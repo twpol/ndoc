@@ -173,8 +173,8 @@ namespace NDoc.Gui
 
 		private void MainForm_Load(object sender, System.EventArgs e)
 		{
-			// Allow developers to continue to compile their assemblies while NDoc is running.
-			AppDomain.CurrentDomain.SetShadowCopyFiles();
+//			// Allow developers to continue to compile their assemblies while NDoc is running.
+//			AppDomain.CurrentDomain.SetShadowCopyFiles();
 
 			Thread.CurrentThread.Name = "GUI";
 
@@ -1289,7 +1289,7 @@ namespace NDoc.Gui
 
 						if (projconfig == null)
 						{
-							warningMessages += String.Format("VS Project {0} could not be imported.\n- There are no settings in the project file for configuration '{2}'\n\n",p.Name,solconfig);
+							warningMessages += String.Format("VS Project {0} could not be imported.\n- There are no settings in the project file for configuration '{1}'\n\n",p.Name,solconfig);
 							continue;
 						}
 
