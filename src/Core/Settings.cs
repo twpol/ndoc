@@ -110,6 +110,8 @@ namespace NDoc.Core
 			if ( data == null )			
 				data = CreateNew( filePath );
 			
+			Debug.Assert( data != null );
+
 			path = filePath;
 		}
 
@@ -274,8 +276,11 @@ namespace NDoc.Core
 
 			foreach( object o in list )
 			{
-				XmlNode item = setting.AppendChild( data.OwnerDocument.CreateElement( itemName ) );
-				item.InnerXml = SerializeObject( o );
+				if ( !object.ReferenceEquals( o, null ) )
+				{
+					XmlNode item = setting.AppendChild( data.OwnerDocument.CreateElement( itemName ) );
+					item.InnerXml = SerializeObject( o );
+				}
 			}
 		}
 		/// <summary>
@@ -304,10 +309,18 @@ namespace NDoc.Core
 		/// <param name="section">The section name to store the setting in</param>
 		/// <param name="name">The name of the setting</param>
 		/// <param name="val">The setting's value</param>
+		/// <remarks>Passing an emtpy string removes the setting</remarks>
 		public void SetSetting( string section, string name, string val )
 		{
-			XmlNode setting = GetOrCreateSettingNode( section, name );
-			setting.InnerText = val;
+			if ( val.Length > 0 )
+			{
+				XmlNode setting = GetOrCreateSettingNode( section, name );
+				setting.InnerText = val;
+			}
+			else
+			{
+				RemoveSetting( section, name );
+			}
 		}
 
 		/// <summary>
@@ -316,24 +329,48 @@ namespace NDoc.Core
 		/// <param name="section">The section name to store the setting in</param>
 		/// <param name="name">The name of the setting</param>
 		/// <param name="val">The setting's value</param>
+		/// <remarks>Passing a null object removes the setting</remarks>
 		public void SetSetting( string section, string name, object val )
 		{
-			XmlNode setting = GetOrCreateSettingNode( section, name );
+			if ( !object.ReferenceEquals( val, null ) )
+			{
+				XmlNode setting = GetOrCreateSettingNode( section, name );
 			
-			setting.InnerXml = SerializeObject( val );
+				setting.InnerXml = SerializeObject( val );
+			}
+			else
+			{
+				RemoveSetting( section, name );
+			}
+		}
+
+		/// <summary>
+		/// Removes a setting
+		/// </summary>
+		/// <param name="section">Setting section</param>
+		/// <param name="name">Setting name</param>
+		public void RemoveSetting( string section, string name )
+		{
+			XmlNode sectionNode = data.SelectSingleNode( section );
+			if ( sectionNode != null )			
+			{
+				XmlNode setting = sectionNode.SelectSingleNode( name );
+				if ( setting != null )			
+					sectionNode.RemoveChild( setting );
+			}
 		}
 
 		private string SerializeObject( object o )
 		{
-			if ( o == null )
-				throw new NullReferenceException( "Null objects cannot be stored" );
+			Debug.Assert( !object.ReferenceEquals( o, null ) );
+			Debug.Assert( o.GetType().IsSerializable );
 
 			XmlSerializer serializer = new XmlSerializer( o.GetType() );
 
 			StringBuilder sb = new StringBuilder();
 			NoPrologXmlWriter writer = new NoPrologXmlWriter( new StringWriter( sb ) );
 
-			serializer.Serialize(writer, o);
+			serializer.Serialize( writer, o );
 			writer.Close();
 
 			return sb.ToString();
