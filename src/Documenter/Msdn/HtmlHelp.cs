@@ -16,11 +16,13 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 using System;
+using System.Collections;
 using System.Diagnostics;
 using System.IO;
-using System.Xml;
-using System.Collections;
 using System.Reflection;
+using System.Xml;
+
+using Microsoft.Win32;
 
 using NDoc.Core;
 
@@ -31,40 +33,37 @@ namespace NDoc.Documenter.Msdn
 	/// to create the files needed by the HTML Help compiler.</remarks>
 	public class HtmlHelp
 	{
-		string _directoryName = null;
-		string _projectName = null;
-		string _defaultTopic = null;
+		private string _directoryName = null;
+		private string _projectName = null;
+		private string _defaultTopic = null;
 
-		string _htmlHelpCompiler = null;
+		private string _htmlHelpCompiler = null;
 
-		bool _includeFavorites = false;
-		bool _binaryTOC = false;
+		private bool _includeFavorites = false;
+		private bool _binaryTOC = false;
 
-		bool _generateTocOnly;
+		private bool _generateTocOnly;
 
-		StreamWriter streamHtmlHelp = null;
+		private StreamWriter streamHtmlHelp = null;
 
-		ArrayList _tocFiles = new ArrayList();
+		private ArrayList _tocFiles = new ArrayList();
 
-		XmlTextWriter tocWriter;
+		private XmlTextWriter tocWriter;
 
 		/// <summary>Initializes a new instance of the HtmlHelp class.</summary>
 		/// <param name="directoryName">The directory to write the HTML Help files to.</param>
 		/// <param name="projectName">The name of the HTML Help project.</param>
 		/// <param name="defaultTopic">The default topic for the compiled HTML Help file.</param>
-		/// <param name="htmlHelpCompiler">The path to the HTML Help compiler.</param>
 		/// <param name="generateTocOnly">When true, HtmlHelp only outputs the HHC file and does not compile the CHM.</param>
 		public HtmlHelp(
 			string directoryName, 
 			string projectName, 
 			string defaultTopic,
-			string htmlHelpCompiler,
 			bool generateTocOnly)
 		{
 			_directoryName = directoryName;
 			_projectName = projectName;
 			_defaultTopic = defaultTopic;
-			_htmlHelpCompiler = htmlHelpCompiler;
 			_generateTocOnly = generateTocOnly;
 		}
 
@@ -80,16 +79,11 @@ namespace NDoc.Documenter.Msdn
 			get { return _projectName; }
 		}
 
-		/// <summary>Gets or sets the path to the HTML Help Compiler.</summary>
-		public string HtmlHelpCompiler
-		{
-			get { return _htmlHelpCompiler; }
-			set { _htmlHelpCompiler = value; }
-		}
-
 		/// <summary>Gets or sets the IncludeFavorites property.</summary>
-		/// <remarks>Setting this to true will include the "favorites" tab 
-		/// in the compiled HTML Help file.</remarks>
+		/// <remarks>
+		/// Setting this to <see langword="true" /> will include the "favorites" 
+		/// tab in the compiled HTML Help file.
+		/// </remarks>
 		public bool IncludeFavorites
 		{
 			get { return _includeFavorites; }
@@ -97,8 +91,10 @@ namespace NDoc.Documenter.Msdn
 		}
 
 		/// <summary>Gets or sets the BinaryTOC property.</summary>
-		/// <remarks>Setting this to true will force the compiler 
-		/// to create a binary TOC in the chm file.</remarks>
+		/// <remarks>
+		/// Setting this to <see langword="true" /> will force the compiler 
+		/// to create a binary TOC in the chm file.
+		/// </remarks>
 		public bool BinaryTOC
 		{
 			get { return _binaryTOC; }
@@ -110,6 +106,78 @@ namespace NDoc.Documenter.Msdn
 		{
 			get { return _defaultTopic; }
 			set { _defaultTopic = value; }
+		}
+
+		/// <summary>Gets the path to the Html Help Compiler.</summary>
+		/// <exception cref="PlatformNotSupportedException">NDoc is running on unix.</exception>
+		internal string HtmlHelpCompiler
+		{
+			get
+			{
+				if ((int) Environment.OSVersion.Platform == 128) 
+				{
+					throw new PlatformNotSupportedException(
+						"The HTML Help Compiler is not supported on unix.");
+				}
+
+				if (_htmlHelpCompiler != null && File.Exists(_htmlHelpCompiler))
+				{
+					return _htmlHelpCompiler;
+				}
+
+				//try the default Html Help Workshop installation directory
+				_htmlHelpCompiler = Path.Combine(
+					Environment.GetFolderPath(
+						Environment.SpecialFolder.ProgramFiles),
+					@"HTML Help Workshop\hhc.exe");
+				if (File.Exists(_htmlHelpCompiler))
+				{
+					return _htmlHelpCompiler;
+				}
+
+				//not in default dir, try to locate it from the registry
+				RegistryKey key = Registry.ClassesRoot.OpenSubKey("hhc.file");
+				if (key != null)
+				{
+					key = key.OpenSubKey("DefaultIcon");
+					if (key != null)
+					{
+						object val = key.GetValue(null);
+						if (val != null)
+						{
+							string hhw = (string)val;
+							if (hhw.Length > 0)
+							{
+								hhw = hhw.Split(new Char[] {','})[0];
+								hhw = Path.GetDirectoryName(hhw);
+								_htmlHelpCompiler = Path.Combine(hhw, "hhc.exe");
+							}
+						}
+					}
+				}
+				if (File.Exists(_htmlHelpCompiler))
+				{
+					return _htmlHelpCompiler;
+				}
+
+				// we still can't find the compiler, see if a location is stored in the machine settings file
+				Settings settings = new Settings( Settings.MachineSettingsFile );
+				string path = settings.GetSetting( "compilers", "htmlHelpWorkshopLocation", "" );
+
+				if ( path.Length > 0 )
+				{
+					_htmlHelpCompiler = Path.Combine(path, "hhc.exe");
+					if (File.Exists(_htmlHelpCompiler))
+					{
+						return _htmlHelpCompiler;
+					}
+				}
+	
+				//still not finding the compiler, give up
+				throw new DocumenterException(
+					"Unable to find the HTML Help Compiler. Please verify that"
+					+ " the HTML Help Workshop has been installed.");
+			}
 		}
 
 		private string GetProjectFilename()
@@ -408,7 +476,7 @@ namespace NDoc.Documenter.Msdn
 				}
 
 				ProcessStartInfo processStartInfo = new ProcessStartInfo();
-				processStartInfo.FileName = _htmlHelpCompiler;
+				processStartInfo.FileName = HtmlHelpCompiler;
 				processStartInfo.Arguments = "\"" + Path.GetFullPath(GetPathToProjectFile()) + "\"";
 				processStartInfo.ErrorDialog = false;
 				processStartInfo.WorkingDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -438,7 +506,7 @@ namespace NDoc.Documenter.Msdn
 				}
 				catch (Exception e)
 				{
-					string msg = String.Format("The HTML Help compiler '{0}' was not found.", _htmlHelpCompiler);
+					string msg = String.Format("The HTML Help compiler '{0}' was not found.", HtmlHelpCompiler);
 					throw new DocumenterException(msg, e);
 				}
 

@@ -20,12 +20,13 @@ using System.Collections;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 using System.Xml.XPath;
 using System.Xml.Xsl;
-using System.Reflection;
+
 using NDoc.Core;
 
 namespace NDoc.Documenter.Msdn
@@ -45,10 +46,8 @@ namespace NDoc.Documenter.Msdn
 
 		private HtmlHelp htmlHelp;
 
-		//private string resourceDirectory;
-
 		private XmlDocument xmlDocumentation;
-        private XPathDocument xpathDocument;
+		private XPathDocument xpathDocument;
 
 		private Hashtable lowerCaseTypeNames;
 		private Hashtable mixedCaseTypeNames;
@@ -178,7 +177,7 @@ namespace NDoc.Documenter.Msdn
 				// copy all of the xslt source files into the workspace
 				DirectoryInfo xsltSource = new DirectoryInfo( Path.GetFullPath(Path.Combine(
 					System.Windows.Forms.Application.StartupPath, @"..\..\..\Documenter\Msdn\xslt") ) );
-                				
+
 				foreach ( FileInfo f in xsltSource.GetFiles( "*.xslt" ) )
 					f.CopyTo( Path.Combine( workspace.ResourceDirectory, f.Name ), true );
 #else
@@ -265,19 +264,11 @@ namespace NDoc.Documenter.Msdn
 						rootPageTOCName = MyConfig.RootPageTOCName;
 					}
 				}
-#if MONO 
-				//html help  compiler cannot be detected with mono
-				string compiler = string.Empty;
-#else
-				string compiler = Environment.ExpandEnvironmentVariables(
-					MyConfig.HtmlHelpCompilerFilename);
-#endif
 
 				htmlHelp = new HtmlHelp(
 					workspace.WorkingDirectory,
 					MyConfig.HtmlHelpName,
 					defaultTopic,
-					compiler,
 					((MyConfig.OutputTarget & OutputType.HtmlHelp) == 0));
 
 				htmlHelp.IncludeFavorites = MyConfig.IncludeFavorites;

@@ -21,8 +21,6 @@ using System.Drawing.Design;
 using System.IO;
 using System.Windows.Forms.Design;
 
-using Microsoft.Win32;
-
 using NDoc.Core;
 
 namespace NDoc.Documenter.Msdn
@@ -127,75 +125,6 @@ namespace NDoc.Documenter.Msdn
 				}
 
 				SetDirty();
-			}
-		}
-
-		/// <summary>The path to the Html Help Compiler.</summary>
-		internal string HtmlHelpCompilerFilename
-		{
-			get
-			{
-#if MONO
-				throw new NotSupportedException("HtmlHelpCompilerFilename property is not supported on MONO");
-#else
-				if ((htmlHelpCompilerFilename != null) 
-					&&(File.Exists(htmlHelpCompilerFilename)))
-				{
-					return htmlHelpCompilerFilename;
-				}
-
-				//try the default Html Help Workshop installation directory
-				htmlHelpCompilerFilename = 	Path.Combine(
-					Environment.GetFolderPath(
-						Environment.SpecialFolder.ProgramFiles),
-					@"HTML Help Workshop\hhc.exe");
-				if (File.Exists(htmlHelpCompilerFilename))
-				{
-					return htmlHelpCompilerFilename;
-				}
-
-				//not in default dir, try to locate it from the registry
-				RegistryKey key = Registry.ClassesRoot.OpenSubKey("hhc.file");
-				if (key != null)
-				{
-					key = key.OpenSubKey("DefaultIcon");
-					if (key != null)
-					{
-						object val = key.GetValue(null);
-						if (val != null)				
-						{
-							string hhw = (string)val;
-							if (hhw.Length > 0)
-							{
-								hhw = hhw.Split(new Char[] {','})[0];
-								hhw = Path.GetDirectoryName(hhw);
-								htmlHelpCompilerFilename = Path.Combine(hhw, "hhc.exe");
-							}
-						}
-					}
-				}
-				if (File.Exists(htmlHelpCompilerFilename))
-				{
-					return htmlHelpCompilerFilename;
-				}
-
-				// we still can't find the compiler, see if a location is stored in the machine settings file
-				Settings settings = new Settings( Settings.MachineSettingsFile );
-				string path = settings.GetSetting( "compilers", "htmlHelpWorkshopLocation", "" );
-
-				if ( path.Length > 0 )
-				{
-					htmlHelpCompilerFilename = Path.Combine(path, "hhc.exe");
-					if (File.Exists(htmlHelpCompilerFilename))
-					{
-						return htmlHelpCompilerFilename;
-					}
-				}				
-	
-				//still not finding the compiler, give up
-				throw new DocumenterException(
-					"Unable to find the HTML Help Compiler. Please verify that the HTML Help Workshop has been installed.");
-#endif
 			}
 		}
 
