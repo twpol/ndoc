@@ -3031,10 +3031,33 @@ namespace NDoc.Test.Unsafe
 	public class ClassWithUnsafeMembers
 	{
 		/// <summary>
+		/// An unsafe constructor
+		/// </summary>
+		/// <param name="p">a pointer</param>
+		unsafe public ClassWithUnsafeMembers( Int32* p )
+		{
+
+		}
+
+		/// <summary>
 		/// A public pointer field
 		/// </summary>
 		unsafe public Int32* pointerField;
 
+		/// <summary>
+		/// A property that is a pointer type
+		/// </summary>
+		unsafe public Int32* PointerProperty
+		{
+			get
+			{
+				return pointerField;
+			}
+			set
+			{
+				pointerField = value;
+			}
+		}
 		/// <summary>
 		/// Pass an unsafe pointer as a paramater
 		/// </summary>
