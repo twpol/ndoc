@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:doc="http://ndoc.sf.net/doc" exclude-result-prefixes="doc">
   <!--
 	 | Identity Template
@@ -56,7 +56,7 @@
         <xsl:call-template name="get-lang">
           <xsl:with-param name="lang" select="@lang" />
         </xsl:call-template>
-        <xsl:text>]</xsl:text>
+        <xsl:text>]&#10;</xsl:text>
       </span>
       <xsl:apply-templates mode="slashdoc" />
     </pre>
@@ -96,8 +96,14 @@
     </li>
   </xsl:template>
   <xsl:template match="list[@type='bullet']/item/term" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrflist.htm">
-    <b>
-      <xsl:apply-templates select="./node()" mode="slashdoc" /> - </b>
+	<xsl:choose>
+		<xsl:when test="../description">
+          <b><xsl:apply-templates select="./node()" mode="slashdoc" /> - </b>
+		</xsl:when>
+		<xsl:otherwise>
+          <xsl:apply-templates select="./node()" mode="slashdoc" />
+		</xsl:otherwise>
+	</xsl:choose>
   </xsl:template>
   <xsl:template match="list[@type='bullet']/item/description" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrflist.htm">
     <xsl:apply-templates select="./node()" mode="slashdoc" />
@@ -113,8 +119,14 @@
     </li>
   </xsl:template>
   <xsl:template match="list[@type='number']/item/term" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrflist.htm">
-    <b>
-      <xsl:apply-templates select="./node()" mode="slashdoc" /> - </b>
+	<xsl:choose>
+		<xsl:when test="../description">
+          <b><xsl:apply-templates select="./node()" mode="slashdoc" /> - </b>
+		</xsl:when>
+		<xsl:otherwise>
+          <xsl:apply-templates select="./node()" mode="slashdoc" />
+		</xsl:otherwise>
+	</xsl:choose>
   </xsl:template>
   <xsl:template match="list[@type='number']/item/description" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrflist.htm">
     <xsl:apply-templates select="./node()" mode="slashdoc" />
@@ -157,6 +169,44 @@
       <xsl:apply-templates select="./node()" mode="slashdoc" />
     </td>
   </xsl:template>
+  <xsl:template match="list[@type='definition']" mode="slashdoc" doc:group="block" doc:msdn="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrflist.htm">
+    <dl>
+	  <xsl:apply-templates select="item" mode="slashdoc" />
+    </dl>
+  </xsl:template>
+  <xsl:template match="list[@type='definition']/item/term" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrflist.htm">
+    <dt>
+      <xsl:apply-templates select="./node()" mode="slashdoc" />
+    </dt>
+  </xsl:template>
+  <xsl:template match="list[@type='definition']/item/description" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrflist.htm">
+    <dd>
+      <xsl:apply-templates select="./node()" mode="slashdoc" />
+    </dd>
+  </xsl:template>
+
+	<!--
+	 | MonoDoc/ECMA Tags
+	 +-->
+	<xsl:template match="block[@type='note']" mode="slashdoc">
+		<p><b>Note: </b><xsl:apply-templates mode="slashdoc"/></p>
+	</xsl:template>
+	<xsl:template match="block[@type='behaviors']" mode="slashdoc">
+		<p><h4 class=".dtH4">Operation</h4><xsl:apply-templates select="./node()" mode="slashdoc"/></p>
+	</xsl:template>
+	<xsl:template match="block[@type='overrides']" mode="slashdoc">
+		<p><h4 class=".dtH4">Note to Inheritors</h4><xsl:apply-templates select="./node()" mode="slashdoc"/></p>
+	</xsl:template>
+	<xsl:template match="block[@type='usage']" mode="slashdoc">
+		<p><h4 class=".dtH4">Usage</h4><xsl:apply-templates select="./node()" mode="slashdoc"/></p>
+	</xsl:template>
+	<xsl:template match="block[@type='default']" mode="slashdoc">
+		<p><h4 class=".dtH4">Default</h4><xsl:apply-templates select="./node()" mode="slashdoc"/></p>
+	</xsl:template>
+	<xsl:template match="block[@type='example']" mode="slashdoc">
+		<p><b>For example: </b><xsl:apply-templates mode="slashdoc"/></p>
+	</xsl:template>
+
   <!--
 	 | Inline Tags
 	 +-->
