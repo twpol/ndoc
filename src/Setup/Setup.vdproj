@@ -27,48 +27,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_0B6D196AB9404680B66379E29CFF71A6"
-        "OwnerKey" = "8:_1078131070D531CAC479AF20F413D606"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_0B6D196AB9404680B66379E29CFF71A6"
-        "OwnerKey" = "8:_CFED1F927ADE40DFBBEC61462A291094"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_0B6D196AB9404680B66379E29CFF71A6"
-        "OwnerKey" = "8:_D09501A9F4629E2BC5D086518C05693F"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_0B6D196AB9404680B66379E29CFF71A6"
-        "OwnerKey" = "8:_29CCA2F98046461E97D0CF4B8D2D7FDF"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_0B6D196AB9404680B66379E29CFF71A6"
-        "OwnerKey" = "8:_1BE3C34A870339F98529356AEB634C02"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_0B6D196AB9404680B66379E29CFF71A6"
-        "OwnerKey" = "8:_087824DA6AA79D8D69D4C73FD8A96ED2"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_0B6D196AB9404680B66379E29CFF71A6"
-        "OwnerKey" = "8:_FBB6212730F68A9B6C98FB65C6D5A888"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_1078131070D531CAC479AF20F413D606"
         "OwnerKey" = "8:_29CCA2F98046461E97D0CF4B8D2D7FDF"
         "MsmSig" = "8:ndoc.corec:\\cvsroot\\ndoc\\src\\core\\obj\\release\\ndoc.core.dll"
@@ -120,6 +78,48 @@
         "MsmKey" = "8:_91C62F0459D84191AA7D9005E4ED5B06"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:C:\\CVSROOT\\NDOC\\SRC\\GUI\\NDOCGUI.EXE.MANIFEST"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_96FAD232CC234A0D849B64E192A52EF7"
+        "OwnerKey" = "8:_1078131070D531CAC479AF20F413D606"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_96FAD232CC234A0D849B64E192A52EF7"
+        "OwnerKey" = "8:_CFED1F927ADE40DFBBEC61462A291094"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_96FAD232CC234A0D849B64E192A52EF7"
+        "OwnerKey" = "8:_D09501A9F4629E2BC5D086518C05693F"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_96FAD232CC234A0D849B64E192A52EF7"
+        "OwnerKey" = "8:_29CCA2F98046461E97D0CF4B8D2D7FDF"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_96FAD232CC234A0D849B64E192A52EF7"
+        "OwnerKey" = "8:_1BE3C34A870339F98529356AEB634C02"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_96FAD232CC234A0D849B64E192A52EF7"
+        "OwnerKey" = "8:_087824DA6AA79D8D69D4C73FD8A96ED2"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_96FAD232CC234A0D849B64E192A52EF7"
+        "OwnerKey" = "8:_FBB6212730F68A9B6C98FB65C6D5A888"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
         }
         "Entry"
         {
@@ -208,7 +208,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:NDoc.Documenter.Msdn, Version=1.0.765.27868, Culture=neutral"
+            "AssemblyAsmDisplayName" = "8:NDoc.Documenter.Msdn, Version=1.0.765.35080, Culture=neutral"
                 "ScatterAssemblies"
                 {
                     "_087824DA6AA79D8D69D4C73FD8A96ED2"
@@ -630,7 +630,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:NDoc"
         "ProductCode" = "8:{C7FA4324-4052-47D2-834F-C65D925CBE0B}"
-        "PackageCode" = "8:{2977EABC-E05A-44FA-AC01-050F95DB1E8B}"
+        "PackageCode" = "8:{C36200DB-C452-48C0-BDE7-10E07E1F1A2A}"
         "UpgradeCode" = "8:{C7002E8C-E7B1-43B5-85FD-BD364AD576E4}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
@@ -656,7 +656,7 @@
         }
         "MergeModule"
         {
-            "{AC8774A4-3E09-11D3-8E14-00C04F6837D0}:_0B6D196AB9404680B66379E29CFF71A6"
+            "{AC8774A4-3E09-11D3-8E14-00C04F6837D0}:_96FAD232CC234A0D849B64E192A52EF7"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
