@@ -30,9 +30,8 @@ namespace NDoc.UsersGuideStager
 
 		private static IHTMLDocument3 Transform( IHTMLDocument2 htmlDoc )
 		{
-			IHTMLDocument3 doc3 = htmlDoc as IHTMLDocument3;
-			Debug.Assert( doc3 != null );
-			
+			AddEmbeddedCSS( htmlDoc );
+		
 			// remove the onload InitTitle script call
 			IHTMLBodyElement body = (IHTMLBodyElement)htmlDoc.body;
 			body.onload = "";
@@ -44,6 +43,9 @@ namespace NDoc.UsersGuideStager
 			foreach ( IHTMLDOMNode script in htmlDoc.scripts )
 				script.parentNode.removeChild( script );
 
+			IHTMLDocument3 doc3 = htmlDoc as IHTMLDocument3;
+			Debug.Assert( doc3 != null );
+
 			// fix up all of the hyper-links
 			foreach ( IHTMLAnchorElement anchor in doc3.getElementsByTagName( "a" ) )
 				Transform( anchor );
@@ -53,6 +55,27 @@ namespace NDoc.UsersGuideStager
 				Transform( img );
 
 			return doc3;
+		}
+
+		/// <summary>
+		/// This embeds an inline css stylesheet that allows tags
+		/// in the users guide html that are in the class "hideonline"
+		/// to be hidden in the version poseted to the website
+		/// </summary>
+		/// <param name="htmlDoc"></param>
+		private static void AddEmbeddedCSS( IHTMLDocument2 htmlDoc )
+		{
+			IHTMLStyleElement style = htmlDoc.createElement( "style" ) as IHTMLStyleElement;
+			style.type = "text/css";
+			style.styleSheet.cssText = ".hideonline{ display:none; }";
+
+			IHTMLElementCollection collection = htmlDoc.all.tags( "head" ) as IHTMLElementCollection;
+			Debug.Assert( collection != null );
+			Debug.Assert( collection.length == 1 );
+
+			mshtml.IHTMLDOMNode head = collection.item( 0, 0 ) as IHTMLDOMNode;
+			Debug.Assert( head != null );
+			head.appendChild( style as IHTMLDOMNode );
 		}
 
 		private static void Transform( IHTMLImgElement img )
