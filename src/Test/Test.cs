@@ -156,9 +156,6 @@ namespace NDoc.Test
 		{
 			return false;
 		}
-
-		/// <summary>This summary contains a link to an enum value: <see cref="Enum.Bar"/>.</summary>
-		public void LinksToEnumValue() {}
 	}
 
 	/// <summary>This event has one property.</summary>
@@ -450,6 +447,7 @@ namespace NDoc.Test
 	/// See <see cref="Outer.Inner"/>.
 	/// See <see cref="Handler"/>.
 	/// See <see cref="Enum"/>.
+	/// See <see cref="Enum.Bar"/>.
 	/// See <see href="http://ndoc.sf.net/" />.
 	/// See <see href="http://ndoc.sf.net/">NDOC</see>.
 	/// </remarks>
@@ -491,6 +489,7 @@ namespace NDoc.Test
 	/// <seealso cref="Outer.Inner"/>
 	/// <seealso cref="Handler"/>
 	/// <seealso cref="Enum"/>
+	/// <seealso cref="Enum.Bar"/>
 	/// <seealso href="http://slashdot.org/">Slashdot</seealso>
 	/// <seealso cref="System.Object"/>
 	public class SeeAlso
