@@ -18,6 +18,7 @@
 	 | no-op extensibility templates
 	 +-->
 	<xsl:template match="node()|@*|text()" mode="seealso-section"/>
+	<xsl:template match="node()|@*|text()" mode="thread-safety-section"/>
 	<xsl:template match="node()|@*|text()" mode="overloads-remarks-section"/>
 	<xsl:template match="node()|@*|text()" mode="overloads-example-section"/>
 	<xsl:template match="node()|@*|text()" mode="overloads-summary-section"/>	
@@ -629,6 +630,31 @@
 			<xsl:apply-templates select="documentation/node()" mode="exceptions-section"/>			
 		</xsl:if>
 	</xsl:template>
+	<!-- -->
+	<xsl:template name="thread-safety-section">
+		<H4 class="dtH4">Thread Safety</H4>
+		<xsl:choose>
+			<xsl:when test="documentation/threadSafety[@static='true'][@instance='true']">
+				<P>This type is safe for multithreaded operations.</P>
+			</xsl:when>
+			<xsl:when test="documentation/threadSafety[@static='false'][@instance='false']">
+				<P>This type is <b>not</b> safe for multithreaded operations.</P>
+			</xsl:when>
+			<xsl:when test="documentation/threadSafety[@static='false'][@instance='true']">
+				<!-- not sure this makes sense but... -->
+				<P>Public static (Shared in Visual Basic) members of this type are not guaranteed 
+				to be safe for multithreaded operations. Instance members are not guaranteed to be 
+				thread-safe.</P>
+			</xsl:when>
+			<xsl:otherwise><!-- static=true instance=false-->
+				<P>Public static (Shared in Visual Basic) members of this type are safe 
+				for multithreaded operations. Instance members are not guaranteed to be 
+				thread-safe.</P>
+			</xsl:otherwise>
+		</xsl:choose>
+		<xsl:apply-templates select="documentation/threadSafety/node()" mode="slashdoc" />
+		<xsl:apply-templates select="documentation/node()" mode="thread-safety-section"/>			
+	</xsl:template>	
 	<!-- -->
 	<xsl:template name="example-section">
 		<xsl:if test="documentation/example">

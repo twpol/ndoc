@@ -2872,3 +2872,47 @@ namespace NDoc.Test.Extensibility
 
 	}
 }
+
+namespace NDoc.Test.ThreadSafety
+{
+	/// <summary>
+	/// This class is thread safe for everything
+	/// </summary>
+	/// <threadSafety static="true" instance="true">
+	/// <para>Here's some extra information about using this class across threads</para>
+	/// </threadSafety>
+	public class ThreadSafe
+	{
+
+	}
+	/// <summary>
+	/// This class is not thread safe
+	/// </summary>
+	/// <threadSafety static="false" instance="false">
+	/// <para>Here's some extra information about using this class across threads</para>
+	/// </threadSafety>
+	public class NotThreadSafe
+	{
+
+	}
+	/// <summary>
+	/// This class is not thread safe
+	/// </summary>
+	/// <threadSafety static="true" instance="false">
+	/// <para>Here's some extra information about using this class across threads</para>
+	/// </threadSafety>
+	public class StaticSafeInstanceNot
+	{
+
+	}
+	/// <summary>
+	/// This class is not thread safe
+	/// </summary>
+	/// <threadSafety static="false" instance="true">
+	/// <para>Here's some extra information about using this class across threads</para>
+	/// </threadSafety>
+	public class StaticNotInstanceSafe
+	{
+
+	}
+}

@@ -137,6 +137,7 @@
 						<xsl:call-template name="parameter-section" />
 						<xsl:call-template name="returnvalue-section" />
 					</xsl:if>
+					<xsl:call-template name="thread-safety-section" />
 					<xsl:call-template name="remarks-section" />
 					<xsl:call-template name="example-section" />
 					<xsl:if test="local-name() = 'enumeration'">
