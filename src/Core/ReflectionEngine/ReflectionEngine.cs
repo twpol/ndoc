@@ -2314,16 +2314,30 @@ namespace NDoc.Core.Reflection
 					}
 					if (implements != null)
 					{
-						writer.WriteStartElement("implements");
 						MethodInfo InterfaceMethod = (MethodInfo)implements.InterfaceMethod;
 						PropertyInfo InterfaceProperty = DerivePropertyFromAccessorMethod(InterfaceMethod);
-						string InterfacePropertyID = GetMemberName(InterfaceProperty);
-						writer.WriteAttributeString("name", InterfaceProperty.Name);
-						writer.WriteAttributeString("id", InterfacePropertyID);
-						writer.WriteAttributeString("interface", implements.InterfaceType.Name);
-						writer.WriteAttributeString("interfaceId", GetMemberName(implements.InterfaceType));
-						writer.WriteAttributeString("declaringType", implements.InterfaceType.FullName.Replace('+', '.'));
-						writer.WriteEndElement();
+						if (InterfaceProperty !=null)
+						{
+							string InterfacePropertyID = GetMemberName(InterfaceProperty);
+							writer.WriteStartElement("implements");
+							writer.WriteAttributeString("name", InterfaceProperty.Name);
+							writer.WriteAttributeString("id", InterfacePropertyID);
+							writer.WriteAttributeString("interface", implements.InterfaceType.Name);
+							writer.WriteAttributeString("interfaceId", GetMemberName(implements.InterfaceType));
+							writer.WriteAttributeString("declaringType", implements.InterfaceType.FullName.Replace('+', '.'));
+							writer.WriteEndElement();
+						}
+						else if (InterfaceMethod !=null)
+						{
+							string InterfaceMethodID = GetMemberName(InterfaceMethod);
+							writer.WriteStartElement("implements");
+							writer.WriteAttributeString("name", InterfaceMethod.Name);
+							writer.WriteAttributeString("id", InterfaceMethodID);
+							writer.WriteAttributeString("interface", implements.InterfaceType.Name);
+							writer.WriteAttributeString("interfaceId", GetMemberName(implements.InterfaceType));
+							writer.WriteAttributeString("declaringType", implements.InterfaceType.FullName.Replace('+', '.'));
+							writer.WriteEndElement();
+						}
 					}
 				}
 
