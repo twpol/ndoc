@@ -296,7 +296,7 @@
 		<xsl:choose>
 			<xsl:when test="parameter">
 				<xsl:text>this[</xsl:text>
-				<xsl:if test="$indent">&#10;</xsl:if>
+				<xsl:if test="$indent"><br /></xsl:if>
 				<xsl:for-each select="parameter">
 					<xsl:if test="$indent">
 						<xsl:text>&#160;&#160;&#160;</xsl:text>
@@ -322,14 +322,16 @@
 					</xsl:choose>
 					<xsl:if test="$display-names">
 						<xsl:text>&#160;</xsl:text>
-						<xsl:value-of select="@name" />
+						<i>
+						  <xsl:value-of select="@name" />
+						</i>
 					</xsl:if>
 					<xsl:if test="position() != last()">
 						<xsl:text>,&#160;</xsl:text>
-						<xsl:if test="$indent">&#10;</xsl:if>
+						<xsl:if test="$indent"><br /></xsl:if>
 					</xsl:if>
 				</xsl:for-each>
-				<xsl:if test="$indent">&#10;</xsl:if>
+				<xsl:if test="$indent"><br /></xsl:if>
 				<xsl:text>]</xsl:text>
 			</xsl:when>
 			<xsl:otherwise>
