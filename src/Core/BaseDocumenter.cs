@@ -1406,7 +1406,6 @@ namespace NDoc.Core
 					  BindingFlags.Public |
 					  BindingFlags.NonPublic;
 
-			//explicitly implemented properties are not returned here.
 			PropertyInfo[] properties = type.GetProperties(bindingFlags);
 
 			foreach (PropertyInfo property in properties)
@@ -1431,7 +1430,8 @@ namespace NDoc.Core
 
 					if ((hasGetter || hasSetter)
 						&& !IsAlsoAnEvent(property)
-						&& !IsHidden(property, type))
+						&& !IsHidden(property, type)
+						&& !assemblyDocCache.HasExcludeTag(GetMemberName(property)))
 					{
 						WriteProperty(
 							writer,
