@@ -32,27 +32,33 @@
 					<xsl:variable name="type" select="@type" />
 					<xsl:variable name="eventargs-id" select="concat('T:', //delegate[@id=concat('T:', $type)]/parameter[contains(@type, 'EventArgs')][1]/@type)" />
 					<xsl:variable name="thisevent" select="//class[@id=$eventargs-id]" />
-					<xsl:if test="$thisevent/property[@access='Public' and not(@static)]">
+					<xsl:variable name="properties" select="$thisevent/property[@access='Public' and not(@static)]" />
+					<xsl:variable name="properties-count" select="count($properties)" />
+					<xsl:if test="$properties-count > 0">
 						<h4 class="dtH4">Event Data</h4>
 						<p>
-							<xsl:text>The event handler receives a </xsl:text>
+							<xsl:text>The event handler receives an argument of type </xsl:text>
 							<a>
 								<xsl:attribute name="href">
-									<xsl:call-template name="get-filename-for-type-members">
+									<xsl:call-template name="get-filename-for-type">
 										<xsl:with-param name="id" select="$eventargs-id" />
 									</xsl:call-template>
 								</xsl:attribute>
 								<xsl:value-of select="$thisevent/@name" />
 							</a>
-							<xsl:text> containing data related to the </xsl:text>
-							<B>
-								<xsl:value-of select="@name" />
-							</B>
-							<xsl:text> event. The following </xsl:text>
+							<xsl:text> containing data related to this event. The following </xsl:text>
 							<B>
 								<xsl:value-of select="//class[@id=$eventargs-id]/@name" />
 							</B>
-							<xsl:text> properties provide information specific to this event.</xsl:text>
+							<xsl:choose>
+								<xsl:when test="$properties-count > 1">
+									<xsl:text> properties provide </xsl:text>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:text> property provides </xsl:text>
+								</xsl:otherwise>
+							</xsl:choose>
+							<xsl:text>information specific to this event.</xsl:text>
 						</p>
 						<div class="tablediv">
 							<table class="dtTABLE" cellspacing="0">
@@ -60,7 +66,7 @@
 									<th width="50%">Property</th>
 									<th width="50%">Description</th>
 								</tr>
-								<xsl:apply-templates select="//class[@id=$eventargs-id]/property[@access='Public' and not(@static)]">
+								<xsl:apply-templates select="$properties">
 									<xsl:sort select="@name" />
 								</xsl:apply-templates>
 							</table>
@@ -130,6 +136,14 @@
 												<xsl:value-of select="@name" />
 											</a>
 										</xsl:when>
+										<xsl:when test="starts-with(@declaringType, 'System.')">
+											<a>
+												<xsl:attribute name="href">
+													<xsl:call-template name="get-filename-for-system-property" />
+												</xsl:attribute>
+												<xsl:value-of select="@name" />
+											</a>
+										</xsl:when>
 										<xsl:otherwise>
 											<xsl:value-of select="@name" />
 										</xsl:otherwise>
@@ -146,7 +160,7 @@
 							</xsl:choose>
 						</td>
 						<td width="50%">
-							<xsl:apply-templates select="documentation/summary/node()" mode="slashdoc" />
+							<xsl:apply-templates select="documentation/summary/node()" mode="nopara" />
 						</td>
 					</xsl:otherwise>
 				</xsl:choose>
