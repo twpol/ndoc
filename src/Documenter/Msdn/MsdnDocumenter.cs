@@ -214,6 +214,17 @@ namespace NDoc.Documenter.Msdn
 					"NDoc.Documenter.Msdn.scripts",
 					MyConfig.OutputDirectory);
 
+				// Write the external files (FilesToInclude) to the html output directory
+
+				foreach( string srcFile in MyConfig.FilesToInclude.Split( '|' ) )
+				{
+					if ((srcFile == null) || (srcFile.Length == 0))
+						continue;
+
+					string dstFile = Path.Combine(MyConfig.OutputDirectory, Path.GetFileName(srcFile));
+					File.Copy(srcFile, dstFile, true);
+				}
+
 				OnDocBuildingStep(10, "Merging XML documentation...");
 				// Let the Documenter base class do it's thing.
 				MakeXml(project);
@@ -1395,6 +1406,7 @@ namespace NDoc.Documenter.Msdn
 #endif
 
 			MsdnXsltUtilities utilities = new MsdnXsltUtilities(fileNames, elemNames);
+			ExternalHtmlProvider htmlProvider = new ExternalHtmlProvider( MyConfig );
 			StreamWriter streamWriter = null;
 
 			try
@@ -1410,6 +1422,7 @@ namespace NDoc.Documenter.Msdn
 				arguments.AddParam("ndoc-documented-attributes", String.Empty, MyConfig.DocumentedAttributes);
 
 				arguments.AddExtensionObject("urn:NDocUtil", utilities);
+				arguments.AddExtensionObject("urn:NDocExternalHtml", htmlProvider);
 
 				transform.Transform(xmlDocumentation, arguments, streamWriter);
 			}
