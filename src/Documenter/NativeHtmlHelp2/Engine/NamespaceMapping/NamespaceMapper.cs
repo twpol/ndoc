@@ -185,9 +185,9 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping
 
 			ManagedName name = new ManagedName( managedName );
 
-			// since in most cases all managed names in a hierarchy will be in the
+			// since in most cases all managed names in a namespace will be in the
 			// same help collection, let's fisrt try to short circuit the search by seeing
-			// if there is a single managedNamespace entry that start with the root of the name we are looking for
+			// if there is a single managedNamespace entry that starts with the root of the name we are looking for
 			string xpath = string.Format( "//map:managedNamespace[ starts-with( @ns,'{0}' ) ]", name.RootNamespace );
 			XmlNodeList firstTry = map.SelectNodes( xpath, nsmgr );
 
@@ -198,7 +198,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping
 			}
 			else
 			{
-				// Since more than managed name the starts with the root of the name 
+				// Since more than one managed name the starts with the root  
 				// being searched, we have to search for a more specific match.
 				// We do this by starting with the most specified name and working backwards to the root
 				// e.g. if we are looking for NS1.NS2.N3.NS4 we would start
