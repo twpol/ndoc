@@ -8,7 +8,7 @@
 	</head>
 	<body class="dtBODY" id="bodyID" onload="InitTitle()">
 		<div id="nstext">
-			<p>The &lt;see&gt; tag lets you specify a link from within text.</p>
+			<p>The &lt;see&gt; tag specifies a link to other documentation from within text.</p>
 			<pre class="syntax">&lt;see cref="<I>member</I>"&gt;[<EM>label</EM>]&lt;/see&gt;
 <b>OR</b>
 &lt;see href="<I>URL</I>"&gt;[<EM>label</EM>]&lt;/see&gt;
@@ -16,25 +16,22 @@
 &lt;see langword="null | sealed | static | abstract | virtual"/&gt;</pre>
 			<p>where:</p>
 			<dl>
-				<dt><I>label</I></dt>
-				<dd>
-					text to display as the link</dd>
-				<dt>cref = "<I>member</I>"</dt>
-				<dd>
-					A reference to a member or field that is available to be called from the 
-					current compilation environment. The compiler checks that the given code 
-					element exists and passes <I>member</I> to the element name in the output XML.<I> member</I>
-					must appear within double quotation marks (" ").</dd>
-				<dt>href = "<I>URL</I>"</dt>
-				<dd>
-					A reference to a member or field that is available to be called from the 
-					current compilation environment. The compiler checks that the given code 
-					element exists and passes <I>member</I> to the element name in the output XML.<I> member</I>
-					must appear within double quotation marks (" ").</dd>
-				<dt>langword</dt>
-				<dd>
-					A common .NET language keyword. These keywords are highlighted, and, in some 
-					cases, expanded into descriptive phrases. See remarks for further details.</dd>
+				<dt><I>label</I>
+					<dd>
+						text to display as the link <dt>cref = "<I>member</I>"
+							<dd>
+								A reference to a member or field that is available to be called from the 
+								current compilation environment. The compiler checks that the given code 
+								element exists and passes <I>member</I> to the element name in the output XML.<I> member</I>
+								must appear within double quotation marks (" "). <dt>href = "<I>URL</I>"
+									<dd>
+										A reference to a member or field that is available to be called from the 
+										current compilation environment. The compiler checks that the given code 
+										element exists and passes <I>member</I> to the element name in the output XML.<I> member</I>
+										must appear within double quotation marks (" "). <dt>langword
+											<dd>
+												A common .NET language keyword. These keywords are highlighted, and, in some 
+												cases, expanded into descriptive phrases. See remarks for further details.</dd>
 			</dl>
 			<h4 class="dtH4">Applies To</h4>
 			<p>Can be used inline within any other markup.</p>
@@ -46,7 +43,7 @@
 			<p>See <a href="tag_summary.htm">&lt;summary&gt;</a> for an example of using 
 				&lt;see&gt;.</p>
 			<h4 class="dtH4">See Also</h4>
-			<p><a HREF="tags.htm"> NDoc&nbsp;Tags</a></p>
+			<p><a HREF="tags.htm"> NDoc&nbsp;Tags</a>&nbsp;|&nbsp;<a href="tag_seealso.htm">&lt;seealso&gt;</a></p>
 		</div>
 	</body>
 </html>

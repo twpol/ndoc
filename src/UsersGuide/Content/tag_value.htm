@@ -2,30 +2,46 @@
 <html>
 	<head>
 		<title>value</title>
-		<meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5">
-		<link href="css/ndoc.css" rel="stylesheet" name="ndocstyle" type="text/css">
+		<meta content="http://schemas.microsoft.com/intellisense/ie5" name="vs_targetSchema">
+		<LINK href="css/ndoc.css" type="text/css" rel="stylesheet" name="ndocstyle">
 		<script src="script/ndoc_tags.js"></script>
 	</head>
 	<body class="dtBODY" id="bodyID" onload="InitTitle()">
 		<div id="nstext">
-			<p>The &lt;value&gt; tag is used to describe a property.</p>
+			<p>The &lt;value&gt; tag is used to describe&nbsp;the value of a property.</p>
 			<pre class="syntax">&lt;value&gt;<I>property-description</I>&lt;/value&gt;</pre>
 			<p>where:</p>
 			<dl>
-				<dt><I>property-description</I></dt>
-				<dd>
-					A description for the property.</dd>
+				<dt><I>property-description</I>
+					<dd>
+						A description for the property.
+					</dd>
 			</dl>
 			<h4 class="dtH4">Applies To</h4>
 			<p>Property.</p>
 			<h4 class="dtH4">Remarks</h4>
-			<p>Note that when you add a property via code wizard in the Visual Studio .NET 
-				development environment, it will add a <a href="tag_summary.htm">&lt;summary&gt;</a>
-				tag for the new property. You should then manually add a &lt;value&gt; tag to 
-				describe the value that the property represents.</p>
+			<p>By convention, properties should always have a &lt;value&gt; tag.
+			</p>
+			<P>For read-only properties, the text in the &lt;value&gt; tag will often be 
+				substantially the same as that in the &lt;summary&gt; tag.</P>
 			<h4 class="dtH4">Example</h4>
+			<pre class="csharpcode"><SPAN class=lang>[C#]</SPAN>
+<span class=rem>/// text for class MyClass</SPAN>
+<span class=kwrd>public</SPAN> <span class=kwrd>class</SPAN> MyClass
+{
+   <span class=rem>/// &lt;summary&gt;MyProperty is a property in the MyClass class.&lt;/summary&gt;</SPAN>
+   <span class=rem>/// &lt;value&gt;A string containing the text "MyProperty String".&lt;/value&gt;</SPAN>
+   <span class=kwrd>public</SPAN> <span class=kwrd>string</SPAN> MyProperty()
+   {
+       <span class=kwrd>get</SPAN>
+       {
+           <span class=kwrd>return</SPAN> <span class=str>"MyProperty String"</SPAN>;
+       }
+   }
+
+}</pre>
 			<h4 class="dtH4">See Also</h4>
-			<p><a HREF="tags.htm"> NDoc&nbsp;Tags</a></p>
+			<p><A href="tags.htm">NDoc&nbsp;Tags</A>&nbsp; |&nbsp;<A href="summary_tag.htm">&lt;summary&gt;</A></p>
 		</div>
 	</body>
 </html>

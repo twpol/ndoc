@@ -2,8 +2,8 @@
 <html>
 	<head>
 		<title>summary</title>
-		<meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5">
-		<link href="css/ndoc.css" rel="stylesheet" name="ndocstyle" type="text/css">
+		<meta content="http://schemas.microsoft.com/intellisense/ie5" name="vs_targetSchema">
+		<LINK href="css/ndoc.css" type="text/css" rel="stylesheet" name="ndocstyle">
 		<script src="script/ndoc_tags.js"></script>
 	</head>
 	<body class="dtBODY" id="bodyID" onload="InitTitle()">
@@ -16,36 +16,37 @@
 			<dl>
 				<dt><I>description</I></dt>
 				<dd>
-					A summary of the object.</dd>
+					A summary of the object.
+				</dd>
 			</dl>
 			<h4 class="dtH4">Applies To</h4>
 			<p>All Types and Members.</p>
 			<h4 class="dtH4">Remarks</h4>
-			<p>Use <a HREF="vclrfremarks.htm">&lt;remarks&gt;</a> to add supplemental 
-				information to a type description.</p>
-			<p>The text for the &lt;summary&gt; tag is the only source of information about the 
-				type in IntelliSense, and is also displayed in the Object Browser and in the 
-				Code Comment Web Report</p>
+			<p>Use <A href="vclrfremarks.htm">&lt;remarks&gt;</A> to add supplemental 
+				information to a type or member description.</p>
+			<blockquote class="dtBlock"><b>note</b>&nbsp;:&nbsp;The text within the 
+				&lt;summary&gt; tag is the only source of information about the type in 
+				IntelliSense, and is also displayed in the Object Browser.</blockquote>
 			<h4 class="dtH4">Example</h4>
-			<pre class="csharpcode"><SPAN class="lang">[C#]</SPAN>
-<span class="rem">/// text for class MyClass</span>
-<span class="kwrd">public</span> <span class="kwrd">class</span> MyClass
+			<pre class="csharpcode"><SPAN class=lang>[C#]</SPAN>
+<span class=rem>/// text for class MyClass</SPAN>
+<span class=kwrd>public</SPAN> <span class=kwrd>class</SPAN> MyClass
 {
-   <span class="rem">/// &lt;summary&gt;MyMethod is a method in the MyClass class.</span>
-   <span class="rem">/// &lt;para&gt;Here's how you could make a second paragraph in a description. &lt;see cref="System.Console.WriteLine"/&gt; for information about output statements.&lt;/para&gt;</span>
-   <span class="rem">/// &lt;seealso cref="MyClass.Main"/&gt;</span>
-   <span class="rem">/// &lt;/summary&gt;</span>
-   <span class="kwrd">public</span> <span class="kwrd">static</span> <span class="kwrd">void</span> MyMethod(<span class="kwrd">int</span> Int1)
+   <span class=rem>/// &lt;summary&gt;MyMethod is a method in the MyClass class.</SPAN>
+   <span class=rem>/// &lt;para&gt;Here's how you could make a second paragraph in a description. &lt;see cref="System.Console.WriteLine"/&gt; for information about output statements.&lt;/para&gt;</SPAN>
+   <span class=rem>/// &lt;seealso cref="MyClass.Main"/&gt;</SPAN>
+   <span class=rem>/// &lt;/summary&gt;</SPAN>
+   <span class=kwrd>public</SPAN> <span class=kwrd>static</SPAN> <span class=kwrd>void</SPAN> MyMethod(<span class=kwrd>int</SPAN> Int1)
    {
    }
 
-   <span class="rem">/// text for Main</span>
-   <span class="kwrd">public</span> <span class="kwrd">static</span> <span class="kwrd">void</span> Main ()
+   <span class=rem>/// text for Main</SPAN>
+   <span class=kwrd>public</SPAN> <span class=kwrd>static</SPAN> <span class=kwrd>void</SPAN> Main ()
    {
    }
 }</pre>
 			<h4 class="dtH4">See Also</h4>
-			<p><a HREF="tags.htm"> NDoc&nbsp;Tags</a></p>
+			<p><A href="tags.htm">NDoc&nbsp;Tags</A>&nbsp;|&nbsp;<a HREF="remarks_tag.htm">&lt;remarks&gt;</a></p>
 		</div>
 	</body>
 </html>

@@ -11,26 +11,26 @@
 			<p>The &lt;overloads&gt; tag provides documentation that applies to all the 
 				overloads of a member.</p>
 			<pre class="syntax">
+<span style="FONT-FAMILY:Verdana"><b>Short Form</b></span>
 &lt;overloads&gt;
-   summary_description
+   <i>summary_description</i>
 &lt;/overloads&gt;
-
-<B>OR</B>
-
+</pre>
+			<pre class="syntax">
+<span style="FONT-FAMILY:Verdana"><b>Expanded Form</b></span>
 &lt;overloads&gt;
-   &lt;summary&gt;&lt;/summary&gt;
-   [&lt;remarks&gt;&lt;/remarks&gt;]
-   [&lt;example&gt;&lt;/example&gt;]
+   &lt;summary&gt;<i>summary_description&lt;</i>/summary&gt;
+   [&lt;remarks&gt;<i>remarks_description&lt;</i>/remarks&gt;]
+   [&lt;example&gt;<i>examples_description&lt;</i>/example&gt;]
 &lt;/overloads&gt;
 </pre>
 			<p>where:</p>
 			<dl>
-				<dt><I>term</I></dt>
-				<dd>
-					A term to define, which will be defined in <I>description</I>.</dd>
-				<dt><I>description</I></dt>
-				<dd>
-					Either an item in a bullet or numbered list or the definition of a <I>term</I>.</dd>
+				<dt><I>term</I>
+					<dd>
+						A term to define, which will be defined in <I>description</I>. <dt><I>description</I>
+							<dd>
+								Either an item in a bullet or numbered list or the definition of a <I>term</I>.</dd>
 			</dl>
 			<h4 class="dtH4">Applies To</h4>
 			<p>Property, Method, Event, Operator.</p>
@@ -42,13 +42,13 @@
 				In the short form, it includes only one or more text blocks that are treated as 
 				the summary.
 				<LI>
-					In the long form, it can include one or more applicable section tags (summary, 
-					remarks and example).
+					In the expanded form, it can include one or more applicable section tags 
+					(summary, remarks and example).
 				</LI>
 			</UL>
 			<h4 class="dtH4">Examples</h4>
 			<h4 class="dtH4">See Also</h4>
-			<p><a HREF="tags.htm"> NDoc&nbsp;Tags</a></p>
+			<p><a HREF="tags.htm"> NDoc&nbsp;Tags</a>&nbsp;|&nbsp;<a HREF="summary_tag.htm">&lt;summary&gt;</a>&nbsp;|&nbsp;<a HREF="remarks_tag.htm">&lt;remarks&gt;</a>&nbsp;|&nbsp;<a HREF="example_tag.htm">&lt;example&gt;</a></p>
 		</div>
 	</body>
 </html>
