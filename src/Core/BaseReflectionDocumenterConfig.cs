@@ -434,7 +434,7 @@ namespace NDoc.Core
 		/// </remarks>
 		[Category("Documentation Main Settings")]
 		[Description("Determines what type of Assembly Version information is documented.")]
-		[DefaultValue(false)]
+		[DefaultValue(AssemblyVersionInformationType.None)]
 		[System.ComponentModel.TypeConverter(typeof(EnumDescriptionConverter))]
 		public AssemblyVersionInformationType AssemblyVersionInfo
 		{
