@@ -40,14 +40,25 @@ namespace NDoc.Core
 			this.slashDocFilename = slashDocFilename;
 		}
 
-		/// <summary>Gets or sets the assembly filename in this pair.</summary>
+		/// <summary>
+		/// Gets or sets the assembly filename in this pair.
+		/// </summary>
+		/// <remarks>
+		/// If the path is not rooted, it should be considered as a path relative
+		/// to the project file.
+		/// </remarks>
 		public string AssemblyFilename
 		{
 			get { return assemblyFilename; }
 			set { assemblyFilename = value; }
 		}
 
-		/// <summary>Gets or sets the /doc filename in this pair.</summary>
+		/// <summary>
+		/// Gets or sets the /doc filename in this pair.
+		/// </summary>
+		/// If the path is not rooted, it should be considered as a path relative
+		/// to the project file.
+		/// </remarks>
 		public string SlashDocFilename
 		{
 			get { return slashDocFilename; }
