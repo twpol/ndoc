@@ -1418,18 +1418,54 @@ namespace NDoc.Test
 
 namespace NDoc.Test.NewStuff
 {
+	/// <summary>no comment</summary>
+	public interface IInterfaceA
+	{
+		/// <summary>no comment</summary>
+		void InheritedImplicitInterfaceMethod();
+	}
+	/// <summary>no comment</summary>
+	public interface IInterfaceB
+	{
+		/// <summary>no comment</summary>
+		void InheritedExplicitInterfaceMethod();
+	}
+	/// <summary>no comment</summary>
+	public interface IInterfaceC
+	{
+		/// <summary>no comment</summary>
+		void ImplicitInterfaceMethod();
+	}
+	/// <summary>no comment</summary>
+	public interface IInterfaceD
+	{
+		/// <summary>no comment</summary>
+		void ExplicitInterfaceMethod();
+	}
+	/// <summary>no comment</summary>
+	public interface IInterfaceE
+	{
+		/// <summary>no comment</summary>
+		void NewInterfaceMethod();
+	}
+	/// <summary>no comment</summary>
+	public interface IInterfaceF
+	{
+		/// <summary>no comment</summary>
+		void InterfaceMethodOverride();
+	}
 	/// <summary>
 	/// Base class used to test the new modifier. See <see cref="NewDerived"/>
 	/// for details. Members in this class are named to demonstrate syntax
 	/// in the derived class.
 	/// </summary>
-	public class NewBase
+	public class NewBase : IInterfaceA, IInterfaceB, IInterfaceE, IInterfaceF
 	{
-		/// <summary></summary>
+		/// <summary>no comment</summary>
 		public class NewClass
 		{
 		}
-		/// <summary></summary>
+		/// <summary>no comment</summary>
 		public int this[int n]
 		{
 			get
@@ -1441,70 +1477,70 @@ namespace NDoc.Test.NewStuff
 			}
 		}
 
-		/// <summary></summary>
+		/// <summary>no comment</summary>
 		public void NewPropertySNOKOM(int n)
 		{
 		}
-		/// <summary></summary>
+		/// <summary>no comment</summary>
 		public void NewVirtualPropertySNOKOM(int n)
 		{
 		}
-		/// <summary></summary>
+		/// <summary>no comment</summary>
 		public int NewMethodSNOKOM;
-		/// <summary></summary>
+		/// <summary>no comment</summary>
 		public int NewVirtualMethodSNOKOM;
-		/// <summary></summary>
+		/// <summary>no comment</summary>
 		public int NewFieldSNOKOM
 		{
 			get { return 0; }
 			set { }
 		}
 
-		/// <summary></summary>
+		/// <summary>no comment</summary>
 		public const int NewConst = 500;
-		/// <summary></summary>
+		/// <summary>no comment</summary>
 		public int NewField;
 
-		/// <summary></summary>
+		/// <summary>no comment</summary>
 		public int NewProperty
 		{
 			get { return 0; }
 			set {}
 		}
-		/// <summary></summary>
+		/// <summary>no comment</summary>
 		public virtual int OverrideProperty
 		{
 			get { return 0; }
 			set {}
 		}
-		/// <summary></summary>
+		/// <summary>no comment</summary>
 		public virtual int NewVirtualProperty
 		{
 			get { return 0; }
 			set {}
 		}
 
-		/// <summary></summary>
+		/// <summary>no comment</summary>
 		public void NewMethod(int n)
 		{
 		}
-		/// <summary></summary>
+		/// <summary>no comment</summary>
 		public virtual void OverrideMethod(int n)
 		{
 		}
-		/// <summary></summary>
+		/// <summary>no comment</summary>
 		public virtual void NewVirtualMethod(int n)
 		{
 		}
-		/// <summary></summary>
+		/// <summary>no comment</summary>
 		public void NewMethodWithOverload(int n)
 		{
 		}
-		/// <summary></summary>
+		/// <summary>no comment</summary>
 		public virtual void NewMethodWithOverload(double d)
 		{
 		}
-		/// <summary></summary>
+		/// <summary>no comment</summary>
 		public virtual void NewMethodWithOverload(long l)
 		{
 		}
@@ -1516,21 +1552,52 @@ namespace NDoc.Test.NewStuff
 		{
 		}
 
-		/// <summary></summary>
+		/// <summary>no comment</summary>
 		public void NewStaticMethod(int n)
 		{
 		}
+
+		#region Implementation of IInterfaceA
+		/// <summary>no comment</summary>
+		public void InheritedImplicitInterfaceMethod()
+		{
+		
+		}
+		#endregion
+
+		#region Implementation of IInterfaceB
+		void IInterfaceB.InheritedExplicitInterfaceMethod()
+		{
+		
+		}
+		#endregion
+
+		#region Implementation of IInterfaceE
+		/// <summary>no comment</summary>
+		public void NewInterfaceMethod()
+		{
+		
+		}
+		#endregion
+
+		#region Implementation of IInterfaceF
+		/// <summary>no comment</summary>
+		public virtual void InterfaceMethodOverride()
+		{
+		
+		}
+		#endregion
 	}
 	/// <summary>
 	/// This class provides new implementations for the base class members.
 	/// </summary>
-	public class NewDerived : NewBase
+	public class NewDerived : NewBase, IInterfaceC, IInterfaceD
 	{
-		/// <summary></summary>
+		/// <summary>no comment</summary>
 		new public class NewClass
 		{
 		}
-		/// <summary></summary>
+		/// <summary>This indexer is new</summary>
 		new public int this[int n]
 		{
 			get
@@ -1541,7 +1608,7 @@ namespace NDoc.Test.NewStuff
 			{
 			}
 		}
-		/// <summary></summary>
+		/// <summary>This indexer is an overload</summary>
 		public int this[string n]
 		{
 			get
@@ -1553,44 +1620,44 @@ namespace NDoc.Test.NewStuff
 			}
 		}
 
-		/// <summary></summary>
+		/// <summary>no comment</summary>
 		public const int Const = 500;
-		/// <summary></summary>
+		/// <summary>no comment</summary>
 		public new const int NewConst = 500;
-		/// <summary></summary>
+		/// <summary>no comment</summary>
 		public int Field;
-		/// <summary></summary>
+		/// <summary>no comment</summary>
 		public new int NewField;
 		/// <summary>
 		/// "Same Name Other Kind Of Member"
 		/// </summary>
 		public new int NewFieldSNOKOM;
 
-		/// <summary></summary>
+		/// <summary>no comment</summary>
 		public int Property
 		{
 			get { return 0; }
 			set {}
 		}
-		/// <summary></summary>
+		/// <summary>no comment</summary>
 		public new int NewProperty
 		{
 			get { return 0; }
 			set {}
 		}
-		/// <summary></summary>
+		/// <summary>no comment</summary>
 		public virtual int VirtualProperty
 		{
 			get { return 0; }
 			set {}
 		}
-		/// <summary></summary>
+		/// <summary>no comment</summary>
 		public override int OverrideProperty
 		{
 			get { return 0; }
 			set {}
 		}
-		/// <summary></summary>
+		/// <summary>no comment</summary>
 		public new virtual int NewVirtualProperty
 		{
 			get { return 0; }
@@ -1612,23 +1679,23 @@ namespace NDoc.Test.NewStuff
 			get { return 0; }
 			set { }
 		}
-		/// <summary></summary>
+		/// <summary>no comment</summary>
 		public void Method(int n)
 		{
 		}
-		/// <summary></summary>
+		/// <summary>no comment</summary>
 		public new void NewMethod(int n)
 		{
 		}
-		/// <summary></summary>
+		/// <summary>no comment</summary>
 		public virtual void VirtualMethod(int n)
 		{
 		}
-		/// <summary></summary>
+		/// <summary>no comment</summary>
 		public override void OverrideMethod(int n)
 		{
 		}
-		/// <summary></summary>
+		/// <summary>no comment</summary>
 		public new virtual void NewVirtualMethod(int n)
 		{
 		}
@@ -1680,9 +1747,36 @@ namespace NDoc.Test.NewStuff
 		{
 		}
 
-		/// <summary></summary>
+		/// <summary>no comment</summary>
 		public new static void NewStaticMethod(int n)
 		{
+		}
+
+		#region Implementation of IInterfaceC
+		/// <summary>no comment</summary>
+		public void ImplicitInterfaceMethod()
+		{
+		
+		}
+		#endregion
+
+		#region Implementation of IInterfaceD
+		void IInterfaceD.ExplicitInterfaceMethod()
+		{
+		
+		}
+		#endregion
+
+		/// <summary>no comment</summary>
+		public new void NewInterfaceMethod()
+		{
+		
+		}
+
+		/// <summary>no comment</summary>
+		public override void InterfaceMethodOverride()
+		{
+		
 		}
 	}
 
@@ -1691,7 +1785,7 @@ namespace NDoc.Test.NewStuff
 	/// </summary>
 	public class Base
 	{
-		/// <summary></summary>
+		/// <summary>no comment</summary>
 		public static void F() {}
 	}
 	/// <summary>
