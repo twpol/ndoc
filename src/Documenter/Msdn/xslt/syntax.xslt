@@ -504,60 +504,48 @@
 		</xsl:choose>
 	</xsl:template>
 	<!-- -->
-	<msxsl:script implements-prefix="user">
+	<msxsl:script language="C#" implements-prefix="user">
 	<![CDATA[
-		function isAttributeWanted(sParamWantedList, oElement)
-		{
-			var aWanted = (''+sParamWantedList).split('|');
-			oElement.Current.MoveToFirstAttribute();
-			var sAttributeType = ''+oElement.Current.Value;
-			for(var i = 0; i != aWanted.length; i++)
-			{
-				var oAttribute = (''+aWanted[i]).split(',');
-				if(sAttributeType.indexOf(""+oAttribute[0]) != -1)
-				{
-					return 'true';
+		string isAttributeWanted(string sParamWantedList, XPathNodeIterator it) {
+			string[] aWanted = ("" + sParamWantedList).Split('|');
+			it.Current.MoveToFirstAttribute();
+			string sAttributeType = "" + it.Current.Value;
+			for (int i = 0; i != aWanted.Length; i++) {
+				string[] oAttribute = ("" + aWanted[i]).Split(',');
+				if (sAttributeType.IndexOf("" + oAttribute[0]) != -1) {
+					return "true";
 				}
 			}
-			return '';
+			return "";
 		}
 		
-		function isPropertyWanted(sParamWantedList, oElement)
-		{
-			var aWanted = (''+sParamWantedList).split('|');
+		string isPropertyWanted(string sParamWantedList, XPathNodeIterator it) {
+			string[] aWanted = ("" + sParamWantedList).Split('|');
 			
-			oElement.Current.MoveToFirstAttribute();
-			var sPropertyType = ''+oElement.Current.Value;
-			oElement.Current.MoveToParent();
-			oElement.Current.MoveToParent();
-			oElement.Current.MoveToFirstAttribute();
-			var sAttributeType = ''+oElement.Current.Value;
+			it.Current.MoveToFirstAttribute();
+			string sPropertyType = "" + it.Current.Value;
+			it.Current.MoveToParent();
+			it.Current.MoveToParent();
+			it.Current.MoveToFirstAttribute();
+			string sAttributeType = ""  + it.Current.Value;
 			
-			for(var i = 0; i != aWanted.length; i++)
-			{
-				var oAttribute = (''+aWanted[i]).split(',');
-				if(sAttributeType.indexOf(""+oAttribute[0]) != -1)
-				{
-					if (oAttribute.length == 1)
-					{
-						return 'true';
-					}
-					else if (oAttribute.length != 0)
-					{
-						for(var j = 1; j != oAttribute.length; j++)
-						{
-							if(sPropertyType.indexOf(""+oAttribute[j]) != -1)
-							{
-								if (sPropertyType.length == oAttribute[j].length)
-								{
-									return 'true';
+			for (int i = 0; i != aWanted.Length; i++) {
+				string[] oAttribute = ("" + aWanted[i]).Split(',');
+				if (sAttributeType.IndexOf("" + oAttribute[0]) != -1) {
+					if (oAttribute.Length == 1) {
+						return "true";
+					} else if (oAttribute.Length != 0) {
+						for (int j = 1; j != oAttribute.Length; j++) {
+							if (sPropertyType.IndexOf("" + oAttribute[j]) != -1) {
+								if (sPropertyType.Length == oAttribute[j].Length) {
+									return "true";
 								}
 							}
 						}
 					}
 				}
 			}
-			return '';
+			return "";
 		}
 		]]>
     </msxsl:script>
