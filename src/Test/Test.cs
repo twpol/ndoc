@@ -198,10 +198,10 @@ namespace NDoc.Test
 		/// <summary>This method is declared in the Base class.</summary>
 		public void Overloaded(int i) { }
 
-    /// <summary>This method is declared in the Base class.</summary>
-    public void Overloaded(byte i) { }
+		/// <summary>This method is declared in the Base class.</summary>
+		public void Overloaded(byte i) { }
 
-    /// <summary>This field is declared in the Base class.</summary>
+		/// <summary>This field is declared in the Base class.</summary>
 		public int BaseField;
 
 		/// <summary>This event is declared in the Base class.</summary>
@@ -223,8 +223,8 @@ namespace NDoc.Test
 		}
 
 		/// <summary>This method is declared in the Derived class.</summary>
-    /// <remarks>This is a reference to a parent member: <see cref="Base.BaseProperty"/></remarks>
-    public void DerivedMethod() { }
+		/// <remarks>This is a reference to a parent member: <see cref="Base.BaseProperty"/></remarks>
+		public void DerivedMethod() { }
 
 		/// <summary>This method is declared in the Derived class with the "new" keyword.</summary>
 		public new void NewMethod() { }
