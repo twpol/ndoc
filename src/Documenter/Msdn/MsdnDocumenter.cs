@@ -251,10 +251,13 @@ namespace NDoc.Documenter.Msdn
 				if (rootPageFileName != null)
 				{
 					// add the file
-					string rootPageOriginalName = Path.Combine(MyConfig.OutputDirectory, 
+					string rootPageOutputName = Path.Combine(MyConfig.OutputDirectory, 
 							Path.GetFileName(rootPageFileName));
-					File.SetAttributes(rootPageOriginalName, FileAttributes.Normal);
-					File.Copy(rootPageFileName, rootPageOriginalName, true);
+					if (File.Exists(rootPageOutputName))
+					{
+						File.SetAttributes(rootPageOutputName, FileAttributes.Normal);
+					}
+					File.Copy(rootPageFileName, rootPageOutputName, true);
 					htmlHelp.AddFileToProject(Path.GetFileName(rootPageFileName));
 					htmlHelp.AddFileToContents(rootPageTOCName, 
 						Path.GetFileName(rootPageFileName));
