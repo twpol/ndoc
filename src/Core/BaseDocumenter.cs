@@ -22,6 +22,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Xml;
+using System.Text;
 
 namespace NDoc.Core
 {
@@ -97,10 +98,38 @@ namespace NDoc.Core
 		abstract public void Clear();
 
 		/// <summary>See <see cref="IDocumenter"/>.</summary>
-		public virtual string CanBuild()
+		public virtual string CanBuild(Project project)
 		{
-			return null;
+			return this.CanBuild(project, false);
 		}
+
+		/// <summary>See <see cref="IDocumenter"/>.</summary>
+		public virtual string CanBuild(Project project, bool checkInputOnly)
+		{
+			StringBuilder xfiles = new StringBuilder();
+			foreach (AssemblySlashDoc asd in project.GetAssemblySlashDocs())
+			{
+				if (!File.Exists(asd.AssemblyFilename))
+				{
+					xfiles.Append("\n" + asd.AssemblyFilename);
+				}
+				if (!File.Exists(asd.SlashDocFilename))
+				{
+					xfiles.Append("\n" + asd.SlashDocFilename);
+				}
+			}
+
+			if (xfiles.Length > 0)
+			{
+				return "One of more source files not found:\n" + xfiles.ToString();
+			}
+			else
+			{
+				return null;
+			}
+		}
+
+
 
 		/// <summary>See <see cref="IDocumenter"/>.</summary>
 		abstract public void Build(Project project);

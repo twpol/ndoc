@@ -83,10 +83,21 @@ namespace NDoc.Core
 
 		/// <summary>Checks to make sure the documenter can perform a
 		/// build.</summary>
+		/// <param name="project">The project the would be built.</param>
 		/// <remarks>This is for people who like to leave their CHMs open.</remarks>
 		/// <returns>null if the documenter can build; otherwise a message
 		/// describing why it can't build</returns>
-		string CanBuild();
+		string CanBuild(Project project);
+
+		/// <summary>Checks to make sure the documenter can perform a
+		/// build.</summary>
+		/// <param name="project">The project the would be built.</param>
+		/// <param name="checkInputOnly">When true, don't check for output 
+		/// file locking.</param>
+		/// <remarks>This is for people who like to leave their CHMs open.</remarks>
+		/// <returns>null if the documenter can build; otherwise a message
+		/// describing why it can't build</returns>
+		string CanBuild(Project project, bool checkInputOnly);
 
 		/// <summary>Builds the documentation.</summary>
 		/// <remarks>The compiler does not currently allow namespaces to documented.</remarks>

@@ -1291,7 +1291,7 @@ namespace NDoc.Gui
 			IDocumenter documenter =
 				(IDocumenter)project.Documenters[comboBoxDocumenters.SelectedIndex];
 
-			string message = documenter.CanBuild();
+			string message = documenter.CanBuild(project);
 
 			if (message != null)
 			{
@@ -1300,7 +1300,7 @@ namespace NDoc.Gui
 					message,
 					"NDoc",
 					MessageBoxButtons.OK,
-					MessageBoxIcon.Error);
+					MessageBoxIcon.Stop);
 
 				return;
 			}
@@ -1626,28 +1626,56 @@ namespace NDoc.Gui
 		protected void namespaceSummariesButton_Click (object sender, System.EventArgs e)
 		{
 			NamespaceSummariesForm form;
-			Hashtable editNamespaceSummaries = new Hashtable();
-			XmlDocumenter xmlDocumenter = new XmlDocumenter();
-			XmlDocument xmlDocumentation = new XmlDocument();
 
-			// Check for any new namespaces and add them to the Hashtable
-			((XmlDocumenterConfig)xmlDocumenter.Config).OutputFile = @"./namespaceSummaries.xml";
-			xmlDocumenter.Build(project);
-			xmlDocumentation.Load(@"./namespaceSummaries.xml");
-			File.Delete(@"./namespaceSummaries.xml");
-
-			XmlNodeList namespaceNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace");
-
-			ArrayList namespaces = new ArrayList();
-
-			foreach (XmlNode namespaceNode in namespaceNodes)
+			this.Cursor = Cursors.WaitCursor;
+			try
 			{
-				string namespaceName = (string)namespaceNode.Attributes["name"].Value;
-				namespaces.Add(namespaceName);
+
+				IDocumenter documenter =
+					(IDocumenter)project.Documenters[comboBoxDocumenters.SelectedIndex];
+
+				string message = documenter.CanBuild(project, true);
+				if (message != null)
+				{
+					MessageBox.Show(
+						this,
+						message,
+						"NDoc",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Stop);
+
+					return;
+				}
+				
+				Hashtable editNamespaceSummaries = new Hashtable();
+				XmlDocumenter xmlDocumenter = new XmlDocumenter();
+				XmlDocument xmlDocumentation = new XmlDocument();
+
+				// Check for any new namespaces and add them to the Hashtable
+				((XmlDocumenterConfig)xmlDocumenter.Config).OutputFile = @"./namespaceSummaries.xml";
+				xmlDocumenter.Build(project);
+				xmlDocumentation.Load(@"./namespaceSummaries.xml");
+				File.Delete(@"./namespaceSummaries.xml");
+
+				XmlNodeList namespaceNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace");
+
+				ArrayList namespaces = new ArrayList();
+
+				foreach (XmlNode namespaceNode in namespaceNodes)
+				{
+					string namespaceName = (string)namespaceNode.Attributes["name"].Value;
+					namespaces.Add(namespaceName);
+				}
+
+				form = new NamespaceSummariesForm(namespaces, project);
+				form.StartPosition = FormStartPosition.CenterParent;
+
+			}
+			finally
+			{
+				this.Cursor = Cursors.Arrow;
 			}
 
-			form = new NamespaceSummariesForm(namespaces, project);
-			form.StartPosition = FormStartPosition.CenterParent;
 			form.ShowDialog(this);
 		}
 

@@ -105,29 +105,37 @@ namespace NDoc.Documenter.Msdn
 		}
 
 		/// <summary>See <see cref="IDocumenter"/>.</summary>
-		public override string CanBuild()
+		public override string CanBuild(Project project, bool checkInputOnly)
 		{
-			// this is lame. can we find a better way to get the output path?
-			HtmlHelp htmlHelp = new HtmlHelp(
-				MyConfig.OutputDirectory,
-				MyConfig.HtmlHelpName,
-				null,
-				MyConfig.HtmlHelpCompilerFilename);
+			string result = base.CanBuild(project, checkInputOnly); 
+			if (result != null)
+			{
+				return result;
+			}
 
-			string result = null;
+			if (checkInputOnly) 
+			{
+				return null;
+			}
+
+			string path = Path.Combine(MyConfig.OutputDirectory, 
+				MyConfig.HtmlHelpName) + ".chm";
+
+			string temp = Path.Combine(MyConfig.OutputDirectory, "~chm.tmp");
 
 			try
 			{
-				string path = htmlHelp.GetPathToCompiledHtmlFile();
 
 				if (File.Exists(path))
 				{
-					File.Delete(path);
+					//if we can move the file, then it is not open...
+					File.Move(path, temp);
+					File.Move(temp, path);
 				}
 			}
 			catch (Exception)
 			{
-				result = "The compiled HTML Help file is probably open.";
+				result = "The compiled HTML Help file is probably open.\nPlease close it and try again.";
 			}
 
 			return result;
