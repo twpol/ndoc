@@ -19,8 +19,14 @@ using System;
 using System.ComponentModel;
 using System.Drawing.Design;
 using System.IO;
+// In mono 0.25, most classes that should actually be in the System.Design assembly
+// are in the System.Windows.Forms assembly.  This has been fixed in Mono post 0.25.
+#if !MONO 
 using System.Windows.Forms.Design;
+#endif
+
 using Microsoft.Win32;
+
 using NDoc.Core;
 
 namespace NDoc.Documenter.Msdn
@@ -311,7 +317,12 @@ namespace NDoc.Documenter.Msdn
 		Category("HTML Help Options"),
 		Description("The name of an html file to be included as the root home page. "
 			+ "SplitTOCs is disabled when this property is set."),
+#if (!MONO)
+		// In mono 0.25 most classes in the System.Windows.Forms.Design assembly 
+		// are located in the System.Windows.Forms assembly while they should 
+		// actually be in the System.Design assembly.
 		Editor(typeof(FileNameEditor), typeof(UITypeEditor))
+#endif
 		]
 		public string RootPageFileName
 		{
