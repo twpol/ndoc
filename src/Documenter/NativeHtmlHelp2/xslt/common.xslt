@@ -18,26 +18,26 @@
 	<!--
 	 | no-op extensibility templates
 	 +-->
-	<xsl:template match="node()|@*" mode="summary-section" />
-	<xsl:template match="node()|@*" mode="syntax-section"/>
-	<xsl:template match="node()|@*" mode="value-section"/>
-	<xsl:template match="node()|@*" mode="parameter-section" />
-	<xsl:template match="node()|@*" mode="returnvalue-section" />
-	<xsl:template match="node()|@*" mode="implements-section" />
-	<xsl:template match="node()|@*" mode="remarks-section" />
-	<xsl:template match="node()|@*" mode="obsolete-section" />
-	<xsl:template match="node()|@*" mode="events-section" />
-	<xsl:template match="node()|@*" mode="exceptions-section" />
-	<xsl:template match="node()|@*" mode="example-section" />
-	<xsl:template match="node()|@*" mode="member-requirements-section" />
-	<xsl:template match="node()|@*" mode="type-requirements-section" />
-	<xsl:template match="node()|@*" mode="seealso-section"/>
-	<xsl:template match="node()|@*" mode="enumeration-members-section"/>
-	<xsl:template match="node()|@*" mode="footer-row"/>
-	<xsl:template match="node()|@*" mode="title-row"/>
-	<xsl:template match="node()|@*" mode="overloads-remarks-section"/>
-	<xsl:template match="node()|@*" mode="overloads-example-section"/>
-	<xsl:template match="node()|@*" mode="overloads-summary-section"/>
+	<xsl:template match="node()|@*|text()" mode="summary-section" />
+	<xsl:template match="node()|@*|text()" mode="syntax-section"/>
+	<xsl:template match="node()|@*|text()" mode="value-section"/>
+	<xsl:template match="node()|@*|text()" mode="parameter-section" />
+	<xsl:template match="node()|@*|text()" mode="returnvalue-section" />
+	<xsl:template match="node()|@*|text()" mode="implements-section" />
+	<xsl:template match="node()|@*|text()" mode="remarks-section" />
+	<xsl:template match="node()|@*|text()" mode="obsolete-section" />
+	<xsl:template match="node()|@*|text()" mode="events-section" />
+	<xsl:template match="node()|@*|text()" mode="exceptions-section" />
+	<xsl:template match="node()|@*|text()" mode="example-section" />
+	<xsl:template match="node()|@*|text()" mode="member-requirements-section" />
+	<xsl:template match="node()|@*|text()" mode="type-requirements-section" />
+	<xsl:template match="node()|@*|text()" mode="seealso-section"/>
+	<xsl:template match="node()|@*|text()" mode="enumeration-members-section"/>
+	<xsl:template match="node()|@*|text()" mode="footer-row"/>
+	<xsl:template match="node()|@*|text()" mode="title-row"/>
+	<xsl:template match="node()|@*|text()" mode="overloads-remarks-section"/>
+	<xsl:template match="node()|@*|text()" mode="overloads-example-section"/>
+	<xsl:template match="node()|@*|text()" mode="overloads-summary-section"/>
 	
 	<!-- -->
 	

@@ -83,6 +83,13 @@ namespace NDoc.Documenter.Msdn
 
 			set
 			{
+				if ( value.IndexOfAny(new char[]{'#','?', ';', ':'}) != -1) 
+				{
+					throw new FormatException("Output Directory '" + value + 
+						"' is not valid because it contains '#','?', ':' or ';' which" +
+						" are reserved characters in HTML URLs."); 
+				}
+
 				outputDirectory = value;
 
 				if (!outputDirectory.EndsWith( Path.DirectorySeparatorChar.ToString() ))

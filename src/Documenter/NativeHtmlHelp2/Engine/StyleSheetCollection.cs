@@ -38,19 +38,19 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>The populated collection</returns>
 		public static StyleSheetCollection LoadStyleSheets( string extensibilityStylesheet, string resourceDirectory )
 		{
-			XmlDocument common = new XmlDocument();
-			common.Load( Path.Combine( Path.Combine( resourceDirectory, "xslt" ), "tags.xslt" ) );
+			XmlDocument tags = new XmlDocument();
+			tags.Load( Path.Combine( Path.Combine( resourceDirectory, "xslt" ), "tags.xslt" ) );
 			
-			XmlElement include = common.CreateElement( "xsl", "include", "http://www.w3.org/1999/XSL/Transform" );
+			XmlElement include = tags.CreateElement( "xsl", "include", "http://www.w3.org/1999/XSL/Transform" );
 
 			if ( !Path.IsPathRooted( extensibilityStylesheet ) )
 				extensibilityStylesheet = Path.GetFullPath( extensibilityStylesheet );
 
 			include.SetAttribute( "href", extensibilityStylesheet );
 
-			common.DocumentElement.PrependChild( include );
+			tags.DocumentElement.PrependChild( include );
 
-			common.Save( Path.Combine( Path.Combine( resourceDirectory, "xslt" ), "tags.xslt" ) );
+			tags.Save( Path.Combine( Path.Combine( resourceDirectory, "xslt" ), "tags.xslt" ) );
 
 			return LoadStyleSheets( resourceDirectory );
 		}
