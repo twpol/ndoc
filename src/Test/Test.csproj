@@ -84,7 +84,7 @@
                 />
                 <File
                     RelPath = "extend-ndoc.xslt"
-                    BuildAction = "None"
+                    BuildAction = "Content"
                 />
                 <File
                     RelPath = "include.xml"
@@ -92,7 +92,7 @@
                 />
                 <File
                     RelPath = "Test.build"
-                    BuildAction = "None"
+                    BuildAction = "Content"
                 />
                 <File
                     RelPath = "Test.cs"
