@@ -165,9 +165,7 @@ namespace NDoc.Test
 		{
 			Event(this, new EventArgs());
 			ProtectedEvent(this, new EventArgs());
-#if !MONO //mono does not like this:
 			StaticEvent(this, new EventArgs());
-#endif
 			EventWithArgs(this, new EventArgsTest());
 			EventWithMoreArgs(this, new EventArgsDerived());
 			MultiEvent(this, new EventArgsOne());
