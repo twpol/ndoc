@@ -20,7 +20,11 @@ using System;
 using System.IO;
 using System.ComponentModel;
 using System.Drawing.Design;
+// In mono 0.25, most classes that should actually be in the System.Design assembly
+// are in the System.Windows.Forms assembly.
+#if !MONO 
 using System.Windows.Forms.Design;
+#endif
 
 using NDoc.Core;
 
@@ -94,7 +98,12 @@ namespace NDoc.Documenter.Latex
 		[
 		Category("LaTeX"),
 		Description("Path to the LaTeX executable (Set to empty if you do not have LaTeX installed)."),
+#if (!MONO)
+		// In mono 0.25 most classes in the System.Windows.Forms.Design assembly 
+		// are located in the System.Windows.Forms assembly while they should 
+		// actually be in the System.Design assembly.
 		Editor(typeof(FileNameEditor), typeof(UITypeEditor))
+#endif
 		]
 		public string LatexCompiler
 		{
