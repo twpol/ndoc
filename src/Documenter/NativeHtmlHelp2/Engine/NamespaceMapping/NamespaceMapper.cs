@@ -10,7 +10,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping
 {
 	/// <summary>
 	/// NamespaceMapper allows managed namespaces to be asscoitated with html help namespaces
-	/// when creatin XLinks in the compiled help
+	/// when creating XLinks in the compiled help
 	/// </summary>
 	public class NamespaceMapper
 	{
@@ -61,8 +61,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping
 		}
 		#endregion
 
-		private XmlNode map;
-		private Hashtable helpNamespaceCache ;
+		private XmlNode map;		// XmlNode representing hte map data
+		private Hashtable helpNamespaceCache ;	// a hashtable to improve lookup speeds
 
 		/// <summary>
 		/// Creates a new instance of the NamespaceMapper class based on the specified map file
@@ -85,10 +85,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping
 				XmlDocument doc = new XmlDocument();
 				doc.Load( reader );
 				map = doc.DocumentElement;
-			}
-			catch ( Exception )
-			{
-				throw;
 			}
 			finally
 			{
@@ -189,9 +185,12 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping
 		/// <returns>The best match for the managed namespace or an empty string if none is found</returns>
 		public string LookupHelpNamespace( string managedName )
 		{
+			// first see if this managed name is in the cache
+			// if it is not in the cache add it
 			if ( !helpNamespaceCache.Contains( managedName ) )
 				helpNamespaceCache.Add( managedName, SelectHelpNamesapce( managedName ) );
 			
+			// return the value from the cache
 			return helpNamespaceCache[managedName].ToString();
 		}
 
@@ -214,11 +213,13 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping
 			}
 			else
 			{
-				// Since more than one managed name the starts with the root  
+				// Since there is more than one managed name that starts with the root  
 				// being searched, we have to search for a more specific match.
 				// We do this by starting with the most specified name and working backwards to the root
 				// e.g. if we are looking for NS1.NS2.N3.NS4 we would start
 				// with NS1.NS2.N3.NS4, then NS1.NS2.N3, then NS1.NS2
+				//
+				// In this way managed namespace documentation can be spread across help namesapces
 				string[] s = name.Parts;
 				for ( int i = s.Length - 1; i >= 0; i-- )
 				{
