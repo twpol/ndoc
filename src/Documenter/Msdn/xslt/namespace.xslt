@@ -29,7 +29,7 @@
 							<xsl:attribute name="href">
 								<xsl:call-template name="get-filename-for-current-namespace-hierarchy" />
 							</xsl:attribute>
-							<xsl:text>Hierarchy diagram</xsl:text>
+							<xsl:text>Namespace hierarchy</xsl:text>
 						</a>
 					</p>
 					<br />
