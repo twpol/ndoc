@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<xsl:transform version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+<xsl:transform version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
 	xmlns:msxsl="urn:schemas-microsoft-com:xslt"
-    xmlns:user="urn:my-scripts"
-    exclude-result-prefixes="msxsl user"
->
+	xmlns:user="urn:my-scripts" 
+	exclude-result-prefixes="msxsl user">
 	<!-- -->
 	<xsl:param name="ndoc-vb-syntax" />
 	<!-- -->
@@ -57,8 +56,8 @@
 		<xsl:if test="$ndoc-vb-syntax">
 			<div class="syntax">
 				<span class="lang">[Visual&#160;Basic]</span>
-				<br/>
-				<xsl:call-template name="vb-attributes"/>
+				<br />
+				<xsl:call-template name="vb-attributes" />
 				<xsl:if test="@abstract = 'true'">
 					<xsl:text>MustInherit&#160;</xsl:text>
 				</xsl:if>
@@ -89,20 +88,40 @@
 				<xsl:choose>
 					<xsl:when test="local-name() != 'delegate'">
 						<xsl:if test="@baseType">
+							<xsl:text>&#160;_</xsl:text>
 							<div>
-							<xsl:text>Inherits&#160;</xsl:text>
-							<xsl:value-of select="@baseType" />
+								<xsl:text>&#160;&#160;&#160;&#160;Inherits&#160;</xsl:text>
+								<a>
+									<xsl:attribute name="href">
+										<xsl:call-template name="get-filename-for-type-name">
+											<xsl:with-param name="type-name" select="./base/@type" />
+										</xsl:call-template>
+									</xsl:attribute>
+									<xsl:call-template name="vb-type">
+										<xsl:with-param name="runtime-type" select="./base/@type" />
+									</xsl:call-template>
+								</a>
 							</div>
 						</xsl:if>
 						<xsl:if test="implements[not(@inherited)]">
+							<xsl:text>&#160;_</xsl:text>
 							<div>
-							<xsl:text>Implements&#160;</xsl:text>
-							<xsl:for-each select="implements[not(@inherited)]">
-								<xsl:value-of select="." />
-								<xsl:if test="position()!=last()">
-									<xsl:text>, </xsl:text>
-								</xsl:if>
-							</xsl:for-each>
+								<xsl:text>&#160;&#160;&#160;&#160;Implements&#160;</xsl:text>
+								<xsl:for-each select="implements[not(@inherited)]">
+									<a>
+										<xsl:attribute name="href">
+											<xsl:call-template name="get-filename-for-type-name">
+												<xsl:with-param name="type-name" select="@type" />
+											</xsl:call-template>
+										</xsl:attribute>
+										<xsl:call-template name="vb-type">
+											<xsl:with-param name="runtime-type" select="@type" />
+										</xsl:call-template>
+									</a>
+									<xsl:if test="position()!=last()">
+										<xsl:text>, </xsl:text>
+									</xsl:if>
+								</xsl:for-each>
 							</div>
 						</xsl:if>
 					</xsl:when>
@@ -139,11 +158,21 @@
 				</xsl:call-template>
 			</a>
 		</xsl:if>
-		<xsl:if test="implements">
-			<xsl:text> Implements _</xsl:text>
-			<br /><xsl:text>&#160;&#160;&#160;</xsl:text>
-			<xsl:value-of select="implements/@interface" /><xsl:text>.</xsl:text><xsl:value-of select="implements/@name" />
-		</xsl:if>
+			<xsl:if test="implements">
+			<xsl:variable name="member" select="local-name(..)"/>
+				<xsl:text>&#160;_</xsl:text>
+				<div>
+					<xsl:text>&#160;&#160;&#160;&#160;Implements&#160;</xsl:text>
+					<xsl:for-each select="implements[not(@inherited)]">
+						<xsl:call-template name="implements-member">
+							<xsl:with-param name="member" select="$member" />
+						</xsl:call-template>
+						<xsl:if test="position()!=last()">
+							<xsl:text>, </xsl:text>
+						</xsl:if>
+					</xsl:for-each>
+				</div>
+			</xsl:if>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="vb-type-access">
@@ -189,7 +218,9 @@
 				<xsl:text>ByVal </xsl:text>
 			</xsl:otherwise>
 		</xsl:choose>
-		<i><xsl:value-of select="@name" /></i>
+		<i>
+			<xsl:value-of select="@name" />
+		</i>
 		<xsl:text>&#160;As&#160;</xsl:text>
 		<a>
 			<xsl:attribute name="href">
@@ -202,10 +233,10 @@
 			</xsl:call-template>
 		</a>
 		<xsl:if test="@optional = 'true'">
-		  <xsl:text> = </xsl:text>
-		  <xsl:if test="@type='System.String'">"</xsl:if>
-		  <xsl:value-of select="@defaultValue" />
-		  <xsl:if test="@type='System.String'">"</xsl:if>
+			<xsl:text> = </xsl:text>
+			<xsl:if test="@type='System.String'">"</xsl:if>
+			<xsl:value-of select="@defaultValue" />
+			<xsl:if test="@type='System.String'">"</xsl:if>
 		</xsl:if>
 		<xsl:if test="position() != last()">
 			<xsl:text>,</xsl:text>
@@ -219,7 +250,7 @@
 			<div class="syntax">
 				<span class="lang">[Visual&#160;Basic]</span>
 				<br />
-				<xsl:call-template name="vb-attributes"/>
+				<xsl:call-template name="vb-attributes" />
 				<xsl:choose>
 					<xsl:when test="local-name() != 'operator'">
 						<xsl:if test="not(parent::interface or @interface)">
@@ -293,7 +324,7 @@
 			<div class="syntax">
 				<span class="lang">[Visual&#160;Basic]</span>
 				<br />
-				<xsl:call-template name="vb-attributes"/>
+				<xsl:call-template name="vb-attributes" />
 				<xsl:if test="not(parent::interface)">
 					<xsl:call-template name="vb-method-access">
 						<xsl:with-param name="access" select="@access" />
@@ -328,19 +359,23 @@
 						<xsl:with-param name="runtime-type" select="@type" />
 					</xsl:call-template>
 				</a>
-			<xsl:if test="@literal='true'">
-				<xsl:text> = </xsl:text>
-				<xsl:if test="@type='System.String'"><xsl:text>"</xsl:text></xsl:if>
-				<xsl:value-of select="@value" />
-				<xsl:if test="@type='System.String'"><xsl:text>"</xsl:text></xsl:if>
-			</xsl:if>
+				<xsl:if test="@literal='true'">
+					<xsl:text> = </xsl:text>
+					<xsl:if test="@type='System.String'">
+						<xsl:text>"</xsl:text>
+					</xsl:if>
+					<xsl:value-of select="@value" />
+					<xsl:if test="@type='System.String'">
+						<xsl:text>"</xsl:text>
+					</xsl:if>
+				</xsl:if>
 			</div>
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="vb-property-syntax">
 		<xsl:if test="$ndoc-vb-syntax">
-			<xsl:call-template name="vb-attributes"/>
+			<xsl:call-template name="vb-attributes" />
 			<xsl:if test="not(parent::interface)">
 				<xsl:choose>
 					<xsl:when test="@contract='Abstract'">
@@ -390,9 +425,19 @@
 				</xsl:call-template>
 			</a>
 			<xsl:if test="implements">
-				<xsl:text> Implements _</xsl:text>
-				<br /><xsl:text>&#160;&#160;&#160;</xsl:text>
-				<xsl:value-of select="implements/@interface" /><xsl:text>.</xsl:text><xsl:value-of select="implements/@name" />
+				<xsl:variable name="member" select="local-name()" />
+				<xsl:text>&#160;_</xsl:text>
+				<div>
+					<xsl:text>&#160;&#160;&#160;&#160;Implements&#160;</xsl:text>
+					<xsl:for-each select="implements[not(@inherited)]">
+						<xsl:call-template name="implements-member">
+							<xsl:with-param name="member" select="$member" />
+						</xsl:call-template>
+						<xsl:if test="position()!=last()">
+							<xsl:text>, </xsl:text>
+						</xsl:if>
+					</xsl:for-each>
+				</div>
 			</xsl:if>
 		</xsl:if>
 	</xsl:template>
@@ -402,14 +447,16 @@
 		<xsl:if test="$ndoc-document-attributes">
 			<xsl:if test="attribute">
 				<xsl:for-each select="attribute">
-					<div class="attribute"><xsl:call-template name="vb-attribute">
-						<xsl:with-param name="attname" select="@name" />
-					</xsl:call-template></div>
+					<div class="attribute">
+						<xsl:call-template name="vb-attribute">
+							<xsl:with-param name="attname" select="@name" />
+						</xsl:call-template>
+					</div>
 				</xsl:for-each>
 			</xsl:if>
 		</xsl:if>
 	</xsl:template>
-	<!-- -->	
+	<!-- -->
 	<xsl:template name="vb-attribute">
 		<xsl:param name="attname" />
 		<xsl:text>&lt;</xsl:text>
@@ -424,15 +471,21 @@
 				<xsl:text>=</xsl:text>
 				<xsl:choose>
 					<xsl:when test="@value">
-						<xsl:if test="@type='System.String'"><xsl:text>"</xsl:text></xsl:if>
+						<xsl:if test="@type='System.String'">
+							<xsl:text>"</xsl:text>
+						</xsl:if>
 						<xsl:value-of select="@value" />
-						<xsl:if test="@type='System.String'"><xsl:text>"</xsl:text></xsl:if>
+						<xsl:if test="@type='System.String'">
+							<xsl:text>"</xsl:text>
+						</xsl:if>
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:text>**UNKNOWN**</xsl:text>
 					</xsl:otherwise>
 				</xsl:choose>
-				<xsl:if test="position()!=last()"><xsl:text>, </xsl:text></xsl:if>
+				<xsl:if test="position()!=last()">
+					<xsl:text>, </xsl:text>
+				</xsl:if>
 			</xsl:for-each>
 			<xsl:text>)</xsl:text>
 		</xsl:if>

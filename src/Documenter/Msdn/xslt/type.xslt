@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<!-- -->
-	<xsl:output method="xml" indent="yes"  encoding="utf-8" omit-xml-declaration="yes"/>
+	<xsl:output method="xml" indent="yes" encoding="utf-8" omit-xml-declaration="yes" />
 	<!-- -->
 	<xsl:include href="common.xslt" />
 	<!-- -->
@@ -31,7 +31,6 @@
 			<xsl:call-template name="indent">
 				<xsl:with-param name="count" select="$level" />
 			</xsl:call-template>
-			
 			<xsl:choose>
 				<xsl:when test="starts-with($list[$last]/@type, 'System.')">
 					<a>
@@ -58,7 +57,7 @@
 							</a>
 						</xsl:when>
 						<xsl:otherwise>
-								<xsl:value-of select="substring-after($list[$last]/@id, ':' )" />
+							<xsl:value-of select="substring-after($list[$last]/@id, ':' )" />
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:otherwise>
@@ -126,11 +125,11 @@
 					<xsl:if test="local-name()='enumeration' and @flags">
 						<p>This enumeration has a <a>
 						<xsl:attribute name="href">
-							<xsl:call-template name="get-filename-for-system-type">
-								<xsl:with-param name="type-name" select="'System.FlagsAttribute'" />
-								<xsl:with-param name="ignore-text" select="true()"/>
-							</xsl:call-template>
-						</xsl:attribute>
+									<xsl:call-template name="get-filename-for-system-type">
+										<xsl:with-param name="type-name" select="'System.FlagsAttribute'" />
+										<xsl:with-param name="ignore-text" select="true()" />
+									</xsl:call-template>
+								</xsl:attribute>
 						FlagsAttribute</a>
 						attribute that allows a bitwise combination of its member values.</p>
 					</xsl:if>
@@ -149,14 +148,14 @@
 													<xsl:call-template name="indent">
 														<xsl:with-param name="count" select="1" />
 													</xsl:call-template>
-							<a>
-								<xsl:attribute name="href">
-									<xsl:call-template name="get-filename-for-type">
-										<xsl:with-param name="id" select="@id" />
-									</xsl:call-template>
-								</xsl:attribute>
-								<xsl:value-of select="substring-after(@id, ':' )" />
-							</a>
+													<a>
+														<xsl:attribute name="href">
+															<xsl:call-template name="get-filename-for-type">
+																<xsl:with-param name="id" select="@id" />
+															</xsl:call-template>
+														</xsl:attribute>
+														<xsl:value-of select="substring-after(@id, ':' )" />
+													</a>
 												</xsl:for-each>
 											</xsl:when>
 											<xsl:otherwise>
@@ -165,9 +164,9 @@
 													<xsl:with-param name="count" select="1" />
 												</xsl:call-template>
 												<xsl:variable name="HierarchyFilename">
-												  <xsl:call-template name="get-filename-for-type-hierarchy">
-												    <xsl:with-param name="id" select="@id"/>
-												    </xsl:call-template>
+													<xsl:call-template name="get-filename-for-type-hierarchy">
+														<xsl:with-param name="id" select="@id" />
+													</xsl:call-template>
 												</xsl:variable>
 												<a href="{$HierarchyFilename}">
 													<xsl:text>Derived interfaces</xsl:text>
@@ -196,7 +195,7 @@
 										<xsl:value-of select="substring-after( @id, ':' )" />
 									</b>
 									<xsl:if test="derivedBy">
-												<xsl:variable name="derivedTypeIndent" select="$typeIndent+2" />
+										<xsl:variable name="derivedTypeIndent" select="$typeIndent+2" />
 										<xsl:choose>
 											<xsl:when test="count(derivedBy) &lt; 6">
 												<xsl:for-each select="derivedBy">
@@ -204,14 +203,14 @@
 													<xsl:call-template name="indent">
 														<xsl:with-param name="count" select="$derivedTypeIndent" />
 													</xsl:call-template>
-							<a>
-								<xsl:attribute name="href">
-									<xsl:call-template name="get-filename-for-type">
-										<xsl:with-param name="id" select="@id" />
-									</xsl:call-template>
-								</xsl:attribute>
-								<xsl:value-of select="substring-after(@id, ':' )" />
-							</a>
+													<a>
+														<xsl:attribute name="href">
+															<xsl:call-template name="get-filename-for-type">
+																<xsl:with-param name="id" select="@id" />
+															</xsl:call-template>
+														</xsl:attribute>
+														<xsl:value-of select="substring-after(@id, ':' )" />
+													</a>
 												</xsl:for-each>
 											</xsl:when>
 											<xsl:otherwise>
@@ -220,9 +219,9 @@
 													<xsl:with-param name="count" select="$derivedTypeIndent" />
 												</xsl:call-template>
 												<xsl:variable name="HierarchyFilename">
-												  <xsl:call-template name="get-filename-for-type-hierarchy">
-												    <xsl:with-param name="id" select="@id"/>
-												    </xsl:call-template>
+													<xsl:call-template name="get-filename-for-type-hierarchy">
+														<xsl:with-param name="id" select="@id" />
+													</xsl:call-template>
 												</xsl:variable>
 												<a href="{$HierarchyFilename}">
 													<xsl:text>Derived types</xsl:text>
@@ -299,50 +298,63 @@
 					<xsl:call-template name="seealso-section">
 						<xsl:with-param name="page" select="$page" />
 					</xsl:call-template>
-					
 					<xsl:if test="not($ndoc-omit-object-tags)">
-						<object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e" viewastext="true" style="display: none;">
+						<object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e"
+							viewastext="true" style="display: none;">
 							<xsl:choose>
 								<xsl:when test="local-name() = 'enumeration'">
 									<xsl:element name="param">
 										<xsl:attribute name="name">Keyword</xsl:attribute>
-										<xsl:attribute name="value"><xsl:value-of select="concat(@name, ' enumeration')" /></xsl:attribute>
+										<xsl:attribute name="value">
+											<xsl:value-of select="concat(@name, ' enumeration')" />
+										</xsl:attribute>
 									</xsl:element>
 									<xsl:element name="param">
 										<xsl:attribute name="name">Keyword</xsl:attribute>
-										<xsl:attribute name="value"><xsl:value-of select="concat(substring-after(@id, ':'), ' enumeration')" /></xsl:attribute>
+										<xsl:attribute name="value">
+											<xsl:value-of select="concat(substring-after(@id, ':'), ' enumeration')" />
+										</xsl:attribute>
 									</xsl:element>
 									<xsl:for-each select="field">
 										<xsl:element name="param">
 											<xsl:attribute name="name">Keyword</xsl:attribute>
-											<xsl:attribute name="value"><xsl:value-of select="concat(@name, ' enumeration member')" /></xsl:attribute>
+											<xsl:attribute name="value">
+												<xsl:value-of select="concat(@name, ' enumeration member')" />
+											</xsl:attribute>
 										</xsl:element>
 										<xsl:element name="param">
 											<xsl:attribute name="name">Keyword</xsl:attribute>
-											<xsl:attribute name="value"><xsl:value-of select="concat(../@name, '.', @name, ' enumeration member')" /></xsl:attribute>
+											<xsl:attribute name="value">
+												<xsl:value-of select="concat(../@name, '.', @name, ' enumeration member')" />
+											</xsl:attribute>
 										</xsl:element>
 									</xsl:for-each>
 								</xsl:when>
 								<xsl:when test="local-name() = 'delegate'">
 									<xsl:element name="param">
 										<xsl:attribute name="name">Keyword</xsl:attribute>
-										<xsl:attribute name="value"><xsl:value-of select="concat(@name, ' delegate')" /></xsl:attribute>
+										<xsl:attribute name="value">
+											<xsl:value-of select="concat(@name, ' delegate')" />
+										</xsl:attribute>
 									</xsl:element>
 									<xsl:element name="param">
 										<xsl:attribute name="name">Keyword</xsl:attribute>
-										<xsl:attribute name="value"><xsl:value-of select="concat(substring-after(@id, ':'), ' delegate')" /></xsl:attribute>
+										<xsl:attribute name="value">
+											<xsl:value-of select="concat(substring-after(@id, ':'), ' delegate')" />
+										</xsl:attribute>
 									</xsl:element>
 								</xsl:when>
 								<xsl:otherwise>
 									<xsl:element name="param">
 										<xsl:attribute name="name">Keyword</xsl:attribute>
-										<xsl:attribute name="value"><xsl:value-of select="concat(@name, ' ', local-name(), ', about ', @name, ' ', local-name())" /></xsl:attribute>
+										<xsl:attribute name="value">
+											<xsl:value-of select="concat(@name, ' ', local-name(), ', about ', @name, ' ', local-name())" />
+										</xsl:attribute>
 									</xsl:element>
 								</xsl:otherwise>
 							</xsl:choose>
 						</object>
 					</xsl:if>
-					
 					<xsl:call-template name="footer-row">
 						<xsl:with-param name="type-name" select="concat(@name, ' ', $type)" />
 					</xsl:call-template>
