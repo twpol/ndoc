@@ -462,14 +462,13 @@ namespace NDoc.Gui
 			// 
 			this.menuHelpIndexItem.Enabled = false;
 			this.menuHelpIndexItem.Index = 0;
-			this.menuHelpIndexItem.Shortcut = System.Windows.Forms.Shortcut.F1;
 			this.menuHelpIndexItem.Text = "&NDoc Help";
 			this.menuHelpIndexItem.Click += new System.EventHandler(this.menuHelpIndexItem_Click);
 			// 
 			// menuTagReferenceItem
 			// 
-			this.menuTagReferenceItem.Enabled = false;
 			this.menuTagReferenceItem.Index = 1;
+			this.menuTagReferenceItem.Shortcut = System.Windows.Forms.Shortcut.F1;
 			this.menuTagReferenceItem.Text = "&Documentation Tag Reference";
 			this.menuTagReferenceItem.Click += new System.EventHandler(this.menuTagReferenceItem_Click);
 			// 
@@ -1525,7 +1524,15 @@ namespace NDoc.Gui
 
 		private void menuTagReferenceItem_Click(object sender, System.EventArgs e)
 		{
-			//TODO: open documentation tag reference here
+			try
+			{
+				System.Diagnostics.Process.Start(Path.Combine(Application.StartupPath, "tags.html"));
+			}
+			catch(System.ComponentModel.Win32Exception ex)
+			{
+				MessageBox.Show(this, ex.Message, "Help", 
+					MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+			}
 		}
 
 		private void menuReleaseNotes_Click(object sender, System.EventArgs e)
