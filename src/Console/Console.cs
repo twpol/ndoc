@@ -16,10 +16,14 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 using System;
-using System.Diagnostics;
 using System.Collections;
-using System.Xml;
+using System.Diagnostics;
+using System.Globalization;
 using System.IO;
+using System.Reflection;
+using System.Text;
+using System.Xml;
+
 using NDoc.Core;
 
 namespace NDoc.ConsoleApplication
@@ -33,6 +37,8 @@ namespace NDoc.ConsoleApplication
 		{
 			try
 			{
+				WriteLogoBanner();
+
 				project = new Project();
 				documenter = project.GetDocumenter("MSDN");
 				if (documenter == null)
@@ -164,7 +170,6 @@ namespace NDoc.ConsoleApplication
 
 		private static void WriteUsage()
 		{
-			Console.WriteLine("NDoc - Code Documentation Generator for .NET");
 			Console.WriteLine();
 			Console.WriteLine("usage: NDocConsole  assembly[,xmldoc] [assembly[,xmldoc]]...");
 			Console.WriteLine("                    [-namespacesummaries=filename]");
@@ -199,11 +204,95 @@ namespace NDoc.ConsoleApplication
 			Console.WriteLine();
 
 			Console.WriteLine(@"namespace summaries file syntax:
-    <namespaces>
-        <namespace name=""My.NameSpace"">My summary.</namespace>
-        ...
-    </namespaces>");
+	<namespaces>
+		<namespace name=""My.NameSpace"">My summary.</namespace>
+		...
+	</namespaces>");
 
+		}
+
+		private static void WriteLogoBanner() {
+			string productName;
+			string informationalVersion;
+			Version assemblyVersion;
+			string configurationInformation = null;
+			string copyrightInformation = null;
+			string companyInformation = null;
+			DateTime buildDate;
+
+			Assembly assembly = Assembly.GetEntryAssembly();
+			if (assembly == null) {
+				assembly = Assembly.GetCallingAssembly();
+			}
+
+			// get product name
+			object[] productAttributes = assembly.GetCustomAttributes(typeof(AssemblyProductAttribute), false);
+			if (productAttributes.Length > 0) {
+				AssemblyProductAttribute productAttribute = (AssemblyProductAttribute) productAttributes[0];
+				productName = productAttribute.Product;
+			} else {
+				productName = assembly.GetName().Name;
+			}
+
+			// get informational version
+			object[] informationalVersionAttributes = assembly.GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), false);
+			if (informationalVersionAttributes.Length > 0) {
+				AssemblyInformationalVersionAttribute informationalVersionAttribute = (AssemblyInformationalVersionAttribute) informationalVersionAttributes[0];
+				informationalVersion = informationalVersionAttribute.InformationalVersion;
+			} else {
+				FileVersionInfo info = FileVersionInfo.GetVersionInfo(assembly.Location);
+				informationalVersion = info.FileMajorPart + "." + info.FileMinorPart;
+			}
+
+			// get assembly version 
+			assemblyVersion = assembly.GetName().Version;
+
+			// determine build date using build number of assembly 
+			// version (specified as number of days passed since 1/1/2000)
+			buildDate = new DateTime(2000, 1, 1).AddDays(assemblyVersion.Build);
+
+			// get configuration information
+			object[] configurationAttributes = assembly.GetCustomAttributes(typeof(AssemblyConfigurationAttribute), false);
+			if (configurationAttributes.Length > 0) {
+				AssemblyConfigurationAttribute configurationAttribute = (AssemblyConfigurationAttribute) configurationAttributes[0];
+				configurationInformation = configurationAttribute.Configuration;
+			}
+
+			// get copyright information
+			object[] copyrightAttributes = assembly.GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false);
+			if (copyrightAttributes.Length > 0) {
+				AssemblyCopyrightAttribute copyrightAttribute = (AssemblyCopyrightAttribute) copyrightAttributes[0];
+				copyrightInformation = copyrightAttribute.Copyright;
+			}
+
+			// get company information
+			object[] companyAttributes = assembly.GetCustomAttributes(typeof(AssemblyCompanyAttribute), false);
+			if (companyAttributes.Length > 0) {
+				AssemblyCompanyAttribute companyAttribute = (AssemblyCompanyAttribute) companyAttributes[0];
+				companyInformation = companyAttribute.Company;
+			}
+
+			StringBuilder logoBanner = new StringBuilder();
+
+			logoBanner.AppendFormat(CultureInfo.InvariantCulture,
+				"{0} {1} (Build {2}; {3}; {4})", productName, 
+				informationalVersion, assemblyVersion.ToString(4),
+				configurationInformation, buildDate.ToShortDateString()); 
+			logoBanner.Append(Environment.NewLine);
+
+			// output copyright information
+			if (copyrightInformation != null && copyrightInformation.Length != 0) {
+				logoBanner.Append(copyrightInformation);
+				logoBanner.Append(Environment.NewLine);
+			}
+
+			// output company information
+			if (companyInformation != null && companyInformation.Length != 0) {
+				logoBanner.Append(companyInformation);
+				logoBanner.Append(Environment.NewLine);
+			}
+
+			Console.WriteLine(logoBanner.ToString());
 		}
 
 		private static DateTime lastStepDateTime;
