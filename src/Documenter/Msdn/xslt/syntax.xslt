@@ -149,10 +149,18 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="member-syntax2">
-		<xsl:call-template name="method-access">
-			<xsl:with-param name="access" select="@access" />
-		</xsl:call-template>
-		<xsl:text>&#160;</xsl:text>
+		<xsl:if test="not(parent::interface)">
+			<xsl:call-template name="method-access">
+				<xsl:with-param name="access" select="@access" />
+			</xsl:call-template>
+			<xsl:text>&#160;</xsl:text>
+			<xsl:if test="@contract and @contract!='Normal'">
+				<xsl:call-template name="contract">
+					<xsl:with-param name="contract" select="@contract" />
+				</xsl:call-template>
+				<xsl:text>&#160;</xsl:text>
+			</xsl:if>
+		</xsl:if>
 		<xsl:choose>
 			<xsl:when test="local-name()='constructor'">
 				<xsl:value-of select="../@name" />
