@@ -357,7 +357,7 @@ namespace NDoc.Documenter.Msdn
 
 		/// <summary>Gets or sets the OutputTarget property.</summary>
 		[Category("Documentation Main Settings")]
-		[Description("Sets this property to .")]
+		[Description("Sets the output type to HTML Help (.chm) or Web or both.")]
 		public OutputType OutputTarget
 		{
 			get { return _OutputTarget; }
