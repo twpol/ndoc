@@ -517,12 +517,6 @@ namespace NDoc.Documenter.Msdn
 				{
 					string namespaceName = (string)namespaceNode.Attributes["name"].Value;
 
-					// Skip duplicate namespaces.
-					if (documentedNamespaces.Contains(namespaceName))
-					{
-						continue;
-					}
-
 					MakeHtmlForNamespace(assemblyName, namespaceName);
 				}
 			}
@@ -575,6 +569,9 @@ namespace NDoc.Documenter.Msdn
 
 		private void MakeHtmlForNamespace(string assemblyName, string namespaceName)
 		{
+			if (documentedNamespaces.Contains(namespaceName)) 
+				return;
+
 			documentedNamespaces.Add(namespaceName);
 
 			string fileName = GetFilenameForNamespace(namespaceName);
