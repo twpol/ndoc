@@ -7,7 +7,7 @@
     >
         <Build>
             <Settings
-                ApplicationIcon = "ndoc.ico"
+                ApplicationIcon = "graphics\NDoc.ico"
                 AssemblyKeyContainerName = ""
                 AssemblyName = "NDocGui"
                 AssemblyOriginatorKeyFile = ""
@@ -198,10 +198,6 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "ndoc.ico"
-                    BuildAction = "Content"
-                />
-                <File
                     RelPath = "NDocGui.exe.manifest"
                     BuildAction = "Content"
                 />
@@ -263,6 +259,38 @@
                 <File
                     RelPath = "WarningForm.resx"
                     DependentUpon = "WarningForm.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "graphics\Build.ico"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "graphics\Cancel.ico"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "graphics\NDoc.ico"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "graphics\New.ico"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "graphics\OpenFile.ico"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "graphics\OpenSolution.ico"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "graphics\Save.ico"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "graphics\View.ico"
                     BuildAction = "EmbeddedResource"
                 />
             </Include>
