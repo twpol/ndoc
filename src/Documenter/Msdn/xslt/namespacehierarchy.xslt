@@ -40,34 +40,30 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template match="namespaceHierarchy">
-		<xsl:for-each select="type">
+		<xsl:for-each select="hierarchyType">
 			<div>
 				<xsl:call-template name="get-type-link">
 					<xsl:with-param name="id" select="@id" />
 				</xsl:call-template>
 				<xsl:apply-templates mode="hierarchy" />
 			</div>
-			<xsl:if test="interfaces">
-				<h4 class="dth4">Interfaces</h4>
-				<xsl:apply-templates select="./interfaces/interface" mode="hierarchy" />
-			</xsl:if>
 		</xsl:for-each>
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="type" mode="hierarchy">
+	<xsl:template match="hierarchyType" mode="hierarchy">
 		<div class="Hierarchy">
 			<xsl:call-template name="get-type-link">
 				<xsl:with-param name="id" select="@id" />
 			</xsl:call-template>
-			<xsl:if test="interfaces">
+			<xsl:if test="hierarchyInterfaces">
 				<xsl:text>&#160;---- </xsl:text>
-				<xsl:apply-templates select="./interfaces/interface" mode="baseInterfaces" />
+				<xsl:apply-templates select="./hierarchyInterfaces/hierarchyInterface" mode="baseInterfaces" />
 			</xsl:if>
-			<xsl:apply-templates select="type" mode="hierarchy" />
+			<xsl:apply-templates select="hierarchyType" mode="hierarchy" />
 		</div>
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="interface" mode="baseInterfaces">
+	<xsl:template match="hierarchyInterface" mode="baseInterfaces">
 		<xsl:call-template name="get-type-link">
 			<xsl:with-param name="id" select="@id" />
 		</xsl:call-template>
