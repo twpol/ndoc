@@ -2947,9 +2947,9 @@ namespace NDoc.Test.ThreadSafety
 	/// <summary>
 	/// This class is thread safe for everything
 	/// </summary>
-	/// <threadSafety static="true" instance="true">
+	/// <threadsafety static="true" instance="true">
 	/// <para>Here's some extra information about using this class across threads</para>
-	/// </threadSafety>
+	/// </threadsafety>
 	public class ThreadSafe
 	{
 
@@ -2957,9 +2957,9 @@ namespace NDoc.Test.ThreadSafety
 	/// <summary>
 	/// This class is not thread safe
 	/// </summary>
-	/// <threadSafety static="false" instance="false">
+	/// <threadsafety static="false" instance="false">
 	/// <para>Here's some extra information about using this class across threads</para>
-	/// </threadSafety>
+	/// </threadsafety>
 	public class NotThreadSafe
 	{
 
@@ -2967,9 +2967,9 @@ namespace NDoc.Test.ThreadSafety
 	/// <summary>
 	/// This class is not thread safe
 	/// </summary>
-	/// <threadSafety static="true" instance="false">
+	/// <threadsafety static="true" instance="false">
 	/// <para>Here's some extra information about using this class across threads</para>
-	/// </threadSafety>
+	/// </threadsafety>
 	public class StaticSafeInstanceNot
 	{
 
@@ -2977,9 +2977,9 @@ namespace NDoc.Test.ThreadSafety
 	/// <summary>
 	/// This class is not thread safe
 	/// </summary>
-	/// <threadSafety static="false" instance="true">
+	/// <threadsafety static="false" instance="true">
 	/// <para>Here's some extra information about using this class across threads</para>
-	/// </threadSafety>
+	/// </threadsafety>
 	public class StaticNotInstanceSafe
 	{
 

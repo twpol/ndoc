@@ -189,7 +189,7 @@
 				</tr>
 				<tr>
 					<td>
-						<p><a name="threadSafety"><b>&lt;threadSafety&gt;</b></a></p>
+						<p><a name="threadsafety"><b>&lt;threadsafety&gt;</b></a></p>
 					</td>
 					<td>
 						<p>Denotes how a class or structure behaves in multi-threaded scenarios.</p>
@@ -200,9 +200,9 @@
 						<p>Textual content can be included as the inner text of this tag in order to 
 							provide additional information about the thread safety of the type.</p>
 						<pre class="csharpcode"><span class=codecomment>/// &lt;summary&gt;This overload just says hello.&lt;/summary&gt;</span>
-<span class=codecomment>/// &lt;threadSafety static="true" instance="true"&gt;</span>
+<span class=codecomment>/// &lt;threadsafety static="true" instance="true"&gt;</span>
 <span class=codecomment>///&nbsp;&nbsp;&nbsp; &lt;para&gt;More information about using this class across thread&lt;/para&gt;</span>
-<span class=codecomment>/// &lt;/threadSafety&gt;</span>
+<span class=codecomment>/// &lt;/threadsafety&gt;</span>
 <span class=kwrd>public</span> <span class=kwrd>class</span> SafeClass() { ... }
 						</pre>
 					</td>

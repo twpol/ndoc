@@ -642,13 +642,13 @@
 	<xsl:template name="thread-safety-section">
 		<H4 class="dtH4">Thread Safety</H4>
 		<xsl:choose>
-			<xsl:when test="documentation/threadSafety[@static='true'][@instance='true']">
+			<xsl:when test="documentation/threadsafety[@static='true'][@instance='true']">
 				<P>This type is safe for multithreaded operations.</P>
 			</xsl:when>
-			<xsl:when test="documentation/threadSafety[@static='false'][@instance='false']">
+			<xsl:when test="documentation/threadsafety[@static='false'][@instance='false']">
 				<P>This type is <b>not</b> safe for multithreaded operations.</P>
 			</xsl:when>
-			<xsl:when test="documentation/threadSafety[@static='false'][@instance='true']">
+			<xsl:when test="documentation/threadsafety[@static='false'][@instance='true']">
 				<!-- not sure this makes sense but... -->
 				<P>Public static (Shared in Visual Basic) members of this type are not guaranteed 
 				to be safe for multithreaded operations. Instance members are not guaranteed to be 
@@ -660,7 +660,7 @@
 				thread-safe.</P>
 			</xsl:otherwise>
 		</xsl:choose>
-		<xsl:apply-templates select="documentation/threadSafety/node()" mode="slashdoc" />
+		<xsl:apply-templates select="documentation/threadsafety/node()" mode="slashdoc" />
 		<xsl:apply-templates select="documentation/node()" mode="thread-safety-section"/>			
 	</xsl:template>	
 	<!-- -->
