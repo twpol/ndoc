@@ -31,14 +31,19 @@ namespace NDoc.Core
 		/// <summary>Initializes a new instance of the Project class.</summary>
 		public Project()
 		{
-			_Documenters = FindDocumenters();
 			_IsDirty = false;
 			_namespaces = new SortedList();
+			_probePath = new ArrayList();
 		}
 
 		private bool _IsDirty;
 		private SortedList _namespaces;
 		private string _projectFile;
+
+		/// <summary>
+		/// Holds the list of directories that will be scanned for documenters.
+		/// </summary>
+		private ArrayList _probePath;
 
 		/// <summary>Gets the IsDirty property.</summary>
 		public bool IsDirty
@@ -232,22 +237,65 @@ namespace NDoc.Core
 			}
 		}
 
-		private ArrayList _Documenters = new ArrayList();
+		private ArrayList _Documenters;
 
-		/// <summary>Gets or sets the Documenters property.</summary>
+		/// <summary>
+		/// Gets the list of available documenters.
+		/// </summary>
 		public ArrayList Documenters
 		{
-			get { return _Documenters; }
+			get
+			{
+				if (_Documenters == null)
+				{
+					_Documenters = FindDocumenters();
+				}
+				return _Documenters;
+			}
 		}
 
 		/// <summary>
-		/// Searches the module directory and all subdirectoties for assemblies 
-		/// containing classes the implement <see cref="IDocumenter" />.
+		/// Appends the specified directory to the probe path.
+		/// </summary>
+		/// <param name="path">The directory to add to the probe path.</param>
+		/// <exception cref="ArgumentNullException"><paramref name="path" /> is <see langword="null" />.</exception>
+		/// <exception cref="ArgumentException"><paramref name="path" /> is a zero-length <see cref="string" />.</exception>
+		/// <remarks>
+		/// <para>
+		/// The probe path is the list of directories that will be scanned for
+		/// assemblies that have classes implementing <see cref="IDocumenter" />.
+		/// </para>
+		/// </remarks>
+		public void AppendProbePath(string path) 
+		{
+			if (path == null)
+			{
+				throw new ArgumentNullException("path");
+			}
+
+			if (path.Length == 0)
+			{
+				throw new ArgumentException("A zero-length string is not a valid value.", "path");
+			}
+
+			// resolve relative path to full path
+			string fullPath = GetFullPath(path);
+
+			if (!_probePath.Contains(fullPath)) 
+			{
+				_probePath.Add(fullPath);
+			}
+		}
+
+		/// <summary>
+		/// Searches the module directory and all directories in the probe path
+		/// for assemblies containing classes that implement <see cref="IDocumenter" />.
 		/// </summary>
 		/// <returns>
-		/// An ArrayList containing new instances of all the found documenters.
+		/// An <see cref="ArrayList" /> containing new instances of all the 
+		/// found documenters.
 		/// </returns>
-		public static ArrayList FindDocumenters()
+		private ArrayList FindDocumenters()
 		{
 			ArrayList documenters = new ArrayList();
 
@@ -256,8 +304,15 @@ namespace NDoc.Core
 #else
 			string mainModuleDirectory = System.Windows.Forms.Application.StartupPath;
 #endif
-			// find documenter in given path and its subdirectories
-			FindDocumentersInPath(documenters, mainModuleDirectory);
+			// make sure module directory is probed
+			AppendProbePath(mainModuleDirectory);
+
+			// scan all assemblies in probe path for documenters
+			foreach (string path in _probePath) 
+			{
+				// find documenters in given path
+				FindDocumentersInPath(documenters, path);
+			}
 
 			// sort documenters
 			documenters.Sort();
@@ -266,8 +321,8 @@ namespace NDoc.Core
 		}
 
 		/// <summary>
-		/// Searches the specified directory and all subdirectories for assemblies 
-		/// containing classes the implement <see cref="IDocumenter" />.
+		/// Searches the specified directory for assemblies containing classes 
+		/// that implement <see cref="IDocumenter" />.
 		/// </summary>
 		/// <param name="documenters">The collection of <see cref="IDocumenter" /> instances to fill.</param>
 		/// <param name="path">The directory to scan for assemblies containing documenters.</param>
@@ -307,11 +362,6 @@ namespace NDoc.Core
 						Debug.WriteLine("ReflectionTypeLoadException reflecting " + fileName);
 					}
 				}
-			}
-
-			foreach (string subDir in Directory.GetDirectories(path))
-			{
-				FindDocumentersInPath(documenters, subDir);
 			}
 		}
 
