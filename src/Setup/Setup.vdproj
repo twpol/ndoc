@@ -15,6 +15,12 @@
     {
         "Entry"
         {
+        "MsmKey" = "8:_08A9A8BD06DD455E831560B60728F7DE"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_1B01EBE9D55D45568029A0BC926FD16B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -51,6 +57,72 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_6732EF2F63E642ADA85BDDAFA969F5B5"
+        "OwnerKey" = "8:_1B01EBE9D55D45568029A0BC926FD16B"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_6732EF2F63E642ADA85BDDAFA969F5B5"
+        "OwnerKey" = "8:_437B41549529F26B3BE068F3FB07EDD0"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_6732EF2F63E642ADA85BDDAFA969F5B5"
+        "OwnerKey" = "8:_8B5DA2120F9A663B39CD9923B09C530D"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_6732EF2F63E642ADA85BDDAFA969F5B5"
+        "OwnerKey" = "8:_E06AA4CCFA0B4FD3A094297FD4A7372C"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_6732EF2F63E642ADA85BDDAFA969F5B5"
+        "OwnerKey" = "8:_9D6F0059D6D840AD9597C268ABB72B8E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_6732EF2F63E642ADA85BDDAFA969F5B5"
+        "OwnerKey" = "8:_77291166267046D484A27DD846B237EF"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_6732EF2F63E642ADA85BDDAFA969F5B5"
+        "OwnerKey" = "8:_E636F726DE27B557361E7808FBBFCF18"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_6732EF2F63E642ADA85BDDAFA969F5B5"
+        "OwnerKey" = "8:_770461D23B0245409B7366552657BCFF"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_6732EF2F63E642ADA85BDDAFA969F5B5"
+        "OwnerKey" = "8:_586C966471AE42F2B3066EA68B2C0D0B"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_6732EF2F63E642ADA85BDDAFA969F5B5"
+        "OwnerKey" = "8:_5049A64647CC4D3682B81596C02E80E1"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_6732EF2F63E642ADA85BDDAFA969F5B5"
+        "OwnerKey" = "8:_3C25064C1EC14331969BFD2087D097BA"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_7371B8F621D34B2ABBCBCE2AA965C71C"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -82,31 +154,7 @@
         "Entry"
         {
         "MsmKey" = "8:_8B5DA2120F9A663B39CD9923B09C530D"
-        "OwnerKey" = "8:_3C25064C1EC14331969BFD2087D097BA"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_8B5DA2120F9A663B39CD9923B09C530D"
-        "OwnerKey" = "8:_5049A64647CC4D3682B81596C02E80E1"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_8B5DA2120F9A663B39CD9923B09C530D"
-        "OwnerKey" = "8:_586C966471AE42F2B3066EA68B2C0D0B"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_8B5DA2120F9A663B39CD9923B09C530D"
-        "OwnerKey" = "8:_770461D23B0245409B7366552657BCFF"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_8B5DA2120F9A663B39CD9923B09C530D"
-        "OwnerKey" = "8:_77291166267046D484A27DD846B237EF"
+        "OwnerKey" = "8:_E06AA4CCFA0B4FD3A094297FD4A7372C"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -118,79 +166,37 @@
         "Entry"
         {
         "MsmKey" = "8:_8B5DA2120F9A663B39CD9923B09C530D"
-        "OwnerKey" = "8:_E06AA4CCFA0B4FD3A094297FD4A7372C"
+        "OwnerKey" = "8:_77291166267046D484A27DD846B237EF"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_8B5DA2120F9A663B39CD9923B09C530D"
+        "OwnerKey" = "8:_770461D23B0245409B7366552657BCFF"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_8B5DA2120F9A663B39CD9923B09C530D"
+        "OwnerKey" = "8:_586C966471AE42F2B3066EA68B2C0D0B"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_8B5DA2120F9A663B39CD9923B09C530D"
+        "OwnerKey" = "8:_5049A64647CC4D3682B81596C02E80E1"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_8B5DA2120F9A663B39CD9923B09C530D"
+        "OwnerKey" = "8:_3C25064C1EC14331969BFD2087D097BA"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_9D6F0059D6D840AD9597C268ABB72B8E"
         "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_BC83C46AC8EB4C1C8558E8E283433A51"
-        "OwnerKey" = "8:_1B01EBE9D55D45568029A0BC926FD16B"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_BC83C46AC8EB4C1C8558E8E283433A51"
-        "OwnerKey" = "8:_E06AA4CCFA0B4FD3A094297FD4A7372C"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_BC83C46AC8EB4C1C8558E8E283433A51"
-        "OwnerKey" = "8:_9D6F0059D6D840AD9597C268ABB72B8E"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_BC83C46AC8EB4C1C8558E8E283433A51"
-        "OwnerKey" = "8:_437B41549529F26B3BE068F3FB07EDD0"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_BC83C46AC8EB4C1C8558E8E283433A51"
-        "OwnerKey" = "8:_77291166267046D484A27DD846B237EF"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_BC83C46AC8EB4C1C8558E8E283433A51"
-        "OwnerKey" = "8:_E636F726DE27B557361E7808FBBFCF18"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_BC83C46AC8EB4C1C8558E8E283433A51"
-        "OwnerKey" = "8:_770461D23B0245409B7366552657BCFF"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_BC83C46AC8EB4C1C8558E8E283433A51"
-        "OwnerKey" = "8:_586C966471AE42F2B3066EA68B2C0D0B"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_BC83C46AC8EB4C1C8558E8E283433A51"
-        "OwnerKey" = "8:_5049A64647CC4D3682B81596C02E80E1"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_BC83C46AC8EB4C1C8558E8E283433A51"
-        "OwnerKey" = "8:_3C25064C1EC14331969BFD2087D097BA"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_BC83C46AC8EB4C1C8558E8E283433A51"
-        "OwnerKey" = "8:_8B5DA2120F9A663B39CD9923B09C530D"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -238,7 +244,7 @@
         "CertificateFile" = "8:"
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
-        "InstallerBootstrapper" = "3:2"
+        "InstallerBootstrapper" = "3:1"
         }
     }
     "Deployable"
@@ -270,6 +276,26 @@
         }
         "File"
         {
+            "{A582A373-4685-4296-BEFE-614B80A702C3}:_08A9A8BD06DD455E831560B60728F7DE"
+            {
+            "SourcePath" = "8:banner.JPG"
+            "TargetName" = "8:banner.JPG"
+            "Tag" = "8:"
+            "Folder" = "8:_3E83289CD02E47D0A8ACE7A8D09CFF5F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{A582A373-4685-4296-BEFE-614B80A702C3}:_2D9C47DC11870FA2F0A553EE16B87C9F"
             {
             "SourcePath" = "8:hxcsrv.exe"
@@ -294,7 +320,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:NDoc.VisualStudio, Version=1.2.1494.41018, Culture=neutral, PublicKeyToken=b9896512f28c0f09"
+            "AssemblyAsmDisplayName" = "8:NDoc.VisualStudio, Version=1.3.0.36893, Culture=neutral, PublicKeyToken=b9896512f28c0f09"
                 "ScatterAssemblies"
                 {
                     "_437B41549529F26B3BE068F3FB07EDD0"
@@ -365,7 +391,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:NDoc.Core, Version=1.2.1494.41017, Culture=neutral, PublicKeyToken=b9896512f28c0f09"
+            "AssemblyAsmDisplayName" = "8:NDoc.Core, Version=1.3.0.36893, Culture=neutral, PublicKeyToken=b9896512f28c0f09"
                 "ScatterAssemblies"
                 {
                     "_8B5DA2120F9A663B39CD9923B09C530D"
@@ -426,7 +452,7 @@
         }
         "FileType"
         {
-            "{9300C6CA-4CE0-41D6-A6CD-70E04FD37067}:_71E7DC2D3FE14F49A6254AF410E6E627"
+            "{9300C6CA-4CE0-41D6-A6CD-70E04FD37067}:_6FE00BFD49EB4CFD82B44BFBC0007E76"
             {
             "Name" = "8:NDoc Project File"
             "Description" = "8:NDoc Project File"
@@ -440,7 +466,7 @@
                 }
                 "Verbs"
                 {
-                    "{9D28A334-2E55-48EE-AD7D-2DF3F0641A76}:_1B32EB35479A44389B1CBCAC6327B2BE"
+                    "{9D28A334-2E55-48EE-AD7D-2DF3F0641A76}:_92A5A0CCBBA147E3B3BA564BF7253A70"
                     {
                     "Command" = "8:&Open"
                     "Verb" = "8:open"
@@ -502,7 +528,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:NDoc 1.3"
         "ProductCode" = "8:{A91D788B-670F-4204-B912-8DECDEB26AA3}"
-        "PackageCode" = "8:{712C2C3E-9033-48DE-A0CB-BDA9C956DEBB}"
+        "PackageCode" = "8:{286A03F7-878B-4BBE-AD43-24B07C967967}"
         "UpgradeCode" = "8:{9068FA94-9672-4F7D-8E2F-B48B51D8659B}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
@@ -596,16 +622,16 @@
             {
                 "Keys"
                 {
-                    "{6A471EEF-D31B-40F8-BCF6-C9E8EC783F36}:_235B4901B6FB424396E0AD91682F6FA4"
+                    "{6A471EEF-D31B-40F8-BCF6-C9E8EC783F36}:_B8FC66B99CEF4BFA93ABC5FFB7797B3A"
                     {
-                    "Name" = "8:ndoc"
+                    "Name" = "8:NDoc Project File"
                     "Condition" = "8:"
                     "AlwaysCreate" = "11:FALSE"
                     "DeleteAtUninstall" = "11:FALSE"
                     "Transitive" = "11:FALSE"
                         "Keys"
                         {
-                            "{6A471EEF-D31B-40F8-BCF6-C9E8EC783F36}:_D751AE743DD6493FA8EED05D4BA5C420"
+                            "{6A471EEF-D31B-40F8-BCF6-C9E8EC783F36}:_1F4510690D2E4CE4BC322E5ED90C26BE"
                             {
                             "Name" = "8:shell"
                             "Condition" = "8:"
@@ -614,16 +640,16 @@
                             "Transitive" = "11:FALSE"
                                 "Keys"
                                 {
-                                    "{6A471EEF-D31B-40F8-BCF6-C9E8EC783F36}:_8FAC93E02D2247F29CE1111AB65BD2AC"
+                                    "{6A471EEF-D31B-40F8-BCF6-C9E8EC783F36}:_1FEA52F4594B427EABEC302A1F10371E"
                                     {
-                                    "Name" = "8:Build"
+                                    "Name" = "8:build"
                                     "Condition" = "8:"
                                     "AlwaysCreate" = "11:FALSE"
                                     "DeleteAtUninstall" = "11:FALSE"
                                     "Transitive" = "11:FALSE"
                                         "Keys"
                                         {
-                                            "{6A471EEF-D31B-40F8-BCF6-C9E8EC783F36}:_0EF4A77467D04FF2A75044C09026B5D4"
+                                            "{6A471EEF-D31B-40F8-BCF6-C9E8EC783F36}:_C56F43598AAB4E85B3C5D08FB13386BD"
                                             {
                                             "Name" = "8:command"
                                             "Condition" = "8:"
@@ -635,7 +661,7 @@
                                                 }
                                                 "Values"
                                                 {
-                                                    "{35AE352C-BC79-4EF9-ABD8-61F467188583}:_668BFD8BEBAF424C97FEC53B7AE28072"
+                                                    "{35AE352C-BC79-4EF9-ABD8-61F467188583}:_238FB70406AF4E0EBA4DCDEFA5AC7239"
                                                     {
                                                     "Name" = "8:"
                                                     "Condition" = "8:"
@@ -648,6 +674,14 @@
                                         }
                                         "Values"
                                         {
+                                            "{35AE352C-BC79-4EF9-ABD8-61F467188583}:_B8874CF18C1E4E38A8B949B05FD139F9"
+                                            {
+                                            "Name" = "8:"
+                                            "Condition" = "8:"
+                                            "Transitive" = "11:FALSE"
+                                            "ValueTypes" = "3:1"
+                                            "Value" = "8:&Build"
+                                            }
                                         }
                                     }
                                 }
@@ -796,7 +830,8 @@
                             "Type" = "3:8"
                             "ContextData" = "8:Bitmap"
                             "Attributes" = "3:4"
-                            "Setting" = "3:1"
+                            "Setting" = "3:2"
+                            "Value" = "8:_08A9A8BD06DD455E831560B60728F7DE"
                             "UsePlugInResources" = "11:TRUE"
                             }
                             "ShowProgress"
@@ -846,7 +881,8 @@
                             "Type" = "3:8"
                             "ContextData" = "8:Bitmap"
                             "Attributes" = "3:4"
-                            "Setting" = "3:1"
+                            "Setting" = "3:2"
+                            "Value" = "8:_08A9A8BD06DD455E831560B60728F7DE"
                             "UsePlugInResources" = "11:TRUE"
                             }
                             "UpdateText"
@@ -857,8 +893,8 @@
                             "Type" = "3:15"
                             "ContextData" = "8:"
                             "Attributes" = "3:0"
-                            "Setting" = "3:1"
-                            "Value" = "8:#1258"
+                            "Setting" = "3:2"
+                            "Value" = "8:Check the NDoc User's Guide for information on downloading HTML Help compilers."
                             "DefaultValue" = "8:#1258"
                             "UsePlugInResources" = "11:TRUE"
                             }
@@ -896,7 +932,8 @@
                             "Type" = "3:8"
                             "ContextData" = "8:Bitmap"
                             "Attributes" = "3:4"
-                            "Setting" = "3:1"
+                            "Setting" = "3:2"
+                            "Value" = "8:_08A9A8BD06DD455E831560B60728F7DE"
                             "UsePlugInResources" = "11:TRUE"
                             }
                             "CopyrightWarning"
@@ -944,7 +981,8 @@
                             "Type" = "3:8"
                             "ContextData" = "8:Bitmap"
                             "Attributes" = "3:4"
-                            "Setting" = "3:1"
+                            "Setting" = "3:2"
+                            "Value" = "8:_08A9A8BD06DD455E831560B60728F7DE"
                             "UsePlugInResources" = "11:TRUE"
                             }
                         }
@@ -966,7 +1004,8 @@
                             "Type" = "3:8"
                             "ContextData" = "8:Bitmap"
                             "Attributes" = "3:4"
-                            "Setting" = "3:1"
+                            "Setting" = "3:2"
+                            "Value" = "8:_08A9A8BD06DD455E831560B60728F7DE"
                             "UsePlugInResources" = "11:TRUE"
                             }
                         }
@@ -988,7 +1027,8 @@
                             "Type" = "3:8"
                             "ContextData" = "8:Bitmap"
                             "Attributes" = "3:4"
-                            "Setting" = "3:1"
+                            "Setting" = "3:2"
+                            "Value" = "8:_08A9A8BD06DD455E831560B60728F7DE"
                             "UsePlugInResources" = "11:TRUE"
                             }
                             "EulaText"
@@ -1124,7 +1164,7 @@
         }
         "MergeModule"
         {
-            "{35A69C6E-5BA4-440D-803D-762B59A45393}:_BC83C46AC8EB4C1C8558E8E283433A51"
+            "{35A69C6E-5BA4-440D-803D-762B59A45393}:_6732EF2F63E642ADA85BDDAFA969F5B5"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
