@@ -1,3 +1,4 @@
+using System;
 using System.Reflection;
 
 [assembly: AssemblyTitle("NDoc VS.NET Solution Parser")]
