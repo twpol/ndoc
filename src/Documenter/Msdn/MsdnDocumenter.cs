@@ -297,7 +297,7 @@ namespace NDoc.Documenter.Msdn
 
 //				if (!MyConfig.SplitTOCs)
 //				{
-//					htmlHelp.OpenContentsFile(string.Empty, true);
+					htmlHelp.OpenContentsFile(string.Empty, true);
 //				}
 
 				try
@@ -350,7 +350,7 @@ namespace NDoc.Documenter.Msdn
 				{
 //					if (!MyConfig.SplitTOCs)
 //					{
-//						htmlHelp.CloseContentsFile();
+						htmlHelp.CloseContentsFile();
 //					}
 
 					htmlHelp.CloseProjectFile();
