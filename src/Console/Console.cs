@@ -57,6 +57,18 @@ namespace NDoc.ConsoleApplication
 				bool propertiesSet = false;
 				bool projectSet = false;
 
+				if (args.Length==0)
+				{
+					WriteUsage();
+					return 1;
+				}
+
+				if (args[0].ToLower().StartsWith("-help"))
+				{
+					WriteHelp(args);
+					return 1;
+				}
+
 				foreach (string arg in args)
 				{
 					if (arg.StartsWith("-"))
@@ -85,7 +97,7 @@ namespace NDoc.ConsoleApplication
 										{
 											throw new ApplicationException("The documenter name must be specified before the project file.");
 										}
-										documenter = project.GetDocumenter(val);
+										documenter = project.GetDocumenter(val.Replace("_"," "));
 										if (documenter == null)
 										{
 											throw new ApplicationException("The specified documenter name is invalid.");
@@ -120,6 +132,9 @@ namespace NDoc.ConsoleApplication
 											streamReader.Close();
 										}
 										break;
+									case "referencepath":
+										project.AddReferencePath(val);
+										break;
 									default:
 										documenter.Config.SetValue(name, val);
 										propertiesSet = true;
@@ -134,7 +149,7 @@ namespace NDoc.ConsoleApplication
 
 						if (pair.Length == 2)
 						{
-							project.AddAssemblySlashDoc(
+							project.AssemblySlashDocs.Add(
 								new AssemblySlashDoc(pair[0], pair[1]));
 						}
 					}
@@ -143,13 +158,18 @@ namespace NDoc.ConsoleApplication
 						string doc = Path.ChangeExtension(arg, ".xml");
 						if (File.Exists(doc))
 						{
-							project.AddAssemblySlashDoc(
+							project.AssemblySlashDocs.Add(
 								new AssemblySlashDoc(arg, doc));
+						}
+						else
+						{
+							project.AssemblySlashDocs.Add(
+								new AssemblySlashDoc(arg, ""));
 						}
 					}
 				}
 
-				if (project.AssemblySlashDocCount == 0)
+				if (project.AssemblySlashDocs.Count == 0)
 				{
 					WriteUsage();
 					return 1;
@@ -174,46 +194,149 @@ namespace NDoc.ConsoleApplication
 		{
 			Console.WriteLine();
 			Console.WriteLine("usage: NDocConsole  assembly[,xmldoc] [assembly[,xmldoc]]...");
+			Console.WriteLine("                    [[-referencepath=dir] [-referencepath=dir]...]");
 			Console.WriteLine("                    [-namespacesummaries=filename]");
-			Console.WriteLine("                    [-documenter=docname]");
+			Console.WriteLine("                    [-documenter=documenter_name]");
 			Console.WriteLine("                    [[-property=value] [-property=value]...]");
 			Console.WriteLine("                    [-verbose]");
 			Console.WriteLine();
 			Console.WriteLine("or     NDocConsole  -recurse=dir[,maxDepth]");
+			Console.WriteLine("                    [[-referencepath=dir] [-referencepath=dir]...]");
 			Console.WriteLine("                    [-namespacesummaries=filename]");
 			Console.WriteLine("                    [-documenter=docname]");
 			Console.WriteLine("                    [[-property=value] [-property=value]...]");
 			Console.WriteLine("                    [-verbose]");
 			Console.WriteLine();
-			Console.WriteLine("or     NDocConsole  [-documenter=docname] -project=ndocfile [-verbose]");
+			Console.WriteLine("or     NDocConsole  [-documenter=documenter_name] -project=ndocfile [-verbose]");
+			Console.WriteLine();
+			Console.WriteLine("or     NDocConsole  [-help] [documenter_name [property_name]]");
+			Console.WriteLine();
 			Console.WriteLine();
 
+			WriteHelpAvailableDocumenters();
+
+			Console.WriteLine();
+			Console.WriteLine(@"namespace summaries file syntax:");
+			Console.WriteLine(@"    <namespaces>");
+			Console.WriteLine(@"        <namespace name=""My.NameSpace"">My summary.</namespace>");
+			Console.WriteLine(@"        ...");
+			Console.WriteLine(@"    </namespaces>");
+
+		}
+
+		private static  void WriteHelp(string[] args)
+		{
+			if (args.Length==1)
+			{
+				WriteUsage();
+				return;
+			}
+
+			if (args.Length>1)
+			{
+				IDocumenter documenter = project.GetDocumenter(args[1].Replace("_"," "));
+				if (documenter == null)
+				{
+					WriteHelpAvailableDocumenters();
+					return;
+				}
+
+				if (args.Length==2)
+				{
+					WriteHelpAvailableDocParameters(documenter);
+				}
+				else
+				{
+					WriteHelpDocParameter(documenter,args[2]);
+				}
+			}
+
+		}
+
+		private static void WriteHelpAvailableDocumenters()
+		{
 			Console.Write("available documenters: ");
 			ArrayList docs = project.Documenters;
 			for (int i = 0; i < docs.Count; i++)
 			{
 				if (i > 0) Console.Write(", ");
-				Console.Write(((IDocumenter)docs[i]).Name);
+				Console.Write(((IDocumenter)docs[i]).Name.Replace(" ","_"));
 			}
 			Console.WriteLine();
-			Console.WriteLine();
-
-			Console.WriteLine("available properties with the {0} documenter:", documenter.Name);
-			foreach (string property in documenter.Config.GetProperties())
-			{
-				Console.WriteLine("    " + property);
-			}
-			Console.WriteLine();
-
-			Console.WriteLine(@"namespace summaries file syntax:
-	<namespaces>
-		<namespace name=""My.NameSpace"">My summary.</namespace>
-		...
-	</namespaces>");
-
 		}
 
-		private static void WriteLogoBanner() {
+		private static void WriteHelpAvailableDocParameters(IDocumenter documenter)
+		{
+			Console.WriteLine("available properties with the {0} documenter:", documenter.Name);
+			foreach (PropertyInfo property in documenter.Config.GetProperties())
+			{
+				if (!property.IsDefined(typeof(NonPersistedAttribute),true))
+				{
+					Console.WriteLine("    " + property.Name);
+				}
+			}
+		}
+
+		private static void WriteHelpDocParameter(IDocumenter documenter,string propertyName)
+		{
+			PropertyInfo foundProperty=null;
+
+			foreach (PropertyInfo property in documenter.Config.GetProperties())
+			{
+				if (string.Compare(property.Name, propertyName, true) == 0)
+				{
+					foundProperty=property;
+					break;
+				}
+			}
+
+			if (foundProperty==null)
+			{
+				Console.WriteLine("{0} is not a property of the {1} documenter...", propertyName, documenter.Name);
+				Console.WriteLine("");
+				WriteHelpAvailableDocParameters(documenter);
+			}
+			else
+			{
+				WriteHelpPropertyDetails(foundProperty);
+			}
+		}
+
+		private static void WriteHelpPropertyDetails(PropertyInfo property)
+		{
+			Console.WriteLine(property.Name);
+			Console.WriteLine("");
+
+			object[] descAttr = property.GetCustomAttributes(typeof(System.ComponentModel.DescriptionAttribute),true);
+			if (descAttr.Length>0)
+			{
+				Console.WriteLine("  Description:");
+				Console.WriteLine("    " + ((System.ComponentModel.DescriptionAttribute)descAttr[0]).Description);
+				Console.WriteLine();
+			}
+
+			if (property.PropertyType.IsSubclassOf(typeof(Enum)))
+			{
+				Console.WriteLine("  Possible Values:");
+				string[] enumValues= Enum.GetNames(property.PropertyType);
+				foreach(string enumValue in enumValues)
+				{
+					Console.WriteLine("    " + enumValue);
+				}
+				Console.WriteLine();
+			}
+
+			object[] defaultAttr = property.GetCustomAttributes(typeof(System.ComponentModel.DefaultValueAttribute),true);
+			if (defaultAttr.Length>0)
+			{
+				Console.WriteLine("  Default Value:");
+				Console.WriteLine("    " + ((System.ComponentModel.DefaultValueAttribute)defaultAttr[0]).Value.ToString());
+				Console.WriteLine();
+			}
+		}
+
+		private static void WriteLogoBanner() 
+		{
 			string productName;
 			string informationalVersion;
 			Version assemblyVersion;
@@ -324,7 +447,7 @@ namespace NDoc.ConsoleApplication
 					docFile = Path.ChangeExtension(file, ".xml");
 					if (System.IO.File.Exists(docFile))
 					{
-						project.AddAssemblySlashDoc(new AssemblySlashDoc(file, docFile));
+						project.AssemblySlashDocs.Add(new AssemblySlashDoc(file, docFile));
 					}
 				}
 			}
