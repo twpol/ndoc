@@ -331,7 +331,7 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="parameter-section">
-		<xsl:if test="documentation/parameter">
+		<xsl:if test="documentation/param">
 			<h4>Parameters</h4>
 			<xsl:call-template name="parameter-topic" />
 		</xsl:if>
