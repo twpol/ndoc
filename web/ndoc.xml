@@ -26,8 +26,8 @@
 			<ol>
 				<li>Create a directory to hold the project. (I use <i>C:\SourceForge\</i> but you can use whatever you want.)</li>
 				<li>Download <a href="http://www.cvshome.org/dev/codewindow.html">CVS for Windows</a> and place <i>cvs.exe</i> in your new directory. (Be careful that you don't extract it to the cvsM-NN sub-directory or the batch file won't work.)</li>
-				<li>Download the <a href="anonymous-checkout.bat">anonymous-checkout</a> batch file and place it in the same directory.</li>
-				<li>Double-click the <i>anonymous-checkout.bat</i> file and hit ENTER when prompted for your CVS password.</li>
+				<li>Download the <a href="checkout.bat">checkout</a> batch file and place it in the same directory.</li>
+				<li>Double-click the <i>checkout.bat</i> file and hit ENTER when prompted for your CVS password.</li>
 			</ol>
 			<p>That's it!</p>
 		</html>
