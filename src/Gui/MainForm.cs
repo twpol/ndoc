@@ -841,7 +841,7 @@ namespace NDoc.Gui
 		/// </returns>
 		private string GetApplicationDataDirectory()
 		{
-			return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\NDoc\";
+			return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + string.Format( "{0}NDoc{0}", Path.DirectorySeparatorChar );
 		}
 
 		/// <summary>Reads in the NDoc configuration file from the

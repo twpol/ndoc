@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Library"
                 PreBuildEvent = 'if $(ConfigurationName)==Release copy "$(SolutionDir)src\ndoc.snk" "$(ProjectDir)obj\$(ConfigurationName)"'
-                PostBuildEvent = 'copy $(TargetName).* "$(SolutionDir)src\Gui\bin\$(ConfigurationName)\"&#xd;&#xa;copy $(TargetName).* "$(SolutionDir)src\Console\bin\$(ConfigurationName)\"&#xd;&#xa;'
+                PostBuildEvent = 'copy "$(TargetName).*" "$(SolutionDir)src\Gui\bin\$(ConfigurationName)\"&#xd;&#xa;copy "$(TargetName).*" "$(SolutionDir)src\Console\bin\$(ConfigurationName)\"&#xd;&#xa;'
                 RootNamespace = "NDoc.Documenter.Msdn"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
