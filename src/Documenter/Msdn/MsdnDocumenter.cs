@@ -1657,7 +1657,6 @@ namespace NDoc.Documenter.Msdn
 			object oNamespaceHierarchy;
 			object oDocumentation;
 			object oImplements;
-			object oParameter;
 			object oAttribute;
 
 			public FilteringXmlTextReader(System.IO.Stream file):base(file)
@@ -1666,7 +1665,6 @@ namespace NDoc.Documenter.Msdn
 				oNamespaceHierarchy = base.NameTable.Add("namespaceHierarchy");
 				oDocumentation = base.NameTable.Add("documentation");
 				oImplements = base.NameTable.Add("implements");
-				oParameter = base.NameTable.Add("parameter");
 				oAttribute = base.NameTable.Add("attribute");
 			}
 		
@@ -1677,7 +1675,6 @@ namespace NDoc.Documenter.Msdn
 					base.Name.Equals(oNamespaceHierarchy)||
 					base.Name.Equals(oDocumentation)||
 					base.Name.Equals(oImplements)||
-					base.Name.Equals(oParameter)||
 					base.Name.Equals(oAttribute)
 					);
 			}
