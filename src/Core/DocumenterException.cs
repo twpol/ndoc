@@ -16,12 +16,15 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 using System;
+using System.Runtime.Serialization;
 
 namespace NDoc.Core
 {
 	/// <summary>Represents the exceptions that are thrown when attempting to build documentation.</summary>
+	[Serializable]
 	public class DocumenterException : ApplicationException
 	{
+
 		/// <summary>Initializes a new instance of the DocumenterException class with the specified message.</summary>
 		/// <param name="message">The message to display when the exception is thrown.</param>
 		public DocumenterException(string message) : base(message)
@@ -37,5 +40,11 @@ namespace NDoc.Core
 		public DocumenterException(string message, Exception inner) : base(message, inner)
 		{
 		}
+
+		/// <remarks>
+		/// required to serialize across appdomain boundry
+		/// </remarks>
+		private DocumenterException (SerializationInfo info , StreamingContext context ):base(info,context){}
+
 	}
 }
