@@ -139,11 +139,9 @@ namespace NDoc.Gui
 		private System.Windows.Forms.MenuItem menuNDocOnline;
 		private System.Windows.Forms.MenuItem menuItem3;
 		private System.Windows.Forms.MenuItem menuViewDescriptions;
-		private System.Windows.Forms.Timer timer1;
 
+		private string startingProjectFilename;
 		private StringCollection recentProjectFilenames = new StringCollection();
-		private Size windowSize;
-		private int traceWindowHeight;
 		#endregion // Fields
 
 		#region Constructors / Dispose
@@ -169,9 +167,12 @@ namespace NDoc.Gui
 			//
 			InitializeComponent();
 
-			if ( DesignMode )
-				return;
+			this.startingProjectFilename = startingProjectFilename;
 
+		}
+
+		private void MainForm_Load(object sender, System.EventArgs e)
+		{
 			// Allow developers to continue to compile their assemblies while NDoc is running.
 			AppDomain.CurrentDomain.SetShadowCopyFiles();
 
@@ -197,11 +198,6 @@ namespace NDoc.Gui
 
 			options = new NDocOptions();
 			ReadConfig();
-
-			//remember the initial size after reading config, 
-			//but before the form is autoscaled
-			windowSize = this.Size;
-			traceWindowHeight = traceWindow1.Height;
 
 			processDirectory = Directory.GetCurrentDirectory();
 
@@ -261,26 +257,6 @@ namespace NDoc.Gui
 		
 			this.traceWindow1.TraceText = string.Format( "[NDoc version {0}]\n", Assembly.GetExecutingAssembly().GetName().Version );
 		}
-
-		private void timer1_Tick(object sender, System.EventArgs e)
-		{
-			timer1.Enabled = false;
-
-			//HACK
-			//if the form has been resized with autoscaling,
-			//restore the original size.
-			if (this.Size != windowSize)
-			{
-				this.Size = windowSize;
-			}
-			//same with trace window height
-			if (traceWindow1.Height != traceWindowHeight)
-			{
-				traceWindow1.Height = traceWindowHeight;
-			}
-
-		}
-
 
 		#endregion // Constructors / Dispose
 
@@ -352,7 +328,6 @@ namespace NDoc.Gui
 			this.labelDocumenters = new System.Windows.Forms.Label();
 			this.comboBoxDocumenters = new System.Windows.Forms.ComboBox();
 			this.propertyGrid = new System.Windows.Forms.PropertyGrid();
-			this.timer1 = new System.Windows.Forms.Timer(this.components);
 			((System.ComponentModel.ISupportInitialize)(this.statusBarTextPanel)).BeginInit();
 			this.assembliesHeaderGroupBox.SuspendLayout();
 			this.documenterHeaderGroupBox.SuspendLayout();
@@ -844,12 +819,6 @@ namespace NDoc.Gui
 			this.propertyGrid.ViewBackColor = System.Drawing.SystemColors.Window;
 			this.propertyGrid.ViewForeColor = System.Drawing.SystemColors.WindowText;
 			// 
-			// timer1
-			// 
-			this.timer1.Enabled = true;
-			this.timer1.Interval = 100;
-			this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-			// 
 			// MainForm
 			// 
 			this.AllowDrop = true;
@@ -870,6 +839,7 @@ namespace NDoc.Gui
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = "NDoc";
 			((System.ComponentModel.ISupportInitialize)(this.statusBarTextPanel)).EndInit();
+			this.Load += new System.EventHandler(this.MainForm_Load);
 			this.assembliesHeaderGroupBox.ResumeLayout(false);
 			this.documenterHeaderGroupBox.ResumeLayout(false);
 			this.ResumeLayout(false);
