@@ -176,6 +176,11 @@ namespace NDoc.Core
 			return _namespaces.Keys;
 		}
 
+		public int NamespaceCount
+		{
+			get { return _namespaces.Count; }
+		}
+
 		// enumerates the namespaces from an assembly 
 		// and add them to the project if new
 		private void AddNamespacesFromAssembly(string assemblyFile)
@@ -184,7 +189,11 @@ namespace NDoc.Core
 			foreach (Type t in a.GetTypes())
 			{
 				string ns = t.Namespace;
-				if ((ns != null) && (!_namespaces.ContainsKey(ns)))
+				if (ns == null)
+				{
+					ns = "(global)";
+				}
+				if (!_namespaces.ContainsKey(ns))
 				{
 					_namespaces.Add(ns, null);
 				}
