@@ -99,6 +99,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "CommonAssemblyInfo.cs"
+                    Link = "..\..\CommonAssemblyInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Latex.build"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "LatexDocumenter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -1,20 +1,7 @@
-using System;
 using System.Reflection;
-using System.Runtime.CompilerServices;
-
-[assembly: CLSCompliant(true)]
 
 [assembly: AssemblyTitle("NDoc Documenter Core")]
-[assembly: AssemblyDescription(
-"Core components for the NDoc code documentation generator.")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("ndoc.sourceforge.net")]
-[assembly: AssemblyProduct("NDoc")]
-[assembly: AssemblyCopyright("")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]		
-
-[assembly: AssemblyVersion("1.2.*")]
+[assembly: AssemblyDescription("Core components for the NDoc code documentation generator.")]
 
 #if !DEBUG
 [assembly: AssemblyDelaySign(false)]

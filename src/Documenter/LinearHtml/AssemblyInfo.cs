@@ -1,20 +1,7 @@
-using System;
 using System.Reflection;
-using System.Runtime.CompilerServices;
-
-[assembly: CLSCompliant(true)]
 
 [assembly: AssemblyTitle("NDoc LinearHtml Documenter")]
-[assembly: AssemblyDescription(
-"Single HTML file documenter for the NDoc code documentation generator.")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("ndoc.sourceforge.net")]
-[assembly: AssemblyProduct("")]
-[assembly: AssemblyCopyright("")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]		
-
-[assembly: AssemblyVersion("1.0.*")]
+[assembly: AssemblyDescription("Single HTML file documenter for the NDoc code documentation generator.")]
 
 #if !DEBUG
 [assembly: AssemblyDelaySign(false)]

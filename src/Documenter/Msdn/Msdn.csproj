@@ -107,9 +107,19 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "CommonAssemblyInfo.cs"
+                    Link = "..\..\CommonAssemblyInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ExternalHtmlProvider.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Msdn.build"
+                    BuildAction = "None"
                 />
                 <File
                     RelPath = "MsdnDocumenter.cs"

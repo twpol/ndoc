@@ -86,6 +86,12 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "CommonAssemblyInfo.cs"
+                    Link = "..\CommonAssemblyInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Project.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -99,6 +105,10 @@
                     RelPath = "Solution.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "VisualStudio.build"
+                    BuildAction = "None"
                 />
             </Include>
         </Files>

@@ -87,6 +87,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "CommonAssemblyInfo.cs"
+                    Link = "..\CommonAssemblyInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Console.build"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "Console.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
