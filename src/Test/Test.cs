@@ -2069,6 +2069,23 @@ namespace NDoc.Test.EditorBrowsableAttr
 	[EditorBrowsable(EditorBrowsableState.Never)]
 	public class NotBrowsableClass
 	{
+		/// <summary>This method is defined in NotBrowsableClass.</summary>
+		public void NotBrowsableClassMethod() {}
+	}
+
+	/// <summary>This class is marked with EditorBrowsableState.Always,
+	/// but inherits from a class with EditorBrowsableState.Never.</summary>
+	/// <remarks>
+	/// <para>Links to NotBrowsableClass and its members should be disabled,
+	/// including in the namespace hierarchy.</para>
+	/// <para>Note that this illustrates a very bad usage of the 
+	/// EditorBrowsable attribute.</para>
+	/// </remarks>
+	[EditorBrowsable(EditorBrowsableState.Always)]
+	public class BrowsableNotBrowsableClass : NotBrowsableClass
+	{
+		/// <summary>This method is defined in BrowsableNotBrowsableClass.</summary>
+		public void BrowsableNotBrowsableClassMethod() {}
 	}
 
 	/// <summary>This delegate is marked with EditorBrowsableState.Advanced</summary>
