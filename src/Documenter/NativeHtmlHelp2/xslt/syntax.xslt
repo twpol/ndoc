@@ -904,6 +904,14 @@
 				<xsl:apply-templates select="." mode="param-array">
 					<xsl:with-param name="lang" select="$lang"/>
 				</xsl:apply-templates>
+				<xsl:if test="$include-type-links=true()">
+					<xsl:if test="$lang = 'Visual Basic'">
+						<i>
+							<xsl:value-of select="@name" />
+						</i>
+						<xsl:text>&#160;As&#160;</xsl:text>
+					</xsl:if>
+				</xsl:if>
 				<xsl:choose>
 					<xsl:when test="$include-type-links=true()">
 						<xsl:variable name="link-type">
@@ -925,13 +933,12 @@
 					</xsl:otherwise>
 				</xsl:choose>
 				<xsl:if test="$include-type-links=true()">
-					<xsl:text>&#160;</xsl:text>
-					<xsl:if test="$lang = 'Visual Basic'">
-						<xsl:text>As&#160;</xsl:text>
+					<xsl:if test="$lang != 'Visual Basic'">
+						<xsl:text>&#160;</xsl:text>
+						<i>
+							<xsl:value-of select="@name" />
+						</i>
 					</xsl:if>
-					<i>
-						<xsl:value-of select="@name" />
-					</i>
 				</xsl:if>
 				<xsl:if test="$lang='C++' and contains(@type, '[')">
 					<xsl:text>&#160;__gc[]</xsl:text>
