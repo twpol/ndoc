@@ -61,23 +61,38 @@
 	<!-- -->
 	<xsl:template name="derivation">
 		<xsl:if test="@baseType!='' or implements[not(@inherited)]">
-			<xsl:text> : </xsl:text>
+			<b><xsl:text> : </xsl:text>
 			<xsl:if test="@baseType!=''">
-				<xsl:call-template name="get-datatype">
-					<xsl:with-param name="datatype" select="@baseType" />
-				</xsl:call-template>
+						<a>
+							<xsl:attribute name="href">
+								<xsl:call-template name="get-filename-for-type-name">
+									<xsl:with-param name="type-name" select="./base/@type" />
+								</xsl:call-template>
+							</xsl:attribute>
+							<xsl:call-template name="get-datatype">
+								<xsl:with-param name="datatype" select="@baseType" />
+							</xsl:call-template>
+						</a>
 				<xsl:if test="implements[not(@inherited)]">
 					<xsl:text>, </xsl:text>
 				</xsl:if>
 			</xsl:if>
 			<xsl:for-each select="implements[not(@inherited)]">
-				<xsl:call-template name="get-datatype">
-					<xsl:with-param name="datatype" select="." />
-				</xsl:call-template>
+						<a>
+							<xsl:attribute name="href">
+								<xsl:call-template name="get-filename-for-type-name">
+									<xsl:with-param name="type-name" select="@type" />
+								</xsl:call-template>
+							</xsl:attribute>
+							<xsl:call-template name="get-datatype">
+								<xsl:with-param name="datatype" select="@type" />
+							</xsl:call-template>
+						</a>
 				<xsl:if test="position()!=last()">
 					<xsl:text>, </xsl:text>
 				</xsl:if>
 			</xsl:for-each>
+			</b>
 		</xsl:if>
 	</xsl:template>
 	<!-- -->

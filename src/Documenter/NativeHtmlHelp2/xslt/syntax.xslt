@@ -812,19 +812,31 @@
 				<xsl:with-param name="lang" select="$lang"/>
 			</xsl:apply-templates>
 			<xsl:if test="@baseType!=''">
-				<xsl:call-template name="get-datatype">
-					<xsl:with-param name="datatype" select="@baseType" />
-					<xsl:with-param name="lang" select="$lang" />						
-				</xsl:call-template>
+				<xsl:variable name="link-type">
+					<xsl:call-template name="get-datatype">
+						<xsl:with-param name="datatype" select="@baseType" />
+						<xsl:with-param name="lang" select="$lang" />						
+					</xsl:call-template>
+				</xsl:variable>
+				<xsl:call-template name="get-link-for-type-name">
+					<xsl:with-param name="type-name" select="./base/@type" />
+					<xsl:with-param name="link-text" select="$link-type" />
+				</xsl:call-template>				
 				<xsl:if test="implements[not(@inherited)]">
 					<xsl:text>, </xsl:text>
 				</xsl:if>
 			</xsl:if>
 			<xsl:for-each select="implements[not(@inherited)]">
-				<xsl:call-template name="get-datatype">
-					<xsl:with-param name="datatype" select="." />
-					<xsl:with-param name="lang" select="$lang" />						
-				</xsl:call-template>
+				<xsl:variable name="link-type">
+					<xsl:call-template name="get-datatype">
+						<xsl:with-param name="datatype" select="@type" />
+						<xsl:with-param name="lang" select="$lang" />						
+					</xsl:call-template>
+				</xsl:variable>
+				<xsl:call-template name="get-link-for-type-name">
+					<xsl:with-param name="type-name" select="@type" />
+					<xsl:with-param name="link-text" select="$link-type" />
+				</xsl:call-template>				
 				<xsl:if test="position()!=last()">
 					<xsl:text>, </xsl:text>
 				</xsl:if>
