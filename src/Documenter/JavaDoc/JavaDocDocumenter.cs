@@ -159,10 +159,13 @@ namespace NDoc.Documenter.JavaDoc
 
 			foreach (XmlElement namespaceElement in namespaceNodes)
 			{
-				string name = namespaceElement.GetAttribute("name");
-				
-				WriteNamespaceSummary(name);
-				WriteTypes(namespaceElement);
+				if (namespaceElement.ChildNodes.Count > 0)
+				{
+					string name = namespaceElement.GetAttribute("name");
+					
+					WriteNamespaceSummary(name);
+					WriteTypes(namespaceElement);
+				}
 			}
 		}
 

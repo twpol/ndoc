@@ -319,49 +319,51 @@ namespace NDoc.Documenter.Msdn
 
 		private void MakeHtmlForNamespaces()
 		{
-			XmlNodeList   namespaceNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace");
-			XmlNode     namespaceNode;
+			XmlNodeList namespaceNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace");
+			int[] indexes = SortNodesByAttribute(namespaceNodes, "name");
 
-			int         nNodes = namespaceNodes.Count;
-			int[]       indexes;
-			string        prevNamespace = string.Empty;
-
-			//sort the namespaces
-			indexes = SortNodesByAttribute(namespaceNodes, "name");
+			int nNodes = namespaceNodes.Count;
+			string prevNamespace = string.Empty;
 
 			for (int i = 0; i < nNodes; i++)
 			{
 				OnDocBuildingProgress(i*100/nNodes);
 
-				namespaceNode = namespaceNodes[indexes[i]];
+				XmlNode namespaceNode = namespaceNodes[indexes[i]];
 
-				string namespaceName = (string)namespaceNode.Attributes["name"].Value;
-
-				//skip duplicate namespaces
-				if(namespaceName == prevNamespace)
+				if (namespaceNode.ChildNodes.Count > 0)
 				{
-					continue;
+					string namespaceName = (string)namespaceNode.Attributes["name"].Value;
+
+					// Skip duplicate namespaces.
+
+					if (namespaceName == prevNamespace)
+					{
+						continue;
+					}
+
+					prevNamespace = namespaceName;
+
+					string fileName = GetFilenameForNamespace(namespaceNode);
+					htmlHelp.AddFileToContents(namespaceName, fileName);
+
+					XsltArgumentList arguments = new XsltArgumentList();
+					arguments.AddParam("namespace", String.Empty, namespaceName);
+					
+					TransformAndWriteResult(xsltNamespace, arguments, fileName);
+
+					arguments = new XsltArgumentList();
+					arguments.AddParam("namespace", String.Empty, namespaceName);
+					
+					TransformAndWriteResult(
+						xsltNamespaceHierarchy,
+						arguments,
+						fileName.Insert(fileName.Length - 5, "Hierarchy"));
+
+					MakeHtmlForTypes(namespaceName);
 				}
-				prevNamespace = namespaceName;
-
-				string fileName = GetFilenameForNamespace(namespaceNode);
-				htmlHelp.AddFileToContents(namespaceName, fileName);
-
-				XsltArgumentList arguments = new XsltArgumentList();
-				arguments.AddParam("namespace", String.Empty, namespaceName);
-				TransformAndWriteResult(xsltNamespace, arguments, fileName);
-
-				arguments = new XsltArgumentList();
-				arguments.AddParam("namespace", String.Empty, namespaceName);
-				TransformAndWriteResult(
-					xsltNamespaceHierarchy,
-					arguments,
-					fileName.Insert(fileName.Length - 5, "Hierarchy"));
-
-				// Create HTML for classes, interfaces, structures,
-				// enumerations, and delegates of this namespace.
-				MakeHtmlForTypes(namespaceName);
 			}
+
 			OnDocBuildingProgress(100);
 		}
 

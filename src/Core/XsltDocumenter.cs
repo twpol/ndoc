@@ -187,14 +187,17 @@ namespace NDoc.Core
 
 			foreach (XmlNode namespaceNode in namespaceNodes)
 			{
-				string currentNamespaceName = namespaceNode.Attributes["name"].Value;
-				
-				if (previousNamespaceName != currentNamespaceName)
+				if (namespaceNode.ChildNodes.Count > 0)
 				{
-					TransformNamespace(currentNamespaceName);
-				}
+					string currentNamespaceName = namespaceNode.Attributes["name"].Value;
+					
+					if (previousNamespaceName != currentNamespaceName)
+					{
+						TransformNamespace(currentNamespaceName);
+					}
 
-				previousNamespaceName = currentNamespaceName;
+					previousNamespaceName = currentNamespaceName;
+				}
 			}
 		}
 

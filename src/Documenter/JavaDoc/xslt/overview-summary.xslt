@@ -40,26 +40,28 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template match="namespace">
-		<tr>
-			<td class="name">
-				<a>
-					<xsl:attribute name="href">
-						<xsl:call-template name="get-href-to-namespace-summary">
-							<xsl:with-param name="namespace-name" select="@name" />
-						</xsl:call-template>
-					</xsl:attribute>
-					<xsl:value-of select="@name" />
-				</a>
-			</td>
-			<td class="namespace">
-				<xsl:choose>
-					<xsl:when test="documentation/summary">
-						<xsl:apply-templates select="documentation/summary" mode="doc" />
-					</xsl:when>
-					<xsl:otherwise>&#160;</xsl:otherwise>
-				</xsl:choose>
-			</td>
-		</tr>
+		<xsl:if test="count(*)">
+			<tr>
+				<td class="name">
+					<a>
+						<xsl:attribute name="href">
+							<xsl:call-template name="get-href-to-namespace-summary">
+								<xsl:with-param name="namespace-name" select="@name" />
+							</xsl:call-template>
+						</xsl:attribute>
+						<xsl:value-of select="@name" />
+					</a>
+				</td>
+				<td class="namespace">
+					<xsl:choose>
+						<xsl:when test="documentation/summary">
+							<xsl:apply-templates select="documentation/summary" mode="doc" />
+						</xsl:when>
+						<xsl:otherwise>&#160;</xsl:otherwise>
+					</xsl:choose>
+				</td>
+			</tr>
+		</xsl:if>
 	</xsl:template>
 	<!-- -->
 </xsl:transform>
