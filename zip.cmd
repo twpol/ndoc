@@ -1,6 +1,6 @@
 @echo off
 setlocal
-set zipname=NDoc-devel
+set zipname=ndoc-devel
 
 if not exist %zipname%.zip goto zip
 del %zipname%.zip
