@@ -209,7 +209,7 @@
 		<property name="current.runtime.netcf-1.0" value="false" readonly="false" />
 		<property name="current.runtime.mono-1.0" value="false" readonly="false" />
 		<property name="current.runtime.sscli-1.0" value="false" readonly="false" />
-		<property name="current.runtime.config.${current.runtime.config}-${current.runtime.version}"
+		<property name="current.runtime.${current.runtime.config}-${current.runtime.version}"
 			value="true" readonly="false" />
 	</target>
 	<!-- 
