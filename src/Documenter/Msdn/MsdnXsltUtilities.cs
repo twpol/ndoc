@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Specialized;
 using System.Globalization;
+
 using NDoc.Core;
+using NDoc.Core.Reflection;
 
 namespace NDoc.Documenter.Msdn
 {
