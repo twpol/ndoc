@@ -460,4 +460,51 @@ namespace NDoc.Test
 		/// <summary>Greater-than-or-equal operator.</summary>
 		public static bool operator >=(Operators x, Operators y) { return false; }
 	}
+
+	/// <summary>This class contains various type conversions.</summary>
+	public class TypeConversions
+	{
+		/// <summary>Explicit conversion to an int.</summary>
+		public static explicit operator int(TypeConversions t) { return 0; }
+	}
+
+	/// <summary>The remarks in this class contains examples of list elements.</summary>
+	public class Lists
+	{
+		/// <summary>BulletMethodSummary</summary>
+		/// <remarks>
+		///		<list type="bullet">
+		///			<item><description>Item One</description></item>
+		///			<item><description>Item Two</description></item>
+		///			<item><description>Item Three</description></item>
+		///		</list>
+		/// </remarks>
+		public void BulletMethod()
+		{
+		}
+
+		/// <summary>NumberMethodSummary</summary>
+		/// <remarks>
+		///		<list type="number">
+		///			<item><description>Item One</description></item>
+		///			<item><description>Item Two</description></item>
+		///			<item><description>Item Three</description></item>
+		///		</list>
+		/// </remarks>
+		public void NumberMethod()
+		{
+		}
+
+		/// <summary>TermMethodSummary</summary>
+		/// <remarks>
+		///		<list type="bullet">
+		///			<item><term>Term One</term><description>Item One</description></item>
+		///			<item><term>Term Two</term><description>Item Two</description></item>
+		///			<item><term>Term Three</term><description>Item Three</description></item>
+		///		</list>
+		/// </remarks>
+		public void TermMethod()
+		{
+		}
+	}
 }
