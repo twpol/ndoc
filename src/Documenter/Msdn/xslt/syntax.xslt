@@ -408,7 +408,7 @@
 		<xsl:if test="$ndoc-document-attributes">
 			<xsl:if test="attribute">
 				<xsl:for-each select="attribute">
-						<div><xsl:call-template name="attribute">
+						<div class="attribute"><xsl:call-template name="attribute">
 								<xsl:with-param name="attname" select="@name" />
 						</xsl:call-template></div>
 				</xsl:for-each>

@@ -310,12 +310,16 @@ pre.syntax, div.syntax
 /* END changes to dtue.css conventions */
 /* ----------------------------------- */
 
-div.syntax div
+.syntax div
 	{
 	padding-left: 24px;
 	text-indent: -24px;
 	}
 
+.syntax .attribute
+	{
+		font-weight: normal;
+	}
 div.footer
 	{
 	font-style: italic;
