@@ -22,6 +22,8 @@ using System.IO;
 using System.Windows.Forms.Design;
 
 using NDoc.Core;
+using NDoc.Core.Reflection;
+using NDoc.Core.PropertyGridUI;
 
 namespace NDoc.Documenter.LinearHtml
 {
@@ -36,8 +38,6 @@ namespace NDoc.Documenter.LinearHtml
 		/// </remarks>
 		public LinearHtmlDocumenterConfig() : base("LinearHtml")
 		{
-			// fix for bug 884121 - OutputDirectory on Linux
-			_OutputDirectory = string.Format(".{0}doc{0}",Path.DirectorySeparatorChar );
 			_Title = "An NDoc Documented Class Library";
 			_HeaderHtml = string.Empty;
 			_FooterHtml = string.Empty;
@@ -76,29 +76,38 @@ namespace NDoc.Documenter.LinearHtml
 		}
 
 
-		string _OutputDirectory;
-
+		string _outputDirectory = string.Format( ".{0}doc{0}", Path.DirectorySeparatorChar );
+		
 		/// <summary>Gets or sets the OutputDirectory property.</summary>
-		/// <remarks>The directory in which .html file will be generated.</remarks>
+		/// <remarks>The directory in which the .html file will be generated.</remarks>
 		[Category("Documentation Main Settings")]
-		[Description("The directory in which .html file will be generated.")]
+		[Description("The directory in which the .html file will be generated.")]
 		[Editor(typeof(FolderNameEditor), typeof(UITypeEditor))]
 		public string OutputDirectory
 		{
-			get { return _OutputDirectory; }
+			get { return _outputDirectory; }
 
 			set
 			{
-				_OutputDirectory = value;
-
-				if (!_OutputDirectory.EndsWith( Path.DirectorySeparatorChar.ToString() ))
+				if ( value.IndexOfAny(new char[]{'#','?', ';'}) != -1) 
 				{
-					_OutputDirectory += Path.DirectorySeparatorChar;
+					throw new FormatException("Output Directory '" + value + 
+						"' is not valid because it contains '#','?' or ';' which" +
+						" are reserved characters in HTML URLs."); 
+				}
+
+				_outputDirectory = value;
+
+				if (!_outputDirectory.EndsWith( Path.DirectorySeparatorChar.ToString() ))
+				{
+					_outputDirectory += Path.DirectorySeparatorChar;
 				}
 
 				SetDirty();
 			}
 		}
+		void ResetOutputDirectory() { _outputDirectory = string.Format( ".{0}doc{0}", Path.DirectorySeparatorChar ); }
+
 
 		private bool _MethodParametersInTable;
 

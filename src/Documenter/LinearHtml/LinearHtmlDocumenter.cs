@@ -43,6 +43,7 @@ using System.Xml.Xsl;
 using System.Reflection;
 
 using NDoc.Core;
+using NDoc.Core.Reflection;
 
 namespace NDoc.Documenter.LinearHtml
 {
@@ -175,7 +176,7 @@ namespace NDoc.Documenter.LinearHtml
 		/// <summary>See <see cref="IDocumenter"/>.</summary>
 		public override string MainOutputFile 
 		{ 
-			get { return Path.Combine(MyConfig.OutputDirectory, "linear.html"); } 
+			get { return Path.Combine(this.WorkingPath, "linear.html"); } 
 		}
 
 		/// <summary>
