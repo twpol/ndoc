@@ -172,43 +172,54 @@ namespace NDoc.Gui
 
 			ReadConfig();
 
-			EnableAssemblyItems();
-			MakeMRUMenu();
-
 			processDirectory = Directory.GetCurrentDirectory();
 
-			if (startingProjectFilename != null || recentProjectFilenames.Count > 0)
+			// If a project document wasn't passed in on the command line
+			// then try loading up the most recently used project file.
+			if (startingProjectFilename == null)
 			{
-				// If a project document wasn't passed in on the command line
-				// then load up the most recently used project file.
-				if (startingProjectFilename == null)
+				while (recentProjectFilenames.Count > 0)
 				{
-					startingProjectFilename = recentProjectFilenames[0];
-				}
-
-				if (File.Exists(startingProjectFilename))
-				{
-					try
+					if (File.Exists(recentProjectFilenames[0]))
 					{
-						FileOpen(startingProjectFilename);
+						FileOpen(recentProjectFilenames[0]);
+						break;
 					}
-					catch(Exception)
+					else
 					{
-						MessageBox.Show("Error loading the NDoc project file '" + startingProjectFilename + "'.", "Error loading NDoc project file");
-						Clear();
+						//the project file was not found, remove it from the MRU
+						recentProjectFilenames.RemoveAt(0);
 					}
 				}
-				else
+				if (recentProjectFilenames.Count == 0)
 				{
-					MessageBox.Show("The NDoc project file '" + startingProjectFilename + "' doesn't exist.", "Error loading NDoc project file");
-					Clear();
+					//there was no project to load
+					projectFilename = untitledProjectName;
+					EnableMenuItems(false);
 				}
 			}
 			else
 			{
-				projectFilename = untitledProjectName;
-				EnableMenuItems(false);
+				//load project passed on the command line
+				if (File.Exists(startingProjectFilename))
+				{
+					FileOpen(startingProjectFilename);
+				}
+				else
+				{
+					MessageBox.Show(
+						this, 
+						"The NDoc project file '" + startingProjectFilename 
+							+ "' does not exist.", "Error loading NDoc project file",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Stop
+					);
+					Clear();
+				}
 			}
+
+			EnableAssemblyItems();
+			MakeMRUMenu();
 
 			menuFileCloseItem.Visible = false;
 
