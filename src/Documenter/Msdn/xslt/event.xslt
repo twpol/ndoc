@@ -81,7 +81,7 @@
 						<xsl:with-param name="page">event</xsl:with-param>
 					</xsl:call-template>
 					<xsl:if test="not($ndoc-omit-object-tags)">					
-						<object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e" viewastext="viewastext">
+						<object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e" viewastext="true" style="display: none;">
 							<xsl:element name="param">
 								<xsl:attribute name="name">Keyword</xsl:attribute>
 								<xsl:attribute name="value"><xsl:value-of select='@name' /> event</xsl:attribute>
