@@ -116,12 +116,6 @@
 		</html>
 	</xsl:template>
 	<!-- -->
-	<xsl:template name="overload-member-sumary">
-		<xsl:param name="member"/>
-		<xsl:message>member:<xsl:value-of select="$member/@id"/></xsl:message>
-
-	</xsl:template>
-	<!-- -->
 	<xsl:template match="constructor | method | property | operator" mode="syntax">
 		<xsl:if test="$ndoc-omit-syntax = false() and not( @unsafe | parameter[@unsafe] )">
 			<blockquote class="dtBlock">
