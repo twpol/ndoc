@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Library"
                 PreBuildEvent = 'if $(ConfigurationName)==Release copy "$(SolutionDir)src\ndoc.snk" "$(ProjectDir)obj\$(ConfigurationName)"'
-                PostBuildEvent = 'copy "$(TargetName).*" "$(SolutionDir)src\Gui\bin\$(ConfigurationName)\"&#xd;&#xa;copy "$(TargetName).*" "$(SolutionDir)src\Console\bin\$(ConfigurationName)\"&#xd;&#xa;'
+                PostBuildEvent = 'copy "$(TargetName).*" "$(SolutionDir)src\Gui\bin\$(ConfigurationName)\"&#xd;&#xa;copy "Interop.*.dll" "$(SolutionDir)src\Gui\bin\$(ConfigurationName)\"&#xd;&#xa;copy "$(TargetName).*" "$(SolutionDir)src\Console\bin\$(ConfigurationName)\"&#xd;&#xa;copy "Interop.*.dll" "$(SolutionDir)src\Console\bin\$(ConfigurationName)\"&#xd;&#xa;'
                 RootNamespace = "NDoc.Documenter.Msdn"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
@@ -96,6 +96,14 @@
                 <Reference
                     Name = "System.Data"
                     AssemblyName = "System.Data"
+                />
+                <Reference
+                    Name = "MSHelpServices"
+                    Guid = "{31411197-A502-11D2-BBCA-00C04F8EC294}"
+                    VersionMajor = "1"
+                    VersionMinor = "0"
+                    Lcid = "0"
+                    WrapperTool = "tlbimp"
                 />
             </References>
         </Build>
