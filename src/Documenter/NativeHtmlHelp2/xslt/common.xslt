@@ -11,7 +11,6 @@
 	<xsl:include href="XLinks.xslt" />
 	<!-- -->
 	<xsl:param name="ndoc-title" />
-	<xsl:param name="ndoc-platforms"/>
 	<xsl:param name="ndoc-net-framework-version"/>
 	<xsl:param name="ndoc-version"/>
 	<!-- -->
@@ -314,10 +313,24 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="parameter-section">
+		<xsl:choose>
+			<xsl:when test="substring(@name,1,3)='op_'">
+				<xsl:if test="documentation/param">
+					<H4 class="dtH4">Arguments <SPAN class="lang">[Visual&#160;Basic,&#160;JScript]</SPAN> </H4>
+					<xsl:call-template name="parameter-topic" />
+				</xsl:if>
+				<xsl:if test="documentation/param">
+					<H4 class="dtH4">Parameters <SPAN class="lang">[C#,&#160;C++]</SPAN> </H4>
+					<xsl:call-template name="parameter-topic" />
+				</xsl:if>
+			</xsl:when>
+			<xsl:otherwise>
 		<xsl:if test="documentation/param">
 			<h4 class="dtH4">Parameters</h4>
 			<xsl:call-template name="parameter-topic" />
 		</xsl:if>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="returnvalue-section">
@@ -369,6 +382,8 @@
 	<!-- -->
 	<xsl:template name="syntax-section">
 	
+		<xsl:apply-templates select="." mode="pre-syntax"/>
+		<xsl:text>&#10;</xsl:text>
 		<PRE class="syntax">
 		<xsl:apply-templates select="." mode="syntax">
 			<xsl:with-param name="lang" select="'Visual Basic'"/>
@@ -383,6 +398,7 @@
 			<xsl:with-param name="lang" select="'JScript'"/>
 		</xsl:apply-templates>
 		</PRE>	
+		<xsl:apply-templates select="." mode="post-syntax"/>
 		
 	</xsl:template>
 	<xsl:template name="remarks-section">
@@ -646,9 +662,12 @@
 		<xsl:variable name="version-rtf">
 			<xsl:call-template name="generated-from-assembly-version" />
 		</xsl:variable>
-		<xsl:if test="string($copyright-rtf) or string($version-rtf) or string($footerHtml)">
+		<xsl:if test="string($copyright-rtf) or string($version-rtf) or string($footerHtml) or /ndoc/feedbackEmail">
 			<hr />
 			<div id="footer">
+				<xsl:apply-templates select="/ndoc/feedbackEmail">
+					<xsl:with-param name="page" select="$type-name"/>
+				</xsl:apply-templates>
 				<xsl:choose>
 					<xsl:when test="$footerHtml=''">
 						<p>
@@ -730,19 +749,7 @@
 			<xsl:when test="$name='op_GreaterThan'">Greater Than Operator</xsl:when>
 			<xsl:when test="$name='op_LessThanOrEqual'">Less Than Or Equal Operator</xsl:when>
 			<xsl:when test="$name='op_GreaterThanOrEqual'">Greater Than Or Equal Operator</xsl:when>
-			<xsl:when test="$name='op_Implicit'">
-				<xsl:text>Implicit </xsl:text>
-				<xsl:call-template name="strip-namespace">
-					<xsl:with-param name="name" select="$from" />
-				</xsl:call-template>
-				<xsl:text> to </xsl:text>
-				<xsl:call-template name="strip-namespace">
-					<xsl:with-param name="name" select="$to" />
-				</xsl:call-template>
-				<xsl:text> Conversion</xsl:text>
-			</xsl:when>
-			<xsl:when test="$name='op_Explicit'">
-				<xsl:text>Explicit </xsl:text>
+			<xsl:when test="$name='op_Implicit' or $name='op_Explicit'">
 				<xsl:call-template name="strip-namespace">
 					<xsl:with-param name="name" select="$from" />
 				</xsl:call-template>
@@ -758,31 +765,40 @@
 	<!-- -->
 	<xsl:template name="csharp-operator-name">
 		<xsl:param name="name" />
+
+		<xsl:text>operator&#160;</xsl:text>
+		<xsl:call-template name="operator-symbol">
+			<xsl:with-param name="name" select="$name"/>
+		</xsl:call-template>
+	</xsl:template>
+
+	<xsl:template name="operator-symbol">
+		<xsl:param name="name" />
 		<xsl:choose>
-			<xsl:when test="$name='op_UnaryPlus'">operator +</xsl:when>
-			<xsl:when test="$name='op_UnaryNegation'">operator -</xsl:when>
-			<xsl:when test="$name='op_LogicalNot'">operator !</xsl:when>
-			<xsl:when test="$name='op_OnesComplement'">operator ~</xsl:when>
-			<xsl:when test="$name='op_Increment'">operator ++</xsl:when>
-			<xsl:when test="$name='op_Decrement'">operator --</xsl:when>
-			<xsl:when test="$name='op_True'">operator true</xsl:when>
-			<xsl:when test="$name='op_False'">operator false</xsl:when>
-			<xsl:when test="$name='op_Addition'">operator +</xsl:when>
-			<xsl:when test="$name='op_Subtraction'">operator -</xsl:when>
-			<xsl:when test="$name='op_Multiply'">operator *</xsl:when>
-			<xsl:when test="$name='op_Division'">operator /</xsl:when>
-			<xsl:when test="$name='op_Modulus'">operator %</xsl:when>
-			<xsl:when test="$name='op_BitwiseAnd'">operator &amp;</xsl:when>
-			<xsl:when test="$name='op_BitwiseOr'">operator |</xsl:when>
-			<xsl:when test="$name='op_ExclusiveOr'">operator ^</xsl:when>
-			<xsl:when test="$name='op_LeftShift'">operator &lt;&lt;</xsl:when>
-			<xsl:when test="$name='op_RightShift'">operator >></xsl:when>
-			<xsl:when test="$name='op_Equality'">operator ==</xsl:when>
-			<xsl:when test="$name='op_Inequality'">operator !=</xsl:when>
-			<xsl:when test="$name='op_LessThan'">operator &lt;</xsl:when>
-			<xsl:when test="$name='op_GreaterThan'">operator ></xsl:when>
-			<xsl:when test="$name='op_LessThanOrEqual'">operator &lt;=</xsl:when>
-			<xsl:when test="$name='op_GreaterThanOrEqual'">operator >=</xsl:when>
+			<xsl:when test="$name='op_UnaryPlus'">+</xsl:when>
+			<xsl:when test="$name='op_UnaryNegation'">-</xsl:when>
+			<xsl:when test="$name='op_LogicalNot'">!</xsl:when>
+			<xsl:when test="$name='op_OnesComplement'">~</xsl:when>
+			<xsl:when test="$name='op_Increment'">++</xsl:when>
+			<xsl:when test="$name='op_Decrement'">--</xsl:when>
+			<xsl:when test="$name='op_True'">true</xsl:when>
+			<xsl:when test="$name='op_False'">false</xsl:when>
+			<xsl:when test="$name='op_Addition'">+</xsl:when>
+			<xsl:when test="$name='op_Subtraction'">-</xsl:when>
+			<xsl:when test="$name='op_Multiply'">*</xsl:when>
+			<xsl:when test="$name='op_Division'">/</xsl:when>
+			<xsl:when test="$name='op_Modulus'">%</xsl:when>
+			<xsl:when test="$name='op_BitwiseAnd'">&amp;</xsl:when>
+			<xsl:when test="$name='op_BitwiseOr'">|</xsl:when>
+			<xsl:when test="$name='op_ExclusiveOr'">^</xsl:when>
+			<xsl:when test="$name='op_LeftShift'">&lt;&lt;</xsl:when>
+			<xsl:when test="$name='op_RightShift'">>></xsl:when>
+			<xsl:when test="$name='op_Equality'">==</xsl:when>
+			<xsl:when test="$name='op_Inequality'">!=</xsl:when>
+			<xsl:when test="$name='op_LessThan'">&lt;</xsl:when>
+			<xsl:when test="$name='op_GreaterThan'">></xsl:when>
+			<xsl:when test="$name='op_LessThanOrEqual'">&lt;=</xsl:when>
+			<xsl:when test="$name='op_GreaterThanOrEqual'">>=</xsl:when>
 			<xsl:otherwise>operator </xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
@@ -978,5 +994,24 @@
 				</center>
 			</p>	
 		</DIV>
+	</xsl:template>
+	
+	<xsl:template match="feedbackEmail">
+		<xsl:param name="page"/>
+		<p>
+			<a>
+				<xsl:attribute name="href">
+					<xsl:text>mailto:</xsl:text>
+					<xsl:value-of select="."/>
+					<xsl:text>?subject=</xsl:text>
+					<xsl:value-of select="$ndoc-title" />
+					<xsl:text> </xsl:text>
+					<xsl:value-of select="$ndoc-version" />
+					<xsl:text> Documentation Feedback: </xsl:text>
+					<xsl:value-of select="$page"/>
+				</xsl:attribute>
+				<xsl:text>Send comments on this topic.</xsl:text>
+			</a>
+		</p>
 	</xsl:template>
 </xsl:stylesheet>

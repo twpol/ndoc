@@ -19,8 +19,7 @@
 	<xsl:template name="syntax-header">	
 		<xsl:param name="lang"/>
 		
-		<SPAN class="lang">[<xsl:value-of select="$lang"/>]<xsl:text>
-</xsl:text></SPAN>
+		<SPAN class="lang">[<xsl:value-of select="$lang"/>]<xsl:text>&#10;</xsl:text></SPAN>
 		<!-- JScript declares attributes after the visibility -->
 		<xsl:if test="$lang != 'JScript'">
 			<xsl:call-template name="attributes">
@@ -64,109 +63,106 @@
 					<xsl:with-param name="link-text" select="$link-type" />
 				</xsl:call-template>					
 			</xsl:if>
-<xsl:text>
-</xsl:text></b>	
+		<xsl:text>&#10;</xsl:text></b>	
 	</xsl:template>
 
 	<xsl:template match="structure | interface | class" mode="syntax">
 		<xsl:param name="lang"/>
 
-		<xsl:call-template name="syntax-header">
-			<xsl:with-param name="lang" select="$lang"/>		
-		</xsl:call-template>
-		<b>
-			<xsl:choose>
-				<xsl:when test="$lang='Visual Basic'">
-					<xsl:apply-templates select="." mode="abstract">
-						<xsl:with-param name="lang" select="$lang"/>
-					</xsl:apply-templates>
-					<xsl:apply-templates select="." mode="sealed">
-						<xsl:with-param name="lang" select="$lang"/>
-					</xsl:apply-templates>				
-					<xsl:apply-templates select="." mode="access">
-						<xsl:with-param name="lang" select="$lang"/>
-					</xsl:apply-templates>
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:apply-templates select="." mode="access">
-						<xsl:with-param name="lang" select="$lang"/>
-					</xsl:apply-templates>
-					<xsl:if test="$lang = 'JScript'">
-						<xsl:call-template name="attributes">
+		<xsl:if test="not(local-name()='structure' and $lang='JScript')">
+			<xsl:call-template name="syntax-header">
+				<xsl:with-param name="lang" select="$lang"/>		
+			</xsl:call-template>
+			<b>
+				<xsl:choose>
+					<xsl:when test="$lang='Visual Basic'">
+						<xsl:apply-templates select="." mode="abstract">
 							<xsl:with-param name="lang" select="$lang"/>
-						</xsl:call-template>
-					</xsl:if>					
-					<xsl:apply-templates select="." mode="gc-type">
-						<xsl:with-param name="lang" select="$lang"/>
-					</xsl:apply-templates>
-					<xsl:apply-templates select="." mode="abstract">
-						<xsl:with-param name="lang" select="$lang"/>
-					</xsl:apply-templates>
-					<xsl:apply-templates select="." mode="sealed">
-						<xsl:with-param name="lang" select="$lang"/>
-					</xsl:apply-templates>				
-				</xsl:otherwise>
-			</xsl:choose>
-			<xsl:apply-templates select="." mode="keyword">
-				<xsl:with-param name="lang" select="$lang"/>
-			</xsl:apply-templates>
-			<xsl:value-of select="@name" />
-			<xsl:apply-templates select="." mode="derivation">
-				<xsl:with-param name="lang" select="$lang"/>			
-			</xsl:apply-templates>
-<xsl:text>
-</xsl:text></b>	
+						</xsl:apply-templates>
+						<xsl:apply-templates select="." mode="sealed">
+							<xsl:with-param name="lang" select="$lang"/>
+						</xsl:apply-templates>				
+						<xsl:apply-templates select="." mode="access">
+							<xsl:with-param name="lang" select="$lang"/>
+						</xsl:apply-templates>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:apply-templates select="." mode="access">
+							<xsl:with-param name="lang" select="$lang"/>
+						</xsl:apply-templates>
+						<xsl:if test="$lang = 'JScript'">
+							<xsl:call-template name="attributes">
+								<xsl:with-param name="lang" select="$lang"/>
+							</xsl:call-template>
+						</xsl:if>					
+						<xsl:apply-templates select="." mode="gc-type">
+							<xsl:with-param name="lang" select="$lang"/>
+						</xsl:apply-templates>
+						<xsl:apply-templates select="." mode="abstract">
+							<xsl:with-param name="lang" select="$lang"/>
+						</xsl:apply-templates>
+						<xsl:apply-templates select="." mode="sealed">
+							<xsl:with-param name="lang" select="$lang"/>
+						</xsl:apply-templates>				
+					</xsl:otherwise>
+				</xsl:choose>
+				<xsl:apply-templates select="." mode="keyword">
+					<xsl:with-param name="lang" select="$lang"/>
+				</xsl:apply-templates>
+				<xsl:value-of select="@name" />
+				<xsl:apply-templates select="." mode="derivation">
+					<xsl:with-param name="lang" select="$lang"/>			
+				</xsl:apply-templates>
+			<xsl:text>&#10;</xsl:text></b>	
+		</xsl:if>
 	</xsl:template>
 	
 	<xsl:template match="delegate" mode="syntax">
 		<xsl:param name="lang"/>
 
-		<xsl:call-template name="syntax-header">
-			<xsl:with-param name="lang" select="$lang"/>		
-		</xsl:call-template>		
-		<b>
-			<xsl:if test="$lang != 'JScript'">
-				<xsl:apply-templates select="." mode="access">
-					<xsl:with-param name="lang" select="$lang"/>
-				</xsl:apply-templates>
-				<xsl:apply-templates select="." mode="gc-type">
-					<xsl:with-param name="lang" select="$lang"/>
-				</xsl:apply-templates>
-			</xsl:if>
+		<!-- delegates can't be defined in JScript -->
+		<xsl:if test="$lang != 'JScript'">
+			<xsl:call-template name="syntax-header">
+				<xsl:with-param name="lang" select="$lang"/>		
+			</xsl:call-template>		
+			<b>
+			<xsl:apply-templates select="." mode="access">
+				<xsl:with-param name="lang" select="$lang"/>
+			</xsl:apply-templates>
+			<xsl:apply-templates select="." mode="gc-type">
+				<xsl:with-param name="lang" select="$lang"/>
+			</xsl:apply-templates>
 			<xsl:apply-templates select="." mode="keyword">
 				<xsl:with-param name="lang" select="$lang"/>
 			</xsl:apply-templates>
-			<!-- delegates can't be defined in JScript -->
-			<xsl:if test="$lang != 'JScript'">
-				<xsl:variable name="link-type">
-					<xsl:call-template name="get-datatype">
-						<xsl:with-param name="datatype" select="@returnType" />
-						<xsl:with-param name="lang" select="$lang" />
-					</xsl:call-template>
-				</xsl:variable>
-				<xsl:if test="$lang != 'Visual Basic'">
-					<xsl:call-template name="get-link-for-type-name">
-						<xsl:with-param name="type-name" select="@returnType" />
-						<xsl:with-param name="link-text" select="$link-type" />
-					</xsl:call-template>
-				</xsl:if>								
-				<xsl:text>&#160;</xsl:text>
-				<xsl:value-of select="@name" />
-				<xsl:call-template name="parameters">
-					<xsl:with-param name="include-type-links" select="true()"/>		
-					<xsl:with-param name="lang" select="$lang"/>
-					<xsl:with-param name="namespace-name" select="../@name" />
+			<xsl:variable name="link-type">
+				<xsl:call-template name="get-datatype">
+					<xsl:with-param name="datatype" select="@returnType" />
+					<xsl:with-param name="lang" select="$lang" />
 				</xsl:call-template>
-				<xsl:if test="$lang='Visual Basic'">
-					<xsl:call-template name="return-type">
-						<xsl:with-param name="lang" select="$lang"/>
-						<xsl:with-param name="include-type-links" select="true()"/>
-						<xsl:with-param name="type" select="@returnType"/>
-					</xsl:call-template>
-				</xsl:if>
+			</xsl:variable>
+			<xsl:if test="$lang != 'Visual Basic'">
+				<xsl:call-template name="get-link-for-type-name">
+					<xsl:with-param name="type-name" select="@returnType" />
+					<xsl:with-param name="link-text" select="$link-type" />
+				</xsl:call-template>
+			</xsl:if>								
+			<xsl:text>&#160;</xsl:text>
+			<xsl:value-of select="@name" />
+			<xsl:call-template name="parameters">
+				<xsl:with-param name="include-type-links" select="true()"/>		
+				<xsl:with-param name="lang" select="$lang"/>
+				<xsl:with-param name="namespace-name" select="../@name" />
+			</xsl:call-template>
+			<xsl:if test="$lang='Visual Basic'">
+				<xsl:call-template name="return-type">
+					<xsl:with-param name="lang" select="$lang"/>
+					<xsl:with-param name="include-type-links" select="true()"/>
+					<xsl:with-param name="type" select="@returnType"/>
+				</xsl:call-template>
 			</xsl:if>
-<xsl:text>
-</xsl:text></b>	
+			<xsl:text>&#10;</xsl:text></b>	
+		</xsl:if>
 	</xsl:template>
 
 	
@@ -199,8 +195,8 @@
 			<xsl:call-template name="constructor-syntax">
 				<xsl:with-param name="lang" select="$lang"/>		
 				<xsl:with-param name="include-type-links" select="true()"/>		
-			</xsl:call-template><xsl:text>
-</xsl:text></b>	
+		</xsl:call-template>
+		<xsl:text>&#10;</xsl:text></b>	
 	</xsl:template>
 	
 	<xsl:template name="constructor-syntax">
@@ -243,7 +239,7 @@
 		<xsl:call-template name="get-link-for-member-overload">
 			<xsl:with-param name="link-text" select="$link-text"/>
 			<xsl:with-param name="member" select="."/>
-		</xsl:call-template>			
+		</xsl:call-template>
 	</xsl:template>
 	
 	<xsl:template match="method" mode="syntax">
@@ -257,14 +253,18 @@
 				<xsl:with-param name="lang" select="$lang"/>
 				<xsl:with-param name="include-type-links" select="true()"/>
 			</xsl:call-template>
-<xsl:text>
-</xsl:text></b>	
+		<xsl:text>&#10;</xsl:text></b>	
 	</xsl:template>
 
 	<xsl:template name="method-syntax">
 		<xsl:param name="include-type-links"/>
 		<xsl:param name="lang"/>
-
+		<xsl:choose>
+			<!-- special 'destructor' syntax for Finalize() in c# and c++ -->
+			<xsl:when test="@name='Finalize' and not(Parameters) and ($lang = 'C#' or $lang='C++')">
+				<xsl:text>~</xsl:text><xsl:value-of select="../@name"/><xsl:text>();</xsl:text>
+			</xsl:when>
+			<xsl:otherwise>
 		<xsl:call-template name="member-syntax-prolog">
 			<xsl:with-param name="lang" select="$lang"/>							
 		</xsl:call-template>
@@ -282,6 +282,8 @@
 			<xsl:with-param name="include-type-links" select="$include-type-links"/>
 			<xsl:with-param name="lang" select="$lang"/>
 		</xsl:call-template>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 
 	<xsl:template name="member-syntax-prolog">
@@ -409,13 +411,10 @@
 		<xsl:call-template name="syntax-header">
 			<xsl:with-param name="lang" select="$lang"/>		
 		</xsl:call-template>
-		<b>
 			<xsl:call-template name="property-syntax">
 				<xsl:with-param name="lang" select="$lang"/>			
 				<xsl:with-param name="include-type-links" select="true()"/>
 			</xsl:call-template>
-<xsl:text>
-</xsl:text></b>	
 	</xsl:template>
 	
 	<xsl:template match="property" mode="inline-syntax">
@@ -503,19 +502,18 @@
 		<xsl:call-template name="statement-end">
 			<xsl:with-param name="lang" select="$lang"/>
 		</xsl:call-template>
-<xsl:text>
-</xsl:text></b>	
+		<xsl:text>&#10;</xsl:text></b>	
 	</xsl:template>
 	
 	<xsl:template match="event" mode="syntax">
 		<xsl:param name="lang"/>
 
-		<xsl:call-template name="syntax-header">
-			<xsl:with-param name="lang" select="$lang"/>		
-		</xsl:call-template>
-		<b>
-	
+		<!-- events can't be defined in JScript -->
 		<xsl:if test="$lang != 'JScript'">
+			<xsl:call-template name="syntax-header">
+				<xsl:with-param name="lang" select="$lang"/>		
+			</xsl:call-template>
+			<b>
 			<xsl:if test="not(parent::interface)">
 				<xsl:apply-templates select="." mode="access">
 					<xsl:with-param name="lang" select="$lang"/>
@@ -529,20 +527,18 @@
 			<xsl:apply-templates select="." mode="contract">
 				<xsl:with-param name="lang" select="$lang"/>
 			</xsl:apply-templates>
-		</xsl:if>
-				
-		<xsl:apply-templates select="." mode="keyword">
-			<xsl:with-param name="lang" select="$lang"/>		
-		</xsl:apply-templates>
+					
+			<xsl:apply-templates select="." mode="keyword">
+				<xsl:with-param name="lang" select="$lang"/>		
+			</xsl:apply-templates>
 
-		<xsl:variable name="link-type">
-			<xsl:call-template name="get-datatype">
-				<xsl:with-param name="datatype" select="@type" />
-				<xsl:with-param name="lang" select="$lang" />				
-			</xsl:call-template>
-		</xsl:variable>
+			<xsl:variable name="link-type">
+				<xsl:call-template name="get-datatype">
+					<xsl:with-param name="datatype" select="@type" />
+					<xsl:with-param name="lang" select="$lang" />				
+				</xsl:call-template>
+			</xsl:variable>
 
-		<xsl:if test="$lang != 'JScript'">
 			<xsl:if test="$lang != 'Visual Basic'">
 				<xsl:call-template name="get-link-for-type-name">
 					<xsl:with-param name="type-name" select="@type" />
@@ -563,14 +559,25 @@
 			<xsl:call-template name="statement-end">
 				<xsl:with-param name="lang" select="$lang"/>
 			</xsl:call-template>
+			<xsl:text>&#10;</xsl:text></b>	
 		</xsl:if>
-<xsl:text>
-</xsl:text></b>	
 	</xsl:template>	
 
 	<xsl:template match="operator" mode="inline-syntax">
 		<xsl:param name="lang"/>
 
+		<xsl:choose>
+			<xsl:when test="$lang='Visual Basic'">
+				<xsl:call-template name="vb-operator-inline-syntax">
+					<xsl:with-param name="lang" select="$lang"/>		
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:when test="$lang='JScript'">
+				<xsl:call-template name="vb-operator-inline-syntax">
+					<xsl:with-param name="lang" select="$lang"/>		
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:otherwise>
 		<xsl:call-template name="syntax-header">
 			<xsl:with-param name="lang" select="$lang"/>		
 		</xsl:call-template>
@@ -585,21 +592,49 @@
 			<xsl:with-param name="link-text" select="$link-text"/>
 			<xsl:with-param name="member" select="."/>
 		</xsl:call-template>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 			
-	<xsl:template match="operator" mode="syntax">
+	<xsl:template name="vb-operator-inline-syntax">
 		<xsl:param name="lang"/>
 
 		<xsl:call-template name="syntax-header">
 			<xsl:with-param name="lang" select="$lang"/>		
 		</xsl:call-template>
-		<b>
+		<xsl:variable name="link-text">
+			<xsl:call-template name="operator-name">
+				<xsl:with-param name="name"><xsl:value-of select="@name" /></xsl:with-param>
+			</xsl:call-template>
+			<xsl:text>&#160;</xsl:text>
+			<!--HACK -->
+			<xsl:call-template name="parameters">
+				<xsl:with-param name="include-type-links" select="false()"/>
+				<xsl:with-param name="lang" select="'C#'"/>
+				<xsl:with-param name="namespace-name" select="../../@name" />
+			</xsl:call-template>
+			<!--HACK END -->
+		</xsl:variable>
+		<xsl:call-template name="get-link-for-member-overload">
+			<xsl:with-param name="link-text" select="$link-text"/>
+			<xsl:with-param name="member" select="."/>
+		</xsl:call-template>
+	</xsl:template>
+			
+	<xsl:template match="operator" mode="syntax">
+		<xsl:param name="lang"/>
+
+		<!-- true and false operators cannot be used by JScript? -->
+		<xsl:if test="not((@name='op_True' or @name='op_False') and $lang='JScript')">
+
+			<xsl:call-template name="syntax-header">
+				<xsl:with-param name="lang" select="$lang"/>		
+			</xsl:call-template>
 			<xsl:call-template name="operator-syntax">
 				<xsl:with-param name="lang" select="$lang"/>
 				<xsl:with-param name="include-type-links" select="true()"/>
 			</xsl:call-template>
-<xsl:text>
-</xsl:text></b>	
+		</xsl:if>
 	</xsl:template>
 	
 	<xsl:template name="operator-syntax">
@@ -608,6 +643,7 @@
 	
 		<xsl:choose>
 			<xsl:when test="$lang = 'C#' or $lang='C++'">
+			<b>
 				<xsl:call-template name="member-syntax-prolog">
 					<xsl:with-param name="lang" select="$lang"/>			
 				</xsl:call-template>
@@ -650,6 +686,21 @@
 					<xsl:with-param name="lang" select="$lang"/>
 					<xsl:with-param name="namespace-name" select="../../@name" />
 				</xsl:call-template>	
+				<xsl:text>&#10;</xsl:text></b>	
+			</xsl:when>
+			<xsl:when test="$lang = 'Visual Basic'">
+				<I>returnValue</I> = <B><xsl:value-of select="../@name"/>.<xsl:value-of select="@name"/>
+				<xsl:text>(</xsl:text></B>
+				<xsl:for-each select="parameter">
+					<i><xsl:value-of select="@name" /></i>
+					<xsl:if test="position()!= last()">
+						<xsl:text>,&#160;</xsl:text>
+					</xsl:if>
+				</xsl:for-each>
+				<B><xsl:text>)</xsl:text></B>
+			</xsl:when>
+			<xsl:when test="$lang = 'JScript'">
+				<xsl:call-template name="jscript-operator-syntax"/>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:apply-templates select="." mode="keyword">
@@ -658,6 +709,61 @@
 			</xsl:otherwise>
 		</xsl:choose>	
 	</xsl:template>
+	<!-- -->
+
+	<xsl:template name="jscript-operator-syntax">
+		<xsl:variable name="operatorsymbol">
+			<xsl:call-template name="operator-symbol">
+				<xsl:with-param name="name" select="@name" />
+			</xsl:call-template>
+		</xsl:variable>
+		
+		<xsl:choose>
+			<xsl:when test="count(./parameter)=2">
+				<I>returnValue</I><B> = </B><I><xsl:value-of select="parameter[1]/@name"/></I>
+				<B>&#160;<xsl:value-of select="$operatorsymbol"/>&#160;</B>
+				<I><xsl:value-of select="parameter[2]/@name"/></I><B>;</B>
+				<xsl:text>&#10;</xsl:text>
+			</xsl:when>
+			<xsl:when test="@name='op_Increment' or @name = 'op_Decrement'">
+				<I>returnValue</I><B> = </B><I><xsl:value-of select="parameter[1]/@name"/></I>
+				<B><xsl:value-of select="$operatorsymbol"/>;</B>
+				<xsl:text>&#10;</xsl:text><B>-or-</B><xsl:text>&#10;</xsl:text>
+				<I>returnValue</I><B> = <xsl:value-of select="$operatorsymbol"/></B>
+				<I><xsl:value-of select="parameter[1]/@name"/></I><B>;</B>
+				<xsl:text>&#10;</xsl:text>
+			</xsl:when>
+			<xsl:when test="@name='op_True' or @name = 'op_False'">
+				<I>returnValue</I><B> = <xsl:value-of select="$operatorsymbol"/>;</B>
+				<xsl:text>&#10;</xsl:text>
+			</xsl:when>
+			<xsl:when test="@name = 'op_Explicit'">
+				<xsl:variable name="link-type">
+					<xsl:call-template name="get-datatype">
+						<xsl:with-param name="datatype" select="@returnType" />
+						<xsl:with-param name="lang" select="'JScript'" />						
+					</xsl:call-template>
+				</xsl:variable>	
+				<I>returnValue</I><B><xsl:text>&#160;=&#160;</xsl:text>
+				<xsl:call-template name="get-link-for-type-name">
+					<xsl:with-param name="type-name" select="@returnType" />
+					<xsl:with-param name="link-text" select="$link-type" />
+				</xsl:call-template>					
+				<xsl:text>(</xsl:text><I><xsl:value-of select="parameter[1]/@name"/></I>);</B>
+				<xsl:text>&#10;</xsl:text>
+			</xsl:when>
+			<xsl:when test="@name='op_Implicit'">
+				<I>returnValue</I><B> = <I><xsl:value-of select="parameter[1]/@name"/></I>;</B>
+				<xsl:text>&#10;</xsl:text>
+			</xsl:when>
+			<xsl:otherwise>
+				<I>returnValue</I><B> = <xsl:value-of select="$operatorsymbol"/></B>
+				<I><xsl:value-of select="parameter[1]/@name"/></I><B>;</B>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	<!-- -->
+	
 	<!-- -->
 	<xsl:template match="structure | interface | class" mode="derivation">
 		<xsl:param name="lang"/>
@@ -769,8 +875,7 @@
 					<xsl:call-template name="statement-continue">
 						<xsl:with-param name="lang" select="$lang"/>
 					</xsl:call-template>
-<xsl:text>
-</xsl:text>
+					<xsl:text>&#10;</xsl:text>
 					<xsl:text>&#160;&#160;&#160;</xsl:text>
 				</xsl:if>
 				<xsl:apply-templates select="." mode="dir">
@@ -787,12 +892,10 @@
 								<xsl:with-param name="lang" select="$lang" />
 							</xsl:call-template>
 						</xsl:variable>
-						<xsl:if test="$include-type-links = true()">
-							<xsl:call-template name="get-link-for-type-name">
-								<xsl:with-param name="type-name" select="@type" />
-								<xsl:with-param name="link-text" select="$link-type" />
-							</xsl:call-template>				
-						</xsl:if>
+						<xsl:call-template name="get-link-for-type-name">
+							<xsl:with-param name="type-name" select="@type" />
+							<xsl:with-param name="link-text" select="$link-type" />
+						</xsl:call-template>				
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:call-template name="get-datatype">
@@ -816,8 +919,7 @@
 				<xsl:call-template name="statement-continue">
 					<xsl:with-param name="lang" select="$lang"/>
 				</xsl:call-template>
-<xsl:text>
-</xsl:text>
+				<xsl:text>&#10;</xsl:text>
 			</xsl:if>
 		</xsl:if>
 		<xsl:value-of select="$close-paren"/>

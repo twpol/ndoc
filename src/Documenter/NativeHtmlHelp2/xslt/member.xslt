@@ -45,11 +45,13 @@
 							<xsl:with-param name="to" select="@returnType" />
 						</xsl:call-template>
 					</xsl:if>					
-					<xsl:text>&#32;</xsl:text>
-					<xsl:value-of select="$childType" />
-					<xsl:if test="count(parent::node()/*[@name=$memberName]) &gt; 1">
+					<xsl:if test="local-name()!='operator'">
 						<xsl:text>&#32;</xsl:text>
-						<xsl:call-template name="get-param-list" />
+						<xsl:value-of select="$childType" />
+						<xsl:if test="count(parent::node()/*[@name=$memberName]) &gt; 1">
+							<xsl:text>&#32;</xsl:text>
+							<xsl:call-template name="get-param-list" />
+						</xsl:if>
 					</xsl:if>
 				</xsl:with-param>
 				<xsl:with-param name="page-type" select="$childType"/>					
@@ -58,18 +60,28 @@
 				<object id="obj_cook" classid="clsid:59CC0C20-679B-11D2-88BD-0800361A1803" style="display:none;"></object>
 				<xsl:call-template name="title-row">
 					<xsl:with-param name="type-name">
-						<xsl:value-of select="../@name" />
+						<xsl:if test="local-name()='constructor'">
+							<xsl:value-of select="../@name" />
+						</xsl:if>
 						<xsl:if test="local-name()='method'">
+							<xsl:value-of select="../@name" />
 							<xsl:text>.</xsl:text>
 							<xsl:value-of select="@name" />
 						</xsl:if>
-						<xsl:text>&#160;</xsl:text>
-						<xsl:value-of select="$childType" />
-						<xsl:text>&#160;</xsl:text>
+						<xsl:if test="local-name()='operator'">
+							<xsl:call-template name="operator-name">
+								<xsl:with-param name="name" select="@name" />							
+								<xsl:with-param name="from" select="parameter/@type" />							
+								<xsl:with-param name="to" select="@returnType" />
+							</xsl:call-template>
+						</xsl:if>					
 						<xsl:if test="local-name()!='operator'">
-						  <xsl:if test="count(parent::node()/*[@name=$memberName]) &gt; 1">
-							  <xsl:call-template name="get-param-list" />
-						  </xsl:if>
+							<xsl:text>&#160;</xsl:text>
+							<xsl:value-of select="$childType" />
+							<xsl:if test="count(parent::node()/*[@name=$memberName]) &gt; 1">
+								<xsl:text>&#160;</xsl:text>
+								<xsl:call-template name="get-param-list" />
+							</xsl:if>
 						</xsl:if>
 					</xsl:with-param>
 				</xsl:call-template>

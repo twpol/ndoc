@@ -184,7 +184,7 @@
 
 	<xsl:template match="property" mode="vb-property-syntax">
 		<xsl:param name="include-type-links"/>
-
+		<b>
 		<xsl:call-template name="member-syntax-prolog">
 			<xsl:with-param name="lang" select="'Visual Basic'"/>	
 		</xsl:call-template>		
@@ -193,7 +193,7 @@
 		<xsl:apply-templates select="." mode="vb-property-dir"/>
 		<xsl:choose>
 			<xsl:when test="parameter">
-				<xsl:text>Item&#160;</xsl:text>
+				<xsl:value-of select="@name"/>
 				<xsl:call-template name="parameters">
 					<xsl:with-param name="include-type-links" select="$include-type-links"/>		
 					<xsl:with-param name="lang" select="'Visual Basic'"/>
@@ -209,6 +209,7 @@
 			<xsl:with-param name="lang" select="'Visual Basic'"/>
 			<xsl:with-param name="type" select="@type"/>
 		</xsl:call-template>			
+		<xsl:text>&#10;</xsl:text></b>	
 	</xsl:template>	
 	<xsl:template match="property[@get='true' and @set='true']" mode="vb-property-dir"/>	
 	<xsl:template match="property[@get='true' and @set='false']" mode="vb-property-dir">
@@ -221,7 +222,7 @@
 	
 	<xsl:template match="property" mode="csharp-property-syntax">
 		<xsl:param name="include-type-links"/>
-
+		<b>
 		<xsl:call-template name="member-syntax-prolog">
 			<xsl:with-param name="lang" select="'C#'"/>							
 		</xsl:call-template>
@@ -233,7 +234,7 @@
 		
 		<xsl:choose>
 			<xsl:when test="parameter">
-				<xsl:text>this&#160;</xsl:text>			
+				<xsl:text>this</xsl:text>			
 				<xsl:call-template name="indexer-params">
 					<xsl:with-param name="include-type-links" select="$include-type-links"/>		
 					<xsl:with-param name="lang" select="'C#'"/>
@@ -248,6 +249,7 @@
 		<xsl:text>&#160;{&#160;</xsl:text>
 		<xsl:apply-templates select="." mode="csharp-property-dir"/>
 		<xsl:text>&#160;}</xsl:text>			
+		<xsl:text>&#10;</xsl:text></b>	
 	</xsl:template>
 
 	<xsl:template match="property[@get='true' and @set='true']" mode="csharp-property-dir">
@@ -262,10 +264,11 @@
 	
 	<xsl:template match="property" mode="cpp-property-syntax">
 		<xsl:param name="include-type-links"/>
-
+		<b>
 		<xsl:apply-templates select="." mode="cpp-property-dir">
 			<xsl:with-param name="include-type-links" select="$include-type-links"/>		
 		</xsl:apply-templates>
+		<xsl:text>&#10;</xsl:text></b>	
 	</xsl:template>	
 	
 	<xsl:template match="property[@get='true' and @set='true']" mode="cpp-property-dir">
@@ -277,8 +280,7 @@
 		<xsl:if test="$include-type-links = false()">
 			<br/>
 		</xsl:if>
-<xsl:text>
-</xsl:text>
+		<xsl:text>&#10;</xsl:text>
 		<xsl:call-template name="cpp-property-setter">
 			<xsl:with-param name="include-type-links" select="$include-type-links"/>
 		</xsl:call-template>
@@ -343,8 +345,7 @@
 			<xsl:with-param name="type" select="@type"/>
 		</xsl:call-template>					
 		<xsl:if test="parameter">
-			<xsl:text>
-</xsl:text>
+			<xsl:text>&#10;</xsl:text>
 		</xsl:if>
 		<xsl:text>);</xsl:text>
 	</xsl:template>
@@ -354,16 +355,16 @@
 
 		<xsl:choose>
 			<xsl:when test="parameter">
-<xsl:text>In JScript, you can use the default indexed properties defined 
-by a type, but you cannot explicitly define your own. However, 
-specifying the expando attribute on a class automatically 
-provides a default indexed property whose type is Object and 
-whose index type is String.</xsl:text>				
+				<I>returnValue</I><B> = </B><I><xsl:value-of select="../@name"/></I><B>.Item(</B><I>name</I><B>);</B>
+				<xsl:text>&#10;</xsl:text><B>-or-</B><xsl:text>&#10;</xsl:text>
+				<I>returnValue</I><B> = </B><I><xsl:value-of select="../@name"/></I><B>(</B><I>name</I><B>);</B>
 			</xsl:when>
 			<xsl:otherwise>
+				<b>			
 				<xsl:apply-templates select="." mode="js-property-dir">
 					<xsl:with-param name="include-type-links" select="$include-type-links"/>		
 				</xsl:apply-templates>				
+			<xsl:text>&#10;</xsl:text></b>	
 			</xsl:otherwise>
 		</xsl:choose>
 			
@@ -378,8 +379,7 @@ whose index type is String.</xsl:text>
 		<xsl:if test="$include-type-links = false()">
 			<br/>
 		</xsl:if>
-<xsl:text>
-</xsl:text>		
+		<xsl:text>&#10;</xsl:text>
 		<xsl:call-template name="js-property-setter">
 			<xsl:with-param name="include-type-links" select="$include-type-links"/>
 		</xsl:call-template>
@@ -466,8 +466,7 @@ whose index type is String.</xsl:text>
 		<xsl:text>&#160;</xsl:text>
 		<xsl:choose>
 			<xsl:when test="$lang='Visual Basic'">
-<xsl:text>
-   </xsl:text>Inherits</xsl:when>
+			<xsl:text>&#10;&#160;&#160;&#160;</xsl:text>Inherits</xsl:when>
 			<xsl:when test="$lang='C#'">:</xsl:when>
 			<xsl:when test="$lang='C++'">: public</xsl:when>
 			<xsl:when test="$lang='JScript'">extends</xsl:when>
@@ -515,8 +514,7 @@ whose index type is String.</xsl:text>
 			<xsl:when test="$lang='Visual Basic'">Structure</xsl:when>
 			<xsl:when test="$lang='C#'">struct</xsl:when>
 			<xsl:when test="$lang='C++'">struct</xsl:when>
-			<xsl:when test="$lang='JScript'">In JScript, you can use the structures in the 
-.NET Framework,but you cannot define your own.</xsl:when>
+			<!-- you cannot define structures in JScript-->
 		</xsl:choose>	
 		<xsl:text>&#160;</xsl:text>
 	</xsl:template>
@@ -546,8 +544,7 @@ whose index type is String.</xsl:text>
 			<xsl:when test="$lang='Visual Basic'">Delegate Function Sub</xsl:when>
 			<xsl:when test="$lang='C#'">delegate</xsl:when>
 			<xsl:when test="$lang='C++'">__delegate</xsl:when>
-			<xsl:when test="$lang='JScript'">In JScript, you can use the delegates in the 
-.NET Framework, but you cannot define your own.</xsl:when>
+			<!-- you cannot define delegates in JScript-->
 		</xsl:choose>	
 		<xsl:text>&#160;</xsl:text>
 	</xsl:template>	
@@ -557,8 +554,7 @@ whose index type is String.</xsl:text>
 			<xsl:when test="$lang='Visual Basic'">Event</xsl:when>
 			<xsl:when test="$lang='C#'">event</xsl:when>
 			<xsl:when test="$lang='C++'">__event</xsl:when>
-			<xsl:when test="$lang='JScript'">In JScript, you can handle the events defined 
-by a class, but you cannot define your own.</xsl:when>
+			<!-- you cannot define events in JScript-->
 		</xsl:choose>	
 		<xsl:text>&#160;</xsl:text>
 	</xsl:template>	
@@ -581,12 +577,10 @@ by a class, but you cannot define your own.</xsl:when>
 	<xsl:template match="operator" mode="keyword">
 		<xsl:param name="lang"/>
 		<xsl:choose>
-			<xsl:when test="$lang='Visual Basic'">In Visual Basic, you can use the operators
-defined by a type, but you cannot define your own.</xsl:when>
+			<!-- you cannot define operators in Visual Basic-->
 			<xsl:when test="$lang='C#'">operator&#160;</xsl:when>
 			<xsl:when test="$lang='C++'"></xsl:when>
-			<xsl:when test="$lang='JScript'">In JScript, you can use the operators defined 
-by a type, but you cannot define your own.</xsl:when>
+			<!-- you cannot define operator in JScript-->
 		</xsl:choose>			
 	</xsl:template>	
 				
@@ -822,22 +816,22 @@ by a type, but you cannot define your own.</xsl:when>
 			<xsl:when test="$lang='C++'">
 				<xsl:variable name="new-type">
 					<xsl:choose>
-						<xsl:when test="$old-type='System.Byte'">byte</xsl:when>
-						<xsl:when test="$old-type='Byte'">byte</xsl:when>
-						<xsl:when test="$old-type='System.SByte'">sbyte</xsl:when>
-						<xsl:when test="$old-type='SByte'">sbyte</xsl:when>
+						<xsl:when test="$old-type='System.Byte'">char</xsl:when>
+						<xsl:when test="$old-type='Byte'">char</xsl:when>
+						<xsl:when test="$old-type='System.SByte'">unsigned char</xsl:when>
+						<xsl:when test="$old-type='SByte'">unsigned char</xsl:when>
 						<xsl:when test="$old-type='System.Int16'">short</xsl:when>
 						<xsl:when test="$old-type='Int16'">short</xsl:when>
-						<xsl:when test="$old-type='System.UInt16'">ushort</xsl:when>
-						<xsl:when test="$old-type='UInt16'">ushort</xsl:when>
+						<xsl:when test="$old-type='System.UInt16'">unsigned short</xsl:when>
+						<xsl:when test="$old-type='UInt16'">unsigned short</xsl:when>
 						<xsl:when test="$old-type='System.Int32'">int</xsl:when>
 						<xsl:when test="$old-type='Int32'">int</xsl:when>
-						<xsl:when test="$old-type='System.UInt32'">uint</xsl:when>
-						<xsl:when test="$old-type='UInt32'">uint</xsl:when>
-						<xsl:when test="$old-type='System.Int64'">long</xsl:when>
-						<xsl:when test="$old-type='Int64'">long</xsl:when>
-						<xsl:when test="$old-type='System.UInt64'">ulong</xsl:when>
-						<xsl:when test="$old-type='UInt64'">ulong</xsl:when>
+						<xsl:when test="$old-type='System.UInt32'">unsigned int</xsl:when>
+						<xsl:when test="$old-type='UInt32'">unsigned int</xsl:when>
+						<xsl:when test="$old-type='System.Int64'">__int64</xsl:when>
+						<xsl:when test="$old-type='Int64'">__int64</xsl:when>
+						<xsl:when test="$old-type='System.UInt64'">unsigned __int64</xsl:when>
+						<xsl:when test="$old-type='UInt64'">unsigned __int64</xsl:when>
 						<xsl:when test="$old-type='System.Single'">float</xsl:when>
 						<xsl:when test="$old-type='Single'">float</xsl:when>
 						<xsl:when test="$old-type='System.Double'">double</xsl:when>
@@ -846,8 +840,8 @@ by a type, but you cannot define your own.</xsl:when>
 						<xsl:when test="$old-type='Decimal'">decimal</xsl:when>
 						<xsl:when test="$old-type='System.String'">String*</xsl:when>
 						<xsl:when test="$old-type='String'">String*</xsl:when>
-						<xsl:when test="$old-type='System.Char'">char</xsl:when>
-						<xsl:when test="$old-type='Char'">char</xsl:when>
+						<xsl:when test="$old-type='System.Char'">wchar_t</xsl:when>
+						<xsl:when test="$old-type='Char'">wchar_t</xsl:when>
 						<xsl:when test="$old-type='System.Boolean'">bool</xsl:when>
 						<xsl:when test="$old-type='Boolean'">bool</xsl:when>
 						<xsl:when test="$old-type='System.Void'">void</xsl:when>
@@ -871,30 +865,16 @@ by a type, but you cannot define your own.</xsl:when>
 			<xsl:when test="$lang='JScript'">
 				<xsl:variable name="new-type">
 					<xsl:choose>
-						<xsl:when test="$old-type='System.Byte'">byte</xsl:when>
-						<xsl:when test="$old-type='Byte'">byte</xsl:when>
-						<xsl:when test="$old-type='System.SByte'">sbyte</xsl:when>
-						<xsl:when test="$old-type='SByte'">sbyte</xsl:when>
 						<xsl:when test="$old-type='System.Int16'">short</xsl:when>
 						<xsl:when test="$old-type='Int16'">short</xsl:when>
-						<xsl:when test="$old-type='System.UInt16'">ushort</xsl:when>
-						<xsl:when test="$old-type='UInt16'">ushort</xsl:when>
 						<xsl:when test="$old-type='System.Int32'">int</xsl:when>
 						<xsl:when test="$old-type='Int32'">int</xsl:when>
-						<xsl:when test="$old-type='System.UInt32'">uint</xsl:when>
-						<xsl:when test="$old-type='UInt32'">uint</xsl:when>
 						<xsl:when test="$old-type='System.Int64'">long</xsl:when>
 						<xsl:when test="$old-type='Int64'">long</xsl:when>
-						<xsl:when test="$old-type='System.UInt64'">ulong</xsl:when>
-						<xsl:when test="$old-type='UInt64'">ulong</xsl:when>
 						<xsl:when test="$old-type='System.Single'">float</xsl:when>
 						<xsl:when test="$old-type='Single'">float</xsl:when>
 						<xsl:when test="$old-type='System.Double'">double</xsl:when>
 						<xsl:when test="$old-type='Double'">double</xsl:when>
-						<xsl:when test="$old-type='System.Decimal'">decimal</xsl:when>
-						<xsl:when test="$old-type='Decimal'">decimal</xsl:when>
-						<xsl:when test="$old-type='System.String'">String</xsl:when>
-						<xsl:when test="$old-type='String'">String</xsl:when>
 						<xsl:when test="$old-type='System.Char'">char</xsl:when>
 						<xsl:when test="$old-type='Char'">char</xsl:when>
 						<xsl:when test="$old-type='System.Boolean'">bool</xsl:when>
@@ -919,6 +899,45 @@ by a type, but you cannot define your own.</xsl:when>
 			</xsl:when>
 		</xsl:choose>				
 	</xsl:template>	
+
+	<!-- -->
+	<xsl:template match="@* | node() | text()" mode="pre-syntax"/>
+	<xsl:template match="property" mode="pre-syntax">
+		<xsl:if test="parameter">
+			<P><SPAN class="lang">[C#]</SPAN> In C#, this property is the indexer for the <B><xsl:value-of select="../@name"/></B> class.</P>
+		</xsl:if>
+	</xsl:template>
+	
+	<xsl:template match="method[@name='Finalize']" mode="pre-syntax">
+		<P><SPAN class="lang">[C#]</SPAN> In C#, finalizers are expressed using destructor syntax.</P>
+		<P><SPAN class="lang">[C++]</SPAN> In C++, finalizers are expressed using destructor syntax.</P>
+	</xsl:template>
+
+	<xsl:template match="structure | delegate | event" mode="post-syntax">
+		<P><SPAN class="lang">[JScript]</SPAN> In JScript, you can use the <xsl:value-of select="local-name()"/>s defined by a type, but you cannot define your own.</P>
+	</xsl:template>
+
+	<xsl:template match="operator[@name='op_Implicit' or @name='op_Explicit']" mode="post-syntax">
+		<P><SPAN class="lang">[Visual&#160;Basic]</SPAN> In Visual Basic, you can use the conversion operators defined by a type, but you cannot define your own.</P>
+		<P><SPAN class="lang">[JScript]</SPAN> In JScript, you can use the conversion operators defined by a type, but you cannot define your own.</P>
+	</xsl:template>
+
+	<xsl:template match="operator[@name!='op_Implicit' and @name!='op_Explicit']" mode="post-syntax">
+		<P><SPAN class="lang">[Visual&#160;Basic]</SPAN> In Visual Basic, you can use the operators defined by a type, but you cannot define your own.</P>
+		<P><SPAN class="lang">[JScript]</SPAN> In JScript, you can use the operators defined by a type, but you cannot define your own.</P>
+	</xsl:template>
+
+	<xsl:template match="@* | node() | text()" mode="post-syntax"/>
+	<xsl:template match="property" mode="post-syntax">
+		<xsl:if test="parameter">
+			<P><SPAN class="lang">[JScript]</SPAN> 
+			In JScript, you can use the default indexed properties defined by a type, 
+			but you cannot explicitly define your own. However, specifying the <B>expando</B> 
+			attribute on a class automatically provides a default indexed property whose 
+			type is <B>Object</B> and whose index type is <B>String</B>.</P>
+		</xsl:if>
+	</xsl:template>
+	
 </xsl:stylesheet>
 
   

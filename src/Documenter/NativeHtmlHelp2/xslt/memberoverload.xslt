@@ -125,7 +125,7 @@
 		</html>
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="constructor | method | property" mode="syntax">
+	<xsl:template match="constructor | method | property | operator" mode="syntax">
 		<blockquote class="dtBlock">
 		<xsl:apply-templates select="." mode="inline-syntax">
 			<xsl:with-param name="lang" select="'Visual Basic'"/>
@@ -148,7 +148,7 @@
 		</blockquote>
 	</xsl:template>
 	
-	<xsl:template match="operator" mode="syntax">
+<!--	<xsl:template match="operator" mode="syntax">
 		<xsl:apply-templates select="." mode="inline-syntax">
 			<xsl:with-param name="lang" select="'C#'"/>
 		</xsl:apply-templates>
@@ -156,6 +156,6 @@
 		<xsl:apply-templates select="." mode="inline-syntax">
 			<xsl:with-param name="lang" select="'C++'"/>
 		</xsl:apply-templates>					
-	</xsl:template>
+	</xsl:template>-->
 	<!-- -->
 </xsl:stylesheet>
