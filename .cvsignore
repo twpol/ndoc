@@ -1,4 +1,5 @@
 bin
+doc
 NDoc.suo
-monotest
 NDoc.ncb
+.#*
