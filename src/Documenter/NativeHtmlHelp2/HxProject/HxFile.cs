@@ -30,6 +30,35 @@ namespace NDoc.Documenter.NativeHtmlHelp2.HxProject
 	public abstract class HxFile
 	{
 		/// <summary>
+		/// Fetches the document element of the specified XML document
+		/// </summary>
+		/// <param name="templateFile">Path to the XML document</param>
+		/// <returns>The <see cref="System.Xml.XmlDocument.DocumentElement"/> of the XML document</returns>
+		public static XmlNode CreateFrom( string templateFile )
+		{
+			if ( !File.Exists( templateFile ) )
+				throw new ArgumentException( "The source file does not exist", "templateFile" );
+			
+			// we are not going to validate or resolve externals from this document
+			XmlDocument doc = new XmlDocument();
+			XmlReader reader = new XmlTextReader( templateFile );
+			try
+			{ 			
+				XmlValidatingReader validator = new XmlValidatingReader( reader );
+				validator.ValidationType = ValidationType.None;
+				validator.XmlResolver = null;
+
+				doc.Load( validator );
+			}
+			finally
+			{
+				reader.Close();
+			}
+
+			return doc.DocumentElement;
+		}
+
+		/// <summary>
 		/// The XmlNode that represents the project file's data
 		/// </summary>
 		protected XmlNode dataNode;
@@ -51,6 +80,15 @@ namespace NDoc.Documenter.NativeHtmlHelp2.HxProject
 
 			Name = name;
 			dataNode = node;
+		}
+
+		/// <summary>
+		/// Language identifier for the project
+		/// </summary>
+		public int LangId
+		{
+			get{ return int.Parse( GetProperty( "@LangId" ) ); }
+			set{ SetProperty( "@LangId", value ); }
 		}
 
 		/// <summary>

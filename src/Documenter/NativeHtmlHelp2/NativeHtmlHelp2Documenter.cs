@@ -100,6 +100,9 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 				}
 			}
 
+			if ( ( MyConfig.GenerateCollectionFiles || MyConfig.RegisterTitleWithNamespace ) && MyConfig.CollectionNamespace.Length == 0 )
+				return "If GenerateCollectionFiles or RegisterTitleWithNamespace is true, a valid CollectionNamespace is required";
+
 			if ( !checkInputOnly ) 
 			{
 				string temp = Path.Combine( MyConfig.OutputDirectory, "~HxS.tmp" );
@@ -142,8 +145,9 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 				OnDocBuildingStep( 10, "Merging XML documentation..." );
 				XmlDocument xmlDocumentation = MergeXml( project );
 
-				TOCFile toc = TOCFile.CreateFrom( Path.Combine( ResourceDirectory, @"HxProject\project.HxT" ), MyConfig.HtmlHelpName );
-				
+				TOCFile toc = TOCFile.CreateFrom( Path.Combine( ResourceDirectory, @"HxProject\HelpTitle\project.HxT" ), MyConfig.HtmlHelpName );
+				toc.LangId = MyConfig.LangID;
+
 				HxProject.TOCFile = toc.FileName;
 				HxProject.Save( w.WorkingDirectory );
 
@@ -165,11 +169,14 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 				w.SaveOutputs( "*.HxI" );
 
 				// do clean up and final registration steps
-				OnDocBuildingStep( 99, "Finishing up..." );
+				OnDocBuildingStep( 95, "Finishing up..." );
 				if ( MyConfig.RegisterTitleWithNamespace )
 					RegisterTitle( w );
 				else if ( MyConfig.RegisterTitleAsCollection )
 					RegisterCollection( w );
+
+				if( MyConfig.GenerateCollectionFiles )
+					CreateCollectionFiles( w );
 			}
 			catch ( Exception e )
 			{
@@ -180,7 +187,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		private ProjectFile CreateProjectFile()
 		{
 			// create a project file from the resource template
-			ProjectFile project = ProjectFile.CreateFrom( Path.Combine( ResourceDirectory, @"HxProject\project.HxC" ), MyConfig.HtmlHelpName );
+			ProjectFile project = ProjectFile.CreateFrom( Path.Combine( ResourceDirectory, @"HxProject\HelpTitle\project.HxC" ), MyConfig.HtmlHelpName );
 			
 			// set it up
 			project.BuildSeperateIndexFile = MyConfig.BuildSeperateIndexFile;
@@ -299,9 +306,14 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 
 			EmbeddedResources.WriteEmbeddedResources(
 				this.GetType().Module.Assembly,
-				"NDoc.Documenter.NativeHtmlHelp2.HxProject",
-				Path.Combine( ResourceDirectory, "HxProject") );
+				"NDoc.Documenter.NativeHtmlHelp2.HxProject.HelpTitle",
+				Path.Combine( ResourceDirectory, @"HxProject\HelpTitle") );
 
+			EmbeddedResources.WriteEmbeddedResources(
+				this.GetType().Module.Assembly,
+				"NDoc.Documenter.NativeHtmlHelp2.HxProject.HelpCollection",
+				Path.Combine( ResourceDirectory, @"HxProject\HelpCollection") );
+			
 			EmbeddedResources.WriteEmbeddedResources(
 				this.GetType().Module.Assembly,
 				"NDoc.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping",
@@ -315,6 +327,51 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 				Path.GetDirectoryName( new Uri( Assembly.GetExecutingAssembly().CodeBase ).AbsolutePath ) );
 		}
 
+		private void CreateCollectionFiles( Workspace w )
+		{
+			string collectionName = MyConfig.HtmlHelpName + "Collection";
+
+			// add the collection table of contents
+			CollectionTOCFile toc = CollectionTOCFile.CreateFrom( 
+				Path.Combine( ResourceDirectory, @"HxProject\HelpCollection\Collection.HxT" ), collectionName );
+
+			toc.LangId = MyConfig.LangID;
+			toc.Flat = MyConfig.CollectionTOCStyle == TOCStyle.Flat;
+			toc.Title = MyConfig.Title;
+			toc.BaseUrl = MyConfig.HtmlHelpName;
+			toc.Save( w.RootDirectory );
+
+			// add the collection file
+			CollectionFile collection = CollectionFile.CreateFrom( 
+				Path.Combine( ResourceDirectory, @"HxProject\HelpCollection\Collection.HxC" ), collectionName );
+			
+			collection.LangId = MyConfig.LangID;
+			collection.Copyright = MyConfig.CopyrightText;
+			collection.FileVersion = MyConfig.Version;
+			collection.Title = MyConfig.Title;
+			collection.TOCFile = toc.FileName;
+			
+			collection.Save( w.RootDirectory );
+
+			// add the various index files
+			IndexFile index = IndexFile.CreateFrom( 
+				Path.Combine( ResourceDirectory, @"HxProject\HelpCollection\Collection_A.HxK" ), collectionName + "_A" );
+			index.LangId = MyConfig.LangID;
+			index.Save( w.RootDirectory );
+
+			index = IndexFile.CreateFrom( 
+				Path.Combine( ResourceDirectory, @"HxProject\HelpCollection\Collection_F.HxK" ), collectionName + "_F" );
+			index.LangId = MyConfig.LangID;
+			index.Save( w.RootDirectory );
+
+			index = IndexFile.CreateFrom( 
+				Path.Combine( ResourceDirectory, @"HxProject\HelpCollection\Collection_K.HxK" ), collectionName + "_K" );
+			index.LangId = MyConfig.LangID;
+			index.Save( w.RootDirectory );
+
+			//TODO set up an H2Reg ini file and save it the workspace
+		}
+	
 		private void RegisterCollection( Workspace w )
 		{
 			string ns = MyConfig.HtmlHelpName;
@@ -330,7 +387,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 
 		private void RegisterTitle( Workspace w )
 		{
-			string ns = MyConfig.ParentCollectionNamespace;
+			string ns = MyConfig.CollectionNamespace;
 
 			if ( ns.Length > 0 )
 			{

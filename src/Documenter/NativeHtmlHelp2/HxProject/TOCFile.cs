@@ -39,26 +39,19 @@ namespace NDoc.Documenter.NativeHtmlHelp2.HxProject
 		/// <returns>A new toc file</returns>
 		public static TOCFile CreateFrom( string templateFile, string name )
 		{
-			if ( !File.Exists( templateFile ) )
-				throw new ArgumentException( "The source file does not exist" );
-
-			XmlDocument doc = new XmlDocument();
-			
-			XmlReader reader = new XmlTextReader( templateFile );
-			XmlValidatingReader validator = new XmlValidatingReader( reader );
-			validator.ValidationType = ValidationType.None;
-			validator.XmlResolver = null;
-
-			doc.Load( validator );
-			
-			return new TOCFile( name, doc.DocumentElement );
+			return new TOCFile( name, HxFile.CreateFrom( templateFile ) );
 		}
 
 		private XmlTextWriter xmlWriter = null;
 		private StringWriter stringWriter = null;
 
 
-		private TOCFile( string name, XmlNode node ) : base( name, node )
+		/// <summary>
+		/// Creates a new instance of the class
+		/// </summary>
+		/// <param name="name">The name of the file</param>
+		/// <param name="node"><see cref="System.Xml.XmlNode"/> representing the file data</param>
+		protected TOCFile( string name, XmlNode node ) : base( name, node )
 		{
 
 		}

@@ -77,11 +77,27 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 	}
 
 	/// <summary>
+	/// Specifies how the collection will be integrated with the help browser
+	/// </summary>
+	public enum TOCStyle
+	{
+		/// <summary>
+		/// Each root topic in the TOC is appears at the plug in point
+		/// </summary>
+		Flat,
+
+		/// <summary>
+		/// Creates a root node in the browser at the plug in point
+		/// </summary>
+		Hieararchical
+	}
+
+	/// <summary>
 	/// Config settings for the native Html Help 2 Documenter
 	/// </summary>
 	public class NativeHtmlHelp2Config : BaseDocumenterConfig
 	{
-		private const string HTMLHELP2_CONFIG_CATEGORY = "Html Help v2.0 Settings";
+		private const string HTMLHELP2_CONFIG_CATEGORY = "Html Help 2 Settings";
 		private const string DEPLOYMENT_CATEGORY = "Html Help 2 Deployment";
 
 		/// <summary>Initializes a new instance of the NativeHtmlHelp2Config class.</summary>
@@ -89,6 +105,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		{
 		}
 
+		#region Main Settings properties
 		string _outputDirectory = @".\doc\";
 		
 		/// <summary>Gets or sets the OutputDirectory property.</summary>
@@ -172,7 +189,126 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 				SetDirty();
 			}
 		}
+		#endregion
 
+		#region Deployment properties
+		bool _RegisterTitleWithNamespace = false;
+
+		/// <summary>
+		/// Should the compiled Html 2 title be registered after it is compiled. (If true CollectionNamespace is required)
+		/// </summary>
+		[Category(DEPLOYMENT_CATEGORY)]
+		[Description("Should the compiled Html 2 title be registered on this machine after it is compiled. Good for testing. (If true CollectionNamespace is required)")]
+		[DefaultValue(false)]
+		public bool RegisterTitleWithNamespace
+		{
+			get { return _RegisterTitleWithNamespace; }
+
+			set
+			{
+				_RegisterTitleWithNamespace = value;
+				SetDirty();
+			}
+		}
+
+		string _CollectionNamespace = String.Empty;
+
+		/// <summary>
+		/// If RegisterTitleWithNamespace is true this is the namesapce to which it will be added.
+		/// </summary>
+		[Category(DEPLOYMENT_CATEGORY)]
+		[Description("The Html Help 2 registry namespace (avoid spaces). Used in conjunction with GenerateCollectionFiles and RegisterTitleWithNamespace")]
+		[DefaultValue("")]
+		public string CollectionNamespace
+		{
+			get { return _CollectionNamespace; }
+
+			set
+			{
+				_CollectionNamespace = value;
+				SetDirty();
+			}
+		}		
+
+		bool _RegisterTitleAsCollection = false;
+
+		/// <summary>
+		/// If true the HxS title will be registered as a collection (ignored if RegisterTitleWithNamespace is ture)
+		/// </summary>
+		[Category(DEPLOYMENT_CATEGORY)]
+		[Description("If true the HxS title will be registered as a collection on this machine. Good for testing. (ignored if RegisterTitleWithNamespace is true)")]
+		[DefaultValue(false)]
+		public bool RegisterTitleAsCollection
+		{
+			get { return _RegisterTitleAsCollection; }
+
+			set
+			{
+				_RegisterTitleAsCollection = value;
+				SetDirty();
+			}
+		}	
+
+		bool _GenerateCollectionFiles = false;
+
+		/// <summary>
+		/// If true creates collection files to contain the help title.
+		/// </summary>
+		[Category(DEPLOYMENT_CATEGORY)]
+		[Description("If true creates collection files to contain the help title. These all the title to be plugged into the Visual Studio help namespace during deployment.")]
+		[DefaultValue(false)]
+		public bool GenerateCollectionFiles
+		{
+			get { return _GenerateCollectionFiles; }
+
+			set
+			{
+				_GenerateCollectionFiles = value;
+				SetDirty();
+			}
+		}	
+
+		string _PlugInNamespace = "ms.vscc";
+
+		/// <summary>
+		/// If GenerateCollectionFiles is true, the resulting collection will be plugged into this namespace during deployment
+		/// </summary>
+		[Category(DEPLOYMENT_CATEGORY)]
+		[Description("If GenerateCollectionFiles is true, the resulting collection will be plugged into this namespace during deployment. ('ms.vscc' is the VS.NET help namespace)")]
+		[DefaultValue("ms.vscc")]
+		public string PlugInNamespace
+		{
+			get { return _PlugInNamespace; }
+
+			set
+			{
+				_PlugInNamespace = value;
+				SetDirty();
+			}
+		}
+
+		
+		TOCStyle _CollectionTOCStyle = TOCStyle.Hieararchical;
+
+		/// <summary>
+		/// Determines how the collection table of contents will appear in the help browser
+		/// </summary>
+		[Category(DEPLOYMENT_CATEGORY)]
+		[Description("Determines how the collection table of contents will appear in the help browser")]
+		[DefaultValue(TOCStyle.Hieararchical)]
+		public TOCStyle CollectionTOCStyle
+		{
+			get { return _CollectionTOCStyle; }
+
+			set
+			{
+				_CollectionTOCStyle = value;
+				SetDirty();
+			}
+		}
+		#endregion
+
+		#region HTML Help 2 properties
 
 		SdkDocVersion _LinkToSdkDocVersion = SdkDocVersion.SDK_v1_1;
 
@@ -225,64 +361,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			}
 		}	
 
-
-		bool _RegisterTitleWithNamespace = false;
-
-		/// <summary>
-		/// Should the compiled Html 2 title be registered after it is compiled. (If true ParentCollectionNamespace is required)
-		/// </summary>
-		[Category(DEPLOYMENT_CATEGORY)]
-		[Description("Should the compiled Html 2 title be registered on this machine after it is compiled. (If true ParentCollectionNamespace is required)")]
-		[DefaultValue(false)]
-		public bool RegisterTitleWithNamespace
-		{
-			get { return _RegisterTitleWithNamespace; }
-
-			set
-			{
-				_RegisterTitleWithNamespace = value;
-				SetDirty();
-			}
-		}
-
-		string _ParentCollectionNamespace = String.Empty;
-
-		/// <summary>
-		/// If RegisterTitleWithNamespace is true this is the namesapce to which it will be added.
-		/// </summary>
-		[Category(DEPLOYMENT_CATEGORY)]
-		[Description("The Html Help 2 registry namespace (avoid spaces). Only used if RegisterTitleWithNamespace is True.")]
-		public string ParentCollectionNamespace
-		{
-			get { return _ParentCollectionNamespace; }
-
-			set
-			{
-				_ParentCollectionNamespace = value;
-				SetDirty();
-			}
-		}		
-
-		bool _RegisterTitleAsCollection = false;
-
-		/// <summary>
-		/// If true the HxS title will be registered as a collection (ignored if RegisterTitleWithNamespace is ture)
-		/// </summary>
-		[Category(DEPLOYMENT_CATEGORY)]
-		[Description("If true the HxS title will be registered as a collection (ignored if RegisterTitleWithNamespace is ture)")]
-		[DefaultValue(false)]
-		public bool RegisterTitleAsCollection
-		{
-			get { return _RegisterTitleAsCollection; }
-
-			set
-			{
-				_RegisterTitleAsCollection = value;
-				SetDirty();
-			}
-		}	
-
-		
 		bool _BuildSeperateIndexFile = false;
 
 		/// <summary>If true a seperate index file is generated, otherwise it is compiled into the HxS (recommended)</summary>
@@ -381,7 +459,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		string _HeaderHtml;
 
 		/// <summary>Gets or sets the HeaderHtml property.</summary>
-		[Category("HTML Help Options")]
+		[Category(HTMLHELP2_CONFIG_CATEGORY)]
 		[Description("Raw HTML that is used as a page header instead of the default blue banner. " +
 			 "\"%FILE_NAME%\" is dynamically replaced by the name of the file for the current html page. " +
 			 "\"%TOPIC_TITLE%\" is dynamically replaced by the title of the current page.")]
@@ -400,7 +478,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		string _FooterHtml;
 
 		/// <summary>Gets or sets the FooterHtml property.</summary>
-		[Category("HTML Help Options")]
+		[Category(HTMLHELP2_CONFIG_CATEGORY)]
 		[Description("Raw HTML that is used as a page footer instead of the default footer." +
 			 "\"%FILE_NAME%\" is dynamically replaced by the name of the file for the current html page. " +
 			 "\"%ASSEMBLY_NAME%\" is dynamically replaced by the name of the assembly for the current page. " +
@@ -417,7 +495,9 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 				SetDirty();
 			}
 		}
+		#endregion
 
+		#region Platform properties
 		bool _SupportsMono = false;
 		/// <summary>
 		/// Indicates whether the assembly supports MONO
@@ -472,5 +552,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 				SetDirty();
 			}
 		}	
+		#endregion
 	}
 }

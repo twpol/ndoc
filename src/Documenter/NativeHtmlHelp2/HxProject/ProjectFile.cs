@@ -32,26 +32,18 @@ namespace NDoc.Documenter.NativeHtmlHelp2.HxProject
 		/// </summary>
 		/// <param name="templateFile">The path to the template</param>
 		/// <param name="name">The name of the new file</param>
-		/// <returns>A new project file</returns>
+		/// <returns>A new ProjectFile</returns>
 		public static ProjectFile CreateFrom( string templateFile, string name )
 		{
-			if ( !File.Exists( templateFile ) )
-				throw new ArgumentException( "The source file does not exist" );
-			
-			XmlDocument doc = new XmlDocument();
-			
-			XmlReader reader = new XmlTextReader( templateFile );
-			XmlValidatingReader validator = new XmlValidatingReader( reader );
-			validator.ValidationType = ValidationType.None;
-			validator.XmlResolver = null;
-
-			doc.Load( validator );
-
-			return new ProjectFile( name, doc.DocumentElement );
+			return new ProjectFile( name, HxFile.CreateFrom( templateFile ) );
 		}
 
-
-		private ProjectFile( string name, XmlNode node ) : base( name, node )
+		/// <summary>
+		/// Creates a new instance of the class
+		/// </summary>
+		/// <param name="name">The name of the file</param>
+		/// <param name="node"><see cref="System.Xml.XmlNode"/> representing the file data</param>
+		protected ProjectFile( string name, XmlNode node ) : base( name, node )
 		{
 
 		}
@@ -68,14 +60,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2.HxProject
 		{
 			get{ return GetProperty( "@Title" ); }
 			set{ SetProperty( "@Title", value ); }
-		}
-		/// <summary>
-		/// Language identifier for the project
-		/// </summary>
-		public int LangId
-		{
-			get{ return int.Parse( GetProperty( "@LangId" ) ); }
-			set{ SetProperty( "@LangId", value ); }
 		}
 		/// <summary>
 		/// Copyright text for the project
