@@ -46,7 +46,7 @@ namespace NDoc.UsersGuideStager
 		{
 			if ( file.Name.ToLower() != ".cvsignore" )
 			{
-				if ( file.Extension == ".htm" || file.Extension == ".html" )
+				if ( file.Extension.ToLower() == ".htm" || file.Extension.ToLower() == ".html" )
 					HtmlTransform.Transform( file, targetDir );
 				else
 					file.CopyTo( Path.Combine( targetDir.FullName.ToLower(), file.Name.ToLower() ) );
