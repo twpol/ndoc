@@ -47,9 +47,33 @@
 		</xs:complexType>
 	</xs:element>
 	<!-- -->
+	<xs:element name="attribute">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="field" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:attribute name="name" type="xs:string" use="required"/>
+						<xs:attribute name="type" type="xs:string" use="required"/>
+						<xs:attribute name="value" type="xs:string" use="required"/>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="property" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:attribute name="name" type="xs:string" use="required"/>
+						<xs:attribute name="type" type="xs:string" use="required"/>
+						<xs:attribute name="value" type="xs:string" use="optional"/>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="name" type="xs:string" use="required"/>
+			<xs:attribute name="target" type="xs:string" use="optional"/>
+		</xs:complexType>
+	</xs:element>
+	<!-- -->
 	<xs:element name="assembly">
 		<xs:complexType>
 			<xs:sequence>
+				<xs:element ref="attribute" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element ref="module" maxOccurs="unbounded"/>
 			</xs:sequence>
 			<xs:attribute name="name" type="xs:string" use="required"/>
@@ -60,6 +84,7 @@
 	<xs:element name="module">
 		<xs:complexType>
 			<xs:sequence>
+				<xs:element ref="attribute" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element ref="namespace" maxOccurs="unbounded"/>
 			</xs:sequence>
 			<xs:attribute name="name" type="xs:string" use="required"/>
@@ -80,27 +105,6 @@
 		</xs:complexType>
 	</xs:element>
 	<!-- -->
-	<xs:element name="attribute">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element name="field" minOccurs="0" maxOccurs="unbounded">
-					<xs:complexType>
-						<xs:attribute name="name" type="xs:string" use="required"/>
-						<xs:attribute name="type" type="xs:string" use="required"/>
-						<xs:attribute name="value" type="xs:string" use="required"/>
-					</xs:complexType>
-				</xs:element>
-				<xs:element name="property" minOccurs="0" maxOccurs="unbounded">
-					<xs:complexType>
-						<xs:attribute name="name" type="xs:string" use="required"/>
-						<xs:attribute name="type" type="xs:string" use="required"/>
-						<xs:attribute name="value" type="xs:string" use="optional"/>
-					</xs:complexType>
-				</xs:element>
-			</xs:sequence>
-			<xs:attribute name="name" type="xs:string" use="required"/>
-		</xs:complexType>
-	</xs:element>
 	<xs:element name="obsolete" type="xs:string"/>
 	<!-- -->
 	<xs:complexType name="TypeMemberBase">
