@@ -326,7 +326,7 @@ namespace NDoc.Core
 
 		private bool MustDocumentMethod(MethodBase method)
 		{
-			//check the basic visibility options first
+			//check the basic visibility options
 			if (!
 				(
 				(method.IsPublic) || 
@@ -335,9 +335,18 @@ namespace NDoc.Core
 				(method.IsFamilyOrAssembly && this.rep.DocumentProtected) || 
 				(method.IsAssembly && this.rep.DocumentInternals) || 
 				(method.IsFamilyAndAssembly && this.rep.DocumentInternals) || 
-				(method.IsPrivate && this.rep.DocumentPrivates)
+				(method.IsPrivate)
 				)
 				)
+			{
+				return false;
+			}
+
+			//Inherited Framework Members
+			if ((!this.rep.DocumentInheritedFrameworkMembers) && 
+				(method.ReflectedType != method.DeclaringType) && 
+				(method.DeclaringType.FullName.StartsWith("System.") || 
+				method.DeclaringType.FullName.StartsWith("Microsoft.")))
 			{
 				return false;
 			}
@@ -345,7 +354,10 @@ namespace NDoc.Core
 			
 			// Methods containing '.' in their name that aren't constructors are probably
 			// explicit interface implementations, we check whether we document those or not.
-			if ((method.Name.IndexOf('.') != -1) && (method.Name != ".ctor") && (method.Name != ".cctor"))
+			if ((method.Name.IndexOf('.') != -1) && 
+				(method.Name != ".ctor") && 
+				(method.Name != ".cctor") &&
+				this.rep.DocumentExplicitInterfaceImplementations)
 			{
 				string interfaceName = null;
 				int lastIndexOfDot = method.Name.LastIndexOf('.');
@@ -363,16 +375,12 @@ namespace NDoc.Core
 					}
 				}
 			}
-
-
-			//Inherited Framework Members
-			if ((!this.rep.DocumentInheritedFrameworkMembers) && 
-				(method.ReflectedType != method.DeclaringType) && 
-				(method.DeclaringType.FullName.StartsWith("System.") || 
-				method.DeclaringType.FullName.StartsWith("Microsoft.")))
+			else
 			{
+				if (method.IsPrivate && !this.rep.DocumentPrivates)
 				return false;
 			}
+
 
 			//check if the member has an exclude tag
 			if (method.DeclaringType != method.ReflectedType) // inherited
