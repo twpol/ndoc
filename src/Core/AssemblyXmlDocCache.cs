@@ -29,7 +29,7 @@ namespace NDoc.Core
 		/// </summary>
 		public void Flush()
 		{
-			docs      = new Hashtable();
+			docs = new Hashtable();
 			nodocTags = new Hashtable();
 		}
 
@@ -48,14 +48,10 @@ namespace NDoc.Core
 				{
 					if (reader.Name.Equals(oMember)) 
 					{
-						string ID  = reader.GetAttribute("name");
+						string ID = reader.GetAttribute("name");
 						string doc = reader.ReadInnerXml().Trim();
-						doc = TidyDoc(doc);
-						docs.Add(ID,doc);
-						if (doc.IndexOf("<nodoc")>-1)
-						{
-							nodocTags.Add(ID,null);
-						}
+						doc = TidyDoc(ID, doc);
+						docs.Add(ID, doc);
 					}      
 				}
 			}
@@ -64,34 +60,38 @@ namespace NDoc.Core
 		/// <summary>
 		/// tidy documentation.
 		/// </summary>
+		/// <param name="id"></param>
 		/// <param name="doc"></param>
 		/// <returns></returns>
-		private string TidyDoc(string doc)
+		private string TidyDoc(string id, string doc)
 		{
 			XmlDocument xmldoc = new XmlDocument();
 			xmldoc.LoadXml(String.Format("<root>{0}</root>", doc));
-			FixupNodes(xmldoc.ChildNodes);
+			FixupNodes(id, xmldoc.ChildNodes);
 			return xmldoc.DocumentElement.InnerXml;
 		}
 
 		/// <summary>
 		/// strip out redundant newlines and spaces from documatation
 		/// </summary>
+		/// <param name="id">member</param>
 		/// <param name="nodes">list of nodes</param>
-		private void FixupNodes(XmlNodeList nodes)
+		private void FixupNodes(string id, XmlNodeList nodes)
 		{
-			foreach(XmlNode node in nodes)
+			foreach (XmlNode node in nodes)
 			{
-				if (node.NodeType==XmlNodeType.Element) 
+				if (node.NodeType == XmlNodeType.Element) 
 				{
-					if (node.Name=="code")
+					if (node.Name == "ndoc") nodocTags.Add(id, null);
+					
+					if (node.Name == "code")
 						FixupCodeTag(node);
 					else
-						FixupNodes(node.ChildNodes);
+						FixupNodes(id, node.ChildNodes);
 				}
-				if (node.NodeType==XmlNodeType.Text)
+				if (node.NodeType == XmlNodeType.Text)
 				{
-					node.Value=((string)node.Value).Replace("\t","    ").Replace("\n"," ").Replace("\r"," ").Replace("        "," ").Replace("    "," ").Replace("   "," ").Replace("  "," ");
+					node.Value = ((string)node.Value).Replace("\t", "    ").Replace("\n", " ").Replace("\r", " ").Replace("        ", " ").Replace("    ", " ").Replace("   ", " ").Replace("  ", " ");
 				}
 			}
 		}
@@ -103,21 +103,28 @@ namespace NDoc.Core
 		private void FixupCodeTag(XmlNode node)
 		{
 			String codeText = (string)node.InnerText;
-			if (codeText.StartsWith("\r\n")) codeText=codeText.Substring(2);
-			codeText=codeText.Replace("\r\n","\n");
-			codeText=codeText.Replace("\t","    ");
-			string[] codeLines = codeText.Split(new Char[]{'\r','\n'});
-			if (codeLines.Length>0)
+			if (codeText.StartsWith("\r\n")) codeText = codeText.Substring(2);
+			codeText = codeText.Replace("\r\n", "\n");
+			codeText = codeText.Replace("\t", "    ");
+			string[] codeLines = codeText.Split(new Char[] {'\r', '\n'});
+			if (codeLines.Length > 0)
 			{
 				string firstLine = codeLines[0];
-				int i=0; //number of chars at start of firstline
-				while (i<firstLine.Length && firstLine.Substring(i,1)==" ") i++;
-				for(int index=0;index<codeLines.Length;index++)
+				int leadingChars = 0; //number of chars at start of firstline
+
+				while (leadingChars < firstLine.Length && firstLine.Substring(leadingChars, 1) == " ")
+					leadingChars++;
+
+				for (int index = 0; index < codeLines.Length; index++)
 				{
-					codeLines[index]=codeLines[index].Substring(i);
+					if (leadingChars < codeLines[index].Length)
+						codeLines[index] = codeLines[index].Substring(leadingChars);
+					else
+						codeLines[index] = String.Empty;
 				}
+
 				string newtext = String.Join(System.Environment.NewLine, codeLines);
-				node.InnerText=newtext;
+				node.InnerText = newtext;
  			}
 
 		}

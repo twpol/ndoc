@@ -24,7 +24,6 @@ namespace NDoc.Core
 		public ExternalXmlSummaryCache()
 		{
 			Flush();
-//			spaceRemovalRegex=new Regex(@"\s+",RegexOptions.Multiline | RegexOptions.Compiled );
 		}
 
 		/// <summary>
