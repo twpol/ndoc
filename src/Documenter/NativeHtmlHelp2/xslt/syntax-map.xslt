@@ -113,52 +113,51 @@
 			<xsl:when test="$lang='Visual Basic'">
 				<xsl:if test="@hiding">Shadows&#160;</xsl:if>
 				<xsl:choose>
-					<xsl:when test="@contract='Static'">Shared</xsl:when>
-					<xsl:when test="@contract='Abstract'">MustOverride</xsl:when>
+					<xsl:when test="@contract='Static'">Shared&#160;</xsl:when>
+					<xsl:when test="@contract='Abstract'">MustOverride&#160;</xsl:when>
 					<xsl:when test="@contract='Final'"></xsl:when>
-					<xsl:when test="@contract='Virtual'">Overridable</xsl:when>
-					<xsl:when test="@contract='Override'">Overrides</xsl:when>
+					<xsl:when test="@contract='Virtual'">Overridable&#160;</xsl:when>
+					<xsl:when test="@contract='Override'">Overrides&#160;</xsl:when>
 					<xsl:when test="@contract='Normal'"></xsl:when>
-					<xsl:otherwise>/* unknown */</xsl:otherwise>
+					<xsl:otherwise>/* unknown */&#160;</xsl:otherwise>
 				</xsl:choose>
 				<xsl:if test="@overload">&#160;Overloads</xsl:if>
 			</xsl:when>
 			<xsl:when test="$lang='C#'">
 				<xsl:if test="@hiding">new&#160;</xsl:if>
 				<xsl:choose>
-					<xsl:when test="@contract='Static'">static</xsl:when>
-					<xsl:when test="@contract='Abstract'">abstract</xsl:when>
+					<xsl:when test="@contract='Static'">static&#160;</xsl:when>
+					<xsl:when test="@contract='Abstract'">abstract&#160;</xsl:when>
 					<xsl:when test="@contract='Final'"></xsl:when>
-					<xsl:when test="@contract='Virtual'">virtual</xsl:when>
-					<xsl:when test="@contract='Override'">override</xsl:when>
+					<xsl:when test="@contract='Virtual'">virtual&#160;</xsl:when>
+					<xsl:when test="@contract='Override'">override&#160;</xsl:when>
 					<xsl:when test="@contract='Normal'"></xsl:when>
-					<xsl:otherwise>/* unknown */</xsl:otherwise>
+					<xsl:otherwise>/* unknown */&#160;</xsl:otherwise>
 				</xsl:choose>
 			</xsl:when>
 			<xsl:when test="$lang='C++'">
 				<xsl:choose>
-					<xsl:when test="@contract='Static'">static</xsl:when>
-					<xsl:when test="@contract='Abstract'">abstract</xsl:when>
+					<xsl:when test="@contract='Static'">static&#160;</xsl:when>
+					<xsl:when test="@contract='Abstract'">abstract&#160;</xsl:when>
 					<xsl:when test="@contract='Final'"></xsl:when>
-					<xsl:when test="@contract='Virtual'">virtual</xsl:when>
+					<xsl:when test="@contract='Virtual'">virtual&#160;</xsl:when>
 					<xsl:when test="@contract='Override'"></xsl:when>
 					<xsl:when test="@contract='Normal'"></xsl:when>
-					<xsl:otherwise>/* unknown */</xsl:otherwise>
+					<xsl:otherwise>/* unknown */&#160;</xsl:otherwise>
 				</xsl:choose>
 			</xsl:when>
 			<xsl:when test="$lang='JScript'">
 				<xsl:choose>
-					<xsl:when test="@contract='Static'">static</xsl:when>
-					<xsl:when test="@contract='Abstract'">abstract</xsl:when>
+					<xsl:when test="@contract='Static'">static&#160;</xsl:when>
+					<xsl:when test="@contract='Abstract'">abstract&#160;</xsl:when>
 					<xsl:when test="@contract='Final'"></xsl:when>
-					<xsl:when test="@contract='Virtual'">virtual</xsl:when>
-					<xsl:when test="@contract='Override'">override</xsl:when>
+					<xsl:when test="@contract='Virtual'">virtual&#160;</xsl:when>
+					<xsl:when test="@contract='Override'">override&#160;</xsl:when>
 					<xsl:when test="@contract='Normal'"></xsl:when>
-					<xsl:otherwise>/* unknown */</xsl:otherwise>
+					<xsl:otherwise>/* unknown */&#160;</xsl:otherwise>
 				</xsl:choose>
 			</xsl:when>
 		</xsl:choose>
-		<xsl:text>&#160;</xsl:text>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="constructor-keyword">
@@ -212,6 +211,7 @@
 				<xsl:with-param name="lang" select="'Visual Basic'" />
 				<xsl:with-param name="type" select="@type" />
 			</xsl:call-template>
+			<xsl:call-template name="member-implements" />
 			<xsl:text>&#10;</xsl:text>
 		</b>
 	</xsl:template>

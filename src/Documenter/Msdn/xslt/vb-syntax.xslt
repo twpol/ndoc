@@ -88,7 +88,6 @@
 				<xsl:choose>
 					<xsl:when test="local-name() != 'delegate'">
 						<xsl:if test="@baseType">
-							<xsl:text>&#160;_</xsl:text>
 							<div>
 								<xsl:text>&#160;&#160;&#160;&#160;Inherits&#160;</xsl:text>
 								<a>
@@ -104,7 +103,6 @@
 							</div>
 						</xsl:if>
 						<xsl:if test="implements[not(@inherited)]">
-							<xsl:text>&#160;_</xsl:text>
 							<div>
 								<xsl:text>&#160;&#160;&#160;&#160;Implements&#160;</xsl:text>
 								<xsl:for-each select="implements[not(@inherited)]">
