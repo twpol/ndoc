@@ -1,22 +1,14 @@
 using System;
 using System.ComponentModel;
+using System.Drawing.Design;
+using System.Windows.Forms.Design;
 
 namespace NDoc.Gui
 {
-	public enum Documenters
-	{
-		VSNET,
-		MSDN,
-		Latex,
-		XML,
-		LinearHTML,
-		JavaDoc
-	}
-
 	/// <summary>
 	/// Configurable application settings
 	/// </summary>
-	public class NDocOptions
+	public class NDocOptions : ICloneable
 	{
 		/// <summary>
 		/// Creates a new instance of the NDocOptions class
@@ -34,7 +26,7 @@ namespace NDoc.Gui
 		[Browsable(true)]
 		[DefaultValue(false)]
 		[Description("If true, the build progress trace window will automatically be shown whenever a build is started.")]
-		[Category("User Interface")]
+		[Category("User Specific Settings")]
 		public bool ShowProgressOnBuild
 		{
 			get{ return _ShowProgressOnBuild; }
@@ -50,7 +42,7 @@ namespace NDoc.Gui
 		[Browsable(true)]
 		[DefaultValue(true)]
 		[Description("If true, NDoc will open the last loaded project when it starts.")]
-		[Category("User Interface")]
+		[Category("User Specific Settings")]
 		public bool LoadLastProjectOnStart
 		{
 			get{ return _LoadLastProjectOnStart; }
@@ -58,28 +50,31 @@ namespace NDoc.Gui
 		}
 
 
-		private Documenters _DefaultDocumenter = Documenters.MSDN;
-
+		private string _HtmlHelpWorkshopLocation = string.Empty;
+		
 		/// <summary>
-		/// Get/Set the LoadLastProjectOnStart property
+		/// Get/Set the HtmlHelpWorkshopLocation property
 		/// </summary>
 		[Browsable(true)]
-		[DefaultValue(Documenters.MSDN)]
-		[Description("The default documenter to use when a specific documenter is not specified.")]
-		[Category("Console Application")]
-		public Documenters DefaultDocumenter
+		[DefaultValue("")]
+		[Description("The path to the html help workshop, where the HHC.EXE compiler is located. Only set this value if the MSDN documenter cannot find the html help compiler.")]
+		[Category("Machine Specific Settings")]
+#if !MONO //System.Windows.Forms.Design.FolderNameEditor is not implemented in mono 0.28
+		[Editor(typeof(FolderNameEditor), typeof(UITypeEditor))]
+#endif
+		public string HtmlHelpWorkshopLocation
 		{
-			get{ return _DefaultDocumenter; }
-			set{ _DefaultDocumenter = value; }
+			get{ return _HtmlHelpWorkshopLocation; }
+			set{ _HtmlHelpWorkshopLocation = value; }
 		}
 
 		/// <summary>
 		/// Create a clone of this object
 		/// </summary>
 		/// <returns>The clone</returns>
-		public NDocOptions Clone()
+		public object Clone()
 		{
-			return (NDocOptions)base.MemberwiseClone();
+			return base.MemberwiseClone();
 		}
 	}
 }

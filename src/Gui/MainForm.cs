@@ -936,7 +936,7 @@ namespace NDoc.Gui
 		/// being used last.</remarks>
 		private void ReadConfig()
 		{
-			Settings settings = new Settings( Settings.ApplicationSettingsFile );
+			Settings settings = new Settings( Settings.UserSettingsFile );
 
 			this.Location = GetOnScreenLocation( (Point)settings.GetSetting( "gui", "location", new Point( Screen.PrimaryScreen.WorkingArea.Top, Screen.PrimaryScreen.WorkingArea.Left ) ) );
 
@@ -983,7 +983,7 @@ namespace NDoc.Gui
 		/// being used last.</remarks>
 		private void WriteConfig()
 		{			
-			using( Settings settings = new Settings( Settings.ApplicationSettingsFile ) )
+			using( Settings settings = new Settings( Settings.UserSettingsFile ) )
 			{
 				if ( this.WindowState == FormWindowState.Maximized )
 				{
@@ -1911,15 +1911,23 @@ namespace NDoc.Gui
 
 		private void menuViewOptions_Click(object sender, System.EventArgs e)
 		{
-			using( OptionsForm optionsForm = new OptionsForm( this.options.Clone() ) )
+			using( OptionsForm optionsForm = new OptionsForm( (NDocOptions)this.options.Clone() ) )
 			{
 				if ( optionsForm.ShowDialog() == DialogResult.OK )
 				{
 					this.options = optionsForm.Options;
-					using( Settings settings = new Settings( Settings.ApplicationSettingsFile ) )
+
+					// save the user settings
+					using( Settings settings = new Settings( Settings.UserSettingsFile ) )
 					{
 						settings.SetSetting( "gui", "loadLastProjectOnStart", this.options.LoadLastProjectOnStart );
 						settings.SetSetting( "gui", "showProgressOnBuild", this.options.ShowProgressOnBuild );
+					}
+
+					// save machine settings
+					using( Settings settings = new Settings( Settings.MachineSettingsFile ) )
+					{
+						settings.SetSetting( "compilers", "htmlHelpWorkshopLocation", this.options.HtmlHelpWorkshopLocation );
 					}
 				}
 			}
