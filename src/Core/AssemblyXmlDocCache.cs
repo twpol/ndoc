@@ -101,8 +101,12 @@ namespace NDoc.Core
 		private string PreprocessDoc(string id, string doc)
 		{
 			//create an XmlDocument containg the memeber's documentation
+			XmlTextReader reader=new XmlTextReader(new StringReader("<root>" + doc + "</root>"));
+			reader.WhitespaceHandling=WhitespaceHandling.All;
+			
 			XmlDocument xmldoc = new XmlDocument();
-			xmldoc.Load(new XmlTextReader(new StringReader("<root>" + doc + "</root>")));
+			xmldoc.PreserveWhitespace=true;
+			xmldoc.Load(reader);
  
 			//
 			CleanupNodes(id, xmldoc.DocumentElement.ChildNodes);
@@ -155,7 +159,7 @@ namespace NDoc.Core
 		/// <param name="node">a code tag node</param>
 		private void FixupCodeTag(XmlNode node)
 		{
-			string codeText = (string)node.InnerText;
+			string codeText = (string)node.InnerXml;
 			if (codeText.TrimStart(new Char[] {' '}).StartsWith("\r\n"))
 			{
 				codeText = codeText.TrimStart(new Char[] {' '}).Substring(2);
@@ -180,7 +184,7 @@ namespace NDoc.Core
 				}
 
 				string newtext = String.Join(System.Environment.NewLine, codeLines);
-				node.InnerText = newtext;
+				node.InnerXml = newtext;
  			}
 
 		}
