@@ -30,6 +30,7 @@ namespace NDoc.Documenter.Msdn
 	/// <remarks>
 	/// <para>The MSDN documenter creates a compiled HTML help version 1 help file (CHM).</para>
 	/// </remarks>
+	[DefaultProperty("OutputDirectory")]
 	public class MsdnDocumenterConfig : BaseDocumenterConfig
 	{
 		string outputDirectory;
@@ -56,7 +57,6 @@ namespace NDoc.Documenter.Msdn
 
 			_BinaryTOC = true;
 
-			_IncludeHierarchy = false;
 			_ShowVisualBasic = false;
 			_OutputTarget = OutputType.HtmlHelpAndWeb;
 
@@ -135,26 +135,6 @@ namespace NDoc.Documenter.Msdn
 			set 
 			{ 
 				_Title = value; 
-				SetDirty();
-			}
-		}
-
-		private bool _IncludeHierarchy;
-
-		/// <summary>Gets or sets the IncludeHierarchy property.</summary>
-		/// <remarks>To include a class hiararchy page for each 
-		/// namespace. Don't turn it on if your project has a namespace 
-		/// with many types, as NDoc will become very slow and might crash.</remarks>
-		[Category("Documentation Main Settings")]
-		[Description("To include a class hiararchy page for each namespace. Don't turn it on if your project has a namespace with many types, as NDoc will become very slow and might crash.")]
-		[DefaultValue(false)]
-		public bool IncludeHierarchy
-		{
-			get { return _IncludeHierarchy; }
-
-			set 
-			{ 
-				_IncludeHierarchy = value; 
 				SetDirty();
 			}
 		}
