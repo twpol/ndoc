@@ -40,6 +40,7 @@ namespace NDoc.Core
 
 		AssemblyXmlDocCache		assemblyDocCache;
 		ExternalXmlSummaryCache	externalSummaryCache;
+		Hashtable               notEmptyNamespaces;
 
 		private class ImplementsInfo
 		{
@@ -62,6 +63,89 @@ namespace NDoc.Core
 			}
 		}
 		ImplementsCollection implementations;
+
+
+		/// <summary>
+		/// Maintains a cache of all base classes and their directly derived children
+		/// </summary>
+		private class DerivedTypesCollection
+		{
+			private Hashtable data;
+			public DerivedTypesCollection()
+			{
+				data = new Hashtable(7);
+			}
+			public void Add(string baseTypeMemberID, string derivedTypeMemberID)
+			{
+				ArrayList derivedTypeList = data[baseTypeMemberID] as ArrayList;
+				if(derivedTypeList==null)
+				{
+					derivedTypeList=new ArrayList();
+					data.Add(baseTypeMemberID,derivedTypeList);
+				}
+				if (!derivedTypeList.Contains(derivedTypeMemberID))
+				{
+					derivedTypeList.Add(derivedTypeMemberID);
+				}
+			}
+
+			public ArrayList GetDerivedTypes(string baseTypeMemberID)
+			{
+				ArrayList derivedTypeList = data[baseTypeMemberID] as ArrayList;
+				if(derivedTypeList==null)
+				{
+					derivedTypeList=new ArrayList();
+				}
+				else
+				{
+					derivedTypeList.Sort();
+				}
+				return derivedTypeList;
+			}
+		}
+		DerivedTypesCollection derivedTypes;
+
+		/// <summary>
+		/// Maintains a cache of all base interfaces and the Types that implement them.
+		/// </summary>
+		private class InterfaceImplementingTypesCollection
+		{
+			private Hashtable data;
+			public InterfaceImplementingTypesCollection()
+			{
+				data = new Hashtable(7);
+			}
+			public void Add(string baseInterfaceMemberID, string implementingTypeMemberID)
+			{
+				ArrayList implementingTypeList = data[baseInterfaceMemberID] as ArrayList;
+				if(implementingTypeList==null)
+				{
+					implementingTypeList=new ArrayList();
+					data.Add(baseInterfaceMemberID,implementingTypeList);
+				}
+				if (!implementingTypeList.Contains(implementingTypeMemberID))
+				{
+					implementingTypeList.Add(implementingTypeMemberID);
+				}
+			}
+
+			public ArrayList GetInterfaceImplementingTypes(string baseInterfaceMemberID)
+			{
+				ArrayList implementingTypeList = data[baseInterfaceMemberID] as ArrayList;
+				if(implementingTypeList==null)
+				{
+					implementingTypeList=new ArrayList();
+				}
+				else
+				{
+					implementingTypeList.Sort();
+				}
+				return implementingTypeList;
+			}
+		}
+		InterfaceImplementingTypesCollection interfaceImplementingTypes;
+
+
 
 		/// <summary>Initialized a new BaseDocumenter instance.</summary>
 		protected BaseDocumenter(string name)
@@ -255,14 +339,12 @@ namespace NDoc.Core
 				return tempfilename;
 			}
 
-			XmlWriter writer=null;
+			XmlTextWriter writer=null;
 			try
 			{
 				writer = new XmlTextWriter(tempfilename,Encoding.UTF8);
-//				XmlTextWriter textWriter = new XmlTextWriter(tempfilename,Encoding.UTF8);
-//				textWriter.Formatting=Formatting.Indented;
-//				textWriter.Indentation=2;
-//				writer=textWriter;
+				//writer.Formatting=Formatting.Indented;
+				//writer.Indentation=2;
 
 				BuildXml(project, writer);
 			
@@ -297,6 +379,8 @@ namespace NDoc.Core
 
 			StringWriter swriter = new StringWriter();
 			XmlWriter writer = new XmlTextWriter(swriter);
+			//writer.Formatting=Formatting.Indented;
+			//writer.Indentation=2;
 
 			try
 			{
@@ -327,7 +411,7 @@ namespace NDoc.Core
 		/// <summary>Builds an Xml file combining the reflected metadata with the /doc comments.</summary>
 		protected void BuildXml(Project project, XmlWriter writer)
 		{
-		int start = Environment.TickCount;
+			int start = Environment.TickCount;
 
 			Debug.WriteLine("Memory making xml: " + GC.GetTotalMemory(false).ToString());
 
@@ -335,31 +419,20 @@ namespace NDoc.Core
 			_Project = project;
 			AssemblyResolver assemblyResolver = SetupAssemblyResolver(project);
 
+			string DocLangCode = Enum.GetName(typeof(SdkLanguage),MyConfig.SdkDocLanguage).Replace("_","-");
+			externalSummaryCache = new ExternalXmlSummaryCache(DocLangCode);
 
-			if (MyConfig.GetExternalSummaries)
-			{
-				string DocLangCode = Enum.GetName(typeof(SdkLanguage),MyConfig.SdkDocLanguage).Replace("_","-");
-				externalSummaryCache = new ExternalXmlSummaryCache(DocLangCode);
-				foreach (AssemblySlashDoc assemblySlashDoc in project.GetAssemblySlashDocs())
-				{
-					string assemblypath = Path.GetFullPath(assemblySlashDoc.AssemblyFilename);
-					Assembly assembly = LoadAssembly(assemblypath);
-					if(assemblySlashDoc.SlashDocFilename!=null && assemblySlashDoc.SlashDocFilename.Length>0)
-					{
-						string slashdocpath = Path.GetFullPath(assemblySlashDoc.SlashDocFilename);
-						externalSummaryCache.AddXmlDoc(assembly.FullName, slashdocpath);
-					}
-				}
-			}
+			notEmptyNamespaces = new Hashtable();
+
+			derivedTypes= new DerivedTypesCollection();
+			interfaceImplementingTypes= new InterfaceImplementingTypesCollection();
+			
+			PreReflectionProcess();
 
 			string currentAssemblyFilename = "";
 
 			try
 			{
-				// Use indenting for readability
-				//writer.Formatting = Formatting.Indented;
-				//writer.Indentation=4;
-
 				// Start the document with the XML declaration tag
 				writer.WriteStartDocument();
 
@@ -396,24 +469,12 @@ namespace NDoc.Core
 						assemblySlashDoc.AssemblyFilename);
 					Assembly assembly = LoadAssembly(currentAssemblyFilename);
 
-					if (assemblySlashDoc.SlashDocFilename!=null && assemblySlashDoc.SlashDocFilename.Length>0)
-					{
-						assemblyDocCache = new AssemblyXmlDocCache(
-							project.GetFullPath(assemblySlashDoc.SlashDocFilename));
-					}
-					else
-					{
-						assemblyDocCache = new AssemblyXmlDocCache();
-					}
-
 					int starta = Environment.TickCount;
 
 					WriteAssembly(writer, assembly);
 
 					Trace.WriteLine("Completed " + assembly.FullName); 
 					Trace.WriteLine(((Environment.TickCount - starta)/1000.0).ToString() + " sec.");
-
-					assemblyDocCache.Flush();
 
 					i++;
 				}
@@ -446,7 +507,10 @@ namespace NDoc.Core
 					assemblyResolver.Deinstall();
 				}
 
-				if (externalSummaryCache != null) externalSummaryCache=null;
+				externalSummaryCache=null;
+				assemblyDocCache=null;
+				derivedTypes=null;
+				interfaceImplementingTypes=null;
 
 				GC.Collect();
 				GC.WaitForPendingFinalizers();
@@ -878,7 +942,7 @@ namespace NDoc.Core
 				writer.WriteAttributeString("version", assemblyName.Version.ToString());
 			}
 
-            WriteCustomAttributes(writer, assembly);
+			WriteCustomAttributes(writer, assembly);
 
 			foreach (Module module in assembly.GetModules())
 			{
@@ -895,7 +959,7 @@ namespace NDoc.Core
 		{
 			writer.WriteStartElement("module");
 			writer.WriteAttributeString("name", module.ScopeName);
-            WriteCustomAttributes(writer, module);
+			WriteCustomAttributes(writer, module);
 			WriteNamespaces(writer, module);
 			writer.WriteEndElement();
 		}
@@ -919,125 +983,82 @@ namespace NDoc.Core
 					ourNamespaceName = namespaceName;
 				}
 
-				string namespaceSummary = null;
-				if (MyConfig.UseNamespaceDocSummaries)
+				if (notEmptyNamespaces.ContainsKey(ourNamespaceName) || MyConfig.DocumentEmptyNamespaces)
 				{
-					if (namespaceName == null)
-						namespaceSummary = assemblyDocCache.GetDoc("T:NamespaceDoc");
-					else
-						namespaceSummary = assemblyDocCache.GetDoc("T:" + namespaceName + ".NamespaceDoc");
-				}
 
-				bool isNamespaceDoc = false;
-
-				if ((namespaceSummary == null) || (namespaceSummary.Length == 0))
-					namespaceSummary = _Project.GetNamespaceSummary(ourNamespaceName);
-				else
-					isNamespaceDoc = true;
-
-				if (MyConfig.SkipNamespacesWithoutSummaries &&
-					(namespaceSummary == null || namespaceSummary.Length == 0))
-				{
-					Trace.WriteLine(string.Format("Skipping namespace {0}...", namespaceName));
-				}
-				else
-				{
-					Trace.WriteLine(string.Format("Writing namespace {0}...", namespaceName));
-
-					StringWriter swriter = null;
-					XmlWriter tempWriter = null;
-					try
+					string namespaceSummary = null;
+					if (MyConfig.UseNamespaceDocSummaries)
 					{
-						// If we don't want empty namespaces, we need to write the XML to a temporary
-						// writer, because we'll only know if its empty once the WriteXxx methods
-						// have been called.
-
-						XmlWriter myWriter;
-						if (!MyConfig.DocumentEmptyNamespaces)
-						{
-							swriter = new StringWriter();
-							tempWriter = new XmlTextWriter(swriter);
-//							XmlTextWriter textWriter = new XmlTextWriter(swriter);
-//							textWriter.Formatting=Formatting.Indented;
-//							textWriter.Indentation=2;
-//							tempWriter = textWriter;
-							myWriter = tempWriter;
-						}
+						if (namespaceName == null)
+							namespaceSummary = assemblyDocCache.GetDoc("T:NamespaceDoc");
 						else
-						{
-							myWriter = writer;
-						}
+							namespaceSummary = assemblyDocCache.GetDoc("T:" + namespaceName + ".NamespaceDoc");
+					}
 
-						myWriter.WriteStartElement("namespace");
-						myWriter.WriteAttributeString("name", ourNamespaceName);
+					bool isNamespaceDoc = false;
+
+					if ((namespaceSummary == null) || (namespaceSummary.Length == 0))
+						namespaceSummary = _Project.GetNamespaceSummary(ourNamespaceName);
+					else
+						isNamespaceDoc = true;
+
+					if (MyConfig.SkipNamespacesWithoutSummaries &&
+						(namespaceSummary == null || namespaceSummary.Length == 0))
+					{
+						Trace.WriteLine(string.Format("Skipping namespace {0} because it has no summary...", namespaceName));
+					}
+					else
+					{
+						Trace.WriteLine(string.Format("Writing namespace {0}...", namespaceName));
+
+						writer.WriteStartElement("namespace");
+						writer.WriteAttributeString("name", ourNamespaceName);
 
 						if (namespaceSummary != null && namespaceSummary.Length > 0)
 						{
-							WriteStartDocumentation(myWriter);
+							WriteStartDocumentation(writer);
 
 							if ( isNamespaceDoc )
 							{
-								myWriter.WriteRaw( namespaceSummary );
+								writer.WriteRaw( namespaceSummary );
 							}
 							else
 							{
-								myWriter.WriteStartElement("summary");
-								myWriter.WriteRaw( namespaceSummary );
-								myWriter.WriteEndElement();
+								writer.WriteStartElement("summary");
+								writer.WriteRaw( namespaceSummary );
+								writer.WriteEndElement();
 							}
-							WriteEndDocumentation(myWriter);
+							WriteEndDocumentation(writer);
 						}
 						else if (MyConfig.ShowMissingSummaries)
 						{
-							WriteStartDocumentation(myWriter);
-							WriteMissingDocumentation(myWriter, "summary", null, "Missing <summary> Documentation for " + namespaceName);
-							WriteEndDocumentation(myWriter);
+							WriteStartDocumentation(writer);
+							WriteMissingDocumentation(writer, "summary", null, "Missing <summary> Documentation for " + namespaceName);
+							WriteEndDocumentation(writer);
 						}
 
-						int classCount = WriteClasses(myWriter, types, namespaceName);
+						int classCount = WriteClasses(writer, types, namespaceName);
 						Trace.WriteLine(string.Format("Wrote {0} classes.", classCount));
 
-						int interfaceCount = WriteInterfaces(myWriter, types, namespaceName);
+						int interfaceCount = WriteInterfaces(writer, types, namespaceName);
 						Trace.WriteLine(string.Format("Wrote {0} interfaces.", interfaceCount));
 
-						int structureCount = WriteStructures(myWriter, types, namespaceName);
+						int structureCount = WriteStructures(writer, types, namespaceName);
 						Trace.WriteLine(string.Format("Wrote {0} structures.", structureCount));
 
-						int delegateCount = WriteDelegates(myWriter, types, namespaceName);
+						int delegateCount = WriteDelegates(writer, types, namespaceName);
 						Trace.WriteLine(string.Format("Wrote {0} delegates.", delegateCount));
 
-						int enumCount = WriteEnumerations(myWriter, types, namespaceName);
+						int enumCount = WriteEnumerations(writer, types, namespaceName);
 						Trace.WriteLine(string.Format("Wrote {0} enumerations.", enumCount));
 
-						myWriter.WriteEndElement();
+						writer.WriteEndElement();
 
-						if (!MyConfig.DocumentEmptyNamespaces)
-						{
-							tempWriter.Flush();
-							if (classCount == 0 && interfaceCount == 0 && structureCount == 0 &&
-								delegateCount == 0 && enumCount == 0)
-							{
-								Trace.WriteLine(string.Format("Discarding namespace {0} because it does not contain any documented types.", namespaceName));
-							}
-							else
-							{
-								writer.WriteRaw(swriter.ToString());
-							}
-						}
 					}
-					finally
-					{
-						if (tempWriter != null)
-						{
-							tempWriter.Close();
-							tempWriter = null;
-						}
-						if (swriter != null)
-						{
-							swriter.Close();
-							swriter = null;
-						}
-					}
+				}
+				else
+				{
+					Trace.WriteLine(string.Format("Discarding namespace {0} because it does not contain any documented types.", ourNamespaceName));
 				}
 			}
 		}
@@ -1255,6 +1276,7 @@ namespace NDoc.Core
 			WriteCustomAttributes(writer, type);
 			if (type.BaseType!=null)
 				WriteBaseType(writer, type.BaseType);
+			WriteDerivedTypes(writer, memberName);
 
 			//Debug.Assert(implementations == null);
 			implementations = new ImplementsCollection();
@@ -1275,11 +1297,11 @@ namespace NDoc.Core
 				if(MustDocumentType(interfaceType))
 				{
 					writer.WriteStartElement("implements");
+					writer.WriteAttributeString("type", interfaceType.FullName.Replace('+', '.'));
 					if (baseInterfaces.Contains(interfaceType.FullName))
 					{
 						writer.WriteAttributeString("inherited", "true");
 					}
-					writer.WriteString(interfaceType.FullName);
 					writer.WriteEndElement();
  
 					InterfaceMapping interfaceMap = type.GetInterfaceMap(interfaceType);
@@ -1310,71 +1332,73 @@ namespace NDoc.Core
 			writer.WriteEndElement();
 		}
 
-        private void WriteStructLayoutAttribute(XmlWriter writer, Type type) {
-            string charSet = null;
-            string layoutKind = null;
+		private void WriteStructLayoutAttribute(XmlWriter writer, Type type) 
+		{
+			string charSet = null;
+			string layoutKind = null;
 
-            // determine if CharSet property should be documented
-            if ((type.Attributes & TypeAttributes.AutoClass) == TypeAttributes.AutoClass)
-            {
-                charSet = CharSet.Auto.ToString(CultureInfo.InvariantCulture);
-            }
-//			//Do not document if default value....
-//			if ((type.Attributes & TypeAttributes.AnsiClass) == TypeAttributes.AnsiClass)
-//			{
-//				charSet = CharSet.Ansi.ToString(CultureInfo.InvariantCulture);
-//			} 
-            if ((type.Attributes & TypeAttributes.UnicodeClass) == TypeAttributes.UnicodeClass)
-            {
-                charSet = CharSet.Unicode.ToString(CultureInfo.InvariantCulture);
-            }
+			// determine if CharSet property should be documented
+			if ((type.Attributes & TypeAttributes.AutoClass) == TypeAttributes.AutoClass)
+			{
+				charSet = CharSet.Auto.ToString(CultureInfo.InvariantCulture);
+			}
+			//			//Do not document if default value....
+			//			if ((type.Attributes & TypeAttributes.AnsiClass) == TypeAttributes.AnsiClass)
+			//			{
+			//				charSet = CharSet.Ansi.ToString(CultureInfo.InvariantCulture);
+			//			} 
+			if ((type.Attributes & TypeAttributes.UnicodeClass) == TypeAttributes.UnicodeClass)
+			{
+				charSet = CharSet.Unicode.ToString(CultureInfo.InvariantCulture);
+			}
 
-            // determine if Value property should be documented
-//			//Do not document if default value....
-//			if ((type.Attributes & TypeAttributes.AutoLayout) == TypeAttributes.AutoLayout)
-//			{
-//				layoutKind = LayoutKind.Auto.ToString(CultureInfo.InvariantCulture);
-//			} 
-            if ((type.Attributes & TypeAttributes.ExplicitLayout) == TypeAttributes.ExplicitLayout)
-            {
-                layoutKind = LayoutKind.Explicit.ToString(CultureInfo.InvariantCulture);
-            } 
-            if ((type.Attributes & TypeAttributes.SequentialLayout) == TypeAttributes.SequentialLayout)
-            {
-                layoutKind = LayoutKind.Sequential.ToString(CultureInfo.InvariantCulture);
-            }
+			// determine if Value property should be documented
+			//			//Do not document if default value....
+			//			if ((type.Attributes & TypeAttributes.AutoLayout) == TypeAttributes.AutoLayout)
+			//			{
+			//				layoutKind = LayoutKind.Auto.ToString(CultureInfo.InvariantCulture);
+			//			} 
+			if ((type.Attributes & TypeAttributes.ExplicitLayout) == TypeAttributes.ExplicitLayout)
+			{
+				layoutKind = LayoutKind.Explicit.ToString(CultureInfo.InvariantCulture);
+			} 
+			if ((type.Attributes & TypeAttributes.SequentialLayout) == TypeAttributes.SequentialLayout)
+			{
+				layoutKind = LayoutKind.Sequential.ToString(CultureInfo.InvariantCulture);
+			}
 
-            if (charSet == null && layoutKind == null)
-            {
-                return;
-            }
+			if (charSet == null && layoutKind == null)
+			{
+				return;
+			}
 
-            // create attribute element
-            writer.WriteStartElement("attribute");
-            writer.WriteAttributeString("name", "System.Runtime.InteropServices.StructLayoutAttribute");
+			// create attribute element
+			writer.WriteStartElement("attribute");
+			writer.WriteAttributeString("name", "System.Runtime.InteropServices.StructLayoutAttribute");
 
-            if (charSet != null)
-            {
-                // create CharSet property element
-                writer.WriteStartElement("property");
-                writer.WriteAttributeString("name", "CharSet");
-                writer.WriteAttributeString("type", "System.Runtime.InteropServices.CharSet");
-                writer.WriteAttributeString("value", charSet);
-                writer.WriteEndElement();
-            }
+			if (charSet != null)
+			{
+				// create CharSet property element
+				writer.WriteStartElement("property");
+				writer.WriteAttributeString("name", "CharSet");
+				writer.WriteAttributeString("type", "System.Runtime.InteropServices.CharSet");
+				writer.WriteAttributeString("value", charSet);
+				writer.WriteEndElement();
+			}
 
-            if (layoutKind != null) {
-                // create Value property element
-                writer.WriteStartElement("property");
-                writer.WriteAttributeString("name", "Value");
-                writer.WriteAttributeString("type", "System.Runtime.InteropServices.LayoutKind");
-                writer.WriteAttributeString("value", layoutKind);
-                writer.WriteEndElement();
-            }
+			if (layoutKind != null) 
+			{
+				// create Value property element
+				writer.WriteStartElement("property");
+				writer.WriteAttributeString("name", "Value");
+				writer.WriteAttributeString("type", "System.Runtime.InteropServices.LayoutKind");
+				writer.WriteAttributeString("value", layoutKind);
+				writer.WriteEndElement();
+			}
 
-            // end attribute element
-            writer.WriteEndElement();
-        }
+			// end attribute element
+			writer.WriteEndElement();
+		}
 
 		private void WriteSpecialAttributes(XmlWriter writer, Type type)
 		{
@@ -1385,7 +1409,7 @@ namespace NDoc.Core
 				writer.WriteEndElement(); // attribute
 			}
 
-            WriteStructLayoutAttribute(writer, type);
+			WriteStructLayoutAttribute(writer, type);
 		}
 
 		private void WriteSpecialAttributes(XmlWriter writer, FieldInfo field)
@@ -1400,13 +1424,15 @@ namespace NDoc.Core
 			//TODO: more special attributes here?
 		}
 
-        private void WriteCustomAttributes(XmlWriter writer, Assembly assembly) {
-            WriteCustomAttributes(writer, assembly.GetCustomAttributes(MyConfig.DocumentInheritedAttributes),"assembly");
-        }
+		private void WriteCustomAttributes(XmlWriter writer, Assembly assembly) 
+		{
+			WriteCustomAttributes(writer, assembly.GetCustomAttributes(MyConfig.DocumentInheritedAttributes),"assembly");
+		}
 
-        private void WriteCustomAttributes(XmlWriter writer, Module module) {
-            WriteCustomAttributes(writer, module.GetCustomAttributes(MyConfig.DocumentInheritedAttributes),"module");
-        }
+		private void WriteCustomAttributes(XmlWriter writer, Module module) 
+		{
+			WriteCustomAttributes(writer, module.GetCustomAttributes(MyConfig.DocumentInheritedAttributes),"module");
+		}
 
 		private void WriteCustomAttributes(XmlWriter writer, Type type)
 		{
@@ -1524,9 +1550,9 @@ namespace NDoc.Core
 			int overload = 0;
 
 			BindingFlags bindingFlags =
-					  BindingFlags.Instance |
-					  BindingFlags.Public |
-					  BindingFlags.NonPublic;
+				BindingFlags.Instance |
+				BindingFlags.Public |
+				BindingFlags.NonPublic;
 
 			if (MyConfig.DocumentInheritedMembers==DocumentedInheritedMembers.None)
 			{
@@ -1557,9 +1583,9 @@ namespace NDoc.Core
 		private void WriteStaticConstructor(XmlWriter writer, Type type)
 		{
 			BindingFlags bindingFlags =
-					  BindingFlags.Static |
-					  BindingFlags.Public |
-					  BindingFlags.NonPublic;
+				BindingFlags.Static |
+				BindingFlags.Public |
+				BindingFlags.NonPublic;
 
 			if (MyConfig.DocumentInheritedMembers==DocumentedInheritedMembers.None)
 			{
@@ -1585,10 +1611,10 @@ namespace NDoc.Core
 		private void WriteFields(XmlWriter writer, Type type)
 		{
 			BindingFlags bindingFlags =
-					  BindingFlags.Instance |
-					  BindingFlags.Static |
-					  BindingFlags.Public |
-					  BindingFlags.NonPublic;
+				BindingFlags.Instance |
+				BindingFlags.Static |
+				BindingFlags.Public |
+				BindingFlags.NonPublic;
 
 			if (MyConfig.DocumentInheritedMembers==DocumentedInheritedMembers.None)
 			{
@@ -1619,10 +1645,10 @@ namespace NDoc.Core
 		private void WriteProperties(XmlWriter writer, Type type)
 		{
 			BindingFlags bindingFlags =
-					  BindingFlags.Instance |
-					  BindingFlags.Static |
-					  BindingFlags.Public |
-					  BindingFlags.NonPublic;
+				BindingFlags.Instance |
+				BindingFlags.Static |
+				BindingFlags.Public |
+				BindingFlags.NonPublic;
 
 			if (MyConfig.DocumentInheritedMembers==DocumentedInheritedMembers.None)
 			{
@@ -1690,10 +1716,10 @@ namespace NDoc.Core
 		private void WriteMethods(XmlWriter writer, Type type)
 		{
 			BindingFlags bindingFlags =
-					  BindingFlags.Instance |
-					  BindingFlags.Static |
-					  BindingFlags.Public |
-					  BindingFlags.NonPublic;
+				BindingFlags.Instance |
+				BindingFlags.Static |
+				BindingFlags.Public |
+				BindingFlags.NonPublic;
 
 			if (MyConfig.DocumentInheritedMembers==DocumentedInheritedMembers.None)
 			{
@@ -1746,10 +1772,10 @@ namespace NDoc.Core
 		private void WriteOperators(XmlWriter writer, Type type)
 		{
 			BindingFlags bindingFlags =
-					  BindingFlags.Instance |
-					  BindingFlags.Static |
-					  BindingFlags.Public |
-					  BindingFlags.NonPublic;
+				BindingFlags.Instance |
+				BindingFlags.Static |
+				BindingFlags.Public |
+				BindingFlags.NonPublic;
 
 			if (MyConfig.DocumentInheritedMembers==DocumentedInheritedMembers.None)
 			{
@@ -1778,10 +1804,10 @@ namespace NDoc.Core
 		private void WriteEvents(XmlWriter writer, Type type)
 		{
 			BindingFlags bindingFlags =
-					  BindingFlags.Instance |
-					  BindingFlags.Static |
-					  BindingFlags.Public |
-					  BindingFlags.NonPublic;
+				BindingFlags.Instance |
+				BindingFlags.Static |
+				BindingFlags.Public |
+				BindingFlags.NonPublic;
 
 			if (MyConfig.DocumentInheritedMembers==DocumentedInheritedMembers.None)
 			{
@@ -1877,13 +1903,19 @@ namespace NDoc.Core
 			WriteTypeDocumentation(writer, memberName, type);
 			WriteCustomAttributes(writer, type);
 
+			WriteDerivedTypes(writer, memberName);
+			
 			foreach(Type interfaceType in type.GetInterfaces())
 			{
 				if(MustDocumentType(interfaceType))
 				{
-					writer.WriteElementString("implements", interfaceType.Name);
+					writer.WriteStartElement("implements");
+					writer.WriteAttributeString("type", interfaceType.FullName.Replace('+', '.'));
+					writer.WriteEndElement();
 				}
 			}
+			
+			WriteInterfaceImplementingTypes(writer, memberName);
 
 			WriteProperties(writer, type);
 			WriteMethods(writer, type);
@@ -3183,7 +3215,7 @@ namespace NDoc.Core
 				{
 					WriteMissingDocumentation(writer, "summary", null,
 						"Missing <summary> documentation for " + memberName);
-					Debug.WriteLine("@@missing@@\t" + memberName);
+					//Debug.WriteLine("@@missing@@\t" + memberName);
 				}
 			}
 
@@ -3389,15 +3421,12 @@ namespace NDoc.Core
 			string memberName, 
 			Type declaringType)
 		{
-			if (MyConfig.GetExternalSummaries)
+			string summary = externalSummaryCache.GetSummary(memberName, declaringType);
+			if (summary.Length > 0)
 			{
-				string summary = externalSummaryCache.GetSummary(memberName, declaringType);
-				if (summary.Length > 0)
-				{
-					WriteStartDocumentation(writer);
-					writer.WriteRaw(summary);
-					WriteEndDocumentation(writer);
-				}
+				WriteStartDocumentation(writer);
+				writer.WriteRaw(summary);
+				WriteEndDocumentation(writer);
 			}
 		}
 
@@ -3733,12 +3762,133 @@ namespace NDoc.Core
 				throw new DocumenterException(string.Format(CultureInfo.InvariantCulture, 
 					"Unable to load assembly '{0}' in directory '{1}'.", baseName, 
 					dirName), e);
-			} finally
+			} 
+			finally
 			{
 				Directory.SetCurrentDirectory(oldDir);
 			}
 
 			return(assy);
 		}
+
+		private void PreReflectionProcess()
+		{
+			PreLoadXmlDocumentation();
+			BuildXrefs();
+		}
+
+		private void PreLoadXmlDocumentation()
+		{
+			//preload all xml documentation
+			foreach (AssemblySlashDoc assemblySlashDoc in _Project.GetAssemblySlashDocs())
+			{
+				//attempt to load the assembly
+				string assemblypath = Path.GetFullPath(assemblySlashDoc.AssemblyFilename);
+				Assembly assembly = LoadAssembly(assemblypath);
+
+				//load documentation
+				if(assemblySlashDoc.SlashDocFilename!=null && assemblySlashDoc.SlashDocFilename.Length>0)
+				{
+					string slashdocpath = Path.GetFullPath(assemblySlashDoc.SlashDocFilename);
+					externalSummaryCache.AddXmlDoc(assembly.FullName, slashdocpath);
+					assemblyDocCache = new AssemblyXmlDocCache(slashdocpath);
+				}
+				
+				// loop through all types in assembly
+				foreach (Type type in assembly.GetTypes())
+				{
+					if (MustDocumentType(type))
+					{
+						BuildDerivedMemberXref(type);
+						BuildDerivedInterfaceXref(type);
+					}
+				}
+			}
+			//it is possible that no xml docs were found, if so create an empty AssemblyXmlDocCache
+			if (assemblyDocCache==null)	assemblyDocCache = new AssemblyXmlDocCache();
+		}
+		
+		private void BuildXrefs()
+		{
+			//build derived members and implementing types xrefs.
+			foreach (AssemblySlashDoc assemblySlashDoc in _Project.GetAssemblySlashDocs())
+			{
+				//attempt to load the assembly
+				string assemblypath = Path.GetFullPath(assemblySlashDoc.AssemblyFilename);
+				Assembly assembly = LoadAssembly(assemblypath);
+
+				// loop through all types in assembly
+				foreach (Type type in assembly.GetTypes())
+				{
+					if (MustDocumentType(type))
+					{
+						BuildDerivedMemberXref(type);
+						BuildDerivedInterfaceXref(type);
+						if (type.Namespace == null)
+						{
+							notEmptyNamespaces["(global)"]=null;
+						}
+						else
+						{
+							notEmptyNamespaces[type.Namespace]=null;
+						}
+					}
+				}
+			}
+		}
+		
+		private void BuildDerivedMemberXref(Type type)
+		{
+			string derivedMemberID=GetMemberName(type);
+			if(type.BaseType!=null &&
+				!(type.BaseType.FullName.StartsWith("System.")||type.BaseType.FullName.StartsWith("Microsoft.")) &&
+				MustDocumentType(type.BaseType)) // we don't care about undocumented types
+			{
+				string baseMemberID=GetMemberName(type.BaseType);
+				derivedTypes.Add(baseMemberID,derivedMemberID);
+			}
+		}
+
+		private void BuildDerivedInterfaceXref(Type type)
+		{
+			string derivedMemberID=GetMemberName(type);
+			foreach(Type interfaceType in type.GetInterfaces())
+			{
+				if(!(interfaceType.FullName.StartsWith("System.")||interfaceType.FullName.StartsWith("Microsoft.")) && 
+					MustDocumentType(interfaceType)) // we don't care about undocumented types
+				{
+					string interfaceMemberID=GetMemberName(interfaceType);
+					if(type.IsInterface)
+					{
+						derivedTypes.Add(interfaceMemberID,derivedMemberID);
+					}
+					else
+					{
+						interfaceImplementingTypes.Add(interfaceMemberID,derivedMemberID);
+					}
+				}
+			}
+		}
+
+		private void WriteDerivedTypes(XmlWriter writer,string memberName)
+		{
+			foreach(string derived in derivedTypes.GetDerivedTypes(memberName))
+			{
+				writer.WriteStartElement("derivedBy");
+				writer.WriteAttributeString("id",derived);
+				writer.WriteEndElement();
+			}
+		}
+
+		private void WriteInterfaceImplementingTypes(XmlWriter writer,string memberName)
+		{
+			foreach(string implementingType in interfaceImplementingTypes.GetInterfaceImplementingTypes(memberName))
+			{
+				writer.WriteStartElement("implementedBy");
+				writer.WriteAttributeString("id",implementingType);
+				writer.WriteEndElement();
+			}
+		}
+		
 	}
 }
