@@ -31,12 +31,10 @@ namespace NDoc.Documenter.LinearHtml
 	/// <summary>The LinearHtmlDocumenterConfig class.</summary>
 	public class LinearHtmlDocumenterConfig : BaseDocumenterConfig
 	{
-		string outputDirectory;
-
 		/// <summary>Initializes a new instance of the MsdnHelpConfig class.</summary>
 		public LinearHtmlDocumenterConfig() : base("LinearHtml")
 		{
-			outputDirectory = @".\doc\";
+			_OutputDirectory = @".\doc\";
 			_Title = "An NDoc Documented Class Library";
 			_HeaderHtml = string.Empty;
 			_FooterHtml = string.Empty;
@@ -44,8 +42,11 @@ namespace NDoc.Documenter.LinearHtml
 			_IncludeHierarchy = false;
 			_SortTOCByNamespace = true;
 			_NamespaceExcludeRegexp = string.Empty;
+			_MethodParametersInTable = false;
 		}
 
+
+		string _OutputDirectory;
 
 		/// <summary>Gets or sets the OutputDirectory property.</summary>
 		[
@@ -55,20 +56,40 @@ namespace NDoc.Documenter.LinearHtml
 		]
 		public string OutputDirectory
 		{
-			get { return outputDirectory; }
+			get { return _OutputDirectory; }
 
 			set
 			{
-				outputDirectory = value;
+				_OutputDirectory = value;
 
-				if (!outputDirectory.EndsWith("\\"))
+				if (!_OutputDirectory.EndsWith("\\"))
 				{
-					outputDirectory += "\\";
+					_OutputDirectory += "\\";
 				}
 
 				SetDirty();
 			}
 		}
+
+		private bool _MethodParametersInTable;
+
+		/// <summary>Gets or sets the MethodParametersInTable property.</summary>
+		[
+		Category("LinearHtml Style Settings"),
+		Description("Whether or not to put method parameter lists into the "
+			+ "same table with the method name."),
+		]
+		public bool MethodParametersInTable
+		{
+			get { return _MethodParametersInTable; }
+
+			set
+			{
+				_MethodParametersInTable = value;
+				SetDirty();
+			}
+		}
+
 
 		private string _NamespaceExcludeRegexp;
 
