@@ -58,23 +58,65 @@ namespace NDoc.Documenter.HtmlHelp2
 			}
 		}
 
-		string _HtmlHelp2CompilerPath = @"C:\Program Files\Microsoft Help 2.0 SDK";
 
-		/// <summary>Gets or sets the directory where the documenter 
-		/// looks for the Html Help 2 compiler and utilities</summary>
-		[
-		Category("Html Help v2.0 Settings"),
-		Editor(typeof(FolderNameEditor), typeof(UITypeEditor)),
-		Description("The directory in which the Html Help 2.0 compilers reside. Look for HxComp.exe.")
-		]
-		public string HtmlHelp2CompilerPath
+		private string _HtmlHelp2CompilerPath = Path.Combine(
+			Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
+			"Microsoft Help 2.0 SDK");
+
+		private bool FindHxComp()
 		{
-			get { return _HtmlHelp2CompilerPath; }
+			return File.Exists(Path.Combine(_HtmlHelp2CompilerPath, "hxcomp.exe"));
+		}
 
-			set
+		internal string HtmlHelp2CompilerPath
+		{
+			get
 			{
-				_HtmlHelp2CompilerPath = value;
-				SetDirty();
+				if (FindHxComp())
+				{
+					return _HtmlHelp2CompilerPath;
+				}
+
+				//not in default dir, try to locate it from the registry
+				RegistryKey key = Registry.ClassesRoot.OpenSubKey("Hxcomp.HxComp");
+				if (key != null)
+				{
+					key = key.OpenSubKey("CLSID");
+					if (key != null)
+					{
+						object val = key.GetValue(null);
+						if (val != null)				
+						{
+							string clsid = (string)val;
+							key = Registry.ClassesRoot.OpenSubKey("CLSID");
+							if (key != null)
+							{
+								key = key.OpenSubKey(clsid);
+								if (key != null)
+								{
+									key = key.OpenSubKey("LocalServer32");
+									if (key != null)
+									{
+										val = key.GetValue(null);
+										if (val != null)
+										{
+											string path = (string)val;
+											_HtmlHelp2CompilerPath = Path.GetDirectoryName(path);
+											if (FindHxComp())
+											{
+												return _HtmlHelp2CompilerPath;
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+
+				//still not finding the compiler, give up
+				throw new DocumenterException(
+					"Unable to find the HTML Help 2 Compiler. Please verify that the Microsoft Visual Studio .NET Help Integration Kit has been installed.");
 			}
 		}
 
