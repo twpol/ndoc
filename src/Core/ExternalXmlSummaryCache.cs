@@ -130,11 +130,19 @@ namespace NDoc.Core
 						// If still not found, try locating the assembly in the Framework folder
 						if (docPath == null)
 						{
-							string frameworkPath = this.GetDotnetFrameworkPath(FileVersionInfo.GetVersionInfo(assemblyPath));
+							string frameworkPath = this.GetDotnetFrameworkPath(a.ImageRuntimeVersion);
 
 							if (frameworkPath != null)
 							{
-								docPath = Path.Combine(frameworkPath, a.GetName().Name + ".xml");
+								string localizedFrameworkPath = Path.Combine(frameworkPath, CultureInfo.CurrentCulture.TwoLetterISOLanguageName);
+								if (Directory.Exists(localizedFrameworkPath))
+								{
+									docPath = Path.Combine(localizedFrameworkPath, a.GetName().Name + ".xml");
+								}
+								if ((docPath == null) || (!File.Exists(docPath)))
+								{
+									docPath = Path.Combine(frameworkPath, a.GetName().Name + ".xml");
+								}
 							}
 						}
 #endif
@@ -262,7 +270,7 @@ namespace NDoc.Core
 			return "<summary>" + summary + "</summary>";
 		}
 
-		private string GetDotnetFrameworkPath(FileVersionInfo version)
+		private string GetDotnetFrameworkPath(string version)
 		{
 			using (RegistryKey regKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\.NETFramework"))
 			{
@@ -274,13 +282,14 @@ namespace NDoc.Core
 				if (installRoot == null)
 					return null;
 
-				string stringVersion = string.Format(
-					"v{0}.{1}.{2}", 
-					version.FileMajorPart, 
-					version.FileMinorPart, 
-					version.FileBuildPart);
-
-				return Path.Combine(installRoot, stringVersion);
+//				string stringVersion = string.Format(
+//					"v{0}.{1}.{2}", 
+//					version.FileMajorPart, 
+//					version.FileMinorPart, 
+//					version.FileBuildPart);
+//
+//				return Path.Combine(installRoot, stringVersion);
+				return Path.Combine(installRoot, version);
 			}
 		}
 	}
