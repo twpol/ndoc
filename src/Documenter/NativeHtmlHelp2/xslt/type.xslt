@@ -98,7 +98,7 @@
 									<xsl:attribute name="href">
 										<xsl:value-of select="$members-href" />
 									</xsl:attribute>
-									<xsl:value-of select="@name" /> Members
+									<xsl:value-of select="@name" /><xsl:text> Members</xsl:text>
 								</a>
 								<xsl:text>.</xsl:text>
 							</p>
