@@ -99,7 +99,6 @@ namespace NDoc.Core.Reflection
 				StringBuilder sb = new StringBuilder();
 				if (assemblyLoader.UnresolvedAssemblies.Count>0)
 				{
-					Hashtable unfoundFiles = new Hashtable();
 					sb.Append("One or more required assemblies could not be located : \n");
 					foreach(string ass in assemblyLoader.UnresolvedAssemblies)
 					{
@@ -269,7 +268,6 @@ namespace NDoc.Core.Reflection
 				StringBuilder sb = new StringBuilder();
 				if (assemblyLoader.UnresolvedAssemblies.Count>0)
 				{
-					Hashtable unfoundFiles = new Hashtable();
 					sb.Append("One or more required assemblies could not be located : \n");
 					foreach(string ass in assemblyLoader.UnresolvedAssemblies)
 					{
