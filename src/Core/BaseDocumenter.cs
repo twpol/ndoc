@@ -26,7 +26,7 @@ using System.Xml;
 namespace NDoc.Core
 {
 	/// <summary>Provides the base class for documenters.</summary>
-	abstract public class BaseDocumenter : IDocumenter
+	abstract public class BaseDocumenter : IDocumenter, IComparable
 	{
 		IDocumenterConfig config;
 
@@ -42,6 +42,12 @@ namespace NDoc.Core
 		{
 			_Name = name;
 			xmlDocument = new XmlDocument();
+		}
+
+		/// <summary>Compares the currrent document to another documenter.</summary>
+		public int CompareTo(object obj)
+		{
+			return String.Compare(Name, ((IDocumenter)obj).Name);
 		}
 
 		/// <summary>See <see cref="IDocumenter"/>.</summary>

@@ -78,7 +78,9 @@ namespace NDoc.Core
 					}
 				}
 			}
-
+			
+			documenters.Sort();
+			
 			return documenters;
 		}
 
