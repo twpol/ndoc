@@ -230,16 +230,48 @@ namespace NDoc.Core
 			return(assemblyResolver);
 		}
 
-		/// <summary>Builds an XmlDocument combining the reflected metadata with the /doc comments.</summary>
+		/// <summary>Builds an Xml file combining the reflected metadata with the /doc comments.</summary>
+		/// <returns>full pathname of XML file</returns>
+		/// <remarks>The caller is responsible for deleting the xml file after use...</remarks>
+		protected string MakeXmlFile(Project project)
+		{
+			string tempfilename = Path.GetTempFileName();
+
+			//if MyConfig.UseNDocXmlFile is set, 
+			//copy it to the temp file and return.
+			string xmlFile = MyConfig.UseNDocXmlFile;
+			if (xmlFile.Length > 0)
+			{
+				Trace.WriteLine("Loading pre-compiled XML information from:\n" + xmlFile);
+				File.Copy(xmlFile,tempfilename,true);
+				return tempfilename;
+			}
+
+			XmlWriter writer=null;
+			try
+			{
+				writer = new XmlTextWriter(tempfilename,Encoding.Default);
+			
+				BuildXml(project, writer);
+			
+				if (writer != null)  writer.Close();
+			
+				return tempfilename;
+			}
+			finally
+			{
+				if (writer != null)  writer.Close();
+			}
+			
+		}
+
+
+		/// <summary>Builds an Xml string combining the reflected metadata with the /doc comments.</summary>
+		/// <returns>XML string</returns>
 		protected string MakeXml(Project project)
 		{
-
-			int start = Environment.TickCount;
-
-			Debug.WriteLine("Memory making xml: " + GC.GetTotalMemory(false).ToString());
-
-			//if MyConfig.UseNDocXmlFile is set, skip this stage 
-			//and load the XmlBuffer from the file.
+			//if MyConfig.UseNDocXmlFile is set, 
+			//load the XmlBuffer from the file and return.
 			string xmlFile = MyConfig.UseNDocXmlFile;
 			if (xmlFile.Length > 0)
 			{
@@ -249,6 +281,45 @@ namespace NDoc.Core
 					return reader.ReadToEnd();
 				}
 			}
+
+			StringWriter swriter = new StringWriter();
+			XmlWriter writer = new XmlTextWriter(swriter);
+
+			try
+			{
+
+				BuildXml(project, writer);
+
+				return swriter.ToString();
+			}
+			finally
+			{
+				if (writer != null)  writer.Close();
+				if (swriter != null) swriter.Close();
+			}
+
+		}
+
+		/// <summary>
+		/// Allows documenter implementations to add their own content to the xml file
+		/// </summary>
+		/// <param name="writer">XmlWriter to write to</param>
+		/// <remarks>
+		/// <para>This method should be overriden if a documenter wishes to add xml elements. 
+		/// It is called after the root (&gt;ndoc&lt;) element is created. </para>
+		/// <para><note>Individual documenters are responsible for ensuring that the added xml is well-formed...</note></para>
+		/// </remarks>
+		protected virtual void AddDocumenterSpecificXmlData(XmlWriter writer)
+		{
+		}
+
+		/// <summary>Builds an Xml file combining the reflected metadata with the /doc comments.</summary>
+		private void BuildXml(Project project, XmlWriter writer)
+		{
+		int start = Environment.TickCount;
+
+			Debug.WriteLine("Memory making xml: " + GC.GetTotalMemory(false).ToString());
+
 
 			_Project = project;
 			AssemblyResolver assemblyResolver = SetupAssemblyResolver(project);
@@ -266,9 +337,6 @@ namespace NDoc.Core
 				}
 			}
 
-			StringWriter swriter = new StringWriter();
-			XmlWriter writer = new XmlTextWriter(swriter);
-
 			string currentAssemblyFilename = "";
 
 			try
@@ -282,6 +350,9 @@ namespace NDoc.Core
 
 				// Start the root element
 				writer.WriteStartElement("ndoc");
+
+				//add any documenter specific elements.
+				AddDocumenterSpecificXmlData(writer);
 
 				if (MyConfig.FeedbackEmailAddress.Length > 0)
 					WriteFeedBackEmailAddress( writer );
@@ -328,8 +399,6 @@ namespace NDoc.Core
 
 				Trace.WriteLine("MakeXML : " + ((Environment.TickCount - start)/1000.0).ToString() + " sec.");
 
-				return swriter.ToString();
-
 				// if you want to see NDoc's intermediate XML file, use the XML documenter.
 			}
 			catch (Exception e)
@@ -344,9 +413,6 @@ namespace NDoc.Core
 				Debug.WriteLine("Memory before cleanup: " + GC.GetTotalMemory(false).ToString());
 
 				_Project = null;
-
-				if (writer != null)  writer.Close();
-				if (swriter != null) swriter.Close();
 
 				if (assemblyResolver != null)
 				{
@@ -487,7 +553,7 @@ namespace NDoc.Core
 				) &&
 				IsEditorBrowsable(type) &&
 				(!MyConfig.UseNamespaceDocSummaries || (type.Name != "NamespaceDoc")) &&
-				!assemblyDocCache.HasNodocTag(GetMemberName(type));
+				!assemblyDocCache.HasExcludeTag(GetMemberName(type));
 		}
 
 		private bool MustDocumentMethod(MethodBase method)
@@ -525,7 +591,7 @@ namespace NDoc.Core
 				(method.IsPrivate && MyConfig.DocumentPrivates)
 				) &&
 				IsEditorBrowsable(method) &&
-				!assemblyDocCache.HasNodocTag(GetMemberName(method));
+				!assemblyDocCache.HasExcludeTag(GetMemberName(method));
 		}
 
 
@@ -692,7 +758,7 @@ namespace NDoc.Core
 				(field.IsFamilyAndAssembly && MyConfig.DocumentInternals) ||
 				(field.IsPrivate && MyConfig.DocumentPrivates)) &&
 				IsEditorBrowsable(field) &&
-				!assemblyDocCache.HasNodocTag(GetMemberName(field));
+				!assemblyDocCache.HasExcludeTag(GetMemberName(field));
 		}
 
 		private void WriteAssembly(XmlWriter writer, Assembly assembly)
