@@ -134,6 +134,19 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		}
 
 		/// <summary>
+		/// Sets the custom namespace map to use while constructing XLinks
+		/// </summary>
+		/// <param name="path">Path to the namespace map. (This file must confrom to NamespaceMap.xsd)</param>
+		public void SetNamespaceMap( string path )
+		{
+			// merge the custom map into the default map
+			nsMapper.MergeMaps( new NamespaceMapper( path ) );
+
+			// then save it so the user has some indication of what was actually used
+			nsMapper.Save( Path.Combine( Directory.GetParent( _outputDirectory ).ToString(), "NamespaceMap.xml" ) );
+		}
+
+		/// <summary>
 		/// Generates HTML for the NDoc XML
 		/// </summary>
 		/// <param name="documentation">NDoc generated xml</param>

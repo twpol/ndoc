@@ -341,7 +341,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		/// <summary>If true the default stop word list is compiled into the help file. 
 		/// (A stop word list is a list of words that will be ignored during a full text search)</summary>
 		[Category(HTMLHELP2_CONFIG_CATEGORY)]
-		[Description("If true the default stop word list is compiled into the help file. (A stop word list is a list of words that will be ignored during a full text search)")]
+		[Description("If true the default stop word list is compiled into the help file. (A stop word list is a " +
+			"list of words that will be ignored during a full text search)")]
 		[DefaultValue(true)]
 		public bool IncludeDefaultStopWordList
 		{
@@ -354,6 +355,29 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			}
 		}
 
+		string _UseHelpNamespaceMappingFile = string.Empty;
+
+		/// <summary>If the documentation includes references to types registered in a seperate html help 2
+		/// namespace, supplying a mapping file allows XLinks to be created to topics within that namespace.
+		/// </summary>
+		[Category(HTMLHELP2_CONFIG_CATEGORY)]
+		[Description("If the documentation includes references to types registered in a seperate html help 2 " +
+			 "namespace, supplying a mapping file allows XLinks to be created to topics within that namespace. " +
+			 "The schema for the mapping file can be found in the location you installed NDoc in a file named " +
+			 "'NamespaceMap.xsd'")]
+		[DefaultValue("")]
+		public string UseHelpNamespaceMappingFile
+		{
+			get { return _UseHelpNamespaceMappingFile; }
+
+			set
+			{
+				_UseHelpNamespaceMappingFile = value;
+				SetDirty();
+			}
+		}
+
+		
 		string _HeaderHtml;
 
 		/// <summary>Gets or sets the HeaderHtml property.</summary>
@@ -448,6 +472,5 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 				SetDirty();
 			}
 		}	
-
 	}
 }

@@ -21,12 +21,14 @@ using System.IO;
 using System.Xml;
 using System.Text;
 using System.Diagnostics;
+using System.Reflection;
 
 using NDoc.Core;
 
 using NDoc.Documenter.NativeHtmlHelp2.Compiler;
 using NDoc.Documenter.NativeHtmlHelp2.HxProject;
 using NDoc.Documenter.NativeHtmlHelp2.Engine;
+using NDoc.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping;
 
 namespace NDoc.Documenter.NativeHtmlHelp2
 {
@@ -79,6 +81,25 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			if ( MyConfig.OutputDirectory == null )
 				return "The output directory must be set";
 
+			if ( MyConfig.UseHelpNamespaceMappingFile.Length != 0 )
+			{
+				if ( !File.Exists( MyConfig.UseHelpNamespaceMappingFile ) )
+					return string.Format( "Could not find the namespace mapping file: {0}", Path.GetFullPath( MyConfig.UseHelpNamespaceMappingFile ) );
+
+				try
+				{
+					NamespaceMapper mapper = new NamespaceMapper( Path.GetFullPath( MyConfig.UseHelpNamespaceMappingFile ) );
+				}
+				catch ( Exception e )
+				{
+					StringBuilder sb = new StringBuilder();
+					sb.AppendFormat( "The namespace mapping file {0} failed to validate.\n", Path.GetFullPath( MyConfig.UseHelpNamespaceMappingFile ) );
+					sb.Append( "Make sure that it conforms to the NamespaceMap.xsd schema that can be found in the NDoc installation directory.\n" );
+					sb.AppendFormat( "Parse error={0}", e.Message );
+					return sb.ToString();
+				}
+			}
+
 			if ( !checkInputOnly ) 
 			{
 				string temp = Path.Combine( MyConfig.OutputDirectory, "~HxS.tmp" );
@@ -116,7 +137,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 				Workspace w = new Workspace( WorkingPath );
 				PrepareWorkspace( w );
 
-				ProjectFile HxProject = CreateProjectFile();				
+				ProjectFile HxProject = CreateProjectFile();
 
 				OnDocBuildingStep( 10, "Merging XML documentation..." );
 				XmlDocument xmlDocumentation = MergeXml( project );
@@ -181,6 +202,9 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 
 			OnDocBuildingStep( 30, "Generating HTML..." );
 
+			if ( MyConfig.UseHelpNamespaceMappingFile.Length != 0 )
+				factory.SetNamespaceMap( MyConfig.UseHelpNamespaceMappingFile );
+
 			// add properties to the factory
 			// these get passed to the stylesheets
 			factory.Properties.Add( "ndoc-title", MyConfig.Title );
@@ -228,7 +252,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			// Load the XML documentation into a DOM.
 			XmlDocument xmlDocumentation = new XmlDocument();
 			xmlDocumentation.LoadXml( MakeXml( project ) );
-//xmlDocumentation.Save( @"C:\NDocTests.xml" );
+//xmlDocumentation.Save( @"C:\NRefDocTests.xml" );
 			XmlNodeList typeNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace/*[name()!='documentation']");
 			if ( typeNodes.Count == 0 )			
 				throw new DocumenterException("There are no documentable types in this project.");
@@ -280,6 +304,13 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 				this.GetType().Module.Assembly,
 				"NDoc.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping",
 				Path.Combine( ResourceDirectory, "NamespaceMapping") );		
+
+			// also unpack a copy of the namespace map schema into the runtime directory
+			// so that users can find it there to use as a reference
+			EmbeddedResources.WriteEmbeddedResources(
+				this.GetType().Module.Assembly,
+				"NDoc.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping",
+				Path.GetDirectoryName( new Uri( Assembly.GetExecutingAssembly().CodeBase ).AbsolutePath ) );
 		}
 
 		private void RegisterCollection()

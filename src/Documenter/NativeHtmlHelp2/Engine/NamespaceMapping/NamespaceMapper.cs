@@ -66,15 +66,82 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping
 			if ( !schemaIsValid )
 				throw new Exception( "The namespaceMap schema is not valid or could not be found" );
 
+			if ( !File.Exists( path ) )
+				throw new ArgumentException( string.Format( "{0} could not be found", path ), "path" );
+
 			XmlValidatingReader reader = new XmlValidatingReader( new XmlTextReader( path ) );
-			reader.Schemas.Add( namespaceMapSchema );
+
+			try
+			{
+				reader.Schemas.Add( namespaceMapSchema );
 		
-			XmlDocument doc = new XmlDocument();
-			doc.Load( reader );
-			map = doc.DocumentElement;
+				XmlDocument doc = new XmlDocument();
+				doc.Load( reader );
+				map = doc.DocumentElement;
+			}
+			catch ( Exception )
+			{
+				throw;
+			}
+			finally
+			{
+				reader.Close();
+			}
 		}
 
 		private XmlNode map;
+
+		/// <summary>
+		/// Merges the specified map into this map
+		/// </summary>
+		/// <param name="mapper">The map to merge into this one</param>
+		public void MergeMaps( NamespaceMapper mapper )
+		{
+			XmlNodeList helpNamespaces = mapper.map.SelectNodes( "//map:helpNamespace", nsmgr );
+
+			// for each help namespace in the new map, merge it into this map
+			foreach ( XmlNode node in helpNamespaces )			
+				MergeHelpNamespace( node );
+		}
+
+		private void MergeHelpNamespace( XmlNode namespaceNode )
+		{
+			string ns = namespaceNode.Attributes.GetNamedItem( "ns" ).Value;
+			
+			XmlNode existingNode = map.SelectSingleNode( string.Format( "//map:helpNamespace[ @ns ='{0}' ]", ns ), nsmgr );
+			
+			// if we've already got the help namespace in this map then merge it with the existing 
+			if ( existingNode != null )
+				MergeNamespaces( existingNode, namespaceNode );
+			else
+				map.AppendChild( map.OwnerDocument.ImportNode( namespaceNode, true ) );
+		}
+
+		private void MergeNamespaces( XmlNode existingHelpNamespace, XmlNode newHelpNamespace )
+		{
+			XmlNodeList managedNamespaces = newHelpNamespace.SelectNodes( "map:managedNamespace", nsmgr );
+
+			// find each managed namespace in the new help namespace and
+			// add it to the existing help namespace
+			foreach ( XmlNode node in managedNamespaces )
+			{
+				string ns = node.Attributes.GetNamedItem( "ns" ).Value;
+				XmlNode existingMNS = existingHelpNamespace.SelectSingleNode( string.Format( "map:managedNamespace[ @ns ='{0}' ]", ns ), nsmgr );
+
+				// we only need to add it if it's not already here
+				if ( existingMNS == null )				
+					existingHelpNamespace.AppendChild( map.OwnerDocument.ImportNode( node, true ) );
+			}
+		}
+
+		/// <summary>
+		/// Saves the map to disk
+		/// </summary>
+		/// <param name="path">The path and filename to save to</param>
+		public void Save( string path )
+		{
+			map.OwnerDocument.Save( path );
+		}
 
 		/// <summary>
 		/// Sets the help namespace to use for system types
