@@ -279,7 +279,7 @@ namespace NDoc.Gui
 			// progressBar
 			// 
 			this.progressBar.Anchor = (System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right);
-			this.progressBar.Location = new System.Drawing.Point(334, 592);
+			this.progressBar.Location = new System.Drawing.Point(334, 593);
 			this.progressBar.Name = "progressBar";
 			this.progressBar.Size = new System.Drawing.Size(144, 15);
 			this.progressBar.TabIndex = 24;
@@ -436,7 +436,7 @@ namespace NDoc.Gui
 			// cancelToolBarButton
 			// 
 			this.cancelToolBarButton.Enabled = false;
-			this.cancelToolBarButton.ImageIndex = 4;
+			this.cancelToolBarButton.ImageIndex = 5;
 			this.cancelToolBarButton.ToolTipText = "Cancel";
 			// 
 			// documenterHeaderGroupBox
@@ -452,7 +452,7 @@ namespace NDoc.Gui
 			this.documenterHeaderGroupBox.Location = new System.Drawing.Point(8, 192);
 			this.documenterHeaderGroupBox.Name = "documenterHeaderGroupBox";
 			this.documenterHeaderGroupBox.Padding = 0;
-			this.documenterHeaderGroupBox.Size = new System.Drawing.Size(480, 396);
+			this.documenterHeaderGroupBox.Size = new System.Drawing.Size(480, 397);
 			this.documenterHeaderGroupBox.TabIndex = 23;
 			this.documenterHeaderGroupBox.TabStop = false;
 			this.documenterHeaderGroupBox.Text = "Select and Configure Documenter";
@@ -477,7 +477,7 @@ namespace NDoc.Gui
 			this.propertyGrid.LineColor = System.Drawing.SystemColors.ScrollBar;
 			this.propertyGrid.Location = new System.Drawing.Point(16, 56);
 			this.propertyGrid.Name = "propertyGrid";
-			this.propertyGrid.Size = new System.Drawing.Size(456, 332);
+			this.propertyGrid.Size = new System.Drawing.Size(456, 333);
 			this.propertyGrid.TabIndex = 0;
 			this.propertyGrid.Text = "PropertyGrid";
 			this.propertyGrid.ViewBackColor = System.Drawing.SystemColors.Window;
@@ -485,12 +485,12 @@ namespace NDoc.Gui
 			// 
 			// viewToolBarButton
 			// 
-			this.viewToolBarButton.ImageIndex = 5;
+			this.viewToolBarButton.ImageIndex = 6;
 			this.viewToolBarButton.ToolTipText = "View Documentation (Ctrl+Shift+V)";
 			// 
 			// statusBar
 			// 
-			this.statusBar.Location = new System.Drawing.Point(0, 589);
+			this.statusBar.Location = new System.Drawing.Point(0, 590);
 			this.statusBar.Name = "statusBar";
 			this.statusBar.Panels.AddRange(new System.Windows.Forms.StatusBarPanel[] {
 																						 this.statusBarTextPanel});
@@ -512,7 +512,7 @@ namespace NDoc.Gui
 			// 
 			// openToolBarButton
 			// 
-			this.openToolBarButton.ImageIndex = 1;
+			this.openToolBarButton.ImageIndex = 2;
 			this.openToolBarButton.ToolTipText = "Open ";
 			// 
 			// separatorToolBarButton
@@ -521,12 +521,12 @@ namespace NDoc.Gui
 			// 
 			// solutionToolBarButton
 			// 
-			this.solutionToolBarButton.ImageIndex = 6;
+			this.solutionToolBarButton.ImageIndex = 1;
 			this.solutionToolBarButton.ToolTipText = "New from Visual Studio Solution";
 			// 
 			// saveToolBarButton
 			// 
-			this.saveToolBarButton.ImageIndex = 2;
+			this.saveToolBarButton.ImageIndex = 3;
 			this.saveToolBarButton.ToolTipText = "Save";
 			// 
 			// editButton
@@ -618,13 +618,13 @@ namespace NDoc.Gui
 			// 
 			// buildToolBarButton
 			// 
-			this.buildToolBarButton.ImageIndex = 3;
+			this.buildToolBarButton.ImageIndex = 4;
 			this.buildToolBarButton.ToolTipText = "Build Documentation (Ctrl+Shift+B)";
 			// 
 			// MainForm
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.ClientSize = new System.Drawing.Size(496, 609);
+			this.ClientSize = new System.Drawing.Size(496, 610);
 			this.Controls.AddRange(new System.Windows.Forms.Control[] {
 																		  this.progressBar,
 																		  this.assembliesHeaderGroupBox,
@@ -657,7 +657,6 @@ namespace NDoc.Gui
 		#endregion // Main
 
 		#region Methods
-		
 		private void OnProjectModified(object sender, EventArgs e)
 		{
 			SetWindowTitle();
@@ -898,7 +897,6 @@ namespace NDoc.Gui
 			}
 		}
 
-
 		private void FileOpen(string fileName)
 		{
 			bool  bFailed = true;
@@ -951,6 +949,7 @@ namespace NDoc.Gui
 		private void FileSave(string fileName)
 		{
 			project.Write(fileName);
+			SetWindowTitle();
 		}
 
 		private void FileSaveAs()
