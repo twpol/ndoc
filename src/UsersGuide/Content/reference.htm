@@ -3,13 +3,39 @@
 
 <head>
 <title>NDoc Developer's Reference</title>
-<meta name="GENERATOR" content="Microsoft Visual Studio .NET 7.1">
 <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5">
-<link href="css/ndoc.css" rel="stylesheet" name="ndocstyle" type="text/css"/>
+<link href="css/ndoc.css" rel="stylesheet" name="ndocstyle" type="text/css" />
 <script src="script/ndoc.js"></script>
 </head>
 
 <body class="dtBODY" id="bodyID" onload="InitTitle()">
+
+<div id="nstext">
+	<h3 class="dtH3">Implementing A Custom Documenter</h3>
+	<p class="dtH3">Implementing a documenter requires an assembly with at least 
+	two classes:</p>
+	<ul>
+		<li>
+		<p class="dtH3">One that inherits from NDoc.Core.DocumenterBase</li>
+	<li>
+	<p class="dtH3">And one that inherits from NDoc.Core.DocumenterConfigBase</li>
+</ul>
+<p class="dtH3"><b>DocumenterConfigBase</b> includes the settings that are 
+shared by all documenters. These settings govern how the /doc XML is merged with 
+reflected meta-data. The inherited class can add its own properties that govern 
+its operation.</p>
+<p class="dtH3"><b>DocumenterBase</b> defines the general process for creating 
+the documentation. This base class will do the XML merge and it is then up to 
+the derived class to transform the merged XML into a documentation set.</p>
+<h3 class="dtH3">How Documenters Are Loaded</h3>
+	<p>NDoc uses a naming convention for the assemblies that contain 
+	documenters. To be located by NDoc, a documenter's assembly must be named 
+	with the pattern:</p>
+<p>&nbsp;&nbsp;&nbsp; NDoc.Documenter.&lt;NAME&gt;.dll </p>
+<p>where &lt;NAME&gt; is the documenter's name.</p>
+<p>Each documenter must reside in the same folder as the NDocGui and NDocConsole 
+applications in order to be located correctly.</p>
+</div>
 
 </body>
 

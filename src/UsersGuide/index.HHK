@@ -15,11 +15,6 @@
             <param name="Local" value="Content\blank.htm">
          </OBJECT>
     <LI><OBJECT type="text/sitemap">
-            <param name="Name" value="** New **">
-            <param name="Name" value="** New **">
-            <param name="Local" value="Content\reference.htm">
-         </OBJECT>
-    <LI><OBJECT type="text/sitemap">
             <param name="Name" value="Attributes">
             <param name="Name" value="Attributes">
             <param name="Local" value="Content\attributes.htm">
@@ -173,6 +168,11 @@
             <param name="Name" value="preliminary">
             <param name="Name" value="preliminary">
             <param name="Local" value="Content\tag_preliminary.htm">
+         </OBJECT>
+    <LI><OBJECT type="text/sitemap">
+            <param name="Name" value="Programmer's Reference">
+            <param name="Name" value="Programmer's Reference">
+            <param name="Local" value="Content\reference.htm">
          </OBJECT>
     <LI><OBJECT type="text/sitemap">
             <param name="Name" value="Project Designer">
