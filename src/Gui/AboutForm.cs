@@ -69,7 +69,9 @@ namespace NDoc.Gui
 			adminsLinkLabel.Links.Add(24, 13, "http://sourceforge.net/sendmessage.php?touser=87620");
 			adminsLinkLabel.Links.Add(39, 18, "http://sourceforge.net/sendmessage.php?touser=235364");
 			adminsLinkLabel.Links.Add(59, 10, "http://sourceforge.net/sendmessage.php?touser=97544");
+			adminsLinkLabel.Links.Add(71, 11, "http://sourceforge.net/sendmessage.php?touser=4516");
 
+			
 			// Fill in loaded modules / version number info list view.
 			try 
 			{
@@ -246,7 +248,8 @@ namespace NDoc.Gui
 			this.adminsLinkLabel.Size = new System.Drawing.Size(520, 16);
 			this.adminsLinkLabel.TabIndex = 6;
 			this.adminsLinkLabel.TabStop = true;
-			this.adminsLinkLabel.Text = "Project administrators: Jason Diamond, Jean-Claude Manoli, Kral Ferch";
+			this.adminsLinkLabel.Text = "Project administrators: Jason Diamond, Jean-Claude Manoli, Kral Ferch, Don Kackma" +
+				"n";
 			this.adminsLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.adminsLinkLabel_LinkClicked);
 			// 
 			// developersLabel
@@ -258,7 +261,7 @@ namespace NDoc.Gui
 			this.developersLabel.Name = "developersLabel";
 			this.developersLabel.Size = new System.Drawing.Size(512, 48);
 			this.developersLabel.TabIndex = 7;
-			this.developersLabel.Text = "Contributors: Carlos Guzmán Álvarez, Don Kackman, Gert Driesen, Heath Stewart, La" +
+			this.developersLabel.Text = "Contributors: Carlos Guzmán Álvarez, Gert Driesen, Heath Stewart, Kevin Downs, La" +
 				"urent Domenech, Jerome Mathieu, Keith Hill, Michael Poettgen, Pascal Bourque, Ry" +
 				"an Seghers, Steve Van Esch, Thong (Tum) Nguyen, Wolfgang Bauer";
 			// 

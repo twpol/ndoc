@@ -188,7 +188,7 @@
                 />
                 <File
                     RelPath = "NDocGui.exe.manifest"
-                    BuildAction = "None"
+                    BuildAction = "Content"
                 />
                 <File
                     RelPath = "SolutionForm.cs"
