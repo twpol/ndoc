@@ -25,13 +25,14 @@ using System.Xml;
 
 namespace NDoc.Core
 {
+
 	/// <summary>The base documenter config class.</summary>
 	abstract public class BaseDocumenterConfig : IDocumenterConfig
 	{
 		private string _Name;
 
 		/// <summary>Initializes a new instance of the DocumenterConfig class.</summary>
-		public BaseDocumenterConfig(string name)
+		protected BaseDocumenterConfig(string name)
 		{
 			_Name = name;
 
@@ -154,30 +155,52 @@ namespace NDoc.Core
 			// calls to SetDirty get ignored.
 			Project project = _Project;
 			_Project = null;
+			string FailureMessages="";
 
 			while(!reader.EOF && !(reader.NodeType == XmlNodeType.EndElement && reader.Name == "documenter"))
 			{
 				if (reader.NodeType == XmlNodeType.Element && reader.Name == "property")
 				{
 					string name = reader["name"];
+					bool ValueParsedOK = false;
 
 					PropertyInfo property = GetType().GetProperty(name);
 
 					if (property != null)
 					{
 						string value = reader["value"];
-						object value2;
+						object value2 = null;
 						
+						// if the string in the project file is not a valid member
+						// of the enum, or cannot be parsed into the property type
+						// for som reason,we don't want to throw an exception and
+						// ditch all the settings stored later in the file!
+						// save the exception details, and  we will throw a 
+						// single exception at the end..
+						try
+						{
 						if (property.PropertyType.BaseType == typeof(Enum))
 						{
 							value2 = Enum.Parse(property.PropertyType, value);
+								ValueParsedOK = true;
 						}
 						else
 						{
 							value2 = Convert.ChangeType(value, property.PropertyType);
+								ValueParsedOK = true;
+							}
 						}
+						catch(System.ArgumentException)
+						{
+							FailureMessages += String.Format("     Property '{0}' has an invalid value ('{1}') \n", name, value);
+						}
+						catch(System.FormatException)
+						{
+							FailureMessages += String.Format("     Property '{0}' has an invalid value for type {1} ('{2}') \n", name, property.PropertyType.ToString() ,value);
+						}
+						// any other exception will be thrown immediately
 
-						if (property.CanWrite)
+						if (property.CanWrite && ValueParsedOK)
 						{
 							property.SetValue(this, value2, null);
 						}
@@ -188,6 +211,8 @@ namespace NDoc.Core
 
 			// Restore the saved project.
 			_Project = project;
+			if (FailureMessages.Length > 0)
+				throw new DocumenterPropertyFormatException(FailureMessages);
 		}
 
 		bool _ShowMissingSummaries;
@@ -198,6 +223,7 @@ namespace NDoc.Core
 		/// generated documentation.</remarks>
 		[Category("Show Missing Documentation")]
 		[Description("Turning this flag on will show you where you are missing summaries.")]
+		[DefaultValue(false)]
 		public bool ShowMissingSummaries
 		{
 			get { return _ShowMissingSummaries; }
@@ -217,6 +243,7 @@ namespace NDoc.Core
 		/// generated documentation.</remarks>
 		[Category("Show Missing Documentation")]
 		[Description("Turning this flag on will show you where you are missing Remarks.")]
+		[DefaultValue(false)]
 		public bool ShowMissingRemarks
 		{
 			get { return _ShowMissingRemarks; }
@@ -236,6 +263,7 @@ namespace NDoc.Core
 		/// generated documentation.</remarks>
 		[Category("Show Missing Documentation")]
 		[Description("Turning this flag on will show you where you are missing Params.")]
+		[DefaultValue(false)]
 		public bool ShowMissingParams
 		{
 			get { return _ShowMissingParams; }
@@ -255,6 +283,7 @@ namespace NDoc.Core
 		/// generated documentation.</remarks>
 		[Category("Show Missing Documentation")]
 		[Description("Turning this flag on will show you where you are missing Returns.")]
+		[DefaultValue(false)]
 		public bool ShowMissingReturns
 		{
 			get { return _ShowMissingReturns; }
@@ -274,6 +303,7 @@ namespace NDoc.Core
 		/// generated documentation.</remarks>
 		[Category("Show Missing Documentation")]
 		[Description("Turning this flag on will show you where you are missing Values.")]
+		[DefaultValue(false)]
 		public bool ShowMissingValues
 		{
 			get { return _ShowMissingValues; }
@@ -290,6 +320,7 @@ namespace NDoc.Core
 		/// <summary>Gets or sets the DocumentInternals property.</summary>
 		[Category("Visibility")]
 		[Description("Turn this flag on to document internal code.")]
+		[DefaultValue(false)]
 		public bool DocumentInternals
 		{
 			get { return _DocumentInternals; }
@@ -306,6 +337,7 @@ namespace NDoc.Core
 		/// <summary>Gets or sets the DocumentProtected property.</summary>
 		[Category("Visibility")]
 		[Description("Turn this flag on to document protected code.")]
+		[DefaultValue(true)]
 		public bool DocumentProtected
 		{
 			get { return _DocumentProtected; }
@@ -329,6 +361,7 @@ namespace NDoc.Core
 		/// <summary>Gets or sets the DocumentSealedProtected property.</summary>
 		[Category("Visibility")]
 		[Description("Turn this flag on to document protected members of sealed classes. DocumentProtected must be turned on, too.")]
+		[DefaultValue(false)]
 		public bool DocumentSealedProtected
 		{
 			get { return _DocumentSealedProtected; }
@@ -352,6 +385,7 @@ namespace NDoc.Core
 		/// <summary>Gets or sets the DocumentPrivates property.</summary>
 		[Category("Visibility")]
 		[Description("Turn this flag on to document private code.")]
+		[DefaultValue(false)]
 		public bool DocumentPrivates
 		{
 			get { return _DocumentPrivates; }
@@ -368,6 +402,7 @@ namespace NDoc.Core
 		/// <summary>Gets or sets the DocumentProtectedInternalAsProtected property.</summary>
 		[Category("Visibility")]
 		[Description("If true, NDoc will treat \"protected internal\" members as \"protected\" only.")]
+		[DefaultValue(false)]
 		public bool DocumentProtectedInternalAsProtected
 		{
 			get { return _DocumentProtectedInternalAsProtected; }
@@ -384,6 +419,7 @@ namespace NDoc.Core
 		/// <summary>Gets or sets the DocumentPrivates property.</summary>
 		[Category("Visibility")]
 		[Description("Turn this flag on to document empty namespaces.")]
+		[DefaultValue(false)]
 		public bool DocumentEmptyNamespaces
 		{
 			get { return _DocumentEmptyNamespaces; }
@@ -400,6 +436,7 @@ namespace NDoc.Core
 		/// <summary>Gets or sets the IncludeAssemblyVersion property.</summary>
 		[Category("Documentation Main Settings")]
 		[Description("Turn this flag on to include the assembly version number in the documentation.")]
+		[DefaultValue(false)]
 		public bool IncludeAssemblyVersion
 		{
 			get { return _IncludeAssemblyVersion; }
@@ -417,6 +454,7 @@ namespace NDoc.Core
 		[Category("Documentation Main Settings")]
 		[Description("A copyright notice text that will be included in the generated docs.")]
 		[Editor(typeof(TextEditor), typeof(UITypeEditor))]
+		[DefaultValue("")]
 		public string CopyrightText
 		{
 			get { return _CopyrightText; }
@@ -433,6 +471,7 @@ namespace NDoc.Core
 		/// <summary>Gets or sets the CopyrightHref property.</summary>
 		[Category("Documentation Main Settings")]
 		[Description("An URL referenced by the copyright notice.")]
+		[DefaultValue("")]
 		public string CopyrightHref
 		{
 			get { return _CopyrightHref; }
@@ -453,6 +492,7 @@ namespace NDoc.Core
 #if !MONO //System.Windows.Forms.Design.FolderNameEditor is not implemented in mono 0.28
 		[Editor(typeof(FolderNameEditor), typeof(UITypeEditor))]
 #endif
+		[DefaultValue("")]
 		public string ReferencesPath
 		{
 			get { return _ReferencesPath; }
@@ -468,6 +508,7 @@ namespace NDoc.Core
 		/// <summary>Gets or sets the SkipNamespacesWithoutSummaries property.</summary>
 		[Category("Visibility")]
 		[Description("Setting this property to true will not document namespaces that don't have an associated namespace summary.")]
+		[DefaultValue(false)]
 		public bool SkipNamespacesWithoutSummaries
 		{
 			get { return _SkipNamespacesWithoutSummaries; }
@@ -489,6 +530,7 @@ namespace NDoc.Core
 			+ "show up in the resulting documentation output. You may want to use "
 			+ "#if ... #endif together with conditional compilation constants to "
 			+ "exclude the NamespaceDoc classes from release build assemblies.")]
+		[DefaultValue(false)]
 		public bool UseNamespaceDocSummaries
 		{
 			get { return _UseNamespaceDocSummaries; }
@@ -510,6 +552,7 @@ namespace NDoc.Core
 			+ "which gives you a way to opt out of this behavior in particular cases. "
 			+ "Currently the naming conventions supported are such that "
 			+ "fields '_Length' and 'length' will be inferred to back property 'Length'.")]
+		[DefaultValue(false)]
 		public bool AutoPropertyBackerSummaries
 		{
 			get { return _AutoPropertyBackerSummaries; }
@@ -528,6 +571,7 @@ namespace NDoc.Core
 		/// comments will be automatically documented.</remarks>
 		[Category("Documentation Main Settings")]
 		[Description("Turning this flag on will enable automatic summary documentation for default constructors.")]
+		[DefaultValue(true)]
 		public bool AutoDocumentConstructors
 		{
 			get { return _AutoDocumentConstructors; }
@@ -544,6 +588,7 @@ namespace NDoc.Core
 		/// <summary>Gets or sets whether or not to document the attributes.</summary>
 		[Category("Show Attributes")]
 		[Description("Set this to true to output the attributes of the types/members in the syntax portion.")]
+		[DefaultValue(false)]
 		public bool DocumentAttributes
 		{
 			get { return _DocumentAttributes; }
@@ -560,6 +605,7 @@ namespace NDoc.Core
 		/// <summary>Gets or sets whether or not to show the TypeId property in attributes.</summary>
 		[Category("Show Attributes")]
 		[Description("Set this to true to output the TypeId property in the attributes.")]
+		[DefaultValue(false)]
 		public bool ShowTypeIdInAttributes
 		{
 			get { return _ShowTypeIdInAttributes; }
@@ -577,6 +623,7 @@ namespace NDoc.Core
 		[Category("Show Attributes")]
 		[Description("When DocumentAttributes is set to true, this specifies which attributes/property are visisble.  Empty to show all.  Format: '<attribute-name-starts-with>,<property-to-show>,<property-to-show>|<attribute-name-starts-with>,<property-to-show>,<property-to-show>|(etc...)'.")]
 		[Editor(typeof(AttributesEditor), typeof(UITypeEditor))]
+		[DefaultValue("")]
 		public string DocumentedAttributes
 		{
 			get { return _DocumentedAttributes; }
@@ -593,6 +640,7 @@ namespace NDoc.Core
 		/// <summary>Load external xml files?</summary>
 		[Category("Documentation Main Settings")]
 		[Description("If true, NDoc will try loading external xml files to retreive the summaries of inherited members.")]
+		[DefaultValue(true)]
 		public bool GetExternalSummaries
 		{
 			get { return _GetExternalSummaries; }
@@ -609,6 +657,7 @@ namespace NDoc.Core
 		/// <summary>Specifies the level of filtering on the EditorBrowsable attribute.</summary>
 		[Category("Visibility")]
 		[Description("Sets the level of filtering to apply on types/members marked with the EditorBrowsable attribute.  Warning: enabling this filter might result in invalid links in the documentation.")]
+		[DefaultValue(EditorBrowsableFilterLevel.Off)]
 		public EditorBrowsableFilterLevel EditorBrowsableFilter
 		{
 			get { return _EditorBrowsableFilter; }
@@ -626,6 +675,7 @@ namespace NDoc.Core
 		[Category("Documentation Main Settings")]
 		[Description("When set, NDoc will use the specified XML file as input instead of reflecting the list of assemblies specified on the project.  Very useful for debugging documenters.  Leave empty for normal usage.")]
 		[Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
+		[DefaultValue("")]
 		public string UseNDocXmlFile
 		{
 			get { return _UseNDocXmlFile; }
@@ -635,6 +685,102 @@ namespace NDoc.Core
 				SetDirty();
 			}
 		}
+
+		bool _InheritPlatformSupport  = true;
+
+		/// <summary>Gets or sets the InheritFrameworkSupport property.</summary>
+		[Category("Supported Platforms")]
+		[Description("When true, types and members that don't have specific framework support specified will display the default operating system and framework support values")]
+		[DefaultValue(true)]
+		public bool InheritPlatformSupport 
+		{
+			get { return _InheritPlatformSupport; }
+			set
+			{
+				_InheritPlatformSupport  = value;
+				SetDirty();
+			}
+		}
+
+		OSSupport _DefaultOSSupport  = OSSupport.NoRestrictions;
+
+		/// <summary>Gets or sets the DefaultOSSupport property.</summary>
+		[Category("Supported Platforms")]
+		[Description("Defines the default set of operating systems supported by classes that don't have OS support specified in their comments (ignored if InheritPlatformSupport is false)")]
+		[DefaultValue(OSSupport.NoRestrictions)]
+		public OSSupport DefaultOSSupport 
+		{
+			get { return _DefaultOSSupport ; }
+			set
+			{
+				_DefaultOSSupport  = value;
+				SetDirty();
+			}
+		}
+
+		bool _SupportCompactFrameworkByDefault  = false;
+
+		/// <summary>Gets or sets the DefaultSupportCompactFramework property.</summary>
+		[Category("Supported Platforms")]
+		[Description("If true, the .NET compact framework will be included in the default set of platforms (ignored if InheritPlatformSupport is false)")]
+		[DefaultValue(false)]
+		public bool SupportCompactFrameworkByDefault 
+		{
+			get { return _SupportCompactFrameworkByDefault ; }
+			set
+			{
+				_SupportCompactFrameworkByDefault  = value;
+				SetDirty();
+			}
+		}
+
+		bool _SupportMONOFrameworkByDefault  = false;
+
+		/// <summary>Gets or sets the DefaultSupportMONOFramework property.</summary>
+		[Category("Supported Platforms")]
+		[Description("If true, the MONO open source framework will be included in the default set of platforms (ignored if InheritPlatformSupport is false)")]
+		[DefaultValue(false)]
+		public bool SupportMONOFrameworkByDefault
+		{
+			get { return _SupportMONOFrameworkByDefault ; }
+			set
+			{
+				_SupportMONOFrameworkByDefault  = value;
+				SetDirty();
+			}
+		}	
+
+		string _AdditionalFrameworkList  = string.Empty;
+
+		/// <summary>Gets or sets the AdditionalFrameworkList property.</summary>
+		[Category("Supported Platforms")]
+		[Description("User defined list of additional framework implementations to be displayed for default platform support (ignored if InheritPlatformSupport is false)")]
+		[DefaultValue("")]
+		public string AdditionalFrameworkList
+		{
+			get { return _AdditionalFrameworkList ; }
+			set
+			{
+				_AdditionalFrameworkList  = value;
+				SetDirty();
+			}
+		}		
+
+		string _AdditionalOSList  = string.Empty;
+
+		/// <summary>Gets or sets the AdditionalOSList property.</summary>
+		[Category("Supported Platforms")]
+		[Description("User defined list of additional operating systems to be displayed for default platform support (ignored if InheritPlatformSupport is false)")]
+		[DefaultValue("")]
+		public string AdditionalOSList
+		{
+			get { return _AdditionalOSList ; }
+			set
+			{
+				_AdditionalOSList  = value;
+				SetDirty();
+			}
+		}	
 	}
 
 	/// <summary>
@@ -650,5 +796,32 @@ namespace NDoc.Core
 
 		/// <summary>Hide members flagged with EditorBrowsableState.Never or EditorBrowsableState.Advanced.</summary>
 		HideAdvanced
+	}
+
+	/// <summary>
+	/// Defines the default set of operating systems to support
+	/// if not explicitly specified in documentation comments
+	/// </summary>
+	public enum OSSupport
+	{
+		/// <summary>
+		/// All operating systems that support .NET
+		/// </summary>
+		NoRestrictions,
+
+		/// <summary>
+		/// A Windows OS from the NT 5 family of operating systems
+		/// </summary>
+		NT5Plus,
+
+		/// <summary>
+		/// A server operating system
+		/// </summary>
+		Server,
+
+		/// <summary>
+		/// Do not show a default list of operating systems
+		/// </summary>
+		None
 	}
 }
