@@ -39,9 +39,7 @@ namespace NDoc.Console
 				else
 				{
 					Project project = new Project();
-// vvvv  WV022402: add Variable to limit recursion depth
-					int maxDepth = 20;
-// ^^^^  WV022402
+					int maxDepth = 20; //to limit recursion depth
 
 					foreach (string arg in args)
 					{
@@ -60,23 +58,11 @@ namespace NDoc.Console
 									string name = pair[0].Substring(1);
 									string value = pair[1];
 
-// vvvv WV022402: replace if statement by switch and add -recurse option
-/*									if (name.ToLower() == "project")
-									{
-										project = new Project();
-										project.Read(value);
-										documenter = (MsdnDocumenter)project.GetDocumenter(documenter.Name);
-									}
-									else
-									{
-										documenter.Config.SetValue(name, value);
-									}  */
 									switch (name.ToLower())
 									{
 										case "project":
 											project = new Project();
 											project.Read(value);
-											documenter = (MsdnDocumenter)project.GetDocumenter(documenter.Name);
 											break;
 										case "recurse":
 											string[] recPair = value.Split(',');
@@ -90,7 +76,6 @@ namespace NDoc.Console
 											documenter.Config.SetValue(name, value);
 											break;
 									}
-// ^^^^ WV022402
 								}
 							}
 						}
@@ -126,7 +111,6 @@ namespace NDoc.Console
 
 		private static void WriteUsage(IDocumenter documenter)
 		{
-// WV022402: Document new option in usage
 			System.Console.WriteLine("usage: NDoc.Console [-verbose] [-project=file] [-recurse=dir[,maxDepth]] [-property=value...] assembly,xml [assembly,xml...]");
 			System.Console.WriteLine("  available properties:");
 
@@ -141,7 +125,6 @@ namespace NDoc.Console
 			System.Console.WriteLine( e.Status );
 		}
 
-// vvvv WV022402: recurse SubDirs and collect Assemblies with matching .xml-File
 		private static void RecurseDir(ref Project project, string dirName, int maxDepth)
 		{
 			if (0 == maxDepth) return;
@@ -163,6 +146,5 @@ namespace NDoc.Console
 				RecurseDir(ref project, subDir, maxDepth - 1);
 			}
 		}
-// ^^^^ WV022402
 	}
 }
