@@ -336,6 +336,7 @@ namespace NDoc.Documenter.LinearHtml
 				OnDocBuildingStep(50, "Generating HTML page...");
 				MakeHtml(this.MainOutputFile);
 				OnDocBuildingStep(100, "Done.");
+				workspace.RemoveResourceDirectory();
 			}
 			catch(Exception ex)
 			{

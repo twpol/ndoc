@@ -225,6 +225,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 				if( MyConfig.GenerateCollectionFiles )
 					CreateCollectionFiles( workspace );
 
+				workspace.RemoveResourceDirectory();
 				if ( MyConfig.CleanIntermediates )
 					workspace.CleanIntermediates();
 

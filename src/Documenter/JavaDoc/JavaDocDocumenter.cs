@@ -102,7 +102,9 @@ namespace NDoc.Documenter.JavaDoc
 			finally
 			{
 				if (File.Exists(tempFileName)) File.Delete(tempFileName);
+				workspace.RemoveResourceDirectory();
 			}
+
 		}
 
 		private string WorkingPath

@@ -418,6 +418,7 @@ namespace NDoc.Documenter.Msdn
 			finally
 			{
 				xmlDocumentation = null;
+				workspace.RemoveResourceDirectory();
 			}
 		}
 

@@ -157,6 +157,7 @@ namespace NDoc.Documenter.Latex
 			
 			WriteTeXDocument(workspace, doc);
 			CompileTexDocument();
+			workspace.RemoveResourceDirectory();
 		}
 
 		

@@ -163,6 +163,15 @@ namespace NDoc.Core
 		}
 
 		/// <summary>
+		/// Recursively deletes the ResourceDirectory
+		/// </summary>
+		public void RemoveResourceDirectory()
+		{
+			if ( Directory.Exists( ResourceDirectory ) )
+				Directory.Delete( ResourceDirectory, true );
+		}
+
+		/// <summary>
 		/// Saves files mathing the specified filter from the build directory to the root directory
 		/// </summary>
 		/// <param name="filter">File filter to search for</param>
