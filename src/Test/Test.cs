@@ -18,6 +18,19 @@ namespace NDoc.Test
 	/// </summary>
 	public class NamespaceDoc {}
 
+	/// <summary>
+	/// DenGrønneKasse don't work in NDoc.
+	/// </summary>
+	public class DenGrønneKasse
+	{
+		/// <summary>
+		/// Not working in NDoc
+		/// </summary>
+		public void TilføjÆble()
+		{
+		}
+	}
+
 	/// <summary>Represents a normal class.</summary>
 	/// <remarks>Conceptualizing random endpoints in a access matrix
 	/// provides reach extentions enterprise wide. Respective divisions
