@@ -138,7 +138,7 @@
 		<nant buildfile="src/Documenter/Latex/Latex.build" target="compile" inheritall="true" />
 		<nant buildfile="src/Documenter/LinearHtml/LinearHtml.build" target="compile" inheritall="true" />
 		<nant buildfile="src/Documenter/Xml/Xml.build" target="compile" inheritall="true" />
-		<!--nant buildfile="src/Test/Test.build" target="compile" inheritall="true" /-->
+		<nant buildfile="src/Test/Test.build" target="compile" inheritall="true" if="${current.runtime.net-1.1}" />
 		<!-- remove the ndoc signing key file -->
 		<delete file="${current.bin.dir}/ndoc.snk" />
 	</target>
