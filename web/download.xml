@@ -10,5 +10,7 @@
 		<p>For those of you who don't want to (or can't) use CVS but still want the latest bits, we automatically archive the code in CVS every morning at 3 AM and make it available for <a href="ndoc-nightly.zip">download</a>.</p>
 
 		<p>If you'd rather use a more "stable" release, you can download the older <insert-latest-release /> release from SourceForge.</p>
+
+		<p>We also have an "experimental" web setup release which you can install by clicking <a href="setup/Setup.Exe">here</a>.</p>
 	</body>
 </page>
