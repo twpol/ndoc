@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+	xmlns:msxsl="urn:schemas-microsoft-com:xslt"
+    xmlns:user="urn:my-scripts">
+	<!-- -->
+	<xsl:param name="ndoc-document-attributes" />
+	<xsl:param name="ndoc-documented-attributes" />
 	<!-- -->
 	<xsl:template name="cs-type-syntax">
 		<div class="syntax">
 			<xsl:if test="$ndoc-vb-syntax">
 				<span class="lang">[C#]</span>
 			</xsl:if>
+			<xsl:call-template name="attributes"/>
 			<div>
 			  <xsl:call-template name="type-access">
 				  <xsl:with-param name="access" select="@access" />
@@ -67,11 +73,12 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="cs-member-syntax">
-		<pre class="syntax">
+		<div class="syntax">
 			<xsl:if test="$ndoc-vb-syntax">
 				<span class="lang">[C#]</span>
 				<br />
 			</xsl:if>
+			<xsl:call-template name="attributes"/>
 			<xsl:if test="not(parent::interface or @interface)">
 				<xsl:call-template name="method-access">
 					<xsl:with-param name="access" select="@access" />
@@ -157,7 +164,7 @@
 				<xsl:with-param name="version">long</xsl:with-param>
 				<xsl:with-param name="namespace-name" select="../../@name" />
 			</xsl:call-template>
-		</pre>
+		</div>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="member-syntax2">
@@ -192,11 +199,12 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="cs-field-or-event-syntax">
-		<pre class="syntax">
+		<div class="syntax">
 			<xsl:if test="$ndoc-vb-syntax">
 				<span class="lang">[C#]</span>
 				<br />
 			</xsl:if>
+			<xsl:call-template name="attributes"/>
 			<xsl:if test="not(parent::interface)">
 				<xsl:call-template name="method-access">
 					<xsl:with-param name="access" select="@access" />
@@ -229,13 +237,14 @@
 			<xsl:text>&#160;</xsl:text>
 			<xsl:value-of select="@name" />
 			<xsl:text>;</xsl:text>
-		</pre>
+		</div>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="cs-property-syntax">
 		<xsl:param name="indent" select="true()" />
 		<xsl:param name="display-names" select="true()" />
 		<xsl:param name="link-types" select="true()" />
+		<xsl:call-template name="attributes"/>
 		<xsl:if test="not(parent::interface)">
 			<xsl:call-template name="method-access">
 				<xsl:with-param name="access" select="@access" />
@@ -335,6 +344,104 @@
 			<xsl:text>set;</xsl:text>
 		</xsl:if>
 		<xsl:text>}</xsl:text>
+	</xsl:template>
+	<!-- ATTRIBUTES -->
+	<msxsl:script implements-prefix="user">
+	<![CDATA[
+		function isAttributeWanted(sParamWantedList, oElement)
+		{
+			var aWanted = (''+sParamWantedList).split('|');
+			oElement.Current.MoveToFirstAttribute();
+			var sAttributeType = ''+oElement.Current.Value;
+			for(var i = 0; i != aWanted.length; i++)
+			{
+				var oAttribute = (''+aWanted[i]).split(',');
+				if(sAttributeType.indexOf(""+oAttribute[0]) != -1)
+				{
+					return 'true';
+				}
+			}
+			return '';
+		}
+		
+		function isPropertyWanted(sParamWantedList, oElement)
+		{
+			var aWanted = (''+sParamWantedList).split('|');
+			
+			oElement.Current.MoveToFirstAttribute();
+			var sPropertyType = ''+oElement.Current.Value;
+			oElement.Current.MoveToParent();
+			oElement.Current.MoveToParent();
+			oElement.Current.MoveToFirstAttribute();
+			var sAttributeType = ''+oElement.Current.Value;
+			
+			for(var i = 0; i != aWanted.length; i++)
+			{
+				var oAttribute = (''+aWanted[i]).split(',');
+				if(sAttributeType.indexOf(""+oAttribute[0]) != -1)
+				{
+					if (oAttribute.length == 1)
+					{
+						return 'true';
+					}
+					else if (oAttribute.length != 0)
+					{
+						for(var j = 1; j != oAttribute.length; j++)
+						{
+							if(sPropertyType.indexOf(""+oAttribute[j]) != -1)
+							{
+								if (sPropertyType.length == oAttribute[j].length)
+								{
+									return 'true';
+								}
+							}
+						}
+					}
+				}
+			}
+			return '';
+		}
+		]]>
+    </msxsl:script>
+	<!-- -->
+	<xsl:template name="attributes">
+		<xsl:if test="$ndoc-document-attributes">
+			<xsl:if test="attribute">
+				<xsl:for-each select="attribute">
+						<div><xsl:call-template name="attribute">
+								<xsl:with-param name="attname" select="@name" />
+						</xsl:call-template></div>
+				</xsl:for-each>
+			</xsl:if>
+		</xsl:if>
+	</xsl:template>
+	<!-- -->
+	<xsl:template name="strip-namespace-and-attribute">
+		<xsl:param name="name" />
+		<xsl:choose>
+			<xsl:when test="contains($name, '.')">
+				<xsl:call-template name="strip-namespace-and-attribute">
+					<xsl:with-param name="name" select="substring-after($name, '.')" />
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="substring-before(concat($name, '_____'), 'Attribute_____')" />
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	<!-- -->
+	<xsl:template name="attribute">
+		<xsl:param name="attname" />
+		<xsl:if test="user:isAttributeWanted($ndoc-documented-attributes, @name)">			
+			[<xsl:call-template name="strip-namespace-and-attribute">
+				<xsl:with-param name="name" select="@name" />
+			</xsl:call-template>
+			<xsl:for-each select="property">
+				<xsl:if test="user:isPropertyWanted($ndoc-documented-attributes, @name) and @value!=''">
+					(<xsl:value-of select="@name" />="<xsl:value-of select="@value" />")
+				</xsl:if>
+			</xsl:for-each>]
+		</xsl:if>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="parameters">

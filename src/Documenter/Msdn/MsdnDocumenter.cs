@@ -1174,6 +1174,8 @@ namespace NDoc.Documenter.Msdn
 				arguments.AddParam("ndoc-title", String.Empty, MyConfig.Title);
 				arguments.AddParam("ndoc-vb-syntax", String.Empty, MyConfig.ShowVisualBasic);
 				arguments.AddParam("ndoc-omit-object-tags", String.Empty, MyConfig.OmitObjectTags);
+				arguments.AddParam("ndoc-document-attributes", String.Empty, MyConfig.DocumentAttributes);
+				arguments.AddParam("ndoc-documented-attributes", String.Empty, MyConfig.DocumentedAttributes);
 
 				transform.Transform(xmlDocumentation, arguments, streamWriter);
 			}

@@ -32,19 +32,19 @@
 				<div id="nstext">
 					<xsl:call-template name="summary-section" />
 					<xsl:if test="$ndoc-vb-syntax">
-						<pre class="syntax">
+						<div class="syntax">
 							<span class="lang">[Visual&#160;Basic]</span>
 							<br />
 							<xsl:call-template name="vb-property-syntax" />
-						</pre>
+						</div>
 					</xsl:if>
-					<pre class="syntax">
+					<div class="syntax">
 						<xsl:if test="$ndoc-vb-syntax">
 							<span class="lang">[C#]</span>
 							<br />
 						</xsl:if>
 						<xsl:call-template name="cs-property-syntax" />
-					</pre>
+					</div>
 					<p></p>
 					<xsl:call-template name="parameter-section" />
 					<xsl:call-template name="value-section" />

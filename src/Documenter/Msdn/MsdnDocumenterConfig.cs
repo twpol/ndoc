@@ -47,6 +47,9 @@ namespace NDoc.Documenter.Msdn
 
 			ShowVisualBasic = true;
 			OmitObjectTags = false;
+
+			DocumentAttributes = false;
+			DocumentedAttributes = "System.Xml.Serialization.,Namespace";
 		}
 
 
@@ -296,6 +299,44 @@ namespace NDoc.Documenter.Msdn
 			set
 			{
 				_RootPageFileName = value;
+				SetDirty();
+			}
+		}
+
+
+		private bool _DocumentAttributes;
+
+		/// <summary>Gets or sets the DocumentAttributes property.</summary>
+		[
+		Category("Visibility"),
+		Description("Set this to true to output the attributes of the types/members in the syntax portion.")
+		]
+		public bool DocumentAttributes
+		{
+			get { return _DocumentAttributes; }
+
+			set 
+			{ 
+				_DocumentAttributes = value; 
+				SetDirty();
+			}
+		}
+
+		private string _DocumentedAttributes;
+
+		/// <summary>Gets or sets the base directory used to resolve directory and assembly references.</summary>
+		[
+		Category("Visibility"),
+		Editor(typeof(AttributesEditor), typeof(UITypeEditor)),
+		Description("When DocumentAttributes is set to true, this specifies which attributes/property are visisble.  Empty to show all.  Format: '<attribute-name-starts-with>,<property-to-show>,<property-to-show>|<attribute-name-starts-with>,<property-to-show>,<property-to-show>|(etc...)'."),
+		]
+		public string DocumentedAttributes
+		{
+			get { return _DocumentedAttributes; }
+
+			set
+			{
+				_DocumentedAttributes = value;
 				SetDirty();
 			}
 		}
