@@ -8,6 +8,6 @@ using System.Reflection;
 
 #if !DEBUG
 [assembly: AssemblyDelaySign(false)]
-[assembly: AssemblyKeyFile(@"..\..\..\ndoc.snk")]
+[assembly: AssemblyKeyFile(@"ndoc.snk")]
 [assembly: AssemblyKeyName("")]
 #endif

@@ -6,8 +6,10 @@ using System.Reflection;
 
 [assembly: CLSCompliant(true)]
 
-#if !DEBUG
+//#if !DEBUG
 //[assembly: AssemblyDelaySign(false)]
-//[assembly: AssemblyKeyFile(@"..\..\..\..\ndoc.snk")]
+//[assembly: AssemblyKeyFile(@"ndoc.snk")]
 //[assembly: AssemblyKeyName("")]
-#endif
+//#endif
+//if you enable assembly signing, enter this command in the project's pre-build event:
+//if $(ConfigurationName)==Release copy $(SolutionDir)src\ndoc.snk $(ProjectDir)obj\$(ConfigurationName)
