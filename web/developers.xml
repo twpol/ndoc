@@ -1,0 +1,37 @@
+<developers>
+
+	<developer
+		id="jason"
+		sourceforge-id="injektilo"
+		full-name="Jason Diamond"
+		short-name="Jason"
+		web="http://injektilo.org/"
+		email="jason@injektilo.org"
+	/>
+
+	<developer
+		id="kral"
+		sourceforge-id="kraldon"
+		full-name="Kral Ferch"
+		short-name="Kral"
+		email="kral_ferch@hotmail.com"
+	/>
+
+	<developer
+		id="jc"
+		sourceforge-id="jcman"
+		full-name="Jean-Claude Manoli"
+		short-name="Jean-Claude"
+		web="http://manoli.net/"
+		email="jc@manoli.net"
+	/>
+
+	<developer
+		id="keith"
+		sourceforge-id="r_keith_hill"
+		full-name="Keith Hill"
+		short-name="Keith"
+		email="r_keith_hill@hotmail.com"
+	/>
+
+</developers>

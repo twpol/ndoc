@@ -1,0 +1,9 @@
+<page>
+	<title>NDOC (formerly DOC.NET)</title>
+	<body>
+		<p>NDoc merges the assemblies and XML documentation files produced by csc.exe and creates a compiled HTML Help file enabling you to browse your own libraries just like the <a href="http://msdn.microsoft.com/library/en-us/cpref/html/cpref_start.asp" title="View the MSDN Library">.NET Framework Class Library</a>.</p>
+		<p>The documentation generator uses <a href="http://www.w3.org/Style/XSL" title="XSL Transformations">XSLT</a> to produce the HTML. Future versions will make it possible to customize the XSLT to produce documentation with any desired look and feel.</p>
+		<p>Download the latest release and see the output for yourself.</p>
+		<p>The NDoc source code is freely available under a certified <a href="http://www.opensource.org/" title="Learn more about the Open Source Initiative">Open Source</a> license. We welcome everyone to use our software in the hopes that they can provide feedback, submit bug reports and fixes, or even join us as a developer!</p>
+	</body>
+</page>

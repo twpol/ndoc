@@ -1,0 +1,17 @@
+<releases>
+
+	<release
+		name="ndoc-devel-1.0-beta1"
+		date="2001-10-15"
+		link="http://sourceforge.net/project/showfiles.php?group_id=36057&amp;release_id=57086"
+		direct="http://prdownloads.sourceforge.net/ndoc/ndoc-devel-1.0-beta1.zip"
+	/>
+
+	<release
+		name="ndoc-devel-1.0-beta2"
+		date="2001-11-06"
+		link="http://sourceforge.net/project/showfiles.php?group_id=36057&amp;release_id=60348"
+		direct="http://prdownloads.sourceforge.net/ndoc/ndoc-devel-1.0-beta2.zip"
+	/>
+
+</releases>
