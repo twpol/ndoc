@@ -25,10 +25,9 @@
 						<p>NDoc creates an HTML file on your hard drive for each topic it generates. 
 							Currently the name of this file is derived directly from the full name of the 
 							type or member being documented. If the total number of characters in an item's 
-							full name (namespace + type + member name) exceed the value of 
-						<b>_MAX_FNAME</b> (256 characters), 
-							NDoc will fail because it attempts to create a file with a name that is longer 
-							than the file system supports.</p>
+							full name (namespace + type + member name) exceed the value of <b>_MAX_FNAME</b>
+							(256 characters), NDoc will fail because it attempts to create a file with a 
+							name that is longer than the file system supports.</p>
 						<p>There is no work-around for this issue.</p>
 						<p>This issue will be addressed in a future version of NDoc.</p>
 					</td>
@@ -65,6 +64,17 @@
 						<P>This is due to the strict security the CLR places on reflection.</P>
 						<P>There is no work-around for this issue (<i>without severely compromising the 
 								security of your machine!</i>)</P>
+						<P>This issue will be addressed in a future version of NDoc.</P>
+					</TD>
+				</TR>
+				<TR>
+					<TD>Compact Framework incompatibilites</TD>
+					<TD>
+						<P>When an assemby compiled to run on the .NET Compact Framework is added to an 
+							NDoc project, the GUI may throw an excpetion, especially if the assembly 
+							references Microsoft.WindowsCE.Forms.
+						</P>
+						<P>There is no work around for this issue.</P>
 						<P>This issue will be addressed in a future version of NDoc.</P>
 					</TD>
 				</TR>
