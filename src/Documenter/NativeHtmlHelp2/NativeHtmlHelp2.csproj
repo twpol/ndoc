@@ -504,7 +504,7 @@
                 />
                 <File
                     RelPath = "xslt\blank.xslt"
-                    BuildAction = "Content"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "xslt\common.xslt"
