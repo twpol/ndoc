@@ -157,11 +157,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "HtmlHelp.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "IDocumenter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
