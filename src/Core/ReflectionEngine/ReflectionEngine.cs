@@ -1102,13 +1102,16 @@ namespace NDoc.Core.Reflection
 					int numberOfMethods = interfaceMap.InterfaceMethods.Length;
 					for (int i = 0; i < numberOfMethods; i++)
 					{
-						string implementation = interfaceMap.TargetMethods[i].ToString();
-						ImplementsInfo implements = new ImplementsInfo();
-						implements.InterfaceMethod = interfaceMap.InterfaceMethods[i];
-						implements.InterfaceType = interfaceMap.InterfaceType;
-						implements.TargetMethod = interfaceMap.TargetMethods[i];
-						implements.TargetType = interfaceMap.TargetType;
-						implementations[implementation] = implements;
+						if (interfaceMap.TargetMethods[i] != null)
+						{
+							string implementation = interfaceMap.TargetMethods[i].ToString();
+							ImplementsInfo implements = new ImplementsInfo();
+							implements.InterfaceMethod = interfaceMap.InterfaceMethods[i];
+							implements.InterfaceType = interfaceMap.InterfaceType;
+							implements.TargetMethod = interfaceMap.TargetMethods[i];
+							implements.TargetType = interfaceMap.TargetType;
+							implementations[implementation] = implements;
+						}
 					}
 				}
 			}
