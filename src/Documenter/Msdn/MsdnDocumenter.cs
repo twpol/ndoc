@@ -848,7 +848,7 @@ namespace NDoc.Documenter.Msdn
 			string typeID = typeNode.Attributes["id"].Value;
 			string fileName = GetFilenameForType(typeNode);
 
-			htmlHelp.AddFileToContents(typeName + " " + mixedCaseTypeNames[whichType], fileName);
+			htmlHelp.AddFileToContents(typeName + " " + mixedCaseTypeNames[whichType], fileName, HtmlHelpIcon.Page );
 
 			XsltArgumentList arguments = new XsltArgumentList();
 			arguments.AddParam("type-id", String.Empty, typeID);
@@ -879,7 +879,9 @@ namespace NDoc.Documenter.Msdn
 			if (hasMembers)
 			{
 				fileName = GetFilenameForTypeMembers(typeNode);
-				htmlHelp.AddFileToContents(typeName + " Members", fileName);
+				htmlHelp.AddFileToContents(typeName + " Members", 
+					fileName, 
+					HtmlHelpIcon.Page);
 
 				arguments = new XsltArgumentList();
 				arguments.AddParam("id", String.Empty, typeID);
@@ -931,11 +933,12 @@ namespace NDoc.Documenter.Msdn
 				if (constructorNodes.Count > 1)
 				{
 					XmlNodeList   parameterNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace/" + lowerCaseTypeNames[whichType] + "[@name=\"" + typeName + "\"]/constructor[@id=\"" + constructorID + "\"]/parameter");
-					htmlHelp.AddFileToContents(typeName + " Constructor " + GetParamList(parameterNodes), fileName);
+					htmlHelp.AddFileToContents(typeName + " Constructor " + GetParamList(parameterNodes), fileName,
+						HtmlHelpIcon.Page );
 				}
 				else
 				{
-					htmlHelp.AddFileToContents(typeName + " Constructor", fileName);
+					htmlHelp.AddFileToContents(typeName + " Constructor", fileName, HtmlHelpIcon.Page );
 				}
 
 				XsltArgumentList arguments = new XsltArgumentList();
@@ -954,7 +957,7 @@ namespace NDoc.Documenter.Msdn
 				constructorID = staticConstructorNode.Attributes["id"].Value;
 				fileName = GetFilenameForConstructor(staticConstructorNode);
 
-				htmlHelp.AddFileToContents(typeName + " Static Constructor", fileName);
+				htmlHelp.AddFileToContents(typeName + " Static Constructor", fileName, HtmlHelpIcon.Page);
 
 				XsltArgumentList arguments = new XsltArgumentList();
 				arguments.AddParam("member-id", String.Empty, constructorID);
@@ -990,7 +993,7 @@ namespace NDoc.Documenter.Msdn
 					string fieldName = field.Attributes["name"].Value;
 					string fieldID = field.Attributes["id"].Value;
 					fileName = GetFilenameForField(field);
-					htmlHelp.AddFileToContents(fieldName + " Field", fileName);
+					htmlHelp.AddFileToContents(fieldName + " Field", fileName, HtmlHelpIcon.Page );
 
 					arguments = new XsltArgumentList();
 					arguments.AddParam("field-id", String.Empty, fieldID);
@@ -1070,11 +1073,13 @@ namespace NDoc.Documenter.Msdn
 					if (bOverloaded)
 					{
 						XmlNodeList parameterNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace/" + lowerCaseTypeNames[whichType] + "[@name=\"" + typeName + "\"]/property[@id=\"" + propertyID + "\"]/parameter");
-						htmlHelp.AddFileToContents(propertyName + " Property " + GetParamList(parameterNodes), fileName);
+						htmlHelp.AddFileToContents(propertyName + " Property " + GetParamList(parameterNodes), fileName,
+							HtmlHelpIcon.Page );
 					}
 					else
 					{
-						htmlHelp.AddFileToContents(propertyName + " Property", fileName);
+						htmlHelp.AddFileToContents(propertyName + " Property", fileName, 
+							HtmlHelpIcon.Page );
 					}
 
 					XsltArgumentList arguments2 = new XsltArgumentList();
@@ -1202,11 +1207,13 @@ namespace NDoc.Documenter.Msdn
 						if (bOverloaded)
 						{
 							XmlNodeList parameterNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace/" + lowerCaseTypeNames[whichType] + "[@name=\"" + typeName + "\"]/method[@id=\"" + methodID + "\"]/parameter");
-							htmlHelp.AddFileToContents(methodName + " Method " + GetParamList(parameterNodes), fileName);
+							htmlHelp.AddFileToContents(methodName + " Method " + GetParamList(parameterNodes), fileName,
+								HtmlHelpIcon.Page );
 						}
 						else
 						{
-							htmlHelp.AddFileToContents(methodName + " Method", fileName);
+							htmlHelp.AddFileToContents(methodName + " Method", fileName,
+								HtmlHelpIcon.Page );
 						}
 
 						XsltArgumentList arguments2 = new XsltArgumentList();
@@ -1300,11 +1307,13 @@ namespace NDoc.Documenter.Msdn
 						if (bOverloaded)
 						{
 							XmlNodeList parameterNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace/" + lowerCaseTypeNames[whichType] + "[@name=\"" + typeName + "\"]/operator[@id=\"" + operatorID + "\"]/parameter");
-							htmlHelp.AddFileToContents(GetOperatorName(operatorNode) + GetParamList(parameterNodes), fileName);
+							htmlHelp.AddFileToContents(GetOperatorName(operatorNode) + GetParamList(parameterNodes), fileName, 
+								HtmlHelpIcon.Page);
 						}
 						else
 						{
-							htmlHelp.AddFileToContents(GetOperatorName(operatorNode), fileName);
+							htmlHelp.AddFileToContents(GetOperatorName(operatorNode), fileName, 
+								HtmlHelpIcon.Page );
 						}
 
 						arguments = new XsltArgumentList();
@@ -1329,7 +1338,8 @@ namespace NDoc.Documenter.Msdn
 					if ((opName == "op_Implicit") || (opName == "op_Explicit"))
 					{
 						fileName = GetFilenameForOperator(operatorNode);
-						htmlHelp.AddFileToContents(GetOperatorName(operatorNode), fileName);
+						htmlHelp.AddFileToContents(GetOperatorName(operatorNode), fileName, 
+							HtmlHelpIcon.Page );
 
 						arguments = new XsltArgumentList();
 						arguments.AddParam("member-id", String.Empty, operatorID);
@@ -1460,7 +1470,9 @@ namespace NDoc.Documenter.Msdn
 							string eventID = (string)eventElement.Attributes["id"].Value;
 
 							fileName = GetFilenameForEvent(eventElement);
-							htmlHelp.AddFileToContents(eventName + " Event", fileName);
+							htmlHelp.AddFileToContents(eventName + " Event", 
+								fileName, 
+								HtmlHelpIcon.Page);
 
 							arguments = new XsltArgumentList();
 							arguments.AddParam("event-id", String.Empty, eventID);

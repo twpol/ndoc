@@ -282,9 +282,9 @@ namespace NDoc.Core
 
 			// these formatting options cannot be used, because they make the 
 			// Html Help Compiler hang.
-//			tocWriter.Formatting = Formatting.Indented;
-//			tocWriter.IndentChar = '\t';
-//			tocWriter.Indentation = 1;
+			//			tocWriter.Formatting = Formatting.Indented;
+			//			tocWriter.IndentChar = '\t';
+			//			tocWriter.Indentation = 1;
 
 			// We don't call WriteStartDocument because that outputs
 			// the XML declaration which the HTML Help Compiler doesn't like.
@@ -314,6 +314,31 @@ namespace NDoc.Core
 			tocWriter.WriteStartElement("param");
 			tocWriter.WriteAttributeString("name", "Local");
 			tocWriter.WriteAttributeString("value", htmlFilename);
+			tocWriter.WriteEndElement();
+			tocWriter.WriteEndElement();
+			tocWriter.WriteEndElement();
+		}
+
+		/// <summary>Adds a file to the contents file.</summary>
+		/// <param name="headingName">The name as it should appear in the contents.</param>
+		/// <param name="htmlFilename">The filename for this entry.</param>
+		/// <param name="icon">The image for this entry.</param>
+		public void AddFileToContents(string headingName, string htmlFilename, HtmlHelpIcon icon)
+		{
+			tocWriter.WriteStartElement("LI");
+			tocWriter.WriteStartElement("OBJECT");
+			tocWriter.WriteAttributeString("type", "text/sitemap");
+			tocWriter.WriteStartElement("param");
+			tocWriter.WriteAttributeString("name", "Name");
+			tocWriter.WriteAttributeString("value", headingName.Replace('$', '.'));
+			tocWriter.WriteEndElement();
+			tocWriter.WriteStartElement("param");
+			tocWriter.WriteAttributeString("name", "Local");
+			tocWriter.WriteAttributeString("value", htmlFilename);
+			tocWriter.WriteEndElement();
+			tocWriter.WriteStartElement("param");
+			tocWriter.WriteAttributeString("name", "ImageNumber");
+			tocWriter.WriteAttributeString("value", ((int)icon).ToString());
 			tocWriter.WriteEndElement();
 			tocWriter.WriteEndElement();
 			tocWriter.WriteEndElement();
@@ -402,10 +427,10 @@ namespace NDoc.Core
 				}
 
 				helpCompileProcess.WaitForExit();
-//				if (!helpCompileProcess.WaitForExit(600000))
-//				{
-//					throw new DocumenterException("Compile did not complete after 10 minutes and was aborted");
-//				}
+				//				if (!helpCompileProcess.WaitForExit(600000))
+				//				{
+				//					throw new DocumenterException("Compile did not complete after 10 minutes and was aborted");
+				//				}
 
 				// Errors return 0 (warnings returns 1 - don't know about complete success)
 				if (helpCompileProcess.ExitCode == 0)
@@ -418,5 +443,84 @@ namespace NDoc.Core
 				helpCompileProcess.Close();
 			}
 		}
+	}
+
+	/// <summary>
+	/// HtmlHelp v1 TOC icons
+	/// </summary>
+	public enum HtmlHelpIcon
+	{
+		/// <summary>
+		/// Contents Book
+		/// </summary>
+		Book=1,
+		/// <summary>
+		/// Contents Folder
+		/// </summary>
+		Folder=5,
+		/// <summary>
+		/// Page with Question Mark
+		/// </summary>
+		Question=9,
+		/// <summary>
+		/// Standard Blank Page
+		/// </summary>
+		Page=11,
+		/// <summary>
+		/// World
+		/// </summary>
+		World=13,
+		/// <summary>
+		/// World w IE icon
+		/// </summary>
+		WorldInternetExplorer=15, 
+		/// <summary>
+		/// Information
+		/// </summary>
+		Information=17,
+		/// <summary>
+		/// Shortcut
+		/// </summary>
+		Shortcut=19,
+		/// <summary>
+		/// BookPage
+		/// </summary>
+		BookPage=21,
+		/// <summary>
+		/// Envelope
+		/// </summary>
+		Envelope=23,
+		/// <summary>
+		/// Person
+		/// </summary>
+		Person=27,
+		/// <summary>
+		/// Sound
+		/// </summary>
+		Sound=29,
+		/// <summary>
+		/// Disc
+		/// </summary>
+		Disc=31,
+		/// <summary>
+		/// Video
+		/// </summary>
+		Video=33,
+		/// <summary>
+		/// Steps
+		/// </summary>
+		Steps=35,
+		/// <summary>
+		/// LightBulb
+		/// </summary>
+		LightBulb=37,
+		/// <summary>
+		/// Pencil
+		/// </summary>
+		Pencil=39,
+		/// <summary>
+		/// Tool
+		/// </summary>
+		Tool=41
 	}
 }
