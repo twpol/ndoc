@@ -31,25 +31,44 @@
 			<xsl:call-template name="indent">
 				<xsl:with-param name="count" select="$level" />
 			</xsl:call-template>
-			<a>
-				<xsl:attribute name="href">
-					<xsl:choose>
-						<xsl:when test="starts-with($list[$last]/@type, 'System.')">
+			
+			<xsl:choose>
+				<xsl:when test="starts-with($list[$last]/@type, 'System.')">
+					<a>
+						<xsl:attribute name="href">
 							<xsl:call-template name="get-filename-for-system-type">
 								<xsl:with-param name="type-name" select="$list[$last]/@type" />
 							</xsl:call-template>
+						</xsl:attribute>
+						<xsl:call-template name="get-datatype">
+							<xsl:with-param name="datatype" select="$list[$last]/@type" />
+						</xsl:call-template>
+					</a>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:variable name="base-class-id" select="string($list[$last]/@id)" />
+					<xsl:variable name="base-class" select="//class[@id=$base-class-id]" />
+					<xsl:choose>
+						<xsl:when test="$base-class">
+							<a>
+								<xsl:attribute name="href">
+									<xsl:call-template name="get-filename-for-type">
+										<xsl:with-param name="id" select="$list[$last]/@id" />
+									</xsl:call-template>
+								</xsl:attribute>
+								<xsl:call-template name="get-datatype">
+									<xsl:with-param name="datatype" select="$list[$last]/@type" />
+								</xsl:call-template>
+							</a>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:call-template name="get-filename-for-type">
-								<xsl:with-param name="id" select="$list[$last]/@id" />
+							<xsl:call-template name="get-datatype">
+								<xsl:with-param name="datatype" select="$list[$last]/@type" />
 							</xsl:call-template>
 						</xsl:otherwise>
 					</xsl:choose>
-				</xsl:attribute>
-				<xsl:call-template name="get-datatype">
-					<xsl:with-param name="datatype" select="$list[$last]/@type" />
-				</xsl:call-template>
-			</a>
+				</xsl:otherwise>
+			</xsl:choose>
 			<br />
 			<xsl:call-template name="draw-hierarchy">
 				<xsl:with-param name="list" select="$list[position()!=$last]" />
