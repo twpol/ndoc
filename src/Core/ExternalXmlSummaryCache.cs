@@ -36,7 +36,8 @@ namespace NDoc.Core
 		private Hashtable summaries;
 
 		/// <summary>
-		/// Initializes a new instance of the XmlDocumentationCache class.
+		/// Initializes a new instance of the <see cref="ExternalXmlSummaryCache" />
+		/// class.
 		/// </summary>
 		public ExternalXmlSummaryCache()
 		{
@@ -44,7 +45,7 @@ namespace NDoc.Core
 		}
 
 		/// <summary>
-		/// Flushes the XmlDocumentationCache.
+		/// Flushes the <see cref="ExternalXmlSummaryCache" />.
 		/// </summary>
 		public void Flush()
 		{
@@ -53,10 +54,10 @@ namespace NDoc.Core
 		}
 
 		/// <summary>
-		/// Adds given XML Doc to the summary cache.
+		/// Adds given XML document to the summary cache.
 		/// </summary>
-		/// <param name="assemblyName">the fullname of the assembly to which to xml doc refers</param>
-		/// <param name="fileName">filename of XML Doc to cache</param>
+		/// <param name="assemblyName">The fullname of the assembly to which to XML document refers.</param>
+		/// <param name="fileName">The filename of XML document to cache.</param>
 		public void AddXmlDoc(string assemblyName, string fileName)
 		{
 			int start = Environment.TickCount;
