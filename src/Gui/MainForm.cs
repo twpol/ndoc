@@ -164,7 +164,17 @@ namespace NDoc.Gui
 
 			foreach (IDocumenter documenter in project.Documenters)
 			{
-				comboBoxDocumenters.Items.Add(documenter.Name);
+				// build a development status string (alpha, beta, etc)
+				string devStatus = string.Empty;
+				if (documenter.DevelopmentStatus != DocumenterDevelopmentStatus.Stable)
+				{
+					devStatus = documenter.DevelopmentStatus.ToString();
+					// want it uncapitalized
+					devStatus = " (" + Char.ToLower(devStatus[0]) + devStatus.Substring(1)
+						+ ")";
+				}
+
+				comboBoxDocumenters.Items.Add(documenter.Name + devStatus);
 			}
 
 			ReadConfig();
