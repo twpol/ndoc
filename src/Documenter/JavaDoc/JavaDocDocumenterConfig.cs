@@ -50,6 +50,7 @@ namespace NDoc.Documenter.JavaDoc
 			set
 			{
 				_Title = value;
+				SetDirty();
 			}
 		}
 
@@ -76,6 +77,8 @@ namespace NDoc.Documenter.JavaDoc
 				{
 					_OutputDirectory += "\\";
 				}
+
+				SetDirty();
 			}
 		}
 	}

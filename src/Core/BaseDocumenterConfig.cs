@@ -43,6 +43,23 @@ namespace NDoc.Core
 			DocumentPrivates = false;
 		}
 
+		private Project _Project;
+
+		/// <summary>Associates this documenter with a project;</summary>
+		public void SetProject(Project project)
+		{
+			_Project = project;
+		}
+
+		/// <summary>Sets the IsDirty property on the project if any is set.</summary>
+		protected void SetDirty()
+		{
+			if (_Project != null)
+			{
+				_Project.IsDirty = true;
+			}
+		}
+
 		/// <summary>Gets a list of property names.</summary>
 		public IEnumerable GetProperties()
 		{
@@ -108,6 +125,12 @@ namespace NDoc.Core
 		/// <remarks>This method uses reflection to set all of the public properties in the documenter.</remarks>
 		public void Read(XmlReader reader)
 		{
+			// If there's an associated project, we don't want to set it as
+			// dirty during the read. Temporarily set it to null so that
+			// calls to SetDirty get ignored.
+			Project project = _Project;
+			_Project = null;
+
 			while (reader.Read() && !(reader.NodeType == XmlNodeType.EndElement && reader.Name == "documenter"))
 			{
 				if (reader.NodeType == XmlNodeType.Element && reader.Name == "property")
@@ -125,6 +148,9 @@ namespace NDoc.Core
 					}
 				}
 			}
+
+			// Restore the saved project.
+			_Project = project;
 		}
 
 		bool _ShowMissingSummaries;
@@ -134,13 +160,18 @@ namespace NDoc.Core
 		/// comments will contain the phrase "Missing Documentation" in the 
 		/// generated documentation.</remarks>
 		[
-		Category("Missing"),
-		Description("Turning this flag on will show you where you are missing summaries.")
+			Category("Missing"),
+			Description("Turning this flag on will show you where you are missing summaries.")
 		]
 		public bool ShowMissingSummaries
 		{
 			get { return _ShowMissingSummaries; }
-			set { _ShowMissingSummaries = value; }
+			
+			set 
+			{ 
+				_ShowMissingSummaries = value; 
+				SetDirty();
+			}
 		}
 
 		bool _ShowMissingRemarks;
@@ -150,13 +181,18 @@ namespace NDoc.Core
 		/// comments will contain the phrase "Missing Documentation" in the 
 		/// generated documentation.</remarks>
 		[
-		Category("Missing"),
-		Description("Turning this flag on will show you where you are missing Remarks.")
+			Category("Missing"),
+			Description("Turning this flag on will show you where you are missing Remarks.")
 		]
 		public bool ShowMissingRemarks
 		{
 			get { return _ShowMissingRemarks; }
-			set { _ShowMissingRemarks = value; }
+
+			set 
+			{ 
+				_ShowMissingRemarks = value; 
+				SetDirty();
+			}
 		}
 
 		bool _ShowMissingParams;
@@ -166,13 +202,18 @@ namespace NDoc.Core
 		/// comments will contain the phrase "Missing Documentation" in the 
 		/// generated documentation.</remarks>
 		[
-		Category("Missing"),
-		Description("Turning this flag on will show you where you are missing Params.")
+			Category("Missing"),
+			Description("Turning this flag on will show you where you are missing Params.")
 		]
 		public bool ShowMissingParams
 		{
 			get { return _ShowMissingParams; }
-			set { _ShowMissingParams = value; }
+
+			set 
+			{ 
+				_ShowMissingParams = value; 
+				SetDirty();
+			}
 		}
 
 		bool _ShowMissingReturns;
@@ -182,13 +223,18 @@ namespace NDoc.Core
 		/// comments will contain the phrase "Missing Documentation" in the 
 		/// generated documentation.</remarks>
 		[
-		Category("Missing"),
-		Description("Turning this flag on will show you where you are missing Returns.")
+			Category("Missing"),
+			Description("Turning this flag on will show you where you are missing Returns.")
 		]
 		public bool ShowMissingReturns
 		{
 			get { return _ShowMissingReturns; }
-			set { _ShowMissingReturns = value; }
+
+			set 
+			{ 
+				_ShowMissingReturns = value; 
+				SetDirty();
+			}
 		}
 
 		bool _ShowMissingValues;
@@ -198,39 +244,54 @@ namespace NDoc.Core
 		/// comments will contain the phrase "Missing Documentation" in the 
 		/// generated documentation.</remarks>
 		[
-		Category("Missing"),
-		Description("Turning this flag on will show you where you are missing Values.")
+			Category("Missing"),
+			Description("Turning this flag on will show you where you are missing Values.")
 		]
 		public bool ShowMissingValues
 		{
 			get { return _ShowMissingValues; }
-			set { _ShowMissingValues = value; }
+
+			set 
+			{ 
+				_ShowMissingValues = value; 
+				SetDirty();
+			}
 		}
 
 		bool _DocumentInternals;
 
 		/// <summary>Gets or sets the DocumentInternals property.</summary>
 		[
-		Category("Visibility"),
-		Description("Turn this flag on to document internal code.")
+			Category("Visibility"),
+			Description("Turn this flag on to document internal code.")
 		]
 		public bool DocumentInternals
 		{
 			get { return _DocumentInternals; }
-			set { _DocumentInternals = value; }
+
+			set 
+			{ 
+				_DocumentInternals = value; 
+				SetDirty();
+			}
 		}
 
 		bool _DocumentPrivates;
 
 		/// <summary>Gets or sets the DocumentPrivates property.</summary>
 		[
-		Category("Visibility"),
-		Description("Turn this flag on to document private code.")
+			Category("Visibility"),
+			Description("Turn this flag on to document private code.")
 		]
 		public bool DocumentPrivates
 		{
 			get { return _DocumentPrivates; }
-			set { _DocumentPrivates = value; }
+
+			set 
+			{ 
+				_DocumentPrivates = value; 
+				SetDirty();
+			}
 		}
 	}
 }

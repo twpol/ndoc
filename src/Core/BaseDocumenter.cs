@@ -30,7 +30,7 @@ namespace NDoc.Core
 	{
 		IDocumenterConfig config;
 
-		Hashtable documenterNamespaceSummaries;
+		Project _Project;
 
 		Assembly currentAssembly;
 		XmlDocument currentSlashDoc;
@@ -101,19 +101,17 @@ namespace NDoc.Core
 		abstract public void View();
 
 		/// <summary>Builds an XmlDocument combining the reflected metadata with the /doc comments.</summary>
-		/// <param name="assemblySlashDocs">The assembly and /doc filenames.</param>
-		/// <param name="namespaceSummaries">The namespace summaries.</param>
-		protected void MakeXml(ArrayList assemblySlashDocs, Hashtable namespaceSummaries)
+		protected void MakeXml(Project project)
 		{
+			_Project = project;
+
 			// Sucks that there's no XmlNodeWriter.  Instead we
 			// have to write out to a file then load back in.
-			XmlWriter   writer = new XmlTextWriter(@".\temp.xml", null);
-			string      currentAssemblyFilename = "";
+			XmlWriter writer = new XmlTextWriter(@".\temp.xml", null);
+			string currentAssemblyFilename = "";
 
 			try
 			{
-				documenterNamespaceSummaries = namespaceSummaries;
-
 				// Use indenting for readability
 				//writer.Formatting = Formatting.Indented;
 				//writer.Indentation=4;
@@ -124,10 +122,10 @@ namespace NDoc.Core
 				// Start the root element
 				writer.WriteStartElement("ndoc");
 
-				int step = 100 / assemblySlashDocs.Count;
+				int step = 100 / project.AssemblySlashDocCount;
 				int i = 0;
 				
-				foreach (AssemblySlashDoc assemblySlashDoc in assemblySlashDocs)
+				foreach (AssemblySlashDoc assemblySlashDoc in project.GetAssemblySlashDocs())
 				{
 					OnDocBuildingProgress(i * step);
 
@@ -212,13 +210,13 @@ namespace NDoc.Core
 					ourNamespaceName = namespaceName;
 				}
 
-				if ((documenterNamespaceSummaries.Count > 0) &&
-					(documenterNamespaceSummaries[ourNamespaceName] != null) &&
-					(((string)documenterNamespaceSummaries[ourNamespaceName]).Length > 0))
+				string namespaceSummary = _Project.GetNamespaceSummary(ourNamespaceName);
+
+				if (namespaceSummary != null && namespaceSummary.Length > 0)
 				{
 					WriteStartDocumentation(writer);
 					writer.WriteStartElement("summary");
-					writer.WriteRaw((string)documenterNamespaceSummaries[ourNamespaceName]);
+					writer.WriteRaw(namespaceSummary);
 					writer.WriteEndElement();
 					WriteEndDocumentation(writer);
 				}

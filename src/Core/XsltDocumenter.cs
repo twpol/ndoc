@@ -41,7 +41,7 @@ namespace NDoc.Core
 		{
 			Clear();
 
-			MakeXml(project.AssemblySlashDocs, project.NamespaceSummaries);
+			MakeXml(project);
 
 			if (!Directory.Exists(MyConfig.OutputDirectory))
 			{
@@ -362,7 +362,12 @@ namespace NDoc.Core
 		public string XsltDirectory
 		{
 			get { return _XsltDirectory; }
-			set { _XsltDirectory = value; }
+
+			set 
+			{ 
+				_XsltDirectory = value; 
+				SetDirty();
+			}
 		}
 
 		private string _OutputDirectory;
@@ -376,7 +381,12 @@ namespace NDoc.Core
 		public string OutputDirectory
 		{
 			get { return _OutputDirectory; }
-			set { _OutputDirectory = value; }
+
+			set 
+			{ 
+				_OutputDirectory = value; 
+				SetDirty();
+			}
 		}
 	}
 }

@@ -54,9 +54,9 @@ namespace NDoc.Documenter.Msdn
 
 		/// <summary>Gets or sets the OutputDirectory property.</summary>
 		[
-		Category("Output"),
-		Editor(typeof(FolderNameEditor), typeof(UITypeEditor)),
-		Description("The directory in which .html files and the .chm file will be generated.")
+			Category("Output"),
+			Editor(typeof(FolderNameEditor), typeof(UITypeEditor)),
+			Description("The directory in which .html files and the .chm file will be generated.")
 		]
 		public string OutputDirectory
 		{
@@ -70,6 +70,8 @@ namespace NDoc.Documenter.Msdn
 				{
 					outputDirectory += "\\";
 				}
+
+				SetDirty();
 			}
 		}
 
@@ -77,31 +79,43 @@ namespace NDoc.Documenter.Msdn
 		/// <remarks>The HTML Help project file and the compiled HTML Help file
 		/// use this property plus the appropriate extension as names.</remarks>
 		[
-		Category("HTML Help"),
-		Description("The name of the HTML Help project and the Compiled HTML Help file.")
+			Category("HTML Help"),
+			Description("The name of the HTML Help project and the Compiled HTML Help file.")
 		]
 		public string HtmlHelpName
 		{
 			get { return htmlHelpName; }
+
 			set 
 			{ 
 				if (Path.GetExtension(value).ToLower() == ".chm") 
+				{
 					HtmlHelpName = Path.GetFileNameWithoutExtension(value);
+				}
 				else
+				{
 					htmlHelpName = value; 
+				}
+
+				SetDirty();
 			}
 		}
 
 		/// <summary>Gets or sets the HtmlHelpCompilerFilename property.</summary>
 		[
-		Category("HTML Help"),
-		Editor(typeof(FileNameEditor), typeof(UITypeEditor)),
-		Description("The full path to the Html Help Compiler (installed with Microsoft Visual Studio .NET).")
+			Category("HTML Help"),
+			Editor(typeof(FileNameEditor), typeof(UITypeEditor)),
+			Description("The full path to the Html Help Compiler (installed with Microsoft Visual Studio .NET).")
 		]
 		public string HtmlHelpCompilerFilename
 		{
 			get { return htmlHelpCompilerFilename; }
-			set { htmlHelpCompilerFilename = value; }
+
+			set 
+			{ 
+				htmlHelpCompilerFilename = value; 
+				SetDirty();
+			}
 		}
 
 		/// <summary>Gets or sets the IncludeFavorites property.</summary>
@@ -112,7 +126,12 @@ namespace NDoc.Documenter.Msdn
 		public bool IncludeFavorites
 		{
 			get { return includeFavorites; }
-			set { includeFavorites = value; }
+
+			set 
+			{ 
+				includeFavorites = value; 
+				SetDirty();
+			}
 		}
 
 		private string _Title;
@@ -125,7 +144,12 @@ namespace NDoc.Documenter.Msdn
 		public string Title
 		{
 			get { return _Title; }
-			set { _Title = value; }
+
+			set 
+			{ 
+				_Title = value; 
+				SetDirty();
+			}
 		}
 	}
 }

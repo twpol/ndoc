@@ -62,8 +62,6 @@ namespace NDoc.Documenter.Msdn
 		XslTransform xsltProperty;
 		XslTransform xsltField;
 
-		ArrayList assemblySlashDocs;
-
 		/// <summary>Initializes a new instance of the MsdnHelp class.</summary>
 		public MsdnDocumenter() : base("MSDN")
 		{
@@ -111,8 +109,6 @@ namespace NDoc.Documenter.Msdn
 			{
 				OnDocBuildingStep(0, "Initializing...");
 
-				assemblySlashDocs = project.AssemblySlashDocs;
-
 				// Define this when you want to edit the stylesheets
 				// without having to shutdown the application to rebuild.
 				#if NO_RESOURCES
@@ -148,7 +144,7 @@ namespace NDoc.Documenter.Msdn
 
 				OnDocBuildingStep(10, "Merging XML documentation...");
 				// Let the Documenter base class do it's thing.
-				MakeXml(assemblySlashDocs, project.NamespaceSummaries);
+				MakeXml(project);
 
 				// Load the XML documentation into a DOM.
 				xmlDocumentation = new XmlDocument();

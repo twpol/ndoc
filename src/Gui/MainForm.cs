@@ -1,5 +1,5 @@
 // MainForm.cs - main GUI interface to NDoc
-// Copyright (C) 2001  Kral Ferch
+// Copyright (C) 2001  Kral Ferch, Keith Hill
 //
 // Modified by: Keith Hill on Sep 28, 2001.  
 //   Tweaked the layout quite a bit. Uses new HeaderGroupBox from Matthew Adams 
@@ -20,6 +20,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
 using System;
 using System.Drawing;
 using System.Collections;
@@ -906,7 +907,7 @@ namespace NDoc.Gui
 
 				// Update the ListView
 				assembliesListView.Items.Clear();
-				foreach (AssemblySlashDoc assemblySlashDoc2 in project.AssemblySlashDocs)
+				foreach (AssemblySlashDoc assemblySlashDoc2 in project.GetAssemblySlashDocs())
 				{
 					AddRowToListView(assemblySlashDoc2);
 				}
@@ -1084,7 +1085,7 @@ namespace NDoc.Gui
 						AssemblySlashDoc asd = new AssemblySlashDoc(
 							Path.Combine(spath, apath), 
 							Path.Combine(spath, xpath));
-						project.AssemblySlashDocs.Add(asd);
+						project.AddAssemblySlashDoc(asd);
 						AddRowToListView(asd);
 					}
 
@@ -1423,7 +1424,7 @@ namespace NDoc.Gui
 
 				assemblySlashDoc.AssemblyFilename = form.AssemblyFilename;
 				assemblySlashDoc.SlashDocFilename = form.SlashDocFilename;
-				project.AssemblySlashDocs.Add(assemblySlashDoc);
+				project.AddAssemblySlashDoc(assemblySlashDoc);
 				AddRowToListView(assemblySlashDoc);
 				EnableMenuItems(true);
 			}
@@ -1440,18 +1441,18 @@ namespace NDoc.Gui
 
 				form.Text = "Edit Assembly Filename and XML Documentation Filename";
 				form.StartPosition = FormStartPosition.CenterParent;
-				form.AssemblyFilename = ((AssemblySlashDoc)project.AssemblySlashDocs[nIndex]).AssemblyFilename;
-				form.SlashDocFilename = ((AssemblySlashDoc)project.AssemblySlashDocs[nIndex]).SlashDocFilename;
+				form.AssemblyFilename = project.GetAssemblySlashDoc(nIndex).AssemblyFilename;
+				form.SlashDocFilename = project.GetAssemblySlashDoc(nIndex).SlashDocFilename;
 
 				if (form.ShowDialog(this) == System.Windows.Forms.DialogResult.OK)
 				{
-					((AssemblySlashDoc)project.AssemblySlashDocs[nIndex]).AssemblyFilename = form.AssemblyFilename;
-					((AssemblySlashDoc)project.AssemblySlashDocs[nIndex]).SlashDocFilename = form.SlashDocFilename;
+					project.GetAssemblySlashDoc(nIndex).AssemblyFilename = form.AssemblyFilename;
+					project.GetAssemblySlashDoc(nIndex).SlashDocFilename = form.SlashDocFilename;
 
 					string[] subItems = new string[1];
 
-					assembliesListView.SelectedItems[0].Text = Path.GetFileName(((AssemblySlashDoc)project.AssemblySlashDocs[nIndex]).AssemblyFilename);
-					subItems[0] = Path.GetFileName(((AssemblySlashDoc)project.AssemblySlashDocs[nIndex]).SlashDocFilename);
+					assembliesListView.SelectedItems[0].Text = Path.GetFileName(project.GetAssemblySlashDoc(nIndex).AssemblyFilename);
+					subItems[0] = Path.GetFileName(project.GetAssemblySlashDoc(nIndex).SlashDocFilename);
 				}
 			}
 		}
@@ -1471,7 +1472,7 @@ namespace NDoc.Gui
 			{
 				ListViewItem  listViewItem = assembliesListView.SelectedItems[0];
 
-				project.AssemblySlashDocs.RemoveAt(listViewItem.Index);
+				project.RemoveAssemblySlashDoc(listViewItem.Index);
 				listViewItem.Remove();
 			}
 
@@ -1507,33 +1508,30 @@ namespace NDoc.Gui
 			File.Delete(@"./namespaceSummaries.xml");
 
 			XmlNodeList namespaceNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace");
+
+			ArrayList namespaces = new ArrayList();
 			
 			foreach (XmlNode namespaceNode in namespaceNodes)
 			{
 				string namespaceName = (string)namespaceNode.Attributes["name"].Value;
-
-				if (project.NamespaceSummaries.ContainsKey(namespaceName))
-				{
-					editNamespaceSummaries[namespaceName] = project.NamespaceSummaries[namespaceName];
-				}
-				else
-				{
-					editNamespaceSummaries[namespaceName] = "";
-				}
+				namespaces.Add(namespaceName);
 			}
 
-			form = new NamespaceSummariesForm(editNamespaceSummaries);
+			form = new NamespaceSummariesForm(namespaces, project);
 			form.StartPosition = FormStartPosition.CenterParent;
-
-			if (form.ShowDialog(this) == System.Windows.Forms.DialogResult.OK)
-			{
-				project.NamespaceSummaries = editNamespaceSummaries;
-			}
+			form.ShowDialog(this);
 		}
 
 		private void comboBoxDocumenters_SelectedIndexChanged (object sender, System.EventArgs e)
 		{
-			propertyGrid.SelectedObject = ((IDocumenter)project.Documenters[comboBoxDocumenters.SelectedIndex]).Config;
+			if (propertyGrid.SelectedObject != null)
+			{
+				((IDocumenterConfig)propertyGrid.SelectedObject).SetProject(null);
+			}
+
+			IDocumenterConfig documenterConfig = ((IDocumenter)project.Documenters[comboBoxDocumenters.SelectedIndex]).Config;
+			documenterConfig.SetProject(project);
+			propertyGrid.SelectedObject = documenterConfig;
 		}
 		#endregion // Event Handlers
 	}

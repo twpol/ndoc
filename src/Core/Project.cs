@@ -31,23 +31,102 @@ namespace NDoc.Core
 		public Project()
 		{
 			_Documenters = FindDocumenters();
+			_IsDirty = false;
+		}
+
+		private bool _IsDirty;
+
+		/// <summary>Gets the IsDirty property.</summary>
+		public bool IsDirty
+		{
+			get { return _IsDirty; }
+			set { _IsDirty = value; }
 		}
 
 		private ArrayList _AssemblySlashDocs = new ArrayList();
 
 		/// <summary>Gets or sets the AssemblySlashDocs property.</summary>
-		public ArrayList AssemblySlashDocs
+		private ArrayList AssemblySlashDocs
 		{
 			get { return _AssemblySlashDocs; }
+		}
+
+		/// <summary>Adds an assembly/doc pair to the project.</summary>
+		public void AddAssemblySlashDoc(AssemblySlashDoc assemblySlashDoc)
+		{
+			_AssemblySlashDocs.Add(assemblySlashDoc);
+			IsDirty = true;
+		}
+
+		/// <summary>Gets an assembly/doc pair.</summary>
+		public AssemblySlashDoc GetAssemblySlashDoc(int index)
+		{
+			return _AssemblySlashDocs[index] as AssemblySlashDoc;
+		}
+
+		/// <summary>Gets an enumerable list of assembly/doc pairs.</summary>
+		public IEnumerable GetAssemblySlashDocs()
+		{
+			return _AssemblySlashDocs;
+		}
+
+		/// <summary>Gets the number of assembly/doc pairs in the project.</summary>
+		public int AssemblySlashDocCount
+		{
+			get { return _AssemblySlashDocs.Count; }
+		}
+
+		/// <summary>Removes an assembly/doc pair from the project.</summary>
+		public void RemoveAssemblySlashDoc(int index)
+		{
+            _AssemblySlashDocs.RemoveAt(index);
+			IsDirty = true;
 		}
 
 		private Hashtable _NamespaceSummaries = new Hashtable();
 
 		/// <summary>Gets or sets the NamespaceSummaries property.</summary>
-		public Hashtable NamespaceSummaries
+		private Hashtable NamespaceSummaries
 		{
 			get { return _NamespaceSummaries; }
 			set { _NamespaceSummaries = value; }
+		}
+
+		/// <summary>Adds a namespace summary to the project.</summary>
+		public void SetNamespaceSummary(string namespaceName, string summary)
+		{
+			if (namespaceName != null)
+			{
+				if (summary != null && summary.Length > 0)
+				{
+					_NamespaceSummaries[namespaceName] = summary;
+				}
+				else
+				{
+					_NamespaceSummaries.Remove(namespaceName);
+				}
+
+				IsDirty = true;
+			}
+		}
+
+		/// <summary>Gets the summary for a namespace.</summary>
+		public string GetNamespaceSummary(string namespaceName)
+		{
+			string summary = null;
+
+			if (namespaceName != null)
+			{
+				summary = _NamespaceSummaries[namespaceName] as string;
+			}
+
+			return summary;
+		}
+
+		/// <summary>Gets an enumerable list of namespace names with summaries.</summary>
+		public IEnumerable GetNamespaceSummaries()
+		{
+			return _NamespaceSummaries.Keys;
 		}
 
 		private ArrayList _Documenters = new ArrayList();
@@ -132,6 +211,8 @@ namespace NDoc.Core
 					reader.Close(); // Closes the underlying stream.
 				}
 			}
+
+			IsDirty = false;
 		}
 
 		private void ReadAssemblySlashDocs(XmlReader reader)
@@ -219,6 +300,8 @@ namespace NDoc.Core
 					writer.Close(); // Closes the underlying stream.
 				}
 			}
+
+			IsDirty = false;
 		}
 
 		private void WriteAssemblySlashDocs(XmlWriter writer)
@@ -278,10 +361,12 @@ namespace NDoc.Core
 			AssemblySlashDocs.Clear();
 			NamespaceSummaries.Clear();
 
-			foreach(IDocumenter documenter in Documenters)
+			foreach (IDocumenter documenter in Documenters)
 			{
 				documenter.Clear();
 			}
+
+			IsDirty = true;
 		}
 	}
 }

@@ -62,7 +62,7 @@ namespace NDoc.Documenter.Xml
 
 			XmlDocumenterConfig config = (XmlDocumenterConfig)Config;
 
-			MakeXml(project.AssemblySlashDocs, project.NamespaceSummaries);
+			MakeXml(project);
 
 			OnDocBuildingStep(50, "Saving XML documentation...");
 

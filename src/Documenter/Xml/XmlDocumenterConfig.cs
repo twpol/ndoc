@@ -44,7 +44,12 @@ namespace NDoc.Documenter.Xml
 		public string OutputFile
 		{
 			get { return _OutputFile; }
-			set { _OutputFile = value; }
+
+			set 
+			{ 
+				_OutputFile = value; 
+				SetDirty();
+			}
 		}
 	}
 }

@@ -1,8 +1,11 @@
 // NamespaceSummariesForm.cs - form for adding namespace summaries
-// Copyright (C) 2001  Kral Ferch
+// Copyright (C) 2001  Kral Ferch, Keith Hill
 //
 // Modified by: Keith Hill on Sep 28, 2001.
 //   Tweaked the layout, made the dialog not show up in the task bar.
+//
+// Modified by: Jason Diamond on Oct 19, 2001.
+//   Updated to work with the new NDoc.Core.Project interface.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -26,6 +29,8 @@ namespace NDoc.Gui
 	using System.ComponentModel;
 	using System.Windows.Forms;
 
+	using NDoc.Core;
+
 	/// <summary>
 	///    Summary description for NamespaceSummariesForm.
 	/// </summary>
@@ -40,24 +45,25 @@ namespace NDoc.Gui
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.ComboBox namespaceComboBox;
-		private Hashtable editNamespaceSummaries;
 		private string selectedText;
 
-		/// <summary>
-		/// Allows the user to associate a summaries with the
-		/// namespaces found in the assemblies that are being documented.
-		/// </summary>
-		/// <param name="namespaceSummaries"></param>
-		public NamespaceSummariesForm(Hashtable namespaceSummaries)
+		private ArrayList _Namespaces;
+		private Project _Project;
+
+		/// <summary>Allows the user to associate a summaries with the
+		/// namespaces found in the assemblies that are being 
+		/// documented.</summary>
+		public NamespaceSummariesForm(ArrayList namespaces, Project project)
 		{
+			_Namespaces = namespaces;
+			_Project = project;
+
 			//
 			// Required for Windows Form Designer support
 			//
 			InitializeComponent();
 
-			editNamespaceSummaries = namespaceSummaries;
-
-			foreach(string namespaceName in namespaceSummaries.Keys)
+			foreach (string namespaceName in _Namespaces)
 			{
 				namespaceComboBox.Items.Add(namespaceName);
 			}
@@ -128,6 +134,7 @@ namespace NDoc.Gui
 			this.namespaceComboBox.Location = new System.Drawing.Point(112, 16);
 			this.namespaceComboBox.Name = "namespaceComboBox";
 			this.namespaceComboBox.Size = new System.Drawing.Size(192, 21);
+			this.namespaceComboBox.Sorted = true;
 			this.namespaceComboBox.TabIndex = 0;
 			this.namespaceComboBox.SelectedIndexChanged += new System.EventHandler(this.namespaceComboBox_SelectedIndexChanged);
 			// 
@@ -183,7 +190,7 @@ namespace NDoc.Gui
 		/// <param name="e"></param>
 		protected void okButton_Click (object sender, System.EventArgs e)
 		{
-			editNamespaceSummaries[selectedText] = summaryTextBox.Text;
+			_Project.SetNamespaceSummary(selectedText, summaryTextBox.Text);
 		}
 
 		/// <summary>
@@ -196,10 +203,10 @@ namespace NDoc.Gui
 		{
 			if (selectedText != null)
 			{
-				editNamespaceSummaries[selectedText] = summaryTextBox.Text;
+				_Project.SetNamespaceSummary(selectedText, summaryTextBox.Text);
 			}
 
-			summaryTextBox.Text = (string)editNamespaceSummaries[namespaceComboBox.Text];
+			summaryTextBox.Text = _Project.GetNamespaceSummary(namespaceComboBox.Text);
 			summaryTextBox.Focus();
 
 			selectedText = namespaceComboBox.Text;

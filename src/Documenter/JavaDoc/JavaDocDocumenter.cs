@@ -70,7 +70,7 @@ namespace NDoc.Documenter.JavaDoc
 				Path.Combine(MyConfig.OutputDirectory, "JavaDoc.css"),
 				true);
 
-			MakeXml(project.AssemblySlashDocs, project.NamespaceSummaries);
+			MakeXml(project);
 
 			WriteOverviewSummary();
 			WriteNamespaceSummaries();
