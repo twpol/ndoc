@@ -138,17 +138,17 @@ namespace NDoc.Core
 		public virtual string CanBuild(Project project, bool checkInputOnly)
 		{
 			StringBuilder xfiles = new StringBuilder();
-			foreach (AssemblySlashDoc asd in project.GetAssemblySlashDocs())
+			foreach (AssemblySlashDoc asd in project.AssemblySlashDocs)
 			{
-				if (!File.Exists(Path.GetFullPath(asd.AssemblyFilename)))
+				if (!File.Exists(asd.Assembly.Path))
 				{
-					xfiles.Append("\n" + asd.AssemblyFilename);
+					xfiles.Append("\n" + asd.Assembly.Path);
 				}
-				if (asd.SlashDocFilename!=null && asd.SlashDocFilename.Length>0)
+				if (asd.SlashDoc.Path.Length>0)
 				{
-					if (!File.Exists(Path.GetFullPath(asd.SlashDocFilename)))
+					if (!File.Exists(asd.SlashDoc.Path))
 					{
-						xfiles.Append("\n" + asd.SlashDocFilename);
+						xfiles.Append("\n" + asd.SlashDoc.Path);
 					}
 				}
 			}
