@@ -760,7 +760,7 @@ namespace NDoc.Core
 			MemberInfo[] methods = type.GetMember(method.Name, MemberTypes.Method, bindingFlags);
 			foreach (MethodInfo m in methods)
 			{
-				if (!IsHidden(m, type))
+				if (!IsHidden(m, type) && MustDocumentMethod(m))
 				{
 					++count;
 				}
