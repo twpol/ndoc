@@ -119,7 +119,7 @@ namespace NDoc.Documenter.JavaDoc
 
 				while (count-- > 0)
 				{
-					pathToRoot += "..\\";
+					pathToRoot += "../";
 				}
 			}
 
@@ -127,7 +127,7 @@ namespace NDoc.Documenter.JavaDoc
 
 			if (resultDirectory != null)
 			{
-				resultFilename = resultDirectory + '\\' + resultFilename;
+				resultFilename = Path.Combine(resultDirectory, resultFilename);
 			}
 
 			string resultPath = Path.Combine(MyConfig.OutputDirectory, resultFilename);
