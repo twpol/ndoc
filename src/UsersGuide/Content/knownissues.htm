@@ -1,44 +1,61 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
-
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
-<title>Known Issues</title>
-<meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5">
-<link href="css/ndoc.css" rel="stylesheet" name="ndocstyle" type="text/css"/>
-<script src="script/ndoc.js"></script>
-</head>
-
-<body class="dtBODY" id="bodyID" onload="InitTitle()">
-
-<div id="nstext">
-	<h3 class="dtH3">Known Issues and Limitations in NDoc 1.3</h3>
-		<table class="dtTABLE" id="Table2" style="WIDTH: 94%" cellspacing="0">
-		<thead>
-			<tr valign="top">
-				<th width="33%">Issue</th>
-				<th width="67%">Description</th>
-			</tr>
-		</thead>
-		<tr valign="top">
-			<td>
-			Very long type names
-			</td>
-			<td>
-			<p>NDoc creates an HTML file on your hard drive for each topic it 
-			generates. Currently the name of this file is derived directly from 
-			the full name of the type or member being documented. If the total 
-			number of characters in an item's full name (namespace + type + 
-			member name) exceed the value of MAX_PATH, NDoc will fail because it 
-			attempts to create a file with a name that is longer than the file 
-			system supports.</p>
-			<p>There is no work-around for this issue.</p>
-			<p>This issue will be addressed in a future version of NDoc.</p>
-			</td>
-		</tr>
-	</table>
-</div>
-
-</body>
-
+	<head>
+		<title>Known Issues</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+		<meta content="http://schemas.microsoft.com/intellisense/ie5" name="vs_targetSchema">
+		<LINK href="css/ndoc.css" type="text/css" rel="stylesheet" name="ndocstyle">
+		<script src="script/ndoc.js"></script>
+	</head>
+	<body class="dtBODY" id="bodyID" onload="InitTitle()">
+		<div id="nstext">
+			<h3 class="dtH3">Known Issues and Limitations in NDoc 1.3</h3>
+			<table class="dtTABLE" id="Table2" style="WIDTH: 94%" cellSpacing="0">
+				<thead>
+					<tr vAlign="top">
+						<th width="33%">
+							Issue</th>
+						<th width="67%">
+							Description</th></tr>
+				</thead>
+				<tr vAlign="top">
+					<td>Very long type names
+					</td>
+					<td>
+						<p>NDoc creates an HTML file on your hard drive for each topic it generates. 
+							Currently the name of this file is derived directly from the full name of the 
+							type or member being documented. If the total number of characters in an item's 
+							full name (namespace + type + member name) exceed the value of MAX_PATH, NDoc 
+							will fail because it attempts to create a file with a name that is longer than 
+							the file system supports.</p>
+						<p>There is no work-around for this issue.</p>
+						<p>This issue will be addressed in a future version of NDoc.</p>
+					</td>
+				</tr>
+				<TR>
+					<TD>NDoc must be restarted if Types or Members are added or deleted.</TD>
+					<TD>
+						<P>NDoc uses reflection to obtain much of the information it requires to build 
+							complete documentation. There is a limitation within the .Net CLR that once an 
+							assembly is loaded, it cannot be unloaded.&nbsp; Therefor, if changes are made 
+							to the assembly, NDoc must be closed and restarted in order to pick-up the 
+							changes.</P>
+						<P>There is no work-around for this issue.</P>
+						<P>This issue will be addressed in a future version of NDoc.</P>
+					</TD>
+				</TR>
+				<TR>
+					<TD>Case-sensitivity</TD>
+					<TD>
+						<P>When the MSDN and JavaDoc documenters create files, problems can arise when 
+							there are Types or Members which differ only by case.</P>
+						<P>It is possible to work around this problem by avoiding types and memebers that 
+							differ only by case; for example public property Thing and private field 
+							_thing.</P>
+						<P>This issue will be addressed in a future version of NDoc.</P>
+					</TD>
+				</TR>
+			</table>
+		</div>
+	</body>
 </html>
