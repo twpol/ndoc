@@ -518,7 +518,7 @@ namespace NDoc.Core
 		/// <summary>Specifies the level of filtering on the EditorBrowsable attribute.</summary>
 		/// <remarks><para>Sets the level of filtering to apply on types/members marked with the <b>EditorBrowsable</b> attribute.  
 		/// <b>Warning: enabling this filter might result in invalid links in the documentation.</b></para>
-		/// <para>As of version 1.3 of NDoc, the <b>&lt;nodoc/&gt;</b> tag is the preferred mechanism for
+		/// <para>As of version 1.3 of NDoc, the <b>&lt;exclude/&gt;</b> tag is the preferred mechanism for
 		/// suppressing the documentation of types or members.</para></remarks>
 		[Category("Visibility")]
 		[Description("Sets the level of filtering to apply on types/members marked with the EditorBrowsable attribute.  Warning: enabling this filter might result in invalid links in the documentation.")]
