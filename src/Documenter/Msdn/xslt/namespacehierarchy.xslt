@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<!-- -->
 	<xsl:output method="html" indent="yes" />
@@ -36,6 +36,14 @@
 						</p>
 					</xsl:if>
 				</div>
+				<xsl:variable name="generated-from">
+					<xsl:call-template name="generated-from-assembly-version" />
+				</xsl:variable>
+				<xsl:if test="$generated-from != ''">
+					<div id="footer">
+						<p><xsl:value-of select="$generated-from" /></p>
+					</div>
+				</xsl:if>
 			</body>
 		</html>
 	</xsl:template>

@@ -626,6 +626,16 @@
 		</div>
 	</xsl:template>
 	<!-- -->
+	<xsl:template name="generated-from-assembly-version">
+		<xsl:if test="/ndoc/assembly/@version">
+			<xsl:text>Generated from assembly </xsl:text>
+			<xsl:value-of select="/ndoc/assembly/@name" />
+			<xsl:text> [</xsl:text>
+			<xsl:value-of select="/ndoc/assembly/@version" />
+			<xsl:text>]</xsl:text>
+		</xsl:if>
+	</xsl:template>
+	<!-- -->
 	<xsl:template name="operator-name">
 		<xsl:param name="name" />
 		<xsl:param name="from" />
