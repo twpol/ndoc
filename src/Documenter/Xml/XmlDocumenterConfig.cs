@@ -43,7 +43,7 @@ namespace NDoc.Documenter.Xml
 	///	useful when you are working on your own documenters.
 	///	</para>
 	///	</remarks>
-	public class XmlDocumenterConfig : BaseDocumenterConfig
+	public class XmlDocumenterConfig : BaseReflectionDocumenterConfig
 	{
 		/// <summary>Initializes a new instance of the XmlDocumenterConfig class.</summary>
 		public XmlDocumenterConfig() : base("XML")
