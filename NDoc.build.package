@@ -1,38 +1,18 @@
 <?xml version="1.0" ?>
 <project name="NDoc-package" xmlnds="http://tempuri.org/nant-vs.xsd">
-	<!-- Cleans the current build configuration -->
-	<target name="clean-build-dir" depends="check-build-dir" description="Deletes current build configuration">
-		<delete dir="${build.dir}" />
-	</target>
 	<!--
 
 	-->
-	<!-- Cleans all build configurations -->
-	<target name="clean-all" description="Deletes every build configuration">
-		<echo message="Deleting all builds from all configurations" />
-		<delete dir="build" />
-	</target>
-	<!--
-
-	-->
-	<!-- Creates a distribution package -->
-	<target name="package" depends="check-project-version" description="Build and Package distribution">
-		<property name="current.package.zipfile" value="${nant.project.name}-${project.version}.zip" />
-		<!-- set flag to indicating that this is a package build -->
+	<target name="package" description="Build and Package distribution" depends="check-project-version">
+		<property name="current.package.zipfile" value="build/${nant.project.name}-${project.version}.zip" />
+		<!-- set flag to indicate that this is a package build -->
 		<property name="project.build.package" value="true" readonly="false" />
-		<!-- clean the current build directory -->
 		<call target="clean-build-dir" force="true" />
-		<!-- copies the examples to the current build directory -->
 		<call target="package-examples" force="true" />
-		<!-- copies the sources to the current build directory -->
 		<call target="package-src" force="true" />
-		<!-- copies the documentation to the current build directory -->
 		<call target="package-doc" force="true" />
-		<!-- copies the release files to the current build directory -->
 		<call target="package-release-files" force="true" />
-		<!-- compile all build configurations for all runtime configurations  -->
-		<call target="compile-all" force="true" />
-		<!-- create the package distribution zipfile -->
+		<call target="compile-release" force="true" />
 		<call target="create-package-zipfile" force="true" />
 	</target>
 	<!--
@@ -57,8 +37,6 @@
 				<excludes name="Addins/**" />
 				<excludes name="NDocGen/**" />
 				<excludes name="Documenter/Msdn7/**" />
-				<excludes name="Setup/Debug/**" />
-				<excludes name="Setup/Release/**" />
 				<excludes name="**/bin/**" />
 				<excludes name="**/obj/**" />
 				<excludes name="**/*.csproj.user" />
@@ -84,8 +62,7 @@
 		<copy todir="${build.dir}">
 			<fileset basedir=".">
 				<includes name="COPYING.txt" />
-				<includes name="NDoc.build" />
-				<includes name="NDoc.build.include" />
+				<includes name="NDoc.build.*" />
 				<includes name="README.txt" />
 				<includes name="NDoc.sln" />
 			</fileset>
@@ -96,11 +73,7 @@
 	-->
 	<target name="create-package-zipfile" depends="check-build-dir, check-current-package-zipfile">
 		<!-- delete the specified zipfile if it already exists -->
-		<delete>
-			<fileset basedir=".">
-				<includes name="${current.package.zipfile}" />
-			</fileset>
-		</delete>
+		<delete file="${current.package.zipfile}" />
 		<zip zipfile="${current.package.zipfile}" ziplevel="9">
 			<fileset basedir="${build.dir}">
 				<includes name="**/*" />

@@ -250,7 +250,7 @@
 		<property name="current.build.debug" value="${build.debug}" readonly="false" />
 		<property name="current.build.defines" value="${build.defines},NET,NET_1_0" readonly="false" />
 		<property name="current.build.optimize" value="${build.optimize}" readonly="false" />
-		<property name="current.bin.dir" value="${build.dir}/bin/.net/${current.runtime.version}/${current.build.config}"
+		<property name="current.bin.dir" value="${build.dir}/bin/.net-${current.runtime.version}"
 			readonly="false" />
 		<property name="current.sdkdoc.dir" value="${build.dir}/doc/sdk/${current.runtime.config}/${current.runtime.version}"
 			readonly="false" />
@@ -268,7 +268,7 @@
 		<property name="current.build.debug" value="${build.debug}" readonly="false" />
 		<property name="current.build.defines" value="${build.defines},NET,NET_1_1" readonly="false" />
 		<property name="current.build.optimize" value="${build.optimize}" readonly="false" />
-		<property name="current.bin.dir" value="${build.dir}/bin/.net/${current.runtime.version}/${current.build.config}"
+		<property name="current.bin.dir" value="${build.dir}/bin/.net-${current.runtime.version}"
 			readonly="false" />
 		<property name="current.sdkdoc.dir" value="${build.dir}/doc/sdk/${current.runtime.config}/${current.runtime.version}"
 			readonly="false" />
@@ -287,7 +287,7 @@
 		<property name="current.build.debug" value="${build.debug}" readonly="false" />
 		<property name="current.build.defines" value="${build.defines},NETCF,NETCF_1_0" readonly="false" />
 		<property name="current.build.optimize" value="${build.optimize}" readonly="false" />
-		<property name="current.bin.dir" value="${build.dir}/bin/${current.runtime.config}/${current.runtime.version}/${current.build.config}"
+		<property name="current.bin.dir" value="${build.dir}/bin/${current.runtime.config}-${current.runtime.version}"
 			readonly="false" />
 		<property name="current.sdkdoc.dir" value="${build.dir}/doc/sdk/${current.runtime.config}/${current.runtime.version}"
 			readonly="false" />
@@ -305,7 +305,7 @@
 		<property name="current.build.debug" value="${build.debug}" readonly="false" />
 		<property name="current.build.defines" value="${build.defines},MONO,MONO_1_0" readonly="false" />
 		<property name="current.build.optimize" value="${build.optimize}" readonly="false" />
-		<property name="current.bin.dir" value="${build.dir}/bin/${current.runtime.config}/${current.runtime.version}/${current.build.config}"
+		<property name="current.bin.dir" value="${build.dir}/bin/${current.runtime.config}-${current.runtime.version}"
 			readonly="false" />
 		<property name="current.sdkdoc.dir" value="${build.dir}/doc/sdk/${current.runtime.config}/${current.runtime.version}"
 			readonly="false" />
@@ -323,7 +323,7 @@
 		<property name="current.build.debug" value="${build.debug}" readonly="false" />
 		<property name="current.build.defines" value="${build.defines},SSCLI,SSCLI_1_0" readonly="false" />
 		<property name="current.build.optimize" value="${build.optimize}" readonly="false" />
-		<property name="current.bin.dir" value="${build.dir}/bin/${current.runtime.config}/${current.runtime.version}/${current.build.config}"
+		<property name="current.bin.dir" value="${build.dir}/bin/${current.runtime.config}-${current.runtime.version}"
 			readonly="false" />
 		<property name="current.sdkdoc.dir" value="${build.dir}/doc/sdk/${current.runtime.config}/${current.runtime.version}"
 			readonly="false" />
@@ -433,4 +433,25 @@
 				readonly="false" />
 		</ifnot>
 	</target>
+	<!-- 
+
+	clean-up targets	
+	-->
+	<target name="clean-current-bin-dir" description="Checks the current bin directory and cleans it up.">
+		<call target="check-current-bin-dir" force="true" />
+		<delete>
+			<fileset basedir="${current.bin.dir}">
+				<includes name="**/*" />
+			</fileset>
+		</delete>
+	</target>
+	<!--
+	
+	-->
+	<target name="clean-build-dir" depends="check-build-dir" description="Deletes current build configuration.">
+		<delete dir="${build.dir}" />
+	</target>
+	<!--
+	
+	-->
 </project>
