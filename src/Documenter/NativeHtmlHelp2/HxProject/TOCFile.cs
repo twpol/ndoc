@@ -24,6 +24,7 @@ using System.Diagnostics;
 
 namespace NDoc.Documenter.NativeHtmlHelp2.HxProject
 {
+
 	/// <summary>
 	/// Summary description for HxTOC.
 	/// </summary>
@@ -82,8 +83,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2.HxProject
 		{
 			xmlWriter.WriteStartElement( "HelpTOCNode" );
 			xmlWriter.WriteAttributeString( "", "Url", "", url );
-			//xmlWriter.WriteE
-			//xmlWriter.WriteEndElement();
 		}
 
 		public void InsertNode( string url )

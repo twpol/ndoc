@@ -49,10 +49,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			if ( !Directory.Exists( rootDir ) )
 				Directory.CreateDirectory( rootDir );
 
-
-			if ( Directory.Exists( ContentDirectory ) )
-				Clean();
-			else
+			if ( !Directory.Exists( ContentDirectory ) )
 				Directory.CreateDirectory( ContentDirectory );
 		}
 
@@ -101,12 +98,17 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		/// </summary>
 		public void Clean()
 		{
+			CleanDirectory( new DirectoryInfo( RootDirectory ) );
+		}
+
+		private void CleanDirectory( DirectoryInfo dir )
+		{
 			//clean-up output path
-			foreach ( string file in Directory.GetFiles( RootDirectory, "*.*" ) )
+			foreach ( FileInfo file in dir.GetFiles( "*.*" ) )
 			{
 				try
 				{
-					File.Delete( file );
+					file.Delete();
 				}
 				catch (UnauthorizedAccessException)
 				{
@@ -119,6 +121,9 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 						+ " from the output directory because it is in use.");
 				}
 			}
+
+			foreach ( DirectoryInfo child in dir.GetDirectories() )
+				CleanDirectory( child );
 		}
 	}
 }

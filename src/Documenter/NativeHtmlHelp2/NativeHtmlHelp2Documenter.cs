@@ -34,7 +34,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 	public class NativeHtmlHelp2Documenter : BaseDocumenter
 	{
 
-		private TOCFile workingToc= null;
+		private TOCFile workingToc = null;
 
 		/// <summary>Initializes a new instance of the NativeHtmlHelp2Documenter class.</summary>
 		public NativeHtmlHelp2Documenter() : base( "Native HtmlHelp2" )
@@ -112,8 +112,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 				Workspace w = new Workspace( WorkingPath );
 				PrepareWorkspace( w );
 
-				ProjectFile HxProject = CreateProjectFile();
-				
+				ProjectFile HxProject = CreateProjectFile();				
 
 				OnDocBuildingStep( 10, "Merging XML documentation..." );
 				XmlDocument xmlDocumentation = MergeXml( project );
@@ -134,21 +133,27 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 
 				// do clean up and final registration steps
 				OnDocBuildingStep( 99, "Finishing up..." );
-				//if ( MyConfig.RegisterTitleWithNamespace )
-				//	RegisterTitle();
-				//else if ( MyConfig.RegisterTitleAsCollection )
-				//	RegisterCollection();
+				if ( MyConfig.RegisterTitleWithNamespace )
+					RegisterTitle();
+				else if ( MyConfig.RegisterTitleAsCollection )
+					RegisterCollection();
 			}
 			catch ( Exception e )
 			{
 				throw new DocumenterException( "An error occured while creating the documentation", e );
 			}
+			finally
+			{
+				workingToc = null;
+			}
 		}
 
 		private ProjectFile CreateProjectFile()
 		{
+			// create a project file from the resource template
 			ProjectFile project = ProjectFile.CreateFrom( Path.Combine( ResourceDirectory, @"HxProject\project.HxC" ), MyConfig.HtmlHelpName );
 			
+			// set it up
 			project.BuildSeperateIndexFile = MyConfig.BuildSeperateIndexFile;
 			project.Copyright = MyConfig.CopyrightText;
 			project.CreateFullTextIndex = MyConfig.CreateFullTextIndex;
@@ -166,26 +171,34 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 
 		private void MakeHtml( XmlNode xmlDocumentation )
 		{
+			// create and intialize a HtmlFactory
 			ExternalHtmlProvider htmlProvider = new ExternalHtmlProvider( MyConfig.HeaderHtml, MyConfig.FooterHtml );
 			HtmlFactory factory = new HtmlFactory( Path.Combine( this.WorkingPath, "html" ), htmlProvider );
 
+			// load the stylesheets
 			OnDocBuildingStep( 15, "Loading StyleSheets..." );
 			factory.LoadStylesheets( ResourceDirectory );
 
 			OnDocBuildingStep( 20, "Generating HTML..." );
 
+			// add properties to the factory
+			// these get passed to the stylesheets
 			factory.Properties.Add( "ndoc-title", MyConfig.Title );
 			factory.Properties.Add( "ndoc-vb-syntax", false );
 			factory.Properties.Add( "ndoc-omit-object-tags", false );
 			factory.Properties.Add( "ndoc-document-attributes", MyConfig.DocumentAttributes );
 			factory.Properties.Add( "ndoc-documented-attributes", MyConfig.DocumentedAttributes );
 
+			// connect to factory events
+			// this is so we can build the TOC as we go
 			factory.TopicStart += new FileEventHandler(factory_TopicStart);
 			factory.TopicEnd += new EventHandler(factory_TopicEnd);
 			factory.AddFileToTopic += new FileEventHandler(factory_AddFileToTopic);
 
+			// make the html
 			factory.MakeHtml( xmlDocumentation, MyConfig.LinkToSdkDocVersion, MyConfig.IncludeHierarchy );
 
+			// disconnect from factory events
 			factory.TopicStart -= new FileEventHandler(factory_TopicStart);
 			factory.TopicEnd -= new EventHandler(factory_TopicEnd);
 			factory.AddFileToTopic -= new FileEventHandler(factory_AddFileToTopic);

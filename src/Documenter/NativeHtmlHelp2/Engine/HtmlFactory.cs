@@ -551,7 +551,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 						bOverloaded = true;
 
 						fileName = NameMapper.GetFilenameForMethodOverloads( typeNode, methodNode );
-						OnAddFileToTopic( fileName );
 
 						arguments = new XsltArgumentList();
 						arguments.AddParam("member-id", String.Empty, methodID);
@@ -563,16 +562,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 					if (methodNode.Attributes["declaringType"] == null)
 					{
 						fileName = NameMapper.GetFilenameForMethod(methodNode);
-
-						if (bOverloaded)
-						{
-							XmlNodeList parameterNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace/" + NameMapper.LowerCaseTypeNames[whichType] + "[@name=\"" + typeName + "\"]/method[@id=\"" + methodID + "\"]/parameter");
-							OnAddFileToTopic( fileName );
-						}
-						else
-						{
-							OnAddFileToTopic( fileName );
-						}
+						OnAddFileToTopic( fileName );
 
 						XsltArgumentList arguments2 = new XsltArgumentList();
 						arguments2.AddParam("member-id", String.Empty, methodID);
@@ -655,14 +645,11 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 				if (typeNode.SelectSingleNode("operator[@name = 'op_Explicit' or @name = 'op_Implicit']") != null)
 					title += " and Type Conversions";
 				
-
-				OnAddFileToTopic( fileName );
-
 				XsltArgumentList arguments = new XsltArgumentList();
 				arguments.AddParam("id", String.Empty, typeID);
 				arguments.AddParam("member-type", String.Empty, "operator");
-				TransformAndWriteResult( xmlDocumentation, "individualmembers", arguments, fileName);
 
+				TransformAndWriteResult( xmlDocumentation, "individualmembers", arguments, fileName);
 				OnTopicStart( fileName );
 
 				int[] indexes = SortNodesByAttribute(operators, "id");
@@ -681,31 +668,22 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 							bOverloaded = true;
 
 							fileName = NameMapper.GetFilenameForOperatorsOverloads(typeNode, operatorNode);
-							OnAddFileToTopic( fileName );
 
 							arguments = new XsltArgumentList();
 							arguments.AddParam("member-id", String.Empty, operatorID);
-							TransformAndWriteResult( xmlDocumentation, "memberoverload", arguments, fileName );
 
+							TransformAndWriteResult( xmlDocumentation, "memberoverload", arguments, fileName );
 							OnTopicStart( fileName );
 						}
 					}
 
-
 					fileName = NameMapper.GetFilenameForOperator(operatorNode);
-					if (bOverloaded)
-					{
-						XmlNodeList parameterNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace/" + NameMapper.LowerCaseTypeNames[whichType] + "[@name=\"" + typeName + "\"]/operator[@id=\"" + operatorID + "\"]/parameter");
-						OnAddFileToTopic( fileName );
-					}
-					else
-					{
-						OnAddFileToTopic( fileName );
-					}
 
 					arguments = new XsltArgumentList();
 					arguments.AddParam("member-id", String.Empty, operatorID);
+
 					TransformAndWriteResult( xmlDocumentation, "member", arguments, fileName);
+					OnAddFileToTopic( fileName );
 
 					if ( bOverloaded && MethodHelper.IsMethodLastOverload( opNodes, indexes, i ) )
 					{

@@ -65,6 +65,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 	public class NativeHtmlHelp2Config : BaseDocumenterConfig
 	{
 		private const string HTMLHELP2_CONFIG_CATEGORY = "Html Help v2.0 Settings";
+		private const string DEPLOYMENT_CATEGORY = "Html Help 2 Deployment";
 
 		/// <summary>Initializes a new instance of the NativeHtmlHelp2Config class.</summary>
 		public NativeHtmlHelp2Config() : base( "Native HtmlHelp2" )
@@ -213,8 +214,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		/// <summary>
 		/// Should the compiled Html 2 title be registered after it is compiled. (If true ParentCollectionNamespace is required)
 		/// </summary>
-		[Category(HTMLHELP2_CONFIG_CATEGORY)]
-		[Description("Should the compiled Html 2 title be registered after it is compiled. (If true ParentCollectionNamespace is required)")]
+		[Category(DEPLOYMENT_CATEGORY)]
+		[Description("Should the compiled Html 2 title be registered on this machine after it is compiled. (If true ParentCollectionNamespace is required)")]
 		[DefaultValue(false)]
 		public bool RegisterTitleWithNamespace
 		{
@@ -232,7 +233,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		/// <summary>
 		/// If RegisterTitleWithNamespace is true this is the namesapce to which it will be added.
 		/// </summary>
-		[Category(HTMLHELP2_CONFIG_CATEGORY)]
+		[Category(DEPLOYMENT_CATEGORY)]
 		[Description("The Html Help 2 registry namespace (avoid spaces). Only used if RegisterTitleWithNamespace is True.")]
 		public string ParentCollectionNamespace
 		{
@@ -250,7 +251,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		/// <summary>
 		/// If true the HxS title will be registered as a collection (ignored if RegisterTitleWithNamespace is ture)
 		/// </summary>
-		[Category(HTMLHELP2_CONFIG_CATEGORY)]
+		[Category(DEPLOYMENT_CATEGORY)]
 		[Description("If true the HxS title will be registered as a collection (ignored if RegisterTitleWithNamespace is ture)")]
 		[DefaultValue(false)]
 		public bool RegisterTitleAsCollection

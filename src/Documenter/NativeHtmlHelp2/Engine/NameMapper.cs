@@ -46,23 +46,16 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 	{
 
 		private static Hashtable lowerCaseTypeNames;
-		private static Hashtable mixedCaseTypeNames;
 
 		static NameMapper()
 		{
 			lowerCaseTypeNames = new Hashtable();
+
 			lowerCaseTypeNames.Add( WhichType.Class, "class" );
 			lowerCaseTypeNames.Add( WhichType.Interface, "interface" );
 			lowerCaseTypeNames.Add( WhichType.Structure, "structure" );
 			lowerCaseTypeNames.Add( WhichType.Enumeration, "enumeration" );
 			lowerCaseTypeNames.Add( WhichType.Delegate, "delegate" );
-
-			mixedCaseTypeNames = new Hashtable();
-			mixedCaseTypeNames.Add( WhichType.Class, "Class" );
-			mixedCaseTypeNames.Add( WhichType.Interface, "Interface" );
-			mixedCaseTypeNames.Add( WhichType.Structure, "Structure" );
-			mixedCaseTypeNames.Add( WhichType.Enumeration, "Enumeration" );
-			mixedCaseTypeNames.Add( WhichType.Delegate, "Delegate" );
 		}
 
 		/// <summary>
@@ -72,14 +65,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		{
 			get{ return lowerCaseTypeNames; }
 		}		
-
-		/// <summary>
-		/// 
-		/// </summary>
-		public static Hashtable MixedCaseTypeNames
-		{
-			get{ return mixedCaseTypeNames; }
-		}
 
 
 		private StringDictionary fileNames;
@@ -270,7 +255,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		{
 			string typeID = (string)typeNode.Attributes["id"].Value;
 			string opName = (string)opNode.Attributes["name"].Value;
-			string fileName = typeID.Substring(2) + "." + opName + ".html";
+			string fileName = typeID.Substring(2) + "." + opName + "_overloads.html";
 			return fileName;
 		}
 
@@ -295,7 +280,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 
 			if (operatorNode.Attributes["overload"] != null)
 			{
-				fileName += operatorNode.Attributes["overload"].Value;
+				fileName += "_overload_" + operatorNode.Attributes["overload"].Value;
 			}
 
 			fileName += ".html";

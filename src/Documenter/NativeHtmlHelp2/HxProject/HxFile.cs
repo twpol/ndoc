@@ -86,5 +86,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2.HxProject
 			Debug.Assert( node != null );
 			node.InnerText = value.ToString();
 		}
+
 	}
 }
