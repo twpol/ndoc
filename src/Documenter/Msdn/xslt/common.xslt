@@ -4,6 +4,8 @@
 	<xsl:include href="syntax.xslt" />
 	<xsl:include href="filenames.xslt" />
 	<!-- -->
+	<xsl:param name="ndoc-title" />
+	<!-- -->
 	<xsl:template name="csharp-type">
 		<xsl:param name="runtime-type" />
 		<xsl:variable name="old-type">
@@ -573,7 +575,9 @@
 	<xsl:template name="title-row">
 		<xsl:param name="type-name" />
 		<div id="banner">
-			<div id="header">NDoc Documented Class Library</div>
+			<div id="header">
+				<xsl:value-of select="$ndoc-title" />
+			</div>
 			<h1>
 				<xsl:value-of select="$type-name" />
 			</h1>

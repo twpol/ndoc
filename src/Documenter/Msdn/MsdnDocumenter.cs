@@ -1007,6 +1007,8 @@ namespace NDoc.Documenter.Msdn
 					File.Open(Path.Combine(MyConfig.OutputDirectory, filename), FileMode.Create),
 					new UTF8Encoding(true));
 
+				arguments.AddParam("ndoc-title", String.Empty, MyConfig.Title);
+
 				transform.Transform(xmlDocumentation, arguments, streamWriter);
 			}
 			finally

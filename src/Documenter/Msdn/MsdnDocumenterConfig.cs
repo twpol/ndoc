@@ -48,6 +48,8 @@ namespace NDoc.Documenter.Msdn
 			{
 				HtmlHelpCompilerFilename = "hhc.exe";
 			}
+
+			Title = "An NDoc Documented Class Library";
 		}
 
 		/// <summary>Gets or sets the OutputDirectory property.</summary>
@@ -111,6 +113,19 @@ namespace NDoc.Documenter.Msdn
 		{
 			get { return includeFavorites; }
 			set { includeFavorites = value; }
+		}
+
+		private string _Title;
+
+		/// <summary>Gets or sets the Title property.</summary>
+		[
+			Category("HTML Help"),
+			Description("This is the title displayed at the top of every page.")
+		]
+		public string Title
+		{
+			get { return _Title; }
+			set { _Title = value; }
 		}
 	}
 }
