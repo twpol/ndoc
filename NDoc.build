@@ -12,6 +12,11 @@
 	<call target="set-build-configuration" force="true" />
 	<call target="set-runtime-configuration" force="true" />
 	<!-- Targets that check settings -->
+	<target name="check-project-version">
+		<ifnot propertyexists="project.version">
+			<fail message="A project version has not been specified." />
+		</ifnot>
+	</target>
 	<target name="check-current-package-zipfile">
 		<ifnot propertyexists="current.package.zipfile">
 			<fail message="The current package zipfile has not been specified." />
@@ -222,33 +227,32 @@
 		<!-- build Xml Documenter -->
 		<nant buildfile="src/Documenter/Xml/Xml.build" target="compile" inheritall="true" />
 	</target>
-	<target name="package" depends="set-package-configuration" description="Build and Package distribution">
+	<!-- Cleans the current build configuration -->
+	<target name="clean-build-dir" depends="check-build-dir" description="Deletes current build configuration">
+        	<delete dir="${build.dir}" />
+	</target>
+	<!-- Cleans all build configurations -->
+	<target name="clean-all" description="Deletes every build configuration">
+	        <echo message="Deleting all builds from all configurations" />
+        	<delete dir="build" />
+	</target>
+	<!-- Creates a distribution package -->
+	<target name="package" depends="check-project-version" description="Build and Package distribution">
 		<property name="current.package.zipfile" value="${nant.project.name}-${project.version}.zip" />
 		<!-- set flag to indicating that this is a package build -->
 		<property name="project.build.package" value="true" readonly="false" />
-		<!-- clean the current package directory -->
-		<!-- TO-DO -->
-		<!-- copies the libraries for building log4net to the current package directory -->
-		<call target="package-build-libraries" force="true" />
-		<!-- copies the examples to the current package directory -->
+		<!-- clean the current build directory -->
+		<call target="clean-build-dir" force="true" />
+		<!-- copies the examples to the current build directory -->
 		<call target="package-examples" force="true" />
-		<!-- copies the sources to the current package directory -->
+		<!-- copies the sources to the current build directory -->
 		<call target="package-src" force="true" />
-		<!-- copies the extenstions to the current package directory -->
-		<call target="package-extensions" force="true" />
-		<!-- copies the documentation to the current package directory -->
+		<!-- copies the documentation to the current build directory -->
 		<call target="package-doc" force="true" />
-		<!-- copies the release files to the current package directory -->
+		<!-- copies the release files to the current build directory -->
 		<call target="package-release-files" force="true" />
 		<!-- compile all build configurations for all runtime configurations  -->
 		<call target="compile-all" force="true" />
-		<!-- compile all examples -->
-		<call target="compile-examples" force="true" />
-		<!-- compile all extensions -->
-		<call target="compile-extensions" force="true" />
-		<!-- generate the sdk docs using the release build configuration for all runtime configuration -->
-		<call target="set-release-build-configuration" force="true" />
-		<call target="generate-sdkdoc-all" force="true" />
 		<!-- create the package distribution zipfile -->
 		<call target="create-package-zipfile" force="true" />
 	</target>
@@ -265,10 +269,10 @@
 		<copy todir="${build.dir}/src">
 			<fileset basedir="src">
 				<includes name="**/*" />
+				<excludes name="NDocGen/**" />
+				<excludes name="**/bin/**" />
 				<excludes name="**/obj/**" />
 				<excludes name="**/*.csproj.user" />
-				<excludes name="NDoc.suo" />
-				<excludes name="**/*.sln.old" />
 			</fileset>
 		</copy>
 	</target>
@@ -287,11 +291,11 @@
 				<includes name="NDoc.build" />
 				<includes name="NDoc.build.include" />
 				<includes name="README.txt" />
-				<includes name="ndoc.snk" />
+				<excludes name="NDoc.sln" />
 			</fileset>
 		</copy>
 	</target>
-	<target name="create-package-zipfile" depends="check-build-dir, check-current-package-dir, check-current-package-zipfile, check-log4net-basedir">
+	<target name="create-package-zipfile" depends="check-build-dir, check-current-package-zipfile">
 		<!-- delete the specified zipfile if it already exists -->
 		<delete>
 			<fileset basedir=".">
