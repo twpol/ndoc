@@ -249,7 +249,11 @@ namespace NDoc.Core
 			try
 			{
 				writer = new XmlTextWriter(tempfilename,Encoding.UTF8);
-			
+//				XmlTextWriter textWriter = new XmlTextWriter(tempfilename,Encoding.UTF8);
+//				textWriter.Formatting=Formatting.Indented;
+//				textWriter.Indentation=2;
+//				writer=textWriter;
+
 				BuildXml(project, writer);
 			
 				return tempfilename;
@@ -586,6 +590,23 @@ namespace NDoc.Core
 
 		private bool MustDocumentMethod(MethodBase method)
 		{
+			//check the basic visibility options first
+			if(!
+				(
+				(method.IsPublic) ||
+				(method.IsFamily && MyConfig.DocumentProtected &&
+				(MyConfig.DocumentSealedProtected || !method.ReflectedType.IsSealed)) ||
+				(method.IsFamilyOrAssembly && MyConfig.DocumentProtected) ||
+				(method.IsAssembly && MyConfig.DocumentInternals) ||
+				(method.IsFamilyAndAssembly && MyConfig.DocumentInternals) ||
+				(method.IsPrivate && MyConfig.DocumentPrivates)
+				)
+				)
+			{
+				return false;
+			}
+
+			
 			// Methods containing '.' in their name that aren't constructors are probably
 			// explicit interface implementations, we check whether we document those or not.
 			if((method.Name.IndexOf('.') != -1) && (method.Name != ".ctor") && (method.Name != ".cctor"))
@@ -607,6 +628,8 @@ namespace NDoc.Core
 				}
 			}
 
+
+			//Inherited Framework Members
 			if ((!MyConfig.DocumentInheritedFrameworkMembers) &&
 				(method.ReflectedType != method.DeclaringType) &&
 				(method.DeclaringType.FullName.StartsWith("System.") || 
@@ -615,21 +638,60 @@ namespace NDoc.Core
 				return false;
 			}
 
-			// All other methods
-			return 
-				(
-				(method.IsPublic) ||
-				(method.IsFamily && MyConfig.DocumentProtected &&
-				(MyConfig.DocumentSealedProtected || !method.ReflectedType.IsSealed)) ||
-				(method.IsFamilyOrAssembly && MyConfig.DocumentProtected) ||
-				(method.IsAssembly && MyConfig.DocumentInternals) ||
-				(method.IsFamilyAndAssembly && MyConfig.DocumentInternals) ||
-				(method.IsPrivate && MyConfig.DocumentPrivates)
-				) &&
-				IsEditorBrowsable(method) &&
-				!assemblyDocCache.HasExcludeTag(GetMemberName(method));
+			//check if the member has an exclude tag
+			if (method.DeclaringType != method.ReflectedType) // inherited
+			{
+				if(assemblyDocCache.HasExcludeTag(GetMemberName(method,method.DeclaringType)))
+					return false;
+			}
+			else
+			{
+				if(assemblyDocCache.HasExcludeTag(GetMemberName(method)))
+					return false;
+			}
+
+			return IsEditorBrowsable(method);
 		}
 
+
+		private bool MustDocumentField(FieldInfo field)
+		{
+			if (!
+				(
+				(field.IsPublic) ||
+				(field.IsFamily && MyConfig.DocumentProtected &&
+				(MyConfig.DocumentSealedProtected || !field.ReflectedType.IsSealed)) ||
+				(field.IsFamilyOrAssembly && MyConfig.DocumentProtected) ||
+				(field.IsAssembly && MyConfig.DocumentInternals) ||
+				(field.IsFamilyAndAssembly && MyConfig.DocumentInternals) ||
+				(field.IsPrivate && MyConfig.DocumentPrivates))
+				)
+			{
+				return false;
+			}
+
+			if ((!MyConfig.DocumentInheritedFrameworkMembers) &&
+				(field.ReflectedType != field.DeclaringType) &&
+				(field.DeclaringType.FullName.StartsWith("System.") || 
+				field.DeclaringType.FullName.StartsWith("Microsoft.")))
+			{
+				return false;
+			}
+
+			//check if the member has an exclude tag
+			if (field.DeclaringType != field.ReflectedType) // inherited
+			{
+				if(assemblyDocCache.HasExcludeTag(GetMemberName(field,field.DeclaringType)))
+					return false;
+			}
+			else
+			{
+				if(assemblyDocCache.HasExcludeTag(GetMemberName(field)))
+					return false;
+			}
+
+			return IsEditorBrowsable(field);
+		}
 
 		private bool IsHidden(MemberInfo member, Type type)
 		{
@@ -784,27 +846,6 @@ namespace NDoc.Core
 			return true;
 		}
 
-		private bool MustDocumentField(FieldInfo field)
-		{
-			if ((!MyConfig.DocumentInheritedFrameworkMembers) &&
-				(field.ReflectedType != field.DeclaringType) &&
-				(field.DeclaringType.FullName.StartsWith("System.") || 
-				 field.DeclaringType.FullName.StartsWith("Microsoft.")))
-			{
-				return false;
-			}
-
-			return (field.IsPublic ||
-				(field.IsFamily && MyConfig.DocumentProtected &&
-				(MyConfig.DocumentSealedProtected || !field.ReflectedType.IsSealed)) ||
-				(field.IsFamilyOrAssembly && MyConfig.DocumentProtected) ||
-				(field.IsAssembly && MyConfig.DocumentInternals) ||
-				(field.IsFamilyAndAssembly && MyConfig.DocumentInternals) ||
-				(field.IsPrivate && MyConfig.DocumentPrivates)) &&
-				IsEditorBrowsable(field) &&
-				!assemblyDocCache.HasExcludeTag(GetMemberName(field));
-		}
-
 		private void WriteAssembly(XmlWriter writer, Assembly assembly)
 		{
 			AssemblyName assemblyName = assembly.GetName();
@@ -896,6 +937,10 @@ namespace NDoc.Core
 						{
 							swriter = new StringWriter();
 							tempWriter = new XmlTextWriter(swriter);
+//							XmlTextWriter textWriter = new XmlTextWriter(swriter);
+//							textWriter.Formatting=Formatting.Indented;
+//							textWriter.Indentation=2;
+//							tempWriter = textWriter;
 							myWriter = tempWriter;
 						}
 						else
@@ -1573,6 +1618,9 @@ namespace NDoc.Core
 
 			foreach (PropertyInfo property in properties)
 			{
+				// here we decide if the property is to be documented
+				// note that we cannot directly test 'visibility' - it has to
+				// be done for both the accessors individualy...
 				if (IsEditorBrowsable(property))
 				{
 					MethodInfo getMethod = null;
@@ -1591,10 +1639,22 @@ namespace NDoc.Core
 					bool hasGetter = (getMethod != null) && MustDocumentMethod(getMethod);
 					bool hasSetter = (setMethod != null) && MustDocumentMethod(setMethod);
 
+					bool IsExcluded=false;
+					//check if the member has an exclude tag
+					if (property.DeclaringType != property.ReflectedType) // inherited
+					{
+						IsExcluded=assemblyDocCache.HasExcludeTag(GetMemberName(property,property.DeclaringType));
+					}
+					else
+					{
+						IsExcluded=assemblyDocCache.HasExcludeTag(GetMemberName(property));
+					}
+
 					if ((hasGetter || hasSetter)
+						&& !IsExcluded
 						&& !IsAlsoAnEvent(property)
 						&& !IsHidden(property, type)
-						&& !assemblyDocCache.HasExcludeTag(GetMemberName(property)))
+						)
 					{
 						WriteProperty(
 							writer,
@@ -1716,13 +1776,27 @@ namespace NDoc.Core
 			EventInfo[] events = type.GetEvents(bindingFlags);
 			foreach (EventInfo eventInfo in events)
 			{
-				MethodInfo addMethod = eventInfo.GetAddMethod(true);
-
-				if (addMethod != null &&
-					MustDocumentMethod(addMethod) &&
-					IsEditorBrowsable(eventInfo))
+				bool IsExcluded=false;
+				//check if the event has an exclude tag
+				if (eventInfo.DeclaringType != eventInfo.ReflectedType) // inherited
 				{
-					WriteEvent(writer, eventInfo);
+					IsExcluded=assemblyDocCache.HasExcludeTag(GetMemberName(eventInfo,eventInfo.DeclaringType));
+				}
+				else
+				{
+					IsExcluded=assemblyDocCache.HasExcludeTag(GetMemberName(eventInfo));
+				}
+
+				if (!IsExcluded)
+				{
+					MethodInfo addMethod = eventInfo.GetAddMethod(true);
+
+					if (addMethod != null &&
+						MustDocumentMethod(addMethod) &&
+						IsEditorBrowsable(eventInfo))
+					{
+						WriteEvent(writer, eventInfo);
+					}
 				}
 			}
 		}
@@ -1993,6 +2067,12 @@ namespace NDoc.Core
 			writer.WriteEndElement();
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="parent"></param>
+		/// <param name="value"></param>
+		/// <returns></returns>
 		protected string GetDisplayValue(Type parent,object value)
 		{
 			if (value == null) return "null";
@@ -2680,11 +2760,28 @@ namespace NDoc.Core
 			return "F:" + GetFullNamespaceName(field) + "." + field.Name;
 		}
 
+		/// <summary>Derives the member name ID for the base of an inherited field.</summary>
+		/// <param name="field">The field to derive the member name ID from.</param>
+		/// <param name="declaringType">The declaring type.</param>
+		private string GetMemberName(FieldInfo field, Type declaringType)
+		{
+			return "F:" + declaringType.FullName.Replace("+", ".") + "." + field.Name;
+		}
+
 		/// <summary>Derives the member name ID for an event. Used to match nodes in the /doc XML.</summary>
 		/// <param name="eventInfo">The event to derive the member name ID from.</param>
 		private string GetMemberName(EventInfo eventInfo)
 		{
 			return "E:" + GetFullNamespaceName(eventInfo) + 
+				"." + eventInfo.Name.Replace('.', '#').Replace('+', '#');
+		}
+
+		/// <summary>Derives the member name ID for an event. Used to match nodes in the /doc XML.</summary>
+		/// <param name="eventInfo">The event to derive the member name ID from.</param>
+		/// <param name="declaringType">The declaring type.</param>
+		private string GetMemberName(EventInfo eventInfo, Type declaringType)
+		{
+			return "E:" + declaringType.FullName.Replace("+", ".") + 
 				"." + eventInfo.Name.Replace('.', '#').Replace('+', '#');
 		}
 
@@ -2723,6 +2820,33 @@ namespace NDoc.Core
 			catch(System.Security.SecurityException){}
 
 			return memberName;
+		}
+
+		/// <summary>Derives the member name ID for the base of an inherited property.</summary>
+		/// <param name="property">The property to derive the member name ID from.</param>
+		/// <param name="declaringType">The declaring type.</param>
+		private string GetMemberName(PropertyInfo property, Type declaringType)
+		{
+			string memberID = GetMemberName(property);
+
+			//extract member type (T:, P:, etc.)
+			string memberType = memberID.Substring(0, 2);
+
+			//extract member name
+			int i = memberID.IndexOf('(');
+			string memberName;
+			if (i > -1)
+			{
+				memberName = memberID.Substring(memberID.LastIndexOf('.', i) + 1);
+			}
+			else
+			{
+				memberName = memberID.Substring(memberID.LastIndexOf('.') + 1);
+			}
+
+			//the member id in the declaring type
+			string key = memberType + declaringType.FullName.Replace("+", ".") + "." + memberName;
+			return key;
 		}
 
 		/// <summary>Derives the member name ID for a member function. Used to match nodes in the /doc XML.</summary>
@@ -2777,6 +2901,34 @@ namespace NDoc.Core
 			
 			return memberName;
 		}
+
+		/// <summary>Derives the member name ID for the basse of an inherited member function.</summary>
+		/// <param name="method">The method to derive the member name ID from.</param>
+		/// <param name="declaringType">The declaring type.</param>
+		private string GetMemberName(MethodBase method, Type declaringType)
+		{
+			string memberID = GetMemberName(method);
+
+			//extract member type (T:, P:, etc.)
+			string memberType = memberID.Substring(0, 2);
+
+			//extract member name
+			int i = memberID.IndexOf('(');
+			string memberName;
+			if (i > -1)
+			{
+				memberName = memberID.Substring(memberID.LastIndexOf('.', i) + 1);
+			}
+			else
+			{
+				memberName = memberID.Substring(memberID.LastIndexOf('.') + 1);
+			}
+
+			//the member id in the declaring type
+			string key = memberType + declaringType.FullName.Replace("+", ".") + "." + memberName;
+			return key;
+		}
+
 
 		private void WriteSlashDocElements(XmlWriter writer, string memberName)
 		{
