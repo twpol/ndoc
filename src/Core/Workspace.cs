@@ -153,6 +153,16 @@ namespace NDoc.Core
 		}
 
 		/// <summary>
+		/// Adds a sub directory to the resource directory
+		/// </summary>
+		/// <param name="dirName">The name of the sub directory</param>
+		public void AddResourceDirectory( string dirName )
+		{
+			if ( !Directory.Exists( Path.Combine( ResourceDirectory, dirName ) ) )
+				Directory.CreateDirectory( Path.Combine( ResourceDirectory, dirName ) );
+		}
+
+		/// <summary>
 		/// Saves files mathing the specified filter from the build directory to the root directory
 		/// </summary>
 		/// <param name="filter">File filter to search for</param>
