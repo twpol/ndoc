@@ -1,188 +1,36 @@
-<project name="NDoc" default="all">
-  <property name="build.dir" value="build" />
-  <property name="debug" value="true" />
-  <target name="all" depends="Gui,Console,Core,Xml,VisualStudio,Test,Msdn,JavaDoc" />
-  <target name="setup">
-    <mkdir dir="${build.dir}" />
-  </target>
-  <target name="Gui" depends="setup,Core,Msdn,Xml,JavaDoc,VisualStudio">
-    <resgen input="Gui\AboutForm.resx" output="${build.dir}\NDoc.Gui.AboutForm.resources" />
-    <resgen input="Gui\AssemblySlashDocForm.resx" output="${build.dir}\NDoc.Gui.AssemblySlashDocForm.resources" />
-    <resgen input="Gui\ErrorForm.resx" output="${build.dir}\NDoc.Gui.ErrorForm.resources" />
-    <resgen input="Gui\MainForm.resx" output="${build.dir}\NDoc.Gui.MainForm.resources" />
-    <resgen input="Gui\NamespaceSummariesForm.resx" output="${build.dir}\NDoc.Gui.NamespaceSummariesForm.resources" />
-    <resgen input="Gui\SolutionForm.resx" output="${build.dir}\NDoc.Gui.SolutionForm.resources" />
-    <csc target="winexe" output="${build.dir}\NDocGui.exe" debug="${debug}" doc="${build.dir}\NDocGui.xml">
-      <sources>
-        <includes name="Gui\AboutForm.cs" />
-        <includes name="Gui\AssemblyInfo.cs" />
-        <includes name="Gui\AssemblySlashDocForm.cs" />
-        <includes name="Gui\BuildWorker.cs" />
-        <includes name="Gui\ErrorForm.cs" />
-        <includes name="Gui\HeaderGroupBox.cs" />
-        <includes name="Gui\MainForm.cs" />
-        <includes name="Gui\NamespaceSummariesForm.cs" />
-        <includes name="Gui\SolutionForm.cs" />
-      </sources>
-      <references>
-        <includes name="System.dll" />
-        <includes name="System.Drawing.dll" />
-        <includes name="System.Windows.Forms.dll" />
-        <includes name="System.Xml.dll" />
-        <includes name="System.Data.dll" />
-        <includes name="${build.dir}\NDoc.Core.dll" />
-        <includes name="${build.dir}\NDoc.Documenter.Msdn.dll" />
-        <includes name="${build.dir}\NDoc.Documenter.Xml.dll" />
-        <includes name="${build.dir}\NDoc.Documenter.JavaDoc.dll" />
-        <includes name="${build.dir}\NDoc.VisualStudio.dll" />
-      </references>
-      <arg value="/resource:Gui\About.rtf,NDoc.Gui.About.rtf" />
-      <arg value="/resource:${build.dir}\NDoc.Gui.AboutForm.resources" />
-      <arg value="/resource:${build.dir}\NDoc.Gui.AssemblySlashDocForm.resources" />
-      <arg value="/resource:${build.dir}\NDoc.Gui.ErrorForm.resources" />
-      <arg value="/resource:${build.dir}\NDoc.Gui.MainForm.resources" />
-      <arg value="/resource:${build.dir}\NDoc.Gui.NamespaceSummariesForm.resources" />
-      <arg value="/resource:${build.dir}\NDoc.Gui.SolutionForm.resources" />
-    </csc>
-  </target>
-  <target name="Console" depends="setup,Core,JavaDoc,Msdn,Xml">
-    <csc target="exe" output="${build.dir}\NDocConsole.exe" debug="${debug}" doc="${build.dir}\NDocConsole.xml">
-      <sources>
-        <includes name="Console\AssemblyInfo.cs" />
-        <includes name="Console\Console.cs" />
-      </sources>
-      <references>
-        <includes name="System.dll" />
-        <includes name="System.Xml.dll" />
-        <includes name="${build.dir}\NDoc.Core.dll" />
-        <includes name="${build.dir}\NDoc.Documenter.JavaDoc.dll" />
-        <includes name="${build.dir}\NDoc.Documenter.Msdn.dll" />
-        <includes name="${build.dir}\NDoc.Documenter.Xml.dll" />
-      </references>
-    </csc>
-  </target>
-  <target name="Core" depends="setup">
-    <csc target="library" output="${build.dir}\NDoc.Core.dll" debug="${debug}" doc="${build.dir}\NDoc.Core.xml">
-      <sources>
-        <includes name="Core\AssemblyInfo.cs" />
-        <includes name="Core\AssemblySlashDoc.cs" />
-        <includes name="Core\BaseDocumenter.cs" />
-        <includes name="Core\BaseDocumenterConfig.cs" />
-        <includes name="Core\DocumenterException.cs" />
-        <includes name="Core\EmbeddedResources.cs" />
-        <includes name="Core\HtmlHelp.cs" />
-        <includes name="Core\IDocumenter.cs" />
-        <includes name="Core\IDocumenterConfig.cs" />
-        <includes name="Core\Project.cs" />
-      </sources>
-      <references>
-        <includes name="System.dll" />
-        <includes name="System.Xml.dll" />
-        <includes name="System.Design.dll" />
-        <includes name="System.Drawing.dll" />
-      </references>
-    </csc>
-  </target>
-  <target name="Xml" depends="setup,Core">
-    <csc target="library" output="${build.dir}\NDoc.Documenter.Xml.dll" debug="${debug}" doc="${build.dir}\NDoc.Documenter.Xml.xml">
-      <sources>
-        <includes name="Documenter\Xml\AssemblyInfo.cs" />
-        <includes name="Documenter\Xml\XmlDocumenter.cs" />
-        <includes name="Documenter\Xml\XmlDocumenterConfig.cs" />
-      </sources>
-      <references>
-        <includes name="System.dll" />
-        <includes name="System.XML.dll" />
-        <includes name="System.Design.dll" />
-        <includes name="System.Drawing.Design.dll" />
-        <includes name="System.Drawing.dll" />
-        <includes name="${build.dir}\NDoc.Core.dll" />
-      </references>
-    </csc>
-  </target>
-  <target name="VisualStudio" depends="setup">
-    <csc target="library" output="${build.dir}\NDoc.VisualStudio.dll" debug="${debug}" doc="${build.dir}\NDoc.VisualStudio.xml">
-      <sources>
-        <includes name="VisualStudio\AssemblyInfo.cs" />
-        <includes name="VisualStudio\Project.cs" />
-        <includes name="VisualStudio\ProjectConfig.cs" />
-        <includes name="VisualStudio\Solution.cs" />
-      </sources>
-      <references>
-        <includes name="System.dll" />
-        <includes name="System.Data.dll" />
-        <includes name="System.Xml.dll" />
-      </references>
-    </csc>
-  </target>
-  <target name="Test" depends="setup">
-    <csc target="library" output="${build.dir}\NDoc.Test.dll" debug="${debug}" doc="${build.dir}\NDoc.Test.xml">
-      <sources>
-        <includes name="Test\AssemblyInfo.cs" />
-        <includes name="Test\Test.cs" />
-      </sources>
-      <references>
-        <includes name="System.dll" />
-        <includes name="System.Xml.dll" />
-      </references>
-    </csc>
-  </target>
-  <target name="Msdn" depends="setup,Core">
-    <csc target="library" output="${build.dir}\NDoc.Documenter.Msdn.dll" debug="${debug}" doc="${build.dir}\NDoc.Documenter.Msdn.xml">
-      <sources>
-        <includes name="Documenter\Msdn\AssemblyInfo.cs" />
-        <includes name="Documenter\Msdn\MsdnDocumenter.cs" />
-        <includes name="Documenter\Msdn\MsdnDocumenterConfig.cs" />
-      </sources>
-      <references>
-        <includes name="System.dll" />
-        <includes name="System.Xml.dll" />
-        <includes name="System.Drawing.Design.dll" />
-        <includes name="System.Design.dll" />
-        <includes name="System.Drawing.dll" />
-        <includes name="${build.dir}\NDoc.Core.dll" />
-      </references>
-      <arg value="/resource:Documenter\Msdn\css\MSDN.css,NDoc.Documenter.Msdn.css.MSDN.css" />
-      <arg value="/resource:Documenter\Msdn\xslt\allmembers.xslt,NDoc.Documenter.Msdn.xslt.allmembers.xslt" />
-      <arg value="/resource:Documenter\Msdn\xslt\common.xslt,NDoc.Documenter.Msdn.xslt.common.xslt" />
-      <arg value="/resource:Documenter\Msdn\xslt\event.xslt,NDoc.Documenter.Msdn.xslt.event.xslt" />
-      <arg value="/resource:Documenter\Msdn\xslt\field.xslt,NDoc.Documenter.Msdn.xslt.field.xslt" />
-      <arg value="/resource:Documenter\Msdn\xslt\filenames.xslt,NDoc.Documenter.Msdn.xslt.filenames.xslt" />
-      <arg value="/resource:Documenter\Msdn\xslt\individualmembers.xslt,NDoc.Documenter.Msdn.xslt.individualmembers.xslt" />
-      <arg value="/resource:Documenter\Msdn\xslt\member.xslt,NDoc.Documenter.Msdn.xslt.member.xslt" />
-      <arg value="/resource:Documenter\Msdn\xslt\memberoverload.xslt,NDoc.Documenter.Msdn.xslt.memberoverload.xslt" />
-      <arg value="/resource:Documenter\Msdn\xslt\memberscommon.xslt,NDoc.Documenter.Msdn.xslt.memberscommon.xslt" />
-      <arg value="/resource:Documenter\Msdn\xslt\namespace.xslt,NDoc.Documenter.Msdn.xslt.namespace.xslt" />
-      <arg value="/resource:Documenter\Msdn\xslt\namespacehierarchy.xslt,NDoc.Documenter.Msdn.xslt.namespacehierarchy.xslt" />
-      <arg value="/resource:Documenter\Msdn\xslt\property.xslt,NDoc.Documenter.Msdn.xslt.property.xslt" />
-      <arg value="/resource:Documenter\Msdn\xslt\syntax.xslt,NDoc.Documenter.Msdn.xslt.syntax.xslt" />
-      <arg value="/resource:Documenter\Msdn\xslt\type.xslt,NDoc.Documenter.Msdn.xslt.type.xslt" />
-      <arg value="/resource:Documenter\Msdn\xslt\vb-syntax.xslt,NDoc.Documenter.Msdn.xslt.vb-syntax.xslt" />
-    </csc>
-  </target>
-  <target name="JavaDoc" depends="setup,Core">
-    <csc target="library" output="${build.dir}\NDoc.Documenter.JavaDoc.dll" debug="${debug}" doc="${build.dir}\NDoc.Documenter.JavaDoc.xml">
-      <sources>
-        <includes name="Documenter\JavaDoc\AssemblyInfo.cs" />
-        <includes name="Documenter\JavaDoc\JavaDocDocumenter.cs" />
-        <includes name="Documenter\JavaDoc\JavaDocDocumenterConfig.cs" />
-      </sources>
-      <references>
-        <includes name="System.dll" />
-        <includes name="System.Xml.dll" />
-        <includes name="System.Design.dll" />
-        <includes name="System.Drawing.Design.dll" />
-        <includes name="System.Drawing.dll" />
-        <includes name="${build.dir}\NDoc.Core.dll" />
-      </references>
-      <arg value="/resource:Documenter\JavaDoc\css\JavaDoc.css,NDoc.Documenter.JavaDoc.css.JavaDoc.css" />
-      <arg value="/resource:Documenter\JavaDoc\xslt\javadoc.xslt,NDoc.Documenter.JavaDoc.xslt.javadoc.xslt" />
-      <arg value="/resource:Documenter\JavaDoc\xslt\namespace-summary.xslt,NDoc.Documenter.JavaDoc.xslt.namespace-summary.xslt" />
-      <arg value="/resource:Documenter\JavaDoc\xslt\overview-summary.xslt,NDoc.Documenter.JavaDoc.xslt.overview-summary.xslt" />
-      <arg value="/resource:Documenter\JavaDoc\xslt\type.xslt,NDoc.Documenter.JavaDoc.xslt.type.xslt" />
-    </csc>
-  </target>
-  <target name="clean">
-    <delete dir="${build.dir}" verbose="true" failonerror="false" />
-  </target>
+<project name="NDoc" default="build">
+	
+	<include href="NDoc.build.include" />
+	
+	<target name="cleanbuild" depends="build">
+		<delete verbose="true">
+			<fileset basedir="${build.dir}">
+				<includes name="*.resources" />
+			</fileset>
+		</delete>
+	</target>
+	
+	<target name="release" depends="clean">
+		<property name="debug" value="false" />
+		<call target="cleanbuild" />		
+	</target>
+	
+	<target name="devel" depends="clean">
+		<tstamp />
+		<property name="devel.name" value="ndoc-devel-${nant.dstamp}.zip" />
+	        <delete file="${devel.name}" failonerror="false"/>
+		<zip zipfile="..\..\${devel.name}">
+			<fileset basedir="..\..">
+				<includes name="ndoc\**" />
+				<excludes name="ndoc\build\**" />
+				<excludes name="ndoc\docs\**" />
+				<excludes name="ndoc\web\**" />
+				<excludes name="**\bin\**" />
+				<excludes name="**\obj\**" />
+				<excludes name="**\*.suo" />
+				<excludes name="**\*.user" />
+			</fileset>
+		</zip>
+	</target>
+
 </project>
