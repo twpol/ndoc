@@ -115,7 +115,7 @@
 				</xsl:call-template>
 			</xsl:when>
 			<xsl:otherwise>
-				<a href="{NUtil:GetHRef( string( $type ) )}">		
+				<a href="{NUtil:GetLocalHRef( string( $type ) )}">		
 					<xsl:value-of select="$link-text"/> 
 				</a>
 			</xsl:otherwise>
@@ -137,7 +137,7 @@
 			</xsl:choose>	
 		</xsl:variable>
 		<xsl:call-template name="get-xlink">
-			<xsl:with-param name="a-index" select="NUtil:GetHRef( $type )"/>
+			<xsl:with-param name="a-index" select="NUtil:GetAIndex( $type )"/>
 			<xsl:with-param name="link-text" select="$text"/>
 		</xsl:call-template>		
 	</xsl:template>
@@ -145,7 +145,8 @@
 	<xsl:template name="get-xlink">
 		<xsl:param name="a-index"/>
 		<xsl:param name="link-text"/>
-		<MSHelp:link keywords="{$a-index}" indexMoniker="!DefaultAssociativeIndex" namespace="{$ndoc-sdk-doc-base-url}" tabindex="0">
+
+		<MSHelp:link keywords="{$a-index}" indexMoniker="!DefaultAssociativeIndex" namespace="{NUtil:GetHelpNamespace( 'System' )}" tabindex="0">
 			<xsl:value-of select="$link-text"/>				
 		</MSHelp:link>		
 	</xsl:template>

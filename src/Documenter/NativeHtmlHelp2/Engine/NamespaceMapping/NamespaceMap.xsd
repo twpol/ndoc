@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
-<xs:schema id="namespaceMap" targetNamespace="urn:ndoc-sourceforge-net:documenters.nativehtmlhelp2.schemas.namespaceMap"
-	xmlns:mstns="urn:ndoc-sourceforge-net:documenters.nativehtmlhelp2.schemas.namespaceMap"
-	xmlns="urn:ndoc-sourceforge-net:documenters.nativehtmlhelp2.schemas.namespaceMap" 
+<xs:schema id="namespaceMap" targetNamespace="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.schemas.namespaceMap"
+	xmlns:mstns="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.schemas.namespaceMap"
+	xmlns="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.schemas.namespaceMap" 
 	xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" 
 	attributeFormDefault="qualified" elementFormDefault="qualified">

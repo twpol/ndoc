@@ -24,6 +24,7 @@ using System.Text;
 using System.Diagnostics;
 using System.Collections;
 using System.Collections.Specialized;
+using NDoc.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping;
 
 namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 {
@@ -42,9 +43,9 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		private string _outputDirectory;
 		private ExternalHtmlProvider _htmlProvider;
 		private StyleSheetCollection _stylesheets;
-		private SdkDocVersion linkToSdkDocVersion = SdkDocVersion.SDK_v1_1;
 
-		private FileNameMapper mapper;
+		private FileNameMapper fileNameMapper;
+		private NamespaceMapper nsMapper;
 
 		/// <summary>
 		/// The collection of properties that are passed to each stylesheet
@@ -56,7 +57,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// </summary>
 		/// <param name="outputDirectory">The directory to write the Html files to</param>
 		/// <param name="htmlProvider">Object the provides additional Html content</param>
-		public HtmlFactory( string outputDirectory, ExternalHtmlProvider htmlProvider )
+		/// <param name="sdkVersion">The SDK version to use for System references</param>
+		public HtmlFactory( string outputDirectory, ExternalHtmlProvider htmlProvider, SdkDocVersion sdkVersion )
 		{			
 			if ( !Directory.Exists( outputDirectory ) )
 				throw new Exception( string.Format( "The output directory {0}, does not exist", outputDirectory ) );
@@ -65,6 +67,16 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			_outputDirectory = outputDirectory;
 
 			_htmlProvider = htmlProvider;
+		
+			nsMapper = new NamespaceMapper( Path.Combine( Directory.GetParent( _outputDirectory ).ToString(), "NamespaceMap.xml" ) );
+
+			if ( sdkVersion == SdkDocVersion.SDK_v1_0 )
+				nsMapper.SetSystemNamespace( "ms-help://MS.NETFrameworkSDK" );
+			else if ( sdkVersion == SdkDocVersion.SDK_v1_1 )
+				nsMapper.SetSystemNamespace( "ms-help://MS.NETFrameworkSDKv1.1" );
+			else
+				Debug.Assert( false );		// remind ourselves to update this list when new framework versions are supported
+
 		}
 
 		#region events
@@ -125,12 +137,10 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// Generates HTML for the NDoc XML
 		/// </summary>
 		/// <param name="documentation">NDoc generated xml</param>
-		/// <param name="sdkVersion">The SDK version to use</param>
-		public void MakeHtml( XmlNode documentation, SdkDocVersion sdkVersion )
+		public void MakeHtml( XmlNode documentation )
 		{
-			linkToSdkDocVersion = sdkVersion;
-			mapper = new FileNameMapper();
-			mapper.MakeElementNames( documentation );
+			fileNameMapper = new FileNameMapper();
+			fileNameMapper.MakeElementNames( documentation );
 			MakeHtmlForAssemblies( documentation );
 		}
 
@@ -190,9 +200,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 				foreach ( DictionaryEntry entry in Properties )				
 					arguments.AddParam( entry.Key.ToString(), "", entry.Value );
 				
-				MsdnXsltUtilities utilities = new MsdnXsltUtilities( mapper.ElemNames, linkToSdkDocVersion );
-
-				arguments.AddParam( "ndoc-sdk-doc-base-url", String.Empty, utilities.SdkDocBaseUrl );
+				MsdnXsltUtilities utilities = new MsdnXsltUtilities( fileNameMapper.ElemNames, this.nsMapper );
 		
 				arguments.AddExtensionObject( "urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities", utilities );
 				arguments.AddExtensionObject( "urn:NDocExternalHtml", _htmlProvider );

@@ -128,7 +128,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 
 				// create and intialize a HtmlFactory
 				ExternalHtmlProvider htmlProvider = new ExternalHtmlProvider( MyConfig.HeaderHtml, MyConfig.FooterHtml );
-				HtmlFactory factory = new HtmlFactory( Path.Combine( this.WorkingPath, "html" ), htmlProvider );
+				HtmlFactory factory = new HtmlFactory( Path.Combine( this.WorkingPath, "html" ), htmlProvider, MyConfig.LinkToSdkDocVersion );
 
 				using( new TOCBuilder( toc, factory ) )
 					MakeHtml( xmlDocumentation, factory );
@@ -191,7 +191,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			factory.Properties.Add( "includeHierarchy", MyConfig.IncludeHierarchy );
 
 			// make the html
-			factory.MakeHtml( xmlDocumentation, MyConfig.LinkToSdkDocVersion );
+			factory.MakeHtml( xmlDocumentation );
 		}
 
 		private string GetPlatformString()
@@ -239,8 +239,13 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		private void PrepareWorkspace( Workspace w )
 		{
 			w.Clean();
+
+			// import the base content files
 			w.ImportContent( Path.Combine( ResourceDirectory, "graphics" ) );
+
+			// import the project template
 			w.ImportProjectFiles( Path.Combine( ResourceDirectory, "includes" ) );
+			w.ImportProjectFiles( Path.Combine( ResourceDirectory, "NamespaceMapping" ) );
 		}
 
 

@@ -21,6 +21,7 @@ using System.Xml;
 using System.Xml.XPath;
 using System.Diagnostics;
 using System.Collections.Specialized;
+using NDoc.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping;
 
 namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 {
@@ -29,46 +30,26 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 	/// </summary>
 	public class MsdnXsltUtilities
 	{
-		private const string sdkDoc10BaseUrl = "ms-help://MS.NETFrameworkSDK";
-		private const string sdkDoc11BaseUrl = "ms-help://MS.NETFrameworkSDKv1.1";
-
 		private const string systemPrefix = "System.";
-
-		private string sdkDocBaseUrl; 
 
 		private StringDictionary elemNames;
 
 		private StringCollection descriptions;
 
+		private NamespaceMapper nsMapper;
+
 		/// <summary>
 		/// Initializes a new instance of class MsdnXsltUtilities
 		/// </summary>
 		/// <param name="elemNames">A StringDictionary holding id to element name mappings</param>
-		/// <param name="linkToSdkDocVersion">Specifies the version of the SDK documentation.</param>	
-		public MsdnXsltUtilities( StringDictionary elemNames, SdkDocVersion linkToSdkDocVersion )
+		/// <param name="NamespaceMapper">The namespace mapper used to look up XLink help namespace for foreign types</param>	
+		public MsdnXsltUtilities( StringDictionary elemNames, NamespaceMapper mapper )
 		{
 			descriptions = new StringCollection();
 
-			this.elemNames = elemNames;
-			
-			switch (linkToSdkDocVersion)
-			{
-				case SdkDocVersion.SDK_v1_0:
-					sdkDocBaseUrl = sdkDoc10BaseUrl;
-					break;
-				case SdkDocVersion.SDK_v1_1:
-					sdkDocBaseUrl = sdkDoc11BaseUrl;
-					break;
-			}
+			this.elemNames = elemNames;		
 
-		}
-
-		/// <summary>
-		/// Gets the base Url for system types links.
-		/// </summary>
-		public string SdkDocBaseUrl
-		{
-			get { return sdkDocBaseUrl; }
+			nsMapper = mapper;
 		}
 
 
@@ -186,6 +167,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			xPathNode.MoveNext();
 			if ( xPathNode.Current != null && xPathNode.Current is IHasXmlNode )
 				return FileNameMapper.GetFilenameForConstructor( ((IHasXmlNode)xPathNode.Current).GetNode() );
+
 			return "";
 		}
 
@@ -208,6 +190,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		public string GetMemberHRef( XPathNodeIterator xPathNode )
 		{
 			xPathNode.MoveNext();
+
 			if ( xPathNode.Current != null && xPathNode.Current is IHasXmlNode )
 			{
 				XmlNode node = ((IHasXmlNode)xPathNode.Current).GetNode();
@@ -283,47 +266,65 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// Returns an HRef for a CRef. This may be local or system
 		/// </summary>
 		/// <param name="cref">The local html filename for local topics or the assocaitave index for system topics</param>
-		public string GetHRef( string cref )
+		public string GetLocalHRef( string cref )
 		{
 			// if it's not a type string return nothing
 			if ( ( cref.Length <= 2 ) || ( cref[1] != ':' ) )
 				return string.Empty;
 
-			// look up the local filename for non system types
-			if ( IsLocalCRef( cref ) )
-			{
-				int lastDot = cref.LastIndexOf( '.' );
-				string memberName = cref.Substring( lastDot + 1 );
-				string typeID = cref.Substring( 0, lastDot );
+			int lastDot = cref.LastIndexOf( '.' );
+			string memberName = cref.Substring( lastDot + 1 );
+			string typeID = cref.Substring( 0, lastDot );
 
-				switch ( cref.Substring( 0, 2 ) )
-				{
-					case "N:":	return GetNamespaceHRef( cref.Substring( 2 ) );
-					case "T:":	return GetTypeHRef( cref );
-					case "F:":	return GetFieldHRef( cref );
-					case "E:":	return GetEventHRef( cref );
-					case "P:":	return GetPropertyHRef( typeID, memberName );
-					case "M:":	return GetMethodHRef( typeID, memberName ) ;
-					default:	return string.Empty;
-				}
-			}
-			else
+			switch ( cref.Substring( 0, 2 ) )
 			{
-				switch ( cref.Substring( 0, 2 ) )
-				{
-					case "N:":	// Namespace
-						return "frlrf" + cref.Substring(2).Replace( ".", "" );
-					case "T:":	// Type: class, interface, struct, enum, delegate
-						return "frlrf" + cref.Substring(2).Replace( ".", "" ) + "ClassTopic";
-					case "F:":	// Field
-					case "P:":	// Property
-					case "M:":	// Method
-					case "E:":	// Event
-						return GetFilenameForSystemMember( cref );
-					default:
-						return string.Empty;
-				}
+				case "N:":	return GetNamespaceHRef( cref.Substring( 2 ) );
+				case "T:":	return GetTypeHRef( cref );
+				case "F:":	return GetFieldHRef( cref );
+				case "E:":	return GetEventHRef( cref );
+				case "P:":	return GetPropertyHRef( typeID, memberName );
+				case "M:":	return GetMethodHRef( typeID, memberName ) ;
+				default:	return string.Empty;
 			}
+		}
+
+		/// <summary>
+		/// Determines the associative index for a cref
+		/// </summary>
+		/// <param name="cref">The cref to link to</param>
+		/// <returns>The associative index</returns>
+		public string GetAIndex( string cref )
+		{
+			// if it's not a type string return nothing
+			if ( ( cref.Length <= 2 ) || ( cref[1] != ':' ) )
+				return string.Empty;
+
+#warning This only works for system types right now
+
+			switch ( cref.Substring( 0, 2 ) )
+			{
+				case "N:":	// Namespace
+					return "frlrf" + cref.Substring(2).Replace( ".", "" );
+				case "T:":	// Type: class, interface, struct, enum, delegate
+					return "frlrf" + cref.Substring(2).Replace( ".", "" ) + "ClassTopic";
+				case "F:":	// Field
+				case "P:":	// Property
+				case "M:":	// Method
+				case "E:":	// Event
+					return GetFilenameForSystemMember( cref );
+				default:
+					return string.Empty;
+			}
+		}
+
+		/// <summary>
+		/// Finds the help namespace most closely mapped to the managed name
+		/// </summary>
+		/// <param name="managedName">The managed name to look up. This can be a namespace, type or member</param>
+		/// <returns>The help namespace or empty string if no match is found</returns>
+		public string GetHelpNamespace( string managedName )
+		{
+			return nsMapper.LookupHelpNamespace( managedName );
 		}
 
 
@@ -365,36 +366,38 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 				if ( IsLocalCRef( cref ) )
 				{
 					string name = elemNames[cref];
-					if (name != null)
+					if ( name != null )
 						return name;
 				}
 
 				int index;
-				if ((index = cref.IndexOf(".#c")) >= 0)
+				if ( ( index = cref.IndexOf( ".#c" ) ) >= 0 )
 					cref = cref.Substring(2, index - 2);
-				else if ((index = cref.IndexOf("(")) >= 0)
-					cref = cref.Substring(2, index - 2);
+				else if ( ( index = cref.IndexOf( "(" ) ) >= 0 )
+					cref = cref.Substring( 2, index - 2 );
 				else
-					cref = cref.Substring(2);
+					cref = cref.Substring( 2 );
 			}
 
-			return cref.Substring(cref.LastIndexOf(".") + 1);
+			return cref.Substring( cref.LastIndexOf( "." ) + 1 );
 		}
 
 		private string GetFilenameForSystemMember(string id)
 		{
 			string crefName;
 			int index;
-			if ((index = id.IndexOf(".#c")) >= 0)
-				crefName = id.Substring(2, index - 2) + ".ctor";
-			else if ((index = id.IndexOf("(")) >= 0)
-				crefName = id.Substring(2, index - 2);
+
+			if ( ( index = id.IndexOf( ".#c" ) ) >= 0 )
+				crefName = id.Substring( 2, index - 2 ) + ".ctor";
+			else if ( ( index = id.IndexOf( "(" ) ) >= 0 )
+				crefName = id.Substring( 2, index - 2 );
 			else
-				crefName = id.Substring(2);
-			index = crefName.LastIndexOf(".");
-			string crefType = crefName.Substring(0, index);
-			string crefMember = crefName.Substring(index + 1);
-			return "frlrf" + crefType.Replace(".", "") + "Class" + crefMember + "Topic";
+				crefName = id.Substring( 2 );
+
+			index = crefName.LastIndexOf( "." );
+			string crefType = crefName.Substring( 0, index );
+			string crefMember = crefName.Substring( index + 1 );
+			return "frlrf" + crefType.Replace( ".", "" ) + "Class" + crefMember + "Topic";
 		}
 
 		/// <summary>
@@ -420,9 +423,10 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// </remarks>
 		public bool HasSimilarOverloads(string description)
 		{
-			if (descriptions.Contains(description))
+			if ( descriptions.Contains( description ) )
 				return true;
-			descriptions.Add(description);
+
+			descriptions.Add( description );
 			return false;
 		}
 	}

@@ -11,7 +11,6 @@
 	<xsl:include href="XLinks.xslt" />
 	<!-- -->
 	<xsl:param name="ndoc-title" />
-	<xsl:param name="ndoc-sdk-doc-base-url" />
 	<xsl:param name="ndoc-platforms"/>
 	<xsl:param name="ndoc-version"/>
 	<!-- -->
@@ -406,7 +405,7 @@
 						<xsl:sort select="@name" />
 						<tr valign="top">
 							<td width="50%">
-								<xsl:call-template name="get-a-href-with-name">
+								<xsl:call-template name="get-a-href">
 									<xsl:with-param name="cref" select="@cref" />
 								</xsl:call-template>
 							</td>
@@ -433,7 +432,7 @@
 						<xsl:sort select="@name" />
 						<tr valign="top">
 							<td width="50%">
-								<xsl:call-template name="get-a-href-with-name">
+								<xsl:call-template name="get-a-href">
 									<xsl:with-param name="cref" select="@cref" />
 								</xsl:call-template>
 							</td>
@@ -497,55 +496,25 @@
 	<!-- get-a-href -->
 	<xsl:template name="get-a-href">
 		<xsl:param name="cref" />
-		<xsl:variable name="href" select="string(NUtil:GetHRef($cref))" />
 
 		<xsl:choose>
-			<xsl:when test="$href=''">
-				<b><xsl:value-of select="string(NUtil:GetName($cref))" /></b>
+			<xsl:when test="contains( $cref, ':System.' )">
+				<xsl:call-template name="get-xlink">
+					<xsl:with-param name="a-index" select="NUtil:GetAIndex( $cref )"/>
+					<xsl:with-param name="link-text" select="string(NUtil:GetName($cref))"/>						
+				</xsl:call-template>	
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:choose>
-					<xsl:when test="contains( $cref, ':System.' )">
-						<xsl:call-template name="get-xlink">
-							<xsl:with-param name="a-index" select="$href"/>
-							<xsl:with-param name="link-text" select="string(NUtil:GetName($cref))"/>						
-						</xsl:call-template>	
-					</xsl:when>
-					<xsl:otherwise>
-						<a>
-							<xsl:attribute name="href">
-								<xsl:value-of select="$href" />
-							</xsl:attribute>
-							<xsl:choose>
-								<xsl:when test="node()">
-									<xsl:value-of select="." />
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:value-of select="string(NUtil:GetName($cref))" />
-								</xsl:otherwise>
-							</xsl:choose>
-						</a>				
-					</xsl:otherwise>
-				</xsl:choose>
-
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:template>
-	<!-- get-a-href-with-name -->
-	<xsl:template name="get-a-href-with-name">
-		<xsl:param name="cref" />
-		<xsl:variable name="href" select="string(NUtil:GetHRef($cref))" />
-		<xsl:choose>
-			<xsl:when test="$href=''">
-				<b><xsl:value-of select="string(NUtil:GetName($cref))" /></b>
-			</xsl:when>
-			<xsl:otherwise>
-				<a>
-					<xsl:attribute name="href">
-						<xsl:value-of select="$href" />
-					</xsl:attribute>
-					<xsl:value-of select="string(NUtil:GetName($cref))" />
-				</a>
+				<a href="{NUtil:GetLocalHRef($cref)}">
+					<xsl:choose>
+						<xsl:when test="node()">
+							<xsl:value-of select="." />
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="NUtil:GetName($cref)" />
+						</xsl:otherwise>
+					</xsl:choose>
+				</a>				
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>

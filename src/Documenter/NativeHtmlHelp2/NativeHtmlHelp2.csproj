@@ -203,6 +203,11 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "Engine\NamespaceMapping\NamespaceMapper.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "graphics\AnimButton1.gif"
                     BuildAction = "EmbeddedResource"
                 />

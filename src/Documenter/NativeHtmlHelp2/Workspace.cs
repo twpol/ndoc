@@ -65,16 +65,26 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		}
 
 		/// <summary>
-		/// Copies resources into the workspace
+		/// Copies project resources into the workspace
 		/// </summary>
 		/// <param name="sourceDirectory">The path to the resources</param>
 		public void ImportProjectFiles( string sourceDirectory )
+		{
+			ImportProjectFiles( sourceDirectory, "*.*" );
+		}
+
+		/// <summary>
+		/// Copies project resources into the workspace
+		/// </summary>
+		/// <param name="sourceDirectory">The path to the resources</param>
+		/// <param name="filer">File filter to use when selecting files to import</param>
+		public void ImportProjectFiles( string sourceDirectory, string filter )
 		{
 			if ( !Directory.Exists( sourceDirectory ) )
 				throw new ArgumentException( "The source location does not exist" );
 
 			DirectoryInfo dir = new DirectoryInfo( sourceDirectory );
-			foreach( FileInfo file in dir.GetFiles( "*.*" ) )
+			foreach( FileInfo file in dir.GetFiles( filter ) )
 				file.CopyTo( Path.Combine( RootDirectory, file.Name ), true );
 		}
 
