@@ -260,7 +260,9 @@ namespace NDoc.Core
 
 		private bool MustDocumentMethod( MethodBase method )
 		{
-			return ((method.Name.IndexOf('.') != -1) ||
+			// Methods containing '.' in their name that aren't constructors are probably
+			// explicit interface implementations and we always want to document those.
+			return ((method.Name.IndexOf('.') != -1 && method.Name != ".ctor") ||
 				method.IsPublic ||
 				(method.IsFamily && MyConfig.DocumentProtected) ||
 				(method.IsFamilyOrAssembly && MyConfig.DocumentProtected) ||
