@@ -531,6 +531,15 @@
 								</b>
 							</td>
 							<td width="50%">
+								<xsl:if test="./obsolete">
+									<FONT color="red">
+										<B>Obsolete.</B>&#160;
+									</FONT>
+									<xsl:if test="./obsolete!=''">
+										<B><xsl:value-of select="obsolete" /></B>
+										<br />
+									</xsl:if>
+								</xsl:if>
 								<xsl:apply-templates select="documentation/summary/node()" mode="slashdoc" />
 								<xsl:if test="not(documentation/summary/node())">&#160;</xsl:if>
 							</td>
