@@ -1229,6 +1229,19 @@ namespace NDoc.Test
 			get { return 0; }
 		}
 	}
+
+	/// <summary>This is a private class.</summary>
+	class PrivateClass
+	{
+		/// <summary>This is a public enum nested in a private class.</summary>
+		public enum PublicEnumInPrivateClass
+		{
+			/// <summary>Foo</summary>
+			Foo,
+			/// <summary>Bar</summary>
+			Bar
+		}
+	}
 }
 
 namespace NDoc.Test.InternalStuff
