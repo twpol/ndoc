@@ -299,7 +299,14 @@
 					<xsl:text>&#160;</xsl:text>
 				</xsl:if>
 				<xsl:if test="@contract='Static'">
-					<xsl:text>Shared&#160;</xsl:text>
+					<xsl:choose>
+						<xsl:when test="@literal='true'">
+							<xsl:text>Const&#160;</xsl:text>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:text>Shared&#160;</xsl:text>
+						</xsl:otherwise>
+					</xsl:choose>
 				</xsl:if>
 				<xsl:if test="@initOnly='true'">
 					<xsl:text>ReadOnly&#160;</xsl:text>
