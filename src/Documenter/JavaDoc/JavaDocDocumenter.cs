@@ -37,7 +37,7 @@ namespace NDoc.Documenter.JavaDoc
 			Config = new JavaDocDocumenterConfig();
 		}
 
-		string _ResourceDirectory;
+		private Workspace workspace = null;
 
 		/// <summary>See <see cref="IDocumenter"/>.</summary>
 		public override string MainOutputFile 
@@ -53,34 +53,43 @@ namespace NDoc.Documenter.JavaDoc
 		/// <summary>See <see cref="IDocumenter"/>.</summary>
 		public override void Build(Project project)
 		{
-			if (!Directory.Exists(MyConfig.OutputDirectory))
-			{
-				Directory.CreateDirectory(MyConfig.OutputDirectory);
-			}
+			this.workspace = new JavaDocWorkspace( this.WorkingPath );
+			workspace.Clean();
+			workspace.Prepare();
+
+			workspace.AddResourceDirectory( "xslt" );
+			workspace.AddResourceDirectory( "css" );
 
 // Define this when you want to edit the stylesheets
 // without having to shutdown the application to rebuild.
 #if NO_RESOURCES
-			_ResourceDirectory = Path.GetFullPath(Path.Combine(
-				System.Windows.Forms.Application.StartupPath, @"..\..\..\Documenter\JavaDoc\"));
-#else
-				_ResourceDirectory = Environment.GetFolderPath(
-					Environment.SpecialFolder.ApplicationData) +
-					"\\NDoc\\JavaDoc\\";
+			// copy all of the xslt source files into the workspace
+			DirectoryInfo xsltSource = new DirectoryInfo( Path.GetFullPath(Path.Combine(
+				System.Windows.Forms.Application.StartupPath, @"..\..\..\Documenter\JavaDoc\xslt") ) );
+                				
+			foreach ( FileInfo f in xsltSource.GetFiles( "*.xslt" ) )
+				f.CopyTo( Path.Combine( Path.Combine( workspace.ResourceDirectory, "xslt" ), f.Name ), true );
 
+			DirectoryInfo cssSource = new DirectoryInfo( Path.GetFullPath(Path.Combine(
+				System.Windows.Forms.Application.StartupPath, @"..\..\..\Documenter\JavaDoc\css") ) );
+                				
+			foreach ( FileInfo f in cssSource.GetFiles( "*.css" ) )
+				f.CopyTo( Path.Combine( Path.Combine( workspace.ResourceDirectory, "css" ), f.Name ), true );
+
+#else
 				EmbeddedResources.WriteEmbeddedResources(
 					this.GetType().Module.Assembly,
 					"NDoc.Documenter.JavaDoc.css",
-					_ResourceDirectory + "css\\");
+					Path.Combine( this.workspace.ResourceDirectory, "css" ) );
 
 				EmbeddedResources.WriteEmbeddedResources(
 					this.GetType().Module.Assembly,
 					"NDoc.Documenter.JavaDoc.xslt",
-					_ResourceDirectory + "xslt\\");
+					Path.Combine( this.workspace.ResourceDirectory, "xslt") );
 #endif
 
 			string outcss = Path.Combine(MyConfig.OutputDirectory, "JavaDoc.css");
-			File.Copy(Path.Combine(_ResourceDirectory, @"css\JavaDoc.css"), outcss, true);
+			File.Copy(Path.Combine(workspace.ResourceDirectory, @"css\JavaDoc.css"), outcss, true);
 			File.SetAttributes(outcss, FileAttributes.Archive);
 
 			try
@@ -94,6 +103,17 @@ namespace NDoc.Documenter.JavaDoc
 			{
 				if (File.Exists(tempFileName)) File.Delete(tempFileName);
 			}
+		}
+
+		private string WorkingPath
+		{ 
+			get
+			{ 
+				if ( Path.IsPathRooted( MyConfig.OutputDirectory ) )
+					return MyConfig.OutputDirectory; 
+
+				return Path.GetFullPath( MyConfig.OutputDirectory );
+			} 
 		}
 
 		/// <summary>See <see cref="IDocumenter"/>.</summary>
@@ -119,7 +139,7 @@ namespace NDoc.Documenter.JavaDoc
 			if(transform == null)
 			{
 				transform = new XslTransform();
-				transform.Load(Path.Combine(_ResourceDirectory, @"xslt\" + fileName));
+				transform.Load(Path.Combine(this.workspace.ResourceDirectory, @"xslt\" + fileName));
 				cachedTransforms.Add(fileName, transform);
 			}
 			return transform;
@@ -135,7 +155,7 @@ namespace NDoc.Documenter.JavaDoc
 			int start = Environment.TickCount;
 #endif
 			XslTransform transform = new XslTransform();
-			transform.Load(Path.Combine(_ResourceDirectory, @"xslt\" + transformFilename));
+			transform.Load(Path.Combine(this.workspace.ResourceDirectory, @"xslt\" + transformFilename));
 
 			if (args == null)
 			{

@@ -117,7 +117,7 @@ namespace NDoc.Documenter.Latex
 #if NO_RESOURCES
 			// copy all of the xslt source files into the workspace
 			DirectoryInfo xsltSource = new DirectoryInfo( Path.GetFullPath(Path.Combine(
-				Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"..\..\..\Documenter\Latex") ) );
+				Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"..\..\..\Documenter\Latex\xslt") ) );
                 				
 			foreach ( FileInfo f in xsltSource.GetFiles( "*.xslt" ) )
 				f.CopyTo( Path.Combine( workspace.ResourceDirectory, f.Name ), true );
