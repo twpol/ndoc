@@ -124,7 +124,7 @@ namespace NDoc.Core
 							}
 						}
 
-#if!MONO 
+#if (!MONO)
 						//TODO: search in the mono lib folder, if they ever give us the xml documentation
 						// If still not found, try locating the assembly in the Framework folder
 						if (docPath == null)
