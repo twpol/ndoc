@@ -76,10 +76,10 @@ pre
 
 pre.code
 {
-        font: Monospace, Courier New, Courier;
-        color: #000066;
-        font-size: 100%;
-        margin-left: -5.7em;
+    font: Monospace, Courier New, Courier;
+    color: #000066;
+    font-size: 100%;
+	margin-left: 20px;
 }
 
 .syntax
