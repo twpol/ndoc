@@ -314,7 +314,7 @@ namespace NDoc.Core
 		}
 
 		/// <summary>Builds an Xml file combining the reflected metadata with the /doc comments.</summary>
-		private void BuildXml(Project project, XmlWriter writer)
+		protected void BuildXml(Project project, XmlWriter writer)
 		{
 		int start = Environment.TickCount;
 
@@ -1748,7 +1748,7 @@ namespace NDoc.Core
 			bool inherited = (field.DeclaringType != field.ReflectedType);
 			if (inherited)
 			{
-				writer.WriteAttributeString("declaringType", field.DeclaringType.FullName);
+				writer.WriteAttributeString("declaringType", field.DeclaringType.FullName.Replace('+', '.'));
 			}
 
 			if ( !IsMemberSafe( field ) )
@@ -1833,7 +1833,7 @@ namespace NDoc.Core
 
 			if (inherited)
 			{
-				writer.WriteAttributeString("declaringType", eventInfo.DeclaringType.FullName);
+				writer.WriteAttributeString("declaringType", eventInfo.DeclaringType.FullName.Replace('+', '.'));
 			}
 
 			if (interfaceName != null)
@@ -1882,7 +1882,7 @@ namespace NDoc.Core
 					writer.WriteAttributeString("id",GetMemberName(InterfaceEvent));
 					writer.WriteAttributeString("interface", implements.InterfaceType.Name);
 					writer.WriteAttributeString("interfaceId", GetMemberName(implements.InterfaceType));
-					writer.WriteAttributeString("declaringType", implements.InterfaceType.FullName);
+					writer.WriteAttributeString("declaringType", implements.InterfaceType.FullName.Replace('+', '.'));
 					writer.WriteEndElement();
 				}
 			}
@@ -2011,7 +2011,7 @@ namespace NDoc.Core
 
 				if (inherited)
 				{
-					writer.WriteAttributeString("declaringType", property.DeclaringType.FullName);
+					writer.WriteAttributeString("declaringType", property.DeclaringType.FullName.Replace('+', '.'));
 				}
 
 				if (overload > 0)
@@ -2076,7 +2076,7 @@ namespace NDoc.Core
 						writer.WriteAttributeString("id",InterfacePropertyID);
 						writer.WriteAttributeString("interface", implements.InterfaceType.Name);
 						writer.WriteAttributeString("interfaceId", GetMemberName(implements.InterfaceType));
-						writer.WriteAttributeString("declaringType", implements.InterfaceType.FullName);
+						writer.WriteAttributeString("declaringType", implements.InterfaceType.FullName.Replace('+', '.'));
 						writer.WriteEndElement();
 					}
 				}
@@ -2220,7 +2220,7 @@ namespace NDoc.Core
 
 				if (inherited)
 				{
-					writer.WriteAttributeString("declaringType", method.DeclaringType.FullName);
+					writer.WriteAttributeString("declaringType", method.DeclaringType.FullName.Replace('+', '.'));
 				}
 
 				if (overload > 0)
@@ -2267,7 +2267,7 @@ namespace NDoc.Core
 						writer.WriteAttributeString("id",GetMemberName((MethodBase)implements.InterfaceMethod));
 						writer.WriteAttributeString("interface", implements.InterfaceType.Name);
 						writer.WriteAttributeString("interfaceId", GetMemberName(implements.InterfaceType));
-						writer.WriteAttributeString("declaringType", implements.InterfaceType.FullName);
+						writer.WriteAttributeString("declaringType", implements.InterfaceType.FullName.Replace('+', '.'));
 						writer.WriteEndElement();
 					}
 				}
@@ -2347,7 +2347,7 @@ namespace NDoc.Core
 
 				if (inherited)
 				{
-					writer.WriteAttributeString("declaringType", method.DeclaringType.FullName);
+					writer.WriteAttributeString("declaringType", method.DeclaringType.FullName.Replace('+', '.'));
 				}
 
 				if (overload > 0)
