@@ -887,7 +887,7 @@ namespace NDoc.Core.Reflection
 					}
 					else
 					{
-						Debug.WriteLine(typeID + " already documented - skipped...");
+						Trace.WriteLine(typeID + " already documented - skipped...");
 					}
 				}
 			}
@@ -914,7 +914,7 @@ namespace NDoc.Core.Reflection
 					}
 					else
 					{
-						Debug.WriteLine(typeID + " already documented - skipped...");
+						Trace.WriteLine(typeID + " already documented - skipped...");
 					}
 				}
 			}
@@ -944,7 +944,7 @@ namespace NDoc.Core.Reflection
 					}
 					else
 					{
-						Debug.WriteLine(typeID + " already documented - skipped...");
+						Trace.WriteLine(typeID + " already documented - skipped...");
 					}
 				}
 			}
@@ -972,7 +972,7 @@ namespace NDoc.Core.Reflection
 					}
 					else
 					{
-						Debug.WriteLine(typeID + " already documented - skipped...");
+						Trace.WriteLine(typeID + " already documented - skipped...");
 					}
 				}
 			}
@@ -999,7 +999,7 @@ namespace NDoc.Core.Reflection
 					}
 					else
 					{
-						Debug.WriteLine(typeID + " already documented - skipped...");
+						Trace.WriteLine(typeID + " already documented - skipped...");
 					}
 				}
 			}
