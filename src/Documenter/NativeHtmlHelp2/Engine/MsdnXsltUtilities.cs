@@ -226,7 +226,49 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			return "";
 		}
 		/// <summary>
-		/// Gets the href for a type topic
+		/// Get the HRef for a local method topic
+		/// </summary>
+		/// <param name="typeID">The id of the containing type</param>
+		/// <param name="memberName"></param>
+		/// <returns>Relative HRef to the Topic</returns>			
+		public string GetMethodHRef( string typeID, string memberName )
+		{
+			return NameMapper.GetFilenameForMethodOverloads( typeID, memberName );
+		}
+
+		/// <summary>
+		/// Get the HRef for a local property topic
+		/// </summary>
+		/// <param name="typeID">The id of the containing type</param>
+		/// <param name="propertyName">The property name</param>
+		/// <returns>Relative HRef to the Topic</returns>			
+		public string GetPropertyHRef( string typeID, string propertyName )
+		{
+			return NameMapper.GetFilenameForPropertyOverloads( typeID, propertyName );
+		}
+
+		/// <summary>
+		/// Get the HRef for a local field topic
+		/// </summary>
+		/// <param name="fieldID">The ID of the field</param>
+		/// <returns>Relative HRef to the Topic</returns>			
+		public string GetFieldHRef( string fieldID  )
+		{
+			return NameMapper.GetFilenameForField( fieldID );
+		}
+
+		/// <summary>
+		/// Get the HRef for a local event topic
+		/// </summary>
+		/// <param name="eventID">The ID of the event</param>
+		/// <returns>Relative HRef to the Topic</returns>			
+		public string GetEventHRef( string eventID  )
+		{
+			return NameMapper.GetFilenameForEvent( eventID );
+		}
+
+		/// <summary>
+		/// Gets the href for a local type topic
 		/// </summary>
 		/// <param name="typeID">The id of the type</param>
 		/// <returns>Relative HRef to the Topic</returns>
@@ -236,27 +278,32 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		}
 
 		/// <summary>
-		/// Returns an HRef for a CRef.
+		/// Returns an HRef for a CRef. This may be local or system
 		/// </summary>
-		/// <param name="cref">CRef for which the HRef will be looked up.</param>
+		/// <param name="cref">The local html filename for local topics or the assocaitave index for system topics</param>
 		public string GetHRef( string cref )
 		{
-
+			// if it's not a type string return nothing
 			if ( ( cref.Length <= 2 ) || ( cref[1] != ':' ) )
 				return string.Empty;
 
-			// non system types
+			// look up the local filename for non system types
 			if ( ( cref.Length < 9 ) || ( cref.Substring( 2, 7 ) != systemPrefix ) )
 			{
-				return GetTypeHRef( cref );
-//				string fileName = fileNames[cref];
-//				if ((fileName == null) && cref.StartsWith("F:"))
-//					fileName = fileNames["E:" + cref.Substring(2)];
-//
-//				if (fileName == null)
-//					return "";
-//				else
-//					return fileName;
+				int lastDot = cref.LastIndexOf( '.' );
+				string memberName = cref.Substring( lastDot + 1 );
+				string typeID = cref.Substring( 0, lastDot );
+
+				switch (cref.Substring(0, 2))
+				{
+					case "N:":	return GetHRefForNamespace( cref.Substring( 2 ) );
+					case "T:":	return GetTypeHRef( cref );
+					case "F:":	return GetFieldHRef( cref );
+					case "E:":	return GetEventHRef( cref );
+					case "P:":	return GetPropertyHRef( typeID, memberName );
+					case "M:":	return GetMethodHRef( typeID, memberName ) ;
+					default:	return string.Empty;
+				}
 			}
 			else
 			{

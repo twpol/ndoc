@@ -591,13 +591,20 @@
 	<xsl:template name="get-a-href">
 		<xsl:param name="cref" />
 		<xsl:variable name="href" select="string(NUtil:GetHRef($cref))" />
+
 		<xsl:choose>
 			<xsl:when test="$href=''">
 				<b><xsl:value-of select="string(NUtil:GetName($cref))" /></b>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:choose>
-					<xsl:when test="contains($cref, '.htm')">
+					<xsl:when test="contains( $cref, ':System.' )">
+						<xsl:call-template name="get-xlink">
+							<xsl:with-param name="a-index" select="$href"/>
+							<xsl:with-param name="link-text" select="string(NUtil:GetName($cref))"/>						
+						</xsl:call-template>	
+					</xsl:when>
+					<xsl:otherwise>
 						<a>
 							<xsl:attribute name="href">
 								<xsl:value-of select="$href" />
@@ -610,13 +617,7 @@
 									<xsl:value-of select="string(NUtil:GetName($cref))" />
 								</xsl:otherwise>
 							</xsl:choose>
-						</a>					
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:call-template name="get-xlink">
-							<xsl:with-param name="a-index" select="$href"/>
-							<xsl:with-param name="link-text" select="string(NUtil:GetName($cref))"/>						
-						</xsl:call-template>
+						</a>				
 					</xsl:otherwise>
 				</xsl:choose>
 

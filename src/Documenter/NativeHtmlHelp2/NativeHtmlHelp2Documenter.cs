@@ -197,7 +197,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			// Load the XML documentation into a DOM.
 			XmlDocument xmlDocumentation = new XmlDocument();
 			xmlDocumentation.LoadXml( MakeXml( project ) );
-//xmlDocumentation.Save( @"C:\NDocTests.xml" );
+xmlDocumentation.Save( @"C:\NDocTests.xml" );
 			XmlNodeList typeNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace/*[name()!='documentation']");
 			if ( typeNodes.Count == 0 )			
 				throw new DocumenterException("There are no documentable types in this project.");
