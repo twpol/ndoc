@@ -316,4 +316,16 @@ namespace NDoc.Test
 		{
 		}
 	}
+
+	/// <summary>This class contains some example code.</summary>
+	/// <example><code>
+	/// public class HelloWorld {
+	///		static void Main() {
+	///			System.Console.WriteLine("Hello, World!");
+	///		}
+	/// }
+	/// </code></example>
+	public class Example
+	{
+	}
 }

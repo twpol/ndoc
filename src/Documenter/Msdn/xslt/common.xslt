@@ -316,14 +316,14 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="parameter-section">
-		<xsl:if test="parameter">
+		<xsl:if test="documentation/parameter">
 			<h4>Parameters</h4>
 			<xsl:call-template name="parameter-topic" />
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="returnvalue-section">
-		<xsl:if test="returns">
+		<xsl:if test="documentation/returns">
 			<h4>Return Value</h4>
 			<p class="i1">
 				<xsl:apply-templates select="documentation/returns/node()" mode="slashdoc" />
@@ -341,7 +341,7 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="value-section">
-		<xsl:if test="value">
+		<xsl:if test="documentation/value">
 			<h4>Property Value</h4>
 			<p class="i1">
 				<xsl:apply-templates select="documentation/value/node()" mode="slashdoc" />
@@ -350,7 +350,7 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="exceptions-section">
-		<xsl:if test="exception">
+		<xsl:if test="documentation/exception">
 			<h4>Exceptions</h4>
 			<div class="table">
 				<table cellspacing="0">
@@ -383,7 +383,7 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="example-section">
-		<xsl:if test="example">
+		<xsl:if test="documentation/example">
 			<h4>Example</h4>
 			<p class="i1">
 				<xsl:apply-templates select="documentation/example/node()" mode="slashdoc" />
