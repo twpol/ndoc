@@ -1064,11 +1064,18 @@ namespace NDoc.Core
 
 		private void WriteCustomAttributes(XmlWriter writer, object[] attributes)
 		{
-			if (this.MyConfig.DocumentAttributes)
+			foreach (Attribute attribute in attributes)
 			{
-				foreach (Attribute attribute in attributes)
+				if (this.MyConfig.DocumentAttributes)
 				{
 					WriteCustomAttribute(writer, attribute);
+				}
+
+				if (attribute.GetType().FullName=="System.ObsoleteAttribute") 
+				{
+					writer.WriteStartElement("obsolete");
+					writer.WriteRaw( ((ObsoleteAttribute)attribute).Message );
+					writer.WriteEndElement();
 				}
 			}
 		}
@@ -1447,9 +1454,6 @@ namespace NDoc.Core
 			writer.WriteAttributeString("id", memberName);
 			writer.WriteAttributeString("access", GetTypeAccessValue(type));
 
-			WriteEnumerationDocumentation(writer, memberName);
-			WriteCustomAttributes(writer, type);
-
 			const BindingFlags bindingFlags =
 					  BindingFlags.Instance |
 					  BindingFlags.Static |
@@ -1459,7 +1463,25 @@ namespace NDoc.Core
 
 			foreach (FieldInfo field in type.GetFields(bindingFlags))
 			{
-				// *** Not sure what this field is but don't want to document it for now.
+				// Enums are normally based on Int32, but this is not a CLR requirement.
+				// In fact, they may be based on any integer type. The value__ field
+				// defines the enum's base type, so we will treat this seperately...
+				if (field.Name == "value__")
+				{
+					if (field.FieldType.FullName != "System.Int32")
+					{
+						writer.WriteAttributeString("baseType",field.FieldType.FullName);
+					}
+					break;
+				}
+			}
+
+			WriteEnumerationDocumentation(writer, memberName);
+			WriteCustomAttributes(writer, type);
+
+			foreach (FieldInfo field in type.GetFields(bindingFlags))
+			{
+				// value__ field handled above...
 				if (field.Name != "value__")
 				{
 					WriteField(
