@@ -1427,23 +1427,27 @@ namespace NDoc.Test.Attributes
 	/// <summary>
 	/// Class with 3 attributes:  Author(name="Jane Programmer", Version=2), IsTested and XmlType.
 	/// </summary>
+	/// <remarks>This class has the [Serializable] attribute.</remarks>
 	[Author("Jane Programmer", Version = 2), IsTested()]
 	[XmlType(Namespace="NDoc/Test/Order")]
 	[Serializable]
 	public class Order
 	{
 		/// <summary>
-		/// Field with XmlElement attribute
+		/// Field with XmlElement attribute.
 		/// </summary>
 		[XmlElement]
 		public int Number = 0;
 
 		/// <summary>
-		/// Another field with XmlElement attribute
+		/// Another field with XmlElement attribute.
 		/// </summary>
 		[XmlElement]
 		public string What = "";
 
+		/// <summary>
+		/// This field has the [NonSerialized] attribute.
+		/// </summary>
 		[NonSerialized]
 		public bool dummy = true;
 	}
