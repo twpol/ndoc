@@ -1,7 +1,7 @@
+using System;
+
 namespace NDoc.Test
 {
-	using System;
-
 	/// <summary>
 	/// <p>This documentation will show up as the summary of a class
 	/// <see cref="NamespaceDoc"/>, when the UseNamespaceDocSummaries
@@ -774,10 +774,10 @@ namespace NDoc.Test
 		public static int operator ^(Operators x, Operators y) { return 0; }
 
 		/// <summary>Left-shift operator.</summary>
-		public static int operator <<(Operators x, Operators y) { return 0; }
+		public static int operator <<(Operators x, int y) { return 0; }
 
 		/// <summary>Right-shift operator.</summary>
-		public static int operator >>(Operators x, Operators y) { return 0; }
+		public static int operator >>(Operators x, int y) { return 0; }
 
 		/// <summary>Equality operator.</summary>
 		public static bool operator ==(Operators x, Operators y) { return false; }
@@ -1282,7 +1282,6 @@ namespace NDoc.Test
 		public void Method(int i) {}
 	}
 
-#warning The link to the method with parameters should point to that correct page.
 	/// <summary>This class wants to ref the method with no parameters
 	/// in the OverloadedWithNoParameters class.
 	/// See <see cref="OverloadedWithNoParameters.Method" />
@@ -1292,6 +1291,9 @@ namespace NDoc.Test
 	/// See <see cref="OverloadedWithNoParameters.Method(int)" />
 	/// ("OverloadedWithNoParameters.Method(int)").
 	/// </summary>
+	/// <remarks>
+	/// The link to the method with parameters should point to that correct page.
+	/// </remarks>
 	public class CRefToOverloadWithNoParameters
 	{
 	}
@@ -1476,8 +1478,8 @@ namespace NDoc.Test
 	/// <summary>This is a private class.</summary>
 	class PrivateClass
 	{
-#warning This type should not appear when DocumentInternals is false.
 		/// <summary>This is a public enum nested in a private class.</summary>
+		/// <remarks>This type should not appear when DocumentInternals is false.</remarks>
 		public enum PublicEnumInPrivateClass
 		{
 			/// <summary>Foo</summary>
@@ -1535,8 +1537,8 @@ namespace NDoc.Test
 		static byte[] bar = new byte[] {1,2,3};
 	}
 
-#warning This link points to a page that will never exist.
 	/// <summary>See <see cref="Enum.Foo" />.</summary>
+	/// <remarks>The summary contains a cref to an enum member.</remarks>
 	public class LinkToEnumMember
 	{
 	}
