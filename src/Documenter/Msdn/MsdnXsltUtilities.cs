@@ -58,6 +58,9 @@ namespace NDoc.Documenter.Msdn
 
 		}
 
+		/// <summary>
+		/// Reset Overload method checking state.
+		/// </summary>
 		public void Reset()
 		{
 			descriptions = new StringCollection();
@@ -211,7 +214,7 @@ namespace NDoc.Documenter.Msdn
 		/// <summary>
 		/// returns a localized sdk url if one exists for the <see cref="CultureInfo.CurrentCulture"/>.
 		/// </summary>
-		/// <param name="searchNamespace">base namespace to search for</param></param>
+		/// <param name="searchNamespace">base namespace to search for</param>
 		/// <returns>ms-help url for sdk</returns>
 		private string GetLocalizedFrameworkURL(string searchNamespace)
 		{
