@@ -54,10 +54,7 @@ namespace NDoc.Documenter.Msdn
 
 			_Title = "An NDoc Documented Class Library";
 
-			_SortTOCByNamespace = true;
-			_SplitTOCs = false;
 			_BinaryTOC = true;
-			_DefaultTOC = string.Empty;
 
 			_IncludeHierarchy = false;
 			_ShowVisualBasic = false;
@@ -239,47 +236,6 @@ namespace NDoc.Documenter.Msdn
 			}
 		}
 
-		private bool _SplitTOCs ;
-
-		/// <summary>Gets or sets the SplitTOCs property.</summary>
-		/// <remarks>Turning this flag on will generate a separate table-of-contents for each assembly. 
-		/// It cannot be set if SortTOCByNamespace is set or RootPageFileName is specified.</remarks>
-		[Category("HTML Help Options")]
-		[Description("Turning this flag on will generate a separate table-of-contents for each assembly. "
-			 + "It cannot be set if SortTOCByNamespace is set or RootPageFileName is specified.")]
-		[DefaultValue(false)]
-		private bool SplitTOCs
-		{
-			get { return _SplitTOCs; }
-
-			set 
-			{
-				if ((!_SortTOCByNamespace) && (_RootPageFileName.Length == 0))
-				{
-					_SplitTOCs = value; 
-					SetDirty();
-				}
-			}
-		}
-
-		private string _DefaultTOC;
-
-		/// <summary>Gets or sets the DefaultTOC property.</summary>
-		/// <remarks>When SplitTOCs is true, this represents the default table-of-contents to use.</remarks>
-		[Category("HTML Help Options")]
-		[Description("When SplitTOCs is true, this represents the default table-of-contents to use.")]
-		[DefaultValue("")]
-		private string DefaultTOC
-		{
-			get { return _DefaultTOC; }
-
-			set 
-			{ 
-				_DefaultTOC = value; 
-				SetDirty();
-			}
-		}
-
 		string _RootPageTOCName;
 
 		/// <summary>Gets or sets the RootPageTOCName property.</summary>
@@ -307,8 +263,7 @@ namespace NDoc.Documenter.Msdn
 		string _RootPageFileName = string.Empty;
 
 		/// <summary>Gets or sets the RootPageFileName property.</summary>
-		/// <remarks>The name of an html file to be included as the root home page. "
-		/// SplitTOCs is disabled when this property is set.</remarks>
+		/// <remarks>The name of an html file to be included as the root home page. "</remarks>
 		[Category("HTML Help Options")]
 		[Description("The name of an html file to be included as the root home page. "
 			 + "SplitTOCs is disabled when this property is set.")]
@@ -321,7 +276,6 @@ namespace NDoc.Documenter.Msdn
 			set
 			{
 				_RootPageFileName = value;
-				_SplitTOCs = _SplitTOCs && (value.Length == 0);
 				SetDirty();
 			}
 		}
@@ -346,26 +300,6 @@ namespace NDoc.Documenter.Msdn
 			set
 			{
 				_RootPageContainsNamespaces = value;
-				SetDirty();
-			}
-		}
-
-		bool _SortTOCByNamespace;
-
-		/// <summary>Gets or sets the SortTOCByNamespace property.</summary>
-		/// <remarks>Sorts the table-of-contents by namespace name. 
-		/// SplitTOCs is disabled when this option is selected.</remarks>
-		[Category("HTML Help Options")]
-		[Description("Sorts the table-of-contents by namespace name. "
-			 + "SplitTOCs is disabled when this option is selected.")]
-		private bool SortTOCByNamespace
-		{
-			get { return _SortTOCByNamespace; }
-
-			set
-			{
-				_SortTOCByNamespace = value;
-				_SplitTOCs = _SplitTOCs && !value;
 				SetDirty();
 			}
 		}
