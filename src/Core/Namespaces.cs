@@ -57,6 +57,7 @@ namespace NDoc.Core
 		/// </summary>
 		public Namespaces()
 		{
+			_namespaces = new SortedList();
 		}
 
 		/// <summary>
@@ -189,6 +190,10 @@ namespace NDoc.Core
 			}
 		}
 
+		/// <summary>
+		/// Loads the namespaces from assemblies.
+		/// </summary>
+		/// <param name="project">Project.</param>
 		public void LoadNamespacesFromAssemblies(Project project)
 		{
 			//let's try to create this in a new AppDomain
