@@ -191,7 +191,7 @@ namespace NDoc.Core
 
 			string mainModuleDirectory = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
 
-			foreach (string fileName in Directory.GetFiles(mainModuleDirectory, "*.dll"))
+			foreach (string fileName in Directory.GetFiles(mainModuleDirectory, "NDoc.Documenter.*.dll"))
 			{
 				Assembly assembly = null;
 
