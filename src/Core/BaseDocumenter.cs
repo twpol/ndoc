@@ -1825,7 +1825,9 @@ namespace NDoc.Core
 			writer.WriteAttributeString("id", memberName);
 			writer.WriteAttributeString("access", GetMethodAccessValue(eventInfo.GetAddMethod(true)));
 			writer.WriteAttributeString("contract", GetMethodContractValue(eventInfo.GetAddMethod(true)));
-			writer.WriteAttributeString("type", eventInfo.EventHandlerType.FullName.Replace('+', '.'));
+			Type t = eventInfo.EventHandlerType;
+			writer.WriteAttributeString("type", GetTypeName(t));
+			writer.WriteAttributeString("valueType", t.IsValueType.ToString().ToLower());
 
 			bool inherited = eventInfo.DeclaringType != eventInfo.ReflectedType;
 
@@ -2346,7 +2348,9 @@ namespace NDoc.Core
 				writer.WriteAttributeString("id", memberName);
 				writer.WriteAttributeString("access", GetMethodAccessValue(method));
 				writer.WriteAttributeString("contract", GetMethodContractValue(method));
-				writer.WriteAttributeString("returnType", method.ReturnType.FullName);
+				Type t = method.ReturnType;
+				writer.WriteAttributeString("returnType", GetTypeName(t));
+				writer.WriteAttributeString("valueType", t.IsValueType.ToString().ToLower());
 
 				bool inherited = method.DeclaringType != method.ReflectedType;
 
