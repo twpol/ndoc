@@ -31,6 +31,8 @@ namespace NDoc.Documenter.HtmlHelp2
 	/// <summary>
 	/// Config setting for the CHM to HxS converter/compiler
 	/// </summary>
+	/// 
+	[Obsolete( "This documenter is now obsolete, you should use the VS.NET (NativeHtmlHelp2) documenter instead" ) ]
 	public class HtmlHelp2Config : MsdnDocumenterConfig
 	{
 		private const string HTMLHELP2_CONFIG_CATEGORY = "Html Help v2.0 Settings";
