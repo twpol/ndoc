@@ -276,12 +276,16 @@ namespace NDoc.Core
 				{
 					string name = reader["name"];
 					IDocumenter documenter = GetDocumenter(name);
-					documenter.Config.Read(reader);
+
+					if (documenter != null)
+					{
+						documenter.Config.Read(reader);
+					}
 				}
 			}
 		}
 
-    /// <summary>Retrieves a documenter by name.</summary>
+		/// <summary>Retrieves a documenter by name.</summary>
 		public IDocumenter GetDocumenter(string name)
 		{
 			foreach (IDocumenter documenter in Documenters)
