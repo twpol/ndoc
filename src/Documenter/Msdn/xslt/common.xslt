@@ -11,6 +11,8 @@
 	<!-- -->
 	<xsl:param name="ndoc-title" />
 	<xsl:param name="ndoc-omit-object-tags" select="false" />
+	<xsl:param name="ndoc-sdk-doc-base-url" />
+	<xsl:param name="ndoc-sdk-doc-file-ext" />
 	<!-- -->
 	<xsl:template name="csharp-type">
 		<xsl:param name="runtime-type" />

@@ -64,6 +64,8 @@ namespace NDoc.Documenter.Msdn
 			_FooterHtml = string.Empty;
 			_FilesToInclude = string.Empty;
 
+			_LinkToSdkDocVersion = SdkDocVersion.SDK_v1_1;
+
 		}
 
 		/// <summary>Gets or sets the OutputDirectory property.</summary>
@@ -442,6 +444,38 @@ namespace NDoc.Documenter.Msdn
 			}
  		}
 
+		SdkDocVersion _LinkToSdkDocVersion;
+
+		/// <summary>Gets or sets the LinkToSdkDocVersion property.</summary>
+		[
+		Category("HTML Help Options"),
+		Description("Specifies to which version of the .NET Framework SDK documentation the links to system types will be pointing.")
+		]
+		public SdkDocVersion LinkToSdkDocVersion
+		{
+			get { return _LinkToSdkDocVersion; }
+			set
+			{
+				_LinkToSdkDocVersion = value;
+				SetDirty();
+			}
+		}
+
+	}
+
+	/// <summary>
+	/// Specifies a version of the .NET Framework documentation.
+	/// </summary>
+	public enum SdkDocVersion
+	{
+		/// <summary>The SDK version 1.0.</summary>
+		SDK_v1_0,
+
+		/// <summary>The SDK version 1.1.</summary>
+		SDK_v1_1,
+		
+		/// <summary>The online version of the SDK documentation.</summary>
+		MsdnOnline
 	}
 
 	/// <summary>

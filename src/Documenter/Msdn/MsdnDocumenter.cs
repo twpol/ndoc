@@ -1413,7 +1413,6 @@ namespace NDoc.Documenter.Msdn
 			int start = Environment.TickCount;
 #endif
 
-			MsdnXsltUtilities utilities = new MsdnXsltUtilities(fileNames, elemNames);
 			ExternalHtmlProvider htmlProvider = new ExternalHtmlProvider(MyConfig, filename);
 			StreamWriter streamWriter = null;
 
@@ -1428,6 +1427,11 @@ namespace NDoc.Documenter.Msdn
 				arguments.AddParam("ndoc-omit-object-tags", String.Empty, ((MyConfig.OutputTarget & OutputType.HtmlHelp) == 0));
 				arguments.AddParam("ndoc-document-attributes", String.Empty, MyConfig.DocumentAttributes);
 				arguments.AddParam("ndoc-documented-attributes", String.Empty, MyConfig.DocumentedAttributes);
+
+				MsdnXsltUtilities utilities = new MsdnXsltUtilities(fileNames, elemNames, MyConfig.LinkToSdkDocVersion);
+
+				arguments.AddParam("ndoc-sdk-doc-base-url", String.Empty, utilities.SdkDocBaseUrl);
+				arguments.AddParam("ndoc-sdk-doc-file-ext", String.Empty, utilities.SdkDocExt);
 
 				arguments.AddExtensionObject("urn:NDocUtil", utilities);
 				arguments.AddExtensionObject("urn:NDocExternalHtml", htmlProvider);
