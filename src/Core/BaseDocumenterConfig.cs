@@ -107,9 +107,20 @@ namespace NDoc.Core
 			{
 				if (name == property.Name.ToLower())
 				{
-					object value2 = System.Convert.ChangeType(value, property.PropertyType);
+					// fix for bug 839384 
+					object value2 = null;
+					if(property.PropertyType.IsEnum) 
+					{
+						value2 = Enum.Parse(property.PropertyType, value);
+					}
+					else 
+					{
+						value2 = System.Convert.ChangeType(value, property.PropertyType);
+					}
+
 					property.SetValue(this, value2, null);
 					break;
+
 				}
 			}
 		}
