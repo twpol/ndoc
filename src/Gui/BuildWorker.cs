@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
@@ -55,8 +56,14 @@ namespace NDoc.Gui
 			{
 				m_isComplete = false;
 
+				GC.Collect();
+				Debug.WriteLine("Memory before build: " + GC.GetTotalMemory(false).ToString());
+
 				// Build the documentation.
 				m_documenter.Build(m_project);
+
+				GC.Collect();
+				Debug.WriteLine("Memory after build: " + GC.GetTotalMemory(false).ToString());
 
 				m_isComplete = true;
 			}
