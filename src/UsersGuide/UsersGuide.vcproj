@@ -135,6 +135,10 @@
 				DeploymentContent="TRUE">
 			</File>
 			<File
+				RelativePath=".\Content\tagsusage.htm"
+				DeploymentContent="TRUE">
+			</File>
+			<File
 				RelativePath=".\Content\vsnet.htm"
 				DeploymentContent="TRUE">
 			</File>

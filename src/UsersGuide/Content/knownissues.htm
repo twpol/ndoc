@@ -25,7 +25,8 @@
 						<p>NDoc creates an HTML file on your hard drive for each topic it generates. 
 							Currently the name of this file is derived directly from the full name of the 
 							type or member being documented. If the total number of characters in an item's 
-							full name (namespace + type + member name) exceed the value of <STRONG>MAX_PATH</STRONG>, 
+							full name (namespace + type + member name) exceed the value of 
+						<b>_MAX_FNAME</b> (256 characters), 
 							NDoc will fail because it attempts to create a file with a name that is longer 
 							than the file system supports.</p>
 						<p>There is no work-around for this issue.</p>
@@ -60,7 +61,7 @@
 					<TD>Assemblies to be documented must reside on a local drive</TD>
 					<TD>
 						<P>Assemblies to be documented must reside on the machine on which NDoc executes. 
-							If they do not, SecurityExceptions will be raised.</P>
+							If they do not, <b>SecurityExceptions</b> will be raised.</P>
 						<P>This is due to the strict security the CLR places on reflection.</P>
 						<P>There is no work-around for this issue (<i>without severely compromising the 
 								security of your machine!</i>)</P>

@@ -105,6 +105,11 @@
             <param name="Local" value="Content\settingupyourproject.htm">
          </OBJECT>
     <LI><OBJECT type="text/sitemap">
+            <param name="Name" value="Tag Usage">
+            <param name="Name" value="Tag Usage">
+            <param name="Local" value="Content\tagsusage.htm">
+         </OBJECT>
+    <LI><OBJECT type="text/sitemap">
             <param name="Name" value="VS.NET">
             <param name="Name" value="VS.NET">
             <param name="Local" value="Content\vsnet.htm">

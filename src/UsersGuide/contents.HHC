@@ -40,6 +40,10 @@
                   <param name="Local" value="Content\tags.htm">
                 </OBJECT>
             <LI><OBJECT type="text/sitemap">
+                  <param name="Name" value="Tag Usage">
+                  <param name="Local" value="Content\tagsusage.htm">
+                </OBJECT>
+            <LI><OBJECT type="text/sitemap">
                   <param name="Name" value="Attributes">
                   <param name="Local" value="Content\attributes.htm">
                 </OBJECT>

@@ -37,17 +37,18 @@ Content\javadoc.htm
 Content\knownissues.htm
 Content\latex.htm
 Content\linear.htm
-Content\images\logo.PNG
 Content\msdn.htm
-Content\css\ndoc.css
-Content\script\ndoc.js
 Content\projectdesigner.htm
 Content\reference.htm
 Content\settingupyourproject.htm
-Content\images\sf.GIF
 Content\support.htm
 Content\tags.htm
 Content\vsnet.htm
 Content\xml.htm
+Content\css\ndoc.css
+Content\images\logo.PNG
+Content\images\sf.GIF
+Content\script\ndoc.js
+Content\tagsusage.htm
 
 [MERGE FILES]
