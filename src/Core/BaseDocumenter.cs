@@ -316,65 +316,132 @@ namespace NDoc.Core
 				(method.IsPrivate && MyConfig.DocumentPrivates));
 		}
 
-		private bool IsHidden(MethodInfo method, MethodInfo[] methods)
+		private bool IsHidden(MemberInfo member, Type type)
 		{
-			if ((method.DeclaringType == method.ReflectedType)
-				|| !method.IsHideBySig
-				|| method.IsFinal)
+			if (member.DeclaringType == member.ReflectedType)
 				return false;
 
-			foreach (MethodInfo m in methods)
+			const BindingFlags bindingFlags =
+					  BindingFlags.Instance |
+					  BindingFlags.Static |
+					  BindingFlags.Public |
+					  BindingFlags.NonPublic;
+
+			MemberInfo [] members = type.GetMember(member.Name, bindingFlags);
+			foreach (MemberInfo m in members)
 			{
-				if ((m.Name == method.Name)
-					&& (m != method))
+				if ((m != member)
+					&& m.DeclaringType.IsSubclassOf(member.DeclaringType))
 				{
-					if (m.DeclaringType.IsSubclassOf(method.DeclaringType)
-						&& HaveSameSig(m, method))
-					{
-						return true;
-					}
+					return true;
 				}
 			}
 
 			return false;
 		}
 
-		private MethodInfo GetHiddenMethod(MethodInfo method, MethodInfo[] methods)
+		private bool IsHidden(MethodInfo method, Type type)
 		{
-			if (method.DeclaringType != method.ReflectedType)
-				return null;
+			if (method.DeclaringType == method.ReflectedType)
+				return false;
 
-			foreach (MethodInfo m in methods)
+			const BindingFlags bindingFlags =
+					  BindingFlags.Instance |
+					  BindingFlags.Static |
+					  BindingFlags.Public |
+					  BindingFlags.NonPublic;
+
+			MemberInfo [] members = type.GetMember(method.Name, bindingFlags);
+			foreach (MemberInfo m in members)
 			{
-				if ((m.Name == method.Name)
-					&& (m != method))
+				if ((m != method)
+					&& (m.DeclaringType.IsSubclassOf(method.DeclaringType))
+					&& ((m.MemberType != MemberTypes.Method)
+					||	HaveSameSig(m as MethodInfo, method)))
 				{
-					if (method.DeclaringType.IsSubclassOf(m.DeclaringType)
-						&& HaveSameSig(m, method))
-					{
-						// this is a workaround, since GetBaseDefinition returns
-						// weird results. Should be simply m.GetBaseDefinition();
-						const BindingFlags bindingFlags =
-							BindingFlags.Instance |
-							BindingFlags.Static |
-							BindingFlags.Public |
-							BindingFlags.NonPublic |
-							BindingFlags.DeclaredOnly;
-
-						ParameterInfo [] parms = m.GetParameters();
-						Type [] types = new Type[parms.Length];
-						for (int i = 0; i < parms.Length; i++)
-						{
-							types[i] = parms[i].ParameterType;
-						}
-
-						return m.DeclaringType.GetMethod(
-							m.Name, bindingFlags, null, types, null);
-					}
+					return true;
 				}
 			}
 
-			return null;
+			return false;
+		}
+
+		private bool IsHiding(MemberInfo member, Type type)
+		{
+			if (member.DeclaringType != member.ReflectedType)
+				return false;
+
+			Type baseType = type.BaseType;
+			if (baseType == null)
+				return false;
+
+			const BindingFlags bindingFlags =
+					  BindingFlags.Instance |
+					  BindingFlags.Static |
+					  BindingFlags.Public |
+					  BindingFlags.NonPublic;
+
+			MemberInfo [] members = baseType.GetMember(member.Name, bindingFlags);
+			if (members.Length > 0)
+				return true;
+
+			return false;
+		}
+
+		private bool IsHiding(MethodInfo method, Type type)
+		{
+			if (method.DeclaringType != method.ReflectedType)
+				return false;
+
+			Type baseType = type.BaseType;
+			if (baseType == null)
+				return false;
+
+			const BindingFlags bindingFlags =
+					  BindingFlags.Instance |
+					  BindingFlags.Static |
+					  BindingFlags.Public |
+					  BindingFlags.NonPublic;
+
+			MemberInfo [] members = baseType.GetMember(method.Name, bindingFlags);
+			foreach (MemberInfo m in members)
+			{
+				if (m == method)
+					continue;
+
+				if (m.MemberType != MemberTypes.Method)
+					return true;
+
+				MethodInfo meth = m as MethodInfo;
+				if (HaveSameSig(meth, method)
+					&& (((method.Attributes & MethodAttributes.Virtual) == 0)
+					||  ((method.Attributes & MethodAttributes.NewSlot) != 0)))
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		private bool IsHiding(PropertyInfo property, Type type)
+		{
+			if (!IsHiding((MemberInfo)property, type))
+				return false;
+
+			bool isIndexer = (property.Name == "Item");
+			foreach (MethodInfo accessor in property.GetAccessors(true))
+			{
+				if (	((accessor.Attributes & MethodAttributes.Virtual) != 0)
+					&&  ((accessor.Attributes & MethodAttributes.NewSlot) == 0))
+					return false;
+
+				// indexers only hide indexers with the same signature
+				if (isIndexer && !IsHiding(accessor, type))
+					return false;
+			}
+
+			return true;
 		}
 
 		private bool HaveSameSig(MethodInfo m1, MethodInfo m2)
@@ -570,7 +637,9 @@ namespace NDoc.Core
 					type.Namespace == namespaceName &&
 					MustDocumentType(type))
 				{
-					WriteClass(writer, type);
+					bool hiding = ((type.MemberType & MemberTypes.NestedType) != 0)
+						&& IsHiding(type, type.DeclaringType);
+					WriteClass(writer, type, hiding);
 					nbWritten++;
 				}
 			}
@@ -607,7 +676,9 @@ namespace NDoc.Core
 					type.Namespace == namespaceName &&
 					MustDocumentType(type))
 				{
-					WriteClass(writer, type);
+					bool hiding = ((type.MemberType & MemberTypes.NestedType) != 0)
+						&& IsHiding(type, type.DeclaringType);
+					WriteClass(writer, type, hiding);
 					nbWritten++;
 				}
 			}
@@ -658,15 +729,21 @@ namespace NDoc.Core
 				type.BaseType.FullName == "System.MulticastDelegate";
 		}
 
-		private int GetMethodOverload(MethodInfo method, MethodInfo[] methods)
+		private int GetMethodOverload(MethodInfo method, Type type)
 		{
 			int count = 0;
 			int overload = 0;
 
+			const BindingFlags bindingFlags =
+					  BindingFlags.Instance |
+					  BindingFlags.Static |
+					  BindingFlags.Public |
+					  BindingFlags.NonPublic;
+
+			MemberInfo[] methods = type.GetMember(method.Name, MemberTypes.Method, bindingFlags);
 			foreach (MethodInfo m in methods)
 			{
-				if ((m.Name == method.Name)
-					&& !IsHidden(m, methods))
+				if (!IsHidden(m, type))
 				{
 					++count;
 				}
@@ -687,7 +764,8 @@ namespace NDoc.Core
 
 			foreach (PropertyInfo p in properties)
 			{
-				if (p.Name == property.Name)
+				if ((p.Name == property.Name)
+					/*&& !IsHidden(p, properties)*/)
 				{
 					++count;
 				}
@@ -712,7 +790,8 @@ namespace NDoc.Core
 		/// <summary>Writes XML documenting a class.</summary>
 		/// <param name="writer">XmlWriter to write on.</param>
 		/// <param name="type">Class to document.</param>
-		private void WriteClass(XmlWriter writer, Type type)
+		/// <param name="hiding">true if hiding base members</param>
+		private void WriteClass(XmlWriter writer, Type type, bool hiding)
 		{
 			bool isStruct = type.IsValueType;
 
@@ -750,6 +829,11 @@ namespace NDoc.Core
 				}
 			}
 
+			if (hiding)
+			{
+				writer.WriteAttributeString("hiding", "true");
+			}
+
 			WriteTypeDocumentation(writer, memberName, type);
 			WriteCustomAttributes(writer, type);
 			WriteBaseType(writer, type.BaseType);
@@ -757,26 +841,11 @@ namespace NDoc.Core
 			Debug.Assert(implementations == null);
 			implementations = new ImplementsCollection();
 
-			//build a collection of the base type's interfaces
-			//to determine which have been inherited
-			StringCollection baseInterfaces = new StringCollection();
-			foreach(Type baseInterfaceType in type.BaseType.GetInterfaces())
-			{
-				baseInterfaces.Add(baseInterfaceType.FullName);
-			}
-
 			foreach(Type interfaceType in type.GetInterfaces())
 			{
 				if(MustDocumentType(interfaceType))
 				{
-					writer.WriteStartElement("implements");
-					if (baseInterfaces.Contains(interfaceType.FullName))
-					{
-						writer.WriteAttributeString("inherited", "true");
-					}
-					writer.WriteString(interfaceType.Name);
-					writer.WriteEndElement();
-
+					writer.WriteElementString("implements", interfaceType.Name);
 					InterfaceMapping interfaceMap = type.GetInterfaceMap(interfaceType);
 					int numberOfMethods = interfaceMap.InterfaceMethods.Length;
 					for (int i = 0; i < numberOfMethods; i++)
@@ -864,9 +933,9 @@ namespace NDoc.Core
 			writer.WriteStartElement("attribute");
 			writer.WriteAttributeString("name", attribute.GetType().FullName);
 
-			BindingFlags bindingFlags =
-				BindingFlags.Instance |
-				BindingFlags.Public;
+			const BindingFlags bindingFlags =
+					  BindingFlags.Instance |
+					  BindingFlags.Public;
 
 			foreach (FieldInfo field in attribute.GetType().GetFields(bindingFlags))
 			{
@@ -910,10 +979,10 @@ namespace NDoc.Core
 		{
 			int overload = 0;
 
-			BindingFlags bindingFlags =
-				BindingFlags.Instance |
-				BindingFlags.Public |
-				BindingFlags.NonPublic;
+			const BindingFlags bindingFlags =
+					  BindingFlags.Instance |
+					  BindingFlags.Public |
+					  BindingFlags.NonPublic;
 
 			ConstructorInfo[] constructors = type.GetConstructors(bindingFlags);
 
@@ -933,28 +1002,35 @@ namespace NDoc.Core
 
 		private void WriteFields(XmlWriter writer, Type type)
 		{
-			BindingFlags bindingFlags =
-				BindingFlags.Instance |
-				BindingFlags.Static |
-				BindingFlags.Public |
-				BindingFlags.NonPublic;
+			const BindingFlags bindingFlags =
+					  BindingFlags.Instance |
+					  BindingFlags.Static |
+					  BindingFlags.Public |
+					  BindingFlags.NonPublic;
 
-			foreach (FieldInfo field in type.GetFields(bindingFlags))
+			FieldInfo [] fields = type.GetFields(bindingFlags);
+			foreach (FieldInfo field in fields)
 			{
-				if (MustDocumentField(field) && !IsAlsoAnEvent(field))
+				if (MustDocumentField(field)
+					&& !IsAlsoAnEvent(field)
+					&& !IsHidden(field, type))
 				{
-					WriteField(writer, field, type);
+					WriteField(
+						writer,
+						field,
+						type,
+						IsHiding(field, type));
 				}
 			}
 		}
 
 		private void WriteProperties(XmlWriter writer, Type type)
 		{
-			BindingFlags bindingFlags =
-				BindingFlags.Instance |
-				BindingFlags.Static |
-				BindingFlags.Public |
-				BindingFlags.NonPublic;
+			const BindingFlags bindingFlags =
+					  BindingFlags.Instance |
+					  BindingFlags.Static |
+					  BindingFlags.Public |
+					  BindingFlags.NonPublic;
 
 			#warning explicitly implemented properties are not returned here.
 			PropertyInfo[] properties = type.GetProperties(bindingFlags);
@@ -967,27 +1043,29 @@ namespace NDoc.Core
 				bool hasGetter = (getMethod != null) && MustDocumentMethod(getMethod);
 				bool hasSetter = (setMethod != null) && MustDocumentMethod(setMethod);
 
-				if ((hasGetter || hasSetter) && !IsAlsoAnEvent(property))
+				if ((hasGetter || hasSetter)
+					&& !IsAlsoAnEvent(property)
+					&& !IsHidden(property, type))
 				{
 					WriteProperty(
 						writer,
 						property,
 						property.DeclaringType.FullName != type.FullName,
-						GetPropertyOverload(property, properties));
+						GetPropertyOverload(property, properties),
+						IsHiding(property, type));
 				}
 			}
 		}
 
 		private void WriteMethods(XmlWriter writer, Type type)
 		{
-			BindingFlags bindingFlags =
-				BindingFlags.Instance |
-				BindingFlags.Static |
-				BindingFlags.Public |
-				BindingFlags.NonPublic;
+			const BindingFlags bindingFlags =
+					  BindingFlags.Instance |
+					  BindingFlags.Static |
+					  BindingFlags.Public |
+					  BindingFlags.NonPublic;
 
 			MethodInfo[] methods = type.GetMethods(bindingFlags);
-
 			foreach (MethodInfo method in methods)
 			{
 				string name = method.Name;
@@ -1005,28 +1083,27 @@ namespace NDoc.Core
 					!name.StartsWith("remove_") &&
 					!name.StartsWith("op_") &&
 					MustDocumentMethod(method) &&
-					!IsHidden(method, methods))
+					!IsHidden(method, type))
 				{
 					WriteMethod(
 						writer,
 						method,
 						method.DeclaringType.FullName != type.FullName,
-						GetMethodOverload(method, methods),
-						GetHiddenMethod(method, methods));
+						GetMethodOverload(method, type),
+						IsHiding(method, type));
 				}
 			}
 		}
 
 		private void WriteOperators(XmlWriter writer, Type type)
 		{
-			BindingFlags bindingFlags =
-				BindingFlags.Instance |
-				BindingFlags.Static |
-				BindingFlags.Public |
-				BindingFlags.NonPublic;
+			const BindingFlags bindingFlags =
+					  BindingFlags.Instance |
+					  BindingFlags.Static |
+					  BindingFlags.Public |
+					  BindingFlags.NonPublic;
 
 			MethodInfo[] methods = type.GetMethods(bindingFlags);
-
 			foreach (MethodInfo method in methods)
 			{
 				if (method.Name.StartsWith("op_") &&
@@ -1035,7 +1112,7 @@ namespace NDoc.Core
 					WriteOperator(
 						writer,
 						method,
-						GetMethodOverload(method, methods));
+						GetMethodOverload(method, type));
 				}
 			}
 		}
@@ -1058,14 +1135,15 @@ namespace NDoc.Core
 		{
 			bool isEvent = false;
 
-			BindingFlags bindingFlags =
-				BindingFlags.Instance |
-				BindingFlags.Static |
-				BindingFlags.Public |
-				BindingFlags.NonPublic |
-				BindingFlags.DeclaredOnly;
+			const BindingFlags bindingFlags =
+					  BindingFlags.Instance |
+					  BindingFlags.Static |
+					  BindingFlags.Public |
+					  BindingFlags.NonPublic |
+					  BindingFlags.DeclaredOnly;
 
-			foreach (EventInfo eventInfo in type.GetEvents(bindingFlags))
+			EventInfo [] events = type.GetEvents(bindingFlags);
+			foreach (EventInfo eventInfo in events)
 			{
 				if (eventInfo.EventHandlerType.FullName == fullName)
 				{
@@ -1139,14 +1217,13 @@ namespace NDoc.Core
 			writer.WriteAttributeString("id", memberName);
 			writer.WriteAttributeString("access", GetTypeAccessValue(type));
 
-			BindingFlags bindingFlags =
-				BindingFlags.Instance |
-				BindingFlags.Static |
-				BindingFlags.Public |
-				BindingFlags.NonPublic;
+			const BindingFlags bindingFlags =
+					  BindingFlags.Instance |
+					  BindingFlags.Static |
+					  BindingFlags.Public |
+					  BindingFlags.NonPublic;
 
 			MethodInfo[] methods = type.GetMethods(bindingFlags);
-
 			foreach (MethodInfo method in methods)
 			{
 				if (method.Name == "Invoke")
@@ -1197,19 +1274,23 @@ namespace NDoc.Core
 			WriteEnumerationDocumentation(writer, memberName);
 			WriteCustomAttributes(writer, type);
 
-			BindingFlags bindingFlags =
-				BindingFlags.Instance |
-				BindingFlags.Static |
-				BindingFlags.Public |
-				BindingFlags.NonPublic |
-				BindingFlags.DeclaredOnly;
+			const BindingFlags bindingFlags =
+					  BindingFlags.Instance |
+					  BindingFlags.Static |
+					  BindingFlags.Public |
+					  BindingFlags.NonPublic |
+					  BindingFlags.DeclaredOnly;
 
 			foreach (FieldInfo field in type.GetFields(bindingFlags))
 			{
 				// *** Not sure what this field is but don't want to document it for now.
 				if (field.Name != "value__")
 				{
-					WriteField(writer, field, type);
+					WriteField(
+						writer,
+						field,
+						type,
+						IsHiding(field, type));
 				}
 			}
 
@@ -1234,8 +1315,13 @@ namespace NDoc.Core
 		/// <summary>Writes XML documenting a field.</summary>
 		/// <param name="writer">XmlWriter to write on.</param>
 		/// <param name="field">Field to document.</param>
-		private void WriteField(XmlWriter writer, FieldInfo field,
-			Type type)
+		/// <param name="type">Type containing the field.</param>
+		/// <param name="hiding">true if hiding base members</param>
+		private void WriteField(
+			XmlWriter writer,
+			FieldInfo field,
+			Type type,
+			bool hiding)
 		{
 			string memberName = GetMemberName(field);
 
@@ -1250,6 +1336,11 @@ namespace NDoc.Core
 			if (inherited)
 			{
 				writer.WriteAttributeString("declaringType", field.DeclaringType.FullName);
+			}
+
+			if (hiding)
+			{
+				writer.WriteAttributeString("hiding", "true");
 			}
 
 			if (field.IsStatic)
@@ -1380,7 +1471,13 @@ namespace NDoc.Core
 		/// <param name="property">Property to document.</param>
 		/// <param name="inherited">true if a declaringType attribute should be included.</param>
 		/// <param name="overload">If &gt; 0, indicates this it the nth overloaded method with the same name.</param>
-		private void WriteProperty(XmlWriter writer, PropertyInfo property, bool inherited, int overload)
+		/// <param name="hiding">true if this property is hiding base class members with the same name.</param>
+		private void WriteProperty(
+			XmlWriter writer,
+			PropertyInfo property,
+			bool inherited,
+			int overload,
+			bool hiding)
 		{
 			string memberName = GetMemberName(property);
 
@@ -1392,6 +1489,11 @@ namespace NDoc.Core
 			if (inherited)
 			{
 				writer.WriteAttributeString("declaringType", property.DeclaringType.FullName);
+			}
+
+			if (hiding)
+			{
+				writer.WriteAttributeString("hiding", "true");
 			}
 
 			writer.WriteAttributeString("type", property.PropertyType.FullName.Replace('+', '.'));
@@ -1505,13 +1607,13 @@ namespace NDoc.Core
 		/// <param name="method">Method to document.</param>
 		/// <param name="inherited">true if a declaringType attribute should be included.</param>
 		/// <param name="overload">If &gt; 0, indicates this it the nth overloaded method with the same name.</param>
-		/// <param name="hiddenMethod">If not null, indicates that this method is a new implementation for hiddenMethod.</param>
+		/// <param name="hiding">true if this method hides methods of the base class with the same signature.</param>
 		private void WriteMethod(
 			XmlWriter writer,
 			MethodInfo method,
 			bool inherited,
 			int overload,
-			MethodInfo hiddenMethod)
+			bool hiding)
 		{
 			if (method != null)
 			{
@@ -1544,9 +1646,9 @@ namespace NDoc.Core
 					writer.WriteAttributeString("declaringType", method.DeclaringType.FullName);
 				}
 
-				if (hiddenMethod != null)
+				if (hiding)
 				{
-					writer.WriteAttributeString("hiddenMember", GetMemberName(hiddenMethod));
+					writer.WriteAttributeString("hiding", "true");
 				}
 
 				writer.WriteAttributeString("contract", GetMethodContractValue(method));
@@ -1965,19 +2067,7 @@ namespace NDoc.Core
 			{
 				if ((methodAttributes & MethodAttributes.NewSlot) > 0)
 				{
-					/*
-					  if (false)
-					  {
-					  // This is where we need to check if the class we
-					  // derive from has a method with our same sig. If
-					  // so then this would be the 'new' keyword.
-					  result = "new";
-					  }
-					  else
-					  {
-					*/
 					result = "Virtual";
-					//   }
 				}
 				else
 				{
@@ -2384,14 +2474,13 @@ namespace NDoc.Core
 		private PropertyInfo FindProperty(string expectedPropertyName,
 			Type type)
 		{
-			BindingFlags bindingFlags =
-				BindingFlags.Instance |
-				BindingFlags.Static |
-				BindingFlags.Public |
-				BindingFlags.NonPublic;
+			const BindingFlags bindingFlags =
+					  BindingFlags.Instance |
+					  BindingFlags.Static |
+					  BindingFlags.Public |
+					  BindingFlags.NonPublic;
 
 			PropertyInfo[] properties = type.GetProperties(bindingFlags);
-
 			foreach (PropertyInfo property in properties)
 			{
 				if (property.Name.Equals(expectedPropertyName))

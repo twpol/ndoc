@@ -13,6 +13,9 @@
 			</xsl:if>
 			<xsl:call-template name="attributes"/>
 			<div>
+			  <xsl:if test="@hiding">
+			      <xsl:text>new&#160;</xsl:text>
+			  </xsl:if>
 			  <xsl:call-template name="type-access">
 				  <xsl:with-param name="access" select="@access" />
 				  <xsl:with-param name="type" select="local-name()" />
@@ -55,15 +58,15 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="derivation">
-		<xsl:if test="@baseType!='' or implements[not(@inherited)]">
+		<xsl:if test="@baseType!='' or implements">
 			<xsl:text> : </xsl:text>
 			<xsl:if test="@baseType!=''">
 				<xsl:value-of select="@baseType" />
-				<xsl:if test="implements[not(@inherited)]">
+				<xsl:if test="implements">
 					<xsl:text>, </xsl:text>
 				</xsl:if>
 			</xsl:if>
-			<xsl:for-each select="implements[not(@inherited)]">
+			<xsl:for-each select="implements">
 				<xsl:value-of select="." />
 				<xsl:if test="position()!=last()">
 					<xsl:text>, </xsl:text>
@@ -79,7 +82,7 @@
 				<br />
 			</xsl:if>
 			<xsl:call-template name="attributes"/>
-			<xsl:if test="@hiddenMember">
+			<xsl:if test="@hiding">
 				<xsl:text>new&#160;</xsl:text>
 			</xsl:if>
 			<xsl:if test="not(parent::interface or @interface)">
@@ -165,6 +168,9 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="member-syntax2">
+		<xsl:if test="@hiding">
+			<xsl:text>new&#160;</xsl:text>
+		</xsl:if>
 		<xsl:if test="not(parent::interface)">
 			<xsl:call-template name="method-access">
 				<xsl:with-param name="access" select="@access" />
@@ -221,6 +227,9 @@
 				<br />
 			</xsl:if>
 			<xsl:call-template name="attributes"/>
+			<xsl:if test="@hiding">
+				<xsl:text>new&#160;</xsl:text>
+			</xsl:if>
 			<xsl:if test="not(parent::interface)">
 				<xsl:call-template name="method-access">
 					<xsl:with-param name="access" select="@access" />
@@ -261,6 +270,9 @@
 		<xsl:param name="display-names" select="true()" />
 		<xsl:param name="link-types" select="true()" />
 		<xsl:call-template name="attributes"/>
+		<xsl:if test="@hiding">
+			<xsl:text>new&#160;</xsl:text>
+		</xsl:if>
 		<xsl:if test="not(parent::interface)">
 			<xsl:call-template name="method-access">
 				<xsl:with-param name="access" select="@access" />
@@ -269,6 +281,14 @@
 		</xsl:if>
 		<xsl:if test="@contract='Static'">
 			<xsl:text>static&#160;</xsl:text>
+		</xsl:if>
+		<xsl:if test="not(parent::interface)">
+			<xsl:if test="@contract!='Normal' and @contract!='Static' and @contract!='Final'">
+				<xsl:call-template name="contract">
+					<xsl:with-param name="contract" select="@contract" />
+				</xsl:call-template>
+				<xsl:text>&#160;</xsl:text>
+			</xsl:if>
 		</xsl:if>
 		<xsl:choose>
 			<xsl:when test="$link-types">
@@ -337,28 +357,12 @@
 		</xsl:choose>
 		<xsl:text>&#160;{</xsl:text>
 		<xsl:if test="@get='true'">
-			<xsl:if test="not(parent::interface)">
-				<xsl:if test="@contract!='Normal' and @contract!='Static' and @contract!='Final'">
-					<xsl:call-template name="contract">
-						<xsl:with-param name="contract" select="@contract" />
-					</xsl:call-template>
-					<xsl:text>&#160;</xsl:text>
-				</xsl:if>
-			</xsl:if>
 			<xsl:text>get;</xsl:text>
 			<xsl:if test="@set='true'">
 				<xsl:text>&#160;</xsl:text>
 			</xsl:if>
 		</xsl:if>
 		<xsl:if test="@set='true'">
-			<xsl:if test="not(parent::interface)">
-				<xsl:if test="@contract!='Normal' and @contract!='Static' and @contract!='Final'">
-					<xsl:call-template name="contract">
-						<xsl:with-param name="contract" select="@contract" />
-					</xsl:call-template>
-					<xsl:text>&#160;</xsl:text>
-				</xsl:if>
-			</xsl:if>
 			<xsl:text>set;</xsl:text>
 		</xsl:if>
 		<xsl:text>}</xsl:text>
