@@ -421,13 +421,18 @@ namespace NDoc.Documenter.Msdn
 				helpCompileProcess.StartInfo = processStartInfo;
 
 				// Start the help compile and bail if it takes longer than 10 minutes.
+				Trace.WriteLine( "Compiling Html Help file" );
 
 				try
 				{
 					helpCompileProcess.Start();
 
 					// Read the standard output of the spawned process.
-					Trace.WriteLine( helpCompileProcess.StandardOutput.ReadToEnd() );
+					string stdOut = helpCompileProcess.StandardOutput.ReadToEnd();
+
+					// compiler std out includes a bunch of unnenessary line feeds + new lines
+					// remplace all the line feed and keep the new lines
+					Trace.WriteLine( stdOut.Replace( "\r", "" ) );
 					Trace.WriteLine( helpCompileProcess.StandardError.ReadToEnd() );
 					
 				}
@@ -448,6 +453,8 @@ namespace NDoc.Documenter.Msdn
 				{
 					throw new DocumenterException("Help compiler returned an error code of " + helpCompileProcess.ExitCode.ToString());
 				}
+
+				Trace.WriteLine( "Html Help compile complete" );
 			}
 			finally
 			{
