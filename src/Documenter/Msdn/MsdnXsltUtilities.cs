@@ -23,6 +23,7 @@ namespace NDoc.Documenter.Msdn
 		private StringDictionary fileNames;
 		private StringDictionary elemNames;
 		private StringCollection descriptions;
+		private string encodingString;
 
 		/// <summary>
 		/// Initializes a new instance of class MsdnXsltUtilities
@@ -32,12 +33,14 @@ namespace NDoc.Documenter.Msdn
 		/// <param name="linkToSdkDocVersion">Specifies the version of the SDK documentation.</param>
 		/// <param name="linkToSdkDocLangauge">Specifies the version of the SDK documentation.</param>
 		/// <param name="SdkLinksOnWeb">Specifies if links should be to ms online documentation.</param>
+		/// <param name="fileEncoding">Specifies if links should be to ms online documentation.</param>
 		public MsdnXsltUtilities(
 			StringDictionary fileNames, 
 			StringDictionary elemNames, 
 			SdkVersion  linkToSdkDocVersion,
 			string linkToSdkDocLangauge,
-			bool SdkLinksOnWeb)
+			bool SdkLinksOnWeb,
+			System.Text.Encoding fileEncoding)
 		{
 			Reset();
 
@@ -52,18 +55,19 @@ namespace NDoc.Documenter.Msdn
 			}
 			else
 			{
-			switch (linkToSdkDocVersion)
-			{
+				switch (linkToSdkDocVersion)
+				{
 					case SdkVersion.SDK_v1_0:
 						sdkDocBaseUrl = GetLocalizedFrameworkURL(sdkDoc10BaseNamespace,linkToSdkDocLangauge);
-					sdkDocExt = sdkDocPageExt;
-					break;
+						sdkDocExt = sdkDocPageExt;
+						break;
 					case SdkVersion.SDK_v1_1:
 						sdkDocBaseUrl = GetLocalizedFrameworkURL(sdkDoc11BaseNamespace,linkToSdkDocLangauge);
-					sdkDocExt = sdkDocPageExt;
-					break;
+						sdkDocExt = sdkDocPageExt;
+						break;
+				}
 			}
-			}
+			encodingString = "text/html; charset=" + fileEncoding.WebName; 
 		}
 
 		/// <summary>
@@ -230,13 +234,22 @@ namespace NDoc.Documenter.Msdn
 			if (langCode!="en")
 			{
 				return helpURL + searchNamespace + "." + langCode.ToUpper() + sdkRoot;
-				}
-			else
-				{
-			//default to non-localized namespace
-			return helpURL + searchNamespace + sdkRoot;
-				}
 			}
+			else
+			{
+				//default to non-localized namespace
+				return helpURL + searchNamespace + sdkRoot;
+			}
+		}
+
+		/// <summary>
+		/// Gets HTML ContentType for the system's current ANSI code page. 
+		/// </summary>
+		/// <returns>ContentType attribute string</returns>
+		public string GetContentType()
+		{
+			return encodingString;
+		}
 
 	}
 }

@@ -26,6 +26,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.Xml.XPath;
 using System.Xml.Xsl;
+using System.Globalization;
 
 using NDoc.Core;
 
@@ -65,6 +66,8 @@ namespace NDoc.Documenter.Msdn
 		private XslTransform xsltMemberOverload;
 		private XslTransform xsltProperty;
 		private XslTransform xsltField;
+
+		private Encoding currentFileEncoding;
 
 		private ArrayList documentedNamespaces;
 
@@ -165,6 +168,10 @@ namespace NDoc.Documenter.Msdn
 			try
 			{
 				OnDocBuildingStep(0, "Initializing...");
+
+				//Get an Encoding for the current LangID
+				CultureInfo ci = new CultureInfo(MyConfig.LangID);
+				currentFileEncoding = Encoding.GetEncoding(ci.TextInfo.ANSICodePage);
 
 				// the workspace class is responsible for maintaining the outputdirectory
 				// and compile intermediate locations
@@ -293,7 +300,7 @@ namespace NDoc.Documenter.Msdn
 				MakeFilenames();
 
 				string DocLangCode = Enum.GetName(typeof(SdkLanguage),MyConfig.SdkDocLanguage).Replace("_","-");
-				utilities = new MsdnXsltUtilities(fileNames, elemNames, MyConfig.SdkDocVersion, DocLangCode, MyConfig.SdkLinksOnWeb);
+				utilities = new MsdnXsltUtilities(fileNames, elemNames, MyConfig.SdkDocVersion, DocLangCode, MyConfig.SdkLinksOnWeb, currentFileEncoding);
 
 				OnDocBuildingStep(30, "Loading XSLT files...");
 
@@ -1506,7 +1513,7 @@ namespace NDoc.Documenter.Msdn
 
 			using (streamWriter =  new StreamWriter(
 					File.Open(Path.Combine(workspace.WorkingDirectory, filename), FileMode.Create),
-					Encoding.UTF8))
+					currentFileEncoding))
 			{
 				arguments.AddParam("ndoc-title", String.Empty, MyConfig.Title);
 				arguments.AddParam("ndoc-vb-syntax", String.Empty, MyConfig.ShowVisualBasic);

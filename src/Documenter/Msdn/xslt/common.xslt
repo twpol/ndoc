@@ -817,7 +817,7 @@
 	<xsl:template name="html-head">
 		<xsl:param name="title" />
 		<head>
-			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+			<meta http-equiv="Content-Type" content="{NUtil:GetContentType()}"/>
 			<meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
 			<title>
 				<xsl:value-of select="$title" />
