@@ -49,7 +49,7 @@
 		It then applies a template to the "documentation" parent that creates
 		the table and then transforms all of the history nodes in a custom fashion
 	-->  
-	<xsl:template match="history[1]" mode="seealso-section">
+	<xsl:template match="history[1]" mode="after-remarks-section">
 		<xsl:apply-templates select="parent::documentation" mode="internal"/>
 	</xsl:template>
 	
