@@ -1,82 +1,110 @@
 <?xml version="1.0" ?>
 <project name="NDoc-package" default="package">
-	<target name="package" description="Build and Package distribution" depends="check-project-version">
-		<!-- set name of package zip file -->
-		<property name="current.package.zipfile" value="${nant.project.name}-devel-v${project.version}.zip" />
-		<!-- set flag to indicate that this is a package build -->
-		<property name="project.build.package" value="true" readonly="false" />
-		<call target="clean-build-dir" />
-		<!-- set build configuration to release -->
-		<call target="release" />
-		<!-- compile current build configuration for all supported frameworks -->
-		<call target="compile-build" />
-		<!-- build user guide -->
-		<call target="build-userguide" />
-		<!-- build setup -->
-		<call target="build-setup" />
-		<!-- create distribution zip file -->
-		<call target="zip" />
-	</target>
-	<!--
+    <target name="package" description="Build and Package distribution" depends="check-project-version">
+        <!-- set name of package zip file -->
+        <property name="current.package.zipfile" value="${nant.project.name}-devel-v${project.version}.zip" />
+        <!-- set flag to indicate that this is a package build -->
+        <property name="project.build.package" value="true" readonly="false" />
+        <call target="clean-build-dir" />
+        <!-- set build configuration to release -->
+        <call target="release" />
+        <!-- compile current build configuration for all supported frameworks -->
+        <call target="compile-build" />
+        <!-- build user guide -->
+        <call target="build-userguide" />
+        <!-- build setup -->
+        <call target="build-setup" />
+        <!-- create distribution zip file -->
+        <call target="zip" />
+    </target>
+    <!--
 
-	-->
-	<target name="zip" depends="check-build-dir, check-current-package-zipfile">
-		<!-- delete the specified zipfile if it already exists -->
-		<delete file="${current.package.zipfile}" if="${file::exists(current.package.zipfile)}" />
-		<zip zipfile="${current.package.zipfile}" ziplevel="9">
-			<fileset>
-				<includes name="COPYING.txt" />
-				<includes name="NDoc.build*" />
-				<includes name="README.txt" />
-				<includes name="NDoc.sln" />
-				<includes name="NDoc.snk" />
+    -->
+    <target name="zip" depends="check-build-dir, check-current-package-zipfile">
+        <!-- create CommonAssemblyInfo.cs file to inclusing in distribution package -->
+        <call target="create-common-assemblyinfo-for-packaging" />
+        <!-- delete the specified zipfile if it already exists -->
+        <delete file="${current.package.zipfile}" if="${file::exists(current.package.zipfile)}" />
+        <zip zipfile="${current.package.zipfile}" ziplevel="9">
+            <fileset>
+                <includes name="COPYING.txt" />
+                <includes name="NDoc.build*" />
+                <includes name="README.txt" />
+                <includes name="NDoc.sln" />
+                <includes name="NDoc.snk" />
+                <includes name="bin/**" />
+                <includes name="doc/**" />
+                <includes name="examples/*" />
+                <includes name="examples/Linked/*" />
+                <excludes name="examples/Linked/Linked.chw" />
+                <excludes name="examples/Linked/Linked.log" />
+                <excludes name="examples/Linked/Linked.chm" />
+                <includes name="src/**/*" />
+                <excludes name="doc/sdk/NDoc-SDK.*" /> <!-- remove HTML Help file, only include HTML files -->
+                <excludes name="src/Addins/**" />
+                <excludes name="src/NDocGen/**" />
+                <excludes name="src/Setup/Debug/**" />
+                <excludes name="src/Setup/Release/**" />
+                <excludes name="src/UsersGuide/Debug/**" />
+                <excludes name="src/UsersGuide/Release/**" />
+                <excludes name="src/**/bin/**" />
+                <excludes name="src/**/obj/**" />
+                <excludes name="**/gc.log" /> <!-- file created by mono compiler -->
+                <excludes name="**/*.user" />
+                <excludes name="**/*.suo" />
+                <excludes name="**/.#*" /> <!-- CVS backup files -->
+            </fileset>
+        </zip>
+    </target>
+    <!--
 
-				<includes name="bin/**" />
-				<includes name="doc/**" />
-				
-				<includes name="examples/*" />
-				<includes name="examples/Linked/*" />
-				<excludes name="examples/Linked/Linked.chw" />
-				<excludes name="examples/Linked/Linked.log" />
-				<excludes name="examples/Linked/Linked.chm" />
+    -->
+    <target name="build-userguide">
+        <exec program="devenv.com">
+            <arg file="src/UsersGuide/UsersGuide.vcproj" />
+            <arg value="/build" />
+            <arg value="release" />
+        </exec>
+        <echo message="NDoc ${project.version} user guide created at '${path::get-full-path('src/UsersGuide/NDocUsersGuide.chm')}'."
+            level="Info" />
+    </target>
+    <!--
 
-				<includes name="src/**/*" />
-				<excludes name="src/Addins/**" />
-				<excludes name="src/NDocGen/**" />
-				<excludes name="src/Setup/Debug/**" />
-				<excludes name="src/Setup/Release/**" />
-				<excludes name="src/UsersGuide/Debug/**" />
-				<excludes name="src/UsersGuide/Release/**" />
-				<excludes name="src/**/bin/**" />
-				<excludes name="src/**/obj/**" />
-								
-				<excludes name="**/gc.log" /> <!-- file created by mono compiler -->
-				<excludes name="**/*.user" />
-				<excludes name="**/*.suo" />
-				<excludes name="**/.#*" /> <!-- CVS backup files -->
-			</fileset>
-		</zip>
-	</target>
-	<!--
-
-	-->
-	<target name="build-userguide">
-		<exec program="devenv.com">
-			<arg file="src/UsersGuide/UsersGuide.vcproj" />
-			<arg value="/build" />
-			<arg value="release" />
-		</exec>
-		<echo message="NDoc ${project.version} user guide created at '${path::get-full-path('src/UsersGuide/NDocUsersGuide.chm')}'." level="Info" />
-	</target>	
-	<!--
-
-	-->
-	<target name="build-setup">
-		<exec program="devenv.com">
-			<arg file="src/Setup/Setup.vdproj" />
-			<arg value="/build" />
-			<arg value="release" />
-		</exec>
-		<echo message="NDoc ${project.version} setup package created at '${path::get-full-path('src/Setup/Release/NDoc.msi')}'." level="Info" />
-	</target>	
+    -->
+    <target name="build-setup">
+        <exec program="devenv.com">
+            <arg file="src/Setup/Setup.vdproj" />
+            <arg value="/build" />
+            <arg value="release" />
+        </exec>
+        <echo message="NDoc ${project.version} setup package created at '${path::get-full-path('src/Setup/Release/NDoc.msi')}'."
+            level="Info" />
+    </target>
+    <!--
+        Create a CommonAssemblyInfo.cs that can be included in the developer 
+        distribution package.
+    -->
+    <target name="create-common-assemblyinfo-for-packaging">
+        <!-- ensure src/CommonAssemblyInfo.cs is writable if it already exists -->
+        <attrib file="src/CommonAssemblyInfo.cs" readonly="false" if="${file::exists('src/CommonAssemblyInfo.cs')}" />
+        <!-- generate the source file holding the common assembly-level attributes -->
+        <asminfo output="src/CommonAssemblyInfo.cs" language="CSharp">
+            <imports>
+                <import name="System" />
+                <import name="System.Reflection" />
+                <import name="System.Runtime.InteropServices" />
+            </imports>
+            <attributes>
+                <attribute type="ComVisibleAttribute" value="false" />
+                <attribute type="AssemblyConfigurationAttribute" value="${project.release.type}" />
+                <attribute type="AssemblyCompanyAttribute" value="http://ndoc.sourceforge.net" />
+                <attribute type="AssemblyProductAttribute" value="NDoc" />
+                <attribute type="AssemblyCopyrightAttribute" value="" />
+                <attribute type="AssemblyTrademarkAttribute" value="" />
+                <attribute type="AssemblyCultureAttribute" value="" />
+                <attribute type="AssemblyVersionAttribute" value="${project.version}.${build.number}.0" />
+                <attribute type="AssemblyInformationalVersionAttribute" value="${project.version}" />
+            </attributes>
+        </asminfo>
+    </target>
 </project>
