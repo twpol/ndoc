@@ -69,30 +69,28 @@
 		<xsl:param name="head" />
 		<xsl:param name="tail" />
 		<xsl:param name="level" />
-		<xsl:call-template name="indent">
-			<xsl:with-param name="count" select="$level" />
-		</xsl:call-template>
-		<xsl:text>-</xsl:text>
-		<a>
-			<xsl:attribute name="href">
-				<xsl:choose>
-					<xsl:when test="starts-with($head/@id, 'T:System.')">
-						<xsl:call-template name="get-filename-for-system-type">
-							<xsl:with-param name="type-name" select="substring-after($head/@id, 'T:')" />
-						</xsl:call-template>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:call-template name="get-filename-for-type">
-							<xsl:with-param name="id" select="$head/@id" />
-						</xsl:call-template>
-					</xsl:otherwise>
-				</xsl:choose>
-			</xsl:attribute>
-			<xsl:call-template name="get-datatype">
-				<xsl:with-param name="datatype" select="substring-after($head/@id, 'T:')" />
+		<p>
+			<xsl:call-template name="indent">
+				<xsl:with-param name="count" select="$level" />
 			</xsl:call-template>
-		</a>
-		<br />
+			<a>
+				<xsl:attribute name="href">
+					<xsl:choose>
+						<xsl:when test="starts-with($head/@id, 'T:System.')">
+							<xsl:call-template name="get-filename-for-system-type">
+								<xsl:with-param name="type-name" select="substring-after($head/@id, 'T:')" />
+							</xsl:call-template>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:call-template name="get-filename-for-type">
+								<xsl:with-param name="id" select="$head/@id" />
+							</xsl:call-template>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:attribute>
+				<xsl:value-of select="substring-after($head/@id, 'T:')"/>
+			</a>
+		</p>
 		<xsl:variable name="derivatives" select="/ndoc/assembly/module/namespace/class[base/@id = $head/@id] | /ndoc/assembly/module/namespace/class/descendant::base[base[@id = $head/@id]]" />
 		<xsl:if test="$derivatives">
 			<xsl:call-template name="call-draw">
@@ -111,7 +109,7 @@
 	<xsl:template name="indent">
 		<xsl:param name="count" />
 		<xsl:if test="$count &gt; 0">
-			<xsl:text>&#160;&#160;</xsl:text>
+			<xsl:text>&#160;&#160;&#160;&#160;</xsl:text>
 			<xsl:call-template name="indent">
 				<xsl:with-param name="count" select="$count - 1" />
 			</xsl:call-template>
