@@ -96,31 +96,28 @@
 			<xsl:when test="starts-with($cref, 'T:')">
 				<xsl:value-of select="concat('ms-help://MS.VSCC/MS.MSDNVS/cpref/html/frlrf', translate(substring-after($cref, ':'), '.', ''), 'ClassTopic.htm')" />
 			</xsl:when>
-			<xsl:when test="starts-with($cref, 'P:')">
-				<xsl:variable name="namespace">
+			<xsl:when test="starts-with($cref, 'F:') or starts-with($cref, 'P:') or starts-with($cref, 'M:') or starts-with($cref, 'E:')">
+				<xsl:variable name="cref-name">
+					<xsl:choose>
+						<xsl:when test="contains($cref, '(')">
+							<xsl:value-of select="substring-after(substring-before($cref, '('), ':')" />
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="substring-after($cref, ':')" />
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:variable>
+				<xsl:variable name="cref-type">
 					<xsl:call-template name="get-namespace">
-						<xsl:with-param name="name" select="substring-after($cref, ':')" />
+						<xsl:with-param name="name" select="$cref-name" />
 					</xsl:call-template>
 				</xsl:variable>
-				<xsl:variable name="name">
+				<xsl:variable name="cref-member">
 					<xsl:call-template name="strip-namespace">
-						<xsl:with-param name="name" select="substring-after($cref, ':')" />
+						<xsl:with-param name="name" select="$cref-name" />
 					</xsl:call-template>
 				</xsl:variable>
-				<xsl:value-of select="concat('ms-help://MS.VSCC/MS.MSDNVS/cpref/html/frlrf', translate($namespace, '.', ''), 'Class', $name, 'Topic.htm')" />
-			</xsl:when>
-			<xsl:when test="starts-with($cref, 'M:')">
-				<xsl:variable name="namespace">
-					<xsl:call-template name="get-namespace">
-						<xsl:with-param name="name" select="substring-after($cref, ':')" />
-					</xsl:call-template>
-				</xsl:variable>
-				<xsl:variable name="name">
-					<xsl:call-template name="strip-namespace">
-						<xsl:with-param name="name" select="substring-after($cref, ':')" />
-					</xsl:call-template>
-				</xsl:variable>
-				<xsl:value-of select="concat('ms-help://MS.VSCC/MS.MSDNVS/cpref/html/frlrf', translate($namespace, '.', ''), 'Class', $name, 'Topic.htm')" />
+				<xsl:value-of select="concat('ms-help://MS.VSCC/MS.MSDNVS/cpref/html/frlrf', translate($cref-type, '.', ''), 'Class', $cref-member, 'Topic.htm')" />
 			</xsl:when>
 		</xsl:choose>
 	</xsl:template>

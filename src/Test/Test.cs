@@ -345,15 +345,63 @@ namespace NDoc.Test
 		{
 		}
 
+		/// <summary>&lt;seealso cref="System.String.Empty"/></summary>
+		/// <seealso cref="System.String.Empty"/>
+		public void SeeSystemField()
+		{
+		}
+
 		/// <summary>&lt;seealso cref="System.String.Length"/></summary>
 		/// <seealso cref="System.String.Length"/>
 		public void SeeSystemProperty()
 		{
 		}
 
+		/// <summary>&lt;seealso cref="System.Collections.ArrayList.Item"/></summary>
+		/// <seealso cref="System.Collections.ArrayList.this"/>
+		public void SeeSystemIndexer()
+		{
+		}
+
 		/// <summary>&lt;seealso cref="System.Object.ToString"/></summary>
 		/// <seealso cref="System.Object.ToString"/>
 		public void SeeSystemMethod()
+		{
+		}
+
+		/// <summary>&lt;seealso cref="System.Object.ToString"/></summary>
+		/// <seealso cref="System.String.Equals"/>
+		public void SeeSystemOverloadedMethod()
+		{
+		}
+
+		/// <summary>&lt;seealso cref="System.Xml.XmlDocument.NodeChanged"/></summary>
+		/// <seealso cref="System.Xml.XmlDocument.NodeChanged"/>
+		public void SeeSystemEvent()
+		{
+		}
+
+		/// <summary>&lt;seealso cref="System.IDisposable"/></summary>
+		/// <seealso cref="System.IDisposable"/>
+		public void SeeSystemInterface()
+		{
+		}
+
+		/// <summary>&lt;seealso cref="System.DateTime"/></summary>
+		/// <seealso cref="System.DateTime"/>
+		public void SeeSystemStructure()
+		{
+		}
+
+		/// <summary>&lt;seealso cref="System.EventHandler"/></summary>
+		/// <seealso cref="System.EventHandler"/>
+		public void SeeSystemDelegate()
+		{
+		}
+
+		/// <summary>&lt;seealso cref="System.DayOfWeek"/></summary>
+		/// <seealso cref="System.DayOfWeek"/>
+		public void SeeSystemEnumeration()
 		{
 		}
 	}

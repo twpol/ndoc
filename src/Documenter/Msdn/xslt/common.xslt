@@ -287,7 +287,14 @@
 												<xsl:with-param name="cref" select="@cref" />
 											</xsl:call-template>
 										</xsl:attribute>
-										<xsl:value-of select="substring-after($cref, ':')" />
+										<xsl:choose>
+											<xsl:when test="contains($cref, '(')">
+												<xsl:value-of select="substring-after(substring-before($cref, '('), ':')" />
+											</xsl:when>
+											<xsl:otherwise>
+												<xsl:value-of select="substring-after($cref, ':')" />
+											</xsl:otherwise>
+										</xsl:choose>
 									</a>									
 								</xsl:when>
 								<xsl:otherwise>
