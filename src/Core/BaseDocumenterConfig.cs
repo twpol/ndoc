@@ -49,6 +49,7 @@ namespace NDoc.Core
 			CopyrightHref = string.Empty;
 
 			SkipNamespacesWithoutSummaries = false;
+			AddPropertyBackerSummaries = false;
 		}
 
 		private Project _Project;
@@ -426,6 +427,29 @@ namespace NDoc.Core
 			set
 			{
 				_SkipNamespacesWithoutSummaries = value;
+				SetDirty();
+			}
+		}
+
+		bool _AddPropertyBackerSummaries;
+
+		/// <summary>Gets or sets the AddPropertyBackerSummaries property.</summary>
+		[
+		Category("Documentation Main Settings"),
+		Description("If true, the documenter will automatically add a summary "
+			+ "for fields which look like they back (hold the value for) a "
+			+ "property. The summary is only added if there is no existing summary, "
+			+ "which gives you a way to opt out of this behavior in particular cases. "
+			+ "Currently the naming conventions supported are such that "
+			+ "fields '_Length' and 'length' will be inferred to back property 'Length'."),
+		]
+		public bool AddPropertyBackerSummaries
+		{
+			get { return _AddPropertyBackerSummaries; }
+
+			set
+			{
+				_AddPropertyBackerSummaries = value;
 				SetDirty();
 			}
 		}
