@@ -2,7 +2,7 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
 	<!-- -->
-	<xsl:output method="html" indent="yes" encoding="Windows-1252" version="3.2" doctype-public="-//W3C//DTD HTML 3.2 Final//EN" />
+	<xsl:output method="html" indent="no" encoding="Windows-1252" version="3.2" doctype-public="-//W3C//DTD HTML 3.2 Final//EN" />
 	<!-- -->
 	<xsl:include href="common.xslt" />
 	<!-- -->
@@ -28,9 +28,7 @@
 				</xsl:call-template>
 				<div id="nstext" valign="bottom">
 					<xsl:call-template name="summary-section" />
-					<xsl:call-template name="vb-field-or-event-syntax" />
-					<xsl:call-template name="cs-field-or-event-syntax" />
-					<p></p>
+					<xsl:call-template name="syntax-section"/>
 					<xsl:variable name="type" select="@type" />
 					<xsl:variable name="eventargs-id" select="concat('T:', //delegate[@id=concat('T:', $type)]/parameter[contains(@type, 'EventArgs')][1]/@type)" />
 					<xsl:variable name="thisevent" select="//class[@id=$eventargs-id]" />

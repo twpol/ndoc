@@ -2,7 +2,7 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
 	<!-- -->
-	<xsl:output method="html" indent="yes" encoding="Windows-1252" version="3.2" doctype-public="-//W3C//DTD HTML 3.2 Final//EN" />
+	<xsl:output method="html" indent="no" encoding="Windows-1252" version="3.2" doctype-public="-//W3C//DTD HTML 3.2 Final//EN" />
 	<!-- -->
 	<xsl:include href="common.xslt" />
 	<!-- -->
@@ -33,21 +33,7 @@
 				</xsl:call-template>
 				<div id="nstext" valign="bottom">
 					<xsl:call-template name="summary-section" />
-					<xsl:if test="$ndoc-vb-syntax">
-						<div class="syntax">
-							<span class="lang">[Visual&#160;Basic]</span>
-							<br />
-							<xsl:call-template name="vb-property-syntax" />
-						</div>
-					</xsl:if>
-					<div class="syntax">
-						<xsl:if test="$ndoc-vb-syntax">
-							<span class="lang">[C#]</span>
-							<br />
-						</xsl:if>
-						<xsl:call-template name="cs-property-syntax" />
-					</div>
-					<p></p>
+					<xsl:call-template name="syntax-section"/>
 					<xsl:call-template name="parameter-section" />
 					<xsl:call-template name="value-section" />
 					<xsl:call-template name="implements-section" />

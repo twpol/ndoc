@@ -2,7 +2,7 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
 	<!-- -->
-	<xsl:output method="html" indent="yes" encoding="Windows-1252" version="3.2" doctype-public="-//W3C//DTD HTML 3.2 Final//EN" />
+	<xsl:output method="html" indent="no" encoding="Windows-1252" version="3.2" doctype-public="-//W3C//DTD HTML 3.2 Final//EN" />
 	<!-- -->
 	<xsl:include href="common.xslt" />
 	<!-- -->
@@ -170,8 +170,7 @@
 							</xsl:choose>
 						</p>
 					</xsl:if>
-					<xsl:call-template name="vb-type-syntax" />
-					<xsl:call-template name="cs-type-syntax" />
+					<xsl:call-template name="syntax-section"/>
 					<xsl:if test="local-name() = 'delegate'">
 						<xsl:call-template name="parameter-section" />
 						<xsl:call-template name="returnvalue-section" />

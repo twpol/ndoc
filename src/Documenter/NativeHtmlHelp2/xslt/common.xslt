@@ -9,6 +9,7 @@
 	<xsl:include href="syntax.xslt" />
 	<xsl:include href="vb-syntax.xslt" />
 	<xsl:include href="tags.xslt" />
+	<xsl:include href="indices.xslt" />
 	<!-- -->
 	<xsl:param name="ndoc-title" />
 	<xsl:param name="ndoc-omit-object-tags" select="false" />
@@ -491,6 +492,9 @@
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
+	<xsl:template name="syntax-section">
+		<PRE class="syntax"><xsl:call-template name="vb-type-syntax" /><xsl:call-template name="cs-type-syntax" /></PRE>	
+	</xsl:template>
 	<xsl:template name="remarks-section">
 		<xsl:if test="documentation/remarks">
 			<h4 class="dtH4">Remarks</h4>
@@ -681,9 +685,6 @@
 	<!-- -->
 	<xsl:template name="html-head">
 		<xsl:param name="title" />
-		<xsl:param name="kTerm" />
-		<xsl:param name="aTerm" />
-		<xsl:param name="fTerm" />
 		<head>
 			<title>
 				<xsl:value-of select="$title" />
@@ -695,16 +696,11 @@
 				<MSHelp:RLTitle>
 					<xsl:attribute name="Title"><xsl:value-of select="$title"/></xsl:attribute>
 				</MSHelp:RLTitle>
-				<!--
-				<MSHelp:Keyword Index="K">
-					<xsl:attribute name="Term"><xsl:value-of select="$kTerm"/></xsl:attribute>
-				</MSHelp:Keyword> 
-				<MSHelp:Keyword Index="A">
-					<xsl:attribute name="Term"><xsl:value-of select="$aTerm"/></xsl:attribute>				
-				</MSHelp:Keyword> 
-				<MSHelp:Keyword Index="F">
-					<xsl:attribute name="Term"><xsl:value-of select="$fTerm"/></xsl:attribute>				
-				</MSHelp:Keyword> -->
+				
+				<xsl:apply-templates select="." mode="KIndex"/>
+				<xsl:apply-templates select="." mode="FIndex"/>
+				<xsl:apply-templates select="." mode="AIndex"/>
+
 				<MSHelp:Attr Name="DocSet" Value="NETFramework"/>
 				<MSHelp:Attr Name="TopicType" Value="kbSyntax"/>
 				<MSHelp:Attr Name="DevLang" Value="CSharp"/>

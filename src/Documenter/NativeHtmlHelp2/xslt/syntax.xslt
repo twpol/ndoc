@@ -10,54 +10,50 @@
 	<xsl:param name="ndoc-documented-attributes" />
 	<!-- -->
 	<xsl:template name="cs-type-syntax">
-		<pre class="syntax">
-			<xsl:if test="$ndoc-vb-syntax">
-				<span class="lang">[C#]</span>
+		<SPAN class="lang">[C#]</SPAN><br/>
+		<xsl:call-template name="attributes"/>
+		<B>
+			<xsl:if test="@hiding">
+			    <xsl:text>new&#160;</xsl:text>
 			</xsl:if>
-			<xsl:call-template name="attributes"/>
-			<div>
-			  <xsl:if test="@hiding">
-			      <xsl:text>new&#160;</xsl:text>
-			  </xsl:if>
-			  <xsl:call-template name="type-access">
-				  <xsl:with-param name="access" select="@access" />
-				  <xsl:with-param name="type" select="local-name()" />
-			  </xsl:call-template>
-			  <xsl:text>&#160;</xsl:text>
-			  <xsl:if test="local-name() != 'interface' and @abstract = 'true'">abstract&#160;</xsl:if>
-			  <xsl:if test="@sealed = 'true'">
-				  <xsl:text>sealed&#160;</xsl:text>
-			  </xsl:if>
-			  <xsl:choose>
-				  <xsl:when test="local-name()='structure'">
-					  <xsl:text>struct</xsl:text>
-				  </xsl:when>
-				  <xsl:when test="local-name()='enumeration'">
-					  <xsl:text>enum</xsl:text>
-				  </xsl:when>
-				  <xsl:otherwise>
-					  <xsl:value-of select="local-name()" />
-				  </xsl:otherwise>
-			  </xsl:choose>
-			  <xsl:text>&#160;</xsl:text>
-			  <xsl:if test="local-name()='delegate'">
-				  <xsl:call-template name="get-datatype">
-					  <xsl:with-param name="datatype" select="@returnType" />
-				  </xsl:call-template>
-				  <xsl:text>&#160;</xsl:text>
-			  </xsl:if>
-			  <xsl:value-of select="@name" />
-			  <xsl:if test="local-name() != 'enumeration' and local-name() != 'delegate'">
-				  <xsl:call-template name="derivation" />
-			  </xsl:if>
-			  <xsl:if test="local-name() = 'delegate'">
-				  <xsl:call-template name="parameters">
-					  <xsl:with-param name="version">long</xsl:with-param>
-					  <xsl:with-param name="namespace-name" select="../@name" />
-				  </xsl:call-template>
-			  </xsl:if>
-			 </div>
-		</pre>
+			<xsl:call-template name="type-access">
+				<xsl:with-param name="access" select="@access" />
+				<xsl:with-param name="type" select="local-name()" />
+			</xsl:call-template>
+			<xsl:text>&#160;</xsl:text>
+			<xsl:if test="local-name() != 'interface' and @abstract = 'true'">abstract&#160;</xsl:if>
+			<xsl:if test="@sealed = 'true'">
+				<xsl:text>sealed&#160;</xsl:text>
+			</xsl:if>
+			<xsl:choose>
+				<xsl:when test="local-name()='structure'">
+					<xsl:text>struct</xsl:text>
+				</xsl:when>
+				<xsl:when test="local-name()='enumeration'">
+					<xsl:text>enum</xsl:text>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="local-name()" />
+				</xsl:otherwise>
+			</xsl:choose>
+			<xsl:text>&#160;</xsl:text>
+			<xsl:if test="local-name()='delegate'">
+				<xsl:call-template name="get-datatype">
+					<xsl:with-param name="datatype" select="@returnType" />
+				</xsl:call-template>
+				<xsl:text>&#160;</xsl:text>
+			</xsl:if>
+			<xsl:value-of select="@name" />
+			<xsl:if test="local-name() != 'enumeration' and local-name() != 'delegate'">
+				<xsl:call-template name="derivation" />
+			</xsl:if>
+			<xsl:if test="local-name() = 'delegate'">
+				<xsl:call-template name="parameters">
+					<xsl:with-param name="version">long</xsl:with-param>
+					<xsl:with-param name="namespace-name" select="../@name" />
+				</xsl:call-template>
+			</xsl:if>
+		</B>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="derivation">
@@ -79,97 +75,92 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="cs-member-syntax">
-		<pre class="syntax">
-			<xsl:if test="$ndoc-vb-syntax">
-				<span class="lang">[C#]</span>
-				<br />
+		<SPAN class="lang">[C#]</SPAN><br/>
+		<xsl:call-template name="attributes"/>
+		<xsl:if test="@hiding">
+			<xsl:text>new&#160;</xsl:text>
+		</xsl:if>
+		<xsl:if test="not(parent::interface or @interface)">
+			<xsl:if test="(local-name()!='constructor') or (@contract!='Static')">
+				<xsl:call-template name="method-access">
+					<xsl:with-param name="access" select="@access" />
+				</xsl:call-template>
+				<xsl:text>&#160;</xsl:text>
 			</xsl:if>
-			<xsl:call-template name="attributes"/>
-			<xsl:if test="@hiding">
-				<xsl:text>new&#160;</xsl:text>
+			<xsl:if test="@contract and @contract!='Normal' and @contract!='Final'">
+				<xsl:call-template name="contract">
+					<xsl:with-param name="contract" select="@contract" />
+				</xsl:call-template>
+				<xsl:text>&#160;</xsl:text>
 			</xsl:if>
-			<xsl:if test="not(parent::interface or @interface)">
-				<xsl:if test="(local-name()!='constructor') or (@contract!='Static')">
-					<xsl:call-template name="method-access">
-						<xsl:with-param name="access" select="@access" />
-					</xsl:call-template>
-					<xsl:text>&#160;</xsl:text>
-				</xsl:if>
-				<xsl:if test="@contract and @contract!='Normal' and @contract!='Final'">
-					<xsl:call-template name="contract">
-						<xsl:with-param name="contract" select="@contract" />
-					</xsl:call-template>
-					<xsl:text>&#160;</xsl:text>
-				</xsl:if>
-			</xsl:if>
-			<xsl:choose>
-				<xsl:when test="local-name()='constructor'">
-					<xsl:value-of select="../@name" />
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:if test="@name != 'op_Explicit' and @name != 'op_Implicit'">
-						<!-- output the return type. this is duplicated code. -->
-						<a>
-							<xsl:attribute name="href">
-								<xsl:call-template name="get-filename-for-type-name">
-									<xsl:with-param name="type-name" select="@returnType" />
-								</xsl:call-template>
-							</xsl:attribute>
-							<xsl:call-template name="get-datatype">
-								<xsl:with-param name="datatype" select="@returnType" />
+		</xsl:if>
+		<xsl:choose>
+			<xsl:when test="local-name()='constructor'">
+				<xsl:value-of select="../@name" />
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:if test="@name != 'op_Explicit' and @name != 'op_Implicit'">
+					<!-- output the return type. this is duplicated code. -->
+					<a>
+						<xsl:attribute name="href">
+							<xsl:call-template name="get-filename-for-type-name">
+								<xsl:with-param name="type-name" select="@returnType" />
 							</xsl:call-template>
-						</a>
-						<xsl:text>&#160;</xsl:text>
-					</xsl:if>
-					<xsl:choose>
-						<xsl:when test="local-name()='operator'">
-							<xsl:choose>
-								<xsl:when test="@name='op_Explicit'">
-									<xsl:text>explicit operator </xsl:text>
-									<!-- output the return type. this is duplicated code. -->
-									<a>
-										<xsl:attribute name="href">
-											<xsl:call-template name="get-filename-for-type-name">
-												<xsl:with-param name="type-name" select="@returnType" />
-											</xsl:call-template>
-										</xsl:attribute>
-										<xsl:call-template name="get-datatype">
-											<xsl:with-param name="datatype" select="@returnType" />
+						</xsl:attribute>
+						<xsl:call-template name="get-datatype">
+							<xsl:with-param name="datatype" select="@returnType" />
+						</xsl:call-template>
+					</a>
+					<xsl:text>&#160;</xsl:text>
+				</xsl:if>
+				<xsl:choose>
+					<xsl:when test="local-name()='operator'">
+						<xsl:choose>
+							<xsl:when test="@name='op_Explicit'">
+								<xsl:text>explicit operator </xsl:text>
+								<!-- output the return type. this is duplicated code. -->
+								<a>
+									<xsl:attribute name="href">
+										<xsl:call-template name="get-filename-for-type-name">
+											<xsl:with-param name="type-name" select="@returnType" />
 										</xsl:call-template>
-									</a>
-								</xsl:when>
-								<xsl:when test="@name='op_Implicit'">
-									<xsl:text>implicit operator </xsl:text>
-									<!-- output the return type. this is duplicated code. -->
-									<a>
-										<xsl:attribute name="href">
-											<xsl:call-template name="get-filename-for-type-name">
-												<xsl:with-param name="type-name" select="@returnType" />
-											</xsl:call-template>
-										</xsl:attribute>
-										<xsl:call-template name="get-datatype">
-											<xsl:with-param name="datatype" select="@returnType" />
-										</xsl:call-template>
-									</a>
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:call-template name="csharp-operator-name">
-										<xsl:with-param name="name" select="@name" />
+									</xsl:attribute>
+									<xsl:call-template name="get-datatype">
+										<xsl:with-param name="datatype" select="@returnType" />
 									</xsl:call-template>
-								</xsl:otherwise>
-							</xsl:choose>
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:value-of select="@name" />
-						</xsl:otherwise>
-					</xsl:choose>
-				</xsl:otherwise>
-			</xsl:choose>
-			<xsl:call-template name="parameters">
-				<xsl:with-param name="version">long</xsl:with-param>
-				<xsl:with-param name="namespace-name" select="../../@name" />
-			</xsl:call-template>
-		</pre>
+								</a>
+							</xsl:when>
+							<xsl:when test="@name='op_Implicit'">
+								<xsl:text>implicit operator </xsl:text>
+								<!-- output the return type. this is duplicated code. -->
+								<a>
+									<xsl:attribute name="href">
+										<xsl:call-template name="get-filename-for-type-name">
+											<xsl:with-param name="type-name" select="@returnType" />
+										</xsl:call-template>
+									</xsl:attribute>
+									<xsl:call-template name="get-datatype">
+										<xsl:with-param name="datatype" select="@returnType" />
+									</xsl:call-template>
+								</a>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:call-template name="csharp-operator-name">
+									<xsl:with-param name="name" select="@name" />
+								</xsl:call-template>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="@name" />
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:otherwise>
+		</xsl:choose>
+		<xsl:call-template name="parameters">
+			<xsl:with-param name="version">long</xsl:with-param>
+			<xsl:with-param name="namespace-name" select="../../@name" />
+		</xsl:call-template>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="member-syntax2">
@@ -228,57 +219,53 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="cs-field-or-event-syntax">
-		<pre class="syntax">
-			<xsl:if test="$ndoc-vb-syntax">
-				<span class="lang">[C#]</span>
-				<br />
-			</xsl:if>
-			<xsl:call-template name="attributes"/>
-			<xsl:if test="@hiding">
-				<xsl:text>new&#160;</xsl:text>
-			</xsl:if>
-			<xsl:if test="not(parent::interface)">
-				<xsl:call-template name="method-access">
-					<xsl:with-param name="access" select="@access" />
-				</xsl:call-template>
-				<xsl:text>&#160;</xsl:text>
-			</xsl:if>
-			<xsl:if test="@contract='Static'">
-				<xsl:choose>
-					<xsl:when test="@literal='true'">
-						<xsl:text>const&#160;</xsl:text>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:text>static&#160;</xsl:text>
-					</xsl:otherwise>
-				</xsl:choose>
-			</xsl:if>
-			<xsl:if test="@initOnly='true'">
-				<xsl:text>readonly&#160;</xsl:text>
-			</xsl:if>
-			<xsl:if test="local-name() = 'event'">
-				<xsl:text>event&#160;</xsl:text>
-			</xsl:if>
-			<a>
-				<xsl:attribute name="href">
-					<xsl:call-template name="get-filename-for-type-name">
-						<xsl:with-param name="type-name" select="@type" />
-					</xsl:call-template>
-				</xsl:attribute>
-				<xsl:call-template name="get-datatype">
-					<xsl:with-param name="datatype" select="@type" />
-				</xsl:call-template>
-			</a>
+		<SPAN class="lang">[C#]</SPAN><br/>
+		<xsl:call-template name="attributes"/>
+		<xsl:if test="@hiding">
+			<xsl:text>new&#160;</xsl:text>
+		</xsl:if>
+		<xsl:if test="not(parent::interface)">
+			<xsl:call-template name="method-access">
+				<xsl:with-param name="access" select="@access" />
+			</xsl:call-template>
 			<xsl:text>&#160;</xsl:text>
-			<xsl:value-of select="@name" />
-			<xsl:text>;</xsl:text>
-		</pre>
+		</xsl:if>
+		<xsl:if test="@contract='Static'">
+			<xsl:choose>
+				<xsl:when test="@literal='true'">
+					<xsl:text>const&#160;</xsl:text>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:text>static&#160;</xsl:text>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:if>
+		<xsl:if test="@initOnly='true'">
+			<xsl:text>readonly&#160;</xsl:text>
+		</xsl:if>
+		<xsl:if test="local-name() = 'event'">
+			<xsl:text>event&#160;</xsl:text>
+		</xsl:if>
+		<a>
+			<xsl:attribute name="href">
+				<xsl:call-template name="get-filename-for-type-name">
+					<xsl:with-param name="type-name" select="@type" />
+				</xsl:call-template>
+			</xsl:attribute>
+			<xsl:call-template name="get-datatype">
+				<xsl:with-param name="datatype" select="@type" />
+			</xsl:call-template>
+		</a>
+		<xsl:text>&#160;</xsl:text>
+		<xsl:value-of select="@name" />
+		<xsl:text>;</xsl:text>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="cs-property-syntax">
 		<xsl:param name="indent" select="true()" />
 		<xsl:param name="display-names" select="true()" />
 		<xsl:param name="link-types" select="true()" />
+		<SPAN class="lang">[C#]</SPAN><br/>
 		<xsl:call-template name="attributes"/>
 		<xsl:if test="@hiding">
 			<xsl:text>new&#160;</xsl:text>

@@ -445,6 +445,10 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "xslt\indices.xslt"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "xslt\individualmembers.xslt"
                     BuildAction = "EmbeddedResource"
                 />

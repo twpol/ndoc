@@ -56,62 +56,61 @@
 	<!-- -->
 	<xsl:template name="vb-type-syntax">
 		<xsl:if test="$ndoc-vb-syntax">
-			<pre class="syntax">
-				<span class="lang">[Visual&#160;Basic]</span>
-				<br/>
-				<xsl:call-template name="vb-attributes"/>
-				<xsl:if test="@abstract = 'true'">
-					<xsl:text>MustInherit&#160;</xsl:text>
-				</xsl:if>
-				<xsl:if test="@sealed = 'true'">
-					<xsl:text>NotInheritable&#160;</xsl:text>
-				</xsl:if>
-				<xsl:call-template name="vb-type-access">
-					<xsl:with-param name="access" select="@access" />
-					<xsl:with-param name="type" select="local-name()" />
-				</xsl:call-template>
-				<xsl:text>&#160;</xsl:text>
-				<xsl:choose>
-					<xsl:when test="local-name() = 'class'">Class</xsl:when>
-					<xsl:when test="local-name() = 'interface'">Interface</xsl:when>
-					<xsl:when test="local-name() = 'structure'">Structure</xsl:when>
-					<xsl:when test="local-name() = 'enumeration'">Enum</xsl:when>
-					<xsl:when test="local-name() = 'delegate'">
-						<xsl:text>Delegate&#160;</xsl:text>
-						<xsl:choose>
-							<xsl:when test="@returnType = 'System.Void'">Sub</xsl:when>
-							<xsl:otherwise>Function</xsl:otherwise>
-						</xsl:choose>
-					</xsl:when>
-					<xsl:otherwise>ERROR</xsl:otherwise>
-				</xsl:choose>
-				<xsl:text>&#160;</xsl:text>
-				<xsl:value-of select="@name" />
-				<xsl:choose>
-					<xsl:when test="local-name() != 'delegate'">
-						<xsl:if test="@baseType">
-							<div>
-							<xsl:text>Inherits&#160;</xsl:text>
-							<xsl:value-of select="@baseType" />
-							</div>
-						</xsl:if>
-						<xsl:if test="implements[not(@inherited)]">
-							<div>
-							<xsl:text>Implements&#160;</xsl:text>
-							<xsl:for-each select="implements[not(@inherited)]">
-								<xsl:value-of select="." />
-								<xsl:if test="position()!=last()">
-									<xsl:text>, </xsl:text>
-								</xsl:if>
-							</xsl:for-each>
-							</div>
-						</xsl:if>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:call-template name="vb-parameters" />
-					</xsl:otherwise>
-				</xsl:choose>
-			</pre>
+		<SPAN class="lang">[Visual&#160;Basic]</SPAN><br/>
+		<B>
+		<xsl:call-template name="vb-attributes"/>
+			<xsl:if test="@abstract = 'true'">
+				<xsl:text>MustInherit&#160;</xsl:text>
+			</xsl:if>
+			<xsl:if test="@sealed = 'true'">
+				<xsl:text>NotInheritable&#160;</xsl:text>
+			</xsl:if>
+			<xsl:call-template name="vb-type-access">
+				<xsl:with-param name="access" select="@access" />
+				<xsl:with-param name="type" select="local-name()" />
+			</xsl:call-template>
+			<xsl:text>&#160;</xsl:text>
+			<xsl:choose>
+				<xsl:when test="local-name() = 'class'">Class</xsl:when>
+				<xsl:when test="local-name() = 'interface'">Interface</xsl:when>
+				<xsl:when test="local-name() = 'structure'">Structure</xsl:when>
+				<xsl:when test="local-name() = 'enumeration'">Enum</xsl:when>
+				<xsl:when test="local-name() = 'delegate'">
+					<xsl:text>Delegate&#160;</xsl:text>
+					<xsl:choose>
+						<xsl:when test="@returnType = 'System.Void'">Sub</xsl:when>
+						<xsl:otherwise>Function</xsl:otherwise>
+					</xsl:choose>
+				</xsl:when>
+				<xsl:otherwise>ERROR</xsl:otherwise>
+			</xsl:choose>
+			<xsl:text>&#160;</xsl:text>
+			<xsl:value-of select="@name" />
+			<xsl:choose>
+				<xsl:when test="local-name() != 'delegate'">
+					<xsl:if test="@baseType">
+						<div>
+						<xsl:text>Inherits&#160;</xsl:text>
+						<xsl:value-of select="@baseType" />
+						</div>
+					</xsl:if>
+					<xsl:if test="implements[not(@inherited)]">
+						<div>
+						<xsl:text>Implements&#160;</xsl:text>
+						<xsl:for-each select="implements[not(@inherited)]">
+							<xsl:value-of select="." />
+							<xsl:if test="position()!=last()">
+								<xsl:text>, </xsl:text>
+							</xsl:if>
+						</xsl:for-each>
+						</div>
+					</xsl:if>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:call-template name="vb-parameters" />
+				</xsl:otherwise>
+			</xsl:choose>
+		</B>
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
@@ -214,178 +213,173 @@
 	<!-- -->
 	<xsl:template name="vb-member-syntax">
 		<xsl:if test="$ndoc-vb-syntax">
-			<pre class="syntax">
-				<span class="lang">[Visual&#160;Basic]</span>
-				<br />
-				<xsl:call-template name="vb-attributes"/>
+		<SPAN class="lang">[Visual&#160;Basic]</SPAN><br/>
+		<xsl:call-template name="vb-attributes"/>
+		<xsl:choose>
+			<xsl:when test="local-name() != 'operator'">
+				<xsl:if test="not(parent::interface or @interface)">
+					<xsl:choose>
+						<xsl:when test="@contract='Abstract'">
+							<xsl:text>MustOverride&#160;</xsl:text>
+						</xsl:when>
+						<xsl:when test="@contract='Final'">
+							<xsl:text>NotOverridable&#160;</xsl:text>
+						</xsl:when>
+						<xsl:when test="@contract='Override'">
+							<xsl:text>Overrides&#160;</xsl:text>
+						</xsl:when>
+						<xsl:when test="@contract='Virtual'">
+							<xsl:text>Overridable&#160;</xsl:text>
+						</xsl:when>
+					</xsl:choose>
+					<xsl:if test="@overload">
+						<xsl:text>Overloads&#160;</xsl:text>
+					</xsl:if>
+					<xsl:call-template name="vb-method-access">
+						<xsl:with-param name="access" select="@access" />
+					</xsl:call-template>
+					<xsl:text>&#160;</xsl:text>
+					<xsl:if test="@contract='Static'">
+						<xsl:text>Shared&#160;</xsl:text>
+					</xsl:if>
+				</xsl:if>
 				<xsl:choose>
-					<xsl:when test="local-name() != 'operator'">
-						<xsl:if test="not(parent::interface or @interface)">
-							<xsl:choose>
-								<xsl:when test="@contract='Abstract'">
-									<xsl:text>MustOverride&#160;</xsl:text>
-								</xsl:when>
-								<xsl:when test="@contract='Final'">
-									<xsl:text>NotOverridable&#160;</xsl:text>
-								</xsl:when>
-								<xsl:when test="@contract='Override'">
-									<xsl:text>Overrides&#160;</xsl:text>
-								</xsl:when>
-								<xsl:when test="@contract='Virtual'">
-									<xsl:text>Overridable&#160;</xsl:text>
-								</xsl:when>
-							</xsl:choose>
-							<xsl:if test="@overload">
-								<xsl:text>Overloads&#160;</xsl:text>
-							</xsl:if>
-							<xsl:call-template name="vb-method-access">
-								<xsl:with-param name="access" select="@access" />
-							</xsl:call-template>
-							<xsl:text>&#160;</xsl:text>
-							<xsl:if test="@contract='Static'">
-								<xsl:text>Shared&#160;</xsl:text>
-							</xsl:if>
-						</xsl:if>
-						<xsl:choose>
-							<xsl:when test="@returnType!='System.Void'">
-								<xsl:text>Function</xsl:text>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:text>Sub</xsl:text>
-							</xsl:otherwise>
-						</xsl:choose>
-						<xsl:text>&#160;</xsl:text>
-						<xsl:choose>
-							<xsl:when test="local-name() = 'constructor'">
-								<xsl:text>New</xsl:text>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:call-template name="strip-namespace">
-									<xsl:with-param name="name" select="@name" />
-								</xsl:call-template>
-							</xsl:otherwise>
-						</xsl:choose>
-						<xsl:call-template name="vb-parameters" />
+					<xsl:when test="@returnType!='System.Void'">
+						<xsl:text>Function</xsl:text>
 					</xsl:when>
 					<xsl:otherwise>
-						<span class="meta">returnValue = </span>
-						<xsl:value-of select="../@name" />
-						<xsl:text>.</xsl:text>
-						<xsl:value-of select="@name" />
-						<xsl:text>(</xsl:text>
-						<xsl:for-each select="parameter">
-							<xsl:value-of select="@name" />
-							<xsl:if test="position() &lt; last()">
-								<xsl:text>,&#160;</xsl:text>
-							</xsl:if>
-						</xsl:for-each>
-						<xsl:text>)</xsl:text>
+						<xsl:text>Sub</xsl:text>
 					</xsl:otherwise>
 				</xsl:choose>
-			</pre>
+				<xsl:text>&#160;</xsl:text>
+				<xsl:choose>
+					<xsl:when test="local-name() = 'constructor'">
+						<xsl:text>New</xsl:text>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:call-template name="strip-namespace">
+							<xsl:with-param name="name" select="@name" />
+						</xsl:call-template>
+					</xsl:otherwise>
+				</xsl:choose>
+				<xsl:call-template name="vb-parameters" />
+			</xsl:when>
+			<xsl:otherwise>
+				<span class="meta">returnValue = </span>
+				<xsl:value-of select="../@name" />
+				<xsl:text>.</xsl:text>
+				<xsl:value-of select="@name" />
+				<xsl:text>(</xsl:text>
+				<xsl:for-each select="parameter">
+					<xsl:value-of select="@name" />
+					<xsl:if test="position() &lt; last()">
+						<xsl:text>,&#160;</xsl:text>
+					</xsl:if>
+				</xsl:for-each>
+				<xsl:text>)</xsl:text>
+			</xsl:otherwise>
+		</xsl:choose>
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="vb-field-or-event-syntax">
 		<xsl:if test="$ndoc-vb-syntax">
-			<pre class="syntax">
-				<span class="lang">[Visual&#160;Basic]</span>
-				<br />
-				<xsl:call-template name="vb-attributes"/>
-				<xsl:if test="not(parent::interface)">
-					<xsl:call-template name="vb-method-access">
-						<xsl:with-param name="access" select="@access" />
-					</xsl:call-template>
-					<xsl:text>&#160;</xsl:text>
-				</xsl:if>
-				<xsl:if test="@contract='Static'">
-					<xsl:choose>
-						<xsl:when test="@literal='true'">
-							<xsl:text>Const&#160;</xsl:text>
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:text>Shared&#160;</xsl:text>
-						</xsl:otherwise>
-					</xsl:choose>
-				</xsl:if>
-				<xsl:if test="@initOnly='true'">
-					<xsl:text>ReadOnly&#160;</xsl:text>
-				</xsl:if>
-				<xsl:if test="local-name() = 'event'">
-					<xsl:text>Event&#160;</xsl:text>
-				</xsl:if>
-				<xsl:value-of select="@name" />
-				<xsl:text>&#160;As&#160;</xsl:text>
-				<a>
-					<xsl:attribute name="href">
-						<xsl:call-template name="get-filename-for-type-name">
-							<xsl:with-param name="type-name" select="@type" />
-						</xsl:call-template>
-					</xsl:attribute>
-					<xsl:call-template name="vb-type">
-						<xsl:with-param name="runtime-type" select="@type" />
-					</xsl:call-template>
-				</a>
-			</pre>
+		<SPAN class="lang">[Visual&#160;Basic]</SPAN><br/>
+		<xsl:call-template name="vb-attributes"/>
+		<xsl:if test="not(parent::interface)">
+			<xsl:call-template name="vb-method-access">
+				<xsl:with-param name="access" select="@access" />
+			</xsl:call-template>
+			<xsl:text>&#160;</xsl:text>
+		</xsl:if>
+		<xsl:if test="@contract='Static'">
+			<xsl:choose>
+				<xsl:when test="@literal='true'">
+					<xsl:text>Const&#160;</xsl:text>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:text>Shared&#160;</xsl:text>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:if>
+		<xsl:if test="@initOnly='true'">
+			<xsl:text>ReadOnly&#160;</xsl:text>
+		</xsl:if>
+		<xsl:if test="local-name() = 'event'">
+			<xsl:text>Event&#160;</xsl:text>
+		</xsl:if>
+		<xsl:value-of select="@name" />
+		<xsl:text>&#160;As&#160;</xsl:text>
+		<a>
+			<xsl:attribute name="href">
+				<xsl:call-template name="get-filename-for-type-name">
+					<xsl:with-param name="type-name" select="@type" />
+				</xsl:call-template>
+			</xsl:attribute>
+			<xsl:call-template name="vb-type">
+				<xsl:with-param name="runtime-type" select="@type" />
+			</xsl:call-template>
+		</a>
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="vb-property-syntax">
 		<xsl:if test="$ndoc-vb-syntax">
-			<xsl:call-template name="vb-attributes"/>
-			<xsl:if test="not(parent::interface)">
-				<xsl:choose>
-					<xsl:when test="@contract='Abstract'">
-						<xsl:text>MustOverride&#160;</xsl:text>
-					</xsl:when>
-					<xsl:when test="@contract='Final'">
-						<xsl:text>NotOverridable&#160;</xsl:text>
-					</xsl:when>
-					<xsl:when test="@contract='Override'">
-						<xsl:text>Overrides&#160;</xsl:text>
-					</xsl:when>
-					<xsl:when test="@contract='Virtual'">
-						<xsl:text>Overridable&#160;</xsl:text>
-					</xsl:when>
-				</xsl:choose>
-				<xsl:if test="@overload">
-					<xsl:text>Overloads&#160;</xsl:text>
-				</xsl:if>
-				<xsl:call-template name="vb-method-access">
-					<xsl:with-param name="access" select="@access" />
-				</xsl:call-template>
-				<xsl:text>&#160;</xsl:text>
-				<xsl:if test="@contract='Static'">
-					<xsl:text>Shared&#160;</xsl:text>
-				</xsl:if>
-				<xsl:if test="parameter">
-					<xsl:text>Default&#160;</xsl:text>
-				</xsl:if>
-				<xsl:if test="@set != 'true'">
-					<xsl:text>ReadOnly&#160;</xsl:text>
-				</xsl:if>
+		<SPAN class="lang">[Visual&#160;Basic]</SPAN><br/>
+		<xsl:call-template name="vb-attributes"/>
+		<xsl:if test="not(parent::interface)">
+			<xsl:choose>
+				<xsl:when test="@contract='Abstract'">
+					<xsl:text>MustOverride&#160;</xsl:text>
+				</xsl:when>
+				<xsl:when test="@contract='Final'">
+					<xsl:text>NotOverridable&#160;</xsl:text>
+				</xsl:when>
+				<xsl:when test="@contract='Override'">
+					<xsl:text>Overrides&#160;</xsl:text>
+				</xsl:when>
+				<xsl:when test="@contract='Virtual'">
+					<xsl:text>Overridable&#160;</xsl:text>
+				</xsl:when>
+			</xsl:choose>
+			<xsl:if test="@overload">
+				<xsl:text>Overloads&#160;</xsl:text>
 			</xsl:if>
-			<xsl:text>Property&#160;</xsl:text>
-			<xsl:value-of select="@name" />
+			<xsl:call-template name="vb-method-access">
+				<xsl:with-param name="access" select="@access" />
+			</xsl:call-template>
+			<xsl:text>&#160;</xsl:text>
+			<xsl:if test="@contract='Static'">
+				<xsl:text>Shared&#160;</xsl:text>
+			</xsl:if>
 			<xsl:if test="parameter">
-				<xsl:call-template name="vb-parameters" />
+				<xsl:text>Default&#160;</xsl:text>
 			</xsl:if>
-			<xsl:text>&#160;As&#160;</xsl:text>
-			<a>
-				<xsl:attribute name="href">
-					<xsl:call-template name="get-filename-for-type-name">
-						<xsl:with-param name="type-name" select="@type" />
-					</xsl:call-template>
-				</xsl:attribute>
-				<xsl:call-template name="vb-type">
-					<xsl:with-param name="runtime-type" select="@type" />
+			<xsl:if test="@set != 'true'">
+				<xsl:text>ReadOnly&#160;</xsl:text>
+			</xsl:if>
+		</xsl:if>
+		<xsl:text>Property&#160;</xsl:text>
+		<xsl:value-of select="@name" />
+		<xsl:if test="parameter">
+			<xsl:call-template name="vb-parameters" />
+		</xsl:if>
+		<xsl:text>&#160;As&#160;</xsl:text>
+		<a>
+			<xsl:attribute name="href">
+				<xsl:call-template name="get-filename-for-type-name">
+					<xsl:with-param name="type-name" select="@type" />
 				</xsl:call-template>
-			</a>
-			<xsl:if test="implements">
-				<xsl:text> Implements _</xsl:text>
-				<br /><xsl:text>&#160;&#160;&#160;</xsl:text>
-				<xsl:value-of select="implements/@interface" /><xsl:text>.</xsl:text><xsl:value-of select="implements/@name" />
-			</xsl:if>
+			</xsl:attribute>
+			<xsl:call-template name="vb-type">
+				<xsl:with-param name="runtime-type" select="@type" />
+			</xsl:call-template>
+		</a>
+		<xsl:if test="implements">
+			<xsl:text> Implements _</xsl:text>
+			<br /><xsl:text>&#160;&#160;&#160;</xsl:text>
+			<xsl:value-of select="implements/@interface" /><xsl:text>.</xsl:text><xsl:value-of select="implements/@name" />
+		</xsl:if>
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
