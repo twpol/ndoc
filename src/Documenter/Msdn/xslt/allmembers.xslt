@@ -263,7 +263,7 @@
 									</xsl:call-template>
 								</xsl:when>
 								<xsl:otherwise>
-									<xsl:text>Initialize a new instance of the </xsl:text>
+									<xsl:text>Initializes a new instance of the </xsl:text>
 									<xsl:value-of select="../@name" />
 									<xsl:text> class.</xsl:text>
 								</xsl:otherwise>
