@@ -220,16 +220,16 @@ namespace NDoc.Documenter.HtmlHelp2.Compiler
 
 			//sb.Append( "<MSHelp:Attr Name='DocSet' Value='NETFramework'/>" );
 			sb.Append( "<MSHelp:Attr Name='TopicType' Value='kbSyntax'/>" );
-			//			sb.Append( "<MSHelp:Attr Name='DevLang' Value='CSharp'/>" );
-			//			sb.Append( "<MSHelp:Attr Name='DevLang' Value='VB'/>" );
-			//			sb.Append( "<MSHelp:Attr Name='DevLang' Value='C++'/>" );
-			//			sb.Append( "<MSHelp:Attr Name='DevLang' Value='JScript'/>" );
-			//			sb.Append( "<MSHelp:Attr Name='Technology' Value='WFC'/>" );
-			//			sb.Append( "<MSHelp:Attr Name='Technology' Value='ManagedC'/>" );
-			//			sb.Append( "<MSHelp:Attr Name='TechnologyVers' Value='kbWFC'/>" );
-			//			sb.Append( "<MSHelp:Attr Name='TechnologyVers' Value='kbManagedC'/>" );
+			sb.Append( "<MSHelp:Attr Name='DevLang' Value='CSharp'/>" );
+			sb.Append( "<MSHelp:Attr Name='DevLang' Value='VB'/>" );
+			sb.Append( "<MSHelp:Attr Name='DevLang' Value='C++'/>" );
+			sb.Append( "<MSHelp:Attr Name='DevLang' Value='JScript'/>" );
+			sb.Append( "<MSHelp:Attr Name='Technology' Value='WFC'/>" );
+			sb.Append( "<MSHelp:Attr Name='Technology' Value='ManagedC'/>" );
+			sb.Append( "<MSHelp:Attr Name='TechnologyVers' Value='kbWFC'/>" );
+			sb.Append( "<MSHelp:Attr Name='TechnologyVers' Value='kbManagedC'/>" );
 			sb.Append( "<MSHelp:Attr Name='Locale' Value='kbEnglish'/>" );
-			//sb.Append( "<MSHelp:Attr Name='HelpPriority' Value='1'/>" );
+			sb.Append( "<MSHelp:Attr Name='HelpPriority' Value='1'/>" );
 		}
 	}
 }
