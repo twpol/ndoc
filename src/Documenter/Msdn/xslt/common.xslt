@@ -663,10 +663,14 @@
 					</xsl:attribute>
 					<xsl:choose>
 						<xsl:when test="contains($cref, '(')">
-							<xsl:value-of select="substring-after(substring-before($cref, '('), ':')" />
+							<xsl:call-template name="strip-namespace">
+								<xsl:with-param name="name" select="substring-after(substring-before($cref, '('), ':')" />
+							</xsl:call-template>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of select="substring-after($cref, ':')" />
+							<xsl:call-template name="strip-namespace">
+								<xsl:with-param name="name" select="substring-after($cref, ':')" />
+							</xsl:call-template>
 						</xsl:otherwise>
 					</xsl:choose>
 				</a>
