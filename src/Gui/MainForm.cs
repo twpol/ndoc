@@ -899,15 +899,24 @@ namespace NDoc.Gui
 									documenterName = reader.ReadString();
 									break;
 								case "window":
-									reader.MoveToNextAttribute();
+									if (!reader.MoveToNextAttribute()) break;
 									this.Left = int.Parse(reader.Value);
-									reader.MoveToNextAttribute();
+
+									if (!reader.MoveToNextAttribute()) break;
 									this.Top = int.Parse(reader.Value);
-									reader.MoveToNextAttribute();
+
+									if (!reader.MoveToNextAttribute()) break;
 									this.Width = int.Parse(reader.Value);
-									reader.MoveToNextAttribute();
+
+									if (!reader.MoveToNextAttribute()) break;
 									//HACK: subtract 20 to last height to keep it constant
 									this.Height = int.Parse(reader.Value) - 20;
+									
+									if (!reader.MoveToNextAttribute()) break;
+									if (bool.Parse(reader.Value))
+									{
+										this.WindowState = FormWindowState.Maximized;
+									}
 									break;
 							}
 						}
@@ -969,15 +978,22 @@ namespace NDoc.Gui
 			XmlTextWriter writer = new XmlTextWriter(streamWriter);
 			writer.Formatting = Formatting.Indented;
 			writer.Indentation = 2;
-
+			
+			bool max = (this.WindowState == FormWindowState.Maximized);
+			//restore the window state before saving it's location
+			//this might be an annoyance if the config is not saved 
+			//during application exit
+			this.WindowState = FormWindowState.Normal;
+			
 			writer.WriteStartElement("ndoc.gui");
 			WriteRecentProjects(writer);
 			writer.WriteElementString("documenter", ((IDocumenter)project.Documenters[comboBoxDocumenters.SelectedIndex]).Name);
 			writer.WriteStartElement("window");
-			writer.WriteAttributeString("", "left", "", this.Location.X.ToString());
-			writer.WriteAttributeString("", "top", "", this.Location.Y.ToString());
-			writer.WriteAttributeString("", "width", "", this.Width.ToString());
-			writer.WriteAttributeString("", "height", "", this.Height.ToString());
+			writer.WriteAttributeString("left", this.Location.X.ToString());
+			writer.WriteAttributeString("top", this.Location.Y.ToString());
+			writer.WriteAttributeString("width", this.Width.ToString());
+			writer.WriteAttributeString("height", this.Height.ToString());
+			writer.WriteAttributeString("maximized", max.ToString()); 
 			writer.WriteEndElement();
 			writer.WriteEndElement();
 
