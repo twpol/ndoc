@@ -45,7 +45,8 @@ namespace NDoc.Core
 		/// <param name="fileName">Fully-qualified filename of xml file with which to populate the cache.</param>
 		public AssemblyXmlDocCache(string fileName)
 		{
-			Flush();
+			if(docs==null) docs = new Hashtable();
+			if(excludeTags==null) excludeTags = new Hashtable();
 			XmlTextReader reader = new XmlTextReader(fileName);
 			reader.WhitespaceHandling=WhitespaceHandling.All;
 			CacheDocs(reader);
@@ -273,21 +274,21 @@ namespace NDoc.Core
 		/// <summary>
 		/// Gets Xml documentation for the given ID
 		/// </summary>
-		/// <param name="memberID">The ID of the item for which documentation is required</param>
+		/// <param name="memberId">The ID of the item for which documentation is required</param>
 		/// <returns>a string containg the Xml documentation</returns>
-		public string GetDoc(string memberID)
+		public string GetDoc(string memberId)
 		{
-			return (string)docs[memberID];
+			return (string)docs[memberId];
 		}
 
 		/// <summary>
 		/// Returns whether a member has an exclude tag
 		/// </summary>
-		/// <param name="memberID">ID to check</param>
+		/// <param name="memberId">ID to check</param>
 		/// <returns>true if the member has an exclude tag, otherwise false</returns>
-		public bool HasExcludeTag(string memberID)
+		public bool HasExcludeTag(string memberId)
 		{
-			return excludeTags.ContainsKey(memberID);
+			return excludeTags.ContainsKey(memberId);
 		}
 	}
 }
