@@ -449,6 +449,19 @@ namespace NDoc.Test
 
 		/// <summary>This is the second field in the first struct.</summary>
 		public string Field2;
+
+		/// <summary>A property in a struct.</summary>
+		public int Property
+		{
+			get { return 1; }
+			set { }
+		}
+
+		/// <summary>A method in a struct.</summary>
+		public int Method() { return -1; }
+
+		/// <summary>A static method in a struct.</summary>
+		public static int StaticMethod() { return -1; }
 	}
 
 	/// <summary>This is the second struct.</summary>
