@@ -1006,9 +1006,9 @@ namespace NDoc.Gui
 				{
 					project.Read(fileName);
 				}
-				catch (CouldNotLoadAllAssembliesException)
+				catch (CouldNotLoadAllAssembliesException e)
 				{
-					MessageBox.Show(this, "One or more of the project's assemblies could not be loaded.", 
+					MessageBox.Show(this, e.Message, 
 						"Open", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 				}
 
