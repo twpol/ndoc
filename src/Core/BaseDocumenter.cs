@@ -50,7 +50,7 @@ namespace NDoc.Core
 		{
 			private Hashtable data;
 			public ImplementsCollection()
-		{
+			{
 				data = new Hashtable(15);  // give it an initial capacity...
 			}
 			public ImplementsInfo this [int index]
@@ -233,9 +233,9 @@ namespace NDoc.Core
 		/// <summary>Builds an XmlDocument combining the reflected metadata with the /doc comments.</summary>
 		protected string MakeXml(Project project)
 		{
-#if DEBUG
+
 			int start = Environment.TickCount;
-#endif
+
 			Debug.WriteLine("Memory making xml: " + GC.GetTotalMemory(false).ToString());
 
 			//if MyConfig.UseNDocXmlFile is set, skip this stage 
@@ -518,7 +518,7 @@ namespace NDoc.Core
 				(
 				(method.IsPublic) ||
 				(method.IsFamily && MyConfig.DocumentProtected &&
-					(MyConfig.DocumentSealedProtected || !method.ReflectedType.IsSealed)) ||
+				(MyConfig.DocumentSealedProtected || !method.ReflectedType.IsSealed)) ||
 				(method.IsFamilyOrAssembly && MyConfig.DocumentProtected) ||
 				(method.IsAssembly && MyConfig.DocumentInternals) ||
 				(method.IsFamilyAndAssembly && MyConfig.DocumentInternals) ||
@@ -686,7 +686,7 @@ namespace NDoc.Core
 		{
 			return (field.IsPublic ||
 				(field.IsFamily && MyConfig.DocumentProtected &&
-					(MyConfig.DocumentSealedProtected || !field.ReflectedType.IsSealed)) ||
+				(MyConfig.DocumentSealedProtected || !field.ReflectedType.IsSealed)) ||
 				(field.IsFamilyOrAssembly && MyConfig.DocumentProtected) ||
 				(field.IsAssembly && MyConfig.DocumentInternals) ||
 				(field.IsFamilyAndAssembly && MyConfig.DocumentInternals) ||
@@ -1176,7 +1176,7 @@ namespace NDoc.Core
 				if (this.MyConfig.DocumentAttributes)
 				{
 					if (attribute.GetType().FullName!="System.ObsoleteAttribute") 
-					WriteCustomAttribute(writer, attribute);
+						WriteCustomAttribute(writer, attribute);
 				}
 
 				if (attribute.GetType().FullName=="System.ObsoleteAttribute") 
@@ -2515,7 +2515,7 @@ namespace NDoc.Core
 							{
 								string remarksdetails =reader.ReadInnerXml();
 								if (remarksdetails.Length>0)
-				{
+								{
 									bMissingRemarks=false;
 								}
 							}
@@ -2524,18 +2524,18 @@ namespace NDoc.Core
 				}
 
 				if (MyConfig.ShowMissingSummaries && bMissingSummary)
-					{
-						WriteMissingDocumentation(writer, "summary", null,
-							"Missing <summary> documentation for " + memberName);
-					}
+				{
+					WriteMissingDocumentation(writer, "summary", null,
+						"Missing <summary> documentation for " + memberName);
+				}
 
 				if (MyConfig.ShowMissingRemarks && bMissingRemarks)
-					{
-						WriteMissingDocumentation(writer, "remarks", null,
-							"Missing <remarks> documentation for " + memberName);
-					}
+				{
+					WriteMissingDocumentation(writer, "remarks", null,
+						"Missing <remarks> documentation for " + memberName);
 				}
 			}
+		}
 
 		private void CheckForMissingParams(
 			XmlWriter writer,
@@ -2638,7 +2638,7 @@ namespace NDoc.Core
 						if (reader.NodeType == XmlNodeType.Element) 
 						{
 							if (reader.Name=="value") 
-				{
+							{
 								string valuesdetails =reader.ReadInnerXml();
 								if (valuesdetails.Length>0)
 								{
