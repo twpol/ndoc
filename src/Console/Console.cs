@@ -31,7 +31,7 @@ namespace NDoc.ConsoleApplication
 		private static Project project;
 		private static IDocumenter documenter;
 
-		public static void Main(string[] args)
+		public static int Main(string[] args)
 		{
 			try
 			{
@@ -135,11 +135,13 @@ namespace NDoc.ConsoleApplication
 				if (project.AssemblySlashDocCount == 0)
 				{
 					WriteUsage();
+					return 1;
 				}
 				else
 				{
 					documenter.DocBuildingStep += new DocBuildingEventHandler(DocBuildingStepHandler);
 					documenter.Build(project);
+					return 0;
 				}
 			}
 			catch( Exception except )
@@ -147,6 +149,7 @@ namespace NDoc.ConsoleApplication
 				Console.WriteLine( "Error: " + except.Message );
 				System.Diagnostics.Trace.WriteLine( "Exception: " + Environment.NewLine + except.ToString() );
 			}
+			return 2;
 		}
 
 		private static void WriteUsage()
