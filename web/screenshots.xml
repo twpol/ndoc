@@ -2,8 +2,6 @@
 	<title>NDOC Screenshots</title>
 	<body>
 		<p><img src="NDocGui.png" alt="Main Form" /></p>
-		<p><img src="NDocGuiSlashDoc.png" alt="Add Assembly and /doc Filenames" /></p>
-		<p><img src="NDocGuiNsSummary.png" alt="Edit Namespace Summaries" /></p>
 		<p><img src="NDocGuiAbout.png" alt="About NDoc" /></p>
 	</body>
 </page>
