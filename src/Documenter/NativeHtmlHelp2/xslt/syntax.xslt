@@ -549,59 +549,68 @@
 			<xsl:with-param name="lang" select="$lang"/>			
 		</xsl:call-template>
 		<xsl:choose>
-			<xsl:when test="@name='op_Explicit'">
-				<xsl:text>explicit operator </xsl:text>
-				<!-- output the return type. this is duplicated code. -->
-				<xsl:variable name="cs-type">
-					<xsl:call-template name="get-datatype">
-						<xsl:with-param name="datatype" select="@returnType" />
-						<xsl:with-param name="lang" select="$lang" />						
-					</xsl:call-template>
-				</xsl:variable>
+			<xsl:when test="$lang = 'C#' or $lang='C++'">
 				<xsl:choose>
-					<xsl:when test="$include-type-links = true()">
-						<xsl:call-template name="get-link-for-type-name">
-							<xsl:with-param name="type-name" select="@returnType" />
-							<xsl:with-param name="link-text" select="$cs-type" />
-						</xsl:call-template>					
+					<xsl:when test="@name='op_Explicit'">
+						<xsl:text>explicit operator </xsl:text>
+						<!-- output the return type. this is duplicated code. -->
+						<xsl:variable name="cs-type">
+							<xsl:call-template name="get-datatype">
+								<xsl:with-param name="datatype" select="@returnType" />
+								<xsl:with-param name="lang" select="$lang" />						
+							</xsl:call-template>
+						</xsl:variable>
+						<xsl:choose>
+							<xsl:when test="$include-type-links = true()">
+								<xsl:call-template name="get-link-for-type-name">
+									<xsl:with-param name="type-name" select="@returnType" />
+									<xsl:with-param name="link-text" select="$cs-type" />
+								</xsl:call-template>					
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="cs-type"/>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:when>
+					<xsl:when test="@name='op_Implicit'">
+						<xsl:text>implicit operator </xsl:text>
+						<!-- output the return type. this is duplicated code. -->
+						<xsl:variable name="cs-type">
+							<xsl:call-template name="get-datatype">
+								<xsl:with-param name="datatype" select="@returnType" />
+								<xsl:with-param name="lang" select="$lang" />						
+							</xsl:call-template>
+						</xsl:variable>
+						<xsl:choose>
+							<xsl:when test="$include-type-links = true()">
+								<xsl:call-template name="get-link-for-type-name">
+									<xsl:with-param name="type-name" select="@returnType" />
+									<xsl:with-param name="link-text" select="$cs-type" />
+								</xsl:call-template>					
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="cs-type"/>
+							</xsl:otherwise>
+						</xsl:choose>									
 					</xsl:when>
 					<xsl:otherwise>
-						<xsl:value-of select="cs-type"/>
+						<xsl:call-template name="csharp-operator-name">
+							<xsl:with-param name="name" select="@name" />
+						</xsl:call-template>
 					</xsl:otherwise>
 				</xsl:choose>
-			</xsl:when>
-			<xsl:when test="@name='op_Implicit'">
-				<xsl:text>implicit operator </xsl:text>
-				<!-- output the return type. this is duplicated code. -->
-				<xsl:variable name="cs-type">
-					<xsl:call-template name="get-datatype">
-						<xsl:with-param name="datatype" select="@returnType" />
-						<xsl:with-param name="lang" select="$lang" />						
-					</xsl:call-template>
-				</xsl:variable>
-				<xsl:choose>
-					<xsl:when test="$include-type-links = true()">
-						<xsl:call-template name="get-link-for-type-name">
-							<xsl:with-param name="type-name" select="@returnType" />
-							<xsl:with-param name="link-text" select="$cs-type" />
-						</xsl:call-template>					
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:value-of select="cs-type"/>
-					</xsl:otherwise>
-				</xsl:choose>									
+				<xsl:call-template name="parameters">
+					<xsl:with-param name="include-type-links" select="$include-type-links"/>
+					<xsl:with-param name="lang" select="$lang"/>
+					<xsl:with-param name="namespace-name" select="../../@name" />
+				</xsl:call-template>	
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:call-template name="csharp-operator-name">
-					<xsl:with-param name="name" select="@name" />
-				</xsl:call-template>
+				<xsl:apply-templates select="." mode="keyword">
+					<xsl:with-param name="lang" select="$lang"/>
+				</xsl:apply-templates>
 			</xsl:otherwise>
-		</xsl:choose>
-		<xsl:call-template name="parameters">
-			<xsl:with-param name="include-type-links" select="$include-type-links"/>
-			<xsl:with-param name="lang" select="$lang"/>
-			<xsl:with-param name="namespace-name" select="../../@name" />
-		</xsl:call-template>		
+		</xsl:choose>	
 	</xsl:template>
 	<!-- -->
 	<xsl:template match="structure | interface | class" mode="derivation">

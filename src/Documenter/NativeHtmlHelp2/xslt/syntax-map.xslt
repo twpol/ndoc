@@ -464,8 +464,8 @@
 			<xsl:when test="$lang='Visual Basic'">Structure</xsl:when>
 			<xsl:when test="$lang='C#'">struct</xsl:when>
 			<xsl:when test="$lang='C++'">struct</xsl:when>
-			<xsl:when test="$lang='JScript'">In JScript, you can use the structures in the .NET Framework,
-but you cannot define your own.</xsl:when>
+			<xsl:when test="$lang='JScript'">In JScript, you can use the structures in the 
+.NET Framework,but you cannot define your own.</xsl:when>
 		</xsl:choose>	
 		<xsl:text>&#160;</xsl:text>
 	</xsl:template>
@@ -495,8 +495,8 @@ but you cannot define your own.</xsl:when>
 			<xsl:when test="$lang='Visual Basic'">Delegate Function Sub</xsl:when>
 			<xsl:when test="$lang='C#'">delegate</xsl:when>
 			<xsl:when test="$lang='C++'">__delegate</xsl:when>
-			<xsl:when test="$lang='JScript'">In JScript, you can use the delegates in the .NET Framework, 
-but you cannot define your own.</xsl:when>
+			<xsl:when test="$lang='JScript'">In JScript, you can use the delegates in the 
+.NET Framework, but you cannot define your own.</xsl:when>
 		</xsl:choose>	
 		<xsl:text>&#160;</xsl:text>
 	</xsl:template>	
@@ -506,8 +506,8 @@ but you cannot define your own.</xsl:when>
 			<xsl:when test="$lang='Visual Basic'">Event</xsl:when>
 			<xsl:when test="$lang='C#'">event</xsl:when>
 			<xsl:when test="$lang='C++'">__event</xsl:when>
-			<xsl:when test="$lang='JScript'">In JScript, you can handle the events defined by a class,
-but you cannot define your own.</xsl:when>
+			<xsl:when test="$lang='JScript'">In JScript, you can handle the events defined 
+by a class, but you cannot define your own.</xsl:when>
 		</xsl:choose>	
 		<xsl:text>&#160;</xsl:text>
 	</xsl:template>	
@@ -527,6 +527,18 @@ but you cannot define your own.</xsl:when>
 			<xsl:when test="$lang='JScript'">var&#160;</xsl:when>
 		</xsl:choose>			
 	</xsl:template>	
+	<xsl:template match="operator" mode="keyword">
+		<xsl:param name="lang"/>
+		<xsl:choose>
+			<xsl:when test="$lang='Visual Basic'">In Visual Basic, you cannot define
+or use custom operators.</xsl:when>
+			<xsl:when test="$lang='C#'">operator&#160;</xsl:when>
+			<xsl:when test="$lang='C++'">operator&#160;</xsl:when>
+			<xsl:when test="$lang='JScript'">In JScript, you cannot define or 
+use custom operators.</xsl:when>
+		</xsl:choose>			
+	</xsl:template>	
+				
 				
 	<xsl:template match="@* | node() | text()" mode="gc-type"/>
 	<xsl:template match="class | interface | delegate" mode="gc-type">
