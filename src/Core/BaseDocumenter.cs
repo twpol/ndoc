@@ -39,6 +39,8 @@ namespace NDoc.Core
 
 		XmlDocument xmlDocument;
 
+		XmlDocumentationCache docCache;
+
 		private class ImplementsInfo
 		{
 			public Type TargetType;
@@ -66,6 +68,7 @@ namespace NDoc.Core
 		{
 			_Name = name;
 			xmlDocument = new XmlDocument();
+			docCache = new XmlDocumentationCache();
 		}
 
 		/// <summary>Compares the currrent document to another documenter.</summary>
@@ -1249,7 +1252,14 @@ namespace NDoc.Core
 				writer.WriteAttributeString("initOnly", "true");
 			}
 
-			WriteFieldDocumentation(writer, memberName, !inherited, type);
+			if (inherited)
+			{
+				WriteInheritedDocumentation(writer, memberName, field.DeclaringType);
+			}
+			else
+			{
+				WriteFieldDocumentation(writer, memberName, true, type);
+			}
 			WriteCustomAttributes(writer, field);
 
 			writer.WriteEndElement();
@@ -1308,7 +1318,14 @@ namespace NDoc.Core
 				}
 			}
 
-			WriteEventDocumentation(writer, memberName, !inherited);
+			if (inherited)
+			{
+				WriteInheritedDocumentation(writer, memberName, eventInfo.DeclaringType);
+			}
+			else
+			{
+				WriteEventDocumentation(writer, memberName, true);
+			}
 			WriteCustomAttributes(writer, eventInfo);
 
 			writer.WriteEndElement();
@@ -1399,7 +1416,14 @@ namespace NDoc.Core
 				}
 			}
 
-			WritePropertyDocumentation(writer, memberName, property, !inherited);
+			if (inherited)
+			{
+				WriteInheritedDocumentation(writer, memberName, property.DeclaringType);
+			}
+			else
+			{
+				WritePropertyDocumentation(writer, memberName, property, true);
+			}
 			WriteCustomAttributes(writer, property);
 
 			foreach (ParameterInfo parameter in GetIndexParameters(property))
@@ -1533,7 +1557,14 @@ namespace NDoc.Core
 					}
 				}
 
-				WriteMethodDocumentation(writer, memberName, method, !inherited);
+				if (inherited)
+				{
+					WriteInheritedDocumentation(writer, memberName, method.DeclaringType);
+				}
+				else
+				{
+					WriteMethodDocumentation(writer, memberName, method, true);
+				}
 				WriteCustomAttributes(writer, method);
 
 				foreach (ParameterInfo parameter in method.GetParameters())
@@ -1623,7 +1654,14 @@ namespace NDoc.Core
 
 				writer.WriteAttributeString("returnType", method.ReturnType.FullName);
 
-				WriteMethodDocumentation(writer, memberName, method, !inherited);
+				if (inherited)
+				{
+					WriteInheritedDocumentation(writer, memberName, method.DeclaringType);
+				}
+				else
+				{
+					WriteMethodDocumentation(writer, memberName, method, true);
+				}
 
 				foreach (ParameterInfo parameter in method.GetParameters())
 				{
@@ -2097,6 +2135,23 @@ namespace NDoc.Core
 			{
 				writer.WriteEndElement();
 				didWriteStartDocumentation = false;
+			}
+		}
+
+		private void WriteInheritedDocumentation(
+			XmlWriter writer, 
+			string memberName, 
+			Type declaringType)
+		{
+			if (MyConfig.GetExternalSummaries)
+			{
+				string summary = docCache.GetSummary(memberName, declaringType).OuterXml;
+				if (summary.Length > 0)
+				{
+					WriteStartDocumentation(writer);
+					writer.WriteRaw(summary);
+					WriteEndDocumentation(writer);
+				}
 			}
 		}
 

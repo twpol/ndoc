@@ -53,6 +53,8 @@ namespace NDoc.Core
 			_AutoPropertyBackerSummaries = false;
 			_AutoDocumentConstructors = true;
 
+			_GetExternalSummaries = true;
+
 			DocumentAttributes = false;
 			DocumentedAttributes = "";
 		}
@@ -511,6 +513,24 @@ namespace NDoc.Core
 			set
 			{
 				_DocumentedAttributes = value;
+				SetDirty();
+			}
+		}
+
+		private bool _GetExternalSummaries;
+
+		/// <summary>Load external xml files?</summary>
+		[
+		Category("Documentation Main Settings"),
+		Description("If true, NDoc will try loading external xml files to retreive the summaries of inherited members."),
+		]
+		public bool GetExternalSummaries
+		{
+			get { return _GetExternalSummaries; }
+
+			set
+			{
+				_GetExternalSummaries = value;
 				SetDirty();
 			}
 		}

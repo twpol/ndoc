@@ -324,9 +324,14 @@
 							<img src="static.bmp" />
 						</xsl:if>
 						<xsl:value-of select="@name" />
+						<xsl:text> (inherited from </xsl:text>
+						<b>
+							<xsl:value-of select="@declaringType" />
+						</b>
+						<xsl:text>)</xsl:text>
 					</td>
 					<td width="50%">
-						<xsl:text>See the third party documentation for more information.</xsl:text>
+						<xsl:call-template name="summary-with-no-paragraph" />
 					</td>
 				</xsl:otherwise>
 			</xsl:choose>
@@ -389,9 +394,14 @@
 							<img src="static.bmp" />
 						</xsl:if>
 						<xsl:value-of select="@name" />
+						<xsl:text> (inherited from </xsl:text>
+						<b>
+							<xsl:value-of select="@declaringType" />
+						</b>
+						<xsl:text>)</xsl:text>
 					</td>
 					<td width="50%">
-						<xsl:text>See the third party documentation for more information.</xsl:text>
+						<xsl:call-template name="summary-with-no-paragraph" />
 					</td>
 				</xsl:otherwise>
 			</xsl:choose>
@@ -421,12 +431,14 @@
 				</a>
 				<xsl:text> (inherited from </xsl:text>
 				<b>
-					<xsl:value-of select="@declaringType" />
+					<xsl:call-template name="strip-namespace">
+						<xsl:with-param name="name" select="@declaringType" />
+					</xsl:call-template>
 				</b>
 				<xsl:text>)</xsl:text>
 			</td>
 			<td width="50%">
-				<xsl:text>Select the property name to go to the Microsoft documentation.</xsl:text>
+				<xsl:call-template name="summary-with-no-paragraph" />
 			</td>
 		</tr>
 	</xsl:template>
@@ -529,9 +541,14 @@
 								<img src="static.bmp" />
 							</xsl:if>
 							<xsl:value-of select="@name" />
+							<xsl:text> (inherited from </xsl:text>
+							<b>
+								<xsl:value-of select="@declaringType" />
+							</b>
+							<xsl:text>)</xsl:text>
 						</td>
 						<td width="50%">
-							<xsl:text>See the third party documentation for more information.</xsl:text>
+							<xsl:call-template name="summary-with-no-paragraph" />
 						</td>
 					</xsl:otherwise>
 				</xsl:choose>
@@ -569,7 +586,7 @@
 				<xsl:text>)</xsl:text>
 			</td>
 			<td width="50%">
-				<xsl:text>Select the method name to go to the Microsoft documentation.</xsl:text>
+				<xsl:call-template name="summary-with-no-paragraph" />
 			</td>
 		</tr>
 	</xsl:template>
@@ -630,9 +647,14 @@
 							<img src="static.bmp" />
 						</xsl:if>
 						<xsl:value-of select="@name" />
+						<xsl:text> (inherited from </xsl:text>
+						<b>
+							<xsl:value-of select="@declaringType" />
+						</b>
+						<xsl:text>)</xsl:text>
 					</td>
 					<td width="50%">
-						<xsl:text>See the third party documentation for more information.</xsl:text>
+						<xsl:call-template name="summary-with-no-paragraph" />
 					</td>
 				</xsl:otherwise>
 			</xsl:choose>
@@ -669,7 +691,7 @@
 				<xsl:text>)</xsl:text>
 			</td>
 			<td width="50%">
-				<xsl:text>Select the event name to go to the Microsoft documentation.</xsl:text>
+				<xsl:call-template name="summary-with-no-paragraph" />
 			</td>
 		</tr>
 	</xsl:template>
