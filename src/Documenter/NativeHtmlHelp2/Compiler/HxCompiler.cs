@@ -64,6 +64,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Compiler
 
 				if ( status.CompileFailed )
 					throw new Exception( status.ErrorMessage );
+
+				Trace.WriteLine( "Help title compile complete" );
 			}
 
 		}
