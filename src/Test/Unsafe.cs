@@ -3,10 +3,39 @@ using System;
 namespace NDoc.Test.Unsafe
 {
 	/// <summary>
+	/// The NDoc.Test.Unsafe namespace contains tests for types
+	/// that expose pointer types and are marked with the "unsafe" keyword
+	/// </summary>
+	public class NamespaceDoc {}
+
+	/// <summary>
+	/// An interface with pointers in its method signatures
+	/// </summary>
+	public interface IUnsafe
+	{
+		/// <summary>
+		/// Return a pointer to an Int32
+		/// </summary>
+		/// <returns>The pointer</returns>
+		Int32* GetIntPointer();
+	}
+
+	/// <summary>
+	/// An unsafe struct with a member of type pointer
+	/// </summary>
+	public struct UNSAFE
+	{
+		/// <summary>
+		/// A pointer field
+		/// </summary>
+		unsafe public Int32* p;
+	}
+
+	/// <summary>
 	/// This class has various mebers that are marked as unsafe and that return
 	/// pointers
 	/// </summary>
-	public class ClassWithUnsafeMembers
+	public class ClassWithUnsafeMembers : IUnsafe
 	{
 		/// <summary>
 		/// An unsafe constructor

@@ -3,6 +3,11 @@ using System;
 namespace NDoc.Test.Preliminary
 {
 	/// <summary>
+	/// Vaiorus uses of the &lt;preliminary/&gt; tag.
+	/// </summary>
+	public class NamespaceDoc {}
+
+	/// <summary>
 	/// This class is preliminary
 	/// </summary>
 	/// <preliminary/>
