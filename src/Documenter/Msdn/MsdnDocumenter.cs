@@ -187,10 +187,15 @@ namespace NDoc.Documenter.Msdn
 						{
 							File.Delete(file);
 						}
+						catch (UnauthorizedAccessException)
+						{
+							Trace.WriteLine("Could not delete " + file 
+								+ " from the output directory.  It might be read-only.");
+						}
 						catch (IOException)
 						{
-							Trace.WriteLine("Could not delete " + file + " from the output directory because it is in use.");
-							// IOException means the file is in use. Swallow the exception and continue.
+							Trace.WriteLine("Could not delete " + file 
+								+ " from the output directory because it is in use.");
 						}
 					}
 				}
