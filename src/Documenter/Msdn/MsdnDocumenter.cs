@@ -396,6 +396,8 @@ namespace NDoc.Documenter.Msdn
 				else
 					workspace.SaveOutputs( "*.*" );
 				
+				if ( MyConfig.CleanIntermediates )
+					workspace.CleanIntermediates();
 				
 				OnDocBuildingStep(100, "Done.");
 			}

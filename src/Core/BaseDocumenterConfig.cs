@@ -714,6 +714,22 @@ namespace NDoc.Core
 			}
 		}
 
+		bool _CleanIntermediates = false;
+
+		/// <summary>Gets or sets the CleanIntermediates property.</summary>
+		[Category("Documentation Main Settings")]
+		[Description("When true, intermediate files will be deleted after a successful build")]
+		[DefaultValue(false)]
+		public bool CleanIntermediates
+		{
+			get { return _CleanIntermediates; }
+			set
+			{
+				_CleanIntermediates = value;
+				SetDirty();
+			}
+		}
+		
 		bool _InheritPlatformSupport  = true;
 
 		/// <summary>Gets or sets the InheritFrameworkSupport property.</summary>

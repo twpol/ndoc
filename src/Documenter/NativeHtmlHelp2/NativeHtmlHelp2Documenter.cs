@@ -221,6 +221,10 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 				// create collection level files
 				if( MyConfig.GenerateCollectionFiles )
 					CreateCollectionFiles( w );
+
+				if ( MyConfig.CleanIntermediates )
+					w.CleanIntermediates();
+
 #if DEBUG
 				Trace.WriteLine( string.Format( "It took a total of {0} seconds", ( Environment.TickCount - start ) / 1000 ) );
 #endif

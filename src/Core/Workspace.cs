@@ -280,6 +280,16 @@ namespace NDoc.Core
 		}
 
 		/// <summary>
+		/// Deletes the content of the <see cref="WorkingDirectory"/>
+		/// </summary>
+		public void CleanIntermediates()
+		{
+			// delete the build temp directory
+			if ( Directory.Exists( WorkingDirectory ) )
+				Directory.Delete( WorkingDirectory, true );
+		}
+
+		/// <summary>
 		/// Delets all output and intermediate files from the project workspace
 		/// This will delete all the cleanable files in the root and remove the working directory
 		/// </summary>
@@ -295,9 +305,8 @@ namespace NDoc.Core
 					File.Delete( f );
 			}
 
-			// then delete the build temp directory
-			if ( Directory.Exists( WorkingDirectory ) )
-				Directory.Delete( WorkingDirectory, true );
+			// then get rid of the working directory
+			CleanIntermediates();
 		}
 	}
 }
