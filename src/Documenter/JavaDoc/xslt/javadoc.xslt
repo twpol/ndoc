@@ -516,7 +516,7 @@
 	<xsl:template match="see[@langword]" mode="doc">
 		<xsl:choose>
 			<xsl:when test="@langword='null'">
-				<xsl:text>null reference (</xsl:text>
+				<xsl:text>a null reference (</xsl:text>
 				<b>Nothing</b>
 				<xsl:text> in Visual Basic)</xsl:text>
 			</xsl:when>

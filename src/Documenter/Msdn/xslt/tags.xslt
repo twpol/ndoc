@@ -297,7 +297,7 @@
   <xsl:template match="see[@langword]" mode="slashdoc" doc:group="inline">
     <xsl:choose>
       <xsl:when test="@langword='null'">
-        <xsl:text>null reference</xsl:text>
+        <xsl:text>a null reference</xsl:text>
         <xsl:if test="$ndoc-vb-syntax">
 				  (<b>Nothing</b><xsl:text> in Visual Basic)</xsl:text></xsl:if>
       </xsl:when>
