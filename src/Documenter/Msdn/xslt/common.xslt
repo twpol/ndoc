@@ -544,6 +544,72 @@
 		</xsl:choose>
 	</xsl:template>
 	<!-- -->
+	<xsl:template name="get-href">
+		<xsl:param name="cref" />
+		<xsl:choose>
+			<xsl:when test="starts-with(substring-after($cref, ':'), 'System.')">
+				<a>
+					<xsl:attribute name="href">
+						<xsl:call-template name="get-filename-for-system-cref">
+							<xsl:with-param name="cref" select="@cref" />
+						</xsl:call-template>
+					</xsl:attribute>
+					<xsl:choose>
+						<xsl:when test="contains($cref, '(')">
+							<xsl:value-of select="substring-after(substring-before($cref, '('), ':')" />
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="substring-after($cref, ':')" />
+						</xsl:otherwise>
+					</xsl:choose>
+				</a>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:variable name="seethis" select="//*[@id=$cref]" />
+				<xsl:choose>
+					<xsl:when test="$seethis">
+						<xsl:variable name="href">
+							<xsl:call-template name="get-filename-for-cref">
+								<xsl:with-param name="cref" select="@cref" />
+							</xsl:call-template>
+						</xsl:variable>
+						<a href="{$href}">
+							<xsl:value-of select="$seethis/@name" />
+						</a>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:choose>
+							<!-- this is an incredibly lame hack. -->
+							<!-- it can go away once microsoft stops prefix event crefs with 'F:'. -->
+							<xsl:when test="starts-with($cref, 'F:')">
+								<xsl:variable name="event-cref" select="concat('E:', substring-after($cref, 'F:'))" />
+								<xsl:variable name="event-seethis" select="//*[@id=$event-cref]" />
+								<xsl:choose>
+									<xsl:when test="$event-seethis">
+										<xsl:variable name="href">
+											<xsl:call-template name="get-filename-for-cref">
+												<xsl:with-param name="cref" select="$event-cref" />
+											</xsl:call-template>
+										</xsl:variable>
+										<a href="{$href}">
+											<xsl:value-of select="$event-seethis/@name" />
+										</a>
+									</xsl:when>
+									<xsl:otherwise>
+										<xsl:value-of select="substring($cref, 3)" />
+									</xsl:otherwise>
+								</xsl:choose>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="substring($cref, 3)" />
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	<!-- -->
 	<xsl:template name="value">
 		<xsl:param name="type" />
 		<xsl:variable name="namespace">

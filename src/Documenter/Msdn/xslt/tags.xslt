@@ -10,7 +10,7 @@
 
 	<xsl:template match="node()|@*" mode="slashdoc">
 		<xsl:copy>
-			<xsl:apply-templates select="node()|@*" mode="slashdoc" />
+			<xsl:apply-templates select="@*|node()" mode="slashdoc" />
 		</xsl:copy>
 	</xsl:template>
 
@@ -101,47 +101,47 @@
 			<xsl:apply-templates mode="slashdoc" />
 		</p>
 	</xsl:template>
-	<!-- -->
+
 	<xsl:template match="list[@type='bullet']" mode="slashdoc" doc:group="block" doc:msdn="ms-help://MS.NETFrameworkSDK/csref/html/vclrflist.htm">
 		<ul type="disc">
 			<xsl:apply-templates select="item" mode="slashdoc" />
 		</ul>
 	</xsl:template>
-	<!-- -->
+
 	<xsl:template match="list[@type='bullet']/item" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDK/csref/html/vclrflist.htm">
 		<li>
 			<xsl:apply-templates select="./node()" mode="slashdoc" />
 		</li>
 	</xsl:template>
-	<!-- -->
+
 	<xsl:template match="list[@type='bullet']/item/term" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDK/csref/html/vclrflist.htm">
 		<b><xsl:apply-templates select="./node()" mode="slashdoc" /> - </b>
 	</xsl:template>
-	<!-- -->
+
 	<xsl:template match="list[@type='bullet']/item/description" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDK/csref/html/vclrflist.htm">
 		<xsl:apply-templates select="./node()" mode="slashdoc" />
 	</xsl:template>
-	<!-- -->
+
 	<xsl:template match="list[@type='number']" mode="slashdoc" doc:group="block" doc:msdn="ms-help://MS.NETFrameworkSDK/csref/html/vclrflist.htm">
 		<ol>
 			<xsl:apply-templates select="item" mode="slashdoc" />
 		</ol>
 	</xsl:template>
-	<!-- -->
+
 	<xsl:template match="list[@type='number']/item" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDK/csref/html/vclrflist.htm">
 		<li>
 			<xsl:apply-templates select="./node()" mode="slashdoc" />
 		</li>
 	</xsl:template>
-	<!-- -->
+
 	<xsl:template match="list[@type='number']/item/term" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDK/csref/html/vclrflist.htm">
 		<b><xsl:apply-templates select="./node()" mode="slashdoc" /> - </b>
 	</xsl:template>
-	<!-- -->
+
 	<xsl:template match="list[@type='number']/item/description" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDK/csref/html/vclrflist.htm">
 		<xsl:apply-templates select="./node()" mode="slashdoc" />
 	</xsl:template>
-	<!-- -->
+
 	<xsl:template match="list[@type='table']" mode="slashdoc" doc:group="block" doc:msdn="ms-help://MS.NETFrameworkSDK/csref/html/vclrflist.htm">
 		<div class="table">
 			<table cellspacing="0">
@@ -150,37 +150,37 @@
 			</table>
 		</div>
 	</xsl:template>
-	<!-- -->
+
 	<xsl:template match="list[@type='table']/listheader" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDK/csref/html/vclrflist.htm">
 		<tr valign="top">
 			<xsl:apply-templates mode="slashdoc" />
 		</tr>
 	</xsl:template>
-	<!-- -->
+
 	<xsl:template match="list[@type='table']/listheader/term" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDK/csref/html/vclrflist.htm">
 		<th width="50%">
 			<xsl:apply-templates select="./node()" mode="slashdoc" />
 		</th>
 	</xsl:template>
-	<!-- -->
+
 	<xsl:template match="list[@type='table']/listheader/description" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDK/csref/html/vclrflist.htm">
 		<th width="50%">
 			<xsl:apply-templates select="./node()" mode="slashdoc" />
 		</th>
 	</xsl:template>
-	<!-- -->
+
 	<xsl:template match="list[@type='table']/item" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDK/csref/html/vclrflist.htm">
 		<tr valign="top">
 			<xsl:apply-templates mode="slashdoc" />
 		</tr>
 	</xsl:template>
-	<!-- -->
+
 	<xsl:template match="list[@type='table']/item/term" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDK/csref/html/vclrflist.htm">
 		<td>
 			<xsl:apply-templates select="./node()" mode="slashdoc" />
 		</td>
 	</xsl:template>
-	<!-- -->
+
 	<xsl:template match="list[@type='table']/item/description" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDK/csref/html/vclrflist.htm">
 		<td>
 			<xsl:apply-templates select="./node()" mode="slashdoc" />
@@ -196,79 +196,19 @@
 			<xsl:apply-templates mode="slashdoc" />
 		</code>
 	</xsl:template>
-	<!-- -->
+
 	<xsl:template match="paramref[@name]" mode="slashdoc" doc:group="inline" doc:msdn="ms-help://MS.NETFrameworkSDK/csref/html/vclrfparamref.htm">
 		<i>
 			<xsl:value-of select="@name" />
 		</i>
 	</xsl:template>
-	<!-- -->
+
 	<xsl:template match="see[@cref]" mode="slashdoc" doc:group="inline" doc:msdn="ms-help://MS.NETFrameworkSDK/csref/html/vclrfsee.htm">
-		<xsl:variable name="cref" select="@cref" />
-		<xsl:choose>
-			<xsl:when test="starts-with(substring-after($cref, ':'), 'System.')">
-				<a>
-					<xsl:attribute name="href">
-						<xsl:call-template name="get-filename-for-system-cref">
-							<xsl:with-param name="cref" select="@cref" />
-						</xsl:call-template>
-					</xsl:attribute>
-					<xsl:choose>
-						<xsl:when test="contains($cref, '(')">
-							<xsl:value-of select="substring-after(substring-before($cref, '('), ':')" />
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:value-of select="substring-after($cref, ':')" />
-						</xsl:otherwise>
-					</xsl:choose>
-				</a>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:variable name="seethis" select="//*[@id=$cref]" />
-				<xsl:choose>
-					<xsl:when test="$seethis">
-						<xsl:variable name="href">
-							<xsl:call-template name="get-filename-for-cref">
-								<xsl:with-param name="cref" select="@cref" />
-							</xsl:call-template>
-						</xsl:variable>
-						<a href="{$href}">
-							<xsl:value-of select="$seethis/@name" />
-						</a>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:choose>
-							<!-- this is an incredibly lame hack. -->
-							<!-- it can go away once microsoft stops prefix event crefs with 'F:'. -->
-							<xsl:when test="starts-with($cref, 'F:')">
-								<xsl:variable name="event-cref" select="concat('E:', substring-after($cref, 'F:'))" />
-								<xsl:variable name="event-seethis" select="//*[@id=$event-cref]" />
-								<xsl:choose>
-									<xsl:when test="$event-seethis">
-										<xsl:variable name="href">
-											<xsl:call-template name="get-filename-for-cref">
-												<xsl:with-param name="cref" select="$event-cref" />
-											</xsl:call-template>
-										</xsl:variable>
-										<a href="{$href}">
-											<xsl:value-of select="$event-seethis/@name" />
-										</a>
-									</xsl:when>
-									<xsl:otherwise>
-										<xsl:value-of select="substring($cref, 3)" />
-									</xsl:otherwise>
-								</xsl:choose>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:value-of select="substring($cref, 3)" />
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:otherwise>
-				</xsl:choose>
-			</xsl:otherwise>
-		</xsl:choose>
+		<xsl:call-template name="get-href">
+			<xsl:with-param name="cref" select="@cref" />
+		</xsl:call-template>
 	</xsl:template>
-	<!-- -->
+
 	<xsl:template match="see[@href]" mode="slashdoc" doc:group="inline">
 		<a href="{@href}">
 			<xsl:choose>
@@ -281,7 +221,7 @@
 			</xsl:choose>
 		</a>
 	</xsl:template>
-	<!-- -->
+
 	<xsl:template match="see[@langword]" mode="slashdoc" doc:group="inline">
 		<xsl:choose>
 			<xsl:when test="@langword='null'">
@@ -316,5 +256,5 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
-	<!-- -->
+
 </xsl:stylesheet>
