@@ -823,7 +823,7 @@
 					<xsl:for-each select="documentation/permission">
 						<li>
 							<xsl:call-template name="get-link-for-type">
-								<xsl:with-param name="type-id" select="@cref" />
+								<xsl:with-param name="type" select="@cref" />
 								<xsl:with-param name="link-text" select="substring-after(@cref, 'T:')"/>
 							</xsl:call-template>	
 							<xsl:text>&#160;</xsl:text>

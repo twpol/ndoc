@@ -98,24 +98,24 @@
 		<xsl:param name="link-text"/>
 
 		<xsl:call-template name="get-link-for-type">
-			<xsl:with-param name="type-id" select="concat( 'T:', $type-name )"/>
+			<xsl:with-param name="type" select="concat( 'T:', $type-name )"/>
 			<xsl:with-param name="link-text" select="$link-text"/>
 		</xsl:call-template>
 	</xsl:template>  
 	
 	<xsl:template name="get-link-for-type">
-		<xsl:param name="type-id"/>
+		<xsl:param name="type"/>
 		<xsl:param name="link-text"/>
 
 		<xsl:choose>
-			<xsl:when test="contains( $type-id, ':System.' )">
+			<xsl:when test="contains( $type, ':System.' )">
 				<xsl:call-template name="get-xlink-for-system-type">
-					<xsl:with-param name="type-id" select="$type-id"/>
+					<xsl:with-param name="type" select="$type"/>
 					<xsl:with-param name="link-text" select="$link-text"/>
 				</xsl:call-template>
 			</xsl:when>
 			<xsl:otherwise>
-				<a href="{NUtil:GetHRef( string( $type-id ) )}">		
+				<a href="{NUtil:GetHRef( string( $type ) )}">		
 					<xsl:value-of select="$link-text"/> 
 				</a>
 			</xsl:otherwise>
@@ -123,7 +123,7 @@
 	</xsl:template>   
 	
 	<xsl:template name="get-xlink-for-system-type">
-		<xsl:param name="type-id"/>
+		<xsl:param name="type"/>
 		<xsl:param name="link-text"/>
 
 		<xsl:variable name="text">
@@ -132,12 +132,12 @@
 					<xsl:value-of select="$link-text"/>								
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:value-of select="substring-after( $type-id, ':' )"/>				
+					<xsl:value-of select="substring-after( $type, ':' )"/>				
 				</xsl:otherwise>
 			</xsl:choose>	
 		</xsl:variable>
 		<xsl:call-template name="get-xlink">
-			<xsl:with-param name="a-index" select="NUtil:GetHRef( $type-id )"/>
+			<xsl:with-param name="a-index" select="NUtil:GetHRef( $type )"/>
 			<xsl:with-param name="link-text" select="$text"/>
 		</xsl:call-template>		
 	</xsl:template>

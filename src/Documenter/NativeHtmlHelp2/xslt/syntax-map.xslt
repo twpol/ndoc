@@ -214,7 +214,7 @@
 		<xsl:param name="lang"/>
 		<xsl:choose>
 			<xsl:when test="$lang='Visual Basic'">MustInherit</xsl:when>
-			<xsl:when test="$lang='C#'">sealed</xsl:when>
+			<xsl:when test="$lang='C#'">abstract</xsl:when>
 			<xsl:when test="$lang='C++'">__abstract</xsl:when>
 		</xsl:choose>	
 		<xsl:text>&#160;</xsl:text>
@@ -283,7 +283,16 @@
 		</xsl:choose>	
 		<xsl:text>&#160;</xsl:text>
 	</xsl:template>	
-		
+	<xsl:template match="property" mode="keyword">
+		<xsl:param name="lang"/>
+		<xsl:choose>
+			<xsl:when test="$lang='Visual Basic'">Property&#160;</xsl:when>
+			<xsl:when test="$lang='C#'"></xsl:when>
+			<xsl:when test="$lang='C++'">__property&#160;</xsl:when>
+			<xsl:when test="$lang='JScript'">function&#160;</xsl:when>
+		</xsl:choose>	
+	</xsl:template>
+	
 	<xsl:template match="@* | node() | text()" mode="gc-type"/>
 	<xsl:template match="class | interface | delegate" mode="gc-type">
 		<xsl:param name="lang"/>
@@ -298,6 +307,17 @@
 		</xsl:choose>	
 	</xsl:template>
 	
+	<xsl:template match="property" mode="property-name">
+		<xsl:param name="lang"/>
+		<xsl:param name="dir"/>
+
+		<xsl:choose>
+			<xsl:when test="$lang='Visual Basic'"><xsl:value-of select="@name"/></xsl:when>
+			<xsl:when test="$lang='C#'"><xsl:value-of select="@name"/></xsl:when>
+			<xsl:when test="$lang='C++'"><xsl:value-of select="$dir"/>_<xsl:value-of select="@name"/></xsl:when>
+			<xsl:when test="$lang='JScript'"><xsl:value-of select="$dir"/><xsl:text>&#160;</xsl:text><xsl:value-of select="@name"/></xsl:when>
+		</xsl:choose>	
+	</xsl:template>
 	
 	<xsl:template name="param-seperator">
 		<xsl:param name="lang"/>

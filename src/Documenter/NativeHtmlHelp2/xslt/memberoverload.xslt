@@ -163,7 +163,7 @@
 		</html>
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="constructor | method | operator" mode="syntax">
+	<xsl:template match="constructor | method | operator | property" mode="syntax">
 		<xsl:param name="href"/>
 		<xsl:apply-templates select="." mode="cs-inline-syntax">
 			<xsl:with-param name="lang" select="'Visual Basic'"/>
@@ -184,14 +184,6 @@
 			<xsl:with-param name="lang" select="'JScript'"/>
 			<xsl:with-param name="href" select="$href"/>
 		</xsl:apply-templates>		
-	</xsl:template>
-	<!-- -->
-	<xsl:template match="property" mode="syntax">
-		<xsl:call-template name="cs-property-syntax">
-			<xsl:with-param name="indent" select="false()" />
-			<xsl:with-param name="display-names" select="false()" />
-			<xsl:with-param name="link-types" select="false()" />
-		</xsl:call-template>
 	</xsl:template>
 	<!-- -->
 </xsl:stylesheet>
