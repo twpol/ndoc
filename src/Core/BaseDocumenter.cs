@@ -832,9 +832,12 @@ namespace NDoc.Core
 
 		private void WriteCustomAttributes(XmlWriter writer, object[] attributes)
 		{
-			foreach (Attribute attribute in attributes)
+			if (this.MyConfig.DocumentAttributes)
 			{
-				WriteCustomAttribute(writer, attribute);
+				foreach (Attribute attribute in attributes)
+				{
+					WriteCustomAttribute(writer, attribute);
+				}
 			}
 		}
 
