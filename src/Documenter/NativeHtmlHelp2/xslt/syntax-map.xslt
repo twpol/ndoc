@@ -411,9 +411,7 @@
 
 		<xsl:choose>
 			<xsl:when test="parameter">
-				<I>returnValue</I><B> = </B><I><xsl:value-of select="../@name"/></I><B>.Item(</B><I>name</I><B>);</B>
-				<xsl:text>&#10;</xsl:text><B>-or-</B><xsl:text>&#10;</xsl:text>
-				<I>returnValue</I><B> = </B><I><xsl:value-of select="../@name"/></I><B>(</B><I>name</I><B>);</B>
+				<xsl:apply-templates select="." mode="js-indexer-syntax"/>
 			</xsl:when>
 			<xsl:otherwise>
 				<b>			
@@ -425,6 +423,61 @@
 		</xsl:choose>
 			
 	</xsl:template>
+
+	<xsl:template match="property" mode="js-indexer-syntax">
+		<xsl:if test="@get='true'">
+			<I>returnValue</I>
+			<B> = </B>
+			<I><xsl:value-of select="../@name"/>Object</I><B>.Item( </B>
+				<xsl:call-template name="js-indexer-params">
+					<xsl:with-param name="lang" select="'JScript'"/>
+					<xsl:with-param name="namespace-name" select="../../@name" />
+				</xsl:call-template>
+			<B> );</B>
+		</xsl:if>
+		<xsl:if test="@set='true'">
+			<xsl:if test="@get='true'">
+				<xsl:text>&#10;</xsl:text>		
+			</xsl:if>
+			<I><xsl:value-of select="../@name"/>Object</I><B>.Item( </B>
+				<xsl:call-template name="js-indexer-params">
+					<xsl:with-param name="lang" select="'JScript'"/>
+					<xsl:with-param name="namespace-name" select="../../@name" />
+				</xsl:call-template>
+			<B> ) = newValue;</B>
+		</xsl:if>
+		<xsl:text>&#10;</xsl:text><B>-or-</B><xsl:text>&#10;</xsl:text>
+		<xsl:if test="@get='true'">
+			<I>returnValue</I><B> = </B><I><xsl:value-of select="../@name"/>Object</I><B>( </B>
+				<xsl:call-template name="js-indexer-params">
+					<xsl:with-param name="lang" select="'JScript'"/>
+					<xsl:with-param name="namespace-name" select="../../@name" />
+					</xsl:call-template>
+			<B> );</B>
+		</xsl:if>
+		<xsl:if test="@set='true'">
+			<xsl:if test="@get='true'">
+				<xsl:text>&#10;</xsl:text>		
+			</xsl:if>
+			<I><xsl:value-of select="../@name"/>Object</I><B>( </B>
+				<xsl:call-template name="js-indexer-params">
+					<xsl:with-param name="lang" select="'JScript'"/>
+					<xsl:with-param name="namespace-name" select="../../@name" />
+				</xsl:call-template>
+			<B> ) = newValue;</B>
+		</xsl:if>
+	</xsl:template>
+	
+	<xsl:template name="js-indexer-params">
+		<xsl:for-each select="parameter">
+			<i>
+				<xsl:value-of select="@name" />
+			</i>		
+			<xsl:if test="position()!= last()">
+				<xsl:text>,&#160;</xsl:text>
+			</xsl:if>
+		</xsl:for-each>	
+	</xsl:template>	
 	
 	<xsl:template match="property[@get='true' and @set='true']" mode="js-property-dir">
 		<xsl:param name="include-type-links"/>
