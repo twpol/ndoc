@@ -114,6 +114,15 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			return BaseNameFromTypeId(typeID) + "Topic" + GetHashCodeForId(typeID) + ".html";
 		}
 
+		/// <summary>
+		/// Determines the filename for the type hierarchy topic
+		/// </summary>
+		/// <param name="typeID">The id of the type</param>
+		/// <returns>Topic Filename</returns>
+		public static string GetFileNameForTypeHierarchy(string typeID)
+		{
+			return BaseNameFromTypeId(typeID) + "Hierarchy" + GetHashCodeForId(typeID) + ".html";
+		}
 
 		/// <summary>
 		/// Determines the filename for an overview topic

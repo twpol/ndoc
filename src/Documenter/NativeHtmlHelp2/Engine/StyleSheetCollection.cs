@@ -32,7 +32,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 	/// <summary>
 	/// The collection of xslt stylesheets used to generate the Html
 	/// </summary>
-	public class StyleSheetCollection : DictionaryBase
+	internal class StyleSheetCollection : DictionaryBase
 	{
 		/// <summary>
 		/// Load the predefined set of xslt stylesheets into a dictionary
@@ -56,6 +56,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			stylesheets.AddFrom( "namespace", resolver );
 			stylesheets.AddFrom( "namespacehierarchy", resolver );
 			stylesheets.AddFrom( "type", resolver );
+			stylesheets.AddFrom( "typehierarchy", resolver );
 			stylesheets.AddFrom( "allmembers", resolver );
 			stylesheets.AddFrom( "individualmembers", resolver );
 			stylesheets.AddFrom( "event", resolver );

@@ -357,6 +357,14 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 
 			OnTopicStart( fileName );
 
+			if ( typeNode.SelectNodes( "derivedBy" ).Count > 5 )
+			{
+				fileName = FileNameMapper.GetFileNameForTypeHierarchy(typeID);
+				this.Arguments.AddParam( "type-id", String.Empty, typeID );
+				TransformAndWriteResult( "typehierarchy", fileName );
+				this.Arguments.RemoveParam( "type-id", String.Empty );
+			}
+
 			if ( typeNode.SelectNodes( "constructor|field|property|method|operator|event" ).Count > 0 )
 			{
 				fileName = FileNameMapper.GetFilenameForOverviewPage(typeID,"Members");

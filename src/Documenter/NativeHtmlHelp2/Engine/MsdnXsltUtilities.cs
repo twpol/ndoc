@@ -102,6 +102,16 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		}
 
 		/// <summary>
+		/// Gets the Href for the type hierarchy topic
+		/// </summary>
+		/// <param name="typeName">The type name</param>
+		/// <returns>Relative HRef to the Topic</returns>
+		public string GetTypeHierarchyHRef( string typeName )
+		{
+			return FileNameMapper.GetFileNameForTypeHierarchy( typeName );
+		}
+
+		/// <summary>
 		/// Gets the href for an overview page
 		/// </summary>
 		/// <param name="typeID">The id of the type</param>
