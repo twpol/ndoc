@@ -56,6 +56,7 @@ namespace NDoc.Core
 		/// <summary>
 		/// Gets or sets the /doc filename in this pair.
 		/// </summary>
+		/// <remarks>
 		/// If the path is not rooted, it should be considered as a path relative
 		/// to the project file.
 		/// </remarks>
