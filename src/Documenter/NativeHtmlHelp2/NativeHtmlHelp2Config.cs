@@ -329,7 +329,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		/// <remarks>The language ID of the locale used by the compiled helpfile</remarks>
 		[Category(HTMLHELP2_CONFIG_CATEGORY)]
 		[Description("The ID of the language the help file is in.")]
-		[DefaultValue(1033)]
+		[DefaultValue((short)1033)]
 		[Editor(typeof(LangIdEditor), typeof(UITypeEditor))]
 		public short LangID
 		{
