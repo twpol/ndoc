@@ -677,13 +677,16 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 							OnTopicStart( fileName );
 						}
 
-						fileName = fileNameMapper[operatorID];
+						if ( operatorNode.Attributes["declaringType"] == null )
+						{
+							fileName = fileNameMapper[operatorID];
 
-						this.Arguments.AddParam( "member-id", String.Empty, operatorID );
-						TransformAndWriteResult( "member", fileName);
-						this.Arguments.RemoveParam( "member-id", String.Empty );
+							this.Arguments.AddParam( "member-id", String.Empty, operatorID );
+							TransformAndWriteResult( "member", fileName);
+							this.Arguments.RemoveParam( "member-id", String.Empty );
 
-						OnAddFileToTopic( fileName );
+							OnAddFileToTopic( fileName );
+						}
 
 						if ( bOverloaded && MethodHelper.IsMethodLastOverload( opNodes, indexes, i ) )
 						{
@@ -702,13 +705,16 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 
 					if ( ( opName == "op_Implicit" ) || ( opName == "op_Explicit" ) )
 					{
-						fileName = fileNameMapper[operatorID];
+						if ( operatorNode.Attributes["declaringType"] == null )
+						{
+							fileName = fileNameMapper[operatorID];
 
-						this.Arguments.AddParam( "member-id", String.Empty, operatorID );
-						TransformAndWriteResult( "member", fileName );
-						this.Arguments.RemoveParam( "member-id", String.Empty );
+							this.Arguments.AddParam( "member-id", String.Empty, operatorID );
+							TransformAndWriteResult( "member", fileName );
+							this.Arguments.RemoveParam( "member-id", String.Empty );
 
-						OnAddFileToTopic( fileName );
+							OnAddFileToTopic( fileName );
+						}
 					}
 				}
 
