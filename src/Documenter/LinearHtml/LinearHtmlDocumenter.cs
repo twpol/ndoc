@@ -291,21 +291,25 @@ namespace NDoc.Documenter.LinearHtml
 
 				OnDocBuildingStep(10, "Merging XML documentation...");
 				// Let the Documenter base class do it's thing.
-				MakeXml(project);
+				string xmlBuffer = MakeXml(project);
 
 				// Load the XML documentation
+				XmlDocument xmlDocumentation = new XmlDocument();
+				xmlDocumentation.LoadXml(xmlBuffer);
+				xmlBuffer = null;
+
 #if USE_XML_DOCUMENT
-				xPathNavigator = Document.CreateNavigator();
+				xPathNavigator = xmlDocumentation.CreateNavigator();
 #else
 				XmlTextWriter tmpWriter = new XmlTextWriter(new MemoryStream(), Encoding.UTF8);
-				Document.WriteTo(tmpWriter);
+				xmlDocumentation.WriteTo(tmpWriter);
 				tmpWriter.Flush();
 				tmpWriter.BaseStream.Position = 0;
 				this.Load(tmpWriter.BaseStream);
 #endif
 
 				// check for documentable types
-				XmlNodeList typeNodes = Document.SelectNodes("/ndoc/assembly/module/namespace/*[name()!='documentation']");
+				XmlNodeList typeNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace/*[name()!='documentation']");
 
 				if (typeNodes.Count == 0)
 				{

@@ -157,8 +157,8 @@ namespace NDoc.Documenter.Msdn
 			{
 				OnDocBuildingStep(0, "Initializing...");
 
-// Define this when you want to edit the stylesheets
-// without having to shutdown the application to rebuild.
+				// Define this when you want to edit the stylesheets
+				// without having to shutdown the application to rebuild.
 #if NO_RESOURCES
 				resourceDirectory = Path.GetFullPath(Path.Combine(
 					System.Windows.Forms.Application.StartupPath, @"..\..\..\Documenter\Msdn\"));
@@ -231,12 +231,11 @@ namespace NDoc.Documenter.Msdn
 				}
 
 				OnDocBuildingStep(10, "Merging XML documentation...");
-				// Let the Documenter base class do it's thing.
-				MakeXml(project);
 
+				// Let the Documenter base class do it's thing.
 				// Load the XML documentation into a DOM.
 				xmlDocumentation = new XmlDocument();
-				xmlDocumentation.LoadXml(XmlBuffer);
+				xmlDocumentation.LoadXml(MakeXml(project));
 
 				XmlNodeList typeNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace/*[name()!='documentation']");
 				if (typeNodes.Count == 0)
@@ -270,7 +269,7 @@ namespace NDoc.Documenter.Msdn
 				string compiler = string.Empty;
 #else
 				string compiler = Environment.ExpandEnvironmentVariables(
-						MyConfig.HtmlHelpCompilerFilename);
+					MyConfig.HtmlHelpCompilerFilename);
 #endif
 
 				htmlHelp = new HtmlHelp(
@@ -403,6 +402,10 @@ namespace NDoc.Documenter.Msdn
 			catch(Exception ex)
 			{
 				throw new DocumenterException(ex.Message, ex);
+			}
+			finally
+			{
+				xmlDocumentation = null;
 			}
 		}
 

@@ -134,7 +134,7 @@ Path.GetFullPath(Path.Combine(moduleDir, @"..\..\..\Documenter\Latex"));
 				m_ResourceDirectory + @"xslt\");
 			#endif
 
-			MakeXml(project);
+			string xmlBuffer = MakeXml(project);
 
 			// Create the output directory if it doesn't exist...
 
@@ -157,7 +157,7 @@ Path.GetFullPath(Path.Combine(moduleDir, @"..\..\..\Documenter\Latex"));
 			OnDocBuildingStep(10, "Scanning document text...");
 
 			XmlDocument doc = new XmlDocument();
-			doc.LoadXml(XmlBuffer);
+			doc.LoadXml(xmlBuffer);
 			MakeTextTeXCompatible(doc);
 			
 			WriteTeXDocument(doc);

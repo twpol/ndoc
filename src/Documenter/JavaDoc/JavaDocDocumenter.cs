@@ -47,6 +47,7 @@ namespace NDoc.Documenter.JavaDoc
 			} 
 		}
 
+		string xmlBuffer;
 		/// <summary>See <see cref="IDocumenter"/>.</summary>
 		public override void Build(Project project)
 		{
@@ -80,10 +81,11 @@ namespace NDoc.Documenter.JavaDoc
 			File.Copy(Path.Combine(_ResourceDirectory, @"css\JavaDoc.css"), outcss, true);
 			File.SetAttributes(outcss, FileAttributes.Archive);
 
-			MakeXml(project);
+			xmlBuffer = MakeXml(project);
 
 			WriteOverviewSummary();
 			WriteNamespaceSummaries();
+			xmlBuffer = null;
 		}
 
 		/// <summary>See <see cref="IDocumenter"/>.</summary>
@@ -139,8 +141,11 @@ namespace NDoc.Documenter.JavaDoc
 			}
 
 			TextWriter writer = new StreamWriter(resultPath);
-
-			XPathDocument doc = GetXPathDocument();
+			XPathDocument doc;
+			using (StringReader sreader = new StringReader(xmlBuffer))
+			{
+				doc = new XPathDocument(sreader);
+			}
 			transform.Transform(doc, args, writer);
 
 			writer.Close();
@@ -163,7 +168,7 @@ namespace NDoc.Documenter.JavaDoc
 		private void WriteNamespaceSummaries()
 		{
 			XmlDocument doc = new XmlDocument();
-			doc.LoadXml(XmlBuffer);
+			doc.LoadXml(xmlBuffer);
 
 			XmlNodeList namespaceNodes = doc.SelectNodes("/ndoc/assembly/module/namespace");
 
