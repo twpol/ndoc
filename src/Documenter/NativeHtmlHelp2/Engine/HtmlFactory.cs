@@ -590,10 +590,22 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 				XmlNodeList opNodes = typeNode.SelectNodes( "operator" );
 				bool bOverloaded = false;
 
-				string title = "Operators";
+				bool bHasOperators =  (typeNode.SelectSingleNode("operator[@name != 'op_Explicit' and @name != 'op_Implicit']") != null);;
+				bool bHasConverters = (typeNode.SelectSingleNode("operator[@name  = 'op_Explicit' or  @name  = 'op_Implicit']") != null);
+				string title="";
 
-				if ( typeNode.SelectSingleNode( "operator[@name = 'op_Explicit' or @name = 'op_Implicit']" ) != null )
-					title += " and Type Conversions";
+				if (bHasOperators)
+				{
+					if (bHasConverters)
+						title = "Operators and Type Conversions";
+					else
+						title = "Operators";
+				}
+				else
+				{
+					if (bHasConverters)
+						title = "Type Conversions";
+				}
 				
 				XsltArgumentList arguments = new XsltArgumentList();
 				arguments.AddParam( "id", String.Empty, typeID );
@@ -605,15 +617,16 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 
 				int[] indexes = SortNodesByAttribute( operators, "id" );
 
+				//operators
 				for ( int i = 0; i < opNodes.Count; i++ )
 				{
 					XmlNode operatorNode = operators[indexes[i]];
 					string operatorID = operatorNode.Attributes["id"].Value;
 
-					if ( MethodHelper.IsMethodFirstOverload( opNodes, indexes, i ) )
+					string opName = operatorNode.Attributes["name"].Value;
+					if ( ( opName != "op_Implicit" ) && ( opName != "op_Explicit" ) )
 					{
-						string opName = operatorNode.Attributes["name"].Value;
-						if ( ( opName != "op_Implicit" ) && ( opName != "op_Implicit" ) )
+						if ( MethodHelper.IsMethodFirstOverload( opNodes, indexes, i ) )
 						{
 							bOverloaded = true;
 
@@ -624,19 +637,37 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 							TransformAndWriteResult( "memberoverload", arguments, fileName );
 							OnTopicStart( fileName );
 						}
+
+						arguments = new XsltArgumentList();
+						arguments.AddParam("member-id", String.Empty, operatorID);
+
+						fileName = FileNameMapper.GetFilenameForOperator(operatorNode);
+						TransformAndWriteResult( "member", arguments, fileName);
+						OnAddFileToTopic( fileName );
+
+						if ( bOverloaded && MethodHelper.IsMethodLastOverload( opNodes, indexes, i ) )
+						{
+							bOverloaded = false;
+							OnTopicEnd();
+						}
 					}
+				}
 
-					arguments = new XsltArgumentList();
-					arguments.AddParam("member-id", String.Empty, operatorID);
+				//type converters
+				for ( int i = 0; i < opNodes.Count; i++ )
+				{
+					XmlNode operatorNode = operators[indexes[i]];
+					string operatorID = operatorNode.Attributes["id"].Value;
+					string opName = operatorNode.Attributes["name"].Value;
 
-					fileName = FileNameMapper.GetFilenameForOperator(operatorNode);
-					TransformAndWriteResult( "member", arguments, fileName);
-					OnAddFileToTopic( fileName );
-
-					if ( bOverloaded && MethodHelper.IsMethodLastOverload( opNodes, indexes, i ) )
+					if ( ( opName == "op_Implicit" ) || ( opName == "op_Explicit" ) )
 					{
-						bOverloaded = false;
-						OnTopicEnd();
+						arguments = new XsltArgumentList();
+						arguments.AddParam("member-id", String.Empty, operatorID);
+
+						fileName = FileNameMapper.GetFilenameForOperator(operatorNode);
+						TransformAndWriteResult( "member", arguments, fileName);
+						OnAddFileToTopic( fileName );
 					}
 				}
 

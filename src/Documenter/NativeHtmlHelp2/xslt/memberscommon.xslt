@@ -532,7 +532,7 @@
 							<xsl:if test="@contract='Override'">
 								<xsl:text>Overidden. </xsl:text>
 							</xsl:if>
-							<xsl:if test="@overload">
+							<xsl:if test="@overload and @name!='op_Implicit' and @name!='op_Explicit'">
 								<xsl:text>Overloaded. </xsl:text>
 							</xsl:if>
 							<xsl:call-template name="summary-with-no-paragraph" />
