@@ -24,7 +24,8 @@
 				</xsl:call-template>
 				<div id="content">
 					<xsl:call-template name="summary-section" />
-					<xsl:call-template name="field-or-event-syntax" />
+					<xsl:call-template name="vb-field-or-event-syntax" />
+					<xsl:call-template name="cs-field-or-event-syntax" />
 					<p></p>
 					<xsl:call-template name="remarks-section" />
 					<xsl:call-template name="example-section" />

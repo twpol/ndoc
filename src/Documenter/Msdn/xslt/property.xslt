@@ -32,7 +32,14 @@
 				<div id="content">
 					<xsl:call-template name="summary-section" />
 					<pre class="syntax">
-						<xsl:call-template name="property-syntax" />
+						<span class="lang">[Visual Basic]</span>
+						<br />
+						<xsl:call-template name="vb-property-syntax" />
+					</pre>
+					<pre class="syntax">
+						<span class="lang">[C#]</span>
+						<br />
+						<xsl:call-template name="cs-property-syntax" />
 					</pre>
 					<p></p>
 					<xsl:call-template name="parameter-section" />

@@ -171,8 +171,10 @@
 		</xsl:call-template>
 	</xsl:template>
 	<!-- -->
-	<xsl:template name="field-or-event-syntax">
+	<xsl:template name="cs-field-or-event-syntax">
 		<pre class="syntax">
+			<span class="lang">[C#]</span>
+			<br />
 			<xsl:if test="not(parent::interface)">
 				<xsl:call-template name="method-access">
 					<xsl:with-param name="access" select="@access" />
@@ -201,7 +203,7 @@
 		</pre>
 	</xsl:template>
 	<!-- -->
-	<xsl:template name="property-syntax">
+	<xsl:template name="cs-property-syntax">
 		<xsl:param name="indent" select="true()" />
 		<xsl:param name="display-names" select="true()" />
 		<xsl:param name="link-types" select="true()" />

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<!-- -->
 	<xsl:output method="html" indent="no" />
@@ -24,7 +24,8 @@
 				</xsl:call-template>
 				<div id="content">
 					<xsl:call-template name="summary-section" />
-					<xsl:call-template name="field-or-event-syntax" />
+					<xsl:call-template name="vb-field-or-event-syntax" />
+					<xsl:call-template name="cs-field-or-event-syntax" />
 					<p></p>
 					<xsl:variable name="type" select="@type" />
 					<xsl:variable name="eventargs-id" select="concat('T:', //delegate[@id=concat('T:', $type)]/parameter[contains(@type, 'EventArgs')][1]/@type)" />

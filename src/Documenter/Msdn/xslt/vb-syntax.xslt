@@ -177,8 +177,8 @@
 												<xsl:with-param name="type-name" select="@returnType" />
 											</xsl:call-template>
 										</xsl:attribute>
-										<xsl:call-template name="get-datatype">
-											<xsl:with-param name="datatype" select="@returnType" />
+										<xsl:call-template name="strip-namespace">
+											<xsl:with-param name="name" select="@returnType" />
 										</xsl:call-template>
 									</a>
 								</xsl:if>
@@ -202,6 +202,92 @@
 					</xsl:otherwise>
 				</xsl:choose>
 			</pre>
+		</xsl:if>
+	</xsl:template>
+	<!-- -->
+	<xsl:template name="vb-field-or-event-syntax">
+		<xsl:if test="$ndoc-vb-syntax">
+			<pre class="syntax">
+				<span class="lang">[Visual Basic]</span>
+				<br />
+				<xsl:if test="not(parent::interface)">
+					<xsl:call-template name="vb-method-access">
+						<xsl:with-param name="access" select="@access" />
+					</xsl:call-template>
+					<xsl:text>&#160;</xsl:text>
+				</xsl:if>
+				<xsl:if test="@contract='Static'">
+					<xsl:text>Shared&#160;</xsl:text>
+				</xsl:if>
+				<xsl:if test="@initOnly='true'">
+					<xsl:text>ReadOnly&#160;</xsl:text>
+				</xsl:if>
+				<xsl:value-of select="@name" />
+				<xsl:text>&#160;As&#160;</xsl:text>
+				<a>
+					<xsl:attribute name="href">
+						<xsl:call-template name="get-filename-for-type-name">
+							<xsl:with-param name="type-name" select="@type" />
+						</xsl:call-template>
+					</xsl:attribute>
+					<xsl:call-template name="strip-namespace">
+						<xsl:with-param name="name" select="@type" />
+					</xsl:call-template>
+				</a>
+			</pre>
+		</xsl:if>
+	</xsl:template>
+	<!-- -->
+	<xsl:template name="vb-property-syntax">
+		<xsl:if test="$ndoc-vb-syntax">
+			<xsl:if test="not(parent::interface)">
+				<xsl:choose>
+					<xsl:when test="@contract='Abstract'">
+						<xsl:text>MustOverride&#160;</xsl:text>
+					</xsl:when>
+					<xsl:when test="@contract='Final'">
+						<xsl:text>NotOverridable&#160;</xsl:text>
+					</xsl:when>
+					<xsl:when test="@contract='Override'">
+						<xsl:text>Overrides&#160;</xsl:text>
+					</xsl:when>
+					<xsl:when test="@contract='Virtual'">
+						<xsl:text>Overridable&#160;</xsl:text>
+					</xsl:when>
+				</xsl:choose>
+				<xsl:if test="@overload">
+					<xsl:text>Overloads&#160;</xsl:text>
+				</xsl:if>
+				<xsl:call-template name="vb-method-access">
+					<xsl:with-param name="access" select="@access" />
+				</xsl:call-template>
+				<xsl:text>&#160;</xsl:text>
+				<xsl:if test="@contract='Static'">
+					<xsl:text>Shared&#160;</xsl:text>
+				</xsl:if>
+				<xsl:if test="@name = 'Item'">
+					<xsl:text>Default&#160;</xsl:text>
+				</xsl:if>
+				<xsl:if test="@set != 'true'">
+					<xsl:text>ReadOnly&#160;</xsl:text>
+				</xsl:if>
+			</xsl:if>
+			<xsl:text>Property&#160;</xsl:text>
+			<xsl:value-of select="@name" />
+			<xsl:if test="@name='Item'">
+				<xsl:call-template name="vb-parameters" />
+			</xsl:if>
+			<xsl:text>&#160;As&#160;</xsl:text>
+			<a>
+				<xsl:attribute name="href">
+					<xsl:call-template name="get-filename-for-type-name">
+						<xsl:with-param name="type-name" select="@type" />
+					</xsl:call-template>
+				</xsl:attribute>
+				<xsl:call-template name="strip-namespace">
+					<xsl:with-param name="name" select="@type" />
+				</xsl:call-template>
+			</a>
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
