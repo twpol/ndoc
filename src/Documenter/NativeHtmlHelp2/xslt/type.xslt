@@ -7,6 +7,7 @@
 	<xsl:output method="html" indent="no" encoding="utf-8" version="3.2" doctype-public="-//W3C//DTD HTML 3.2 Final//EN" />
 	<!-- -->
 	<xsl:include href="common.xslt" />
+	<xsl:include href="syntax.xslt" />
 	<!-- -->
 	<xsl:param name='type-id' />
 	<!-- -->
@@ -27,9 +28,7 @@
 	<xsl:template name="draw-hierarchy">
 		<xsl:param name="list" />
 		<xsl:param name="level" />
-		<!-- this is commented out because XslTransform is throwing an InvalidCastException in it. -->
 		<xsl:if test="count($list) &gt; 0">
-			<!-- last() is causing an InvalidCastException in Beta 2. -->
 			<xsl:variable name="last" select="count($list)" />
 			<xsl:call-template name="indent">
 				<xsl:with-param name="count" select="$level" />
@@ -91,7 +90,7 @@
 				<div id="nstext" valign="bottom">
 					<xsl:call-template name="summary-section" />
 					<xsl:if test="local-name()!='delegate' and local-name()!='enumeration'">
-						<xsl:variable name="members-href" select="NUtil:GetTypeMembersHRef( string( @id ) )"/>
+						<xsl:variable name="members-href" select="NUtil:GetOverviewHRef( string( @id ), 'Members' )"/>
 						<xsl:if test="constructor|field|property|method|operator|event">
 							<p>For a list of all members of this type, see <a href="{$members-href}"><xsl:value-of select="@name" /> Members</a>.</p>
 						</xsl:if>

@@ -37,7 +37,7 @@
 					<xsl:when test="*[local-name()=$member and @name!='op_Implicit' and @name!='op_Explicit']">
 						<xsl:choose>
 							<xsl:when test="*[local-name()=$member and (@name='op_Implicit' or @name='op_Explicit')]">
-							Operators and Type Conversions
+							<xsl:text>Operators and Type Conversions</xsl:text>
 							</xsl:when>
 							<xsl:otherwise>Operators</xsl:otherwise>
 						</xsl:choose>
@@ -465,9 +465,8 @@
 				
 				<xsl:text> (inherited from </xsl:text>
 				<b>
-					<xsl:call-template name="get-datatype">
-						<xsl:with-param name="datatype" select="@declaringType" />
-						<xsl:with-param name="lang" select="'C#'"/>								
+					<xsl:call-template name="strip-namespace">
+						<xsl:with-param name="name" select="@declaringType" />
 					</xsl:call-template>
 				</b>
 				<xsl:text>)</xsl:text>
@@ -503,7 +502,7 @@
 								<img src="intmethod.gif" />
 							</xsl:when>
 						  </xsl:choose>
-							<a href="{NUtil:GetConstructorOverloadHRef( string( ../@id ) )}">
+							<a href="{NUtil:GetOverviewHRef( string( ../@id ), 'Constructor' )}">
 								<xsl:value-of select="../@name" />
 							</a>
 							<xsl:call-template name="member-list-platform"/>							
@@ -603,7 +602,7 @@
 								<xsl:with-param name="contract" select="@contract" />
 								<xsl:with-param name="local-name" select="local-name()" />
 							</xsl:call-template>
-							<a href="{NUtil:GetMemberHRef( . )}">
+							<a href="{NUtil:GetLocalCRef( ./@id )}">
 								<xsl:choose>
 									<xsl:when test="local-name()='operator'">
 										<xsl:call-template name="operator-name">

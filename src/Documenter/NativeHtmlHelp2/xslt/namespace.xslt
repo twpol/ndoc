@@ -129,7 +129,7 @@
 	<xsl:template match="enumeration | delegate | structure | interface | class">
 		<tr valign="top">
 			<td width="50%">
-				<a href="{NUtil:GetTypeHRef( string( @id ) ) }">
+				<a href="{NUtil:GetLocalCRef( string( @id ) ) }">
 					<xsl:value-of select="@name" />
 				</a>
 			</td>

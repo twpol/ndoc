@@ -79,8 +79,12 @@
 			</xsl:choose>
 		</xsl:variable> 
 
+		<xsl:variable name="cref">
+			<xsl:value-of select="NUtil:GetLocalCRef( $member/@id )"/>
+		</xsl:variable>
+		
 		<xsl:choose>
-			<xsl:when test="not( //constructor[@id=$mid] | //field[@id=$mid] | //property[@id=$mid] | //method[@id=$mid] | //event[@id=$mid] | //operator[@id=$mid] )">
+			<xsl:when test="$cref=''">
 				<xsl:variable name="a-index" select="NUtil:GetAIndex( $mid )"/>
 				<xsl:call-template name="get-xlink">
 					<xsl:with-param name="a-index" select="$a-index"/>
@@ -96,7 +100,8 @@
 						</a>					
 					</xsl:when>
 					<xsl:otherwise>
-						<a href="{NUtil:GetMemberHRef( $member )}">			
+						<a>
+							<xsl:attribute name="href"><xsl:value-of select="$cref"/></xsl:attribute> 			
 							<xsl:value-of select="$link-text"/> 
 						</a>					
 					</xsl:otherwise>
@@ -120,8 +125,12 @@
 			</xsl:choose>
 		</xsl:variable> 
 
+		<xsl:variable name="cref">
+			<xsl:value-of select="NUtil:GetLocalCRef( $mid )"/>
+		</xsl:variable>
+		
 		<xsl:choose>
-			<xsl:when test="not( //constructor[@id=$mid] | //field[@id=$mid] | //property[@id=$mid] | //method[@id=$mid] | //event[@id=$mid] | //operator[@id=$mid] )">
+			<xsl:when test="$cref=''">
 				<xsl:variable name="a-index" select="NUtil:GetAIndex( $mid )"/>
 				<xsl:call-template name="get-xlink">
 					<xsl:with-param name="a-index" select="$a-index"/>
@@ -160,15 +169,20 @@
 		<xsl:param name="type"/>
 		<xsl:param name="link-text"/>
 
+		<xsl:variable name="cref">
+			<xsl:value-of select="NUtil:GetLocalCRef( $type/@id )"/>
+		</xsl:variable>
+		
 		<xsl:choose>
-			<xsl:when test="not( //class[@id=$type] | //interface[@id=$type] | //structure[@id=$type] | //delegate[@id=$type] | //enumeration[@id=$type] )">
+			<xsl:when test="$cref=''">
 				<xsl:call-template name="get-xlink-for-foreign-type">
 					<xsl:with-param name="type" select="$type"/>
 					<xsl:with-param name="link-text" select="$link-text"/>
 				</xsl:call-template>
 			</xsl:when>
 			<xsl:otherwise>
-				<a href="{NUtil:GetLocalHRef( string( $type ) )}">		
+				<a>
+					<xsl:attribute name="href"><xsl:value-of select="$cref"/></xsl:attribute> 			
 					<xsl:value-of select="$link-text"/> 
 				</a>
 			</xsl:otherwise>

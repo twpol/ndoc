@@ -46,6 +46,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		private ExternalHtmlProvider _htmlProvider;
 		private StyleSheetCollection _stylesheets;
 
+		private FileNameMapper  fileNameMapper;
 		private NamespaceMapper nsMapper;
 
 		private XPathDocument xPathDocumentation;	// XPath version of the xmlDocumentation node (improves performance)
@@ -76,9 +77,10 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			xmlDocumentation = documentationNode;
 			documentedNamespaces = new ArrayList();
 		
+			fileNameMapper = new FileNameMapper(documentationNode);
 			nsMapper = new NamespaceMapper( Path.Combine( Directory.GetParent( _outputDirectory ).ToString(), "NamespaceMap.xml" ) );
 			_htmlProvider = htmlProvider;
-			_utilities = new MsdnXsltUtilities( this.nsMapper );
+			_utilities = new MsdnXsltUtilities( this.nsMapper, this.fileNameMapper );
 
 			this.Arguments = new XsltArgumentList();
 			this.Arguments.AddExtensionObject( "urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities", _utilities );
@@ -240,7 +242,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			{
 				documentedNamespaces.Add( namespaceName );
 				
-				string fileName = FileNameMapper.GetFilenameForNamespace( namespaceName );
+				string fileName = fileNameMapper["N:" + namespaceName];
 
 				this.Arguments.AddParam( "namespace", String.Empty, namespaceName );
 				TransformAndWriteResult( "namespace", fileName );
@@ -291,7 +293,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			string typeName = typeNode.Attributes["name"].Value;
 			string typeID = typeNode.Attributes["id"].Value;
 
-			string fileName = FileNameMapper.GetFilenameForType( typeNode );
+			string fileName = fileNameMapper[typeID];
 
 			this.Arguments.AddParam( "type-id", String.Empty, typeID );
 			TransformAndWriteResult( "type", fileName );
@@ -305,7 +307,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			string typeName = typeNode.Attributes["name"].Value;
 			string typeID = typeNode.Attributes["id"].Value;
 
-			string fileName = FileNameMapper.GetFilenameForType( typeNode );
+			string fileName = fileNameMapper[typeID];
 
 			this.Arguments.AddParam( "type-id", String.Empty, typeID );
 			TransformAndWriteResult( "type", fileName );
@@ -315,7 +317,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 
 			if ( typeNode.SelectNodes( "constructor|field|property|method|operator|event" ).Count > 0 )
 			{
-				fileName = FileNameMapper.GetFilenameForTypeMembers(typeNode);
+				fileName = FileNameMapper.GetFilenameForOverviewPage(typeID,"Members");
 
 				this.Arguments.AddParam( "id", String.Empty, typeID );
 				TransformAndWriteResult( "allmembers", fileName );
@@ -344,7 +346,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			if ( constructorNodes.Count > 1 )
 			{
 				string constructorID = constructorNodes[0].Attributes["id"].Value;
-				string fileName = FileNameMapper.GetFilenameForConstructors(typeNode);
+				string fileName = FileNameMapper.GetFilenameForOverviewPage(typeID,"Constructor");
 
 				this.Arguments.AddParam( "member-id", String.Empty, constructorID );
 				TransformAndWriteResult( "memberoverload", fileName );
@@ -356,7 +358,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			foreach ( XmlNode constructorNode in constructorNodes )
 			{
 				string constructorID = constructorNode.Attributes["id"].Value;
-				string fileName = FileNameMapper.GetFilenameForConstructor( constructorNode );
+				string fileName = fileNameMapper[constructorID];
 
 				this.Arguments.AddParam( "member-id", String.Empty, constructorID );
 				TransformAndWriteResult( "member", fileName );
@@ -372,7 +374,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			if ( staticConstructorNode != null )
 			{
 				string constructorID = staticConstructorNode.Attributes["id"].Value;
-				string fileName = FileNameMapper.GetFilenameForConstructor( staticConstructorNode );
+				string fileName = fileNameMapper[constructorID];
 
 				this.Arguments.AddParam( "member-id", String.Empty, constructorID );
 				TransformAndWriteResult( "member", fileName );
@@ -390,7 +392,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			{
 				string typeName = typeNode.Attributes["name"].Value;
 				string typeID = typeNode.Attributes["id"].Value;
-				string fileName = FileNameMapper.GetFilenameForTypeFields( typeNode );
+				string fileName = FileNameMapper.GetFilenameForOverviewPage( typeID,"Fields" );
 
 				this.Arguments.AddParam( "id", String.Empty, typeID );
 				this.Arguments.AddParam( "member-type", String.Empty, "field" );
@@ -409,7 +411,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 					string fieldName = field.Attributes["name"].Value;
 					string fieldID = field.Attributes["id"].Value;
 
-					fileName = FileNameMapper.GetFilenameForField( field );
+					fileName = fileNameMapper[fieldID];
 
 					this.Arguments.AddParam( "field-id", String.Empty, fieldID );
 					TransformAndWriteResult( "field", fileName );
@@ -437,7 +439,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 
 				int[] indexes = SortNodesByAttribute( propertyNodes, "id" );
 
-				string fileName = FileNameMapper.GetFilenameForTypeProperties( typeNode );
+				string fileName = FileNameMapper.GetFilenameForOverviewPage( typeID, "Properties" );
 
 				this.Arguments.AddParam( "id", String.Empty, typeID );
 				this.Arguments.AddParam( "member-type", String.Empty, "property" );
@@ -461,7 +463,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 
 					if ( ( previousPropertyName != propertyName ) && ( nextPropertyName == propertyName ) )
 					{
-						fileName = FileNameMapper.GetFilenameForPropertyOverloads( typeNode, propertyNode );
+						fileName = FileNameMapper.GetFilenameForPropertyOverloads( typeID, propertyName );
 
 						this.Arguments.AddParam( "member-id", String.Empty, propertyID );
 						TransformAndWriteResult( "memberoverload", fileName );
@@ -470,7 +472,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 						OnTopicStart( fileName );
 					}
 
-					fileName = FileNameMapper.GetFilenameForProperty( propertyNode );
+					fileName = fileNameMapper[propertyID];
 
 					this.Arguments.AddParam( "property-id", String.Empty, propertyID );
 					TransformAndWriteResult( "property", fileName );
@@ -499,7 +501,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 
 				int[] indexes = SortNodesByAttribute( methodNodes, "id" );
 
-				string fileName = FileNameMapper.GetFilenameForTypeMethods( typeNode );
+				string fileName = FileNameMapper.GetFilenameForOverviewPage( typeID, "Methods" );
 
 				this.Arguments.AddParam( "id", String.Empty, typeID );
 				this.Arguments.AddParam( "member-type", String.Empty, "method" );
@@ -519,7 +521,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 					{
 						bOverloaded = true;
 
-						fileName = FileNameMapper.GetFilenameForMethodOverloads( typeNode, methodNode );
+						fileName = FileNameMapper.GetFilenameForMethodOverloads( typeID, methodName );
 
 						this.Arguments.AddParam( "member-id", String.Empty, methodID );
 						TransformAndWriteResult( "memberoverload", fileName );
@@ -530,7 +532,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 
 					if ( methodNode.Attributes["declaringType"] == null )
 					{
-						fileName = FileNameMapper.GetFilenameForMethod( methodNode );
+						fileName = fileNameMapper[methodID];
 
 						this.Arguments.AddParam( "member-id", String.Empty, methodID );
 						TransformAndWriteResult( "member", fileName );
@@ -563,7 +565,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 					string typeName = typeNode.Attributes["name"].Value;
 					string typeID = typeNode.Attributes["id"].Value;
 
-					string fileName = FileNameMapper.GetFilenameForTypeEvents( typeNode );
+					string fileName = FileNameMapper.GetFilenameForOverviewPage( typeID, "Events" );
 
 					this.Arguments.AddParam( "id", String.Empty, typeID );
 					this.Arguments.AddParam( "member-type", String.Empty, "event" );
@@ -584,7 +586,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 							string eventName = eventElement.Attributes["name"].Value;
 							string eventID = eventElement.Attributes["id"].Value;
 
-							fileName = FileNameMapper.GetFilenameForEvent( eventElement );
+							fileName = fileNameMapper[eventID];
 
 							this.Arguments.AddParam( "event-id", String.Empty, eventID );
 							TransformAndWriteResult( "event", fileName );
@@ -610,7 +612,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 				XmlNodeList opNodes = typeNode.SelectNodes( "operator" );
 				bool bOverloaded = false;
 
-				string fileName = FileNameMapper.GetFilenameForTypeOperators( typeNode );
+				string fileName = FileNameMapper.GetFilenameForOverviewPage( typeID, "Operators" );
 				
 				this.Arguments.AddParam( "id", String.Empty, typeID );
 				this.Arguments.AddParam( "member-type", String.Empty, "operator" );
@@ -635,7 +637,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 						{
 							bOverloaded = true;
 
-							fileName = FileNameMapper.GetFilenameForOperatorsOverloads( typeNode, operatorNode );
+							fileName = FileNameMapper.GetFilenameForOperatorsOverloads( typeID, opName );
 
 							this.Arguments.AddParam( "member-id", String.Empty, operatorID );
 							TransformAndWriteResult( "memberoverload", fileName );
@@ -644,7 +646,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 							OnTopicStart( fileName );
 						}
 
-						fileName = FileNameMapper.GetFilenameForOperator( operatorNode );
+						fileName = fileNameMapper[operatorID];
 
 						this.Arguments.AddParam( "member-id", String.Empty, operatorID );
 						TransformAndWriteResult( "member", fileName);
@@ -664,13 +666,14 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 				for ( int i = 0; i < opNodes.Count; i++ )
 				{
 					XmlNode operatorNode = operators[indexes[i]];
+					string operatorID = operatorNode.Attributes["id"].Value;
 					string opName = operatorNode.Attributes["name"].Value;
 
 					if ( ( opName == "op_Implicit" ) || ( opName == "op_Explicit" ) )
 					{
-						fileName = FileNameMapper.GetFilenameForOperator( operatorNode );
+						fileName = fileNameMapper[operatorID];
 
-						this.Arguments.AddParam( "member-id", String.Empty, operatorNode.Attributes["id"].Value );
+						this.Arguments.AddParam( "member-id", String.Empty, operatorID );
 						TransformAndWriteResult( "member", fileName );
 						this.Arguments.RemoveParam( "member-id", String.Empty );
 

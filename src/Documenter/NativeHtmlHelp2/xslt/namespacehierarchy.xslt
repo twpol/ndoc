@@ -92,18 +92,16 @@
 					<xsl:variable name="base-class" select="//class[@id=$base-class-id]" />
 					<xsl:choose>
 						<xsl:when test="$base-class">
-						<a href="{NUtil:GetTypeHRef( string( $base-class-id ) ) }">
-								<xsl:call-template name="get-datatype">
-									<xsl:with-param name="datatype" select="$head/@type" />
-									<xsl:with-param name="lang" select="'C#'"/>								
+						<a href="{NUtil:GetLocalCRef( string( $base-class-id ) ) }">
+								<xsl:call-template name="strip-namespace">
+									<xsl:with-param name="name" select="$head/@type" />
 								</xsl:call-template>
 								<xsl:value-of select="substring-after($head/@id, 'T:')"/>
 							</a>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:call-template name="get-datatype">
-								<xsl:with-param name="datatype" select="$head/@type" />
-								<xsl:with-param name="lang" select="'C#'"/>
+							<xsl:call-template name="strip-namespace">
+								<xsl:with-param name="name" select="$head/@type" />
 							</xsl:call-template>
 							<xsl:value-of select="substring-after($head/@id, 'T:')"/>
 						</xsl:otherwise>
@@ -138,7 +136,7 @@
 	<!-- -->
 	<xsl:template match="interface">
 		<p>
-			<a href="{NUtil:GetTypeHRef( string( @id ) ) }">
+			<a href="{NUtil:GetLocalCRef( string( @id ) ) }">
 				<xsl:value-of select="@name" />
 			</a>
 		</p>

@@ -5,6 +5,7 @@
 	<xsl:output method="html" indent="no" encoding="utf-8" version="3.2" doctype-public="-//W3C//DTD HTML 3.2 Final//EN" />
 	<!-- -->
 	<xsl:include href="common.xslt" />
+	<xsl:include href="syntax.xslt" />
 	<!-- -->
 	<xsl:param name='member-id' />
 	<!-- -->

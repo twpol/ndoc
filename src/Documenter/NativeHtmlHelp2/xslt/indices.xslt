@@ -109,7 +109,7 @@
 		<xsl:variable name="filename">
 			<xsl:choose>
 				<xsl:when test="$overload-page=true()">
-					<xsl:value-of select="NUtil:GetConstructorOverloadHRef( string( ../@id ) )"/>								
+					<xsl:value-of select="NUtil:GetOverviewHRef( string( ../@id ), 'Constructor' )"/>								
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:value-of select="NUtil:GetConstructorHRef( . )"/>				
@@ -126,22 +126,28 @@
 		<xsl:variable name="filename">
 			<xsl:choose>
 				<xsl:when test="$page-type='Members'">
-					<xsl:value-of select="NUtil:GetTypeMembersHRef( string( @id ) )"/>				
+					<xsl:value-of select="NUtil:GetOverviewHRef( string( @id ), 'Members' )"/>				
 				</xsl:when>
 				<xsl:when test="$page-type='Properties'">
-					<xsl:value-of select="NUtil:GetTypePropertiesHRef( string( @id ) )"/>				
+					<xsl:value-of select="NUtil:GetOverviewHRef( string( @id ), 'Properties' )"/>				
 				</xsl:when>
 				<xsl:when test="$page-type='Events'">
-					<xsl:value-of select="NUtil:GetTypeEventsHRef( string( @id ) )"/>				
+					<xsl:value-of select="NUtil:GetOverviewHRef( string( @id ), 'Events' )"/>				
 				</xsl:when>
 				<xsl:when test="$page-type='Operators'">
-					<xsl:value-of select="NUtil:GetTypeOperatorsHRef( string( @id ) )"/>				
+					<xsl:value-of select="NUtil:GetOverviewHRef( string( @id ), 'Operators' )"/>				
+				</xsl:when>
+				<xsl:when test="$page-type='Type Conversions'">
+					<xsl:value-of select="NUtil:GetOverviewHRef( string( @id ), 'Operators' )"/>				
+				</xsl:when>
+				<xsl:when test="$page-type='Operators and Type Conversions'">
+					<xsl:value-of select="NUtil:GetOverviewHRef( string( @id ), 'Operators' )"/>				
 				</xsl:when>
 				<xsl:when test="$page-type='Methods'">
-					<xsl:value-of select="NUtil:GetTypeMethodsHRef( string( @id ) )"/>				
+					<xsl:value-of select="NUtil:GetOverviewHRef( string( @id ), 'Methods' )"/>				
 				</xsl:when>
 				<xsl:when test="$page-type='Fields'">
-					<xsl:value-of select="NUtil:GetTypeFieldsHRef( string( @id ) )"/>				
+					<xsl:value-of select="NUtil:GetOverviewHRef( string( @id ), 'Fields' )"/>				
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:value-of select="NUtil:GetTypeHRef( string( @id ) )"/>
@@ -308,6 +314,18 @@
 				<xsl:call-template name="add-index-term">
 					<xsl:with-param name="index">K</xsl:with-param>
 					<xsl:with-param name="term" select="concat( @name, ' ', local-name(), ', operators' )"/>
+				</xsl:call-template>									
+			</xsl:when>
+			<xsl:when test="$page-type='Type Conversions'">
+				<xsl:call-template name="add-index-term">
+					<xsl:with-param name="index">K</xsl:with-param>
+					<xsl:with-param name="term" select="concat( @name, ' ', local-name(), ', type conversions' )"/>
+				</xsl:call-template>									
+			</xsl:when>
+			<xsl:when test="$page-type='Operators and Type Conversions'">
+				<xsl:call-template name="add-index-term">
+					<xsl:with-param name="index">K</xsl:with-param>
+					<xsl:with-param name="term" select="concat( @name, ' ', local-name(), ', operators and type conversions' )"/>
 				</xsl:call-template>									
 			</xsl:when>
 			<xsl:when test="$page-type='Methods'">

@@ -56,7 +56,7 @@
 						<xsl:text> </xsl:text>
 						<xsl:value-of select="local-name()" />
 						<xsl:text> members, see the </xsl:text>
-						<a href="{NUtil:GetTypeMembersHRef( string( @id ) )}">
+						<a href="{NUtil:GetOverviewHRef( string( @id ), 'Members' )}">
 							<xsl:value-of select="@name" />
 							<xsl:text> Members</xsl:text>
 						</a>

@@ -34,15 +34,18 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		private Hashtable descriptions;
 
 		private NamespaceMapper nsMapper;
+		private FileNameMapper _fileMapper;
 
 		/// <summary>
 		/// Initializes a new instance of class MsdnXsltUtilities
 		/// </summary>
 		/// <param name="mapper">The namespace mapper used to look up XLink help namespace for foreign types</param>	
-		public MsdnXsltUtilities( NamespaceMapper mapper )
+		/// <param name="fileMapper">The mapper used to look up local filenames</param>	
+		public MsdnXsltUtilities( NamespaceMapper mapper, FileNameMapper fileMapper )
 		{
 			ResetDescriptions();
 			nsMapper = mapper;
+			_fileMapper = fileMapper;
 		}
 
 		/// <summary>
@@ -87,73 +90,14 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		}
 
 		/// <summary>
-		/// Gets the href for the all members topic of a type
+		/// Gets the href for an overview page
 		/// </summary>
 		/// <param name="typeID">The id of the type</param>
+		/// <param name="pageType">The type of overview page to generate</param>
 		/// <returns>Relative HRef to the Topic</returns>
-		public string GetTypeMembersHRef( string typeID )
+		public string GetOverviewHRef( string typeID, string pageType )
 		{
-			return FileNameMapper.GetFilenameForTypeMembers( typeID );
-		}
-
-		/// <summary>
-		/// Gets the href for the fields topic for a type
-		/// </summary>
-		/// <param name="typeID">The id of the type</param>
-		/// <returns>Relative HRef to the Topic</returns>
-		public string GetTypeFieldsHRef( string typeID )
-		{
-			return FileNameMapper.GetFilenameForTypeProperties( typeID );
-		}
-
-		/// <summary>
-		/// Gets the href for the hethods topic of a type
-		/// </summary>
-		/// <param name="typeID">The id of the type</param>
-		/// <returns>Relative HRef to the Topic</returns>
-		public string GetTypeMethodsHRef( string typeID )
-		{
-			return FileNameMapper.GetFilenameForTypeMethods( typeID );
-		}
-
-		/// <summary>
-		/// Gets the href for the operators topic of a type
-		/// </summary>
-		/// <param name="typeID">The id of the type</param>
-		/// <returns>Relative HRef to the Topic</returns>
-		public string GetTypeOperatorsHRef( string typeID )
-		{
-			return FileNameMapper.GetFilenameForTypeOperators( typeID );
-		}
-
-		/// <summary>
-		/// Gets the href for the events topic of a type
-		/// </summary>
-		/// <param name="typeID">The id of the type</param>
-		/// <returns>Relative HRef to the Topic</returns>
-		public string GetTypeEventsHRef( string typeID )
-		{
-			return FileNameMapper.GetFilenameForTypeEvents( typeID );
-		}
-
-		/// <summary>
-		/// Gets the href for the properties topic of a type
-		/// </summary>
-		/// <param name="typeID">The id of the type</param>
-		/// <returns>Relative HRef to the Topic</returns>
-		public string GetTypePropertiesHRef( string typeID )
-		{
-			return FileNameMapper.GetFilenameForTypeProperties( typeID );
-		}
-
-		/// <summary>
-		/// Gets the href for the constructor overloads topic of a type
-		/// </summary>
-		/// <param name="typeID">The id of the type</param>
-		/// <returns>Relative HRef to the Topic</returns>
-		public string GetConstructorOverloadHRef( string typeID )
-		{
-			return FileNameMapper.GetFilenameForConstructors( typeID );
+			return FileNameMapper.GetFilenameForOverviewPage( typeID, pageType );
 		}
 
 		/// <summary>
@@ -394,6 +338,16 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 				case "M:":	return GetMethodHRef( typeID, memberName ) ;
 				default:	return string.Empty;
 			}
+		}
+
+		/// <summary>
+		/// gets the filename for a local cref 
+		/// </summary>
+		/// <param name="cref">The cref to link to</param>
+		/// <returns>a filename</returns>
+		public string GetLocalCRef(string cref)
+		{
+			return _fileMapper[cref];
 		}
 
 		/// <summary>

@@ -4,8 +4,6 @@
 	xmlns:NHtmlProvider="urn:NDocExternalHtml"
 	xmlns:MSHelp="http://msdn.microsoft.com/mshelp"
 	exclude-result-prefixes="NUtil NHtmlProvider" >
-	<!-- -->
-	<xsl:include href="syntax.xslt" />
 	<xsl:include href="tags.xslt" />
 	<xsl:include href="indices.xslt" />
 	<xsl:include href="XLinks.xslt" />
@@ -146,7 +144,7 @@
 				<xsl:text> | </xsl:text>
 			</xsl:if>
 			<xsl:if test="(constructor|field|property|method|operator|event) and $page!='members' and $page!='enumeration' and $page!='delegate' and $page!='methods' and $page!='properties' and $page!='fields' and $page!='events'">
-				<a href="{NUtil:GetTypeMembersHRef( string( $typeID ) )}">
+				<a href="{NUtil:GetOverviewHRef( string( $typeID ), 'Members' )}">
 					<xsl:value-of select="$typeName" />
 					<xsl:text> Members</xsl:text>
 				</a>
@@ -162,7 +160,7 @@
 					<xsl:choose>
 						<xsl:when test="local-name()='constructor'">
  				      <xsl:text> | </xsl:text>
-							<a href="{NUtil:GetConstructorOverloadHRef( string( ../@id ) )}">
+							<a href="{NUtil:GetOverviewHRef( string( ../@id ), 'Constructor' )}">
 								<xsl:value-of select="$typeName" />
 								<xsl:text> Constructor Overload List</xsl:text>
 							</a>
@@ -411,28 +409,6 @@
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
-	<xsl:template name="syntax-section">
-		<xsl:if test="$ndoc-omit-syntax = false()">
-			<xsl:apply-templates select="." mode="pre-syntax"/>
-			<xsl:text>&#10;</xsl:text>
-			<PRE class="syntax">
-			<xsl:apply-templates select="." mode="syntax">
-				<xsl:with-param name="lang" select="'Visual Basic'"/>
-			</xsl:apply-templates>
-			<xsl:apply-templates select="." mode="syntax">
-				<xsl:with-param name="lang" select="'C#'"/>
-			</xsl:apply-templates>
-			<xsl:apply-templates select="." mode="syntax">
-				<xsl:with-param name="lang" select="'C++'"/>
-			</xsl:apply-templates>	
-			<xsl:apply-templates select="." mode="syntax">
-				<xsl:with-param name="lang" select="'JScript'"/>
-			</xsl:apply-templates>
-			</PRE>	
-			<xsl:apply-templates select="." mode="post-syntax"/>
-			<xsl:apply-templates select="documentation/node()" mode="syntax-section"/>			
-		</xsl:if>
-	</xsl:template>
 	<xsl:template name="remarks-section">
 		<xsl:if test="documentation/remarks">
 			<h4 class="dtH4">Remarks</h4>
@@ -569,9 +545,11 @@
 	<!-- get-a-href -->
 	<xsl:template name="get-a-href">
 		<xsl:param name="cref" />
-
+		<xsl:variable name="filename">
+			<xsl:value-of select="NUtil:GetLocalCRef( $cref )"/>
+		</xsl:variable>
 		<xsl:choose>
-			<xsl:when test="not( //node()[@id = $cref][local-name() != 'base'] )">
+			<xsl:when test="$filename=''">
 				<xsl:call-template name="get-xlink">
 					<xsl:with-param name="a-index" select="NUtil:GetAIndex( $cref )"/>
 					<xsl:with-param name="link-text" select="string(NUtil:GetName($cref))"/>	
@@ -579,7 +557,8 @@
 				</xsl:call-template>	
 			</xsl:when>
 			<xsl:otherwise>
-				<a href="{NUtil:GetLocalHRef($cref)}">
+				<a>
+					<xsl:attribute name="href"><xsl:value-of select="$filename"/></xsl:attribute> 			
 					<xsl:choose>
 						<xsl:when test="node()">
 							<xsl:value-of select="." />
@@ -606,7 +585,6 @@
 				<xsl:apply-templates select="." mode="MSHelpTitle">
 					<xsl:with-param name="title" select="$title"/>
 					<xsl:with-param name="page-type" select="$page-type"/>						
-					<!--xsl:with-param name="overload-page" select="$overload-page"/-->
 				</xsl:apply-templates>
 				
 				<xsl:choose>

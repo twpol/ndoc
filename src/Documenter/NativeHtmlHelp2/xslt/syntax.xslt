@@ -10,6 +10,28 @@
 	<xsl:param name="ndoc-document-attributes" />
 	<xsl:param name="ndoc-documented-attributes" />
 	<!-- -->
+	<xsl:template name="syntax-section">
+	
+		<xsl:apply-templates select="." mode="pre-syntax"/>
+		<xsl:text>&#10;</xsl:text>
+		<PRE class="syntax">
+		<xsl:apply-templates select="." mode="syntax">
+			<xsl:with-param name="lang" select="'Visual Basic'"/>
+		</xsl:apply-templates>
+		<xsl:apply-templates select="." mode="syntax">
+			<xsl:with-param name="lang" select="'C#'"/>
+		</xsl:apply-templates>
+		<xsl:apply-templates select="." mode="syntax">
+			<xsl:with-param name="lang" select="'C++'"/>
+		</xsl:apply-templates>	
+		<xsl:apply-templates select="." mode="syntax">
+			<xsl:with-param name="lang" select="'JScript'"/>
+		</xsl:apply-templates>
+		</PRE>	
+		<xsl:apply-templates select="." mode="post-syntax"/>
+		
+	</xsl:template>
+	<!-- -->
 	<xsl:template name="syntax-header">	
 		<xsl:param name="lang"/>
 		
