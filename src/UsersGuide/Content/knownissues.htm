@@ -56,6 +56,17 @@
 						<P>This issue will be addressed in a future version of NDoc.</P>
 					</TD>
 				</TR>
+				<TR vAlign="top">
+					<TD>Assemblies to be documented must reside on a local drive</TD>
+					<TD>
+						<P>Assemblies to be documented must reside on the machine on which NDoc executes. 
+							If they do not, SecurityExceptions will be raised.</P>
+						<P>This is due to the strict security the CLR places on reflection.</P>
+						<P>There is no work-around for this issue (<i>without severely compromising the 
+								security of your machine!</i>)</P>
+						<P>This issue will be addressed in a future version of NDoc.</P>
+					</TD>
+				</TR>
 			</table>
 		</div>
 	</body>
