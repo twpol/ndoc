@@ -3492,15 +3492,17 @@ namespace NDoc.Core
 					{
 						BuildDerivedMemberXref(type);
 						BuildDerivedInterfaceXref(type);
-						BuildNamespaceHierarchy(type.Namespace, type);
+						string friendlyNamespaceName;
 						if (type.Namespace == null)
 						{
-							notEmptyNamespaces["(global)"] = null;
+							friendlyNamespaceName="(global)";
 						}
 						else
 						{
-							notEmptyNamespaces[type.Namespace] = null;
+							friendlyNamespaceName=type.Namespace;
 						}
+						BuildNamespaceHierarchy(friendlyNamespaceName, type);
+						notEmptyNamespaces[friendlyNamespaceName] = null;
 					}
 				}
 			}
