@@ -47,12 +47,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NativeHtmlHelp2", "src\Docu
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "src\Setup\Setup.vdproj", "{7C556555-331E-4232-B067-917CD6E50277}"
-	ProjectSection(ProjectDependencies) = postProject
-		{ED78444A-4734-41F7-8688-4BA9994BEBF5} = {ED78444A-4734-41F7-8688-4BA9994BEBF5}
-		{DBA75D67-23C9-4A78-ABC2-CF8802FDB7CA} = {DBA75D67-23C9-4A78-ABC2-CF8802FDB7CA}
-	EndProjectSection
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UsersGuide", "src\UsersGuide\UsersGuide.vcproj", "{D250CF6D-13ED-4B69-AE7C-345D7C686B49}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
@@ -109,9 +103,6 @@ Global
 		{5B088ED3-EEED-4DD4-AE4C-A7E9323B634C}.Debug.Build.0 = Debug|.NET
 		{5B088ED3-EEED-4DD4-AE4C-A7E9323B634C}.Release.ActiveCfg = Release|.NET
 		{5B088ED3-EEED-4DD4-AE4C-A7E9323B634C}.Release.Build.0 = Release|.NET
-		{7C556555-331E-4232-B067-917CD6E50277}.Debug.ActiveCfg = Debug
-		{7C556555-331E-4232-B067-917CD6E50277}.Release.ActiveCfg = Release
-		{7C556555-331E-4232-B067-917CD6E50277}.Release.Build.0 = Release
 		{D250CF6D-13ED-4B69-AE7C-345D7C686B49}.Debug.ActiveCfg = Debug|Win32
 		{D250CF6D-13ED-4B69-AE7C-345D7C686B49}.Release.ActiveCfg = Release|Win32
 		{D250CF6D-13ED-4B69-AE7C-345D7C686B49}.Release.Build.0 = Release|Win32
