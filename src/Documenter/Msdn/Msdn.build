@@ -13,7 +13,6 @@
 				<includes name="${nant.settings.currentframework.frameworkassemblydirectory}/System.dll" />
 				<includes name="${nant.settings.currentframework.frameworkassemblydirectory}/System.Xml.dll" />
 				<includes name="${nant.settings.currentframework.frameworkassemblydirectory}/System.Drawing.Design.dll" />
-				<includes name="${nant.settings.currentframework.frameworkassemblydirectory}/System.Windows.Forms.dll" />
 				<includes name="${nant.settings.currentframework.frameworkassemblydirectory}/System.Design.dll" />
 				<includes name="${nant.settings.currentframework.frameworkassemblydirectory}/System.Drawing.dll" />
 				<includes name="${nant.settings.currentframework.frameworkassemblydirectory}/System.Data.dll" />

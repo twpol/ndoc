@@ -15,7 +15,6 @@
 				<includes name="${nant.settings.currentframework.frameworkassemblydirectory}/System.Design.dll" />
 				<includes name="${nant.settings.currentframework.frameworkassemblydirectory}/System.Drawing.Design.dll" />
 				<includes name="${nant.settings.currentframework.frameworkassemblydirectory}/System.Drawing.dll" />
-				<includes name="${nant.settings.currentframework.frameworkassemblydirectory}/System.Windows.Forms.dll" />
 				<includes name="${current.bin.dir}/NDoc.Core.dll" />
 			</references>
 			<resources prefix="NDoc.Documenter.JavaDoc" dynamicprefix="true">
