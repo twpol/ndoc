@@ -99,7 +99,7 @@
     <xsl:param name="declaring-type" />
     <xsl:param name="method-name" />
     <xsl:variable name="type-part" select="translate($declaring-type, '[,]', '')" />
-    <xsl:value-of select="concat($type-part, '.', $method-name, '.html')" />
+    <xsl:value-of select="concat($type-part, '.', $method-name, '_overloads.html')" />
   </xsl:template>
   <!-- -->
   <xsl:template name="get-filename-for-method">
@@ -247,7 +247,7 @@
           </xsl:when>
           <xsl:when test="contains($cref, '(')">
 			<xsl:if test="string-length($overload) &gt; 0">
-	            <xsl:value-of select="concat(translate(substring-after(substring-before($cref, '('), 'M:'), '[,]', ''), '_overload_', $overload)" />
+	            <xsl:value-of select="concat(translate(substring-after(substring-before($cref, '('), 'M:'), '[,]', ''), '_overload_', $overload, '.html')" />
 			</xsl:if>
 			<xsl:if test="string-length($overload) = 0">
             <xsl:value-of select="concat(translate(substring-after(substring-before($cref, '('), 'M:'), '[,]', ''), $overload, '.html')" />
@@ -255,7 +255,7 @@
           </xsl:when>
           <xsl:otherwise>
 			<xsl:if test="string-length($overload) &gt; 0">
-				<xsl:value-of select="concat(translate(substring-after($cref, 'M:'), '[,]', ''), '_overload_', $overload)" />
+				<xsl:value-of select="concat(translate(substring-after($cref, 'M:'), '[,]', ''), '_overload_', $overload, '.html')" />
 			</xsl:if>
 			<xsl:if test="string-length($overload) = 0">
 				<xsl:value-of select="concat(translate(substring-after($cref, 'M:'), '[,]', ''), $overload, '.html')" />
