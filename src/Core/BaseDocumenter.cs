@@ -2700,11 +2700,10 @@ namespace NDoc.Core
 			XmlWriter writer,
 			string memberName)
 		{
-			if (MyConfig.ShowMissingSummaries || MyConfig.ShowMissingRemarks)
+			if (MyConfig.ShowMissingSummaries)
 			{
-				string xmldoc=assemblyDocCache.GetDoc(memberName);
 				bool bMissingSummary=true;
-				bool bMissingRemarks=true;
+				string xmldoc=assemblyDocCache.GetDoc(memberName);
 
 				if (xmldoc!=null)
 				{
@@ -2719,27 +2718,47 @@ namespace NDoc.Core
 								if (summarydetails.Length>0 && !summarydetails.Trim().StartsWith("Summary description for"))
 								{
 									bMissingSummary=false;
-								}
-							}
-							if (reader.Name=="remarks")
-							{
-								string remarksdetails =reader.ReadInnerXml();
-								if (remarksdetails.Length>0)
-								{
-									bMissingRemarks=false;
+									break;
 								}
 							}
 						}
 					}
 				}
 
-				if (MyConfig.ShowMissingSummaries && bMissingSummary)
+				if (bMissingSummary)
 				{
 					WriteMissingDocumentation(writer, "summary", null,
 						"Missing <summary> documentation for " + memberName);
+					Debug.WriteLine("@@missing@@\t" + memberName);
+				}
+			}
+
+			if (MyConfig.ShowMissingRemarks)
+			{
+				bool bMissingRemarks=true;
+				string xmldoc=assemblyDocCache.GetDoc(memberName);
+
+				if (xmldoc!=null)
+				{
+					XmlTextReader reader= new XmlTextReader(xmldoc,XmlNodeType.Element,null);
+					while (reader.Read()) 
+					{
+						if (reader.NodeType == XmlNodeType.Element) 
+						{
+							if (reader.Name=="remarks")
+							{
+								string remarksdetails =reader.ReadInnerXml();
+								if (remarksdetails.Length>0)
+								{
+									bMissingRemarks=false;
+									break;
+								}
+							}
+						}
+					}
 				}
 
-				if (MyConfig.ShowMissingRemarks && bMissingRemarks)
+				if (bMissingRemarks)
 				{
 					WriteMissingDocumentation(writer, "remarks", null,
 						"Missing <remarks> documentation for " + memberName);
