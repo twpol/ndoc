@@ -95,8 +95,16 @@ namespace NDoc.Core
 
 		/// <summary>See <see cref="IDocumenter"/>.</summary>
 		abstract public void Clear();
+
+		/// <summary>See <see cref="IDocumenter"/>.</summary>
+		public virtual string CanBuild()
+		{
+			return null;
+		}
+
 		/// <summary>See <see cref="IDocumenter"/>.</summary>
 		abstract public void Build(Project project);
+
 		/// <summary>See <see cref="IDocumenter"/>.</summary>
 		abstract public void View();
 
@@ -124,7 +132,7 @@ namespace NDoc.Core
 
 				int step = 100 / project.AssemblySlashDocCount;
 				int i = 0;
-  
+
 				foreach (AssemblySlashDoc assemblySlashDoc in project.GetAssemblySlashDocs())
 				{
 					OnDocBuildingProgress(i * step);
@@ -179,8 +187,8 @@ namespace NDoc.Core
 
 		private bool MustDocumentMethod( MethodBase method )
 		{
-			return (method.IsPublic || 
-				(method.IsFamily && MyConfig.DocumentProtected) || 
+			return (method.IsPublic ||
+				(method.IsFamily && MyConfig.DocumentProtected) ||
 				(method.IsFamilyOrAssembly && MyConfig.DocumentProtected) ||
 				(method.IsAssembly && MyConfig.DocumentInternals) ||
 				(method.IsFamilyAndAssembly && MyConfig.DocumentInternals) ||
@@ -189,8 +197,8 @@ namespace NDoc.Core
 
 		private bool MustDocumentField( FieldInfo field )
 		{
-			return (field.IsPublic || 
-				(field.IsFamily && MyConfig.DocumentProtected) || 
+			return (field.IsPublic ||
+				(field.IsFamily && MyConfig.DocumentProtected) ||
 				(field.IsFamilyOrAssembly && MyConfig.DocumentProtected) ||
 				(field.IsAssembly && MyConfig.DocumentInternals) ||
 				(field.IsFamilyAndAssembly && MyConfig.DocumentInternals) ||
@@ -315,7 +323,7 @@ namespace NDoc.Core
 				{
 					tempWriter.Close();
 
-					if (nbClasses == 0 && nbInterfaces == 0 && nbStructures == 0 && 
+					if (nbClasses == 0 && nbInterfaces == 0 && nbStructures == 0 &&
 						nbDelegates == 0 && nbEnums == 0)
 					{
 						Trace.WriteLine(string.Format("Discarding namespace {0} because it does not contain any documented types.", namespaceName));
@@ -335,8 +343,8 @@ namespace NDoc.Core
 
 			foreach (Type type in types)
 			{
-				if (type.IsClass && 
-					!IsDelegate(type) && 
+				if (type.IsClass &&
+					!IsDelegate(type) &&
 					type.Namespace == namespaceName &&
 					MustDocumentType(type))
 				{
@@ -354,7 +362,7 @@ namespace NDoc.Core
 
 			foreach (Type type in types)
 			{
-				if (type.IsInterface && 
+				if (type.IsInterface &&
 					type.Namespace == namespaceName &&
 					MustDocumentType(type))
 				{
@@ -372,8 +380,8 @@ namespace NDoc.Core
 
 			foreach (Type type in types)
 			{
-				if (type.IsValueType && 
-					!type.IsEnum && 
+				if (type.IsValueType &&
+					!type.IsEnum &&
 					type.Namespace == namespaceName &&
 					MustDocumentType(type))
 				{
@@ -391,8 +399,8 @@ namespace NDoc.Core
 
 			foreach (Type type in types)
 			{
-				if (type.IsClass && 
-					IsDelegate(type) && 
+				if (type.IsClass &&
+					IsDelegate(type) &&
 					type.Namespace == namespaceName &&
 					MustDocumentType(type))
 				{
@@ -410,7 +418,7 @@ namespace NDoc.Core
 
 			foreach (Type type in types)
 			{
-				if (type.IsEnum && 
+				if (type.IsEnum &&
 					type.Namespace == namespaceName &&
 					MustDocumentType(type))
 				{
@@ -424,7 +432,7 @@ namespace NDoc.Core
 
 		private bool IsDelegate(Type type)
 		{
-			return type.BaseType.FullName == "System.Delegate" || 
+			return type.BaseType.FullName == "System.Delegate" ||
 				type.BaseType.FullName == "System.MulticastDelegate";
 		}
 
@@ -592,7 +600,7 @@ namespace NDoc.Core
 		{
 			int overload = 0;
 
-			BindingFlags bindingFlags =  
+			BindingFlags bindingFlags =
 				BindingFlags.Instance |
 				BindingFlags.Public |
 				BindingFlags.NonPublic;
@@ -615,7 +623,7 @@ namespace NDoc.Core
 
 		private void WriteFields(XmlWriter writer, Type type)
 		{
-			BindingFlags bindingFlags =  
+			BindingFlags bindingFlags =
 				BindingFlags.Instance |
 				BindingFlags.Static |
 				BindingFlags.Public |
@@ -632,7 +640,7 @@ namespace NDoc.Core
 
 		private void WriteProperties(XmlWriter writer, Type type)
 		{
-			BindingFlags bindingFlags = 
+			BindingFlags bindingFlags =
 				BindingFlags.Instance |
 				BindingFlags.Static |
 				BindingFlags.Public |
@@ -651,8 +659,8 @@ namespace NDoc.Core
 				if ((hasGetter || hasSetter) && !IsAlsoAnEvent(property))
 				{
 					WriteProperty(
-						writer, 
-						property, 
+						writer,
+						property,
 						property.DeclaringType.FullName != type.FullName,
 						GetPropertyOverload(property, properties));
 				}
@@ -661,7 +669,7 @@ namespace NDoc.Core
 
 		private void WriteMethods(XmlWriter writer, Type type)
 		{
-			BindingFlags bindingFlags = 
+			BindingFlags bindingFlags =
 				BindingFlags.Instance |
 				BindingFlags.Static |
 				BindingFlags.Public |
@@ -671,17 +679,17 @@ namespace NDoc.Core
 
 			foreach (MethodInfo method in methods)
 			{
-				if (!(method.Name.StartsWith("get_")) && 
+				if (!(method.Name.StartsWith("get_")) &&
 					!(method.Name.StartsWith("set_")) &&
-					!(method.Name.StartsWith("add_")) && 
+					!(method.Name.StartsWith("add_")) &&
 					!(method.Name.StartsWith("remove_")) &&
 					!(method.Name.StartsWith("op_")) &&
 					MustDocumentMethod(method))
 				{
 					WriteMethod(
-						writer, 
-						method, 
-						method.DeclaringType.FullName != type.FullName, 
+						writer,
+						method,
+						method.DeclaringType.FullName != type.FullName,
 						GetMethodOverload(method, methods));
 				}
 			}
@@ -689,7 +697,7 @@ namespace NDoc.Core
 
 		private void WriteOperators(XmlWriter writer, Type type)
 		{
-			BindingFlags bindingFlags = 
+			BindingFlags bindingFlags =
 				BindingFlags.Instance |
 				BindingFlags.Static |
 				BindingFlags.Public |
@@ -703,8 +711,8 @@ namespace NDoc.Core
 					MustDocumentMethod(method))
 				{
 					WriteOperator(
-						writer, 
-						method, 
+						writer,
+						method,
 						GetMethodOverload(method, methods));
 				}
 			}
@@ -712,7 +720,7 @@ namespace NDoc.Core
 
 		private void WriteEvents(XmlWriter writer, Type type)
 		{
-			BindingFlags bindingFlags =  
+			BindingFlags bindingFlags =
 				BindingFlags.Instance |
 				BindingFlags.Static |
 				BindingFlags.Public |
@@ -723,7 +731,7 @@ namespace NDoc.Core
 			{
 				MethodInfo addMethod = eventInfo.GetAddMethod(true);
 
-				if (addMethod != null && 
+				if (addMethod != null &&
 					MustDocumentMethod(addMethod))
 				{
 					WriteEvent(writer, eventInfo);
@@ -735,7 +743,7 @@ namespace NDoc.Core
 		{
 			bool isEvent = false;
 
-			BindingFlags bindingFlags =  
+			BindingFlags bindingFlags =
 				BindingFlags.Instance |
 				BindingFlags.Static |
 				BindingFlags.Public |
@@ -804,7 +812,7 @@ namespace NDoc.Core
 			writer.WriteAttributeString("id", memberName);
 			writer.WriteAttributeString("access", GetTypeAccessValue(type));
 
-			BindingFlags bindingFlags =  
+			BindingFlags bindingFlags =
 				BindingFlags.Instance |
 				BindingFlags.Static |
 				BindingFlags.Public |
@@ -846,7 +854,7 @@ namespace NDoc.Core
 			WriteEnumerationDocumentation(writer, memberName);
 			WriteCustomAttributes(writer, type);
 
-			BindingFlags bindingFlags =  
+			BindingFlags bindingFlags =
 				BindingFlags.Instance |
 				BindingFlags.Static |
 				BindingFlags.Public |
@@ -1129,7 +1137,7 @@ namespace NDoc.Core
 			writer.WriteAttributeString("name", parameter.Name);
 			writer.WriteAttributeString("type", parameter.ParameterType.FullName);
 			writer.WriteAttributeString("optional", parameter.IsOptional ? "true" : "false");
-  
+
 			if (direction != "in")
 			{
 				writer.WriteAttributeString("direction", direction);
@@ -1184,8 +1192,8 @@ namespace NDoc.Core
 			}
 		}
 
-		/// <summary>Used by GetMemberName(Type type) and by 
-		/// GetFullNamespaceName(MemberInfo member) functions to build 
+		/// <summary>Used by GetMemberName(Type type) and by
+		/// GetFullNamespaceName(MemberInfo member) functions to build
 		/// up most of the /doc member name.</summary>
 		/// <param name="type"></param>
 		private string GetTypeNamespaceName(Type type)
@@ -1200,7 +1208,7 @@ namespace NDoc.Core
 			return theNamespace + type.Name.Replace('+', '.');
 		}
 
-		/// <summary>Used by all the GetMemberName() functions except the 
+		/// <summary>Used by all the GetMemberName() functions except the
 		/// Type one. It returns most of the /doc member name.</summary>
 		/// <param name="member"></param>
 		private string GetFullNamespaceName(MemberInfo member)
@@ -1699,7 +1707,7 @@ namespace NDoc.Core
 		/// <param name="filename">The assembly filename.</param>
 		/// <returns>The assembly object.</returns>
 		/// <remarks>This method loads an assembly into memory. If you
-		/// use Assembly.Load or Assembly.LoadFrom the assembly file locks. 
+		/// use Assembly.Load or Assembly.LoadFrom the assembly file locks.
 		/// This method doesn't lock the assembly file.</remarks>
 		public static Assembly LoadAssembly(string filename)
 		{

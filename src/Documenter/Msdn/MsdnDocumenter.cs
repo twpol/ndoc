@@ -102,6 +102,35 @@ namespace NDoc.Documenter.Msdn
 			Process.Start(path);
 		}
 
+		/// <summary>See <see cref="IDocumenter"/>.</summary>
+		public override string CanBuild()
+		{
+			// this is lame. can we find a better way to get the output path?
+			HtmlHelp htmlHelp = new HtmlHelp(
+				MyConfig.OutputDirectory,
+				MyConfig.HtmlHelpName,
+				null,
+				MyConfig.HtmlHelpCompilerFilename);
+
+			string result = null;
+
+			try
+			{
+				string path = htmlHelp.GetPathToCompiledHtmlFile();
+
+				if (File.Exists(path))
+				{
+					File.Delete(path);
+				}
+			}
+			catch (Exception e)
+			{
+				result = "The compiled HTML Help file is probably open.";
+			}
+
+			return result;
+		}
+
 		/// <summary>See IDocumenter.</summary>
 		public override void Build(Project project)
 		{
@@ -311,22 +340,22 @@ namespace NDoc.Documenter.Msdn
 			switch (typeNode.Name)
 			{
 				case "class":
-					whichType = WhichType.Class; 
+					whichType = WhichType.Class;
 					break;
 				case "interface":
-					whichType = WhichType.Interface; 
+					whichType = WhichType.Interface;
 					break;
 				case "structure":
-					whichType = WhichType.Structure; 
+					whichType = WhichType.Structure;
 					break;
 				case "enumeration":
-					whichType = WhichType.Enumeration; 
+					whichType = WhichType.Enumeration;
 					break;
 				case "delegate":
-					whichType = WhichType.Delegate; 
+					whichType = WhichType.Delegate;
 					break;
 				default:
-					whichType = WhichType.Unknown; 
+					whichType = WhichType.Unknown;
 					break;
 			}
 
@@ -414,12 +443,12 @@ namespace NDoc.Documenter.Msdn
 
 					XsltArgumentList arguments = new XsltArgumentList();
 					arguments.AddParam("namespace", String.Empty, namespaceName);
-					
+
 					TransformAndWriteResult(xsltNamespace, arguments, fileName);
 
 					arguments = new XsltArgumentList();
 					arguments.AddParam("namespace", String.Empty, namespaceName);
-					
+
 					TransformAndWriteResult(
 						xsltNamespaceHierarchy,
 						arguments,
@@ -434,7 +463,7 @@ namespace NDoc.Documenter.Msdn
 
 		private void MakeHtmlForTypes(string namespaceName)
 		{
-			XmlNodeList typeNodes = 
+			XmlNodeList typeNodes =
 				xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace[@name=\"" + namespaceName + "\"]/*[local-name()!='documentation']");
 
 			int[] indexes = SortNodesByAttribute(typeNodes, "id");
@@ -451,19 +480,19 @@ namespace NDoc.Documenter.Msdn
 				switch(whichType)
 				{
 					case WhichType.Class:
-						MakeHtmlForInterfaceOrClassOrStructure(whichType, typeNode); 
+						MakeHtmlForInterfaceOrClassOrStructure(whichType, typeNode);
 						break;
 					case WhichType.Interface:
-						MakeHtmlForInterfaceOrClassOrStructure(whichType, typeNode); 
+						MakeHtmlForInterfaceOrClassOrStructure(whichType, typeNode);
 						break;
 					case WhichType.Structure:
-						MakeHtmlForInterfaceOrClassOrStructure(whichType, typeNode); 
+						MakeHtmlForInterfaceOrClassOrStructure(whichType, typeNode);
 						break;
 					case WhichType.Enumeration:
-						MakeHtmlForEnumerationOrDelegate(whichType, typeNode); 
+						MakeHtmlForEnumerationOrDelegate(whichType, typeNode);
 						break;
 					case WhichType.Delegate:
-						MakeHtmlForEnumerationOrDelegate(whichType, typeNode); 
+						MakeHtmlForEnumerationOrDelegate(whichType, typeNode);
 						break;
 					default:
 						break;
@@ -698,8 +727,8 @@ namespace NDoc.Documenter.Msdn
 		}
 
 		private string GetPreviousMethodName(
-			XmlNodeList methodNodes, 
-			int[] indexes, 
+			XmlNodeList methodNodes,
+			int[] indexes,
 			int index)
 		{
 			while (--index >= 0)
@@ -714,8 +743,8 @@ namespace NDoc.Documenter.Msdn
 		}
 
 		private string GetNextMethodName(
-			XmlNodeList methodNodes, 
-			int[] indexes, 
+			XmlNodeList methodNodes,
+			int[] indexes,
 			int index)
 		{
 			while (++index < methodNodes.Count)
@@ -730,8 +759,8 @@ namespace NDoc.Documenter.Msdn
 		}
 
 		private bool IsMethodFirstOverload(
-			XmlNodeList methodNodes, 
-			int[] indexes, 
+			XmlNodeList methodNodes,
+			int[] indexes,
 			int index)
 		{
 			if (methodNodes[indexes[index]].Attributes["declaringType"] != null)
@@ -871,7 +900,7 @@ namespace NDoc.Documenter.Msdn
 
 					fileName = GetFilenameForOperator(operatorNode);
 					htmlHelp.AddFileToContents(
-						GetOperatorName(operatorNode), 
+						GetOperatorName(operatorNode),
 						fileName);
 
 					arguments = new XsltArgumentList();
@@ -1161,7 +1190,7 @@ namespace NDoc.Documenter.Msdn
 		{
 			string operatorID = operatorNode.Attributes["id"].Value;
 			string fileName = operatorID.Substring(2);
-			
+
 			int opIndex = fileName.IndexOf("op_");
 
 			if (opIndex != -1)

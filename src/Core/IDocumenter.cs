@@ -42,17 +42,17 @@ namespace NDoc.Core
 		/// Gets the percentage value.
 		/// </summary>
 		/// <value>A number between 0 and 100 corresponding to the percentage of work completed.</value>
-		public int Progress 
-		{ 
-			get {return progress;} 
+		public int Progress
+		{
+			get {return progress;}
 		}
 		/// <summary>
 		/// Gets the current work label.
 		/// </summary>
 		/// <value>A short description of the current work beeing done.</value>
-		public string Status 
-		{ 
-			get {return status;} 
+		public string Status
+		{
+			get {return status;}
 		}
 	}
 
@@ -77,9 +77,16 @@ namespace NDoc.Core
 		/// Raised to update the current step's percent complete value.
 		/// </summary>
 		event DocBuildingEventHandler DocBuildingProgress;
-		
+
 		/// <summary>Resets the documenter to a clean state.</summary>
 		void Clear();
+
+		/// <summary>Checks to make sure the documenter can perform a
+		/// build.</summary>
+		/// <remarks>This is for people who like to leave their CHMs open.</remarks>
+		/// <returns>null if the documenter can build; otherwise a message
+		/// describing why it can't build</returns>
+		string CanBuild();
 
 		/// <summary>Builds the documentation.</summary>
 		/// <remarks>The compiler does not currently allow namespaces to documented.</remarks>

@@ -1207,6 +1207,20 @@ namespace NDoc.Gui
 			IDocumenter documenter =
 				(IDocumenter)project.Documenters[comboBoxDocumenters.SelectedIndex];
 
+			string message = documenter.CanBuild();
+
+			if (message != null)
+			{
+				MessageBox.Show(
+					this,
+					message,
+					"NDoc",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
+
+				return;
+			}
+
 			documenter.DocBuildingProgress += new DocBuildingEventHandler(OnProgressUpdate);
 			documenter.DocBuildingStep += new DocBuildingEventHandler(OnStepUpdate);
 
