@@ -92,6 +92,11 @@
                     Name = "System.Data"
                     AssemblyName = "System.Data"
                 />
+                <Reference
+                    Name = "ExtendedUI"
+                    Project = "{0E14C115-C99D-49F7-A892-3AEF74320A61}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
             </References>
         </Build>
         <Files>
@@ -112,9 +117,23 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "AssemblySlashDocCollection.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AssemblyXmlDocCache.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AssySlashDocXML.xsd"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "AssySlashDocXML.xsx"
+                    DependentUpon = "AssySlashDocXML.xsd"
+                    BuildAction = "None"
                 />
                 <File
                     RelPath = "AttributesEditor.cs"
@@ -182,6 +201,26 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "FilenameEditor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "FilePath.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "FolderNameEditor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "FolderPath.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "IDocumenter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -202,9 +241,59 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "NonRelocatableFilePath.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "PathItemBase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "PathUtilities.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Project.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "PropertySorter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ReferencePath.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ReferencePathCollection.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ReferencePathCollectionEditorForm.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ReferencePathCollectionEditorForm.resx"
+                    DependentUpon = "ReferencePathCollectionEditorForm.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "RuntimePropertyGrid.cs"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "RuntimePropertyGrid.resx"
+                    DependentUpon = "RuntimePropertyGrid.cs"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "Settings.cs"
@@ -250,6 +339,26 @@
                     RelPath = "XsltResourceResolver.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "graphics\folder.bmp"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "graphics\folderpin.bmp"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "graphics\multifolder.bmp"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "graphics\multifolderpin.bmp"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "graphics\Red Folder.ico"
+                    BuildAction = "Content"
                 />
                 <File
                     RelPath = "ReflectionEngine\ReflectionEngine.cs"
