@@ -51,7 +51,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		{
 			// this assumes that all content files are going in a directory named
 			// "html" (relative to the location of the HxT
-			_toc.OpenNode( string.Format( "/{0}/{1}", Workspace.ContentDirectoryName, args.File ) );
+			_toc.OpenNode( string.Format( "/{0}/{1}", NativeHtmlHelp2Workspace.ContentLocationName, args.File ) );
 		}
 
 		private void factory_TopicEnd(object sender, EventArgs e)
@@ -63,7 +63,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		{
 			// this assumes that all content files are going in a directory named
 			// "html" (relative to the location of the HxT
-			_toc.InsertNode( string.Format( "/{0}/{1}", Workspace.ContentDirectoryName, args.File ) );
+			_toc.InsertNode( string.Format( "/{0}/{1}", NativeHtmlHelp2Workspace.ContentLocationName, args.File ) );
 		}
 
 		/// <summary>

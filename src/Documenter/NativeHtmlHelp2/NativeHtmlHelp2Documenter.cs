@@ -165,13 +165,13 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 				OnDocBuildingStep( 0, "Initializing..." );
 				UnPackResources();
 
-				Workspace w = new Workspace( WorkingPath );
+				Workspace w = new NativeHtmlHelp2Workspace( WorkingPath );
 				PrepareWorkspace( w );
 
 				// set up the includes file
 				IncludeFile includes = IncludeFile.CreateFrom( Path.Combine( ResourceDirectory, @"HxProject\HelpTitle\includes.hxf" ), "includes" );
 				// attach to this event so resource directories get included in the include file
-				w.ContentDirectoryAdded += new ContentDirectoryEventHandler( includes.AddDirectory ); 
+				w.ContentDirectoryAdded += new ContentEventHandler( includes.AddDirectory ); 
 
 				// create and save the named url index
 				CreateNamedUrlIndex( w );
@@ -262,7 +262,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		{
 			string fileName = Path.GetFileName( path );
 			w.ImportContent( Path.GetDirectoryName( path ), fileName );
-			return Path.Combine( Workspace.ContentDirectoryName, fileName );
+			return Path.Combine( w.ContentDirectoryName, fileName );
 		}
 
 

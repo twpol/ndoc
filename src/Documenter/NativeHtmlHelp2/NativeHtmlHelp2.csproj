@@ -130,12 +130,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "TOCBuilder.cs"
+                    RelPath = "NativeHtmlHelp2Workspace.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Workspace.cs"
+                    RelPath = "TOCBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
