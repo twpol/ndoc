@@ -8,29 +8,33 @@
 	<xsl:param name='namespace' />
 	<!-- -->
 	<xsl:template match="/">
-		<xsl:apply-templates select="ndoc/assembly/module/namespace[@name=$namespace]" />
-	</xsl:template>
-	<!-- -->
-	<xsl:template match="namespace">
+		<xsl:variable name="ns" select="ndoc/assembly/module/namespace[@name=$namespace]" />
 		<html dir="LTR">
 			<xsl:call-template name="html-head">
-				<xsl:with-param name="title" select="concat(@name, 'Hierarchy')" />
+				<xsl:with-param name="title" select="concat($ns/@name, 'Hierarchy')" />
 			</xsl:call-template>
 			<body>
 				<xsl:call-template name="title-row">
-					<xsl:with-param name="type-name" select="concat(@name, ' Hierarchy')" />
+					<xsl:with-param name="type-name" select="concat($ns/@name, ' Hierarchy')" />
 				</xsl:call-template>
 				<div id="content">
-					<a href="ms-help://MSDNVS/cpref/html_hh2/frlrfSystemObjectClassTopic.htm">System.Object</a>
+					<a>
+						<xsl:attribute name="href">
+							<xsl:call-template name="get-filename-for-system-type">
+								<xsl:with-param name="type-name" select="'System.Object'" />
+							</xsl:call-template>
+						</xsl:attribute>
+						<xsl:text>System.Object</xsl:text>
+					</a>
 					<br />
-					<xsl:apply-templates select=".//*[(local-name()='class' and not(base)) or (local-name()='base' and not(base))]">
+					<xsl:apply-templates select="$ns//*[(local-name()='class' and not(base)) or (local-name()='base' and not(base))]">
 						<xsl:sort select="@name" />
 					</xsl:apply-templates>
 					<br />
-					<xsl:if test="interface">
+					<xsl:if test="$ns/interface">
 						<h3>Interfaces</h3>
 						<p>
-							<xsl:apply-templates select="interface">
+							<xsl:apply-templates select="$ns/interface">
 								<xsl:sort select="@name" />
 							</xsl:apply-templates>
 						</p>
