@@ -1090,7 +1090,7 @@ namespace NDoc.Core
 			// determine if CharSet property should be documented
 			if ((type.Attributes & TypeAttributes.AutoClass) == TypeAttributes.AutoClass)
 			{
-				charSet = CharSet.Auto.ToString(CultureInfo.InvariantCulture);
+				charSet = CharSet.Auto.ToString();
 			}
 			//			//Do not document if default value....
 			//			if ((type.Attributes & TypeAttributes.AnsiClass) == TypeAttributes.AnsiClass)
@@ -1099,7 +1099,7 @@ namespace NDoc.Core
 			//			} 
 			if ((type.Attributes & TypeAttributes.UnicodeClass) == TypeAttributes.UnicodeClass)
 			{
-				charSet = CharSet.Unicode.ToString(CultureInfo.InvariantCulture);
+				charSet = CharSet.Unicode.ToString();
 			}
 
 			// determine if Value property should be documented
@@ -1110,11 +1110,11 @@ namespace NDoc.Core
 			//			} 
 			if ((type.Attributes & TypeAttributes.ExplicitLayout) == TypeAttributes.ExplicitLayout)
 			{
-				layoutKind = LayoutKind.Explicit.ToString(CultureInfo.InvariantCulture);
+				layoutKind = LayoutKind.Explicit.ToString();
 			} 
 			if ((type.Attributes & TypeAttributes.SequentialLayout) == TypeAttributes.SequentialLayout)
 			{
-				layoutKind = LayoutKind.Sequential.ToString(CultureInfo.InvariantCulture);
+				layoutKind = LayoutKind.Sequential.ToString();
 			}
 
 			if (charSet == null && layoutKind == null)
