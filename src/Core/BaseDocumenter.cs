@@ -321,7 +321,8 @@ namespace NDoc.Core
 
 				// write our intermediate xml to a file for debugging
 #if DEBUG
-//				FileStream fs = new FileStream(@"C:\test.xml", FileMode.Create);
+//				string testFile = Path.Combine(Path.GetPathRoot(Environment.SystemDirectory), "ndoc-test.xml");
+//				FileStream fs = new FileStream(testFile, FileMode.Create);
 //				fs.Write(memoryStream.GetBuffer(), 0, (int)memoryStream.Length);
 //				fs.Close();
 #endif
