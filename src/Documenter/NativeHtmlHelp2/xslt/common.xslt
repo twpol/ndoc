@@ -995,32 +995,23 @@
 				<xsl:value-of select="../@name" />
 			</a>
 		</p>
-		<xsl:choose>
-			<xsl:when test="documentation/platform">
-				<xsl:apply-templates select="documentation/platform" />
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:apply-templates select="/ndoc/platform" />
-			</xsl:otherwise>
-		</xsl:choose>
 		<p>
 			<b>Assembly: </b>
 			<xsl:value-of select="../../../@name" /> (in <xsl:value-of select="../../@name" />)
 		</p>
-		<xsl:call-template name="permsissions" />
+		<xsl:call-template name="permissions" />
 		<xsl:apply-templates select="documentation/node()" mode="type-requirements-section" />
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="member-requirements-section">
-		<xsl:if test="documentation/permission | documentation/platform | parent::node()/documentation/platform | /ndoc/platform">
+		<xsl:if test="documentation/permission">
 			<h4 class="dtH4">Requirements</h4>
-			<xsl:call-template name="member-platform" />
-			<xsl:call-template name="permsissions" />
+			<xsl:call-template name="permissions" />
 			<xsl:apply-templates select="documentation/node()" mode="member-requirements-section" />
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
-	<xsl:template name="permsissions">
+	<xsl:template name="permissions">
 		<xsl:if test="documentation/permission">
 			<p>
 				<b>.NET Framework Security: </b>
@@ -1041,97 +1032,6 @@
 			<xsl:text>&#160;</xsl:text>
 			<xsl:apply-templates mode="slashdoc" />
 		</li>
-	</xsl:template>
-	<!-- -->
-	<xsl:template name="member-platform">
-		<xsl:choose>
-			<!-- first see if the member has a platform specified -->
-			<xsl:when test="documentation/platform">
-				<xsl:apply-templates select="documentation/platform" />
-			</xsl:when>
-			<!-- then look in the containing type -->
-			<xsl:when test="parent::node()/documentation/platform">
-				<xsl:apply-templates select="parent::node()/documentation/platform" />
-			</xsl:when>
-			<!-- otherwise use the project defaults -->
-			<xsl:otherwise>
-				<xsl:apply-templates select="/ndoc/platform" />
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:template>
-	<!-- -->
-	<xsl:template match="ndoc/platform">
-		<p>
-			<b class="le">Platforms: </b>
-			<xsl:apply-templates select="os" />
-			<xsl:apply-templates select="frameworks" />
-		</p>
-	</xsl:template>
-	<!-- -->
-	<xsl:template match="documentation/platform">
-		<p>
-			<b class="le">Platforms: </b>
-			<!-- this next part will first look for os and framework support locally
-					if it can't find it, then it looks to the project defaults -->
-			<xsl:choose>
-				<xsl:when test="os">
-					<xsl:apply-templates select="os" />
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:apply-templates select="/ndoc/platform/os" />
-				</xsl:otherwise>
-			</xsl:choose>
-			<xsl:choose>
-				<xsl:when test="frameworks">
-					<xsl:apply-templates select="frameworks" />
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:apply-templates select="/ndoc/platform/frameworks" />
-				</xsl:otherwise>
-			</xsl:choose>
-		</p>
-	</xsl:template>
-	<!-- -->
-	<xsl:template match="os">
-		<xsl:choose>
-			<xsl:when test="@predefined = 'all'">
-				<xsl:text>Windows 98, Windows NT 4.0, Windows Millennium Edition, Windows 2000, Windows XP Home Edition, Windows XP Professional, Windows Server 2003 family</xsl:text>
-			</xsl:when>
-			<xsl:when test="@predefined = 'nt5plus'">
-				<xsl:text>Windows 2000, Windows XP Home Edition, Windows XP Professional, Windows Server 2003 family</xsl:text>
-			</xsl:when>
-			<xsl:when test="@predefined = 'enterprise'">
-				<xsl:text>Windows 2000, Windows XP Professional, Windows Server 2003 family</xsl:text>
-			</xsl:when>
-		</xsl:choose>
-		<xsl:if test="string-length(.)">
-			<xsl:text>, </xsl:text>
-			<xsl:value-of select="." />
-		</xsl:if>
-	</xsl:template>
-	<!-- -->
-	<xsl:template match="frameworks">
-		<xsl:if test="count( node()[text()='true'] | custom ) != 0">, </xsl:if>
-		<xsl:apply-templates select="compact | mono | custom" />
-	</xsl:template>
-	<!-- -->
-	<xsl:template match="mono" />
-	<!-- -->
-	<xsl:template match="mono[text() = 'true']">
-		<xsl:text>MONO Open Source Framework</xsl:text>
-		<xsl:if test="position()!=last()">, </xsl:if>
-	</xsl:template>
-	<!-- -->
-	<xsl:template match="compact" />
-	<!-- -->
-	<xsl:template match="compact[text() = 'true']">
-		<xsl:text>.NET Compact Framework</xsl:text>
-		<xsl:if test="position()!=last()">, </xsl:if>
-	</xsl:template>
-	<!-- -->
-	<xsl:template match="frameworks/custom">
-		<xsl:value-of select="." />
-		<xsl:if test="position()!=last()">, </xsl:if>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="version-section">

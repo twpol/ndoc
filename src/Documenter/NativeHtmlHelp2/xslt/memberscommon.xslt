@@ -374,7 +374,6 @@
 					</xsl:call-template>
 				</b>
 				<xsl:text>)</xsl:text>
-				<xsl:call-template name="member-list-platform" />
 			</td>
 			<td width="50%">
 				<xsl:call-template name="obsolete-inline" />
@@ -413,7 +412,6 @@
 					</xsl:call-template>
 				</b>
 				<xsl:text>)</xsl:text>
-				<xsl:call-template name="member-list-platform" />
 			</td>
 			<td width="50%">
 				<xsl:call-template name="obsolete-inline" />
@@ -453,7 +451,6 @@
 						</xsl:call-template>
 					</b>
 					<xsl:text>)</xsl:text>
-					<xsl:call-template name="member-list-platform" />
 				</td>
 				<td width="50%">
 					<xsl:if test="@contract='Override'">
@@ -491,7 +488,6 @@
 					</xsl:call-template>
 				</b>
 				<xsl:text>)</xsl:text>
-				<xsl:call-template name="member-list-platform" />
 			</td>
 			<td width="50%">
 				<xsl:call-template name="obsolete-inline" />
@@ -529,7 +525,6 @@
 								</xsl:attribute>
 								<xsl:value-of select="../@name" />
 							</a>
-							<xsl:call-template name="member-list-platform" />
 						</td>
 						<td width="50%">
 							<xsl:text>Overloaded. </xsl:text>
@@ -573,7 +568,6 @@
 								<xsl:value-of select="../@name" />
 								<xsl:text> Constructor</xsl:text>
 							</a>
-							<xsl:call-template name="member-list-platform" />
 						</td>
 						<td width="50%">
 							<xsl:call-template name="obsolete-inline" />
@@ -622,7 +616,6 @@
 					</xsl:call-template>
 				</b>
 				<xsl:text>)</xsl:text>
-				<xsl:call-template name="member-list-platform" />
 			</td>
 			<td width="50%">
 				<xsl:call-template name="obsolete-inline" />
@@ -664,7 +657,6 @@
 									</xsl:otherwise>
 								</xsl:choose>
 							</a>
-							<xsl:call-template name="member-list-platform" />
 						</td>
 						<td width="50%">
 							<xsl:text>Overloaded. </xsl:text>
@@ -695,7 +687,6 @@
 									</xsl:otherwise>
 								</xsl:choose>
 							</a>
-							<xsl:call-template name="member-list-platform" />
 						</td>
 						<td width="50%">
 							<xsl:if test="@contract='Override'">
@@ -713,56 +704,6 @@
 				</xsl:choose>
 			</tr>
 		</xsl:if>
-	</xsl:template>
-	<!-- -->
-	<xsl:template name="member-list-platform">
-		<xsl:choose>
-			<!-- first see if the member has a platform specified -->
-			<xsl:when test="documentation/platform/frameworks">
-				<xsl:apply-templates select="documentation/platform/frameworks" mode="member-list" />
-			</xsl:when>
-			<!-- then look in the containing type -->
-			<xsl:when test="parent::node()/documentation/platform/frameworks">
-				<xsl:apply-templates select="parent::node()/documentation/platform/frameworks" mode="member-list" />
-			</xsl:when>
-			<!-- otherwise use the project defaults -->
-			<xsl:otherwise>
-				<xsl:apply-templates select="/ndoc/platform/frameworks" mode="member-list" />
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:template>
-	<!-- -->
-	<xsl:template match="frameworks" mode="member-list">
-		<xsl:if test="count( node()[text()='true'] | custom ) != 0">
-			<p>
-				<xsl:text>Supported by </xsl:text>
-				<xsl:apply-templates select="compact | mono | custom" mode="member-list" />
-				<xsl:text>.</xsl:text>
-			</p>
-		</xsl:if>
-	</xsl:template>
-	<!-- -->
-	<xsl:template match="mono" mode="member-list" />
-	<!-- -->
-	<xsl:template match="mono[text() = 'true']" mode="member-list">
-		<xsl:if test="position()=last() and count( preceding-sibling::node()[text() = 'true'] ) != 0">and </xsl:if>
-		<xsl:text>the MONO Open Source Framework</xsl:text>
-		<xsl:if test="position()!=last()">, </xsl:if>
-	</xsl:template>
-	<!-- -->
-	<xsl:template match="compact" mode="member-list" />
-	<!-- -->
-	<xsl:template match="compact[text() = 'true']" mode="member-list">
-		<xsl:if test="position()=last() and count( preceding-sibling::node()[text() = 'true'] ) != 0">and </xsl:if>
-		<xsl:text>the .NET Compact Framework</xsl:text>
-		<xsl:if test="position()!=last()">, </xsl:if>
-	</xsl:template>
-	<!-- -->
-	<xsl:template match="frameworks/custom" mode="member-list">
-		<xsl:if test="position()=last() and count( preceding-sibling::node()[text() = 'true'] ) != 0">and </xsl:if>
-		<xsl:text>the </xsl:text>
-		<xsl:value-of select="." />
-		<xsl:if test="position()!=last()">, </xsl:if>
 	</xsl:template>
 	<!-- -->
 </xsl:stylesheet>
