@@ -4,6 +4,7 @@ using System.Xml;
 using System.Xml.Schema;
 using System.Diagnostics;
 using System.Reflection;
+using System.Collections;
 
 namespace NDoc.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping
 {
@@ -13,6 +14,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping
 	/// </summary>
 	public class NamespaceMapper
 	{
+
+		#region Static Members
 		private static string mapXmlNamespace = "urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.schemas.namespaceMap";
 
 		private static XmlSchema namespaceMapSchema = null;
@@ -56,6 +59,10 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping
 			Trace.WriteLine( e.Message );	
 			schemaIsValid = false;
 		}
+		#endregion
+
+		private XmlNode map;
+		private Hashtable helpNamespaceCache ;
 
 		/// <summary>
 		/// Creates a new instance of the NamespaceMapper class based on the specified map file
@@ -87,9 +94,10 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping
 			{
 				reader.Close();
 			}
+
+			helpNamespaceCache = new Hashtable();
 		}
 
-		private XmlNode map;
 
 		/// <summary>
 		/// Merges the specified map into this map
@@ -180,6 +188,14 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping
 		/// <param name="managedName">The managed name to query for (case sensitive)</param>
 		/// <returns>The best match for the managed namespace or an empty string if none is found</returns>
 		public string LookupHelpNamespace( string managedName )
+		{
+			if ( !helpNamespaceCache.Contains( managedName ) )
+				helpNamespaceCache.Add( managedName, SelectHelpNamesapce( managedName ) );
+			
+			return helpNamespaceCache[managedName].ToString();
+		}
+
+		private string SelectHelpNamesapce( string managedName )
 		{
 			string helpNamespace = String.Empty;
 
