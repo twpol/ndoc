@@ -35,7 +35,7 @@ namespace NDoc.Documenter.Msdn
 			StringDictionary elemNames, 
 			SdkDocVersion linkToSdkDocVersion)
 		{
-			descriptions = new StringCollection();
+			Reset();
 
 			this.fileNames = fileNames;
 			this.elemNames = elemNames;
@@ -56,6 +56,11 @@ namespace NDoc.Documenter.Msdn
 					break;
 			}
 
+		}
+
+		public void Reset()
+		{
+			descriptions = new StringCollection();
 		}
 
 		/// <summary>

@@ -1552,6 +1552,9 @@ namespace NDoc.Documenter.Msdn
 				arguments.AddExtensionObject("urn:NDocUtil", utilities);
 				arguments.AddExtensionObject("urn:NDocExternalHtml", htmlProvider);
 
+				//reset overloads testing
+				utilities.Reset();
+
 				transform.Transform(xpathDocument, arguments, streamWriter);
 			}
 
