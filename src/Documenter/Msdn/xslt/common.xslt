@@ -732,6 +732,7 @@
 					<xsl:text>]</xsl:text>
 				</span>
 			</xsl:if>
+			<xsl:text>&#160;</xsl:text>
 			<xsl:apply-templates select="./node()" mode="slashdoc" />
 		</p>
 	</xsl:template>
