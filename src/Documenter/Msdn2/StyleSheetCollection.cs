@@ -37,7 +37,7 @@ namespace NDoc.Documenter.Msdn2
 		/// <summary>
 		/// Load the predefined set of xslt stylesheets into a dictionary
 		/// </summary>
-		/// <param name="extensibiltyStylesheet"></param>
+		/// <param name="extensibilityStylesheet"></param>
 		/// <returns>The populated collection</returns>
 		public static StyleSheetCollection LoadStyleSheets( string extensibilityStylesheet )
 		{
