@@ -798,6 +798,7 @@ namespace NDoc.Core
 				SetDirty();
 			}
 		}	
+
 	}
 
 	/// <summary>
