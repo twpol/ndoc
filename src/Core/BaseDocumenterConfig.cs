@@ -680,6 +680,25 @@ namespace NDoc.Core
 			}
 		}
 
+
+		private bool _Preliminary = false;
+
+		/// <summary>Get/set the Preliminary preoperty</summary>
+		[Category("Documentation Main Settings")]
+		[Description("If true, NDoc will mark every topic as being preliminary documentation")]
+		[DefaultValue(false)]
+		public bool Preliminary
+		{
+			get { return _Preliminary; }
+
+			set
+			{
+				_Preliminary = value;
+				SetDirty();
+			}
+		}
+
+		
 		private EditorBrowsableFilterLevel _EditorBrowsableFilter;
 
 		/// <summary>Specifies the level of filtering on the EditorBrowsable attribute.</summary>

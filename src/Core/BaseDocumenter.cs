@@ -270,6 +270,9 @@ namespace NDoc.Core
 				if ( MyConfig.InheritPlatformSupport )
 					WriteDefaultPlatform( writer );
 
+				if ( MyConfig.Preliminary )
+					writer.WriteElementString( "preliminary", "" );
+
 				int step = 100 / project.AssemblySlashDocCount;
 				int i = 0;
 

@@ -17,6 +17,7 @@
 	<!--
 	 | no-op extensibility templates
 	 +-->
+	<xsl:template match="node()|@*|text()" mode="preliminary-section"/>
 	<xsl:template match="node()|@*|text()" mode="seealso-section"/>
 	<xsl:template match="node()|@*|text()" mode="thread-safety-section"/>
 	<xsl:template match="node()|@*|text()" mode="overloads-remarks-section"/>
@@ -807,6 +808,9 @@
 					<xsl:value-of select="$headerHtml" disable-output-escaping="yes" />
 				</xsl:otherwise>
 			</xsl:choose>
+			<xsl:if test="ancestor-or-self::node()/documentation/preliminary | /ndoc/preliminary">
+				<xsl:call-template name="preliminary-section"/>
+			</xsl:if>					
 			<xsl:apply-templates select="documentation/node()" mode="title-row"/>			
 		</div>
 	</xsl:template>
@@ -845,10 +849,28 @@
 						<xsl:value-of select="$footerHtml" disable-output-escaping="yes" />
 					</xsl:otherwise>
 				</xsl:choose>
+				<xsl:apply-templates select="documentation/node()" mode="footer-row"/>			
 			</div>
-			<xsl:apply-templates select="documentation/node()" mode="footer-row"/>			
 		</xsl:if>
 	</xsl:template>
+	
+	<xsl:template name="preliminary-section">
+		<p class="topicstatus">
+			<xsl:choose>
+				<xsl:when test="documentation/preliminary[text()]">
+					<xsl:value-of select="documentation/preliminary"/>
+				</xsl:when>
+				<xsl:when test="ancestor::node()/documentation/preliminary[text()]">
+					<xsl:value-of select="ancestor::node()/documentation/preliminary"/>				
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:text>[This is preliminary documentation and subject to change.]</xsl:text>
+				</xsl:otherwise>
+			</xsl:choose>
+		</p>
+		<xsl:apply-templates select="documentation/node()" mode="preliminary-section"/>			
+	</xsl:template>
+
 	<!-- -->
 	<xsl:template name="copyright-notice">
 		<xsl:variable name="copyright-text">
