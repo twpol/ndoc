@@ -192,7 +192,7 @@ namespace NDoc.Documenter.Msdn
 					xmlDocumentation.SelectSingleNode("/ndoc/assembly/module/namespace");
 
 				string defaultNamespaceName = (string)defaultNamespace.Attributes["name"].Value;
-				string defaultTopic = RemoveChar(defaultNamespaceName, '.') + ".html";
+				string defaultTopic = defaultNamespaceName + ".html";
 
 				htmlHelp = new HtmlHelp(
 					MyConfig.OutputDirectory,
@@ -392,7 +392,7 @@ namespace NDoc.Documenter.Msdn
 							if (defaultNamespace != null)
 							{
 								string defaultNamespaceName = (string)defaultNamespace.Attributes["name"].Value;
-								htmlHelp.DefaultTopic = RemoveChar(defaultNamespaceName, '.') + ".html";
+								htmlHelp.DefaultTopic = defaultNamespaceName + ".html";
 							}
 						}
 
@@ -1140,28 +1140,28 @@ namespace NDoc.Documenter.Msdn
 		private string GetFilenameForNamespace(XmlNode namespaceNode)
 		{
 			string namespaceName = (string)namespaceNode.Attributes["name"].Value;
-			string fileName = RemoveChar(namespaceName, '.') + ".html";
+			string fileName = namespaceName + ".html";
 			return fileName;
 		}
 
 		private string GetFilenameForType(XmlNode typeNode)
 		{
 			string typeID = (string)typeNode.Attributes["id"].Value;
-			string fileName = RemoveChar(typeID.Substring(2), '.') + ".html";
+			string fileName = typeID.Substring(2) + ".html";
 			return fileName;
 		}
 
 		private string GetFilenameForTypeMembers(XmlNode typeNode)
 		{
 			string typeID = (string)typeNode.Attributes["id"].Value;
-			string fileName = RemoveChar(typeID.Substring(2), '.') + "Members.html";
+			string fileName = typeID.Substring(2) + "Members.html";
 			return fileName;
 		}
 
 		private string GetFilenameForConstructors(XmlNode typeNode)
 		{
 			string typeID = (string)typeNode.Attributes["id"].Value;
-			string fileName = RemoveChar(typeID.Substring(2), '.') + "Constructor.html";
+			string fileName = typeID.Substring(2) + "Constructor.html";
 			return fileName;
 		}
 
@@ -1170,7 +1170,7 @@ namespace NDoc.Documenter.Msdn
 			string constructorID = (string)constructorNode.Attributes["id"].Value;
 			int dotHash = constructorID.IndexOf(".#"); // constructors could be #ctor or #cctor
 
-			string fileName = RemoveChar(constructorID.Substring(2, dotHash - 2), '.');
+			string fileName = constructorID.Substring(2, dotHash - 2);
 
 			fileName += "Constructor";
 
@@ -1187,21 +1187,21 @@ namespace NDoc.Documenter.Msdn
 		private string GetFilenameForFields(WhichType whichType, XmlNode typeNode)
 		{
 			string typeID = (string)typeNode.Attributes["id"].Value;
-			string fileName = RemoveChar(typeID.Substring(2), '.') + "Fields.html";
+			string fileName = typeID.Substring(2) + "Fields.html";
 			return fileName;
 		}
 
 		private string GetFilenameForField(XmlNode fieldNode)
 		{
 			string fieldID = (string)fieldNode.Attributes["id"].Value;
-			string fileName = RemoveChar(fieldID.Substring(2), '.') + ".html";
+			string fileName = fieldID.Substring(2) + ".html";
 			return fileName;
 		}
 
 		private string GetFilenameForOperators(WhichType whichType, XmlNode typeNode)
 		{
 			string typeID = typeNode.Attributes["id"].Value;
-			string fileName = RemoveChar(typeID.Substring(2), '.') + "Operators.html";
+			string fileName = typeID.Substring(2) + "Operators.html";
 			return fileName;
 		}
 
@@ -1224,8 +1224,6 @@ namespace NDoc.Documenter.Msdn
 				fileName = fileName.Substring(0, leftParenIndex);
 			}
 
-			fileName = RemoveChar(fileName, '.');
-
 			if (operatorNode.Attributes["overload"] != null)
 			{
 				fileName += operatorNode.Attributes["overload"].Value;
@@ -1239,21 +1237,21 @@ namespace NDoc.Documenter.Msdn
 		private string GetFilenameForEvents(WhichType whichType, XmlNode typeNode)
 		{
 			string typeID = (string)typeNode.Attributes["id"].Value;
-			string fileName = RemoveChar(typeID.Substring(2), '.') + "Events.html";
+			string fileName = typeID.Substring(2) + "Events.html";
 			return fileName;
 		}
 
 		private string GetFilenameForEvent(XmlNode eventNode)
 		{
 			string eventID = (string)eventNode.Attributes["id"].Value;
-			string fileName = RemoveChar(eventID.Substring(2), '.') + ".html";
+			string fileName = eventID.Substring(2) + ".html";
 			return fileName;
 		}
 
 		private string GetFilenameForProperties(WhichType whichType, XmlNode typeNode)
 		{
 			string typeID = (string)typeNode.Attributes["id"].Value;
-			string fileName = RemoveChar(typeID.Substring(2), '.') + "Properties.html";
+			string fileName = typeID.Substring(2) + "Properties.html";
 			return fileName;
 		}
 
@@ -1261,7 +1259,7 @@ namespace NDoc.Documenter.Msdn
 		{
 			string typeID = (string)typeNode.Attributes["id"].Value;
 			string propertyName = (string)propertyNode.Attributes["name"].Value;
-			string fileName = RemoveChar(typeID.Substring(2), '.') + propertyName + ".html";
+			string fileName = typeID.Substring(2) + propertyName + ".html";
 			return fileName;
 		}
 
@@ -1277,8 +1275,6 @@ namespace NDoc.Documenter.Msdn
 				fileName = fileName.Substring(0, leftParenIndex);
 			}
 
-			fileName = RemoveChar(fileName, '.');
-
 			if (propertyNode.Attributes["overload"] != null)
 			{
 				fileName += (string)propertyNode.Attributes["overload"].Value;
@@ -1292,7 +1288,7 @@ namespace NDoc.Documenter.Msdn
 		private string GetFilenameForMethods(WhichType whichType, XmlNode typeNode)
 		{
 			string typeID = (string)typeNode.Attributes["id"].Value;
-			string fileName = RemoveChar(typeID.Substring(2), '.') + "Methods.html";
+			string fileName = typeID.Substring(2) + "Methods.html";
 			return fileName;
 		}
 
@@ -1300,7 +1296,7 @@ namespace NDoc.Documenter.Msdn
 		{
 			string typeID = (string)typeNode.Attributes["id"].Value;
 			string methodName = (string)methodNode.Attributes["name"].Value;
-			string fileName = RemoveChar(typeID.Substring(2), '.') + methodName + ".html";
+			string fileName = typeID.Substring(2) + methodName + ".html";
 			return fileName;
 		}
 
@@ -1316,7 +1312,6 @@ namespace NDoc.Documenter.Msdn
 				fileName = fileName.Substring(0, leftParenIndex);
 			}
 
-			fileName = RemoveChar(fileName, '.');
 			fileName = RemoveChar(fileName, '#');
 
 			if (methodNode.Attributes["overload"] != null)
