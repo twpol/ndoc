@@ -274,10 +274,8 @@ namespace NDoc.Core
 
 			XmlTextReader reader = null;
 
-//			bool assembliesLoadErrorFlag = false;
-
-			// keep track of assemblies which fail to load
-			CouldNotLoadAllAssembliesException exc = null;
+			// keep track of whether or not any assemblies fail to load
+			CouldNotLoadAllAssembliesException assemblyLoadException = null;
 
 			try
 			{
@@ -294,7 +292,15 @@ namespace NDoc.Core
 						switch (reader.Name)
 						{
 							case "assemblies":
-								ReadAssemblySlashDocs(reader);
+								// continue even if we don't load all assemblies
+								try
+								{
+									ReadAssemblySlashDocs(reader);
+								}
+								catch (CouldNotLoadAllAssembliesException e)
+								{
+									assemblyLoadException = e;
+								}
 								break;
 							case "namespaces":
 								ReadNamespaceSummaries(reader);
@@ -313,10 +319,6 @@ namespace NDoc.Core
 					}
 				}
 			}
-			catch (CouldNotLoadAllAssembliesException e)
-			{
-				throw e;
-			}
 			catch (Exception ex)
 			{
 				throw new DocumenterException("Error reading in project file " 
@@ -330,6 +332,11 @@ namespace NDoc.Core
 				{
 					reader.Close(); // Closes the underlying stream.
 				}
+			}
+
+			if (assemblyLoadException != null)
+			{
+				throw assemblyLoadException;
 			}
 
 			IsDirty = false;
