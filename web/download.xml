@@ -1,13 +1,13 @@
 <page>
 	<title>Download NDOC</title>
 	<body>
-		<p>Obviously, you're going to need Microsoft's <a href="http://msdn.microsoft.com/downloads/sample.asp?url=/msdn-files/027/000/976/msdncompositedoc.xml">.NET Framework SDK</a> installed on your machine.</p>
+		<p>Obviously, you're going to need Microsoft's .NET Framework SDK installed on your machine. See <a href="http://msdn.microsoft.com/netframework/downloads/howtoget.aspx">how to get it from Microsoft</a>, if you don't already have it.</p>
 
 		<p>In order to compile the generated HTML files into a CHM file, you're going to need the HTML Help Compiler (hhc.exe) which can be found in Microsoft's <a href="http://msdn.microsoft.com/library/en-us/htmlhelp/html/hwMicrosoftHTMLHelpDownloads.asp?frame=true">HTML Help Workshop</a>. If you've installed Visual Studio .NET then you probably already have this (look for the <a href="file:C:\Program Files\HTML Help Workshop\">C:\Program Files\HTML Help Workshop\</a> folder).</p>
 
 		<p>To get the latest sources, check them out of <a href="cvs.html">CVS</a>. Since this code is under active development, it might not be in perfect working condition (even though we try really hard not to check something in if it doesn't work).</p>
 
-		<p>For those of you who don't want to (or can't) use CVS but still want the latest bits, we automatically archive the code in CVS every morning at 3 AM and make it available for <a href="ndoc-nightly.zip">download</a>.</p>
+		<p>For those of you who don't want to (or can't) use CVS but still want the latest bits, we automatically archive the code in CVS every morning at 3 AM (Pacific time, GMT-8) and make it available for <a href="ndoc-nightly.zip">download</a>.</p>
 
 		<p>If you'd rather use a more "stable" release, you can download the older <insert-latest-release /> release from SourceForge.</p>
 
