@@ -185,3 +185,8 @@ pre.syntax span.meta
 {
 	margin-top: 6px;
 }
+
+blockquote.dtBlock
+{
+	margin: .5em 1.5em .5em 1.5em;
+}

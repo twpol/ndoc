@@ -429,9 +429,8 @@
 	<!-- -->
 	<xsl:template name="output-paragraph">
 		<xsl:param name="nodes" />
-		<xsl:variable name="first-element" select="local-name($nodes[1])" />
 		<xsl:choose>
-			<xsl:when test="$first-element != 'para' and $first-element != 'p'">
+			<xsl:when test="not($nodes/self::para | $nodes/self::p)">
 				<p class="i1">
 					<xsl:apply-templates select="$nodes" mode="slashdoc" />
 				</p>
@@ -442,22 +441,38 @@
 		</xsl:choose>
 	</xsl:template>
 	<!-- -->
+	<xsl:template match="para | p" mode="no-para">
+		<xsl:apply-templates mode="slashdoc" />
+	</xsl:template>
+	<!-- -->
+	<xsl:template match="note" mode="no-para">
+		<blockquote class="dtBlock">
+			<b>Note</b>
+			<xsl:text>&#160;&#160;&#160;</xsl:text>
+			<xsl:apply-templates mode="slashdoc" />
+		</blockquote>
+	</xsl:template>
+	<!-- -->
+	<xsl:template match="node()">
+		<xsl:apply-templates select="." mode="slashdoc" />
+	</xsl:template>
+	<!-- -->
 	<xsl:template name="summary-section">
 		<xsl:call-template name="output-paragraph">
-			<xsl:with-param name="nodes" select="documentation/summary/node()" />
+			<xsl:with-param name="nodes" select="(documentation/summary)[1]/node()" />
 		</xsl:call-template>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="summary-with-no-paragraph">
 		<xsl:param name="member" select="." />
-		<xsl:apply-templates select="$member[1]/documentation/summary[1]/node()" mode="slashdoc" />
+		<xsl:apply-templates select="($member/documentation/summary)[1]/node()" mode="no-para" />
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="overloads-summary-section">
 		<xsl:choose>
 			<xsl:when test="documentation/overloads/summary">
 				<xsl:call-template name="output-paragraph">
-					<xsl:with-param name="nodes" select="documentation/overloads/summary[1]/node()" />
+					<xsl:with-param name="nodes" select="(documentation/overloads/summary)[1]/node()" />
 				</xsl:call-template>
 			</xsl:when>
 			<xsl:otherwise>
@@ -470,7 +485,7 @@
 		<xsl:param name="overloads" select="." />
 		<xsl:choose>
 			<xsl:when test="$overloads/documentation/overloads/summary">
-				<xsl:apply-templates select="$overloads/documentation/overloads/summary[1]/node()" mode="slashdoc" />
+				<xsl:apply-templates select="($overloads/documentation/overloads/summary)[1]/node()" mode="no-para" />
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:call-template name="summary-with-no-paragraph">
@@ -480,21 +495,11 @@
 		</xsl:choose>
 	</xsl:template>
 	<!-- -->
-	<xsl:template name="overloads-note-section">
-		<xsl:if test="documentation/overloads/note">
-			<p class="i2">
-				<b>Note</b>
-				<xsl:text>&#160;&#160;</xsl:text>
-				<xsl:apply-templates select="documentation/overloads/note/node()" mode="slashdoc" />
-			</p>
-		</xsl:if>
-	</xsl:template>
-	<!-- -->
 	<xsl:template name="overloads-example-section">
 		<xsl:if test="documentation/overloads/example">
 			<h4>Example</h4>
 			<p class="i1">
-				<xsl:apply-templates select="documentation/overloads/example/node()" mode="slashdoc" />
+				<xsl:apply-templates select="(documentation/overloads/example)[1]/node()" mode="slashdoc" />
 			</p>
 		</xsl:if>
 	</xsl:template>
@@ -687,20 +692,20 @@
 	<!-- -->
 	<xsl:template match="note" mode="slashdoc">
 		<xsl:choose>
-			<xsl:when test="@type='note'">
-				<B>Note: </B>
-				<xsl:apply-templates select="./node()" mode="slashdoc" />
-			</xsl:when>
 			<xsl:when test="@type='inheritinfo'">
-				<B>Notes to Inheritors: </B>
+				<b>Notes to Inheritors: </b>
 				<xsl:apply-templates select="./node()" mode="slashdoc" />
 			</xsl:when>
 			<xsl:when test="@type='inotes'">
-				<B>Notes to Implementers: </B>
+				<b>Notes to Implementers: </b>
 				<xsl:apply-templates select="./node()" mode="slashdoc" />
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:apply-templates select="./node()" />
+				<p class="i2">
+					<b>Note</b>
+					<xsl:text>&#160;&#160;&#160;</xsl:text>
+					<xsl:apply-templates select="./node()" mode="slashdoc" />
+				</p>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>

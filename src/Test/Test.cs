@@ -1157,8 +1157,10 @@ namespace NDoc.Test
 		}
 
 		/// <overloads>
-		///   <summary>This method is overloaded.</summary>
-		///   <note>This is a note.</note>
+		///   <summary>
+		///     <para>This method is overloaded.</para>
+		///     <note>This is a note.</note>
+		///   </summary>
 		///   <example>
 		///     <para>This is some example code.</para>
 		///     <code>Foo.Bar.Baz.Quux();</code>
