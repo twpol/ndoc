@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <project name="NDoc.Documenter.HtmlHelp2" default="compile">
 	<target name="compile" unless="${current.runtime.config.mono}" depends="locate-help-compilerservices-typelib, locate-mshtml-interop-assembly">
-            	<if propertyexists="help.compilerservices.typelib">
+		<if propertyexists="help.compilerservices.typelib">
 			<if propertyexists="mshtml.primary.interop.assembly">
 				<!-- generate COM interop assembly for Microsoft Help Compiler Services 1.0 -->
 				<tlbimp typelib="${help.compilerservices.typelib}" output="${current.bin.dir}/Interop.MSHelpCompiler.dll" namespace="MSHelpCompiler" asmversion="1.0.0.0" keyfile="../../ndoc.snk" />
@@ -28,8 +28,8 @@
 	</target>
 	<target name="locate-help-compilerservices-typelib">
 		<readregistry property="help.compilerservices.typelib" key="TypeLib\{314111EE-A502-11D2-BBCA-00C04F8EC294}\1.0\0\win32\"
-                	hive="ClassesRoot" failonerror="false" />
-            	<ifnot propertyexists="help.compilerservices.typelib">
+			hive="ClassesRoot" failonerror="false" />
+			<ifnot propertyexists="help.compilerservices.typelib">
 			<if propertyexists="project.build.package" propertytrue="project.build.package">
 				<fail message="Microsoft Help Compiler Services 1.0 is not available. Please ensure that you've installed the Visual Studio Help Integration Kit 2002 or 2003." />
 			</if>
