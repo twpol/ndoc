@@ -105,7 +105,7 @@ namespace NDoc.Gui
 			// 
 			// okButton
 			// 
-			this.okButton.Anchor = (System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left);
+			this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.okButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.okButton.Location = new System.Drawing.Point(131, 112);
@@ -115,7 +115,7 @@ namespace NDoc.Gui
 			// 
 			// cancelButton
 			// 
-			this.cancelButton.Anchor = (System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left);
+			this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.cancelButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.cancelButton.Location = new System.Drawing.Point(219, 112);
@@ -125,27 +125,29 @@ namespace NDoc.Gui
 			// 
 			// assemblyTextBox
 			// 
-			this.assemblyTextBox.Anchor = ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-				| System.Windows.Forms.AnchorStyles.Right);
+			this.assemblyTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+				| System.Windows.Forms.AnchorStyles.Right)));
 			this.assemblyTextBox.Location = new System.Drawing.Point(120, 24);
 			this.assemblyTextBox.Name = "assemblyTextBox";
 			this.assemblyTextBox.Size = new System.Drawing.Size(272, 20);
 			this.assemblyTextBox.TabIndex = 2;
 			this.assemblyTextBox.Text = "";
+			this.assemblyTextBox.TextChanged += new System.EventHandler(this.slashDocTextBox_TextChanged);
 			// 
 			// slashDocTextBox
 			// 
-			this.slashDocTextBox.Anchor = ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-				| System.Windows.Forms.AnchorStyles.Right);
+			this.slashDocTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+				| System.Windows.Forms.AnchorStyles.Right)));
 			this.slashDocTextBox.Location = new System.Drawing.Point(120, 64);
 			this.slashDocTextBox.Name = "slashDocTextBox";
 			this.slashDocTextBox.Size = new System.Drawing.Size(272, 20);
 			this.slashDocTextBox.TabIndex = 3;
 			this.slashDocTextBox.Text = "";
+			this.slashDocTextBox.TextChanged += new System.EventHandler(this.slashDocTextBox_TextChanged);
 			// 
 			// assemblyButton
 			// 
-			this.assemblyButton.Anchor = (System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right);
+			this.assemblyButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.assemblyButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.assemblyButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
 			this.assemblyButton.Location = new System.Drawing.Point(392, 24);
@@ -157,7 +159,7 @@ namespace NDoc.Gui
 			// 
 			// slashDocButton
 			// 
-			this.slashDocButton.Anchor = (System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right);
+			this.slashDocButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.slashDocButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.slashDocButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
 			this.slashDocButton.Location = new System.Drawing.Point(392, 64);
@@ -193,16 +195,15 @@ namespace NDoc.Gui
 			this.AcceptButton = this.okButton;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.CancelButton = this.cancelButton;
-			this.ClientSize = new System.Drawing.Size(424, 148);
-			this.Controls.AddRange(new System.Windows.Forms.Control[] {
-																		  this.slashDocButton,
-																		  this.assemblyButton,
-																		  this.cancelButton,
-																		  this.okButton,
-																		  this.slashDocTextBox,
-																		  this.assemblyTextBox,
-																		  this.label2,
-																		  this.label1});
+			this.ClientSize = new System.Drawing.Size(426, 150);
+			this.Controls.Add(this.slashDocButton);
+			this.Controls.Add(this.assemblyButton);
+			this.Controls.Add(this.cancelButton);
+			this.Controls.Add(this.okButton);
+			this.Controls.Add(this.slashDocTextBox);
+			this.Controls.Add(this.assemblyTextBox);
+			this.Controls.Add(this.label2);
+			this.Controls.Add(this.label1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
@@ -224,6 +225,10 @@ namespace NDoc.Gui
 			if (SlashDocFilename != "" && AssemblyFilename != "")
 			{
 				okButton.Enabled = true;
+			}
+			else
+			{
+				okButton.Enabled = false;
 			}
 		}
 
@@ -271,6 +276,11 @@ namespace NDoc.Gui
 				}
 			}
 
+			CheckOKEnable();
+		}
+
+		private void slashDocTextBox_TextChanged(object sender, System.EventArgs e)
+		{
 			CheckOKEnable();
 		}
 	}
