@@ -43,6 +43,7 @@ namespace NDoc.Core
 			_DocumentInternals = false;
 			_DocumentProtected = true;
 			_DocumentPrivates = false;
+			_DocumentProtectedInternalAsProtected = false;
 			_DocumentEmptyNamespaces = false;
 
 			_IncludeAssemblyVersion = false;
@@ -335,6 +336,24 @@ namespace NDoc.Core
 			set
 			{
 				_DocumentPrivates = value;
+				SetDirty();
+			}
+		}
+
+		private bool _DocumentProtectedInternalAsProtected;
+
+		/// <summary>Gets or sets the DocumentProtectedInternalAsProtected property.</summary>
+		[
+		Category("Visibility"),
+		Description("If true, NDoc will treat \"protected internal\" members as \"protected\" only."),
+		]
+		public bool DocumentProtectedInternalAsProtected
+		{
+			get { return _DocumentProtectedInternalAsProtected; }
+
+			set
+			{
+				_DocumentProtectedInternalAsProtected = value;
 				SetDirty();
 			}
 		}

@@ -1984,7 +1984,14 @@ namespace NDoc.Core
 					result = "NestedFamily";
 					break;
 				case TypeAttributes.NestedFamORAssem:
-					result = "NestedFamilyOrAssembly";
+					if (MyConfig.DocumentProtectedInternalAsProtected)
+					{
+						result = "NestedFamily";
+					}
+					else
+					{
+						result = "NestedFamilyOrAssembly";
+					}
 					break;
 				case TypeAttributes.NestedAssembly:
 					result = "NestedAssembly";
@@ -2013,7 +2020,14 @@ namespace NDoc.Core
 					result = "Family";
 					break;
 				case FieldAttributes.FamORAssem:
-					result = "FamilyOrAssembly";
+					if (MyConfig.DocumentProtectedInternalAsProtected)
+					{
+						result = "Family";
+					}
+					else
+					{
+						result = "FamilyOrAssembly";
+					}
 					break;
 				case FieldAttributes.Assembly:
 					result = "Assembly";
@@ -2061,7 +2075,14 @@ namespace NDoc.Core
 					result = "Family";
 					break;
 				case MethodAttributes.FamORAssem:
-					result = "FamilyOrAssembly";
+					if (MyConfig.DocumentProtectedInternalAsProtected)
+					{
+						result = "Family";
+					}
+					else
+					{
+						result = "FamilyOrAssembly";
+					}
 					break;
 				case MethodAttributes.Assembly:
 					result = "Assembly";
