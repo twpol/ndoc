@@ -33,7 +33,7 @@
 					<td>
 						<p>Use this tag to declare events that are raised by a member. Syntax:
 						</p>
-						<pre class="csharpcode"><span class=codecomment>///&lt;event cref="EventName"&gt;
+						<pre class="csharpcode"><span class=rem>///&lt;event cref="EventName"&gt;
 ///    Raised when something occurs.
 ///&lt;/event&gt;</span></pre>
 					</td>
@@ -94,12 +94,11 @@
 							</li>
 						</ul>
 						<p>Example:</p>
-						<pre class="csharpcode"><span class=codecomment>///&lt;overloads&gt;This method has two overloads.&lt;/overloads&gt;</span>
-<span class=codecomment>///&lt;summary&gt;This overload just says hello.&lt;/summary&gt;</span>
+						<pre class="csharpcode"><span class=rem>///&lt;overloads&gt;This method has two overloads.&lt;/overloads&gt;</span>
+<span class=rem>///&lt;summary&gt;This overload just says hello.&lt;/summary&gt;</span>
 <span class=kwrd>public</span> <span class=kwrd>void</span> SayHello() { ... }
-<span class=codecomment>///&lt;summary&gt;This one says hello to someone.&lt;/summary&gt;</span>
-<span class=kwrd>public</span> <span class=kwrd>void</span> SayHello(<span class=kwrd>string</span> toSomeone) { ... }
-</pre>
+<span class=rem>///&lt;summary&gt;This one says hello to someone.&lt;/summary&gt;</span>
+<span class=kwrd>public</span> <span class=kwrd>void</span> SayHello(<span class=kwrd>string</span> toSomeone) { ... }</pre>
 					</td>
 				</tr>
 				<tr vAlign="top">
@@ -125,9 +124,8 @@
 						<p><a name="platform"><b>&lt;platform&gt;</b></a></p>
 					</td>
 					<td>Used to specify the supported operating systems and framework implementations 
-						supported by a type or member. See the
-					<a href="tag_platform.htm">&lt;platform&gt;</a> tag topic for more 
-					information.</td>
+						supported by a type or member. See the <a href="tag_platform.htm">&lt;platform&gt;</a>
+						tag topic for more information.</td>
 				</tr>
 				<tr>
 					<td>
@@ -140,8 +138,8 @@
 						<p>If the tag is empty, preliminary topics will include the default message:</p>
 						<p><font color="red">[This is preliminary documentation and subject to change.]</font></p>
 						<p><font color="black">It is also possible to mark an entire help project as 
-								preliminary using the <strong>
-						<a href="documenters.htm#preliminary">Preliminary</a></strong> project setting.</font></p>
+								preliminary using the <strong><a href="documenters.htm#preliminary">Preliminary</a></strong>
+								project setting.</font></p>
 					</td>
 				</tr>
 				<tr vAlign="top">
@@ -202,12 +200,11 @@
 							be.</p>
 						<p>Textual content can be included as the inner text of this tag in order to 
 							provide additional information about the thread safety of the type.</p>
-						<pre class="csharpcode"><span class=codecomment>/// &lt;summary&gt;This overload just says hello.&lt;/summary&gt;</span>
-<span class=codecomment>/// &lt;threadsafety static="true" instance="true"&gt;</span>
-<span class=codecomment>///&nbsp;&nbsp;&nbsp; &lt;para&gt;More information about using this class across thread&lt;/para&gt;</span>
-<span class=codecomment>/// &lt;/threadsafety&gt;</span>
-<span class=kwrd>public</span> <span class=kwrd>class</span> SafeClass() { ... }
-						</pre>
+						<pre class="csharpcode"><span class=rem>/// &lt;summary&gt;This overload just says hello.&lt;/summary&gt;</span>
+<span class=rem>/// &lt;threadsafety static="true" instance="true"&gt;</span>
+<span class=rem>///&nbsp;&nbsp;&nbsp; &lt;para&gt;More information about using this class across thread&lt;/para&gt;</span>
+<span class=rem>/// &lt;/threadsafety&gt;</span>
+<span class=kwrd>public</span> <span class=kwrd>class</span> SafeClass() { ... }</pre>
 					</td>
 				</tr>
 				<tr vAlign="top">
@@ -256,11 +253,10 @@
 					<td>
 						<p>A formatted note block.</p>
 						<P>Example:</P>
-						<pre class="csharpcode"><span class=codecomment>/// &lt;summary&gt;</span>
-<span class=codecomment>/// </span><span class=codecomment>&lt;note&gt;This is a note in the summary.&lt;/note&gt;</span>
-<span class=codecomment>/// &lt;/summary&gt;</span>
-<span class=kwrd>public</span> <span class=kwrd>class</span> SomeClass() { ... }
-						</pre>
+						<pre class="csharpcode"><span class=rem>/// &lt;summary&gt;</span>
+<span class=rem>/// &lt;note&gt;This is a note in the summary.&lt;/note&gt;</span>
+<span class=rem>/// &lt;/summary&gt;</span>
+<span class=kwrd>public</span> <span class=kwrd>class</span> SomeClass() { ... }</pre>
 						<p>gives,</p>
 						<blockquote class="dtBlock"><b>Note</b> This is a note in the summary.</blockquote>
 					</td>
