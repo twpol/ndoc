@@ -31,11 +31,13 @@
 				</xsl:call-template>
 				<div id="content">
 					<xsl:call-template name="summary-section" />
-					<pre class="syntax">
-						<span class="lang">[Visual&#160;Basic]</span>
-						<br />
-						<xsl:call-template name="vb-property-syntax" />
-					</pre>
+					<xsl:if test="$ndoc-vb-syntax">
+						<pre class="syntax">
+							<span class="lang">[Visual&#160;Basic]</span>
+							<br />
+							<xsl:call-template name="vb-property-syntax" />
+						</pre>
+					</xsl:if>
 					<pre class="syntax">
 						<span class="lang">[C#]</span>
 						<br />
