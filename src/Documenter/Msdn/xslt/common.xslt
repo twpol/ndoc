@@ -1,8 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<!-- -->
-	<xsl:include href="syntax.xslt" />
 	<xsl:include href="filenames.xslt" />
+	<xsl:include href="syntax.xslt" />
+	<xsl:include href="vb-syntax.xslt" />
 	<!-- -->
 	<xsl:param name="ndoc-title" />
 	<!-- -->

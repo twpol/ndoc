@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.0.9254"
+        ProductVersion = "7.0.9372"
         SchemaVersion = "1.0"
         ProjectGuid = "{8282F072-D966-4075-A8DA-8911E36F4980}"
     >
@@ -15,7 +15,6 @@
                 DefaultHTMLPageLayout = "Grid"
                 DefaultTargetSchema = "IE50"
                 DelaySign = "false"
-                NoStandardLibraries = "false"
                 OutputType = "Library"
                 RootNamespace = "NDoc.Documenter.Msdn"
                 StartupObject = ""
@@ -160,6 +159,10 @@
                 />
                 <File
                     RelPath = "xslt\type.xslt"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "xslt\vb-syntax.xslt"
                     BuildAction = "EmbeddedResource"
                 />
             </Include>

@@ -407,6 +407,11 @@ namespace NDoc.Core
 					writer.WriteAttributeString("abstract", "true");
 				}
 
+				if (type.IsSealed)
+				{
+					writer.WriteAttributeString("sealed", "true");
+				}
+
 				if (type.BaseType != null && type.BaseType.FullName != "System.Object")
 				{
 					writer.WriteAttributeString("baseType", type.BaseType.Name);

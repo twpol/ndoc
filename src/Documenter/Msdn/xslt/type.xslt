@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<!-- -->
-	<xsl:output method="html" indent="yes" />
+	<xsl:output method="html" indent="no" />
 	<!-- -->
 	<xsl:include href="common.xslt" />
 	<!-- -->
@@ -149,7 +149,8 @@
 							</xsl:choose>
 						</p>
 					</xsl:if>
-					<xsl:call-template name="type-syntax" />
+					<xsl:call-template name="vb-type-syntax" />
+					<xsl:call-template name="cs-type-syntax" />
 					<xsl:if test="local-name() = 'delegate'">
 						<xsl:call-template name="parameter-section" />
 					</xsl:if>

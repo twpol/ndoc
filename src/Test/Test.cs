@@ -114,8 +114,23 @@ namespace NDoc.Test
 		/// <summary>This is a method in an interface.</summary>
 		void InterfaceMethod();
 
-		/// <summary>This event is decalred in an interface.</summary>
+		/// <summary>This event is declared in an interface.</summary>
 		event Handler InterfaceEvent;
+	}
+
+	/// <summary>This is an empty interface.</summary>
+	public interface Interface1
+	{
+	}
+
+	/// <summary>This is also an empty interface.</summary>
+	public interface Interface2
+	{
+	}
+
+	/// <summary>This class implements two empty interfaces.</summary>
+	public class ImplementsTwoInterfaces : Interface1, Interface2
+	{
 	}
 
 	/// <summary>Represents an abstract class.</summary>
@@ -541,5 +556,10 @@ namespace NDoc.Test
 		public void PermissionsRequired()
 		{
 		}
+	}
+
+	/// <summary>This is a sealed class.</summary>
+	public sealed class SealedClass
+	{
 	}
 }

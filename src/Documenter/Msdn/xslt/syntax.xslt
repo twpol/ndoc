@@ -1,13 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<!-- -->
-	<xsl:template name="type-syntax">
+	<xsl:template name="cs-type-syntax">
 		<pre class="syntax">
+			<span class="lang">[C#]</span>
+			<br />
 			<xsl:call-template name="type-access">
 				<xsl:with-param name="access" select="@access" />
 			</xsl:call-template>
 			<xsl:text>&#160;</xsl:text>
 			<xsl:if test="local-name() != 'interface' and @abstract = 'true'">abstract&#160;</xsl:if>
+			<xsl:if test="@sealed = 'true'">
+				<xsl:text>sealed&#160;</xsl:text>
+			</xsl:if>
 			<xsl:choose>
 				<xsl:when test="local-name()='structure'">
 					<xsl:text>struct</xsl:text>

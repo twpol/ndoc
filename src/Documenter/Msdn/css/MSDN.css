@@ -157,3 +157,9 @@ code.ce
 {
 	font-style: italic;
 }
+
+pre.syntax span.lang
+{
+	margin: 0;
+	font-weight: normal;
+}
