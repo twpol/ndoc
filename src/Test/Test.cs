@@ -307,6 +307,10 @@ namespace NDoc.Test
 		{
 			BaseEvent(this, new EventArgs());
 		}
+
+		/// <summary>A static method in the Base class.</summary>
+		/// <remarks>This should not appear in derived classes.</remarks>
+		public static void StaticBaseMethod() {}
 	}
 
 	/// <summary>Represents a derived class.</summary>
@@ -341,6 +345,10 @@ namespace NDoc.Test
 		/// <summary>This method is overriden in the Derived class.</summary>
 		/// <remarks>Only one of the two overloads is overriden.</remarks>
 		public override void TwoVirtualOverloads(string key) { }
+
+		/// <summary>A static method in the Derived class.</summary>
+		/// <remarks>This should not appear in derived classes.</remarks>
+		public static void StaticDerivedMethod() {}
 	}
 
 	/// <summary>Represents another derived class.</summary>
