@@ -14,6 +14,7 @@
             <property name="DocumentInternals" value="False" />
             <property name="DocumentProtected" value="True" />
             <property name="DocumentPrivates" value="False" />
+            <property name="DocumentEmptyNamespaces" value="False" />
         </documenter>
         <documenter name="MSDN">
             <property name="OutputDirectory" value=".\docs\Test\MSDN\" />
@@ -29,6 +30,7 @@
             <property name="DocumentInternals" value="False" />
             <property name="DocumentProtected" value="True" />
             <property name="DocumentPrivates" value="False" />
+            <property name="DocumentEmptyNamespaces" value="False" />
         </documenter>
         <documenter name="XML">
             <property name="OutputFile" value=".\docs\Test\Test.xml" />
@@ -40,6 +42,7 @@
             <property name="DocumentInternals" value="False" />
             <property name="DocumentProtected" value="True" />
             <property name="DocumentPrivates" value="False" />
+            <property name="DocumentEmptyNamespaces" value="False" />
         </documenter>
         <documenter name="XSLT">
             <property name="XsltDirectory" value=".\src\Simple" />
@@ -52,6 +55,7 @@
             <property name="DocumentInternals" value="False" />
             <property name="DocumentProtected" value="True" />
             <property name="DocumentPrivates" value="False" />
+            <property name="DocumentEmptyNamespaces" value="False" />
         </documenter>
     </documenters>
 </project>
