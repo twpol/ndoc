@@ -222,18 +222,6 @@
              </OBJECT>
       </UL>
       <LI><OBJECT type="text/sitemap">
-            <param name="Name" value="Programmer's Reference">
-            <param name="Local" value="Content\reference.htm">
-          </OBJECT>
-      <UL>
-         <LI><OBJECT type="text/sitemap">
-               <param name="Name" value="ref">
-             </OBJECT>
-      </UL>
-      <OBJECT type="text/sitemap">
-        <param name="Merge" value="NDocReference.chm::/NDocReference.hhc">
-      </OBJECT>
-      <LI><OBJECT type="text/sitemap">
             <param name="Name" value="Getting Involved">
             <param name="Local" value="Content\gettinginvolved.htm">
             <param name="ImageNumber" value="41">

@@ -190,11 +190,6 @@
             <param name="Local" value="Content\tag_preliminary.htm">
          </OBJECT>
     <LI><OBJECT type="text/sitemap">
-            <param name="Name" value="Programmer's Reference">
-            <param name="Name" value="Programmer's Reference">
-            <param name="Local" value="Content\reference.htm">
-         </OBJECT>
-    <LI><OBJECT type="text/sitemap">
             <param name="Name" value="Project Designer">
             <param name="Name" value="Project Designer">
             <param name="Local" value="Content\projectdesigner.htm">

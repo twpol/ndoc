@@ -3,7 +3,7 @@
 
 [OPTIONS]
 Auto Index=Yes
-Binary TOC=No
+Binary TOC=Yes
 Compatibility=1.1 or later
 Compiled File=NDocUsersGuide.chm
 Contents File=contents.HHC
@@ -83,5 +83,3 @@ Content\images\sf.GIF
 Content\script\ndoc.js
 Content\build_process.htm
 
-[MERGE FILES]
-NDocReference.chm
