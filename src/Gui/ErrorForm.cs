@@ -5,6 +5,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Text;
 using System.Windows.Forms;
+using System.Reflection;
 
 namespace NDoc.Gui
 {
@@ -48,8 +49,30 @@ namespace NDoc.Gui
 				{
 					strBld.AppendFormat("Exception: {0}\n", tmpEx.GetType().ToString());
 					strBld.Append(tmpEx.Message);
-					strBld.Append("\n\n");
+					strBld.Append("\n");
 					tmpEx = tmpEx.InnerException;
+				}
+				strBld.Append("\n");
+			}
+			ReflectionTypeLoadException rtle = ex as ReflectionTypeLoadException;
+			if (rtle != null)
+			{
+				Hashtable fileLoadExceptions = new Hashtable();
+				foreach(Exception loaderEx in rtle.LoaderExceptions)
+				{
+					System.IO.FileLoadException fileLoadEx = loaderEx as System.IO.FileLoadException;
+					if (fileLoadEx !=null)
+					{
+						if (!fileLoadExceptions.ContainsKey(fileLoadEx.FileName))
+						{
+							fileLoadExceptions.Add(fileLoadEx.FileName,null);
+						strBld.Append("Unable to load: " + fileLoadEx.FileName + "\n");
+						}
+					}
+					else
+					{
+						strBld.Append(loaderEx.Message + "\n");
+					}
 				}
 			}
 			string[] lines = strBld.ToString().Split('\n');
@@ -106,13 +129,12 @@ namespace NDoc.Gui
 			// 
 			this.m_messageTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
 				| System.Windows.Forms.AnchorStyles.Right)));
-			this.m_messageTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.m_messageTextBox.Location = new System.Drawing.Point(16, 12);
+			this.m_messageTextBox.Location = new System.Drawing.Point(8, 8);
 			this.m_messageTextBox.Multiline = true;
 			this.m_messageTextBox.Name = "m_messageTextBox";
 			this.m_messageTextBox.ReadOnly = true;
 			this.m_messageTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.m_messageTextBox.Size = new System.Drawing.Size(432, 116);
+			this.m_messageTextBox.Size = new System.Drawing.Size(440, 140);
 			this.m_messageTextBox.TabIndex = 6;
 			this.m_messageTextBox.Text = "";
 			// 
@@ -121,7 +143,7 @@ namespace NDoc.Gui
 			this.m_closeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.m_closeButton.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.m_closeButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.m_closeButton.Location = new System.Drawing.Point(368, 328);
+			this.m_closeButton.Location = new System.Drawing.Point(368, 384);
 			this.m_closeButton.Name = "m_closeButton";
 			this.m_closeButton.TabIndex = 4;
 			this.m_closeButton.Text = "&Close";
@@ -129,7 +151,7 @@ namespace NDoc.Gui
 			// m_stackTraceLabel
 			// 
 			this.m_stackTraceLabel.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.m_stackTraceLabel.Location = new System.Drawing.Point(8, 132);
+			this.m_stackTraceLabel.Location = new System.Drawing.Point(8, 152);
 			this.m_stackTraceLabel.Name = "m_stackTraceLabel";
 			this.m_stackTraceLabel.Size = new System.Drawing.Size(88, 16);
 			this.m_stackTraceLabel.TabIndex = 8;
@@ -140,20 +162,21 @@ namespace NDoc.Gui
 			this.m_stackTraceTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
 				| System.Windows.Forms.AnchorStyles.Left) 
 				| System.Windows.Forms.AnchorStyles.Right)));
-			this.m_stackTraceTextBox.Location = new System.Drawing.Point(8, 148);
+			this.m_stackTraceTextBox.Location = new System.Drawing.Point(8, 168);
 			this.m_stackTraceTextBox.Multiline = true;
 			this.m_stackTraceTextBox.Name = "m_stackTraceTextBox";
 			this.m_stackTraceTextBox.ReadOnly = true;
 			this.m_stackTraceTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.m_stackTraceTextBox.Size = new System.Drawing.Size(440, 172);
+			this.m_stackTraceTextBox.Size = new System.Drawing.Size(440, 208);
 			this.m_stackTraceTextBox.TabIndex = 7;
 			this.m_stackTraceTextBox.Text = "";
 			this.m_stackTraceTextBox.WordWrap = false;
 			// 
 			// btnCopy
 			// 
+			this.btnCopy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.btnCopy.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.btnCopy.Location = new System.Drawing.Point(8, 328);
+			this.btnCopy.Location = new System.Drawing.Point(8, 384);
 			this.btnCopy.Name = "btnCopy";
 			this.btnCopy.Size = new System.Drawing.Size(120, 24);
 			this.btnCopy.TabIndex = 9;
@@ -163,12 +186,12 @@ namespace NDoc.Gui
 			// ErrorForm
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.ClientSize = new System.Drawing.Size(456, 358);
+			this.ClientSize = new System.Drawing.Size(456, 414);
 			this.Controls.Add(this.btnCopy);
 			this.Controls.Add(this.m_messageTextBox);
+			this.Controls.Add(this.m_stackTraceTextBox);
 			this.Controls.Add(this.m_closeButton);
 			this.Controls.Add(this.m_stackTraceLabel);
-			this.Controls.Add(this.m_stackTraceTextBox);
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.MinimumSize = new System.Drawing.Size(400, 300);
