@@ -288,6 +288,7 @@ namespace NDoc.Gui
 			this.menuView = new System.Windows.Forms.MenuItem();
 			this.menuViewBuildProgress = new System.Windows.Forms.MenuItem();
 			this.menuViewStatusBar = new System.Windows.Forms.MenuItem();
+			this.menuViewDescriptions = new System.Windows.Forms.MenuItem();
 			this.menuItem1 = new System.Windows.Forms.MenuItem();
 			this.menuViewOptions = new System.Windows.Forms.MenuItem();
 			this.menuHelpItem = new System.Windows.Forms.MenuItem();
@@ -322,7 +323,6 @@ namespace NDoc.Gui
 			this.labelDocumenters = new System.Windows.Forms.Label();
 			this.comboBoxDocumenters = new System.Windows.Forms.ComboBox();
 			this.propertyGrid = new System.Windows.Forms.PropertyGrid();
-			this.menuViewDescriptions = new System.Windows.Forms.MenuItem();
 			((System.ComponentModel.ISupportInitialize)(this.statusBarTextPanel)).BeginInit();
 			this.assembliesHeaderGroupBox.SuspendLayout();
 			this.documenterHeaderGroupBox.SuspendLayout();
@@ -500,6 +500,13 @@ namespace NDoc.Gui
 			this.menuViewStatusBar.Index = 1;
 			this.menuViewStatusBar.Text = "Status Bar";
 			this.menuViewStatusBar.Click += new System.EventHandler(this.menuViewStatusBar_Click);
+			// 
+			// menuViewDescriptions
+			// 
+			this.menuViewDescriptions.Checked = true;
+			this.menuViewDescriptions.Index = 2;
+			this.menuViewDescriptions.Text = "Descriptions";
+			this.menuViewDescriptions.Click += new System.EventHandler(this.menuViewDescriptions_Click);
 			// 
 			// menuItem1
 			// 
@@ -801,15 +808,9 @@ namespace NDoc.Gui
 			this.propertyGrid.ViewBackColor = System.Drawing.SystemColors.Window;
 			this.propertyGrid.ViewForeColor = System.Drawing.SystemColors.WindowText;
 			// 
-			// menuViewDescriptions
-			// 
-			this.menuViewDescriptions.Checked = true;
-			this.menuViewDescriptions.Index = 2;
-			this.menuViewDescriptions.Text = "Descriptions";
-			this.menuViewDescriptions.Click += new System.EventHandler(this.menuViewDescriptions_Click);
-			// 
 			// MainForm
 			// 
+			this.AllowDrop = true;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.ClientSize = new System.Drawing.Size(496, 610);
 			this.Controls.Add(this.documenterHeaderGroupBox);
@@ -1309,10 +1310,26 @@ namespace NDoc.Gui
 
 		private void menuFileOpenItem_Click (object sender, System.EventArgs e)
 		{
-			if (project.IsDirty)
+			if ( QueryContinueOpen() )
 			{
-				DialogResult result = PromptToSave();
-				switch (result)
+				OpenFileDialog openFileDlg = new OpenFileDialog();
+				openFileDlg.InitialDirectory = Directory.GetCurrentDirectory();
+				openFileDlg.Filter = "NDoc Project files (*.ndoc)|*.ndoc|All files (*.*)|*.*" ;
+
+				if(openFileDlg.ShowDialog() == DialogResult.OK)
+				{
+					FileOpen(openFileDlg.FileName);
+				}
+			}
+		}
+
+		private bool QueryContinueOpen()
+		{
+			bool continueOpen = true;
+
+			if ( project.IsDirty )
+			{
+				switch ( PromptToSave() )
 				{
 					case DialogResult.Yes:
 						SaveOrSaveAs();
@@ -1320,17 +1337,12 @@ namespace NDoc.Gui
 					case DialogResult.No:
 						break;
 					case DialogResult.Cancel:
-						return;
+						continueOpen = false;
+						break;
 				}
 			}
-			OpenFileDialog openFileDlg = new OpenFileDialog();
-			openFileDlg.InitialDirectory = Directory.GetCurrentDirectory();
-			openFileDlg.Filter = "NDoc Project files (*.ndoc)|*.ndoc|All files (*.*)|*.*" ;
 
-			if(openFileDlg.ShowDialog() == DialogResult.OK)
-			{
-				FileOpen(openFileDlg.FileName);
-			}
+			return continueOpen;
 		}
 
 		private void menuFileSaveItem_Click (object sender, System.EventArgs e)
@@ -1853,7 +1865,7 @@ namespace NDoc.Gui
 
 		private DialogResult PromptToSave()
 		{
-			return MessageBox.Show(
+			return MessageBox.Show( this,
 				"Save changes to project " + projectFilename + "?",
 				"Save?",
 				MessageBoxButtons.YesNoCancel,
@@ -1960,7 +1972,7 @@ namespace NDoc.Gui
 		private void assembliesListView_DragDrop(object sender, System.Windows.Forms.DragEventArgs e)
 		{
 			string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-			foreach ( AssemblySlashDoc assemblySlashDoc in DragDropHandler.HandleDrop( files ) )
+			foreach ( AssemblySlashDoc assemblySlashDoc in DragDropHandler.GetAssemblySlashDocs( files ) )
 			{			
 				this.Cursor = Cursors.WaitCursor;
 				try
@@ -1990,7 +2002,7 @@ namespace NDoc.Gui
 
 		private void assembliesListView_DragEnter(object sender, System.Windows.Forms.DragEventArgs e)
 		{
-			if( e.Data.GetDataPresent(DataFormats.FileDrop) && DragDropHandler.CanDrop( (string[])e.Data.GetData(DataFormats.FileDrop) ) )
+			if( e.Data.GetDataPresent(DataFormats.FileDrop) && DragDropHandler.CanDrop( (string[])e.Data.GetData( DataFormats.FileDrop ) ) == DropFileType.Assembly )
 			{
 				e.Effect = DragDropEffects.Link;
 			}
@@ -2029,6 +2041,30 @@ namespace NDoc.Gui
 		private void menuViewDescriptions_Click(object sender, System.EventArgs e)
 		{
 			ShowDescriptions = !ShowDescriptions;
+		}
+
+		protected override void OnDragEnter(DragEventArgs drgevent)
+		{
+			if( drgevent.Data.GetDataPresent( DataFormats.FileDrop ) && DragDropHandler.CanDrop( (string[])drgevent.Data.GetData( DataFormats.FileDrop ) ) == DropFileType.Project )
+			{
+				drgevent.Effect = DragDropEffects.Link;
+			}
+			else
+			{
+				drgevent.Effect = DragDropEffects.None;
+			}		
+			base.OnDragEnter (drgevent);
+		}
+
+		protected override void OnDragDrop(DragEventArgs drgevent)
+		{
+			// ask the user if they want to save if the current project if dirty
+			if( QueryContinueOpen() )
+			{
+				string[] files = (string[])drgevent.Data.GetData( DataFormats.FileDrop );
+				FileOpen( DragDropHandler.GetProjectFilePath( files ) );
+			}
+			base.OnDragDrop (drgevent);
 		}
 
 		private bool ShowDescriptions
