@@ -69,9 +69,16 @@
 				<xsl:text>)</xsl:text>
 				<xsl:if test="@returnType != 'System.Void'">
 					<xsl:text>&#160;As&#160;</xsl:text>
-					<xsl:call-template name="strip-namespace">
-						<xsl:with-param name="name" select="@returnType" />
-					</xsl:call-template>
+					<a>
+						<xsl:attribute name="href">
+							<xsl:call-template name="get-filename-for-type-name">
+								<xsl:with-param name="type-name" select="@returnType" />
+							</xsl:call-template>
+						</xsl:attribute>
+						<xsl:call-template name="strip-namespace">
+							<xsl:with-param name="name" select="@returnType" />
+						</xsl:call-template>
+					</a>
 				</xsl:if>
 			</xsl:when>
 			<xsl:otherwise>
@@ -169,19 +176,6 @@
 							</xsl:when>
 							<xsl:otherwise>
 								<xsl:value-of select="@name" />
-								<xsl:if test="@returnType != 'System.Void'">
-									<xsl:text> As </xsl:text>
-									<a>
-										<xsl:attribute name="href">
-											<xsl:call-template name="get-filename-for-type-name">
-												<xsl:with-param name="type-name" select="@returnType" />
-											</xsl:call-template>
-										</xsl:attribute>
-										<xsl:call-template name="strip-namespace">
-											<xsl:with-param name="name" select="@returnType" />
-										</xsl:call-template>
-									</a>
-								</xsl:if>
 							</xsl:otherwise>
 						</xsl:choose>
 						<xsl:call-template name="vb-parameters" />
