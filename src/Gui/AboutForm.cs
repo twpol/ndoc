@@ -72,12 +72,12 @@ namespace NDoc.Gui
 			AddLink(adminsLinkLabel,"Kevin Downs","http://sourceforge.net/sendmessage.php?touser=919791");
 			adminsLinkLabel.Text += ", ";
 			AddLink(adminsLinkLabel,"Don Kackman","http://sourceforge.net/sendmessage.php?touser=4516");
-			adminsLinkLabel.Text += ", ";
-			AddLink(adminsLinkLabel,"Jason Diamond","http://sourceforge.net/sendmessage.php?touser=87620");
-			adminsLinkLabel.Text += ", ";
-			AddLink(adminsLinkLabel,"Jean-Claude Manoli","http://sourceforge.net/sendmessage.php?touser=235364");
-			adminsLinkLabel.Text += ", ";
-			AddLink(adminsLinkLabel,"Kral Ferch","http://sourceforge.net/sendmessage.php?touser=97544");
+//			adminsLinkLabel.Text += ", ";
+//			AddLink(adminsLinkLabel,"Jason Diamond","http://sourceforge.net/sendmessage.php?touser=87620");
+//			adminsLinkLabel.Text += ", ";
+//			AddLink(adminsLinkLabel,"Jean-Claude Manoli","http://sourceforge.net/sendmessage.php?touser=235364");
+//			adminsLinkLabel.Text += ", ";
+//			AddLink(adminsLinkLabel,"Kral Ferch","http://sourceforge.net/sendmessage.php?touser=97544");
 
 			
 			// Fill in loaded modules / version number info list view.
@@ -262,7 +262,7 @@ namespace NDoc.Gui
 			this.adminsLinkLabel.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
 			this.adminsLinkLabel.Location = new System.Drawing.Point(128, 176);
 			this.adminsLinkLabel.Name = "adminsLinkLabel";
-			this.adminsLinkLabel.Size = new System.Drawing.Size(408, 32);
+			this.adminsLinkLabel.Size = new System.Drawing.Size(408, 16);
 			this.adminsLinkLabel.TabIndex = 6;
 			this.adminsLinkLabel.TabStop = true;
 			this.adminsLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.adminsLinkLabel_LinkClicked);
@@ -272,25 +272,26 @@ namespace NDoc.Gui
 			this.developersLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
 				| System.Windows.Forms.AnchorStyles.Right)));
 			this.developersLabel.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
-			this.developersLabel.Location = new System.Drawing.Point(88, 208);
+			this.developersLabel.Location = new System.Drawing.Point(88, 200);
 			this.developersLabel.Name = "developersLabel";
-			this.developersLabel.Size = new System.Drawing.Size(440, 48);
+			this.developersLabel.Size = new System.Drawing.Size(440, 64);
 			this.developersLabel.TabIndex = 7;
-			this.developersLabel.Text = "Carlos Guzmán Álvarez, Gert Driesen, Heath Stewart, Laurent Domenech, Jerome Math" +
-				"ieu, Keith Hill, Michael Poettgen, Pascal Bourque, Ryan Seghers, Steve Van Esch," +
-				" Thong (Tum) Nguyen, Wolfgang Bauer";
+			this.developersLabel.Text = "Jason Diamond, Jean-Claude Manoli, Kral Ferch, Carlos Guzmán Álvarez, Gert Driese" +
+				"n, Heath Stewart, Laurent Domenech, Jerome Mathieu, Keith Hill, Michael Poettgen" +
+				", Pascal Bourque, Ryan Seghers, Steve Van Esch, Thong (Tum) Nguyen, Wolfgang Bau" +
+				"er";
 			// 
 			// label1
 			// 
 			this.label1.Location = new System.Drawing.Point(16, 176);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(128, 32);
+			this.label1.Size = new System.Drawing.Size(128, 16);
 			this.label1.TabIndex = 8;
 			this.label1.Text = "Project administrators : ";
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(16, 208);
+			this.label2.Location = new System.Drawing.Point(16, 200);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(72, 40);
 			this.label2.TabIndex = 9;
