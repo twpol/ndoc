@@ -45,7 +45,7 @@ div#titlerow /* provides non-scroll topic title area (requires script) */
 	background-color: #99ccff;        
 	}
 
-h1, h2, h3, h4
+h1, h2, h3, h4, h5
 	{
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	margin-bottom: .4em; 
@@ -72,6 +72,11 @@ h3
 h4
 	{
 	font-size: 100%;
+	}
+h5
+	{
+	font-size: 100%;
+	margin-left: 0px;
 	}
 .dtH1, .dtH2, .dtH3, .dtH4
 	{
