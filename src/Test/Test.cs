@@ -582,4 +582,140 @@ namespace NDoc.Test
 	public sealed class SealedClass
 	{
 	}
+
+	/// <summary>This class covers all member visibilities.</summary>
+	public class VisibilityTester
+	{
+		/// <summary>Public constructor</summary>
+		public VisibilityTester() {}
+
+		/// <summary>Public method</summary>
+		public void PublicMethod() {}
+
+		/// <summary>Public read-only property</summary>
+		public bool PublicReadOnlyProperty
+		{
+			get { return false; }
+		}
+
+		/// <summary>Public write-only property</summary>
+		public bool PublicWriteOnlyProperty
+		{
+			set {}
+		}
+
+		/// <summary>Public field</summary>
+		public bool publicField;
+
+		/// <summary>Public event</summary>
+		public event Handler PublicEvent;
+
+		/// <summary>Protected constructor</summary>
+		protected VisibilityTester(bool a) {}
+
+		/// <summary>Protected method</summary>
+		protected void ProtectedMethod() {}
+
+		/// <summary>Protected read-only property</summary>
+		protected bool ProtectedReadOnlyProperty
+		{
+			get { return false; }
+		}
+
+		/// <summary>Protected write-only property</summary>
+		protected bool ProtectedWriteOnlyProperty
+		{
+			set {}
+		}
+
+		/// <summary>Protected field</summary>
+		protected bool protectedField;
+
+		/// <summary>Protected event</summary>
+		protected event Handler ProtectedEvent;
+
+		/// <summary>Private constructor</summary>
+		private VisibilityTester(int a) {}
+
+		/// <summary>Private method</summary>
+		private void PrivateMethod() {}
+
+		/// <summary>Private read-only property</summary>
+		private bool PrivateReadOnlyProperty
+		{
+			get { return false; }
+		}
+
+		/// <summary>Private write-only property</summary>
+		private bool PrivateWriteOnlyProperty
+		{
+			set {}
+		}
+
+		/// <summary>Private field</summary>
+		private bool privateField = false;
+
+		/// <summary>Private event</summary>
+		private event Handler PrivateEvent;
+
+		/// <summary>Protected Internal constructor</summary>
+		protected internal VisibilityTester(short a) {}
+
+		/// <summary>Protected Internal method</summary>
+		protected internal void ProtectedInternalMethod() {}
+
+		/// <summary>Protected Internal read-only property</summary>
+		protected internal bool ProtectedInternalReadOnlyProperty
+		{
+			get { return false; }
+		}
+
+		/// <summary>Protected Internal write-only property</summary>
+		protected internal bool ProtectedInternalWriteOnlyProperty
+		{
+			set {}
+		}
+
+		/// <summary>Protected Internal field</summary>
+		protected internal bool protectedInternalField;
+
+		/// <summary>Protected Internal event</summary>
+		protected internal event Handler ProtectedInternalEvent;
+
+		/// <summary>Internal constructor</summary>
+		internal VisibilityTester(long a) {}
+
+		/// <summary>Internal method</summary>
+		internal bool InternalMethod() 
+		{
+			return (PublicEvent != null || 
+						ProtectedEvent != null || 
+						PrivateEvent != null || 
+						ProtectedInternalEvent != null || 
+						InternalEvent != null ||
+						publicField ||
+						protectedField ||
+						privateField ||
+						protectedInternalField ||
+						internalField);
+		}
+
+		/// <summary>Internal read-only property</summary>
+		internal bool InternalReadOnlyProperty
+		{
+			get { return false; }
+		}
+
+		/// <summary>Internal write-only property</summary>
+		internal bool InternalWriteOnlyProperty
+		{
+			set {}
+		}
+
+		/// <summary>Internal field</summary>
+		internal bool internalField = false;
+
+		/// <summary>Internal event</summary>
+		internal event Handler InternalEvent;
+	}
 }

@@ -40,7 +40,8 @@ namespace NDoc.Core
 			ShowMissingValues = false;
 
 			DocumentInternals = false;
-			DocumentPrivates = false;
+      DocumentProtected = true;
+      DocumentPrivates = false;
 		}
 
 		private Project _Project;
@@ -276,7 +277,25 @@ namespace NDoc.Core
 			}
 		}
 
-		bool _DocumentPrivates;
+    bool _DocumentProtected;
+
+    /// <summary>Gets or sets the DocumentProtected property.</summary>
+    [
+      Category("Visibility"),
+      Description("Turn this flag on to document protected code.")
+    ]
+    public bool DocumentProtected
+    {
+      get { return _DocumentProtected; }
+
+      set 
+      { 
+        _DocumentProtected = value; 
+        SetDirty();
+      }
+    }
+
+    bool _DocumentPrivates;
 
 		/// <summary>Gets or sets the DocumentPrivates property.</summary>
 		[

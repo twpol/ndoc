@@ -1,139 +1,139 @@
-// Documenter.cs - base XML documenter code
-// Copyright (C) 2001  Kral Ferch, Jason Diamond
+// Documenter.cs - base	XML	documenter code
+// Copyright (C) 2001	 Kral	Ferch, Jason Diamond
 //
-// This program is free software; you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation; either version 2 of the License, or
-// (at your option) any later version.
+// This	program	is free	software;	you	can	redistribute it	and/or modify
+// it	under	the	terms	of the GNU General Public	License	as published by
+// the Free	Software Foundation; either	version	2	of the License,	or
+// (at your	option)	any	later	version.
 //
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
+// This	program	is distributed in	the	hope that	it will	be useful,
+// but WITHOUT ANY WARRANTY; without even	the	implied	warranty of
+// MERCHANTABILITY or	FITNESS	FOR	A	PARTICULAR PURPOSE.	 See the
+// GNU General Public	License	for	more details.
 //
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+// You should	have received	a	copy of	the	GNU	General	Public License
+// along with	this program;	if not,	write	to the Free	Software
+// Foundation, Inc., 59	Temple Place,	Suite	330, Boston, MA	 02111-1307	 USA
 
-using System;
-using System.Collections;
-using System.Collections.Specialized;
-using System.Diagnostics;
-using System.IO;
-using System.Reflection;
-using System.Xml;
+using	System;
+using	System.Collections;
+using	System.Collections.Specialized;
+using	System.Diagnostics;
+using	System.IO;
+using	System.Reflection;
+using	System.Xml;
 
-namespace NDoc.Core
+namespace	NDoc.Core
 {
-	/// <summary>Provides the base class for documenters.</summary>
-	abstract public class BaseDocumenter : IDocumenter, IComparable
+	///	<summary>Provides	the	base class for documenters.</summary>
+	abstract public	class	BaseDocumenter : IDocumenter,	IComparable
 	{
-		IDocumenterConfig config;
+		IDocumenterConfig	config;
 
-		Project _Project;
+		Project	_Project;
 
 		Assembly currentAssembly;
-		XmlDocument currentSlashDoc;
+		XmlDocument	currentSlashDoc;
 
-		XmlDocument xmlDocument;
+		XmlDocument	xmlDocument;
 
-		/// <summary>Initialized a new BaseDocumenter instance.</summary>
-		protected BaseDocumenter(string name)
+		///	<summary>Initialized a new BaseDocumenter	instance.</summary>
+		protected	BaseDocumenter(string	name)
 		{
-			_Name = name;
-			xmlDocument = new XmlDocument();
+			_Name	=	name;
+			xmlDocument	=	new	XmlDocument();
 		}
 
-		/// <summary>Compares the currrent document to another documenter.</summary>
-		public int CompareTo(object obj)
+		///	<summary>Compares	the	currrent document	to another documenter.</summary>
+		public int CompareTo(object	obj)
 		{
-			return String.Compare(Name, ((IDocumenter)obj).Name);
+			return String.Compare(Name,	((IDocumenter)obj).Name);
 		}
 
-		/// <summary>See <see cref="IDocumenter"/>.</summary>
+		///	<summary>See <see	cref="IDocumenter"/>.</summary>
 		public IDocumenterConfig Config
 		{
-			get { return config; }
-			set { config = value; }
+			get	{	return config; }
+			set	{	config = value;	}
 		}
 
-		/// <summary>Gets the XmlDocument containing the combined relected metadata and /doc comments.</summary>
-		protected XmlDocument Document
+		///	<summary>Gets	the	XmlDocument	containing the combined	relected metadata	and	/doc comments.</summary>
+		protected	XmlDocument	Document
 		{
-			get { return xmlDocument; }
+			get	{	return xmlDocument;	}
 		}
 
-		private string _Name;
+		private	string _Name;
 
-		/// <summary>Gets the display name for the documenter.</summary>
-		public string Name
+		///	<summary>Gets	the	display	name for the documenter.</summary>
+		public string	Name
 		{
-			get { return _Name; }
+			get	{	return _Name;	}
 		}
 
-		/// <summary>See <see cref="IDocumenter"/>.</summary>
+		///	<summary>See <see	cref="IDocumenter"/>.</summary>
 		public event DocBuildingEventHandler DocBuildingStep;
-		/// <summary>See <see cref="IDocumenter"/>.</summary>
+		///	<summary>See <see	cref="IDocumenter"/>.</summary>
 		public event DocBuildingEventHandler DocBuildingProgress;
 
-		/// <summary>Raises the DocBuildingStep event.</summary>
-		/// <param name="step">The overall percent complete value.</param>
-		/// <param name="label">A description of the work currently beeing done.</param>
-		protected void OnDocBuildingStep(int step, string label)
+		///	<summary>Raises	the	DocBuildingStep	event.</summary>
+		///	<param name="step">The overall percent complete	value.</param>
+		///	<param name="label">A	description	of the work	currently	beeing done.</param>
+		protected	void OnDocBuildingStep(int step, string	label)
 		{
-			if (DocBuildingStep != null)
-				DocBuildingStep(this, new ProgressArgs(step, label));
+			if (DocBuildingStep	!= null)
+				DocBuildingStep(this,	new	ProgressArgs(step, label));
 		}
 
-		/// <summary>Raises the DocBuildingProgress event.</summary>
-		/// <param name="progress">Percentage progress value</param>
-		protected void OnDocBuildingProgress(int progress)
+		///	<summary>Raises	the	DocBuildingProgress	event.</summary>
+		///	<param name="progress">Percentage	progress value</param>
+		protected	void OnDocBuildingProgress(int progress)
 		{
-			if (DocBuildingProgress != null)
-				DocBuildingProgress(this, new ProgressArgs(progress, ""));
+			if (DocBuildingProgress	!= null)
+				DocBuildingProgress(this,	new	ProgressArgs(progress, ""));
 		}
 
-		/// <summary>See <see cref="IDocumenter"/>.</summary>
-		abstract public void Clear();
-		/// <summary>See <see cref="IDocumenter"/>.</summary>
-		abstract public void Build(Project project);
-		/// <summary>See <see cref="IDocumenter"/>.</summary>
-		abstract public void View();
+		///	<summary>See <see	cref="IDocumenter"/>.</summary>
+		abstract public	void Clear();
+		///	<summary>See <see	cref="IDocumenter"/>.</summary>
+		abstract public	void Build(Project project);
+		///	<summary>See <see	cref="IDocumenter"/>.</summary>
+		abstract public	void View();
 
-		/// <summary>Builds an XmlDocument combining the reflected metadata with the /doc comments.</summary>
-		protected void MakeXml(Project project)
+		///	<summary>Builds	an XmlDocument combining the reflected metadata	with the /doc	comments.</summary>
+		protected	void MakeXml(Project project)
 		{
 			_Project = project;
 
-			// Sucks that there's no XmlNodeWriter.  Instead we
-			// have to write out to a file then load back in.
-			XmlWriter writer = new XmlTextWriter(@".\temp.xml", null);
+			// Sucks that	there's	no XmlNodeWriter.	 Instead we
+			// have	to write out to	a	file then	load back	in.
+			XmlWriter	writer = new XmlTextWriter(@".\temp.xml",	null);
 			string currentAssemblyFilename = "";
 
 			try
 			{
 				// Use indenting for readability
-				//writer.Formatting = Formatting.Indented;
+				//writer.Formatting	=	Formatting.Indented;
 				//writer.Indentation=4;
 
-				// Start the document with the XML declaration tag
+				// Start the document	with the XML declaration tag
 				writer.WriteStartDocument();
 
-				// Start the root element
+				// Start the root	element
 				writer.WriteStartElement("ndoc");
 
-				int step = 100 / project.AssemblySlashDocCount;
-				int i = 0;
+				int	step = 100 / project.AssemblySlashDocCount;
+				int	i	=	0;
 				
-				foreach (AssemblySlashDoc assemblySlashDoc in project.GetAssemblySlashDocs())
+				foreach	(AssemblySlashDoc	assemblySlashDoc in	project.GetAssemblySlashDocs())
 				{
-					OnDocBuildingProgress(i * step);
+					OnDocBuildingProgress(i	*	step);
 
-					currentAssemblyFilename = assemblySlashDoc.AssemblyFilename;
-					string path = Path.GetFullPath(currentAssemblyFilename);
-					currentAssembly = Assembly.LoadFrom(path);
+					currentAssemblyFilename	=	assemblySlashDoc.AssemblyFilename;
+					string path	=	Path.GetFullPath(currentAssemblyFilename);
+					currentAssembly	=	Assembly.LoadFrom(path);
 
-					currentSlashDoc = new XmlDocument();
+					currentSlashDoc	=	new	XmlDocument();
 					currentSlashDoc.Load(assemblySlashDoc.SlashDocFilename);
 
 					Write(writer);
@@ -151,12 +151,12 @@ namespace NDoc.Core
 
 				xmlDocument.Load(@".\temp.xml");
 			}
-			catch (Exception e)
+			catch	(Exception e)
 			{
-				throw new DocumenterException(
-					"Error reflecting against the " +
-					Path.GetFileName(currentAssemblyFilename) +
-					" assembly: \n" + e.Message, e);
+				throw	new	DocumenterException(
+					"Error reflecting	against	the	"	+
+					Path.GetFileName(currentAssemblyFilename)	+
+					"	assembly:	\n"	+	e.Message, e);
 			}
 			finally
 			{
@@ -165,54 +165,86 @@ namespace NDoc.Core
 			}
 		}
 
-		private void Write(XmlWriter writer)
+		private bool MustDocumentType( Type type )
 		{
-			writer.WriteStartElement("assembly");
-			writer.WriteAttributeString("name", currentAssembly.GetName().Name);
-
-			foreach(Module module in currentAssembly.GetModules())
-			{
-				WriteModule(writer, module);
-			}
-
-			writer.WriteEndElement(); // assembly
+			return (type.IsPublic	||
+						(type.IsNotPublic	&& MyConfig.DocumentInternals) ||
+						type.IsNestedPublic	||
+						(type.IsNestedFamily && MyConfig.DocumentProtected)	||
+						(type.IsNestedFamORAssem && MyConfig.DocumentProtected)	||
+						(type.IsNestedAssembly &&	MyConfig.DocumentInternals)	||
+						(type.IsNestedFamANDAssem	&& MyConfig.DocumentInternals) ||
+						(type.IsNestedPrivate	&& MyConfig.DocumentInternals));
 		}
 
-		/// <summary>Writes documentation about a module out as XML.</summary>
-		/// <param name="writer">XmlWriter to write on.</param>
-		/// <param name="module">Module to document.</param>
-		private void WriteModule(XmlWriter writer, Module module)
+		private bool MustDocumentMethod( MethodBase method )
+		{
+			return (method.IsPublic	|| 
+						(method.IsFamily && MyConfig.DocumentProtected)	|| 
+						(method.IsFamilyOrAssembly && MyConfig.DocumentProtected)	||
+						(method.IsAssembly &&	MyConfig.DocumentInternals)	||
+						(method.IsFamilyAndAssembly	&& MyConfig.DocumentInternals) ||
+						(method.IsPrivate	&& MyConfig.DocumentPrivates));
+		}
+
+		private bool MustDocumentField( FieldInfo field )
+		{
+			return (field.IsPublic	|| 
+				(field.IsFamily && MyConfig.DocumentProtected)	|| 
+				(field.IsFamilyOrAssembly && MyConfig.DocumentProtected)	||
+				(field.IsAssembly &&	MyConfig.DocumentInternals)	||
+				(field.IsFamilyAndAssembly	&& MyConfig.DocumentInternals) ||
+				(field.IsPrivate	&& MyConfig.DocumentPrivates));
+		}
+
+		private	void Write(XmlWriter writer)
+		{
+			writer.WriteStartElement("assembly");
+			writer.WriteAttributeString("name",	currentAssembly.GetName().Name);
+
+			foreach(Module module	in currentAssembly.GetModules())
+			{
+				WriteModule(writer,	module);
+			}
+
+			writer.WriteEndElement();	// assembly
+		}
+
+		///	<summary>Writes	documentation	about	a	module out as	XML.</summary>
+		///	<param name="writer">XmlWriter to	write	on.</param>
+		///	<param name="module">Module	to document.</param>
+		private	void WriteModule(XmlWriter writer, Module	module)
 		{
 			writer.WriteStartElement("module");
-			writer.WriteAttributeString("name", module.ScopeName);
-			WriteNamespaces(writer, module);
+			writer.WriteAttributeString("name",	module.ScopeName);
+			WriteNamespaces(writer,	module);
 			writer.WriteEndElement();
 		}
 
-		private void WriteNamespaces(XmlWriter writer, Module module)
+		private	void WriteNamespaces(XmlWriter writer, Module	module)
 		{
 			Type[] types = module.GetTypes();
-			StringCollection namespaceNames = GetNamespaceNames(types);
+			StringCollection namespaceNames	=	GetNamespaceNames(types);
 			string ourNamespaceName;
 
-			foreach (string namespaceName in namespaceNames)
+			foreach	(string	namespaceName	in namespaceNames)
 			{
 				writer.WriteStartElement("namespace");
 
-				if (namespaceName == null)
+				if (namespaceName	== null)
 				{
-					writer.WriteAttributeString("name", "(global)");
+					writer.WriteAttributeString("name",	"(global)");
 					ourNamespaceName = "(global)";
 				}
 				else
 				{
-					writer.WriteAttributeString("name", namespaceName);
+					writer.WriteAttributeString("name",	namespaceName);
 					ourNamespaceName = namespaceName;
 				}
 
-				string namespaceSummary = _Project.GetNamespaceSummary(ourNamespaceName);
+				string namespaceSummary	=	_Project.GetNamespaceSummary(ourNamespaceName);
 
-				if (namespaceSummary != null && namespaceSummary.Length > 0)
+				if (namespaceSummary !=	null &&	namespaceSummary.Length	>	0)
 				{
 					WriteStartDocumentation(writer);
 					writer.WriteStartElement("summary");
@@ -220,156 +252,119 @@ namespace NDoc.Core
 					writer.WriteEndElement();
 					WriteEndDocumentation(writer);
 				}
-				else if (MyConfig.ShowMissingSummaries)
+				else if	(MyConfig.ShowMissingSummaries)
 				{
 					WriteStartDocumentation(writer);
-					WriteMissingDocumentation(writer, "summary", null);
+					WriteMissingDocumentation(writer,	"summary", null);
 					WriteEndDocumentation(writer);
 				}
 
-				WriteClasses(writer, types, namespaceName);
-				WriteInterfaces(writer, types, namespaceName);
-				WriteStructures(writer, types, namespaceName);
-				WriteDelegates(writer, types, namespaceName);
-				WriteEnumerations(writer, types, namespaceName);
+				WriteClasses(writer, types,	namespaceName);
+				WriteInterfaces(writer,	types, namespaceName);
+				WriteStructures(writer,	types, namespaceName);
+				WriteDelegates(writer, types,	namespaceName);
+				WriteEnumerations(writer,	types, namespaceName);
 
 				writer.WriteEndElement();
 			}
 		}
 
-		private void WriteClasses(XmlWriter writer, Type[] types, string namespaceName)
+		private	void WriteClasses(XmlWriter	writer,	Type[] types,	string namespaceName)
 		{
-			foreach (Type type in types)
+			foreach	(Type	type in	types)
 			{
-				if (type.IsClass && !IsDelegate(type) && type.Namespace == namespaceName)
+				if (type.IsClass &&	
+					!IsDelegate(type)	&& 
+					type.Namespace ==	namespaceName	&&
+					MustDocumentType(type))
 				{
-					if (type.IsPublic ||
-						(type.IsNotPublic && MyConfig.DocumentInternals) ||
-						type.IsNestedPublic ||
-						type.IsNestedFamily ||
-						type.IsNestedFamORAssem ||
-						(type.IsNestedAssembly && MyConfig.DocumentInternals) ||
-						(type.IsNestedFamANDAssem && MyConfig.DocumentInternals) ||
-						(type.IsNestedPrivate && MyConfig.DocumentInternals))
-					{
-						WriteClass(writer, type);
-					}
+					WriteClass(writer, type);
 				}
 			}
 		}
 
-		private void WriteInterfaces(XmlWriter writer, Type[] types, string namespaceName)
+		private	void WriteInterfaces(XmlWriter writer, Type[]	types, string	namespaceName)
 		{
-			foreach (Type type in types)
+			foreach	(Type	type in	types)
 			{
-				if (type.IsInterface && type.Namespace == namespaceName)
+				if (type.IsInterface &&	
+					type.Namespace ==	namespaceName	&&
+					MustDocumentType(type))
 				{
-					if (type.IsPublic ||
-						(type.IsNotPublic && MyConfig.DocumentInternals) ||
-						type.IsNestedPublic ||
-						type.IsNestedFamily ||
-						type.IsNestedFamORAssem ||
-						(type.IsNestedAssembly && MyConfig.DocumentInternals) ||
-						(type.IsNestedFamANDAssem && MyConfig.DocumentInternals) ||
-						(type.IsNestedPrivate && MyConfig.DocumentInternals))
-					{
-						WriteInterface(writer, type);
-					}
+					WriteInterface(writer, type);
 				}
 			}
 		}
 
-		private void WriteStructures(XmlWriter writer, Type[] types, string namespaceName)
+		private	void WriteStructures(XmlWriter writer, Type[]	types, string	namespaceName)
 		{
-			foreach (Type type in types)
+			foreach	(Type	type in	types)
 			{
-				if (type.IsValueType && !type.IsEnum && type.Namespace == namespaceName)
+				if (type.IsValueType &&	
+					!type.IsEnum &&	
+					type.Namespace ==	namespaceName &&
+					MustDocumentType(type))
 				{
-					if (type.IsPublic ||
-						(type.IsNotPublic && MyConfig.DocumentInternals) ||
-						type.IsNestedPublic ||
-						type.IsNestedFamily ||
-						type.IsNestedFamORAssem ||
-						(type.IsNestedAssembly && MyConfig.DocumentInternals) ||
-						(type.IsNestedFamANDAssem && MyConfig.DocumentInternals) ||
-						(type.IsNestedPrivate && MyConfig.DocumentInternals))
-					{
-						WriteClass(writer, type);
-					}
+					WriteClass(writer, type);
 				}
 			}
 		}
 
-		private void WriteDelegates(XmlWriter writer, Type[] types, string namespaceName)
+		private	void WriteDelegates(XmlWriter	writer,	Type[] types,	string namespaceName)
 		{
-			foreach (Type type in types)
+			foreach	(Type	type in	types)
 			{
-				if (type.IsClass && IsDelegate(type) && type.Namespace == namespaceName)
+				if (type.IsClass &&	
+					IsDelegate(type) &&	
+					type.Namespace ==	namespaceName &&
+					MustDocumentType(type))
 				{
-					if (type.IsPublic ||
-						(type.IsNotPublic && MyConfig.DocumentInternals) ||
-						type.IsNestedPublic ||
-						type.IsNestedFamily ||
-						type.IsNestedFamORAssem ||
-						(type.IsNestedAssembly && MyConfig.DocumentInternals) ||
-						(type.IsNestedFamANDAssem && MyConfig.DocumentInternals) ||
-						(type.IsNestedPrivate && MyConfig.DocumentInternals))
-					{
-						WriteDelegate(writer, type);
-					}
+						WriteDelegate(writer,	type);
 				}
 			}
 		}
 
-		private void WriteEnumerations(XmlWriter writer, Type[] types, string namespaceName)
+		private	void WriteEnumerations(XmlWriter writer, Type[]	types, string	namespaceName)
 		{
-			foreach (Type type in types)
+			foreach	(Type	type in	types)
 			{
-				if (type.IsEnum && type.Namespace == namespaceName)
+				if (type.IsEnum	&& 
+					type.Namespace	== namespaceName &&
+					MustDocumentType(type))
 				{
-					if (type.IsPublic ||
-						(type.IsNotPublic && MyConfig.DocumentInternals) ||
-						type.IsNestedPublic ||
-						type.IsNestedFamily ||
-						type.IsNestedFamORAssem ||
-						(type.IsNestedAssembly && MyConfig.DocumentInternals) ||
-						(type.IsNestedFamANDAssem && MyConfig.DocumentInternals) ||
-						(type.IsNestedPrivate && MyConfig.DocumentInternals))
-					{
-						WriteEnumeration(writer, type);
-					}
+					WriteEnumeration(writer, type);
 				}
 			}
 		}
 
-		private bool IsDelegate(Type type)
+		private	bool IsDelegate(Type type)
 		{
-			return type.BaseType.FullName == "System.Delegate" || 
-				type.BaseType.FullName == "System.MulticastDelegate";
+			return type.BaseType.FullName	== "System.Delegate" ||	
+				type.BaseType.FullName ==	"System.MulticastDelegate";
 		}
 
-		private int GetMethodOverload(MethodInfo method, MethodInfo[] methods)
+		private	int	GetMethodOverload(MethodInfo method, MethodInfo[]	methods)
 		{
-			int count = 0;
-			int overload = 0;
+			int	count	=	0;
+			int	overload = 0;
 
-			foreach (MethodInfo m in methods)
+			foreach	(MethodInfo	m	in methods)
 			{
-				if (m.Name == method.Name)
+				if (m.Name ==	method.Name)
 				{
 					++count;
 				}
 
-				if (m == method)
+				if (m	== method)
 				{
 					overload = count;
 				}
 			}
 
-			return (count > 1) ? overload : 0;
+			return (count	>	1) ? overload	:	0;
 		}
 
-		private BaseDocumenterConfig MyConfig
+		private	BaseDocumenterConfig MyConfig
 		{
 			get
 			{
@@ -377,253 +372,222 @@ namespace NDoc.Core
 			}
 		}
 
-		/// <summary>Writes XML documenting a class.</summary>
-		/// <param name="writer">XmlWriter to write on.</param>
-		/// <param name="type">Class to document.</param>
-		private void WriteClass(XmlWriter writer, Type type)
+		///	<summary>Writes	XML	documenting	a	class.</summary>
+		///	<param name="writer">XmlWriter to	write	on.</param>
+		///	<param name="type">Class to	document.</param>
+		private	void WriteClass(XmlWriter	writer,	Type type)
 		{
-			bool isStruct = type.IsValueType;
+			bool isStruct	=	type.IsValueType;
 
-			string memberName = GetMemberName(type);
+			string memberName	=	GetMemberName(type);
 
-			string fullNameWithoutNamespace = type.FullName.Replace('+', '.');
+			string fullNameWithoutNamespace	=	type.FullName.Replace('+', '.');
 
-			if (type.Namespace != null)
+			if (type.Namespace !=	null)
 			{
-				fullNameWithoutNamespace = fullNameWithoutNamespace.Substring(type.Namespace.Length + 1);
+				fullNameWithoutNamespace = fullNameWithoutNamespace.Substring(type.Namespace.Length	+	1);
 			}
 
-			writer.WriteStartElement(isStruct ? "structure" : "class");
-			writer.WriteAttributeString("name", fullNameWithoutNamespace);
-			writer.WriteAttributeString("id", memberName);
-			writer.WriteAttributeString("access", GetTypeAccessValue(type));
+			writer.WriteStartElement(isStruct	?	"structure"	:	"class");
+			writer.WriteAttributeString("name",	fullNameWithoutNamespace);
+			writer.WriteAttributeString("id",	memberName);
+			writer.WriteAttributeString("access",	GetTypeAccessValue(type));
 
-			// structs can't be abstract and always derive from System.ValueType
-			// so don't bother including those attributes.
+			// structs can't be	abstract and always	derive from	System.ValueType
+			// so	don't	bother including those attributes.
 			if (!isStruct)
 			{
 				if (type.IsAbstract)
 				{
-					writer.WriteAttributeString("abstract", "true");
+					writer.WriteAttributeString("abstract",	"true");
 				}
 
 				if (type.IsSealed)
 				{
-					writer.WriteAttributeString("sealed", "true");
+					writer.WriteAttributeString("sealed",	"true");
 				}
 
-				if (type.BaseType != null && type.BaseType.FullName != "System.Object")
+				if (type.BaseType	!= null	&& type.BaseType.FullName	!= "System.Object")
 				{
-					writer.WriteAttributeString("baseType", type.BaseType.Name);
+					writer.WriteAttributeString("baseType",	type.BaseType.Name);
 				}
 			}
 
 			WriteTypeDocumentation(writer, memberName, type);
 
-			WriteBaseType(writer, type.BaseType);
+			WriteBaseType(writer,	type.BaseType);
 
-			foreach(Type interfaceType in type.GetInterfaces())
+			foreach(Type interfaceType in	type.GetInterfaces())
 			{
-				writer.WriteElementString("implements", interfaceType.Name);
+				writer.WriteElementString("implements",	interfaceType.Name);
 			}
 
-			WriteConstructors(writer, type);
-			WriteFields(writer, type);
-			WriteProperties(writer, type);
+			WriteConstructors(writer,	type);
+			WriteFields(writer,	type);
+			WriteProperties(writer,	type);
 			WriteMethods(writer, type);
 			WriteOperators(writer, type);
-			WriteEvents(writer, type);
+			WriteEvents(writer,	type);
 
 			writer.WriteEndElement();
 		}
 
-		private void WriteConstructors(XmlWriter writer, Type type)
+		private	void WriteConstructors(XmlWriter writer, Type	type)
 		{
-			int overload = 0;
+			int	overload = 0;
 
-			BindingFlags bindingFlags =  
-				BindingFlags.Instance |
-				BindingFlags.Public |
+			BindingFlags bindingFlags	=	 
+				BindingFlags.Instance	|
+				BindingFlags.Public	|
 				BindingFlags.NonPublic;
 
-			ConstructorInfo[] constructors = type.GetConstructors(bindingFlags);
+			ConstructorInfo[]	constructors = type.GetConstructors(bindingFlags);
 
-			if (constructors.Length > 1)
+			if (constructors.Length	>	1)
 			{
 				overload = 1;
 			}
 
-			foreach (ConstructorInfo constructor in constructors)
+			foreach	(ConstructorInfo constructor in	constructors)
 			{
-				if (constructor.IsPublic || 
-					constructor.IsFamily || 
-					constructor.IsFamilyOrAssembly ||
-					(constructor.IsAssembly && MyConfig.DocumentInternals) ||
-					(constructor.IsFamilyAndAssembly && MyConfig.DocumentInternals) ||
-					(constructor.IsPrivate && MyConfig.DocumentPrivates))
+				if (MustDocumentMethod(constructor))
 				{
-					WriteConstructor(writer, constructor, overload++);
+					WriteConstructor(writer, constructor,	overload++);
 				}
 			}
 		}
 
-		private void WriteFields(XmlWriter writer, Type type)
+		private	void WriteFields(XmlWriter writer, Type	type)
 		{
-			BindingFlags bindingFlags =  
-				BindingFlags.Instance |
-				BindingFlags.Static |
-				BindingFlags.Public |
+			BindingFlags bindingFlags	=	 
+				BindingFlags.Instance	|
+				BindingFlags.Static	|
+				BindingFlags.Public	|
 				BindingFlags.NonPublic;
 
-			foreach (FieldInfo field in type.GetFields(bindingFlags))
+			foreach	(FieldInfo field in	type.GetFields(bindingFlags))
 			{
-				if (field.IsPublic || 
-					field.IsFamily || 
-					field.IsFamilyOrAssembly ||
-					(field.IsAssembly && MyConfig.DocumentInternals) ||
-					(field.IsFamilyAndAssembly && MyConfig.DocumentInternals) ||
-					(field.IsPrivate && MyConfig.DocumentPrivates))
+				if (MustDocumentField(field) && !IsAlsoAnEvent(field))
 				{
 					WriteField(writer, field);
 				}
 			}
 		}
 
-		private void WriteProperties(XmlWriter writer, Type type)
+		private	void WriteProperties(XmlWriter writer, Type	type)
 		{
-			BindingFlags bindingFlags = 
-				BindingFlags.Instance |
-				BindingFlags.Static |
-				BindingFlags.Public |
+			BindingFlags bindingFlags	=	
+				BindingFlags.Instance	|
+				BindingFlags.Static	|
+				BindingFlags.Public	|
 				BindingFlags.NonPublic;
 
-			foreach (PropertyInfo property in type.GetProperties(bindingFlags))
+			foreach	(PropertyInfo	property in	type.GetProperties(bindingFlags))
 			{
 				MethodInfo getMethod = property.GetGetMethod(true);
 				MethodInfo setMethod = property.GetSetMethod(true);
 
-				bool hasGetter = (getMethod != null) &&
-					(getMethod.IsPublic || 
-					getMethod.IsFamily || 
-					getMethod.IsFamilyOrAssembly ||
-					(getMethod.IsAssembly && MyConfig.DocumentInternals) ||
-					(getMethod.IsFamilyAndAssembly && MyConfig.DocumentInternals) ||
-					(getMethod.IsPrivate && MyConfig.DocumentPrivates));
+				bool hasGetter = (getMethod	!= null) &&	MustDocumentMethod(getMethod);
+				bool hasSetter = (setMethod	!= null) &&	MustDocumentMethod(setMethod);
 
-				bool hasSetter = (setMethod != null) &&
-					(setMethod.IsPublic || 
-					setMethod.IsFamily || 
-					setMethod.IsFamilyOrAssembly ||
-					(setMethod.IsAssembly && MyConfig.DocumentInternals) ||
-					(setMethod.IsFamilyAndAssembly && MyConfig.DocumentInternals) ||
-					(setMethod.IsPrivate && MyConfig.DocumentPrivates));
-
-				if ((hasGetter || hasSetter) && !IsAlsoAnEvent(property))
+				if ((hasGetter ||	hasSetter) &&	!IsAlsoAnEvent(property))
 				{
 					WriteProperty(
-						writer, 
-						property, 
-						property.DeclaringType.FullName != type.FullName);
+						writer,	
+						property,	
+						property.DeclaringType.FullName	!= type.FullName);
 				}
 			}
 		}
 
-		private void WriteMethods(XmlWriter writer, Type type)
+		private	void WriteMethods(XmlWriter	writer,	Type type)
 		{
-			BindingFlags bindingFlags = 
-				BindingFlags.Instance |
-				BindingFlags.Static |
-				BindingFlags.Public |
+			BindingFlags bindingFlags	=	
+				BindingFlags.Instance	|
+				BindingFlags.Static	|
+				BindingFlags.Public	|
 				BindingFlags.NonPublic;
 
 			MethodInfo[] methods = type.GetMethods(bindingFlags);
 
-			foreach (MethodInfo method in methods)
+			foreach	(MethodInfo	method in	methods)
 			{
-				if (!(method.Name.StartsWith("get_")) && 
-					!(method.Name.StartsWith("set_")) &&
-					!(method.Name.StartsWith("add_")) && 
+				if (!(method.Name.StartsWith("get_"))	&& 
+					!(method.Name.StartsWith("set_"))	&&
+					!(method.Name.StartsWith("add_"))	&& 
 					!(method.Name.StartsWith("remove_")) &&
-					!(method.Name.StartsWith("op_")))
+					!(method.Name.StartsWith("op_")) &&
+					MustDocumentMethod(method))
 				{
-					if (method.IsPublic || 
-						method.IsFamily || 
-						method.IsFamilyOrAssembly ||
-						(method.IsAssembly && MyConfig.DocumentInternals) ||
-						(method.IsFamilyAndAssembly && MyConfig.DocumentInternals) ||
-						(method.IsPrivate && MyConfig.DocumentPrivates))
-					{
-						WriteMethod(
-							writer, 
-							method, 
-							method.DeclaringType.FullName != type.FullName, 
-							GetMethodOverload(method, methods));
-					}
+					WriteMethod(
+						writer,	
+						method,	
+						method.DeclaringType.FullName	!= type.FullName,	
+						GetMethodOverload(method,	methods));
 				}
 			}
 		}
 
-		private void WriteOperators(XmlWriter writer, Type type)
+		private	void WriteOperators(XmlWriter	writer,	Type type)
 		{
-			BindingFlags bindingFlags = 
-				BindingFlags.Instance |
-				BindingFlags.Static |
-				BindingFlags.Public |
+			BindingFlags bindingFlags	=	
+				BindingFlags.Instance	|
+				BindingFlags.Static	|
+				BindingFlags.Public	|
 				BindingFlags.NonPublic;
 
 			MethodInfo[] methods = type.GetMethods(bindingFlags);
 
-			foreach (MethodInfo method in methods)
+			foreach	(MethodInfo	method in	methods)
 			{
-				if (method.Name.StartsWith("op_"))
+				if (method.Name.StartsWith("op_") &&
+					MustDocumentMethod(method))
 				{
-					if (method.IsPublic || 
-						method.IsFamily || 
-						method.IsFamilyOrAssembly ||
-						(method.IsAssembly && MyConfig.DocumentInternals) ||
-						(method.IsFamilyAndAssembly && MyConfig.DocumentInternals) ||
-						(method.IsPrivate && MyConfig.DocumentPrivates))
-					{
-						WriteOperator(
-							writer, 
-							method, 
-							GetMethodOverload(method, methods));
-					}
+					WriteOperator(
+						writer,	
+						method,	
+						GetMethodOverload(method,	methods));
 				}
 			}
 		}
 
-		private void WriteEvents(XmlWriter writer, Type type)
+		private	void WriteEvents(XmlWriter writer, Type	type)
 		{
-			BindingFlags bindingFlags =  
-				BindingFlags.Instance |
-				BindingFlags.Static |
-				BindingFlags.Public |
+			BindingFlags bindingFlags	=	 
+				BindingFlags.Instance	|
+				BindingFlags.Static	|
+				BindingFlags.Public	|
 				BindingFlags.NonPublic |
 				BindingFlags.DeclaredOnly;
 
-			foreach (EventInfo eventInfo in type.GetEvents(bindingFlags))
+			foreach	(EventInfo eventInfo in	type.GetEvents(bindingFlags))
 			{
-				WriteEvent(writer, eventInfo);
+				MethodInfo addMethod = eventInfo.GetAddMethod(true);
+
+				if (addMethod != null && 
+					MustDocumentMethod(addMethod))
+				{
+					WriteEvent(writer, eventInfo);
+				}
 			}
 		}
 
-		private bool IsAlsoAnEvent(Type type, string fullName)
+		private	bool IsAlsoAnEvent(Type	type,	string fullName)
 		{
-			bool  isEvent = false;
+			bool	isEvent	=	false;
 
-			BindingFlags bindingFlags =  
-				BindingFlags.Instance |
-				BindingFlags.Static |
-				BindingFlags.Public |
+			BindingFlags bindingFlags	=	 
+				BindingFlags.Instance	|
+				BindingFlags.Static	|
+				BindingFlags.Public	|
 				BindingFlags.NonPublic |
 				BindingFlags.DeclaredOnly;
 
-			foreach (EventInfo eventInfo in type.GetEvents(bindingFlags))
+			foreach	(EventInfo eventInfo in	type.GetEvents(bindingFlags))
 			{
-				if (eventInfo.EventHandlerType.FullName == fullName)
+				if (eventInfo.EventHandlerType.FullName	== fullName)
 				{
-					isEvent = true;
+					isEvent	=	true;
 					break;
 				}
 			}
@@ -631,74 +595,74 @@ namespace NDoc.Core
 			return isEvent;
 		}
 
-		private bool IsAlsoAnEvent(FieldInfo field)
+		private	bool IsAlsoAnEvent(FieldInfo field)
 		{
-			return IsAlsoAnEvent(field.DeclaringType, field.FieldType.FullName);
+			return IsAlsoAnEvent(field.DeclaringType,	field.FieldType.FullName);
 		}
 
-		private bool IsAlsoAnEvent(PropertyInfo property)
+		private	bool IsAlsoAnEvent(PropertyInfo	property)
 		{
 			return IsAlsoAnEvent(property.DeclaringType, property.PropertyType.FullName);
 		}
 
-		/// <summary>Writes XML documenting an interface.</summary>
-		/// <param name="writer">XmlWriter to write on.</param>
-		/// <param name="type">Interface to document.</param>
-		private void WriteInterface(XmlWriter writer, Type type)
+		///	<summary>Writes	XML	documenting	an interface.</summary>
+		///	<param name="writer">XmlWriter to	write	on.</param>
+		///	<param name="type">Interface to	document.</param>
+		private	void WriteInterface(XmlWriter	writer,	Type type)
 		{
-			string memberName = GetMemberName(type);
+			string memberName	=	GetMemberName(type);
 
 			writer.WriteStartElement("interface");
-			writer.WriteAttributeString("name", type.Name.Replace('+', '.'));
-			writer.WriteAttributeString("id", memberName);
-			writer.WriteAttributeString("access", GetTypeAccessValue(type));
+			writer.WriteAttributeString("name",	type.Name.Replace('+', '.'));
+			writer.WriteAttributeString("id",	memberName);
+			writer.WriteAttributeString("access",	GetTypeAccessValue(type));
 
 			WriteTypeDocumentation(writer, memberName, type);
 
-			foreach(Type interfaceType in type.GetInterfaces())
+			foreach(Type interfaceType in	type.GetInterfaces())
 			{
-				writer.WriteElementString("implements", interfaceType.Name);
+				writer.WriteElementString("implements",	interfaceType.Name);
 			}
 
-			WriteFields(writer, type);
-			WriteProperties(writer, type);
+			WriteFields(writer,	type);
+			WriteProperties(writer,	type);
 			WriteMethods(writer, type);
-			WriteEvents(writer, type);
+			WriteEvents(writer,	type);
 
 			writer.WriteEndElement();
 		}
 
-		/// <summary>Writes XML documenting a delegate.</summary>
-		/// <param name="writer">XmlWriter to write on.</param>
-		/// <param name="type">Delegate to document.</param>
-		private void WriteDelegate(XmlWriter writer, Type type)
+		///	<summary>Writes	XML	documenting	a	delegate.</summary>
+		///	<param name="writer">XmlWriter to	write	on.</param>
+		///	<param name="type">Delegate	to document.</param>
+		private	void WriteDelegate(XmlWriter writer, Type	type)
 		{
-			string memberName = GetMemberName(type);
+			string memberName	=	GetMemberName(type);
 
 			writer.WriteStartElement("delegate");
-			writer.WriteAttributeString("name", type.Name.Replace('+', '.'));
-			writer.WriteAttributeString("id", memberName);
-			writer.WriteAttributeString("access", GetTypeAccessValue(type));
+			writer.WriteAttributeString("name",	type.Name.Replace('+', '.'));
+			writer.WriteAttributeString("id",	memberName);
+			writer.WriteAttributeString("access",	GetTypeAccessValue(type));
 
-			BindingFlags bindingFlags =  
-				BindingFlags.Instance |
-				BindingFlags.Static |
-				BindingFlags.Public |
+			BindingFlags bindingFlags	=	 
+				BindingFlags.Instance	|
+				BindingFlags.Static	|
+				BindingFlags.Public	|
 				BindingFlags.NonPublic;
 
 			MethodInfo[] methods = type.GetMethods(bindingFlags);
 
-			foreach (MethodInfo method in methods)
+			foreach	(MethodInfo	method in	methods)
 			{
-				if (method.Name == "Invoke")
+				if (method.Name	== "Invoke")
 				{
-					writer.WriteAttributeString("returnType", method.ReturnType.FullName);
+					writer.WriteAttributeString("returnType",	method.ReturnType.FullName);
 
 					WriteDelegateDocumentation(writer, memberName, type, method);
 
-					foreach (ParameterInfo parameter in method.GetParameters())
+					foreach	(ParameterInfo parameter in	method.GetParameters())
 					{
-						WriteParameter(writer, GetMemberName(method), parameter);
+						WriteParameter(writer, GetMemberName(method),	parameter);
 					}
 				}
 			}
@@ -706,31 +670,31 @@ namespace NDoc.Core
 			writer.WriteEndElement();
 		}
 
-		/// <summary>Writes XML documenting an enumeration.</summary>
-		/// <param name="writer">XmlWriter to write on.</param>
-		/// <param name="type">Enumeration to document.</param>
-		private void WriteEnumeration(XmlWriter writer, Type type)
+		///	<summary>Writes	XML	documenting	an enumeration.</summary>
+		///	<param name="writer">XmlWriter to	write	on.</param>
+		///	<param name="type">Enumeration to	document.</param>
+		private	void WriteEnumeration(XmlWriter	writer,	Type type)
 		{
-			string memberName = GetMemberName(type);
+			string memberName	=	GetMemberName(type);
 
 			writer.WriteStartElement("enumeration");
-			writer.WriteAttributeString("name", type.Name.Replace('+', '.'));
-			writer.WriteAttributeString("id", memberName);
-			writer.WriteAttributeString("access", GetTypeAccessValue(type));
+			writer.WriteAttributeString("name",	type.Name.Replace('+', '.'));
+			writer.WriteAttributeString("id",	memberName);
+			writer.WriteAttributeString("access",	GetTypeAccessValue(type));
 
-			WriteEnumerationDocumentation(writer, memberName);
+			WriteEnumerationDocumentation(writer,	memberName);
 
-			BindingFlags bindingFlags =  
-				BindingFlags.Instance |
-				BindingFlags.Static |
-				BindingFlags.Public |
+			BindingFlags bindingFlags	=	 
+				BindingFlags.Instance	|
+				BindingFlags.Static	|
+				BindingFlags.Public	|
 				BindingFlags.NonPublic |
 				BindingFlags.DeclaredOnly;
 
-			foreach (FieldInfo field in type.GetFields(bindingFlags))
+			foreach	(FieldInfo field in	type.GetFields(bindingFlags))
 			{
-				// *** Not sure what this field is but don't want to document it for now.
-				if (field.Name != "value__")
+				// *** Not sure	what this	field	is but don't want	to document	it for now.
+				if (field.Name !=	"value__")
 				{
 					WriteField(writer, field);
 				}
@@ -739,69 +703,69 @@ namespace NDoc.Core
 			writer.WriteEndElement();
 		}
 
-		private void WriteBaseType(XmlWriter writer, Type type)
+		private	void WriteBaseType(XmlWriter writer, Type	type)
 		{
 			if (!"System.Object".Equals(type.FullName))
 			{
 				writer.WriteStartElement("base");
-				writer.WriteAttributeString("name", type.Name);
-				writer.WriteAttributeString("id", GetMemberName(type));
-				writer.WriteAttributeString("type", type.FullName.Replace('+', '.'));
+				writer.WriteAttributeString("name",	type.Name);
+				writer.WriteAttributeString("id",	GetMemberName(type));
+				writer.WriteAttributeString("type",	type.FullName.Replace('+', '.'));
 
-				WriteBaseType(writer, type.BaseType);
+				WriteBaseType(writer,	type.BaseType);
 
 				writer.WriteEndElement();
 			}
 		}
 
-		/// <summary>Writes XML documenting a field.</summary>
-		/// <param name="writer">XmlWriter to write on.</param>
-		/// <param name="field">Field to document.</param>
-		private void WriteField(XmlWriter writer, FieldInfo field)
+		///	<summary>Writes	XML	documenting	a	field.</summary>
+		///	<param name="writer">XmlWriter to	write	on.</param>
+		///	<param name="field">Field	to document.</param>
+		private	void WriteField(XmlWriter	writer,	FieldInfo	field)
 		{
-			string memberName = GetMemberName(field);
+			string memberName	=	GetMemberName(field);
 
 			writer.WriteStartElement("field");
-			writer.WriteAttributeString("name", field.Name);
-			writer.WriteAttributeString("id", memberName);
-			writer.WriteAttributeString("access", GetFieldAccessValue(field));
-			writer.WriteAttributeString("type", field.FieldType.FullName.Replace('+', '.'));
+			writer.WriteAttributeString("name",	field.Name);
+			writer.WriteAttributeString("id",	memberName);
+			writer.WriteAttributeString("access",	GetFieldAccessValue(field));
+			writer.WriteAttributeString("type",	field.FieldType.FullName.Replace('+',	'.'));
 
-			if (field.DeclaringType != field.ReflectedType)
+			if (field.DeclaringType	!= field.ReflectedType)
 			{
 				writer.WriteAttributeString("declaringType", field.DeclaringType.FullName);
 			}
 
 			if (field.IsStatic)
 			{
-				writer.WriteAttributeString("contract", "Static");
+				writer.WriteAttributeString("contract",	"Static");
 			}
 
 			if (field.IsInitOnly)
 			{
-				writer.WriteAttributeString("initOnly", "true");
+				writer.WriteAttributeString("initOnly",	"true");
 			}
 
-			WriteFieldDocumentation(writer, memberName);
+			WriteFieldDocumentation(writer,	memberName);
 
 			writer.WriteEndElement();
 		}
 
-		/// <summary>Writes XML documenting an event.</summary>
-		/// <param name="writer">XmlWriter to write on.</param>
-		/// <param name="eventInfo">Event to document.</param>
-		private void WriteEvent(XmlWriter writer, EventInfo eventInfo)
+		///	<summary>Writes	XML	documenting	an event.</summary>
+		///	<param name="writer">XmlWriter to	write	on.</param>
+		///	<param name="eventInfo">Event	to document.</param>
+		private	void WriteEvent(XmlWriter	writer,	EventInfo	eventInfo)
 		{
-			string memberName = GetMemberName(eventInfo);
+			string memberName	=	GetMemberName(eventInfo);
 
 			writer.WriteStartElement("event");
-			writer.WriteAttributeString("name", eventInfo.Name);
-			writer.WriteAttributeString("id", memberName);
-			writer.WriteAttributeString("access", GetMethodAccessValue(eventInfo.GetAddMethod(true)));
-			writer.WriteAttributeString("contract", GetMethodContractValue(eventInfo.GetAddMethod(true)));
-			writer.WriteAttributeString("type", eventInfo.EventHandlerType.FullName.Replace('+', '.'));
+			writer.WriteAttributeString("name",	eventInfo.Name);
+			writer.WriteAttributeString("id",	memberName);
+			writer.WriteAttributeString("access",	GetMethodAccessValue(eventInfo.GetAddMethod(true)));
+			writer.WriteAttributeString("contract",	GetMethodContractValue(eventInfo.GetAddMethod(true)));
+			writer.WriteAttributeString("type",	eventInfo.EventHandlerType.FullName.Replace('+', '.'));
 
-			if (eventInfo.DeclaringType != eventInfo.ReflectedType)
+			if (eventInfo.DeclaringType	!= eventInfo.ReflectedType)
 			{
 				writer.WriteAttributeString("declaringType", eventInfo.DeclaringType.FullName);
 			}
@@ -811,32 +775,32 @@ namespace NDoc.Core
 				writer.WriteAttributeString("multicast", "true");
 			}
 
-			WriteEventDocumentation(writer, memberName);
+			WriteEventDocumentation(writer,	memberName);
 
 			writer.WriteEndElement();
 		}
 
-		/// <summary>Writes XML documenting a constructor.</summary>
-		/// <param name="writer">XmlWriter to write on.</param>
-		/// <param name="constructor">Constructor to document.</param>
-		/// <param name="overload">If &gt; 0, indicates this is the nth overloaded constructor.</param>
-		private void WriteConstructor(XmlWriter writer, ConstructorInfo constructor, int overload)
+		///	<summary>Writes	XML	documenting	a	constructor.</summary>
+		///	<param name="writer">XmlWriter to	write	on.</param>
+		///	<param name="constructor">Constructor	to document.</param>
+		///	<param name="overload">If	&gt; 0,	indicates	this is	the	nth	overloaded constructor.</param>
+		private	void WriteConstructor(XmlWriter	writer,	ConstructorInfo	constructor, int overload)
 		{
-			string memberName = GetMemberName(constructor);
+			string memberName	=	GetMemberName(constructor);
 
 			writer.WriteStartElement("constructor");
-			writer.WriteAttributeString("name", constructor.Name);
-			writer.WriteAttributeString("id", memberName);
-			writer.WriteAttributeString("access", GetMethodAccessValue(constructor));
+			writer.WriteAttributeString("name",	constructor.Name);
+			writer.WriteAttributeString("id",	memberName);
+			writer.WriteAttributeString("access",	GetMethodAccessValue(constructor));
 
 			if (overload > 0)
 			{
-				writer.WriteAttributeString("overload", overload.ToString());
+				writer.WriteAttributeString("overload",	overload.ToString());
 			}
 
-			WriteConstructorDocumentation(writer, memberName, constructor);
+			WriteConstructorDocumentation(writer,	memberName,	constructor);
 
-			foreach (ParameterInfo parameter in constructor.GetParameters())
+			foreach	(ParameterInfo parameter in	constructor.GetParameters())
 			{
 				WriteParameter(writer, GetMemberName(constructor), parameter);
 			}
@@ -844,32 +808,32 @@ namespace NDoc.Core
 			writer.WriteEndElement();
 		}
 
-		/// <summary>Writes XML documenting a property.</summary>
-		/// <param name="writer">XmlWriter to write on.</param>
-		/// <param name="property">Property to document.</param>
-		/// <param name="inherited">true if a declaringType attribute should be included.</param>
-		private void WriteProperty(XmlWriter writer, PropertyInfo property, bool inherited)
+		///	<summary>Writes	XML	documenting	a	property.</summary>
+		///	<param name="writer">XmlWriter to	write	on.</param>
+		///	<param name="property">Property	to document.</param>
+		///	<param name="inherited">true if	a	declaringType	attribute	should be	included.</param>
+		private	void WriteProperty(XmlWriter writer, PropertyInfo	property,	bool inherited)
 		{
-			string memberName = GetMemberName(property);
+			string memberName	=	GetMemberName(property);
 
 			writer.WriteStartElement("property");
-			writer.WriteAttributeString("name", property.Name);
-			writer.WriteAttributeString("id", memberName);
-			writer.WriteAttributeString("access", GetPropertyAccessValue(property));
+			writer.WriteAttributeString("name",	property.Name);
+			writer.WriteAttributeString("id",	memberName);
+			writer.WriteAttributeString("access",	GetPropertyAccessValue(property));
 
 			if (inherited)
 			{
 				writer.WriteAttributeString("declaringType", property.DeclaringType.FullName);
 			}
 
-			writer.WriteAttributeString("type", property.PropertyType.FullName.Replace('+', '.'));
-			writer.WriteAttributeString("contract", GetPropertyContractValue(property));
-			writer.WriteAttributeString("get", property.GetGetMethod(true) != null ? "true" : "false");
-			writer.WriteAttributeString("set", property.GetSetMethod(true) != null ? "true" : "false");
+			writer.WriteAttributeString("type",	property.PropertyType.FullName.Replace('+',	'.'));
+			writer.WriteAttributeString("contract",	GetPropertyContractValue(property));
+			writer.WriteAttributeString("get", property.GetGetMethod(true) !=	null ? "true"	:	"false");
+			writer.WriteAttributeString("set", property.GetSetMethod(true) !=	null ? "true"	:	"false");
 
 			WritePropertyDocumentation(writer, memberName, property);
 
-			foreach(ParameterInfo parameter in GetIndexParameters(property))
+			foreach(ParameterInfo	parameter	in GetIndexParameters(property))
 			{
 				WriteParameter(writer, memberName, parameter);
 			}
@@ -877,26 +841,26 @@ namespace NDoc.Core
 			writer.WriteEndElement();
 		}
 
-		private string GetPropertyContractValue(PropertyInfo property)
+		private	string GetPropertyContractValue(PropertyInfo property)
 		{
 			return GetMethodContractValue(property.GetAccessors(true)[0]);
 		}
 
-		private ParameterInfo[] GetIndexParameters(PropertyInfo property)
+		private	ParameterInfo[]	GetIndexParameters(PropertyInfo	property)
 		{
-			// The ParameterInfo[] returned by GetIndexParameters()
-			// contains ParameterInfo objects with empty names so
-			// we have to get the parameters from the getter or
-			// setter instead.
+			// The ParameterInfo[] returned	by GetIndexParameters()
+			// contains	ParameterInfo	objects	with empty names so
+			// we	have to	get	the	parameters from	the	getter or
+			// setter	instead.
 
-			ParameterInfo[] parameters;
-			int length = 0;
+			ParameterInfo[]	parameters;
+			int	length = 0;
 
-			if (property.GetGetMethod(true) != null)
+			if (property.GetGetMethod(true)	!= null)
 			{
 				parameters = property.GetGetMethod(true).GetParameters();
 
-				if (parameters != null)
+				if (parameters !=	null)
 				{
 					length = parameters.Length;
 				}
@@ -905,275 +869,275 @@ namespace NDoc.Core
 			{
 				parameters = property.GetSetMethod(true).GetParameters();
 
-				if (parameters != null)
+				if (parameters !=	null)
 				{
-					// If the indexer only has a setter, we neet
-					// to subtract 1 so that the value parameter
+					// If	the	indexer	only has a setter, we	neet
+					// to	subtract 1 so	that the value parameter
 					// isn't displayed.
 
 					length = parameters.Length - 1;
 				}
 			}
 
-			ParameterInfo[] result = new ParameterInfo[length];
+			ParameterInfo[]	result = new ParameterInfo[length];
 
 			if (length > 0)
 			{
-				for (int i = 0; i < length; ++i)
+				for	(int i = 0;	i	<	length;	++i)
 				{
-					result[i] = parameters[i];
+					result[i]	=	parameters[i];
 				}
 			}
 
 			return result;
 		}
 
-		/// <summary>Writes XML documenting a method.</summary>
-		/// <param name="writer">XmlWriter to write on.</param>
-		/// <param name="method">Method to document.</param>
-		/// <param name="inherited">true if a declaringType attribute should be included.</param>
-		/// <param name="overload">If &gt; 0, indicates this it the nth overloaded method with the same name.</param>
-		private void WriteMethod(
-			XmlWriter writer,
+		///	<summary>Writes	XML	documenting	a	method.</summary>
+		///	<param name="writer">XmlWriter to	write	on.</param>
+		///	<param name="method">Method	to document.</param>
+		///	<param name="inherited">true if	a	declaringType	attribute	should be	included.</param>
+		///	<param name="overload">If	&gt; 0,	indicates	this it	the	nth	overloaded method	with the same	name.</param>
+		private	void WriteMethod(
+			XmlWriter	writer,
 			MethodInfo method,
 			bool inherited,
-			int overload)
+			int	overload)
 		{
-			if (method != null)
+			if (method !=	null)
 			{
-				string memberName = GetMemberName(method);
+				string memberName	=	GetMemberName(method);
 
 				writer.WriteStartElement("method");
-				writer.WriteAttributeString("name", method.Name);
-				writer.WriteAttributeString("id", memberName);
-				writer.WriteAttributeString("access", GetMethodAccessValue(method));
+				writer.WriteAttributeString("name",	method.Name);
+				writer.WriteAttributeString("id",	memberName);
+				writer.WriteAttributeString("access",	GetMethodAccessValue(method));
 
 				if (inherited)
 				{
 					writer.WriteAttributeString("declaringType", method.DeclaringType.FullName);
 				}
 
-				writer.WriteAttributeString("contract", GetMethodContractValue(method));
+				writer.WriteAttributeString("contract",	GetMethodContractValue(method));
 
 				if (overload > 0)
 				{
-					writer.WriteAttributeString("overload", overload.ToString());
+					writer.WriteAttributeString("overload",	overload.ToString());
 				}
 
-				writer.WriteAttributeString("returnType", method.ReturnType.FullName);
+				writer.WriteAttributeString("returnType",	method.ReturnType.FullName);
 
 				WriteMethodDocumentation(writer, memberName, method);
 
-				foreach (ParameterInfo parameter in method.GetParameters())
+				foreach	(ParameterInfo parameter in	method.GetParameters())
 				{
-					WriteParameter(writer, GetMemberName(method), parameter);
+					WriteParameter(writer, GetMemberName(method),	parameter);
 				}
 
 				writer.WriteEndElement();
 			}
 		}
 
-		private void WriteParameter(XmlWriter writer, string memberName, ParameterInfo parameter)
+		private	void WriteParameter(XmlWriter	writer,	string memberName, ParameterInfo parameter)
 		{
 			string direction = "in";
-      bool isParamArray = false;
+			bool isParamArray	=	false;
 
 			if (parameter.ParameterType.IsByRef)
 			{
-				direction = parameter.IsOut ? "out" : "ref";
+				direction	=	parameter.IsOut	?	"out"	:	"ref";
 			}
 
-      if (parameter.GetCustomAttributes(typeof(ParamArrayAttribute), false).Length > 0)
-      {
-        isParamArray = true;
-      }
+			if (parameter.GetCustomAttributes(typeof(ParamArrayAttribute), false).Length > 0)
+			{
+				isParamArray = true;
+			}
 
-      writer.WriteStartElement("parameter");
-			writer.WriteAttributeString("name", parameter.Name);
-			writer.WriteAttributeString("type", parameter.ParameterType.FullName);
-			writer.WriteAttributeString("optional", parameter.IsOptional ? "true" : "false");
+			writer.WriteStartElement("parameter");
+			writer.WriteAttributeString("name",	parameter.Name);
+			writer.WriteAttributeString("type",	parameter.ParameterType.FullName);
+			writer.WriteAttributeString("optional",	parameter.IsOptional ? "true"	:	"false");
 			
-			if (direction != "in")
+			if (direction	!= "in")
 			{
 				writer.WriteAttributeString("direction", direction);
 			}
 
-      if (isParamArray)
-      {
-        writer.WriteAttributeString("isParamArray", "true");
-      }
+			if (isParamArray)
+			{
+				writer.WriteAttributeString("isParamArray",	"true");
+			}
 
-      writer.WriteEndElement();
+			writer.WriteEndElement();
 		}
 
-		private void WriteOperator(
-			XmlWriter writer,
+		private	void WriteOperator(
+			XmlWriter	writer,
 			MethodInfo method,
-			int overload)
+			int	overload)
 		{
-			if (method != null)
+			if (method !=	null)
 			{
-				string memberName = GetMemberName(method);
+				string memberName	=	GetMemberName(method);
 
 				writer.WriteStartElement("operator");
-				writer.WriteAttributeString("name", method.Name);
-				writer.WriteAttributeString("id", memberName);
-				writer.WriteAttributeString("access", GetMethodAccessValue(method));
+				writer.WriteAttributeString("name",	method.Name);
+				writer.WriteAttributeString("id",	memberName);
+				writer.WriteAttributeString("access",	GetMethodAccessValue(method));
 
-				if (method.DeclaringType != method.ReflectedType)
+				if (method.DeclaringType !=	method.ReflectedType)
 				{
 					writer.WriteAttributeString("declaringType", method.DeclaringType.FullName);
 				}
 
-				writer.WriteAttributeString("contract", GetMethodContractValue(method));
+				writer.WriteAttributeString("contract",	GetMethodContractValue(method));
 
 				if (overload > 0)
 				{
-					writer.WriteAttributeString("overload", overload.ToString());
+					writer.WriteAttributeString("overload",	overload.ToString());
 				}
 
-				writer.WriteAttributeString("returnType", method.ReturnType.FullName);
+				writer.WriteAttributeString("returnType",	method.ReturnType.FullName);
 
 				WriteMethodDocumentation(writer, memberName, method);
 
-				foreach (ParameterInfo parameter in method.GetParameters())
+				foreach	(ParameterInfo parameter in	method.GetParameters())
 				{
-					WriteParameter(writer, GetMemberName(method), parameter);
+					WriteParameter(writer, GetMemberName(method),	parameter);
 				}
 
 				writer.WriteEndElement();
 			}
 		}
 
-		/// <summary>Used by GetMemberName(Type type) and by 
-		/// GetFullNamespaceName(MemberInfo member) functions to build 
-		/// up most of the /doc member name.</summary>
-		/// <param name="type"></param>
-		private string GetTypeNamespaceName(Type type)
+		///	<summary>Used	by GetMemberName(Type	type)	and	by 
+		///	GetFullNamespaceName(MemberInfo	member)	functions	to build 
+		///	up most	of the /doc	member name.</summary>
+		///	<param name="type"></param>
+		private	string GetTypeNamespaceName(Type type)
 		{
-			string  theNamespace = "";
+			string	theNamespace = "";
 
-			if (type.Namespace != null && type.Namespace.Length > 0)
+			if (type.Namespace !=	null &&	type.Namespace.Length	>	0)
 			{
-				theNamespace = type.Namespace + ".";
+				theNamespace = type.Namespace	+	".";
 			}
 
-			return theNamespace + type.Name.Replace('+', '.');
+			return theNamespace	+	type.Name.Replace('+', '.');
 		}
 
-		/// <summary>Used by all the GetMemberName() functions except the 
-		/// Type one. It returns most of the /doc member name.</summary>
-		/// <param name="member"></param>
-		private string GetFullNamespaceName(MemberInfo member)
+		///	<summary>Used	by all the GetMemberName() functions except	the	
+		///	Type one.	It returns most	of the /doc	member name.</summary>
+		///	<param name="member"></param>
+		private	string GetFullNamespaceName(MemberInfo member)
 		{
 			return GetTypeNamespaceName(member.ReflectedType);
 		}
 
-		/// <summary>Derives the member name ID for a type. Used to match nodes in the /doc XML.</summary>
-		/// <param name="type">The type to derive the member name ID from.</param>
-		private string GetMemberName(Type type)
+		///	<summary>Derives the member	name ID	for	a	type.	Used to	match	nodes	in the /doc	XML.</summary>
+		///	<param name="type">The type	to derive	the	member name	ID from.</param>
+		private	string GetMemberName(Type	type)
 		{
-			return "T:" + type.FullName.Replace('+', '.');
+			return "T:"	+	type.FullName.Replace('+', '.');
 		}
 
-		/// <summary>Derives the member name ID for a field. Used to match nodes in the /doc XML.</summary>
-		/// <param name="field">The field to derive the member name ID from.</param>
-		private string GetMemberName(FieldInfo field)
+		///	<summary>Derives the member	name ID	for	a	field. Used	to match nodes in	the	/doc XML.</summary>
+		///	<param name="field">The	field	to derive	the	member name	ID from.</param>
+		private	string GetMemberName(FieldInfo field)
 		{
-			return "F:" + GetFullNamespaceName(field) + "." + field.Name;
+			return "F:"	+	GetFullNamespaceName(field)	+	"."	+	field.Name;
 		}
 
-		/// <summary>Derives the member name ID for an event. Used to match nodes in the /doc XML.</summary>
-		/// <param name="eventInfo">The event to derive the member name ID from.</param>
-		private string GetMemberName(EventInfo eventInfo)
+		///	<summary>Derives the member	name ID	for	an event.	Used to	match	nodes	in the /doc	XML.</summary>
+		///	<param name="eventInfo">The	event	to derive	the	member name	ID from.</param>
+		private	string GetMemberName(EventInfo eventInfo)
 		{
-			return "E:" + GetFullNamespaceName(eventInfo) + "." + eventInfo.Name;
+			return "E:"	+	GetFullNamespaceName(eventInfo)	+	"."	+	eventInfo.Name;
 		}
 
-		/// <summary>Derives the member name ID for a property.  Used to match nodes in the /doc XML.</summary>
-		/// <param name="property">The property to derive the member name ID from.</param>
-		private string GetMemberName(PropertyInfo property)
+		///	<summary>Derives the member	name ID	for	a	property.	 Used	to match nodes in	the	/doc XML.</summary>
+		///	<param name="property">The property	to derive	the	member name	ID from.</param>
+		private	string GetMemberName(PropertyInfo	property)
 		{
-			string  memberName;
+			string	memberName;
 
-			memberName = "P:" + GetFullNamespaceName(property) + "." + property.Name;
+			memberName = "P:"	+	GetFullNamespaceName(property) + "." + property.Name;
 
 			if (property.GetIndexParameters().Length > 0)
 			{
-				memberName += "(";
+				memberName +=	"(";
 
-				int i = 0;
+				int	i	=	0;
 
-				foreach (ParameterInfo parameter in property.GetIndexParameters())
+				foreach	(ParameterInfo parameter in	property.GetIndexParameters())
 				{
-					if (i > 0)
+					if (i	>	0)
 					{
-						memberName += ",";
+						memberName +=	",";
 					}
 
-					memberName += parameter.ParameterType.FullName;
+					memberName +=	parameter.ParameterType.FullName;
 
 					++i;
 				}
 
-				memberName += ")";
+				memberName +=	")";
 			}
 
 			return memberName;
 		}
 
-		/// <summary>Derives the member name ID for a member function.  Used to match nodes in the /doc XML.</summary>
-		/// <param name="method">The method to derive the member name ID from.</param>
-		private string GetMemberName(MethodBase method)
+		///	<summary>Derives the member	name ID	for	a	member function.	Used to	match	nodes	in the /doc	XML.</summary>
+		///	<param name="method">The method	to derive	the	member name	ID from.</param>
+		private	string GetMemberName(MethodBase	method)
 		{
-			string  memberName;
+			string	memberName;
 
-			memberName = "M:" + GetFullNamespaceName(method) + "." + method.Name.Replace('.', '#');
+			memberName = "M:"	+	GetFullNamespaceName(method) + "." + method.Name.Replace('.',	'#');
 
-			int i = 0;
+			int	i	=	0;
 
-			foreach (ParameterInfo parameter in method.GetParameters())
+			foreach	(ParameterInfo parameter in	method.GetParameters())
 			{
-				if (i == 0)
+				if (i	== 0)
 				{
-					memberName += "(";
+					memberName +=	"(";
 				}
 				else
 				{
-					memberName += ",";
+					memberName +=	",";
 				}
 
-				// XML Documentation file appends a "@" to reference and out types, not a "&"
-				memberName += parameter.ParameterType.FullName.Replace('&', '@');
+				// XML Documentation file	appends	a	"@"	to reference and out types,	not	a	"&"
+				memberName +=	parameter.ParameterType.FullName.Replace('&',	'@');
 
 				++i;
 			}
 
-			if (i > 0)
+			if (i	>	0)
 			{
-				memberName += ")";
+				memberName +=	")";
 			}
 
 			return memberName;
 		}
 
-		private void WriteSlashDocElements(XmlWriter writer, string memberName)
+		private	void WriteSlashDocElements(XmlWriter writer, string	memberName)
 		{
-			string xPathExpr = "/doc/members/member[@name=\"" + memberName + "\"]";
-			XmlNode xmlNode = currentSlashDoc.SelectSingleNode(xPathExpr);
+			string xPathExpr = "/doc/members/member[@name=\""	+	memberName + "\"]";
+			XmlNode	xmlNode	=	currentSlashDoc.SelectSingleNode(xPathExpr);
 
-			if (xmlNode != null && xmlNode.HasChildNodes)
+			if (xmlNode	!= null	&& xmlNode.HasChildNodes)
 			{
 				WriteStartDocumentation(writer);
 				writer.WriteRaw(xmlNode.InnerXml);
 			}
 		}
 
-		private string GetTypeAccessValue(Type type)
+		private	string GetTypeAccessValue(Type type)
 		{
-			string result = "Unknown";
+			string result	=	"Unknown";
 
-			switch (type.Attributes & TypeAttributes.VisibilityMask)
+			switch (type.Attributes	&	TypeAttributes.VisibilityMask)
 			{
 				case TypeAttributes.Public:
 					result = "Public";
@@ -1204,9 +1168,9 @@ namespace NDoc.Core
 			return result;
 		}
 
-		private string GetFieldAccessValue(FieldInfo field)
+		private	string GetFieldAccessValue(FieldInfo field)
 		{
-			string result = "Unknown";
+			string result	=	"Unknown";
 
 			switch (field.Attributes & FieldAttributes.FieldAccessMask)
 			{
@@ -1236,11 +1200,11 @@ namespace NDoc.Core
 			return result;
 		}
 
-		private string GetPropertyAccessValue(PropertyInfo property)
+		private	string GetPropertyAccessValue(PropertyInfo property)
 		{
 			MethodInfo method;
 
-			if (property.GetGetMethod(true) != null)
+			if (property.GetGetMethod(true)	!= null)
 			{
 				method = property.GetGetMethod(true);
 			}
@@ -1252,11 +1216,11 @@ namespace NDoc.Core
 			return GetMethodAccessValue(method);
 		}
 
-		private string GetMethodAccessValue(MethodBase method)
+		private	string GetMethodAccessValue(MethodBase method)
 		{
-			string result = "Unknown";
+			string result	=	"Unknown";
 
-			switch (method.Attributes & MethodAttributes.MemberAccessMask)
+			switch (method.Attributes	&	MethodAttributes.MemberAccessMask)
 			{
 				case MethodAttributes.Public:
 					result = "Public";
@@ -1284,40 +1248,40 @@ namespace NDoc.Core
 			return result;
 		}
 
-		private string GetMethodContractValue(MethodBase method)
+		private	string GetMethodContractValue(MethodBase method)
 		{
-			string        result;
-			MethodAttributes  methodAttributes = method.Attributes;
+			string				result;
+			MethodAttributes	methodAttributes = method.Attributes;
 
-			if ((methodAttributes & MethodAttributes.Static) > 0)
+			if ((methodAttributes	&	MethodAttributes.Static) > 0)
 			{
 				result = "Static";
 			}
-			else if ((methodAttributes & MethodAttributes.Abstract) > 0)
+			else if	((methodAttributes & MethodAttributes.Abstract)	>	0)
 			{
 				result = "Abstract";
 			}
-			else if ((methodAttributes & MethodAttributes.Final) > 0)
+			else if	((methodAttributes & MethodAttributes.Final) > 0)
 			{
 				result = "Final";
 			}
-			else if ((methodAttributes & MethodAttributes.Virtual) > 0)
+			else if	((methodAttributes & MethodAttributes.Virtual) > 0)
 			{
-				if ((methodAttributes & MethodAttributes.NewSlot) > 0)
+				if ((methodAttributes	&	MethodAttributes.NewSlot)	>	0)
 				{
 					/*
-							  if (false)
-							  {
-								// This is where we need to check if the class we
-								// derive from has a method with our same sig.  If
-								// so then this would be the 'new' keyword.
+								if (false)
+								{
+								// This	is where we	need to	check	if the class we
+								// derive	from has a method	with our same	sig.	If
+								// so	then this	would	be the 'new' keyword.
 								result = "new";
-							  }
-							  else
-							  {
+								}
+								else
+								{
 					*/
 					result = "Virtual";
-					//          }
+					//					}
 				}
 				else
 				{
@@ -1332,13 +1296,13 @@ namespace NDoc.Core
 			return result;
 		}
 
-		private StringCollection GetNamespaceNames(Type[] types)
+		private	StringCollection GetNamespaceNames(Type[]	types)
 		{
-			StringCollection namespaceNames = new StringCollection();
+			StringCollection namespaceNames	=	new	StringCollection();
 
-			foreach (Type type in types)
+			foreach	(Type	type in	types)
 			{
-				if (namespaceNames.Contains(type.Namespace) == false)
+				if (namespaceNames.Contains(type.Namespace)	== false)
 				{
 					namespaceNames.Add(type.Namespace);
 				}
@@ -1347,76 +1311,76 @@ namespace NDoc.Core
 			return namespaceNames;
 		}
 
-		private void CheckForMissingSummaryAndRemarks(
-			XmlWriter writer,
+		private	void CheckForMissingSummaryAndRemarks(
+			XmlWriter	writer,
 			string memberName)
 		{
-			if (MyConfig.ShowMissingSummaries || MyConfig.ShowMissingRemarks)
+			if (MyConfig.ShowMissingSummaries	|| MyConfig.ShowMissingRemarks)
 			{
-				string xPathExpr = "/doc/members/member[@name=\"" + memberName + "\"]";
-				XmlNode xmlNode = currentSlashDoc.SelectSingleNode(xPathExpr);
+				string xPathExpr = "/doc/members/member[@name=\""	+	memberName + "\"]";
+				XmlNode	xmlNode	=	currentSlashDoc.SelectSingleNode(xPathExpr);
 
 				if (MyConfig.ShowMissingSummaries)
 				{
-					if (xmlNode == null || xmlNode.SelectSingleNode("summary") == null)
+					if (xmlNode	== null	|| xmlNode.SelectSingleNode("summary") ==	null)
 					{
-						WriteMissingDocumentation(writer, "summary", null);
+						WriteMissingDocumentation(writer,	"summary", null);
 					}
 				}
 
 				if (MyConfig.ShowMissingRemarks)
 				{
-					if (xmlNode == null || xmlNode.SelectSingleNode("remarks") == null)
+					if (xmlNode	== null	|| xmlNode.SelectSingleNode("remarks") ==	null)
 					{
-						WriteMissingDocumentation(writer, "remarks", null);
+						WriteMissingDocumentation(writer,	"remarks", null);
 					}
 				}
 			}
 		}
 
-		private void CheckForMissingParams(
-			XmlWriter writer,
+		private	void CheckForMissingParams(
+			XmlWriter	writer,
 			string memberName,
-			ParameterInfo[] parameters)
+			ParameterInfo[]	parameters)
 		{
 			if (MyConfig.ShowMissingParams)
 			{
-				foreach (ParameterInfo parameter in parameters)
+				foreach	(ParameterInfo parameter in	parameters)
 				{
 					string xpath = String.Format(
 						"/doc/members/member[@name='{0}']/param[@name='{1}']",
 						memberName,
 						parameter.Name);
 
-					if (currentSlashDoc.SelectSingleNode(xpath) == null)
+					if (currentSlashDoc.SelectSingleNode(xpath)	== null)
 					{
-						WriteMissingDocumentation(writer, "param", parameter.Name);
+						WriteMissingDocumentation(writer,	"param", parameter.Name);
 					}
 				}
 			}
 		}
 
-		private void CheckForMissingReturns(
-			XmlWriter writer,
+		private	void CheckForMissingReturns(
+			XmlWriter	writer,
 			string memberName,
 			MethodInfo method)
 		{
-			if (MyConfig.ShowMissingReturns &&
+			if (MyConfig.ShowMissingReturns	&&
 				!"System.Void".Equals(method.ReturnType.FullName))
 			{
 				string xpath = String.Format(
 					"/doc/members/member[@name='{0}']/returns",
 					memberName);
 
-				if (currentSlashDoc.SelectSingleNode(xpath) == null)
+				if (currentSlashDoc.SelectSingleNode(xpath)	== null)
 				{
-					WriteMissingDocumentation(writer, "returns", null);
+					WriteMissingDocumentation(writer,	"returns", null);
 				}
 			}
 		}
 
-		private void CheckForMissingValue(
-			XmlWriter writer,
+		private	void CheckForMissingValue(
+			XmlWriter	writer,
 			string memberName)
 		{
 			if (MyConfig.ShowMissingValues)
@@ -1425,15 +1389,15 @@ namespace NDoc.Core
 					"/doc/members/member[@name='{0}']/value",
 					memberName);
 
-				if (currentSlashDoc.SelectSingleNode(xpath) == null)
+				if (currentSlashDoc.SelectSingleNode(xpath)	== null)
 				{
-					WriteMissingDocumentation(writer, "value", null);
+					WriteMissingDocumentation(writer,	"value", null);
 				}
 			}
 		}
 
-		private void WriteMissingDocumentation(
-			XmlWriter writer,
+		private	void WriteMissingDocumentation(
+			XmlWriter	writer,
 			string element,
 			string name)
 		{
@@ -1441,22 +1405,22 @@ namespace NDoc.Core
 
 			writer.WriteStartElement(element);
 
-			if (name != null)
+			if (name !=	null)
 			{
-				writer.WriteAttributeString("name", name);
+				writer.WriteAttributeString("name",	name);
 			}
 
 			writer.WriteStartElement("span");
 			writer.WriteAttributeString("class", "missing");
-			writer.WriteString("Missing Documentation");
+			writer.WriteString("Missing	Documentation");
 			writer.WriteEndElement();
 
 			writer.WriteEndElement();
 		}
 
-		private bool didWriteStartDocumentation = false;
+		private	bool didWriteStartDocumentation	=	false;
 
-		private void WriteStartDocumentation(XmlWriter writer)
+		private	void WriteStartDocumentation(XmlWriter writer)
 		{
 			if (!didWriteStartDocumentation)
 			{
@@ -1465,7 +1429,7 @@ namespace NDoc.Core
 			}
 		}
 
-		private void WriteEndDocumentation(XmlWriter writer)
+		private	void WriteEndDocumentation(XmlWriter writer)
 		{
 			if (didWriteStartDocumentation)
 			{
@@ -1474,103 +1438,103 @@ namespace NDoc.Core
 			}
 		}
 
-		private void WriteTypeDocumentation(
-			XmlWriter writer,
+		private	void WriteTypeDocumentation(
+			XmlWriter	writer,
 			string memberName,
 			Type type)
 		{
-			WriteSlashDocElements(writer, memberName);
+			WriteSlashDocElements(writer,	memberName);
 			CheckForMissingSummaryAndRemarks(writer, memberName);
 			WriteEndDocumentation(writer);
 		}
 
-		private void WriteDelegateDocumentation(
-			XmlWriter writer,
+		private	void WriteDelegateDocumentation(
+			XmlWriter	writer,
 			string memberName,
 			Type type,
 			MethodInfo method)
 		{
 			WriteTypeDocumentation(writer, memberName, type);
-			CheckForMissingParams(writer, memberName, method.GetParameters());
+			CheckForMissingParams(writer,	memberName,	method.GetParameters());
 			WriteEndDocumentation(writer);
 		}
 
-		private void WriteEnumerationDocumentation(XmlWriter writer, string memberName)
+		private	void WriteEnumerationDocumentation(XmlWriter writer, string	memberName)
 		{
-			WriteSlashDocElements(writer, memberName);
+			WriteSlashDocElements(writer,	memberName);
 			CheckForMissingSummaryAndRemarks(writer, memberName);
 			WriteEndDocumentation(writer);
 		}
 
-		private void WriteConstructorDocumentation(
-			XmlWriter writer,
+		private	void WriteConstructorDocumentation(
+			XmlWriter	writer,
 			string memberName,
-			ConstructorInfo constructor)
+			ConstructorInfo	constructor)
 		{
-			WriteSlashDocElements(writer, memberName);
+			WriteSlashDocElements(writer,	memberName);
 			CheckForMissingSummaryAndRemarks(writer, memberName);
-			CheckForMissingParams(writer, memberName, constructor.GetParameters());
+			CheckForMissingParams(writer,	memberName,	constructor.GetParameters());
 			WriteEndDocumentation(writer);
 		}
 
-		private void WriteFieldDocumentation(
-			XmlWriter writer,
+		private	void WriteFieldDocumentation(
+			XmlWriter	writer,
 			string memberName)
 		{
-			WriteSlashDocElements(writer, memberName);
+			WriteSlashDocElements(writer,	memberName);
 			CheckForMissingSummaryAndRemarks(writer, memberName);
 			WriteEndDocumentation(writer);
 		}
 
-		private void WritePropertyDocumentation(
-			XmlWriter writer,
+		private	void WritePropertyDocumentation(
+			XmlWriter	writer,
 			string memberName,
 			PropertyInfo property)
 		{
-			WriteSlashDocElements(writer, memberName);
+			WriteSlashDocElements(writer,	memberName);
 			CheckForMissingSummaryAndRemarks(writer, memberName);
-			CheckForMissingParams(writer, memberName, GetIndexParameters(property));
+			CheckForMissingParams(writer,	memberName,	GetIndexParameters(property));
 			CheckForMissingValue(writer, memberName);
 			WriteEndDocumentation(writer);
 		}
 
-		private void WriteMethodDocumentation(
-			XmlWriter writer,
+		private	void WriteMethodDocumentation(
+			XmlWriter	writer,
 			string memberName,
 			MethodInfo method)
 		{
-			WriteSlashDocElements(writer, memberName);
+			WriteSlashDocElements(writer,	memberName);
 			CheckForMissingSummaryAndRemarks(writer, memberName);
-			CheckForMissingParams(writer, memberName, method.GetParameters());
+			CheckForMissingParams(writer,	memberName,	method.GetParameters());
 			CheckForMissingReturns(writer, memberName, method);
 			WriteEndDocumentation(writer);
 		}
 
-		private void WriteEventDocumentation(
-			XmlWriter writer,
+		private	void WriteEventDocumentation(
+			XmlWriter	writer,
 			string memberName)
 		{
-			WriteSlashDocElements(writer, memberName);
+			WriteSlashDocElements(writer,	memberName);
 			CheckForMissingSummaryAndRemarks(writer, memberName);
 			WriteEndDocumentation(writer);
 		}
 
-		/// <summary>Loads an assembly.</summary>
-		/// <param name="filename">The assembly filename.</param>
-		/// <returns>The assembly object.</returns>
-		/// <remarks>This method loads an assembly into memory. If you
-		/// use Assembly.Load or Assembly.LoadFrom the assembly file locks. 
-		/// This method doesn't lock the assembly file.</remarks>
-		public static Assembly LoadAssembly(string filename)
+		///	<summary>Loads an	assembly.</summary>
+		///	<param name="filename">The assembly	filename.</param>
+		///	<returns>The assembly	object.</returns>
+		///	<remarks>This	method loads an	assembly into	memory.	If you
+		///	use	Assembly.Load	or Assembly.LoadFrom the assembly	file locks.	
+		///	This method	doesn't	lock the assembly	file.</remarks>
+		public static	Assembly LoadAssembly(string filename)
 		{
 			if (!File.Exists(filename))
 			{
-				throw new ApplicationException("can't find assembly " + filename);
+				throw	new	ApplicationException("can't	find assembly	"	+	filename);
 			}
 
-			FileStream fs = File.Open(filename, FileMode.Open, FileAccess.Read);
-			byte[] buffer = new byte[fs.Length];
-			fs.Read(buffer, 0, (int)fs.Length);
+			FileStream fs	=	File.Open(filename,	FileMode.Open, FileAccess.Read);
+			byte[] buffer	=	new	byte[fs.Length];
+			fs.Read(buffer,	0, (int)fs.Length);
 			fs.Close();
 
 			return Assembly.Load(buffer);
