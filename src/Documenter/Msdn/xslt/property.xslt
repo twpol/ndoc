@@ -19,14 +19,23 @@
 			</xsl:choose>
 		</xsl:variable>
 		<xsl:variable name="propertyName" select="@name" />
+		<xsl:variable name="title">
+			<xsl:value-of select="@name" /><xsl:text> Property</xsl:text>
+			<xsl:if test="./parameter">
+				<xsl:text> </xsl:text>
+				<xsl:if test="count(parent::node()/*[@name=$propertyName]) &gt; 1">
+					<xsl:call-template name="get-param-list" />
+				</xsl:if>
+			</xsl:if>
+		</xsl:variable>
 		<html dir="LTR">
 			<xsl:call-template name="html-head">
-				<xsl:with-param name="title" select="concat(../@name, '.', @name, ' Property')" />
+				<xsl:with-param name="title" select="$title" />
 			</xsl:call-template>
 			<body id="bodyID" class="dtBODY">
 				<xsl:call-template name="title-row">
 					<xsl:with-param name="type-name">
-						<xsl:value-of select="../@name" />.<xsl:value-of select="@name" /> Property
+						<xsl:value-of select="../@name" />.<xsl:value-of select="$title" />
 					</xsl:with-param>
 				</xsl:call-template>
 				<div id="nstext">

@@ -22,16 +22,25 @@
 			</xsl:choose>
 		</xsl:variable>
 		<xsl:variable name="propertyName" select="@name" />
+		<xsl:variable name="title">
+			<xsl:value-of select="@name" /><xsl:text> Property</xsl:text>
+			<xsl:if test="./parameter">
+				<xsl:text> </xsl:text>
+				<xsl:if test="count(parent::node()/*[@name=$propertyName]) &gt; 1">
+					<xsl:call-template name="get-param-list" />
+				</xsl:if>
+			</xsl:if>
+		</xsl:variable>
 		<html dir="LTR">
 			<xsl:call-template name="html-head">
-				<xsl:with-param name="title" select="concat( @name, ' Property' )" />
+				<xsl:with-param name="title" select="$title"/>
 				<xsl:with-param name="page-type" select="'Property'" />
 			</xsl:call-template>
 			<body topmargin="0" id="bodyID" class="dtBODY">
 				<object id="obj_cook" classid="clsid:59CC0C20-679B-11D2-88BD-0800361A1803" style="display:none;"></object>
 				<xsl:call-template name="title-row">
 					<xsl:with-param name="type-name">
-						<xsl:value-of select="../@name" />.<xsl:value-of select="@name" /> Property
+						<xsl:value-of select="../@name" />.<xsl:value-of select="$titlename" />
 					</xsl:with-param>
 				</xsl:call-template>
 				<div id="nstext" valign="bottom">
