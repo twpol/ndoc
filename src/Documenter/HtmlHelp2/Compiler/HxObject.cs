@@ -2,8 +2,6 @@ using System;
 using System.IO;
 using System.Diagnostics;
 
-using NDoc.Core;
-
 namespace NDoc.Documenter.HtmlHelp2.Compiler
 {
 	/// <summary>
@@ -63,6 +61,7 @@ namespace NDoc.Documenter.HtmlHelp2.Compiler
 			try
 			{
 				ProcessStartInfo processStartInfo = new ProcessStartInfo();
+
 				processStartInfo.FileName = CompilerEXEPath;
 				processStartInfo.Arguments = arguments;
 				processStartInfo.ErrorDialog = false;
@@ -76,27 +75,25 @@ namespace NDoc.Documenter.HtmlHelp2.Compiler
 				{
 					HxProcess.Start();
 				}
-				catch (Exception e)
+				catch ( Exception e )
 				{
-					string msg = String.Format("The HTML Help compiler '{0}' was not found.", _AppName);
-					throw new DocumenterException(msg, e);
+					string msg = String.Format("An error occured while attempting to run {0}", _AppName);
+					throw new Exception(msg, e);
 				}
 
-				if (!HxProcess.WaitForExit( ProcessTimeout ))
+				if ( !HxProcess.WaitForExit( ProcessTimeout ) )
 				{
-					throw new DocumenterException("Compile did not complete after 10 minutes and was aborted");
-				}
-
-				// Errors return 0 (warnings returns 1 - don't know about complete success)
-				if (HxProcess.ExitCode == 0)
-				{
-					//HxConv returns an error code of 0 even though no errors are being reported
-					//and the output appear to all be getting created without issue
-					#warning Not reporting zero return code
-					//throw new DocumenterException("Help compiler returned an error code of " + HxProcess.ExitCode.ToString());
+					throw new Exception( string.Format( "{0} did not complete after {1} seconds and was aborted", _AppName, ProcessTimeout / 1000)  );
 				}
 
 				Trace.WriteLine( String.Format( "{0} returned an exit code of {1}", _AppName, HxProcess.ExitCode ) );
+				
+				// 0 means a successful exit
+				if ( HxProcess.ExitCode != 0 )
+				{
+					throw new Exception( String.Format( "{0} returned an exit code of {1}", _AppName, HxProcess.ExitCode ) );
+				}
+
 			}
 			finally
 			{
@@ -111,11 +108,6 @@ namespace NDoc.Documenter.HtmlHelp2.Compiler
 		/// <remarks>Can be overridden by derived classes to provide custom timeout intervals</remarks>
 		/// <value>600000</value>
 		protected virtual int ProcessTimeout{ get{ return 600000; } }
-
-		/// <summary>
-		/// The tmp directory where the CHM is decompiled into and the HxS file created
-		/// </summary>
-		//public static string WorkingDirectoryName{ get{ return "_HxsWorkDir_"; } }
 		
 	}
 }
