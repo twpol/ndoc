@@ -121,6 +121,15 @@ namespace NDoc.ConsoleApplication
 								new AssemblySlashDoc(pair[0], pair[1]));
 						}
 					}
+					else
+					{
+						string doc = Path.ChangeExtension(arg, ".xml");
+						if (File.Exists(doc))
+						{
+							project.AddAssemblySlashDoc(
+								new AssemblySlashDoc(arg, doc));
+						}
+					}
 				}
 
 				if (project.AssemblySlashDocCount == 0)
@@ -143,13 +152,19 @@ namespace NDoc.ConsoleApplication
 		private static void WriteUsage()
 		{
 			Console.WriteLine();
-			Console.WriteLine("usage: NDocConsole  [-verbose] [-documenter=docname]");
-			Console.WriteLine("                    [-recurse=dir[,maxDepth]] [-property=val...]");
-			Console.WriteLine("                    assembly,xml [assembly,xml...]");
+			Console.WriteLine("usage: NDocConsole  assembly[,xmldoc] [assembly[,xmldoc]]...");
 			Console.WriteLine("                    [-namespacesummaries=filename]");
+			Console.WriteLine("                    [-documenter=docname]");
+			Console.WriteLine("                    [[-property=value] [-property=value]...]");
+			Console.WriteLine("                    [-verbose]");
 			Console.WriteLine();
-			Console.WriteLine("or     NDocConsole  [-verbose] [-documenter=docname] [-project=file]");
-			Console.WriteLine("                    [-recurse=dir[,maxDepth]] [-property=val...]");
+			Console.WriteLine("or     NDocConsole  -recurse=dir[,maxDepth]");
+			Console.WriteLine("                    [-namespacesummaries=filename]");
+			Console.WriteLine("                    [-documenter=docname]");
+			Console.WriteLine("                    [[-property=value] [-property=value]...]");
+			Console.WriteLine("                    [-verbose]");
+			Console.WriteLine();
+			Console.WriteLine("or     NDocConsole  -project=ndocfile [-documenter=docname] [-verbose]");
 			Console.WriteLine();
 
 			Console.Write("available documenters: ");
