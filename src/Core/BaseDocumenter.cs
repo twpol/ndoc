@@ -1232,7 +1232,7 @@ namespace NDoc.Core
 			string memberName = GetMemberName(type);
 
 			writer.WriteStartElement("delegate");
-			writer.WriteAttributeString("name", type.Name.Replace('+', '.'));
+			writer.WriteAttributeString("name", GetNestedTypeName(type));
 			writer.WriteAttributeString("id", memberName);
 			writer.WriteAttributeString("access", GetTypeAccessValue(type));
 
@@ -1262,14 +1262,12 @@ namespace NDoc.Core
 			writer.WriteEndElement();
 		}
 
-		private string GetEnumerationName(Type type)
+		private string GetNestedTypeName(Type type)
 		{
 			int indexOfPlus = type.FullName.IndexOf('+');
-
 			if (indexOfPlus != -1)
 			{
 				int lastIndexOfDot = type.FullName.LastIndexOf('.');
-
 				return type.FullName.Substring(lastIndexOfDot + 1).Replace('+', '.');
 			}
 			else
@@ -1286,7 +1284,7 @@ namespace NDoc.Core
 			string memberName = GetMemberName(type);
 
 			writer.WriteStartElement("enumeration");
-			writer.WriteAttributeString("name", GetEnumerationName(type));
+			writer.WriteAttributeString("name", GetNestedTypeName(type));
 			writer.WriteAttributeString("id", memberName);
 			writer.WriteAttributeString("access", GetTypeAccessValue(type));
 
