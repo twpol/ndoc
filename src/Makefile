@@ -78,7 +78,59 @@ JAVADOC_DEBUG = /debug-
 
 all: $(GUI) $(CONSOLE) $(CORE) $(XML) $(VISUALSTUDIO) $(TEST) $(MSDN) $(JAVADOC)
 
-$(GUI): $(CORE) $(MSDN) $(XML) $(JAVADOC) $(VISUALSTUDIO) Gui\About.rtf Gui\AboutForm.cs Gui\AboutForm.resx Gui\AssemblyInfo.cs Gui\AssemblySlashDocForm.cs Gui\AssemblySlashDocForm.resx Gui\BuildWorker.cs Gui\ErrorForm.cs Gui\ErrorForm.resx Gui\HeaderGroupBox.cs Gui\HeaderGroupBox.resx Gui\MainForm.cs Gui\MainForm.resx Gui\NamespaceSummariesForm.cs Gui\NamespaceSummariesForm.resx Gui\SolutionForm.cs Gui\SolutionForm.resx
+GUI_SOURCE_FILES = \
+	Gui\AboutForm.cs \
+	Gui\AssemblyInfo.cs \
+	Gui\AssemblySlashDocForm.cs \
+	Gui\BuildWorker.cs \
+	Gui\ErrorForm.cs \
+	Gui\HeaderGroupBox.cs \
+	Gui\MainForm.cs \
+	Gui\NamespaceSummariesForm.cs \
+	Gui\SolutionForm.cs
+
+CONSOLE_SOURCE_FILES = \
+	Console\AssemblyInfo.cs \
+	Console\Console.cs
+
+CORE_SOURCE_FILES = \
+	Core\AssemblyInfo.cs \
+	Core\AssemblySlashDoc.cs \
+	Core\BaseDocumenter.cs \
+	Core\BaseDocumenterConfig.cs \
+	Core\DocumenterException.cs \
+	Core\EmbeddedResources.cs \
+	Core\HtmlHelp.cs \
+	Core\IDocumenter.cs \
+	Core\IDocumenterConfig.cs \
+	Core\Project.cs
+
+XML_SOURCE_FILES = \
+	Documenter\Xml\AssemblyInfo.cs \
+	Documenter\Xml\XmlDocumenter.cs \
+	Documenter\Xml\XmlDocumenterConfig.cs
+
+VISUALSTUDIO_SOURCE_FILES = \
+	VisualStudio\AssemblyInfo.cs \
+	VisualStudio\Project.cs \
+	VisualStudio\ProjectConfig.cs \
+	VisualStudio\Solution.cs
+
+TEST_SOURCE_FILES = \
+	Test\AssemblyInfo.cs \
+	Test\Test.cs
+
+MSDN_SOURCE_FILES = \
+	Documenter\Msdn\AssemblyInfo.cs \
+	Documenter\Msdn\MsdnDocumenter.cs \
+	Documenter\Msdn\MsdnDocumenterConfig.cs
+
+JAVADOC_SOURCE_FILES = \
+	Documenter\JavaDoc\AssemblyInfo.cs \
+	Documenter\JavaDoc\JavaDocDocumenter.cs \
+	Documenter\JavaDoc\JavaDocDocumenterConfig.cs
+
+$(GUI): $(CORE) $(MSDN) $(XML) $(JAVADOC) $(VISUALSTUDIO) $(GUI_SOURCE_FILES)
 	if not exist $(GUI_DIRECTORY) md $(GUI_DIRECTORY)
 	resgen Gui\AboutForm.resx $(GUI_DIRECTORY)\NDoc.Gui.AboutForm.resources
 	resgen Gui\AssemblySlashDocForm.resx $(GUI_DIRECTORY)\NDoc.Gui.AssemblySlashDocForm.resources
@@ -86,46 +138,46 @@ $(GUI): $(CORE) $(MSDN) $(XML) $(JAVADOC) $(VISUALSTUDIO) Gui\About.rtf Gui\Abou
 	resgen Gui\MainForm.resx $(GUI_DIRECTORY)\NDoc.Gui.MainForm.resources
 	resgen Gui\NamespaceSummariesForm.resx $(GUI_DIRECTORY)\NDoc.Gui.NamespaceSummariesForm.resources
 	resgen Gui\SolutionForm.resx $(GUI_DIRECTORY)\NDoc.Gui.SolutionForm.resources
-	csc /nologo /target:winexe /out:$(GUI) $(GUI_DEBUG) Gui\AboutForm.cs Gui\AssemblyInfo.cs Gui\AssemblySlashDocForm.cs Gui\BuildWorker.cs Gui\ErrorForm.cs Gui\HeaderGroupBox.cs Gui\MainForm.cs Gui\NamespaceSummariesForm.cs Gui\SolutionForm.cs /reference:System.dll /reference:System.Drawing.dll /reference:System.Windows.Forms.dll /reference:System.Xml.dll /reference:System.Data.dll /reference:$(CORE) /reference:$(MSDN) /reference:$(XML) /reference:$(JAVADOC) /reference:$(VISUALSTUDIO) /resource:Gui\About.rtf,NDoc.Gui.About.rtf /resource:$(GUI_DIRECTORY)\NDoc.Gui.AboutForm.resources /resource:$(GUI_DIRECTORY)\NDoc.Gui.AssemblySlashDocForm.resources /resource:$(GUI_DIRECTORY)\NDoc.Gui.ErrorForm.resources /resource:$(GUI_DIRECTORY)\NDoc.Gui.MainForm.resources /resource:$(GUI_DIRECTORY)\NDoc.Gui.NamespaceSummariesForm.resources /resource:$(GUI_DIRECTORY)\NDoc.Gui.SolutionForm.resources
+	csc /nologo /target:winexe /out:$(GUI) $(GUI_DEBUG) $(GUI_SOURCE_FILES) /reference:System.dll /reference:System.Drawing.dll /reference:System.Windows.Forms.dll /reference:System.Xml.dll /reference:System.Data.dll /reference:$(CORE) /reference:$(MSDN) /reference:$(XML) /reference:$(JAVADOC) /reference:$(VISUALSTUDIO) /resource:Gui\About.rtf,NDoc.Gui.About.rtf /resource:$(GUI_DIRECTORY)\NDoc.Gui.AboutForm.resources /resource:$(GUI_DIRECTORY)\NDoc.Gui.AssemblySlashDocForm.resources /resource:$(GUI_DIRECTORY)\NDoc.Gui.ErrorForm.resources /resource:$(GUI_DIRECTORY)\NDoc.Gui.MainForm.resources /resource:$(GUI_DIRECTORY)\NDoc.Gui.NamespaceSummariesForm.resources /resource:$(GUI_DIRECTORY)\NDoc.Gui.SolutionForm.resources
 	copy $(CORE) $(GUI_DIRECTORY)
 	copy $(MSDN) $(GUI_DIRECTORY)
 	copy $(XML) $(GUI_DIRECTORY)
 	copy $(JAVADOC) $(GUI_DIRECTORY)
 	copy $(VISUALSTUDIO) $(GUI_DIRECTORY)
 
-$(CONSOLE): $(CORE) $(JAVADOC) $(MSDN) $(XML) Console\AssemblyInfo.cs Console\Console.cs
+$(CONSOLE): $(CORE) $(JAVADOC) $(MSDN) $(XML) $(CONSOLE_SOURCE_FILES)
 	if not exist $(CONSOLE_DIRECTORY) md $(CONSOLE_DIRECTORY)
-	csc /nologo /target:exe /out:$(CONSOLE) $(CONSOLE_DEBUG) Console\AssemblyInfo.cs Console\Console.cs /reference:System.dll /reference:System.Xml.dll /reference:$(CORE) /reference:$(JAVADOC) /reference:$(MSDN) /reference:$(XML)
+	csc /nologo /target:exe /out:$(CONSOLE) $(CONSOLE_DEBUG) $(CONSOLE_SOURCE_FILES) /reference:System.dll /reference:System.Xml.dll /reference:$(CORE) /reference:$(JAVADOC) /reference:$(MSDN) /reference:$(XML)
 	copy $(CORE) $(CONSOLE_DIRECTORY)
 	copy $(JAVADOC) $(CONSOLE_DIRECTORY)
 	copy $(MSDN) $(CONSOLE_DIRECTORY)
 	copy $(XML) $(CONSOLE_DIRECTORY)
 
-$(CORE): Core\AssemblyInfo.cs Core\AssemblySlashDoc.cs Core\BaseDocumenter.cs Core\BaseDocumenterConfig.cs Core\DocumenterException.cs Core\EmbeddedResources.cs Core\HtmlHelp.cs Core\IDocumenter.cs Core\IDocumenterConfig.cs Core\Project.cs
+$(CORE): $(CORE_SOURCE_FILES)
 	if not exist $(CORE_DIRECTORY) md $(CORE_DIRECTORY)
-	csc /nologo /target:library /out:$(CORE) $(CORE_DEBUG) Core\AssemblyInfo.cs Core\AssemblySlashDoc.cs Core\BaseDocumenter.cs Core\BaseDocumenterConfig.cs Core\DocumenterException.cs Core\EmbeddedResources.cs Core\HtmlHelp.cs Core\IDocumenter.cs Core\IDocumenterConfig.cs Core\Project.cs /reference:System.dll /reference:System.Xml.dll /reference:System.Design.dll /reference:System.Drawing.dll
+	csc /nologo /target:library /out:$(CORE) $(CORE_DEBUG) $(CORE_SOURCE_FILES) /reference:System.dll /reference:System.Xml.dll /reference:System.Design.dll /reference:System.Drawing.dll
 
-$(XML): $(CORE) Documenter\Xml\AssemblyInfo.cs Documenter\Xml\XmlDocumenter.cs Documenter\Xml\XmlDocumenterConfig.cs
+$(XML): $(CORE) $(XML_SOURCE_FILES)
 	if not exist $(XML_DIRECTORY) md $(XML_DIRECTORY)
-	csc /nologo /target:library /out:$(XML) $(XML_DEBUG) Documenter\Xml\AssemblyInfo.cs Documenter\Xml\XmlDocumenter.cs Documenter\Xml\XmlDocumenterConfig.cs /reference:System.dll /reference:System.XML.dll /reference:System.Design.dll /reference:System.Drawing.Design.dll /reference:System.Drawing.dll /reference:$(CORE)
+	csc /nologo /target:library /out:$(XML) $(XML_DEBUG) $(XML_SOURCE_FILES) /reference:System.dll /reference:System.XML.dll /reference:System.Design.dll /reference:System.Drawing.Design.dll /reference:System.Drawing.dll /reference:$(CORE)
 	copy $(CORE) $(XML_DIRECTORY)
 
-$(VISUALSTUDIO): VisualStudio\AssemblyInfo.cs VisualStudio\Project.cs VisualStudio\ProjectConfig.cs VisualStudio\Solution.cs
+$(VISUALSTUDIO): $(VISUALSTUDIO_SOURCE_FILES)
 	if not exist $(VISUALSTUDIO_DIRECTORY) md $(VISUALSTUDIO_DIRECTORY)
-	csc /nologo /target:library /out:$(VISUALSTUDIO) $(VISUALSTUDIO_DEBUG) VisualStudio\AssemblyInfo.cs VisualStudio\Project.cs VisualStudio\ProjectConfig.cs VisualStudio\Solution.cs /reference:System.dll /reference:System.Data.dll /reference:System.Xml.dll
+	csc /nologo /target:library /out:$(VISUALSTUDIO) $(VISUALSTUDIO_DEBUG) $(VISUALSTUDIO_SOURCE_FILES) /reference:System.dll /reference:System.Data.dll /reference:System.Xml.dll
 
-$(TEST): Test\AssemblyInfo.cs Test\include.xml Test\Test.cs
+$(TEST): $(TEST_SOURCE_FILES)
 	if not exist $(TEST_DIRECTORY) md $(TEST_DIRECTORY)
-	csc /nologo /target:library /out:$(TEST) $(TEST_DEBUG) Test\AssemblyInfo.cs Test\Test.cs /reference:System.dll /reference:System.Xml.dll
+	csc /nologo /target:library /out:$(TEST) $(TEST_DEBUG) $(TEST_SOURCE_FILES) /reference:System.dll /reference:System.Xml.dll
 
-$(MSDN): $(CORE) Documenter\Msdn\AssemblyInfo.cs Documenter\Msdn\MsdnDocumenter.cs Documenter\Msdn\MsdnDocumenterConfig.cs Documenter\Msdn\css\MSDN.css Documenter\Msdn\xslt\allmembers.xslt Documenter\Msdn\xslt\common.xslt Documenter\Msdn\xslt\event.xslt Documenter\Msdn\xslt\field.xslt Documenter\Msdn\xslt\filenames.xslt Documenter\Msdn\xslt\individualmembers.xslt Documenter\Msdn\xslt\member.xslt Documenter\Msdn\xslt\memberoverload.xslt Documenter\Msdn\xslt\memberscommon.xslt Documenter\Msdn\xslt\namespace.xslt Documenter\Msdn\xslt\namespacehierarchy.xslt Documenter\Msdn\xslt\property.xslt Documenter\Msdn\xslt\syntax.xslt Documenter\Msdn\xslt\type.xslt Documenter\Msdn\xslt\vb-syntax.xslt
+$(MSDN): $(CORE) $(MSDN_SOURCE_FILES)
 	if not exist $(MSDN_DIRECTORY) md $(MSDN_DIRECTORY)
-	csc /nologo /target:library /out:$(MSDN) $(MSDN_DEBUG) Documenter\Msdn\AssemblyInfo.cs Documenter\Msdn\MsdnDocumenter.cs Documenter\Msdn\MsdnDocumenterConfig.cs /reference:System.dll /reference:System.Xml.dll /reference:System.Drawing.Design.dll /reference:System.Design.dll /reference:System.Drawing.dll /reference:$(CORE) /resource:Documenter\Msdn\css\MSDN.css,NDoc.Documenter.Msdn.css.MSDN.css /resource:Documenter\Msdn\xslt\allmembers.xslt,NDoc.Documenter.Msdn.xslt.allmembers.xslt /resource:Documenter\Msdn\xslt\common.xslt,NDoc.Documenter.Msdn.xslt.common.xslt /resource:Documenter\Msdn\xslt\event.xslt,NDoc.Documenter.Msdn.xslt.event.xslt /resource:Documenter\Msdn\xslt\field.xslt,NDoc.Documenter.Msdn.xslt.field.xslt /resource:Documenter\Msdn\xslt\filenames.xslt,NDoc.Documenter.Msdn.xslt.filenames.xslt /resource:Documenter\Msdn\xslt\individualmembers.xslt,NDoc.Documenter.Msdn.xslt.individualmembers.xslt /resource:Documenter\Msdn\xslt\member.xslt,NDoc.Documenter.Msdn.xslt.member.xslt /resource:Documenter\Msdn\xslt\memberoverload.xslt,NDoc.Documenter.Msdn.xslt.memberoverload.xslt /resource:Documenter\Msdn\xslt\memberscommon.xslt,NDoc.Documenter.Msdn.xslt.memberscommon.xslt /resource:Documenter\Msdn\xslt\namespace.xslt,NDoc.Documenter.Msdn.xslt.namespace.xslt /resource:Documenter\Msdn\xslt\namespacehierarchy.xslt,NDoc.Documenter.Msdn.xslt.namespacehierarchy.xslt /resource:Documenter\Msdn\xslt\property.xslt,NDoc.Documenter.Msdn.xslt.property.xslt /resource:Documenter\Msdn\xslt\syntax.xslt,NDoc.Documenter.Msdn.xslt.syntax.xslt /resource:Documenter\Msdn\xslt\type.xslt,NDoc.Documenter.Msdn.xslt.type.xslt /resource:Documenter\Msdn\xslt\vb-syntax.xslt,NDoc.Documenter.Msdn.xslt.vb-syntax.xslt
+	csc /nologo /target:library /out:$(MSDN) $(MSDN_DEBUG) $(MSDN_SOURCE_FILES) /reference:System.dll /reference:System.Xml.dll /reference:System.Drawing.Design.dll /reference:System.Design.dll /reference:System.Drawing.dll /reference:$(CORE) /resource:Documenter\Msdn\css\MSDN.css,NDoc.Documenter.Msdn.css.MSDN.css /resource:Documenter\Msdn\xslt\allmembers.xslt,NDoc.Documenter.Msdn.xslt.allmembers.xslt /resource:Documenter\Msdn\xslt\common.xslt,NDoc.Documenter.Msdn.xslt.common.xslt /resource:Documenter\Msdn\xslt\event.xslt,NDoc.Documenter.Msdn.xslt.event.xslt /resource:Documenter\Msdn\xslt\field.xslt,NDoc.Documenter.Msdn.xslt.field.xslt /resource:Documenter\Msdn\xslt\filenames.xslt,NDoc.Documenter.Msdn.xslt.filenames.xslt /resource:Documenter\Msdn\xslt\individualmembers.xslt,NDoc.Documenter.Msdn.xslt.individualmembers.xslt /resource:Documenter\Msdn\xslt\member.xslt,NDoc.Documenter.Msdn.xslt.member.xslt /resource:Documenter\Msdn\xslt\memberoverload.xslt,NDoc.Documenter.Msdn.xslt.memberoverload.xslt /resource:Documenter\Msdn\xslt\memberscommon.xslt,NDoc.Documenter.Msdn.xslt.memberscommon.xslt /resource:Documenter\Msdn\xslt\namespace.xslt,NDoc.Documenter.Msdn.xslt.namespace.xslt /resource:Documenter\Msdn\xslt\namespacehierarchy.xslt,NDoc.Documenter.Msdn.xslt.namespacehierarchy.xslt /resource:Documenter\Msdn\xslt\property.xslt,NDoc.Documenter.Msdn.xslt.property.xslt /resource:Documenter\Msdn\xslt\syntax.xslt,NDoc.Documenter.Msdn.xslt.syntax.xslt /resource:Documenter\Msdn\xslt\type.xslt,NDoc.Documenter.Msdn.xslt.type.xslt /resource:Documenter\Msdn\xslt\vb-syntax.xslt,NDoc.Documenter.Msdn.xslt.vb-syntax.xslt
 	copy $(CORE) $(MSDN_DIRECTORY)
 
-$(JAVADOC): $(CORE) Documenter\JavaDoc\AssemblyInfo.cs Documenter\JavaDoc\JavaDocDocumenter.cs Documenter\JavaDoc\JavaDocDocumenterConfig.cs Documenter\JavaDoc\css\JavaDoc.css Documenter\JavaDoc\xslt\javadoc.xslt Documenter\JavaDoc\xslt\namespace-summary.xslt Documenter\JavaDoc\xslt\overview-summary.xslt Documenter\JavaDoc\xslt\type.xslt
+$(JAVADOC): $(CORE) $(JAVADOC_SOURCE_FILES)
 	if not exist $(JAVADOC_DIRECTORY) md $(JAVADOC_DIRECTORY)
-	csc /nologo /target:library /out:$(JAVADOC) $(JAVADOC_DEBUG) Documenter\JavaDoc\AssemblyInfo.cs Documenter\JavaDoc\JavaDocDocumenter.cs Documenter\JavaDoc\JavaDocDocumenterConfig.cs /reference:System.dll /reference:System.Xml.dll /reference:System.Design.dll /reference:System.Drawing.Design.dll /reference:System.Drawing.dll /reference:$(CORE) /resource:Documenter\JavaDoc\css\JavaDoc.css,NDoc.Documenter.JavaDoc.css.JavaDoc.css /resource:Documenter\JavaDoc\xslt\javadoc.xslt,NDoc.Documenter.JavaDoc.xslt.javadoc.xslt /resource:Documenter\JavaDoc\xslt\namespace-summary.xslt,NDoc.Documenter.JavaDoc.xslt.namespace-summary.xslt /resource:Documenter\JavaDoc\xslt\overview-summary.xslt,NDoc.Documenter.JavaDoc.xslt.overview-summary.xslt /resource:Documenter\JavaDoc\xslt\type.xslt,NDoc.Documenter.JavaDoc.xslt.type.xslt
+	csc /nologo /target:library /out:$(JAVADOC) $(JAVADOC_DEBUG) $(JAVADOC_SOURCE_FILES) /reference:System.dll /reference:System.Xml.dll /reference:System.Design.dll /reference:System.Drawing.Design.dll /reference:System.Drawing.dll /reference:$(CORE) /resource:Documenter\JavaDoc\css\JavaDoc.css,NDoc.Documenter.JavaDoc.css.JavaDoc.css /resource:Documenter\JavaDoc\xslt\javadoc.xslt,NDoc.Documenter.JavaDoc.xslt.javadoc.xslt /resource:Documenter\JavaDoc\xslt\namespace-summary.xslt,NDoc.Documenter.JavaDoc.xslt.namespace-summary.xslt /resource:Documenter\JavaDoc\xslt\overview-summary.xslt,NDoc.Documenter.JavaDoc.xslt.overview-summary.xslt /resource:Documenter\JavaDoc\xslt\type.xslt,NDoc.Documenter.JavaDoc.xslt.type.xslt
 	copy $(CORE) $(JAVADOC_DIRECTORY)
 
 clean:
