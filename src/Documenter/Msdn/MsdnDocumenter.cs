@@ -123,7 +123,7 @@ namespace NDoc.Documenter.Msdn
 					File.Delete(path);
 				}
 			}
-			catch (Exception e)
+			catch (Exception)
 			{
 				result = "The compiled HTML Help file is probably open.";
 			}
