@@ -160,7 +160,9 @@ p.labelproc
 
 img
 	{
-	border: none; 
+	border: none;
+	vertical-align: top;
+	margin-right: 2px;
 	}
 
 /* --------------------------------------------------
@@ -351,14 +353,18 @@ table.dtTABLE th, table.dtTABLE td
 	padding: 4px 6px;
 	text-align: left;
 	}
-table.dtTABLE th	
-	{ 
-	background: #cccccc; /* Creates the shaded table header row */
-	vertical-align: bottom;
+table.dtTABLE th
+	{
+ 	background: #cccccc; /* Creates the shaded table header row */
+ 	vertical-align: bottom;
 	}
 table.dtTABLE td	
 	{
 	background: #ffffff;
+	vertical-align: top;
+	}
+table.dtTABLE td a	
+	{
 	vertical-align: top;
 	}
 
@@ -401,7 +407,7 @@ table.bannerparthead td /* General Values for cells in the top row of running he
 	padding: 2px 0px 0px 4px;
 	vertical-align: middle;
 	/*border-width: 0px 0px 1px 0px; */
-	border-width: 0px
+	border-width: 0px;
 	border-style: solid;
 	border-color: #999999;
 	background: transparent; 
