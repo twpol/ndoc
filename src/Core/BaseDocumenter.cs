@@ -241,9 +241,12 @@ namespace NDoc.Core
 			}
 		}
 
-		private bool MustDocumentType( Type type )
+		private bool MustDocumentType(Type type)
 		{
-			return (!type.FullName.StartsWith("<PrivateImplementationDetails>") &&
+			Type declaringType = type.DeclaringType;
+
+			return !type.FullName.StartsWith("<PrivateImplementationDetails>") &&
+				(declaringType == null || MustDocumentType(declaringType)) &&
 				(type.IsPublic ||
 				(type.IsNotPublic && MyConfig.DocumentInternals) ||
 				type.IsNestedPublic ||
@@ -251,12 +254,11 @@ namespace NDoc.Core
 				(type.IsNestedFamORAssem && MyConfig.DocumentProtected) ||
 				(type.IsNestedAssembly && MyConfig.DocumentInternals) ||
 				(type.IsNestedFamANDAssem && MyConfig.DocumentInternals) ||
-				(type.IsNestedPrivate && MyConfig.DocumentPrivates)));
+				(type.IsNestedPrivate && MyConfig.DocumentPrivates));
 		}
 
-		private bool MustDocumentMethod( MethodBase method )
+		private bool MustDocumentMethod(MethodBase method)
 		{
-
 			// Methods containing '.' in their name that aren't constructors are probably
 			// explicit interface implementations, we check whether we document those or not.
 			if((method.Name.IndexOf('.') != -1 && method.Name != ".ctor"))
@@ -287,7 +289,7 @@ namespace NDoc.Core
 				(method.IsPrivate && MyConfig.DocumentPrivates));
 		}
 
-		private bool MustDocumentField( FieldInfo field )
+		private bool MustDocumentField(FieldInfo field)
 		{
 			return (field.IsPublic ||
 				(field.IsFamily && MyConfig.DocumentProtected) ||
