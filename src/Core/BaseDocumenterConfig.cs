@@ -158,7 +158,16 @@ namespace NDoc.Core
 					if (property != null)
 					{
 						string value = reader["value"];
-						object value2 = Convert.ChangeType(value, property.PropertyType);
+						object value2;
+						
+						if (property.PropertyType.BaseType == typeof(Enum))
+						{
+							value2 = Enum.Parse(property.PropertyType, value);
+						}
+						else
+						{
+							value2 = Convert.ChangeType(value, property.PropertyType);
+						}
 
 						property.SetValue(this, value2, null);
 					}
