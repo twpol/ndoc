@@ -1,6 +1,6 @@
-<project>
+﻿<project>
     <assemblies>
-        <assembly location="..\bin\.net-1.1\NDoc.Test.dll" documentation="..\bin\.net-1.1\NDoc.Test.xml" />
+        <assembly location="..\bin\net\1.1\NDoc.Test.dll" documentation="..\bin\net\1.1\NDoc.Test.xml" />
     </assemblies>
     <namespaces>
         <namespace name="NDoc.Test"></namespace>

@@ -1,6 +1,6 @@
-<project>
+﻿<project>
     <assemblies>
-        <assembly location="..\bin\.net-1.1\NDoc.Core.dll" documentation="..\bin\.net-1.1\NDoc.Core.xml" />
+        <assembly location="..\bin\net\1.1\NDoc.Core.dll" documentation="..\bin\net\1.1\NDoc.Core.xml" />
     </assemblies>
     <namespaces>
         <namespace name="NDoc.Core">The <b>NDoc.Core</b> namespace contains the core functionality of NDoc as well as interfaces and base classes to build specific documenters.</namespace>
