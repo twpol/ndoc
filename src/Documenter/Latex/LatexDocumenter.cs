@@ -333,7 +333,7 @@ namespace NDoc.Documenter.Latex
 			args = new XsltArgumentList();
 			
 			writer = new XmlTextWriter(LatexConfig.TexFileFullPath, 
-				System.Text.Encoding.ASCII);
+				new UTF8Encoding( false ) );
 							
 			OnDocBuildingStep(20, "Building TeX file...");
 
