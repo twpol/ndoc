@@ -46,18 +46,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 	}
 
 	/// <summary>
-	/// Specifies a version of the .NET Framework documentation.
-	/// </summary>
-	public enum SdkDocVersion
-	{
-		/// <summary>The SDK version 1.0.</summary>
-		SDK_v1_0,
-
-		/// <summary>The SDK version 1.1.</summary>
-		SDK_v1_1,
-	}
-
-	/// <summary>
 	/// Specifies how the collection will be integrated with the help browser
 	/// </summary>
 	public enum TOCStyle
@@ -317,23 +305,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		#endregion
 
 		#region HTML Help 2 properties
-
-		SdkDocVersion _LinkToSdkDocVersion = SdkDocVersion.SDK_v1_1;
-
-		/// <summary>Gets or sets the LinkToSdkDocVersion property.</summary>
-		/// <remarks>Specifies to which version of the .NET Framework SDK documentation the links to system types will be pointing.</remarks>
-		[Category(HTMLHELP2_CONFIG_CATEGORY)]
-		[Description("Specifies to which version of the .NET Framework SDK documentation the links to system types will be pointing.")]
-		[DefaultValue(SdkDocVersion.SDK_v1_1)]
-		public SdkDocVersion LinkToSdkDocVersion
-		{
-			get { return _LinkToSdkDocVersion; }
-			set
-			{
-				_LinkToSdkDocVersion = value;
-				SetDirty();
-			}
-		}
 
 		CharacterSet _CharacterSet = CharacterSet.UTF8;
 		/// <summary>

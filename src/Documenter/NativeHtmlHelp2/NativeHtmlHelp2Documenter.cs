@@ -197,7 +197,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 
 				// create and intialize a HtmlFactory
 				ExternalHtmlProvider htmlProvider = new ExternalHtmlProvider( MyConfig.HeaderHtml, MyConfig.FooterHtml );
-				HtmlFactory factory = new HtmlFactory( tempFileName, workspace.ContentDirectory, htmlProvider, MyConfig.LinkToSdkDocVersion );
+				string DocLangCode = Enum.GetName(typeof(SdkLanguage),MyConfig.SdkDocLanguage).Replace("_","-");
+				HtmlFactory factory = new HtmlFactory( tempFileName, workspace.ContentDirectory, htmlProvider, MyConfig.SdkDocVersion, DocLangCode );
 
 				// generate all the html content - builds the toc along the way
 				using( new TOCBuilder( toc, factory ) )
@@ -331,10 +332,10 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 
 		private string GetNETVersionString()
 		{
-			switch ( MyConfig.LinkToSdkDocVersion )
+			switch ( MyConfig.SdkDocVersion )
 			{
-				case SdkDocVersion.SDK_v1_1:	return "1.1";
-				case SdkDocVersion.SDK_v1_0:	return "1.0";
+				case SdkVersion.SDK_v1_1:	return "1.1";
+				case SdkVersion.SDK_v1_0:	return "1.0";
 				default:						return "";
 			}
 		}
