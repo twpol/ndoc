@@ -113,6 +113,12 @@ namespace NDoc.Core
 						FixupCodeTag(node);
 					else
 						FixupNodes(id, node.ChildNodes);
+
+					// Trim attribute values...
+					foreach(XmlNode attr in node.Attributes)
+					{
+						attr.Value=attr.Value.Trim();
+					}
 				}
 				if (node.NodeType == XmlNodeType.Text)
 				{
