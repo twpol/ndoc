@@ -69,16 +69,16 @@ font-family:&quot;Lucida Console&quot;;color:blue">&lt;</span><span style="font-
 	the &lt;see&gt; tag, by determining the keyword identifier from the item being linked 
 	to and within the framework SDK help namespace. </p>
 	<h3 class="dtH3">Links to Non-Framework Topics</h3>
-	<p class="dtH3">It is also possible to create links to your own Html Help 2 
+	<p>It is also possible to create links to your own Html Help 2 
 	titles using the same XLinking mechanism. For NDoc to properly generate an XLink 
 	to an external title, it needs to know both the help namespace and the keyword 
 	value within the <b>DefaultAssociativeIndex</b>.</p>
-	<p class="dtH3">When NDoc generates an Html Help 2 topic, it includes an XML 
+	<p>When NDoc generates an Html Help 2 topic, it includes an XML 
 	data island that includes an associative index term similar to those that appear 
 	within framework topics. Since NDoc can document <b>private</b> and <b>internal</b> 
 	members, the index generated is slightly more complicated than framework keywords, 
 	but the keyword value is generated deterministically. </p>
-	<p class="dtH3">The thing that cannot be determined is the value of the help 
+	<p>The thing that cannot be determined is the value of the help 
 	namespace. The mapping between managed type names and help namespaces is provided 
 	by specifying a mapping file via the
 	<a href="vsnet.htm#UseHelpNamespaceMappingFile">UseHelpNamespaceMappingFile</a> 
@@ -124,13 +124,13 @@ font-family:&quot;Lucida Console&quot;">&nbsp;&nbsp;&nbsp;&nbsp; </span></p>
 color:blue">&lt;/</span><span style="font-size:8.0pt;font-family:&quot;Lucida Console&quot;;
 color:maroon">namespaceMap</span><span style="font-size:8.0pt;font-family:&quot;Lucida Console&quot;;
 color:blue">&gt;</span></p>
-	<p class="dtH3">This file specifies the managed namespace to help namespace 
+	<p>This file specifies the managed namespace to help namespace 
 	mapping that will be used when creating XLinks to managed types that are not 
 	part of the documentation set being processed. Each <b>helpNamespace</b> entry 
 	can contain <b>1..n</b> <b>managedNamespace</b> entries. When resolving the 
 	help namespace of a managed type, the most specific <b>managedNamespace</b> 
 	entry will be used to select the appropriate help namespace.</p>
-	<p class="dtH3">The managed type <b>CompanyX.Product2.Class1</b> would map to
+	<p>The managed type <b>CompanyX.Product2.Class1</b> would map to
 	<b>ms-help://companyX.producthelpcollection</b>, while <b>CompanyX.Core.Class1</b> 
 	would map to <b>ms-help://companyX.sharedhelpcollection</b>.</p>
 	<h4 class="dtH4">See Also</h4>
