@@ -3829,6 +3829,14 @@ namespace NDoc.Core
 				DerivedTypesCollection derivedTypesCollection = namespaces[namespaceName] as DerivedTypesCollection;
 				return derivedTypesCollection;
 			}
+
+			public ICollection DefinedNamespaces
+			{
+				get
+				{
+					return namespaces.Keys;
+				}
+			}
 		}
 
 		/// <summary>
