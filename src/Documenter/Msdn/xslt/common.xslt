@@ -686,22 +686,37 @@
 	<!-- -->
 	<xsl:template name="enumeration-members-section">
 		<xsl:if test="field">
+			<xsl:variable name="asflags">
+				<xsl:choose>
+					<xsl:when test="@flags">true</xsl:when>
+					<xsl:otherwise>false</xsl:otherwise>
+				</xsl:choose>
+			</xsl:variable>
 			<h4 class="dtH4">Members</h4>
 			<div class="tablediv">
 				<table class="dtTABLE" cellspacing="0">
 					<tr valign="top">
-						<th width="50%">Member Name</th>
-						<th width="50%">Description</th>
+						<xsl:choose>
+							<xsl:when test="$asflags='true'">
+								<th width="40%">Member Name</th>
+								<th width="40%">Description</th>
+								<th width="20%">Value</th>
+							</xsl:when>
+							<xsl:otherwise>
+								<th width="50%">Member Name</th>
+								<th width="50%">Description</th>
+							</xsl:otherwise>
+						</xsl:choose>
 					</tr>
 					<xsl:for-each select="field">
 						<xsl:text>&#10;</xsl:text>
 						<tr valign="top">
-							<td width="50%">
+							<td>
 								<b>
 									<xsl:value-of select="@name" />
 								</b>
 							</td>
-							<td width="50%">
+							<td>
 								<xsl:if test="./obsolete">
 									<FONT color="red">
 										<B>Obsolete.</B>&#160;
@@ -714,6 +729,11 @@
 								<xsl:apply-templates select="documentation/summary/node()" mode="slashdoc" />
 								<xsl:if test="not(documentation/summary/node())">&#160;</xsl:if>
 							</td>
+							<xsl:if test="$asflags='true'">
+							<td>
+								<xsl:value-of select="@value" />
+							</td>
+							</xsl:if>
 						</tr>
 					</xsl:for-each>
 				</table>

@@ -129,6 +129,16 @@
 							<p>For a list of all members of this type, see <a href="{$members-href}"><xsl:value-of select="@name" /> Members</a>.</p>
 						</xsl:if>
 					</xsl:if>
+					<xsl:if test="local-name()='enumeration' and @flags">
+						<p>This enumeration has a <a>
+						<xsl:attribute name="href">
+							<xsl:call-template name="get-filename-for-system-type">
+								<xsl:with-param name="type-name" select="'System.FlagsAttribute'" />
+							</xsl:call-template>
+						</xsl:attribute>
+						FlagsAttribute</a>
+						attribute that allows a bitwise combination of its member values.</p>
+					</xsl:if>
 					<xsl:if test="local-name() != 'delegate' and local-name() != 'enumeration'">
 						<p>
 							<xsl:choose>

@@ -95,6 +95,13 @@
 							<p>For a list of all members of this type, see <a href="{$members-href}"><xsl:value-of select="@name" /> Members</a>.</p>
 						</xsl:if>
 					</xsl:if>
+					<xsl:if test="local-name()='enumeration' and @flags">
+						<p>This enumeration has a 
+						<xsl:call-template name="get-a-href">
+							<xsl:with-param name="cref" select="'T:System.FlagsAttribute'" />
+						</xsl:call-template>
+						attribute that allows a bitwise combination of its member values.</p>
+					</xsl:if>
 
 					<xsl:if test="local-name() != 'delegate' and local-name() != 'enumeration'">
 						<p>
