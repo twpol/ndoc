@@ -489,29 +489,39 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="thread-safety-section">
-		<H4 class="dtH4">Thread Safety</H4>
 		<xsl:choose>
-			<xsl:when test="documentation/threadsafety[@static='true'][@instance='true']">
-				<P>This type is safe for multithreaded operations.</P>
+			<xsl:when test="documentation/threadsafety">
+				<xsl:apply-templates select="documentation/threadsafety"/>
 			</xsl:when>
-			<xsl:when test="documentation/threadsafety[@static='false'][@instance='false']">
-				<P>This type is <b>not</b> safe for multithreaded operations.</P>
-			</xsl:when>
-			<xsl:when test="documentation/threadsafety[@static='false'][@instance='true']">
-				<!-- not sure this makes sense but... -->
-				<P>Public static (Shared in Visual Basic) members of this type are not guaranteed 
-				to be safe for multithreaded operations. Instance members are not guaranteed to be 
-				thread-safe.</P>
-			</xsl:when>
-			<xsl:otherwise><!-- static=true instance=false-->
-				<P>Public static (Shared in Visual Basic) members of this type are safe 
-				for multithreaded operations. Instance members are not guaranteed to be 
-				thread-safe.</P>
+			<xsl:otherwise><!-- document the project default theadsafety tag -->
+				<xsl:apply-templates select="/ndoc/threadsafety"/>
 			</xsl:otherwise>
 		</xsl:choose>
-		<xsl:apply-templates select="documentation/threadsafety/node()" mode="slashdoc" />
-		<xsl:apply-templates select="documentation/node()" mode="thread-safety-section"/>			
 	</xsl:template>	
+	
+	<xsl:template match="threadsafety">
+		<H4 class="dtH4">Thread Safety</H4>
+		<xsl:choose>
+			<xsl:when test="@static='true' and @instance='true'">
+				<P>This type is safe for multithreaded operations.</P>
+			</xsl:when>
+			<xsl:when test="@static='false' and @instance='false'">
+				<P>This type is <b>not</b> safe for multithreaded operations.</P>
+			</xsl:when>
+			<xsl:when test="@static='true' and @instance='false'">
+				<P>Public static (Shared in Visual Basic) members of this type are 
+				safe for multithreaded operations. Instance members are <b>not</b> guaranteed to be 
+				thread-safe.</P>
+			</xsl:when>
+			<xsl:when test="@static='false' and @instance='true'">
+				<P>Public static (Shared in Visual Basic) members of this type are <b>not</b> guaranteed 
+				to be safe for multithreaded operations. Instance members are thread-safe.</P>
+			</xsl:when>
+		</xsl:choose>					
+		<xsl:apply-templates select="node()" mode="slashdoc" />
+		<xsl:apply-templates select="." mode="thread-safety-section"/>				
+	</xsl:template>
+	
 	<!-- -->
 	<xsl:template name="enumeration-members-section">
 		<xsl:if test="field">

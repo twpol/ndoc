@@ -1013,6 +1013,67 @@ namespace NDoc.Core
 
 		#endregion
 
+		#region Thread Safety Options
+
+		private bool _IncludeDefaultThreadSafety  = true;
+
+		/// <summary>Gets or sets the IncludeDefaultThreadSafety property.</summary>
+		/// <remarks>When true, typs that do not have an explicit &lt;threadsafety&gt;
+		/// tag will include thread safety documentation corresponding to StaticMembersDefaultToSafe 
+		/// and InstanceMembersDefaultToSafe.
+		/// </remarks>
+		[Category("Thread Safety")]
+		[Description("When true, typs that do not have an explicit <threadsafety> tag will include thread safety documentation corresponding to StaticMembersDefaultToSafe and InstanceMembersDefaultToSafe.")]
+		[DefaultValue(true)]
+		public bool IncludeDefaultThreadSafety 
+		{
+			get { return _IncludeDefaultThreadSafety; }
+			set
+			{
+				_IncludeDefaultThreadSafety  = value;
+				SetDirty();
+			}
+		}
+
+		private bool _StaticMembersDefaultToSafe  = true;
+
+		/// <summary>Gets or sets the StaticMembersDefaultToSafe property.</summary>
+		/// <remarks>When true, types that do not have an explicit &lt;threadsafety&gt;
+		/// tag will default to being safe for accessing static members across threads. 
+		/// (ignored if IncludeDefaultThreadSafety is false)</remarks>
+		[Category("Thread Safety")]
+		[Description("When true, types that do not have an explicit <threadsafety> tag will default to being safe for accessing static members across threads. (ignored if IncludeDefaultThreadSafety is false)")]
+		[DefaultValue(true)]
+		public bool StaticMembersDefaultToSafe 
+		{
+			get { return _StaticMembersDefaultToSafe; }
+			set
+			{
+				_StaticMembersDefaultToSafe  = value;
+				SetDirty();
+			}
+		}
+
+		private bool _InstanceMembersDefaultToSafe  = false;
+
+		/// <summary>Gets or sets the InstanceMembersDefaultToSafe property.</summary>
+		/// <remarks>When true, types that do not have an explicit &lt;threadsafety&gt;
+		///  tag will default to being safe for accessing instance members across threads. 
+		///  (ignored if IncludeDefaultThreadSafety is false)</remarks>
+		[Category("Thread Safety")]
+		[Description("When true, types that do not have an explicit <threadsafety> tag will default to being safe for accessing instance members across threads. (ignored if IncludeDefaultThreadSafety is false)")]
+		[DefaultValue(false)]
+		public bool InstanceMembersDefaultToSafe 
+		{
+			get { return _InstanceMembersDefaultToSafe; }
+			set
+			{
+				_InstanceMembersDefaultToSafe  = value;
+				SetDirty();
+			}
+		}
+		#endregion
+
 		#region Supported Platforms Options
 		
 		private bool _InheritPlatformSupport  = true;

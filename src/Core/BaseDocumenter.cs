@@ -252,15 +252,12 @@ namespace NDoc.Core
 			
 				BuildXml(project, writer);
 			
-				if (writer != null)  writer.Close();
-			
 				return tempfilename;
 			}
 			finally
 			{
 				if (writer != null)  writer.Close();
-			}
-			
+			}			
 		}
 
 
@@ -365,6 +362,9 @@ namespace NDoc.Core
 				if ( MyConfig.InheritPlatformSupport )
 					WriteDefaultPlatform( writer );
 
+				if ( MyConfig.IncludeDefaultThreadSafety )
+					WriteDefaultThreadSafety( writer );
+
 				if ( MyConfig.Preliminary )
 					writer.WriteElementString( "preliminary", "" );
 
@@ -429,6 +429,15 @@ namespace NDoc.Core
 				GC.Collect();
 				Debug.WriteLine("Memory after cleanup: " + GC.GetTotalMemory(false).ToString());
 			}
+		}
+
+		// writes out the default thead safety settings for the project
+		private void WriteDefaultThreadSafety( XmlWriter writer )
+		{
+			writer.WriteStartElement( "threadsafety" );
+			writer.WriteAttributeString( "static", XmlConvert.ToString( MyConfig.StaticMembersDefaultToSafe ) );
+			writer.WriteAttributeString( "instance", XmlConvert.ToString( MyConfig.InstanceMembersDefaultToSafe ) );
+			writer.WriteEndElement();
 		}
 
 		// writes out the list of default supported operating systems and frameworks 
