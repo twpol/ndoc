@@ -126,6 +126,7 @@ namespace NDoc.Gui
 		private System.Windows.Forms.MenuItem menuSpacerItem4;
 		private System.Windows.Forms.MenuItem menuSpacerItem6;
 		private System.Windows.Forms.MenuItem menuCancelBuildItem;
+		private System.Windows.Forms.MenuItem menuViewLicense;
 		private StringCollection recentProjectFilenames = new StringCollection();
 		#endregion // Fields
 
@@ -296,6 +297,7 @@ namespace NDoc.Gui
 			this.deleteButton = new System.Windows.Forms.Button();
 			this.toolBar = new System.Windows.Forms.ToolBar();
 			this.buildToolBarButton = new System.Windows.Forms.ToolBarButton();
+			this.menuViewLicense = new System.Windows.Forms.MenuItem();
 			this.documenterHeaderGroupBox.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.statusBarTextPanel)).BeginInit();
 			this.assembliesHeaderGroupBox.SuspendLayout();
@@ -310,7 +312,7 @@ namespace NDoc.Gui
 			// 
 			// progressBar
 			// 
-			this.progressBar.Anchor = (System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right);
+			this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.progressBar.Location = new System.Drawing.Point(334, 593);
 			this.progressBar.Name = "progressBar";
 			this.progressBar.Size = new System.Drawing.Size(144, 15);
@@ -330,7 +332,6 @@ namespace NDoc.Gui
 			// 
 			// imageList1
 			// 
-			this.imageList1.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
 			this.imageList1.ImageSize = new System.Drawing.Size(16, 16);
 			this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
 			this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
@@ -455,6 +456,7 @@ namespace NDoc.Gui
 			this.menuHelpItem.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
 																						 this.menuTagReferenceItem,
 																						 this.menuSpacerItem4,
+																						 this.menuViewLicense,
 																						 this.menuAboutItem});
 			this.menuHelpItem.Text = "&Help";
 			// 
@@ -472,7 +474,7 @@ namespace NDoc.Gui
 			// 
 			// menuAboutItem
 			// 
-			this.menuAboutItem.Index = 2;
+			this.menuAboutItem.Index = 3;
 			this.menuAboutItem.Text = "&About NDoc";
 			this.menuAboutItem.Click += new System.EventHandler(this.menuAboutItem_Click);
 			// 
@@ -488,7 +490,7 @@ namespace NDoc.Gui
 			// 
 			// addButton
 			// 
-			this.addButton.Anchor = (System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right);
+			this.addButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.addButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.addButton.Location = new System.Drawing.Point(397, 24);
 			this.addButton.Name = "addButton";
@@ -509,14 +511,13 @@ namespace NDoc.Gui
 			// 
 			// documenterHeaderGroupBox
 			// 
-			this.documenterHeaderGroupBox.Anchor = (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.documenterHeaderGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
 				| System.Windows.Forms.AnchorStyles.Left) 
-				| System.Windows.Forms.AnchorStyles.Right);
+				| System.Windows.Forms.AnchorStyles.Right)));
 			this.documenterHeaderGroupBox.BackColor = System.Drawing.SystemColors.Control;
-			this.documenterHeaderGroupBox.Controls.AddRange(new System.Windows.Forms.Control[] {
-																								   this.labelDocumenters,
-																								   this.comboBoxDocumenters,
-																								   this.propertyGrid});
+			this.documenterHeaderGroupBox.Controls.Add(this.labelDocumenters);
+			this.documenterHeaderGroupBox.Controls.Add(this.comboBoxDocumenters);
+			this.documenterHeaderGroupBox.Controls.Add(this.propertyGrid);
 			this.documenterHeaderGroupBox.Location = new System.Drawing.Point(8, 192);
 			this.documenterHeaderGroupBox.Name = "documenterHeaderGroupBox";
 			this.documenterHeaderGroupBox.Padding = 0;
@@ -537,9 +538,9 @@ namespace NDoc.Gui
 			// 
 			// propertyGrid
 			// 
-			this.propertyGrid.Anchor = (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.propertyGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
 				| System.Windows.Forms.AnchorStyles.Left) 
-				| System.Windows.Forms.AnchorStyles.Right);
+				| System.Windows.Forms.AnchorStyles.Right)));
 			this.propertyGrid.CommandsVisibleIfAvailable = true;
 			this.propertyGrid.LargeButtons = false;
 			this.propertyGrid.LineColor = System.Drawing.SystemColors.ScrollBar;
@@ -600,7 +601,7 @@ namespace NDoc.Gui
 			// 
 			// editButton
 			// 
-			this.editButton.Anchor = (System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right);
+			this.editButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.editButton.Enabled = false;
 			this.editButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.editButton.Location = new System.Drawing.Point(397, 56);
@@ -611,7 +612,7 @@ namespace NDoc.Gui
 			// 
 			// namespaceSummariesButton
 			// 
-			this.namespaceSummariesButton.Anchor = (System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right);
+			this.namespaceSummariesButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.namespaceSummariesButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.namespaceSummariesButton.Location = new System.Drawing.Point(397, 120);
 			this.namespaceSummariesButton.Name = "namespaceSummariesButton";
@@ -622,15 +623,14 @@ namespace NDoc.Gui
 			// 
 			// assembliesHeaderGroupBox
 			// 
-			this.assembliesHeaderGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-				| System.Windows.Forms.AnchorStyles.Right);
+			this.assembliesHeaderGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+				| System.Windows.Forms.AnchorStyles.Right)));
 			this.assembliesHeaderGroupBox.BackColor = System.Drawing.SystemColors.Control;
-			this.assembliesHeaderGroupBox.Controls.AddRange(new System.Windows.Forms.Control[] {
-																								   this.assembliesListView,
-																								   this.editButton,
-																								   this.namespaceSummariesButton,
-																								   this.deleteButton,
-																								   this.addButton});
+			this.assembliesHeaderGroupBox.Controls.Add(this.assembliesListView);
+			this.assembliesHeaderGroupBox.Controls.Add(this.editButton);
+			this.assembliesHeaderGroupBox.Controls.Add(this.namespaceSummariesButton);
+			this.assembliesHeaderGroupBox.Controls.Add(this.deleteButton);
+			this.assembliesHeaderGroupBox.Controls.Add(this.addButton);
 			this.assembliesHeaderGroupBox.Location = new System.Drawing.Point(8, 32);
 			this.assembliesHeaderGroupBox.Name = "assembliesHeaderGroupBox";
 			this.assembliesHeaderGroupBox.Padding = 0;
@@ -642,9 +642,9 @@ namespace NDoc.Gui
 			// 
 			// assembliesListView
 			// 
-			this.assembliesListView.Anchor = (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.assembliesListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
 				| System.Windows.Forms.AnchorStyles.Left) 
-				| System.Windows.Forms.AnchorStyles.Right);
+				| System.Windows.Forms.AnchorStyles.Right)));
 			this.assembliesListView.ForeColor = System.Drawing.SystemColors.WindowText;
 			this.assembliesListView.Location = new System.Drawing.Point(16, 24);
 			this.assembliesListView.Name = "assembliesListView";
@@ -656,7 +656,7 @@ namespace NDoc.Gui
 			// 
 			// deleteButton
 			// 
-			this.deleteButton.Anchor = (System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right);
+			this.deleteButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.deleteButton.Enabled = false;
 			this.deleteButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.deleteButton.Location = new System.Drawing.Point(397, 88);
@@ -679,9 +679,10 @@ namespace NDoc.Gui
 																					   this.viewToolBarButton});
 			this.toolBar.DropDownArrows = true;
 			this.toolBar.ImageList = this.imageList1;
+			this.toolBar.Location = new System.Drawing.Point(0, 0);
 			this.toolBar.Name = "toolBar";
 			this.toolBar.ShowToolTips = true;
-			this.toolBar.Size = new System.Drawing.Size(496, 25);
+			this.toolBar.Size = new System.Drawing.Size(496, 28);
 			this.toolBar.TabIndex = 20;
 			this.toolBar.TextAlign = System.Windows.Forms.ToolBarTextAlign.Right;
 			this.toolBar.Wrappable = false;
@@ -692,16 +693,21 @@ namespace NDoc.Gui
 			this.buildToolBarButton.ImageIndex = 4;
 			this.buildToolBarButton.ToolTipText = "Build Documentation (Ctrl+Shift+B)";
 			// 
+			// menuViewLicense
+			// 
+			this.menuViewLicense.Index = 2;
+			this.menuViewLicense.Text = "View License";
+			this.menuViewLicense.Click += new System.EventHandler(this.menuViewLicense_Click);
+			// 
 			// MainForm
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.ClientSize = new System.Drawing.Size(496, 610);
-			this.Controls.AddRange(new System.Windows.Forms.Control[] {
-																		  this.progressBar,
-																		  this.assembliesHeaderGroupBox,
-																		  this.statusBar,
-																		  this.toolBar,
-																		  this.documenterHeaderGroupBox});
+			this.Controls.Add(this.progressBar);
+			this.Controls.Add(this.assembliesHeaderGroupBox);
+			this.Controls.Add(this.statusBar);
+			this.Controls.Add(this.toolBar);
+			this.Controls.Add(this.documenterHeaderGroupBox);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Menu = this.mainMenu1;
 			this.MinimumSize = new System.Drawing.Size(504, 460);
@@ -1863,6 +1869,16 @@ namespace NDoc.Gui
 		private void assembliesHeaderGroupBox_Enter(object sender, System.EventArgs e)
 		{
 		
+		}
+
+		private void menuViewLicense_Click(object sender, System.EventArgs e)
+		{
+			Uri uri = new Uri( Assembly.GetExecutingAssembly().CodeBase );
+			string path = Path.Combine( Path.GetDirectoryName( uri.AbsolutePath ), "gpl.rtf" );
+			if ( !File.Exists( path ) )
+				MessageBox.Show( this, "Could not find the license file", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error );
+			else
+				Process.Start( path );
 		}
 
 	}
