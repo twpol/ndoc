@@ -702,13 +702,19 @@
 											<xsl:value-of select="$event-seethis/@name" />
 										</a>
 									</xsl:when>
+									<xsl:when test="string-length(substring-before($cref, ':')) = 1">
+										<b><xsl:value-of select="substring($cref, 3)" /></b>
+									</xsl:when>
 									<xsl:otherwise>
-										<xsl:value-of select="substring($cref, 3)" />
+										<b><xsl:value-of select="$cref" /></b>
 									</xsl:otherwise>
 								</xsl:choose>
 							</xsl:when>
+							<xsl:when test="string-length(substring-before($cref, ':')) = 1">
+								<b><xsl:value-of select="substring($cref, 3)" /></b>
+							</xsl:when>
 							<xsl:otherwise>
-								<xsl:value-of select="substring($cref, 3)" />
+								<b><xsl:value-of select="$cref" /></b>
 							</xsl:otherwise>
 						</xsl:choose>
 					</xsl:otherwise>

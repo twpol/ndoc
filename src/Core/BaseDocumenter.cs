@@ -313,6 +313,92 @@ namespace NDoc.Core
 				(method.IsPrivate && MyConfig.DocumentPrivates));
 		}
 
+		private bool IsHidden(MethodInfo method, MethodInfo[] methods)
+		{
+			if ((method.DeclaringType == method.ReflectedType)
+				|| !method.IsHideBySig
+				|| method.IsFinal)
+				return false;
+
+			foreach (MethodInfo m in methods)
+			{
+				if ((m.Name == method.Name)
+					&& (m != method))
+				{
+					if (m.DeclaringType.IsSubclassOf(method.DeclaringType)
+						&& HaveSameSig(m, method))
+					{
+						return true;
+					}
+				}
+			}
+
+			return false;
+		}
+
+		private MethodInfo GetHiddenMethod(MethodInfo method, MethodInfo[] methods)
+		{
+			if (method.DeclaringType != method.ReflectedType)
+				return null;
+
+			foreach (MethodInfo m in methods)
+			{
+				if ((m.Name == method.Name)
+					&& (m != method))
+				{
+					if (method.DeclaringType.IsSubclassOf(m.DeclaringType)
+						&& HaveSameSig(m, method))
+					{
+						// this is a workaround, since GetBaseDefinition returns
+						// weird results. Should be simply m.GetBaseDefinition();
+						const BindingFlags bindingFlags =
+							BindingFlags.Instance |
+							BindingFlags.Static |
+							BindingFlags.Public |
+							BindingFlags.NonPublic |
+							BindingFlags.DeclaredOnly;
+
+						ParameterInfo [] parms = m.GetParameters();
+						Type [] types = new Type[parms.Length];
+						for (int i = 0; i < parms.Length; i++)
+						{
+							types[i] = parms[i].ParameterType;
+						}
+
+						return m.DeclaringType.GetMethod(
+							m.Name, bindingFlags, null, types, null);
+					}
+				}
+			}
+
+			return null;
+		}
+
+		private bool HaveSameSig(MethodInfo m1, MethodInfo m2)
+		{
+			ParameterInfo [] ps1 = m1.GetParameters();
+			ParameterInfo [] ps2 = m2.GetParameters();
+
+			if (ps1.Length != ps2.Length)
+				return false;
+
+			for (int i = 0; i < ps1.Length; i++)
+			{
+				ParameterInfo p1 = ps1[i];
+				ParameterInfo p2 = ps2[i];
+				if (p1.ParameterType != p2.ParameterType)
+					return false;
+				if (p1.IsIn != p2.IsIn)
+					return false;
+				if (p1.IsOut != p2.IsOut)
+					return false;
+				if (p1.IsRetval != p2.IsRetval)
+					return false;
+			}
+
+			return true;
+		}
+
 		private bool MustDocumentField(FieldInfo field)
 		{
 			return (field.IsPublic ||
@@ -576,7 +662,8 @@ namespace NDoc.Core
 
 			foreach (MethodInfo m in methods)
 			{
-				if (m.Name == method.Name)
+				if ((m.Name == method.Name)
+					&& !IsHidden(m, methods))
 				{
 					++count;
 				}
@@ -896,13 +983,15 @@ namespace NDoc.Core
 					!name.StartsWith("add_") &&
 					!name.StartsWith("remove_") &&
 					!name.StartsWith("op_") &&
-					MustDocumentMethod(method))
+					MustDocumentMethod(method) &&
+					!IsHidden(method, methods))
 				{
 					WriteMethod(
 						writer,
 						method,
 						method.DeclaringType.FullName != type.FullName,
-						GetMethodOverload(method, methods));
+						GetMethodOverload(method, methods),
+						GetHiddenMethod(method, methods));
 				}
 			}
 		}
@@ -1381,11 +1470,13 @@ namespace NDoc.Core
 		/// <param name="method">Method to document.</param>
 		/// <param name="inherited">true if a declaringType attribute should be included.</param>
 		/// <param name="overload">If &gt; 0, indicates this it the nth overloaded method with the same name.</param>
+		/// <param name="hiddenMethod">If not null, indicates that this method is a new implementation for hiddenMethod.</param>
 		private void WriteMethod(
 			XmlWriter writer,
 			MethodInfo method,
 			bool inherited,
-			int overload)
+			int overload,
+			MethodInfo hiddenMethod)
 		{
 			if (method != null)
 			{
@@ -1416,6 +1507,11 @@ namespace NDoc.Core
 				if (inherited)
 				{
 					writer.WriteAttributeString("declaringType", method.DeclaringType.FullName);
+				}
+
+				if (hiddenMethod != null)
+				{
+					writer.WriteAttributeString("hiddenMember", GetMemberName(hiddenMethod));
 				}
 
 				writer.WriteAttributeString("contract", GetMethodContractValue(method));

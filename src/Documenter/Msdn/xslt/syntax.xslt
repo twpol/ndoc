@@ -79,6 +79,9 @@
 				<br />
 			</xsl:if>
 			<xsl:call-template name="attributes"/>
+			<xsl:if test="@hiddenMember">
+				<xsl:text>new&#160;</xsl:text>
+			</xsl:if>
 			<xsl:if test="not(parent::interface or @interface)">
 				<xsl:call-template name="method-access">
 					<xsl:with-param name="access" select="@access" />

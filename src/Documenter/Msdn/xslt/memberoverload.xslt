@@ -64,41 +64,79 @@
 					<xsl:call-template name="overloads-summary-section" />
 					<h4 class="dtH4">Overload List</h4>
 					<xsl:for-each select="parent::node()/*[@name=$memberName]">
-						<p>
-							<xsl:choose>
-								<xsl:when test="@declaringType">
+						<xsl:choose>
+							<xsl:when test="@declaringType">
+								<p>
+									<xsl:text>Inherited from </xsl:text>
+									<a>
+										<xsl:attribute name="href">
+											<xsl:call-template name="get-filename-for-type-name">
+												<xsl:with-param name="type-name" select="@declaringType" />
+											</xsl:call-template>
+										</xsl:attribute>
+										<xsl:call-template name="strip-namespace">
+											<xsl:with-param name="name" select="@declaringType" />
+										</xsl:call-template>
+									</a>
+									<xsl:text>. </xsl:text>
 									<xsl:call-template name="summary-with-no-paragraph">
 										<xsl:with-param name="member" select="//class[@id=concat('T:', current()/@declaringType)]/*[@name=$memberName]" />
 									</xsl:call-template>
-								</xsl:when>
-								<xsl:otherwise>
+								</p>
+								<blockquote class="dtBlock">
+									<a>
+										<xsl:attribute name="href">
+											<xsl:choose>
+												<xsl:when test="local-name()='constructor'">
+													<xsl:call-template name="get-filename-for-current-constructor" />
+												</xsl:when>
+												<xsl:when test="local-name()='method'">
+													<xsl:call-template name="get-filename-for-inherited-method-overloads">
+														<xsl:with-param name="declaring-type" select="@declaringType" />
+														<xsl:with-param name="method-name" select="@name" />
+													</xsl:call-template>
+												</xsl:when>
+												<xsl:when test="local-name()='operator'">
+													<xsl:call-template name="get-filename-for-operator" />
+												</xsl:when>
+												<xsl:otherwise>
+													<xsl:call-template name="get-filename-for-current-property" />
+												</xsl:otherwise>
+											</xsl:choose>
+										</xsl:attribute>
+										<xsl:apply-templates select="self::node()" mode="syntax" />
+									</a>
+								</blockquote>
+							</xsl:when>
+							<xsl:otherwise>
+								<p>
 									<xsl:call-template name="summary-with-no-paragraph">
 										<xsl:with-param name="member" select="." />
 									</xsl:call-template>
-								</xsl:otherwise>
-							</xsl:choose>
-						</p>
-						<blockquote class="dtBlock">
-							<a>
-								<xsl:attribute name="href">
-									<xsl:choose>
-										<xsl:when test="local-name()='constructor'">
-											<xsl:call-template name="get-filename-for-current-constructor" />
-										</xsl:when>
-										<xsl:when test="local-name()='method'">
-											<xsl:call-template name="get-filename-for-method" />
-										</xsl:when>
-										<xsl:when test="local-name()='operator'">
-											<xsl:call-template name="get-filename-for-operator" />
-										</xsl:when>
-										<xsl:otherwise>
-											<xsl:call-template name="get-filename-for-current-property" />
-										</xsl:otherwise>
-									</xsl:choose>
-								</xsl:attribute>
-								<xsl:apply-templates select="self::node()" mode="syntax" />
-							</a>
-						</blockquote>
+								</p>
+								<blockquote class="dtBlock">
+									<a>
+										<xsl:attribute name="href">
+											<xsl:choose>
+												<xsl:when test="local-name()='constructor'">
+													<xsl:call-template name="get-filename-for-current-constructor" />
+												</xsl:when>
+												<xsl:when test="local-name()='method'">
+													<xsl:call-template name="get-filename-for-method" />
+												</xsl:when>
+												<xsl:when test="local-name()='operator'">
+													<xsl:call-template name="get-filename-for-operator" />
+												</xsl:when>
+												<xsl:otherwise>
+													<xsl:call-template name="get-filename-for-current-property" />
+												</xsl:otherwise>
+											</xsl:choose>
+										</xsl:attribute>
+										<xsl:apply-templates select="self::node()" mode="syntax" />
+									</a>
+								</blockquote>
+							</xsl:otherwise>
+						</xsl:choose>
 					</xsl:for-each>
 					<xsl:call-template name="overloads-remarks-section" />
 					<xsl:call-template name="overloads-example-section" />
