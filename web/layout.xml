@@ -17,8 +17,6 @@
 			<tr id="body">
 				<td id="left">
 					<insert-links />
-					<h3>download</h3>
-					<p><insert-latest-release /></p>
 				</td>
 				<td id="content">
 					<div id="tag"><insert-title /></div>

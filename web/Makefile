@@ -3,11 +3,11 @@
 .xml.html:
 	msxsl $< ndoc.xslt > $@
 
-FILES = index.html screenshots.html cvs.html
+FILES = index.html screenshots.html cvs.html download.html involved.html
 
 all: $(FILES)
 
 clean:
 	del /q $(FILES)
 
-$(FILES): ndoc.xslt layout.xml releases.xml developers.xml
+$(FILES): ndoc.xslt layout.xml links.xml releases.xml developers.xml
