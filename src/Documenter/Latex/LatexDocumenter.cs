@@ -106,7 +106,7 @@ namespace NDoc.Documenter.Latex
 				string moduleDir;
 			
 				moduleDir = 
-Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
+Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 				m_ResourceDirectory = 
 Path.GetFullPath(Path.Combine(moduleDir, @"..\..\..\Documenter\Latex"));
 

@@ -359,7 +359,7 @@ namespace NDoc.Core
 				processStartInfo.FileName = _htmlHelpCompiler;
 				processStartInfo.Arguments = "\"" + Path.GetFullPath(GetPathToProjectFile()) + "\"";
 				processStartInfo.ErrorDialog = false;
-				processStartInfo.WorkingDirectory = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
+				processStartInfo.WorkingDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 				processStartInfo.WindowStyle = ProcessWindowStyle.Hidden;
 
 				helpCompileProcess.StartInfo = processStartInfo;
