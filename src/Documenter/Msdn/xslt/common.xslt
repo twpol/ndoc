@@ -795,8 +795,8 @@
 					</xsl:call-template>
 					<xsl:text>]</xsl:text>
 				</span>
+				<xsl:text>&#160;</xsl:text>
 			</xsl:if>
-			<xsl:text>&#160;</xsl:text>
 			<xsl:apply-templates select="./node()" mode="slashdoc" />
 		</p>
 	</xsl:template>
