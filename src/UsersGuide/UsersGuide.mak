@@ -1,5 +1,5 @@
 #change the value of this macro to where you keep the html help compiler
-HHC= "C:\Program Files\HTML Help Workshop\hhc.exe"
+HHC= "$(PROGRAMFILES)\HTML Help Workshop\hhc.exe"
 
 
 !IF !EXIST ($(HHC))
@@ -14,15 +14,20 @@ HHC= "C:\Program Files\HTML Help Workshop\hhc.exe"
 # hhc returns 1 on success, which NMAKE interprets as an error
 # ignore non-zero exit codes
 .IGNORE :
+
 NDocUsersGuide.chm: UsersGuide.hhp 
 # make the CHM	
 	$(HHC) UsersGuide.hhp
 # copy user guide to doc/help directory where setup generation will pick it up
-    mkdir..\..\doc\help
+!IF !EXIST (..\..\doc\help)
+	mkdir ..\..\doc\help
+!ENDIF
 	copy NDocUsersGuide.chm ..\..\doc\help /y
 # copy user guide to gui bin directory
 	copy NDocUsersGuide.chm ..\Gui\bin\$(CONFIG) /y	
-
+	
+# turn error codes back on	
+!CMDSWITCHES -I
 
 # these are the various file types that the chm is dependent on
 IMAGES = {content\images}*.gif {content\images}*.jpg
@@ -41,7 +46,9 @@ NAMESPACEMAPPINGDIR = ..\Documenter\NativeHtmlHelp2\Engine\NamespaceMapping
 
 $(EXAMPLEDIR)\NamespaceMap.xsd: $(NAMESPACEMAPPINGDIR)\NamespaceMap.xsd $(NAMESPACEMAPPINGDIR)\NamespaceMap.xml
 # copy examples into the content directory
+!IF !EXIST ($(EXAMPLEDIR))
 	mkdir $(EXAMPLEDIR)
+!ENDIF
 	copy /a $(NAMESPACEMAPPINGDIR)\NamespaceMap.xsd+,, $(EXAMPLEDIR)\NamespaceMap.xsd /y
 	copy /a $(NAMESPACEMAPPINGDIR)\NamespaceMap.xml+,, $(EXAMPLEDIR)\NamespaceMap.xml /y 
 
