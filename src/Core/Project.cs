@@ -1,4 +1,4 @@
-// Project.cs - project management code
+// Project.cs - project management code 
 // Copyright (C) 2001  Jason Diamond
 //
 // This program is free software; you can redistribute it and/or modify
@@ -240,19 +240,40 @@ namespace NDoc.Core
 			get { return _Documenters; }
 		}
 
-		/// <summary>Searches the module directory for assemblies containing classes the implement IDocumenter.</summary>
-		/// <returns>An ArrayList containing new instances of all the found documenters.</returns>
+		/// <summary>
+		/// Searches the module directory and all subdirectoties for assemblies 
+		/// containing classes the implement <see cref="IDocumenter" />.
+		/// </summary>
+		/// <returns>
+		/// An ArrayList containing new instances of all the found documenters.
+		/// </returns>
 		public static ArrayList FindDocumenters()
 		{
 			ArrayList documenters = new ArrayList();
 
-#if MONO //System.Windows.Forms.Application.StartupPath is not implemented in mono v0.28
-			string mainModuleDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+#if MONO //System.Windows.Forms.Application.StartupPath is not implemented in mono v0.31
+			string mainModuleDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
 #else
 			string mainModuleDirectory = System.Windows.Forms.Application.StartupPath;
 #endif
+			// find documenter in given path and its subdirectories
+			FindDocumentersInPath(documenters, mainModuleDirectory);
 
-			foreach (string fileName in Directory.GetFiles(mainModuleDirectory, "NDoc.Documenter.*.dll"))
+			// sort documenters
+			documenters.Sort();
+
+			return documenters;
+		}
+
+		/// <summary>
+		/// Searches the specified directory and all subdirectories for assemblies 
+		/// containing classes the implement <see cref="IDocumenter" />.
+		/// </summary>
+		/// <param name="documenters">The collection of <see cref="IDocumenter" /> instances to fill.</param>
+		/// <param name="path">The directory to scan for assemblies containing documenters.</param>
+		private static void FindDocumentersInPath(ArrayList documenters, string path) 
+		{
+			foreach (string fileName in Directory.GetFiles(path, "NDoc.Documenter.*.dll")) 
 			{
 				Assembly assembly = null;
 
@@ -260,7 +281,7 @@ namespace NDoc.Core
 				{
 					assembly = Assembly.LoadFrom(fileName);
 				}
-				catch (BadImageFormatException)
+				catch (BadImageFormatException) 
 				{
 					// The DLL must not be a .NET assembly.
 					// Don't need to do anything since the
@@ -268,11 +289,11 @@ namespace NDoc.Core
 					Debug.WriteLine("BadImageFormatException loading " + fileName);
 				}
 
-				if (assembly != null)
+				if (assembly != null) 
 				{
-					try
+					try 
 					{
-						foreach (Type type in assembly.GetTypes())
+						foreach (Type type in assembly.GetTypes()) 
 						{
 							if (type.IsClass && !type.IsAbstract && (type.GetInterface("NDoc.Core.IDocumenter") != null))
 							{
@@ -280,7 +301,7 @@ namespace NDoc.Core
 							}
 						}
 					}
-					catch (ReflectionTypeLoadException)
+					catch (ReflectionTypeLoadException) 
 					{
 						// eat this exception and just ignore this assembly
 						Debug.WriteLine("ReflectionTypeLoadException reflecting " + fileName);
@@ -288,9 +309,10 @@ namespace NDoc.Core
 				}
 			}
 
-			documenters.Sort();
-
-			return documenters;
+			foreach (string subDir in Directory.GetDirectories(path))
+			{
+				FindDocumentersInPath(documenters, subDir);
+			}
 		}
 
 		/// <summary>Reads an NDoc project file.</summary>
