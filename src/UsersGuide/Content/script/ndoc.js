@@ -18,7 +18,7 @@ function InsertHeader()
 	html += "<div id=TitleRow><h1 class=dtH1>";
 	html += document.title;
 	html += "</h1></div></div>";
-	html += "<div><font color='Red'>[This is preliminary documentation and subject to change]</font></div>";
+	html += "<div style='padding-left:3pt;padding-top:3pt;'><font color='Red'>[This is preliminary documentation and subject to change]</font></div>";
 	
 	document.body.insertAdjacentHTML( "afterBegin", html );
 }
