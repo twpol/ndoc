@@ -148,7 +148,9 @@ namespace NDoc.Documenter.JavaDoc
 		private void WriteOverviewSummary()
 		{
 			XsltArgumentList args = new XsltArgumentList();
-			args.AddParam("global-title", String.Empty, MyConfig.Title);
+			string title = MyConfig.Title;
+			if (title == null) title = string.Empty;
+			args.AddParam("global-title", String.Empty, title);
 
 			TransformAndWriteResult(
 				"overview-summary.xslt",
