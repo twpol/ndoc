@@ -392,6 +392,26 @@ namespace NDoc.Documenter.Msdn
 			}
 		}
 
+		string _AdditionalContentResourceDirectory = string.Empty;
+
+		/// <summary>Gets or sets the AdditionalContentResourceDirectory property</summary>
+		/// <remarks>Directory that contains resources (images etc.) used by the additional content pages. 
+		/// This directory will be recursively compiled into the help file.</remarks>
+		[Category("HTML Help Options")]
+		[Description("Directory that contains resources (images etc.) used by the additional content pages. This directory will be recursively compiled into the help file.")]
+		[DefaultValue("")]
+		[Editor(typeof(FolderNameEditor), typeof(UITypeEditor))]
+		public string AdditionalContentResourceDirectory
+		{
+			get { return _AdditionalContentResourceDirectory; }
+
+			set
+			{
+				_AdditionalContentResourceDirectory = value;
+				SetDirty();
+			}
+		}	
+
 		string _ExtensibilityStylesheet = string.Empty;
 
 		/// <summary>Path to an xslt stylesheet that contains templates for documenting extensibility tags</summary>
