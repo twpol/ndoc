@@ -656,6 +656,7 @@ namespace NDoc.Gui
 			this.assembliesHeaderGroupBox.TabIndex = 22;
 			this.assembliesHeaderGroupBox.TabStop = false;
 			this.assembliesHeaderGroupBox.Text = "Select Assemblies to Document";
+			this.assembliesHeaderGroupBox.Enter += new System.EventHandler(this.assembliesHeaderGroupBox_Enter);
 			// 
 			// assembliesListView
 			// 
@@ -1069,6 +1070,7 @@ namespace NDoc.Gui
 			{
 				MessageBox.Show(this, ex.InnerException.Message, "Project Save", 
 					MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+				FileSaveAs();
 			}
 		}
 
@@ -1161,11 +1163,39 @@ namespace NDoc.Gui
 		/// <seealso cref="Clear"/>
 		protected void menuFileNewItem_Click (object sender, System.EventArgs e)
 		{
+			if (project.IsDirty)
+			{
+				DialogResult result = PromptToSave();
+				switch (result)
+				{
+					case DialogResult.Yes:
+						SaveOrSaveAs();
+						break;
+					case DialogResult.No:
+						break;
+					case DialogResult.Cancel:
+						return;
+				}
+			}
 			Clear();
 		}
 
 		private void menuFileOpenSolution_Click (object sender, System.EventArgs e)
 		{
+			if (project.IsDirty)
+			{
+				DialogResult result = PromptToSave();
+				switch (result)
+				{
+					case DialogResult.Yes:
+						SaveOrSaveAs();
+						break;
+					case DialogResult.No:
+						break;
+					case DialogResult.Cancel:
+						return;
+				}
+			}
 			OpenFileDialog openFileDlg = new OpenFileDialog();
 			openFileDlg.InitialDirectory = Directory.GetCurrentDirectory();
 			openFileDlg.Filter = "Visual Studio Solution files (*.sln)|*.sln|All files (*.*)|*.*" ;
@@ -1238,6 +1268,20 @@ namespace NDoc.Gui
 
 		private void menuFileOpenItem_Click (object sender, System.EventArgs e)
 		{
+			if (project.IsDirty)
+			{
+				DialogResult result = PromptToSave();
+				switch (result)
+				{
+					case DialogResult.Yes:
+						SaveOrSaveAs();
+						break;
+					case DialogResult.No:
+						break;
+					case DialogResult.Cancel:
+						return;
+				}
+			}
 			OpenFileDialog openFileDlg = new OpenFileDialog();
 			openFileDlg.InitialDirectory = Directory.GetCurrentDirectory();
 			openFileDlg.Filter = "Project files (*.ndoc)|*.ndoc|All files (*.*)|*.*" ;
@@ -1294,13 +1338,27 @@ namespace NDoc.Gui
 
 			if (File.Exists(fileName))
 			{
+				if (project.IsDirty)
+				{
+					DialogResult result = PromptToSave();
+					switch (result)
+					{
+						case DialogResult.Yes:
+							SaveOrSaveAs();
+							break;
+						case DialogResult.No:
+							break;
+						case DialogResult.Cancel:
+							return;
+					}
+				}
 				FileOpen(fileName);
 			}
 			else
 			{
 				try
 				{
-					MessageBox.Show(this, "Project file doesn't exist.", "NDoc Unable to Open Project File",
+					MessageBox.Show(this, "Project file doesn't exist.", "Open Project",
 						            MessageBoxButtons.OK, MessageBoxIcon.Information);
 					recentProjectFilenames.Remove(fileName);
 					MakeMRUMenu();
@@ -1745,6 +1803,16 @@ namespace NDoc.Gui
 			propertyGrid.SelectedObject = documenterConfig;
 		}
 
+		private DialogResult PromptToSave()
+		{
+			return MessageBox.Show(
+				"Save changes to " + projectFilename + "?",
+				"NDoc",
+				MessageBoxButtons.YesNoCancel,
+				MessageBoxIcon.Exclamation,
+				MessageBoxDefaultButton.Button1);
+		}
+
 		/// <summary>Prompts the user to save the project if it's dirty.</summary>
 		protected override void OnClosing(CancelEventArgs e)
 		{
@@ -1754,13 +1822,7 @@ namespace NDoc.Gui
 
 			if (project.IsDirty)
 			{
-				DialogResult result = MessageBox.Show(
-					"Save changes to " + projectFilename + "?",
-					"NDoc",
-					MessageBoxButtons.YesNoCancel,
-					MessageBoxIcon.Exclamation,
-					MessageBoxDefaultButton.Button1);
-
+				DialogResult result = PromptToSave();
 				switch (result)
 				{
 					case DialogResult.Yes:
@@ -1781,6 +1843,11 @@ namespace NDoc.Gui
 		}
 
 		#endregion // Event Handlers
+
+		private void assembliesHeaderGroupBox_Enter(object sender, System.EventArgs e)
+		{
+		
+		}
 
 	}
 }
