@@ -18,8 +18,8 @@
 			ConfigurationType="0">
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="NMAKE /F UsersGuide.mak /B"
-				ReBuildCommandLine="NMAKE /E /F UsersGuide.mak /A"
+				BuildCommandLine="NMAKE /F UsersGuide.mak /B CONFIG=$(ConfigurationName)"
+				ReBuildCommandLine="NMAKE /E /F UsersGuide.mak /A CONFIG=$(ConfigurationName)"
 				CleanCommandLine="del NDocUsersGuide.chm"
 				Output="NDocUsersGuide.chm"/>
 		</Configuration>
@@ -30,8 +30,8 @@
 			ConfigurationType="0">
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="NMAKE /F UsersGuide.mak /B"
-				ReBuildCommandLine="NMAKE /F UsersGuide.mak /A"
+				BuildCommandLine="NMAKE /F UsersGuide.mak /B CONFIG=$(ConfigurationName)"
+				ReBuildCommandLine="NMAKE /E /F UsersGuide.mak /A CONFIG=$(ConfigurationName)"
 				CleanCommandLine="del NDocUsersGuide.chm"
 				Output="NDocUsersGuide.chm"/>
 		</Configuration>
@@ -42,8 +42,8 @@
 			ConfigurationType="0">
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="NMAKE /F UsersGuide.mak /B"
-				ReBuildCommandLine="NMAKE /F UsersGuide.mak /A"
+				BuildCommandLine="NMAKE /F UsersGuide.mak /B CONFIG=$(ConfigurationName)"
+				ReBuildCommandLine="NMAKE /E /F UsersGuide.mak /A CONFIG=$(ConfigurationName)"
 				CleanCommandLine="del NDocUsersGuide.chm"
 				Output="NDocUsersGuide.chm"/>
 		</Configuration>
@@ -96,6 +96,10 @@
 			</File>
 			<File
 				RelativePath=".\Content\javadoc.htm"
+				DeploymentContent="TRUE">
+			</File>
+			<File
+				RelativePath=".\Content\knownissues.htm"
 				DeploymentContent="TRUE">
 			</File>
 			<File
