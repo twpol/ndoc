@@ -40,6 +40,12 @@ namespace NDoc.Core
 		/// <summary>List of subdirectory lists already scanned.</summary>
 		private Hashtable directoryLists;
 
+		/// <summary>List of directories already scanned.</summary>
+		private Hashtable searchedDirectories;
+
+		/// <summary>List of Assemblies that could not be resolved.</summary>
+		private Hashtable unresolvedAssemblies;
+
 		/// <summary>assemblies already scanned, but not loaded.</summary>
 		/// <remarks>Maps Assembly FullName to Filename for assemblies scanned, 
 		/// but not loaded because they were not a match to the required FullName.
@@ -72,6 +78,8 @@ namespace NDoc.Core
 			this.projectDirectories = projectDirectories;
 			this.referenceDirectories = referenceDirectories;
 			this.directoryLists = new Hashtable();
+			this.unresolvedAssemblies = new Hashtable();
+			this.searchedDirectories=new Hashtable();
 		}
 
 		/// <summary>
@@ -83,6 +91,22 @@ namespace NDoc.Core
 			get { return (includeSubdirs); }
 			set { includeSubdirs = value; }
 		}
+
+		/// <summary>
+		/// Directories Searched for assemblies.
+		/// </summary>
+		public ICollection SearchedDirectories 
+		{
+			get { return searchedDirectories.Keys; }
+		} 
+
+		/// <summary>
+		/// Assemblies that could not be resolved.
+		/// </summary>
+		public ICollection UnresolvedAssemblies 
+		{
+			get { return unresolvedAssemblies.Keys; }
+		} 
 
 		/// <summary> 
 		/// Installs the assembly resolver by hooking up to the AppDomain's AssemblyResolve event.
@@ -283,6 +307,12 @@ namespace NDoc.Core
 				}
 			}
 
+			if (assy == null)
+			{
+				if (!unresolvedAssemblies.ContainsKey(args.Name)) 
+					unresolvedAssemblies.Add(args.Name,null);
+			}
+
 			return assy;
 		}
 
@@ -307,6 +337,10 @@ namespace NDoc.Core
 			{
 				if (Directory.Exists(path))
 				{
+					if (!searchedDirectories.ContainsKey(path))
+					{
+						searchedDirectories.Add(path, null);
+					}
 					string fn = Path.Combine(path, fileName);
 					if (File.Exists(fn)) 
 					{
