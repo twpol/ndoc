@@ -75,6 +75,48 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_3B6B6A46A0EA438EAFC4A46735CA3C76"
+        "OwnerKey" = "8:_1078131070D531CAC479AF20F413D606"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_3B6B6A46A0EA438EAFC4A46735CA3C76"
+        "OwnerKey" = "8:_CFED1F927ADE40DFBBEC61462A291094"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_3B6B6A46A0EA438EAFC4A46735CA3C76"
+        "OwnerKey" = "8:_D09501A9F4629E2BC5D086518C05693F"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_3B6B6A46A0EA438EAFC4A46735CA3C76"
+        "OwnerKey" = "8:_29CCA2F98046461E97D0CF4B8D2D7FDF"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_3B6B6A46A0EA438EAFC4A46735CA3C76"
+        "OwnerKey" = "8:_1BE3C34A870339F98529356AEB634C02"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_3B6B6A46A0EA438EAFC4A46735CA3C76"
+        "OwnerKey" = "8:_087824DA6AA79D8D69D4C73FD8A96ED2"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_3B6B6A46A0EA438EAFC4A46735CA3C76"
+        "OwnerKey" = "8:_FBB6212730F68A9B6C98FB65C6D5A888"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_75E428F0CBF54557A9E41269F5F633FE"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:C:\\CVSROOT\\NDOC\\README.TXT"
@@ -96,48 +138,6 @@
         "MsmKey" = "8:_D09501A9F4629E2BC5D086518C05693F"
         "OwnerKey" = "8:_CFED1F927ADE40DFBBEC61462A291094"
         "MsmSig" = "8:ndoc.visualstudioc:\\cvsroot\\ndoc\\src\\visualstudio\\obj\\release\\ndoc.visualstudio.dll"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_F388C809244045E1B7FDD695BB0C92E7"
-        "OwnerKey" = "8:_1078131070D531CAC479AF20F413D606"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_F388C809244045E1B7FDD695BB0C92E7"
-        "OwnerKey" = "8:_CFED1F927ADE40DFBBEC61462A291094"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_F388C809244045E1B7FDD695BB0C92E7"
-        "OwnerKey" = "8:_D09501A9F4629E2BC5D086518C05693F"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_F388C809244045E1B7FDD695BB0C92E7"
-        "OwnerKey" = "8:_29CCA2F98046461E97D0CF4B8D2D7FDF"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_F388C809244045E1B7FDD695BB0C92E7"
-        "OwnerKey" = "8:_1BE3C34A870339F98529356AEB634C02"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_F388C809244045E1B7FDD695BB0C92E7"
-        "OwnerKey" = "8:_087824DA6AA79D8D69D4C73FD8A96ED2"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_F388C809244045E1B7FDD695BB0C92E7"
-        "OwnerKey" = "8:_FBB6212730F68A9B6C98FB65C6D5A888"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
         }
         "Entry"
         {
@@ -214,7 +214,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:NDoc.Documenter.Msdn, Version=1.0.765.35080, Culture=neutral"
+            "AssemblyAsmDisplayName" = "8:NDoc.Documenter.Msdn, Version=1.0.766.22309, Culture=neutral"
                 "ScatterAssemblies"
                 {
                     "_087824DA6AA79D8D69D4C73FD8A96ED2"
@@ -245,7 +245,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:NDoc.Core, Version=1.0.765.27868, Culture=neutral"
+            "AssemblyAsmDisplayName" = "8:NDoc.Core, Version=1.0.766.22308, Culture=neutral"
                 "ScatterAssemblies"
                 {
                     "_1078131070D531CAC479AF20F413D606"
@@ -276,7 +276,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:NDoc.Documenter.Xml, Version=1.0.765.27869, Culture=neutral"
+            "AssemblyAsmDisplayName" = "8:NDoc.Documenter.Xml, Version=1.0.766.22309, Culture=neutral"
                 "ScatterAssemblies"
                 {
                     "_1BE3C34A870339F98529356AEB634C02"
@@ -347,7 +347,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:NDoc.VisualStudio, Version=1.0.765.27869, Culture=neutral"
+            "AssemblyAsmDisplayName" = "8:NDoc.VisualStudio, Version=1.0.766.22309, Culture=neutral"
                 "ScatterAssemblies"
                 {
                     "_D09501A9F4629E2BC5D086518C05693F"
@@ -378,7 +378,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:NDoc.Documenter.JavaDoc, Version=1.0.765.27869, Culture=neutral"
+            "AssemblyAsmDisplayName" = "8:NDoc.Documenter.JavaDoc, Version=1.0.766.22310, Culture=neutral"
                 "ScatterAssemblies"
                 {
                     "_FBB6212730F68A9B6C98FB65C6D5A888"
@@ -656,10 +656,10 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:NDoc"
         "ProductCode" = "8:{C7FA4324-4052-47D2-834F-C65D925CBE0B}"
-        "PackageCode" = "8:{C36200DB-C452-48C0-BDE7-10E07E1F1A2A}"
+        "PackageCode" = "8:{A9E79D63-BB53-4880-B8ED-2CE6C746C0B6}"
         "UpgradeCode" = "8:{C7002E8C-E7B1-43B5-85FD-BD364AD576E4}"
         "RestartWWWService" = "11:FALSE"
-        "RemovePreviousVersions" = "11:TRUE"
+        "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "ProductVersion" = "8:1.0.0"
         "Manufacturer" = "8:NDoc"
@@ -682,7 +682,7 @@
         }
         "MergeModule"
         {
-            "{AC8774A4-3E09-11D3-8E14-00C04F6837D0}:_F388C809244045E1B7FDD695BB0C92E7"
+            "{AC8774A4-3E09-11D3-8E14-00C04F6837D0}:_3B6B6A46A0EA438EAFC4A46735CA3C76"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
