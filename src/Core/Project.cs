@@ -34,6 +34,8 @@ namespace NDoc.Core
 			_IsDirty = false;
 			_probePath = new ArrayList();
 			_referencePaths = new ArrayList();
+			_namespaces = new Namespaces();
+			_namespaces.ContentsChanged += new EventHandler(ContentsChanged);
 		}
 
 		private bool _IsDirty;
@@ -55,6 +57,11 @@ namespace NDoc.Core
 		}
 
 
+		private void ContentsChanged(object sender, EventArgs e)
+		{
+			IsDirty = true;
+		}
+
 		/// <summary>Gets the IsDirty property.</summary>
 		public bool IsDirty
 		{
@@ -62,10 +69,10 @@ namespace NDoc.Core
 
 			set
 			{
-				if (!_IsDirty && value && Modified != null)
+				if (!_IsDirty && value)
 				{
 					_IsDirty = true;
-					Modified(this, new EventArgs());
+					if (Modified != null) Modified(this, EventArgs.Empty);
 				}
 				else
 				{
@@ -164,7 +171,7 @@ namespace NDoc.Core
 		/// </returns>
 		public string GetFullPath(string path) {
 
-			if (path!=null && path.Length>0)
+			if (path != null && path.Length > 0)
 			{
 				if (!Path.IsPathRooted(path)) 
 				{
@@ -175,91 +182,17 @@ namespace NDoc.Core
 			return path;
 		}
 
-		private SortedList _namespaces;
+		private Namespaces _namespaces;
 
-		public SortedList Namespaces 
+		/// <summary>
+		/// Gets the project namespace summaries collection.
+		/// </summary>
+		/// <value></value>
+		public Namespaces Namespaces 
 		{
 			get { return _namespaces; }
-			set { _namespaces = value; }
 		} 
 
-		/// <summary>Sets a namespace summary.</summary>
-		public void SetNamespaceSummary(string namespaceName, string summary)
-		{
-			//ignore a namespace that is not already in the collecton
-			if (_namespaces.ContainsKey(namespaceName))
-			{
-				//set dirty only if the value changed
-				if (summary.Length == 0)
-				{
-					summary = null;
-				}
-				if ((string)_namespaces[namespaceName] != summary)
-				{
-					_namespaces[namespaceName] = summary;
-					IsDirty = true;
-				}
-			}
-		}
-
-		/// <summary>Gets the summary for a namespace.</summary>
-		public string GetNamespaceSummary(string namespaceName)
-		{
-			if (_namespaces==null)
-				return "";
-			else
-				return (string)_namespaces[namespaceName];
-		}
-
-		/// <summary>Gets an enumerable list of namespace names.</summary>
-		public IEnumerable GetNamespaces()
-		{
-			if (NamespaceCount>0)
-				return _namespaces.Keys;
-			else
-				return new ArrayList();
-		}
-
-		/// <summary>The number of namespaces in the project.</summary>
-		public int NamespaceCount
-		{
-			get 
-			{
-				if (_namespaces!=null)
-				{
-					return _namespaces.Count;
-				}
-				else
-				{
-					return 0;
-				}
-			}
-		}
-
-//		// enumerates the namespaces from an assembly 
-//		// and add them to the project if new
-//		private void AddNamespacesFromAssembly(AssemblyLoader assemblyLoader,string assemblyFile)
-//		{
-//			Assembly a = assemblyLoader.LoadAssembly(assemblyFile);
-//			if (_namespaces==null) _namespaces = new SortedList();
-//
-//			foreach (Type t in a.GetTypes())
-//			{
-//				string ns = t.Namespace;
-//				{
-//					if (ns == null)
-//					{
-//						if ((!_namespaces.ContainsKey("(global)")))
-//							_namespaces.Add("(global)",null);
-//					}
-//					else
-//					{
-//						if ((!_namespaces.ContainsKey(ns)))
-//							_namespaces.Add(ns, null);
-//					}
-//				}
-//			}
-//		}
 
 		private ArrayList _Documenters;
 
@@ -418,7 +351,7 @@ namespace NDoc.Core
 					{
 						switch (reader.Name)
 						{
-							case "assemblies":
+							case "assemblies" : 
 								// continue even if we don't load all assemblies
 								try
 								{
@@ -429,14 +362,14 @@ namespace NDoc.Core
 									assemblyLoadException = e;
 								}
 								break;
-							case "referencePaths":
+							case "referencePaths" : 
 								ReadReferencePaths(reader);
 								break;
-							case "namespaces":
+							case "namespaces" : 
 								//GetNamespacesFromAssemblies();
-								ReadNamespaceSummaries(reader);
+								Namespaces.Read(reader);
 								break;
-							case "documenters":
+							case "documenters" : 
 								// continue even if we have errors in documenter properties
 								try
 								{
@@ -447,7 +380,7 @@ namespace NDoc.Core
 									documenterPropertyFormatExceptions = e;
 								}
 								break;
-							default:
+							default : 
 								reader.Read();
 								break;
 						}
@@ -461,7 +394,7 @@ namespace NDoc.Core
 			catch (Exception ex)
 			{
 				throw new DocumenterException("Error reading in project file " 
-					+ filename  + ".\n" + ex.Message, ex);
+					+ filename + ".\n" + ex.Message, ex);
 
 				// Set all the documenters to a default state since unable to load them.
 			}
@@ -517,7 +450,7 @@ namespace NDoc.Core
 					{
 						AddAssemblySlashDoc(assemblySlashDoc);
 					}
-					catch(FileNotFoundException e)
+					catch (FileNotFoundException e)
 					{
 						failedDocs.Add(assemblySlashDoc);
 						loadExceptions.Add(e);
@@ -525,52 +458,20 @@ namespace NDoc.Core
 				}
 				reader.Read();
 			}
-			if (failedDocs.Count>0)
+			if (failedDocs.Count > 0)
 			{
 				StringBuilder sb = new StringBuilder();
-				for(int i=0;i<failedDocs.Count;i++)
+				for (int i = 0; i < failedDocs.Count; i++)
 				{
-					FileNotFoundException LoadException=(FileNotFoundException)loadExceptions[i];
-					sb.Append( LoadException.Message  + "\n");
-					sb.Append( LoadException.FusionLog );
+					FileNotFoundException LoadException = (FileNotFoundException)loadExceptions[i];
+					sb.Append(LoadException.Message + "\n");
+					sb.Append(LoadException.FusionLog);
 					sb.Append("\n");
 				}
 				throw new CouldNotLoadAllAssembliesException(sb.ToString());
 			}
 		}
 
-
-		/// <summary>
-		/// Loads namespace summaries from an XML document.
-		/// </summary>
-		/// <param name="reader">
-		/// An open XmlReader positioned before the namespace elements.</param>
-		public void ReadNamespaceSummaries(XmlReader reader)
-		{
-			while (!reader.EOF && !(reader.NodeType == XmlNodeType.EndElement && reader.Name == "namespaces"))
-			{
-				if (reader.NodeType == XmlNodeType.Element && reader.Name == "namespace")
-				{
-					if (_namespaces==null) 
-						_namespaces = new SortedList();
-
-					string name = reader["name"];
-					string summary = reader.ReadInnerXml();
-
-					//ignore duplicate summaries
-					if (!_namespaces.ContainsKey(name))
-					{
-						_namespaces[name] = summary;
-					}
-
-					// ReadInnerXml moved Reader cursor to next node.
-				}
-				else
-				{
-					reader.Read();
-				}
-			}
-		}
 
 		/// <summary>
 		/// Loads reference paths from an XML document.
@@ -595,7 +496,7 @@ namespace NDoc.Core
 
 		private void ReadDocumenters(XmlReader reader)
 		{
-			string FailureMessages="";
+			string FailureMessages = "";
 
 			while (!reader.EOF && !(reader.NodeType == XmlNodeType.EndElement && reader.Name == "documenters"))
 			{
@@ -652,12 +553,12 @@ namespace NDoc.Core
 				writer.Indentation = 4;
 
 				writer.WriteStartElement("project");
-				writer.WriteAttributeString("SchemaVersion","1.3");
+				writer.WriteAttributeString("SchemaVersion", "1.3");
 
 				//do not change the order of those lines
 				WriteAssemblySlashDocs(writer);
 				WriteReferencePaths(writer);
-				WriteNamespaceSummaries(writer);
+				Namespaces.Write(writer);
 				WriteDocumenters(writer);
 
 				writer.WriteEndElement();
@@ -693,36 +594,6 @@ namespace NDoc.Core
 				}
 
 				writer.WriteEndElement();
-			}
-		}
-
-		private void WriteNamespaceSummaries(XmlWriter writer)
-		{
-			if (_namespaces!=null && _namespaces.Count > 0)
-			{
-				//do a quick check to make sure there are some namespace summaries
-				//if not, we don't need to write this section out
-				bool summariesExist=false;
-				foreach (string ns in _namespaces.Keys)
-				{
-					string summary = (string)_namespaces[ns];
-					if (summary!=null && summary.Length>0) summariesExist = true;
-				}
-
-				if (summariesExist)
-				{
-					writer.WriteStartElement("namespaces");
-
-					foreach (string ns in _namespaces.Keys)
-					{
-						writer.WriteStartElement("namespace");
-						writer.WriteAttributeString("name", ns);
-						writer.WriteRaw((string)_namespaces[ns]);
-						writer.WriteEndElement();
-					}
-
-					writer.WriteEndElement();
-				}
 			}
 		}
 
@@ -762,7 +633,7 @@ namespace NDoc.Core
 		public void Clear()
 		{
 			_AssemblySlashDocs.Clear();
-			if (_namespaces!=null) _namespaces=null;
+			if (_namespaces != null) _namespaces = new Namespaces();
 
 			foreach (IDocumenter documenter in Documenters)
 			{
@@ -799,9 +670,9 @@ namespace NDoc.Core
 
 		/// <summary/>
 		protected CouldNotLoadAllAssembliesException(
-			System.Runtime.Serialization.SerializationInfo info,
+			System.Runtime.Serialization.SerializationInfo info, 
 			System.Runtime.Serialization.StreamingContext context
-			) : base (info, context) { }
+) : base(info, context) { }
 	}
 	/// <summary>
 	/// This exception is thrown when there were invalid values in the documenter properties.
@@ -822,8 +693,8 @@ namespace NDoc.Core
 
 		/// <summary/>
 		protected DocumenterPropertyFormatException(
-			System.Runtime.Serialization.SerializationInfo info,
+			System.Runtime.Serialization.SerializationInfo info, 
 			System.Runtime.Serialization.StreamingContext context
-			) : base (info, context) { }
+) : base(info, context) { }
 	}
 }

@@ -48,6 +48,7 @@ namespace NDoc.Gui
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.ComboBox namespaceComboBox;
 		private string selectedText;
+		private System.Windows.Forms.StatusBar statusBar1;
 
 		private Project _Project;
 
@@ -63,53 +64,8 @@ namespace NDoc.Gui
 			//
 			InitializeComponent();
 
-			RefreshNamespaces();
-
 		}
 
-		public void RefreshNamespaces()
-		{
-			//let's try to create this in a new AppDomain
-			AppDomain appDomain=null;
-			try
-			{
-				appDomain = AppDomain.CreateDomain("NDocNamespaces");
-				ReflectionEngine re = (ReflectionEngine)
-					appDomain.CreateInstanceFromAndUnwrap(_Project.GetType().Assembly.CodeBase, 
-					"NDoc.Core.ReflectionEngine");
-				ReflectionEngineParameters rep = new ReflectionEngineParameters(_Project);
-				foreach (AssemblySlashDoc assemblySlashDoc in _Project.GetAssemblySlashDocs())
-				{
-					if(assemblySlashDoc.AssemblyFilename!=null && assemblySlashDoc.AssemblyFilename.Length>0)
-					{
-						string assemblyFullPath = _Project.GetFullPath(assemblySlashDoc.AssemblyFilename);
-						if(File.Exists(assemblyFullPath))
-						{
-							SortedList namespaces = re.GetNamespacesFromAssembly(rep,assemblyFullPath);
-							foreach(string ns in namespaces.GetKeyList())
-							{
-								if (_Project.Namespaces==null)
-									_Project.Namespaces = new SortedList();
-								if ((!_Project.Namespaces.ContainsKey(ns)))
-									_Project.Namespaces.Add(ns, null);
-							}
-						}
-					}
-				}
-			}
-			finally
-			{
-				if (appDomain!=null) AppDomain.Unload(appDomain);
-			}
-
-			namespaceComboBox.Items.Clear();
-			foreach (string namespaceName in _Project.GetNamespaces())
-			{
-				namespaceComboBox.Items.Add(namespaceName);
-			}
-
-			if (namespaceComboBox.Items.Count>0) namespaceComboBox.SelectedIndex = 0;
-		}
 
 		/// <summary>
 		///    Required method for Designer support - do not modify
@@ -123,6 +79,7 @@ namespace NDoc.Gui
 			this.namespaceComboBox = new System.Windows.Forms.ComboBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
+			this.statusBar1 = new System.Windows.Forms.StatusBar();
 			this.SuspendLayout();
 			// 
 			// okButton
@@ -154,7 +111,7 @@ namespace NDoc.Gui
 			this.summaryTextBox.Location = new System.Drawing.Point(8, 80);
 			this.summaryTextBox.Multiline = true;
 			this.summaryTextBox.Name = "summaryTextBox";
-			this.summaryTextBox.Size = new System.Drawing.Size(390, 126);
+			this.summaryTextBox.Size = new System.Drawing.Size(390, 104);
 			this.summaryTextBox.TabIndex = 3;
 			this.summaryTextBox.Text = "";
 			// 
@@ -190,6 +147,13 @@ namespace NDoc.Gui
 			this.label2.TabIndex = 2;
 			this.label2.Text = "Summary:";
 			// 
+			// statusBar1
+			// 
+			this.statusBar1.Location = new System.Drawing.Point(0, 200);
+			this.statusBar1.Name = "statusBar1";
+			this.statusBar1.Size = new System.Drawing.Size(504, 22);
+			this.statusBar1.TabIndex = 6;
+			// 
 			// NamespaceSummariesForm
 			// 
 			this.AcceptButton = this.okButton;
@@ -197,6 +161,7 @@ namespace NDoc.Gui
 			this.AutoScroll = true;
 			this.CancelButton = this.cancelButton;
 			this.ClientSize = new System.Drawing.Size(504, 222);
+			this.Controls.Add(this.statusBar1);
 			this.Controls.Add(this.cancelButton);
 			this.Controls.Add(this.okButton);
 			this.Controls.Add(this.summaryTextBox);
@@ -209,7 +174,9 @@ namespace NDoc.Gui
 			this.Name = "NamespaceSummariesForm";
 			this.ShowInTaskbar = false;
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Edit Namespace Summaries";
+			this.Activated += new System.EventHandler(this.NamespaceSummariesForm_Activated);
 			this.ResumeLayout(false);
 
 		}
@@ -222,7 +189,7 @@ namespace NDoc.Gui
 		/// <param name="e"></param>
 		protected void okButton_Click (object sender, System.EventArgs e)
 		{
-			_Project.SetNamespaceSummary(selectedText, summaryTextBox.Text);
+			_Project.Namespaces[selectedText]= summaryTextBox.Text;
 		}
 
 		/// <summary>
@@ -235,13 +202,40 @@ namespace NDoc.Gui
 		{
 			if (selectedText != null)
 			{
-				_Project.SetNamespaceSummary(selectedText, summaryTextBox.Text);
+				_Project.Namespaces[selectedText]=summaryTextBox.Text;
 			}
 
-			summaryTextBox.Text = _Project.GetNamespaceSummary(namespaceComboBox.Text);
+			summaryTextBox.Text = _Project.Namespaces[namespaceComboBox.Text];
 			summaryTextBox.Focus();
 
 			selectedText = namespaceComboBox.Text;
+		}
+
+		private void NamespaceSummariesForm_Activated(object sender, System.EventArgs e)
+		{
+			statusBar1.Text="Scanning assemblies for namespace names...";
+			namespaceComboBox.Enabled=false;
+			summaryTextBox.Enabled=false;
+			okButton.Enabled=false;
+			cancelButton.Enabled=false;
+
+			Application.DoEvents();
+			namespaceComboBox.Items.Clear();
+
+			_Project.Namespaces.LoadNamespacesFromAssemblies(_Project);
+			foreach (string namespaceName in _Project.Namespaces.NamespaceNames)
+			{
+				namespaceComboBox.Items.Add(namespaceName);
+			}
+
+			if (namespaceComboBox.Items.Count>0) namespaceComboBox.SelectedIndex = 0;
+
+			statusBar1.Text="";
+			namespaceComboBox.Enabled=true;
+			summaryTextBox.Enabled=true;
+			okButton.Enabled=true;
+			cancelButton.Enabled=true;
+
 		}
 	}
 }

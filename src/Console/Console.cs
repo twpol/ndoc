@@ -114,7 +114,7 @@ namespace NDoc.ConsoleApplication
 										{
 											XmlTextReader reader = new XmlTextReader(streamReader);
 											reader.MoveToContent();
-											project.ReadNamespaceSummaries(reader);
+											project.Namespaces.Read(reader);
 											reader.Close();
 											streamReader.Close();
 										}
