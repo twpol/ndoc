@@ -25,7 +25,7 @@ namespace NDoc.Gui
 {
 	using System;
 	using System.Drawing;
-	using System.Collections;
+	using System.Collections.Specialized;
 	using System.ComponentModel;
 	using System.Windows.Forms;
 
@@ -47,13 +47,13 @@ namespace NDoc.Gui
 		private System.Windows.Forms.ComboBox namespaceComboBox;
 		private string selectedText;
 
-		private ArrayList _Namespaces;
+		private StringCollection _Namespaces;
 		private Project _Project;
 
 		/// <summary>Allows the user to associate a summaries with the
 		/// namespaces found in the assemblies that are being 
 		/// documented.</summary>
-		public NamespaceSummariesForm(ArrayList namespaces, Project project)
+		public NamespaceSummariesForm(StringCollection namespaces, Project project)
 		{
 			_Namespaces = namespaces;
 			_Project = project;

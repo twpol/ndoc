@@ -1703,12 +1703,15 @@ namespace NDoc.Gui
 
 				XmlNodeList namespaceNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace");
 
-				ArrayList namespaces = new ArrayList();
+				StringCollection namespaces = new StringCollection();
 
 				foreach (XmlNode namespaceNode in namespaceNodes)
 				{
 					string namespaceName = (string)namespaceNode.Attributes["name"].Value;
-					namespaces.Add(namespaceName);
+					if (!namespaces.Contains(namespaceName))
+					{
+						namespaces.Add(namespaceName);
+					}
 				}
 
 				form = new NamespaceSummariesForm(namespaces, project);
