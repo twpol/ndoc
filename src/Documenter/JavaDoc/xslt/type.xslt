@@ -153,6 +153,21 @@
 					<xsl:with-param name="type-of-members" select="'Methods'" />
 					<xsl:with-param name="member-element" select="'method'" />
 				</xsl:call-template>
+				<a name="operator-summary" />
+				<xsl:if test="$operators">
+					<!-- IE doesn't support the border-spacing CSS property so we have to set the cellspacing attribute here. -->
+					<table class="table" cellspacing="0">
+						<thead>
+							<tr>
+								<th colspan="2">Operator Summary</th>
+							</tr>
+						</thead>
+						<xsl:apply-templates select="$operators">
+							<xsl:sort select="@name" />
+						</xsl:apply-templates>
+					</table>
+					<br />
+				</xsl:if>
 				<a name="event-summary" />
 				<xsl:if test="$events">
 					<!-- IE doesn't support the border-spacing CSS property so we have to set the cellspacing attribute here. -->
@@ -245,6 +260,25 @@
 					</table>
 					<xsl:variable name="last" select="count($methods)" />
 					<xsl:for-each select="$methods">
+						<xsl:sort select="@name" />
+						<xsl:apply-templates select="." mode="detail" />
+						<xsl:if test="position()!=$last">
+							<hr />
+						</xsl:if>
+					</xsl:for-each>
+				</xsl:if>
+				<a name="operator-detail" />
+				<xsl:if test="$operators">
+					<!-- IE doesn't support the border-spacing CSS property so we have to set the cellspacing attribute here. -->
+					<table class="table" cellspacing="0">
+						<thead>
+							<tr>
+								<th>Operator Detail</th>
+							</tr>
+						</thead>
+					</table>
+					<xsl:variable name="last" select="count($operators)" />
+					<xsl:for-each select="$operators">
 						<xsl:sort select="@name" />
 						<xsl:apply-templates select="." mode="detail" />
 						<xsl:if test="position()!=$last">
@@ -361,7 +395,7 @@
 		</tr>
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="method">
+	<xsl:template match="method|operator">
 		<tr>
 			<!-- Is there a CSS property that can emulate the valign attribute? -->
 			<td class="returnType" valign="top">
@@ -371,7 +405,16 @@
 			</td>
 			<td class="method">
 				<a href="#{substring-after(@id, 'M:')}">
-					<xsl:value-of select="@name" />
+					<xsl:choose>
+						<xsl:when test="name()='operator'">
+							<xsl:call-template name="csharp-operator-name">
+								<xsl:with-param name="name" select="@name" />
+							</xsl:call-template>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="@name" />
+						</xsl:otherwise>
+					</xsl:choose>
 				</a>
 				<xsl:text>(</xsl:text>
 				<xsl:for-each select="parameter">
@@ -568,10 +611,19 @@
 		</dl>
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="method" mode="detail">
+	<xsl:template match="method|operator" mode="detail">
 		<a name="{substring-after(@id, 'M:')}" />
 		<h3>
-			<xsl:value-of select="@name" />
+			<xsl:choose>
+				<xsl:when test="name()='operator'">
+					<xsl:call-template name="operator-name">
+						<xsl:with-param name="name" select="@name" />
+					</xsl:call-template>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="@name" />
+				</xsl:otherwise>
+			</xsl:choose>
 		</h3>
 		<pre>
 			<xsl:variable name="method">
@@ -584,7 +636,16 @@
 				</xsl:call-template>
 				<xsl:text>&#32;</xsl:text>
 				<b>
-					<xsl:value-of select="@name" />
+					<xsl:choose>
+						<xsl:when test="name()='operator'">
+							<xsl:call-template name="csharp-operator-name">
+								<xsl:with-param name="name" select="@name" />
+							</xsl:call-template>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="@name" />
+						</xsl:otherwise>
+					</xsl:choose>
 				</b>
 			</xsl:variable>
 			<xsl:value-of select="$method" />
