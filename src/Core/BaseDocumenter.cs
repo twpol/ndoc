@@ -1883,6 +1883,10 @@ namespace NDoc.Core
 					break;
 				}
 			}
+			if (type.IsDefined(typeof(System.FlagsAttribute),false))
+			{
+				writer.WriteAttributeString("flags","true");
+			}
 
 			WriteEnumerationDocumentation(writer, memberName);
 			WriteCustomAttributes(writer, type);
@@ -1971,6 +1975,7 @@ namespace NDoc.Core
 			if (field.IsLiteral)
 			{
 				writer.WriteAttributeString("literal", "true");
+				writer.WriteAttributeString("value",GetDisplayValue(field.DeclaringType,field.GetValue(null)));
 			}
 
 			if (inherited)
@@ -1984,6 +1989,45 @@ namespace NDoc.Core
 			WriteCustomAttributes(writer, field);
 
 			writer.WriteEndElement();
+		}
+
+		protected string GetDisplayValue(Type parent,object value)
+		{
+			if (value == null) return "null";
+
+			if (value is string)
+			{
+				return ("\"" + value.ToString() + "\"");
+			}
+
+			if (value is Enum)
+			{
+				if(parent.IsEnum)
+				{
+					return Enum.Format(value.GetType(),value,"d");
+				}
+				else
+				{
+					string enumTypeName = value.GetType().Name;
+					string enumValue = value.ToString();
+					string[] enumValues = enumValue.Split(new char[] {','});
+					if (enumValues.Length > 0)
+					{
+						for (int i = 0; i < enumValues.Length; i++)
+						{
+							enumValues[i] = enumTypeName + "." + enumValues[i].Trim();
+						}
+						return "(" + String.Join("|", enumValues) + ")";
+					}
+					else
+					{
+						return enumTypeName + "." + enumValue;
+					}
+				}
+			}
+			
+			return value.ToString();
+
 		}
 
 		/// <summary>Writes XML documenting an event.</summary>
