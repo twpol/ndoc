@@ -216,6 +216,7 @@ namespace NDoc.Core
 				//writer.Close();
 				writer.Flush();
 
+				// write our intermediate xml to a file for debugging
 				//FileStream fs = new FileStream(@"C:\test.xml", FileMode.Create);
 				//fs.Write(memoryStream.GetBuffer(), 0, memoryStream.GetBuffer().Length);
 				//fs.Close();
@@ -737,7 +738,7 @@ namespace NDoc.Core
 			{
 				if (MustDocumentField(field) && !IsAlsoAnEvent(field))
 				{
-					WriteField(writer, field);
+					WriteField(writer, field, type);
 				}
 			}
 		}
@@ -1003,7 +1004,7 @@ namespace NDoc.Core
 				// *** Not sure what this field is but don't want to document it for now.
 				if (field.Name != "value__")
 				{
-					WriteField(writer, field);
+					WriteField(writer, field, type);
 				}
 			}
 
@@ -1028,7 +1029,8 @@ namespace NDoc.Core
 		/// <summary>Writes XML documenting a field.</summary>
 		/// <param name="writer">XmlWriter to write on.</param>
 		/// <param name="field">Field to document.</param>
-		private void WriteField(XmlWriter writer, FieldInfo field)
+		private void WriteField(XmlWriter writer, FieldInfo field,
+			Type type)
 		{
 			string memberName = GetMemberName(field);
 
@@ -1060,7 +1062,7 @@ namespace NDoc.Core
 				writer.WriteAttributeString("initOnly", "true");
 			}
 
-			WriteFieldDocumentation(writer, memberName, !inherited);
+			WriteFieldDocumentation(writer, memberName, !inherited, type);
 			WriteCustomAttributes(writer, field);
 
 			writer.WriteEndElement();
@@ -1855,12 +1857,14 @@ namespace NDoc.Core
 		private void WriteFieldDocumentation(
 			XmlWriter writer,
 			string memberName,
-			bool writeMissing)
+			bool writeMissing,
+			Type type)
 		{
 			if (writeMissing)
 			{
 				CheckForMissingSummaryAndRemarks(writer, memberName);
 			}
+			CheckForPropertyBacker(writer, memberName, type);
 			WriteSlashDocElements(writer, memberName);
 			WriteEndDocumentation(writer);
 		}
@@ -1909,6 +1913,141 @@ namespace NDoc.Core
 			WriteSlashDocElements(writer, memberName);
 			WriteEndDocumentation(writer);
 		}
+
+		/// <summary>
+		/// This checks whether a field is a property backer, meaning
+		/// it stores the information for the property.
+		/// This takes advantage of the fact that most people
+		/// have a simple convention for the names of the fields
+		/// and the properties that they back.
+		/// If the field doesn't have a summary already, and it
+		/// looks like it backs a property, and the BaseDocumenterConfig
+		/// property is set appropriately, then this adds a
+		/// summary indicating that.
+		/// </summary>
+		/// <remarks>
+		/// Note that this design will call multiple fields the backer
+		/// for a single property.
+		/// <para/>This also will call a public field a backer for a
+		/// property, when typically that wouldn't be the case.
+		/// </remarks>
+		/// <param name="writer">The XmlWriter to write to.</param>
+		/// <param name="memberName">The full name of the field.</param>
+		/// <param name="type">The Type which contains the field
+		/// and potentially the property.</param>
+		private void CheckForPropertyBacker(
+			XmlWriter writer,
+			string memberName,
+			Type type)
+		{
+			if (!MyConfig.AddPropertyBackerSummaries) return;
+
+			string xPathExpr = "/doc/members/member[@name=\"" + memberName + "\"]";
+			XmlNode xmlNode = currentSlashDoc.SelectSingleNode(xPathExpr);
+
+			// determine if field is non-public
+			// (because public fields are probably not backers for properties)
+			bool isNonPublic = true;  // stubbed out for now
+
+			// only do this if there is no summary already
+			XmlNode summary;
+			if ((xmlNode == null
+					|| (summary = xmlNode.SelectSingleNode("summary")) == null
+					|| summary.InnerText.Length == 0
+					|| summary.InnerText.Trim().StartsWith("Summary description for"))
+				&& isNonPublic)
+			{
+				// find the property (if any) that this field backs
+
+				// generate the possible property names that this could back
+				// so far have: property Name could be backed by _Name or name
+				// but could be other conventions
+				string[] words = memberName.Split('.');
+				string fieldBaseName = words[words.Length - 1];
+				string firstLetter = fieldBaseName.Substring(0, 1);
+				string camelCasePropertyName = firstLetter.ToUpper() 
+					+ fieldBaseName.Remove(0, 1);
+				string usPropertyName = fieldBaseName.Replace("_", "");
+
+				// find it
+				PropertyInfo propertyInfo;
+
+				if (((propertyInfo = FindProperty(camelCasePropertyName,
+						type)) != null)
+					|| ((propertyInfo = FindProperty(usPropertyName,
+						type)) != null))
+				{
+					WritePropertyBackerDocumentation(writer, "summary", 
+						propertyInfo);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Find a particular property of the specified type, by name.
+		/// Return the PropertyInfo for it.
+		/// </summary>
+		/// <param name="expectedPropertyName">The name of the property to
+		/// find.</param>
+		/// <param name="type">The type in which to search for 
+		/// the property.</param>
+		/// <returns>PropertyInfo - The property info, or null for 
+		/// not found.</returns>
+		private PropertyInfo FindProperty(string expectedPropertyName,
+			Type type)
+		{
+			BindingFlags bindingFlags =
+				BindingFlags.Instance |
+				BindingFlags.Static |
+				BindingFlags.Public |
+				BindingFlags.NonPublic;
+
+			PropertyInfo[] properties = type.GetProperties(bindingFlags);
+
+			foreach (PropertyInfo property in properties)
+			{
+				if (property.Name.Equals(expectedPropertyName))
+				{
+					MethodInfo getMethod = property.GetGetMethod(true);
+					MethodInfo setMethod = property.GetSetMethod(true);
+
+					bool hasGetter = (getMethod != null) && MustDocumentMethod(getMethod);
+					bool hasSetter = (setMethod != null) && MustDocumentMethod(setMethod);
+
+					if ((hasGetter || hasSetter) && !IsAlsoAnEvent(property))
+					{
+						return(property);
+					}
+				}
+			}
+
+			return(null);
+		}
+
+		/// <summary>
+		/// Write xml info for a property's backer field to the specified writer.
+		/// This writes a string with a link to the property.
+		/// </summary>
+		/// <param name="writer">The XmlWriter to write to.</param>
+		/// <param name="element">The field which backs the property.</param>
+		/// <param name="property">The property backed by the field.</param>
+		private void WritePropertyBackerDocumentation(
+			XmlWriter writer,
+			string element,
+			PropertyInfo property)
+		{
+			string propertyName = property.Name;
+			string propertyId = "P:" + property.DeclaringType.FullName + "."
+				+ propertyName; 
+			string memberName = GetMemberName(property);
+
+			WriteStartDocumentation(writer);
+			writer.WriteStartElement(element);
+			writer.WriteRaw("Backer for property <see cref=\"" 
+				+ propertyId + "\">" + memberName + "</see>");
+			writer.WriteEndElement();
+		}
+
 
 		/// <summary>Loads an assembly.</summary>
 		/// <param name="filename">The assembly filename.</param>
