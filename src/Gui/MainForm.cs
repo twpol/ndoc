@@ -1672,11 +1672,8 @@ namespace NDoc.Gui
 							strBld.Append("Unable to load: " + fileLoadEx.FileName + "\r\n");
 						}
 					}
-//					else
-//					{
-						strBld.Append(loaderEx.Message + "\r\n");
-						strBld.Append(loaderEx.StackTrace + Environment.NewLine);
-					//					}
+					strBld.Append(loaderEx.Message + "\r\n");
+					strBld.Append(loaderEx.StackTrace + Environment.NewLine);
 				}
 			}
 
@@ -1870,8 +1867,15 @@ namespace NDoc.Gui
 			if (form.ShowDialog(this) == System.Windows.Forms.DialogResult.OK)
 			{
 				AssemblySlashDoc assemblySlashDoc = form.AssySlashDoc;
-				project.AssemblySlashDocs.Add(assemblySlashDoc);
-				AddRowToListView(assemblySlashDoc);
+				if (project.AssemblySlashDocs.Contains(assemblySlashDoc.Assembly.Path))
+				{
+					DialogResult result = MessageBox.Show(this,"The assembly you are trying to add already exists in this project.","Duplicate Assembly",MessageBoxButtons.OK,MessageBoxIcon.Error);
+				}
+				else
+				{
+					project.AssemblySlashDocs.Add(assemblySlashDoc);
+					AddRowToListView(assemblySlashDoc);
+				}
 				EnableMenuItems(true);
 			}
 
