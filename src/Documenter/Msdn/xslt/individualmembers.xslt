@@ -87,6 +87,9 @@
 					<xsl:call-template name="private-instance-section">
 						<xsl:with-param name="member" select="$member" />
 					</xsl:call-template>
+					<xsl:call-template name="explicit-interface-implementations">
+						<xsl:with-param name="member" select="$member" />
+					</xsl:call-template>
 					<xsl:call-template name="seealso-section">
 						<xsl:with-param name="page">
 							<xsl:value-of select="$members" />

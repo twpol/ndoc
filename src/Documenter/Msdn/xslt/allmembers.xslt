@@ -194,6 +194,9 @@
 					<xsl:call-template name="private-instance-section">
 						<xsl:with-param name="member" select="'event'" />
 					</xsl:call-template>
+					<xsl:call-template name="explicit-interface-implementations">
+						<xsl:with-param name="member" select="'method'" />
+					</xsl:call-template>
 					<xsl:call-template name="seealso-section">
 						<xsl:with-param name="page">members</xsl:with-param>
 					</xsl:call-template>

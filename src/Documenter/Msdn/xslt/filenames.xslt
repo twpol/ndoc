@@ -82,10 +82,10 @@
     <xsl:param name="method" select="." />
     <xsl:choose>
       <xsl:when test="contains($method/@id, '(')">
-        <xsl:value-of select="concat(translate(substring-after(substring-before($method/@id, '('), 'M:'), '.[]', ''), $method/@overload, '.html')" />
+        <xsl:value-of select="concat(translate(substring-after(substring-before($method/@id, '('), 'M:'), '.[]#', ''), $method/@overload, '.html')" />
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="concat(translate(substring-after($method/@id, 'M:'), '.[]', ''), $method/@overload, '.html')" />
+        <xsl:value-of select="concat(translate(substring-after($method/@id, 'M:'), '.[]#', ''), $method/@overload, '.html')" />
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>

@@ -66,7 +66,7 @@
 		<pre class="syntax">
 			<span class="lang">[C#]</span>
 			<br />
-			<xsl:if test="not(parent::interface)">
+			<xsl:if test="not(parent::interface or @interface)">
 				<xsl:call-template name="method-access">
 					<xsl:with-param name="access" select="@access" />
 				</xsl:call-template>
@@ -136,6 +136,12 @@
 							</xsl:choose>
 						</xsl:when>
 						<xsl:otherwise>
+							<xsl:if test="@interface">
+								<xsl:call-template name="strip-namespace">
+									<xsl:with-param name="name" select="@interface" />
+								</xsl:call-template>
+								<xsl:text>.</xsl:text>
+							</xsl:if>
 							<xsl:value-of select="@name" />
 						</xsl:otherwise>
 					</xsl:choose>

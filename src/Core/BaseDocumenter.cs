@@ -187,7 +187,8 @@ namespace NDoc.Core
 
 		private bool MustDocumentMethod( MethodBase method )
 		{
-			return (method.IsPublic ||
+			return ((method.Name.IndexOf('.') != -1) ||
+				method.IsPublic ||
 				(method.IsFamily && MyConfig.DocumentProtected) ||
 				(method.IsFamilyOrAssembly && MyConfig.DocumentProtected) ||
 				(method.IsAssembly && MyConfig.DocumentInternals) ||
@@ -646,6 +647,7 @@ namespace NDoc.Core
 				BindingFlags.Public |
 				BindingFlags.NonPublic;
 
+			#warning explicitly implemented properties are not returned here.
 			PropertyInfo[] properties = type.GetProperties(bindingFlags);
 
 			foreach (PropertyInfo property in properties)
@@ -679,11 +681,20 @@ namespace NDoc.Core
 
 			foreach (MethodInfo method in methods)
 			{
-				if (!(method.Name.StartsWith("get_")) &&
-					!(method.Name.StartsWith("set_")) &&
-					!(method.Name.StartsWith("add_")) &&
-					!(method.Name.StartsWith("remove_")) &&
-					!(method.Name.StartsWith("op_")) &&
+				string name = method.Name;
+
+				int lastIndexOfDot = name.LastIndexOf('.');
+
+				if (lastIndexOfDot != -1)
+				{
+					name = method.Name.Substring(lastIndexOfDot + 1);
+				}
+
+				if (!name.StartsWith("get_") &&
+					!name.StartsWith("set_") &&
+					!name.StartsWith("add_") &&
+					!name.StartsWith("remove_") &&
+					!name.StartsWith("op_") &&
 					MustDocumentMethod(method))
 				{
 					WriteMethod(
@@ -1110,10 +1121,26 @@ namespace NDoc.Core
 			{
 				string memberName = GetMemberName(method);
 
+				string name = method.Name;
+				string interfaceName = null;
+
+				int lastIndexOfDot = name.LastIndexOf('.');
+
+				if (lastIndexOfDot != -1)
+				{
+					name = method.Name.Substring(lastIndexOfDot + 1);
+					interfaceName = method.Name.Substring(0, lastIndexOfDot);
+				}
+
 				writer.WriteStartElement("method");
-				writer.WriteAttributeString("name", method.Name);
+				writer.WriteAttributeString("name", name);
 				writer.WriteAttributeString("id", memberName);
 				writer.WriteAttributeString("access", GetMethodAccessValue(method));
+
+				if (interfaceName != null)
+				{
+					writer.WriteAttributeString("interface", interfaceName);
+				}
 
 				if (inherited)
 				{

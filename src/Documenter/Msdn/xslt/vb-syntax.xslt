@@ -129,6 +129,14 @@
 				</xsl:call-template>
 			</a>
 		</xsl:if>
+		<xsl:if test="@interface">
+			<xsl:text> Implements </xsl:text>
+			<xsl:call-template name="strip-namespace">
+				<xsl:with-param name="name" select="@interface" />
+			</xsl:call-template>
+			<xsl:text>.</xsl:text>
+			<xsl:value-of select="@name" />
+		</xsl:if>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="vb-type-access">
@@ -186,7 +194,7 @@
 				<br />
 				<xsl:choose>
 					<xsl:when test="local-name() != 'operator'">
-						<xsl:if test="not(parent::interface)">
+						<xsl:if test="not(parent::interface or @interface)">
 							<xsl:choose>
 								<xsl:when test="@contract='Abstract'">
 									<xsl:text>MustOverride&#160;</xsl:text>

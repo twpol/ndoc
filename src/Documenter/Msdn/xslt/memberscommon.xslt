@@ -218,7 +218,7 @@
 	<!-- -->
 	<xsl:template name="private-instance-section">
 		<xsl:param name="member" />
-		<xsl:if test="*[local-name()=$member and @access='Private' and not(@contract='Static')]">
+		<xsl:if test="*[local-name()=$member and @access='Private' and not(@contract='Static') and not(@interface)]">
 			<h4>
 				<xsl:text>Private Instance </xsl:text>
 				<xsl:call-template name="get-big-member-plural">
@@ -227,7 +227,23 @@
 			</h4>
 			<div class="table">
 				<table cellspacing="0">
-					<xsl:apply-templates select="*[local-name()=$member and @access='Private' and not(@contract='Static')]">
+					<xsl:apply-templates select="*[local-name()=$member and @access='Private' and not(@contract='Static') and not(@interface)]">
+						<xsl:sort select="@name" />
+					</xsl:apply-templates>
+				</table>
+			</div>
+		</xsl:if>
+	</xsl:template>
+	<!-- -->
+	<xsl:template name="explicit-interface-implementations">
+		<xsl:param name="member" />
+		<xsl:if test="*[local-name()=$member and @access='Private' and not(@contract='Static') and @interface]">
+			<h4>
+				<xsl:text>Explicit Interface Implementations</xsl:text>
+			</h4>
+			<div class="table">
+				<table cellspacing="0">
+					<xsl:apply-templates select="*[local-name()=$member and @access='Private' and not(@contract='Static') and @interface]">
 						<xsl:sort select="@name" />
 					</xsl:apply-templates>
 				</table>

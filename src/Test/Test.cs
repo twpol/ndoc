@@ -1099,6 +1099,31 @@ namespace NDoc.Test
 	public class CRefToOverloadWithNoParameters
 	{
 	}
+
+	/// <summary>Explicit interface test</summary>
+	public interface ExplicitInterface
+	{
+		/// <summary>Explicit method test</summary>
+		int ExplicitProperty { get; }
+
+		/// <summary>Explicit method test</summary>
+		void ExplicitMethod();
+	}
+
+	/// <summary>Testing explicit interface implementations</summary>
+	public class ExplicitImplementation : ExplicitInterface
+	{
+		/// <summary>an explicitly implemented property</summary>
+		int ExplicitInterface.ExplicitProperty
+		{
+			get { return 0; }
+		}
+
+		/// <summary>an explicitly implemented method</summary>
+		void ExplicitInterface.ExplicitMethod()
+		{
+		}
+	}
 }
 
 namespace NDoc.Test.InternalStuff

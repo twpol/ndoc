@@ -1307,6 +1307,7 @@ namespace NDoc.Documenter.Msdn
 			}
 
 			fileName = RemoveChar(fileName, '.');
+			fileName = RemoveChar(fileName, '#');
 
 			if (methodNode.Attributes["overload"] != null)
 			{
