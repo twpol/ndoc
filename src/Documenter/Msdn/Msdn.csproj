@@ -332,6 +332,10 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "xslt\typehierarchy.xslt"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "xslt\vb-syntax.xslt"
                     BuildAction = "EmbeddedResource"
                 />

@@ -567,6 +567,10 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "xslt\typehierarchy.xslt"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "xslt\XLinks.xslt"
                     BuildAction = "EmbeddedResource"
                 />
