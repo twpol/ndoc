@@ -734,7 +734,7 @@ namespace NDoc.Core
 						{
 							tempWriter.Flush();
 							if (classCount == 0 && interfaceCount == 0 && structureCount == 0 &&
-								delegateCount == 0 && enumCount == 0)
+								delegateCount == 0 && enumCount == 0 && (namespaceSummary == null || namespaceSummary.Length == 0))
 							{
 								Trace.WriteLine(string.Format("Discarding namespace {0} because it does not contain any documented types.", namespaceName));
 							}
