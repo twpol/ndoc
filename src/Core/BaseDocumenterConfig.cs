@@ -97,6 +97,14 @@ namespace NDoc.Core
 			}
 		}
 
+		/// <summary>
+		/// The display name of the documenter.
+		/// </summary>
+		public string Name
+		{
+			get { return _Name;}
+		}
+
 		/// <summary>Gets a list of property names.</summary>
 		public IEnumerable GetProperties()
 		{
@@ -204,50 +212,7 @@ namespace NDoc.Core
 			{
 				if (reader.NodeType == XmlNodeType.Element && reader.Name == "property")
 				{
-					string name = reader["name"];
-					bool ValueParsedOK = false;
-
-					PropertyInfo property = GetType().GetProperty(name);
-
-					if (property != null)
-					{
-						string value = reader["value"];
-						object value2 = null;
-						
-						// if the string in the project file is not a valid member
-						// of the enum, or cannot be parsed into the property type
-						// for som reason,we don't want to throw an exception and
-						// ditch all the settings stored later in the file!
-						// save the exception details, and  we will throw a 
-						// single exception at the end..
-						try
-						{
-						if (property.PropertyType.BaseType == typeof(Enum))
-						{
-							value2 = Enum.Parse(property.PropertyType, value);
-								ValueParsedOK = true;
-						}
-						else
-						{
-							value2 = Convert.ChangeType(value, property.PropertyType);
-								ValueParsedOK = true;
-							}
-						}
-						catch(System.ArgumentException)
-						{
-							FailureMessages += String.Format("     Property '{0}' has an invalid value ('{1}') \n", name, value);
-						}
-						catch(System.FormatException)
-						{
-							FailureMessages += String.Format("     Property '{0}' has an invalid value for type {1} ('{2}') \n", name, property.PropertyType.ToString() ,value);
-						}
-						// any other exception will be thrown immediately
-
-						if (property.CanWrite && ValueParsedOK)
-						{
-							property.SetValue(this, value2, null);
-						}
-					}
+					FailureMessages += ReadProperty(reader["name"], reader["value"]);
 				}
 				reader.Read(); // Advance.
 			}
@@ -256,6 +221,88 @@ namespace NDoc.Core
 			_Project = project;
 			if (FailureMessages.Length > 0)
 				throw new DocumenterPropertyFormatException(FailureMessages);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="name"></param>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		protected string ReadProperty(string name, string value)
+		{
+			string FailureMessages="";
+			PropertyInfo property = GetType().GetProperty(name);
+
+			if (property == null)
+			{
+				FailureMessages += HandleUnknownPropertyType(name, value);
+			}
+			else
+			{
+				bool ValueParsedOK = false;
+				object value2 = null;
+						
+				// if the string in the project file is not a valid member
+				// of the enum, or cannot be parsed into the property type
+				// for some reason,we don't want to throw an exception and
+				// ditch all the settings stored later in the file!
+				// save the exception details, and  we will throw a 
+				// single exception at the end..
+				try
+				{
+					if (property.PropertyType.IsEnum)
+					{
+						//parse is now case-insensitive...
+						value2 = Enum.Parse(property.PropertyType, value, true);
+						ValueParsedOK = true;
+					}
+					else
+					{
+						value2 = Convert.ChangeType(value, property.PropertyType);
+						ValueParsedOK = true;
+					}
+				}
+				catch(System.ArgumentException)
+				{
+					FailureMessages += HandleUnknownPropertyValue(property, value);
+				}
+				catch(System.FormatException)
+				{
+					FailureMessages += HandleUnknownPropertyValue(property, value);
+				}
+				// any other exception will be thrown immediately
+
+				if (property.CanWrite && ValueParsedOK)
+				{
+					property.SetValue(this, value2, null);
+				}
+			}
+			return FailureMessages;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="name"></param>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		protected virtual string HandleUnknownPropertyType(string name, string value)
+		{
+			// As a default, we will ignore unknown property types
+			return "";
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="property"></param>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		protected virtual string HandleUnknownPropertyValue(PropertyInfo property, string value)
+		{
+			// we cannot handle this, so return an error message
+			return String.Format("     Property '{0}' has an invalid value for type {1} ('{2}') \n", property.Name, property.PropertyType.ToString() ,value);
 		}
 
 		#region Show Missing Documentation Options
@@ -1105,10 +1152,12 @@ namespace NDoc.Core
 	public enum SdkVersion
 	{
 		/// <summary>The SDK version 1.0.</summary>
-		[Description(".Net Version 1.0")]SDK_v1_0,
+		[Description(".Net Version 1.0")]
+		SDK_v1_0,
 
 		/// <summary>The SDK version 1.1.</summary>
-		[Description(".Net Version 1.1")]SDK_v1_1,
+		[Description(".Net Version 1.1")]
+		SDK_v1_1,
 	}
 
 	/// <summary>
