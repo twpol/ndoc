@@ -32,7 +32,7 @@ namespace NDoc.Core
 	[Serializable]
 	[DefaultProperty("Path")]
 	[TypeConverter(typeof(PathItemBase.TypeConverter))]
-	public class PathItemBase
+	public class PathItemBase 
 	{
 		#region Static Members
 		private static string _basePath;

@@ -27,6 +27,27 @@ using System.IO;
 namespace NDoc.Core
 {
 	/// <summary>
+	/// Event arguments class for events related to an AssemblySlashDoc
+	/// </summary>
+	public class AssemblySlashDocEventArgs : EventArgs
+	{
+		/// <summary>
+		/// The AssemblySlashDoc
+		/// </summary>
+		public readonly AssemblySlashDoc AssemblySlashDoc;
+
+		internal AssemblySlashDocEventArgs( AssemblySlashDoc assemblySlashDoc )
+		{
+			AssemblySlashDoc = assemblySlashDoc;
+		}
+	}
+
+	/// <summary>
+	/// Event handler delegate for AssemblySlashDoc related events
+	/// </summary>
+	public delegate void AssemblySlashDocEventHandler( object sender, AssemblySlashDocEventArgs args );
+
+	/// <summary>
 	/// Represents a collection of assemblies and their associated documentation comment XML files. 
 	/// </summary>
 	[Serializable]
@@ -34,6 +55,13 @@ namespace NDoc.Core
 	{
 		#region collection methods
 		
+		/// <summary>
+		/// Creates an instance of the class
+		/// </summary>
+		public AssemblySlashDocCollection()
+		{
+		}
+
 		/// <summary>
 		/// Adds the specified <see cref="AssemblySlashDoc"/> object to the collection.
 		/// </summary>
@@ -49,22 +77,41 @@ namespace NDoc.Core
 			if (assySlashDoc == null)
 				throw new ArgumentNullException("assySlashDoc");
 
-			if (!Contains(assySlashDoc.Assembly.Path))
+			if ( !Contains( assySlashDoc.Assembly.Path ) )
 				this.List.Add(assySlashDoc);
 		}
-		
-		/// <summary>
-		/// Adds the elements of an <see cref="ICollection"/> to the end of the collection.
-		/// </summary>
-		/// <param name="c">The <see cref="ICollection"/> whose elements should be added to the end of the collection. 
-		/// The collection itself cannot be a <see langword="null"/>.</param>
-		/// <exception cref="ArgumentNullException"><paramref name="c"/> is a <see langword="null"/>.</exception>
-		/// <remarks>
-		/// </remarks>
-		public virtual void AddRange(ICollection c)
-		{
-			base.InnerList.AddRange(c);
 
+		/// <summary>
+		/// Event rasied when the collection is cleared
+		/// </summary>
+		public event EventHandler Cleared;
+
+		/// <summary>
+		/// Raises the <see cref="Cleared"/> event
+		/// </summary>
+		protected override void OnClear()
+		{
+			if ( Cleared != null )
+				Cleared( this, EventArgs.Empty );
+
+			base.OnClear ();
+		}
+		
+
+		/// <summary>
+		/// Event rasied when an item is added to the collection
+		/// </summary>
+		public event AssemblySlashDocEventHandler ItemAdded;
+
+		/// <summary>
+		/// Raises the <see cref="ItemAdded"/> event
+		/// </summary>
+		protected override void OnInsertComplete(int index, object value)
+		{
+			if ( ItemAdded != null )
+				ItemAdded( this, new AssemblySlashDocEventArgs( value as AssemblySlashDoc ) );
+
+			base.OnInsertComplete (index, value);
 		}
 
 		/// <summary>
@@ -81,6 +128,22 @@ namespace NDoc.Core
 				throw new ArgumentNullException("assySlashDoc");
 
 			this.List.Remove(assySlashDoc);
+		}
+
+		/// <summary>
+		/// Event rasied when an item is removed from the collection
+		/// </summary>
+		public event AssemblySlashDocEventHandler ItemRemoved;
+
+		/// <summary>
+		/// Raises the <see cref="ItemRemoved"/> event
+		/// </summary>
+		protected override void OnRemoveComplete(int index, object value)
+		{
+			if ( ItemRemoved != null )
+				ItemRemoved( this, new AssemblySlashDocEventArgs( value as AssemblySlashDoc ) );
+
+			base.OnRemoveComplete (index, value);
 		}
 		
 		/// <summary>
@@ -101,6 +164,7 @@ namespace NDoc.Core
 			{
 				if (value == null)
 					throw new ArgumentNullException("set value");
+
 				this.List[index] = value;
 			}
 		}
@@ -169,17 +233,16 @@ namespace NDoc.Core
 				{
 					if (reader.GetAttribute("location") == null) 
 					{
-						throw new DocumenterException("\"location\" attribute is"
-							+ " required for <assembly> element in project file.");
+						throw new DocumenterException("\"location\" attribute is" + " required for <assembly> element in project file.");
 					}
 					string location = reader.GetAttribute("location").Trim();
 					if (location.Length == 0) 
 					{
-						throw new DocumenterException("\"location\" attribute of"
-							+ " <assembly> element cannot be empty in project file.");
+						throw new DocumenterException("\"location\" attribute of" + " <assembly> element cannot be empty in project file.");
 					}
 					string documentation = reader.GetAttribute("documentation");
-					if (documentation==null) documentation=String.Empty;
+					if ( documentation==null ) 
+						documentation=String.Empty;
 					AssemblySlashDoc assemblySlashDoc = new AssemblySlashDoc(location, documentation);
 					Add(assemblySlashDoc);
 				}

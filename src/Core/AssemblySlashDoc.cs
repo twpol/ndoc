@@ -27,7 +27,7 @@ namespace NDoc.Core
 	/// See <see href="http://www.ecma-international.org/publications/standards/Ecma-334.htm">here</see> for further details.
 	/// </remarks>
 	[Serializable]
-	public class AssemblySlashDoc
+	public class AssemblySlashDoc : ICloneable
 	{
 		private FilePath assembly;
 		private FilePath slashDoc;
@@ -66,7 +66,6 @@ namespace NDoc.Core
 			get { return assembly; }
 			set { assembly = value; }
 		} 
-		void ResetAssembly() { assembly = new FilePath(); }
 
 		/// <summary>
 		/// Gets or sets the path to a documentation comment XML file.
@@ -80,6 +79,18 @@ namespace NDoc.Core
 			get { return slashDoc; }
 			set { slashDoc = value; }
 		} 
-		void ResetSlashDoc() { slashDoc = new FilePath(); }
+
+		/// <summary>
+		/// <see cref="System.ICloneable"/>
+		/// </summary>
+		/// <returns>cloned object</returns>
+		public object Clone()
+		{
+			AssemblySlashDoc ret = new AssemblySlashDoc();
+			ret.assembly = new FilePath( this.assembly );
+			ret.slashDoc = new FilePath( this.slashDoc );
+
+			return ret;
+		}
 	}
 }

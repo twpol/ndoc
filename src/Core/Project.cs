@@ -36,6 +36,11 @@ namespace NDoc.Core
 			_referencePaths = new ReferencePathCollection();
 			_namespaces = new Namespaces();
 			_namespaces.ContentsChanged += new EventHandler(ContentsChanged);
+
+			_AssemblySlashDocs = new AssemblySlashDocCollection();
+			_AssemblySlashDocs.Cleared += new EventHandler(_AssemblySlashDocs_Cleared);
+			_AssemblySlashDocs.ItemAdded += new AssemblySlashDocEventHandler(_AssemblySlashDocs_ItemAdded);
+			_AssemblySlashDocs.ItemRemoved += new AssemblySlashDocEventHandler(_AssemblySlashDocs_ItemRemoved);
 		}
 
 		private string _projectFile;
@@ -113,7 +118,7 @@ namespace NDoc.Core
 
 		#region AssemblySlashDocs
 
-		private AssemblySlashDocCollection _AssemblySlashDocs = new AssemblySlashDocCollection();
+		private AssemblySlashDocCollection _AssemblySlashDocs;
 
 		/// <summary>
 		/// Gets the collection of assemblies and documentation comment XML files in the project.
@@ -632,7 +637,20 @@ namespace NDoc.Core
 			ProjectFile = "";
 		}
 
+		private void _AssemblySlashDocs_Cleared(object sender, EventArgs e)
+		{
+			IsDirty = true;
+		}
 
+		private void _AssemblySlashDocs_ItemAdded(object sender, AssemblySlashDocEventArgs args)
+		{
+			IsDirty = true;
+		}
+
+		private void _AssemblySlashDocs_ItemRemoved(object sender, AssemblySlashDocEventArgs args)
+		{
+			IsDirty = true;
+		}
 	}
 
 	/// <summary>Handles Project <see cref="Project.Modified"/> events.</summary>
