@@ -1024,7 +1024,7 @@ namespace NDoc.Documenter.LinearHtml
 			// foreach Type (class, delegate, interface)...
 			do 
 			{
-				MakeHtmlForType(nav, namespaceName);
+				if (TypeMatchesIncludeRegexp(nav)) MakeHtmlForType(nav, namespaceName);
 			} while(nav.MoveToNext());
 
 			nav.MoveToParent();
@@ -1059,15 +1059,48 @@ namespace NDoc.Documenter.LinearHtml
 						string typeName = (string)entry.Key;
 						XPathNavigator n = (XPathNavigator)entry.Value;
 
-						//string typeName = n.GetAttribute("name", string.Empty);
-						XPathNavigator summaryNav = GetDescendantNodeWithName(n, "summary");
-						string summary = string.Empty;
-						if (summaryNav != null) summary = summaryNav.Value;
-						AddTableEntryRaw(xtw, this.TypeLinkReferenceWrap(typeName), summary);
+						if (TypeMatchesIncludeRegexp(n))
+						{
+							//string typeName = n.GetAttribute("name", string.Empty);
+							XPathNavigator summaryNav = GetDescendantNodeWithName(n, "summary");
+							string summary = string.Empty;
+							if (summaryNav != null) summary = summaryNav.Value;
+							AddTableEntryRaw(xtw, this.TypeLinkReferenceWrap(typeName), summary);
+						}
 					} 
 					this.EndTable(xtw);
 				}
 			}
+		}
+
+		/// <summary>
+		/// This checks whether the Type represented by the specified node
+		/// matches the include type regexp.
+		/// </summary>
+		/// <param name="nav">The XPathNavigator pointing to the type node.</param>
+		/// <returns>bool - true for should be included, false for should be
+		/// excluded.</returns>
+		bool TypeMatchesIncludeRegexp(XPathNavigator nav)
+		{
+			// skip this namespace based on regex
+			if ((MyConfig.TypeIncludeRegexp != null) 
+				&& (MyConfig.TypeIncludeRegexp.Length > 0))
+			{
+				string nodeName = nav.GetAttribute("name", "");
+				Regex typeIncludeRegex = new Regex(MyConfig.TypeIncludeRegexp);
+
+				if (typeIncludeRegex.IsMatch(nodeName))
+				{
+					Console.WriteLine("Including node {0} by regexp", nodeName);
+					return(true);
+				}
+				else
+				{
+					Console.WriteLine("Excluding node {0} by regexp", nodeName);
+					return(false);
+				}
+			}
+			else return(true);
 		}
 
 		#endregion

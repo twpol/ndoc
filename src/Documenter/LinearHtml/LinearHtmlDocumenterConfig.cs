@@ -43,6 +43,7 @@ namespace NDoc.Documenter.LinearHtml
 			_SortTOCByNamespace = true;
 
 			_NamespaceExcludeRegexp = string.Empty;
+			_TypeIncludeRegexp = string.Empty;
 			_MethodParametersInTable = false;
 			_IncludeTypeMemberDetails = false;
 		}
@@ -113,6 +114,25 @@ namespace NDoc.Documenter.LinearHtml
 			}
 		}
 
+
+		private string _TypeIncludeRegexp;
+
+		/// <summary>Gets or sets the TypeIncludeRegexp property.</summary>
+		[
+		Category("Documentation Main Settings"),
+		Description("A C# regular expression to include types.  If this is specified,"
+			+ " only types which match will be included in the output."),
+		]
+		public string TypeIncludeRegexp
+		{
+			get { return _TypeIncludeRegexp; }
+
+			set
+			{
+				_TypeIncludeRegexp = value;
+				SetDirty();
+			}
+		}
 
 		private string _NamespaceExcludeRegexp;
 
