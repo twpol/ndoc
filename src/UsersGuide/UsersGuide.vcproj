@@ -260,6 +260,9 @@
 				<File
 					RelativePath=".\Content\script\ndoc.js">
 				</File>
+				<File
+					RelativePath=".\Content\script\ndoc_tags.js">
+				</File>
 			</Filter>
 		</Filter>
 		<File
