@@ -38,6 +38,7 @@
 					<xsl:call-template name="parameter-section" />
 					<xsl:call-template name="value-section" />
 					<xsl:call-template name="remarks-section" />
+					<xsl:call-template name="events-section" />
 					<xsl:call-template name="exceptions-section" />
 					<xsl:call-template name="example-section" />
 					<xsl:call-template name="seealso-section">

@@ -97,6 +97,19 @@ namespace	NDoc.Test
 			StaticEvent(this,	new	EventArgs());
 		}
 
+    /// <summary>
+    /// Raises some events.
+    /// </summary>
+    /// <event cref="Class.Event">
+    /// Raised when something occurs.
+    /// </event>
+    /// <event cref="Class.ProtectedEvent">
+    /// Raised when something else occurs.
+    /// </event>
+    public void RaisesSomeEvents()
+    {
+    }
+
 		///	<summary>This	event	is protected.</summary>
 		protected	event	Handler	ProtectedEvent;
 

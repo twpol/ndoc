@@ -407,6 +407,38 @@
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
+	<xsl:template name="events-section">
+		<xsl:if test="documentation/event">
+			<h4>Events</h4>
+			<div class="table">
+				<table cellspacing="0">
+					<tr valign="top">
+						<th width="50%">Event Type</th>
+						<th width="50%">Reason</th>
+					</tr>
+					<xsl:for-each select="documentation/event">
+						<xsl:sort select="@name" />
+						<tr valign="top">
+							<td width="50%">
+								<xsl:variable name="type-filename">
+									<xsl:call-template name="get-filename-for-cref">
+										<xsl:with-param name="cref" select="@cref" />
+									</xsl:call-template>
+								</xsl:variable>
+								<a href="{$type-filename}">
+									<xsl:value-of select="substring-after(@cref, 'F:')" />
+								</a>
+							</td>
+							<td width="50%">
+								<xsl:apply-templates select="./node()" mode="slashdoc" />
+							</td>
+						</tr>
+					</xsl:for-each>
+				</table>
+			</div>
+		</xsl:if>
+	</xsl:template>
+	<!-- -->
 	<xsl:template name="exceptions-section">
 		<xsl:if test="documentation/exception">
 			<h4>Exceptions</h4>
