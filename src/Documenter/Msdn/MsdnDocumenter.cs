@@ -62,6 +62,8 @@ namespace NDoc.Documenter.Msdn
 		XslTransform xsltProperty;
 		XslTransform xsltField;
 
+		ArrayList documentedNamespaces;
+
 		/// <summary>Initializes a new instance of the MsdnHelp class.</summary>
 		public MsdnDocumenter() : base("MSDN")
 		{
@@ -215,6 +217,7 @@ namespace NDoc.Documenter.Msdn
 
 				try
 				{
+					documentedNamespaces = new ArrayList();
 					MakeHtmlForAssemblies();
 				}
 				finally
@@ -417,7 +420,6 @@ namespace NDoc.Documenter.Msdn
 			int[] indexes = SortNodesByAttribute(namespaceNodes, "name");
 
 			int nNodes = namespaceNodes.Count;
-			string prevNamespace = string.Empty;
 
 			for (int i = 0; i < nNodes; i++)
 			{
@@ -431,12 +433,12 @@ namespace NDoc.Documenter.Msdn
 
 					// Skip duplicate namespaces.
 
-					if (namespaceName == prevNamespace)
+					if (documentedNamespaces.Contains(namespaceName))
 					{
 						continue;
 					}
 
-					prevNamespace = namespaceName;
+					documentedNamespaces.Add(namespaceName);
 
 					string fileName = GetFilenameForNamespace(namespaceNode);
 					htmlHelp.AddFileToContents(namespaceName, fileName);
