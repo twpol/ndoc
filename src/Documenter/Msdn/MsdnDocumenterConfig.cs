@@ -188,7 +188,7 @@ namespace NDoc.Documenter.Msdn
 		/// <remarks>When SplitTOCs is true, this represents the default table-of-contents to use.</remarks>
 		[Category("HTML Help Options")]
 		[Description("When SplitTOCs is true, this represents the default table-of-contents to use.")]
-		public string DefaultTOC
+		private string DefaultTOC
 		{
 			get { return _DefaultTOC; }
 
