@@ -105,7 +105,7 @@ namespace NDoc.Test
 			get { return 0; }
 		}
 
-		/// <summary>This method is declared in the Base class.</summary>
+		/// <summary>This method is declared in the Derived class.</summary>
 		public void DerivedMethod() { }
 
 		/// <summary>This method is declared in the Derived class with the "new" keyword.</summary>
