@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Library"
                 PreBuildEvent = ""
-                PostBuildEvent = "copy $(TargetName).* $(SolutionDir)Gui\bin\$(ConfigurationName)\&#xd;&#xa;copy $(TargetName).* $(SolutionDir)Console\bin\$(ConfigurationName)\&#xd;&#xa;"
+                PostBuildEvent = "copy $(TargetName).* $(SolutionDir)src\Gui\bin\$(ConfigurationName)\&#xd;&#xa;copy $(TargetName).* $(SolutionDir)src\Console\bin\$(ConfigurationName)\&#xd;&#xa;"
                 RootNamespace = "NDoc.Documenter.LinearHtml"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
