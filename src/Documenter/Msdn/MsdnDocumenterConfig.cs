@@ -175,6 +175,19 @@ namespace NDoc.Documenter.Msdn
 					return htmlHelpCompilerFilename;
 				}
 
+				// we still can't find the compiler, see if a location is stored in the machine settings file
+				Settings settings = new Settings( Settings.MachineSettingsFile );
+				string path = settings.GetSetting( "compilers", "htmlHelpWorkshopLocation", "" );
+
+				if ( path.Length > 0 )
+				{
+					htmlHelpCompilerFilename = Path.Combine(path, "hhc.exe");
+					if (File.Exists(htmlHelpCompilerFilename))
+					{
+						return htmlHelpCompilerFilename;
+					}
+				}				
+	
 				//still not finding the compiler, give up
 				throw new DocumenterException(
 					"Unable to find the HTML Help Compiler. Please verify that the HTML Help Workshop has been installed.");
