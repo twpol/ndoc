@@ -239,7 +239,7 @@ namespace NDoc.Core
 
 					currentAssemblyFilename = assemblySlashDoc.AssemblyFilename;
 					string path = Path.GetFullPath(currentAssemblyFilename);
-					currentAssembly = Assembly.LoadFrom(path);
+					currentAssembly = LoadAssembly(path);
 
 					currentSlashDoc = new XmlDocument();
 					currentSlashDoc.Load(assemblySlashDoc.SlashDocFilename);

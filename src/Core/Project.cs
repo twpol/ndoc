@@ -196,7 +196,7 @@ namespace NDoc.Core
 		// and add them to the project if new
 		private void AddNamespacesFromAssembly(string assemblyFile)
 		{
-			Assembly a = Assembly.LoadFrom(assemblyFile);
+			Assembly a = BaseDocumenter.LoadAssembly(assemblyFile);
 			foreach (Type t in a.GetTypes())
 			{
 				string ns = t.Namespace;
@@ -229,7 +229,7 @@ namespace NDoc.Core
 
 				try
 				{
-					assembly = Assembly.LoadFrom(fileName);
+					assembly = BaseDocumenter.LoadAssembly(fileName);
 				}
 				catch (BadImageFormatException)
 				{

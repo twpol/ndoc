@@ -142,7 +142,7 @@ namespace NDoc.Core {
 			string fn = Path.Combine(path, fileName);
 			try {
 				if (true == File.Exists(fn)) {
-					assembly = Assembly.LoadFrom(fn);
+					assembly = BaseDocumenter.LoadAssembly(fn);
 					if ("" != fullName && fullName != assembly.FullName) {
 //						assembly = null;
 						Debug.WriteLine(
