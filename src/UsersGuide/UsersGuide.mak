@@ -6,6 +6,10 @@ HHC= "C:\Program Files\HTML Help Workshop\hhc.exe"
 !ERROR Could not find the html help compiler
 !ENDIF
 
+!IF !EXIST("..\..\doc\help\")
+	mkdir "..\..\doc\help\"
+!ENDIF
+
 
 .SUFFIXES :
 .SUFFIXES : .chm .hhp .htm .html .css .jpg .png .gif .js
@@ -16,8 +20,11 @@ HHC= "C:\Program Files\HTML Help Workshop\hhc.exe"
 .IGNORE :
 NDocUsersGuide.chm: UsersGuide.hhp
 	$(HHC) UsersGuide.hhp
-	copy NDocUsersGuide.chm ..\Gui\bin\$(CONFIG) /y
-
+# copy user guide to doc/help directory where setup generation will
+# pick it up
+	copy NDocUsersGuide.chm ..\..\doc\help\ /y
+# copy user guide to gui bin directory
+	copy NDocUsersGuide.chm ..\Gui\bin\$(CONFIG) /y	
 
 # these are the various file types that the chm is dependent on
 IMAGES = {content\images}*.gif {content\images}*.png {content\images}*.jpg
