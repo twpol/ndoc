@@ -33,10 +33,10 @@
 						<xsl:text>.</xsl:text>
 						<xsl:value-of select="@name" />
 					</xsl:if>
-					<xsl:text>&#160;</xsl:text>
+					<xsl:text>&#32;</xsl:text>
 					<xsl:value-of select="$childType" />
-					<xsl:text>&#160;</xsl:text>
 					<xsl:if test="count(parent::node()/*[@name=$memberName]) &gt; 1">
+						<xsl:text>&#32;</xsl:text>
 						<xsl:call-template name="get-param-list" />
 					</xsl:if>
 				</xsl:with-param>

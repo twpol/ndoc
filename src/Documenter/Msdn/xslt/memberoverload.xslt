@@ -37,7 +37,7 @@
 							<xsl:value-of select="../@name" />
 						</xsl:otherwise>
 					</xsl:choose>
-					<xsl:text>&#160;</xsl:text>
+					<xsl:text>&#32;</xsl:text>
 					<xsl:value-of select="$childType" />
 				</xsl:with-param>
 			</xsl:call-template>
