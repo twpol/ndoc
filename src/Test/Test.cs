@@ -2024,4 +2024,38 @@ namespace NDoc.Test.Attributes
 		public bool dummy = true;
 	}
 
+	/// <summary>
+	/// Demonstrates overloads with different access.
+	/// </summary>
+	public class OverloadsWithDifferentAccess
+	{
+		/// <summary>
+		/// Public method with int param.
+		/// </summary>
+		/// <param name="index">Some int value</param>
+		public void SomeMethod(int index)
+		{
+		}
+		/// <summary>
+		/// Protected method with string param.
+		/// </summary>
+		/// <param name="name">Some string value</param>
+		protected void SomeMethod(string name)
+		{
+		}
+		/// <summary>
+		/// Public static method with double param.
+		/// </summary>
+		/// <param name="index">Some double value</param>
+		public static void SomeMethod(double index)
+		{
+		}
+		/// <summary>
+		/// Protected static method with Type param.
+		/// </summary>
+		/// <param name="name">Some Type value</param>
+		protected static void SomeMethod(Type name)
+		{
+		}
+	}
 }
