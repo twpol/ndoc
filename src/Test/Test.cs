@@ -27,6 +27,9 @@ namespace NDoc.Test
 		/// parameter. This is the first integer parameter.</param>
 		/// <param name="i2">This is the second integer parameter.</param>
 		/// <param name="i3">This is the third integer parameter.</param>
+		/// <remarks>
+		/// Yes, the <paramref name="i3"/> parameter is of type int.
+		/// </remarks>
 		public Class(int i1, int i2, int i3) { }
 
 		/// <summary>Holds an <c>int</c> value.</summary>
@@ -873,12 +876,33 @@ namespace NDoc.Test
 	}
 
 	/// <summary>This class shows how permission elements are used.</summary>
+	/// <permission cref="System.Security.PermissionSet">to inherit from this class.</permission>
 	public class Permissions
 	{
-		/// <permission cref="System.Security.PermissionSet">Everyone can access this method.</permission>
-		public void PermissionsRequired()
+		/// <summary>This constructor has permissions.</summary>
+		/// <permission cref="System.Security.PermissionSet">to instanciate the <see cref="Permissions"/> class.</permission>
+		public Permissions()
 		{
 		}
+		/// <summary>This field has permissions.</summary>
+		/// <permission cref="System.Security.PermissionSet">to access this field.</permission>
+		public string RestrictedField;
+
+		/// <summary>This property has permissions.</summary>
+		/// <permission cref="System.Security.PermissionSet">to access this property.</permission>
+		public string RestrictedProperty
+		{
+			get { return ""; }
+		}
+		/// <summary>This method has permissions.</summary>
+		/// <permission cref="System.Security.PermissionSet">to execute this method.</permission>
+		public void RestrictedMethod()
+		{
+			RestrictedEvent(this, new EventArgs());
+		}
+		/// <summary>This event has permissions.</summary>
+		/// <permission cref="System.Security.PermissionSet">to register with this event.</permission>
+		public event Handler RestrictedEvent;
 	}
 
 	/// <summary>This is a sealed class.</summary>
