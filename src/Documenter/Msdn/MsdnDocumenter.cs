@@ -150,6 +150,13 @@ namespace NDoc.Documenter.Msdn
 				xmlDocumentation = new XmlDocument();
 				xmlDocumentation.LoadXml(Document.OuterXml);
 
+				XmlNodeList typeNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace/*[name()!='documentation']");
+
+				if (typeNodes.Count == 0)
+				{
+					throw new DocumenterException("There are no documentable types in this project.");
+				}
+
 				XmlNode defaultNamespace =
 					xmlDocumentation.SelectSingleNode("/ndoc/assembly/module/namespace");
 
