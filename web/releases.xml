@@ -14,4 +14,11 @@
 		direct="http://prdownloads.sourceforge.net/ndoc/ndoc-devel-1.0-beta2.zip"
 	/>
 
+	<release
+		name="ndoc-devel-20020123"
+		date="2002-01-23"
+		link="http://sourceforge.net/project/showfiles.php?group_id=36057&amp;release_id=71665"
+		direct="http://prdownloads.sourceforge.net/ndoc/ndoc-devel-20020123.zip"
+	/>
+
 </releases>
