@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	xmlns:NUtil="urn:NDocUtil"
-	xmlns:NHtmlProvider="urn:NDocExternalHtml"
-	exclude-result-prefixes="NUtil NHtmlProvider" >
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<!-- -->
 	<xsl:include href="filenames.xslt" />
 	<xsl:include href="syntax.xslt" />
@@ -631,10 +628,10 @@
 	<!-- get-a-href -->
 	<xsl:template name="get-a-href">
 		<xsl:param name="cref" />
-		<xsl:variable name="href" select="string(NUtil:GetHRef($cref))" />
+		<xsl:variable name="href" />
 		<xsl:choose>
 			<xsl:when test="$href=''">
-				<b><xsl:value-of select="string(NUtil:GetName($cref))" /></b>
+				<b>Dummy</b>
 			</xsl:when>
 			<xsl:otherwise>
 				<a>
@@ -646,7 +643,7 @@
 							<xsl:value-of select="." />
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of select="string(NUtil:GetName($cref))" />
+							Dummy1
 						</xsl:otherwise>
 					</xsl:choose>
 				</a>
@@ -686,7 +683,7 @@
 	<xsl:template name="title-row">
 		<xsl:param name="type-name" />
 		<div id="nsbanner">
-			<xsl:variable name="headerHtml" select="NHtmlProvider:GetHeaderHtml(string($type-name))" />
+			<xsl:variable name="headerHtml" />
 			<xsl:choose>
 				<xsl:when test="$headerHtml=''">
 					<div id="bannerrow1">
@@ -719,7 +716,7 @@
 		<xsl:variable name="assembly-version">
 			<xsl:value-of select="ancestor-or-self::assembly/./@version" />
 		</xsl:variable>
-		<xsl:variable name="footerHtml" select="NHtmlProvider:GetFooterHtml(string($assembly-name), string($assembly-version), string($type-name))" />
+		<xsl:variable name="footerHtml" />
 		<xsl:variable name="copyright-rtf">
 			<xsl:call-template name="copyright-notice" />
 		</xsl:variable>
