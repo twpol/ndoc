@@ -14,7 +14,7 @@ Error log file=_errorlog.txt
 Full-text search=Yes
 Index File=index.HHK
 Language=0x409 English (United States)
-Title=NDoc User's Guide
+Title=NDoc 1.3 User's Guide
 Binary Index=Yes
 Default Font=
 Create CHI file=No
@@ -43,12 +43,12 @@ Content\reference.htm
 Content\settingupyourproject.htm
 Content\support.htm
 Content\tags.htm
+Content\tagsusage.htm
 Content\vsnet.htm
 Content\xml.htm
 Content\css\ndoc.css
 Content\images\logo.PNG
 Content\images\sf.GIF
 Content\script\ndoc.js
-Content\tagsusage.htm
 
 [MERGE FILES]
