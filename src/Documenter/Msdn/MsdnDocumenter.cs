@@ -634,18 +634,15 @@ namespace NDoc.Documenter.Msdn
 
 			indexes = SortNodesByAttribute(propertyNodes, "id");
 
-			if (propertyNodes.Count > 1)
-			{
-				fileName = GetFilenameForProperties(whichType, typeNode);
-				htmlHelp.AddFileToContents("Properties", fileName);
+			fileName = GetFilenameForProperties(whichType, typeNode);
+			htmlHelp.AddFileToContents("Properties", fileName);
 
-				XsltArgumentList arguments = new XsltArgumentList();
-				arguments.AddParam("id", String.Empty, typeID);
-				arguments.AddParam("member", String.Empty, "property");
-				TransformAndWriteResult(xsltIndividualMembers, arguments, fileName);
+			XsltArgumentList arguments = new XsltArgumentList();
+			arguments.AddParam("id", String.Empty, typeID);
+			arguments.AddParam("member", String.Empty, "property");
+			TransformAndWriteResult(xsltIndividualMembers, arguments, fileName);
 
-				htmlHelp.OpenBookInContents();
-			}
+			htmlHelp.OpenBookInContents();
 
 			for (i = 0; i < nNodes; i++)
 			{
@@ -665,7 +662,7 @@ namespace NDoc.Documenter.Msdn
 					fileName = GetFilenameForPropertyOverloads(typeNode, propertyNode);
 					htmlHelp.AddFileToContents(propertyName + " Property", fileName);
 
-					XsltArgumentList arguments = new XsltArgumentList();
+					arguments = new XsltArgumentList();
 					arguments.AddParam("member-id", String.Empty, propertyID);
 					TransformAndWriteResult(xsltMemberOverload, arguments, fileName);
 
@@ -697,38 +694,7 @@ namespace NDoc.Documenter.Msdn
 				}
 			}
 
-			if (propertyNodes.Count > 1)
-			{
-				htmlHelp.CloseBookInContents();
-			}
-		}
-
-		private bool IsMoreThanOneDeclaredMethod(XmlNodeList methodNodes)
-		{
-			bool bMoreThanOne = false;
-
-			if (methodNodes.Count > 2)
-			{
-				XmlNode firstMethodNode = methodNodes[0];
-				XmlNodeList declaredMethodNodes =
-					firstMethodNode.SelectNodes("self::method[not(@declaringType)]|following-sibling::method[not(@declaringType)]");
-
-				int nNodes = declaredMethodNodes.Count;
-
-				for (int i = 1; i < nNodes; i++)
-				{
-					string thisName = (string)declaredMethodNodes[i].Attributes["name"].Value;
-					string previousName = (string)declaredMethodNodes[i - 1].Attributes["name"].Value;
-
-					if (thisName != previousName)
-					{
-						bMoreThanOne = true;
-						break;
-					}
-				}
-			}
-
-			return bMoreThanOne;
+			htmlHelp.CloseBookInContents();
 		}
 
 		private string GetPreviousMethodName(
@@ -810,18 +776,15 @@ namespace NDoc.Documenter.Msdn
 
 			int[] indexes = SortNodesByAttribute(methodNodes, "id");
 
-			if (IsMoreThanOneDeclaredMethod(methodNodes))
-			{
-				fileName = GetFilenameForMethods(whichType, typeNode);
-				htmlHelp.AddFileToContents("Methods", fileName);
+			fileName = GetFilenameForMethods(whichType, typeNode);
+			htmlHelp.AddFileToContents("Methods", fileName);
 
-				XsltArgumentList arguments = new XsltArgumentList();
-				arguments.AddParam("id", String.Empty, typeID);
-				arguments.AddParam("member", String.Empty, "method");
-				TransformAndWriteResult(xsltIndividualMembers, arguments, fileName);
+			XsltArgumentList arguments = new XsltArgumentList();
+			arguments.AddParam("id", String.Empty, typeID);
+			arguments.AddParam("member", String.Empty, "method");
+			TransformAndWriteResult(xsltIndividualMembers, arguments, fileName);
 
-				htmlHelp.OpenBookInContents();
-			}
+			htmlHelp.OpenBookInContents();
 
 			for (int i = 0; i < nNodes; i++)
 			{
@@ -836,7 +799,7 @@ namespace NDoc.Documenter.Msdn
 					fileName = GetFilenameForMethodOverloads(typeNode, methodNode);
 					htmlHelp.AddFileToContents(methodName + " Method", fileName);
 
-					XsltArgumentList arguments = new XsltArgumentList();
+					arguments = new XsltArgumentList();
 					arguments.AddParam("member-id", String.Empty, methodID);
 					TransformAndWriteResult(xsltMemberOverload, arguments, fileName);
 
@@ -870,10 +833,7 @@ namespace NDoc.Documenter.Msdn
 				}
 			}
 
-			if (IsMoreThanOneDeclaredMethod(methodNodes))
-			{
-				htmlHelp.CloseBookInContents();
-			}
+			htmlHelp.CloseBookInContents();
 		}
 
 		private void MakeHtmlForOperators(WhichType whichType, XmlNode typeNode)
