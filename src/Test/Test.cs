@@ -106,6 +106,12 @@ namespace NDoc.Test
 
 		/// <summary>This method is declared in the Base class.</summary>
 		public void Overloaded(int i) { }
+
+		/// <summary>This field is declared in the Base class.</summary>
+		public int BaseField;
+
+		/// <summary>This event is declared in the Base class.</summary>
+		public event Handler BaseEvent;
 	}
 
 	/// <summary>Represents a derived class.</summary>

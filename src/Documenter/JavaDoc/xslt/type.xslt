@@ -48,23 +48,9 @@
 						<xsl:apply-templates select="$type/documentation/remarks" mode="doc" />
 					</p>
 				</xsl:if>
-				<xsl:variable name="constructors" select="$type/constructor" />
-				<xsl:if test="$constructors">
-					<a name="constructor-summary" />
-					<!-- IE doesn't support the border-spacing CSS property so we have to set the cellspacing attribute here. -->
-					<table class="table" cellspacing="0">
-						<thead>
-							<tr>
-								<th colspan="2">Constructor Summary</th>
-							</tr>
-						</thead>
-						<xsl:apply-templates select="$constructors" />
-					</table>
-					<br />
-				</xsl:if>
 				<xsl:variable name="fields" select="$type/field[not(@declaringType)]" />
+				<a name="field-summary" />
 				<xsl:if test="$fields">
-					<a name="field-summary" />
 					<!-- IE doesn't support the border-spacing CSS property so we have to set the cellspacing attribute here. -->
 					<table class="table" cellspacing="0">
 						<thead>
@@ -78,9 +64,31 @@
 					</table>
 					<br />
 				</xsl:if>
+				<xsl:for-each select="$type/descendant::base">
+					<xsl:call-template name="inherited-members">
+						<xsl:with-param name="type" select="$type" />
+						<xsl:with-param name="base-id" select="substring-after(@id, 'T:')" />
+						<xsl:with-param name="type-of-members" select="'Fields'" />
+						<xsl:with-param name="member-element" select="'field'" />
+					</xsl:call-template>
+				</xsl:for-each>
+				<xsl:variable name="constructors" select="$type/constructor" />
+				<a name="constructor-summary" />
+				<xsl:if test="$constructors">
+					<!-- IE doesn't support the border-spacing CSS property so we have to set the cellspacing attribute here. -->
+					<table class="table" cellspacing="0">
+						<thead>
+							<tr>
+								<th colspan="2">Constructor Summary</th>
+							</tr>
+						</thead>
+						<xsl:apply-templates select="$constructors" />
+					</table>
+					<br />
+				</xsl:if>
 				<xsl:variable name="properties" select="$type/property[not(@declaringType)]" />
+				<a name="property-summary" />
 				<xsl:if test="$properties">
-					<a name="property-summary" />
 					<!-- IE doesn't support the border-spacing CSS property so we have to set the cellspacing attribute here. -->
 					<table class="table" cellspacing="0">
 						<thead>
@@ -94,9 +102,17 @@
 					</table>
 					<br />
 				</xsl:if>
+				<xsl:for-each select="$type/descendant::base">
+					<xsl:call-template name="inherited-members">
+						<xsl:with-param name="type" select="$type" />
+						<xsl:with-param name="base-id" select="substring-after(@id, 'T:')" />
+						<xsl:with-param name="type-of-members" select="'Properties'" />
+						<xsl:with-param name="member-element" select="'property'" />
+					</xsl:call-template>
+				</xsl:for-each>
 				<xsl:variable name="methods" select="$type/method[not(@declaringType)]" />
+				<a name="method-summary" />
 				<xsl:if test="$methods">
-					<a name="method-summary" />
 					<!-- IE doesn't support the border-spacing CSS property so we have to set the cellspacing attribute here. -->
 					<table class="table" cellspacing="0">
 						<thead>
@@ -114,15 +130,19 @@
 					<xsl:call-template name="inherited-members">
 						<xsl:with-param name="type" select="$type" />
 						<xsl:with-param name="base-id" select="substring-after(@id, 'T:')" />
+						<xsl:with-param name="type-of-members" select="'Methods'" />
+						<xsl:with-param name="member-element" select="'method'" />
 					</xsl:call-template>
 				</xsl:for-each>
 				<xsl:call-template name="inherited-members">
 					<xsl:with-param name="type" select="$type" />
 					<xsl:with-param name="base-id" select="'System.Object'" />
+					<xsl:with-param name="type-of-members" select="'Methods'" />
+					<xsl:with-param name="member-element" select="'method'" />
 				</xsl:call-template>
 				<xsl:variable name="events" select="$type/event[not(@declaringType)]" />
+				<a name="event-summary" />
 				<xsl:if test="$events">
-					<a name="event-summary" />
 					<!-- IE doesn't support the border-spacing CSS property so we have to set the cellspacing attribute here. -->
 					<table class="table" cellspacing="0">
 						<thead>
@@ -136,6 +156,14 @@
 					</table>
 					<br />
 				</xsl:if>
+				<xsl:for-each select="$type/descendant::base">
+					<xsl:call-template name="inherited-members">
+						<xsl:with-param name="type" select="$type" />
+						<xsl:with-param name="base-id" select="substring-after(@id, 'T:')" />
+						<xsl:with-param name="type-of-members" select="'Events'" />
+						<xsl:with-param name="member-element" select="'event'" />
+					</xsl:call-template>
+				</xsl:for-each>
 				<hr />
 				<xsl:call-template name="output-navigation-bar">
 					<xsl:with-param name="select" select="'Type'" />
@@ -299,22 +327,25 @@
 	<xsl:template name="inherited-members">
 		<xsl:param name="type" />
 		<xsl:param name="base-id" />
-		<xsl:variable name="inherited-methods" select="$type/method[@declaringType=$base-id]" />
-		<xsl:if test="$inherited-methods">
+		<xsl:param name="type-of-members" />
+		<xsl:param name="member-element" />
+		<xsl:variable name="inherited-members" select="$type/*[name()=$member-element and @declaringType=$base-id]" />
+		<xsl:if test="$inherited-members">
 			<!-- IE doesn't support the border-spacing CSS property so we have to set the cellspacing attribute here. -->
 			<table class="subtable" cellspacing="0">
 				<thead>
 					<tr>
 						<th>
-							<xsl:text>Methods inherited from class </xsl:text>
+							<xsl:value-of select="$type-of-members" />
+							<xsl:text> inherited from class </xsl:text>
 							<xsl:value-of select="$base-id" />
 						</th>
 					</tr>
 				</thead>
 				<tr>
 					<td>
-						<xsl:variable name="methods-count" select="count($inherited-methods)" />
-						<xsl:for-each select="$inherited-methods">
+						<xsl:variable name="member-count" select="count($inherited-members)" />
+						<xsl:for-each select="$inherited-members">
 							<xsl:sort select="@name" />
 							<a>
 								<xsl:attribute name="href">
@@ -324,7 +355,7 @@
 								</xsl:attribute>
 								<xsl:value-of select="@name" />
 							</a>
-							<xsl:if test="position() &lt; $methods-count">, </xsl:if>
+							<xsl:if test="position() &lt; $member-count">, </xsl:if>
 						</xsl:for-each>
 					</td>
 				</tr>
