@@ -635,10 +635,7 @@
 				<MSHelp:Attr Name="DevLang" Value="C++"/>
 				<MSHelp:Attr Name="DevLang" Value="JScript"/>
 				<MSHelp:Attr Name="DevLang" Value="VJ#"/>
-				<MSHelp:Attr Name="Technology" Value="WFC"/>
-				<MSHelp:Attr Name="Technology" Value="ManagedC"/>
-				<MSHelp:Attr Name="TechnologyVers" Value="kbWFC"/>
-				<MSHelp:Attr Name="TechnologyVers" Value="kbManagedC"/>
+				<MSHelp:Attr Name="Technology" Value="ManagedCode"/>
 				<MSHelp:Attr Name="Locale" Value="kbEnglish"/>
 				<!-- Microsoft reserves priority of 1 and 2 for framework types -->
 				<MSHelp:Attr Name="HelpPriority" Value="3"/>	
