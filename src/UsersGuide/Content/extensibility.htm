@@ -113,8 +113,10 @@
 							</span><span style="COLOR:red">class</span><span style="COLOR:blue">="green"&gt;</span></span></p>
 					<p class="MsoNormal">
 						<span style="FONT-SIZE:8pt;FONT-FAMILY:'Lucida Console'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							<span style="COLOR:blue">&lt;</span><span style="COLOR:maroon">xsl:value-of</span><span style="COLOR:fuchsia">
-							</span><span style="COLOR:red">select</span><span style="COLOR:blue">="."/&gt;</span></span></p>
+							<span style="COLOR:blue">&lt;</span><span style="COLOR:maroon">xsl:value-of</span></span><span style="COLOR:blue; font-size:8pt; font-family:Lucida Console"> </span>
+						<span style="FONT-SIZE:8pt;FONT-FAMILY:'Lucida Console'"><span style="COLOR:red">select</span><span style="COLOR:blue">="."</span></span><span style="COLOR:fuchsia; font-size:8pt; font-family:Lucida Console">
+							</span>
+						<span style="FONT-SIZE:8pt;FONT-FAMILY:'Lucida Console'"><span style="COLOR:red">mode</span><span style="COLOR:blue">="slashdoc&quot;</span></span><span style="COLOR:blue; font-size:8pt; font-family:Lucida Console">/&gt;</span></p>
 					<p class="MsoNormal">
 						<span style="FONT-SIZE:8pt;FONT-FAMILY:'Lucida Console'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 							<span style="COLOR:blue">&lt;/</span><span style="COLOR:maroon">h1</span><span style="COLOR:blue">&gt;</span></span></p>
@@ -144,6 +146,10 @@
 						which your template will execute. The most common usage is to simply match the 
 						name of your custom tag, but it is also possible to change the behavior of your 
 						tag based on what sort of code artifact it is associated with.</p>
+						<blockquote style="border:solid black 1px;background-color:#ffffee;padding:2px"><b>Note:&nbsp;</b>If you want NDoc to perform standard 
+						processing of tags <i>within</i> your tags (for example, expanding in-line tags such as &lt;see&gt;) you must 
+						include the following within your processing 
+						<blockquote><pre style="font-size:8pt;font-family:Lucida Console, Courier"><font color="#0000FF">&lt;</font><font color="#800000">xsl:apply-templates</font> <font color="#FF0000">select</font><font color="#0000FF">=&quot;.&quot;</font> <font color="#FF0000">mode</font><font color="#0000FF">=&quot;slashdoc&quot;/&gt;</font></pre></blockquote></blockquote>
 					<p>The <b>header-section</b> template allows you to specify additional content in 
 						the <b>&lt;head&gt;</b> of the generated html. This allows stylesheet authors 
 						to define custom css styles or override NDoc's default styles.</p>
