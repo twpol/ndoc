@@ -567,6 +567,7 @@
 					<xsl:apply-templates select="documentation/remarks" mode="doc" />
 				</p>
 				<xsl:call-template name="param-section" />
+				<xsl:call-template name="exception-section" />
 			</dd>
 		</dl>
 	</xsl:template>
@@ -622,6 +623,7 @@
 				</p>
 				<xsl:call-template name="param-section" />
 				<xsl:call-template name="value-section" />
+				<xsl:call-template name="exception-section" />
 			</dd>
 		</dl>
 	</xsl:template>
@@ -688,6 +690,7 @@
 				</p>
 				<xsl:call-template name="param-section" />
 				<xsl:call-template name="returns-section" />
+				<xsl:call-template name="exception-section" />
 			</dd>
 		</dl>
 	</xsl:template>
@@ -761,6 +764,25 @@
 				</dd>
 			</dl>
 		</xsl:if>
+	</xsl:template>
+	<!-- -->
+	<xsl:template name="exception-section">
+		<xsl:if test="documentation/exception">
+			<b>Throws:</b>
+			<dl>
+				<xsl:apply-templates select="documentation/exception" />
+			</dl>
+		</xsl:if>
+	</xsl:template>
+	<!-- -->
+	<xsl:template match="exception">
+		<dd>
+			<code>
+				<xsl:value-of select="substring-after(@cref, 'T:')" />
+			</code>
+			<xsl:text> - </xsl:text>
+			<xsl:apply-templates mode="doc" />
+		</dd>
 	</xsl:template>
 	<!-- -->
 </xsl:transform>
