@@ -148,7 +148,7 @@ namespace NDoc.Core
 				}
 				catch(System.IO.FileLoadException e)
 				{
-					if (e.Message == "Exception from HRESULT: 0x80131019.")
+					if (e.Message.IndexOf("0x80131019")!=-1)
 					{
 						try
 						{
