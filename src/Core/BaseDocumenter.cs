@@ -1231,21 +1231,23 @@ namespace NDoc.Core
             if ((type.Attributes & TypeAttributes.AutoClass) == TypeAttributes.AutoClass)
             {
                 charSet = CharSet.Auto.ToString(CultureInfo.InvariantCulture);
-            } 
-            if ((type.Attributes & TypeAttributes.AnsiClass) == TypeAttributes.AnsiClass)
-            {
-                charSet = CharSet.Ansi.ToString(CultureInfo.InvariantCulture);
-            } 
+            }
+//			//Do not document if default value....
+//			if ((type.Attributes & TypeAttributes.AnsiClass) == TypeAttributes.AnsiClass)
+//			{
+//				charSet = CharSet.Ansi.ToString(CultureInfo.InvariantCulture);
+//			} 
             if ((type.Attributes & TypeAttributes.UnicodeClass) == TypeAttributes.UnicodeClass)
             {
                 charSet = CharSet.Unicode.ToString(CultureInfo.InvariantCulture);
             }
 
             // determine if Value property should be documented
-            if ((type.Attributes & TypeAttributes.AutoLayout) == TypeAttributes.AutoLayout)
-            {
-                layoutKind = LayoutKind.Auto.ToString(CultureInfo.InvariantCulture);
-            } 
+//			//Do not document if default value....
+//			if ((type.Attributes & TypeAttributes.AutoLayout) == TypeAttributes.AutoLayout)
+//			{
+//				layoutKind = LayoutKind.Auto.ToString(CultureInfo.InvariantCulture);
+//			} 
             if ((type.Attributes & TypeAttributes.ExplicitLayout) == TypeAttributes.ExplicitLayout)
             {
                 layoutKind = LayoutKind.Explicit.ToString(CultureInfo.InvariantCulture);
