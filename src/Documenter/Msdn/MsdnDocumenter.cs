@@ -829,7 +829,14 @@ namespace NDoc.Documenter.Msdn
 				string typeID = (string)typeNode.Attributes["id"].Value;
 				string fileName = GetFilenameForOperators(whichType, typeNode);
 
-				htmlHelp.AddFileToContents("Operators", fileName);
+				string title = "Operators";
+
+				if (typeNode.SelectSingleNode("operator[@name = 'op_Explicit' or @name = 'op_Implicit']") != null)
+				{
+					title += " and Type Conversions";
+				}
+
+				htmlHelp.AddFileToContents(title, fileName);
 
 				XsltArgumentList arguments = new XsltArgumentList();
 				arguments.AddParam("id", String.Empty, typeID);
@@ -843,11 +850,12 @@ namespace NDoc.Documenter.Msdn
 				foreach (int index in indexes)
 				{
 					XmlNode operatorNode = operators[index];
-
-					string operatorName = operatorNode.Attributes["name"].Value;
 					string operatorID = operatorNode.Attributes["id"].Value;
+
 					fileName = GetFilenameForOperator(operatorNode);
-					htmlHelp.AddFileToContents(GetOperatorName(operatorName), fileName);
+					htmlHelp.AddFileToContents(
+						GetOperatorName(operatorNode), 
+						fileName);
 
 					arguments = new XsltArgumentList();
 					arguments.AddParam("member-id", String.Empty, operatorID);
@@ -858,8 +866,10 @@ namespace NDoc.Documenter.Msdn
 			}
 		}
 
-		private string GetOperatorName(string name)
+		private string GetOperatorName(XmlNode operatorNode)
 		{
+			string name = operatorNode.Attributes["name"].Value;
+
 			switch (name)
 			{
 				case "op_UnaryPlus":
@@ -910,9 +920,30 @@ namespace NDoc.Documenter.Msdn
 					return "Less Than Or Equal Operator";
 				case "op_GreaterThanOrEqual":
 					return "Greater Than Or Equal Operator";
+				case "op_Explicit":
+					XmlNode parameterNode = operatorNode.SelectSingleNode("parameter");
+					string from = parameterNode.Attributes["type"].Value;
+					string to = operatorNode.Attributes["returnType"].Value;
+					return StripNamespace(from) + " to " + StripNamespace(to) + " Conversion";
+				case "op_Implicit":
+					goto case "op_Explicit";
 				default:
 					return "ERROR";
 			}
+		}
+
+		private string StripNamespace(string name)
+		{
+			string result = name;
+
+			int lastDot = name.LastIndexOf('.');
+
+			if (lastDot != -1)
+			{
+				result = name.Substring(lastDot + 1);
+			}
+
+			return result;
 		}
 
 		private void MakeHtmlForEvents(WhichType whichType, XmlNode typeNode)

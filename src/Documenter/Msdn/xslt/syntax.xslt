@@ -76,22 +76,57 @@
 					<xsl:value-of select="../@name" />
 				</xsl:when>
 				<xsl:otherwise>
-					<a>
-						<xsl:attribute name="href">
-							<xsl:call-template name="get-filename-for-type-name">
-								<xsl:with-param name="type-name" select="@returnType" />
+					<xsl:if test="@name != 'op_Explicit' and @name != 'op_Implicit'">
+						<!-- output the return type. this is duplicated code. -->
+						<a>
+							<xsl:attribute name="href">
+								<xsl:call-template name="get-filename-for-type-name">
+									<xsl:with-param name="type-name" select="@returnType" />
+								</xsl:call-template>
+							</xsl:attribute>
+							<xsl:call-template name="get-datatype">
+								<xsl:with-param name="datatype" select="@returnType" />
 							</xsl:call-template>
-						</xsl:attribute>
-						<xsl:call-template name="get-datatype">
-							<xsl:with-param name="datatype" select="@returnType" />
-						</xsl:call-template>
-					</a>
-					<xsl:text>&#160;</xsl:text>
+						</a>
+						<xsl:text>&#160;</xsl:text>
+					</xsl:if>
 					<xsl:choose>
 						<xsl:when test="local-name()='operator'">
-							<xsl:call-template name="csharp-operator-name">
-								<xsl:with-param name="name" select="@name" />
-							</xsl:call-template>
+							<xsl:choose>
+								<xsl:when test="@name='op_Explicit'">
+									<xsl:text>explicit operator </xsl:text>
+									<!-- output the return type. this is duplicated code. -->
+									<a>
+										<xsl:attribute name="href">
+											<xsl:call-template name="get-filename-for-type-name">
+												<xsl:with-param name="type-name" select="@returnType" />
+											</xsl:call-template>
+										</xsl:attribute>
+										<xsl:call-template name="get-datatype">
+											<xsl:with-param name="datatype" select="@returnType" />
+										</xsl:call-template>
+									</a>
+								</xsl:when>
+								<xsl:when test="@name='op_Implicit'">
+									<xsl:text>implicit operator </xsl:text>
+									<!-- output the return type. this is duplicated code. -->
+									<a>
+										<xsl:attribute name="href">
+											<xsl:call-template name="get-filename-for-type-name">
+												<xsl:with-param name="type-name" select="@returnType" />
+											</xsl:call-template>
+										</xsl:attribute>
+										<xsl:call-template name="get-datatype">
+											<xsl:with-param name="datatype" select="@returnType" />
+										</xsl:call-template>
+									</a>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:call-template name="csharp-operator-name">
+										<xsl:with-param name="name" select="@name" />
+									</xsl:call-template>
+								</xsl:otherwise>
+							</xsl:choose>
 						</xsl:when>
 						<xsl:otherwise>
 							<xsl:value-of select="@name" />

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<!-- -->
 	<xsl:template match="/">
@@ -379,6 +379,8 @@
 									<xsl:when test="local-name()='operator'">
 										<xsl:call-template name="operator-name">
 											<xsl:with-param name="name" select="@name" />
+											<xsl:with-param name="from" select="parameter/@type"/>
+											<xsl:with-param name="to" select="@returnType" />
 										</xsl:call-template>
 									</xsl:when>
 									<xsl:otherwise>
@@ -403,6 +405,8 @@
 									<xsl:when test="local-name()='operator'">
 										<xsl:call-template name="operator-name">
 											<xsl:with-param name="name" select="@name" />
+											<xsl:with-param name="from" select="parameter/@type"/>
+											<xsl:with-param name="to" select="@returnType" />
 										</xsl:call-template>
 									</xsl:when>
 									<xsl:otherwise>

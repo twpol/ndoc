@@ -586,6 +586,8 @@
 	<!-- -->
 	<xsl:template name="operator-name">
 		<xsl:param name="name" />
+		<xsl:param name="from" />
+		<xsl:param name="to" />
 		<xsl:choose>
 			<xsl:when test="$name='op_UnaryPlus'">Unary Plus Operator</xsl:when>
 			<xsl:when test="$name='op_UnaryNegation'">Unary Negation Operator</xsl:when>
@@ -611,6 +613,12 @@
 			<xsl:when test="$name='op_GreaterThan'">Greater Than Operator</xsl:when>
 			<xsl:when test="$name='op_LessThanOrEqual'">Less Than Or Equal Operator</xsl:when>
 			<xsl:when test="$name='op_GreaterThanOrEqual'">Greater Than Or Equal Operator</xsl:when>
+			<xsl:when test="$name='op_Implicit' or $name='op_Explicit'">
+				<xsl:value-of select="$from" />
+				<xsl:text> to </xsl:text>
+				<xsl:value-of select="$to" />
+				<xsl:text> Conversion</xsl:text>
+			</xsl:when>
 			<xsl:otherwise>ERROR</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
