@@ -10,6 +10,8 @@
         <call target="release" />
         <!-- compile current build configuration for all supported frameworks -->
         <call target="compile-build" />
+	<!-- build SDK doc -->
+	<call target="sdkdoc" />
         <!-- build user guide -->
         <call target="build-userguide" />
         <!-- build setup -->
@@ -62,7 +64,7 @@
     <target name="build-userguide">
         <exec program="devenv.com">
             <arg file="src/UsersGuide/UsersGuide.vcproj" />
-            <arg value="/build" />
+            <arg value="/rebuild" />
             <arg value="release" />
         </exec>
         <echo message="NDoc ${project.version} user guide created at '${path::get-full-path('src/UsersGuide/NDocUsersGuide.chm')}'."
@@ -74,7 +76,7 @@
     <target name="build-setup">
         <exec program="devenv.com">
             <arg file="src/Setup/Setup.vdproj" />
-            <arg value="/build" />
+            <arg value="/rebuild" />
             <arg value="release" />
         </exec>
         <echo message="NDoc ${project.version} setup package created at '${path::get-full-path('src/Setup/Release/NDoc.msi')}'."
