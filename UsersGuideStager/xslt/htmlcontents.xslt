@@ -42,7 +42,8 @@
 			</xsl:choose>
 			
 			<a>
-				<xsl:attribute name="href"><xsl:value-of select="./param[@name='local']/@value"/></xsl:attribute>
+				<!-- replace the back slashes that the CHM editor uses with forwards slashes -->
+				<xsl:attribute name="href"><xsl:value-of select="translate( ./param[@name='local']/@value, '\', '/' )"/></xsl:attribute>
 				<xsl:attribute name="target">main</xsl:attribute>
 				<xsl:attribute name="class">treeUnselected</xsl:attribute>
 				<xsl:attribute name="onclick">clickAnchor(this)</xsl:attribute>
