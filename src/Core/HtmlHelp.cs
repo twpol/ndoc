@@ -377,10 +377,11 @@ namespace NDoc.Core
 					throw new DocumenterException(msg, e);
 				}
 
-				if (!helpCompileProcess.WaitForExit(600000))
-				{
-					throw new DocumenterException("Compile did not complete after 10 minutes and was aborted");
-				}
+				helpCompileProcess.WaitForExit();
+//				if (!helpCompileProcess.WaitForExit(600000))
+//				{
+//					throw new DocumenterException("Compile did not complete after 10 minutes and was aborted");
+//				}
 
 				// Errors return 0 (warnings returns 1 - don't know about complete success)
 				if (helpCompileProcess.ExitCode == 0)
