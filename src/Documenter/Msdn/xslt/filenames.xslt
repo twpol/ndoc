@@ -252,7 +252,17 @@
         <xsl:value-of select="concat(translate(substring-after($cref, 'E:'), '[,]', ''), $overload, '.html')" />
       </xsl:when>
       <xsl:when test="starts-with($cref, 'F:')">
-        <xsl:value-of select="concat(translate(substring-after($cref, 'F:'), '[,]', ''), $overload, '.html')" />
+		<xsl:variable name="enum" select="/ndoc/assembly/module/namespace//enumeration[field/@id = $cref]" />
+		<xsl:choose>
+			<xsl:when test="$enum">
+				<xsl:call-template name="get-filename-for-type-name">
+					<xsl:with-param name="type-name" select="substring-after($enum/@id, 'T:')" />
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="concat(translate(substring-after($cref, 'F:'), '[,]', ''), $overload, '.html')" />
+			</xsl:otherwise>
+		</xsl:choose>
       </xsl:when>
       <xsl:when test="starts-with($cref, 'P:')">
         <xsl:choose>
