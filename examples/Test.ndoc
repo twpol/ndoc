@@ -1,7 +1,6 @@
 <project>
     <assemblies>
-        <assembly location=".\src\Test\bin\Debug\NDoc.Test.dll" documentation=".\src\Test\bin\Debug\NDoc.Test.xml" />
-        <assembly location=".\src\VisualStudio\bin\Debug\NDoc.VisualStudio.dll" documentation=".\src\VisualStudio\bin\Debug\NDoc.VisualStudio.xml" />
+        <assembly location="..\src\Test\bin\Debug\NDoc.Test.dll" documentation="..\src\Test\bin\Debug\NDoc.Test.xml" />
     </assemblies>
     <documenters>
         <documenter name="JavaDoc">
@@ -16,15 +15,16 @@
             <property name="DocumentProtected" value="True" />
             <property name="DocumentPrivates" value="False" />
             <property name="DocumentEmptyNamespaces" value="False" />
+            <property name="IncludeAssemblyVersion" value="False" />
         </documenter>
         <documenter name="MSDN">
-            <property name="OutputDirectory" value=".\docs\Test SplitTOC\MSDN\" />
+            <property name="OutputDirectory" value=".\docs\Test\MSDN\" />
             <property name="HtmlHelpName" value="NDoc.Test" />
             <property name="HtmlHelpCompilerFilename" value="C:\Program Files\HTML Help Workshop\hhc.exe" />
             <property name="IncludeFavorites" value="False" />
             <property name="Title" value="An NDoc Documented Class Library" />
-            <property name="SplitTOCs" value="True" />
-            <property name="DefaulTOC" value="NDoc.VisualStudio" />
+            <property name="SplitTOCs" value="False" />
+            <property name="DefaulTOC" value="" />
             <property name="ShowMissingSummaries" value="True" />
             <property name="ShowMissingRemarks" value="True" />
             <property name="ShowMissingParams" value="True" />
@@ -33,7 +33,8 @@
             <property name="DocumentInternals" value="False" />
             <property name="DocumentProtected" value="True" />
             <property name="DocumentPrivates" value="False" />
-            <property name="DocumentEmptyNamespaces" value="True" />
+            <property name="DocumentEmptyNamespaces" value="False" />
+            <property name="IncludeAssemblyVersion" value="True" />
         </documenter>
         <documenter name="XML">
             <property name="OutputFile" value=".\docs\Test\Test.xml" />
@@ -46,6 +47,7 @@
             <property name="DocumentProtected" value="True" />
             <property name="DocumentPrivates" value="False" />
             <property name="DocumentEmptyNamespaces" value="False" />
+            <property name="IncludeAssemblyVersion" value="False" />
         </documenter>
     </documenters>
 </project>
