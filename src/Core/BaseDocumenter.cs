@@ -160,11 +160,11 @@ namespace NDoc.Core
 
 			AssemblyResolver assemblyResolver = null;
 
-			string baseDirectory = MyConfig.BaseDirectory;
+			string referencesPath = MyConfig.ReferencesPath;
 
-			if (string.Empty != baseDirectory)
+			if (string.Empty != referencesPath)
 			{
-				assemblyResolver = new AssemblyResolver(baseDirectory);
+				assemblyResolver = new AssemblyResolver(referencesPath);
 				assemblyResolver.Install();
 			}
 

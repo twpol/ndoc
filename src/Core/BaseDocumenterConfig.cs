@@ -390,26 +390,26 @@ namespace	NDoc.Core
 			}
 		}
 
-// vvvv WB020102: add Configuration for AssemblyResolver
-		string _BaseDirectory;
+
+		string _ReferencesPath;
 
 		///	<summary>Gets	or sets	the	base directory used to resolve directory and assembly references.</summary>
 		[
-		Category("Extra Information"),
-		Description("The base directory used to resolve path specifications and assembly references. The search for assemblies includes this directory and all subdirectories."),
+		Category("Documentation Main Settings"),
+		Description("The directory used to resolve path specifications and assembly references. The search for assemblies includes this directory and all subdirectories."),
 		Editor(typeof(System.Windows.Forms.Design.FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor)),
 		]
-		public string	BaseDirectory
+		public string	ReferencesPath
 		{
-			get	{	return _BaseDirectory; }
+			get	{	return _ReferencesPath; }
 
 			set	
 			{	
-				_BaseDirectory = value;	
+				_ReferencesPath = value;	
 				SetDirty();
 			}
 		}
-// ^^^^ WB020102
+
 
 	}
 }
