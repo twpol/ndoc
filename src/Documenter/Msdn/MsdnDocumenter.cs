@@ -45,7 +45,7 @@ namespace NDoc.Documenter.Msdn
 
 		private HtmlHelp htmlHelp;
 
-		private string resourceDirectory;
+		//private string resourceDirectory;
 
 		private XmlDocument xmlDocumentation;
         private XPathDocument xpathDocument;
@@ -166,27 +166,27 @@ namespace NDoc.Documenter.Msdn
 			{
 				OnDocBuildingStep(0, "Initializing...");
 
+				// the workspace class is responsible for maintaining the outputdirectory
+				// and compile intermediate locations
+				workspace = new MsdnWorkspace( Path.GetFullPath( MyConfig.OutputDirectory ) );
+				workspace.Clean();
+				workspace.Prepare();
 
 				// Define this when you want to edit the stylesheets
 				// without having to shutdown the application to rebuild.
 #if NO_RESOURCES
-				resourceDirectory = Path.GetFullPath(Path.Combine(
-					System.Windows.Forms.Application.StartupPath, @"..\..\..\Documenter\Msdn\"));
+				// copy all of the xslt source files into the workspace
+				DirectoryInfo xsltSource = new DirectoryInfo( Path.GetFullPath(Path.Combine(
+					System.Windows.Forms.Application.StartupPath, @"..\..\..\Documenter\Msdn\xslt") ) );
+                				
+				foreach ( FileInfo f in xsltSource.GetFiles( "*.xslt" ) )
+					f.CopyTo( Path.Combine( workspace.ResourceDirectory, f.Name ), true );
 #else
-				resourceDirectory = Path.Combine(Path.Combine(
-					Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-					"NDoc"), "MSDN");
-
 				EmbeddedResources.WriteEmbeddedResources(
 					this.GetType().Module.Assembly,
 					"NDoc.Documenter.Msdn.xslt",
-					Path.Combine(resourceDirectory, "xslt"));
+					workspace.ResourceDirectory);
 #endif
-				// the workspace class is responsible for maintaining the outputdirectory
-				// and compile intermediate locations
-				workspace = new MsdnWorkspace( Path.GetFullPath( MyConfig.OutputDirectory ) );
-				workspace.Prepare();
-				workspace.Clean();
 
 				// Write the embedded css files to the html output directory
 				EmbeddedResources.WriteEmbeddedResources(
@@ -435,7 +435,7 @@ namespace NDoc.Documenter.Msdn
 		{
 			try
 			{
-				transform.Load(Path.Combine(Path.Combine(resourceDirectory, "xslt"), filename));
+				transform.Load(Path.Combine( this.workspace.ResourceDirectory, filename));
 			}
 			catch (Exception e)
 			{
@@ -509,15 +509,8 @@ namespace NDoc.Documenter.Msdn
 		/// </summary>
 		private void AddExtensibilityStylesheet()
 		{
-#if NO_RESOURCES
-			// when NO_RESOURCES is defined resourceDirectory points directly to the source
-			// files (assuming ndoc is running from the IDE, which it usually would be for a debug build)
-			// When resourceDirectory points directly to the source files, the code below ends up modifying
-			// application source, rather than application resource.
-			#warning Because NO_RESOURCES is defined, ndoc extensiblity is disabled in this build
-#else
 			XmlDocument tags = new XmlDocument();
-			tags.Load( Path.Combine( Path.Combine( resourceDirectory, "xslt" ), "tags.xslt" ) );
+			tags.Load( Path.Combine( this.workspace.ResourceDirectory, "tags.xslt" ) );
 			
 			XmlElement include = tags.CreateElement( "xsl", "include", "http://www.w3.org/1999/XSL/Transform" );
 
@@ -531,8 +524,7 @@ namespace NDoc.Documenter.Msdn
 
 			tags.DocumentElement.PrependChild( include );
 
-			tags.Save( Path.Combine( Path.Combine( resourceDirectory, "xslt" ), "tags.xslt" ) );
-#endif
+			tags.Save( Path.Combine( this.workspace.ResourceDirectory, "tags.xslt" ) );
 		}
 
 		private void MakeTransforms()

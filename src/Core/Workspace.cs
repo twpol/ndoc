@@ -60,6 +60,7 @@ namespace NDoc.Core
 				throw new ArgumentException( "The workspace type cannot be zero length", type );
 
 			rootDir = root;
+
 			buildDir = string.Format( "ndoc_{0}_temp", type );
 			contentDir = contentDirName;
 			cleanableFileTypes = cleanableExtensions;
@@ -108,11 +109,14 @@ namespace NDoc.Core
 		/// </summary>
 		public void Prepare()
 		{
-			if ( !Directory.Exists( WorkingDirectory ) )
-				Directory.CreateDirectory( WorkingDirectory );
+			if ( !Directory.Exists( this.WorkingDirectory ) )
+				Directory.CreateDirectory( this.WorkingDirectory );
+			
+			if ( !Directory.Exists( this.ContentDirectory ) )
+				Directory.CreateDirectory( this.ContentDirectory );
 
-			if ( !Directory.Exists( ContentDirectory ) )
-				Directory.CreateDirectory( ContentDirectory );
+			if ( !Directory.Exists( this.ResourceDirectory ) )
+				Directory.CreateDirectory( this.ResourceDirectory );
 		}
 
 		/// <summary>
@@ -134,6 +138,17 @@ namespace NDoc.Core
 			get
 			{
 				return Path.Combine( RootDirectory, buildDir );
+			}
+		}
+
+		/// <summary>
+		/// The location where the xslt stylesheets will be unpacked
+		/// </summary>
+		public string ResourceDirectory
+		{
+			get
+			{
+				return Path.Combine( WorkingDirectory, "ndoc_resources" );
 			}
 		}
 
@@ -290,9 +305,13 @@ namespace NDoc.Core
 		/// </summary>
 		public void CleanIntermediates()
 		{
+			// delete the resource directory
+			if ( Directory.Exists( this.ResourceDirectory ) )
+				Directory.Delete( this.ResourceDirectory, true );
+
 			// delete the build temp directory
-			if ( Directory.Exists( WorkingDirectory ) )
-				Directory.Delete( WorkingDirectory, true );
+			if ( Directory.Exists( this.WorkingDirectory ) )
+				Directory.Delete( this.WorkingDirectory, true );
 		}
 
 		/// <summary>
@@ -307,7 +326,7 @@ namespace NDoc.Core
 			// workspace root and delete them
 			foreach ( string ext in extenstions )
 			{
-				foreach ( string f in Directory.GetFiles( RootDirectory, ext ) )
+				foreach ( string f in Directory.GetFiles( this.RootDirectory, ext ) )
 					File.Delete( f );
 			}
 

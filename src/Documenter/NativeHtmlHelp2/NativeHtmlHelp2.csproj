@@ -28,7 +28,7 @@
                     BaseAddress = "541786112"
                     CheckForOverflowUnderflow = "false"
                     ConfigurationOverrideFile = ""
-                    DefineConstants = "DEBUG;TRACE"
+                    DefineConstants = "DEBUG;TRACE;NO_RESOURCES"
                     DocumentationFile = "NDoc.Documenter.NativeHtmlHelp2.xml"
                     DebugSymbols = "true"
                     FileAlignment = "4096"
@@ -99,6 +99,11 @@
                     Name = "System.Data"
                     AssemblyName = "System.Data"
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
+                />
+                <Reference
+                    Name = "System.Windows.Forms"
+                    AssemblyName = "System.Windows.Forms"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Windows.Forms.dll"
                 />
             </References>
         </Build>

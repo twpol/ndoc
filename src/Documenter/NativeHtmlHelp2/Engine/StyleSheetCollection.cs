@@ -17,6 +17,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 using System;
+using System.Text;
 using System.IO;
 using System.Collections;
 using System.Xml;
@@ -38,9 +39,24 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>The populated collection</returns>
 		public static StyleSheetCollection LoadStyleSheets( string extensibilityStylesheet, string resourceDirectory )
 		{
+			XmlReader reader = null;
 			XmlDocument tags = new XmlDocument();
-			tags.Load( Path.Combine( Path.Combine( resourceDirectory, "xslt" ), "tags.xslt" ) );
-			
+
+			try 
+			{
+				reader = new XmlTextReader( Path.Combine( resourceDirectory, "tags.xslt" ) );
+				tags.Load( reader );
+			}
+			catch ( Exception )
+			{
+				throw;
+			}
+			finally
+			{
+				if ( reader != null )
+					reader.Close();
+			}
+
 			XmlElement include = tags.CreateElement( "xsl", "include", "http://www.w3.org/1999/XSL/Transform" );
 
 			if ( !Path.IsPathRooted( extensibilityStylesheet ) )
@@ -50,7 +66,22 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 
 			tags.DocumentElement.PrependChild( include );
 
-			tags.Save( Path.Combine( Path.Combine( resourceDirectory, "xslt" ), "tags.xslt" ) );
+			XmlWriter writer = null;
+
+			try
+			{
+				writer = new XmlTextWriter( Path.Combine( resourceDirectory, "tags.xslt" ), Encoding.UTF8 );
+				tags.Save( writer );
+			}
+			catch ( Exception )
+			{
+				throw;
+			}
+			finally
+			{
+				if ( writer != null )
+					writer.Close();
+			}
 
 			return LoadStyleSheets( resourceDirectory );
 		}
@@ -111,7 +142,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			{
 				Trace.WriteLine( name + ".xslt" );
 				XslTransform transform = new XslTransform();
-				transform.Load( Path.Combine( Path.Combine( resourceDirectory, "xslt" ), name + ".xslt" ) );
+				transform.Load( Path.Combine( resourceDirectory, name + ".xslt" ) );
 				return transform;
 			}
 			catch ( Exception e )

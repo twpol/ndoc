@@ -163,30 +163,32 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 				int start = Environment.TickCount;
 #endif
 				OnDocBuildingStep( 0, "Initializing..." );
-				UnPackResources();
 
-				Workspace w = new NativeHtmlHelp2Workspace( WorkingPath );
-				PrepareWorkspace( w );
+				Workspace workspace = new NativeHtmlHelp2Workspace( WorkingPath );
+				workspace.Clean();
+				workspace.Prepare();
+
+				UnPackResources( workspace );
 
 				// set up the includes file
-				IncludeFile includes = IncludeFile.CreateFrom( Path.Combine( ResourceDirectory, @"HxProject\HelpTitle\includes.hxf" ), "includes" );
+				IncludeFile includes = IncludeFile.CreateFrom( Path.Combine( workspace.ResourceDirectory, "includes.hxf" ), "includes" );
 				// attach to this event so resource directories get included in the include file
-				w.ContentDirectoryAdded += new ContentEventHandler( includes.AddDirectory ); 
+				workspace.ContentDirectoryAdded += new ContentEventHandler( includes.AddDirectory ); 
 
 				// create and save the named url index
-				CreateNamedUrlIndex( w );
+				CreateNamedUrlIndex( workspace );
 
 				// save the includes file
-				includes.Save( w.WorkingDirectory );
+				includes.Save( workspace.WorkingDirectory );
 
 				// set up the table of contents
-				TOCFile toc = TOCFile.CreateFrom( Path.Combine( ResourceDirectory, @"HxProject\HelpTitle\project.HxT" ), MyConfig.HtmlHelpName );
+				TOCFile toc = TOCFile.CreateFrom( Path.Combine( workspace.ResourceDirectory, "project.HxT" ), MyConfig.HtmlHelpName );
 				toc.LangId = MyConfig.LangID;
 
 				// set up the project file
-				ProjectFile HxProject = CreateProjectFile();
+				ProjectFile HxProject = CreateProjectFile( workspace );
 				HxProject.TOCFile = toc.FileName;
-				HxProject.Save( w.WorkingDirectory );
+				HxProject.Save( workspace.WorkingDirectory );
 
 				// get the ndoc xml
 				OnDocBuildingStep( 10, "Merging XML documentation..." );
@@ -195,36 +197,36 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 
 				// create and intialize a HtmlFactory
 				ExternalHtmlProvider htmlProvider = new ExternalHtmlProvider( MyConfig.HeaderHtml, MyConfig.FooterHtml );
-				HtmlFactory factory = new HtmlFactory( tempFileName, w.ContentDirectory, htmlProvider, MyConfig.LinkToSdkDocVersion );
+				HtmlFactory factory = new HtmlFactory( tempFileName, workspace.ContentDirectory, htmlProvider, MyConfig.LinkToSdkDocVersion );
 
 				// generate all the html content - builds the toc along the way
 				using( new TOCBuilder( toc, factory ) )
-					MakeHtml( factory );
+					MakeHtml( workspace, factory );
 
-				toc.Save( w.WorkingDirectory );
+				toc.Save( workspace.WorkingDirectory );
 
 				//then compile the HxC into an HxS
 				OnDocBuildingStep( 65, "Compiling Html Help 2 Files..." );
-				CompileHxCFile( w );
+				CompileHxCFile( workspace );
 
 				// copy outputs to the final build location
-				w.SaveOutputs( "*.Hxs" );
-				w.SaveOutputs( "*.HxI" );
+				workspace.SaveOutputs( "*.Hxs" );
+				workspace.SaveOutputs( "*.HxI" );
 
 				// do clean up and final registration steps
 				OnDocBuildingStep( 95, "Finishing up..." );
 
 				if ( MyConfig.RegisterTitleWithNamespace )
-					RegisterTitle( w );
+					RegisterTitle( workspace );
 				else if ( MyConfig.RegisterTitleAsCollection )
-					RegisterCollection( w );
+					RegisterCollection( workspace );
 
 				// create collection level files
 				if( MyConfig.GenerateCollectionFiles )
-					CreateCollectionFiles( w );
+					CreateCollectionFiles( workspace );
 
 				if ( MyConfig.CleanIntermediates )
-					w.CleanIntermediates();
+					workspace.CleanIntermediates();
 
 #if DEBUG
 				Trace.WriteLine( string.Format( "It took a total of {0} seconds", ( Environment.TickCount - start ) / 1000 ) );
@@ -237,44 +239,44 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			}
 		}
 
-		private void CreateNamedUrlIndex( Workspace w )
+		private void CreateNamedUrlIndex( Workspace workspace )
 		{
-			NamedUrlFile namedUrlIndex = NamedUrlFile.CreateFrom( Path.Combine( ResourceDirectory, @"HxProject\HelpTitle\NamedURL.HxK" ), "NamedURL" );
+			NamedUrlFile namedUrlIndex = NamedUrlFile.CreateFrom( Path.Combine( workspace.ResourceDirectory, "NamedURL.HxK" ), "NamedURL" );
 			namedUrlIndex.LangId = MyConfig.LangID;
 
 			if ( MyConfig.IntroductionPage.Length > 0 )			
-				namedUrlIndex.IntroductionPage = ImportContentFileToWorkspace( MyConfig.IntroductionPage, w );
+				namedUrlIndex.IntroductionPage = ImportContentFileToWorkspace( MyConfig.IntroductionPage, workspace );
 
 			if ( MyConfig.AboutPageIconPage.Length > 0 )			
-				namedUrlIndex.AboutPageIcon = ImportContentFileToWorkspace( MyConfig.AboutPageIconPage, w );
+				namedUrlIndex.AboutPageIcon = ImportContentFileToWorkspace( MyConfig.AboutPageIconPage, workspace );
 
 			if ( MyConfig.AboutPageInfo.Length > 0 )			
-				namedUrlIndex.AboutPageInfo = ImportContentFileToWorkspace( MyConfig.AboutPageInfo, w );
+				namedUrlIndex.AboutPageInfo = ImportContentFileToWorkspace( MyConfig.AboutPageInfo, workspace );
 
 			if ( MyConfig.EmptyIndexTermPage.Length > 0 )			
-				namedUrlIndex.EmptyIndexTerm = ImportContentFileToWorkspace( MyConfig.EmptyIndexTermPage, w );
+				namedUrlIndex.EmptyIndexTerm = ImportContentFileToWorkspace( MyConfig.EmptyIndexTermPage, workspace );
 
 			if ( MyConfig.NavFailPage.Length > 0 )			
-				namedUrlIndex.NavFailPage = ImportContentFileToWorkspace( MyConfig.NavFailPage, w );
+				namedUrlIndex.NavFailPage = ImportContentFileToWorkspace( MyConfig.NavFailPage, workspace );
 			
 			if ( MyConfig.AdditionalContentResourceDirectory.Length > 0 )			
-				w.ImportContentDirectory( MyConfig.AdditionalContentResourceDirectory );
+				workspace.ImportContentDirectory( MyConfig.AdditionalContentResourceDirectory );
 
-			namedUrlIndex.Save( w.WorkingDirectory );
+			namedUrlIndex.Save( workspace.WorkingDirectory );
 		}
 
-		private static string ImportContentFileToWorkspace( string path, Workspace w )
+		private static string ImportContentFileToWorkspace( string path, Workspace workspace )
 		{
 			string fileName = Path.GetFileName( path );
-			w.ImportContent( Path.GetDirectoryName( path ), fileName );
-			return Path.Combine( w.ContentDirectoryName, fileName );
+			workspace.ImportContent( Path.GetDirectoryName( path ), fileName );
+			return Path.Combine( workspace.ContentDirectoryName, fileName );
 		}
 
 
-		private ProjectFile CreateProjectFile()
+		private ProjectFile CreateProjectFile( Workspace workspace )
 		{
 			// create a project file from the resource template
-			ProjectFile project = ProjectFile.CreateFrom( Path.Combine( ResourceDirectory, @"HxProject\HelpTitle\project.HxC" ), MyConfig.HtmlHelpName );
+			ProjectFile project = ProjectFile.CreateFrom( Path.Combine( workspace.ResourceDirectory, "project.HxC" ), MyConfig.HtmlHelpName );
 			
 			// set it up
 			project.BuildSeparateIndexFile = MyConfig.BuildSeparateIndexFile;
@@ -290,24 +292,23 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			return project;
 		}
 
-		private void MakeHtml( HtmlFactory factory )
+		private void MakeHtml( Workspace workspace, HtmlFactory factory )
 		{
 			// load the stylesheets
 			OnDocBuildingStep( 20, "Loading StyleSheets..." );
 
 			if ( MyConfig.ExtensibilityStylesheet.Length > 0 )
-				factory.LoadStylesheets( MyConfig.ExtensibilityStylesheet, ResourceDirectory );
+				factory.LoadStylesheets( MyConfig.ExtensibilityStylesheet, workspace.ResourceDirectory );
 
 			else
-				factory.LoadStylesheets( ResourceDirectory );
+				factory.LoadStylesheets( workspace.ResourceDirectory );
 
 			OnDocBuildingStep( 30, "Generating HTML..." );
 
 			if ( MyConfig.UseHelpNamespaceMappingFile.Length != 0 )
 				factory.SetNamespaceMap( MyConfig.UseHelpNamespaceMappingFile );
 
-			// add properties to the factory
-			// these get passed to the stylesheets
+			// add properties to the factory - these get passed to the stylesheets
 			factory.Arguments.AddParam( "ndoc-title", "", MyConfig.Title );
 			factory.Arguments.AddParam( "ndoc-document-attributes", "", MyConfig.DocumentAttributes );
 			factory.Arguments.AddParam( "ndoc-documented-attributes", "", MyConfig.DocumentedAttributes );
@@ -361,84 +362,65 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			}
 		}
 
-		private void PrepareWorkspace( Workspace w )
+		private void UnPackResources( Workspace workspace )
 		{
-			// delete any existing intermediates
-			w.Clean();
-			// preapre workspace
-			w.Prepare();
-
-			// import the base content files
-			w.ImportContent( Path.Combine( ResourceDirectory, "graphics" ) );
-
-			// import the project template
-			w.ImportProjectFiles( Path.Combine( ResourceDirectory, "includes" ) );
-			w.ImportProjectFiles( Path.Combine( ResourceDirectory, "NamespaceMapping" ) );
-		}
-
-
-		private static string ResourceDirectory = Path.Combine(
-														Path.Combine(
-															Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-															"NDoc"), 
-														"NativeHtmlHelp2" );
-		private void UnPackResources()
-		{
+#if NO_RESOURCES
+				// copy all of the xslt source files into the workspace
+				DirectoryInfo xsltSource = new DirectoryInfo( Path.GetFullPath(Path.Combine(
+					System.Windows.Forms.Application.StartupPath, @"..\..\..\Documenter\NativeHtmlHelp2\xslt") ) );
+                				
+				foreach ( FileInfo f in xsltSource.GetFiles( "*.xslt" ) )
+					f.CopyTo( Path.Combine( workspace.ResourceDirectory, f.Name ), true );
+#else
 			EmbeddedResources.WriteEmbeddedResources(
 				this.GetType().Module.Assembly,
 				"NDoc.Documenter.NativeHtmlHelp2.xslt",
-				Path.Combine( ResourceDirectory, "xslt") );
+				workspace.ResourceDirectory );
+#endif
 
 			EmbeddedResources.WriteEmbeddedResources(
 				this.GetType().Module.Assembly,
 				"NDoc.Documenter.NativeHtmlHelp2.includes",
-				Path.Combine( ResourceDirectory, "includes") );
+				workspace.WorkingDirectory );
 
 			EmbeddedResources.WriteEmbeddedResources(
 				this.GetType().Module.Assembly,
 				"NDoc.Documenter.NativeHtmlHelp2.graphics",
-				Path.Combine( ResourceDirectory, "graphics") );
+				workspace.ContentDirectory );
 
 			EmbeddedResources.WriteEmbeddedResources(
 				this.GetType().Module.Assembly,
 				"NDoc.Documenter.NativeHtmlHelp2.HxProject.HelpTitle",
-				Path.Combine( ResourceDirectory, @"HxProject\HelpTitle") );
+				workspace.ResourceDirectory );
 
 			EmbeddedResources.WriteEmbeddedResources(
 				this.GetType().Module.Assembly,
 				"NDoc.Documenter.NativeHtmlHelp2.HxProject.HelpCollection",
-				Path.Combine( ResourceDirectory, @"HxProject\HelpCollection") );
+				workspace.ResourceDirectory );
 			
 			EmbeddedResources.WriteEmbeddedResources(
 				this.GetType().Module.Assembly,
 				"NDoc.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping",
-				Path.Combine( ResourceDirectory, "NamespaceMapping") );		
-
-			// also unpack a copy of the namespace map schema into the runtime directory
-			// so that users can find it there to use as a reference
-			EmbeddedResources.WriteEmbeddedResources(
-				this.GetType().Module.Assembly,
-				"NDoc.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping",
-				Path.GetDirectoryName( new Uri( Assembly.GetExecutingAssembly().CodeBase, true ).AbsolutePath ) );
+				workspace.WorkingDirectory );
 		}
 
-		private void CreateCollectionFiles( Workspace w )
+		private void CreateCollectionFiles( Workspace workspace )
 		{
 			string collectionName = MyConfig.HtmlHelpName + "Collection";
 
 			// add the collection table of contents
 			CollectionTOCFile toc = CollectionTOCFile.CreateFrom( 
-				Path.Combine( ResourceDirectory, @"HxProject\HelpCollection\Collection.HxT" ), collectionName );
+				Path.Combine( workspace.ResourceDirectory, "Collection.HxT" ), collectionName );
 
 			toc.LangId = MyConfig.LangID;
 			toc.Flat = MyConfig.CollectionTOCStyle == TOCStyle.Flat;
 			toc.Title = MyConfig.Title;
 			toc.BaseUrl = MyConfig.HtmlHelpName;
-			toc.Save( w.RootDirectory );
+			toc.Save( workspace.RootDirectory );
 
 			// add the collection file
 			CollectionFile collection = CollectionFile.CreateFrom( 
-				Path.Combine( ResourceDirectory, @"HxProject\HelpCollection\Collection.HxC" ), collectionName );
+				Path.Combine( workspace.ResourceDirectory, "Collection.HxC" ), collectionName );
 			
 			collection.LangId = MyConfig.LangID;
 			collection.Copyright = MyConfig.CopyrightText;
@@ -446,11 +428,11 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			collection.Title = MyConfig.Title;
 			collection.TOCFile = toc.FileName;
 
-			AddIndexToCollection( w, collection, "Collection_A.HxK", collectionName + "_A" );
-			AddIndexToCollection( w, collection, "Collection_F.HxK", collectionName + "_F" );
-			AddIndexToCollection( w, collection, "Collection_K.HxK", collectionName + "_K" );
+			AddIndexToCollection( workspace, collection, "Collection_A.HxK", collectionName + "_A" );
+			AddIndexToCollection( workspace, collection, "Collection_F.HxK", collectionName + "_F" );
+			AddIndexToCollection( workspace, collection, "Collection_K.HxK", collectionName + "_K" );
 			
-			collection.Save( w.RootDirectory );
+			collection.Save( workspace.RootDirectory );
 			
 			// create and save the H2reg ini file
 			H2RegFile h2reg = new H2RegFile( collectionName );
@@ -465,43 +447,43 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			else
 				h2reg.AddTitle( MyConfig.HtmlHelpName, MyConfig.LangID, MyConfig.HtmlHelpName + ".HxS" );
 
-			h2reg.Save( w.RootDirectory );
+			h2reg.Save( workspace.RootDirectory );
 		}
 
-		private void AddIndexToCollection( Workspace w, CollectionFile collection, string templateName, string fileName )
+		private void AddIndexToCollection( Workspace workspace, CollectionFile collection, string templateName, string fileName )
 		{
 			IndexFile index = IndexFile.CreateFrom( 
-				Path.Combine( ResourceDirectory, @"HxProject\HelpCollection\" + templateName ), fileName );
+				Path.Combine( workspace.ResourceDirectory, templateName ), fileName );
 			index.LangId = collection.LangId;
 			collection.AddKeywordIndex( index.FileName );
-			index.Save( w.RootDirectory );
+			index.Save( workspace.RootDirectory );
 		}
 	
-		private void RegisterCollection( Workspace w )
+		private void RegisterCollection( Workspace workspace )
 		{
 			string ns = MyConfig.HtmlHelpName;
 
 			if ( ns.Length > 0 )
 			{
 				HxReg reg = new HxReg();
-				FileInfo f = new FileInfo( Path.Combine( w.RootDirectory, MyConfig.HtmlHelpName + ".Hxs" ) );
+				FileInfo f = new FileInfo( Path.Combine( workspace.RootDirectory, MyConfig.HtmlHelpName + ".Hxs" ) );
 				reg.RegisterNamespace( ns, f, MyConfig.Title );
 				reg.RegisterTitle( ns, ns, f );
 			}
 		}
 
-		private void RegisterTitle( Workspace w )
+		private void RegisterTitle( Workspace workspace )
 		{
 			string ns = MyConfig.CollectionNamespace;
 
 			if ( ns.Length > 0 )
 			{
 				HxReg reg = new HxReg();
-				reg.RegisterTitle( ns, MyConfig.HtmlHelpName, new FileInfo( Path.Combine( w.RootDirectory, MyConfig.HtmlHelpName + ".Hxs" ) ) );
+				reg.RegisterTitle( ns, MyConfig.HtmlHelpName, new FileInfo( Path.Combine( workspace.RootDirectory, MyConfig.HtmlHelpName + ".Hxs" ) ) );
 			}
 		}
 
-		private void CompileHxCFile( Workspace w )
+		private void CompileHxCFile( Workspace workspace )
 		{
 			try
 			{
@@ -510,7 +492,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 				int start = Environment.TickCount;
 #endif				
 				HxCompiler compiler = new HxCompiler();
-				compiler.Compile( new DirectoryInfo( w.WorkingDirectory ), MyConfig.HtmlHelpName, MyConfig.LangID );
+				compiler.Compile( new DirectoryInfo( workspace.WorkingDirectory ), MyConfig.HtmlHelpName, MyConfig.LangID );
 #if DEBUG
 				Trace.WriteLine( string.Format( "It took {0} seconds to compile the html", ( Environment.TickCount - start ) / 1000 ) );
 #endif
