@@ -181,11 +181,11 @@ namespace NDoc.Documenter.HtmlHelp2
 		bool _RegisterTitleWithNamespace = false;
 
 		/// <summary>
-		/// Should the compiled Html 2 title be registered after it is compiled. (If true both a TitleID and Namespace are required)
+		/// Should the compiled Html 2 title be registered after it is compiled. (If true ParentCollectionNamespace is required)
 		/// </summary>
 		[
 		Category(HTMLHELP2_CONFIG_CATEGORY),
-		Description("Should the compiled Html 2 title be registered after it is compiled. (If true both a TitleID and Namespace are required)")
+		Description("Should the compiled Html 2 title be registered after it is compiled. (If true ParentCollectionNamespace is required)")
 		]
 		public bool RegisterTitleWithNamespace
 		{
@@ -201,11 +201,11 @@ namespace NDoc.Documenter.HtmlHelp2
 		string _ParentCollectionNamespace = String.Empty;
 
 		/// <summary>
-		/// If RegisterTitle is true this is the namesapce it will be added to
+		/// If RegisterTitleWithNamespace is true this is the namesapce to which it will be added.
 		/// </summary>
 		[
 		Category(HTMLHELP2_CONFIG_CATEGORY),
-		Description("The Html Help 2 registry namespace (avoid spaces). Only used if _RegisterTitleWithNamespace is True.")
+		Description("The Html Help 2 registry namespace (avoid spaces). Only used if RegisterTitleWithNamespace is True.")
 		]
 		public string ParentCollectionNamespace
 		{
