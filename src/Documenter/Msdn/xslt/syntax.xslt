@@ -173,10 +173,12 @@
 	<!-- -->
 	<xsl:template name="field-or-event-syntax">
 		<pre class="syntax">
-			<xsl:call-template name="method-access">
-				<xsl:with-param name="access" select="@access" />
-			</xsl:call-template>
-			<xsl:text>&#160;</xsl:text>
+			<xsl:if test="not(parent::interface)">
+				<xsl:call-template name="method-access">
+					<xsl:with-param name="access" select="@access" />
+				</xsl:call-template>
+				<xsl:text>&#160;</xsl:text>
+			</xsl:if>
 			<xsl:if test="@contract='Static'">
 				<xsl:text>static&#160;</xsl:text>
 			</xsl:if>
