@@ -20,14 +20,19 @@ using System.ComponentModel;
 
 namespace NDoc.Core
 {
-	/// <summary>Represents an assembly and /doc pair.</summary>
+	/// <summary>Represents the path to an assembly and its associated documentation comment XML file.</summary>
+	/// <remarks>Documentation comment XML files are known colloquially as <i>"SlashDoc"</i> files as they produced
+	/// by the Microsoft C# compiler when the /doc command-line option is specified. The format of these files is detailed in
+	/// the ECMA C# Specification (Appendix E). 
+	/// See <see href="http://www.ecma-international.org/publications/standards/Ecma-334.htm">here</see> for further details.
+	/// </remarks>
 	[Serializable]
 	public class AssemblySlashDoc
 	{
 		private FilePath assembly;
 		private FilePath slashDoc;
 
-		/// <overrides>Initializes a new instance of the <see cref="AssemblySlashDoc"/> class.</overrides>
+		/// <overloads>Initializes a new instance of the <see cref="AssemblySlashDoc"/> class.</overloads>
 		/// <summary>Initializes a blank instance of the <see cref="AssemblySlashDoc"/> class.</summary>
 		public AssemblySlashDoc()
 		{
@@ -38,7 +43,7 @@ namespace NDoc.Core
 		/// <summary>Initializes a new instance of the <see cref="AssemblySlashDoc"/> class
 		/// with the specified Assembly and SlashDoc paths.</summary>
 		/// <param name="assemblyFilename">An assembly filename.</param>
-		/// <param name="slashDocFilename">A /doc filename.</param>
+		/// <param name="slashDocFilename">A documentation comment XML filename.</param>
 		public AssemblySlashDoc(string assemblyFilename, string slashDocFilename)
 		{
 			this.assembly = new FilePath(assemblyFilename);
@@ -50,9 +55,9 @@ namespace NDoc.Core
 		}
 
 		/// <summary>
-		/// Gets or sets the assembly.
+		/// Gets or sets the path to an assembly file.
 		/// </summary>
-		/// <value></value>
+		/// <value>A <see cref="FilePath"/> representing the path to an assembly.</value>
 		[NDoc.Core.PropertyGridUI.FilenameEditor.FileDialogFilter
 			 ("Select Assembly", 
 			 "Library and Executable files (*.dll, *.exe)|*.dll;*.exe|Library files (*.dll)|*.dll|Executable files (*.exe)|*.exe|All files (*.*)|*.*")]
@@ -64,9 +69,9 @@ namespace NDoc.Core
 		void ResetAssembly() { assembly = new FilePath(); }
 
 		/// <summary>
-		/// Gets or sets the slash doc.
+		/// Gets or sets the path to a documentation comment XML file.
 		/// </summary>
-		/// <value></value>
+		/// <value>A <see cref="FilePath"/> representing the path to a documentation comment XML file.</value>
 		[NDoc.Core.PropertyGridUI.FilenameEditor.FileDialogFilter
 			 ("Select Assembly", 
 			 "/doc Output files (*.xml)|*.xml|All files (*.*)|*.*")]
