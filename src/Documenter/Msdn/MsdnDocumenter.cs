@@ -43,31 +43,35 @@ namespace NDoc.Documenter.Msdn
 			Unknown
 		};
 
-		HtmlHelp htmlHelp;
+		private HtmlHelp htmlHelp;
 
-		string resourceDirectory;
+		private string resourceDirectory;
 
-		XmlDocument xmlDocumentation;
+		private XmlDocument xmlDocumentation;
+        private XPathDocument xpathDocument;
 
-		Hashtable lowerCaseTypeNames;
-		Hashtable mixedCaseTypeNames;
-		StringDictionary fileNames;
-		StringDictionary elemNames;
+		private Hashtable lowerCaseTypeNames;
+		private Hashtable mixedCaseTypeNames;
+		private StringDictionary fileNames;
+		private StringDictionary elemNames;
 
-		XslTransform xsltNamespace;
-		XslTransform xsltNamespaceHierarchy;
-		XslTransform xsltType;
-		XslTransform xsltAllMembers;
-		XslTransform xsltIndividualMembers;
-		XslTransform xsltEvent;
-		XslTransform xsltMember;
-		XslTransform xsltMemberOverload;
-		XslTransform xsltProperty;
-		XslTransform xsltField;
+		private XslTransform xsltNamespace;
+		private XslTransform xsltNamespaceHierarchy;
+		private XslTransform xsltType;
+		private XslTransform xsltAllMembers;
+		private XslTransform xsltIndividualMembers;
+		private XslTransform xsltEvent;
+		private XslTransform xsltMember;
+		private XslTransform xsltMemberOverload;
+		private XslTransform xsltProperty;
+		private XslTransform xsltField;
 
-		ArrayList documentedNamespaces;
+		private ArrayList documentedNamespaces;
 
-		/// <summary>Initializes a new instance of the MsdnHelp class.</summary>
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MsdnDocumenter" />
+		/// class.
+		/// </summary>
 		public MsdnDocumenter() : base("MSDN")
 		{
 			lowerCaseTypeNames = new Hashtable();
@@ -237,6 +241,10 @@ namespace NDoc.Documenter.Msdn
 				xmlDocumentation = new XmlDocument();
 				xmlDocumentation.LoadXml(MakeXml(project));
 
+                // create XPATH document
+                StringReader sr = new StringReader(xmlDocumentation.OuterXml);
+                xpathDocument = new XPathDocument(sr);
+
 				XmlNodeList typeNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace/*[name()!='documentation']");
 				if (typeNodes.Count == 0)
 				{
@@ -283,7 +291,7 @@ namespace NDoc.Documenter.Msdn
 
 				OnDocBuildingStep(25, "Building file mapping...");
 
-				MakeFilenames(xmlDocumentation);
+				MakeFilenames();
 
 				OnDocBuildingStep(30, "Loading XSLT files...");
 
@@ -435,7 +443,7 @@ namespace NDoc.Documenter.Msdn
 			}
 		}
 
-		private void MakeFilenames(XmlNode documentation)
+		private void MakeFilenames()
 		{
 			XmlNodeList namespaces = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace");
 			foreach (XmlElement namespaceNode in namespaces)
@@ -1506,7 +1514,7 @@ namespace NDoc.Documenter.Msdn
 				arguments.AddExtensionObject("urn:NDocUtil", utilities);
 				arguments.AddExtensionObject("urn:NDocExternalHtml", htmlProvider);
 
-				transform.Transform(xmlDocumentation, arguments, streamWriter);
+				transform.Transform(xpathDocument, arguments, streamWriter);
 			}
 
 #if DEBUG
