@@ -32,8 +32,8 @@ namespace NDoc.Core
 		public Project()
 		{
 			_IsDirty = false;
-			_namespaces = new SortedList();
 			_probePath = new ArrayList();
+			_referencePaths = new ArrayList();
 		}
 
 		private bool _IsDirty;
@@ -44,6 +44,17 @@ namespace NDoc.Core
 		/// Holds the list of directories that will be scanned for documenters.
 		/// </summary>
 		private ArrayList _probePath;
+
+		/// <summary>
+		/// Holds the list of additional directories that will be probed when loading assemblies.
+		/// </summary>
+		private ArrayList _referencePaths;
+		/// <summary>Gets an enumerable list of ReferencePaths.</summary>
+		public IEnumerable GetReferencePaths()
+		{
+			return _referencePaths;
+		}
+
 
 		/// <summary>Gets the IsDirty property.</summary>
 		public bool IsDirty
@@ -93,7 +104,6 @@ namespace NDoc.Core
 
 			IsDirty = true;
 
-			AddNamespacesFromAssembly(GetFullPath(assemblySlashDoc.AssemblyFilename));
 			_AssemblySlashDocs.Add(assemblySlashDoc);
 		}
 
@@ -189,19 +199,38 @@ namespace NDoc.Core
 		/// <summary>Gets the summary for a namespace.</summary>
 		public string GetNamespaceSummary(string namespaceName)
 		{
-			return (string)_namespaces[namespaceName];
+			if (_namespaces==null)
+				return "";
+			else
+				return (string)_namespaces[namespaceName];
 		}
 
 		/// <summary>Gets an enumerable list of namespace names.</summary>
 		public IEnumerable GetNamespaces()
 		{
-			return _namespaces.Keys;
+			if (NamespaceCount>0)
+				return _namespaces.Keys;
+			else
+				return new ArrayList();
 		}
 
 		/// <summary>The number of namespaces in the project.</summary>
 		public int NamespaceCount
 		{
-			get { return _namespaces.Count; }
+			get 
+			{
+				if (_namespaces==null)
+					GetNamespacesFromAssemblies();
+				
+				if (_namespaces!=null)
+				{
+					return _namespaces.Count;
+				}
+				else
+				{
+					return 0;
+				}
+			}
 		}
 
 		// enumerates the namespaces from an assembly 
@@ -209,6 +238,8 @@ namespace NDoc.Core
 		private void AddNamespacesFromAssembly(string assemblyFile)
 		{
 			Assembly a = BaseDocumenter.LoadAssembly(assemblyFile);
+			if (_namespaces==null) _namespaces = new SortedList();
+
 			foreach (Type t in a.GetTypes())
 			{
 				string ns = t.Namespace;
@@ -395,7 +426,11 @@ namespace NDoc.Core
 									assemblyLoadException = e;
 								}
 								break;
+							case "referencePaths":
+								ReadReferencePaths(reader);
+								break;
 							case "namespaces":
+								//GetNamespacesFromAssemblies();
 								ReadNamespaceSummaries(reader);
 								break;
 							case "documenters":
@@ -473,7 +508,6 @@ namespace NDoc.Core
 							+ " <assembly> element cannot be empty in project file.");
 					}
 					assemblySlashDoc.AssemblyFilename = reader["location"];
-
 					assemblySlashDoc.SlashDocFilename = reader["documentation"];
 					count++;
 					try
@@ -499,6 +533,26 @@ namespace NDoc.Core
 					sb.Append("\n");
 				}
 				throw new CouldNotLoadAllAssembliesException(sb.ToString());
+			}
+		}
+
+		private void GetNamespacesFromAssemblies()
+		{
+			AssemblyResolver assemblyResolver=null;
+
+			if (_AssemblySlashDocs.Count > 0)
+			{
+				assemblyResolver = SetupAssemblyResolver();
+
+				foreach (AssemblySlashDoc assemblySlashDoc in _AssemblySlashDocs)
+				{
+					AddNamespacesFromAssembly(GetFullPath(assemblySlashDoc.AssemblyFilename));
+				}
+			}
+
+			if (assemblyResolver != null)
+			{
+				assemblyResolver.Deinstall();
 			}
 		}
 
@@ -529,6 +583,27 @@ namespace NDoc.Core
 				{
 					reader.Read();
 				}
+			}
+		}
+
+		/// <summary>
+		/// Loads reference paths from an XML document.
+		/// </summary>
+		/// <param name="reader">
+		/// An open XmlReader positioned before the referencePath elements.</param>
+		public void ReadReferencePaths(XmlReader reader)
+		{
+			while (!reader.EOF && !(reader.NodeType == XmlNodeType.EndElement && reader.Name == "referencePaths"))
+			{
+				if (reader.NodeType == XmlNodeType.Element && reader.Name == "referencePath")
+				{
+					string path = reader["path"];
+					if (Directory.Exists(path))
+					{
+						_referencePaths.Add(path);
+					}
+				}
+				reader.Read();
 			}
 		}
 
@@ -595,6 +670,7 @@ namespace NDoc.Core
 
 				//do not change the order of those lines
 				WriteAssemblySlashDocs(writer);
+				WriteReferencePaths(writer);
 				WriteNamespaceSummaries(writer);
 				WriteDocumenters(writer);
 
@@ -636,15 +712,44 @@ namespace NDoc.Core
 
 		private void WriteNamespaceSummaries(XmlWriter writer)
 		{
-			if (_namespaces.Count > 0)
+			if (_namespaces!=null && _namespaces.Count > 0)
 			{
-				writer.WriteStartElement("namespaces");
-
+				//do a quick check to make sure there are some namespace summaries
+				//if not, we don't need to write this section out
+				bool summariesExist=false;
 				foreach (string ns in _namespaces.Keys)
 				{
-					writer.WriteStartElement("namespace");
-					writer.WriteAttributeString("name", ns);
-					writer.WriteRaw((string)_namespaces[ns]);
+					string summary = (string)_namespaces[ns];
+					if (summary!=null && summary.Length>0) summariesExist = true;
+				}
+
+				if (summariesExist)
+				{
+					writer.WriteStartElement("namespaces");
+
+					foreach (string ns in _namespaces.Keys)
+					{
+						writer.WriteStartElement("namespace");
+						writer.WriteAttributeString("name", ns);
+						writer.WriteRaw((string)_namespaces[ns]);
+						writer.WriteEndElement();
+					}
+
+					writer.WriteEndElement();
+				}
+			}
+		}
+
+		private void WriteReferencePaths(XmlWriter writer)
+		{
+			if (_referencePaths.Count > 0)
+			{
+				writer.WriteStartElement("referencePaths");
+
+				foreach (string refPath in _referencePaths)
+				{
+					writer.WriteStartElement("referencePath");
+					writer.WriteAttributeString("path", refPath);
 					writer.WriteEndElement();
 				}
 
@@ -671,7 +776,7 @@ namespace NDoc.Core
 		public void Clear()
 		{
 			_AssemblySlashDocs.Clear();
-			_namespaces.Clear();
+			if (_namespaces!=null) _namespaces.Clear();
 
 			foreach (IDocumenter documenter in Documenters)
 			{
@@ -683,6 +788,55 @@ namespace NDoc.Core
 
 		/// <summary>Raised by projects when they're dirty state changes from false to true.</summary>
 		public event ProjectModifiedEventHandler Modified;
+
+		/// <summary>
+		/// Setup AssemblyResolver for case where system doesn't resolve
+		/// an assembly automatically.
+		/// This puts in the directories in ReferencesPath, and the directories
+		/// to each assembly referenced in the project.
+		/// </summary>
+		/// <remarks>
+		/// <para>The case which forced this to be so thorough is when an assembly 
+		/// references an unmanaged (native) dll.  When the assembly is loaded,
+		/// the system must also find the unmanaged dll.  The rules for
+		/// finding the unmanaged dll are apparently just like any other application:
+		/// current working directory, the path environment variable, etc. </para>
+		/// <para>So in order to handle that case, we have to install an
+		/// AssemblyResolver that catches the resolution failure, and uses
+		/// an assembly load function that cd's to the directory which hopefully
+		/// contains the unmanaged dll (see LoadAssembly()).  So in this
+		/// case I'm assuming that the directory containing the referencing
+		/// assembly also contains the unmanaged dll.</para>
+		/// </remarks>
+		protected AssemblyResolver SetupAssemblyResolver()
+		{
+			ArrayList assemblyResolveDirs = new ArrayList();
+
+			// add references path
+			foreach(string dir in GetReferencePaths())
+			{
+				if (!assemblyResolveDirs.Contains(dir))
+					assemblyResolveDirs.Add(dir);
+			}
+
+			// put dirs containing assemblies in also
+			foreach(AssemblySlashDoc assemblySlashDoc in GetAssemblySlashDocs())
+			{
+				string dir = Path.GetDirectoryName(Path.GetFullPath(
+					assemblySlashDoc.AssemblyFilename));
+				if (!assemblyResolveDirs.Contains(dir)) assemblyResolveDirs.Add(dir);
+			}
+			AssemblyResolver assemblyResolver = new AssemblyResolver(assemblyResolveDirs);
+
+			// For performance, don't have resolver search all subdirs.  Also, it's not
+			// clear that's a reasonable behavior.
+			assemblyResolver.IncludeSubdirs = false; 
+			assemblyResolver.Install();
+
+			return(assemblyResolver);
+		}
+
+
 	}
 
 	/// <summary>Handles ProjectModified events.</summary>
