@@ -1,8 +1,14 @@
 readme.txt
 copying.txt
 examples\
-src\NDoc.sln
-src\ndoc.build
+NDoc.sln
+ndoc.build
+NDoc.build.include
+bin\.net\1.0\
+bin\.net\1.1\
+bin\mono\
+doc\
+examples\
 src\Addins\NDocBuild\
 src\Addins\NDocBuild\NDocBuildSetup\
 src\Console\
@@ -26,7 +32,6 @@ src\Documenter\Msdn\onlinetemplates\
 src\Documenter\Msdn\xslt\
 src\Documenter\Xml\
 src\Gui\
-src\help\
 src\Setup\Setup.vdproj
 src\Test\
 src\VisualStudio\
