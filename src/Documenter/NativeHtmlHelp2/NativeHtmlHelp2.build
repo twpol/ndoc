@@ -3,7 +3,7 @@
 	<target name="compile" depends="locate-help-compilerservices-typelib" unless="${framework::get-family(framework::get-target-framework())='mono'}">
 		<if test="${property::exists('help.compilerservices.typelib')}">
 			<!-- generate COM interop assembly for Microsoft Help Compiler Services 1.0 -->
-			<tlbimp typelib="${help.compilerservices.typelib}" output="${current.bin.dir}/Interop.MSHelpCompiler.dll" namespace="MSHelpCompiler" asmversion="1.0.0.0" keyfile="../../ndoc.snk" />
+			<tlbimp typelib="${help.compilerservices.typelib}" output="${current.bin.dir}/Interop.MSHelpCompiler.dll" namespace="MSHelpCompiler" asmversion="1.0.0.0" keyfile="../../../NDoc.snk" />
 			<!-- compile the assembly -->
 			<csc target="library" output="${current.bin.dir}/${nant.project.name}.dll" debug="${current.build.debug}" optimize="${current.build.optimize}" unsafe="false" checked="false" define="${current.build.defines}" doc="${current.bin.dir}/${nant.project.name}.xml">
 				<sources>
