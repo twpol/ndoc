@@ -207,8 +207,9 @@ namespace NDoc.Gui
 			this.closeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.closeButton.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.closeButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.closeButton.Location = new System.Drawing.Point(456, 444);
+			this.closeButton.Location = new System.Drawing.Point(448, 444);
 			this.closeButton.Name = "closeButton";
+			this.closeButton.Size = new System.Drawing.Size(88, 24);
 			this.closeButton.TabIndex = 0;
 			this.closeButton.Text = "&Close";
 			// 
