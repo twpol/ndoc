@@ -7,6 +7,7 @@ body /* This body tag requires the use of one of the sets of banner and/or text 
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 70%;
 	width: 100%;
+	overflow: expression('hidden');
 	}
 div#scrollyes /* Allows topic to scroll with correct margins. Cannot be used with running head banner */
 	{     /* Must immediately follow <body>. */
@@ -19,10 +20,16 @@ div#nsbanner /* Creates Nonscrolling banner region */
 	left: 0px;
 	padding: 0px 0px 0px 0px;
 	border-bottom: 1px solid #999999;
+	width: expression(document.body.clientWidth);
+	background-color: #99ccff;
 	}
 div#nstext /* Creates the scrolling text area for Nonscrolling region topic */
 	{
-	padding: 5px 10px 0px 22px; 
+	top: 0px;
+	padding: 5px 20px 0px 22px;
+	overflow: expression('auto');
+	width: expression(document.body.clientWidth);
+	height: expression(document.body.clientHeight - nsbanner.offsetHeight);
 	}
 div#scrbanner /* Creates the running head bar in a full-scroll topic */
 	{     /* Allows topic to scroll. */
@@ -36,13 +43,10 @@ div#scrtext /* Creates the text area in a full-scroll topic */
 	}
 div#bannerrow1 /* provides full-width color to top row in running head (requires script) */
 	{
-	background-color: #99ccff;
 	}
 div#titlerow /* provides non-scroll topic title area (requires script) */
 	{
-	width: 100%; /* Forces tables to have correct right margin */
 	padding: 0px 10px 0px 22px; 
-	background-color: #99ccff;        
 	}
 
 h1, h2, h3, h4

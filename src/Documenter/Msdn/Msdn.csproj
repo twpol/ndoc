@@ -155,10 +155,6 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "scripts\scroll.js"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
                     RelPath = "xslt\allmembers.xslt"
                     BuildAction = "EmbeddedResource"
                 />
