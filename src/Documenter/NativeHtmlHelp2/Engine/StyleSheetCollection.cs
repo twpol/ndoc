@@ -1,6 +1,6 @@
-// MsdnDocumenter.cs - a MSDN-like documenter
-// Copyright (C) 2003 Don Kackman
-// Parts copyright 2001  Kral Ferch, Jason Diamond
+// StyleSheetCollection
+// Copyright (C) 2004 Kevin Downs
+// Parts Copyright (c) 2003 Don Kackman
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -23,6 +23,9 @@ using System.Collections;
 using System.Xml;
 using System.Xml.Xsl;
 using System.Diagnostics;
+using System.Reflection;
+
+using NDoc.Core;
 
 namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 {
@@ -34,79 +37,32 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <summary>
 		/// Load the predefined set of xslt stylesheets into a dictionary
 		/// </summary>
-		/// <param name="extensibilityStylesheet">Path to an xslt stylesheet used for displaying custom tags</param>
-		/// <param name="resourceDirectory">The location of the xsl files</param>
+		/// <param name="extensibiltyStylesheet"></param>
 		/// <returns>The populated collection</returns>
-		public static StyleSheetCollection LoadStyleSheets( string extensibilityStylesheet, string resourceDirectory )
-		{
-			XmlReader reader = null;
-			XmlDocument tags = new XmlDocument();
-
-			try 
-			{
-				reader = new XmlTextReader( Path.Combine( resourceDirectory, "tags.xslt" ) );
-				tags.Load( reader );
-			}
-			catch ( Exception )
-			{
-				throw;
-			}
-			finally
-			{
-				if ( reader != null )
-					reader.Close();
-			}
-
-			XmlElement include = tags.CreateElement( "xsl", "include", "http://www.w3.org/1999/XSL/Transform" );
-
-			if ( !Path.IsPathRooted( extensibilityStylesheet ) )
-				extensibilityStylesheet = Path.GetFullPath( extensibilityStylesheet );
-
-			include.SetAttribute( "href", extensibilityStylesheet );
-
-			tags.DocumentElement.PrependChild( include );
-
-			XmlWriter writer = null;
-
-			try
-			{
-				writer = new XmlTextWriter( Path.Combine( resourceDirectory, "tags.xslt" ), Encoding.UTF8 );
-				tags.Save( writer );
-			}
-			catch ( Exception )
-			{
-				throw;
-			}
-			finally
-			{
-				if ( writer != null )
-					writer.Close();
-			}
-
-			return LoadStyleSheets( resourceDirectory );
-		}
-
-		/// <summary>
-		/// Load the predefined set of xslt stylesheets into a dictionary
-		/// </summary>
-		/// <param name="resourceDirectory">The location of the xsl files</param>
-		/// <returns>The populated collection</returns>
-		public static StyleSheetCollection LoadStyleSheets( string resourceDirectory )
+		public static StyleSheetCollection LoadStyleSheets( string extensibiltyStylesheet )
 		{
 			StyleSheetCollection stylesheets = new StyleSheetCollection();
 
+#if NO_RESOURCES
+			string resourceBase = "file://" + Path.GetFullPath(Path.Combine(System.Windows.Forms.Application.StartupPath, @"..\..\..\Documenter\NativeHtmlHelp2\xslt") );
+#else
+			string resourceBase = "NDoc.Documenter.NativeHtmlHelp2.xslt";
+#endif
+
+			XsltResourceResolver resolver = new XsltResourceResolver(resourceBase);
+			resolver.ExtensibiltyStylesheet=extensibiltyStylesheet;
 			Trace.Indent();
 
-			stylesheets.AddFrom( "namespace", resourceDirectory );
-			stylesheets.AddFrom( "namespacehierarchy", resourceDirectory );
-			stylesheets.AddFrom( "type", resourceDirectory );
-			stylesheets.AddFrom( "allmembers", resourceDirectory );
-			stylesheets.AddFrom( "individualmembers", resourceDirectory );
-			stylesheets.AddFrom( "event", resourceDirectory );
-			stylesheets.AddFrom( "member", resourceDirectory );
-			stylesheets.AddFrom( "memberoverload", resourceDirectory );
-			stylesheets.AddFrom( "property", resourceDirectory );
-			stylesheets.AddFrom( "field", resourceDirectory );
+			stylesheets.AddFrom( "namespace", resolver );
+			stylesheets.AddFrom( "namespacehierarchy", resolver );
+			stylesheets.AddFrom( "type", resolver );
+			stylesheets.AddFrom( "allmembers", resolver );
+			stylesheets.AddFrom( "individualmembers", resolver );
+			stylesheets.AddFrom( "event", resolver );
+			stylesheets.AddFrom( "member", resolver );
+			stylesheets.AddFrom( "memberoverload", resolver );
+			stylesheets.AddFrom( "property", resolver );
+			stylesheets.AddFrom( "field", resolver );
 
 			Trace.Unindent();
 
@@ -116,7 +72,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 
 		private StyleSheetCollection( )
 		{
-
 		}
 
 		/// <summary>
@@ -131,18 +86,19 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			}
 		}
 
-		private void AddFrom( string name, string resourceDirectory )
+		private void AddFrom( string name, XsltResourceResolver resolver )
 		{
-			base.InnerHashtable.Add( name, MakeTransform( resourceDirectory, name ) );
+			base.InnerHashtable.Add( name, MakeTransform( name, resolver ) );
 		}
 
-		private static XslTransform MakeTransform( string resourceDirectory, string name )
+		private static XslTransform MakeTransform( string name,  XsltResourceResolver resolver)
 		{
 			try
 			{
 				Trace.WriteLine( name + ".xslt" );
 				XslTransform transform = new XslTransform();
-				transform.Load( Path.Combine( resourceDirectory, name + ".xslt" ) );
+				XmlReader reader=(XmlReader)resolver.GetEntity(new Uri("res:" + name + ".xslt"),null,typeof(XmlReader));
+				transform.Load(reader ,resolver);
 				return transform;
 			}
 			catch ( Exception e )
@@ -150,5 +106,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 				throw new Exception( string.Format(	"Error compiling the {0} stylesheet", name ), e );
 			}
 		}
+
 	}
 }
