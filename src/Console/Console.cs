@@ -360,7 +360,7 @@ namespace NDoc.ConsoleApplication
 					{
 						if (!fileLoadExceptions.ContainsKey(fileLoadEx.FileName))
 						{
-							fileLoadExceptions.Add(fileLoadEx.FileName,null);
+							fileLoadExceptions.Add(fileLoadEx.FileName, null);
 							strBld.Append("Unable to load: " + fileLoadEx.FileName + Environment.NewLine);
 						}
 					}
@@ -371,7 +371,7 @@ namespace NDoc.ConsoleApplication
 				}
 			}
 
-			strBld.Append(tmpEx.StackTrace);
+			strBld.Append(ex.StackTrace);
 
 			return strBld.ToString();
 		}
