@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:MSHelp="http://msdn.microsoft.com/mshelp" >
+	
+	<!-- html help 2 data island template -->
+	<xsl:template match="ndoc" mode="xml-data-island">
+		<MSHelp:Attr Name="TargetOS" Value="Windows"/>
+	</xsl:template>
 	
 	<!-- header template -->
-	<xsl:template match="ndoc" mode="header-section">
+	<xsl:template match="node()" mode="header-section">
 		<style type="text/css">
 			.green
 			{

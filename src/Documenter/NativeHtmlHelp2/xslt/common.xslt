@@ -40,6 +40,7 @@
 	<xsl:template match="node()|@*|text()" mode="overloads-example-section" />
 	<xsl:template match="node()|@*|text()" mode="overloads-summary-section" />
 	<xsl:template match="node()|@*|text()" mode="header-section" />
+	<xsl:template match="node()|@*|text()" mode="xml-data-island" />
 	<!-- -->
 	<xsl:template name="parameter-topic">
 		<dl>
@@ -739,6 +740,7 @@
 				<MSHelp:Attr Name="Locale" Value="kbEnglish" />
 				<!-- Microsoft reserves priority of 1 and 2 for framework types -->
 				<MSHelp:Attr Name="HelpPriority" Value="3" />
+				<xsl:apply-templates select="." mode="xml-data-island"/>
 			</xml>
 			<SCRIPT SRC="dtuelink.js"></SCRIPT>
 			<xsl:apply-templates select="/ndoc" mode="header-section" />
