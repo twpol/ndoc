@@ -97,8 +97,9 @@ namespace NDoc.ConsoleApplication
 											throw new ApplicationException("The project file must be specified before any documenter specific options.");
 										}
 										project = new Project();
-										project.Read(val);
 										documenter = project.GetDocumenter(documenter.Name);
+										documenter.Config.SetProject(project);
+										project.Read(val);
 										projectSet = true;
 										break;
 									case "recurse":
@@ -364,16 +365,17 @@ namespace NDoc.ConsoleApplication
 							strBld.Append("Unable to load: " + fileLoadEx.FileName + Environment.NewLine);
 						}
 					}
-					else
-					{
+//					else
+//					{
 						strBld.Append(loaderEx.Message + Environment.NewLine);
-					}
+						strBld.Append(loaderEx.StackTrace + Environment.NewLine);
+					//					}
 				}
 			}
 
 			strBld.Append(ex.StackTrace);
 
-			return strBld.ToString();
+			return strBld.ToString().Replace("\r\n","\n").Replace("\r","\n").Replace("\n","\r\n");
 		}
 	}
 }

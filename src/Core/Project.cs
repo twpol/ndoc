@@ -41,6 +41,19 @@ namespace NDoc.Core
 		private string _projectFile;
 
 		/// <summary>
+		/// Gets or sets the project file.
+		/// </summary>
+		/// <value></value>
+		public string ProjectFile 
+		{
+			get { return _projectFile; }
+			set 
+			{ 
+				_projectFile = value; 
+			}
+		} 
+
+		/// <summary>
 		/// Holds the list of directories that will be scanned for documenters.
 		/// </summary>
 		private ArrayList _probePath;
@@ -387,7 +400,7 @@ namespace NDoc.Core
 		/// </summary>
 		/// <param name="documenters">The collection of <see cref="IDocumenter" /> instances to fill.</param>
 		/// <param name="path">The directory to scan for assemblies containing documenters.</param>
-		private static void FindDocumentersInPath(ArrayList documenters, string path) 
+		private void FindDocumentersInPath(ArrayList documenters, string path) 
 		{
 			foreach (string fileName in Directory.GetFiles(path, "NDoc.Documenter.*.dll")) 
 			{
@@ -416,6 +429,7 @@ namespace NDoc.Core
 								IDocumenter documenter = Activator.CreateInstance(type) as IDocumenter;
 								if (documenter != null)
 								{
+									documenter.Config.SetProject(this);
 									documenters.Add(documenter);
 								}
 								else
@@ -597,10 +611,7 @@ namespace NDoc.Core
 				if (reader.NodeType == XmlNodeType.Element && reader.Name == "referencePath")
 				{
 					string path = reader["path"];
-					if (Directory.Exists(path))
-					{
-						_referencePaths.Add(path);
-					}
+					_referencePaths.Add(path);
 				}
 				reader.Read();
 			}
@@ -752,10 +763,11 @@ namespace NDoc.Core
 			foreach (IDocumenter documenter in Documenters)
 			{
 				documenter.Clear();
+				documenter.Config.SetProject(this);
 			}
 
 			IsDirty = false;
-			_projectFile = "";
+			ProjectFile = "";
 		}
 
 	}
