@@ -811,12 +811,7 @@ namespace NDoc.Core
 
 		private void WriteNamespaces(XmlWriter writer, Module module)
 		{
-#if MONO    //Module.GetTypes() is not implemented in mono v0.28
-			//HACK: so we cheat and load assembly types
-			Type[] types = module.Assembly.GetTypes();
-#else
 			Type[] types = module.GetTypes();
-#endif
 
 			StringCollection namespaceNames = GetNamespaceNames(types);
 
