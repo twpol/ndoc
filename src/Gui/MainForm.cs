@@ -1571,7 +1571,7 @@ namespace NDoc.Gui
 			string tagsFile = Path.Combine(Application.StartupPath, "tags.html");
 			if (!File.Exists(tagsFile))
 			{
-				tagsFile = Path.Combine(Application.StartupPath, @"..\..\..\doc\tags.html");
+				tagsFile = Path.Combine(Application.StartupPath, @"..\..\doc\tags.html");
 
 				if (!File.Exists(tagsFile))
 				{
