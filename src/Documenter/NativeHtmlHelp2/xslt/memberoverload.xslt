@@ -4,7 +4,7 @@
 	xmlns:MSHelp="http://msdn.microsoft.com/mshelp"
 	exclude-result-prefixes="NUtil" >
 	<!-- -->
-	<xsl:output method="html" indent="yes" encoding="utf-8" version="3.2" doctype-public="-//W3C//DTD HTML 3.2 Final//EN" />
+	<xsl:output method="html" indent="no" encoding="utf-8" version="3.2" doctype-public="-//W3C//DTD HTML 3.2 Final//EN" />
 	<!-- -->
 	<xsl:include href="common.xslt" />
 	<!-- -->
@@ -113,6 +113,7 @@
 								</p>
 								<blockquote class="dtBlock">
 									<xsl:choose>
+										<!-- not sure this block can ever get executed since constructors aren't inherited -->
 										<xsl:when test="local-name()='constructor'">
 											<a href="{NUtil:GetCustructorOverloadHRef( string( @declaringType ) )}">
 												<xsl:apply-templates select="self::node()" mode="syntax" />
@@ -133,18 +134,9 @@
 									</xsl:call-template>
 								</p>
 								<blockquote class="dtBlock">
-									<xsl:choose>
-										<xsl:when test="local-name()='constructor'">
-											<a href="{NUtil:GetCustructorHRef( . )}">
-												<xsl:apply-templates select="self::node()" mode="syntax" />
-											</a>										
-										</xsl:when>
-										<xsl:otherwise>
-											<a href="{NUtil:GetMemberHRef( . )}">
-												<xsl:apply-templates select="self::node()" mode="syntax" />
-											</a>									
-										</xsl:otherwise>
-									</xsl:choose>
+										<xsl:apply-templates select="self::node()" mode="syntax">
+											<xsl:with-param name="href" select="NUtil:GetMemberHRef( . )"/>
+										</xsl:apply-templates>								
 								</blockquote>
 							</xsl:otherwise>
 						</xsl:choose>
@@ -172,10 +164,26 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template match="constructor | method | operator" mode="syntax">
-		<xsl:apply-templates select="." mode="cs-syntax">
-			<xsl:with-param name="include-type-links" select="false()"/>
-			<xsl:with-param name="version" select="'short'"/>
+		<xsl:param name="href"/>
+		<xsl:apply-templates select="." mode="cs-inline-syntax">
+			<xsl:with-param name="lang" select="'Visual Basic'"/>
+			<xsl:with-param name="href" select="$href"/>
 		</xsl:apply-templates>
+		<br/>
+		<xsl:apply-templates select="." mode="cs-inline-syntax">
+			<xsl:with-param name="lang" select="'C#'"/>
+			<xsl:with-param name="href" select="$href"/>
+		</xsl:apply-templates>
+		<br/>
+		<xsl:apply-templates select="." mode="cs-inline-syntax">
+			<xsl:with-param name="lang" select="'C++'"/>
+			<xsl:with-param name="href" select="$href"/>
+		</xsl:apply-templates>				
+		<br/>
+		<xsl:apply-templates select="." mode="cs-inline-syntax">
+			<xsl:with-param name="lang" select="'JScript'"/>
+			<xsl:with-param name="href" select="$href"/>
+		</xsl:apply-templates>		
 	</xsl:template>
 	<!-- -->
 	<xsl:template match="property" mode="syntax">

@@ -53,9 +53,7 @@
 		<xsl:if test="*[local-name()=$member and @access='Public' and @contract='Static']">
 			<h4 class="dtH4">
 				<xsl:text>Public Static </xsl:text>
-				<xsl:if test="$ndoc-vb-syntax">
   				<xsl:text>(Shared) </xsl:text>
-  			</xsl:if>
 				<xsl:call-template name="get-big-member-plural">
 					<xsl:with-param name="member" select="$member" />
 				</xsl:call-template>
@@ -75,9 +73,7 @@
 		<xsl:if test="*[local-name()=$member and @access='Family' and @contract='Static']">
 			<h4 class="dtH4">
 				<xsl:text>Protected Static </xsl:text>
-				<xsl:if test="$ndoc-vb-syntax">
   				<xsl:text>(Shared) </xsl:text>
-  			</xsl:if>
 				<xsl:call-template name="get-big-member-plural">
 					<xsl:with-param name="member" select="$member" />
 				</xsl:call-template>
@@ -97,9 +93,7 @@
 		<xsl:if test="*[local-name()=$member and @access='FamilyOrAssembly' and @contract='Static']">
 			<h4 class="dtH4">
 				<xsl:text>Protected Internal Static </xsl:text>
-				<xsl:if test="$ndoc-vb-syntax">
   				<xsl:text>(Shared) </xsl:text>
-  			</xsl:if>
 				<xsl:call-template name="get-big-member-plural">
 					<xsl:with-param name="member" select="$member" />
 				</xsl:call-template>
@@ -119,9 +113,7 @@
 		<xsl:if test="*[local-name()=$member and @access='Assembly' and @contract='Static']">
 			<h4 class="dtH4">
 				<xsl:text>Internal Static </xsl:text>
-				<xsl:if test="$ndoc-vb-syntax">
   				<xsl:text>(Shared) </xsl:text>
-  			</xsl:if>
 				<xsl:call-template name="get-big-member-plural">
 					<xsl:with-param name="member" select="$member" />
 				</xsl:call-template>
@@ -141,9 +133,7 @@
 		<xsl:if test="*[local-name()=$member and @access='Private' and @contract='Static']">
 			<h4 class="dtH4">
 				<xsl:text>Private Static </xsl:text>
-				<xsl:if test="$ndoc-vb-syntax">
   				<xsl:text>(Shared) </xsl:text>
-  			</xsl:if>
 				<xsl:call-template name="get-big-member-plural">
 					<xsl:with-param name="member" select="$member" />
 				</xsl:call-template>
@@ -330,13 +320,14 @@
 							<xsl:with-param name="contract" select="@contract" />
 							<xsl:with-param name="local-name" select="local-name()" />
 						</xsl:call-template>
-						<a href="{NUtil:GetMemberHRef( $declaring-class/property[@name=$name] )}">
+						<a href="{NUtil:GetPropertyHRef( string( $declaring-class/@id ), string( @name ) )}">						
 							<xsl:value-of select="@name" />
 						</a>
 						<xsl:text> (inherited from </xsl:text>
 						<b>
 							<xsl:call-template name="get-datatype">
 								<xsl:with-param name="datatype" select="@declaringType" />
+								<xsl:with-param name="lang" select="'C#'"/>								
 							</xsl:call-template>
 						</b>
 						<xsl:text>)</xsl:text>
@@ -410,13 +401,14 @@
 							<xsl:with-param name="contract" select="@contract" />
 							<xsl:with-param name="local-name" select="local-name()" />
 						</xsl:call-template>
-						<a href="{NUtil:GetMemberHRef( $declaring-class/field[@name=$name] )}">
+						<a href="{NUtil:GetFieldHRef( string( $declaring-class/field[@name=$name]/@id ) )}">
 							<xsl:value-of select="@name" />
 						</a>
 						<xsl:text> (inherited from </xsl:text>
 						<b>
 							<xsl:call-template name="get-datatype">
 								<xsl:with-param name="datatype" select="@declaringType" />
+								<xsl:with-param name="lang" select="'C#'"/>								
 							</xsl:call-template>
 						</b>
 						<xsl:text>)</xsl:text>
@@ -496,13 +488,14 @@
 										<xsl:with-param name="contract" select="$contract" />
 										<xsl:with-param name="local-name" select="local-name()" />
 									</xsl:call-template>
-									<a href="{NUtil:GetMemberOverloadHRef( string( @declaringType ), string( @name ) )}">
+									<a href="{NUtil:GetMemberOverloadHRef( string( $declaring-type-id ), string( @name ) )}">
 										<xsl:value-of select="@name" />
 									</a>
 									<xsl:text> (inherited from </xsl:text>
 									<b>
 										<xsl:call-template name="get-datatype">
 											<xsl:with-param name="datatype" select="@declaringType" />
+											<xsl:with-param name="lang" select="'C#'"/>											
 										</xsl:call-template>
 									</b>
 									<xsl:text>)</xsl:text>
@@ -521,13 +514,14 @@
 										<xsl:with-param name="contract" select="$contract" />
 										<xsl:with-param name="local-name" select="local-name()" />
 									</xsl:call-template>
-									<a href="{NUtil:GetMemberHRef( $declaring-class/method[@name=$name] )}">
+									<a href="{NUtil:GetMethodHRef( string( $declaring-class/@id ), string( @name ) )}">									
 										<xsl:value-of select="@name" />
 									</a>
 									<xsl:text> (inherited from </xsl:text>
 									<b>
 										<xsl:call-template name="get-datatype">
 											<xsl:with-param name="datatype" select="@declaringType" />
+											<xsl:with-param name="lang" select="'C#'"/>											
 										</xsl:call-template>
 									</b>
 									<xsl:text>)</xsl:text>
@@ -619,13 +613,15 @@
 							<xsl:with-param name="contract" select="@contract" />
 							<xsl:with-param name="local-name" select="local-name()" />
 						</xsl:call-template>
-						<a href="{NUtil:GetMemberHRef( $declaring-class/event[@name=$name] )}">
+						
+						<a href="{NUtil:GetEventHRef( $declaring-class/event[@name=$name]/@id )}">
 							<xsl:value-of select="@name" />
 						</a>
 						<xsl:text> (inherited from </xsl:text>
 						<b>
 							<xsl:call-template name="get-datatype">
 								<xsl:with-param name="datatype" select="@declaringType" />
+								<xsl:with-param name="lang" select="'C#'"/>								
 							</xsl:call-template>
 						</b>
 						<xsl:text>)</xsl:text>

@@ -5,6 +5,7 @@
 	exclude-result-prefixes="NUtil" >
 <!-- good for debugging 
 <xsl:output indent="yes"/>-->
+
 	<!-- provide no-op override for all non-specified types -->
 	<xsl:template match="@* | node() | text()" mode="FIndex"/>
 	<xsl:template match="@* | node() | text()" mode="KIndex"/>

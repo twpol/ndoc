@@ -485,7 +485,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForPropertyOverloads( string typeID, string propertyName )
 		{
-			return typeID.Substring(2) + propertyName + "Topic.html";
+			return typeID.Substring(2) + "." + propertyName + "Topic.html";
 		}
 		/// <summary>
 		/// Determines the filename for an property overloads list topic

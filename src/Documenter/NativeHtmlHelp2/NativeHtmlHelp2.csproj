@@ -473,15 +473,15 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "xslt\syntax-map.xslt"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "xslt\tags.xslt"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "xslt\type.xslt"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "xslt\vb-syntax.xslt"
                     BuildAction = "EmbeddedResource"
                 />
                 <File

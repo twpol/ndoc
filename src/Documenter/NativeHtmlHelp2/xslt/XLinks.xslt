@@ -3,6 +3,7 @@
 	xmlns:MSHelp="http://msdn.microsoft.com/mshelp"
 	xmlns:NUtil="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities"
 	exclude-result-prefixes="NUtil" >
+	
 
 	<xsl:template name="get-link-for-interface-method">
 		<xsl:param name="declaring-type-name"/>		

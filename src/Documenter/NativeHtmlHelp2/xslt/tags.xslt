@@ -227,38 +227,28 @@
 		<xsl:choose>
 			<xsl:when test="@langword='null'">
 				<xsl:text>a null reference</xsl:text>
-				<xsl:if test="$ndoc-vb-syntax">
 				  (<b>Nothing</b>
 				  <xsl:text> in Visual Basic)</xsl:text>
-  			</xsl:if>
 			</xsl:when>
 			<xsl:when test="@langword='sealed'">
 				<xsl:text>sealed</xsl:text>
-				<xsl:if test="$ndoc-vb-syntax">
 				  (<b>NotInheritable</b>
 				  <xsl:text> in Visual Basic)</xsl:text>
-  			</xsl:if>
 			</xsl:when>
 			<xsl:when test="@langword='static'">
 				<xsl:text>static</xsl:text>
-				<xsl:if test="$ndoc-vb-syntax">
 				  (<b>Shared</b>
 				  <xsl:text> in Visual Basic)</xsl:text>
-  			</xsl:if>
 			</xsl:when>
 			<xsl:when test="@langword='abstract'">
 				<xsl:text>abstract</xsl:text>
-				<xsl:if test="$ndoc-vb-syntax">
 				  (<b>MustInherit</b>
 				  <xsl:text> in Visual Basic)</xsl:text>
-  			</xsl:if>
 			</xsl:when>
 			<xsl:when test="@langword='virtual'">
 				<xsl:text>virtual</xsl:text>
-				<xsl:if test="$ndoc-vb-syntax">
 				  (<b>CanOverride</b>
 				  <xsl:text> in Visual Basic)</xsl:text>
-  			</xsl:if>
 			</xsl:when>
 			<xsl:otherwise>
 				<b>

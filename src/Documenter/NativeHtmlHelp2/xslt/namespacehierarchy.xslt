@@ -4,7 +4,7 @@
 	xmlns:NUtil="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities"
 	exclude-result-prefixes="NUtil">	
 	<!-- -->
-	<xsl:output method="html" indent="yes" encoding="utf-8" version="3.2" doctype-public="-//W3C//DTD HTML 3.2 Final//EN" />
+	<xsl:output method="html" indent="no" encoding="utf-8" version="3.2" doctype-public="-//W3C//DTD HTML 3.2 Final//EN" />
 	<!-- -->
 	<xsl:include href="common.xslt" />
 	<!-- -->
@@ -95,6 +95,7 @@
 						<a href="{NUtil:GetTypeHRef( string( $base-class-id ) ) }">
 								<xsl:call-template name="get-datatype">
 									<xsl:with-param name="datatype" select="$head/@type" />
+									<xsl:with-param name="lang" select="'C#'"/>								
 								</xsl:call-template>
 								<xsl:value-of select="substring-after($head/@id, 'T:')"/>
 							</a>
@@ -102,6 +103,7 @@
 						<xsl:otherwise>
 							<xsl:call-template name="get-datatype">
 								<xsl:with-param name="datatype" select="$head/@type" />
+								<xsl:with-param name="lang" select="'C#'"/>
 							</xsl:call-template>
 							<xsl:value-of select="substring-after($head/@id, 'T:')"/>
 						</xsl:otherwise>

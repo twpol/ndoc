@@ -179,12 +179,13 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <summary>
 		/// Gets the href for a constructor
 		/// </summary>
-		/// <param name="node">The node selection for the contsructor</param>
+		/// <param name="xPathNode">The node selection for the contsructor</param>
 		/// <returns>Relative HRef to the Topic</returns>
-		public string GetCustructorHRef( XPathNodeIterator node )
+		public string GetCustructorHRef( XPathNodeIterator xPathNode )
 		{
-			if ( node.Current != null && node.Current is IHasXmlNode )
-				return NameMapper.GetFilenameForConstructor( ((IHasXmlNode)node.Current).GetNode() );
+			xPathNode.MoveNext();
+			if ( xPathNode.Current != null && xPathNode.Current is IHasXmlNode )
+				return NameMapper.GetFilenameForConstructor( ((IHasXmlNode)xPathNode.Current).GetNode() );
 			return "";
 		}
 
@@ -206,6 +207,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>Relative HRef to the Topic</returns>			
 		public string GetMemberHRef( XPathNodeIterator xPathNode )
 		{
+			xPathNode.MoveNext();
 			if ( xPathNode.Current != null && xPathNode.Current is IHasXmlNode )
 			{
 				XmlNode node = ((IHasXmlNode)xPathNode.Current).GetNode();
@@ -217,6 +219,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 					case "method":		return NameMapper.GetFilenameForMethod( node );
 					case "property":	return NameMapper.GetFilenameForProperty( node );
 					case "operator":	return NameMapper.GetFilenameForOperator( node );
+					case "constructor":	return NameMapper.GetFilenameForConstructor( node );
 					default:			return "";
 				}
 			}

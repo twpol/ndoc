@@ -183,7 +183,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			// add properties to the factory
 			// these get passed to the stylesheets
 			factory.Properties.Add( "ndoc-title", MyConfig.Title );
-			factory.Properties.Add( "ndoc-vb-syntax", false );
 			factory.Properties.Add( "ndoc-document-attributes", MyConfig.DocumentAttributes );
 			factory.Properties.Add( "ndoc-documented-attributes", MyConfig.DocumentedAttributes );
 

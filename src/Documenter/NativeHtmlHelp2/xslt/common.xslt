@@ -6,7 +6,6 @@
 	exclude-result-prefixes="NUtil NHtmlProvider" >
 	<!-- -->
 	<xsl:include href="syntax.xslt" />
-	<xsl:include href="vb-syntax.xslt" />
 	<xsl:include href="tags.xslt" />
 	<xsl:include href="indices.xslt" />
 	<xsl:include href="XLinks.xslt" />
@@ -14,109 +13,7 @@
 	<xsl:param name="ndoc-title" />
 	<xsl:param name="ndoc-sdk-doc-base-url" />
 	<!-- -->
-	<xsl:template name="csharp-type">
-		<xsl:param name="runtime-type" />
-		<xsl:variable name="old-type">
-			<xsl:choose>
-				<xsl:when test="contains($runtime-type, '[')">
-					<xsl:value-of select="substring-before($runtime-type, '[')" />
-				</xsl:when>
-				<xsl:when test="contains($runtime-type, '&amp;')">
-					<xsl:value-of select="substring-before($runtime-type, '&amp;')" />
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:value-of select="$runtime-type" />
-				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:variable>
-		<xsl:variable name="new-type">
-			<xsl:choose>
-				<xsl:when test="$old-type='System.Byte'">byte</xsl:when>
-				<xsl:when test="$old-type='Byte'">byte</xsl:when>
-				<xsl:when test="$old-type='System.SByte'">sbyte</xsl:when>
-				<xsl:when test="$old-type='SByte'">sbyte</xsl:when>
-				<xsl:when test="$old-type='System.Int16'">short</xsl:when>
-				<xsl:when test="$old-type='Int16'">short</xsl:when>
-				<xsl:when test="$old-type='System.UInt16'">ushort</xsl:when>
-				<xsl:when test="$old-type='UInt16'">ushort</xsl:when>
-				<xsl:when test="$old-type='System.Int32'">int</xsl:when>
-				<xsl:when test="$old-type='Int32'">int</xsl:when>
-				<xsl:when test="$old-type='System.UInt32'">uint</xsl:when>
-				<xsl:when test="$old-type='UInt32'">uint</xsl:when>
-				<xsl:when test="$old-type='System.Int64'">long</xsl:when>
-				<xsl:when test="$old-type='Int64'">long</xsl:when>
-				<xsl:when test="$old-type='System.UInt64'">ulong</xsl:when>
-				<xsl:when test="$old-type='UInt64'">ulong</xsl:when>
-				<xsl:when test="$old-type='System.Single'">float</xsl:when>
-				<xsl:when test="$old-type='Single'">float</xsl:when>
-				<xsl:when test="$old-type='System.Double'">double</xsl:when>
-				<xsl:when test="$old-type='Double'">double</xsl:when>
-				<xsl:when test="$old-type='System.Decimal'">decimal</xsl:when>
-				<xsl:when test="$old-type='Decimal'">decimal</xsl:when>
-				<xsl:when test="$old-type='System.String'">string</xsl:when>
-				<xsl:when test="$old-type='String'">string</xsl:when>
-				<xsl:when test="$old-type='System.Char'">char</xsl:when>
-				<xsl:when test="$old-type='Char'">char</xsl:when>
-				<xsl:when test="$old-type='System.Boolean'">bool</xsl:when>
-				<xsl:when test="$old-type='Boolean'">bool</xsl:when>
-				<xsl:when test="$old-type='System.Void'">void</xsl:when>
-				<xsl:when test="$old-type='Void'">void</xsl:when>
-				<xsl:when test="$old-type='System.Object'">object</xsl:when>
-				<xsl:when test="$old-type='Object'">object</xsl:when>
-				<xsl:otherwise>
-					<xsl:value-of select="$old-type" />
-				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:variable>
-		<xsl:choose>
-			<xsl:when test="contains($runtime-type, '[')">
-				<xsl:value-of select="concat($new-type, '[', substring-after($runtime-type, '['))" />
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:value-of select="$new-type" />
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:template>
-	<!-- -->
-	<xsl:template name="type-access">
-		<xsl:param name="access" />
-		<xsl:param name="type" />
-		<xsl:choose>
-			<xsl:when test="$access='Public'">public</xsl:when>
-			<xsl:when test="$access='NotPublic'">internal</xsl:when>
-			<xsl:when test="$access='NestedPublic'">public</xsl:when>
-			<xsl:when test="$access='NestedFamily'">protected</xsl:when>
-			<xsl:when test="$access='NestedFamilyOrAssembly'">protected internal</xsl:when>
-			<xsl:when test="$access='NestedAssembly'">internal</xsl:when>
-			<xsl:when test="$access='NestedPrivate'">private</xsl:when>
-			<xsl:otherwise>/* unknown */</xsl:otherwise>
-		</xsl:choose>
-	</xsl:template>
-	<!-- -->
-	<xsl:template name="method-access">
-		<xsl:param name="access" />
-		<xsl:choose>
-			<xsl:when test="$access='Public'">public</xsl:when>
-			<xsl:when test="$access='Family'">protected</xsl:when>
-			<xsl:when test="$access='FamilyOrAssembly'">protected internal</xsl:when>
-			<xsl:when test="$access='Assembly'">internal</xsl:when>
-			<xsl:when test="$access='Private'">private</xsl:when>
-			<xsl:otherwise>/* unknown */</xsl:otherwise>
-		</xsl:choose>
-	</xsl:template>
-	<!-- -->
-	<xsl:template name="contract">
-		<xsl:param name="contract" />
-		<xsl:choose>
-			<xsl:when test="$contract='Static'">static</xsl:when>
-			<xsl:when test="$contract='Abstract'">abstract</xsl:when>
-			<xsl:when test="$contract='Final'"></xsl:when>
-			<xsl:when test="$contract='Virtual'">virtual</xsl:when>
-			<xsl:when test="$contract='Override'">override</xsl:when>
-			<xsl:when test="$contract='Normal'"></xsl:when>
-			<xsl:otherwise>/* unknown */</xsl:otherwise>
-		</xsl:choose>
-	</xsl:template>
+
 	<!-- -->
 	<xsl:template name="parameter-topic">
 		<dl>
@@ -451,13 +348,22 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="syntax-section">
+	
 		<PRE class="syntax">
-		<!--xsl:call-template name="vb-type-syntax" /-->
 		<xsl:apply-templates select="." mode="cs-syntax">
-			<xsl:with-param name="include-type-links" select="true()"/>
-			<xsl:with-param name="version" select="'long'"/>
+			<xsl:with-param name="lang" select="'Visual Basic'"/>
+		</xsl:apply-templates>
+		<xsl:apply-templates select="." mode="cs-syntax">
+			<xsl:with-param name="lang" select="'C#'"/>
+		</xsl:apply-templates>
+		<xsl:apply-templates select="." mode="cs-syntax">
+			<xsl:with-param name="lang" select="'C++'"/>
+		</xsl:apply-templates>	
+		<xsl:apply-templates select="." mode="cs-syntax">
+			<xsl:with-param name="lang" select="'JScript'"/>
 		</xsl:apply-templates>
 		</PRE>	
+		
 	</xsl:template>
 	<xsl:template name="remarks-section">
 		<xsl:if test="documentation/remarks">
@@ -641,24 +547,6 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
-	<!-- -->
-	<xsl:template name="value">
-		<xsl:param name="type" />
-		<xsl:variable name="namespace">
-			<xsl:value-of select="concat(../../@name, '.')" />
-		</xsl:variable>
-		<xsl:choose>
-			<xsl:when test="contains($type, $namespace)">
-				<xsl:value-of select="substring-after($type, $namespace)" />
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:call-template name="csharp-type">
-					<xsl:with-param name="runtime-type" select="$type" />
-				</xsl:call-template>
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:template>
-
 	<!-- -->
 
 	<xsl:template name="html-head">

@@ -112,7 +112,7 @@
 									<xsl:variable name="declaring-class" select="//class[@id=$declaring-type-id]" />
 									<xsl:choose>
 										<xsl:when test="$declaring-class">
-											<a href="{NUtil:GetMemberHRef( $declaring-class/property[@name=$name] )}">
+											<a href="{NUtil:GetPropertyHRef( string( $declaring-class/@id ), string( @name ) )}">
 												<xsl:value-of select="@name" />
 											</a>
 										</xsl:when>
