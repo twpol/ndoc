@@ -98,11 +98,6 @@
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "Msdn7"
-                    Project = "{032D6069-AB8F-4F6E-9C14-5149C2F7D50D}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
                     Name = "Latex"
                     Project = "{2929DFA6-FFCF-4110-B8B5-3005A087B58A}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
