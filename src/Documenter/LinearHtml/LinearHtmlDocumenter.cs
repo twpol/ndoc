@@ -426,6 +426,57 @@ namespace NDoc.Documenter.LinearHtml
 
 		#endregion
 
+		#region System Type/Access Utility Methods
+
+		/// <summary>
+		/// Convert a full type name like System.Int32 to the more simple version
+		/// "int".
+		/// </summary>
+		/// <param name="s"></param>
+		/// <returns></returns>
+		public static string ToSimpleType(string s)
+		{
+			if ((s == null) || (s == string.Empty)) return(string.Empty);
+
+			Type type = Type.GetType(s);
+			if (type == null) return(TypeBaseName(s));
+
+			TypeCode code = Type.GetTypeCode(type);
+			if (code.Equals(TypeCode.Object)) return(TypeBaseName(s));
+
+			return(code.ToString());
+		}
+
+		/// <summary>
+		/// Convert an access string as in the xml (Public, Family, etc) to
+		/// one like we want for declarations (public, protected, etc).
+		/// </summary>
+		/// <param name="typeAccess"></param>
+		/// <returns></returns>
+		public static string ToAccessDeclaration(string typeAccess)
+		{
+			if ((typeAccess == null) || (typeAccess == string.Empty)) return(string.Empty);
+			string lcTypeAccess = Char.ToLower(typeAccess[0]) + typeAccess.Substring(1);
+			if (lcTypeAccess.Equals("family")) return("protected");
+			else return(lcTypeAccess);
+		}
+
+		/// <summary>
+		/// Return the base of the input type name.  For example the base of 
+		/// System.String is String.
+		/// </summary>
+		/// <param name="typeName"></param>
+		/// <returns></returns>
+		public static string TypeBaseName(string typeName)
+		{
+			if ((typeName == null) || (typeName == string.Empty)) return(string.Empty);
+			if (typeName.IndexOf(".") >= 0)
+				return(typeName.Substring(typeName.LastIndexOf(".") + 1));
+			else return(typeName);
+		}
+
+		#endregion
+
 		#region Xml Utility Methods
 
 		/// <summary>
@@ -452,6 +503,27 @@ namespace NDoc.Documenter.LinearHtml
 					list.Add(children.Clone());
 				}
 			} while(children.MoveToNext());
+
+			return(list);
+		}
+
+		/// <summary>
+		/// Get the descendants of the current node which have the specified
+		/// localName.  This just provides a different iteration style
+		/// from XPathNavigator.SelectDescendants().
+		/// </summary>
+		/// <param name="localName">The localname to select.</param>
+		/// <param name="nav">The XPathNavigator.</param>
+		/// <returns>A new ArrayList of XPathNavigators.</returns>
+		ArrayList GetDescendants(XPathNavigator nav, string localName)
+		{
+			ArrayList list = new ArrayList();
+
+			XPathNodeIterator iter = nav.SelectDescendants(localName, "", false);
+			while(iter.MoveNext())
+			{
+				list.Add(iter.Current.Clone());
+			}
 
 			return(list);
 		}
@@ -489,17 +561,15 @@ namespace NDoc.Documenter.LinearHtml
 			return(sortedList);
 		}
 
-		/// <summary>
-		/// Return the base of the input type name.  For example the base of 
-		/// System.String is String.
-		/// </summary>
-		/// <param name="typeName"></param>
-		/// <returns></returns>
-		private string TypeBaseName(string typeName)
+		void GetSummaryAndRemarks(XPathNavigator nav, out string summary, out string remarks)
 		{
-			if (typeName.IndexOf(".") >= 0)
-				return(typeName.Substring(typeName.LastIndexOf(".") + 1));
-			else return(typeName);
+			XPathNavigator summaryNav = GetDescendantNodeWithName(nav, "summary");
+			XPathNavigator remarksNav = GetDescendantNodeWithName(nav, "remarks");
+			summary = GetNodeXmlFixCode(summaryNav);
+			if (summaryNav != null)
+				Console.WriteLine("GSAR: got {0} from {1}", summary, summaryNav.Value);
+			else Console.WriteLine("GSAR: No summary");
+			remarks = GetNodeXmlFixCode(remarksNav);
 		}
 
 		/// <summary>
@@ -514,7 +584,65 @@ namespace NDoc.Documenter.LinearHtml
 			}
 		}
 
-		/* doesn't work because can't modify node via XPathNavigator
+		/// <summary>
+		/// Fix code node such that it will be rendered correctly (using pre).
+		/// </summary>
+		/// <param name="topNode"></param>
+		private void FixCodeNodes(XPathNavigator nav)
+		{
+			XmlNode n = null;
+			try
+			{
+				n = ((IHasXmlNode)nav).GetNode();
+			}
+			catch(Exception) 
+			{
+				return;
+			}
+
+			if (n != null) 
+			{
+				FixCodeNodes(n); // change <code> to <pre class="code">
+			}
+		}
+
+		/// <summary>
+		/// Fix any code nodes under the specified navigator, and return the node's
+		/// inner Xml. 
+		/// </summary>
+		/// <param name="nav"></param>
+		/// <returns></returns>
+		private string GetNodeXmlFixCode(XPathNavigator nav)
+		{
+			if (nav == null) return(string.Empty);
+
+			// want the XmlNode if possible (depends on whether nav came from
+			// XmlDocument or XPathDocument).
+			// Can't seem to get raw xml from the navigator in the XPathDocument case.
+			// Don't know another way to test the cast, and it must be slow on exception
+			string s = string.Empty;
+			try
+			{
+				XmlNode n = ((IHasXmlNode)nav).GetNode();
+				FixCodeNodes(n); // change <code> to <pre class="code">
+				s = n.InnerXml;
+			}
+			catch(Exception) 
+			{
+				s = nav.Value;
+			}
+			return(s);
+		}
+
+		private void WriteNodeFixCode(XmlTextWriter xtw, XPathNavigator nav,
+			string elemType)
+		{
+			xtw.WriteStartElement(elemType);
+			xtw.WriteRaw(GetNodeXmlFixCode(nav));
+			xtw.WriteEndElement();
+		}
+
+	/* doesn't work because can't modify node via XPathNavigator
 				/// <summary>
 				/// Fix code nodes such that it will be rendered correctly (using pre).
 				/// </summary>
@@ -744,6 +872,8 @@ namespace NDoc.Documenter.LinearHtml
 
 		#region Make Html
 
+		#region Top level, assembly, module, and namespace
+
 		/// <summary>
 		/// Build and emit the html document from the loaded NDoc Xml document.
 		/// </summary>
@@ -922,6 +1052,10 @@ namespace NDoc.Documenter.LinearHtml
 			}
 		}
 
+		#endregion
+
+		#region Type
+
 		/// <summary>
 		/// Builds html for a Type.  An Type here is a class, struct, interface, etc.
 		/// </summary>
@@ -1055,27 +1189,7 @@ namespace NDoc.Documenter.LinearHtml
 				XPathNavigator summaryNav = GetDescendantNodeWithName(nav2, "summary");
 				remarksNav = GetDescendantNodeWithName(nav2, "remarks");
 
-				if (summaryNav != null)
-				{
-					// want the XmlNode if possible, can't seem to get raw xml from the navigator
-					// don't know another way to test the cast, and it must be slow on exception
-					XmlNode n = null;
-					try
-					{
-						n = ((IHasXmlNode)summaryNav).GetNode();
-					}
-					catch(Exception) {}
-
-					// write it
-					xtw.WriteStartElement("p");
-					if (n != null) 
-					{
-						FixCodeNodes(n); // change <code> to <pre class="code">
-						xtw.WriteRaw(n.InnerXml);
-					}
-					else xtw.WriteRaw(summaryNav.Value);
-					xtw.WriteEndElement();
-				}
+				if (summaryNav != null) WriteNodeFixCode(xtw, summaryNav, "p");
 			}
 
 			// attributes
@@ -1102,40 +1216,21 @@ namespace NDoc.Documenter.LinearHtml
 			if (remarksNav != null)
 			{
 				xtw.WriteElementString("h4", "Remarks");
-
-				// want the XmlNode if possible (depends on whether nav came from
-				// XmlDocument or XPathDocument).
-				// Can't seem to get raw xml from the navigator in the XPathDocument case.
-				// Don't know another way to test the cast, and it must be slow on exception
-				XmlNode n = null;
-				try
-				{
-					n = ((IHasXmlNode)remarksNav).GetNode();
-				}
-				catch(Exception) {}
-
-				// write it
-				xtw.WriteStartElement("p");
-				if (n != null) 
-				{
-					FixCodeNodes(n); // change <code> to <pre class="code">
-					xtw.WriteRaw(n.InnerXml);
-				}
-				else xtw.WriteRaw(remarksNav.Value);
-				xtw.WriteEndElement();
+				WriteNodeFixCode(xtw, remarksNav, "p");
 			}
 
 			//
-			// member types which use name/access/summary table
+			// the members (properties, methods, fields, etc) in the type
 			//
-			foreach(string memberType in orderedMemberTypes)
+			if (nodeType == "enumeration")
 			{
+				// enumerations
+				string memberType = "field"; // members are all fields in enumerations
+
 				if (memberTypeHt.ContainsKey(memberType))
 				{
-					string capsMemberType = char.ToUpper(memberType[0]) + memberType.Substring(1);
-					xtw.WriteElementString("h4", String.Format("{0} Members", capsMemberType));
-
-					string[] columnNames = { "Name", "Access", "Summary" };
+					xtw.WriteElementString("h4", String.Format("{0} Members", "Enumeration"));
+					string[] columnNames = { "Field", "Summary" };
 					StartTable(xtw, memberType + "_TableId_" + nodeName, 600, columnNames);
 
 					//
@@ -1149,13 +1244,77 @@ namespace NDoc.Documenter.LinearHtml
 					foreach(string memberId in sortedMemberIds.Keys)
 					{
 						XPathNavigator nav2 = (XPathNavigator)navTable[memberId];
-						MakeHtmlForTypeMember(nodeName, memberType, nav2, xtw);
+						string memberName = nav2.GetAttribute("name", "");
+
+						// get summary
+						string summaryString = string.Empty;
+						XPathNavigator summaryNav = GetDescendantNodeWithName(nav2, "summary");
+						if (summaryNav != null) summaryString = summaryNav.Value;
+						
+						this.AddTableEntry(xtw, memberName, summaryString);
 					}
 
 					EndTable(xtw);
 				}
+				else
+				{
+					// hmm, an enumeration with no fields?
+					Console.WriteLine("Error: LinearHtml: MakeHtmlForTypeUsingCs: No fields in enumeration {0}?",
+						nodeName);
+				}
+			}
+			else
+			{
+				// struct, class, etc.
+
+				//
+				// member types which use name/access/summary table
+				//
+				foreach(string memberType in orderedMemberTypes) // memberType in constructor, field, property...
+				{
+					if (memberTypeHt.ContainsKey(memberType))
+					{
+						string capsMemberType = char.ToUpper(memberType[0]) + memberType.Substring(1);
+						xtw.WriteElementString("h4", String.Format("{0} Members", capsMemberType));
+						navTable = (Hashtable)memberTypeHt[memberType]; // memberId -> navigator
+						// sort by member id (approximately the member name?)
+						SortedList sortedMemberIds = new SortedList(navTable);
+
+						if (MyConfig.IncludeTypeMemberDetails && 
+							(memberType.Equals("method") || memberType.Equals("constructor")))
+						{
+							// method, with details
+							foreach(string memberId in sortedMemberIds.Keys)
+							{
+								XPathNavigator nav2 = (XPathNavigator)navTable[memberId];
+								MakeHtmlDetailsForMethod(nodeName, memberType, nav2, xtw);
+							}
+						}
+						else
+						{
+							// not a method, or no details
+							string[] columnNames = { "Name", "Access", "Summary" };
+							StartTable(xtw, memberType + "_TableId_" + nodeName, 600, columnNames);
+
+							//
+							// create a table entry for each member of this Type
+							//
+							foreach(string memberId in sortedMemberIds.Keys)
+							{
+								XPathNavigator nav2 = (XPathNavigator)navTable[memberId];
+								MakeHtmlForTypeMember(nodeName, memberType, nav2, xtw);
+							}
+
+							EndTable(xtw);
+						}
+					}
+				}
 			}
 		}
+
+		#endregion
+
+		#region Type Members, methods
 
 		/// <summary>
 		/// Make (and write) html for a Type (class, interface, ...) member, such
@@ -1175,8 +1334,16 @@ namespace NDoc.Documenter.LinearHtml
 			string typeName = nav.GetAttribute("type", "");
 			string typeBaseName = TypeBaseName(typeName);
 			string declaringType = nav.GetAttribute("declaringType", "");
+
 			XPathNavigator summaryNav = GetDescendantNodeWithName(nav, "summary");
 			//DumpNavTree(summaryNav, "    ");
+			XPathNavigator remarksNav = GetDescendantNodeWithName(nav, "remarks");
+
+			string summaryString = string.Empty;
+			if (summaryNav != null) summaryString = summaryNav.Value;
+			string remarksString = string.Empty;
+			if (MyConfig.IncludeTypeMemberDetails && (remarksNav != null))
+				remarksString = "<br/><br/>" + remarksNav.Value;
 
 			//
 			// create a string for the name column
@@ -1188,16 +1355,18 @@ namespace NDoc.Documenter.LinearHtml
 					nameString = KeyWrap(memberName) + TypeRefWrap(" : " + typeBaseName);
 					break;
 				case "property":
-					nameString = KeyWrap(memberName)  + TypeRefWrap(" : " + typeBaseName);
+					nameString = KeyWrap(memberName) + TypeRefWrap(" : " + typeBaseName);
 					break;
 				case "method":
 					typeBaseName = TypeBaseName(nav.GetAttribute("returnType", ""));
 					string args = "";
-					if (includeMethodSignature) args = MakeMethodParameterList(nav);
+					if (includeMethodSignature) args = MakeMethodParametersString(nav);
 					nameString = KeyWrap(memberName + "(" + args + ")") + TypeRefWrap(" : " + typeBaseName);
+					remarksString = string.Empty; // don't include remarks for methods
 					break;
 				case "constructor":
 					nameString = KeyWrap(parentTypeName + "()");
+					remarksString = string.Empty; // don't include remarks for methods
 					break;
 			}
 
@@ -1210,7 +1379,7 @@ namespace NDoc.Documenter.LinearHtml
 				xtw.WriteStartElement("TD");
 				xtw.WriteRaw(nameString);
 				xtw.WriteEndElement();
-				xtw.WriteElementString("TD", memberAccess);
+				xtw.WriteElementString("TD", ToAccessDeclaration(memberAccess));
 
 				if (declaringType.Length > 0)
 				{
@@ -1222,14 +1391,16 @@ namespace NDoc.Documenter.LinearHtml
 					xtw.WriteRaw("(from " + TypeRefWrap(declaringType) + ")");
 					xtw.WriteEndElement(); // em
 					xtw.WriteString(" ");
-					if (summaryNav != null) xtw.WriteString(summaryNav.Value);
+					xtw.WriteString(summaryString);
+					if (!remarksString.Equals(string.Empty)) xtw.WriteRaw(remarksString);
 					xtw.WriteEndElement(); // TD
 				}
 				else
 				{
-					if (summaryNav != null)
-						xtw.WriteElementString("TD", summaryNav.Value);
-					else xtw.WriteElementString("TD", " ");
+					xtw.WriteStartElement("TD");
+					xtw.WriteString(summaryString);
+					if (!remarksString.Equals(string.Empty)) xtw.WriteRaw(remarksString);
+					xtw.WriteEndElement(); // TD
 				}
 
 				xtw.WriteEndElement();
@@ -1237,16 +1408,114 @@ namespace NDoc.Documenter.LinearHtml
 		}
 
 		/// <summary>
+		/// Write html for a single method.
+		/// </summary>
+		/// <param name="parentTypeName"></param>
+		/// <param name="memberType"></param>
+		/// <param name="nav"></param>
+		/// <param name="xtw"></param>
+		void MakeHtmlDetailsForMethod(string parentTypeName, string memberType, 
+			  XPathNavigator nav, XmlTextWriter xtw)
+		{
+			// get summary and remarks strings
+			XPathNavigator summaryNav = GetDescendantNodeWithName(nav, "summary");
+			XPathNavigator remarksNav = GetDescendantNodeWithName(nav, "remarks");
+
+			xtw.WriteRaw(String.Format("<b>{0}</b>", MakeMethodDeclaration(nav, parentTypeName)));
+			xtw.WriteStartElement("div");
+			xtw.WriteAttributeString("class", "indent1");
+			if (summaryNav != null) WriteNodeFixCode(xtw, summaryNav, "p");
+			if (remarksNav != null) WriteNodeFixCode(xtw, remarksNav, "p");
+			MakeHtmlForMethodParameterDetails(nav, xtw);
+			xtw.WriteEndElement(); // div
+		}
+
+		/// <summary>
+		/// Write a parameter list to the specified text writer.
+		/// </summary>
+		/// <param name="nav">Navigator to the Method's node.</param>
+		/// <returns>The param list string.</returns>
+		void MakeHtmlForMethodParameterDetails(XPathNavigator nav, XmlTextWriter xtw)
+		{
+			// add params
+			ArrayList parameterList = GetChildren(nav, "parameter");
+			ArrayList paramList = GetDescendants(nav, "param");
+
+			if (parameterList.Count > 0)
+			{
+				xtw.WriteStartElement("p");
+				xtw.WriteElementString("lh", "Parameters:");
+				foreach(XPathNavigator n3 in parameterList)
+				{
+					string name = n3.GetAttribute("name", "");
+					string type = n3.GetAttribute("type", "");
+					string simpleType = ToSimpleType(type);
+					string inOutRef = n3.GetAttribute("huh?", "");
+
+					StringBuilder sb = new StringBuilder();
+					if (inOutRef.Length > 0) sb.Append(inOutRef + " ");
+					sb.Append(simpleType + " " + name);
+
+					// get description, which is the value of another node!
+					string desc = string.Empty;
+					foreach(XPathNavigator descNav in paramList)
+					{
+						string tmpName = descNav.GetAttribute("name", "");
+						if (tmpName == name)
+						{
+							desc = descNav.Value;
+							break;
+						}
+					}
+
+					xtw.WriteRaw(String.Format("<li class=\"indent1\">{0} : {1}</li>", sb.ToString(), desc));
+				}
+				xtw.WriteEndElement();
+			}
+		}
+
+		/// <summary>
+		/// Make a string for a method (including constructor) declaration, such as 
+		/// "public bool Foo(int x, int y, string s)".
+		/// </summary>
+		/// <param name="nav">Navigator to the Method's node.</param>
+		/// <param name="parentTypeName">The name of the Type which contains this
+		/// method.</param>
+		/// <returns>The declaration string.</returns>
+		string MakeMethodDeclaration(XPathNavigator nav, string parentTypeName)
+		{
+			string memberAccess = nav.GetAttribute("access", "");
+			string memberName = nav.GetAttribute("name", "");
+			string returnType = ToSimpleType(nav.GetAttribute("returnType", ""));
+
+			string args = MakeMethodParametersString(nav);
+			string nameString;
+			if (memberName.Equals(".ctor"))
+			{
+				nameString = KeyWrap(ToAccessDeclaration(memberAccess) + " " 
+					+ parentTypeName + "(" + args + ")");
+			}
+			else
+			{
+				nameString = KeyWrap(ToAccessDeclaration(memberAccess) + " " 
+					+ TypeRefWrap(returnType) + " " 
+					+ memberName + "(" + args + ")");
+			}
+
+			return(nameString);
+		}
+
+		/// <summary>
 		/// Make a string for a method's parameter list, such as 
 		/// "int x, int y, string s".
 		/// </summary>
 		/// <param name="nav">Navigator to the Method's node.</param>
-		/// <returns>The declaration string.</returns>
-		string MakeMethodParameterList(XPathNavigator nav)
+		/// <returns>The param list string.</returns>
+		string MakeMethodParametersString(XPathNavigator nav)
 		{
 			StringBuilder sb = new StringBuilder();
 
-			// add interfaces to declaration string
+			// add params
 			ArrayList paramList = GetChildren(nav, "parameter");
 			if (paramList.Count > 0)
 			{
@@ -1257,9 +1526,10 @@ namespace NDoc.Documenter.LinearHtml
 					first = false;
 					string name = n3.GetAttribute("name", "");
 					string type = n3.GetAttribute("type", "");
+					string simpleType = ToSimpleType(type);
 					string inOutRef = n3.GetAttribute("huh?", "");
 					if (inOutRef.Length > 0) sb.Append(inOutRef + " ");
-					sb.Append(type + " " + name);
+					sb.Append(simpleType + " " + name);
 				}
 			}
 
@@ -1283,7 +1553,7 @@ namespace NDoc.Documenter.LinearHtml
 			else if (abstractString.Equals("true")) abstractString = " abstract ";
 
 			// put in declaration
-			string lcTypeAccess = Char.ToLower(typeAccess[0]) + typeAccess.Substring(1);
+			string lcTypeAccess = ToAccessDeclaration(typeAccess);
 			string declarationString = lcTypeAccess + abstractString + nodeType + " " + nodeName;
 			if (baseType.Length > 0) declarationString += " : " + baseType;
 
@@ -1306,6 +1576,8 @@ namespace NDoc.Documenter.LinearHtml
 
 			return(declarationString);
 		}
+
+		#endregion
 
 		#endregion
 
