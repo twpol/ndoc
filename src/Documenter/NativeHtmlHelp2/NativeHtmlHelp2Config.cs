@@ -22,8 +22,6 @@ using System.Drawing.Design;
 using System.ComponentModel;
 using System.Windows.Forms.Design;
 
-using Microsoft.Win32;
-
 using NDoc.Core;
 
 namespace NDoc.Documenter.NativeHtmlHelp2
@@ -376,69 +374,5 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 				SetDirty();
 			}
 		}
-
-		#region HxComp location stuff
-		private static string _HtmlHelp2CompilerPath = Path.Combine(
-			Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
-			"Microsoft Help 2.0 SDK");
-
-		private static bool FindHxComp()
-		{
-			return File.Exists(Path.Combine(_HtmlHelp2CompilerPath, "hxcomp.exe"));
-		}
-
-		internal static string HtmlHelp2CompilerPath
-		{
-			get
-			{
-				if (FindHxComp())
-				{
-					return _HtmlHelp2CompilerPath;
-				}
-
-				//not in default dir, try to locate it from the registry
-				RegistryKey key = Registry.ClassesRoot.OpenSubKey("Hxcomp.HxComp");
-				if (key != null)
-				{
-					key = key.OpenSubKey("CLSID");
-					if (key != null)
-					{
-						object val = key.GetValue(null);
-						if (val != null)				
-						{
-							string clsid = (string)val;
-							key = Registry.ClassesRoot.OpenSubKey("CLSID");
-							if (key != null)
-							{
-								key = key.OpenSubKey(clsid);
-								if (key != null)
-								{
-									key = key.OpenSubKey("LocalServer32");
-									if (key != null)
-									{
-										val = key.GetValue(null);
-										if (val != null)
-										{
-											string path = (string)val;
-											_HtmlHelp2CompilerPath = Path.GetDirectoryName(path);
-											if (FindHxComp())
-											{
-												return _HtmlHelp2CompilerPath;
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-
-				//still not finding the compiler, give up
-				throw new DocumenterException(
-					"Unable to find the HTML Help 2 Compiler. Please verify that the Microsoft Visual Studio .NET Help Integration Kit has been installed.");
-			}
-		}
-		#endregion
-
 	}
 }

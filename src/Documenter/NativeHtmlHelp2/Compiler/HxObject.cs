@@ -20,6 +20,8 @@ using System;
 using System.IO;
 using System.Diagnostics;
 
+using Microsoft.Win32;
+
 namespace NDoc.Documenter.NativeHtmlHelp2.Compiler
 {
 	/// <summary>
@@ -28,8 +30,101 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Compiler
 	/// </summary>
 	public abstract class HxObject : object
 	{
-		private string _CompilerPath = String.Empty;
+
 		private string _AppName = String.Empty;
+
+		static HxObject()
+		{
+			string path = Path.Combine(
+												Environment.GetFolderPath( Environment.SpecialFolder.ProgramFiles ),
+												"Microsoft Help 2.0 SDK" );
+
+			try
+			{
+				if ( !HxPathIsGood( path ) )
+				{
+					path = HxPathFromRegistry;
+			
+					HxCompFound = HxPathIsGood( path );
+				}
+				else
+				{
+					HxCompFound = true;
+				}
+
+				if ( HxCompFound )
+					_HtmlHelp2CompilerPath = path;
+			}
+			catch ( Exception )
+			{
+				HxCompFound = false;
+			}
+		}
+
+
+		private static bool HxCompFound = false;
+		public static bool HxCompIsInstalled
+		{
+			get
+			{
+				return HxCompFound;
+			}
+		}
+
+		private static string _HtmlHelp2CompilerPath; 
+		protected static string HtmlHelp2CompilerPath
+		{
+			get
+			{
+				return _HtmlHelp2CompilerPath;
+			}
+		}
+
+		private static bool HxPathIsGood( string path )
+		{
+			return File.Exists( Path.Combine( path, "hxcomp.exe" ) );
+		}
+
+		private static string HxPathFromRegistry
+		{
+			get
+			{
+				RegistryKey key = Registry.ClassesRoot.OpenSubKey( "Hxcomp.HxComp" );
+				if ( key != null )
+				{
+					key = key.OpenSubKey( "CLSID" );
+					if ( key != null )
+					{
+						object val = key.GetValue( null );
+						if ( val != null )				
+						{
+							string clsid = (string)val;
+							key = Registry.ClassesRoot.OpenSubKey( "CLSID" );
+							if ( key != null )
+							{
+								key = key.OpenSubKey(clsid);
+								if ( key != null )
+								{
+									key = key.OpenSubKey( "LocalServer32" );
+									if ( key != null )
+									{
+										val = key.GetValue( null );
+										if ( val != null )
+										{
+											return Path.GetDirectoryName( (string)val );
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+
+				//still not finding the compiler, give up
+				throw new Exception(
+					"Unable to find the HTML Help 2 Compiler. Please verify that the Microsoft Visual Studio .NET Help Integration Kit has been installed.");			
+			}
+		}
 
 		/// <summary>
 		/// Create a new instance of the HxObject class
@@ -37,28 +132,22 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Compiler
 		/// <param name="compilerPath">See <see cref="CompilerPath"/></param>
 		/// <param name="appName">The name of the executable that implements 
 		/// the functionality wrapped by an HxObject derived class</param>
-		public HxObject( string compilerPath, string appName )
+		public HxObject( string appName )
 		{
-			if ( !Directory.Exists( compilerPath ) )
-				throw new ArgumentException( "The specifed directory does not exist:" + compilerPath, "compilerPath" );
+			if ( !HxObject.HxCompIsInstalled ) 
+				throw new Exception( "VSHIK is not installed" );
 			
-			if ( !File.Exists( Path.Combine( compilerPath, appName ) ) )
+			if ( !File.Exists( Path.Combine( HtmlHelp2CompilerPath, appName ) ) )
 				throw new ArgumentException( "Could not find the specified compiler:" + appName, "appName" );
 
-			_CompilerPath = compilerPath;
 			_AppName = appName;
 		}
 
-		/// <summary>
-		/// The location of the executable file
-		/// <see cref="AppName"/>
-		/// </summary>
-		public string CompilerPath{ get{ return _CompilerPath; } }
 
 		/// <summary>
 		/// The full path and file name of the Hx executable file
 		/// </summary>
-		protected string CompilerEXEPath{ get{ return Path.Combine( CompilerPath, AppName ); } }
+		protected string CompilerEXEPath{ get{ return Path.Combine( HtmlHelp2CompilerPath, AppName ); } }
 
 		/// <summary>
 		/// The name of the executable that the class wraps
@@ -126,6 +215,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Compiler
 		/// <remarks>Can be overridden by derived classes to provide custom timeout intervals</remarks>
 		/// <value>600000</value>
 		protected virtual int ProcessTimeout{ get{ return 600000; } }
-		
+
 	}
 }

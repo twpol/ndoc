@@ -690,12 +690,9 @@
 				<xsl:value-of select="$title" />
 			</title>
 			<xml>
-				<MSHelp:TOCTitle>
-					<xsl:attribute name="Title"><xsl:value-of select="$title" /></xsl:attribute>
-				</MSHelp:TOCTitle>
-				<MSHelp:RLTitle>
-					<xsl:attribute name="Title"><xsl:value-of select="$title"/></xsl:attribute>
-				</MSHelp:RLTitle>
+				<xsl:apply-templates select="." mode="MSHelpTitle">
+					<xsl:with-param name="title" select="$title"/>
+				</xsl:apply-templates>
 				
 				<xsl:apply-templates select="." mode="KIndex"/>
 				<xsl:apply-templates select="." mode="FIndex"/>

@@ -56,8 +56,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Compiler
 		/// <summary>
 		/// Create a new instance of a HxReg object
 		/// </summary>
-		/// <param name="compilerPath"><see cref="HxObject.CompilerPath"/></param>
-		public HxReg( string compilerPath ) : base( compilerPath, "HxReg.exe" )
+		public HxReg() : base( "HxReg.exe" )
 		{
 		}
 

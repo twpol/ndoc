@@ -6,6 +6,37 @@
 	<xsl:template match="* | node() | text()" mode="KIndex"/>
 	<xsl:template match="* | node() | text()" mode="AIndex"/>
 	
+	<!-- this is just here until each type has it's own title logic -->
+	<xsl:template match="* | node() | text()" mode="MSHelpTitle">
+		<MSHelp:TOCTitle>
+			<xsl:attribute name="Title"><xsl:value-of select="@id"/></xsl:attribute>
+		</MSHelp:TOCTitle>
+		<MSHelp:RLTitle>
+			<xsl:attribute name="Title"><xsl:value-of select="@id"/></xsl:attribute>
+		</MSHelp:RLTitle>	
+	</xsl:template>
+	
+	<xsl:template match="ndoc" mode="MSHelpTitle">
+		<xsl:param name="title" />
+		<MSHelp:TOCTitle>
+			<xsl:attribute name="Title"><xsl:value-of select="$title"/></xsl:attribute>
+		</MSHelp:TOCTitle>
+		<MSHelp:RLTitle>
+			<xsl:attribute name="Title"><xsl:value-of select="concat( $title, ' Namespace' )"/></xsl:attribute>
+		</MSHelp:RLTitle>	
+	</xsl:template>
+	
+	<xsl:template match="enumeration" mode="MSHelpTitle">
+		<xsl:param name="title" />
+		<MSHelp:TOCTitle>
+			<xsl:attribute name="Title"><xsl:value-of select="$title"/></xsl:attribute>
+		</MSHelp:TOCTitle>
+		<MSHelp:RLTitle>
+			<xsl:attribute name="Title"><xsl:value-of select="$title"/></xsl:attribute>
+		</MSHelp:RLTitle>	
+	</xsl:template>
+	
+	
 	<xsl:template match="enumeration" mode="FIndex">
 		<xsl:call-template name="add-index-term">
 			<xsl:with-param name="index">F</xsl:with-param>
@@ -25,6 +56,22 @@
 		</xsl:call-template>		
 	</xsl:template>	
 	
+	<xsl:template match="namespace" mode="FIndex">
+		<!-- TODO - look at how nested namespace appear -->
+		<xsl:call-template name="add-index-term">
+			<xsl:with-param name="index">F</xsl:with-param>
+			<xsl:with-param name="term" select="@name"/>
+		</xsl:call-template>
+	</xsl:template>
+	
+	<xsl:template match="namespace" mode="KIndex">
+		<!-- TODO - look at how nested namespace appear -->
+		<xsl:call-template name="add-index-term">
+			<xsl:with-param name="index">K</xsl:with-param>
+			<xsl:with-param name="term" select="concat( @name, ' namespace' )"/>
+		</xsl:call-template>
+	</xsl:template>
+	
 	<xsl:template match="enumeration" mode="KIndex">
 		<xsl:apply-templates select="field" mode="KIndex"/>
 		<xsl:call-template name="add-index-term">
@@ -40,7 +87,8 @@
 		</xsl:call-template>		
 	</xsl:template>
 	
-	<xsl:template match="enumeration" mode="AIndex">
+	
+	<xsl:template match="enumeration | namespace" mode="AIndex">
 		<MSHelp:Keyword Index="A">
 			<xsl:attribute name="Term">
 				<xsl:call-template name="get-filename-for-type">

@@ -72,6 +72,9 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			if (result != null)
 				return result;
 
+			if ( !HxObject.HxCompIsInstalled )
+				return "Could not find Html Help 2 compiler. Please make sure VSHIK 2003 is properly installed";
+
 			if ( MyConfig.OutputDirectory == null )
 				return "The output directory must be set";
 
@@ -101,6 +104,9 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		/// <summary>See <see cref="IDocumenter"/>.</summary>
 		public override void Build(Project project)
 		{
+			if ( !HxObject.HxCompIsInstalled )
+				throw new DocumenterException( "Could not find Html Help 2 compiler. Please make sure VSHIK 2003 is properly installed" );
+
 			try
 			{
 				OnDocBuildingStep( 0, "Initializing..." );
@@ -242,7 +248,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 
 			if ( ns.Length > 0 )
 			{
-				HxReg reg = new HxReg( NativeHtmlHelp2Config.HtmlHelp2CompilerPath );
+				HxReg reg = new HxReg();
 				reg.RegisterNamespace( ns, new FileInfo( Path.Combine( WorkingPath, MyConfig.HtmlHelpName + ".Hxs" ) ), MyConfig.Title );
 				reg.RegisterTitle( ns, ns, new FileInfo( Path.Combine( WorkingPath, MyConfig.HtmlHelpName + ".Hxs" ) ) );
 			}
@@ -254,7 +260,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 
 			if ( ns.Length > 0 )
 			{
-				HxReg reg = new HxReg( NativeHtmlHelp2Config.HtmlHelp2CompilerPath );
+				HxReg reg = new HxReg();
 				reg.RegisterTitle( ns, MyConfig.HtmlHelpName, new FileInfo( Path.Combine( WorkingPath, MyConfig.HtmlHelpName + ".Hxs" ) ) );
 			}
 		}
