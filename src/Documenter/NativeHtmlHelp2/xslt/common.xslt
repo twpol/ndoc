@@ -319,7 +319,6 @@
 					<xsl:choose>
 						<xsl:when test="$member='property'">
 							<xsl:call-template name="get-link-for-interface-property">
-								<xsl:with-param name="declaring-type-name" select="@declaringType"/>
 								<xsl:with-param name="interface-property" select="$declaring-interface/property[@name=$name]"/>
 								<xsl:with-param name="property" select="."/>
 								<xsl:with-param name="link-text" select="concat( @interface, '.', @name )"/>
@@ -327,7 +326,6 @@
 						</xsl:when>
 						<xsl:when test="$member='event'">
 							<xsl:call-template name="get-link-for-interface-event">
-								<xsl:with-param name="declaring-type-name" select="@declaringType"/>
 								<xsl:with-param name="interface-event" select="$declaring-interface/event[@name=$name]"/>
 								<xsl:with-param name="event" select="."/>
 								<xsl:with-param name="link-text" select="concat( @interface, '.', @name )"/>
@@ -336,7 +334,6 @@
 						</xsl:when>
 						<xsl:otherwise>
 							<xsl:call-template name="get-link-for-interface-method">
-								<xsl:with-param name="declaring-type-name" select="@declaringType"/>
 								<xsl:with-param name="interface-method" select="$declaring-interface/method[@name=$name]"/>
 								<xsl:with-param name="method" select="."/>
 								<xsl:with-param name="link-text" select="concat( @interface, '.', @name )"/>
@@ -498,10 +495,11 @@
 		<xsl:param name="cref" />
 
 		<xsl:choose>
-			<xsl:when test="contains( $cref, ':System.' )">
+			<xsl:when test="not( //node()[@id = $cref][local-name() != 'base'] )">
 				<xsl:call-template name="get-xlink">
 					<xsl:with-param name="a-index" select="NUtil:GetAIndex( $cref )"/>
-					<xsl:with-param name="link-text" select="string(NUtil:GetName($cref))"/>						
+					<xsl:with-param name="link-text" select="string(NUtil:GetName($cref))"/>	
+					<xsl:with-param name="ns-key" select="substring-after( $cref, ':' )"/>										
 				</xsl:call-template>	
 			</xsl:when>
 			<xsl:otherwise>

@@ -145,27 +145,31 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 				TOCFile toc = TOCFile.CreateFrom( Path.Combine( ResourceDirectory, @"HxProject\project.HxT" ), MyConfig.HtmlHelpName );
 				
 				HxProject.TOCFile = toc.FileName;
-				HxProject.Save( w.RootDirectory );
+				HxProject.Save( w.WorkingDirectory );
 
 				// create and intialize a HtmlFactory
 				ExternalHtmlProvider htmlProvider = new ExternalHtmlProvider( MyConfig.HeaderHtml, MyConfig.FooterHtml );
-				HtmlFactory factory = new HtmlFactory( Path.Combine( this.WorkingPath, "html" ), htmlProvider, MyConfig.LinkToSdkDocVersion );
+				HtmlFactory factory = new HtmlFactory( w.ContentDirectory, htmlProvider, MyConfig.LinkToSdkDocVersion );
 
 				using( new TOCBuilder( toc, factory ) )
 					MakeHtml( xmlDocumentation, factory );
 
-				toc.Save( w.RootDirectory );
+				toc.Save( w.WorkingDirectory );
 
 				//then compile the HxC into and HxS
 				OnDocBuildingStep( 65, "Compiling Html Help 2 Files..." );
-				CompileHxCFile();
+				CompileHxCFile( w );
+
+				// copy outputs to the final build location
+				w.SaveOutputs( "*.Hxs" );
+				w.SaveOutputs( "*.HxI" );
 
 				// do clean up and final registration steps
 				OnDocBuildingStep( 99, "Finishing up..." );
 				if ( MyConfig.RegisterTitleWithNamespace )
-					RegisterTitle();
+					RegisterTitle( w );
 				else if ( MyConfig.RegisterTitleAsCollection )
-					RegisterCollection();
+					RegisterCollection( w );
 			}
 			catch ( Exception e )
 			{
@@ -187,9 +191,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			project.Title = MyConfig.Title;
 
 			if ( MyConfig.IncludeDefaultStopWordList )
-				project.StopWordFile = "FTSstop_" + MyConfig.CharacterSet.ToString() + ".stp";
-			else
-				project.StopWordFile = "";
+				project.StopWordFile = string.Format( "FTSstop_{0}.stp", MyConfig.CharacterSet.ToString() );
 
 			return project;
 		}
@@ -212,7 +214,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			factory.Properties.Add( "ndoc-documented-attributes", MyConfig.DocumentedAttributes );
 			factory.Properties.Add( "ndoc-platforms", GetPlatformString() );
 			factory.Properties.Add( "ndoc-version", MyConfig.Version );
-			factory.Properties.Add( "includeHierarchy", MyConfig.IncludeHierarchy );
+			factory.Properties.Add( "ndoc-includeHierarchy", MyConfig.IncludeHierarchy );
 
 			// make the html
 			factory.MakeHtml( xmlDocumentation );
@@ -313,35 +315,36 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 				Path.GetDirectoryName( new Uri( Assembly.GetExecutingAssembly().CodeBase ).AbsolutePath ) );
 		}
 
-		private void RegisterCollection()
+		private void RegisterCollection( Workspace w )
 		{
 			string ns = MyConfig.HtmlHelpName;
 
 			if ( ns.Length > 0 )
 			{
 				HxReg reg = new HxReg();
-				reg.RegisterNamespace( ns, new FileInfo( Path.Combine( WorkingPath, MyConfig.HtmlHelpName + ".Hxs" ) ), MyConfig.Title );
-				reg.RegisterTitle( ns, ns, new FileInfo( Path.Combine( WorkingPath, MyConfig.HtmlHelpName + ".Hxs" ) ) );
+				FileInfo f = new FileInfo( Path.Combine( w.RootDirectory, MyConfig.HtmlHelpName + ".Hxs" ) );
+				reg.RegisterNamespace( ns, f, MyConfig.Title );
+				reg.RegisterTitle( ns, ns, f );
 			}
 		}
 
-		private void RegisterTitle()
+		private void RegisterTitle( Workspace w )
 		{
 			string ns = MyConfig.ParentCollectionNamespace;
 
 			if ( ns.Length > 0 )
 			{
 				HxReg reg = new HxReg();
-				reg.RegisterTitle( ns, MyConfig.HtmlHelpName, new FileInfo( Path.Combine( WorkingPath, MyConfig.HtmlHelpName + ".Hxs" ) ) );
+				reg.RegisterTitle( ns, MyConfig.HtmlHelpName, new FileInfo( Path.Combine( w.RootDirectory, MyConfig.HtmlHelpName + ".Hxs" ) ) );
 			}
 		}
 
-		private void CompileHxCFile()
+		private void CompileHxCFile( Workspace w )
 		{
 			try
 			{
 				HxCompiler compiler = new HxCompiler();
-				compiler.Compile( new DirectoryInfo( WorkingPath ), MyConfig.HtmlHelpName, MyConfig.LangID );
+				compiler.Compile( new DirectoryInfo( w.WorkingDirectory ), MyConfig.HtmlHelpName, MyConfig.LangID );
 			}
 			catch ( Exception e )
 			{

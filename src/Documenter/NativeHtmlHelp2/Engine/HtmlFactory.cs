@@ -153,7 +153,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		public void MakeHtml( XmlNode documentation )
 		{
 			fileNameMapper = new FileNameMapper();
-			fileNameMapper.MakeElementNames( documentation );
 			MakeHtmlForAssemblies( documentation );
 		}
 
@@ -213,7 +212,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 				foreach ( DictionaryEntry entry in Properties )				
 					arguments.AddParam( entry.Key.ToString(), "", entry.Value );
 				
-				MsdnXsltUtilities utilities = new MsdnXsltUtilities( fileNameMapper.ElemNames, this.nsMapper );
+				MsdnXsltUtilities utilities = new MsdnXsltUtilities( this.nsMapper );
 		
 				arguments.AddExtensionObject( "urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities", utilities );
 				arguments.AddExtensionObject( "urn:NDocExternalHtml", _htmlProvider );
@@ -242,7 +241,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 				arguments = new XsltArgumentList();
 				arguments.AddParam( "namespace", String.Empty, namespaceName );
 
-				if ( Properties.Contains("includeHierarchy") && (bool)Properties["includeHierarchy"] )
+				if ( Properties.Contains("ndoc-includeHierarchy") && (bool)Properties["ndoc-includeHierarchy"] )
 					TransformAndWriteResult( xmlDocumentation, "namespacehierarchy", arguments, FileNameMapper.GetFileNameForNamespaceHierarchy( namespaceName ) );
 
 				MakeHtmlForTypes( xmlDocumentation, namespaceName );

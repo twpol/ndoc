@@ -106,33 +106,11 @@
 					</xsl:when>
 					<xsl:otherwise>
 						<td width="50%">
-							<xsl:choose>
-								<xsl:when test="@declaringType">
-									<xsl:variable name="declaring-type-id" select="concat('T:', @declaringType)" />
-									<xsl:variable name="declaring-class" select="//class[@id=$declaring-type-id]" />
-									<xsl:choose>
-										<xsl:when test="$declaring-class">
-											<a href="{NUtil:GetPropertyHRef( string( $declaring-class/@id ), string( @name ) )}">
-												<xsl:value-of select="@name" />
-											</a>
-										</xsl:when>
-										<xsl:when test="starts-with(@declaringType, 'System.')">
-											<xsl:call-template name="get-xlink-for-system-member">
-												<xsl:with-param name="text" select="@name"/>
-												<xsl:with-param name="member" select="."/>
-											</xsl:call-template>											
-										</xsl:when>
-										<xsl:otherwise>
-											<xsl:value-of select="@name" />
-										</xsl:otherwise>
-									</xsl:choose>
-								</xsl:when>
-								<xsl:otherwise>
-									<a href="{NUtil:GetMemberHRef( . )}">
-										<xsl:value-of select="@name" />
-									</a>
-								</xsl:otherwise>
-							</xsl:choose>
+							<xsl:call-template name="get-link-for-member">
+								<xsl:with-param name="link-text" select="@name"/>
+								<xsl:with-param name="member" select="."/>
+								<xsl:with-param name="member-prefix" select="'P'"/>
+							</xsl:call-template>
 						</td>
 						<td width="50%">
 							<xsl:apply-templates select="documentation/summary/node()" mode="nopara" />

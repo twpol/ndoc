@@ -24,7 +24,7 @@
 				</xsl:call-template>
 				<div id="nstext" valign="bottom">
 					<p>
-						<xsl:call-template name="get-xlink-for-system-type">
+						<xsl:call-template name="get-xlink-for-foreign-type">
 							<xsl:with-param name="type" select="'T:System.Object'" />									
 						</xsl:call-template>
 					</p>
@@ -83,7 +83,7 @@
 			</xsl:call-template>
 			<xsl:choose>
 				<xsl:when test="starts-with($head/@id, 'T:System.')">
-					<xsl:call-template name="get-xlink-for-system-type">
+					<xsl:call-template name="get-xlink-for-foreign-type">
 						<xsl:with-param name="type" select="$head/@id" />									
 					</xsl:call-template>
 				</xsl:when>

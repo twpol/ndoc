@@ -21,6 +21,7 @@ using System.Xml;
 using System.Xml.XPath;
 using System.Diagnostics;
 using System.Collections.Specialized;
+
 using NDoc.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping;
 
 namespace NDoc.Documenter.NativeHtmlHelp2.Engine
@@ -32,8 +33,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 	{
 		private const string systemPrefix = "System.";
 
-		private StringDictionary elemNames;
-
 		private StringCollection descriptions;
 
 		private NamespaceMapper nsMapper;
@@ -41,13 +40,10 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <summary>
 		/// Initializes a new instance of class MsdnXsltUtilities
 		/// </summary>
-		/// <param name="elemNames">A StringDictionary holding id to element name mappings</param>
-		/// <param name="NamespaceMapper">The namespace mapper used to look up XLink help namespace for foreign types</param>	
-		public MsdnXsltUtilities( StringDictionary elemNames, NamespaceMapper mapper )
+		/// <param name="mapper">The namespace mapper used to look up XLink help namespace for foreign types</param>	
+		public MsdnXsltUtilities( NamespaceMapper mapper )
 		{
-			descriptions = new StringCollection();
-
-			this.elemNames = elemNames;		
+			descriptions = new StringCollection();	
 
 			nsMapper = mapper;
 		}
@@ -269,12 +265,18 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		public string GetLocalHRef( string cref )
 		{
 			// if it's not a type string return nothing
-			if ( ( cref.Length <= 2 ) || ( cref[1] != ':' ) )
+			if ( cref == null || cref.Length <= 2 || cref[1] != ':' )
 				return string.Empty;
 
+			string memberName = string.Empty;
+			string typeID = string.Empty;
+
 			int lastDot = cref.LastIndexOf( '.' );
-			string memberName = cref.Substring( lastDot + 1 );
-			string typeID = cref.Substring( 0, lastDot );
+			if ( lastDot > -1 )
+			{
+				memberName = cref.Substring( lastDot + 1 );
+				typeID = cref.Substring( 0, lastDot );
+			}
 
 			switch ( cref.Substring( 0, 2 ) )
 			{
@@ -299,8 +301,25 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			if ( ( cref.Length <= 2 ) || ( cref[1] != ':' ) )
 				return string.Empty;
 
-#warning This only works for system types right now
+			ManagedName name = new ManagedName( cref );
 
+			// if the cref is from the system or microsoft namespace generate a MS AIndex
+			if ( name.RootNamespace == "System" || name.RootNamespace == "Microsoft" )
+				return GetSystemAIndex( cref );
+			// otherwise we're going to assume that the foreign type was documented with NDoc
+			// and generate an NDoc AIndex
+			else
+				return GetNDocAIndex( cref );
+		}
+
+		private string GetNDocAIndex( string cref )
+		{
+			string fileName = GetLocalHRef( cref );	
+			return fileName.Replace( ".html", "" );
+		}
+
+		private string GetSystemAIndex( string cref )
+		{
 			switch ( cref.Substring( 0, 2 ) )
 			{
 				case "N:":	// Namespace
@@ -311,7 +330,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 				case "P:":	// Property
 				case "M:":	// Method
 				case "E:":	// Event
-					return GetFilenameForSystemMember( cref );
+					return GetAIndexForSystemMember( cref );
 				default:
 					return string.Empty;
 			}
@@ -324,6 +343,9 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>The help namespace or empty string if no match is found</returns>
 		public string GetHelpNamespace( string managedName )
 		{
+			if ( managedName.IndexOf( ':' ) > -1 )
+				managedName = managedName.Substring( 2 );
+
 			return nsMapper.LookupHelpNamespace( managedName );
 		}
 
@@ -342,15 +364,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			return GetName(cref);
 		}
 #endif
-		/// <summary>
-		/// Determines if a cref is for a local or a system type
-		/// </summary>
-		/// <param name="cref">The cref to evaluate</param>
-		/// <returns>True if the cref namespace starts with 'System.'</returns>
-		private static bool IsLocalCRef( string cref )
-		{
-			return ( cref.Length < 9 ) || ( cref.Substring( 2, 7 ) != systemPrefix );
-		}
+
 
 		/// <summary>
 		/// Returns a name for a CRef.
@@ -363,13 +377,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 
 			if (cref[1] == ':')
 			{
-				if ( IsLocalCRef( cref ) )
-				{
-					string name = elemNames[cref];
-					if ( name != null )
-						return name;
-				}
-
 				int index;
 				if ( ( index = cref.IndexOf( ".#c" ) ) >= 0 )
 					cref = cref.Substring(2, index - 2);
@@ -382,7 +389,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			return cref.Substring( cref.LastIndexOf( "." ) + 1 );
 		}
 
-		private string GetFilenameForSystemMember(string id)
+		private string GetAIndexForSystemMember(string id)
 		{
 			string crefName;
 			int index;

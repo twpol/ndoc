@@ -10,7 +10,7 @@
 	<xsl:include href="common.xslt" />
 	<!-- -->
 	<xsl:param name='namespace' />
-	<xsl:param name='includeHierarchy' />
+	<xsl:param name='ndoc-includeHierarchy' />
 	<!-- -->
 	<xsl:template match="/">
 		<xsl:apply-templates select="ndoc" />
@@ -34,7 +34,7 @@
 					<div id="allHistory" class="saveHistory" onsave="saveAll()" onload="loadAll()"></div>
 					<!-- the namespace template just gets the summary. -->
 					<xsl:apply-templates select="(assembly/module/namespace[(@name=$namespace) and documentation])[1]" />
-					<xsl:if test="$includeHierarchy">
+					<xsl:if test="$ndoc-includeHierarchy">
 					  <p>
 						  <a href="{NUtil:GetNamespaceHierarchyHRef( string( $namespace ) )}">
 							  <xsl:text>Namespace hierarchy</xsl:text>

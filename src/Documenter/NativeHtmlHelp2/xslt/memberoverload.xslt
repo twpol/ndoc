@@ -73,30 +73,6 @@
 					<xsl:for-each select="parent::node()/*[@name=$memberName]">
 						<xsl:sort order="ascending" select="@id"/>
 						<xsl:choose>
-							<xsl:when test="@declaringType and starts-with(@declaringType, 'System.')">
-								<p>
-									<xsl:text>Inherited from </xsl:text>
-									<xsl:variable name="link-text">
-										<xsl:call-template name="strip-namespace">
-											<xsl:with-param name="name" select="@declaringType" />
-										</xsl:call-template>
-									</xsl:variable>
-									<xsl:call-template name="get-link-for-type-name">
-										<xsl:with-param name="type-name" select="@declaringType" />
-										<xsl:with-param name="link-text" select="$link-text" />
-									</xsl:call-template>									
-									<xsl:text>.</xsl:text>
-								</p>
-								<blockquote class="dtBlock">
-									<xsl:variable name="text">
-										<xsl:apply-templates select="self::node()" mode="syntax" />
-									</xsl:variable>
-									<xsl:call-template name="get-xlink-for-system-member">
-										<xsl:with-param name="text" select="@name"/>
-										<xsl:with-param name="member" select="."/>
-									</xsl:call-template>
-								</blockquote>
-							</xsl:when>
 							<xsl:when test="@declaringType">
 								<p>
 									<xsl:text>Inherited from </xsl:text>
@@ -112,19 +88,18 @@
 									<xsl:text>.</xsl:text>
 								</p>
 								<blockquote class="dtBlock">
-									<xsl:choose>
-										<!-- not sure this block can ever get executed since constructors aren't inherited -->
-										<xsl:when test="local-name()='constructor'">
-											<a href="{NUtil:GetCustructorOverloadHRef( string( @declaringType ) )}">
-												<xsl:apply-templates select="self::node()" mode="syntax" />
-											</a>										
-										</xsl:when>
-										<xsl:otherwise>
-											<a href="{NUtil:GetMemberOverloadHRef( string( @declaringType ), string( @name ) )}">
-												<xsl:apply-templates select="self::node()" mode="syntax" />
-											</a>										
-										</xsl:otherwise>
-									</xsl:choose>
+										<xsl:apply-templates select="self::node()" mode="syntax" />
+									<!--
+									<xsl:variable name="link-text">
+										<xsl:apply-templates select="self::node()" mode="syntax" />
+									</xsl:variable>-->
+									<!--
+									<xsl:call-template name="get-link-for-member">
+										<xsl:with-param name="link-text" select="$link-text"/>
+										<xsl:with-param name="member" select="."/>
+										<xsl:with-param name="member-prefix" select="'M'"/>										
+									</xsl:call-template>	
+									-->									
 								</blockquote>
 							</xsl:when>
 							<xsl:otherwise>
@@ -134,9 +109,17 @@
 									</xsl:call-template>
 								</p>
 								<blockquote class="dtBlock">
-										<xsl:apply-templates select="self::node()" mode="syntax">
-											<xsl:with-param name="href" select="NUtil:GetMemberHRef( . )"/>
-										</xsl:apply-templates>								
+										<xsl:apply-templates select="self::node()" mode="syntax" />
+<!--									<xsl:variable name="link-text">
+										<xsl:apply-templates select="self::node()" mode="syntax" />
+									</xsl:variable>-->
+									<!--
+									<xsl:call-template name="get-link-for-member">
+										<xsl:with-param name="link-text" select="$link-text"/>
+										<xsl:with-param name="member" select="."/>
+										<xsl:with-param name="member-prefix" select="'M'"/>										
+									</xsl:call-template>
+									-->						
 								</blockquote>
 							</xsl:otherwise>
 						</xsl:choose>
@@ -164,26 +147,24 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template match="constructor | method | operator | property" mode="syntax">
-		<xsl:param name="href"/>
+	
 		<xsl:apply-templates select="." mode="cs-inline-syntax">
 			<xsl:with-param name="lang" select="'Visual Basic'"/>
-			<xsl:with-param name="href" select="$href"/>
 		</xsl:apply-templates>
 		<br/>
 		<xsl:apply-templates select="." mode="cs-inline-syntax">
 			<xsl:with-param name="lang" select="'C#'"/>
-			<xsl:with-param name="href" select="$href"/>
 		</xsl:apply-templates>
 		<br/>
 		<xsl:apply-templates select="." mode="cs-inline-syntax">
 			<xsl:with-param name="lang" select="'C++'"/>
-			<xsl:with-param name="href" select="$href"/>
 		</xsl:apply-templates>				
 		<br/>
 		<xsl:apply-templates select="." mode="cs-inline-syntax">
 			<xsl:with-param name="lang" select="'JScript'"/>
-			<xsl:with-param name="href" select="$href"/>
 		</xsl:apply-templates>		
 	</xsl:template>
+	
+
 	<!-- -->
 </xsl:stylesheet>

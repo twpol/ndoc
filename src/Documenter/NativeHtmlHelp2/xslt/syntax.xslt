@@ -194,17 +194,22 @@
 
 	<xsl:template match="method" mode="cs-inline-syntax">
 		<xsl:param name="lang"/>
-		<xsl:param name="href"/>
 
 		<xsl:call-template name="cs-syntax-header">
 			<xsl:with-param name="lang" select="$lang"/>		
 		</xsl:call-template>
-		<a href="{$href}">
+		
+		<xsl:variable name="link-text">
 			<xsl:call-template name="cs-method-syntax">
 				<xsl:with-param name="lang" select="$lang"/>
 				<xsl:with-param name="include-type-links" select="false()"/>
-			</xsl:call-template>
-		</a>
+			</xsl:call-template>		
+		</xsl:variable>
+		<xsl:call-template name="get-link-for-member">
+			<xsl:with-param name="link-text" select="$link-text"/>
+			<xsl:with-param name="member" select="."/>
+			<xsl:with-param name="member-prefix" select="'M'"/>										
+		</xsl:call-template>			
 	</xsl:template>
 	
 	<xsl:template match="method" mode="cs-syntax">

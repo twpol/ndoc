@@ -112,12 +112,32 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping
 			
 			// if we've already got the help namespace in this map then merge it with the existing 
 			if ( existingNode != null )
-				MergeNamespaces( existingNode, namespaceNode );
+				MergeNewToExisting( existingNode, namespaceNode );
 			else
-				map.AppendChild( map.OwnerDocument.ImportNode( namespaceNode, true ) );
+				MergeNew( namespaceNode );
 		}
 
-		private void MergeNamespaces( XmlNode existingHelpNamespace, XmlNode newHelpNamespace )
+		private void MergeNew( XmlNode newHelpNamespace )
+		{
+			XmlNodeList managedNamespaces = newHelpNamespace.SelectNodes( "map:managedNamespace", nsmgr );
+
+			// find each managed namespace in the new help namespace and
+			// and remove it from the existing map if it exists
+			foreach ( XmlNode node in managedNamespaces )
+			{
+				string ns = node.Attributes.GetNamedItem( "ns" ).Value;
+				XmlNode existingMNS = map.SelectSingleNode( string.Format( "//map:managedNamespace[ @ns ='{0}' ]", ns ), nsmgr );
+
+				// we only need to add it if it's not already here
+				if ( existingMNS != null )				
+					existingMNS.ParentNode.RemoveChild( existingMNS );
+			}
+
+			// now we can safely append the new help namespace and all of its children
+			map.AppendChild( map.OwnerDocument.ImportNode( newHelpNamespace, true ) );
+		}
+
+		private void MergeNewToExisting( XmlNode existingHelpNamespace, XmlNode newHelpNamespace )
 		{
 			XmlNodeList managedNamespaces = newHelpNamespace.SelectNodes( "map:managedNamespace", nsmgr );
 
@@ -185,39 +205,5 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping
 
 			return map.SelectNodes( xpath, nsmgr );
 		}
-
-		#region ManagedName nested class
-		private class ManagedName
-		{
-			string _ns;
-
-			public ManagedName( string ns )
-			{
-				// strip off any NDoc type prefix
-				int colonPos = ns.IndexOf( ':' );
-				if ( colonPos > -1 )
-					_ns = ns.Substring( colonPos + 1 );
-				else
-					_ns = ns;
-			}
-
-			public string RootNamespace
-			{
-				get
-				{
-					int firstDot = _ns.IndexOf( '.' );
-					if ( firstDot > -1 )
-						return _ns.Substring( 0, firstDot );
-
-					return _ns;
-				}
-			}
-
-			public override string ToString()
-			{
-				return _ns;
-			}
-		}
-		#endregion
 	}
 }

@@ -307,60 +307,6 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template match="property[@declaringType]">
-		<xsl:variable name="name" select="@name" />
-		<xsl:variable name="declaring-type-id" select="concat('T:', @declaringType)" />
-		<xsl:text>&#10;</xsl:text>
-		<tr VALIGN="top">
-			<xsl:variable name="declaring-class" select="//class[@id=$declaring-type-id]" />
-			<xsl:choose>
-				<xsl:when test="$declaring-class">
-					<td width="50%">
-						<xsl:call-template name="images">
-							<xsl:with-param name="access" select="@access" />
-							<xsl:with-param name="contract" select="@contract" />
-							<xsl:with-param name="local-name" select="local-name()" />
-						</xsl:call-template>
-						<a href="{NUtil:GetPropertyHRef( string( $declaring-class/@id ), string( @name ) )}">						
-							<xsl:value-of select="@name" />
-						</a>
-						<xsl:text> (inherited from </xsl:text>
-						<b>
-							<xsl:call-template name="get-datatype">
-								<xsl:with-param name="datatype" select="@declaringType" />
-								<xsl:with-param name="lang" select="'C#'"/>								
-							</xsl:call-template>
-						</b>
-						<xsl:text>)</xsl:text>
-					</td>
-					<td width="50%">
-						<xsl:call-template name="summary-with-no-paragraph">
-							<xsl:with-param name="member" select="$declaring-class/property[@name=$name]" />
-						</xsl:call-template>
-					</td>
-				</xsl:when>
-				<xsl:otherwise>
-					<td width="50%">
-						<xsl:call-template name="images">
-							<xsl:with-param name="access" select="@access" />
-							<xsl:with-param name="contract" select="@contract" />
-							<xsl:with-param name="local-name" select="local-name()" />
-						</xsl:call-template>
-						<xsl:value-of select="@name" />
-						<xsl:text> (inherited from </xsl:text>
-						<b>
-							<xsl:value-of select="@declaringType" />
-						</b>
-						<xsl:text>)</xsl:text>
-					</td>
-					<td width="50%">
-						<xsl:call-template name="summary-with-no-paragraph" />
-					</td>
-				</xsl:otherwise>
-			</xsl:choose>
-		</tr>
-	</xsl:template>
-	<!-- -->
-	<xsl:template match="property[@declaringType and starts-with(@declaringType, 'System.')]">
 		<xsl:text>&#10;</xsl:text>
 		<tr VALIGN="top">
 			<td width="50%">
@@ -369,10 +315,13 @@
 					<xsl:with-param name="contract" select="@contract" />
 					<xsl:with-param name="local-name" select="local-name()" />
 				</xsl:call-template>
-				<xsl:call-template name="get-xlink-for-system-member">
-					<xsl:with-param name="text" select="@name"/>
-					<xsl:with-param name="member" select="."/>				
+				
+				<xsl:call-template name="get-link-for-member">
+					<xsl:with-param name="link-text" select="@name"/>
+					<xsl:with-param name="member" select="."/>
+					<xsl:with-param name="member-prefix" select="'P'"/>
 				</xsl:call-template>
+				
 				<xsl:text> (inherited from </xsl:text>
 				<b>
 					<xsl:call-template name="strip-namespace">
@@ -388,60 +337,6 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template match="field[@declaringType]">
-		<xsl:variable name="name" select="@name" />
-		<xsl:variable name="declaring-type-id" select="concat('T:', @declaringType)" />
-		<xsl:text>&#10;</xsl:text>
-		<tr VALIGN="top">
-			<xsl:variable name="declaring-class" select="//class[@id=$declaring-type-id]" />
-			<xsl:choose>
-				<xsl:when test="$declaring-class">
-					<td width="50%">
-						<xsl:call-template name="images">
-							<xsl:with-param name="access" select="@access" />
-							<xsl:with-param name="contract" select="@contract" />
-							<xsl:with-param name="local-name" select="local-name()" />
-						</xsl:call-template>
-						<a href="{NUtil:GetFieldHRef( string( $declaring-class/field[@name=$name]/@id ) )}">
-							<xsl:value-of select="@name" />
-						</a>
-						<xsl:text> (inherited from </xsl:text>
-						<b>
-							<xsl:call-template name="get-datatype">
-								<xsl:with-param name="datatype" select="@declaringType" />
-								<xsl:with-param name="lang" select="'C#'"/>								
-							</xsl:call-template>
-						</b>
-						<xsl:text>)</xsl:text>
-					</td>
-					<td width="50%">
-						<xsl:call-template name="summary-with-no-paragraph">
-							<xsl:with-param name="member" select="$declaring-class/field[@name=$name]" />
-						</xsl:call-template>
-					</td>
-				</xsl:when>
-				<xsl:otherwise>
-					<td width="50%">
-						<xsl:call-template name="images">
-							<xsl:with-param name="access" select="@access" />
-							<xsl:with-param name="contract" select="@contract" />
-							<xsl:with-param name="local-name" select="local-name()" />
-						</xsl:call-template>
-						<xsl:value-of select="@name" />
-						<xsl:text> (inherited from </xsl:text>
-						<b>
-							<xsl:value-of select="@declaringType" />
-						</b>
-						<xsl:text>)</xsl:text>
-					</td>
-					<td width="50%">
-						<xsl:call-template name="summary-with-no-paragraph" />
-					</td>
-				</xsl:otherwise>
-			</xsl:choose>
-		</tr>
-	</xsl:template>
-	<!-- -->
-	<xsl:template match="field[@declaringType and starts-with(@declaringType, 'System.')]">
 		<xsl:text>&#10;</xsl:text>
 		<tr VALIGN="top">
 			<td width="50%">
@@ -450,10 +345,13 @@
 					<xsl:with-param name="contract" select="@contract" />
 					<xsl:with-param name="local-name" select="local-name()" />
 				</xsl:call-template>
-				<xsl:call-template name="get-xlink-for-system-member">
-					<xsl:with-param name="text" select="@name"/>
+					
+				<xsl:call-template name="get-link-for-member">
+					<xsl:with-param name="link-text" select="@name"/>
 					<xsl:with-param name="member" select="."/>
+					<xsl:with-param name="member-prefix" select="'F'"/>
 				</xsl:call-template>
+				
 				<xsl:text> (inherited from </xsl:text>
 				<b>
 					<xsl:call-template name="strip-namespace">
@@ -469,118 +367,23 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template match="method[@declaringType]">
-		<xsl:variable name="name" select="@name" />
-		<xsl:variable name="contract" select="@contract" />
-		<xsl:variable name="access" select="@access" />
-		<xsl:variable name="declaringType" select="@declaringType" />
-		<xsl:variable name="declaring-type-id" select="concat('T:', @declaringType)" />
-		<xsl:if test="not(NUtil:HasSimilarOverloads(concat($name,':',$declaringType,':',$access,':',($contract='Static'))))">
-			<xsl:text>&#10;</xsl:text>
-			<tr VALIGN="top">
-				<xsl:variable name="declaring-class" select="//class[@id=$declaring-type-id]" />
-				<xsl:choose>
-					<xsl:when test="$declaring-class">
-						<xsl:choose>
-							<xsl:when test="following-sibling::method[(@name=$name) and (@declaringType=$declaringType) and (@access=$access) and (($contract='Static' and @contract='Static') or ($contract!='Static' and @contract!='Static'))]">
-								<td width="50%">
-									<xsl:call-template name="images">
-										<xsl:with-param name="access" select="$access" />
-										<xsl:with-param name="contract" select="$contract" />
-										<xsl:with-param name="local-name" select="local-name()" />
-									</xsl:call-template>
-									<a href="{NUtil:GetMemberOverloadHRef( string( $declaring-type-id ), string( @name ) )}">
-										<xsl:value-of select="@name" />
-									</a>
-									<xsl:text> (inherited from </xsl:text>
-									<b>
-										<xsl:call-template name="get-datatype">
-											<xsl:with-param name="datatype" select="@declaringType" />
-											<xsl:with-param name="lang" select="'C#'"/>											
-										</xsl:call-template>
-									</b>
-									<xsl:text>)</xsl:text>
-								</td>
-								<td width="50%">
-									<xsl:text>Overloaded. </xsl:text>
-									<xsl:call-template name="overloads-summary-with-no-paragraph">
-										<xsl:with-param name="overloads" select="$declaring-class/method[@name=$name]" />
-									</xsl:call-template>
-								</td>
-							</xsl:when>
-							<xsl:otherwise>
-								<td width="50%">
-									<xsl:call-template name="images">
-										<xsl:with-param name="access" select="$access" />
-										<xsl:with-param name="contract" select="$contract" />
-										<xsl:with-param name="local-name" select="local-name()" />
-									</xsl:call-template>
-									<a href="{NUtil:GetMethodHRef( string( $declaring-class/@id ), string( @name ) )}">									
-										<xsl:value-of select="@name" />
-									</a>
-									<xsl:text> (inherited from </xsl:text>
-									<b>
-										<xsl:call-template name="get-datatype">
-											<xsl:with-param name="datatype" select="@declaringType" />
-											<xsl:with-param name="lang" select="'C#'"/>											
-										</xsl:call-template>
-									</b>
-									<xsl:text>)</xsl:text>
-								</td>
-								<td width="50%">
-									<xsl:if test="@overload">
-										<xsl:text>Overloaded. </xsl:text>
-									</xsl:if>
-									<xsl:call-template name="summary-with-no-paragraph">
-										<xsl:with-param name="member" select="$declaring-class/method[@name=$name]" />
-									</xsl:call-template>
-								</td>
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:when>
-					<xsl:otherwise>
-						<td width="50%">
-							<xsl:call-template name="images">
-								<xsl:with-param name="access" select="$access" />
-								<xsl:with-param name="contract" select="$contract" />
-								<xsl:with-param name="local-name" select="local-name()" />
-							</xsl:call-template>
-							<xsl:value-of select="@name" />
-							<xsl:text> (inherited from </xsl:text>
-							<b>
-								<xsl:value-of select="@declaringType" />
-							</b>
-							<xsl:text>)</xsl:text>
-						</td>
-						<td width="50%">
-							<xsl:if test="@overload">
-								<xsl:text>Overloaded. </xsl:text>
-							</xsl:if>
-							<xsl:call-template name="summary-with-no-paragraph" />
-						</td>
-					</xsl:otherwise>
-				</xsl:choose>
-			</tr>
-		</xsl:if>
-	</xsl:template>
-	<!-- -->
-	<xsl:template match="method[@declaringType and starts-with(@declaringType, 'System.')]">
-		<xsl:variable name="name" select="@name" />
-		<xsl:variable name="contract" select="@contract" />
-		<xsl:variable name="access" select="@access" />
-		<xsl:variable name="declaringType" select="@declaringType" />
-		<xsl:if test="not(NUtil:HasSimilarOverloads(concat($name,':',$declaringType,':',$access,':',($contract='Static'))))">
+	
+		<xsl:if test="not(NUtil:HasSimilarOverloads(concat(@name,':',@declaringType,':',@access,':',(@contract='Static'))))">
 			<xsl:text>&#10;</xsl:text>
 			<tr VALIGN="top">
 				<td width="50%">
 					<xsl:call-template name="images">
-						<xsl:with-param name="access" select="$access" />
-						<xsl:with-param name="contract" select="$contract" />
+						<xsl:with-param name="access" select="@access" />
+						<xsl:with-param name="contract" select="@contract" />
 						<xsl:with-param name="local-name" select="local-name()" />
 					</xsl:call-template>
-					<xsl:call-template name="get-xlink-for-system-member">
-						<xsl:with-param name="text" select="@name"/>
-						<xsl:with-param name="member" select="."/>				
+					
+					<xsl:call-template name="get-link-for-member">
+						<xsl:with-param name="link-text" select="@name"/>
+						<xsl:with-param name="member" select="."/>
+						<xsl:with-param name="member-prefix" select="'M'"/>
 					</xsl:call-template>
+
 					<xsl:text> (inherited from </xsl:text>
 					<b>
 						<xsl:call-template name="strip-namespace">
@@ -590,6 +393,9 @@
 					<xsl:text>)</xsl:text>
 				</td>
 				<td width="50%">
+					<xsl:if test="@contract='Override'">
+						<xsl:text>Overidden. </xsl:text>
+					</xsl:if>
 					<xsl:if test="@overload">
 						<xsl:text>Overloaded. </xsl:text>
 					</xsl:if>
@@ -598,63 +404,8 @@
 			</tr>
 		</xsl:if>
 	</xsl:template>
-	<!-- -->
+
 	<xsl:template match="event[@declaringType]">
-		<xsl:variable name="name" select="@name" />
-		<xsl:variable name="declaring-type-id" select="concat('T:', @declaringType)" />
-		<xsl:text>&#10;</xsl:text>
-		<tr VALIGN="top">
-			<xsl:variable name="declaring-class" select="//class[@id=$declaring-type-id]" />
-			<xsl:choose>
-				<xsl:when test="$declaring-class">
-					<td width="50%">
-						<xsl:call-template name="images">
-							<xsl:with-param name="access" select="@access" />
-							<xsl:with-param name="contract" select="@contract" />
-							<xsl:with-param name="local-name" select="local-name()" />
-						</xsl:call-template>
-						
-						<a href="{NUtil:GetEventHRef( $declaring-class/event[@name=$name]/@id )}">
-							<xsl:value-of select="@name" />
-						</a>
-						<xsl:text> (inherited from </xsl:text>
-						<b>
-							<xsl:call-template name="get-datatype">
-								<xsl:with-param name="datatype" select="@declaringType" />
-								<xsl:with-param name="lang" select="'C#'"/>								
-							</xsl:call-template>
-						</b>
-						<xsl:text>)</xsl:text>
-					</td>
-					<td width="50%">
-						<xsl:call-template name="summary-with-no-paragraph">
-							<xsl:with-param name="member" select="$declaring-class/event[@name=$name]" />
-						</xsl:call-template>
-					</td>
-				</xsl:when>
-				<xsl:otherwise>
-					<td width="50%">
-						<xsl:call-template name="images">
-							<xsl:with-param name="access" select="@access" />
-							<xsl:with-param name="contract" select="@contract" />
-							<xsl:with-param name="local-name" select="local-name()" />
-						</xsl:call-template>
-						<xsl:value-of select="@name" />
-						<xsl:text> (inherited from </xsl:text>
-						<b>
-							<xsl:value-of select="@declaringType" />
-						</b>
-						<xsl:text>)</xsl:text>
-					</td>
-					<td width="50%">
-						<xsl:call-template name="summary-with-no-paragraph" />
-					</td>
-				</xsl:otherwise>
-			</xsl:choose>
-		</tr>
-	</xsl:template>
-	<!-- -->
-	<xsl:template match="event[@declaringType and starts-with(@declaringType, 'System.')]">
 		<xsl:text>&#10;</xsl:text>
 		<tr VALIGN="top">
 			<td width="50%">
@@ -663,14 +414,18 @@
 					<xsl:with-param name="contract" select="@contract" />
 					<xsl:with-param name="local-name" select="local-name()" />
 				</xsl:call-template>
-				<xsl:call-template name="get-xlink-for-system-member">
-					<xsl:with-param name="text" select="@name"/>
+				
+				<xsl:call-template name="get-link-for-member">
+					<xsl:with-param name="link-text" select="@name"/>
 					<xsl:with-param name="member" select="."/>
-				</xsl:call-template>				
+					<xsl:with-param name="member-prefix" select="'E'"/>
+				</xsl:call-template>	
+				
 				<xsl:text> (inherited from </xsl:text>
 				<b>
-					<xsl:call-template name="strip-namespace">
-						<xsl:with-param name="name" select="@declaringType" />
+					<xsl:call-template name="get-datatype">
+						<xsl:with-param name="datatype" select="@declaringType" />
+						<xsl:with-param name="lang" select="'C#'"/>								
 					</xsl:call-template>
 				</b>
 				<xsl:text>)</xsl:text>
@@ -740,6 +495,9 @@
 							</a>
 						</td>
 						<td width="50%">
+							<xsl:if test="@contract='Override'">
+								<xsl:text>Overidden. </xsl:text>
+							</xsl:if>
 							<xsl:if test="@overload">
 								<xsl:text>Overloaded. </xsl:text>
 							</xsl:if>

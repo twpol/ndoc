@@ -46,8 +46,11 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 				throw new ArgumentException( "A relative path cannot be used for a worksapce" );
 
 			RootDirectory = rootDir;
-			if ( !Directory.Exists( rootDir ) )
-				Directory.CreateDirectory( rootDir );
+			if ( !Directory.Exists( RootDirectory ) )
+				Directory.CreateDirectory( RootDirectory );
+
+			if ( !Directory.Exists( WorkingDirectory ) )
+				Directory.CreateDirectory( WorkingDirectory );
 
 			if ( !Directory.Exists( ContentDirectory ) )
 				Directory.CreateDirectory( ContentDirectory );
@@ -60,8 +63,30 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		{
 			get 
 			{
-				return Path.Combine( RootDirectory, "html" );
+				return Path.Combine( WorkingDirectory, "html" );
 			}
+		}
+
+		/// <summary>
+		/// The directory where the compilation will run
+		/// </summary>
+		public string WorkingDirectory
+		{
+			get
+			{
+				return Path.Combine( RootDirectory, "temp" );
+			}
+		}
+
+		/// <summary>
+		/// Saves files mathing the specified filter from the working directory to the root directory
+		/// </summary>
+		/// <param name="filter">File filter to search for</param>
+		public void SaveOutputs( string filter )
+		{
+			DirectoryInfo dir = new DirectoryInfo( WorkingDirectory );
+			foreach ( FileInfo f in dir.GetFiles( filter ) )
+				f.MoveTo( Path.Combine( this.RootDirectory, f.Name ) );
 		}
 
 		/// <summary>
@@ -77,7 +102,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		/// Copies project resources into the workspace
 		/// </summary>
 		/// <param name="sourceDirectory">The path to the resources</param>
-		/// <param name="filer">File filter to use when selecting files to import</param>
+		/// <param name="filter">File filter to use when selecting files to import</param>
 		public void ImportProjectFiles( string sourceDirectory, string filter )
 		{
 			if ( !Directory.Exists( sourceDirectory ) )
@@ -85,7 +110,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 
 			DirectoryInfo dir = new DirectoryInfo( sourceDirectory );
 			foreach( FileInfo file in dir.GetFiles( filter ) )
-				file.CopyTo( Path.Combine( RootDirectory, file.Name ), true );
+				file.CopyTo( Path.Combine( WorkingDirectory, file.Name ), true );
 		}
 
 		/// <summary>
@@ -120,7 +145,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 				{
 					file.Delete();
 				}
-				catch (UnauthorizedAccessException)
+				catch ( UnauthorizedAccessException )
 				{
 					Trace.WriteLine("Could not delete " + file 
 						+ " from the output directory.  It might be read-only.");

@@ -190,6 +190,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Engine\NamespaceMapping\ManagedName.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Engine\NamespaceMapping\NamespaceMap.xml"
                     BuildAction = "EmbeddedResource"
                 />

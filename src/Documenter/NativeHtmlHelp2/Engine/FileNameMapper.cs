@@ -21,7 +21,7 @@ using System.Xml;
 using System.Text;
 using System.Diagnostics;
 using System.Collections;
-using System.Collections.Specialized;
+
 
 namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 {
@@ -66,68 +66,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// </summary>
 		public FileNameMapper()
 		{
-		}
-
-		private StringDictionary elemNames;
-
-		/// <summary>
-		/// A collection of element names generated for the documentation xml
-		/// </summary>
-		public StringDictionary ElemNames
-		{
-			get{ return elemNames; }
-		}
-
-		/// <summary>
-		/// Creates the element name type mapping
-		/// </summary>
-		/// <param name="documentation">The NDoc XML documentation summary</param>
-		public void MakeElementNames( XmlNode documentation )
-		{
-			elemNames = new StringDictionary();
-
-			XmlNodeList namespaces = documentation.SelectNodes( "/ndoc/assembly/module/namespace" );
-			foreach ( XmlElement namespaceNode in namespaces )
-			{
-				string namespaceName = namespaceNode.Attributes["name"].Value;
-				string namespaceId = "N:" + namespaceName;
-
-				elemNames[namespaceId] = namespaceName;
-
-				XmlNodeList types = namespaceNode.SelectNodes( "*[@id]" );
-				foreach (XmlElement typeNode in types)
-				{
-					string typeId = typeNode.Attributes["id"].Value;
-					elemNames[typeId] = typeNode.Attributes["name"].Value;
-
-					XmlNodeList members = typeNode.SelectNodes( "*[@id]" );
-					foreach ( XmlElement memberNode in members )
-					{
-						string id = memberNode.Attributes["id"].Value;
-						switch ( memberNode.Name )
-						{
-							case "constructor":
-								elemNames[id] = elemNames[typeId];
-								break;
-							case "field":
-								elemNames[id] = memberNode.Attributes["name"].Value;
-								break;
-							case "property":
-								elemNames[id] = memberNode.Attributes["name"].Value;
-								break;
-							case "method":
-								elemNames[id] = memberNode.Attributes["name"].Value;
-								break;
-							case "operator":
-								elemNames[id] = memberNode.Attributes["name"].Value;
-								break;
-							case "event":
-								elemNames[id] = memberNode.Attributes["name"].Value;
-								break;
-						}
-					}
-				}
-			}
 		}
 
 		/// <summary>

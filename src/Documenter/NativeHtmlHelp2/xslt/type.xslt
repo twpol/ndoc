@@ -115,7 +115,7 @@
 									</xsl:if>
 								</xsl:when>
 								<xsl:otherwise>
-									<xsl:call-template name="get-xlink-for-system-type">
+									<xsl:call-template name="get-xlink-for-foreign-type">
 										<xsl:with-param name="type" select="'T:System.Object'" />									
 									</xsl:call-template>
 									<br />
