@@ -27,12 +27,16 @@ function InsertFooter()
 {
 	var lastChild = document.body.lastChild;
 	if ( lastChild == null ) return;
+
+	var subject = "?subject=NDoc User's Guide feedback about page '" + document.title + "'"
+	subject = subject.replace("(\s+)","%20");
 	
 	var html = "<hr/><table border=0 cellSpacing=0 class=footer>";
 	html += "<tr vAlign=top><td><p>NDoc development is hosted by <a target=_blank href=http://sourceforge.net>";
 	html += "<img src=images/sf.gif alt=SourceForge align=absMiddle border=0></a>";
 	html += "<br/><a href=\"mailto:ndoc-helpfeedback@lists.sourceforge.net";
-	html += "?subject=NDoc User's Guide feedback about page '" + document.title + "'\">Send feedback on this topic</A></p></td>";
+	html += subject;
+	html += "\">Send feedback on this topic</A></p></td>";
 	html += "<td><A href=http://ndoc.sourceforge.net/ target=_blank><img alt='Visit the NDoc WIKI' align=right src=images/logo.png></a></td></tr></table>";	
 
 	lastChild.insertAdjacentHTML( "beforeEnd", html );
