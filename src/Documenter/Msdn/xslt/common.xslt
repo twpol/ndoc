@@ -412,6 +412,7 @@
 	<xsl:template name="summary-with-no-paragraph">
 		<xsl:param name="member" select="." />
 		<xsl:apply-templates select="($member/documentation/summary)[1]/node()" mode="no-para" />
+		<xsl:if test="not(($member/documentation/summary)[1]/node())">&#160;</xsl:if>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="overloads-summary-section">
@@ -599,6 +600,7 @@
 							</td>
 							<td width="50%">
 								<xsl:apply-templates select="./node()" mode="slashdoc" />
+								<xsl:if test="not(./node())">&#160;</xsl:if>
 							</td>
 						</tr>
 					</xsl:for-each>
@@ -627,6 +629,7 @@
 							</td>
 							<td width="50%">
 								<xsl:apply-templates select="./node()" mode="slashdoc" />
+								<xsl:if test="not(./node())">&#160;</xsl:if>
 							</td>
 						</tr>
 					</xsl:for-each>
@@ -690,6 +693,7 @@
 							</td>
 							<td width="50%">
 								<xsl:apply-templates select="documentation/summary/node()" mode="slashdoc" />
+								<xsl:if test="not(documentation/summary/node())">&#160;</xsl:if>
 							</td>
 						</tr>
 					</xsl:for-each>
