@@ -587,6 +587,54 @@
 			</tr>
 		</xsl:if>
 	</xsl:template>	
+	<!-- -->
+	<xsl:template match="operator[@declaringType]">
+		<xsl:text>&#10;</xsl:text>
+		<tr VALIGN="top">
+			<td width="50%">
+				<xsl:call-template name="images">
+					<xsl:with-param name="access" select="@access" />
+					<xsl:with-param name="contract" select="@contract" />
+					<xsl:with-param name="local-name" select="local-name()" />
+				</xsl:call-template>
+				<xsl:variable name="link-text">
+					<xsl:call-template name="operator-name">
+						<xsl:with-param name="name" select="@name" />
+						<xsl:with-param name="from" select="parameter/@type"/>
+						<xsl:with-param name="to" select="@returnType" />
+					</xsl:call-template>
+				</xsl:variable>
+				<xsl:choose>
+					<xsl:when test="@interface">
+						<xsl:call-template name="get-link-for-explicit-interface-member">
+							<xsl:with-param name="link-text" select="$link-text"/>
+							<xsl:with-param name="member" select="."/>
+						</xsl:call-template>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:call-template name="get-link-for-member">
+							<xsl:with-param name="link-text" select="$link-text"/>
+							<xsl:with-param name="member" select="."/>
+						</xsl:call-template>
+					</xsl:otherwise>
+				</xsl:choose>
+				
+				<xsl:text> (inherited from </xsl:text>
+				<b>
+					<xsl:call-template name="strip-namespace">
+						<xsl:with-param name="name" select="@declaringType" />
+					</xsl:call-template>
+				</b>
+				<xsl:text>)</xsl:text>				
+				<xsl:call-template name="member-list-platform"/>
+			</td>
+			<td width="50%">
+				<xsl:call-template name="obsolete-inline"/>
+				<xsl:call-template name="summary-with-no-paragraph" />
+			</td>
+		</tr>
+	</xsl:template>
+	<!-- -->
 	<!--<xsl:template match="field[not(@declaringType)]|property[not(@declaringType)]|event[not(@declaringType)]|method[not(@declaringType)]|operator">-->
 	<xsl:template match="field | property | event | method | operator">
 		<xsl:variable name="member" select="local-name()" />
