@@ -869,11 +869,11 @@ namespace NDoc.Core.Reflection
 
 			foreach (Type type in types)
 			{
-				string typeID = GetMemberName(type);
 				if (type.IsClass && 
 					!IsDelegate(type) && 
 					type.Namespace == namespaceName) 
 				{
+					string typeID = GetMemberName(type);
 					if(!documentedTypes.ContainsKey(typeID))
 					{
 						documentedTypes.Add(typeID,null);
@@ -905,8 +905,17 @@ namespace NDoc.Core.Reflection
 					type.Namespace == namespaceName && 
 					MustDocumentType(type))
 				{
-					WriteInterface(writer, type);
-					nbWritten++;
+					string typeID = GetMemberName(type);
+					if(!documentedTypes.ContainsKey(typeID))
+					{
+						documentedTypes.Add(typeID,null);
+						WriteInterface(writer, type);
+						nbWritten++;
+					}
+					else
+					{
+						Debug.WriteLine(typeID + " already documented - skipped...");
+					}
 				}
 			}
 
@@ -924,10 +933,19 @@ namespace NDoc.Core.Reflection
 					type.Namespace == namespaceName && 
 					MustDocumentType(type))
 				{
-					bool hiding = ((type.MemberType & MemberTypes.NestedType) != 0)
-						&& IsHiding(type, type.DeclaringType);
-					WriteClass(writer, type, hiding);
-					nbWritten++;
+					string typeID = GetMemberName(type);
+					if(!documentedTypes.ContainsKey(typeID))
+					{
+						documentedTypes.Add(typeID,null);
+						bool hiding = ((type.MemberType & MemberTypes.NestedType) != 0)
+							&& IsHiding(type, type.DeclaringType);
+						WriteClass(writer, type, hiding);
+						nbWritten++;
+					}
+					else
+					{
+						Debug.WriteLine(typeID + " already documented - skipped...");
+					}
 				}
 			}
 
@@ -945,8 +963,17 @@ namespace NDoc.Core.Reflection
 					type.Namespace == namespaceName && 
 					MustDocumentType(type))
 				{
-					WriteDelegate(writer, type);
-					nbWritten++;
+					string typeID = GetMemberName(type);
+					if(!documentedTypes.ContainsKey(typeID))
+					{
+						documentedTypes.Add(typeID,null);
+						WriteDelegate(writer, type);
+						nbWritten++;
+					}
+					else
+					{
+						Debug.WriteLine(typeID + " already documented - skipped...");
+					}
 				}
 			}
 
@@ -963,8 +990,17 @@ namespace NDoc.Core.Reflection
 					type.Namespace == namespaceName && 
 					MustDocumentType(type))
 				{
-					WriteEnumeration(writer, type);
-					nbWritten++;
+					string typeID = GetMemberName(type);
+					if(!documentedTypes.ContainsKey(typeID))
+					{
+						documentedTypes.Add(typeID,null);
+						WriteEnumeration(writer, type);
+						nbWritten++;
+					}
+					else
+					{
+						Debug.WriteLine(typeID + " already documented - skipped...");
+					}
 				}
 			}
 
