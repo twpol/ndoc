@@ -194,7 +194,14 @@ namespace NDoc.Documenter.JavaDoc
 
 			TextWriter writer = new StreamWriter(resultPath);
 			XPathDocument doc = GetCachedXPathDocument();
+
+#if(NET_1_0)
+				//Use overload that is obsolete in v1.1
 			transform.Transform(doc, args, writer);
+#else
+			//Use new overload so we don't get obsolete warnings - clean compile :)
+			transform.Transform(doc, args, writer, null);
+#endif
 
 			writer.Close();
 

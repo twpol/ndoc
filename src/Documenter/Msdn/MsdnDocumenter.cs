@@ -380,9 +380,16 @@ namespace NDoc.Documenter.Msdn
 					//transform the HHC contents file into html
 					XslTransform xsltContents = new XslTransform();
 					MakeTransform(xsltContents, "htmlcontents.xslt");
+#if(NET_1_0)
+					//Use overload that is obsolete in v1.1
 					xsltContents.Transform(htmlHelp.GetPathToContentsFile(), 
 						Path.Combine(workspace.WorkingDirectory, "contents.html"));
-				}
+#else
+					//Use new overload so we don't get obsolete warnings - clean compile :)
+					xsltContents.Transform(htmlHelp.GetPathToContentsFile(), 
+						Path.Combine(workspace.WorkingDirectory, "contents.html"), null);
+#endif
+					}
 
 				if ((MyConfig.OutputTarget & OutputType.HtmlHelp) > 0)
 				{
@@ -1557,8 +1564,14 @@ namespace NDoc.Documenter.Msdn
 				//reset overloads testing
 				utilities.Reset();
 
+#if (NET_1_0)
+				//Use overload that is now obsolete
 				transform.Transform(xpathDocument, arguments, streamWriter);
-			}
+#else           
+				//Use new overload so we don't get obsolete warnings - clean compile :)
+				transform.Transform(xpathDocument, arguments, streamWriter, null);
+#endif
+				}
 
 #if DEBUG
 			Trace.WriteLine((Environment.TickCount - start).ToString() + " msec.");

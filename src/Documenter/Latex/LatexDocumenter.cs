@@ -333,7 +333,13 @@ namespace NDoc.Documenter.Latex
 							
 			OnDocBuildingStep(20, "Building TeX file...");
 
+#if(NET_1_0)
+				//Use overload that is obsolete in v1.1
 			transform.Transform(document, args, writer);
+#else
+			//Use new overload so we don't get obsolete warnings - clean compile :)
+			transform.Transform(document, args, writer, null);
+#endif
 
 			writer.Close();
 		}
