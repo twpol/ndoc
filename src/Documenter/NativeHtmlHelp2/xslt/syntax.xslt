@@ -15,18 +15,22 @@
 		<xsl:apply-templates select="." mode="pre-syntax"/>
 		<xsl:text>&#10;</xsl:text>
 		<PRE class="syntax">
-		<xsl:apply-templates select="." mode="syntax">
-			<xsl:with-param name="lang" select="'Visual Basic'"/>
-		</xsl:apply-templates>
+		<xsl:if test="not( @unsafe | parameter[@unsafe] )">
+			<xsl:apply-templates select="." mode="syntax">
+				<xsl:with-param name="lang" select="'Visual Basic'"/>
+			</xsl:apply-templates>
+		</xsl:if>
 		<xsl:apply-templates select="." mode="syntax">
 			<xsl:with-param name="lang" select="'C#'"/>
 		</xsl:apply-templates>
 		<xsl:apply-templates select="." mode="syntax">
 			<xsl:with-param name="lang" select="'C++'"/>
 		</xsl:apply-templates>	
-		<xsl:apply-templates select="." mode="syntax">
-			<xsl:with-param name="lang" select="'JScript'"/>
-		</xsl:apply-templates>
+		<xsl:if test="not( @unsafe | parameter[@unsafe] )">
+			<xsl:apply-templates select="." mode="syntax">
+				<xsl:with-param name="lang" select="'JScript'"/>
+			</xsl:apply-templates>
+		</xsl:if>
 		</PRE>	
 		<xsl:apply-templates select="." mode="post-syntax"/>
 		

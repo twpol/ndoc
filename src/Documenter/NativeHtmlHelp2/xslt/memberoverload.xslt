@@ -127,31 +127,33 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template match="constructor | method | property | operator" mode="syntax">
-		<xsl:if test="$ndoc-omit-syntax = false()">
+		<xsl:if test="$ndoc-omit-syntax = false() and not( @unsafe | parameter[@unsafe] )">
 			<blockquote class="dtBlock">
-			<xsl:apply-templates select="." mode="inline-syntax">
-				<xsl:with-param name="lang" select="'Visual Basic'"/>
-			</xsl:apply-templates>
+				<xsl:apply-templates select="." mode="inline-syntax">
+					<xsl:with-param name="lang" select="'Visual Basic'"/>
+				</xsl:apply-templates>
 			</blockquote>
 		</xsl:if>
 		
 		<blockquote class="dtBlock">
-		<xsl:apply-templates select="." mode="inline-syntax">
-			<xsl:with-param name="lang" select="'C#'"/>
-		</xsl:apply-templates>
+			<xsl:apply-templates select="." mode="inline-syntax">
+				<xsl:with-param name="lang" select="'C#'"/>
+			</xsl:apply-templates>
 		</blockquote>
 		
 		<xsl:if test="$ndoc-omit-syntax = false()">
 			<blockquote class="dtBlock">
-			<xsl:apply-templates select="." mode="inline-syntax">
-				<xsl:with-param name="lang" select="'C++'"/>
-			</xsl:apply-templates>				
+				<xsl:apply-templates select="." mode="inline-syntax">
+					<xsl:with-param name="lang" select="'C++'"/>
+				</xsl:apply-templates>				
 			</blockquote>
-			<blockquote class="dtBlock">
-			<xsl:apply-templates select="." mode="inline-syntax">
-				<xsl:with-param name="lang" select="'JScript'"/>
-			</xsl:apply-templates>		
-			</blockquote>
+			<xsl:if test="not( @unsafe | parameter[@unsafe] )">
+				<blockquote class="dtBlock">
+					<xsl:apply-templates select="." mode="inline-syntax">
+						<xsl:with-param name="lang" select="'JScript'"/>
+					</xsl:apply-templates>		
+				</blockquote>
+			</xsl:if>
 		</xsl:if>		
 	</xsl:template>
 </xsl:stylesheet>
