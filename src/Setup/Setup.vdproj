@@ -525,12 +525,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_AE452890E81B451EAA0CD1D57D61AF8B"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_AE6FB4067F87480792C18EE0D1030C0E"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -2080,26 +2074,6 @@
             "Tag" = "8:"
             "Folder" = "8:_C711924DB96A4A028E73D9A6076EE941"
             "Condition" = "8:NET_1_1"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{A582A373-4685-4296-BEFE-614B80A702C3}:_AE452890E81B451EAA0CD1D57D61AF8B"
-            {
-            "SourcePath" = "8:fix_xml_mime_type.reg"
-            "TargetName" = "8:fix_xml_mime_type.reg"
-            "Tag" = "8:"
-            "Folder" = "8:_3E83289CD02E47D0A8ACE7A8D09CFF5F"
-            "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
