@@ -277,8 +277,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 \evensidemargin 0in
 % \topmargin -.8in
 \chardef\bslash=`\\
-\textheight 9.4in
-\textwidth 6.5in
+\textheight 8.4in
+\textwidth 5.5in
 \begin{document}
 \sloppy
 \raggedright
@@ -382,6 +382,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 						<xsl:call-template name="output-member">
 						<xsl:with-param name="label" select="concat('liprop', 'L', $namespaceindex, 'L', $interfaceindex, 'L', $propertyindex)" />
 						</xsl:call-template>
+						\vskip 1.5em
 					}
 					</xsl:for-each>
 				\end{itemize}
@@ -401,6 +402,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 						<xsl:call-template name="output-member">
 						<xsl:with-param name="label" select="concat('limthd', 'L', $namespaceindex, 'L', $interfaceindex, 'L', $methodindex)" />
 						</xsl:call-template>
+						\vskip 1.5em
 					}
 					</xsl:for-each>
 				\end{itemize}
@@ -473,6 +475,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 						<xsl:call-template name="output-member">
 						<xsl:with-param name="label" select="concat('lcfield', 'L', $namespaceindex, 'L', $classindex, 'L', $fieldindex)" />
 						</xsl:call-template>
+						\vskip 1.5em
 					}
 					</xsl:for-each>
 				\end{itemize}
@@ -492,6 +495,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 						<xsl:call-template name="output-member">
 						<xsl:with-param name="label" select="concat('lcprop', 'L', $namespaceindex, 'L', $classindex, 'L', $propertyindex)" />
 						</xsl:call-template>
+						\vskip 1.5em
 					}
 					</xsl:for-each>
 				\end{itemize}
@@ -511,6 +515,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 						<xsl:call-template name="output-member">
 							<xsl:with-param name="label" select="concat('lcctor', 'L', $namespaceindex, 'L', $classindex, 'L', $constructorindex)" />
 						</xsl:call-template>
+						\vskip 1.5em
 					}
 					</xsl:for-each>
 				\end{itemize}
@@ -524,12 +529,13 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 				\begin{itemize}
 					<xsl:for-each select="method">
 					<xsl:sort order="ascending" select="@name"/>
-					<xsl:variable name="methodindex" select="position()"/>
-					\item
-					{
+					<xsl:variable name="methodindex" select="position()"/>					
+					\item					
+					{						
 						<xsl:call-template name="output-member">
 						<xsl:with-param name="label" select="concat('lcmthd', 'L', $namespaceindex, 'L', $classindex, 'L', $methodindex)" />
 						</xsl:call-template>
+						\vskip 1.5em
 					}
 					</xsl:for-each>
 				\end{itemize}
