@@ -648,46 +648,69 @@ namespace NDoc.Documenter.Msdn
 			return bMoreThanOne;
 		}
 
-		private bool IsMethodFirstOverload(XmlNodeList methodNodes, int[] indexes, int index)
+		private string GetPreviousMethodName(
+			XmlNodeList methodNodes, 
+			int[] indexes, 
+			int index)
 		{
+			while (--index >= 0)
+			{
+				if (methodNodes[indexes[index]].Attributes["declaringType"] == null)
+				{
+					return methodNodes[indexes[index]].Attributes["name"].Value;
+				}
+			}
+
+			return null;
+		}
+
+		private string GetNextMethodName(
+			XmlNodeList methodNodes, 
+			int[] indexes, 
+			int index)
+		{
+			while (++index < methodNodes.Count)
+			{
+				if (methodNodes[indexes[index]].Attributes["declaringType"] == null)
+				{
+					return methodNodes[indexes[index]].Attributes["name"].Value;
+				}
+			}
+
+			return null;
+		}
+
+		private bool IsMethodFirstOverload(
+			XmlNodeList methodNodes, 
+			int[] indexes, 
+			int index)
+		{
+			if (methodNodes[indexes[index]].Attributes["declaringType"] != null)
+			{
+				return false;
+			}
+
 			string name = methodNodes[indexes[index]].Attributes["name"].Value;
 			int count = methodNodes.Count;
 
-			string previousName = null;
-
-			if (index > 0)
-			{
-				previousName = methodNodes[indexes[index - 1]].Attributes["name"].Value;
-			}
-
-			string nextName = null;
-
-			if (index + 1 < count)
-			{
-				nextName = methodNodes[indexes[index + 1]].Attributes["name"].Value;
-			}
+			string previousName = GetPreviousMethodName(methodNodes, indexes, index);
+			string nextName = GetNextMethodName(methodNodes, indexes, index);
 
 			return previousName != name && name == nextName;
 		}
 
 		private bool IsMethodLastOverload(XmlNodeList methodNodes, int[] indexes, int index)
 		{
+			if (methodNodes[indexes[index]].Attributes["declaringType"] != null)
+			{
+				return false;
+			}
+
 			string name = (string)methodNodes[indexes[index]].Attributes["name"].Value;
 			int count = methodNodes.Count;
 
-			string previousName = null;
-
-			if (index > 0)
-			{
-				previousName = methodNodes[indexes[index - 1]].Attributes["name"].Value;
-			}
-
-			string nextName = null;
-
-			if (index + 1 < count)
-			{
-				nextName = methodNodes[indexes[index + 1]].Attributes["name"].Value;
-			}
+			string previousName = GetPreviousMethodName(methodNodes, indexes, index);
+			string nextName = GetNextMethodName(methodNodes, indexes, index);
 
 			return previousName == name && name != nextName;
 		}
