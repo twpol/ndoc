@@ -41,8 +41,8 @@ namespace NDoc.Core
 		{
 			get { return _IsDirty; }
 
-			set 
-			{ 
+			set
+			{
 				if (!_IsDirty && value && Modified != null)
 				{
 					_IsDirty = true;
@@ -50,7 +50,7 @@ namespace NDoc.Core
 				}
 				else
 				{
-					_IsDirty = value; 
+					_IsDirty = value;
 				}
 			}
 		}
@@ -66,40 +66,36 @@ namespace NDoc.Core
 		/// <summary>Adds an assembly/doc pair to the project.</summary>
 		public void AddAssemblySlashDoc(AssemblySlashDoc assemblySlashDoc)
 		{
-// vvvvv WB020201: Check for duplicates before inserting!!!
-//			_AssemblySlashDocs.Add(assemblySlashDoc);
-//			IsDirty = true;
-// ----- WB020201: replaced by
-			if (false == FindAssemblySlashDoc(assemblySlashDoc)) 
+			if (false == FindAssemblySlashDoc(assemblySlashDoc))
 			{
 				_AssemblySlashDocs.Add(assemblySlashDoc);
                 IsDirty = true;
 			}
-// ^^^^^ WB020201
 		}
 
-// vvvvv WB020201: Search for assemblySlashDoc by assembly and slashDoc filename
-		private bool FindAssemblySlashDoc(AssemblySlashDoc assemblySlashDoc) 
+		private bool FindAssemblySlashDoc(AssemblySlashDoc assemblySlashDoc)
 		{
-			foreach (AssemblySlashDoc a in this._AssemblySlashDocs) 
+			foreach (AssemblySlashDoc a in this._AssemblySlashDocs)
 			{
 				if (a.AssemblyFilename == assemblySlashDoc.AssemblyFilename &&
-					a.SlashDocFilename == assemblySlashDoc.SlashDocFilename) 
+					a.SlashDocFilename == assemblySlashDoc.SlashDocFilename)
 				{
 					return true;
 				}
 			}
 			return false;
 		}
-// ^^^^^ WB020201
 
-// vvvvv WB020204: find assemblySlashDoc by assembly name
-		public int FindAssemblySlashDocByName(string assemblyName) 
+		/// <summary>Returns the index of the assembly/doc based on an
+		/// assembly name.</summary>
+		/// <param name="assemblyName">The assembly to search for.</param>
+		/// <returns></returns>
+		public int FindAssemblySlashDocByName(string assemblyName)
 		{
 			int count = 0;
-			foreach (AssemblySlashDoc a in this._AssemblySlashDocs) 
+			foreach (AssemblySlashDoc a in this._AssemblySlashDocs)
 			{
-				if (a.AssemblyFilename == assemblyName) 
+				if (a.AssemblyFilename == assemblyName)
 				{
 					return count;
 				}
@@ -107,7 +103,6 @@ namespace NDoc.Core
 			}
 			return -1;
 		}
-// ^^^^^ WB020204
 
 		/// <summary>Gets an assembly/doc pair.</summary>
 		public AssemblySlashDoc GetAssemblySlashDoc(int index)
@@ -207,24 +202,31 @@ namespace NDoc.Core
 				catch (BadImageFormatException)
 				{
 					// The DLL must not be a .NET assembly.
-					// Don't need to do anything since the 
+					// Don't need to do anything since the
 					// assembly reference should still be null.
 				}
 
 				if (assembly != null)
 				{
-					foreach (Type type in assembly.GetTypes())
+					try
 					{
-						if (type.IsClass && !type.IsAbstract && (type.GetInterface("NDoc.Core.IDocumenter") != null))
+						foreach (Type type in assembly.GetTypes())
 						{
-							documenters.Add(Activator.CreateInstance(type));
+							if (type.IsClass && !type.IsAbstract && (type.GetInterface("NDoc.Core.IDocumenter") != null))
+							{
+								documenters.Add(Activator.CreateInstance(type));
+							}
 						}
+					}
+					catch (ReflectionTypeLoadException)
+					{
+						// eat this exception and just ignore this assembly
 					}
 				}
 			}
-			
+
 			documenters.Sort();
-			
+
 			return documenters;
 		}
 
@@ -264,7 +266,7 @@ namespace NDoc.Core
 			}
 			catch (Exception ex)
 			{
-				throw new DocumenterException("Error reading in project file " 
+				throw new DocumenterException("Error reading in project file "
 					+ filename  + ".\n" + ex.Message, ex);
 
 				// Set all the documenters to a default state since unable to load them.
@@ -360,7 +362,7 @@ namespace NDoc.Core
 			}
 			catch (Exception ex)
 			{
-				throw new DocumenterException("Error saving project file " 
+				throw new DocumenterException("Error saving project file "
 					+ ".\n" + ex.Message, ex);
 			}
 			finally
