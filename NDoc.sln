@@ -53,6 +53,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtendedUI", "src\ExtendedU
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Msdn2", "src\Documenter\Msdn2\Msdn2.csproj", "{8282F072-D966-4075-A8DA-8911E36F4980}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -110,6 +114,10 @@ Global
 		{0E14C115-C99D-49F7-A892-3AEF74320A61}.Debug.Build.0 = Debug|.NET
 		{0E14C115-C99D-49F7-A892-3AEF74320A61}.Release.ActiveCfg = Release|.NET
 		{0E14C115-C99D-49F7-A892-3AEF74320A61}.Release.Build.0 = Release|.NET
+		{8282F072-D966-4075-A8DA-8911E36F4980}.Debug.ActiveCfg = Debug|.NET
+		{8282F072-D966-4075-A8DA-8911E36F4980}.Debug.Build.0 = Debug|.NET
+		{8282F072-D966-4075-A8DA-8911E36F4980}.Release.ActiveCfg = Release|.NET
+		{8282F072-D966-4075-A8DA-8911E36F4980}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 		src\CommonAssemblyInfo.cs = src\CommonAssemblyInfo.cs
