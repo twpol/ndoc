@@ -32,7 +32,7 @@ namespace NDoc.Core
 	[Serializable]
 	[DefaultProperty("Path")]
 	[TypeConverter(typeof(PathItemBase.TypeConverter))]
-	public class PathItemBase
+	public abstract class PathItemBase
 	{
 		#region Static Members
 		private static string _basePath;
@@ -79,16 +79,16 @@ namespace NDoc.Core
 		#endregion
 
 		#region Constructors
-		/// <overrides>
-		/// Creates a new <see cref="PathItemBase"/> instance.
-		/// </overrides>
+		/// <overloads>
+		/// Initializes a new instance of the <see cref="PathItemBase"/> class.
+		/// </overloads>
 		/// <summary>
-		/// Creates a blank <see cref="PathItemBase"/> instance.
+		/// Initializes a new instance of the <see cref="PathItemBase"/> class.
 		/// </summary>
 		public PathItemBase() {}
 		
 		/// <summary>
-		/// Creates a <see cref="PathItemBase"/> instance from a given path string.
+		/// Initializes a new instance of the <see cref="PathItemBase"/> class from a given path string.
 		/// </summary>
 		/// <param name="path">A relative or absolute path.</param>
 		/// <exception cref="ArgumentNullException"><paramref name="path"/> is a <see langword="null"/>.</exception>
@@ -123,9 +123,9 @@ namespace NDoc.Core
 		}
 
 		/// <summary>
-		/// Creates a new <see cref="PathItemBase"/> instance from an existing <see cref="PathItemBase"/>.
+		/// Initializes a new instance of the <see cref="PathItemBase"/> class from an existing <see cref="PathItemBase"/> instance.
 		/// </summary>
-		/// <param name="pathItemBase">A <see cref="PathItemBase"/> instance.</param>
+		/// <param name="pathItemBase">An existing <see cref="PathItemBase"/> instance.</param>
 		/// <exception cref="ArgumentNullException"><paramref name="pathItemBase"/> is a <see langword="null"/>.</exception>
 		public PathItemBase(PathItemBase pathItemBase)
 		{

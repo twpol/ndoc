@@ -36,12 +36,12 @@ namespace NDoc.Core
 	public class FolderPath : PathItemBase
 	{
 		/// <summary>
-		/// Creates a new <see cref="FilePath"/> instance.
+		/// Initializes a new instance of the <see cref="FolderPath"/> class.
 		/// </summary>
 		public FolderPath() : base() {}
 
 		/// <summary>
-		/// Creates a new <see cref="FilePath"/> instance.
+		/// Initializes a new instance of the <see cref="FolderPath"/> class from a given path string.
 		/// </summary>
 		/// <param name="path">Path.</param>
 		public FolderPath(string path) : base(path)
@@ -49,9 +49,9 @@ namespace NDoc.Core
 		}
 
 		/// <summary>
-		/// Creates a new <see cref="FilePath"/> instance.
+		/// Initializes a new instance of the <see cref="FolderPath"/> class from an existing <see cref="FilePath"/> instance.
 		/// </summary>
-		/// <param name="path">Path.</param>
+		/// <param name="path">An existing <see cref="FolderPath"/>.</param>
 		public FolderPath(FolderPath path)
 		{
 			if (path.Path.Length > 0)

@@ -27,17 +27,17 @@ using System.Xml;
 namespace NDoc.Core
 {
 
-	/// <summary>The base documenter config class.</summary>
+	/// <summary>Provides an abstract base class for documenter configurations.</summary>
 	/// <remarks>
 	/// This is a base class for NDoc Documenter Configs.  
 	/// It implements all the methods required by the <see cref="IDocumenterConfig"/> interface. 
-	/// It also provides some basic properties which are shared by all documenters. 
+	/// It also provides some basic properties which are shared by all configs. 
 	/// </remarks>
 	abstract public class BaseDocumenterConfig : IDocumenterConfig
 	{
 		private string _Name;
 
-		/// <summary>Initializes a new instance of the DocumenterConfig class.</summary>
+		/// <summary>Initializes a new instance of the <see cref="BaseDocumenterConfig"/> class.</summary>
 		protected BaseDocumenterConfig(string name)
 		{
 			_Name = name;
@@ -45,20 +45,22 @@ namespace NDoc.Core
 
 		private Project _Project;
 		/// <summary>
-		/// 
+		/// Gets the <see cref="Project"/> that this config is associated with, if any
 		/// </summary>
+		/// <value>The <see cref="Project"/> that this config is associated with, or a <see langword="null"/> if it is not associated with a project.</value>
 		protected Project Project
 		{
 			get{return _Project;}
 		}
 
-		/// <summary>Associates this documenter with a project;</summary>
+		/// <summary>Associates this config with a <see cref="Project"/>.</summary>
+		/// <param name="project">A <see cref="Project"/> to associate with this config.</param>
 		public void SetProject(Project project)
 		{
 			_Project = project;
 		}
 
-		/// <summary>Sets the IsDirty property on the project if any is set.</summary>
+		/// <summary>Sets the <see cref="NDoc.Core.Project.IsDirty"/> property on the <see cref="Project"/>.</summary>
 		protected void SetDirty()
 		{
 			if (_Project != null)
@@ -68,7 +70,7 @@ namespace NDoc.Core
 		}
 
 		/// <summary>
-		/// The display name of the documenter.
+		/// Gets the display name of the documenter.
 		/// </summary>
 		[Browsable(false)]
 		public string Name
@@ -76,7 +78,8 @@ namespace NDoc.Core
 			get { return _Name;}
 		}
 
-		/// <summary>Gets a list of properties.</summary>
+		/// <summary>Gets an enumerable list of <see cref="PropertyInfo"/> objects representing the properties of this config.</summary>
+		/// <remarks>properties are represented by <see cref="PropertyInfo"/> objects.</remarks>
 		public IEnumerable GetProperties()
 		{
 			ArrayList properties = new ArrayList();
@@ -101,7 +104,7 @@ namespace NDoc.Core
 		}
 
 		/// <summary>
-		/// Sets the value of a config property.
+		/// Sets the value of a named config property.
 		/// </summary>
 		/// <param name="name">The name of the property to set.</param>
 		/// <param name="value">A string representation of the desired property value.</param>
@@ -123,9 +126,20 @@ namespace NDoc.Core
 			}
 		}
 
-		/// <summary>Writes the current state of the documenter to the specified XmlWrtier.</summary>
-		/// <param name="writer">An XmlWriter.</param>
-		/// <remarks>This method uses reflection to serialize all of the public properties in the documenter.</remarks>
+		/// <summary>Writes the current state of the config to the specified <see cref="XmlWriter"/>.</summary>
+		/// <param name="writer">An open <see cref="XmlWriter"/>.</param>
+		/// <remarks>
+		/// This method uses reflection to serialize the public properties in the config.
+		/// <para>
+		/// A property will <b>not</b> be persisted if,
+		/// <list type="bullet">
+		/// <item>The value is equal to the default value, or</item>
+		/// <item>The string representation of the value is an empty string, or</item>
+		/// <item>The property has a Browsable(false) attribute, or</item>
+		/// <item>The property has a NonPersisted attribute.</item>
+		/// </list>
+		/// </para>
+		/// </remarks>
 		public void Write(XmlWriter writer)
 		{
 			writer.WriteStartElement("documenter");
@@ -185,12 +199,12 @@ namespace NDoc.Core
 			writer.WriteEndElement();
 		}
 
-		/// <summary>Reads the previously serialized state of the documenter into memory.</summary>
-		/// <param name="reader">An XmlReader positioned on a documenter element.</param>
-		/// <remarks>This method uses reflection to set all of the public properties in the documenter.</remarks>
+		/// <summary>Loads config details from the specified <see cref="XmlReader"/>.</summary>
+		/// <param name="reader">An <see cref="XmlReader"/> positioned on a &lt;documenter&gt; element.</param>
+		/// <remarks>Each property found in the XML is loaded into current config using <see cref="ReadProperty"/>.</remarks>
 		public void Read(XmlReader reader)
 		{
-			// we don't want to set the project isdirty flag during the read...
+			// we don't want to set the project IsDirty flag during the read...
 			_Project.SuspendDirtyCheck=true;
 
 			string FailureMessages="";
@@ -211,11 +225,11 @@ namespace NDoc.Core
 		}
 
 		/// <summary>
-		/// 
+		/// Sets the value of a named property. 
 		/// </summary>
-		/// <param name="name"></param>
-		/// <param name="value"></param>
-		/// <returns></returns>
+		/// <param name="name">A property name.</param>
+		/// <param name="value">A string respesentation of the desired property value.</param>
+		/// <returns>A string containing any messages generated while attempting to set the property.</returns>
 		protected string ReadProperty(string name, string value)
 		{
 			// if value is an empty string, do not bother with anything else
@@ -257,11 +271,15 @@ namespace NDoc.Core
 				}
 				catch(System.ArgumentException)
 				{
+					Project.SuspendDirtyCheck=false;
 					FailureMessages += HandleUnknownPropertyValue(property, value);
+					Project.SuspendDirtyCheck=true;
 				}
 				catch(System.FormatException)
 				{
+					Project.SuspendDirtyCheck=false;
 					FailureMessages += HandleUnknownPropertyValue(property, value);
+					Project.SuspendDirtyCheck=true;
 				}
 				// any other exception will be thrown immediately
 
@@ -274,11 +292,19 @@ namespace NDoc.Core
 		}
 
 		/// <summary>
-		/// 
+		/// When overridden in a derived class, handles a property found by <see cref="Read"/> which does not 
+		/// correspond to any property in the config object.
 		/// </summary>
-		/// <param name="name"></param>
-		/// <param name="value"></param>
-		/// <returns></returns>
+		/// <param name="name">The unknown property name.</param>
+		/// <param name="value">A string representation of the desired property value.</param>
+		/// <returns>A string containing any messages generated by the handler.</returns>
+		/// <remarks>
+		/// As implemented in this class, no action is taken.
+		/// <note type="inheritinfo">
+		/// <para>If a handler can translate the unknown property, it can call the protected method 
+		/// <see cref="ReadProperty"/> to process to translated name/value.</para>
+		/// </note>
+		/// </remarks>
 		protected virtual string HandleUnknownPropertyType(string name, string value)
 		{
 			// As a default, we will ignore unknown property types
@@ -286,11 +312,19 @@ namespace NDoc.Core
 		}
 
 		/// <summary>
-		/// 
+		/// When overridden in a derived class, handles a unknown or invalid property value read by <see cref="Read"/>.
 		/// </summary>
-		/// <param name="property"></param>
-		/// <param name="value"></param>
-		/// <returns></returns>
+		/// <param name="property">A valid Property name.</param>
+		/// <param name="value">A string representation of the desired property value.</param>
+		/// <returns>A string containing any messages generated by the handler.</returns>
+		/// <remarks>
+		/// As implemented in this class, an error message is returned which details the 
+		/// property name, type and the invalid value.
+		/// <note type="inheritinfo">
+		/// <para>If a handler can translate the unknown value, it can call the protected method <see cref="ReadProperty"/> to
+		/// process to translated name/value.</para>
+		/// </note>
+		/// </remarks>
 		protected virtual string HandleUnknownPropertyValue(PropertyInfo property, string value)
 		{
 			// we cannot handle this, so return an error message
@@ -302,11 +336,11 @@ namespace NDoc.Core
 
 		private string _UseNDocXmlFile = string.Empty;
 
-		/// <summary>Gets or sets the UseNDocXmlFile property.</summary>
+		/// <summary>Gets or sets a value indicating whether to use the specified XML file as input instead of reflecting the list of assemblies specified on the project.</summary>
 		/// <remarks><para>When set, NDoc will use the specified XML file as 
 		/// input instead of reflecting the list of assemblies specified 
 		/// on the project.</para>
-		/// <para>Very useful for debugging documenters. <i>Leave empty for normal usage.</i></para>
+		/// <para>Very useful for debugging documenters. <b><i>Leave empty for normal usage.</i></b></para>
 		/// </remarks>
 		[Category("Documentation Main Settings")]
 		[Description("When set, NDoc will use the specified XML file as input instead of reflecting the list of assemblies specified on the project.  Very useful for debugging documenters.  Leave empty for normal usage.")]
@@ -324,9 +358,11 @@ namespace NDoc.Core
 
 		private bool _CleanIntermediates = false;
 
-		/// <summary>Gets or sets the CleanIntermediates property.</summary>
+		/// <summary>Gets or sets a value indicating whether to delete intermediate files after a successful build.</summary>
 		/// <remarks>
-		/// <para>When true, intermediate files will be deleted after a successful build.</para>
+		/// <value>
+		/// <see langword="true"/> if intermediate files should be deleted after a successful build;
+		/// otherwise, <see langword="false"/>. By default, the value of this property is <see langword="false"/>.</value>
 		/// <para>For documenters that result in a compiled output, like the MSDN and VS.NET
 		/// documenters, intermediate files include all of the HTML Help project files, as well as the generated
 		/// HTML files.</para></remarks>

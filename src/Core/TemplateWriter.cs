@@ -33,7 +33,7 @@ namespace NDoc.Core
 		private TextReader template;
 
 		/// <summary>
-		/// Initializes a new instance of the TemplateWriter class for the specified 
+		/// Initializes a new instance of the <see cref="TemplateWriter"/> class for the specified 
 		/// file on the specified path, using the specified template stream and using 
 		/// the default encoding and buffer size.
 		/// </summary>
@@ -45,7 +45,7 @@ namespace NDoc.Core
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the TemplateWriter class for the specified 
+		/// Initializes a new instance of the <see cref="TemplateWriter"/> class for the specified 
 		/// stream, using the specified template stream and using the default encoding 
 		/// and buffer size.
 		/// </summary>

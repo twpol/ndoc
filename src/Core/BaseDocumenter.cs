@@ -32,10 +32,10 @@ using System.ComponentModel;
 
 namespace NDoc.Core
 {
-	/// <summary>The base documenter class.</summary>
+	/// <summary>Provides an abstract base class for documenters.</summary>
 	/// <remarks>
-	/// This is a base class for NDoc Documenters.  
-	/// It implements all the methods required by the <see cref="IDocumenter"/> interface. 
+	/// This is an <see langword="abstract"/> base class for NDoc Documenters.
+	/// It provides default implementations of all the methods required by the <see cref="IDocumenter"/> interface. 
 	/// It also provides some basic properties which are shared by all documenters. 
 	/// </remarks>
 	abstract public class BaseDocumenter : IDocumenter, IComparable
@@ -50,16 +50,20 @@ namespace NDoc.Core
 			}
 		}
 
-		/// <summary>Initialized a new BaseDocumenter instance.</summary>
+		/// <summary>Initializes a new instance of the <see cref="BaseDocumenter"/> class.</summary>
+		/// <param name="name">The display name of this documenter.</param>
 		protected BaseDocumenter(string name)
 		{
 			_Name = name;
 		}
 
 		/// <summary>
-		/// The development status (alpha, beta, stable) of this documenter.
-		/// Documenters should override this if they aren't stable.
+		/// Specifies the development status (alpha, beta, stable) of a documenter.
 		/// </summary>
+		/// <remarks>
+		/// As implemented in this class, this always returns <see cref="DocumenterDevelopmentStatus">Stable</see>.
+		/// <note type="inheritinfo">Documenters should override this if they are not yet stable...</note>
+		/// </remarks>
 		public virtual DocumenterDevelopmentStatus DevelopmentStatus
 		{
 			get { return(DocumenterDevelopmentStatus.Stable); }
@@ -71,7 +75,7 @@ namespace NDoc.Core
 			return String.Compare(Name, ((IDocumenter)obj).Name);
 		}
 
-		/// <summary>See <see cref="IDocumenter"/>.</summary>
+		/// <summary>See <see cref="IDocumenter.Config">IDocumenter.Config</see>.</summary>
 		public IDocumenterConfig Config
 		{
 			get { return config; }
@@ -80,16 +84,16 @@ namespace NDoc.Core
 
 		private string _Name;
 
-		/// <summary>Gets the display name for the documenter.</summary>
+		/// <summary>Gets the display name of this documenter.</summary>
 		public string Name
 		{
 			get { return _Name; }
 		}
 
-		/// <summary>See <see cref="IDocumenter"/>.</summary>
+		/// <summary>See <see cref="IDocumenter.MainOutputFile">IDocumenter.MainOutputFile</see>.</summary>
 		public abstract string MainOutputFile { get; }
 
-		/// <summary>See <see cref="IDocumenter"/>.</summary>
+		/// <summary>See <see cref="IDocumenter.View">IDocumenter.View</see>.</summary>
 		public virtual void View()
 		{
 			if (File.Exists(this.MainOutputFile))
@@ -103,12 +107,12 @@ namespace NDoc.Core
 			}
 		}
 
-		/// <summary>See <see cref="IDocumenter"/>.</summary>
+		/// <summary>See <see cref="IDocumenter.DocBuildingStep">IDocumenter.DocBuildingStep</see>.</summary>
 		public event DocBuildingEventHandler DocBuildingStep;
-		/// <summary>See <see cref="IDocumenter"/>.</summary>
+		/// <summary>See <see cref="IDocumenter.DocBuildingProgress">IDocumenter.DocBuildingProgress</see>.</summary>
 		public event DocBuildingEventHandler DocBuildingProgress;
 
-		/// <summary>Raises the DocBuildingStep event.</summary>
+		/// <summary>Raises the <see cref="DocBuildingStep"/> event.</summary>
 		/// <param name="step">The overall percent complete value.</param>
 		/// <param name="label">A description of the work currently beeing done.</param>
 		protected void OnDocBuildingStep(int step, string label)
@@ -117,7 +121,7 @@ namespace NDoc.Core
 				DocBuildingStep(this, new ProgressArgs(step, label));
 		}
 
-		/// <summary>Raises the DocBuildingProgress event.</summary>
+		/// <summary>Raises the <see cref="DocBuildingProgress"/> event.</summary>
 		/// <param name="progress">Percentage progress value</param>
 		protected void OnDocBuildingProgress(int progress)
 		{
@@ -125,16 +129,16 @@ namespace NDoc.Core
 				DocBuildingProgress(this, new ProgressArgs(progress, ""));
 		}
 
-		/// <summary>See <see cref="IDocumenter"/>.</summary>
+		/// <summary>See <see cref="IDocumenter.Clear">IDocumenter.Clear</see>.</summary>
 		abstract public void Clear();
 
-		/// <summary>See <see cref="IDocumenter"/>.</summary>
+		/// <summary>See <see cref="IDocumenter.CanBuild">IDocumenter.CanBuild</see>.</summary>
 		public virtual string CanBuild(Project project)
 		{
 			return this.CanBuild(project, false);
 		}
 
-		/// <summary>See <see cref="IDocumenter"/>.</summary>
+		/// <summary>See <see cref="IDocumenter.CanBuild">CanBuild</see>.</summary>
 		public virtual string CanBuild(Project project, bool checkInputOnly)
 		{
 			StringBuilder xfiles = new StringBuilder();
@@ -163,8 +167,7 @@ namespace NDoc.Core
 			}
 		}
 
-		/// <summary>See <see cref="IDocumenter"/>.</summary>
+		/// <summary>See <see cref="IDocumenter.Build">IDocumenter.Build</see>.</summary>
 		abstract public void Build(Project project);
-
 	}
 }

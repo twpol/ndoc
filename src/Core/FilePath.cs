@@ -35,24 +35,19 @@ namespace NDoc.Core
 	[Editor(typeof(FilePath.UIEditor), typeof(UITypeEditor))]
 	public class FilePath : PathItemBase
 	{
-		/// <summary>
-		/// Creates a new <see cref="FilePath"/> instance.
-		/// </summary>
+		/// <summary>Initializes a new instance of the <see cref="FilePath"/> class.</summary>
+		/// <overloads>Initializes a new instance of the <see cref="FilePath"/> class.</overloads>
 		public FilePath() : base() {}
 
-		/// <summary>
-		/// Creates a new <see cref="FilePath"/> instance.
-		/// </summary>
+		/// <summary>Initializes a new instance of the <see cref="FilePath"/> class from a given path string.</summary>
 		/// <param name="path">Path.</param>
 		public FilePath(string path) : base(path)
 		{
 			Path = path;
 		}
 
-		/// <summary>
-		/// Creates a new <see cref="FilePath"/> instance.
-		/// </summary>
-		/// <param name="path">Path.</param>
+		/// <summary>Initializes a new instance of the <see cref="FilePath"/> class from an existing <see cref="FilePath"/> instance.</summary>
+		/// <param name="path">An existing <see cref="FilePath"/>.</param>
 		public FilePath(FilePath path)
 		{
 			if (path.Path.Length > 0)

@@ -45,16 +45,16 @@ namespace NDoc.Core
 		#endregion
 
 		#region Constructors
-		/// <overrides>
-		/// Creates a new <see cref="ReferencePath"/> instance.
-		/// </overrides>
+		/// <overloads>
+		/// Initializes a new instance of the <see cref="ReferencePath"/> class.
+		/// </overloads>
 		/// <summary>
-		/// Creates a blank <see cref="ReferencePath"/> instance.
+		/// Initializes a new instance of the <see cref="ReferencePath"/> class.
 		/// </summary>
 		public ReferencePath() {}
 		
 		/// <summary>
-		/// Creates a <see cref="ReferencePath"/> instance from a given path string.
+		/// Initializes a new instance of the <see cref="ReferencePath"/> class from a given path string.
 		/// </summary>
 		/// <param name="path">A relative or absolute path.</param>
 		/// <exception cref="ArgumentNullException"><paramref name="path"/> is a <see langword="null"/>.</exception>
@@ -80,9 +80,9 @@ namespace NDoc.Core
 		}
 
 		/// <summary>
-		/// Creates a new <see cref="ReferencePath"/> instance from an existing <see cref="ReferencePath"/>.
+		/// Initializes a new instance of the <see cref="ReferencePath"/> class from an existing <see cref="ReferencePath"/> instance.
 		/// </summary>
-		/// <param name="refPath">A <see cref="ReferencePath"/> instance.</param>
+		/// <param name="refPath">An existing <see cref="ReferencePath"/> instance.</param>
 		/// <exception cref="ArgumentNullException"><paramref name="refPath"/> is a <see langword="null"/>.</exception>
 		public ReferencePath(ReferencePath refPath)
 		{

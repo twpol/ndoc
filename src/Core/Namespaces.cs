@@ -57,7 +57,7 @@ namespace NDoc.Core
 
 
 		/// <summary>
-		/// Creates a new <see cref="Namespaces"/> instance.
+		/// Initializes a new instance of the <see cref="Namespaces"/> class.
 		/// </summary>
 		public Namespaces()
 		{
