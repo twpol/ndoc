@@ -136,80 +136,103 @@ namespace NDoc.Core
 
 			Debug.WriteLine("Memory making xml: " + GC.GetTotalMemory(false).ToString());
 
-			assemblyLoader = SetupAssemblyLoader();
-
-			string DocLangCode = Enum.GetName(typeof(SdkLanguage), this.rep.SdkDocLanguage).Replace("_", "-");
-			externalSummaryCache = new ExternalXmlSummaryCache(DocLangCode);
-
-			notEmptyNamespaces = new Hashtable();
-
-			namespaceHierarchies = new NamespaceHierarchyCollection();
-			baseInterfaces = new BaseInterfacesCollection();
-			derivedTypes = new DerivedTypesCollection();
-			interfaceImplementingTypes = new InterfaceImplementingTypesCollection();
-			attributeFilter = new AttributeUsageDisplayFilter(this.rep.DocumentedAttributes);
-			
-			documentedTypes = new Hashtable();
-			
-			PreReflectionProcess();
-
-			string currentAssemblyFilename = "";
-
 			try
 			{
-				// Start the document with the XML declaration tag
-				writer.WriteStartDocument();
+				assemblyLoader = SetupAssemblyLoader();
 
-				// Start the root element
-				writer.WriteStartElement("ndoc");
-				writer.WriteAttributeString("SchemaVersion", "1.3");
+				string DocLangCode = Enum.GetName(typeof(SdkLanguage), this.rep.SdkDocLanguage).Replace("_", "-");
+				externalSummaryCache = new ExternalXmlSummaryCache(DocLangCode);
 
-				if (this.rep.FeedbackEmailAddress.Length > 0)
-					WriteFeedBackEmailAddress(writer);
+				notEmptyNamespaces = new Hashtable();
 
-				if (this.rep.CopyrightText.Length > 0)
-					WriteCopyright(writer);
+				namespaceHierarchies = new NamespaceHierarchyCollection();
+				baseInterfaces = new BaseInterfacesCollection();
+				derivedTypes = new DerivedTypesCollection();
+				interfaceImplementingTypes = new InterfaceImplementingTypesCollection();
+				attributeFilter = new AttributeUsageDisplayFilter(this.rep.DocumentedAttributes);
+			
+				documentedTypes = new Hashtable();
+			
+				PreReflectionProcess();
 
-				if (this.rep.IncludeDefaultThreadSafety)
-					WriteDefaultThreadSafety(writer);
+				string currentAssemblyFilename = "";
 
-				if (this.rep.Preliminary)
-					writer.WriteElementString("preliminary", "");
-
-				foreach (string AssemblyFileName in this.rep.AssemblyFileNames)
+				try
 				{
-					currentAssemblyFilename = AssemblyFileName;
-					Assembly assembly = assemblyLoader.LoadAssembly(currentAssemblyFilename);
+					// Start the document with the XML declaration tag
+					writer.WriteStartDocument();
 
-					int starta = Environment.TickCount;
+					// Start the root element
+					writer.WriteStartElement("ndoc");
+					writer.WriteAttributeString("SchemaVersion", "1.3");
 
-					WriteAssembly(writer, assembly);
+					if (this.rep.FeedbackEmailAddress.Length > 0)
+						WriteFeedBackEmailAddress(writer);
 
-					Trace.WriteLine("Completed " + assembly.FullName);
-					Trace.WriteLine(((Environment.TickCount - starta) / 1000.0).ToString() + " sec.");
+					if (this.rep.CopyrightText.Length > 0)
+						WriteCopyright(writer);
+
+					if (this.rep.IncludeDefaultThreadSafety)
+						WriteDefaultThreadSafety(writer);
+
+					if (this.rep.Preliminary)
+						writer.WriteElementString("preliminary", "");
+
+					foreach (string AssemblyFileName in this.rep.AssemblyFileNames)
+					{
+						currentAssemblyFilename = AssemblyFileName;
+						Assembly assembly = assemblyLoader.LoadAssembly(currentAssemblyFilename);
+
+						int starta = Environment.TickCount;
+
+						WriteAssembly(writer, assembly);
+
+						Trace.WriteLine("Completed " + assembly.FullName);
+						Trace.WriteLine(((Environment.TickCount - starta) / 1000.0).ToString() + " sec.");
+					}
+
+					writer.WriteEndElement();
+					writer.WriteEndDocument();
+					writer.Flush();
+
+					Trace.WriteLine("MakeXML : " + ((Environment.TickCount - start) / 1000.0).ToString() + " sec.");
+
+					// if you want to see NDoc's intermediate XML file, use the XML documenter.
 				}
-
-				writer.WriteEndElement();
-				writer.WriteEndDocument();
-				writer.Flush();
-
-				Trace.WriteLine("MakeXML : " + ((Environment.TickCount - start) / 1000.0).ToString() + " sec.");
-
-				// if you want to see NDoc's intermediate XML file, use the XML documenter.
-			}
-			catch (Exception e)
-			{
-				throw new DocumenterException(
-					"Error reflecting against the " + 
-					Path.GetFileName(currentAssemblyFilename) + 
-					" assembly: \n" + e.Message, e);
-			}
-			finally
-			{
-				if (assemblyLoader != null)
+				catch(ReflectionTypeLoadException)
 				{
-					assemblyLoader.Deinstall();
+					throw;
 				}
+				catch (Exception e)
+				{
+					throw new DocumenterException(
+						"Error reflecting against the " + 
+						Path.GetFileName(currentAssemblyFilename) + 
+						" assembly: \n" + e.Message, e);
+				}
+				finally
+				{
+					if (assemblyLoader != null)
+					{
+						assemblyLoader.Deinstall();
+					}
+				}
+			}
+			catch(ReflectionTypeLoadException e)
+			{
+				Hashtable unfoundFiles = new Hashtable();
+				StringBuilder sb = new StringBuilder();
+				sb.Append("One or more required assemblies could not be located : \n");
+				foreach(string ass in assemblyLoader.UnresolvedAssemblies)
+				{
+					sb.AppendFormat("   {0}\n",ass);
+				}
+				sb.Append("\nThe following directories were searched, \n");
+				foreach(string dir in assemblyLoader.SearchedDirectories)
+				{
+					sb.AppendFormat("   {0}\n",dir);
+				}
+				throw new DocumenterException(sb.ToString());
 			}
 		}
 
