@@ -117,7 +117,7 @@ namespace NDoc.Gui
 		private string processDirectory;
 		private string projectFilename;
 		private string untitledProjectName = "(Untitled)";
-		private int maxMRU = 5;
+		private int maxMRU = 8;
 		private Thread buildThread;
 		private System.Windows.Forms.ToolBarButton solutionToolBarButton;
 		private System.Windows.Forms.MenuItem menuFileOpenSolution;
@@ -217,7 +217,6 @@ namespace NDoc.Gui
 		/// file and calls Dispose() on base and components.</summary>
 		protected override void Dispose(bool disposing)
 		{
-			WriteConfig();
 			base.Dispose(disposing);
 		}
 		#endregion // Constructors / Dispose
@@ -853,6 +852,7 @@ namespace NDoc.Gui
 
 					reader = new XmlTextReader(streamReader);
 					reader.MoveToContent();
+
 					reader.ReadStartElement("ndoc.gui");
 
 					while (reader.Read() && reader.NodeType != XmlNodeType.EndElement)
@@ -882,8 +882,11 @@ namespace NDoc.Gui
 						}
 					}
 				}
-				catch (Exception e)
+				catch (XmlException)
 				{
+					//config file is corrupted, delete it
+					reader.Close();
+					File.Delete(guiConfigFilename);
 				}
 				finally
 				{
@@ -1645,12 +1648,13 @@ namespace NDoc.Gui
 			documenterConfig.SetProject(project);
 			propertyGrid.SelectedObject = documenterConfig;
 		}
-		#endregion // Event Handlers
 
 		/// <summary>Prompts the user to save the project if it's dirty.</summary>
 		protected override void OnClosing(CancelEventArgs e)
 		{
 			base.OnClosing(e);
+
+			WriteConfig();
 
 			if (project.IsDirty)
 			{
@@ -1674,6 +1678,7 @@ namespace NDoc.Gui
 				}
 			}
 		}
+		#endregion // Event Handlers
 
 	}
 }
