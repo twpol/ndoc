@@ -121,6 +121,7 @@
 					<xsl:when test="@contract='Normal'"></xsl:when>
 					<xsl:otherwise>/* unknown */</xsl:otherwise>
 				</xsl:choose>
+				<xsl:if test="@overload">&#160;Overloads</xsl:if>
 			</xsl:when>		
 			<xsl:when test="$lang='C#'">
 				<xsl:if test="@hiding">new&#160;</xsl:if>

@@ -928,6 +928,9 @@
 				</xsl:choose>
 				<xsl:if test="$include-type-links=true()">
 					<xsl:text>&#160;</xsl:text>
+					<xsl:if test="$lang = 'Visual Basic'">
+						<xsl:text>As&#160;</xsl:text>
+					</xsl:if>
 					<i>
 						<xsl:value-of select="@name" />
 					</i>
