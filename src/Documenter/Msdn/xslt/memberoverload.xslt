@@ -90,6 +90,7 @@
 							</a>
 						</blockquote>
 					</xsl:for-each>
+					<xsl:call-template name="overloads-remarks-section" />
 					<xsl:call-template name="overloads-example-section" />
 					<xsl:call-template name="seealso-section">
 						<xsl:with-param name="page">memberoverload</xsl:with-param>

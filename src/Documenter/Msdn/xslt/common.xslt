@@ -367,6 +367,11 @@
 					<xsl:with-param name="nodes" select="(documentation/overloads/summary)[1]/node()" />
 				</xsl:call-template>
 			</xsl:when>
+			<xsl:when test="documentation/overloads">
+				<xsl:call-template name="output-paragraph">
+					<xsl:with-param name="nodes" select="(documentation/overloads)[1]/node()" />
+				</xsl:call-template>
+			</xsl:when>
 			<xsl:otherwise>
 				<xsl:call-template name="summary-section" />
 			</xsl:otherwise>
@@ -379,12 +384,24 @@
 			<xsl:when test="$overloads/documentation/overloads/summary">
 				<xsl:apply-templates select="($overloads/documentation/overloads/summary)[1]/node()" mode="no-para" />
 			</xsl:when>
+			<xsl:when test="$overloads/documentation/overloads">
+				<xsl:apply-templates select="($overloads/documentation/overloads)[1]/node()" mode="no-para" />
+			</xsl:when>
 			<xsl:otherwise>
 				<xsl:call-template name="summary-with-no-paragraph">
 					<xsl:with-param name="member" select="$overloads" />
 				</xsl:call-template>
 			</xsl:otherwise>
 		</xsl:choose>
+	</xsl:template>
+	<!-- -->
+	<xsl:template name="overloads-remarks-section">
+		<xsl:if test="documentation/overloads/remarks">
+			<h4 class="dtH4">Remarks</h4>
+			<p>
+				<xsl:apply-templates select="(documentation/overloads/remarks)[1]/node()" mode="slashdoc" />
+			</p>
+		</xsl:if>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="overloads-example-section">

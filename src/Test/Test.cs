@@ -1164,28 +1164,24 @@ namespace NDoc.Test
 	/// <summary>Test the new overloads tag.</summary>
 	public class OverloadsTag
 	{
-		/// <overloads>
-		///   <summary>This constructor is overloaded.</summary>
-		/// </overloads>
+		/// <overloads>This constructor is overloaded.</overloads>
+		/// 
 		/// <summary>This overloaded constructor accepts no parameters.</summary>
 		public OverloadsTag()
 		{
 		}
-
 		/// <summary>This overloaded constructor accepts one int parameter.</summary>
 		public OverloadsTag(int i)
 		{
 		}
 
-		/// <overloads>
-		///   <summary>This indexer is overloaded.</summary>
-		/// </overloads>
+		/// <overloads>This indexer is overloaded.</overloads>
+		/// 
 		/// <summary>This overloaded indexer accepts one int parameter.</summary>
 		public int this[int i]
 		{
 			get { return 0; }
 		}
-
 		/// <summary>This overloaded indexer accepts one string parameter.</summary>
 		public int this[string s]
 		{
@@ -1193,23 +1189,54 @@ namespace NDoc.Test
 		}
 
 		/// <overloads>
-		///   <summary>
-		///     <para>This method is overloaded.</para>
+		/// This method is overloaded.
+		/// </overloads>
+		/// 
+		/// <summary>This overload accepts no parameters.</summary>
+		public void OverloadedMethod()
+		{
+		}
+		/// <summary>This overload accepts one int parameter.</summary>
+		public void OverloadedMethod(int i)
+		{
+		}
+
+		/// <overloads>
+		///   <summary>This method is overloaded.</summary>
+		///   <remarks>
+		///		<para>This remark should also appear.</para>
 		///     <note>This is a note.</note>
-		///   </summary>
+		///   </remarks>
 		///   <example>
 		///     <para>This is some example code.</para>
 		///     <code>Foo.Bar.Baz.Quux();</code>
 		///   </example>
 		/// </overloads>
+		/// 
 		/// <summary>This overload accepts no parameters.</summary>
-		public void OverloadedMethod()
+		public void FullDocOverloadedMethod()
+		{
+		}
+		/// <summary>This overload accepts one int parameter.</summary>
+		public void FullDocOverloadedMethod(int i)
 		{
 		}
 
-		/// <summary>This overload accepts one int parameter.</summary>
-		public void OverloadedMethod(int i)
+		/// <overloads>The Addition for <b>OverloadsTag</b>.</overloads>
+		/// 
+		/// <summary>
+		/// Addition that takes two <b>OverloadsTag</b>.
+		/// </summary>
+		public static OverloadsTag operator +(OverloadsTag x, OverloadsTag y)
 		{
+			return new OverloadsTag();
+		}
+		/// <summary>
+		/// Addition that takes an <b>OverloadsTag</b> and an <b>Int32</b>.
+		/// </summary>
+		public static OverloadsTag operator +(OverloadsTag x, int i)
+		{
+			return new OverloadsTag(i);
 		}
 	}
 

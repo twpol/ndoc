@@ -231,7 +231,7 @@
 						<td width="50%">
 							<xsl:text>Overloaded. </xsl:text>
 							<xsl:choose>
-								<xsl:when test="../constructor/documentation/overloads/summary">
+								<xsl:when test="../constructor/documentation/overloads">
 									<xsl:call-template name="overloads-summary-with-no-paragraph">
 										<xsl:with-param name="overloads" select="../constructor" />
 									</xsl:call-template>
