@@ -1023,7 +1023,11 @@ namespace NDoc.Gui
 			{
 				comboBoxDocumenters.SelectedIndex = 1;
 			}
-			comboBoxDocumenters.SelectedIndex = currentIndex;
+
+			if (currentIndex != -1)
+			{
+				comboBoxDocumenters.SelectedIndex = currentIndex;
+			}
 		}
 		#endregion // Methods
 
