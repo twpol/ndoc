@@ -32,7 +32,12 @@ using System.ComponentModel;
 
 namespace NDoc.Core
 {
-	/// <summary>Provides the base class for documenters.</summary>
+	/// <summary>The base documenter class.</summary>
+	/// <remarks>
+	/// This is a base class for NDoc Documenters.  
+	/// It implements all the methods required by the <see cref="IDocumenter"/> interface. 
+	/// It also provides some basic properties which are shared by all documenters. 
+	/// </remarks>
 	abstract public class BaseDocumenter : IDocumenter, IComparable
 	{
 		IDocumenterConfig		config;
@@ -160,78 +165,6 @@ namespace NDoc.Core
 
 		/// <summary>See <see cref="IDocumenter"/>.</summary>
 		abstract public void Build(Project project);
-
-		/// <summary>Builds an Xml file combining the reflected metadata with the /doc comments.</summary>
-		/// <returns>full pathname of XML file</returns>
-		/// <remarks>The caller is responsible for deleting the xml file after use...</remarks>
-		protected string MakeXmlFile(Project project)
-		{
-			string tempfilename = Path.GetTempFileName();
-
-			//if this.rep.UseNDocXmlFile is set, 
-			//copy it to the temp file and return.
-			string xmlFile = MyConfig.UseNDocXmlFile;
-			if (xmlFile.Length > 0)
-			{
-				Trace.WriteLine("Loading pre-compiled XML information from:\n" + xmlFile);
-				File.Copy(xmlFile,tempfilename,true);
-				return tempfilename;
-			}
-
-			//let's try to create this in a new AppDomain
-			AppDomain appDomain=null;
-			try
-			{
-				appDomain = AppDomain.CreateDomain("NDocReflection");
-				ReflectionEngine re = (ReflectionEngine)  
-					appDomain.CreateInstanceFromAndUnwrap(Assembly.GetExecutingAssembly().EscapedCodeBase, 
-					"NDoc.Core.ReflectionEngine");
-				ReflectionEngineParameters rep = new ReflectionEngineParameters(project, MyConfig);
-				tempfilename = re.MakeXmlFile(rep);
-				return tempfilename;
-			}
-			finally
-			{
-				if (appDomain!=null) AppDomain.Unload(appDomain);
-			}
-		}
-
-		/// <summary>Builds an Xml string combining the reflected metadata with the /doc comments.</summary>
-		/// <remarks>This now evidently writes the string in utf-16 format (and 
-		/// says so, correctly I suppose, in the xml text) so if you write this string to a file with 
-		/// utf-8 encoding it will be unparseable because the file will claim to be utf-16
-		/// but will actually be utf-8.</remarks>
-		/// <returns>XML string</returns>
-		protected string MakeXml(Project project)
-		{
-			//if MyConfig.UseNDocXmlFile is set, 
-			//load the XmlBuffer from the file and return.
-			string xmlFile = MyConfig.UseNDocXmlFile;
-			if (xmlFile.Length > 0)
-			{
-				Trace.WriteLine("Loading pre-compiled XML information from:\n" + xmlFile);
-				using (TextReader reader = new StreamReader(xmlFile,Encoding.UTF8))
-				{
-					return reader.ReadToEnd();
-				}
-			}
-
-			AppDomain appDomain=null;
-			try
-			{
-				appDomain = AppDomain.CreateDomain("NDocReflection");
-				ReflectionEngine re = (ReflectionEngine)  
-					appDomain.CreateInstanceFromAndUnwrap(Assembly.GetExecutingAssembly().EscapedCodeBase, 
-					"NDoc.Core.ReflectionEngine");
-				ReflectionEngineParameters rep = new ReflectionEngineParameters(project, MyConfig);
-				string tempString = re.MakeXml(rep);
-				return tempString;
-			}
-			finally
-			{
-				if (appDomain!=null) AppDomain.Unload(appDomain);
-			}
-		}
 
 	}
 }

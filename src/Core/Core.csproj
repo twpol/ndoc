@@ -142,6 +142,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "BaseReflectionDocumenter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BaseReflectionDocumenterConfig.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "CommonAssemblyInfo.cs"
                     Link = "..\CommonAssemblyInfo.cs"
                     SubType = "Code"
