@@ -82,7 +82,7 @@ namespace NDoc.Core
 			{
 				if (node.NodeType == XmlNodeType.Element) 
 				{
-					if (node.Name == "ndoc") nodocTags.Add(id, null);
+					if (node.Name == "nodoc") nodocTags.Add(id, null);
 					
 					if (node.Name == "code")
 						FixupCodeTag(node);
