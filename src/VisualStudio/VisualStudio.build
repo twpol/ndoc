@@ -15,5 +15,6 @@
 				<includes name="System.Xml.dll" />
 			</references>
 		</csc>
+		<delete file="${current.bin.dir}/../../../ndoc.snk" if="${current.build.config.release}" />
 	</target>
 </project>

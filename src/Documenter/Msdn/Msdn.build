@@ -26,5 +26,6 @@
 				<includes name="**/*.html" />
 			</resources>
 		</csc>
+		<delete file="${current.bin.dir}/../../../../ndoc.snk" if="${current.build.config.release}" />
 	</target>
 </project>

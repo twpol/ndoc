@@ -25,6 +25,7 @@
 						<includes name="xml/*.HxK" />
 					</resources>
 				</csc>
+				<delete file="${current.bin.dir}/../../../../ndoc.snk" if="${current.build.config.release}" />
 			</if>
 		</if>
 	</target>

@@ -21,5 +21,6 @@
 				<includes name="**/*.xslt" />
 			</resources>
 		</csc>
+		<delete file="${current.bin.dir}/../../../../ndoc.snk" if="${current.build.config.release}" />
 	</target>
 </project>
