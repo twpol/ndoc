@@ -157,9 +157,12 @@ namespace NDoc.Core
 				{
 					xfiles.Append("\n" + asd.AssemblyFilename);
 				}
-				if (!File.Exists(Path.GetFullPath(asd.SlashDocFilename)))
+				if (asd.SlashDocFilename!=null && asd.SlashDocFilename.Length>0)
 				{
-					xfiles.Append("\n" + asd.SlashDocFilename);
+					if (!File.Exists(Path.GetFullPath(asd.SlashDocFilename)))
+					{
+						xfiles.Append("\n" + asd.SlashDocFilename);
+					}
 				}
 			}
 
@@ -333,9 +336,12 @@ namespace NDoc.Core
 				foreach (AssemblySlashDoc assemblySlashDoc in project.GetAssemblySlashDocs())
 				{
 					string assemblypath = Path.GetFullPath(assemblySlashDoc.AssemblyFilename);
-					string slashdocpath = Path.GetFullPath(assemblySlashDoc.SlashDocFilename);
 					Assembly assembly = LoadAssembly(assemblypath);
-					externalSummaryCache.AddXmlDoc(assembly.FullName, slashdocpath);
+					if(assemblySlashDoc.SlashDocFilename!=null && assemblySlashDoc.SlashDocFilename.Length>0)
+					{
+						string slashdocpath = Path.GetFullPath(assemblySlashDoc.SlashDocFilename);
+						externalSummaryCache.AddXmlDoc(assembly.FullName, slashdocpath);
+					}
 				}
 			}
 
@@ -383,8 +389,15 @@ namespace NDoc.Core
 						assemblySlashDoc.AssemblyFilename);
 					Assembly assembly = LoadAssembly(currentAssemblyFilename);
 
-					assemblyDocCache = new AssemblyXmlDocCache(project.GetFullPath(
-						assemblySlashDoc.SlashDocFilename));
+					if (assemblySlashDoc.SlashDocFilename!=null && assemblySlashDoc.SlashDocFilename.Length>0)
+					{
+						assemblyDocCache = new AssemblyXmlDocCache(
+							project.GetFullPath(assemblySlashDoc.SlashDocFilename));
+					}
+					else
+					{
+						assemblyDocCache = new AssemblyXmlDocCache();
+					}
 
 					int starta = Environment.TickCount;
 

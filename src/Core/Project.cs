@@ -474,14 +474,6 @@ namespace NDoc.Core
 					}
 					assemblySlashDoc.AssemblyFilename = reader["location"];
 
-					if (reader.GetAttribute("documentation") == null) {
-						throw new DocumenterException("\"documentation\" attribute is"
-							+ " required for <assembly> element in project file.");
-					}
-					if (reader.GetAttribute("documentation").Trim().Length == 0) {
-						throw new DocumenterException("\"documentation\" attribute of"
-							+ " <assembly> element cannot be empty in project file.");
-					}
 					assemblySlashDoc.SlashDocFilename = reader["documentation"];
 					count++;
 					try
