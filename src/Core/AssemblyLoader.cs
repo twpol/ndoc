@@ -1,3 +1,19 @@
+// Copyright (C) 2004  Kevin Downs
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
 using System;
 using System.Collections;
 using System.Collections.Specialized;
@@ -5,37 +21,19 @@ using System.Diagnostics;
 using System.IO;
 using System.Globalization;
 using System.Reflection;
+using System.Security;
+using System.Security.Permissions;
+using System.Security.Policy;
 
-namespace NDoc.Core
+namespace NDoc.Core.Reflection
 {
-	/// <summary> 
-	/// Resolves assemblies located in a specified directory and its sub-directories.
+	/// <summary>
+	/// Handles the resolution and loading of assemblies.
 	/// </summary>
-	/// <remarks>
-	/// <para>Class AssemblyResolver resolves assemblies not found by the system.
-	/// An instance of this class is configured with a base directory and hooks
-	/// up to the AppDomain.AssemblyResolve event. Whenever called, the instance
-	/// checks the associated directory with all subdirectories for the assembly
-	/// requested.</para>
-	/// <para>The class implements two features to speed up the search:</para>
-	/// <list type="bullet">
-	/// <item><description>
-	/// AssemblyList: Before searching the file system, the assembly list is searched.
-	/// Once an assembly has been found, it is added to the AssemblyList. 
-	/// </description></item>
-	/// <item><description>
-	/// SubDirectoryCache: The class caches the subdirectories of each directory once
-	/// they have been determined. This avoids repeated filesystem queries for subdirectories.
-	/// </description></item>
-	/// </list>
-	/// </remarks>
 	public class AssemblyLoader
 	{
 		/// <summary>primary search directories.</summary>
-		private ArrayList projectDirectories;
-
-		/// <summary>Additional search directories.</summary>
-		private ArrayList referenceDirectories;
+		private ReferencePathCollection SearchDirectories;
 
 		/// <summary>List of subdirectory lists already scanned.</summary>
 		private Hashtable directoryLists;
@@ -56,9 +54,6 @@ namespace NDoc.Core
 		/// </list></remarks>
 		private Hashtable AssemblyNameFileNameMap;
 
-		/// <summary>Whether or not to include subdirectories in searches.</summary>
-		private bool includeSubdirs = false;
-
 		// loaded assembly cache keyed by Assembly FullName
 		private Hashtable assemblysLoadedAssyName;
 
@@ -68,28 +63,17 @@ namespace NDoc.Core
 		/// <summary>
 		/// Creates a new <see cref="AssemblyLoader"/> instance.
 		/// </summary>
-		/// <param name="projectDirectories">Project directories.</param>
 		/// <param name="referenceDirectories">Reference directories.</param>
-		public AssemblyLoader(ArrayList projectDirectories, ArrayList referenceDirectories)
+		public AssemblyLoader(ReferencePathCollection referenceDirectories)
 		{
 			this.assemblysLoadedAssyName = new Hashtable();
 			this.assemblysLoadedFileName = new Hashtable();
 			this.AssemblyNameFileNameMap = new Hashtable();
-			this.projectDirectories = projectDirectories;
-			this.referenceDirectories = referenceDirectories;
 			this.directoryLists = new Hashtable();
 			this.unresolvedAssemblies = new Hashtable();
-			this.searchedDirectories=new Hashtable();
-		}
+			this.searchedDirectories = new Hashtable();
 
-		/// <summary>
-		/// Whether or not to include sub-directories in the searches which
-		/// are in response to the AssemblyResolve event.
-		/// </summary>
-		public bool IncludeSubdirs
-		{
-			get { return (includeSubdirs); }
-			set { includeSubdirs = value; }
+			this.SearchDirectories = referenceDirectories;
 		}
 
 		/// <summary>
@@ -136,6 +120,20 @@ namespace NDoc.Core
 		{
 			// have we already loaded this assembly?
 			Assembly assy = assemblysLoadedFileName[fileName] as Assembly;
+
+			//double check assy not already loaded
+			if (assy == null)
+			{
+				AssemblyName assyName = AssemblyName.GetAssemblyName(fileName);
+				foreach (Assembly loadedAssy in AppDomain.CurrentDomain.GetAssemblies())
+				{
+					if (assyName.FullName == loadedAssy.FullName)
+					{
+						assy = loadedAssy;
+						break;
+					}
+				}
+			}
 			
 			// Assembly not loaded, so we must go a get it
 			if (assy == null)
@@ -166,9 +164,19 @@ namespace NDoc.Core
 				// Now we have the assembly image, try to load it into the CLR
 				try
 				{
-					assy = Assembly.Load(memStream.ToArray());
+					Evidence evidence = CreateAssemblyEvidence(fileName);
+					assy = Assembly.Load(memStream.ToArray(), null, evidence);
 					// If the assembly loaded OK, cache the Assembly ref using the fileName as key.
 					assemblysLoadedFileName.Add(fileName, assy);
+				}
+				catch (System.Security.SecurityException e)
+				{
+					if (e.Message.IndexOf("0x8013141A") != -1)
+					{
+						throw new System.Security.SecurityException(String.Format("Strong name validation failed for assembly '{0}'.", fileName));
+					}
+					else
+						throw;
 				}
 				catch (System.IO.FileLoadException e)
 				{
@@ -203,6 +211,29 @@ namespace NDoc.Core
 			return assy;
 		}
 
+		static Evidence CreateAssemblyEvidence(string fileName)
+		{
+			//HACK: I am unsure whether 'Hash' evidence is required - since this will be difficult to obtain, we will not supply it...
+ 
+			Evidence newEvidence = new Evidence();
+
+			//We must have zone evidence, or we will get a policy exception
+			Zone zone = new Zone(SecurityZone.MyComputer);
+			newEvidence.AddHost(zone);
+
+			//If the assembly is strong-named, we must supply this evidence
+			//for StrongNameIdentityPermission demands
+			AssemblyName assemblyName = AssemblyName.GetAssemblyName(fileName);
+			byte[] pk = assemblyName.GetPublicKey();
+			if (pk.Length != 0)
+			{
+				StrongNamePublicKeyBlob blob = new StrongNamePublicKeyBlob(pk);
+				StrongName strongName = new StrongName(blob, assemblyName.Name, assemblyName.Version);
+				newEvidence.AddHost(strongName);
+			}
+
+			return newEvidence;
+		}
 
 		/// <summary> 
 		/// Resolves the location and loads an assembly not found by the system.
@@ -220,7 +251,7 @@ namespace NDoc.Core
 			Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
 			foreach (Assembly a in assemblies) 
 			{
-				if (a.FullName == args.Name) 
+				if (IsAssemblyNameEquivalent(a.FullName, args.Name)) 
 				{
 					return a;
 				}
@@ -251,58 +282,63 @@ namespace NDoc.Core
 			if (assy == null)
 			{
 				fileName = assemblyInfo[0] + ".dll";
-				assy = LoadAssemblyFrom(this.projectDirectories, fullName, fileName, this.includeSubdirs);
+				assy = LoadAssemblyFrom(fullName, fileName);
 			}
 
 			// Project Path Exes
 			if (assy == null)
 			{
 				fileName = assemblyInfo[0] + ".exe";
-				assy = LoadAssemblyFrom(this.projectDirectories, fullName, fileName, this.includeSubdirs);
+				assy = LoadAssemblyFrom(fullName, fileName);
 			}
 
 			// Reference Path DLLs
 			if (assy == null)
 			{
 				fileName = assemblyInfo[0] + ".dll";
-				assy = LoadAssemblyFrom(this.referenceDirectories, fullName, fileName, this.includeSubdirs);
+				assy = LoadAssemblyFrom(fullName, fileName);
 			}
 
 			// Reference Path Exes
 			if (assy == null)
 			{
 				fileName = assemblyInfo[0] + ".exe";
-				assy = LoadAssemblyFrom(this.referenceDirectories, fullName, fileName, this.includeSubdirs);
+				assy = LoadAssemblyFrom(fullName, fileName);
 			}
 
-			if (assy == null)
+			//if the requested assembly did not have a strong name, we can
+			//get even more desperate and start looking for partial name matches
+			if (assemblyInfo.Length < 4 || assemblyInfo[3].Trim() == "PublicKeyToken=null")
 			{
-				//nothing found so far, get desperate and start looking for partial name matches in
-				//the assemblies we have already loaded...
-				assemblies = AppDomain.CurrentDomain.GetAssemblies();
-				foreach (Assembly a in assemblies) 
+				if (assy == null)
 				{
-					string[] assemblyNameParts = a.FullName.Split(new char[] {','});
-					if (assemblyNameParts[0] == assemblyInfo[0])
+					//start looking for partial name matches in
+					//the assemblies we have already loaded...
+					assemblies = AppDomain.CurrentDomain.GetAssemblies();
+					foreach (Assembly a in assemblies) 
 					{
-						assy = a;
-						break;
+						string[] assemblyNameParts = a.FullName.Split(new char[] {','});
+						if (assemblyNameParts[0] == assemblyInfo[0])
+						{
+							assy = a;
+							break;
+						}
 					}
 				}
-			}
 
-			if (assy == null)
-			{
-				//get even more desperate and start looking for partial name matches in
-				//the assemblies we have already scanned...
-				foreach (string assemblyName in AssemblyNameFileNameMap.Keys)
+				if (assy == null)
 				{
-
-					string[] assemblyNameParts = assemblyName.Split(new char[] {','});
-					if (assemblyNameParts[0] == assemblyInfo[0])
+					//get even more desperate and start looking for partial name matches
+					//the assemblies we have already scanned...
+					foreach (string assemblyName in AssemblyNameFileNameMap.Keys)
 					{
-						assy = LoadAssembly((string)AssemblyNameFileNameMap[assemblyName]);
-						break;
+
+						string[] assemblyNameParts = assemblyName.Split(new char[] {','});
+						if (assemblyNameParts[0] == assemblyInfo[0])
+						{
+							assy = LoadAssembly((string)AssemblyNameFileNameMap[assemblyName]);
+							break;
+						}
 					}
 				}
 			}
@@ -310,7 +346,7 @@ namespace NDoc.Core
 			if (assy == null)
 			{
 				if (!unresolvedAssemblies.ContainsKey(args.Name)) 
-					unresolvedAssemblies.Add(args.Name,null);
+					unresolvedAssemblies.Add(args.Name, null);
 			}
 
 			return assy;
@@ -320,81 +356,103 @@ namespace NDoc.Core
 		/// Search for and load the specified assembly in a set of directories.
 		/// This will optionally search recursively.
 		/// </summary>
-		/// <param name="dirs">The list of directories to look in.</param>
 		/// <param name="fullName">
 		/// Fully qualified assembly name. If not empty, the full name of each assembly found is
 		/// compared to this name and the assembly is accepted only, if the names match.
 		/// </param>
 		/// <param name="fileName">The name of the assembly.</param>
-		/// <param name="includeSubDirs">true, to include subdirectories.</param>
 		/// <returns>The assembly, or null if not found.</returns>
-		private Assembly LoadAssemblyFrom(ArrayList dirs, string fullName, string fileName, bool includeSubDirs) 
+		private Assembly LoadAssemblyFrom(string fullName, string fileName) 
+		{
+			Assembly assy = null;
+			
+			if ((SearchDirectories == null) || (SearchDirectories.Count == 0)) return (null);
+
+			foreach (ReferencePath rp in SearchDirectories)
+			{
+				if (Directory.Exists(rp.Path))
+				{
+					assy = LoadAssemblyFrom(fullName, fileName, rp.Path, rp.IncludeSubDirectories);
+					if (assy != null) return assy;
+				}
+			}
+			return null;
+		}
+		
+		/// <summary> 
+		/// Search for and load the specified assembly in a given directory.
+		/// This will optionally search recursively into sub-directories if requested.
+		/// </summary>
+		/// <param name="path">The directory to look in.</param>
+		/// <param name="fullName">
+		/// Fully qualified assembly name. If not empty, the full name of each assembly found is
+		/// compared to this name and the assembly is accepted only, if the names match.
+		/// </param>
+		/// <param name="fileName">The name of the assembly.</param>
+		/// <param name="includeSubDirs">true, search subdirectories.</param>
+		/// <returns>The assembly, or null if not found.</returns>
+		private Assembly LoadAssemblyFrom(string fullName, string fileName, string path, bool includeSubDirs) 
 		{
 			Assembly assembly = null;
-			if ((dirs == null) || (dirs.Count == 0)) return (null);
-
-			foreach (string path in dirs)
+			if (!searchedDirectories.ContainsKey(path))
 			{
-				if (Directory.Exists(path))
+				searchedDirectories.Add(path, null);
+			}
+			string fn = Path.Combine(path, fileName);
+			if (File.Exists(fn)) 
+			{
+				// file exists, check it's the right assembly
+				try
 				{
-					if (!searchedDirectories.ContainsKey(path))
+					AssemblyName assyName = AssemblyName.GetAssemblyName(fn);
+					if (IsAssemblyNameEquivalent(assyName.FullName, fullName))
 					{
-						searchedDirectories.Add(path, null);
-					}
-					string fn = Path.Combine(path, fileName);
-					if (File.Exists(fn)) 
-					{
-						// file exists, check it's the right assembly
+						//This looks like the right assembly, try loading it
 						try
 						{
-							AssemblyName assyName = AssemblyName.GetAssemblyName(fn);
-							if (assyName.FullName == fullName)
-							{
-								//This looks like the right assembly, try loading it
-								try
-								{
-									assembly = LoadAssembly(fn);
-									return (assembly);
-								}
-								catch (Exception e)
-								{
-									Debug.WriteLine("Assembly Load Error: " + e.Message, "AssemblyResolver");
-								}
-							}
-							else
-							{
-								//nope, names don't match; save the FileName and AssemblyName map
-								//in case we need this assembly later...
-								//only first found occurence of fully-qualifed assembly name is cached
-								if (!AssemblyNameFileNameMap.ContainsKey(assyName.FullName))
-								{
-									AssemblyNameFileNameMap.Add(assyName.FullName, fn);
-								}
-							}
+							assembly = LoadAssembly(fn);
+							return (assembly);
 						}
 						catch (Exception e)
 						{
-							//oops this wasn't a valid assembly
-							Debug.WriteLine("AssemblyResolver: File " + fn + " not a valid assembly");
-							Debug.WriteLine(e.Message);
+							Debug.WriteLine("Assembly Load Error: " + e.Message, "AssemblyResolver");
 						}
 					}
 					else
 					{
-						Debug.WriteLine("AssemblyResolver: File " + fileName + " not in " + path);
-					}
-
-					// not in this dir (or load failed), scan subdirectories
-					if (includeSubDirs) 
-					{
-						string[] subdirs = GetSubDirectories(path);
-						ArrayList subDirList = new ArrayList();
-						foreach (string subdir in subdirs) subDirList.Add(subdir);
-						return (LoadAssemblyFrom(subDirList, fullName, fileName, true));
+						//nope, names don't match; save the FileName and AssemblyName map
+						//in case we need this assembly later...
+						//only first found occurence of fully-qualifed assembly name is cached
+						if (!AssemblyNameFileNameMap.ContainsKey(assyName.FullName))
+						{
+							AssemblyNameFileNameMap.Add(assyName.FullName, fn);
+						}
 					}
 				}
+				catch (Exception e)
+				{
+					//oops this wasn't a valid assembly
+					Debug.WriteLine("AssemblyResolver: File " + fn + " not a valid assembly");
+					Debug.WriteLine(e.Message);
+				}
 			}
-			return (null);
+			else
+			{
+				Debug.WriteLine("AssemblyResolver: File " + fileName + " not in " + path);
+			}
+
+			// not in this dir (or load failed), scan subdirectories
+			if (includeSubDirs) 
+			{
+				string[] subdirs = GetSubDirectories(path);
+				foreach (string subdir in subdirs)
+				{
+					Assembly assy = LoadAssemblyFrom(fullName, fileName, subdir, true);
+					if (assy != null) return assy;
+				}
+			}
+
+			return null;
 		}
 
 		private string[] GetSubDirectories(string parentDir) 
@@ -406,6 +464,17 @@ namespace NDoc.Core
 				this.directoryLists.Add(parentDir, subdirs);
 			}
 			return subdirs;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		private bool IsAssemblyNameEquivalent(string AssyFullName, string RequiredAssyName)
+		{
+			if (RequiredAssyName.Length < AssyFullName.Length)
+				return (AssyFullName.Substring(0, RequiredAssyName.Length) == RequiredAssyName);
+			else
+				return (AssyFullName == RequiredAssyName.Substring(0, AssyFullName.Length));
 		}
 
 	}
