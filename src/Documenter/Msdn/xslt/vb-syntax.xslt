@@ -3,6 +3,50 @@
 	<!-- -->
 	<xsl:param name="ndoc-vb-syntax" />
 	<!-- -->
+	<xsl:template name="vb-type">
+		<xsl:param name="runtime-type" />
+		<xsl:variable name="old-type">
+			<xsl:choose>
+				<xsl:when test="contains($runtime-type, '[]')">
+					<xsl:value-of select="substring-before($runtime-type, '[]')" />
+				</xsl:when>
+				<xsl:when test="contains($runtime-type, '&amp;')">
+					<xsl:value-of select="substring-before($runtime-type, '&amp;')" />
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="$runtime-type" />
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:variable name="new-type">
+			<xsl:choose>
+				<xsl:when test="$old-type='System.Byte'">Byte</xsl:when>
+				<xsl:when test="$old-type='System.Int16'">Short</xsl:when>
+				<xsl:when test="$old-type='System.Int32'">Integer</xsl:when>
+				<xsl:when test="$old-type='System.Int64'">Long</xsl:when>
+				<xsl:when test="$old-type='System.Single'">Single</xsl:when>
+				<xsl:when test="$old-type='System.Double'">Double</xsl:when>
+				<xsl:when test="$old-type='System.Decimal'">Decimal</xsl:when>
+				<xsl:when test="$old-type='System.String'">String</xsl:when>
+				<xsl:when test="$old-type='System.Char'">Char</xsl:when>
+				<xsl:when test="$old-type='System.Boolean'">Boolean</xsl:when>
+				<xsl:when test="$old-type='System.DateTime'">Date</xsl:when>
+				<xsl:when test="$old-type='System.Object'">Object</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="$old-type" />
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:choose>
+			<xsl:when test="contains($runtime-type, '[]')">
+				<xsl:value-of select="concat($new-type, '()')" />
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="$new-type" />
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	<!-- -->
 	<xsl:template name="vb-type-syntax">
 		<xsl:if test="$ndoc-vb-syntax">
 			<pre class="syntax">
@@ -67,24 +111,24 @@
 				<br />
 				<xsl:apply-templates select="parameter" mode="vb" />
 				<xsl:text>)</xsl:text>
-				<xsl:if test="@returnType != 'System.Void'">
-					<xsl:text>&#160;As&#160;</xsl:text>
-					<a>
-						<xsl:attribute name="href">
-							<xsl:call-template name="get-filename-for-type-name">
-								<xsl:with-param name="type-name" select="@returnType" />
-							</xsl:call-template>
-						</xsl:attribute>
-						<xsl:call-template name="strip-namespace">
-							<xsl:with-param name="name" select="@returnType" />
-						</xsl:call-template>
-					</a>
-				</xsl:if>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:text>()</xsl:text>
 			</xsl:otherwise>
 		</xsl:choose>
+		<xsl:if test="@returnType != 'System.Void'">
+			<xsl:text>&#160;As&#160;</xsl:text>
+			<a>
+				<xsl:attribute name="href">
+					<xsl:call-template name="get-filename-for-type-name">
+						<xsl:with-param name="type-name" select="@returnType" />
+					</xsl:call-template>
+				</xsl:attribute>
+				<xsl:call-template name="vb-type">
+					<xsl:with-param name="runtime-type" select="@returnType" />
+				</xsl:call-template>
+			</a>
+		</xsl:if>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="vb-type-access">
@@ -118,9 +162,16 @@
 		<xsl:text>ByVal </xsl:text>
 		<xsl:value-of select="@name" />
 		<xsl:text>&#160;As&#160;</xsl:text>
-		<xsl:call-template name="strip-namespace">
-			<xsl:with-param name="name" select="@type" />
-		</xsl:call-template>
+		<a>
+			<xsl:attribute name="href">
+				<xsl:call-template name="get-filename-for-type-name">
+					<xsl:with-param name="type-name" select="@type" />
+				</xsl:call-template>
+			</xsl:attribute>
+			<xsl:call-template name="vb-type">
+				<xsl:with-param name="runtime-type" select="@type" />
+			</xsl:call-template>
+		</a>
 		<xsl:if test="position() != last()">
 			<xsl:text>,</xsl:text>
 		</xsl:if>
@@ -224,8 +275,8 @@
 							<xsl:with-param name="type-name" select="@type" />
 						</xsl:call-template>
 					</xsl:attribute>
-					<xsl:call-template name="strip-namespace">
-						<xsl:with-param name="name" select="@type" />
+					<xsl:call-template name="vb-type">
+						<xsl:with-param name="runtime-type" select="@type" />
 					</xsl:call-template>
 				</a>
 			</pre>
@@ -278,8 +329,8 @@
 						<xsl:with-param name="type-name" select="@type" />
 					</xsl:call-template>
 				</xsl:attribute>
-				<xsl:call-template name="strip-namespace">
-					<xsl:with-param name="name" select="@type" />
+				<xsl:call-template name="vb-type">
+					<xsl:with-param name="runtime-type" select="@type" />
 				</xsl:call-template>
 			</a>
 		</xsl:if>
