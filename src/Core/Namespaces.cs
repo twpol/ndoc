@@ -21,6 +21,9 @@ using System.Xml;
 using System.Reflection;
 using System.IO;
 using System.Diagnostics;
+using System.Globalization;
+
+using NDoc.Core.Reflection;
 
 namespace NDoc.Core
 {
@@ -49,7 +52,7 @@ namespace NDoc.Core
 
 		private void OnContentsChanged()
 		{
-			if (ContentsChanged!=null) ContentsChanged(this,EventArgs.Empty);
+			if (ContentsChanged != null) ContentsChanged(this, EventArgs.Empty);
 		}
 
 
@@ -69,7 +72,7 @@ namespace NDoc.Core
 		{
 			get
 			{
-				if (_namespaces==null)
+				if (_namespaces == null)
 					return "";
 				else
 					return (string)_namespaces[namespaceName];
@@ -77,22 +80,22 @@ namespace NDoc.Core
 
 			set
 			{
-				   //ignore a namespace that is not already in the collecton
-				   if (_namespaces.ContainsKey(namespaceName))
-				   {
-					   if (value.Length == 0)
-					   {
-						   value = null;
-					   }
+				//ignore a namespace that is not already in the collecton
+				if (_namespaces.ContainsKey(namespaceName))
+				{
+					if (value.Length == 0)
+					{
+						value = null;
+					}
 
-					   //throw ContentsChanged if the value changed
-					   if ((string)_namespaces[namespaceName] != value)
-					   {
-						   _namespaces[namespaceName] = value;
-						   OnContentsChanged();
-					   }
-				   }
-			   }
+					//throw ContentsChanged if the value changed
+					if ((string)_namespaces[namespaceName] != value)
+					{
+						_namespaces[namespaceName] = value;
+						OnContentsChanged();
+					}
+				}
+			}
 		}
 
 		/// <summary>Gets an enumerable list of namespace names.</summary>
@@ -100,7 +103,7 @@ namespace NDoc.Core
 		{
 			get
 			{
-				if (Count>0)
+				if (Count > 0)
 					return _namespaces.Keys;
 				else
 					return new ArrayList();
@@ -112,7 +115,7 @@ namespace NDoc.Core
 		{
 			get 
 			{
-				if (_namespaces!=null)
+				if (_namespaces != null)
 				{
 					return _namespaces.Count;
 				}
@@ -129,12 +132,12 @@ namespace NDoc.Core
 		/// An open XmlReader positioned before the namespace elements.</param>
 		public void Read(XmlReader reader)
 		{
-			bool IsDirty=false;
+			bool IsDirty = false;
 			while (!reader.EOF && !(reader.NodeType == XmlNodeType.EndElement && reader.Name == "namespaces"))
 			{
 				if (reader.NodeType == XmlNodeType.Element && reader.Name == "namespace")
 				{
-					if (_namespaces==null) 
+					if (_namespaces == null) 
 						_namespaces = new SortedList();
 
 					string name = reader["name"];
@@ -144,7 +147,7 @@ namespace NDoc.Core
 					if (!_namespaces.ContainsKey(name))
 					{
 						_namespaces[name] = summary;
-						IsDirty=true;
+						IsDirty = true;
 					}
 					// Note:ReadInnerXml moved Reader cursor to next node.
 				}
@@ -163,14 +166,14 @@ namespace NDoc.Core
 		/// An open XmlWriter.</param>
 		public void Write(XmlWriter writer)
 		{
-			if (_namespaces!=null && _namespaces.Count > 0)
+			if (_namespaces != null && _namespaces.Count > 0)
 			{
 				//do a quick check to make sure there are some namespace summaries
 				//if not, we don't need to write this section out
-				bool summariesExist=false;
+				bool summariesExist = false;
 				foreach (DictionaryEntry ns in _namespaces)
 				{
-					if (ns.Value!=null && ((string)ns.Value).Length>0) summariesExist = true;
+					if (ns.Value != null && ((string)ns.Value).Length > 0) summariesExist = true;
 				}
 
 				if (summariesExist)
@@ -179,7 +182,7 @@ namespace NDoc.Core
 
 					foreach (DictionaryEntry ns in _namespaces)
 					{
-						if (ns.Value!=null && ((string)ns.Value).Length>0)
+						if (ns.Value != null && ((string)ns.Value).Length > 0)
 						{
 							writer.WriteStartElement("namespace");
 							writer.WriteAttributeString("name", (string)ns.Key);
@@ -200,25 +203,27 @@ namespace NDoc.Core
 		public void LoadNamespacesFromAssemblies(Project project)
 		{
 			//let's try to create this in a new AppDomain
-			AppDomain appDomain=null;
+			AppDomain appDomain = null;
 			try
 			{
 				appDomain = AppDomain.CreateDomain("NDocNamespaces");
-				ReflectionEngine re = (ReflectionEngine)
-					appDomain.CreateInstanceFromAndUnwrap(Assembly.GetExecutingAssembly().CodeBase, 
-					"NDoc.Core.ReflectionEngine");
+				ReflectionEngine re = (ReflectionEngine)   
+					appDomain.CreateInstanceAndUnwrap(typeof(ReflectionEngine).Assembly.FullName, 
+					typeof(ReflectionEngine).FullName, false, BindingFlags.Public | BindingFlags.Instance, 
+					null, new object[0], CultureInfo.InvariantCulture, new object[0], 
+					AppDomain.CurrentDomain.Evidence);
 				ReflectionEngineParameters rep = new ReflectionEngineParameters(project);
-				foreach (AssemblySlashDoc assemblySlashDoc in project.GetAssemblySlashDocs())
+				foreach (AssemblySlashDoc assemblySlashDoc in project.AssemblySlashDocs)
 				{
-					if(assemblySlashDoc.AssemblyFilename!=null && assemblySlashDoc.AssemblyFilename.Length>0)
+					if (assemblySlashDoc.Assembly.Path.Length > 0)
 					{
-						string assemblyFullPath = project.GetFullPath(assemblySlashDoc.AssemblyFilename);
-						if(File.Exists(assemblyFullPath))
+						string assemblyFullPath = assemblySlashDoc.Assembly.Path;
+						if (File.Exists(assemblyFullPath))
 						{
-							SortedList namespaces = re.GetNamespacesFromAssembly(rep,assemblyFullPath);
-							foreach(string ns in namespaces.GetKeyList())
+							SortedList namespaces = re.GetNamespacesFromAssembly(rep, assemblyFullPath);
+							foreach (string ns in namespaces.GetKeyList())
 							{
-								if (_namespaces==null)
+								if (_namespaces == null)
 									_namespaces = new SortedList();
 								if ((!_namespaces.ContainsKey(ns)))
 								{
@@ -231,9 +236,8 @@ namespace NDoc.Core
 			}
 			finally
 			{
-				if (appDomain!=null) AppDomain.Unload(appDomain);
+				if (appDomain != null) AppDomain.Unload(appDomain);
 			}
-
 		}
 	}
 }
