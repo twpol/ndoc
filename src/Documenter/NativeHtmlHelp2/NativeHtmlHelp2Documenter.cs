@@ -49,7 +49,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		/// </summary>
 		public override DocumenterDevelopmentStatus DevelopmentStatus
 		{
-			get { return DocumenterDevelopmentStatus.Beta; }
+			get { return DocumenterDevelopmentStatus.Stable; }
 		}
 
 		/// <summary>See <see cref="IDocumenter"/>.</summary>
@@ -213,6 +213,11 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 					tempFileName = Path.GetTempFileName();
 					// Let the Documenter base class do it's thing.
 					MakeXmlFile(project, tempFileName);
+
+					GC.Collect();
+					GC.WaitForPendingFinalizers();
+					GC.Collect();
+
 					// create and intialize a HtmlFactory
 					ExternalHtmlProvider htmlProvider = new ExternalHtmlProvider(
 						MyConfig.HeaderHtml, MyConfig.FooterHtml);
