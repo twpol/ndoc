@@ -36,6 +36,12 @@ nant from within that directory and you should be good to go.
 If you don't have the .NET Framework SDK installed then why do you even
 want to use this?
 
+You will also need the Visual Studio Help Integration Kit (VSHIK) installed. NDoc
+uses the Html Help 2 compiler, which is a COM server. 
+
+VSHIK can be obtained free from Microsoft at: 
+http://msdn.microsoft.com/library/default.asp?url=/library/en-us/htmlhelp/html/hwmscextendingnethelp.asp
+
 
 Using NDoc
 ----------
