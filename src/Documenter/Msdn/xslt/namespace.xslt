@@ -24,6 +24,8 @@
 					</xsl:with-param>
 				</xsl:call-template>
 				<div id="nstext">
+					<!-- the namespace template just gets the summary. -->
+					<xsl:apply-templates select="assembly/module/namespace[@name=$namespace][1]" />
 					<p>
 						<a>
 							<xsl:attribute name="href">
@@ -32,9 +34,6 @@
 							<xsl:text>Namespace hierarchy</xsl:text>
 						</a>
 					</p>
-					<br />
-					<!-- the namespace template just gets the summary. -->
-					<xsl:apply-templates select="assembly/module/namespace[@name=$namespace][1]" />
 					<xsl:if test="assembly/module/namespace[@name=$namespace]/class">
 						<h3 class="dtH3">Classes</h3>
 						<div class="tablediv">
