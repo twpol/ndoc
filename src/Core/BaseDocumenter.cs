@@ -529,16 +529,24 @@ namespace NDoc.Core
 
 			BindingFlags bindingFlags =
 				BindingFlags.Instance |
-				BindingFlags.Public |
-				BindingFlags.DeclaredOnly;
+				BindingFlags.Public;
+
+			foreach (FieldInfo field in attribute.GetType().GetFields(bindingFlags))
+			{
+				writer.WriteStartElement("field");
+				writer.WriteAttributeString("name", field.Name);
+				object value = field.GetValue(attribute);
+				writer.WriteAttributeString("value", value != null ? value.ToString() : "");
+				writer.WriteEndElement(); // field
+			}
 
 			foreach (PropertyInfo property in attribute.GetType().GetProperties(bindingFlags))
 			{
-				writer.WriteStartElement("parameter");
+				writer.WriteStartElement("property");
 				writer.WriteAttributeString("name", property.Name);
 				object value = property.GetValue(attribute, null);
 				writer.WriteAttributeString("value", value != null ? value.ToString() : "");
-				writer.WriteEndElement(); // parameter
+				writer.WriteEndElement(); // property
 			}
 
 			writer.WriteEndElement(); // attribute
