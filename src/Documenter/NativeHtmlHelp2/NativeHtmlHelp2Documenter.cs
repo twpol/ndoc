@@ -342,13 +342,30 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			// Load the XML documentation into a DOM.
 			XmlDocument xmlDocumentation = new XmlDocument();
 			xmlDocumentation.LoadXml( MakeXml( project ) );
-//xmlDocumentation.Save( @"C:\Tests.xml" );
+
 			XmlNodeList typeNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace/*[name()!='documentation']");
 			
 			if ( typeNodes.Count == 0 )			
 				throw new DocumenterException("There are no documentable types in this project.");
 
+			// add the default docset for this help title
+			AddDocSet( xmlDocumentation, MyConfig.HtmlHelpName );
+
+			// also add the items from the custom docset list
+			foreach ( string s in MyConfig.DocSetList.Split( new char [] { ',' } ) )
+				AddDocSet( xmlDocumentation, s );
+
 			return xmlDocumentation;
+		}
+
+		private void AddDocSet( XmlDocument xmlDocumentation, string id )
+		{
+			if ( id.Length > 0 )
+			{
+				XmlElement e = xmlDocumentation.CreateElement( "docSet" );
+				e.InnerText = id.Trim();
+				xmlDocumentation.DocumentElement.PrependChild( e );
+			}
 		}
 
 		private void PrepareWorkspace( Workspace w )
@@ -448,7 +465,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			h2reg.CollectionFileName = collection.FileName;
 			h2reg.Description = MyConfig.Title;
 			h2reg.PluginNamespace = MyConfig.PlugInNamespace;
-			
+			h2reg.SetDocSetFilter( MyConfig.Title, MyConfig.HtmlHelpName );
+
 			if ( MyConfig.BuildSeparateIndexFile )
 				h2reg.AddTitle( MyConfig.HtmlHelpName, MyConfig.LangID, MyConfig.HtmlHelpName + ".HxS", MyConfig.HtmlHelpName + ".HxI" );
 			else

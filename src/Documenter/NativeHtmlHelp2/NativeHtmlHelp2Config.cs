@@ -367,6 +367,23 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			}
 		}
 
+		string _DocSetList = "NETFramework";
+
+		/// <summary>Get's or sets the DocSetList for the help file</summary>
+		[Category(HTMLHELP2_CONFIG_CATEGORY)]
+		[Description("A comma-seperated list of DocSet filter identifiers in which topics in this title will included.")]
+		[DefaultValue("NETFramework")]
+		public string DocSetList
+		{
+			get { return _DocSetList; }
+
+			set
+			{
+				_DocSetList = value;
+				SetDirty();
+			}
+		}
+	
 
 		string _Version = "1.0.0.0";
 

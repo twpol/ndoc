@@ -10,11 +10,13 @@ namespace NDoc.Documenter.NativeHtmlHelp2.HxProject
 	/// </summary>
 	public class H2RegFile
 	{
-		private string collectionNamespace;
-		private string pluginNamespace;
-		private string description;
+		private string collectionNamespace = string.Empty;
+		private string pluginNamespace = string.Empty;
+		private string description = string.Empty;
 		private int langId;
-		private string collectionFileName;
+		private string collectionFileName = string.Empty;
+		private string docSetName = string.Empty;
+		private string docSetFilter = string.Empty;
 
 		private ArrayList titles;
 
@@ -56,6 +58,15 @@ namespace NDoc.Documenter.NativeHtmlHelp2.HxProject
 				sb.AppendFormat( "{0}+|_DEFAULT|{1}|_DEFAULT|\r\n\r\n", PluginNamespace, CollectionNamespace );
 			}
 
+			if ( docSetName.Length > 0 && docSetFilter.Length > 0 )
+			{
+				sb.Append( "[Reg_Filter]\r\n" );
+				sb.AppendFormat( "{0}|{1}|(\"DocSet\"=\"{2}\")\r\n\r\n", CollectionNamespace, docSetName, docSetFilter );
+
+				sb.Append( "[UnReg_Filter]\r\n" );
+				sb.AppendFormat( "{0}|{1}\r\n\r\n", CollectionNamespace, docSetName );
+			}
+
 			sb.Append( "[Reg_Title]\r\n" );
 			foreach( HelpTitle title in titles )
 				sb.AppendFormat( "{0}|{1}|{2}|{3}|{4}||||||\r\n", CollectionNamespace, title.TitleId, title.LangId, title.FileName, title.IndexFileName );
@@ -66,6 +77,17 @@ namespace NDoc.Documenter.NativeHtmlHelp2.HxProject
 
 			using ( StreamWriter writer = File.CreateText( Path.Combine( path, CollectionNamespace + ".h2reg.ini" ) ) )
 				writer.Write( sb.ToString() );
+		}
+
+		/// <summary>
+		/// Sets a DocSet filter that will be installed with the collection
+		/// </summary>
+		/// <param name="name">The friendly name of the filter</param>
+		/// <param name="docSet">The DocSet query value</param>
+		public void SetDocSetFilter( string name, string docSet )
+		{
+			docSetName = name;
+			docSetFilter = docSet;
 		}
 
 		/// <summary>

@@ -621,7 +621,10 @@
 					</xsl:otherwise>
 				</xsl:choose>
 				
-				<MSHelp:Attr Name="DocSet" Value="NETFramework"/>
+				<!--MSHelp:Attr Name="DocSet" Value="NETFramework"/-->
+				<xsl:for-each select="/ndoc/docSet">
+					<MSHelp:Attr Name="DocSet" Value="{text()}"/>					
+				</xsl:for-each>
 				<MSHelp:Attr Name="TopicType" Value="kbSyntax"/>
 				<MSHelp:Attr Name="DevLang" Value="CSharp"/>
 				<MSHelp:Attr Name="DevLang" Value="VB"/>
