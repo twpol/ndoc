@@ -296,6 +296,21 @@
 				<b>NotInheritable</b>
 				<xsl:text> in Visual Basic)</xsl:text>
 			</xsl:when>
+			<xsl:when test="@langword='static'">
+				<xsl:text>static (</xsl:text>
+				<b>Shared</b>
+				<xsl:text> in Visual Basic)</xsl:text>
+			</xsl:when>
+			<xsl:when test="@langword='abstract'">
+				<xsl:text>abstract (</xsl:text>
+				<b>MustInherit</b>
+				<xsl:text> in Visual Basic)</xsl:text>
+			</xsl:when>
+			<xsl:when test="@langword='virtual'">
+				<xsl:text>virtual (</xsl:text>
+				<b>CanOverride</b>
+				<xsl:text> in Visual Basic)</xsl:text>
+			</xsl:when>
 			<xsl:otherwise>
 				<b>
 					<xsl:value-of select="@langword" />
