@@ -99,6 +99,9 @@ namespace NDoc.Gui
 			}
 		} 
 
+		/// <summary>
+		/// See <see cref="Control.Refresh"/>
+		/// </summary>
 		public override void Refresh()
 		{
 			foreach ( ListViewItem item in this.assembliesListView.Items )
