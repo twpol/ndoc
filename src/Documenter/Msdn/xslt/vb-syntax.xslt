@@ -89,10 +89,10 @@
 							    <xsl:value-of select="@baseType" />
 							  </div>
 						  </xsl:if>
-						  <xsl:if test="implements">
+						  <xsl:if test="implements[not(@inherited)]">
 							  <div>
 							    <xsl:text>Implements&#160;</xsl:text>
-							    <xsl:for-each select="implements">
+							    <xsl:for-each select="implements[not(@inherited)]">
 								    <xsl:value-of select="." />
 								    <xsl:if test="position()!=last()">
 									    <xsl:text>, </xsl:text>

@@ -55,15 +55,15 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="derivation">
-		<xsl:if test="@baseType!='' or implements">
+		<xsl:if test="@baseType!='' or implements[not(@inherited)]">
 			<xsl:text> : </xsl:text>
 			<xsl:if test="@baseType!=''">
 				<xsl:value-of select="@baseType" />
-				<xsl:if test="implements">
+				<xsl:if test="implements[not(@inherited)]">
 					<xsl:text>, </xsl:text>
 				</xsl:if>
 			</xsl:if>
-			<xsl:for-each select="implements">
+			<xsl:for-each select="implements[not(@inherited)]">
 				<xsl:value-of select="." />
 				<xsl:if test="position()!=last()">
 					<xsl:text>, </xsl:text>
