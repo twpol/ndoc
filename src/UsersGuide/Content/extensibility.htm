@@ -1,95 +1,97 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
-
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
-<title>Extending NDoc</title>
-<meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5">
-<link href="css/ndoc.css" rel="stylesheet" name="ndocstyle" type="text/css" />
-<script src="script/ndoc.js"></script>
-</head>
-
-<body class="dtBODY" id="bodyID" onload="InitTitle()">
-
-<div id="nstext">
-	<h3 class="dtH3">NDoc Extensibility</h3>
-	<p>Both the MSDN and VS.NET documenters support an extensibility model that 
-	allows you to define your own tags and control where and how they appear in 
-	the documentation. NDoc relies heavily on XSLT to generate documentation and 
-	the extensibility model is based on XSLT as well. </p>
-	<ol>
-		<li>
-		<p>The first step is to add your custom tag to the code comments in your 
-		C# files:</p>
-		<span class="lang">[C#]</span>
-		<pre class="csharpcode">
+	<head>
+		<title>Extending NDoc</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+		<meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5">
+		<link href="css/ndoc.css" rel="stylesheet" name="ndocstyle" type="text/css">
+		<script src="script/ndoc.js"></script>
+	</head>
+	<body class="dtBODY" id="bodyID" onload="InitTitle()">
+		<div id="nstext">
+			<h3 class="dtH3">NDoc Extensibility</h3>
+			<p>Both the MSDN and VS.NET documenters support an extensibility model that allows 
+				you to define your own tags and control where and how they appear in the 
+				documentation. NDoc relies heavily on XSLT to generate documentation and the 
+				extensibility model is based on XSLT as well.
+			</p>
+			<ol>
+				<li>
+					<p>The first step is to add your custom tag to the code comments in your C# files:</p>
+					<span class="lang">[C#]</span>
+					<pre class="csharpcode">
 <span class="rem">/// &lt;myTag&gt;This is a custom tag&lt;/myTag&gt;
 /// &lt;summary&gt;
 ///   When processed by the VS.NET or MSDN documenters, 
-///   using the stylesheet &quot;extend-ndoc.xslt&quot; as the ExtensibilityStylesheet 
+///   using the stylesheet "extend-ndoc.xslt" as the ExtensibilityStylesheet 
 ///   property will result in end-user defined tags being displayed in the 
 ///   final help output topics 
 /// &lt;/summary&gt;</span>
 <span class="kwrd">public</span> <span class="kwrd">class</span> ABunchOfCustomTags
 {
-}</pre><p>When the compiler generates the /doc summary file, it will include your 
-		custom tag in the XML.</p></li><li>
-		<p>Next create an XSLT file with templates that control where and how your 
-		tag will be displayed:</p><p class="MsoNormal" style="text-autospace: none">
-		<span style="font-size:8.0pt;font-family:&quot;Lucida Console&quot;;color:blue">
-		&lt;?</span><span style="font-size:8.0pt;font-family:&quot;Lucida Console&quot;;color:maroon">xml</span><span style="font-size:8.0pt;font-family:&quot;Lucida Console&quot;;color:fuchsia">
-		</span>
-		<span style="font-size:8.0pt;font-family:&quot;Lucida Console&quot;;color:red">
-		version</span><span style="font-size:8.0pt;font-family:&quot;Lucida Console&quot;;color:blue">=&quot;1.0&quot;</span><span style="font-size:8.0pt;font-family:&quot;Lucida Console&quot;;color:fuchsia">
-		</span>
-		<span style="font-size:8.0pt;font-family:&quot;Lucida Console&quot;;color:red">
-		encoding</span><span style="font-size:8.0pt;font-family:&quot;Lucida Console&quot;;color:blue">=&quot;UTF-8&quot;</span><span style="font-size:8.0pt;font-family:&quot;Lucida Console&quot;;color:fuchsia">
-		</span>
-		<span style="font-size:8.0pt;font-family:&quot;Lucida Console&quot;;color:blue">
-		?&gt;</span></p><p class="MsoNormal" style="text-autospace: none">
-		<span style="font-size:8.0pt;font-family:&quot;Lucida Console&quot;;color:blue">
-		&lt;</span><span style="font-size:8.0pt;font-family:&quot;Lucida Console&quot;;color:maroon">xsl:stylesheet</span><span style="font-size:8.0pt;font-family:&quot;Lucida Console&quot;;color:fuchsia">
-		</span>
-		<span style="font-size:8.0pt;font-family:&quot;Lucida Console&quot;;color:red">
-		version</span><span style="font-size:8.0pt;font-family:&quot;Lucida Console&quot;;color:blue">=&quot;1.0&quot;</span><span style="font-size:8.0pt;font-family:&quot;Lucida Console&quot;;color:fuchsia">
-		</span>
-		<span style="font-size:8.0pt;font-family:&quot;Lucida Console&quot;;color:maroon">
-		xmlns</span><span style="font-size:8.0pt;font-family:&quot;Lucida Console&quot;;color:fuchsia">:</span><span style="font-size:8.0pt;font-family:&quot;Lucida Console&quot;;color:red">xsl</span><span style="font-size:8.0pt;font-family:&quot;Lucida Console&quot;;color:blue">=&quot;http://www.w3.org/1999/XSL/Transform&quot;&gt;</span></p><p class="MsoNormal" style="text-autospace: none">
-		<span style="font-size:8.0pt;font-family:&quot;Lucida Console&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		<span style="color:blue">&lt;</span><span style="color:maroon">xsl:template</span><span style="color:fuchsia">
-		</span><span style="color:red">match</span><span style="color:blue">=&quot;myTag&quot;</span><span style="color:fuchsia">
-		</span><span style="color:red">mode</span><span style="color:blue">=&quot;summary-section&quot;&gt;</span></span></p><p class="MsoNormal" style="text-autospace: none">
-		<span style="font-size:8.0pt;font-family:&quot;Lucida Console&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		<span style="color:blue">&lt;</span><span style="color: #800000">h1</span><span style="color:fuchsia">
-		</span><span style="color:red">style</span><span style="color:blue">=&quot;color:green&quot;&gt;</span></span></p><p class="MsoNormal" style="text-autospace: none">
-		<span style="font-size:8.0pt;font-family:&quot;Lucida Console&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		<span style="color:blue">&lt;</span><span style="color:maroon">xsl:value-of</span><span style="color:fuchsia"> </span><span style="color:red">select</span><span style="color:blue">=&quot;.&quot;/&gt;</span></span></p><p class="MsoNormal" style="text-autospace: none">
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:blue; font-size:8.0pt; font-family:Lucida Console">&lt;/</span><span style="color:#800000; font-size:8.0pt; font-family:Lucida Console">h1</span><span style="color:blue; font-size:8.0pt; font-family:Lucida Console">&gt;</span></p><p class="MsoNormal" style="text-autospace: none">
-		<span style="font-size:8.0pt;font-family:&quot;Lucida Console&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:blue">&lt;/</span><span style="color:maroon">xsl:template</span><span style="color:blue">&gt;</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></p><p class="MsoNormal">
-		<span style="font-size:8.0pt;font-family:&quot;Lucida Console&quot;;
-color:blue">&lt;/</span><span style="font-size:8.0pt;font-family:&quot;Lucida Console&quot;;
-color:maroon">xsl:stylesheet</span><span style="font-size:8.0pt;font-family:
-&quot;Lucida Console&quot;;color:blue">&gt;</span></p><p>This stylesheet must be valid XSLT markup, and must also have the XSLT 
-		namespace.</p><p>The templates in this stylesheet need to be written to match the names 
-		of your tags. The <b>match</b> attribute is an XPath query that defines 
-		the context at which your template will execute. The most common usage 
-		is to simply match the name of your custom tag, but it is also possible 
-		to change the behavior of your tag based on what sort of code artifact 
-		it is associated with.</p>
-		<p>The <b>mode</b> attribute is used to specify which section 
-		in the documentation your tag will be displayed.
-		<a href="extensibility-sections.htm">Refer to the section topic</a> for 
-		a complete list of sections and their descriptions.</p><p><i><b>Remember</b></i>: XSLT is case sensitive; so both the <b>match</b> 
-		pattern and the <b>mode</b> names must be correct or your templates will 
-		be ignored.</p></li><li>
-		<p>Next set the <b>ExtensibilityStylesheet</b> property of your MSDN or 
-		VS.NET project to the path to your stylesheet. When NDoc builds the documentation 
-		it will include your stylesheet and display your tags according to the rules 
-		you specify in the XSLT templates.</p></li></ol>
-	<p>The resulting overview page for this topic will look like:</p>
-	<img src="images/extendexample.JPG" style="border-style: solid; border-width: 1px; padding-left: 4px; padding-right: 4px; padding-top: 1px; padding-bottom: 1px"/>
-
-	<p class="fineprint">Example Extensibility Output</p>
-
-
-	<h4 class="dtH4">See Also</h4><p><a href="extensibility-sections.htm">Extensibility Sections</a></p></div></body></html>
+}</pre>
+					<p>When the compiler generates the /doc summary file, it will include your custom 
+						tag in the XML.</p>
+				<li>
+					<p>Next create an XSLT file with templates that control where and how your tag will 
+						be displayed:</p>
+					<p class="MsoNormal">
+						<span style="FONT-SIZE:8pt;COLOR:blue;FONT-FAMILY:'Lucida Console'">&lt;?</span><span style="FONT-SIZE:8pt;COLOR:maroon;FONT-FAMILY:'Lucida Console'">xml</span><span style="FONT-SIZE:8pt;COLOR:fuchsia;FONT-FAMILY:'Lucida Console'">
+						</span><span style="FONT-SIZE:8pt;COLOR:red;FONT-FAMILY:'Lucida Console'">version</span><span style="FONT-SIZE:8pt;COLOR:blue;FONT-FAMILY:'Lucida Console'">="1.0"</span><span style="FONT-SIZE:8pt;COLOR:fuchsia;FONT-FAMILY:'Lucida Console'">
+						</span><span style="FONT-SIZE:8pt;COLOR:red;FONT-FAMILY:'Lucida Console'">encoding</span><span style="FONT-SIZE:8pt;COLOR:blue;FONT-FAMILY:'Lucida Console'">="UTF-8"</span><span style="FONT-SIZE:8pt;COLOR:fuchsia;FONT-FAMILY:'Lucida Console'">
+						</span><span style="FONT-SIZE:8pt;COLOR:blue;FONT-FAMILY:'Lucida Console'">?&gt;</span></p>
+					<p class="MsoNormal">
+						<span style="FONT-SIZE:8pt;COLOR:blue;FONT-FAMILY:'Lucida Console'">&lt;</span><span style="FONT-SIZE:8pt;COLOR:maroon;FONT-FAMILY:'Lucida Console'">xsl:stylesheet</span><span style="FONT-SIZE:8pt;COLOR:fuchsia;FONT-FAMILY:'Lucida Console'">
+						</span><span style="FONT-SIZE:8pt;COLOR:red;FONT-FAMILY:'Lucida Console'">version</span><span style="FONT-SIZE:8pt;COLOR:blue;FONT-FAMILY:'Lucida Console'">="1.0"</span><span style="FONT-SIZE:8pt;COLOR:fuchsia;FONT-FAMILY:'Lucida Console'">
+						</span><span style="FONT-SIZE:8pt;COLOR:maroon;FONT-FAMILY:'Lucida Console'">xmlns</span><span style="FONT-SIZE:8pt;COLOR:fuchsia;FONT-FAMILY:'Lucida Console'">:</span><span style="FONT-SIZE:8pt;COLOR:red;FONT-FAMILY:'Lucida Console'">xsl</span><span style="FONT-SIZE:8pt;COLOR:blue;FONT-FAMILY:'Lucida Console'">="http://www.w3.org/1999/XSL/Transform"&gt;</span></p>
+					<p class="MsoNormal">
+						<span style="FONT-SIZE:8pt;FONT-FAMILY:'Lucida Console'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<span style="COLOR:blue">&lt;</span><span style="COLOR:maroon">xsl:template</span><span style="COLOR:fuchsia">
+							</span><span style="COLOR:red">match</span><span style="COLOR:blue">="myTag"</span><span style="COLOR:fuchsia">
+							</span><span style="COLOR:red">mode</span><span style="COLOR:blue">="summary-section"&gt;</span></span></p>
+					<p class="MsoNormal">
+						<span style="FONT-SIZE:8pt;FONT-FAMILY:'Lucida Console'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<span style="COLOR:blue">&lt;</span><span style="COLOR: #800000">h1</span><span style="COLOR:fuchsia">
+							</span><span style="COLOR:red">style</span><span style="COLOR:blue">="color:green"&gt;</span></span></p>
+					<p class="MsoNormal">
+						<span style="FONT-SIZE:8pt;FONT-FAMILY:'Lucida Console'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<span style="COLOR:blue">&lt;</span><span style="COLOR:maroon">xsl:value-of</span><span style="COLOR:fuchsia">
+							</span><span style="COLOR:red">select</span><span style="COLOR:blue">="."/&gt;</span></span></p>
+					<p class="MsoNormal">
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="FONT-SIZE:8pt; COLOR:blue; FONT-FAMILY:Lucida Console">
+							&lt;/</span><span style="FONT-SIZE:8pt; COLOR:#800000; FONT-FAMILY:Lucida Console">h1</span><span style="FONT-SIZE:8pt; COLOR:blue; FONT-FAMILY:Lucida Console">&gt;</span></p>
+					<p class="MsoNormal">
+						<span style="FONT-SIZE:8pt;FONT-FAMILY:'Lucida Console'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<span style="COLOR:blue">&lt;/</span><span style="COLOR:maroon">xsl:template</span><span style="COLOR:blue">&gt;</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						</span>
+					</p>
+					<p class="MsoNormal">
+						<span style="FONT-SIZE:8pt;COLOR:blue;FONT-FAMILY:'Lucida Console'">&lt;/</span><span style="FONT-SIZE:8pt;COLOR:maroon;FONT-FAMILY:'Lucida Console'">xsl:stylesheet</span><span style="FONT-SIZE:8pt;COLOR:blue;FONT-FAMILY:'Lucida Console'">&gt;</span></p>
+					<p>This stylesheet must be valid XSLT markup, and must also have the XSLT 
+						namespace.</p>
+					<p>The templates in this stylesheet need to be written to match the names of your 
+						tags. The <b>match</b> attribute is an XPath query that defines the context at 
+						which your template will execute. The most common usage is to simply match the 
+						name of your custom tag, but it is also possible to change the behavior of your 
+						tag based on what sort of code artifect it is associated with.</p>
+					<p>The <b>mode</b> attribute is used to specify which section in the documentation 
+						your tag will be displayed. <a href="extensibility-sections.htm">Refer to the 
+							section topic</a> for a complete list of sections and their descriptions.</p>
+					<p><i><b>Remember</b></i>: XSLT is case sensitive; so both the <b>match</b> pattern 
+						and the <b>mode</b> names must be correct or your templates will be ignored.</p>
+				<li>
+					<p>Next, set the <b>ExtensibilityStylesheet</b> property of your MSDN or VS.NET 
+						project to the path to your stylesheet. When NDoc builds the documentation it 
+						will include your stylesheet and display your tags according to the rules you 
+						specify in the XSLT templates.</p>
+				</li>
+			</ol>
+			<p>The resulting overview page for this topic will look like:</p>
+			<img src="images/extendexample.JPG" style="BORDER-RIGHT: 1px solid; PADDING-RIGHT: 4px; BORDER-TOP: 1px solid; PADDING-LEFT: 4px; PADDING-BOTTOM: 1px; BORDER-LEFT: 1px solid; PADDING-TOP: 1px; BORDER-BOTTOM: 1px solid">
+			<p class="fineprint">Example Extensibility Output</p>
+			<h4 class="dtH4">See Also</h4>
+			<p><a href="extensibility-sections.htm">Extensibility Sections</a></p>
+		</div>
+	</body>
+</html>
