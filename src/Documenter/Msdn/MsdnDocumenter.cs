@@ -173,6 +173,14 @@ namespace NDoc.Documenter.Msdn
 				{
 					Directory.CreateDirectory(MyConfig.OutputDirectory);
 				}
+				else
+				{
+					//clean-up output path
+					foreach (string file in Directory.GetFiles(MyConfig.OutputDirectory, "*.*"))
+					{
+						File.Delete(file);
+					}
+				}
 
 				// Write the embedded css files to the html output directory
 				EmbeddedResources.WriteEmbeddedResources(
@@ -343,8 +351,16 @@ namespace NDoc.Documenter.Msdn
 						Path.Combine(MyConfig.OutputDirectory, "contents.html"));
 				}
 
-				OnDocBuildingStep(85, "Compiling HTML Help file...");
-				htmlHelp.CompileProject();
+				if ((MyConfig.OutputTarget & OutputType.HtmlHelp) > 0)
+				{
+					OnDocBuildingStep(85, "Compiling HTML Help file...");
+					htmlHelp.CompileProject();
+				}
+				else
+				{
+					//remove .hhc file
+					File.Delete(htmlHelp.GetPathToContentsFile());
+				}
 
 				OnDocBuildingStep(100, "Done.");
 			}
