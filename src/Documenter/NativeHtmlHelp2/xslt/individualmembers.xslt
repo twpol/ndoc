@@ -45,13 +45,13 @@
 						<b>
 							<xsl:value-of select="@name" />
 						</b>
-						<xsl:text></xsl:text>
+						<xsl:text> </xsl:text>
 						<xsl:value-of select="local-name()" />
 						<xsl:text> are listed below. For a complete list of </xsl:text>
 						<b>
 							<xsl:value-of select="@name" />
 						</b>
-						<xsl:text></xsl:text>
+						<xsl:text> </xsl:text>
 						<xsl:value-of select="local-name()" />
 						<xsl:text> members, see the </xsl:text>
 						<a>
