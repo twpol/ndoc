@@ -237,6 +237,8 @@ namespace NDoc.Core
 				throw new DocumenterPropertyFormatException(FailureMessages);
 		}
 
+		#region Show Missing Documentation Options
+
 		private bool _ShowMissingSummaries;
 
 		/// <summary>Gets or sets the ShowMissingSummaries property.</summary>
@@ -333,6 +335,29 @@ namespace NDoc.Core
 			set
 			{
 				_ShowMissingValues = value;
+				SetDirty();
+			}
+		}
+
+		#endregion
+
+		#region Visibility Options
+		
+		private bool _DocumentExplicitInterfaceImplementations;
+
+		/// <summary>Gets or sets the DocumentInternals property.</summary>
+		/// <remarks>If this is true, members which explicitly implement interfaces will
+		/// be included in the documentation. Normally, these members are not documented.</remarks>
+		[Category("Visibility")]
+		[Description("Turn this flag on to document explicit interface implementations.")]
+		[DefaultValue(false)]
+		public bool DocumentExplicitInterfaceImplementations
+		{
+			get { return _DocumentExplicitInterfaceImplementations; }
+
+			set
+			{
+				_DocumentExplicitInterfaceImplementations = value;
 				SetDirty();
 			}
 		}
@@ -468,6 +493,51 @@ namespace NDoc.Core
 			}
 		}
 
+		private bool _SkipNamespacesWithoutSummaries;
+
+		/// <summary>Gets or sets the SkipNamespacesWithoutSummaries property.</summary>
+		/// <remarks>Setting this property to true , NDoc will not document namespaces 
+		/// that don't have an associated namespace summary.</remarks>
+		[Category("Visibility")]
+		[Description("Setting this property to true will not document namespaces that don't have an associated namespace summary.")]
+		[DefaultValue(false)]
+		public bool SkipNamespacesWithoutSummaries
+		{
+			get { return _SkipNamespacesWithoutSummaries; }
+
+			set
+			{
+				_SkipNamespacesWithoutSummaries = value;
+				SetDirty();
+			}
+		}
+
+		
+		private EditorBrowsableFilterLevel _EditorBrowsableFilter;
+
+		/// <summary>Specifies the level of filtering on the EditorBrowsable attribute.</summary>
+		/// <remarks><para>Sets the level of filtering to apply on types/members marked with the <b>EditorBrowsable</b> attribute.  
+		/// <b>Warning: enabling this filter might result in invalid links in the documentation.</b></para>
+		/// <para>As of version 1.3 of NDoc, the <b>&lt;nodoc/&gt;</b> tag is the preferred mechanism for
+		/// suppressing the documentation of types or members.</para></remarks>
+		[Category("Visibility")]
+		[Description("Sets the level of filtering to apply on types/members marked with the EditorBrowsable attribute.  Warning: enabling this filter might result in invalid links in the documentation.")]
+		[DefaultValue(EditorBrowsableFilterLevel.Off)]
+		public EditorBrowsableFilterLevel EditorBrowsableFilter
+		{
+			get { return _EditorBrowsableFilter; }
+
+			set
+			{
+				_EditorBrowsableFilter = value;
+				SetDirty();
+			}
+		}
+
+		#endregion
+
+		#region Documentation Main Settings 
+		
 		private bool _IncludeAssemblyVersion;
 
 		/// <summary>Gets or sets the IncludeAssemblyVersion property.</summary>
@@ -564,27 +634,8 @@ namespace NDoc.Core
 				_FeedbackEmailAddress = value;
 				SetDirty();
 			}
-		}			
-		
-		private bool _SkipNamespacesWithoutSummaries;
-
-		/// <summary>Gets or sets the SkipNamespacesWithoutSummaries property.</summary>
-		/// <remarks>Setting this property to true , NDoc will not document namespaces 
-		/// that don't have an associated namespace summary.</remarks>
-		[Category("Visibility")]
-		[Description("Setting this property to true will not document namespaces that don't have an associated namespace summary.")]
-		[DefaultValue(false)]
-		public bool SkipNamespacesWithoutSummaries
-		{
-			get { return _SkipNamespacesWithoutSummaries; }
-
-			set
-			{
-				_SkipNamespacesWithoutSummaries = value;
-				SetDirty();
-			}
 		}
-
+		
 		private bool _UseNamespaceDocSummaries;
 
 		/// <summary>Gets or sets the UseNamespaceDocSummaries property.</summary>
@@ -663,6 +714,97 @@ namespace NDoc.Core
 			}
 		}
 
+		private bool _GetExternalSummaries;
+
+		/// <summary>Load external xml files?</summary>
+		/// <remarks>If true, NDoc will try loading external xml files to 
+		/// retreive the summaries of inherited members. Setting this to true results 
+		/// in more complete documentation as NDoc will attempt to retrieve summaries
+		/// for any inherited members from types external to the project, including CLR types.</remarks>
+		[Category("Documentation Main Settings")]
+		[Description("If true, NDoc will try loading external xml files to retreive the summaries of inherited members.")]
+		[DefaultValue(true)]
+		public bool GetExternalSummaries
+		{
+			get { return _GetExternalSummaries; }
+
+			set
+			{
+				_GetExternalSummaries = value;
+				SetDirty();
+			}
+		}
+
+		private bool _Preliminary = false;
+
+		/// <summary>Get/set the Preliminary preoperty</summary>
+		/// <remarks>
+		/// <para>If true, NDoc will mark every topic as being preliminary documentation.
+		/// Each topic will include a notice that the documentation is preliminary</para>
+		/// <para>The default notice is <font color="red">[This is preliminary documentation 
+		/// and subject to change.]</font></para></remarks>
+		[Category("Documentation Main Settings")]
+		[Description("If true, NDoc will mark every topic as being preliminary documentation.")]
+		[DefaultValue(false)]
+		public bool Preliminary
+		{
+			get { return _Preliminary; }
+
+			set
+			{
+				_Preliminary = value;
+				SetDirty();
+			}
+		}
+
+		private string _UseNDocXmlFile = string.Empty;
+
+		/// <summary>Gets or sets the UseNDocXmlFile property.</summary>
+		/// <remarks><para>When set, NDoc will use the specified XML file as 
+		/// input instead of reflecting the list of assemblies specified 
+		/// on the project.</para>
+		/// <para>Very useful for debugging documenters. <i>Leave empty for normal usage.</i></para>
+		/// </remarks>
+		[Category("Documentation Main Settings")]
+		[Description("When set, NDoc will use the specified XML file as input instead of reflecting the list of assemblies specified on the project.  Very useful for debugging documenters.  Leave empty for normal usage.")]
+		[Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
+		[DefaultValue("")]
+		public string UseNDocXmlFile
+		{
+			get { return _UseNDocXmlFile; }
+			set
+			{
+				_UseNDocXmlFile = value;
+				SetDirty();
+			}
+		}
+
+		private bool _CleanIntermediates = false;
+
+		/// <summary>Gets or sets the CleanIntermediates property.</summary>
+		/// <remarks>
+		/// <para>When true, intermediate files will be deleted after a successful build.</para>
+		/// <para>For documenters that result in a compiled output, like the MSDN and VS.NET
+		/// documenters, intermediate files include all of the HTML Help project files, as well as the generated
+		/// HTML files.</para></remarks>
+		[Category("Documentation Main Settings")]
+		[Description("When true, intermediate files will be deleted after a successful build.")]
+		[DefaultValue(false)]
+		public bool CleanIntermediates
+		{
+			get { return _CleanIntermediates; }
+			set
+			{
+				_CleanIntermediates = value;
+				SetDirty();
+			}
+		}
+		
+
+		#endregion
+		
+		#region Show Attributes Options
+
 		private bool _DocumentAttributes;
 
 		/// <summary>Gets or sets whether or not to document the attributes.</summary>
@@ -722,114 +864,9 @@ namespace NDoc.Core
 			}
 		}
 
-		private bool _GetExternalSummaries;
+		#endregion
 
-		/// <summary>Load external xml files?</summary>
-		/// <remarks>If true, NDoc will try loading external xml files to 
-		/// retreive the summaries of inherited members. Setting this to true results 
-		/// in more complete documentation as NDoc will attempt to retrieve summaries
-		/// for any inherited members from types external to the project, including CLR types.</remarks>
-		[Category("Documentation Main Settings")]
-		[Description("If true, NDoc will try loading external xml files to retreive the summaries of inherited members.")]
-		[DefaultValue(true)]
-		public bool GetExternalSummaries
-		{
-			get { return _GetExternalSummaries; }
-
-			set
-			{
-				_GetExternalSummaries = value;
-				SetDirty();
-			}
-		}
-
-
-		private bool _Preliminary = false;
-
-		/// <summary>Get/set the Preliminary preoperty</summary>
-		/// <remarks>
-		/// <para>If true, NDoc will mark every topic as being preliminary documentation.
-		/// Each topic will include a notice that the documentation is preliminary</para>
-		/// <para>The default notice is <font color="red">[This is preliminary documentation 
-		/// and subject to change.]</font></para></remarks>
-		[Category("Documentation Main Settings")]
-		[Description("If true, NDoc will mark every topic as being preliminary documentation.")]
-		[DefaultValue(false)]
-		public bool Preliminary
-		{
-			get { return _Preliminary; }
-
-			set
-			{
-				_Preliminary = value;
-				SetDirty();
-			}
-		}
-
-		
-		private EditorBrowsableFilterLevel _EditorBrowsableFilter;
-
-		/// <summary>Specifies the level of filtering on the EditorBrowsable attribute.</summary>
-		/// <remarks><para>Sets the level of filtering to apply on types/members marked with the <b>EditorBrowsable</b> attribute.  
-		/// <b>Warning: enabling this filter might result in invalid links in the documentation.</b></para>
-		/// <para>As of version 1.3 of NDoc, the <b>&lt;nodoc/&gt;</b> tag is the preferred mechanism for
-		/// suppressing the documentation of types or members.</para></remarks>
-		[Category("Visibility")]
-		[Description("Sets the level of filtering to apply on types/members marked with the EditorBrowsable attribute.  Warning: enabling this filter might result in invalid links in the documentation.")]
-		[DefaultValue(EditorBrowsableFilterLevel.Off)]
-		public EditorBrowsableFilterLevel EditorBrowsableFilter
-		{
-			get { return _EditorBrowsableFilter; }
-
-			set
-			{
-				_EditorBrowsableFilter = value;
-				SetDirty();
-			}
-		}
-
-		private string _UseNDocXmlFile = string.Empty;
-
-		/// <summary>Gets or sets the UseNDocXmlFile property.</summary>
-		/// <remarks><para>When set, NDoc will use the specified XML file as 
-		/// input instead of reflecting the list of assemblies specified 
-		/// on the project.</para>
-		/// <para>Very useful for debugging documenters. <i>Leave empty for normal usage.</i></para>
-		/// </remarks>
-		[Category("Documentation Main Settings")]
-		[Description("When set, NDoc will use the specified XML file as input instead of reflecting the list of assemblies specified on the project.  Very useful for debugging documenters.  Leave empty for normal usage.")]
-		[Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
-		[DefaultValue("")]
-		public string UseNDocXmlFile
-		{
-			get { return _UseNDocXmlFile; }
-			set
-			{
-				_UseNDocXmlFile = value;
-				SetDirty();
-			}
-		}
-
-		private bool _CleanIntermediates = false;
-
-		/// <summary>Gets or sets the CleanIntermediates property.</summary>
-		/// <remarks>
-		/// <para>When true, intermediate files will be deleted after a successful build.</para>
-		/// <para>For documenters that result in a compiled output, like the MSDN and VS.NET
-		/// documenters, intermediate files include all of the HTML Help project files, as well as the generated
-		/// HTML files.</para></remarks>
-		[Category("Documentation Main Settings")]
-		[Description("When true, intermediate files will be deleted after a successful build.")]
-		[DefaultValue(false)]
-		public bool CleanIntermediates
-		{
-			get { return _CleanIntermediates; }
-			set
-			{
-				_CleanIntermediates = value;
-				SetDirty();
-			}
-		}
+		#region Supported Platforms Options
 		
 		private bool _InheritPlatformSupport  = true;
 
@@ -958,7 +995,9 @@ namespace NDoc.Core
 				_AdditionalOSList  = value;
 				SetDirty();
 			}
-		}	
+		}
+	
+		#endregion
 	}
 
 	/// <summary>

@@ -538,6 +538,14 @@ namespace NDoc.Core
 		{
 			Type declaringType = type.DeclaringType;
 
+			if (type.FullName.StartsWith("System") || type.FullName.StartsWith("Microsoft"))
+			{
+				if(type.IsNotPublic) return false;
+				if(type.DeclaringType !=null &&
+					!MustDocumentType(type.DeclaringType))
+					return false;
+			}
+
 			return 
 				!type.FullName.StartsWith("<PrivateImplementationDetails>") &&
 				(declaringType == null || MustDocumentType(declaringType)) &&
@@ -1756,8 +1764,41 @@ namespace NDoc.Core
 		{
 			string memberName = GetMemberName(eventInfo);
 
+			string name = eventInfo.Name;
+			string interfaceName = null;
+
+			int lastIndexOfDot = name.LastIndexOf('.');
+			if (lastIndexOfDot != -1)
+			{
+				//this is an explicit interface implementation. if we don't want
+				//to document them, get out of here quick...
+				if (!MyConfig.DocumentExplicitInterfaceImplementations) return;
+
+				interfaceName = name.Substring(0, lastIndexOfDot);
+				lastIndexOfDot = interfaceName.LastIndexOf('.');
+				if (lastIndexOfDot != -1)
+					name = name.Substring(lastIndexOfDot + 1);
+
+				//check if we want to document this interface.
+				ImplementsInfo implements = null;
+				MethodInfo adder = eventInfo.GetAddMethod(true);
+				if (adder != null)
+				{
+					implements = implementations[adder.ToString()];
+				}
+				if (implements == null)
+				{
+					MethodInfo remover = eventInfo.GetRemoveMethod(true);
+					if (remover != null)
+					{
+						implements = implementations[remover.ToString()];
+					}
+				}
+				if (implements != null) return;
+			}
+
 			writer.WriteStartElement("event");
-			writer.WriteAttributeString("name", eventInfo.Name);
+			writer.WriteAttributeString("name", name);
 			writer.WriteAttributeString("id", memberName);
 			writer.WriteAttributeString("access", GetMethodAccessValue(eventInfo.GetAddMethod(true)));
 			writer.WriteAttributeString("contract", GetMethodContractValue(eventInfo.GetAddMethod(true)));
@@ -1778,14 +1819,14 @@ namespace NDoc.Core
 			if (implementations != null)
 			{
 				ImplementsInfo implements = null;
-				MethodInfo adder = eventInfo.GetAddMethod();
+				MethodInfo adder = eventInfo.GetAddMethod(true);
 				if (adder != null)
 				{
 					implements = implementations[adder.ToString()];
 				}
 				if (implements == null)
 				{
-					MethodInfo remover = eventInfo.GetRemoveMethod();
+					MethodInfo remover = eventInfo.GetRemoveMethod(true);
 					if (remover != null)
 					{
 						implements = implementations[remover.ToString()];
@@ -1794,10 +1835,10 @@ namespace NDoc.Core
 				if (implements != null)
 				{
 					writer.WriteStartElement("implements");
-					writer.WriteAttributeString("name", eventInfo.Name);
 					MemberInfo InterfaceMethod = (MemberInfo)implements.InterfaceMethod;
 					EventInfo InterfaceEvent = 
 						InterfaceMethod.DeclaringType.GetEvent(InterfaceMethod.Name.Substring(4));
+					writer.WriteAttributeString("name", InterfaceEvent.Name);
 					writer.WriteAttributeString("id",GetMemberName(InterfaceEvent));
 					writer.WriteAttributeString("interface", implements.InterfaceType.Name);
 					writer.WriteAttributeString("interfaceId", GetMemberName(implements.InterfaceType));
@@ -1862,80 +1903,121 @@ namespace NDoc.Core
 			int overload,
 			bool hiding)
 		{
-			string memberName = GetMemberName(property);
-
-			writer.WriteStartElement("property");
-			writer.WriteAttributeString("name", property.Name);
-			writer.WriteAttributeString("id", memberName);
-			writer.WriteAttributeString("access", GetPropertyAccessValue(property));
-
-			if (inherited)
+			if (property != null)
 			{
-				writer.WriteAttributeString("declaringType", property.DeclaringType.FullName);
-			}
+				string memberName = GetMemberName(property);
 
-			if (hiding)
-			{
-				writer.WriteAttributeString("hiding", "true");
-			}
+				string name = property.Name;
+				string interfaceName = null;
 
-			writer.WriteAttributeString("type", property.PropertyType.FullName.Replace('+', '.'));
-			writer.WriteAttributeString("contract", GetPropertyContractValue(property));
-			writer.WriteAttributeString("get", property.GetGetMethod(true) != null ? "true" : "false");
-			writer.WriteAttributeString("set", property.GetSetMethod(true) != null ? "true" : "false");
-
-			if (overload > 0)
-			{
-				writer.WriteAttributeString("overload", overload.ToString());
-			}
-
-			if (implementations != null)
-			{
-				ImplementsInfo implements = null;
-				MethodInfo getter = property.GetGetMethod();
-				if (getter != null)
+				int lastIndexOfDot = name.LastIndexOf('.');
+				if (lastIndexOfDot != -1)
 				{
-					implements = implementations[getter.ToString()];
-				}
-				if (implements == null)
-				{
-					MethodInfo setter = property.GetSetMethod();
-					if (setter != null)
+					//this is an explicit interface implementation. if we don't want
+					//to document them, get out of here quick...
+					if (!MyConfig.DocumentExplicitInterfaceImplementations) return;
+
+					interfaceName = name.Substring(0, lastIndexOfDot);
+					lastIndexOfDot = interfaceName.LastIndexOf('.');
+					if (lastIndexOfDot != -1)
+						name = name.Substring(lastIndexOfDot + 1);
+
+					//check if we want to document this interface.
+					ImplementsInfo implements = null;
+					MethodInfo getter = property.GetGetMethod(true);
+					if (getter != null)
 					{
-						implements = implementations[setter.ToString()];
+						implements = implementations[getter.ToString()];
+					}
+					if (implements == null)
+					{
+						MethodInfo setter = property.GetSetMethod(true);
+						if (setter != null)
+						{
+							implements = implementations[setter.ToString()];
+						}
+					}
+					if (implements==null) return;
+				}
+
+				writer.WriteStartElement("property");
+				writer.WriteAttributeString("name", name);
+				writer.WriteAttributeString("id", memberName);
+				writer.WriteAttributeString("access", GetPropertyAccessValue(property));
+
+				if (interfaceName != null)
+				{
+					writer.WriteAttributeString("interface", interfaceName);
+				}
+
+				if (inherited)
+				{
+					writer.WriteAttributeString("declaringType", property.DeclaringType.FullName);
+				}
+
+				if (hiding)
+				{
+					writer.WriteAttributeString("hiding", "true");
+				}
+
+				writer.WriteAttributeString("type", property.PropertyType.FullName.Replace('+', '.'));
+				writer.WriteAttributeString("contract", GetPropertyContractValue(property));
+				writer.WriteAttributeString("get", property.GetGetMethod(true) != null ? "true" : "false");
+				writer.WriteAttributeString("set", property.GetSetMethod(true) != null ? "true" : "false");
+
+				if (overload > 0)
+				{
+					writer.WriteAttributeString("overload", overload.ToString());
+				}
+
+				if (implementations != null)
+				{
+					ImplementsInfo implements = null;
+					MethodInfo getter = property.GetGetMethod(true);
+					if (getter != null)
+					{
+						implements = implementations[getter.ToString()];
+					}
+					if (implements == null)
+					{
+						MethodInfo setter = property.GetSetMethod(true);
+						if (setter != null)
+						{
+							implements = implementations[setter.ToString()];
+						}
+					}
+					if (implements != null)
+					{
+						writer.WriteStartElement("implements");
+						MethodInfo InterfaceMethod = (MethodInfo)implements.InterfaceMethod;
+						PropertyInfo InterfaceProperty = DerivePropertyFromAccessorMethod(InterfaceMethod);
+						string InterfacePropertyID=GetMemberName(InterfaceProperty);
+						writer.WriteAttributeString("name", InterfaceProperty.Name);
+						writer.WriteAttributeString("id",InterfacePropertyID);
+						writer.WriteAttributeString("interface", implements.InterfaceType.Name);
+						writer.WriteAttributeString("interfaceId", GetMemberName(implements.InterfaceType));
+						writer.WriteAttributeString("declaringType", implements.InterfaceType.FullName);
+						writer.WriteEndElement();
 					}
 				}
-				if (implements != null)
+
+				if (inherited)
 				{
-					writer.WriteStartElement("implements");
-					writer.WriteAttributeString("name", property.Name);
-					MethodInfo InterfaceMethod = (MethodInfo)implements.InterfaceMethod;
-					PropertyInfo InterfaceProperty = DerivePropertyFromAccessorMethod(InterfaceMethod);
-					string InterfacePropertyID=GetMemberName(InterfaceProperty);
-					writer.WriteAttributeString("id",InterfacePropertyID);
-					writer.WriteAttributeString("interface", implements.InterfaceType.Name);
-					writer.WriteAttributeString("interfaceId", GetMemberName(implements.InterfaceType));
-					writer.WriteAttributeString("declaringType", implements.InterfaceType.FullName);
-					writer.WriteEndElement();
+					WriteInheritedDocumentation(writer, memberName, property.DeclaringType);
 				}
-			}
+				else
+				{
+					WritePropertyDocumentation(writer, memberName, property, true);
+				}
+				WriteCustomAttributes(writer, property);
 
-			if (inherited)
-			{
-				WriteInheritedDocumentation(writer, memberName, property.DeclaringType);
-			}
-			else
-			{
-				WritePropertyDocumentation(writer, memberName, property, true);
-			}
-			WriteCustomAttributes(writer, property);
+				foreach (ParameterInfo parameter in GetIndexParameters(property))
+				{
+					WriteParameter(writer, memberName, parameter);
+				}
 
-			foreach (ParameterInfo parameter in GetIndexParameters(property))
-			{
-				WriteParameter(writer, memberName, parameter);
+				writer.WriteEndElement();
 			}
-
-			writer.WriteEndElement();
 		}
 
 		private PropertyInfo DerivePropertyFromAccessorMethod(MemberInfo accessor)
@@ -2046,13 +2128,22 @@ namespace NDoc.Core
 				string name = method.Name;
 				string interfaceName = null;
 
+				name=name.Replace('+','.');
 				int lastIndexOfDot = name.LastIndexOf('.');
 				if (lastIndexOfDot != -1)
 				{
+					//this is an explicit interface implementation. if we don't want
+					//to document them, get out of here quick...
+					if (!MyConfig.DocumentExplicitInterfaceImplementations) return;
+
 					interfaceName = name.Substring(0, lastIndexOfDot);
 					lastIndexOfDot = interfaceName.LastIndexOf('.');
 					if (lastIndexOfDot != -1)
 						name = name.Substring(lastIndexOfDot + 1);
+
+					//check if we want to document this interface.
+					ImplementsInfo implements = implementations[method.ToString()];
+					if (implements==null) return;
 				}
 
 				writer.WriteStartElement("method");
@@ -2238,7 +2329,7 @@ namespace NDoc.Core
 		/// <param name="type">The type to derive the member name ID from.</param>
 		private string GetTypeName(Type type)
 		{
-			return type.FullName.Replace('+', '.').Replace("&", null);
+			return type.FullName.Replace('+', '.').Replace("&", null).Replace('+', '#');
 		}
 
 		/// <summary>Derives the member name ID for a type. Used to match nodes in the /doc XML.</summary>
@@ -2259,7 +2350,8 @@ namespace NDoc.Core
 		/// <param name="eventInfo">The event to derive the member name ID from.</param>
 		private string GetMemberName(EventInfo eventInfo)
 		{
-			return "E:" + GetFullNamespaceName(eventInfo) + "." + eventInfo.Name;
+			return "E:" + GetFullNamespaceName(eventInfo) + 
+				"." + eventInfo.Name.Replace('.', '#').Replace('+', '#');
 		}
 
 		/// <summary>Derives the member name ID for a property.  Used to match nodes in the /doc XML.</summary>
@@ -2268,7 +2360,8 @@ namespace NDoc.Core
 		{
 			string memberName;
 
-			memberName = "P:" + GetFullNamespaceName(property) + "." + property.Name;
+			memberName = "P:" + GetFullNamespaceName(property) + 
+				"." + property.Name.Replace('.', '#').Replace('+', '#');
 
 			try
 			{
@@ -2308,7 +2401,7 @@ namespace NDoc.Core
 				"M:" +
 				GetFullNamespaceName(method) +
 				"." +
-				method.Name.Replace('.', '#');
+				method.Name.Replace('.', '#').Replace('+', '#');
 
 			int i = 0;
 
