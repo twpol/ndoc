@@ -16,25 +16,38 @@
 	two classes:</p>
 	<ul>
 		<li>
-		<p class="dtH3">One that inherits from NDoc.Core.DocumenterBase</li>
-	<li>
-	<p class="dtH3">And one that inherits from NDoc.Core.DocumenterConfigBase</li>
-</ul>
-<p class="dtH3"><b>DocumenterConfigBase</b> includes the settings that are 
-shared by all documenters. These settings govern how the /doc XML is merged with 
-reflected meta-data. The inherited class can add its own properties that govern 
-its operation.</p>
-<p class="dtH3"><b>DocumenterBase</b> defines the general process for creating 
-the documentation. This base class will do the XML merge and it is then up to 
-the derived class to transform the merged XML into a documentation set.</p>
-<h3 class="dtH3">How Documenters Are Loaded</h3>
-	<p>NDoc uses a naming convention for the assemblies that contain 
-	documenters. To be located by NDoc, a documenter's assembly must be named 
-	with the pattern:</p>
-<p>&nbsp;&nbsp;&nbsp; NDoc.Documenter.&lt;NAME&gt;.dll </p>
-<p>where &lt;NAME&gt; is the documenter's name.</p>
-<p>Each documenter must reside in the same folder as the NDocGui and NDocConsole 
-applications in order to be located correctly.</p>
+		<p class="dtH3">A class that inherits from NDoc.Core.DocumenterBase</p>
+		</li>
+		<li>
+		<p class="dtH3">And a class that inherits from NDoc.Core.DocumenterConfigBase</p>
+		</li>
+	</ul>
+	<p class="dtH3"><b>DocumenterConfigBase</b> includes the settings that are shared 
+	by all documenters. These settings govern how the /doc XML is merged with reflected 
+	meta-data. The inherited class can add its own properties that govern its operation.</p>
+	<p class="dtH3"><b>DocumenterBase</b> defines the general process for creating 
+	the documentation. This base class will do the XML merge and it is then up to 
+	the derived class to transform the merged XML into a documentation set.</p>
+	<p class="dtH3">The implementation must provide implementations for the abstract 
+	base class methods of <b>Clear</b>, <b>Build</b>, and the <b>MainOutputFile</b> 
+	property. </p>
+	<p class="dtH3">In the implementation of <b>Build</b>, call the base class
+	<b>MergeXML</b> method. This method merges the /doc XML file with the project 
+	assembly&#39;s reflected meta-data and returns the resulting XML to the derived 
+	class. It is then up to the derived class to transform the XML into it particular 
+	documentation format.</p>
+	<p class="dtH3">Using the <a href="xml.htm">XML Documenter</a> in order to pre-generate 
+	the merged XML, in conjunction with the
+	<a href="documenters.htm#UseNDocXmlFile">UseNDocXmlFile</a> setting, is a good 
+	way to explore the structure of the merged XML document and concentrate on creating 
+	the custom documentation format.</p>
+	<h3 class="dtH3">How Documenters Are Loaded</h3>
+	<p>NDoc uses a naming convention for the assemblies that contain documenters. 
+	To be located by NDoc, a documenter&#39;s assembly must be named with the pattern:</p>
+	<p>&nbsp;&nbsp;&nbsp; <i>NDoc.Documenter.&lt;NAME&gt;.dll </i></p>
+	<p>where &lt;NAME&gt; is the documenter&#39;s name.</p>
+	<p>Each documenter must reside in the same folder as the NDocGui.exe and NDocConsole.exe 
+	applications in order to be located correctly.</p>
 </div>
 
 </body>

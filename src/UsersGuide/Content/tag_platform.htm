@@ -28,8 +28,8 @@
 		Server</li>
 		<li><i>enterprise</i> - Windows 2000, Windows XP Pro, Windows 2003 Server</li>
 	</ul>
-	<p><i>custom list</i> is a list of frameworks or operating system not included 
-	in the predefined sets</p>
+	<p><i>custom list</i> is a textual list of frameworks or operating system not 
+	included in the predefined sets</p>
 	<h4 class="dtH4">Applies To</h4>
 	<p>All Types and Members.</p>
 	<h4 class="dtH4">Remarks</h4>
@@ -46,13 +46,15 @@
 	refers to the .NET Compact Framework and the <b>&lt;mono&gt;</b> tag refers to the 
 	MONO open source framework. Additional framework implementations can be specified 
 	within the <b>&lt;custom&gt;</b> tag within the <b>&lt;frameworks&gt;</b> tag.</p>
-	<p class="dtH4">The <b>&lt;platform&gt;</b> tag works in conjunction with the
-	<b><a href="documenters.htm#AdditionalFrameworkList">AdditionalFrameworkList</a>, 
-	<a href="documenters.htm#AdditionalOSList">AdditionalOSList</a>, 
+	<p class="dtH4">The <b>&lt;platform&gt;</b> tag works in conjunction with the <b>
+	<a href="documenters.htm#AdditionalFrameworkList">AdditionalFrameworkList</a>,
+	<a href="documenters.htm#AdditionalOSList">AdditionalOSList</a>,
 	<a href="documenters.htm#DefaultOSSupport">DefaultOSSupport</a>,
-	<a href="documenters.htm#InheritPlatformSupport">InheritPlatformSupport</a>, 
-	<a href="documenters.htm#SupportCompactFrameworkByDefault">SupportCompactFrameworkByDefault</a> </b>and<b> 
-	<a href="documenters.htm#SupportMONOFrameworkByDefault">SupportMONOFrameworkByDefault</a> </b>documenter settings.</p>
+	<a href="documenters.htm#InheritPlatformSupport">InheritPlatformSupport</a>,
+	<a href="documenters.htm#SupportCompactFrameworkByDefault">SupportCompactFrameworkByDefault</a>
+	</b>and<b> <a href="documenters.htm#SupportMONOFrameworkByDefault">SupportMONOFrameworkByDefault</a>
+	</b>documenter settings. These settings determine how items that do not have 
+	a platform specified in their code comments report platform compatibility.</p>
 	<h4 class="dtH4">Examples</h4>
 	<pre class="code"><span class="lang">[C#]</span>
 /// &lt;platform&gt;
@@ -78,12 +80,14 @@ public class ThisClassSupportsAllPlatforms
    public void ThisMethodDoesNotSupportTheCF(){}
 }</pre>
 	<h4 class="dtH4">See Also</h4>
-	<p><a href="tags.htm">NDoc Tags</a>, <a href="documenters.htm#AdditionalFrameworkList">AdditionalFrameworkList</a>, 
-	<a href="documenters.htm#AdditionalOSList">AdditionalOSList</a>, 
+	<p><a href="tags.htm">NDoc Tags</a>,
+	<a href="documenters.htm#AdditionalFrameworkList">AdditionalFrameworkList</a>,
+	<a href="documenters.htm#AdditionalOSList">AdditionalOSList</a>,
 	<a href="documenters.htm#DefaultOSSupport">DefaultOSSupport</a>,
-	<a href="documenters.htm#InheritPlatformSupport">InheritPlatformSupport</a>, 
+	<a href="documenters.htm#InheritPlatformSupport">InheritPlatformSupport</a>,
 	<a href="documenters.htm#SupportCompactFrameworkByDefault">SupportCompactFrameworkByDefault</a>,
-	<a href="documenters.htm#SupportMONOFrameworkByDefault">SupportMONOFrameworkByDefault</a> </p>
+	<a href="documenters.htm#SupportMONOFrameworkByDefault">SupportMONOFrameworkByDefault</a>
+	</p>
 </div>
 
 </body>
