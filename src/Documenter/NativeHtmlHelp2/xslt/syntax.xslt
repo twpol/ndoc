@@ -827,20 +827,20 @@
 		<xsl:choose>
 			<xsl:when test="$lang = 'Visual Basic'">
 				<xsl:if test="@baseType!=''">
-				<xsl:text>&#10;&#160;&#160;&#160;&#160;Inherits&#160;</xsl:text>
-						<xsl:variable name="link-type">
-							<xsl:call-template name="get-datatype">
-								<xsl:with-param name="datatype" select="@baseType" />
-								<xsl:with-param name="lang" select="$lang" />
-							</xsl:call-template>
-						</xsl:variable>
-						<xsl:call-template name="get-link-for-type-name">
-							<xsl:with-param name="type-name" select="./base/@type" />
-							<xsl:with-param name="link-text" select="$link-type" />
+					<xsl:text>&#10;&#160;&#160;&#160;&#160;Inherits&#160;</xsl:text>
+					<xsl:variable name="link-type">
+						<xsl:call-template name="get-datatype">
+							<xsl:with-param name="datatype" select="@baseType" />
+							<xsl:with-param name="lang" select="$lang" />
 						</xsl:call-template>
+					</xsl:variable>
+					<xsl:call-template name="get-link-for-type-name">
+						<xsl:with-param name="type-name" select="./base/@type" />
+						<xsl:with-param name="link-text" select="$link-type" />
+					</xsl:call-template>
 				</xsl:if>
 				<xsl:if test="implements[not(@inherited)]">
-				<xsl:text>&#10;&#160;&#160;&#160;&#160;Implements&#160;</xsl:text>
+					<xsl:text>&#10;&#160;&#160;&#160;&#160;Implements&#160;</xsl:text>
 					<xsl:for-each select="implements[not(@inherited)]">
 						<xsl:variable name="link-type">
 							<xsl:call-template name="get-datatype">
@@ -1057,14 +1057,43 @@
 		<xsl:param name="lang" />
 		<xsl:if test="$ndoc-document-attributes">
 			<xsl:if test="attribute">
-				<xsl:for-each select="attribute">
-					<div class="attribute">
-						<xsl:call-template name="attribute">
-							<xsl:with-param name="attname" select="@name" />
-							<xsl:with-param name="lang" select="$lang" />
-						</xsl:call-template>
-					</div>
-				</xsl:for-each>
+				<xsl:choose>
+					<xsl:when test="$lang='Visual Basic'">
+						<div class="attribute">
+							<xsl:apply-templates select="." mode="attribute-open">
+								<xsl:with-param name="lang" select="$lang" />
+							</xsl:apply-templates>
+							<xsl:for-each select="attribute">
+								<xsl:call-template name="attribute">
+									<xsl:with-param name="attname" select="@name" />
+									<xsl:with-param name="lang" select="$lang" />
+								</xsl:call-template>
+								<xsl:if test="position()!=last()">
+									<xsl:text>, </xsl:text>
+								</xsl:if>
+							</xsl:for-each>
+							<xsl:apply-templates select="." mode="attribute-close">
+								<xsl:with-param name="lang" select="$lang" />
+							</xsl:apply-templates>
+						</div>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:for-each select="attribute">
+							<div class="attribute">
+								<xsl:apply-templates select="." mode="attribute-open">
+									<xsl:with-param name="lang" select="$lang" />
+								</xsl:apply-templates>
+								<xsl:call-template name="attribute">
+									<xsl:with-param name="attname" select="@name" />
+									<xsl:with-param name="lang" select="$lang" />
+								</xsl:call-template>
+								<xsl:apply-templates select="." mode="attribute-close">
+									<xsl:with-param name="lang" select="$lang" />
+								</xsl:apply-templates>
+							</div>
+						</xsl:for-each>
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:if>
 		</xsl:if>
 	</xsl:template>
@@ -1072,9 +1101,6 @@
 	<xsl:template name="attribute">
 		<xsl:param name="attname" />
 		<xsl:param name="lang" />
-		<xsl:apply-templates select="." mode="attribute-open">
-			<xsl:with-param name="lang" select="$lang" />
-		</xsl:apply-templates>
 		<xsl:if test="@target"><xsl:value-of select="@target" /> : </xsl:if>
 		<xsl:call-template name="strip-namespace-and-attribute">
 			<xsl:with-param name="name" select="@name" />
@@ -1104,9 +1130,6 @@
 			</xsl:for-each>
 			<xsl:text>)</xsl:text>
 		</xsl:if>
-		<xsl:apply-templates select="." mode="attribute-close">
-			<xsl:with-param name="lang" select="$lang" />
-		</xsl:apply-templates>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="strip-namespace-and-attribute">
