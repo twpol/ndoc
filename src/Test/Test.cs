@@ -18,6 +18,7 @@ namespace NDoc.Test
 	/// </summary>
 	public class NamespaceDoc {}
 
+#if UNICODE_NAMES
 	/// <summary>
 	/// DenGrønneKasse don't work in NDoc.
 	/// </summary>
@@ -30,6 +31,7 @@ namespace NDoc.Test
 		{
 		}
 	}
+#endif
 
 	/// <summary>Represents a normal class.</summary>
 	/// <remarks>Conceptualizing random endpoints in a access matrix
