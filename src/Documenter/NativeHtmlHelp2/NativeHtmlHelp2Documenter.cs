@@ -34,7 +34,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 	{
 
 		/// <summary>Initializes a new instance of the NativeHtmlHelp2Documenter class.</summary>
-		public NativeHtmlHelp2Documenter() : base( "Native HtmlHelp2" )
+		public NativeHtmlHelp2Documenter() : base( "VS.NET 2003" )
 		{
 			Clear();
 		}
@@ -198,6 +198,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			// Load the XML documentation into a DOM.
 			XmlDocument xmlDocumentation = new XmlDocument();
 			xmlDocumentation.LoadXml( MakeXml( project ) );
+
+xmlDocumentation.Save( @"C:\ndoctest.xml" );
 
 			XmlNodeList typeNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace/*[name()!='documentation']");
 			if ( typeNodes.Count == 0 )			

@@ -66,7 +66,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		private const string DEPLOYMENT_CATEGORY = "Html Help 2 Deployment";
 
 		/// <summary>Initializes a new instance of the NativeHtmlHelp2Config class.</summary>
-		public NativeHtmlHelp2Config() : base( "Native HtmlHelp2" )
+		public NativeHtmlHelp2Config() : base( "VS.NET 2003" )
 		{
 		}
 
