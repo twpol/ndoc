@@ -1251,7 +1251,15 @@ namespace NDoc.Test
 		/// <summary>Returns the inverse of a matrix.</summary>
 		/// <param name="matrix">A matrix.</param>
 		/// <returns>The inverted matrix.</returns>
-		public static double[,] Inverse(double[,] matrix)
+		public static double[,] Inverse2(double[,] matrix)
+		{
+			return null;
+		}
+
+		/// <summary>Returns the inverse of a matrix.</summary>
+		/// <param name="matrix">A matrix.</param>
+		/// <returns>The inverted matrix.</returns>
+		public static double[,,] Inverse3(double[,,] matrix)
 		{
 			return null;
 		}

@@ -21,8 +21,9 @@ using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using System.Xml;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Xml;
 
 // WB020102
 using NDoc.Core.WB;
@@ -1425,9 +1426,14 @@ namespace NDoc.Core
 				{
 					memberName += ",";
 				}
+				
+				string parameterName = parameter.ParameterType.FullName;
+
+				parameterName = Regex.Replace(parameterName, ",", ",0:");
+				parameterName = Regex.Replace(parameterName, @"\[,", "[0:,");
 
 				// XML Documentation file appends a "@" to reference and out types, not a "&"
-				memberName += parameter.ParameterType.FullName.Replace('&', '@').Replace('+', '.');
+				memberName += parameterName.Replace('&', '@').Replace('+', '.');
 
 				++i;
 			}
