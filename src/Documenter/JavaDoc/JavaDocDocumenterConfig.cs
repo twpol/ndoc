@@ -22,6 +22,7 @@ using System.Drawing.Design;
 using System.Windows.Forms.Design;
 
 using NDoc.Core;
+using NDoc.Core.Reflection;
 
 namespace NDoc.Documenter.JavaDoc
 {
@@ -41,8 +42,6 @@ namespace NDoc.Documenter.JavaDoc
 		/// </remarks>
 		public JavaDocDocumenterConfig() : base("JavaDoc")
 		{
-			// fix for bug 884121 - OutputDirectory on Linux
-			OutputDirectory = string.Format(".{0}doc{0}",Path.DirectorySeparatorChar );
 		}
 
 		private string _Title;
@@ -65,20 +64,17 @@ namespace NDoc.Documenter.JavaDoc
 			}
 		}
 
-		private string _OutputDirectory;
-
+		string _outputDirectory = string.Format( ".{0}doc{0}", Path.DirectorySeparatorChar );
+		
 		/// <summary>Gets or sets the OutputDirectory property.</summary>
 		/// <remarks>The folder where the root of the HTML set will be located.
 		/// This can be absolute or relative from the .ndoc project file.</remarks>
 		[Category("Documentation Main Settings")]
-		[Description("The output folder.")]
+		[Description("The folder where the root of the HTML set will be located.\nThis can be absolute or relative from the .ndoc project file.")]
 		[Editor(typeof(FolderNameEditor), typeof(UITypeEditor))]
 		public string OutputDirectory
 		{
-			get 
-			{ 
-				return _OutputDirectory; 
-			}
+			get { return _outputDirectory; }
 
 			set
 			{
@@ -89,15 +85,17 @@ namespace NDoc.Documenter.JavaDoc
 						" are reserved characters in HTML URLs."); 
 				}
 
-				_OutputDirectory = value;
+				_outputDirectory = value;
 
-				if (!_OutputDirectory.EndsWith( Path.DirectorySeparatorChar.ToString() ))
+				if (!_outputDirectory.EndsWith( Path.DirectorySeparatorChar.ToString() ))
 				{
-					_OutputDirectory += Path.DirectorySeparatorChar;
+					_outputDirectory += Path.DirectorySeparatorChar;
 				}
 
 				SetDirty();
 			}
 		}
+		void ResetOutputDirectory() { _outputDirectory = string.Format( ".{0}doc{0}", Path.DirectorySeparatorChar ); }
+
 	}
 }

@@ -25,6 +25,7 @@ using System.Reflection;
 using System.Collections;
 
 using NDoc.Core;
+using NDoc.Core.Reflection;
 
 namespace NDoc.Documenter.JavaDoc
 {
@@ -44,7 +45,7 @@ namespace NDoc.Documenter.JavaDoc
 		{ 
 			get 
 			{
-				return Path.Combine(MyConfig.OutputDirectory, 
+				return Path.Combine(this.WorkingPath, 
 					"overview-summary.html");
 			} 
 		}
