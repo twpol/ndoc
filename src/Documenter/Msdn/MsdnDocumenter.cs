@@ -53,6 +53,7 @@ namespace NDoc.Documenter.Msdn
 		private Hashtable mixedCaseTypeNames;
 		private StringDictionary fileNames;
 		private StringDictionary elemNames;
+		private MsdnXsltUtilities utilities;
 
 		private XslTransform xsltNamespace;
 		private XslTransform xsltNamespaceHierarchy;
@@ -277,6 +278,8 @@ namespace NDoc.Documenter.Msdn
 				OnDocBuildingStep(25, "Building file mapping...");
 
 				MakeFilenames();
+
+				utilities = new MsdnXsltUtilities(fileNames, elemNames, MyConfig.LinkToSdkDocVersion);
 
 				OnDocBuildingStep(30, "Loading XSLT files...");
 
@@ -1542,8 +1545,6 @@ namespace NDoc.Documenter.Msdn
 				arguments.AddParam("ndoc-omit-object-tags", String.Empty, ((MyConfig.OutputTarget & OutputType.HtmlHelp) == 0));
 				arguments.AddParam("ndoc-document-attributes", String.Empty, MyConfig.DocumentAttributes);
 				arguments.AddParam("ndoc-documented-attributes", String.Empty, MyConfig.DocumentedAttributes);
-
-				MsdnXsltUtilities utilities = new MsdnXsltUtilities(fileNames, elemNames, MyConfig.LinkToSdkDocVersion);
 
 				arguments.AddParam("ndoc-sdk-doc-base-url", String.Empty, utilities.SdkDocBaseUrl);
 				arguments.AddParam("ndoc-sdk-doc-file-ext", String.Empty, utilities.SdkDocExt);
