@@ -55,7 +55,7 @@ namespace NDoc.Documenter.Xml
 
 		/// <summary>Gets or sets the OutputFile property.</summary>
 		/// <remarks>This is the path and filename of the file where 
-		/// the merged documentation will be written. This can be 
+		/// the merged /doc output and reflection information will be written. This can be 
 		/// absolute or relative from the .ndoc project file.</remarks>
 		[Category("Documentation Main Settings")]
 		[Description("The path to the XML file to create which will be the combined /doc output and reflection information.")]
