@@ -68,11 +68,23 @@
 					</TD>
 				</TR>
 				<TR>
-					<TD>Compact Framework incompatibilites</TD>
+					<TD>StrongNameIdentityPermissionAttribute</TD>
 					<TD>
-						<P>When an assemby compiled to run on the .NET Compact Framework is added to an 
-							NDoc project, the GUI may throw an excpetion, especially if the assembly 
-							references Microsoft.WindowsCE.Forms.
+						Assemblies decorated with the <b>
+						StrongNameIdentityPermission</b> attribute can only be 
+						called by other assemblies that are marked with the 
+						specified key. NDoc will fail when it attempts to 
+						document an assembly compiled with this attribute.<p>To 
+						work around this issue conditionally compile a version 
+						of the assembly that does not include the 
+						StrongNameIdentityPermission attribute.</TD>
+				</TR>
+				<TR>
+					<TD>Compact Framework incompatibilities</TD>
+					<TD>
+						<P>When an assembly compiled to run on the .NET Compact Framework is added to an 
+							NDoc project, the GUI may throw an exception, especially if the assembly 
+							references Microsoft.WindowsCE.Forms or SqlServerCe.
 						</P>
 						<P>There is no work around for this issue.</P>
 						<P>This issue will be addressed in a future version of NDoc.</P>
