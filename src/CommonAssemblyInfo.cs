@@ -19,6 +19,6 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyrightAttribute("")]
 [assembly: AssemblyTrademarkAttribute("")]
 [assembly: AssemblyCultureAttribute("")]
-[assembly: AssemblyVersionAttribute("1.3.1811.0")]
-[assembly: AssemblyInformationalVersionAttribute("1.3")]
+[assembly: AssemblyVersionAttribute("1.3.1851.0")]
+[assembly: AssemblyInformationalVersionAttribute("1.3.1")]
 
