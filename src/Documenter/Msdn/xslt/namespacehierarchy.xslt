@@ -73,23 +73,43 @@
 			<xsl:call-template name="indent">
 				<xsl:with-param name="count" select="$level" />
 			</xsl:call-template>
-			<a>
-				<xsl:attribute name="href">
-					<xsl:choose>
-						<xsl:when test="starts-with($head/@id, 'T:System.')">
+			<xsl:choose>
+				<xsl:when test="starts-with($head/@id, 'T:System.')">
+					<a>
+						<xsl:attribute name="href">
 							<xsl:call-template name="get-filename-for-system-type">
 								<xsl:with-param name="type-name" select="substring-after($head/@id, 'T:')" />
 							</xsl:call-template>
+						</xsl:attribute>
+						<xsl:value-of select="substring-after($head/@id, 'T:')"/>
+					</a>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:variable name="base-class-id" select="$head/@id" />
+					<xsl:variable name="base-class" select="//class[@id=$base-class-id]" />
+					<xsl:choose>
+						<xsl:when test="$base-class">
+							<a>
+								<xsl:attribute name="href">
+									<xsl:call-template name="get-filename-for-type">
+										<xsl:with-param name="id" select="$base-class-id" />
+									</xsl:call-template>
+								</xsl:attribute>
+								<xsl:call-template name="get-datatype">
+									<xsl:with-param name="datatype" select="$head/@type" />
+								</xsl:call-template>
+								<xsl:value-of select="substring-after($head/@id, 'T:')"/>
+							</a>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:call-template name="get-filename-for-type">
-								<xsl:with-param name="id" select="$head/@id" />
+							<xsl:call-template name="get-datatype">
+								<xsl:with-param name="datatype" select="$head/@type" />
 							</xsl:call-template>
+							<xsl:value-of select="substring-after($head/@id, 'T:')"/>
 						</xsl:otherwise>
 					</xsl:choose>
-				</xsl:attribute>
-				<xsl:value-of select="substring-after($head/@id, 'T:')"/>
-			</a>
+				</xsl:otherwise>
+			</xsl:choose>
 		</p>
 		<xsl:variable name="derivatives" select="/ndoc/assembly/module/namespace/class[base/@id = $head/@id] | /ndoc/assembly/module/namespace/class/descendant::base[base[@id = $head/@id]]" />
 		<xsl:if test="$derivatives">
