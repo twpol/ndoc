@@ -49,14 +49,7 @@
 		</xsl:choose>
 		<MSHelp:RLTitle Title="{$title}"/>
 	</xsl:template>
-<!--		
-	<xsl:template match="operator" mode="MSHelpTitle">
-		<xsl:param name="title" />
-		<xsl:param name="page-type"/>	
-		<MSHelp:TOCTitle Title="{$page-type}"/>	
-		<MSHelp:RLTitle Title="{$title}"/>
-	</xsl:template>
--->		
+
 		
 	<xsl:template match="ndoc" mode="AIndex">
 		<xsl:call-template name="add-a-index">
