@@ -561,7 +561,7 @@ namespace NDoc.Gui
 			// menuAboutItem
 			// 
 			this.menuAboutItem.Index = 6;
-			this.menuAboutItem.Text = "&About NDoc";
+			this.menuAboutItem.Text = "&About NDoc...";
 			this.menuAboutItem.Click += new System.EventHandler(this.menuAboutItem_Click);
 			// 
 			// addButton
