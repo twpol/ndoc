@@ -118,7 +118,6 @@ namespace NDoc.Gui
 		private System.Windows.Forms.MenuItem menuFileOpenSolution;
 		private System.Windows.Forms.MenuItem menuHelpItem;
 		private System.Windows.Forms.MenuItem menuAboutItem;
-		private System.Windows.Forms.MenuItem menuTagReferenceItem;
 		private System.Windows.Forms.MenuItem menuSpacerItem4;
 		private System.Windows.Forms.MenuItem menuSpacerItem6;
 		private System.Windows.Forms.MenuItem menuCancelBuildItem;
@@ -135,6 +134,10 @@ namespace NDoc.Gui
 		private System.Windows.Forms.MenuItem menuViewOptions;
 		private System.Windows.Forms.MenuItem menuViewStatusBar;
 		private NDocOptions options;
+		private System.Windows.Forms.MenuItem menuHelpContents;
+		private System.Windows.Forms.MenuItem menuHelpIndex;
+		private System.Windows.Forms.MenuItem menuNDocOnline;
+		private System.Windows.Forms.MenuItem menuItem3;
 
 		private StringCollection recentProjectFilenames = new StringCollection();
 		#endregion // Fields
@@ -288,9 +291,12 @@ namespace NDoc.Gui
 			this.menuItem1 = new System.Windows.Forms.MenuItem();
 			this.menuViewOptions = new System.Windows.Forms.MenuItem();
 			this.menuHelpItem = new System.Windows.Forms.MenuItem();
-			this.menuTagReferenceItem = new System.Windows.Forms.MenuItem();
+			this.menuHelpContents = new System.Windows.Forms.MenuItem();
+			this.menuHelpIndex = new System.Windows.Forms.MenuItem();
 			this.menuSpacerItem4 = new System.Windows.Forms.MenuItem();
 			this.menuViewLicense = new System.Windows.Forms.MenuItem();
+			this.menuNDocOnline = new System.Windows.Forms.MenuItem();
+			this.menuItem3 = new System.Windows.Forms.MenuItem();
 			this.menuAboutItem = new System.Windows.Forms.MenuItem();
 			this.addButton = new System.Windows.Forms.Button();
 			this.slashDocHeader = new System.Windows.Forms.ColumnHeader();
@@ -508,33 +514,53 @@ namespace NDoc.Gui
 			// 
 			this.menuHelpItem.Index = 3;
 			this.menuHelpItem.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																						 this.menuTagReferenceItem,
+																						 this.menuHelpContents,
+																						 this.menuHelpIndex,
 																						 this.menuSpacerItem4,
 																						 this.menuViewLicense,
+																						 this.menuNDocOnline,
+																						 this.menuItem3,
 																						 this.menuAboutItem});
 			this.menuHelpItem.Text = "&Help";
 			// 
-			// menuTagReferenceItem
+			// menuHelpContents
 			// 
-			this.menuTagReferenceItem.Index = 0;
-			this.menuTagReferenceItem.Shortcut = System.Windows.Forms.Shortcut.F1;
-			this.menuTagReferenceItem.Text = "&Documentation Tags Reference";
-			this.menuTagReferenceItem.Click += new System.EventHandler(this.menuTagReferenceItem_Click);
+			this.menuHelpContents.Index = 0;
+			this.menuHelpContents.Shortcut = System.Windows.Forms.Shortcut.F1;
+			this.menuHelpContents.Text = "Contents...";
+			this.menuHelpContents.Click += new System.EventHandler(this.menuHelpContents_Click);
+			// 
+			// menuHelpIndex
+			// 
+			this.menuHelpIndex.Index = 1;
+			this.menuHelpIndex.Text = "Index...";
+			this.menuHelpIndex.Click += new System.EventHandler(this.menuHelpIndex_Click);
 			// 
 			// menuSpacerItem4
 			// 
-			this.menuSpacerItem4.Index = 1;
+			this.menuSpacerItem4.Index = 2;
 			this.menuSpacerItem4.Text = "-";
 			// 
 			// menuViewLicense
 			// 
-			this.menuViewLicense.Index = 2;
+			this.menuViewLicense.Index = 3;
 			this.menuViewLicense.Text = "View License";
 			this.menuViewLicense.Click += new System.EventHandler(this.menuViewLicense_Click);
 			// 
+			// menuNDocOnline
+			// 
+			this.menuNDocOnline.Index = 4;
+			this.menuNDocOnline.Text = "NDoc Online";
+			this.menuNDocOnline.Click += new System.EventHandler(this.menuNDocOnline_Click);
+			// 
+			// menuItem3
+			// 
+			this.menuItem3.Index = 5;
+			this.menuItem3.Text = "-";
+			// 
 			// menuAboutItem
 			// 
-			this.menuAboutItem.Index = 3;
+			this.menuAboutItem.Index = 6;
 			this.menuAboutItem.Text = "&About NDoc";
 			this.menuAboutItem.Click += new System.EventHandler(this.menuAboutItem_Click);
 			// 
@@ -1598,37 +1624,6 @@ namespace NDoc.Gui
 			}
 		}
 
-		private void menuTagReferenceItem_Click(object sender, System.EventArgs e)
-		{
-			//try to find the documentation in several possible locations
-			string tagsFile = Path.Combine(Application.StartupPath, "tags.html");
-			if (!File.Exists(tagsFile))
-			{
-				tagsFile = Path.Combine(Application.StartupPath, @"..\..\doc\tags.html");
-
-				if (!File.Exists(tagsFile))
-				{
-					tagsFile = Path.Combine(Application.StartupPath, @"..\..\..\..\doc\tags.html");
-
-					if (!File.Exists(tagsFile))
-					{
-						MessageBox.Show(this, "The tags documentation file was not found.", "Help", 
-							MessageBoxButtons.OK, MessageBoxIcon.Information);
-						return;
-					}
-				}
-			}
-			try
-			{
-				System.Diagnostics.Process.Start(tagsFile);
-			}
-			catch(System.ComponentModel.Win32Exception ex)
-			{
-				MessageBox.Show(this, ex.Message, "Help", 
-					MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-			}
-		}
-
 		private void menuAboutItem_Click(object sender, System.EventArgs e)
 		{
 			AboutForm aboutForm = new AboutForm();
@@ -1986,5 +1981,30 @@ namespace NDoc.Gui
 			}		
 		}
 
+		private void menuNDocOnline_Click(object sender, System.EventArgs e)
+		{
+			Process.Start( "http://ndoc.sourceforge.net" );
+		}
+
+
+		private static string HelpFilePath
+		{
+			get
+			{
+				return Path.Combine( 
+					Path.GetDirectoryName( new Uri( Assembly.GetExecutingAssembly().CodeBase, true ).AbsolutePath ),
+					"NDocUsersGuide.chm" );
+			}
+		}
+
+		private void menuHelpContents_Click(object sender, System.EventArgs e)
+		{
+			Help.ShowHelp( this, HelpFilePath );
+		}
+
+		private void menuHelpIndex_Click(object sender, System.EventArgs e)
+		{
+			Help.ShowHelpIndex( this, HelpFilePath );
+		}
 	}
 }
