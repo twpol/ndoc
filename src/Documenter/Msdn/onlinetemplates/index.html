@@ -1,8 +1,15 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Frameset//EN"> 
 <html>
 	<head>
-		<meta NAME="Robots" CONTENT="noindex">
+		<meta name="Robots" content="noindex">
 		<title><%TITLE%></title>
+		<script language="JavaScript">
+		// ensure this page is not loaded inside another frame
+		if (top.location != self.location)
+		{
+			top.location = self.location;
+		}
+		</script>
 	</head>
 	<frameset cols="250,*" framespacing="6" bordercolor="#6699CC">
 		<frame name="contents" src="contents.html" frameborder="0" scrolling="no">
