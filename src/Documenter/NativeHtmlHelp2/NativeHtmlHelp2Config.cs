@@ -76,6 +76,9 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 	/// <summary>
 	/// Config settings for the native Html Help 2 Documenter
 	/// </summary>
+	/// <remarks>
+	/// <para></para>
+	/// </remarks>
 	public class NativeHtmlHelp2Config : BaseDocumenterConfig
 	{
 		private const string HTMLHELP2_CONFIG_CATEGORY = "Html Help 2 Settings";
@@ -91,6 +94,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		string _outputDirectory = string.Format( ".{0}doc{0}", Path.DirectorySeparatorChar );
 		
 		/// <summary>Gets or sets the OutputDirectory property.</summary>
+		/// <remarks>The directory in which .html files and the .Hx* files will be generated.</remarks>
 		[Category("Documentation Main Settings")]
 		[Description("The directory in which .html files and the .Hx* files will be generated.")]
 #if !MONO //System.Windows.Forms.Design.FolderNameEditor is not implemented in mono 0.28
@@ -149,6 +153,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		private string _Title = "An NDoc documented library";
 
 		/// <summary>Gets or sets the Title property.</summary>
+		/// <remarks>This is the title displayed at the top of every page.</remarks>
 		[Category("Documentation Main Settings")]
 		[Description("This is the title displayed at the top of every page.")]
 		public string Title
@@ -165,6 +170,10 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		private bool _IncludeHierarchy = false;
 
 		/// <summary>Gets or sets the IncludeHierarchy property.</summary>
+		/// <remarks>To include a class hiararchy page for each namespace. 
+		/// Don't turn it on if your project has a namespace with many types, 
+		/// as NDoc will become very slow and might crash.</remarks>
+		/// <remarks></remarks>
 		[Category("Documentation Main Settings")]
 		[Description("To include a class hiararchy page for each namespace. Don't turn it on if your project has a namespace with many types, as NDoc will become very slow and might crash.")]
 		[DefaultValue(false)]
@@ -184,10 +193,12 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		bool _RegisterTitleWithNamespace = false;
 
 		/// <summary>
-		/// Should the compiled Html 2 title be registered after it is compiled. (If true CollectionNamespace is required)
+		/// Gets or sets the RegisterTitleWithNamespace property
 		/// </summary>
+		/// <remarks>Should the compiled Html 2 title be registered on this 
+		/// machine after it is compiled. Good for testing. (If true CollectionNamespace is required)</remarks>
 		[Category(DEPLOYMENT_CATEGORY)]
-		[Description("Should the compiled Html 2 title be registered on this machine after it is compiled. Good for testing. (If true CollectionNamespace is required)")]
+		[Description("Should the compiled Html 2 title be registered on this machine after it is compiled. Good for testing. (If true CollectionNamespace is required).")]
 		[DefaultValue(false)]
 		public bool RegisterTitleWithNamespace
 		{
@@ -203,10 +214,12 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		string _CollectionNamespace = String.Empty;
 
 		/// <summary>
-		/// If RegisterTitleWithNamespace is true this is the namesapce to which it will be added.
+		/// Gets or sets the CollectionNamespace property
 		/// </summary>
+		/// <remarks>The Html Help 2 registry namespace (avoid spaces). 
+		/// Used in conjunction with GenerateCollectionFiles and RegisterTitleWithNamespace</remarks>
 		[Category(DEPLOYMENT_CATEGORY)]
-		[Description("The Html Help 2 registry namespace (avoid spaces). Used in conjunction with GenerateCollectionFiles and RegisterTitleWithNamespace")]
+		[Description("The Html Help 2 registry namespace (avoid spaces). Used in conjunction with GenerateCollectionFiles and RegisterTitleWithNamespace.")]
 		[DefaultValue("")]
 		public string CollectionNamespace
 		{
@@ -222,8 +235,9 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		bool _RegisterTitleAsCollection = false;
 
 		/// <summary>
-		/// If true the HxS title will be registered as a collection (ignored if RegisterTitleWithNamespace is true)
+		/// Gets or sets the RegisterTitleAsCollection property
 		/// </summary>
+		/// <remarks>If true the HxS title will be registered as a collection (ignored if RegisterTitleWithNamespace is true)</remarks>
 		[Category(DEPLOYMENT_CATEGORY)]
 		[Description("If true the HxS title will be registered as a collection on this machine (uses HtmlHelpName as the namespace name).  Good for testing. (ignored if RegisterTitleWithNamespace is true)")]
 		[DefaultValue(false)]
@@ -241,8 +255,10 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		bool _GenerateCollectionFiles = false;
 
 		/// <summary>
-		/// If true creates collection files to contain the help title.
+		/// Gets or sets the GenerateCollectionFiles property
 		/// </summary>
+		/// <remarks>If true creates collection files to contain the help title. 
+		/// These all the title to be plugged into the Visual Studio help namespace during deployment.</remarks>
 		[Category(DEPLOYMENT_CATEGORY)]
 		[Description("If true creates collection files to contain the help title. These all the title to be plugged into the Visual Studio help namespace during deployment.")]
 		[DefaultValue(false)]
@@ -260,8 +276,10 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		string _PlugInNamespace = "ms.vscc";
 
 		/// <summary>
-		/// If GenerateCollectionFiles is true, the resulting collection will be plugged into this namespace during deployment
+		/// Gets or sets the PlugInNamespace property
 		/// </summary>
+		/// <remarks>If GenerateCollectionFiles is true, the resulting 
+		/// collection will be plugged into this namespace during deployment</remarks>
 		[Category(DEPLOYMENT_CATEGORY)]
 		[Description("If GenerateCollectionFiles is true, the resulting collection will be plugged into this namespace during deployment. ('ms.vscc' is the VS.NET help namespace)")]
 		[DefaultValue("ms.vscc")]
@@ -280,8 +298,9 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		TOCStyle _CollectionTOCStyle = TOCStyle.Hierarchical;
 
 		/// <summary>
-		/// Determines how the collection table of contents will appear in the help browser
+		/// Gets or sets the CollectionTOCStyle property
 		/// </summary>
+		/// <remarks>Determines how the collection table of contents will appear in the help browser</remarks>
 		[Category(DEPLOYMENT_CATEGORY)]
 		[Description("Determines how the collection table of contents will appear in the help browser")]
 		[DefaultValue(TOCStyle.Hierarchical)]
@@ -302,6 +321,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		SdkDocVersion _LinkToSdkDocVersion = SdkDocVersion.SDK_v1_1;
 
 		/// <summary>Gets or sets the LinkToSdkDocVersion property.</summary>
+		/// <remarks>Specifies to which version of the .NET Framework SDK documentation the links to system types will be pointing.</remarks>
 		[Category(HTMLHELP2_CONFIG_CATEGORY)]
 		[Description("Specifies to which version of the .NET Framework SDK documentation the links to system types will be pointing.")]
 		[DefaultValue(SdkDocVersion.SDK_v1_1)]
@@ -317,9 +337,9 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 
 		CharacterSet _CharacterSet = CharacterSet.UTF8;
 		/// <summary>
-		/// Gets or sets the character set that will be used when compiling the help file.
-		/// Defaults to UTF8.
+		/// Gets or sets the CharacterSet property
 		/// </summary>
+		/// <remarks>The character set that will be used when compiling the help file</remarks>
 		[Category(HTMLHELP2_CONFIG_CATEGORY)]
 		[Description("Gets or sets the character set that will be used when compiling the help file")]
 		[DefaultValue(CharacterSet.UTF8)]
@@ -335,7 +355,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		
 		short _LangID = 1033;
 
-		/// <summary>The language ID of the locale used by the compiled helpfile</summary>
+		/// <summary>Gets or sets the LangID property</summary>
+		/// <remarks>The language ID of the locale used by the compiled helpfile</remarks>
 		[Category(HTMLHELP2_CONFIG_CATEGORY)]
 		[Description("The ID of the language the help file is in.")]
 		[DefaultValue(1033)]
@@ -352,7 +373,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 
 		bool _BuildSeparateIndexFile = false;
 
-		/// <summary>If true a seperate index file is generated, otherwise it is compiled into the HxS (recommended)</summary>
+		/// <summary>Gets or sets the BuildSeparateIndexFile property</summary>
+		/// <remarks>If true a seperate index file is generated, otherwise it is compiled into the HxS (recommended)</remarks>
 		[Category(HTMLHELP2_CONFIG_CATEGORY)]
 		[Description("If true, create a separate index file (HxI), otherwise the index is compiled into the HxS file.")]
 		[DefaultValue(false)]
@@ -369,7 +391,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 
 		string _DocSetList = "NETFramework";
 
-		/// <summary>Get's or sets the DocSetList for the help file</summary>
+		/// <summary>Get's or sets the DocSetList property</summary>
+		/// <remarks>A comma-seperated list of DocSet filter identifiers in which topics in this title will included.</remarks>
 		[Category(HTMLHELP2_CONFIG_CATEGORY)]
 		[Description("A comma-seperated list of DocSet filter identifiers in which topics in this title will included.")]
 		[DefaultValue("NETFramework")]
@@ -387,7 +410,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 
 		string _Version = "1.0.0.0";
 
-		/// <summary>Get's or sets the version number for the help file</summary>
+		/// <summary>Get's or sets the version property</summary>
+		/// <remarks>The version number for the help file (#.#.#.#)</remarks>
 		[Category(HTMLHELP2_CONFIG_CATEGORY)]
 		[Description("The version number for the help file (#.#.#.#)")]
 		[DefaultValue("1.0.0.0")]
@@ -405,7 +429,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 
 		bool _CreateFullTextIndex = true;
 
-		/// <summary>If true creates a full text index for the help file</summary>
+		/// <summary>Gets or sets the CreateFullTextIndex property</summary>
+		/// <remarks>If true creates a full text index for the help file</remarks>
 		[Category(HTMLHELP2_CONFIG_CATEGORY)]
 		[Description("If true creates a full text index for the help file")]
 		[DefaultValue(true)]
@@ -422,8 +447,9 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 
 		bool _IncludeDefaultStopWordList = true;
 
-		/// <summary>If true the default stop word list is compiled into the help file. 
-		/// (A stop word list is a list of words that will be ignored during a full text search)</summary>
+		/// <summary>Gets or sets the IncludeDefaultStopWordList property</summary>
+		/// <remarks>If true the default stop word list is compiled into the help file. 
+		/// (A stop word list is a list of words that will be ignored during a full text search)</remarks>
 		[Category(HTMLHELP2_CONFIG_CATEGORY)]
 		[Description("If true the default stop word list is compiled into the help file. (A stop word list is a " +
 			"list of words that will be ignored during a full text search)")]
@@ -441,9 +467,11 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 
 		string _UseHelpNamespaceMappingFile = string.Empty;
 
-		/// <summary>If the documentation includes references to types registered in a seperate html help 2
+		/// <summary>Gets or sets the UseHelpNamespaceMappingFile property.</summary>
+		/// <remarks>If the documentation includes references to types registered in a seperate html help 2 
 		/// namespace, supplying a mapping file allows XLinks to be created to topics within that namespace.
-		/// </summary>
+		/// The schema for the mapping file can be found in the location you installed NDoc in a file named 
+		/// 'NamespaceMap.xsd'</remarks>
 		[Category(HTMLHELP2_CONFIG_CATEGORY)]
 		[Description("If the documentation includes references to types registered in a seperate html help 2 " +
 			 "namespace, supplying a mapping file allows XLinks to be created to topics within that namespace. " +
@@ -466,6 +494,9 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		string _HeaderHtml;
 
 		/// <summary>Gets or sets the HeaderHtml property.</summary>
+		/// <remarks>Raw HTML that is used as a page header instead of the default blue banner. 
+		/// %FILE_NAME%\" is dynamically replaced by the name of the file for the current html page. 
+		/// %TOPIC_TITLE%\" is dynamically replaced by the title of the current page.</remarks>
 		[Category(HTMLHELP2_CONFIG_CATEGORY)]
 		[Description("Raw HTML that is used as a page header instead of the default blue banner. " +
 			 "\"%FILE_NAME%\" is dynamically replaced by the name of the file for the current html page. " +
@@ -485,6 +516,11 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		string _FooterHtml;
 
 		/// <summary>Gets or sets the FooterHtml property.</summary>
+		/// <remarks>Raw HTML that is used as a page footer instead of the default footer.
+		/// %FILE_NAME% is dynamically replaced by the name of the file for the current html page. 
+		/// %ASSEMBLY_NAME% is dynamically replaced by the name of the assembly for the current page.
+		/// %ASSEMBLY_VERSION% is dynamically replaced by the version of the assembly for the current page.
+		/// %TOPIC_TITLE% is dynamically replaced by the title of the current page.</remarks>
 		[Category(HTMLHELP2_CONFIG_CATEGORY)]
 		[Description("Raw HTML that is used as a page footer instead of the default footer." +
 			 "\"%FILE_NAME%\" is dynamically replaced by the name of the file for the current html page. " +
@@ -505,7 +541,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 
 		bool _OmitSyntaxSection = false;
 
-		/// <summary>If true, the syntax section on member topics will not be generated (improves performance)</summary>
+		/// <summary>Gets or sets the OmitSyntaxSection property</summary>
+		/// <remarks>If true, the syntax section on member topics will not be generated (improves performance)</remarks>
 		[Category(HTMLHELP2_CONFIG_CATEGORY)]
 		[Description("If true, the syntax section on member topics will not be generated (improves performance)")]
 		[DefaultValue(false)]
@@ -525,7 +562,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		
 		string _IntroductionPage = string.Empty;
 
-		/// <summary>An HTML page that will be dispayed when the root TOC node is selected</summary>
+		/// <summary>Gets or sets the IntroductionPage property</summary>
+		/// <remarks>An HTML page that will be dispayed when the root TOC node is selected.</remarks>
 		[Category(ADDITIONAL_CONTENT_CATEGORY)]
 		[Description("An HTML page that will be dispayed when the root TOC node is selected")]
 		[DefaultValue("")]
@@ -543,7 +581,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		
 		string _AboutPageInfo = string.Empty;
 
-		/// <summary>Displays product information in Help About.</summary>
+		/// <summary>Gets or sets the AboutPageInfo property</summary>
+		/// <remarks>Displays product information in Help About.</remarks>
 		[Category(ADDITIONAL_CONTENT_CATEGORY)]
 		[Description("Displays product information in Help About.")]
 		[DefaultValue("")]
@@ -561,7 +600,9 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 
 		string _EmptyIndexTermPage = string.Empty;
 
-		/// <summary>Displays when a user chooses a keyword index term that has subkeywords but is not directly associated with a topic itself.</summary>
+		/// <summary>Gets or sets the EmptyIndexTermPage property</summary>
+		/// <remarks>Displays when a user chooses a keyword index term that has 
+		/// subkeywords but is not directly associated with a topic itself.</remarks>
 		[Category(ADDITIONAL_CONTENT_CATEGORY)]
 		[Description("Displays when a user chooses a keyword index term that has subkeywords but is not directly associated with a topic itself.")]
 		[DefaultValue("")]
@@ -579,7 +620,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 
 		string _NavFailPage = string.Empty;
 
-		/// <summary>Opens if a link to a topic or URL is broken.</summary>
+		/// <summary>Gets or sets the NavFailPage property</summary>
+		/// <remarks>Page that opens if a link to a topic or URL is broken.</remarks>
 		[Category(ADDITIONAL_CONTENT_CATEGORY)]
 		[Description("Opens if a link to a topic or URL is broken.")]
 		[DefaultValue("")]
@@ -597,7 +639,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 	
 		string _AboutPageIconPage = string.Empty;
 
-		/// <summary>HTML file that displays the Help About image.</summary>
+		/// <summary>Gets or sets the AboutPageIconPage property</summary>
+		/// <remarks>HTML file that displays the Help About image.</remarks>
 		[Category(ADDITIONAL_CONTENT_CATEGORY)]
 		[Description("HTML file that displays the Help About image.")]
 		[DefaultValue("")]
@@ -615,7 +658,9 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 
 		string _AdditionalContentResourceDirectory = string.Empty;
 
-		/// <summary>Directory that contains resources (images etc.) used by the additional content pages. This directory will be recursively compiled into the help file.</summary>
+		/// <summary>Gets or sets the AdditionalContentResourceDirectory property</summary>
+		/// <remarks>Directory that contains resources (images etc.) used by the additional content pages. 
+		/// This directory will be recursively compiled into the help file.</remarks>
 		[Category(ADDITIONAL_CONTENT_CATEGORY)]
 		[Description("Directory that contains resources (images etc.) used by the additional content pages. This directory will be recursively compiled into the help file.")]
 		[DefaultValue("")]
@@ -637,7 +682,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		#region Extensibility properties
 		string _ExtensibilityStylesheet = string.Empty;
 
-		/// <summary>Path to an xslt stylesheet that contains templates for documenting extensibility tags</summary>
+		/// <summary>Gets or sets the ExtensibilityStylesheet property</summary>
+		/// <remarks>Path to an xslt stylesheet that contains templates for documenting extensibility tags.</remarks>
 		[Category("Extensibility")]
 		[Description("Path to an xslt stylesheet that contains templates for documenting extensibility tags. Refer to the NDoc user's guide for more details on extending NDoc.")]
 		[DefaultValue("")]
