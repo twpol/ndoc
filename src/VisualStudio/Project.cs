@@ -180,7 +180,7 @@ namespace NDoc.VisualStudio
 			return new ProjectConfig(navigator);
 		}
 
-		/// <summary>Gets the relative path (from the project directory) to the
+		/// <summary>Gets the relative path (from the solution directory) to the
 		/// assembly this project generates.</summary>
 		/// <param name="configName">A valid configuration name, usually "Debug" or "Release".</param>
 		public string GetRelativeOutputPathForConfiguration(string configName)
@@ -190,7 +190,7 @@ namespace NDoc.VisualStudio
 				OutputFile);
 		}
 
-		/// <summary>Gets the relative path (from the project directory) to the
+		/// <summary>Gets the relative path (from the solution directory) to the
 		/// XML documentation this project generates.</summary>
 		/// <param name="configName">A valid configuration name, usually "Debug" or "Release".</param>
 		public string GetRelativePathToDocumentationFile(string configName)
