@@ -187,12 +187,18 @@
 
 		<xsl:call-template name="cs-member-syntax-prolog">
 			<xsl:with-param name="lang" select="'Visual Basic'"/>	
-		</xsl:call-template>						
+		</xsl:call-template>		
+		<xsl:if test="parameter">Default&#160;</xsl:if>				
 		<xsl:text>Property&#160;</xsl:text>
 		<xsl:apply-templates select="." mode="vb-property-dir"/>
 		<xsl:choose>
 			<xsl:when test="parameter">
-			
+				<xsl:text>Item&#160;</xsl:text>
+				<xsl:call-template name="parameters">
+					<xsl:with-param name="include-type-links" select="$include-type-links"/>		
+					<xsl:with-param name="lang" select="'Visual Basic'"/>
+					<xsl:with-param name="namespace-name" select="../../@name" />
+				</xsl:call-template>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:value-of select="@name"/>
@@ -212,6 +218,7 @@
 		<xsl:text>WriteOnly&#160;</xsl:text>
 	</xsl:template>
 	
+	
 	<xsl:template match="property" mode="csharp-property-syntax">
 		<xsl:param name="include-type-links"/>
 
@@ -226,7 +233,12 @@
 		
 		<xsl:choose>
 			<xsl:when test="parameter">
-			
+				<xsl:text>this&#160;</xsl:text>			
+				<xsl:call-template name="cs-indexer-params">
+					<xsl:with-param name="include-type-links" select="$include-type-links"/>		
+					<xsl:with-param name="lang" select="'C#'"/>
+					<xsl:with-param name="namespace-name" select="../../@name" />
+				</xsl:call-template>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:value-of select="@name"/>
@@ -317,20 +329,44 @@
 		<xsl:text>set_</xsl:text>
 		<xsl:value-of select="@name"/>
 		<xsl:text>(</xsl:text>
+		<xsl:call-template name="cpp-indexer-params">
+			<xsl:with-param name="include-type-links" select="$include-type-links"/>		
+			<xsl:with-param name="lang" select="'C++'"/>
+			<xsl:with-param name="namespace-name" select="../../@name" />
+		</xsl:call-template>		
+		<xsl:if test="parameter">
+			<xsl:text>&#160;&#160;&#160;</xsl:text>
+		</xsl:if>
 		<xsl:call-template name="return-type">
 			<xsl:with-param name="include-type-links" select="$include-type-links"/>
 			<xsl:with-param name="lang" select="'C++'"/>
 			<xsl:with-param name="type" select="@type"/>
 		</xsl:call-template>					
+		<xsl:if test="parameter">
+			<xsl:text>
+</xsl:text>
+		</xsl:if>
 		<xsl:text>);</xsl:text>
 	</xsl:template>
 		
 	<xsl:template match="property" mode="js-property-syntax">
 		<xsl:param name="include-type-links"/>
 
-		<xsl:apply-templates select="." mode="js-property-dir">
-			<xsl:with-param name="include-type-links" select="$include-type-links"/>		
-		</xsl:apply-templates>				
+		<xsl:choose>
+			<xsl:when test="parameter">
+<xsl:text>In JScript, you can use the default indexed properties defined 
+by a type, but you cannot explicitly define your own. However, 
+specifying the expando attribute on a class automatically 
+provides a default indexed property whose type is Object and 
+whose index type is String.</xsl:text>				
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:apply-templates select="." mode="js-property-dir">
+					<xsl:with-param name="include-type-links" select="$include-type-links"/>		
+				</xsl:apply-templates>				
+			</xsl:otherwise>
+		</xsl:choose>
+			
 	</xsl:template>
 	
 	<xsl:template match="property[@get='true' and @set='true']" mode="js-property-dir">

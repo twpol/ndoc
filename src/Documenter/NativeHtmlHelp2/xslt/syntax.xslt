@@ -382,15 +382,17 @@
 		<xsl:param name="href"/>
 		<xsl:param name="lang"/>
 
-		<xsl:call-template name="cs-syntax-header">
-			<xsl:with-param name="lang" select="$lang"/>		
-		</xsl:call-template>
-		<a href="{$href}">
-			<xsl:call-template name="cs-property-syntax">
-				<xsl:with-param name="lang" select="$lang"/>			
-				<xsl:with-param name="include-type-links" select="false()"/>
+		<xsl:if test="($lang != 'JScript' and parameter) or not(parameter)">
+			<xsl:call-template name="cs-syntax-header">
+				<xsl:with-param name="lang" select="$lang"/>		
 			</xsl:call-template>
-		</a>
+			<a href="{$href}">
+				<xsl:call-template name="cs-property-syntax">
+					<xsl:with-param name="lang" select="$lang"/>			
+					<xsl:with-param name="include-type-links" select="false()"/>
+				</xsl:call-template>
+			</a>
+		</xsl:if>
 	</xsl:template>	
 		
 	<xsl:template match="field" mode="cs-syntax">
@@ -656,87 +658,58 @@
 			</xsl:when>
 		</xsl:choose>		
 	</xsl:template>
-	
-	<xsl:template match="property[parameter]" mode="params">
-		<xsl:param name="include-type-links"/>
-		<xsl:param name="lang"/>
-
-		<xsl:text>this[</xsl:text>
-		<xsl:if test="$include-type-links = true()">
-<xsl:text>
-</xsl:text>
-		</xsl:if>
-		<xsl:for-each select="parameter">
-			<xsl:if test="$include-type-links = true()">
-				<xsl:text>&#160;&#160;&#160;</xsl:text>
-			</xsl:if>
-			<xsl:choose>
-				<xsl:when test="$include-type-links = true()">
-					<xsl:variable name="cs-type">
-						<xsl:call-template name="get-datatype">
-							<xsl:with-param name="datatype" select="@type" />
-							<xsl:with-param name="lang" select="$lang" />									
-						</xsl:call-template>
-					</xsl:variable>
-					<xsl:call-template name="get-link-for-type-name">
-						<xsl:with-param name="type-name" select="@type" />
-						<xsl:with-param name="link-text" select="$cs-type" />
-					</xsl:call-template>	
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:call-template name="get-datatype">
-						<xsl:with-param name="datatype" select="@type" />
-						<xsl:with-param name="lang" select="$lang" />
-					</xsl:call-template>
-				</xsl:otherwise>
-			</xsl:choose>
-			<xsl:if test="$include-type-links = true()">
-				<xsl:text>&#160;</xsl:text>
-				<i>
-					<xsl:value-of select="@name" />
-				</i>
-			</xsl:if>
-			<xsl:if test="position() != last()">
-				<xsl:text>,&#160;</xsl:text>
-				<xsl:if test="$include-type-links = true()">						
-<xsl:text>
-</xsl:text>
-				</xsl:if>
-			</xsl:if>
-		</xsl:for-each>
-		<xsl:if test="$include-type-links = true()">
-<xsl:text>
-</xsl:text>				
-		</xsl:if>
-		<xsl:text>]</xsl:text>
-	
-	</xsl:template>
-	<!-- -->
-	<xsl:template name="value">
-		<xsl:param name="type" />
-		<xsl:variable name="namespace">
-			<xsl:value-of select="concat(../../@name, '.')" />
-		</xsl:variable>
-		<xsl:choose>
-			<xsl:when test="contains($type, $namespace)">
-				<xsl:value-of select="substring-after($type, $namespace)" />
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:call-template name="lang-type">
-					<xsl:with-param name="runtime-type" select="$type" />
-					<xsl:with-param name="lang" select="'C#'"/>
-				</xsl:call-template>
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:template>
 		
 	<!-- -->
+	<xsl:template name="cpp-indexer-params">
+		<xsl:param name="lang"/>
+		<xsl:param name="namespace-name" />
+		<xsl:param name="include-type-links"/>
+		
+		<xsl:call-template name="parameters-list">
+			<xsl:with-param name="lang" select="$lang"/>
+			<xsl:with-param name="namespace-name" select="$namespace-name"/>
+			<xsl:with-param name="include-type-links" select="$include-type-links"/>
+			<xsl:with-param name="open-paren" select="''"/>
+			<xsl:with-param name="close-paren" select="''"/>
+		</xsl:call-template>	
+	</xsl:template>
+
+	<xsl:template name="cs-indexer-params">
+		<xsl:param name="lang"/>
+		<xsl:param name="namespace-name" />
+		<xsl:param name="include-type-links"/>
+		
+		<xsl:call-template name="parameters-list">
+			<xsl:with-param name="lang" select="$lang"/>
+			<xsl:with-param name="namespace-name" select="$namespace-name"/>
+			<xsl:with-param name="include-type-links" select="$include-type-links"/>
+			<xsl:with-param name="open-paren" select="'['"/>
+			<xsl:with-param name="close-paren" select="']'"/>
+		</xsl:call-template>	
+	</xsl:template>
+	
 	<xsl:template name="parameters">
 		<xsl:param name="lang"/>
 		<xsl:param name="namespace-name" />
 		<xsl:param name="include-type-links"/>
 		
-		<xsl:text>(</xsl:text>
+		<xsl:call-template name="parameters-list">
+			<xsl:with-param name="lang" select="$lang"/>
+			<xsl:with-param name="namespace-name" select="$namespace-name"/>
+			<xsl:with-param name="include-type-links" select="$include-type-links"/>
+			<xsl:with-param name="open-paren" select="'('"/>
+			<xsl:with-param name="close-paren" select="')'"/>
+		</xsl:call-template>
+	</xsl:template>
+	
+	<xsl:template name="parameters-list">
+		<xsl:param name="lang"/>
+		<xsl:param name="namespace-name" />
+		<xsl:param name="include-type-links"/>
+		<xsl:param name="open-paren"/>
+		<xsl:param name="close-paren"/>
+		
+		<xsl:value-of select="$open-paren"/>
 		<xsl:if test="parameter">
 			<xsl:for-each select="parameter">
 				<xsl:if test="$include-type-links=true()">
@@ -781,7 +754,8 @@
 						<xsl:value-of select="@name" />
 					</i>
 				</xsl:if>
-				<xsl:if test="position()!= last()">
+				<!-- c++ indexer setters also include the return type in the param list -->
+				<xsl:if test="position()!= last() or ($lang='C++' and parent::node()[local-name()='property'])">
 					<xsl:text>,</xsl:text>
 				</xsl:if>
 			</xsl:for-each>
@@ -793,8 +767,9 @@
 </xsl:text>
 			</xsl:if>
 		</xsl:if>
-		<xsl:text>)</xsl:text>	
+		<xsl:value-of select="$close-paren"/>
 	</xsl:template>
+	
 	<!-- -->
 	<xsl:template name="get-datatype">
 		<xsl:param name="datatype" />
