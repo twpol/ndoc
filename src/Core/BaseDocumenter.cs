@@ -194,20 +194,62 @@ namespace NDoc.Core
 		/// <summary>See <see cref="IDocumenter"/>.</summary>
 		abstract public void Build(Project project);
 
+		/// <summary>
+		/// Setup AssemblyResolver for case where system doesn't resolve
+		/// an assembly automatically.
+		/// This puts in the directories in ReferencesPath, and the directories
+		/// to each assembly referenced in the project.
+		/// </summary>
+		/// <remarks>
+		/// <para>The case which forced this to be so thorough is when an assembly 
+		/// references an unmanaged (native) dll.  When the assembly is loaded,
+		/// the system must also find the unmanaged dll.  The rules for
+		/// finding the unmanaged dll are apparently just like any other application:
+		/// current working directory, the path environment variable, etc. </para>
+		/// <para>So in order to handle that case, we have to install an
+		/// AssemblyResolver that catches the resolution failure, and uses
+		/// an assembly load function that cd's to the directory which hopefully
+		/// contains the unmanaged dll (see LoadAssembly()).  So in this
+		/// case I'm assuming that the directory containing the referencing
+		/// assembly also contains the unmanaged dll.</para>
+		/// </remarks>
+		/// <param name="project"></param>
+		protected AssemblyResolver SetupAssemblyResolver(Project project)
+		{
+			ArrayList assemblyResolveDirs = new ArrayList();
+
+			// add references path
+			if ((MyConfig.ReferencesPath != null) && (MyConfig.ReferencesPath != string.Empty))
+			{
+				string[] dirs = MyConfig.ReferencesPath.Split(';');
+				foreach(string dir in dirs)
+				{
+					if (!assemblyResolveDirs.Contains(dir))
+						assemblyResolveDirs.Add(dir);
+				}
+			}
+
+			// put dirs containing assemblies in also
+			foreach(AssemblySlashDoc assemblySlashDoc in project.GetAssemblySlashDocs())
+			{
+				string dir = Path.GetDirectoryName(assemblySlashDoc.AssemblyFilename);
+				if (!assemblyResolveDirs.Contains(dir)) assemblyResolveDirs.Add(dir);
+			}
+			AssemblyResolver assemblyResolver = new AssemblyResolver(assemblyResolveDirs);
+
+			// For performance, don't have resolver search all subdirs.  Also, it's not
+			// clear that's a reasonable behavior.
+			assemblyResolver.IncludeSubdirs = false; 
+			assemblyResolver.Install();
+
+			return(assemblyResolver);
+		}
+
 		/// <summary>Builds an XmlDocument combining the reflected metadata with the /doc comments.</summary>
 		protected void MakeXml(Project project)
 		{
 			_Project = project;
-
-			AssemblyResolver assemblyResolver = null;
-
-			string referencesPath = MyConfig.ReferencesPath;
-
-			if (string.Empty != referencesPath)
-			{
-				assemblyResolver = new AssemblyResolver(referencesPath);
-				assemblyResolver.Install();
-			}
+			AssemblyResolver assemblyResolver = SetupAssemblyResolver(project);
 
 			// Sucks that there's no XmlNodeWriter. Instead we
 			// have to write out to a file then load back in.
@@ -874,7 +916,7 @@ namespace NDoc.Core
 			WriteCustomAttributes(writer, type);
 			WriteBaseType(writer, type.BaseType);
 
-			Debug.Assert(implementations == null);
+			//Debug.Assert(implementations == null);
 			implementations = new ImplementsCollection();
 
 			//build a collection of the base type's interfaces
@@ -1250,7 +1292,7 @@ namespace NDoc.Core
 				}
 			}
 
-			Debug.Assert(implementations == null);
+			//Debug.Assert(implementations == null);
 
 			WriteFields(writer, type);
 			WriteProperties(writer, type);
@@ -2609,19 +2651,28 @@ namespace NDoc.Core
 		/// This method doesn't lock the assembly file.</remarks>
 		public static Assembly LoadAssembly(string filename)
 		{
-//			if (!File.Exists(filename))
-//			{
-//				throw new ApplicationException("can't find assembly " + filename);
-//			}
-//
-//			FileStream fs = File.Open(filename, FileMode.Open, FileAccess.Read);
-//			byte[] buffer = new byte[fs.Length];
-//			fs.Read(buffer, 0, (int)fs.Length);
-//			fs.Close();
-//
-//			return Assembly.Load(buffer);
+			// apparently need to cd there if it references native dlls
+			// (and those dlls are in that dir)
+			string oldDir = Directory.GetCurrentDirectory();
+			Directory.SetCurrentDirectory(Path.GetDirectoryName(filename));
 
-			return Assembly.LoadFrom(filename);
+			Trace.WriteLine(String.Format("LoadAssembly: Trying to load {0}", filename));
+			Assembly assy = null;
+			try
+			{
+				assy = Assembly.LoadFrom(filename);
+			}
+			catch(Exception e)
+			{
+				Directory.SetCurrentDirectory(oldDir);
+				Console.WriteLine("Error: LoadAssembly: Unable to load assembly {0}",
+					filename);
+				Console.WriteLine("Error: LoadAssembly: Exception is {0}", e.ToString());
+				throw e;
+			}
+
+			Directory.SetCurrentDirectory(oldDir);
+			return(assy);
 		}
 	}
 }
