@@ -971,7 +971,8 @@ namespace NDoc.Gui
 			
 			writer.WriteStartElement("ndoc.gui");
 			WriteRecentProjects(writer);
-			writer.WriteElementString("documenter", ((IDocumenter)project.Documenters[comboBoxDocumenters.SelectedIndex]).Name);
+			if (comboBoxDocumenters.SelectedIndex != -1)
+				writer.WriteElementString("documenter", ((IDocumenter)project.Documenters[comboBoxDocumenters.SelectedIndex]).Name);
 			writer.WriteStartElement("window");
 			writer.WriteAttributeString("left", this.Location.X.ToString());
 			writer.WriteAttributeString("top", this.Location.Y.ToString());
@@ -1122,25 +1123,11 @@ namespace NDoc.Gui
 
 		private void RefreshPropertyGrid()
 		{
-			#warning This code assumes there is always more than one documenter.
-
-			// Can't figure out how to get the propertyGrid to update
-			// to the newly updated documenter except for the hack
-			// below.  Tried Refresh(), Reset(), Invalidate()/Update().
-			int currentIndex = comboBoxDocumenters.SelectedIndex;
-			if (currentIndex != 0)
-			{
+			if ((comboBoxDocumenters.SelectedIndex == -1)
+				&& (comboBoxDocumenters.Items.Count > 0))
 				comboBoxDocumenters.SelectedIndex = 0;
-			}
-			else
-			{
-				comboBoxDocumenters.SelectedIndex = 1;
-			}
 
-			if (currentIndex != -1)
-			{
-				comboBoxDocumenters.SelectedIndex = currentIndex;
-			}
+			SelectedDocumenterChanged();
 		}
 		#endregion // Methods
 
@@ -1781,14 +1768,22 @@ namespace NDoc.Gui
 
 		private void comboBoxDocumenters_SelectedIndexChanged (object sender, System.EventArgs e)
 		{
+			SelectedDocumenterChanged();
+		}
+
+		private void SelectedDocumenterChanged()
+		{
 			if (propertyGrid.SelectedObject != null)
 			{
 				((IDocumenterConfig)propertyGrid.SelectedObject).SetProject(null);
 			}
 
-			IDocumenterConfig documenterConfig = ((IDocumenter)project.Documenters[comboBoxDocumenters.SelectedIndex]).Config;
-			documenterConfig.SetProject(project);
-			propertyGrid.SelectedObject = documenterConfig;
+			if (comboBoxDocumenters.SelectedIndex != -1)
+			{
+				IDocumenterConfig documenterConfig = ((IDocumenter)project.Documenters[comboBoxDocumenters.SelectedIndex]).Config;
+				documenterConfig.SetProject(project);
+				propertyGrid.SelectedObject = documenterConfig;
+			}
 		}
 
 		private DialogResult PromptToSave()
