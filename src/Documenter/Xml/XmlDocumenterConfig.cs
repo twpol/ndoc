@@ -26,6 +26,23 @@ using NDoc.Core;
 namespace NDoc.Documenter.Xml
 {
 	/// <summary>The XmlDocumenter config class.</summary>
+	/// <remarks>	
+	/// <para>
+	/// The XML Documenter is the simplest of the NDoc Documenters. It is primarily 
+	/// a development tool.
+	/// </para>
+	/// <para>
+	/// As part of the documentation compile process, NDoc merges the type information 
+	///	in the assemblies being documented with the code comment summary XML document that the
+	///	<a href="ms-help://MS.NETFrameworkSDKv1.1/cscomp/html/vcerrDocProcessDocumentationComments.htm">
+	///	/doc compiler option</a> emits. The XML Documenter allows you to save this merged 
+	///	set of data for curiosity&#39;s sake or debugging purposes. 
+	///	</para>
+	/// <para>
+	/// Used in conjunction with the <b>UseNDocXmlFile</b> setting, this is especially 
+	///	useful when you are working on your own documenters.
+	///	</para>
+	///	</remarks>
 	public class XmlDocumenterConfig : BaseDocumenterConfig
 	{
 		/// <summary>Initializes a new instance of the XmlDocumenterConfig class.</summary>
@@ -34,9 +51,12 @@ namespace NDoc.Documenter.Xml
 			OutputFile = string.Format( ".{0}doc{0}doc.xml", Path.DirectorySeparatorChar );
 		}
 
-		string _OutputFile;
+		private string _OutputFile;
 
 		/// <summary>Gets or sets the OutputFile property.</summary>
+		/// <remarks>This is the path and filename of the file where 
+		/// the merged documentation will be written. This can be 
+		/// absolute or relative from the .ndoc project file.</remarks>
 		[Category("Documentation Main Settings")]
 		[Description("The path to the XML file to create which will be the combined /doc output and reflection information.")]
 		[Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
