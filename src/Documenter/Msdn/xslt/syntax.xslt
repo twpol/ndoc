@@ -88,10 +88,12 @@
 				<xsl:text>new&#160;</xsl:text>
 			</xsl:if>
 			<xsl:if test="not(parent::interface or @interface)">
-				<xsl:call-template name="method-access">
-					<xsl:with-param name="access" select="@access" />
-				</xsl:call-template>
-				<xsl:text>&#160;</xsl:text>
+				<xsl:if test="(local-name()!='constructor') or (@contract!='Static')">
+					<xsl:call-template name="method-access">
+						<xsl:with-param name="access" select="@access" />
+					</xsl:call-template>
+					<xsl:text>&#160;</xsl:text>
+				</xsl:if>
 				<xsl:if test="@contract and @contract!='Normal' and @contract!='Final'">
 					<xsl:call-template name="contract">
 						<xsl:with-param name="contract" select="@contract" />
@@ -174,10 +176,12 @@
 			<xsl:text>new&#160;</xsl:text>
 		</xsl:if>
 		<xsl:if test="not(parent::interface)">
-			<xsl:call-template name="method-access">
-				<xsl:with-param name="access" select="@access" />
-			</xsl:call-template>
-			<xsl:text>&#160;</xsl:text>
+			<xsl:if test="(local-name()!='constructor') or (@contract!='Static')">
+				<xsl:call-template name="method-access">
+					<xsl:with-param name="access" select="@access" />
+				</xsl:call-template>
+				<xsl:text>&#160;</xsl:text>
+			</xsl:if>
 			<xsl:if test="@contract and @contract!='Normal' and @contract!='Final'">
 				<xsl:call-template name="contract">
 					<xsl:with-param name="contract" select="@contract" />

@@ -22,7 +22,14 @@
   <!-- -->
   <xsl:template name="get-filename-for-current-constructor">
     <!-- .#ctor or .#cctor -->
-    <xsl:value-of select="concat(translate(substring-after(substring-before(@id, '.#c'), 'M:'), '[,]', ''), 'Constructor', @overload, '.html')" />
+    <xsl:choose>
+		<xsl:when test="@contract != 'Static'">
+		    <xsl:value-of select="concat(translate(substring-after(substring-before(@id, '.#c'), 'M:'), '[,]', ''), 'Constructor', @overload, '.html')" />
+		</xsl:when>
+		<xsl:otherwise>
+		    <xsl:value-of select="concat(translate(substring-after(substring-before(@id, '.#c'), 'M:'), '[,]', ''), 'StaticConstructor', @overload, '.html')" />
+		</xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
   <!-- -->
   <xsl:template name="get-filename-for-type-members">

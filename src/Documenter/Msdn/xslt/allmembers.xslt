@@ -88,6 +88,14 @@
 						<xsl:with-param name="member" select="'event'" />
 					</xsl:call-template>
 					<!-- private static members -->
+					<xsl:if test="constructor[@access='Private' and @contract='Static']">
+						<h4 class="dtH4">Private Static Constructor</h4>
+						<div class="tablediv">
+							<table class="dtTABLE" cellspacing="0">
+								<xsl:apply-templates select="constructor[@access='Private' and @contract='Static']" />
+							</table>
+						</div>
+					</xsl:if>
 					<xsl:call-template name="private-static-section">
 						<xsl:with-param name="member" select="'field'" />
 					</xsl:call-template>
@@ -101,11 +109,11 @@
 						<xsl:with-param name="member" select="'event'" />
 					</xsl:call-template>
 					<!-- public instance members -->
-					<xsl:if test="constructor[@access='Public']">
+					<xsl:if test="constructor[@access='Public' and @contract='Normal']">
 						<h4 class="dtH4">Public Instance Constructors</h4>
 						<div class="tablediv">
 							<table class="dtTABLE" cellspacing="0">
-								<xsl:apply-templates select="constructor[@access='Public']" />
+								<xsl:apply-templates select="constructor[@access='Public' and @contract='Normal']" />
 							</table>
 						</div>
 					</xsl:if>
@@ -122,11 +130,11 @@
 						<xsl:with-param name="member" select="'event'" />
 					</xsl:call-template>
 					<!-- protected instance members -->
-					<xsl:if test="constructor[@access='Family']">
+					<xsl:if test="constructor[@access='Family' and @contract='Normal']">
 						<h4 class="dtH4">Protected Instance Constructors</h4>
 						<div class="tablediv">
 							<table class="dtTABLE" cellspacing="0">
-								<xsl:apply-templates select="constructor[@access='Family']" />
+								<xsl:apply-templates select="constructor[@access='Family' and @contract='Normal']" />
 							</table>
 						</div>
 					</xsl:if>
@@ -143,11 +151,11 @@
 						<xsl:with-param name="member" select="'event'" />
 					</xsl:call-template>
 					<!-- protected internal instance members -->
-					<xsl:if test="constructor[@access='FamilyOrAssembly']">
+					<xsl:if test="constructor[@access='FamilyOrAssembly' and @contract='Normal']">
 						<h4 class="dtH4">Protected Internal Instance Constructors</h4>
 						<div class="tablediv">
 							<table class="dtTABLE" cellspacing="0">
-								<xsl:apply-templates select="constructor[@access='FamilyOrAssembly']" />
+								<xsl:apply-templates select="constructor[@access='FamilyOrAssembly' and @contract='Normal']" />
 							</table>
 						</div>
 					</xsl:if>
@@ -164,11 +172,11 @@
 						<xsl:with-param name="member" select="'event'" />
 					</xsl:call-template>
 					<!-- internal instance members -->
-					<xsl:if test="constructor[@access='Assembly']">
+					<xsl:if test="constructor[@access='Assembly' and @contract='Normal']">
 						<h4 class="dtH4">Internal Instance Constructors</h4>
 						<div class="tablediv">
 							<table class="dtTABLE" cellspacing="0">
-								<xsl:apply-templates select="constructor[@access='Assembly']" />
+								<xsl:apply-templates select="constructor[@access='Assembly' and @contract='Normal']" />
 							</table>
 						</div>
 					</xsl:if>
@@ -185,11 +193,11 @@
 						<xsl:with-param name="member" select="'event'" />
 					</xsl:call-template>
 					<!-- private instance members -->
-					<xsl:if test="constructor[@access='Private']">
+					<xsl:if test="constructor[@access='Private' and @contract='Normal']">
 						<h4 class="dtH4">Private Instance Constructors</h4>
 						<div class="tablediv">
 							<table class="dtTABLE" cellspacing="0">
-								<xsl:apply-templates select="constructor[@access='Private']" />
+								<xsl:apply-templates select="constructor[@access='Private' and @contract='Normal']" />
 							</table>
 						</div>
 					</xsl:if>
@@ -242,9 +250,10 @@
 	<xsl:template match="constructor">
 		<xsl:variable name="access" select="@access" />
 		<xsl:if test="not(preceding-sibling::constructor[@access=$access])">
+			<xsl:variable name="contract" select="@contract" />
 			<tr VALIGN="top">
 				<xsl:choose>
-					<xsl:when test="count(../constructor) &gt; 1">
+					<xsl:when test="(count(../constructor[@contract!='Static']) &gt; 1) and ($contract!='Static')">
 						<td width="50%">
 						  <xsl:choose>
 							<xsl:when test="@access='Public'">
@@ -299,6 +308,9 @@
 								<img src="intmethod.gif" />
 							</xsl:when>
 						  </xsl:choose>
+						  <xsl:if test="$contract='Static'">
+							 <img src="static.gif" />
+						  </xsl:if>
 							<a>
 								<xsl:attribute name="href">
 									<xsl:call-template name="get-filename-for-current-constructor" />

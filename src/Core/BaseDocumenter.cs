@@ -426,7 +426,7 @@ namespace NDoc.Core
 		{
 			// Methods containing '.' in their name that aren't constructors are probably
 			// explicit interface implementations, we check whether we document those or not.
-			if((method.Name.IndexOf('.') != -1 && method.Name != ".ctor"))
+			if((method.Name.IndexOf('.') != -1) && (method.Name != ".ctor") && (method.Name != ".cctor"))
 			{
 				string interfaceName = null;
 				int lastIndexOfDot = method.Name.LastIndexOf('.');
@@ -1018,6 +1018,7 @@ namespace NDoc.Core
 			}
 
 			WriteConstructors(writer, type);
+			WriteStaticConstructor(writer, type);
 			WriteFields(writer, type);
 			WriteProperties(writer, type);
 			WriteMethods(writer, type);
@@ -1158,6 +1159,24 @@ namespace NDoc.Core
 				if (MustDocumentMethod(constructor))
 				{
 					WriteConstructor(writer, constructor, overload++);
+				}
+			}
+		}
+
+		private void WriteStaticConstructor(XmlWriter writer, Type type)
+		{
+			const BindingFlags bindingFlags =
+					  BindingFlags.Static |
+					  BindingFlags.Public |
+					  BindingFlags.NonPublic;
+
+			ConstructorInfo[] constructors = type.GetConstructors(bindingFlags);
+
+			foreach (ConstructorInfo constructor in constructors)
+			{
+				if (MustDocumentMethod(constructor))
+				{
+					WriteConstructor(writer, constructor, 0);
 				}
 			}
 		}
@@ -1618,6 +1637,7 @@ namespace NDoc.Core
 			writer.WriteAttributeString("name", constructor.Name);
 			writer.WriteAttributeString("id", memberName);
 			writer.WriteAttributeString("access", GetMethodAccessValue(constructor));
+			writer.WriteAttributeString("contract", GetMethodContractValue(constructor));
 
 			if (overload > 0)
 			{
@@ -2503,8 +2523,16 @@ namespace NDoc.Core
 						|| summary.InnerText.Length == 0)
 					{
 						WriteStartDocumentation(writer);
-						writer.WriteElementString("summary", "Initializes a new instance of the " 
-							+ constructor.DeclaringType.Name + " class.");
+						if (constructor.IsStatic)
+						{
+							writer.WriteElementString("summary", "Initializes the static fields of the " 
+								+ constructor.DeclaringType.Name + " class.");
+						}
+						else
+						{
+							writer.WriteElementString("summary", "Initializes a new instance of the " 
+								+ constructor.DeclaringType.Name + " class.");
+						}
 						return true;
 					}
 				}

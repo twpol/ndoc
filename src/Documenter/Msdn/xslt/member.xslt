@@ -34,6 +34,7 @@
 				    </xsl:with-param>
 			    </xsl:call-template>
 				</xsl:when>
+				<xsl:when test="@contract='Static'">Static Constructor</xsl:when>
 				<xsl:otherwise>Constructor</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>

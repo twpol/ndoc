@@ -864,7 +864,7 @@ namespace NDoc.Documenter.Msdn
 
 			typeName = typeNode.Attributes["name"].Value;
 			typeID = typeNode.Attributes["id"].Value;
-			constructorNodes = typeNode.SelectNodes("constructor");
+			constructorNodes = typeNode.SelectNodes("constructor[@contract!='Static']");
 
 			// If the constructor is overloaded then make an overload page.
 			if (constructorNodes.Count > 1)
@@ -904,6 +904,19 @@ namespace NDoc.Documenter.Msdn
 			if (constructorNodes.Count > 1)
 			{
 				htmlHelp.CloseBookInContents();
+			}
+
+			XmlNode staticConstructorNode = typeNode.SelectSingleNode("constructor[@contract='Static']");
+			if (staticConstructorNode != null)
+			{
+				constructorID = staticConstructorNode.Attributes["id"].Value;
+				fileName = GetFilenameForConstructor(staticConstructorNode);
+
+				htmlHelp.AddFileToContents(typeName + " Static Constructor", fileName);
+
+				XsltArgumentList arguments = new XsltArgumentList();
+				arguments.AddParam("member-id", String.Empty, constructorID);
+				TransformAndWriteResult(xsltMember, arguments, fileName);
 			}
 		}
 
@@ -1512,6 +1525,8 @@ namespace NDoc.Documenter.Msdn
 			int dotHash = constructorID.IndexOf(".#"); // constructors could be #ctor or #cctor
 
 			string fileName = constructorID.Substring(2, dotHash - 2);
+			if (constructorNode.Attributes["contract"].Value == "Static")
+				fileName += "Static";
 
 			fileName += "Constructor";
 
