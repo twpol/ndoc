@@ -66,7 +66,7 @@ namespace NDoc.Core.Reflection
 		/// <param name="rep">ReflectionEngine Parameters.</param>
 		/// <param name="assemblyFile">Assembly file name.</param>
 		/// <returns></returns>
-		public SortedList GetNamespacesFromAssembly(ReflectionEngineParameters rep,string assemblyFile)
+		public SortedList GetNamespacesFromAssembly(ReflectionEngineParameters rep, string assemblyFile)
 		{
 			this.rep = rep;
 			assemblyLoader = SetupAssemblyLoader();
@@ -82,7 +82,7 @@ namespace NDoc.Core.Reflection
 					if (ns == null)
 					{
 						if ((!namespaces.ContainsKey("(global)")))
-							namespaces.Add("(global)",null);
+							namespaces.Add("(global)", null);
 					}
 					else
 					{
@@ -94,33 +94,33 @@ namespace NDoc.Core.Reflection
 
 				return namespaces;
 			}
-			catch(ReflectionTypeLoadException rtle)
+			catch (ReflectionTypeLoadException rtle)
 			{
 				StringBuilder sb = new StringBuilder();
-				if (assemblyLoader.UnresolvedAssemblies.Count>0)
+				if (assemblyLoader.UnresolvedAssemblies.Count > 0)
 				{
 					sb.Append("One or more required assemblies could not be located : \n");
-					foreach(string ass in assemblyLoader.UnresolvedAssemblies)
+					foreach (string ass in assemblyLoader.UnresolvedAssemblies)
 					{
-						sb.AppendFormat("   {0}\n",ass);
+						sb.AppendFormat("   {0}\n", ass);
 					}
 					sb.Append("\nThe following directories were searched, \n");
-					foreach(string dir in assemblyLoader.SearchedDirectories)
+					foreach (string dir in assemblyLoader.SearchedDirectories)
 					{
-						sb.AppendFormat("   {0}\n",dir);
+						sb.AppendFormat("   {0}\n", dir);
 					}
 				}
 				else
 				{
 					Hashtable fileLoadExceptions = new Hashtable();
-					foreach(Exception loaderEx in rtle.LoaderExceptions)
+					foreach (Exception loaderEx in rtle.LoaderExceptions)
 					{
 						System.IO.FileLoadException fileLoadEx = loaderEx as System.IO.FileLoadException;
-						if (fileLoadEx !=null)
+						if (fileLoadEx != null)
 						{
 							if (!fileLoadExceptions.ContainsKey(fileLoadEx.FileName))
 							{
-								fileLoadExceptions.Add(fileLoadEx.FileName,null);
+								fileLoadExceptions.Add(fileLoadEx.FileName, null);
 								sb.Append("Unable to load: " + fileLoadEx.FileName + "\r\n");
 							}
 						}
@@ -263,33 +263,33 @@ namespace NDoc.Core.Reflection
 					}
 				}
 			}
-			catch(ReflectionTypeLoadException rtle)
+			catch (ReflectionTypeLoadException rtle)
 			{
 				StringBuilder sb = new StringBuilder();
-				if (assemblyLoader.UnresolvedAssemblies.Count>0)
+				if (assemblyLoader.UnresolvedAssemblies.Count > 0)
 				{
 					sb.Append("One or more required assemblies could not be located : \n");
-					foreach(string ass in assemblyLoader.UnresolvedAssemblies)
+					foreach (string ass in assemblyLoader.UnresolvedAssemblies)
 					{
-						sb.AppendFormat("   {0}\n",ass);
+						sb.AppendFormat("   {0}\n", ass);
 					}
 					sb.Append("\nThe following directories were searched, \n");
-					foreach(string dir in assemblyLoader.SearchedDirectories)
+					foreach (string dir in assemblyLoader.SearchedDirectories)
 					{
-						sb.AppendFormat("   {0}\n",dir);
+						sb.AppendFormat("   {0}\n", dir);
 					}
 				}
 				else
 				{
 					Hashtable fileLoadExceptions = new Hashtable();
-					foreach(Exception loaderEx in rtle.LoaderExceptions)
+					foreach (Exception loaderEx in rtle.LoaderExceptions)
 					{
 						System.IO.FileLoadException fileLoadEx = loaderEx as System.IO.FileLoadException;
-						if (fileLoadEx !=null)
+						if (fileLoadEx != null)
 						{
 							if (!fileLoadExceptions.ContainsKey(fileLoadEx.FileName))
 							{
-								fileLoadExceptions.Add(fileLoadEx.FileName,null);
+								fileLoadExceptions.Add(fileLoadEx.FileName, null);
 								sb.Append("Unable to load: " + fileLoadEx.FileName + "\r\n");
 							}
 						}
@@ -301,6 +301,9 @@ namespace NDoc.Core.Reflection
 				throw new DocumenterException(sb.ToString());
 			}
 		}
+
+
+		#region Global Xml Elements
 
 		// writes out the default thead safety settings for the project
 		private void WriteDefaultThreadSafety(XmlWriter writer)
@@ -337,6 +340,10 @@ namespace NDoc.Core.Reflection
 			writer.WriteEndElement();
 		}
 
+		#endregion
+
+		#region EditorBrowsable filter
+
 		//checks if the member has been flagged with the 
 		//EditorBrowsableState.Never value
 		private bool IsEditorBrowsable(MemberInfo minfo)
@@ -363,6 +370,10 @@ namespace NDoc.Core.Reflection
 			}
 		}
 
+		#endregion
+
+		#region MustDocument * filters
+
 		private bool MustDocumentType(Type type)
 		{
 			Type declaringType = type.DeclaringType;
@@ -377,14 +388,14 @@ namespace NDoc.Core.Reflection
 #if NET_2_0
 			//If the type has a CompilerGenerated attribute then we don't want to document it 
 			//as it is an internal artifact of the compiler
-			if (type.IsDefined(typeof(System.Runtime.CompilerServices.CompilerGeneratedAttribute),false))
+			if (type.IsDefined(typeof(System.Runtime.CompilerServices.CompilerGeneratedAttribute), false))
 			{
 				return false;
 			}
 #else
 			//HACK: exclude Net 2.0 compiler generated iterators
 			//These are nested classes with name starting with "<"
-			if (type.DeclaringType!=null && type.Name.StartsWith("<"))
+			if (type.DeclaringType != null && type.Name.StartsWith("<"))
 			{
 				return false;
 			}
@@ -399,7 +410,7 @@ namespace NDoc.Core.Reflection
 					return false;
 				// There are a group of *public* interfaces in System.Runtime.InteropServices
 				// that are not documented by MS and should be considered internal to the framework...
-				if (type.IsInterface && type.Namespace=="System.Runtime.InteropServices" && type.Name.StartsWith("_"))
+				if (type.IsInterface && type.Namespace == "System.Runtime.InteropServices" && type.Name.StartsWith("_"))
 					return false;
 			}
 
@@ -428,7 +439,7 @@ namespace NDoc.Core.Reflection
 			//Finalize method; all code you write in the destructor is 
 			//actually written to the finalize method. So, we will filter
 			//it out of the documentation by default...
-			if (method.Name=="__dtor") 
+			if (method.Name == "__dtor") 
 				return false;
 			
 			//check the basic visibility options
@@ -468,7 +479,7 @@ namespace NDoc.Core.Reflection
 			// explicit interface implementations, we check whether we document those or not.
 			if ((method.Name.IndexOf('.') != -1) && 
 				(method.Name != ".ctor") && 
-				(method.Name != ".cctor") &&
+				(method.Name != ".cctor") && 
 				this.rep.DocumentExplicitInterfaceImplementations)
 			{
 				string interfaceName = null;
@@ -597,6 +608,10 @@ namespace NDoc.Core.Reflection
 			return IsEditorBrowsable(field);
 		}
 
+		#endregion
+
+		#region IsHidden\IsHiding
+		
 		private bool IsHidden(MemberInfo member, Type type)
 		{
 			if (member.DeclaringType == member.ReflectedType)
@@ -750,6 +765,9 @@ namespace NDoc.Core.Reflection
 			return true;
 		}
 
+		#endregion
+
+		#region Assembly
 		private void WriteAssembly(XmlWriter writer, Assembly assembly)
 		{
 			AssemblyName assemblyName = assembly.GetName();
@@ -757,14 +775,14 @@ namespace NDoc.Core.Reflection
 			writer.WriteStartElement("assembly");
 			writer.WriteAttributeString("name", assemblyName.Name);
 
-			if (this.rep.AssemblyVersionInfo==AssemblyVersionInformationType.AssemblyVersion)
+			if (this.rep.AssemblyVersionInfo == AssemblyVersionInformationType.AssemblyVersion)
 			{
 				writer.WriteAttributeString("version", assemblyName.Version.ToString());
 			}
-			if (this.rep.AssemblyVersionInfo==AssemblyVersionInformationType.AssemblyFileVersion)
+			if (this.rep.AssemblyVersionInfo == AssemblyVersionInformationType.AssemblyFileVersion)
 			{
-				object[] attrs = assembly.GetCustomAttributes(typeof(AssemblyFileVersionAttribute),false);
-				if (attrs.Length>0)
+				object[] attrs = assembly.GetCustomAttributes(typeof(AssemblyFileVersionAttribute), false);
+				if (attrs.Length > 0)
 				{
 					string version = ((AssemblyFileVersionAttribute)attrs[0]).Version;
 					writer.WriteAttributeString("version", version);
@@ -780,7 +798,9 @@ namespace NDoc.Core.Reflection
 
 			writer.WriteEndElement(); // assembly
 		}
+		#endregion
 
+		#region Module
 		/// <summary>Writes documentation about a module out as XML.</summary>
 		/// <param name="writer">XmlWriter to write on.</param>
 		/// <param name="module">Module to document.</param>
@@ -792,7 +812,9 @@ namespace NDoc.Core.Reflection
 			WriteNamespaces(writer, module);
 			writer.WriteEndElement();
 		}
+		#endregion
 
+		#region Namespace
 		private void WriteNamespaces(XmlWriter writer, Module module)
 		{
 			Type[] types = module.GetTypes();
@@ -890,7 +912,9 @@ namespace NDoc.Core.Reflection
 				}
 			}
 		}
+		#endregion
 
+		#region TypeCollections
 		private int WriteClasses(XmlWriter writer, Type[] types, string namespaceName)
 		{
 			int nbWritten = 0;
@@ -902,9 +926,9 @@ namespace NDoc.Core.Reflection
 					type.Namespace == namespaceName) 
 				{
 					string typeID = MemberID.GetMemberID(type);
-					if(!documentedTypes.ContainsKey(typeID))
+					if (!documentedTypes.ContainsKey(typeID))
 					{
-						documentedTypes.Add(typeID,null);
+						documentedTypes.Add(typeID, null);
 						if (MustDocumentType(type))
 						{
 							bool hiding = ((type.MemberType & MemberTypes.NestedType) != 0)
@@ -934,9 +958,9 @@ namespace NDoc.Core.Reflection
 					MustDocumentType(type))
 				{
 					string typeID = MemberID.GetMemberID(type);
-					if(!documentedTypes.ContainsKey(typeID))
+					if (!documentedTypes.ContainsKey(typeID))
 					{
-						documentedTypes.Add(typeID,null);
+						documentedTypes.Add(typeID, null);
 						WriteInterface(writer, type);
 						nbWritten++;
 					}
@@ -962,9 +986,9 @@ namespace NDoc.Core.Reflection
 					MustDocumentType(type))
 				{
 					string typeID = MemberID.GetMemberID(type);
-					if(!documentedTypes.ContainsKey(typeID))
+					if (!documentedTypes.ContainsKey(typeID))
 					{
-						documentedTypes.Add(typeID,null);
+						documentedTypes.Add(typeID, null);
 						bool hiding = ((type.MemberType & MemberTypes.NestedType) != 0)
 							&& IsHiding(type, type.DeclaringType);
 						WriteClass(writer, type, hiding);
@@ -992,9 +1016,9 @@ namespace NDoc.Core.Reflection
 					MustDocumentType(type))
 				{
 					string typeID = MemberID.GetMemberID(type);
-					if(!documentedTypes.ContainsKey(typeID))
+					if (!documentedTypes.ContainsKey(typeID))
 					{
-						documentedTypes.Add(typeID,null);
+						documentedTypes.Add(typeID, null);
 						WriteDelegate(writer, type);
 						nbWritten++;
 					}
@@ -1019,9 +1043,9 @@ namespace NDoc.Core.Reflection
 					MustDocumentType(type))
 				{
 					string typeID = MemberID.GetMemberID(type);
-					if(!documentedTypes.ContainsKey(typeID))
+					if (!documentedTypes.ContainsKey(typeID))
 					{
-						documentedTypes.Add(typeID,null);
+						documentedTypes.Add(typeID, null);
 						WriteEnumeration(writer, type);
 						nbWritten++;
 					}
@@ -1041,6 +1065,8 @@ namespace NDoc.Core.Reflection
 			return type.BaseType.FullName == "System.Delegate" || 
 				type.BaseType.FullName == "System.MulticastDelegate";
 		}
+
+		#endregion
 
 		private int GetMethodOverload(MethodInfo method, Type type)
 		{
@@ -1092,6 +1118,8 @@ namespace NDoc.Core.Reflection
 			return (count > 1) ? overload : 0;
 		}
 
+
+		#region Types
 		/// <summary>Writes XML documenting a class.</summary>
 		/// <param name="writer">XmlWriter to write on.</param>
 		/// <param name="type">Class to document.</param>
@@ -1205,12 +1233,175 @@ namespace NDoc.Core.Reflection
 			writer.WriteEndElement();
 		}
 
+		/// <summary>Writes XML documenting an interface.</summary>
+		/// <param name="writer">XmlWriter to write on.</param>
+		/// <param name="type">Interface to document.</param>
+		private void WriteInterface(XmlWriter writer, Type type)
+		{
+			string memberName = MemberID.GetMemberID(type);
+
+			string fullNameWithoutNamespace = type.FullName.Replace('+', '.');
+
+			if (type.Namespace != null)
+			{
+				fullNameWithoutNamespace = fullNameWithoutNamespace.Substring(type.Namespace.Length + 1);
+			}
+
+			writer.WriteStartElement("interface");
+			writer.WriteAttributeString("name", fullNameWithoutNamespace);
+			writer.WriteAttributeString("displayName", MemberDisplayName.GetMemberDisplayName(type));
+			writer.WriteAttributeString("namespace", type.Namespace);
+			writer.WriteAttributeString("id", memberName);
+			writer.WriteAttributeString("access", GetTypeAccessValue(type));
+
+			WriteTypeDocumentation(writer, memberName, type);
+			WriteCustomAttributes(writer, type);
+
+			WriteDerivedTypes(writer, type);
+			
+			foreach (Type interfaceType in type.GetInterfaces())
+			{
+				if (MustDocumentType(interfaceType))
+				{
+					writer.WriteStartElement("implements");
+					writer.WriteAttributeString("type", interfaceType.FullName.Replace('+', '.'));
+					writer.WriteEndElement();
+				}
+			}
+			
+			WriteInterfaceImplementingTypes(writer, type);
+
+			WriteProperties(writer, type);
+			WriteMethods(writer, type);
+			WriteEvents(writer, type);
+
+			writer.WriteEndElement();
+		}
+
+		/// <summary>Writes XML documenting a delegate.</summary>
+		/// <param name="writer">XmlWriter to write on.</param>
+		/// <param name="type">Delegate to document.</param>
+		private void WriteDelegate(XmlWriter writer, Type type)
+		{
+			string memberName = MemberID.GetMemberID(type);
+
+			writer.WriteStartElement("delegate");
+			writer.WriteAttributeString("name", GetNestedTypeName(type));
+			writer.WriteAttributeString("displayName", MemberDisplayName.GetMemberDisplayName(type));
+			writer.WriteAttributeString("namespace", type.Namespace);
+			writer.WriteAttributeString("id", memberName);
+			writer.WriteAttributeString("access", GetTypeAccessValue(type));
+
+			const BindingFlags bindingFlags = 
+					  BindingFlags.Instance | 
+					  BindingFlags.Static | 
+					  BindingFlags.Public | 
+					  BindingFlags.NonPublic;
+
+			MethodInfo[] methods = type.GetMethods(bindingFlags);
+			foreach (MethodInfo method in methods)
+			{
+				if (method.Name == "Invoke")
+				{
+					Type t = method.ReturnType;
+					writer.WriteAttributeString("returnType", MemberID.GetTypeName(t));
+					writer.WriteAttributeString("valueType", t.IsValueType.ToString().ToLower());
+
+					WriteDelegateDocumentation(writer, memberName, type, method);
+					WriteCustomAttributes(writer, type);
+
+					foreach (ParameterInfo parameter in method.GetParameters())
+					{
+						WriteParameter(writer, MemberID.GetMemberID(method), parameter);
+					}
+				}
+			}
+
+			writer.WriteEndElement();
+		}
+
+		private string GetNestedTypeName(Type type)
+		{
+			int indexOfPlus = type.FullName.IndexOf('+');
+			if (indexOfPlus != -1)
+			{
+				int lastIndexOfDot = type.FullName.LastIndexOf('.');
+				return type.FullName.Substring(lastIndexOfDot + 1).Replace('+', '.');
+			}
+			else
+			{
+				return type.Name;
+			}
+		}
+
+		/// <summary>Writes XML documenting an enumeration.</summary>
+		/// <param name="writer">XmlWriter to write on.</param>
+		/// <param name="type">Enumeration to document.</param>
+		private void WriteEnumeration(XmlWriter writer, Type type)
+		{
+			string memberName = MemberID.GetMemberID(type);
+
+			writer.WriteStartElement("enumeration");
+			writer.WriteAttributeString("name", GetNestedTypeName(type));
+			writer.WriteAttributeString("id", memberName);
+			writer.WriteAttributeString("displayName", MemberDisplayName.GetMemberDisplayName(type));
+			writer.WriteAttributeString("namespace", type.Namespace);
+			writer.WriteAttributeString("access", GetTypeAccessValue(type));
+
+			const BindingFlags bindingFlags = 
+					  BindingFlags.Instance | 
+					  BindingFlags.Static | 
+					  BindingFlags.Public | 
+					  BindingFlags.NonPublic | 
+					  BindingFlags.DeclaredOnly;
+
+			foreach (FieldInfo field in type.GetFields(bindingFlags))
+			{
+				// Enums are normally based on Int32, but this is not a CLR requirement.
+				// In fact, they may be based on any integer type. The value__ field
+				// defines the enum's base type, so we will treat this seperately...
+				if (field.Name == "value__")
+				{
+					if (field.FieldType.FullName != "System.Int32")
+					{
+						writer.WriteAttributeString("baseType", field.FieldType.FullName);
+					}
+					break;
+				}
+			}
+			if (type.IsDefined(typeof(System.FlagsAttribute), false))
+			{
+				writer.WriteAttributeString("flags", "true");
+			}
+
+			WriteEnumerationDocumentation(writer, memberName);
+			WriteCustomAttributes(writer, type);
+
+			foreach (FieldInfo field in type.GetFields(bindingFlags))
+			{
+				// value__ field handled above...
+				if (field.Name != "value__")
+				{
+					WriteField(
+						writer, 
+						field, 
+						type, 
+						IsHiding(field, type));
+				}
+			}
+
+			writer.WriteEndElement();
+		}
+
+		#endregion
+
+		#region Attributes
 		private void WriteStructLayoutAttribute(XmlWriter writer, Type type) 
 		{
 			string charSet = null;
 			string layoutKind = null;
 
-			if (!attributeFilter.Show("System.Runtime.InteropServices.StructLayoutAttribute","CharSet"))
+			if (!attributeFilter.Show("System.Runtime.InteropServices.StructLayoutAttribute", "CharSet"))
 			{
 				// determine if CharSet property should be documented
 				if ((type.Attributes & TypeAttributes.AutoClass) == TypeAttributes.AutoClass)
@@ -1228,7 +1419,7 @@ namespace NDoc.Core.Reflection
 				}
 			}
 
-			if (!attributeFilter.Show("System.Runtime.InteropServices.StructLayoutAttribute","Value"))
+			if (!attributeFilter.Show("System.Runtime.InteropServices.StructLayoutAttribute", "Value"))
 			{
 				// determine if Value property should be documented
 				//			//Do not document if default value....
@@ -1327,9 +1518,9 @@ namespace NDoc.Core.Reflection
 				WriteSpecialAttributes(writer, type);
 				WriteCustomAttributes(writer, type.GetCustomAttributes(this.rep.DocumentInheritedAttributes), "");
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
-				TraceErrorOutput("Error retrieving custom attributes for " + MemberID.GetMemberID(type),e);
+				TraceErrorOutput("Error retrieving custom attributes for " + MemberID.GetMemberID(type), e);
 			}
 		}
 
@@ -1340,9 +1531,9 @@ namespace NDoc.Core.Reflection
 				WriteSpecialAttributes(writer, fieldInfo);
 				WriteCustomAttributes(writer, fieldInfo.GetCustomAttributes(this.rep.DocumentInheritedAttributes), "");
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
-				TraceErrorOutput("Error retrieving custom attributes for " + MemberID.GetMemberID(fieldInfo),e);
+				TraceErrorOutput("Error retrieving custom attributes for " + MemberID.GetMemberID(fieldInfo), e);
 			}
 		}
 
@@ -1352,9 +1543,9 @@ namespace NDoc.Core.Reflection
 			{
 				WriteCustomAttributes(writer, constructorInfo.GetCustomAttributes(this.rep.DocumentInheritedAttributes), "");
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
-				TraceErrorOutput("Error retrieving custom attributes for " + MemberID.GetMemberID(constructorInfo),e);
+				TraceErrorOutput("Error retrieving custom attributes for " + MemberID.GetMemberID(constructorInfo), e);
 			}
 		}
 
@@ -1365,9 +1556,9 @@ namespace NDoc.Core.Reflection
 				WriteCustomAttributes(writer, methodInfo.GetCustomAttributes(this.rep.DocumentInheritedAttributes), "");
 				WriteCustomAttributes(writer, methodInfo.ReturnTypeCustomAttributes.GetCustomAttributes(this.rep.DocumentInheritedAttributes), "return");
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
-				TraceErrorOutput("Error retrieving custom attributes for " + MemberID.GetMemberID(methodInfo),e);
+				TraceErrorOutput("Error retrieving custom attributes for " + MemberID.GetMemberID(methodInfo), e);
 			}
 		}
 
@@ -1377,9 +1568,9 @@ namespace NDoc.Core.Reflection
 			{
 				WriteCustomAttributes(writer, propertyInfo.GetCustomAttributes(this.rep.DocumentInheritedAttributes), "");
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
-				TraceErrorOutput("Error retrieving custom attributes for " + MemberID.GetMemberID(propertyInfo),e);
+				TraceErrorOutput("Error retrieving custom attributes for " + MemberID.GetMemberID(propertyInfo), e);
 			}
 		}
 
@@ -1389,9 +1580,9 @@ namespace NDoc.Core.Reflection
 			{
 				WriteCustomAttributes(writer, parameterInfo.GetCustomAttributes(this.rep.DocumentInheritedAttributes), "");
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
-				TraceErrorOutput("Error retrieving custom attributes for " + parameterInfo.Member.ReflectedType.FullName + "." + parameterInfo.Member.Name + " param " + parameterInfo.Name,e);
+				TraceErrorOutput("Error retrieving custom attributes for " + parameterInfo.Member.ReflectedType.FullName + "." + parameterInfo.Member.Name + " param " + parameterInfo.Name, e);
 			}
 		}
 
@@ -1401,9 +1592,9 @@ namespace NDoc.Core.Reflection
 			{
 				WriteCustomAttributes(writer, eventInfo.GetCustomAttributes(this.rep.DocumentInheritedAttributes), "");
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
-				TraceErrorOutput("Error retrieving custom attributes for " + MemberID.GetMemberID(eventInfo),e);
+				TraceErrorOutput("Error retrieving custom attributes for " + MemberID.GetMemberID(eventInfo), e);
 			}
 		}
 
@@ -1444,17 +1635,17 @@ namespace NDoc.Core.Reflection
 			{
 				if (MustDocumentField(field) && attributeFilter.Show(fullName, field.Name))
 				{
-					string fieldValue=null;
+					string fieldValue = null;
 					try
 					{
-						fieldValue=GetDisplayValue(field.DeclaringType, field.GetValue(attribute));
+						fieldValue = GetDisplayValue(field.DeclaringType, field.GetValue(attribute));
 					}
-					catch(Exception e)
+					catch (Exception e)
 					{
-						TraceErrorOutput("Value for attribute field " + MemberID.GetMemberID(field).Substring(2) + " cannot be determined",e);
-						fieldValue="***UNKNOWN***";
+						TraceErrorOutput("Value for attribute field " + MemberID.GetMemberID(field).Substring(2) + " cannot be determined", e);
+						fieldValue = "***UNKNOWN***";
 					}
-					if (fieldValue.Length>0)
+					if (fieldValue.Length > 0)
 					{
 						writer.WriteStartElement("field");
 						writer.WriteAttributeString("name", field.Name);
@@ -1477,17 +1668,17 @@ namespace NDoc.Core.Reflection
 				{
 					if (property.CanRead)
 					{
-						string propertyValue=null;
+						string propertyValue = null;
 						try
 						{
-							propertyValue=GetDisplayValue(property.DeclaringType, property.GetValue(attribute, null));
+							propertyValue = GetDisplayValue(property.DeclaringType, property.GetValue(attribute, null));
 						}
-						catch(Exception e)
+						catch (Exception e)
 						{
-							TraceErrorOutput("Value for attribute property " + MemberID.GetMemberID(property).Substring(2) + " cannot be determined",e);
-							propertyValue="***UNKNOWN***";
+							TraceErrorOutput("Value for attribute property " + MemberID.GetMemberID(property).Substring(2) + " cannot be determined", e);
+							propertyValue = "***UNKNOWN***";
 						}
-						if (propertyValue.Length>0)
+						if (propertyValue.Length > 0)
 						{
 							writer.WriteStartElement("property");
 							writer.WriteAttributeString("name", property.Name);
@@ -1501,6 +1692,10 @@ namespace NDoc.Core.Reflection
 
 			writer.WriteEndElement(); // attribute
 		}
+
+		#endregion
+
+		#region MemberCollections
 
 		private void WriteConstructors(XmlWriter writer, Type type)
 		{
@@ -1771,6 +1966,7 @@ namespace NDoc.Core.Reflection
 			}
 		}
 
+		
 		private bool IsAlsoAnEvent(Type type, string fullName)
 		{
 			bool isEvent = false;
@@ -1805,166 +2001,6 @@ namespace NDoc.Core.Reflection
 			return IsAlsoAnEvent(property.DeclaringType, property.PropertyType.FullName);
 		}
 
-		/// <summary>Writes XML documenting an interface.</summary>
-		/// <param name="writer">XmlWriter to write on.</param>
-		/// <param name="type">Interface to document.</param>
-		private void WriteInterface(XmlWriter writer, Type type)
-		{
-			string memberName = MemberID.GetMemberID(type);
-
-			string fullNameWithoutNamespace = type.FullName.Replace('+', '.');
-
-			if (type.Namespace != null)
-			{
-				fullNameWithoutNamespace = fullNameWithoutNamespace.Substring(type.Namespace.Length + 1);
-			}
-
-			writer.WriteStartElement("interface");
-			writer.WriteAttributeString("name", fullNameWithoutNamespace);
-			writer.WriteAttributeString("displayName", MemberDisplayName.GetMemberDisplayName(type));
-			writer.WriteAttributeString("namespace", type.Namespace);
-			writer.WriteAttributeString("id", memberName);
-			writer.WriteAttributeString("access", GetTypeAccessValue(type));
-
-			WriteTypeDocumentation(writer, memberName, type);
-			WriteCustomAttributes(writer, type);
-
-			WriteDerivedTypes(writer, type);
-			
-			foreach (Type interfaceType in type.GetInterfaces())
-			{
-				if (MustDocumentType(interfaceType))
-				{
-					writer.WriteStartElement("implements");
-					writer.WriteAttributeString("type", interfaceType.FullName.Replace('+', '.'));
-					writer.WriteEndElement();
-				}
-			}
-			
-			WriteInterfaceImplementingTypes(writer, type);
-
-			WriteProperties(writer, type);
-			WriteMethods(writer, type);
-			WriteEvents(writer, type);
-
-			writer.WriteEndElement();
-		}
-
-		/// <summary>Writes XML documenting a delegate.</summary>
-		/// <param name="writer">XmlWriter to write on.</param>
-		/// <param name="type">Delegate to document.</param>
-		private void WriteDelegate(XmlWriter writer, Type type)
-		{
-			string memberName = MemberID.GetMemberID(type);
-
-			writer.WriteStartElement("delegate");
-			writer.WriteAttributeString("name", GetNestedTypeName(type));
-			writer.WriteAttributeString("displayName", MemberDisplayName.GetMemberDisplayName(type));
-			writer.WriteAttributeString("namespace", type.Namespace);
-			writer.WriteAttributeString("id", memberName);
-			writer.WriteAttributeString("access", GetTypeAccessValue(type));
-
-			const BindingFlags bindingFlags = 
-					  BindingFlags.Instance | 
-					  BindingFlags.Static | 
-					  BindingFlags.Public | 
-					  BindingFlags.NonPublic;
-
-			MethodInfo[] methods = type.GetMethods(bindingFlags);
-			foreach (MethodInfo method in methods)
-			{
-				if (method.Name == "Invoke")
-				{
-					Type t = method.ReturnType;
-					writer.WriteAttributeString("returnType", MemberID.GetTypeName(t));
-					writer.WriteAttributeString("valueType", t.IsValueType.ToString().ToLower());
-
-					WriteDelegateDocumentation(writer, memberName, type, method);
-					WriteCustomAttributes(writer, type);
-
-					foreach (ParameterInfo parameter in method.GetParameters())
-					{
-						WriteParameter(writer, MemberID.GetMemberID(method), parameter);
-					}
-				}
-			}
-
-			writer.WriteEndElement();
-		}
-
-		private string GetNestedTypeName(Type type)
-		{
-			int indexOfPlus = type.FullName.IndexOf('+');
-			if (indexOfPlus != -1)
-			{
-				int lastIndexOfDot = type.FullName.LastIndexOf('.');
-				return type.FullName.Substring(lastIndexOfDot + 1).Replace('+', '.');
-			}
-			else
-			{
-				return type.Name;
-			}
-		}
-
-		/// <summary>Writes XML documenting an enumeration.</summary>
-		/// <param name="writer">XmlWriter to write on.</param>
-		/// <param name="type">Enumeration to document.</param>
-		private void WriteEnumeration(XmlWriter writer, Type type)
-		{
-			string memberName = MemberID.GetMemberID(type);
-
-			writer.WriteStartElement("enumeration");
-			writer.WriteAttributeString("name", GetNestedTypeName(type));
-			writer.WriteAttributeString("id", memberName);
-			writer.WriteAttributeString("displayName", MemberDisplayName.GetMemberDisplayName(type));
-			writer.WriteAttributeString("namespace", type.Namespace);
-			writer.WriteAttributeString("access", GetTypeAccessValue(type));
-
-			const BindingFlags bindingFlags = 
-					  BindingFlags.Instance | 
-					  BindingFlags.Static | 
-					  BindingFlags.Public | 
-					  BindingFlags.NonPublic | 
-					  BindingFlags.DeclaredOnly;
-
-			foreach (FieldInfo field in type.GetFields(bindingFlags))
-			{
-				// Enums are normally based on Int32, but this is not a CLR requirement.
-				// In fact, they may be based on any integer type. The value__ field
-				// defines the enum's base type, so we will treat this seperately...
-				if (field.Name == "value__")
-				{
-					if (field.FieldType.FullName != "System.Int32")
-					{
-						writer.WriteAttributeString("baseType", field.FieldType.FullName);
-					}
-					break;
-				}
-			}
-			if (type.IsDefined(typeof(System.FlagsAttribute), false))
-			{
-				writer.WriteAttributeString("flags", "true");
-			}
-
-			WriteEnumerationDocumentation(writer, memberName);
-			WriteCustomAttributes(writer, type);
-
-			foreach (FieldInfo field in type.GetFields(bindingFlags))
-			{
-				// value__ field handled above...
-				if (field.Name != "value__")
-				{
-					WriteField(
-						writer, 
-						field, 
-						type, 
-						IsHiding(field, type));
-				}
-			}
-
-			writer.WriteEndElement();
-		}
-
 		private void WriteBaseType(XmlWriter writer, Type type)
 		{
 			if (!"System.Object".Equals(type.FullName))
@@ -1981,16 +2017,17 @@ namespace NDoc.Core.Reflection
 			}
 		}
 
+		#endregion
+
+
+		#region Members
+
 		/// <summary>Writes XML documenting a field.</summary>
 		/// <param name="writer">XmlWriter to write on.</param>
 		/// <param name="field">Field to document.</param>
 		/// <param name="type">Type containing the field.</param>
 		/// <param name="hiding">true if hiding base members</param>
-		private void WriteField(
-			XmlWriter writer, 
-			FieldInfo field, 
-			Type type, 
-			bool hiding)
+		private void WriteField(XmlWriter writer, FieldInfo field, Type type, bool hiding)
 		{
 			string memberName = MemberID.GetMemberID(field);
 
@@ -2038,16 +2075,16 @@ namespace NDoc.Core.Reflection
 			if (field.IsLiteral)
 			{
 				writer.WriteAttributeString("literal", "true");
-				string fieldValue=null;
+				string fieldValue = null;
 				try
 				{
-					fieldValue=GetDisplayValue(field.DeclaringType, field.GetValue(null));
+					fieldValue = GetDisplayValue(field.DeclaringType, field.GetValue(null));
 				}
-				catch(Exception e)
+				catch (Exception e)
 				{
-					TraceErrorOutput("Literal value for " + memberName.Substring(2) + " cannot be determined",e);
+					TraceErrorOutput("Literal value for " + memberName.Substring(2) + " cannot be determined", e);
 				}
-				if (fieldValue!=null)
+				if (fieldValue != null)
 				{
 					writer.WriteAttributeString("value", fieldValue);
 				}
@@ -2221,35 +2258,6 @@ namespace NDoc.Core.Reflection
 			writer.WriteEndElement();
 		}
 
-
-		private bool IsMemberSafe(FieldInfo field)
-		{
-			return!field.FieldType.IsPointer;
-		}
-
-		private bool IsMemberSafe(PropertyInfo property)
-		{
-			return!property.PropertyType.IsPointer;
-		}
-
-		private bool IsMemberSafe(MethodBase method)
-		{
-			foreach (ParameterInfo parameter in method.GetParameters())
-			{
-				if (parameter.GetType().IsPointer)
-					return false;
-			}
-			return true;
-		}
-
-		private bool IsMemberSafe(MethodInfo method)
-		{
-			if (method.ReturnType.IsPointer)
-				return false;
-
-			return IsMemberSafe((MethodBase)method);
-		}
-
 		/// <summary>Writes XML documenting a constructor.</summary>
 		/// <param name="writer">XmlWriter to write on.</param>
 		/// <param name="constructor">Constructor to document.</param>
@@ -2289,12 +2297,7 @@ namespace NDoc.Core.Reflection
 		/// <param name="inherited">true if a declaringType attribute should be included.</param>
 		/// <param name="overload">If &gt; 0, indicates this it the nth overloaded method with the same name.</param>
 		/// <param name="hiding">true if this property is hiding base class members with the same name.</param>
-		private void WriteProperty(
-			XmlWriter writer, 
-			PropertyInfo property, 
-			bool inherited, 
-			int overload, 
-			bool hiding)
+		private void WriteProperty(XmlWriter writer, PropertyInfo property, bool inherited, int overload, bool hiding)
 		{
 			if (property != null)
 			{
@@ -2410,7 +2413,7 @@ namespace NDoc.Core.Reflection
 					{
 						MethodInfo InterfaceMethod = (MethodInfo)implements.InterfaceMethod;
 						PropertyInfo InterfaceProperty = DerivePropertyFromAccessorMethod(InterfaceMethod);
-						if (InterfaceProperty !=null)
+						if (InterfaceProperty != null)
 						{
 							string InterfacePropertyID = MemberID.GetMemberID(InterfaceProperty);
 							writer.WriteStartElement("implements");
@@ -2421,7 +2424,7 @@ namespace NDoc.Core.Reflection
 							writer.WriteAttributeString("declaringType", implements.InterfaceType.FullName.Replace('+', '.'));
 							writer.WriteEndElement();
 						}
-						else if (InterfaceMethod !=null)
+						else if (InterfaceMethod != null)
 						{
 							string InterfaceMethodID = MemberID.GetMemberID(InterfaceMethod);
 							writer.WriteStartElement("implements");
@@ -2533,12 +2536,7 @@ namespace NDoc.Core.Reflection
 		/// <param name="inherited">true if a declaringType attribute should be included.</param>
 		/// <param name="overload">If &gt; 0, indicates this it the nth overloaded method with the same name.</param>
 		/// <param name="hiding">true if this method hides methods of the base class with the same signature.</param>
-		private void WriteMethod(
-			XmlWriter writer, 
-			MethodInfo method, 
-			bool inherited, 
-			int overload, 
-			bool hiding)
+		private void WriteMethod(XmlWriter writer, MethodInfo method, bool inherited, int overload, bool hiding)
 		{
 			if (method != null)
 			{
@@ -2652,7 +2650,7 @@ namespace NDoc.Core.Reflection
 			
 			Type t = parameter.ParameterType;
 #if NET_2_0
-			writer.WriteAttributeString("type", MemberID.GetTypeName(t,false));
+			writer.WriteAttributeString("type", MemberID.GetTypeName(t, false));
 #else
 			writer.WriteAttributeString("type", MemberID.GetTypeName(t));
 #endif
@@ -2690,10 +2688,7 @@ namespace NDoc.Core.Reflection
 			writer.WriteEndElement();
 		}
 
-		private void WriteOperator(
-			XmlWriter writer, 
-			MethodInfo method, 
-			int overload)
+		private void WriteOperator(XmlWriter writer, MethodInfo method, int overload)
 		{
 			if (method != null)
 			{
@@ -2743,21 +2738,48 @@ namespace NDoc.Core.Reflection
 			}
 		}
 
-		/// <summary>Used by GetMemberName(Type type) and by
-		/// GetFullNamespaceName(MemberInfo member) functions to build
+
+		#endregion
+
+		#region IsMemberSafe
+		private bool IsMemberSafe(FieldInfo field)
+		{
+			return!field.FieldType.IsPointer;
+		}
+
+		private bool IsMemberSafe(PropertyInfo property)
+		{
+			return!property.PropertyType.IsPointer;
+		}
+
+		private bool IsMemberSafe(MethodBase method)
+		{
+			foreach (ParameterInfo parameter in method.GetParameters())
+			{
+				if (parameter.GetType().IsPointer)
+					return false;
+			}
+			return true;
+		}
+
+		private bool IsMemberSafe(MethodInfo method)
+		{
+			if (method.ReturnType.IsPointer)
+				return false;
+
+			return IsMemberSafe((MethodBase)method);
+		}
+		#endregion
+
+		#region Get MemberID of base of inherited member
+		//TODO: Refactor into get base member and then use MemberID to get ID
+
+		/// <summary>Used by GetFullNamespaceName(MemberInfo member) functions to build
 		/// up most of the /doc member name.</summary>
 		/// <param name="type"></param>
 		private string GetTypeNamespaceName(Type type)
 		{
 			return type.FullName.Replace('+', '.');
-		}
-
-		/// <summary>Used by all the GetMemberName() functions except the
-		/// Type one. It returns most of the /doc member name.</summary>
-		/// <param name="member"></param>
-		private string GetFullNamespaceName(MemberInfo member)
-		{
-			return GetTypeNamespaceName(member.ReflectedType);
 		}
 
 		/// <summary>Derives the member name ID for the base of an inherited field.</summary>
@@ -2831,16 +2853,10 @@ namespace NDoc.Core.Reflection
 			return key;
 		}
 
+		#endregion
 
-		private void WriteSlashDocElements(XmlWriter writer, string memberName)
-		{
-			string temp = assemblyDocCache.GetDoc(memberName);
-			if (temp != null)	
-			{
-				WriteStartDocumentation(writer);
-				writer.WriteRaw(temp);
-			}
-		}
+
+		#region Enumeration Values
 
 		private string GetTypeAccessValue(Type type)
 		{
@@ -3017,6 +3033,8 @@ namespace NDoc.Core.Reflection
 			return result;
 		}
 
+		#endregion
+
 		private StringCollection GetNamespaceNames(Type[] types)
 		{
 			StringCollection namespaceNames = new StringCollection();
@@ -3031,6 +3049,9 @@ namespace NDoc.Core.Reflection
 
 			return namespaceNames;
 		}
+
+
+		#region Missing Documentation
 
 		private void CheckForMissingSummaryAndRemarks(
 			XmlWriter writer, 
@@ -3246,6 +3267,11 @@ namespace NDoc.Core.Reflection
 			writer.WriteEndElement();
 		}
 
+		#endregion
+
+
+		#region Write Documentation
+
 		private bool didWriteStartDocumentation = false;
 
 		private void WriteStartDocumentation(XmlWriter writer)
@@ -3263,6 +3289,16 @@ namespace NDoc.Core.Reflection
 			{
 				writer.WriteEndElement();
 				didWriteStartDocumentation = false;
+			}
+		}
+
+		private void WriteSlashDocElements(XmlWriter writer, string memberName)
+		{
+			string temp = assemblyDocCache.GetDoc(memberName);
+			if (temp != null)	
+			{
+				WriteStartDocumentation(writer);
+				writer.WriteRaw(temp);
 			}
 		}
 
@@ -3358,7 +3394,7 @@ namespace NDoc.Core.Reflection
 							writer.WriteString("Initializes a new instance of the ");
 						}
 						writer.WriteStartElement("see");
-						writer.WriteAttributeString("cref", MemberID.GetMemberID(constructor.DeclaringType)); 
+						writer.WriteAttributeString("cref", MemberID.GetMemberID(constructor.DeclaringType));
 						writer.WriteEndElement();
 						writer.WriteString(" class.");
 						writer.WriteEndElement();
@@ -3440,6 +3476,11 @@ namespace NDoc.Core.Reflection
 			WriteSlashDocElements(writer, memberName);
 			WriteEndDocumentation(writer);
 		}
+
+		#endregion
+
+
+		#region Property Backers
 
 		/// <summary>
 		/// This checks whether a field is a property backer, meaning
@@ -3590,6 +3631,11 @@ namespace NDoc.Core.Reflection
 			writer.WriteEndElement();
 		}
 
+		#endregion
+
+
+		#region PreReflectionProcess
+
 		private void PreReflectionProcess()
 		{
 			PreLoadXmlDocumentation();
@@ -3625,11 +3671,11 @@ namespace NDoc.Core.Reflection
 						string friendlyNamespaceName;
 						if (type.Namespace == null)
 						{
-							friendlyNamespaceName="(global)";
+							friendlyNamespaceName = "(global)";
 						}
 						else
 						{
-							friendlyNamespaceName=type.Namespace;
+							friendlyNamespaceName = type.Namespace;
 						}
 						BuildNamespaceHierarchy(friendlyNamespaceName, type);
 						notEmptyNamespaces[friendlyNamespaceName] = null;
@@ -3702,6 +3748,11 @@ namespace NDoc.Core.Reflection
 			}
 		}
 
+		#endregion
+
+
+		#region Write Hierarchies
+
 		private void WriteDerivedTypes(XmlWriter writer, Type type)
 		{
 			foreach (Type derived in derivedTypes.GetDerivedTypes(type))
@@ -3730,7 +3781,7 @@ namespace NDoc.Core.Reflection
 		private void WriteNamespaceHierarchies(XmlWriter writer)
 		{
 			writer.WriteStartElement("namespaceHierarchies");
-			foreach(string namespaceName in namespaceHierarchies.DefinedNamespaces)
+			foreach (string namespaceName in namespaceHierarchies.DefinedNamespaces)
 			{
 				WriteNamespaceTypeHierarchy(writer, namespaceName);
 			}
@@ -3745,7 +3796,7 @@ namespace NDoc.Core.Reflection
 			{
 				//we will always start the hierarchy with System.Object (hopefully for obvious reasons)
 				writer.WriteStartElement("namespaceHierarchy");
-				writer.WriteAttributeString("name",namespaceName);
+				writer.WriteAttributeString("name", namespaceName);
 				WriteTypeHierarchy(writer, derivedTypesCollection, typeof(System.Object));
 				writer.WriteEndElement();
 			}
@@ -3780,22 +3831,24 @@ namespace NDoc.Core.Reflection
 			writer.WriteEndElement();
 		}
 
+		#endregion
+
 		private void TraceErrorOutput(string message)
 		{
-			TraceErrorOutput(message,null);
+			TraceErrorOutput(message, null);
 		}
 
 		private void TraceErrorOutput(string message, Exception ex)
 		{
 			Trace.WriteLine("[WARNING] " + message);
-			if (ex!=null)
+			if (ex != null)
 			{
 				Exception tempEx = ex;
 				do
 				{
 					Trace.WriteLine("-> " + tempEx.GetType().ToString() + ":" + ex.Message);
-					tempEx=tempEx.InnerException;
-				} while(tempEx!=null);
+					tempEx = tempEx.InnerException;
+				} while (tempEx != null);
 				Trace.WriteLine(ex.StackTrace);
 			}
 		}
@@ -3808,6 +3861,9 @@ namespace NDoc.Core.Reflection
 
 			return (assemblyLoader);
 		}
+
+
+		#region ImplementsInfo
 
 		private class ImplementsInfo
 		{
@@ -3830,72 +3886,8 @@ namespace NDoc.Core.Reflection
 			}
 		}
 
+		#endregion
 
-		private class AttributeUsageDisplayFilter
-		{
-			private ArrayList AttributeFilters = new ArrayList();
-
-			public AttributeUsageDisplayFilter(string documentedAttributesConfig)
-			{
-				string[] filters = documentedAttributesConfig.Split(new char[]{'|'});
-				foreach (string filter in filters)
-				{
-					string[] filterParts = filter.Split(new char[]{','});
-					if (filterParts.Length>0)
-					{
-						if (filterParts[0].Length>0)
-						{
-							DisplayFilter displayFilter = new DisplayFilter();
-							displayFilter.attributeName=filterParts[0];
-							if (filterParts.Length>1)
-							{
-								string[] memberNames = new string[filterParts.Length-1];
-								for (int i=1; i<filterParts.Length; i++)
-								{
-									memberNames[i-1]=filterParts[i];
-								}
-								displayFilter.memberNames=memberNames;
-							}
-							AttributeFilters.Add(displayFilter);
-						}
-					}
-				}
-			}
-
-			public bool Show(string attributeFullName)
-			{
-				if (AttributeFilters.Count==0) return true;
-				foreach (DisplayFilter filter in AttributeFilters)
-				{
-					if (attributeFullName.IndexOf(filter.attributeName)>-1) return true;
-				}
-				return false;
-			}
-
-			public bool Show(string attributeFullName, string memberName)
-			{
-				if (AttributeFilters.Count==0) return true;
-				foreach (DisplayFilter filter in AttributeFilters)
-				{
-					if (attributeFullName.IndexOf(filter.attributeName)>-1)
-					{
-						if (filter.memberNames==null) return true;
-						foreach(string memberNameFilter in filter.memberNames)
-						{
-							if (memberName.IndexOf(memberNameFilter)>-1)  return true;
-						}
-						return false;
-					}
-				}
-				return false;
-			}
-
-			private struct DisplayFilter
-			{
-				public string attributeName;
-				public string[] memberNames;
-			}
-		}
 	
 	}
 }
