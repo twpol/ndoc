@@ -227,44 +227,49 @@
 						<xsl:with-param name="page" select="$page" />
 					</xsl:call-template>
 					
-					<xsl:if test="local-name() = 'class'">
-						<xsl:if test="not($ndoc-omit-object-tags)">
-							<object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e" viewastext="true" style="display: none;">
-								<xsl:element name="param">
-									<xsl:attribute name="name">Keyword</xsl:attribute>
-									<xsl:attribute name="value"><xsl:value-of select='@name' /> class, about <xsl:value-of select='@name' /> class</xsl:attribute>
-								</xsl:element>
-							</object>
-						</xsl:if>
-					</xsl:if>
-					
-					<xsl:if test="local-name() = 'interface'">
-						<xsl:if test="not($ndoc-omit-object-tags)">
-							<object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e" viewastext="true" style="display: none;">
-								<xsl:element name="param">
-									<xsl:attribute name="name">Keyword</xsl:attribute>
-									<xsl:attribute name="value"><xsl:value-of select='@name' /> interface</xsl:attribute>
-								</xsl:element>
-							</object>
-						</xsl:if>
-					</xsl:if>
-
-					<xsl:if test="local-name() = 'enumeration'">
-						<xsl:if test="not($ndoc-omit-object-tags)">
-							<object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e" viewastext="true" style="display: none;">
-								<xsl:element name="param">
-									<xsl:attribute name="name">Keyword</xsl:attribute>
-									<xsl:attribute name="value"><xsl:value-of select='@name' /> enumeration</xsl:attribute>
-								</xsl:element>
-								<xsl:for-each select="field">
+					<xsl:if test="not($ndoc-omit-object-tags)">
+						<object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e" viewastext="true" style="display: none;">
+							<xsl:choose>
+								<xsl:when test="local-name() = 'enumeration'">
 									<xsl:element name="param">
 										<xsl:attribute name="name">Keyword</xsl:attribute>
-										<xsl:attribute name="value"><xsl:value-of select='@name' /> enumeration member</xsl:attribute>
+										<xsl:attribute name="value"><xsl:value-of select="concat(@name, ' enumeration')" /></xsl:attribute>
 									</xsl:element>
-								</xsl:for-each>
-							</object>
-						</xsl:if>
+									<xsl:element name="param">
+										<xsl:attribute name="name">Keyword</xsl:attribute>
+										<xsl:attribute name="value"><xsl:value-of select="concat(substring-after(@id, ':'), ' enumeration')" /></xsl:attribute>
+									</xsl:element>
+									<xsl:for-each select="field">
+										<xsl:element name="param">
+											<xsl:attribute name="name">Keyword</xsl:attribute>
+											<xsl:attribute name="value"><xsl:value-of select="concat(@name, ' enumeration member')" /></xsl:attribute>
+										</xsl:element>
+										<xsl:element name="param">
+											<xsl:attribute name="name">Keyword</xsl:attribute>
+											<xsl:attribute name="value"><xsl:value-of select="concat(../@name, '.', @name, ' enumeration member')" /></xsl:attribute>
+										</xsl:element>
+									</xsl:for-each>
+								</xsl:when>
+								<xsl:when test="local-name() = 'delegate'">
+									<xsl:element name="param">
+										<xsl:attribute name="name">Keyword</xsl:attribute>
+										<xsl:attribute name="value"><xsl:value-of select="concat(@name, ' delegate')" /></xsl:attribute>
+									</xsl:element>
+									<xsl:element name="param">
+										<xsl:attribute name="name">Keyword</xsl:attribute>
+										<xsl:attribute name="value"><xsl:value-of select="concat(substring-after(@id, ':'), ' delegate')" /></xsl:attribute>
+									</xsl:element>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:element name="param">
+										<xsl:attribute name="name">Keyword</xsl:attribute>
+										<xsl:attribute name="value"><xsl:value-of select="concat(@name, ' ', local-name(), ', about ', @name, ' ', local-name())" /></xsl:attribute>
+									</xsl:element>
+								</xsl:otherwise>
+							</xsl:choose>
+						</object>
 					</xsl:if>
+					
 					<xsl:call-template name="footer-row">
 						<xsl:with-param name="type-name" select="concat(@name, ' ', $type)" />
 					</xsl:call-template>

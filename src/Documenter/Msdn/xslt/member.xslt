@@ -112,7 +112,7 @@
 								</xsl:element>
 								<xsl:element name="param">
 									<xsl:attribute name="name">Keyword</xsl:attribute>
-									<xsl:attribute name="value"><xsl:value-of select='@name' /> method, <xsl:value-of select='../@name' /> class</xsl:attribute>
+									<xsl:attribute name="value"><xsl:value-of select="concat(@name, ' method, ', ../@name, ' ', local-name(parent::*))" /></xsl:attribute>
 								</xsl:element>
 								<xsl:element name="param">
 									<xsl:attribute name="name">Keyword</xsl:attribute>
@@ -121,6 +121,7 @@
 							</object>
 						</xsl:if>
 					</xsl:if>
+					
 					<xsl:call-template name="footer-row">
 						<xsl:with-param name="type-name">
 							<xsl:value-of select="../@name" />

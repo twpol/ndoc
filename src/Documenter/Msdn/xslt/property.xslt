@@ -65,7 +65,7 @@
 							</xsl:element>
 							<xsl:element name="param">
 								<xsl:attribute name="name">Keyword</xsl:attribute>
-								<xsl:attribute name="value"><xsl:value-of select='@name' /> property, <xsl:value-of select='../@name' /> class</xsl:attribute>
+								<xsl:attribute name="value"><xsl:value-of select="concat(@name, ' property, ', ../@name, ' ', local-name(parent::*))" /></xsl:attribute>
 							</xsl:element>
 							<xsl:element name="param">
 								<xsl:attribute name="name">Keyword</xsl:attribute>
