@@ -279,9 +279,9 @@ namespace NDoc.Core
 
 				// write our intermediate xml to a file for debugging
 #if DEBUG
-				FileStream fs = new FileStream(@"C:\test.xml", FileMode.Create);
-				fs.Write(memoryStream.GetBuffer(), 0, (int)memoryStream.Length);
-				fs.Close();
+//				FileStream fs = new FileStream(@"C:\test.xml", FileMode.Create);
+//				fs.Write(memoryStream.GetBuffer(), 0, (int)memoryStream.Length);
+//				fs.Close();
 #endif
 
 				// xmlDocument.Load(new MemoryStream(memoryStream.GetBuffer()));
