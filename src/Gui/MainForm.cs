@@ -26,6 +26,7 @@ using System.Drawing;
 using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Globalization;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using System.IO;
@@ -1914,14 +1915,34 @@ namespace NDoc.Gui
 
 		#endregion // Event Handlers
 
-		private void menuViewLicense_Click(object sender, System.EventArgs e)
-		{
-			Uri uri = new Uri( Assembly.GetExecutingAssembly().CodeBase, true );
-			string path = Path.Combine( Path.GetDirectoryName( uri.AbsolutePath ), "gpl.rtf" );
-			if ( !File.Exists( path ) )
-				MessageBox.Show( this, "Could not find the license file", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error );
-			else
-				Process.Start( path );
+        /// <summary>
+        /// Opens the license file in its associates application.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">A <see cref="EventArgs" /> that contains the event data.</param>
+        private void menuViewLicense_Click(object sender, System.EventArgs e) {
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase, true);
+            // first try to locate license file in directory in which NDocGui is
+            // located
+            string path = Path.Combine(Path.GetDirectoryName(uri.AbsolutePath), "gpl.rtf");
+            if (!File.Exists(path)) {
+                // if not found, try to look in NDoc main directory, which is 3 
+                // levels up (from <ndoc root>/bin/<framework>/<framework version> 
+                // to <ndoc root>)
+                path = Path.Combine(
+                    Path.GetDirectoryName(uri.AbsolutePath), 
+                    string.Format(CultureInfo.InvariantCulture, "..{0}..{0}..{0}gpl.rtf", 
+                    Path.DirectorySeparatorChar));
+                if (!File.Exists(path)) {
+                    MessageBox.Show(this, "Could not find the license file.", 
+                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    // skip further processing
+                    return;
+                }
+            }
+
+            // license file exists, so open it in associated application
+            Process.Start(path);
 		}
 
 		private void traceWindow1_VisibleChanged(object sender, System.EventArgs e)
@@ -2030,9 +2051,21 @@ namespace NDoc.Gui
 		{
 			get
 			{
-				return Path.Combine( 
-					Path.GetDirectoryName( new Uri( Assembly.GetExecutingAssembly().CodeBase, true ).AbsolutePath ),
-					"NDocUsersGuide.chm" );
+                Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase, true);
+                // first try to locate help file in directory in which NDocGui is
+                // located
+                string path = Path.Combine( 
+                    Path.GetDirectoryName(uri.AbsolutePath),
+                    "NDocUsersGuide.chm");
+                if (!File.Exists(path)) {
+                    // if not found, try to look in NDoc main directory, which is 3 
+                    // levels up (from <ndoc root>/bin/<framework>/<framework version> 
+                    // to <ndoc root>/doc/help)
+                    path = Path.Combine(Path.GetDirectoryName(uri.AbsolutePath), 
+                        string.Format(CultureInfo.InvariantCulture, "..{0}..{0}..{0}doc{0}help{0}NDocUsersGuide.chm", 
+                        Path.DirectorySeparatorChar));
+                }
+                return path;
 			}
 		}
 
