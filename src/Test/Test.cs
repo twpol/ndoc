@@ -92,14 +92,6 @@ namespace NDoc.Test
 		/// <summary>This is a simple event that uses the Handler delegate.</summary>
 		public event Handler Event;
 
-		/// <summary>Stop warning me about Event not being used.</summary>
-		public void OnEvent()
-		{
-			Event(this, new EventArgs());
-			ProtectedEvent(this, new EventArgs());
-			StaticEvent(this, new EventArgs());
-		}
-
 		/// <summary>
 		/// Raises some events.
 		/// </summary>
@@ -115,6 +107,8 @@ namespace NDoc.Test
 		/// <event cref="ProtectedEvent">
 		/// Raised when something else occurs.
 		/// </event>
+		/// <event cref="EventWithArgs">Raised when it feels like it.</event>
+		/// <event cref="EventWithMoreArgs">Never raised?</event>
 		/// <exception cref="Exception">
 		/// Some exception is thrown.
 		/// </exception>
@@ -123,7 +117,19 @@ namespace NDoc.Test
 		/// </exception>
 		public void RaisesSomeEvents()
 		{
+			Event(this, new EventArgs());
+			ProtectedEvent(this, new EventArgs());
+			StaticEvent(this, new EventArgs());
+			EventWithArgs(this, new EventArgsTest());
+			EventWithMoreArgs(this, new EventArgsDerived());
 		}
+
+		/// <summary>This event has arguments.</summary>
+		public event HandlerWithArgs EventWithArgs;
+
+		/// <summary>This event has more arguments.</summary>
+		/// <remarks>Check the links in the Event Data table...</remarks>
+		public event HandlerWithMoreArgs EventWithMoreArgs;
 
 		/// <summary>This event is protected.</summary>
 		protected event Handler ProtectedEvent;
@@ -138,6 +144,34 @@ namespace NDoc.Test
 			return false;
 		}
 	}
+
+	/// <summary>This is an event arguments class.</summary>
+	public class EventArgsTest : EventArgs
+	{
+		/// <summary>This is an event arguments property.</summary>
+		public string EventArgsTestProperty
+		{
+			get { return ""; }
+			set { }
+		}
+	}
+
+	/// <summary>This is a derived event arguments class.</summary>
+	public class EventArgsDerived : EventArgsTest
+	{
+		/// <summary>This event arguments property is declared in the derived class.</summary>
+		public string EventArgsDerivedProperty
+		{
+			get { return ""; }
+			set { }
+		}
+	}
+
+	/// <summary>This is a delegate with arguments used by Class.</summary>
+	public delegate void HandlerWithArgs(object sender, EventArgsTest e);
+
+	/// <summary>This is a delegate with more arguments used by Class.</summary>
+	public delegate void HandlerWithMoreArgs(object sender, EventArgsDerived e);
 
 	/// <summary>This is a simple delegate used by Class.</summary>
 	public delegate void Handler(object sender, EventArgs e);
