@@ -166,6 +166,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Compiler\HtmlHelpFile.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Compiler\HxAugmenter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -189,6 +194,10 @@
                     RelPath = "Compiler\HxReg.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "xml\_A.HxK"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "xml\_F.HxK"

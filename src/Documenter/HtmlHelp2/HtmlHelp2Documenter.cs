@@ -107,13 +107,15 @@ namespace NDoc.Documenter.HtmlHelp2
 			if ( MyConfig.AugmentXmlDataIslands )
 			{
 				OnDocBuildingStep( 60, "Augmenting Xml data islands..." );
-				AugmentDataIslands();
+				HxAugmenter.Augment( new DirectoryInfo( WorkingPath ), MyConfig.HtmlHelpName );
 			}
 
 			//then compile the HxC into and HxS
 			OnDocBuildingStep( 75, "Compiling Html Help 2 Files..." );
 			CompileHxCFile();
 
+			//then compile the HxC into and HxS
+			OnDocBuildingStep( 99, "Finishing up..." );
 			if ( MyConfig.DeleteCHM )
 				File.Delete( InputCHMPath );
 		}
@@ -127,12 +129,6 @@ namespace NDoc.Documenter.HtmlHelp2
 			OnDocBuildingStep( e.Progress / 2, e.Status );
 		}
 
-		private void AugmentDataIslands()
-		{
-			HxAugmenter augmenter = new HxAugmenter();
-			augmenter.Augment( new DirectoryInfo( WorkingPath ), MyConfig.HtmlHelpName );
-		}
-
 		private void CleanCHMIntermediates()
 		{
 			DirectoryInfo dir = new DirectoryInfo( WorkingPath );
@@ -141,7 +137,7 @@ namespace NDoc.Documenter.HtmlHelp2
 			{
 				switch ( file.Extension.ToLower() )
 				{
-					case ".chm":	//leave teh CHM
+					case ".chm":	//leave the CHM
 						break;
 					case ".log":	//leave the log files
 						break;
@@ -181,7 +177,7 @@ namespace NDoc.Documenter.HtmlHelp2
 
 		private string WorkingPath{ get{ return MyConfig.OutputDirectory; } }
 		
-		private string InputCHMPath{ get{ return Path.Combine( MyConfig.OutputDirectory, MyConfig.HtmlHelpName ) + ".chm";} }
+		private string InputCHMPath{ get{ return Path.Combine( MyConfig.OutputDirectory, MyConfig.HtmlHelpName ) + ".chm"; } }
 
 		private HtmlHelp2Config MyConfig{ get{ return (HtmlHelp2Config)Config; } }
 	}

@@ -66,9 +66,7 @@ namespace NDoc.Documenter.HtmlHelp2.Compiler
 			else if ( _CharacterSet == CharacterSet.Unicode )
 				ret.Append( " -w " );
 
-			//set the output directory where the converted files get placed
-			//this is relarive to the location of the input CHM file
-			ret.Append( " -o . " );//, HxObject.WorkingDirectoryName );
+			ret.Append( " -o . " );	//set the output directory to the processes working directory
 
 			ret.Append( '"' );
 			ret.Append( CHMFile.FullName );
