@@ -1151,7 +1151,7 @@ namespace NDoc.Documenter.Msdn
 		private string GetFilenameForConstructors(XmlNode typeNode)
 		{
 			string typeID = (string)typeNode.Attributes["id"].Value;
-			string fileName = RemoveChar(typeID.Substring(2), '.') + "ConstructorOverloads.html";
+			string fileName = RemoveChar(typeID.Substring(2), '.') + "Constructor.html";
 			return fileName;
 		}
 
@@ -1177,14 +1177,14 @@ namespace NDoc.Documenter.Msdn
 		private string GetFilenameForFields(WhichType whichType, XmlNode typeNode)
 		{
 			string typeID = (string)typeNode.Attributes["id"].Value;
-			string fileName = RemoveChar(typeID.Substring(2), '.') + "FieldOrEvent.html";
+			string fileName = RemoveChar(typeID.Substring(2), '.') + "Fields.html";
 			return fileName;
 		}
 
 		private string GetFilenameForField(XmlNode fieldNode)
 		{
 			string fieldID = (string)fieldNode.Attributes["id"].Value;
-			string fileName = RemoveChar(fieldID.Substring(2), '.') + "FieldOrEvent.html";
+			string fileName = RemoveChar(fieldID.Substring(2), '.') + ".html";
 			return fileName;
 		}
 
@@ -1215,7 +1215,6 @@ namespace NDoc.Documenter.Msdn
 			}
 
 			fileName = RemoveChar(fileName, '.');
-			fileName += "Operator";
 
 			if (operatorNode.Attributes["overload"] != null)
 			{
@@ -1237,7 +1236,7 @@ namespace NDoc.Documenter.Msdn
 		private string GetFilenameForEvent(XmlNode eventNode)
 		{
 			string eventID = (string)eventNode.Attributes["id"].Value;
-			string fileName = RemoveChar(eventID.Substring(2), '.') + "FieldOrEvent.html";
+			string fileName = RemoveChar(eventID.Substring(2), '.') + ".html";
 			return fileName;
 		}
 
@@ -1252,7 +1251,7 @@ namespace NDoc.Documenter.Msdn
 		{
 			string typeID = (string)typeNode.Attributes["id"].Value;
 			string propertyName = (string)propertyNode.Attributes["name"].Value;
-			string fileName = RemoveChar(typeID.Substring(2), '.') + propertyName + "Overloads.html";
+			string fileName = RemoveChar(typeID.Substring(2), '.') + propertyName + ".html";
 			return fileName;
 		}
 
@@ -1269,7 +1268,6 @@ namespace NDoc.Documenter.Msdn
 			}
 
 			fileName = RemoveChar(fileName, '.');
-			fileName += "Property";
 
 			if (propertyNode.Attributes["overload"] != null)
 			{
@@ -1292,7 +1290,7 @@ namespace NDoc.Documenter.Msdn
 		{
 			string typeID = (string)typeNode.Attributes["id"].Value;
 			string methodName = (string)methodNode.Attributes["name"].Value;
-			string fileName = RemoveChar(typeID.Substring(2), '.') + methodName + "Overloads.html";
+			string fileName = RemoveChar(typeID.Substring(2), '.') + methodName + ".html";
 			return fileName;
 		}
 
@@ -1309,7 +1307,6 @@ namespace NDoc.Documenter.Msdn
 			}
 
 			fileName = RemoveChar(fileName, '.');
-			fileName += "Method";
 
 			if (methodNode.Attributes["overload"] != null)
 			{
