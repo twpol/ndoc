@@ -184,8 +184,17 @@ namespace NDoc.Core
 				}
 
 				string newtext = String.Join(System.Environment.NewLine, codeLines);
-				node.InnerXml = newtext;
- 			}
+
+				XmlAttribute escaped = node.Attributes["escaped"];
+				if (escaped!=null && escaped.Value=="true")
+				{
+					node.InnerText = newtext;
+				}
+				else
+				{
+					node.InnerXml = newtext;
+				}
+			}
 
 		}
 
