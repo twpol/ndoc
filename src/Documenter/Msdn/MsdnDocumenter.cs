@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
@@ -50,6 +51,8 @@ namespace NDoc.Documenter.Msdn
 
 		Hashtable lowerCaseTypeNames;
 		Hashtable mixedCaseTypeNames;
+		StringDictionary fileNames;
+		StringDictionary elemNames;
 
 		XslTransform xsltNamespace;
 		XslTransform xsltNamespaceHierarchy;
@@ -80,6 +83,9 @@ namespace NDoc.Documenter.Msdn
 			mixedCaseTypeNames.Add(WhichType.Structure, "Structure");
 			mixedCaseTypeNames.Add(WhichType.Enumeration, "Enumeration");
 			mixedCaseTypeNames.Add(WhichType.Delegate, "Delegate");
+
+			fileNames = new StringDictionary();
+			elemNames = new StringDictionary();
 
 			Clear();
 		}
@@ -249,6 +255,10 @@ namespace NDoc.Documenter.Msdn
 
 				htmlHelp.IncludeFavorites = MyConfig.IncludeFavorites;
 
+				OnDocBuildingStep(25, "Building file mapping...");
+
+				MakeFilenames(xmlDocumentation);
+
 				OnDocBuildingStep(30, "Loading XSLT files...");
 
 				MakeTransforms();
@@ -392,6 +402,62 @@ namespace NDoc.Documenter.Msdn
 					filename +
 					" stylesheet: \n" + e.Message,
 					e);
+			}
+		}
+
+		private void MakeFilenames(XmlNode documentation)
+		{
+			XmlNodeList namespaces = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace");
+			foreach (XmlElement namespaceNode in namespaces)
+			{
+				string namespaceName = namespaceNode.Attributes["name"].Value;
+				string namespaceId = "N:" + namespaceName;
+				fileNames[namespaceId] = GetFilenameForNamespace(namespaceName);
+				elemNames[namespaceId] = namespaceName;
+
+				XmlNodeList types = namespaceNode.SelectNodes("*[@id]");
+				foreach (XmlElement typeNode in types)
+				{
+					string typeId = typeNode.Attributes["id"].Value;
+					fileNames[typeId] = GetFilenameForType(typeNode);
+					elemNames[typeId] = typeNode.Attributes["name"].Value;
+
+					XmlNodeList members = typeNode.SelectNodes("*[@id]");
+					foreach (XmlElement memberNode in members)
+					{
+						string id = memberNode.Attributes["id"].Value;
+						switch (memberNode.Name)
+						{
+							case "constructor":
+								fileNames[id] = GetFilenameForConstructor(memberNode);
+								elemNames[id] = elemNames[typeId];
+								break;
+							case "field":
+								if (typeNode.Name == "enumeration")
+									fileNames[id] = GetFilenameForType(typeNode);
+								else
+									fileNames[id] = GetFilenameForField(memberNode);
+								elemNames[id] = memberNode.Attributes["name"].Value;
+								break;
+							case "property":
+								fileNames[id] = GetFilenameForProperty(memberNode);
+								elemNames[id] = memberNode.Attributes["name"].Value;
+								break;
+							case "method":
+								fileNames[id] = GetFilenameForMethod(memberNode);
+								elemNames[id] = memberNode.Attributes["name"].Value;
+								break;
+							case "operator":
+								fileNames[id] = GetFilenameForOperator(memberNode);
+								elemNames[id] = memberNode.Attributes["name"].Value;
+								break;
+							case "event":
+								fileNames[id] = GetFilenameForEvent(memberNode);
+								elemNames[id] = memberNode.Attributes["name"].Value;
+								break;
+						}
+					}
+				}
 			}
 		}
 
@@ -1316,7 +1382,11 @@ namespace NDoc.Documenter.Msdn
 			string filename)
 		{
 			Trace.WriteLine(filename);
+#if DEBUG
+			int start = Environment.TickCount;
+#endif
 
+			MsdnXsltUtilities utilities = new MsdnXsltUtilities(fileNames, elemNames);
 			StreamWriter streamWriter = null;
 
 			try
@@ -1331,6 +1401,8 @@ namespace NDoc.Documenter.Msdn
 				arguments.AddParam("ndoc-document-attributes", String.Empty, MyConfig.DocumentAttributes);
 				arguments.AddParam("ndoc-documented-attributes", String.Empty, MyConfig.DocumentedAttributes);
 
+				arguments.AddExtensionObject("urn:NDocUtil", utilities);
+
 				transform.Transform(xmlDocumentation, arguments, streamWriter);
 			}
 			finally
@@ -1341,6 +1413,9 @@ namespace NDoc.Documenter.Msdn
 				}
 			}
 
+#if DEBUG
+			Trace.WriteLine((Environment.TickCount - start).ToString() + " msec.");
+#endif
 			htmlHelp.AddFileToProject(filename);
 		}
 

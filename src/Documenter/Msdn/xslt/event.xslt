@@ -48,7 +48,7 @@
 							</a>
 							<xsl:text> containing data related to this event. The following </xsl:text>
 							<B>
-								<xsl:value-of select="//class[@id=$eventargs-id]/@name" />
+								<xsl:value-of select="$thisevent/@name" />
 							</B>
 							<xsl:choose>
 								<xsl:when test="$properties-count > 1">

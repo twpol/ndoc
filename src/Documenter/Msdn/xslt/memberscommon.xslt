@@ -306,7 +306,7 @@
 					</td>
 					<td width="50%">
 						<xsl:call-template name="summary-with-no-paragraph">
-							<xsl:with-param name="member" select="//class[@id=$declaring-type-id]/property[@name=$name]" />
+							<xsl:with-param name="member" select="$declaring-class/property[@name=$name]" />
 						</xsl:call-template>
 					</td>
 				</xsl:when>
@@ -376,7 +376,7 @@
 					</td>
 					<td width="50%">
 						<xsl:call-template name="summary-with-no-paragraph">
-							<xsl:with-param name="member" select="//class[@id=$declaring-type-id]/field[@name=$name]" />
+							<xsl:with-param name="member" select="$declaring-class/field[@name=$name]" />
 						</xsl:call-template>
 					</td>
 				</xsl:when>
@@ -486,7 +486,7 @@
 								<td width="50%">
 									<xsl:text>Overloaded. </xsl:text>
 									<xsl:call-template name="overloads-summary-with-no-paragraph">
-										<xsl:with-param name="overloads" select="//class[@id=$declaring-type-id]/method[@name=$name]" />
+										<xsl:with-param name="overloads" select="$declaring-class/method[@name=$name]" />
 									</xsl:call-template>
 								</td>
 							</xsl:when>
@@ -521,7 +521,7 @@
 								</td>
 								<td width="50%">
 									<xsl:call-template name="summary-with-no-paragraph">
-										<xsl:with-param name="member" select="//class[@id=$declaring-type-id]/method[@name=$name]" />
+										<xsl:with-param name="member" select="$declaring-class/method[@name=$name]" />
 									</xsl:call-template>
 								</td>
 							</xsl:otherwise>
@@ -629,7 +629,7 @@
 					</td>
 					<td width="50%">
 						<xsl:call-template name="summary-with-no-paragraph">
-							<xsl:with-param name="member" select="//class[@id=$declaring-type-id]/event[@name=$name]" />
+							<xsl:with-param name="member" select="$declaring-class/event[@name=$name]" />
 						</xsl:call-template>
 					</td>
 				</xsl:when>
