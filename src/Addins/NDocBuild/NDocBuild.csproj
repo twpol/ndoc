@@ -80,17 +80,14 @@
                 <Reference
                     Name = "EnvDTE"
                     AssemblyName = "EnvDTE"
-                    HintPath = "..\..\..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.0.3705\EnvDTE.dll"
                 />
                 <Reference
                     Name = "System.Drawing"
                     AssemblyName = "System.Drawing"
-                    HintPath = "..\..\..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.0.3705\System.Drawing.dll"
                 />
                 <Reference
                     Name = "System.Windows.Forms"
                     AssemblyName = "System.Windows.Forms"
-                    HintPath = "..\..\..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.0.3705\System.Windows.Forms.dll"
                 />
                 <Reference
                     Name = "Core"
