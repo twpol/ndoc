@@ -772,11 +772,11 @@ namespace NDoc.Documenter.Msdn
 			XmlNodeList   constructorNodes;
 			string        constructorID;
 			string        typeName;
-			string        typeID;
+			//string        typeID;
 			string        fileName;
 
 			typeName = typeNode.Attributes["name"].Value;
-			typeID = typeNode.Attributes["id"].Value;
+			//typeID = typeNode.Attributes["id"].Value;
 			constructorNodes = typeNode.SelectNodes("constructor[@contract!='Static']");
 
 			// If the constructor is overloaded then make an overload page.
@@ -840,7 +840,7 @@ namespace NDoc.Documenter.Msdn
 
 			if (fields.Count > 0)
 			{
-				string typeName = typeNode.Attributes["name"].Value;
+				//string typeName = typeNode.Attributes["name"].Value;
 				string typeID = typeNode.Attributes["id"].Value;
 				string fileName = GetFilenameForFields(whichType, typeNode);
 
@@ -1311,7 +1311,7 @@ namespace NDoc.Documenter.Msdn
 
 				if (events.Count > 0)
 				{
-					string typeName = (string)typeNode.Attributes["name"].Value;
+					//string typeName = (string)typeNode.Attributes["name"].Value;
 					string typeID = (string)typeNode.Attributes["id"].Value;
 					string fileName = GetFilenameForEvents(whichType, typeNode);
 

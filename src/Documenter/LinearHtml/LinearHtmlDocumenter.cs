@@ -999,7 +999,7 @@ namespace NDoc.Documenter.LinearHtml
         /// <param name="assemblyVersion">The version of the assembly containing the module.</param>
         void MakeHtmlForModule(XPathNavigator nav, string assemblyName, string assemblyVersion)
 		{
-			string moduleName = nav.GetAttribute("name", "");
+			//string moduleName = nav.GetAttribute("name", "");
 			Console.WriteLine("Module: {0}", nav.GetAttribute("name", ""));
 			nav.MoveToFirstChild();
 
@@ -1213,8 +1213,8 @@ namespace NDoc.Documenter.LinearHtml
 		/// <param name="namespaceName"></param>
 		void MakeHtmlForTypeUsingXslt(XPathNavigator nav, XmlTextWriter xtw, string namespaceName)
 		{
-			string nodeName = nav.GetAttribute("name", "");
-			string nodeType = nav.LocalName;
+			//string nodeName = nav.GetAttribute("name", "");
+			//string nodeType = nav.LocalName;
 			string typeId = nav.GetAttribute("id", "");
 
 			// create transform if it hasn't already been created
@@ -1313,7 +1313,7 @@ namespace NDoc.Documenter.LinearHtml
 				foreach(string memberId in navTable.Keys)
 				{
 					if (!first) { sb.Append(", "); first = false; }
-					XPathNavigator nav2 = (XPathNavigator)navTable[memberId];
+					//XPathNavigator nav2 = (XPathNavigator)navTable[memberId];
 					//this.DumpNavTree(nav2, "    ");
 					string tmps = ((XPathNavigator)navTable[memberId]).GetAttribute("name", "");
 					sb.Append(tmps);
