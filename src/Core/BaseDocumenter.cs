@@ -534,10 +534,25 @@ namespace NDoc.Core
 			}
 		}
 
+		//checks if the type is a java inner class
+		private bool IsJavaInnerClass(Type type)
+		{
+			com.ms.vjsharp.cor.InnerAttribute[] attrs = 
+				Attribute.GetCustomAttributes(type, typeof(com.ms.vjsharp.cor.InnerAttribute), false)
+				as com.ms.vjsharp.cor.InnerAttribute[];
+			
+			if (attrs.Length > 0)
+				return true;
+			else
+				return false;
+		}
+		
+
 		private bool MustDocumentType(Type type)
 		{
 			Type declaringType = type.DeclaringType;
 
+			//exclude type internal to .net framework classes 
 			if (type.FullName.StartsWith("System") || type.FullName.StartsWith("Microsoft"))
 			{
 				if(type.IsNotPublic) return false;
@@ -561,7 +576,8 @@ namespace NDoc.Core
 				) &&
 				IsEditorBrowsable(type) &&
 				(!MyConfig.UseNamespaceDocSummaries || (type.Name != "NamespaceDoc")) &&
-				!assemblyDocCache.HasExcludeTag(GetMemberName(type));
+				!assemblyDocCache.HasExcludeTag(GetMemberName(type)) &&
+				!IsJavaInnerClass(type);
 		}
 
 		private bool MustDocumentMethod(MethodBase method)
