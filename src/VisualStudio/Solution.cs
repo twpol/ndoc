@@ -173,8 +173,10 @@ namespace NDoc.VisualStudio
 		private Hashtable _projects = new Hashtable();
 
 		private void AddProject(string projectLine)
-		{
-			string pattern = @"^Project\(""(?<unknown>\S+)""\) = ""(?<name>\S+)"", ""(?<path>\S+)"", ""(?<id>\S+)""";
+		{			
+			//string pattern = @"^Project\(""(?<unknown>\S+)""\) = ""(?<name>\S+)"", ""(?<path>\S+)"", ""(?<id>\S+)""";
+			// fix for bug 887476 
+			string pattern = @"^Project\(""(?<unknown>.*?)""\) = ""(?<name>.*?)"", ""(?<path>.*?)"", ""(?<id>.*?)""";
 			Regex regex = new Regex(pattern);
 			Match match = regex.Match(projectLine);
 		
