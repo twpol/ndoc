@@ -21,103 +21,163 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_1B01EBE9D55D45568029A0BC926FD16B"
+        "MsmKey" = "8:_0BE3E19A370F4A85B3D9DED4B1E1379D"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_2690C7B82FF8489BA349B4228D8A3245"
-        "OwnerKey" = "8:_1B01EBE9D55D45568029A0BC926FD16B"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_2690C7B82FF8489BA349B4228D8A3245"
-        "OwnerKey" = "8:_E06AA4CCFA0B4FD3A094297FD4A7372C"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_2690C7B82FF8489BA349B4228D8A3245"
-        "OwnerKey" = "8:_9D6F0059D6D840AD9597C268ABB72B8E"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_2690C7B82FF8489BA349B4228D8A3245"
-        "OwnerKey" = "8:_437B41549529F26B3BE068F3FB07EDD0"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_2690C7B82FF8489BA349B4228D8A3245"
-        "OwnerKey" = "8:_77291166267046D484A27DD846B237EF"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_2690C7B82FF8489BA349B4228D8A3245"
-        "OwnerKey" = "8:_E636F726DE27B557361E7808FBBFCF18"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_2690C7B82FF8489BA349B4228D8A3245"
-        "OwnerKey" = "8:_770461D23B0245409B7366552657BCFF"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_2690C7B82FF8489BA349B4228D8A3245"
-        "OwnerKey" = "8:_586C966471AE42F2B3066EA68B2C0D0B"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_2690C7B82FF8489BA349B4228D8A3245"
-        "OwnerKey" = "8:_5049A64647CC4D3682B81596C02E80E1"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_2690C7B82FF8489BA349B4228D8A3245"
-        "OwnerKey" = "8:_3C25064C1EC14331969BFD2087D097BA"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_2690C7B82FF8489BA349B4228D8A3245"
-        "OwnerKey" = "8:_8B5DA2120F9A663B39CD9923B09C530D"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_2D9C47DC11870FA2F0A553EE16B87C9F"
-        "OwnerKey" = "8:_E636F726DE27B557361E7808FBBFCF18"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_3C25064C1EC14331969BFD2087D097BA"
+        "MsmKey" = "8:_10A0797C69C74AF197DFF0BE8DCF5701"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_437B41549529F26B3BE068F3FB07EDD0"
-        "OwnerKey" = "8:_77291166267046D484A27DD846B237EF"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_5049A64647CC4D3682B81596C02E80E1"
+        "MsmKey" = "8:_16E5FF76779A4C548E381CFF1529302C"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_586C966471AE42F2B3066EA68B2C0D0B"
+        "MsmKey" = "8:_1A5C09962C644BDEB00CEF8CC8CF7C55"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_2426A5E2F00A4800AC415CA0AF03278E"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_287FBF5D692F4F088F419B3BDD0E32CE"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_2A6DE4D83AB143FFA3DA45B279085844"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_2BFC73B0C8C54E2288EC08C22D1F1C36"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_310245E124D64E5291859A7D4A01C95A"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_345F5C76C441460C895C7BDCD84D456F"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_357F0AE4D5C04FEBB722A82F49EA03C7"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_374DCEF0A44CB978182F1A9874345C11"
+        "OwnerKey" = "8:_55B04B1DC2804A24837DF2509D8A49F9"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_374DCEF0A44CB978182F1A9874345C11"
+        "OwnerKey" = "8:_C55D16D3401C4DF7ACFF041B7344A816"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_3776F548F2AD4ED3BFD1B7DEB191D226"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_3C3F52D0015742DD839D39C6F6D59B49"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_3F35339048D84ABEB00D7B2A6AC1E869"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_43BE701307784A9A810B6064F86338E5"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_471B5A92BC7348C08838935B12B27C36"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_495E7FEA56D64D3FBA25CE70A6F66EEC"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_4B5D9DC2F87A4E1CAC8EF24F82D8FF4A"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_4D74B0BD552741DD819CA0090D99130A"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_55B04B1DC2804A24837DF2509D8A49F9"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_58AAF018C6D1468F87D019A416325CB4"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_5A453E058C2D45E0B7F2DAAC6F497EFC"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_5E67B931F9BB4560BEB77EC7FE7BF4B7"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_5F3AC34325484105837459C72423C1A5"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_6009425D1DE943B0A7A620131733879F"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -129,19 +189,91 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_649D0C80C2AD4C3E947ACB7A13CFC064"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_6834FB4EE00F4ECA9597B0F6E29D382D"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_68441B6349704BC183C96604A6154539"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_6DCC5E7482404F2999B097B380DA9CA9"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_6F8C7874D4C44D09B5EF161A58AFE4FA"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_7126BF2118546CDFDE77EF8131943FAE"
+        "OwnerKey" = "8:_F3841C4AC9072363CD2658EBCFEAE577"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_7126BF2118546CDFDE77EF8131943FAE"
+        "OwnerKey" = "8:_A1987C3E5AB1420DB44C0A6D26C641A2"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_7126BF2118546CDFDE77EF8131943FAE"
+        "OwnerKey" = "8:_80AA7C38A5BE44F38966BB0E47CCF2E4"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_72F0BEC8D9B54002B799906FD15B2162"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_7371B8F621D34B2ABBCBCE2AA965C71C"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_770461D23B0245409B7366552657BCFF"
+        "MsmKey" = "8:_7675053B322C49FFA4515B60159CFA06"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_77291166267046D484A27DD846B237EF"
+        "MsmKey" = "8:_7D929405828745EC9A03F9150187B5A8"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_7DF230E45B434EE1A8EB2B11A0C5C75F"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_80AA7C38A5BE44F38966BB0E47CCF2E4"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_8605075E88DC4CCF8B39F088257A120F"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -153,73 +285,505 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_8B5DA2120F9A663B39CD9923B09C530D"
-        "OwnerKey" = "8:_1B01EBE9D55D45568029A0BC926FD16B"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_8B5DA2120F9A663B39CD9923B09C530D"
-        "OwnerKey" = "8:_E06AA4CCFA0B4FD3A094297FD4A7372C"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_8B5DA2120F9A663B39CD9923B09C530D"
-        "OwnerKey" = "8:_9D6F0059D6D840AD9597C268ABB72B8E"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_8B5DA2120F9A663B39CD9923B09C530D"
-        "OwnerKey" = "8:_77291166267046D484A27DD846B237EF"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_8B5DA2120F9A663B39CD9923B09C530D"
-        "OwnerKey" = "8:_770461D23B0245409B7366552657BCFF"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_8B5DA2120F9A663B39CD9923B09C530D"
-        "OwnerKey" = "8:_586C966471AE42F2B3066EA68B2C0D0B"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_8B5DA2120F9A663B39CD9923B09C530D"
-        "OwnerKey" = "8:_5049A64647CC4D3682B81596C02E80E1"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_8B5DA2120F9A663B39CD9923B09C530D"
-        "OwnerKey" = "8:_3C25064C1EC14331969BFD2087D097BA"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_9D6F0059D6D840AD9597C268ABB72B8E"
+        "MsmKey" = "8:_9402E8C7859A4EB9B396645407E3D552"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_E06AA4CCFA0B4FD3A094297FD4A7372C"
+        "MsmKey" = "8:_9B1A6CB74B7E42B5A33C669D25FF41CD"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_E636F726DE27B557361E7808FBBFCF18"
-        "OwnerKey" = "8:_770461D23B0245409B7366552657BCFF"
+        "MsmKey" = "8:_9EC2AF80EE5649A894D503F6D46E6267"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_FED705E08CBF407C86DCED4F891A549D"
+        "MsmKey" = "8:_A10DFDB1A33C48408D467C513D550659"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A1987C3E5AB1420DB44C0A6D26C641A2"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_AC887665D4714F12A05FE2D2EFFB7D9F"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_AE6FB4067F87480792C18EE0D1030C0E"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_B6431E1784A64A0F85ABB79E6B4A7962"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_B6597AA08E96440883CD9C10EC0E40B2"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_BC4D04896E9540C782378DF12355B19D"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C192183DFA2E4E919742048E7E08CB7D"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C55D16D3401C4DF7ACFF041B7344A816"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C6EB27536D0C4DAEA19EC6D70BF555B1"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CA9CAA627AA3EEA6B8A4316CFE0243AE"
+        "OwnerKey" = "8:_16E5FF76779A4C548E381CFF1529302C"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CA9CAA627AA3EEA6B8A4316CFE0243AE"
+        "OwnerKey" = "8:_FB61802D2EF947DC88041791417110CF"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CA9CAA627AA3EEA6B8A4316CFE0243AE"
+        "OwnerKey" = "8:_F0A43B7998254EE4B326FC225F607E33"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CA9CAA627AA3EEA6B8A4316CFE0243AE"
+        "OwnerKey" = "8:_D4CA578EF4294CA2B9D77FBBE73C6F5F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CA9CAA627AA3EEA6B8A4316CFE0243AE"
+        "OwnerKey" = "8:_CDEB7B8DDDBE4A63B999BC8851ED99D1"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CA9CAA627AA3EEA6B8A4316CFE0243AE"
+        "OwnerKey" = "8:_CAB0C6845AA74043BF5B47BF25B7E4E8"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CA9CAA627AA3EEA6B8A4316CFE0243AE"
+        "OwnerKey" = "8:_C55D16D3401C4DF7ACFF041B7344A816"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CA9CAA627AA3EEA6B8A4316CFE0243AE"
+        "OwnerKey" = "8:_B6431E1784A64A0F85ABB79E6B4A7962"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CA9CAA627AA3EEA6B8A4316CFE0243AE"
+        "OwnerKey" = "8:_AE6FB4067F87480792C18EE0D1030C0E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CA9CAA627AA3EEA6B8A4316CFE0243AE"
+        "OwnerKey" = "8:_AC887665D4714F12A05FE2D2EFFB7D9F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CA9CAA627AA3EEA6B8A4316CFE0243AE"
+        "OwnerKey" = "8:_7675053B322C49FFA4515B60159CFA06"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CA9CAA627AA3EEA6B8A4316CFE0243AE"
+        "OwnerKey" = "8:_6DCC5E7482404F2999B097B380DA9CA9"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CA9CAA627AA3EEA6B8A4316CFE0243AE"
+        "OwnerKey" = "8:_649D0C80C2AD4C3E947ACB7A13CFC064"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CA9CAA627AA3EEA6B8A4316CFE0243AE"
+        "OwnerKey" = "8:_5E67B931F9BB4560BEB77EC7FE7BF4B7"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CA9CAA627AA3EEA6B8A4316CFE0243AE"
+        "OwnerKey" = "8:_5A453E058C2D45E0B7F2DAAC6F497EFC"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CA9CAA627AA3EEA6B8A4316CFE0243AE"
+        "OwnerKey" = "8:_55B04B1DC2804A24837DF2509D8A49F9"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CA9CAA627AA3EEA6B8A4316CFE0243AE"
+        "OwnerKey" = "8:_4B5D9DC2F87A4E1CAC8EF24F82D8FF4A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CA9CAA627AA3EEA6B8A4316CFE0243AE"
+        "OwnerKey" = "8:_495E7FEA56D64D3FBA25CE70A6F66EEC"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CA9CAA627AA3EEA6B8A4316CFE0243AE"
+        "OwnerKey" = "8:_43BE701307784A9A810B6064F86338E5"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CA9CAA627AA3EEA6B8A4316CFE0243AE"
+        "OwnerKey" = "8:_3C3F52D0015742DD839D39C6F6D59B49"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CA9CAA627AA3EEA6B8A4316CFE0243AE"
+        "OwnerKey" = "8:_310245E124D64E5291859A7D4A01C95A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CA9CAA627AA3EEA6B8A4316CFE0243AE"
+        "OwnerKey" = "8:_1A5C09962C644BDEB00CEF8CC8CF7C55"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CAB0C6845AA74043BF5B47BF25B7E4E8"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CBBBFB1103504ACFB71D6A54EE6EE8CA"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CC31B44C345442A5A099D2AE6387E61C"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CDEB7B8DDDBE4A63B999BC8851ED99D1"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D4CA578EF4294CA2B9D77FBBE73C6F5F"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D72810DE1D9145AC8FA10724A3BFEB01"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D970A9507BB849ACAA4520F952A1AB4E"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_E6DBE24BDD684AB38F2F82E6E78072B2"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_EB54D636C660406D8C81C63853303A7C"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F0A43B7998254EE4B326FC225F607E33"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F3841C4AC9072363CD2658EBCFEAE577"
+        "OwnerKey" = "8:_5A453E058C2D45E0B7F2DAAC6F497EFC"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F3841C4AC9072363CD2658EBCFEAE577"
+        "OwnerKey" = "8:_AE6FB4067F87480792C18EE0D1030C0E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F43E4FE895A948B683985C0E3C3BCDA1"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F65F9008CD4D4CC08F58AFE8D2B8858C"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F8FABAEC6BCA4DEAA0286E91AB347A0B"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F9BA5A28912343B78B03BE8CC7459654"
+        "OwnerKey" = "8:_16E5FF76779A4C548E381CFF1529302C"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F9BA5A28912343B78B03BE8CC7459654"
+        "OwnerKey" = "8:_FB61802D2EF947DC88041791417110CF"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F9BA5A28912343B78B03BE8CC7459654"
+        "OwnerKey" = "8:_F8FABAEC6BCA4DEAA0286E91AB347A0B"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F9BA5A28912343B78B03BE8CC7459654"
+        "OwnerKey" = "8:_F65F9008CD4D4CC08F58AFE8D2B8858C"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F9BA5A28912343B78B03BE8CC7459654"
+        "OwnerKey" = "8:_F0A43B7998254EE4B326FC225F607E33"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F9BA5A28912343B78B03BE8CC7459654"
+        "OwnerKey" = "8:_D4CA578EF4294CA2B9D77FBBE73C6F5F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F9BA5A28912343B78B03BE8CC7459654"
+        "OwnerKey" = "8:_CDEB7B8DDDBE4A63B999BC8851ED99D1"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F9BA5A28912343B78B03BE8CC7459654"
+        "OwnerKey" = "8:_CAB0C6845AA74043BF5B47BF25B7E4E8"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F9BA5A28912343B78B03BE8CC7459654"
+        "OwnerKey" = "8:_C55D16D3401C4DF7ACFF041B7344A816"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F9BA5A28912343B78B03BE8CC7459654"
+        "OwnerKey" = "8:_C192183DFA2E4E919742048E7E08CB7D"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F9BA5A28912343B78B03BE8CC7459654"
+        "OwnerKey" = "8:_B6431E1784A64A0F85ABB79E6B4A7962"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F9BA5A28912343B78B03BE8CC7459654"
+        "OwnerKey" = "8:_AE6FB4067F87480792C18EE0D1030C0E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F9BA5A28912343B78B03BE8CC7459654"
+        "OwnerKey" = "8:_AC887665D4714F12A05FE2D2EFFB7D9F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F9BA5A28912343B78B03BE8CC7459654"
+        "OwnerKey" = "8:_A1987C3E5AB1420DB44C0A6D26C641A2"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F9BA5A28912343B78B03BE8CC7459654"
+        "OwnerKey" = "8:_9402E8C7859A4EB9B396645407E3D552"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F9BA5A28912343B78B03BE8CC7459654"
+        "OwnerKey" = "8:_7675053B322C49FFA4515B60159CFA06"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F9BA5A28912343B78B03BE8CC7459654"
+        "OwnerKey" = "8:_6DCC5E7482404F2999B097B380DA9CA9"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F9BA5A28912343B78B03BE8CC7459654"
+        "OwnerKey" = "8:_649D0C80C2AD4C3E947ACB7A13CFC064"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F9BA5A28912343B78B03BE8CC7459654"
+        "OwnerKey" = "8:_6009425D1DE943B0A7A620131733879F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F9BA5A28912343B78B03BE8CC7459654"
+        "OwnerKey" = "8:_5F3AC34325484105837459C72423C1A5"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F9BA5A28912343B78B03BE8CC7459654"
+        "OwnerKey" = "8:_5E67B931F9BB4560BEB77EC7FE7BF4B7"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F9BA5A28912343B78B03BE8CC7459654"
+        "OwnerKey" = "8:_5A453E058C2D45E0B7F2DAAC6F497EFC"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F9BA5A28912343B78B03BE8CC7459654"
+        "OwnerKey" = "8:_374DCEF0A44CB978182F1A9874345C11"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F9BA5A28912343B78B03BE8CC7459654"
+        "OwnerKey" = "8:_55B04B1DC2804A24837DF2509D8A49F9"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F9BA5A28912343B78B03BE8CC7459654"
+        "OwnerKey" = "8:_4B5D9DC2F87A4E1CAC8EF24F82D8FF4A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F9BA5A28912343B78B03BE8CC7459654"
+        "OwnerKey" = "8:_495E7FEA56D64D3FBA25CE70A6F66EEC"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F9BA5A28912343B78B03BE8CC7459654"
+        "OwnerKey" = "8:_43BE701307784A9A810B6064F86338E5"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F9BA5A28912343B78B03BE8CC7459654"
+        "OwnerKey" = "8:_3F35339048D84ABEB00D7B2A6AC1E869"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F9BA5A28912343B78B03BE8CC7459654"
+        "OwnerKey" = "8:_3C3F52D0015742DD839D39C6F6D59B49"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F9BA5A28912343B78B03BE8CC7459654"
+        "OwnerKey" = "8:_3776F548F2AD4ED3BFD1B7DEB191D226"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F9BA5A28912343B78B03BE8CC7459654"
+        "OwnerKey" = "8:_310245E124D64E5291859A7D4A01C95A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F9BA5A28912343B78B03BE8CC7459654"
+        "OwnerKey" = "8:_1A5C09962C644BDEB00CEF8CC8CF7C55"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F9BA5A28912343B78B03BE8CC7459654"
+        "OwnerKey" = "8:_CA9CAA627AA3EEA6B8A4316CFE0243AE"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_FB61802D2EF947DC88041791417110CF"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -231,27 +795,11 @@
         "DisplayName" = "8:Debug"
         "IsDebugOnly" = "11:TRUE"
         "IsReleaseOnly" = "11:FALSE"
-        "OutputFilename" = "8:Debug\\Setup.msi"
+        "OutputFilename" = "8:Debug\\NDoc.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
         "Compression" = "3:2"
-        "SignOutput" = "11:FALSE"
-        "CertificateFile" = "8:"
-        "PrivateKeyFile" = "8:"
-        "TimeStampServer" = "8:"
-        "InstallerBootstrapper" = "3:2"
-        }
-        "Deploy"
-        {
-        "DisplayName" = "8:Deploy"
-        "IsDebugOnly" = "11:FALSE"
-        "IsReleaseOnly" = "11:FALSE"
-        "OutputFilename" = "8:Deploy\\Setup.msi"
-        "PackageFilesAs" = "3:2"
-        "PackageFileSize" = "3:-2147483648"
-        "CabType" = "3:1"
-        "Compression" = "3:3"
         "SignOutput" = "11:FALSE"
         "CertificateFile" = "8:"
         "PrivateKeyFile" = "8:"
@@ -273,6 +821,13 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:1"
+            "BootstrapperCfg:{6ACC3AB5-647B-4D74-A7F6-B217A05DD543}"
+            {
+            "BaseURL" = "8:http://ndoc.sourceforge.net/setup"
+            "InstMsiURL" = "8:"
+            "PropertyName" = "8:"
+            "PropertyValue" = "8:"
+            }
         }
     }
     "Deployable"
@@ -294,7 +849,7 @@
                 {
                 "Name" = "8:.NET Framework"
                 "Message" = "8:[VSDNETMSG]"
-                "SupportedRuntimes" = "8:1.1.4322"
+                "SupportedRuntimes" = "8:1.1.4322;1.0.3705"
                 "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=9832"
                 }
             }
@@ -324,7 +879,804 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{A582A373-4685-4296-BEFE-614B80A702C3}:_2D9C47DC11870FA2F0A553EE16B87C9F"
+            "{A582A373-4685-4296-BEFE-614B80A702C3}:_0BE3E19A370F4A85B3D9DED4B1E1379D"
+            {
+            "SourcePath" = "8:..\\..\\examples\\Linked\\readme.html"
+            "TargetName" = "8:readme.html"
+            "Tag" = "8:"
+            "Folder" = "8:_F3CA139F2DF344528A0C44F2F159C5D7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{A582A373-4685-4296-BEFE-614B80A702C3}:_10A0797C69C74AF197DFF0BE8DCF5701"
+            {
+            "SourcePath" = "8:..\\..\\bin\\net\\1.1\\NDoc.Documenter.JavaDoc.xml"
+            "TargetName" = "8:NDoc.Documenter.JavaDoc.xml"
+            "Tag" = "8:"
+            "Folder" = "8:_C711924DB96A4A028E73D9A6076EE941"
+            "Condition" = "8:NET_1_1"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{FB480208-1853-44D0-9ABD-A3B734C3FAAA}:_16E5FF76779A4C548E381CFF1529302C"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:NDoc.Documenter.JavaDoc, Version=1.3.1531.0, Culture=neutral"
+                "ScatterAssemblies"
+                {
+                }
+            "SourcePath" = "8:..\\..\\bin\\mono\\1.0\\NDoc.Documenter.JavaDoc.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_8302415435064823B59AC1DA12E26B5B"
+            "Condition" = "8:MONO_1_0"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{FB480208-1853-44D0-9ABD-A3B734C3FAAA}:_1A5C09962C644BDEB00CEF8CC8CF7C55"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:NDoc.Documenter.LinearHtml, Version=1.3.1531.0, Culture=neutral, PublicKeyToken=b9896512f28c0f09"
+                "ScatterAssemblies"
+                {
+                    "_1A5C09962C644BDEB00CEF8CC8CF7C55"
+                    {
+                    "Name" = "8:NDoc.Documenter.LinearHtml.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\..\\bin\\net\\1.1\\NDoc.Documenter.LinearHtml.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_C711924DB96A4A028E73D9A6076EE941"
+            "Condition" = "8:NET_1_1"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{A582A373-4685-4296-BEFE-614B80A702C3}:_2426A5E2F00A4800AC415CA0AF03278E"
+            {
+            "SourcePath" = "8:..\\..\\bin\\net\\1.0\\NDoc.Core.xml"
+            "TargetName" = "8:NDoc.Core.xml"
+            "Tag" = "8:"
+            "Folder" = "8:_3BB3BC3AFBAA41C39FE8C71428EA0555"
+            "Condition" = "8:NET_1_0"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{A582A373-4685-4296-BEFE-614B80A702C3}:_287FBF5D692F4F088F419B3BDD0E32CE"
+            {
+            "SourcePath" = "8:..\\..\\examples\\NDoc.Core.ndoc"
+            "TargetName" = "8:NDoc.Core.ndoc"
+            "Tag" = "8:"
+            "Folder" = "8:_372EC7B1986142DCA2A5F8C664AD2B30"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{A582A373-4685-4296-BEFE-614B80A702C3}:_2A6DE4D83AB143FFA3DA45B279085844"
+            {
+            "SourcePath" = "8:..\\..\\bin\\net\\1.1\\NDoc.Test.xml"
+            "TargetName" = "8:NDoc.Test.xml"
+            "Tag" = "8:"
+            "Folder" = "8:_C711924DB96A4A028E73D9A6076EE941"
+            "Condition" = "8:NET_1_1"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{A582A373-4685-4296-BEFE-614B80A702C3}:_2BFC73B0C8C54E2288EC08C22D1F1C36"
+            {
+            "SourcePath" = "8:..\\..\\bin\\net\\1.0\\NDoc.Documenter.NativeHtmlHelp2.xml"
+            "TargetName" = "8:NDoc.Documenter.NativeHtmlHelp2.xml"
+            "Tag" = "8:"
+            "Folder" = "8:_3BB3BC3AFBAA41C39FE8C71428EA0555"
+            "Condition" = "8:NET_1_0"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{FB480208-1853-44D0-9ABD-A3B734C3FAAA}:_310245E124D64E5291859A7D4A01C95A"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:NDoc.Documenter.Xml, Version=1.3.1531.0, Culture=neutral, PublicKeyToken=b9896512f28c0f09"
+                "ScatterAssemblies"
+                {
+                    "_310245E124D64E5291859A7D4A01C95A"
+                    {
+                    "Name" = "8:NDoc.Documenter.Xml.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\..\\bin\\net\\1.1\\NDoc.Documenter.Xml.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_C711924DB96A4A028E73D9A6076EE941"
+            "Condition" = "8:NET_1_1"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{A582A373-4685-4296-BEFE-614B80A702C3}:_345F5C76C441460C895C7BDCD84D456F"
+            {
+            "SourcePath" = "8:..\\..\\bin\\net\\1.1\\NDocGui.exe.manifest"
+            "TargetName" = "8:NDocGui.exe.manifest"
+            "Tag" = "8:"
+            "Folder" = "8:_C711924DB96A4A028E73D9A6076EE941"
+            "Condition" = "8:NET_1_1"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{A582A373-4685-4296-BEFE-614B80A702C3}:_357F0AE4D5C04FEBB722A82F49EA03C7"
+            {
+            "SourcePath" = "8:..\\..\\examples\\Linked\\Linked.hhc"
+            "TargetName" = "8:Linked.hhc"
+            "Tag" = "8:"
+            "Folder" = "8:_F3CA139F2DF344528A0C44F2F159C5D7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{FB480208-1853-44D0-9ABD-A3B734C3FAAA}:_374DCEF0A44CB978182F1A9874345C11"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:NDoc.VisualStudio, Version=1.3.1531.0, Culture=neutral, PublicKeyToken=b9896512f28c0f09"
+                "ScatterAssemblies"
+                {
+                    "_374DCEF0A44CB978182F1A9874345C11"
+                    {
+                    "Name" = "8:NDoc.VisualStudio.DLL"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:NDoc.VisualStudio.DLL"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_3BB3BC3AFBAA41C39FE8C71428EA0555"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{FB480208-1853-44D0-9ABD-A3B734C3FAAA}:_3776F548F2AD4ED3BFD1B7DEB191D226"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:NDoc.VisualStudio, Version=1.3.1531.0, Culture=neutral, PublicKeyToken=b9896512f28c0f09"
+                "ScatterAssemblies"
+                {
+                    "_3776F548F2AD4ED3BFD1B7DEB191D226"
+                    {
+                    "Name" = "8:NDoc.VisualStudio.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\..\\bin\\net\\1.1\\NDoc.VisualStudio.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_C711924DB96A4A028E73D9A6076EE941"
+            "Condition" = "8:NET_1_1"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{FB480208-1853-44D0-9ABD-A3B734C3FAAA}:_3C3F52D0015742DD839D39C6F6D59B49"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:NDoc.Documenter.Latex, Version=1.3.1531.0, Culture=neutral, PublicKeyToken=b9896512f28c0f09"
+                "ScatterAssemblies"
+                {
+                    "_3C3F52D0015742DD839D39C6F6D59B49"
+                    {
+                    "Name" = "8:NDoc.Documenter.Latex.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\..\\bin\\net\\1.1\\NDoc.Documenter.Latex.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_C711924DB96A4A028E73D9A6076EE941"
+            "Condition" = "8:NET_1_1"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{FB480208-1853-44D0-9ABD-A3B734C3FAAA}:_3F35339048D84ABEB00D7B2A6AC1E869"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:NDoc.Core, Version=1.3.1531.0, Culture=neutral, PublicKeyToken=b9896512f28c0f09"
+                "ScatterAssemblies"
+                {
+                    "_3F35339048D84ABEB00D7B2A6AC1E869"
+                    {
+                    "Name" = "8:NDoc.Core.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\..\\bin\\net\\1.1\\NDoc.Core.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_C711924DB96A4A028E73D9A6076EE941"
+            "Condition" = "8:NET_1_1"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{FB480208-1853-44D0-9ABD-A3B734C3FAAA}:_43BE701307784A9A810B6064F86338E5"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:NDoc.Documenter.LinearHtml, Version=1.3.1531.0, Culture=neutral"
+                "ScatterAssemblies"
+                {
+                }
+            "SourcePath" = "8:..\\..\\bin\\mono\\1.0\\NDoc.Documenter.LinearHtml.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_8302415435064823B59AC1DA12E26B5B"
+            "Condition" = "8:MONO_1_0"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{A582A373-4685-4296-BEFE-614B80A702C3}:_471B5A92BC7348C08838935B12B27C36"
+            {
+            "SourcePath" = "8:..\\..\\examples\\Linked\\MSDN.css"
+            "TargetName" = "8:MSDN.css"
+            "Tag" = "8:"
+            "Folder" = "8:_F3CA139F2DF344528A0C44F2F159C5D7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{FB480208-1853-44D0-9ABD-A3B734C3FAAA}:_495E7FEA56D64D3FBA25CE70A6F66EEC"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:NDoc.Documenter.Xml, Version=1.3.1531.0, Culture=neutral, PublicKeyToken=b9896512f28c0f09"
+                "ScatterAssemblies"
+                {
+                    "_495E7FEA56D64D3FBA25CE70A6F66EEC"
+                    {
+                    "Name" = "8:NDoc.Documenter.Xml.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\..\\bin\\net\\1.0\\NDoc.Documenter.Xml.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_3BB3BC3AFBAA41C39FE8C71428EA0555"
+            "Condition" = "8:NET_1_0"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{FB480208-1853-44D0-9ABD-A3B734C3FAAA}:_4B5D9DC2F87A4E1CAC8EF24F82D8FF4A"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:NDoc.Documenter.Msdn, Version=1.3.1531.0, Culture=neutral"
+                "ScatterAssemblies"
+                {
+                }
+            "SourcePath" = "8:..\\..\\bin\\mono\\1.0\\NDoc.Documenter.Msdn.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_8302415435064823B59AC1DA12E26B5B"
+            "Condition" = "8:MONO_1_0"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{A582A373-4685-4296-BEFE-614B80A702C3}:_4D74B0BD552741DD819CA0090D99130A"
+            {
+            "SourcePath" = "8:..\\..\\bin\\net\\1.1\\NDoc.Documenter.NativeHtmlHelp2.xml"
+            "TargetName" = "8:NDoc.Documenter.NativeHtmlHelp2.xml"
+            "Tag" = "8:"
+            "Folder" = "8:_C711924DB96A4A028E73D9A6076EE941"
+            "Condition" = "8:NET_1_1"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{FB480208-1853-44D0-9ABD-A3B734C3FAAA}:_55B04B1DC2804A24837DF2509D8A49F9"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:NDocGui, Version=1.3.1531.0, Culture=neutral, PublicKeyToken=b9896512f28c0f09"
+                "ScatterAssemblies"
+                {
+                    "_55B04B1DC2804A24837DF2509D8A49F9"
+                    {
+                    "Name" = "8:NDocGui.exe"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\..\\bin\\net\\1.0\\NDocGui.exe"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_3BB3BC3AFBAA41C39FE8C71428EA0555"
+            "Condition" = "8:NET_1_0"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{A582A373-4685-4296-BEFE-614B80A702C3}:_58AAF018C6D1468F87D019A416325CB4"
+            {
+            "SourcePath" = "8:..\\..\\doc\\help\\NDocUsersGuide.chm"
+            "TargetName" = "8:NDocUsersGuide.chm"
+            "Tag" = "8:"
+            "Folder" = "8:_219738F167424F6FB6D597D97314FAF6"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{FB480208-1853-44D0-9ABD-A3B734C3FAAA}:_5A453E058C2D45E0B7F2DAAC6F497EFC"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:NDoc.Documenter.NativeHtmlHelp2, Version=1.3.1531.0, Culture=neutral, PublicKeyToken=b9896512f28c0f09"
+                "ScatterAssemblies"
+                {
+                    "_5A453E058C2D45E0B7F2DAAC6F497EFC"
+                    {
+                    "Name" = "8:NDoc.Documenter.NativeHtmlHelp2.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\..\\bin\\net\\1.0\\NDoc.Documenter.NativeHtmlHelp2.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_3BB3BC3AFBAA41C39FE8C71428EA0555"
+            "Condition" = "8:NET_1_0"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{FB480208-1853-44D0-9ABD-A3B734C3FAAA}:_5E67B931F9BB4560BEB77EC7FE7BF4B7"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:NDoc.Documenter.Latex, Version=1.3.1531.0, Culture=neutral"
+                "ScatterAssemblies"
+                {
+                }
+            "SourcePath" = "8:..\\..\\bin\\mono\\1.0\\NDoc.Documenter.Latex.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_8302415435064823B59AC1DA12E26B5B"
+            "Condition" = "8:MONO_1_0"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{FB480208-1853-44D0-9ABD-A3B734C3FAAA}:_5F3AC34325484105837459C72423C1A5"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:NDoc.Core, Version=1.3.1531.0, Culture=neutral"
+                "ScatterAssemblies"
+                {
+                }
+            "SourcePath" = "8:..\\..\\bin\\mono\\1.0\\NDoc.Core.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_8302415435064823B59AC1DA12E26B5B"
+            "Condition" = "8:MONO_1_0"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{FB480208-1853-44D0-9ABD-A3B734C3FAAA}:_6009425D1DE943B0A7A620131733879F"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:NDoc.VisualStudio, Version=1.3.1531.0, Culture=neutral, PublicKeyToken=b9896512f28c0f09"
+                "ScatterAssemblies"
+                {
+                    "_6009425D1DE943B0A7A620131733879F"
+                    {
+                    "Name" = "8:NDoc.VisualStudio.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\..\\bin\\net\\1.0\\NDoc.VisualStudio.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_3BB3BC3AFBAA41C39FE8C71428EA0555"
+            "Condition" = "8:NET_1_0"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{A582A373-4685-4296-BEFE-614B80A702C3}:_60AFD71975214E9E9CA5A0E1BCAC3086"
+            {
+            "SourcePath" = "8:24.ico"
+            "TargetName" = "8:24.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_3E83289CD02E47D0A8ACE7A8D09CFF5F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{FB480208-1853-44D0-9ABD-A3B734C3FAAA}:_649D0C80C2AD4C3E947ACB7A13CFC064"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:NDoc.Documenter.Xml, Version=1.3.1531.0, Culture=neutral"
+                "ScatterAssemblies"
+                {
+                }
+            "SourcePath" = "8:..\\..\\bin\\mono\\1.0\\NDoc.Documenter.Xml.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_8302415435064823B59AC1DA12E26B5B"
+            "Condition" = "8:MONO_1_0"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{A582A373-4685-4296-BEFE-614B80A702C3}:_6834FB4EE00F4ECA9597B0F6E29D382D"
+            {
+            "SourcePath" = "8:..\\..\\examples\\Linked\\tags.html"
+            "TargetName" = "8:tags.html"
+            "Tag" = "8:"
+            "Folder" = "8:_F3CA139F2DF344528A0C44F2F159C5D7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{A582A373-4685-4296-BEFE-614B80A702C3}:_68441B6349704BC183C96604A6154539"
+            {
+            "SourcePath" = "8:..\\..\\bin\\net\\1.1\\NDoc.Documenter.Xml.xml"
+            "TargetName" = "8:NDoc.Documenter.Xml.xml"
+            "Tag" = "8:"
+            "Folder" = "8:_C711924DB96A4A028E73D9A6076EE941"
+            "Condition" = "8:NET_1_1"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{FB480208-1853-44D0-9ABD-A3B734C3FAAA}:_6DCC5E7482404F2999B097B380DA9CA9"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:NDoc.Documenter.Latex, Version=1.3.1531.0, Culture=neutral, PublicKeyToken=b9896512f28c0f09"
+                "ScatterAssemblies"
+                {
+                    "_6DCC5E7482404F2999B097B380DA9CA9"
+                    {
+                    "Name" = "8:NDoc.Documenter.Latex.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\..\\bin\\net\\1.0\\NDoc.Documenter.Latex.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_3BB3BC3AFBAA41C39FE8C71428EA0555"
+            "Condition" = "8:NET_1_0"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{A582A373-4685-4296-BEFE-614B80A702C3}:_6F8C7874D4C44D09B5EF161A58AFE4FA"
+            {
+            "SourcePath" = "8:..\\..\\examples\\Linked\\reference.html"
+            "TargetName" = "8:reference.html"
+            "Tag" = "8:"
+            "Folder" = "8:_F3CA139F2DF344528A0C44F2F159C5D7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{A582A373-4685-4296-BEFE-614B80A702C3}:_7126BF2118546CDFDE77EF8131943FAE"
             {
             "SourcePath" = "8:hxcsrv.exe"
             "TargetName" = "8:hxcsrv.exe"
@@ -344,44 +1696,13 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{FB480208-1853-44D0-9ABD-A3B734C3FAAA}:_437B41549529F26B3BE068F3FB07EDD0"
+            "{A582A373-4685-4296-BEFE-614B80A702C3}:_72F0BEC8D9B54002B799906FD15B2162"
             {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:NDoc.VisualStudio, Version=1.3.0.41056, Culture=neutral, PublicKeyToken=b9896512f28c0f09"
-                "ScatterAssemblies"
-                {
-                    "_437B41549529F26B3BE068F3FB07EDD0"
-                    {
-                    "Name" = "8:NDoc.VisualStudio.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:NDoc.VisualStudio.dll"
-            "TargetName" = "8:"
+            "SourcePath" = "8:..\\..\\bin\\net\\1.1\\NDoc.Documenter.LinearHtml.xml"
+            "TargetName" = "8:NDoc.Documenter.LinearHtml.xml"
             "Tag" = "8:"
-            "Folder" = "8:_3E83289CD02E47D0A8ACE7A8D09CFF5F"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{A582A373-4685-4296-BEFE-614B80A702C3}:_60AFD71975214E9E9CA5A0E1BCAC3086"
-            {
-            "SourcePath" = "8:24.ico"
-            "TargetName" = "8:24.ico"
-            "Tag" = "8:"
-            "Folder" = "8:_3E83289CD02E47D0A8ACE7A8D09CFF5F"
-            "Condition" = "8:"
+            "Folder" = "8:_C711924DB96A4A028E73D9A6076EE941"
+            "Condition" = "8:NET_1_1"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
@@ -415,6 +1736,128 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{FB480208-1853-44D0-9ABD-A3B734C3FAAA}:_7675053B322C49FFA4515B60159CFA06"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:NDoc.Documenter.JavaDoc, Version=1.3.1531.0, Culture=neutral, PublicKeyToken=b9896512f28c0f09"
+                "ScatterAssemblies"
+                {
+                    "_7675053B322C49FFA4515B60159CFA06"
+                    {
+                    "Name" = "8:NDoc.Documenter.JavaDoc.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\..\\bin\\net\\1.0\\NDoc.Documenter.JavaDoc.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_3BB3BC3AFBAA41C39FE8C71428EA0555"
+            "Condition" = "8:NET_1_0"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{A582A373-4685-4296-BEFE-614B80A702C3}:_7D929405828745EC9A03F9150187B5A8"
+            {
+            "SourcePath" = "8:..\\..\\bin\\net\\1.1\\NDoc.VisualStudio.xml"
+            "TargetName" = "8:NDoc.VisualStudio.xml"
+            "Tag" = "8:"
+            "Folder" = "8:_C711924DB96A4A028E73D9A6076EE941"
+            "Condition" = "8:NET_1_1"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{A582A373-4685-4296-BEFE-614B80A702C3}:_7DF230E45B434EE1A8EB2B11A0C5C75F"
+            {
+            "SourcePath" = "8:..\\..\\bin\\net\\1.0\\NDoc.Documenter.Latex.xml"
+            "TargetName" = "8:NDoc.Documenter.Latex.xml"
+            "Tag" = "8:"
+            "Folder" = "8:_3BB3BC3AFBAA41C39FE8C71428EA0555"
+            "Condition" = "8:NET_1_0"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{FB480208-1853-44D0-9ABD-A3B734C3FAAA}:_80AA7C38A5BE44F38966BB0E47CCF2E4"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Interop.MSHelpCompiler, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b9896512f28c0f09"
+                "ScatterAssemblies"
+                {
+                    "_80AA7C38A5BE44F38966BB0E47CCF2E4"
+                    {
+                    "Name" = "8:Interop.MSHelpCompiler.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\..\\bin\\net\\1.0\\Interop.MSHelpCompiler.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_3BB3BC3AFBAA41C39FE8C71428EA0555"
+            "Condition" = "8:NET_1_0"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{A582A373-4685-4296-BEFE-614B80A702C3}:_8605075E88DC4CCF8B39F088257A120F"
+            {
+            "SourcePath" = "8:..\\..\\bin\\net\\1.0\\NDoc.Documenter.Msdn.xml"
+            "TargetName" = "8:NDoc.Documenter.Msdn.xml"
+            "Tag" = "8:"
+            "Folder" = "8:_3BB3BC3AFBAA41C39FE8C71428EA0555"
+            "Condition" = "8:NET_1_0"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{A582A373-4685-4296-BEFE-614B80A702C3}:_88DDA4B3D56E42D3A5AC2E40CC317FEC"
             {
             "SourcePath" = "8:ndocsetup.ico"
@@ -435,23 +1878,350 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{FB480208-1853-44D0-9ABD-A3B734C3FAAA}:_8B5DA2120F9A663B39CD9923B09C530D"
+            "{FB480208-1853-44D0-9ABD-A3B734C3FAAA}:_9402E8C7859A4EB9B396645407E3D552"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:NDoc.Core, Version=1.3.0.41055, Culture=neutral, PublicKeyToken=b9896512f28c0f09"
+            "AssemblyAsmDisplayName" = "8:NDoc.Core, Version=1.3.1531.0, Culture=neutral, PublicKeyToken=b9896512f28c0f09"
                 "ScatterAssemblies"
                 {
-                    "_8B5DA2120F9A663B39CD9923B09C530D"
+                    "_9402E8C7859A4EB9B396645407E3D552"
                     {
                     "Name" = "8:NDoc.Core.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:NDoc.Core.dll"
+            "SourcePath" = "8:..\\..\\bin\\net\\1.0\\NDoc.Core.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
-            "Folder" = "8:_3E83289CD02E47D0A8ACE7A8D09CFF5F"
+            "Folder" = "8:_3BB3BC3AFBAA41C39FE8C71428EA0555"
+            "Condition" = "8:NET_1_0"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{A582A373-4685-4296-BEFE-614B80A702C3}:_9B1A6CB74B7E42B5A33C669D25FF41CD"
+            {
+            "SourcePath" = "8:..\\..\\bin\\net\\1.0\\NDoc.Test.xml"
+            "TargetName" = "8:NDoc.Test.xml"
+            "Tag" = "8:"
+            "Folder" = "8:_3BB3BC3AFBAA41C39FE8C71428EA0555"
+            "Condition" = "8:NET_1_0"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{A582A373-4685-4296-BEFE-614B80A702C3}:_9EC2AF80EE5649A894D503F6D46E6267"
+            {
+            "SourcePath" = "8:..\\..\\examples\\Linked\\NDoc.Core.chm"
+            "TargetName" = "8:NDoc.Core.chm"
+            "Tag" = "8:"
+            "Folder" = "8:_F3CA139F2DF344528A0C44F2F159C5D7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{A582A373-4685-4296-BEFE-614B80A702C3}:_A10DFDB1A33C48408D467C513D550659"
+            {
+            "SourcePath" = "8:..\\..\\examples\\Linked\\Index.hhk"
+            "TargetName" = "8:Index.hhk"
+            "Tag" = "8:"
+            "Folder" = "8:_F3CA139F2DF344528A0C44F2F159C5D7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{FB480208-1853-44D0-9ABD-A3B734C3FAAA}:_A1987C3E5AB1420DB44C0A6D26C641A2"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Interop.MSHelpCompiler, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b9896512f28c0f09"
+                "ScatterAssemblies"
+                {
+                    "_A1987C3E5AB1420DB44C0A6D26C641A2"
+                    {
+                    "Name" = "8:Interop.MSHelpCompiler.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\..\\bin\\net\\1.1\\Interop.MSHelpCompiler.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_C711924DB96A4A028E73D9A6076EE941"
+            "Condition" = "8:NET_1_1"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{FB480208-1853-44D0-9ABD-A3B734C3FAAA}:_AC887665D4714F12A05FE2D2EFFB7D9F"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:NDoc.Documenter.JavaDoc, Version=1.3.1531.0, Culture=neutral, PublicKeyToken=b9896512f28c0f09"
+                "ScatterAssemblies"
+                {
+                    "_AC887665D4714F12A05FE2D2EFFB7D9F"
+                    {
+                    "Name" = "8:NDoc.Documenter.JavaDoc.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\..\\bin\\net\\1.1\\NDoc.Documenter.JavaDoc.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_C711924DB96A4A028E73D9A6076EE941"
+            "Condition" = "8:NET_1_1"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{FB480208-1853-44D0-9ABD-A3B734C3FAAA}:_AE6FB4067F87480792C18EE0D1030C0E"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:NDoc.Documenter.NativeHtmlHelp2, Version=1.3.1531.0, Culture=neutral, PublicKeyToken=b9896512f28c0f09"
+                "ScatterAssemblies"
+                {
+                    "_AE6FB4067F87480792C18EE0D1030C0E"
+                    {
+                    "Name" = "8:NDoc.Documenter.NativeHtmlHelp2.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\..\\bin\\net\\1.1\\NDoc.Documenter.NativeHtmlHelp2.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_C711924DB96A4A028E73D9A6076EE941"
+            "Condition" = "8:NET_1_1"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{FB480208-1853-44D0-9ABD-A3B734C3FAAA}:_B6431E1784A64A0F85ABB79E6B4A7962"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:NDoc.Documenter.Msdn, Version=1.3.1531.0, Culture=neutral, PublicKeyToken=b9896512f28c0f09"
+                "ScatterAssemblies"
+                {
+                    "_B6431E1784A64A0F85ABB79E6B4A7962"
+                    {
+                    "Name" = "8:NDoc.Documenter.Msdn.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\..\\bin\\net\\1.1\\NDoc.Documenter.Msdn.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_C711924DB96A4A028E73D9A6076EE941"
+            "Condition" = "8:NET_1_1"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{A582A373-4685-4296-BEFE-614B80A702C3}:_B6597AA08E96440883CD9C10EC0E40B2"
+            {
+            "SourcePath" = "8:..\\..\\bin\\net\\1.1\\NDoc.Documenter.Msdn.xml"
+            "TargetName" = "8:NDoc.Documenter.Msdn.xml"
+            "Tag" = "8:"
+            "Folder" = "8:_C711924DB96A4A028E73D9A6076EE941"
+            "Condition" = "8:NET_1_1"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{A582A373-4685-4296-BEFE-614B80A702C3}:_BC4D04896E9540C782378DF12355B19D"
+            {
+            "SourcePath" = "8:..\\..\\examples\\Linked\\Linked.hhp"
+            "TargetName" = "8:Linked.hhp"
+            "Tag" = "8:"
+            "Folder" = "8:_F3CA139F2DF344528A0C44F2F159C5D7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{FB480208-1853-44D0-9ABD-A3B734C3FAAA}:_C192183DFA2E4E919742048E7E08CB7D"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:NDoc.VisualStudio, Version=1.3.1531.0, Culture=neutral"
+                "ScatterAssemblies"
+                {
+                }
+            "SourcePath" = "8:..\\..\\bin\\mono\\1.0\\NDoc.VisualStudio.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_8302415435064823B59AC1DA12E26B5B"
+            "Condition" = "8:MONO_1_0"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{FB480208-1853-44D0-9ABD-A3B734C3FAAA}:_C55D16D3401C4DF7ACFF041B7344A816"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:NDocGui, Version=1.3.1531.0, Culture=neutral, PublicKeyToken=b9896512f28c0f09"
+                "ScatterAssemblies"
+                {
+                    "_C55D16D3401C4DF7ACFF041B7344A816"
+                    {
+                    "Name" = "8:NDocGui.exe"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\..\\bin\\net\\1.1\\NDocGui.exe"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_C711924DB96A4A028E73D9A6076EE941"
+            "Condition" = "8:NET_1_1"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{A582A373-4685-4296-BEFE-614B80A702C3}:_C6EB27536D0C4DAEA19EC6D70BF555B1"
+            {
+            "SourcePath" = "8:..\\..\\bin\\net\\1.0\\NDoc.Documenter.JavaDoc.xml"
+            "TargetName" = "8:NDoc.Documenter.JavaDoc.xml"
+            "Tag" = "8:"
+            "Folder" = "8:_3BB3BC3AFBAA41C39FE8C71428EA0555"
+            "Condition" = "8:NET_1_0"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{FB480208-1853-44D0-9ABD-A3B734C3FAAA}:_CA9CAA627AA3EEA6B8A4316CFE0243AE"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:NDoc.Core, Version=1.3.1531.0, Culture=neutral"
+                "ScatterAssemblies"
+                {
+                }
+            "SourcePath" = "8:NDoc.Core.DLL"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_8302415435064823B59AC1DA12E26B5B"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -466,20 +2236,259 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{FB480208-1853-44D0-9ABD-A3B734C3FAAA}:_E636F726DE27B557361E7808FBBFCF18"
+            "{FB480208-1853-44D0-9ABD-A3B734C3FAAA}:_CAB0C6845AA74043BF5B47BF25B7E4E8"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Interop.MSHelpCompiler, Version=1.0.0.0, Culture=neutral"
+            "AssemblyAsmDisplayName" = "8:NDocConsole, Version=1.3.1531.0, Culture=neutral"
                 "ScatterAssemblies"
                 {
-                    "_E636F726DE27B557361E7808FBBFCF18"
+                }
+            "SourcePath" = "8:..\\..\\bin\\mono\\1.0\\NDocConsole.exe"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_8302415435064823B59AC1DA12E26B5B"
+            "Condition" = "8:MONO_1_0"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{A582A373-4685-4296-BEFE-614B80A702C3}:_CBBBFB1103504ACFB71D6A54EE6EE8CA"
+            {
+            "SourcePath" = "8:..\\..\\bin\\net\\1.0\\NDocGui.exe.manifest"
+            "TargetName" = "8:NDocGui.exe.manifest"
+            "Tag" = "8:"
+            "Folder" = "8:_3BB3BC3AFBAA41C39FE8C71428EA0555"
+            "Condition" = "8:NET_1_0"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{A582A373-4685-4296-BEFE-614B80A702C3}:_CC31B44C345442A5A099D2AE6387E61C"
+            {
+            "SourcePath" = "8:..\\..\\bin\\net\\1.1\\NDoc.Documenter.Latex.xml"
+            "TargetName" = "8:NDoc.Documenter.Latex.xml"
+            "Tag" = "8:"
+            "Folder" = "8:_C711924DB96A4A028E73D9A6076EE941"
+            "Condition" = "8:NET_1_1"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{FB480208-1853-44D0-9ABD-A3B734C3FAAA}:_CDEB7B8DDDBE4A63B999BC8851ED99D1"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:NDocConsole, Version=1.3.1531.0, Culture=neutral, PublicKeyToken=b9896512f28c0f09"
+                "ScatterAssemblies"
+                {
+                    "_CDEB7B8DDDBE4A63B999BC8851ED99D1"
                     {
-                    "Name" = "8:Interop.MSHelpCompiler.dll"
+                    "Name" = "8:NDocConsole.exe"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:Interop.MSHelpCompiler.dll"
+            "SourcePath" = "8:..\\..\\bin\\net\\1.0\\NDocConsole.exe"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_3BB3BC3AFBAA41C39FE8C71428EA0555"
+            "Condition" = "8:NET_1_0"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{FB480208-1853-44D0-9ABD-A3B734C3FAAA}:_D4CA578EF4294CA2B9D77FBBE73C6F5F"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:NDocConsole, Version=1.3.1531.0, Culture=neutral, PublicKeyToken=b9896512f28c0f09"
+                "ScatterAssemblies"
+                {
+                    "_D4CA578EF4294CA2B9D77FBBE73C6F5F"
+                    {
+                    "Name" = "8:NDocConsole.exe"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\..\\bin\\net\\1.1\\NDocConsole.exe"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_C711924DB96A4A028E73D9A6076EE941"
+            "Condition" = "8:NET_1_1"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{A582A373-4685-4296-BEFE-614B80A702C3}:_D72810DE1D9145AC8FA10724A3BFEB01"
+            {
+            "SourcePath" = "8:..\\..\\examples\\Test.ndoc"
+            "TargetName" = "8:Test.ndoc"
+            "Tag" = "8:"
+            "Folder" = "8:_372EC7B1986142DCA2A5F8C664AD2B30"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{A582A373-4685-4296-BEFE-614B80A702C3}:_D970A9507BB849ACAA4520F952A1AB4E"
+            {
+            "SourcePath" = "8:..\\..\\bin\\net\\1.1\\NDoc.Core.xml"
+            "TargetName" = "8:NDoc.Core.xml"
+            "Tag" = "8:"
+            "Folder" = "8:_C711924DB96A4A028E73D9A6076EE941"
+            "Condition" = "8:NET_1_1"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{A582A373-4685-4296-BEFE-614B80A702C3}:_E6DBE24BDD684AB38F2F82E6E78072B2"
+            {
+            "SourcePath" = "8:..\\..\\bin\\net\\1.0\\NDoc.Documenter.LinearHtml.xml"
+            "TargetName" = "8:NDoc.Documenter.LinearHtml.xml"
+            "Tag" = "8:"
+            "Folder" = "8:_3BB3BC3AFBAA41C39FE8C71428EA0555"
+            "Condition" = "8:NET_1_0"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{A582A373-4685-4296-BEFE-614B80A702C3}:_EB54D636C660406D8C81C63853303A7C"
+            {
+            "SourcePath" = "8:..\\..\\bin\\net\\1.0\\NDoc.Documenter.Xml.xml"
+            "TargetName" = "8:NDoc.Documenter.Xml.xml"
+            "Tag" = "8:"
+            "Folder" = "8:_3BB3BC3AFBAA41C39FE8C71428EA0555"
+            "Condition" = "8:NET_1_0"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{FB480208-1853-44D0-9ABD-A3B734C3FAAA}:_F0A43B7998254EE4B326FC225F607E33"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:NDoc.Documenter.Msdn, Version=1.3.1531.0, Culture=neutral, PublicKeyToken=b9896512f28c0f09"
+                "ScatterAssemblies"
+                {
+                    "_F0A43B7998254EE4B326FC225F607E33"
+                    {
+                    "Name" = "8:NDoc.Documenter.Msdn.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\..\\bin\\net\\1.0\\NDoc.Documenter.Msdn.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_3BB3BC3AFBAA41C39FE8C71428EA0555"
+            "Condition" = "8:NET_1_0"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{FB480208-1853-44D0-9ABD-A3B734C3FAAA}:_F3841C4AC9072363CD2658EBCFEAE577"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Interop.MSHelpCompiler, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b9896512f28c0f09"
+                "ScatterAssemblies"
+                {
+                    "_F3841C4AC9072363CD2658EBCFEAE577"
+                    {
+                    "Name" = "8:Interop.MSHelpCompiler.DLL"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Interop.MSHelpCompiler.DLL"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_3E83289CD02E47D0A8ACE7A8D09CFF5F"
@@ -493,8 +2502,121 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:FALSE"
+            "Exclude" = "11:TRUE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{A582A373-4685-4296-BEFE-614B80A702C3}:_F43E4FE895A948B683985C0E3C3BCDA1"
+            {
+            "SourcePath" = "8:..\\..\\bin\\net\\1.0\\NDoc.VisualStudio.xml"
+            "TargetName" = "8:NDoc.VisualStudio.xml"
+            "Tag" = "8:"
+            "Folder" = "8:_3BB3BC3AFBAA41C39FE8C71428EA0555"
+            "Condition" = "8:NET_1_0"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{FB480208-1853-44D0-9ABD-A3B734C3FAAA}:_F65F9008CD4D4CC08F58AFE8D2B8858C"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:NDoc.Test, Version=0.0.0.0, Culture=neutral, PublicKeyToken=b9896512f28c0f09"
+                "ScatterAssemblies"
+                {
+                    "_F65F9008CD4D4CC08F58AFE8D2B8858C"
+                    {
+                    "Name" = "8:NDoc.Test.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\..\\bin\\net\\1.1\\NDoc.Test.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_C711924DB96A4A028E73D9A6076EE941"
+            "Condition" = "8:NET_1_1"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{FB480208-1853-44D0-9ABD-A3B734C3FAAA}:_F8FABAEC6BCA4DEAA0286E91AB347A0B"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:NDoc.Test, Version=0.0.0.0, Culture=neutral, PublicKeyToken=b9896512f28c0f09"
+                "ScatterAssemblies"
+                {
+                    "_F8FABAEC6BCA4DEAA0286E91AB347A0B"
+                    {
+                    "Name" = "8:NDoc.Test.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\..\\bin\\net\\1.0\\NDoc.Test.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_3BB3BC3AFBAA41C39FE8C71428EA0555"
+            "Condition" = "8:NET_1_0"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{FB480208-1853-44D0-9ABD-A3B734C3FAAA}:_FB61802D2EF947DC88041791417110CF"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:NDoc.Documenter.LinearHtml, Version=1.3.1531.0, Culture=neutral, PublicKeyToken=b9896512f28c0f09"
+                "ScatterAssemblies"
+                {
+                    "_FB61802D2EF947DC88041791417110CF"
+                    {
+                    "Name" = "8:NDoc.Documenter.LinearHtml.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\..\\bin\\net\\1.0\\NDoc.Documenter.LinearHtml.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_3BB3BC3AFBAA41C39FE8C71428EA0555"
+            "Condition" = "8:NET_1_0"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
         }
@@ -510,7 +2632,7 @@
             "IconIndex" = "3:0"
                 "Command"
                 {
-                "Command" = "8:_77291166267046D484A27DD846B237EF"
+                "Command" = "8:_C55D16D3401C4DF7ACFF041B7344A816"
                 }
                 "Verbs"
                 {
@@ -548,20 +2670,42 @@
                 {
                     "{F27BD5C5-A65D-4608-96D4-7C5DA1F76302}:_E47643E103B94E3C904A9C294AB7733B"
                     {
-                    "Name" = "8:NDoc"
+                    "Name" = "8:NDoc 1.3"
                     "AlwaysCreate" = "11:FALSE"
                     "Condition" = "8:"
                     "Transitive" = "11:FALSE"
                     "Property" = "8:_9B1B7B57663C489E83EE6BC3D731D158"
                         "Folders"
                         {
+                            "{F27BD5C5-A65D-4608-96D4-7C5DA1F76302}:_70E1732F781045A68B2B31D123110CA9"
+                            {
+                            "Name" = "8:Microsoft .NET 1.1"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:NET_1_1"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_A8132F47CB8C4B5C85F9A6179BC38D43"
+                                "Folders"
+                                {
+                                }
+                            }
+                            "{F27BD5C5-A65D-4608-96D4-7C5DA1F76302}:_9C0242BF4408445CB0585B8A9B5EB84D"
+                            {
+                            "Name" = "8:Microsoft .NET 1.0"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:NET_1_0"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_1D5F29DB482E4C5CA24ECBFCB5330365"
+                                "Folders"
+                                {
+                                }
+                            }
                         }
                     }
                 }
             }
             "{58C0ADA3-3CEA-43BD-A3B3-2EA121BC8217}:_3E83289CD02E47D0A8ACE7A8D09CFF5F"
             {
-            "DefaultLocation" = "8:[ProgramFilesFolder][Manufacturer]\\[ProductName]"
+            "DefaultLocation" = "8:[ProgramFilesFolder][ProductName]"
             "Name" = "8:#1925"
             "AlwaysCreate" = "11:FALSE"
             "Condition" = "8:"
@@ -569,24 +2713,112 @@
             "Property" = "8:TARGETDIR"
                 "Folders"
                 {
+                    "{F27BD5C5-A65D-4608-96D4-7C5DA1F76302}:_08599197A61E46D684260271B0C226CE"
+                    {
+                    "Name" = "8:doc"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_971AAA693A3844BA920919B238925B1F"
+                        "Folders"
+                        {
+                            "{F27BD5C5-A65D-4608-96D4-7C5DA1F76302}:_219738F167424F6FB6D597D97314FAF6"
+                            {
+                            "Name" = "8:help"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_F0BDF984878F42A5BFBEFFA9A37CD654"
+                                "Folders"
+                                {
+                                }
+                            }
+                        }
+                    }
                     "{F27BD5C5-A65D-4608-96D4-7C5DA1F76302}:_372EC7B1986142DCA2A5F8C664AD2B30"
                     {
-                    "Name" = "8:Examples"
+                    "Name" = "8:examples"
                     "AlwaysCreate" = "11:FALSE"
                     "Condition" = "8:"
                     "Transitive" = "11:FALSE"
                     "Property" = "8:_923475CAF12A4F62803FE0C3A599F368"
                         "Folders"
                         {
-                            "{F27BD5C5-A65D-4608-96D4-7C5DA1F76302}:_62090C9F2B91430C982FFD74D130048A"
+                            "{F27BD5C5-A65D-4608-96D4-7C5DA1F76302}:_F3CA139F2DF344528A0C44F2F159C5D7"
                             {
-                            "Name" = "8:NDoc.Tests"
+                            "Name" = "8:linked"
                             "AlwaysCreate" = "11:FALSE"
                             "Condition" = "8:"
                             "Transitive" = "11:FALSE"
-                            "Property" = "8:_6399EDD771284357A3431ED5E2C23755"
+                            "Property" = "8:_38D609993F9E47A6890AFBE5B0ECF05C"
                                 "Folders"
                                 {
+                                }
+                            }
+                        }
+                    }
+                    "{F27BD5C5-A65D-4608-96D4-7C5DA1F76302}:_66CC387430444E698A3FF8F70D6B754E"
+                    {
+                    "Name" = "8:bin"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_851445DC17104946897DE3DA251C517E"
+                        "Folders"
+                        {
+                            "{F27BD5C5-A65D-4608-96D4-7C5DA1F76302}:_0D7B7D09F104433B8CC5CB716B50F674"
+                            {
+                            "Name" = "8:net"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:NET_1_0 or NET_1_1"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_870573675A734FB3A6A0E2FD9823F510"
+                                "Folders"
+                                {
+                                    "{F27BD5C5-A65D-4608-96D4-7C5DA1F76302}:_3BB3BC3AFBAA41C39FE8C71428EA0555"
+                                    {
+                                    "Name" = "8:1.0"
+                                    "AlwaysCreate" = "11:FALSE"
+                                    "Condition" = "8:NET_1_0"
+                                    "Transitive" = "11:FALSE"
+                                    "Property" = "8:_26E52761089843EE988CFE76BDF464D6"
+                                        "Folders"
+                                        {
+                                        }
+                                    }
+                                    "{F27BD5C5-A65D-4608-96D4-7C5DA1F76302}:_C711924DB96A4A028E73D9A6076EE941"
+                                    {
+                                    "Name" = "8:1.1"
+                                    "AlwaysCreate" = "11:FALSE"
+                                    "Condition" = "8:NET_1_1"
+                                    "Transitive" = "11:FALSE"
+                                    "Property" = "8:_FEFA1FA8042C407DA3644CE896E38645"
+                                        "Folders"
+                                        {
+                                        }
+                                    }
+                                }
+                            }
+                            "{F27BD5C5-A65D-4608-96D4-7C5DA1F76302}:_2B0B4676543B4432B5B0574F212DA75C"
+                            {
+                            "Name" = "8:mono"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:MONO_1_0"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_2D55F9AFF4544B56BD5E50E12707C8BD"
+                                "Folders"
+                                {
+                                    "{F27BD5C5-A65D-4608-96D4-7C5DA1F76302}:_8302415435064823B59AC1DA12E26B5B"
+                                    {
+                                    "Name" = "8:1.0"
+                                    "AlwaysCreate" = "11:FALSE"
+                                    "Condition" = "8:MONO_1_0"
+                                    "Transitive" = "11:FALSE"
+                                    "Property" = "8:_7CAF4ED484724AFB8D48084150D2A781"
+                                        "Folders"
+                                        {
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -609,7 +2841,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:NDoc 1.3"
         "ProductCode" = "8:{A91D788B-670F-4204-B912-8DECDEB26AA3}"
-        "PackageCode" = "8:{524EBBAF-450D-4680-BF86-6DE84B2B455A}"
+        "PackageCode" = "8:{8FB0D724-4745-414C-980F-D7AFB3F62C0E}"
         "UpgradeCode" = "8:{9068FA94-9672-4F7D-8E2F-B48B51D8659B}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
@@ -745,10 +2977,10 @@
                                                     "{35AE352C-BC79-4EF9-ABD8-61F467188583}:_238FB70406AF4E0EBA4DCDEFA5AC7239"
                                                     {
                                                     "Name" = "8:"
-                                                    "Condition" = "8:"
+                                                    "Condition" = "8:NET_1_1"
                                                     "Transitive" = "11:FALSE"
                                                     "ValueTypes" = "3:1"
-                                                    "Value" = "8:\"[TARGETDIR]NDocConsole.exe\" -project=\"%1\""
+                                                    "Value" = "8:\"[TARGETDIR]\\bin\\net\\1.1\\NDocConsole.exe\" -project=\"%1\""
                                                     }
                                                 }
                                             }
@@ -809,32 +3041,46 @@
             "Icon" = "8:"
             "Feature" = "8:"
             }
-            "{478F747B-8505-45D1-9AAE-8C3B645C26E3}:_753302AB81F54CE1B0DFEDD18CAF2700"
+            "{478F747B-8505-45D1-9AAE-8C3B645C26E3}:_7CF20257E63540ECB393EC789781B6DA"
             {
-            "Name" = "8:NDoc 1.3 User's Guide"
+            "Name" = "8:NDoc"
             "Arguments" = "8:"
-            "Description" = "8:Open the NDoc User's Guide Help File"
+            "Description" = "8:Code Documentation Generator for .NET 1.1"
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_FED705E08CBF407C86DCED4F891A549D"
-            "Folder" = "8:_E47643E103B94E3C904A9C294AB7733B"
-            "WorkingFolder" = "8:_3E83289CD02E47D0A8ACE7A8D09CFF5F"
+            "Target" = "8:_C55D16D3401C4DF7ACFF041B7344A816"
+            "Folder" = "8:_70E1732F781045A68B2B31D123110CA9"
+            "WorkingFolder" = "8:_C711924DB96A4A028E73D9A6076EE941"
             "Icon" = "8:_60AFD71975214E9E9CA5A0E1BCAC3086"
             "Feature" = "8:"
             }
-            "{478F747B-8505-45D1-9AAE-8C3B645C26E3}:_8D032CDE7FC34D03B9910EA6162797F1"
+            "{478F747B-8505-45D1-9AAE-8C3B645C26E3}:_CF08E6456AE04CF08C1EAD81E2E53E49"
             {
-            "Name" = "8:NDoc 1.3"
+            "Name" = "8:User Guide"
             "Arguments" = "8:"
-            "Description" = "8:Code Documentation Generator for .NET"
+            "Description" = "8:The NDoc User Guide"
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_77291166267046D484A27DD846B237EF"
+            "Target" = "8:_58AAF018C6D1468F87D019A416325CB4"
             "Folder" = "8:_E47643E103B94E3C904A9C294AB7733B"
-            "WorkingFolder" = "8:_3E83289CD02E47D0A8ACE7A8D09CFF5F"
-            "Icon" = "8:_88DDA4B3D56E42D3A5AC2E40CC317FEC"
+            "WorkingFolder" = "8:_219738F167424F6FB6D597D97314FAF6"
+            "Icon" = "8:_60AFD71975214E9E9CA5A0E1BCAC3086"
+            "Feature" = "8:"
+            }
+            "{478F747B-8505-45D1-9AAE-8C3B645C26E3}:_F1CAEFAE63D144DB9AB8B09F7B3913EF"
+            {
+            "Name" = "8:NDoc"
+            "Arguments" = "8:"
+            "Description" = "8:Code Documentation Generator for .NET 1.0"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_55B04B1DC2804A24837DF2509D8A49F9"
+            "Folder" = "8:_9C0242BF4408445CB0585B8A9B5EB84D"
+            "WorkingFolder" = "8:_3BB3BC3AFBAA41C39FE8C71428EA0555"
+            "Icon" = "8:_60AFD71975214E9E9CA5A0E1BCAC3086"
             "Feature" = "8:"
             }
         }
@@ -1075,7 +3321,7 @@
                     }
                     "{18ADD6EC-89FE-4ED7-AD3E-211C40278470}:_2E6192FC32064CE58FD225AE1A51E2D8"
                     {
-                    "Sequence" = "3:200"
+                    "Sequence" = "3:300"
                     "DisplayName" = "8:Installation Folder"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
@@ -1096,9 +3342,266 @@
                             }
                         }
                     }
+                    "{18ADD6EC-89FE-4ED7-AD3E-211C40278470}:_350EB4BE608844CB82713A30B42A8450"
+                    {
+                    "Sequence" = "3:200"
+                    "DisplayName" = "8:Checkboxes   (A)"
+                    "UseDynamicProperties" = "11:TRUE"
+                    "IsDependency" = "11:FALSE"
+                    "SourcePath" = "8:<VsdDialogDir>\\VsdCustomCheck1Dlg.wid"
+                        "Properties"
+                        {
+                            "BannerBitmap"
+                            {
+                            "Name" = "8:BannerBitmap"
+                            "DisplayName" = "8:#1001"
+                            "Description" = "8:#1101"
+                            "Type" = "3:8"
+                            "ContextData" = "8:Bitmap"
+                            "Attributes" = "3:4"
+                            "Setting" = "3:2"
+                            "Value" = "8:_08A9A8BD06DD455E831560B60728F7DE"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "BannerText"
+                            {
+                            "Name" = "8:BannerText"
+                            "DisplayName" = "8:#1014"
+                            "Description" = "8:#1114"
+                            "Type" = "3:3"
+                            "ContextData" = "8:"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:2"
+                            "Value" = "8:Framework Support"
+                            "DefaultValue" = "8:#1214"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "BodyText"
+                            {
+                            "Name" = "8:BodyText"
+                            "DisplayName" = "8:#1015"
+                            "Description" = "8:#1115"
+                            "Type" = "3:3"
+                            "ContextData" = "8:"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:2"
+                            "Value" = "8:Please select the framework versions of NDoc that you want to install:"
+                            "DefaultValue" = "8:#1215"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "Checkbox1Label"
+                            {
+                            "Name" = "8:Checkbox1Label"
+                            "DisplayName" = "8:#1034"
+                            "Description" = "8:#1134"
+                            "Type" = "3:3"
+                            "ContextData" = "8:"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:2"
+                            "Value" = "8:Mono 1.0"
+                            "DefaultValue" = "8:#1234"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "Checkbox1Property"
+                            {
+                            "Name" = "8:Checkbox1Property"
+                            "DisplayName" = "8:#1030"
+                            "Description" = "8:#1130"
+                            "Type" = "3:14"
+                            "ContextData" = "8:Public"
+                            "Attributes" = "3:2"
+                            "Setting" = "3:2"
+                            "Value" = "8:MONO_1_0"
+                            "DefaultValue" = "8:CHECKBOXA1"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "Checkbox1Value"
+                            {
+                            "Name" = "8:Checkbox1Value"
+                            "DisplayName" = "8:#1038"
+                            "Description" = "8:#1138"
+                            "Type" = "3:2"
+                            "ContextData" = "8:Unchecked=;Checked=1"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:2"
+                            "Value" = "8:"
+                            "DefaultValue" = "8:"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "Checkbox1Visible"
+                            {
+                            "Name" = "8:Checkbox1Visible"
+                            "DisplayName" = "8:#1026"
+                            "Description" = "8:#1126"
+                            "Type" = "3:5"
+                            "ContextData" = "8:1;True=1;False=0"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:0"
+                            "Value" = "3:1"
+                            "DefaultValue" = "3:1"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "Checkbox2Label"
+                            {
+                            "Name" = "8:Checkbox2Label"
+                            "DisplayName" = "8:#1035"
+                            "Description" = "8:#1135"
+                            "Type" = "3:3"
+                            "ContextData" = "8:"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:2"
+                            "Value" = "8:Microsoft .NET 1.0"
+                            "DefaultValue" = "8:#1235"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "Checkbox2Property"
+                            {
+                            "Name" = "8:Checkbox2Property"
+                            "DisplayName" = "8:#1031"
+                            "Description" = "8:#1131"
+                            "Type" = "3:14"
+                            "ContextData" = "8:Public"
+                            "Attributes" = "3:2"
+                            "Setting" = "3:2"
+                            "Value" = "8:NET_1_0"
+                            "DefaultValue" = "8:CHECKBOXA2"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "Checkbox2Value"
+                            {
+                            "Name" = "8:Checkbox2Value"
+                            "DisplayName" = "8:#1039"
+                            "Description" = "8:#1139"
+                            "Type" = "3:2"
+                            "ContextData" = "8:Unchecked=;Checked=1"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:2"
+                            "Value" = "8:1"
+                            "DefaultValue" = "8:"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "Checkbox2Visible"
+                            {
+                            "Name" = "8:Checkbox2Visible"
+                            "DisplayName" = "8:#1027"
+                            "Description" = "8:#1127"
+                            "Type" = "3:5"
+                            "ContextData" = "8:1;True=1;False=0"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:0"
+                            "Value" = "3:1"
+                            "DefaultValue" = "3:1"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "Checkbox3Label"
+                            {
+                            "Name" = "8:Checkbox3Label"
+                            "DisplayName" = "8:#1036"
+                            "Description" = "8:#1136"
+                            "Type" = "3:3"
+                            "ContextData" = "8:"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:2"
+                            "Value" = "8:Microsoft .NET 1.1"
+                            "DefaultValue" = "8:#1236"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "Checkbox3Property"
+                            {
+                            "Name" = "8:Checkbox3Property"
+                            "DisplayName" = "8:#1032"
+                            "Description" = "8:#1132"
+                            "Type" = "3:14"
+                            "ContextData" = "8:Public"
+                            "Attributes" = "3:2"
+                            "Setting" = "3:2"
+                            "Value" = "8:NET_1_1"
+                            "DefaultValue" = "8:CHECKBOXA3"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "Checkbox3Value"
+                            {
+                            "Name" = "8:Checkbox3Value"
+                            "DisplayName" = "8:#1040"
+                            "Description" = "8:#1140"
+                            "Type" = "3:2"
+                            "ContextData" = "8:Unchecked=;Checked=1"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:2"
+                            "Value" = "8:1"
+                            "DefaultValue" = "8:"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "Checkbox3Visible"
+                            {
+                            "Name" = "8:Checkbox3Visible"
+                            "DisplayName" = "8:#1028"
+                            "Description" = "8:#1128"
+                            "Type" = "3:5"
+                            "ContextData" = "8:1;True=1;False=0"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:0"
+                            "Value" = "3:1"
+                            "DefaultValue" = "3:1"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "Checkbox4Label"
+                            {
+                            "Name" = "8:Checkbox4Label"
+                            "DisplayName" = "8:#1037"
+                            "Description" = "8:#1137"
+                            "Type" = "3:3"
+                            "ContextData" = "8:"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:2"
+                            "Value" = "8:Microsoft .NET 2.0"
+                            "DefaultValue" = "8:#1237"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "Checkbox4Property"
+                            {
+                            "Name" = "8:Checkbox4Property"
+                            "DisplayName" = "8:#1033"
+                            "Description" = "8:#1133"
+                            "Type" = "3:14"
+                            "ContextData" = "8:Public"
+                            "Attributes" = "3:2"
+                            "Setting" = "3:2"
+                            "Value" = "8:NET_2_0"
+                            "DefaultValue" = "8:CHECKBOXA4"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "Checkbox4Value"
+                            {
+                            "Name" = "8:Checkbox4Value"
+                            "DisplayName" = "8:#1041"
+                            "Description" = "8:#1141"
+                            "Type" = "3:2"
+                            "ContextData" = "8:Unchecked=;Checked=1"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:2"
+                            "Value" = "8:"
+                            "DefaultValue" = "8:"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "Checkbox4Visible"
+                            {
+                            "Name" = "8:Checkbox4Visible"
+                            "DisplayName" = "8:#1029"
+                            "Description" = "8:#1129"
+                            "Type" = "3:5"
+                            "ContextData" = "8:1;True=1;False=0"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:0"
+                            "Value" = "3:0"
+                            "DefaultValue" = "3:1"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                        }
+                    }
                     "{18ADD6EC-89FE-4ED7-AD3E-211C40278470}:_EA463EE3ADB744EF9E006F45D8AD9F8E"
                     {
-                    "Sequence" = "3:300"
+                    "Sequence" = "3:500"
                     "DisplayName" = "8:Confirm Installation"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
@@ -1121,7 +3624,7 @@
                     }
                     "{18ADD6EC-89FE-4ED7-AD3E-211C40278470}:_F03CD7EB6EB9480192443B7E9B424191"
                     {
-                    "Sequence" = "3:210"
+                    "Sequence" = "3:400"
                     "DisplayName" = "8:License Agreement"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
@@ -1273,7 +3776,7 @@
         }
         "MergeModule"
         {
-            "{35A69C6E-5BA4-440D-803D-762B59A45393}:_2690C7B82FF8489BA349B4228D8A3245"
+            "{35A69C6E-5BA4-440D-803D-762B59A45393}:_F9BA5A28912343B78B03BE8CC7459654"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
@@ -1290,342 +3793,6 @@
         }
         "ProjectOutput"
         {
-            "{8062640A-2EEE-46E9-AB67-688E9A886E9F}:_1B01EBE9D55D45568029A0BC926FD16B"
-            {
-            "SourcePath" = "8:..\\Documenter\\Latex\\obj\\Release\\NDoc.Documenter.Latex.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_3E83289CD02E47D0A8ACE7A8D09CFF5F"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            "ProjectOutputGroupRegister" = "3:1"
-            "OutputConfiguration" = "8:"
-            "OutputGroupCanonicalName" = "8:Built"
-            "OutputProjectGuid" = "8:{2929DFA6-FFCF-4110-B8B5-3005A087B58A}"
-            "ShowKeyOutput" = "11:TRUE"
-                "ExcludeFilters"
-                {
-                }
-            }
-            "{8062640A-2EEE-46E9-AB67-688E9A886E9F}:_1BC5C292D8FD4C80BDE30FECD2DAF81B"
-            {
-            "SourcePath" = "8:"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_3E83289CD02E47D0A8ACE7A8D09CFF5F"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            "ProjectOutputGroupRegister" = "3:1"
-            "OutputConfiguration" = "8:"
-            "OutputGroupCanonicalName" = "8:ContentFiles"
-            "OutputProjectGuid" = "8:{905285AD-A830-4BEB-A243-22A26A8E9827}"
-            "ShowKeyOutput" = "11:TRUE"
-                "ExcludeFilters"
-                {
-                }
-            }
-            "{8062640A-2EEE-46E9-AB67-688E9A886E9F}:_3C25064C1EC14331969BFD2087D097BA"
-            {
-            "SourcePath" = "8:..\\Documenter\\Xml\\obj\\Release\\NDoc.Documenter.Xml.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_3E83289CD02E47D0A8ACE7A8D09CFF5F"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            "ProjectOutputGroupRegister" = "3:1"
-            "OutputConfiguration" = "8:"
-            "OutputGroupCanonicalName" = "8:Built"
-            "OutputProjectGuid" = "8:{C90E801B-30AF-45DA-A138-E6BCCB1E99A7}"
-            "ShowKeyOutput" = "11:TRUE"
-                "ExcludeFilters"
-                {
-                }
-            }
-            "{8062640A-2EEE-46E9-AB67-688E9A886E9F}:_5049A64647CC4D3682B81596C02E80E1"
-            {
-            "SourcePath" = "8:..\\Documenter\\Msdn\\obj\\Release\\NDoc.Documenter.Msdn.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_3E83289CD02E47D0A8ACE7A8D09CFF5F"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            "ProjectOutputGroupRegister" = "3:1"
-            "OutputConfiguration" = "8:"
-            "OutputGroupCanonicalName" = "8:Built"
-            "OutputProjectGuid" = "8:{8282F072-D966-4075-A8DA-8911E36F4980}"
-            "ShowKeyOutput" = "11:TRUE"
-                "ExcludeFilters"
-                {
-                }
-            }
-            "{8062640A-2EEE-46E9-AB67-688E9A886E9F}:_586C966471AE42F2B3066EA68B2C0D0B"
-            {
-            "SourcePath" = "8:..\\Documenter\\LinearHtml\\obj\\Release\\NDoc.Documenter.LinearHtml.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_3E83289CD02E47D0A8ACE7A8D09CFF5F"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            "ProjectOutputGroupRegister" = "3:1"
-            "OutputConfiguration" = "8:"
-            "OutputGroupCanonicalName" = "8:Built"
-            "OutputProjectGuid" = "8:{8844E0D9-FCA0-419D-9168-BCD420B38378}"
-            "ShowKeyOutput" = "11:TRUE"
-                "ExcludeFilters"
-                {
-                }
-            }
-            "{8062640A-2EEE-46E9-AB67-688E9A886E9F}:_641B982CF18B43E997B1059A82BDBE73"
-            {
-            "SourcePath" = "8:"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_62090C9F2B91430C982FFD74D130048A"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            "ProjectOutputGroupRegister" = "3:1"
-            "OutputConfiguration" = "8:"
-            "OutputGroupCanonicalName" = "8:SourceFiles"
-            "OutputProjectGuid" = "8:{087FF069-C495-4CE7-B999-06C2B5D311B9}"
-            "ShowKeyOutput" = "11:TRUE"
-                "ExcludeFilters"
-                {
-                }
-            }
-            "{8062640A-2EEE-46E9-AB67-688E9A886E9F}:_69AD472F777B44A1879DA6D6D66F1C27"
-            {
-            "SourcePath" = "8:"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_62090C9F2B91430C982FFD74D130048A"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            "ProjectOutputGroupRegister" = "3:1"
-            "OutputConfiguration" = "8:"
-            "OutputGroupCanonicalName" = "8:ContentFiles"
-            "OutputProjectGuid" = "8:{087FF069-C495-4CE7-B999-06C2B5D311B9}"
-            "ShowKeyOutput" = "11:TRUE"
-                "ExcludeFilters"
-                {
-                }
-            }
-            "{8062640A-2EEE-46E9-AB67-688E9A886E9F}:_770461D23B0245409B7366552657BCFF"
-            {
-            "SourcePath" = "8:..\\Documenter\\NativeHtmlHelp2\\obj\\Release\\NDoc.Documenter.NativeHtmlHelp2.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_3E83289CD02E47D0A8ACE7A8D09CFF5F"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            "ProjectOutputGroupRegister" = "3:1"
-            "OutputConfiguration" = "8:"
-            "OutputGroupCanonicalName" = "8:Built"
-            "OutputProjectGuid" = "8:{5B088ED3-EEED-4DD4-AE4C-A7E9323B634C}"
-            "ShowKeyOutput" = "11:TRUE"
-                "ExcludeFilters"
-                {
-                }
-            }
-            "{8062640A-2EEE-46E9-AB67-688E9A886E9F}:_77291166267046D484A27DD846B237EF"
-            {
-            "SourcePath" = "8:..\\Gui\\obj\\Release\\NDocGui.exe"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_3E83289CD02E47D0A8ACE7A8D09CFF5F"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            "ProjectOutputGroupRegister" = "3:1"
-            "OutputConfiguration" = "8:"
-            "OutputGroupCanonicalName" = "8:Built"
-            "OutputProjectGuid" = "8:{905285AD-A830-4BEB-A243-22A26A8E9827}"
-            "ShowKeyOutput" = "11:TRUE"
-                "ExcludeFilters"
-                {
-                }
-            }
-            "{8062640A-2EEE-46E9-AB67-688E9A886E9F}:_9D6F0059D6D840AD9597C268ABB72B8E"
-            {
-            "SourcePath" = "8:..\\Console\\obj\\Release\\NDocConsole.exe"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_3E83289CD02E47D0A8ACE7A8D09CFF5F"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            "ProjectOutputGroupRegister" = "3:1"
-            "OutputConfiguration" = "8:"
-            "OutputGroupCanonicalName" = "8:Built"
-            "OutputProjectGuid" = "8:{D7D2286A-8378-4CC9-A260-7AC1EE65E24E}"
-            "ShowKeyOutput" = "11:TRUE"
-                "ExcludeFilters"
-                {
-                }
-            }
-            "{8062640A-2EEE-46E9-AB67-688E9A886E9F}:_E06AA4CCFA0B4FD3A094297FD4A7372C"
-            {
-            "SourcePath" = "8:..\\Documenter\\JavaDoc\\obj\\Release\\NDoc.Documenter.JavaDoc.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_3E83289CD02E47D0A8ACE7A8D09CFF5F"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            "ProjectOutputGroupRegister" = "3:1"
-            "OutputConfiguration" = "8:"
-            "OutputGroupCanonicalName" = "8:Built"
-            "OutputProjectGuid" = "8:{17A4026E-1790-4965-A670-861AE002BEF0}"
-            "ShowKeyOutput" = "11:TRUE"
-                "ExcludeFilters"
-                {
-                }
-            }
-            "{8062640A-2EEE-46E9-AB67-688E9A886E9F}:_FED705E08CBF407C86DCED4F891A549D"
-            {
-            "SourcePath" = "8:..\\UsersGuide\\NDocUsersGuide.chm"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_3E83289CD02E47D0A8ACE7A8D09CFF5F"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            "ProjectOutputGroupRegister" = "3:1"
-            "OutputConfiguration" = "8:"
-            "OutputGroupCanonicalName" = "8:Built"
-            "OutputProjectGuid" = "8:{D250CF6D-13ED-4B69-AE7C-345D7C686B49}"
-            "ShowKeyOutput" = "11:TRUE"
-                "ExcludeFilters"
-                {
-                }
-            }
         }
     }
 }
