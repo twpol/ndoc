@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-	xmlns:msxsl="urn:schemas-microsoft-com:xslt"
-	xmlns:user="urn:my-scripts" 
-	xmlns:MSHelp="http://msdn.microsoft.com/mshelp" 
-	exclude-result-prefixes="msxsl user">
+	xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
 	<!-- -->
 	<xsl:include href="syntax-map.xslt" />
 	<!-- -->
@@ -1011,33 +1008,29 @@
 	<xsl:template name="attribute">
 		<xsl:param name="attname" />
 		<xsl:param name="lang" />
-		<xsl:if test="user:isAttributeWanted($ndoc-documented-attributes, @name)">
-			<xsl:apply-templates select="." mode="attribute-open">
-				<xsl:with-param name="lang" select="$lang" />
-			</xsl:apply-templates>
-			<xsl:if test="@target"><xsl:value-of select="@target" /> : </xsl:if>
-			<xsl:call-template name="strip-namespace-and-attribute">
-				<xsl:with-param name="name" select="@name" />
-			</xsl:call-template>
-			<xsl:if test="count(property) > 0">
-				<xsl:text>(</xsl:text>
-				<xsl:for-each select="property">
-					<xsl:if test="user:isPropertyWanted($ndoc-documented-attributes, @name) and @value!=''">
-						<xsl:value-of select="@name" />
-						<xsl:text>="</xsl:text>
-						<xsl:value-of select="@value" />
-						<xsl:text>"</xsl:text>
-						<xsl:if test="position()!=last()">
-							<xsl:text>, </xsl:text>
-						</xsl:if>
-					</xsl:if>
-				</xsl:for-each>
-				<xsl:text>)</xsl:text>
-			</xsl:if>
-			<xsl:apply-templates select="." mode="attribute-close">
-				<xsl:with-param name="lang" select="$lang" />
-			</xsl:apply-templates>
+		<xsl:apply-templates select="." mode="attribute-open">
+			<xsl:with-param name="lang" select="$lang" />
+		</xsl:apply-templates>
+		<xsl:if test="@target"><xsl:value-of select="@target" /> : </xsl:if>
+		<xsl:call-template name="strip-namespace-and-attribute">
+			<xsl:with-param name="name" select="@name" />
+		</xsl:call-template>
+		<xsl:if test="count(property) > 0">
+			<xsl:text>(</xsl:text>
+			<xsl:for-each select="property">
+				<xsl:value-of select="@name" />
+				<xsl:text>="</xsl:text>
+				<xsl:value-of select="@value" />
+				<xsl:text>"</xsl:text>
+				<xsl:if test="position()!=last()">
+					<xsl:text>, </xsl:text>
+				</xsl:if>
+			</xsl:for-each>
+			<xsl:text>)</xsl:text>
 		</xsl:if>
+		<xsl:apply-templates select="." mode="attribute-close">
+			<xsl:with-param name="lang" select="$lang" />
+		</xsl:apply-templates>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="strip-namespace-and-attribute">
@@ -1053,63 +1046,5 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
-	<!-- -->
-	<msxsl:script implements-prefix="user">
-	<![CDATA[
-		function isAttributeWanted(sParamWantedList, oElement)
-		{
-			var aWanted = (''+sParamWantedList).split('|');
-			oElement.Current.MoveToFirstAttribute();
-			var sAttributeType = ''+oElement.Current.Value;
-			for(var i = 0; i != aWanted.length; i++)
-			{
-				var oAttribute = (''+aWanted[i]).split(',');
-				if(sAttributeType.indexOf(""+oAttribute[0]) != -1)
-				{
-					return 'true';
-				}
-			}
-			return '';
-		}
-		
-		function isPropertyWanted(sParamWantedList, oElement)
-		{
-			var aWanted = (''+sParamWantedList).split('|');
-			
-			oElement.Current.MoveToFirstAttribute();
-			var sPropertyType = ''+oElement.Current.Value;
-			oElement.Current.MoveToParent();
-			oElement.Current.MoveToParent();
-			oElement.Current.MoveToFirstAttribute();
-			var sAttributeType = ''+oElement.Current.Value;
-			
-			for(var i = 0; i != aWanted.length; i++)
-			{
-				var oAttribute = (''+aWanted[i]).split(',');
-				if(sAttributeType.indexOf(""+oAttribute[0]) != -1)
-				{
-					if (oAttribute.length == 1)
-					{
-						return 'true';
-					}
-					else if (oAttribute.length != 0)
-					{
-						for(var j = 1; j != oAttribute.length; j++)
-						{
-							if(sPropertyType.indexOf(""+oAttribute[j]) != -1)
-							{
-								if (sPropertyType.length == oAttribute[j].length)
-								{
-									return 'true';
-								}
-							}
-						}
-					}
-				}
-			}
-			return '';
-		}
-		]]>
-    </msxsl:script>
 	<!-- -->
 </xsl:stylesheet>

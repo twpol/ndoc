@@ -40,6 +40,7 @@ namespace NDoc.Core
 		InterfaceImplementingTypesCollection interfaceImplementingTypes;
 		NamespaceHierarchyCollection namespaceHierarchies;
 		BaseInterfacesCollection baseInterfaces;
+		AttributeUsageDisplayFilter attributeFilter;
 
 
 		/// <summary>
@@ -146,6 +147,7 @@ namespace NDoc.Core
 			baseInterfaces = new BaseInterfacesCollection();
 			derivedTypes = new DerivedTypesCollection();
 			interfaceImplementingTypes = new InterfaceImplementingTypesCollection();
+			attributeFilter = new AttributeUsageDisplayFilter(this.rep.DocumentedAttributes);
 			
 			documentedTypes = new Hashtable();
 			
@@ -1077,36 +1079,42 @@ namespace NDoc.Core
 			string charSet = null;
 			string layoutKind = null;
 
-			// determine if CharSet property should be documented
-			if ((type.Attributes & TypeAttributes.AutoClass) == TypeAttributes.AutoClass)
+			if (!attributeFilter.Show("System.Runtime.InteropServices.StructLayoutAttribute","CharSet"))
 			{
-				charSet = CharSet.Auto.ToString();
-			}
-			//			//Do not document if default value....
-			//			if ((type.Attributes & TypeAttributes.AnsiClass) == TypeAttributes.AnsiClass)
-			//			{
-			//				charSet = CharSet.Ansi.ToString(CultureInfo.InvariantCulture);
-			//			} 
-			if ((type.Attributes & TypeAttributes.UnicodeClass) == TypeAttributes.UnicodeClass)
-			{
-				charSet = CharSet.Unicode.ToString();
-			}
-
-			// determine if Value property should be documented
-			//			//Do not document if default value....
-			//			if ((type.Attributes & TypeAttributes.AutoLayout) == TypeAttributes.AutoLayout)
-			//			{
-			//				layoutKind = LayoutKind.Auto.ToString(CultureInfo.InvariantCulture);
-			//			} 
-			if ((type.Attributes & TypeAttributes.ExplicitLayout) == TypeAttributes.ExplicitLayout)
-			{
-				layoutKind = LayoutKind.Explicit.ToString();
-			} 
-			if ((type.Attributes & TypeAttributes.SequentialLayout) == TypeAttributes.SequentialLayout)
-			{
-				layoutKind = LayoutKind.Sequential.ToString();
+				// determine if CharSet property should be documented
+				if ((type.Attributes & TypeAttributes.AutoClass) == TypeAttributes.AutoClass)
+				{
+					charSet = CharSet.Auto.ToString();
+				}
+				//			//Do not document if default value....
+				//			if ((type.Attributes & TypeAttributes.AnsiClass) == TypeAttributes.AnsiClass)
+				//			{
+				//				charSet = CharSet.Ansi.ToString(CultureInfo.InvariantCulture);
+				//			} 
+				if ((type.Attributes & TypeAttributes.UnicodeClass) == TypeAttributes.UnicodeClass)
+				{
+					charSet = CharSet.Unicode.ToString();
+				}
 			}
 
+			if (!attributeFilter.Show("System.Runtime.InteropServices.StructLayoutAttribute","Value"))
+			{
+				// determine if Value property should be documented
+				//			//Do not document if default value....
+				//			if ((type.Attributes & TypeAttributes.AutoLayout) == TypeAttributes.AutoLayout)
+				//			{
+				//				layoutKind = LayoutKind.Auto.ToString(CultureInfo.InvariantCulture);
+				//			} 
+				if ((type.Attributes & TypeAttributes.ExplicitLayout) == TypeAttributes.ExplicitLayout)
+				{
+					layoutKind = LayoutKind.Explicit.ToString();
+				} 
+				if ((type.Attributes & TypeAttributes.SequentialLayout) == TypeAttributes.SequentialLayout)
+				{
+					layoutKind = LayoutKind.Sequential.ToString();
+				}
+			}
+			
 			if (charSet == null && layoutKind == null)
 			{
 				return;
@@ -1138,15 +1146,19 @@ namespace NDoc.Core
 
 			// end attribute element
 			writer.WriteEndElement();
+
 		}
 
 		private void WriteSpecialAttributes(XmlWriter writer, Type type)
 		{
 			if ((type.Attributes & TypeAttributes.Serializable) == TypeAttributes.Serializable)
 			{
-				writer.WriteStartElement("attribute");
-				writer.WriteAttributeString("name", "System.SerializableAttribute");
-				writer.WriteEndElement(); // attribute
+				if (attributeFilter.Show("System.SerializableAttribute"))
+				{
+					writer.WriteStartElement("attribute");
+					writer.WriteAttributeString("name", "System.SerializableAttribute");
+					writer.WriteEndElement(); // attribute
+				}
 			}
 
 			WriteStructLayoutAttribute(writer, type);
@@ -1156,9 +1168,12 @@ namespace NDoc.Core
 		{
 			if ((field.Attributes & FieldAttributes.NotSerialized) == FieldAttributes.NotSerialized)
 			{
-				writer.WriteStartElement("attribute");
-				writer.WriteAttributeString("name", "System.NonSerializedAttribute");
-				writer.WriteEndElement(); // attribute
+				if (attributeFilter.Show("System.NonSerializedAttribute"))
+				{
+					writer.WriteStartElement("attribute");
+					writer.WriteAttributeString("name", "System.NonSerializedAttribute");
+					writer.WriteEndElement(); // attribute
+				}
 			}
 
 			//TODO: more special attributes here?
@@ -1218,7 +1233,7 @@ namespace NDoc.Core
 			{
 				if (this.rep.DocumentAttributes)
 				{
-					if (MustDocumentType(attribute.GetType()))
+					if (MustDocumentType(attribute.GetType()) && attributeFilter.Show(attribute.GetType().FullName))
 					{
 						WriteCustomAttribute(writer, attribute, target);
 					}
@@ -1234,7 +1249,8 @@ namespace NDoc.Core
 		private void WriteCustomAttribute(XmlWriter writer, Attribute attribute, string target)
 		{
 			writer.WriteStartElement("attribute");
-			writer.WriteAttributeString("name", attribute.GetType().FullName);
+			string fullName = attribute.GetType().FullName;
+			writer.WriteAttributeString("name", fullName);
 			if (target.Length > 0)
 			{
 				writer.WriteAttributeString("target", target);
@@ -1246,7 +1262,7 @@ namespace NDoc.Core
 
 			foreach (FieldInfo field in attribute.GetType().GetFields(bindingFlags))
 			{
-				if (MustDocumentField(field))
+				if (MustDocumentField(field) && attributeFilter.Show(fullName, field.Name))
 				{
 					writer.WriteStartElement("field");
 					writer.WriteAttributeString("name", field.Name);
@@ -1265,7 +1281,7 @@ namespace NDoc.Core
 					continue;
 				}
 
-				if (MustDocumentProperty(property))
+				if (MustDocumentProperty(property) && attributeFilter.Show(fullName, property.Name))
 				{
 
 					writer.WriteStartElement("property");
@@ -3656,8 +3672,6 @@ namespace NDoc.Core
 			return (assemblyLoader);
 		}
 
-
-	
 		private class ImplementsInfo
 		{
 			public Type TargetType;
@@ -3821,5 +3835,72 @@ namespace NDoc.Core
 				return baseInterfaceList;
 			}
 		}
+
+		private class AttributeUsageDisplayFilter
+		{
+			private ArrayList AttributeFilters = new ArrayList();
+
+			public AttributeUsageDisplayFilter(string documentedAttributesConfig)
+			{
+				string[] filters = documentedAttributesConfig.Split(new char[]{'|'});
+				foreach (string filter in filters)
+				{
+					string[] filterParts = filter.Split(new char[]{','});
+					if (filterParts.Length>0)
+					{
+						if (filterParts[0].Length>0)
+						{
+							DisplayFilter displayFilter = new DisplayFilter();
+							displayFilter.attributeName=filterParts[0];
+							if (filterParts.Length>1)
+							{
+								string[] memberNames = new string[filterParts.Length-1];
+								for (int i=1; i<filterParts.Length; i++)
+								{
+									memberNames[i-1]=filterParts[i];
+								}
+								displayFilter.memberNames=memberNames;
+							}
+							AttributeFilters.Add(displayFilter);
+						}
+					}
+				}
+			}
+
+			public bool Show(string attributeFullName)
+			{
+				if (AttributeFilters.Count==0) return true;
+				foreach (DisplayFilter filter in AttributeFilters)
+				{
+					if (attributeFullName.IndexOf(filter.attributeName)>-1) return true;
+				}
+				return false;
+			}
+
+			public bool Show(string attributeFullName, string memberName)
+			{
+				if (AttributeFilters.Count==0) return true;
+				foreach (DisplayFilter filter in AttributeFilters)
+				{
+					if (attributeFullName.IndexOf(filter.attributeName)>-1)
+					{
+						if (filter.memberNames==null) return true;
+						foreach(string memberNameFilter in filter.memberNames)
+						{
+							if (memberName.IndexOf(memberNameFilter)>-1)  return true;
+						}
+						return false;
+					}
+				}
+				return false;
+			}
+
+			private struct DisplayFilter
+			{
+				public string attributeName;
+				public string[] memberNames;
+			}
+		}
+	
 	}
 }

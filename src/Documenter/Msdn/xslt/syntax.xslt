@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	xmlns:msxsl="urn:schemas-microsoft-com:xslt"
-    xmlns:user="urn:my-scripts"
-    exclude-result-prefixes="msxsl user"
->
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<!-- -->
 	<xsl:param name="ndoc-document-attributes" />
 	<xsl:param name="ndoc-documented-attributes" />
@@ -13,85 +9,86 @@
 			<xsl:if test="$ndoc-vb-syntax">
 				<span class="lang">[C#]</span>
 			</xsl:if>
-			<xsl:call-template name="attributes"/>
+			<xsl:call-template name="attributes" />
 			<div>
-			  <xsl:if test="@hiding">
-			      <xsl:text>new&#160;</xsl:text>
-			  </xsl:if>
-			  <xsl:call-template name="type-access">
-				  <xsl:with-param name="access" select="@access" />
-				  <xsl:with-param name="type" select="local-name()" />
-			  </xsl:call-template>
-			  <xsl:text>&#160;</xsl:text>
-			  <xsl:if test="local-name() != 'interface' and @abstract = 'true'">abstract&#160;</xsl:if>
-			  <xsl:if test="@sealed = 'true'">
-				  <xsl:text>sealed&#160;</xsl:text>
-			  </xsl:if>
-			  <xsl:choose>
-				  <xsl:when test="local-name()='structure'">
-					  <xsl:text>struct</xsl:text>
-				  </xsl:when>
-				  <xsl:when test="local-name()='enumeration'">
-					  <xsl:text>enum</xsl:text>
-				  </xsl:when>
-				  <xsl:otherwise>
-					  <xsl:value-of select="local-name()" />
-				  </xsl:otherwise>
-			  </xsl:choose>
-			  <xsl:text>&#160;</xsl:text>
-			  <xsl:if test="local-name()='delegate'">
-				  <xsl:call-template name="get-datatype">
-					  <xsl:with-param name="datatype" select="@returnType" />
-				  </xsl:call-template>
-				  <xsl:text>&#160;</xsl:text>
-			  </xsl:if>
-			  <xsl:value-of select="@name" />
-			  <xsl:if test="local-name() != 'enumeration' and local-name() != 'delegate'">
-				  <xsl:call-template name="derivation" />
-			  </xsl:if>
-			  <xsl:if test="local-name() = 'delegate'">
-				  <xsl:call-template name="parameters">
-					  <xsl:with-param name="version">long</xsl:with-param>
-					  <xsl:with-param name="namespace-name" select="../@name" />
-				  </xsl:call-template>
-			  </xsl:if>
-			 </div>
+				<xsl:if test="@hiding">
+					<xsl:text>new&#160;</xsl:text>
+				</xsl:if>
+				<xsl:call-template name="type-access">
+					<xsl:with-param name="access" select="@access" />
+					<xsl:with-param name="type" select="local-name()" />
+				</xsl:call-template>
+				<xsl:text>&#160;</xsl:text>
+				<xsl:if test="local-name() != 'interface' and @abstract = 'true'">abstract&#160;</xsl:if>
+				<xsl:if test="@sealed = 'true'">
+					<xsl:text>sealed&#160;</xsl:text>
+				</xsl:if>
+				<xsl:choose>
+					<xsl:when test="local-name()='structure'">
+						<xsl:text>struct</xsl:text>
+					</xsl:when>
+					<xsl:when test="local-name()='enumeration'">
+						<xsl:text>enum</xsl:text>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="local-name()" />
+					</xsl:otherwise>
+				</xsl:choose>
+				<xsl:text>&#160;</xsl:text>
+				<xsl:if test="local-name()='delegate'">
+					<xsl:call-template name="get-datatype">
+						<xsl:with-param name="datatype" select="@returnType" />
+					</xsl:call-template>
+					<xsl:text>&#160;</xsl:text>
+				</xsl:if>
+				<xsl:value-of select="@name" />
+				<xsl:if test="local-name() != 'enumeration' and local-name() != 'delegate'">
+					<xsl:call-template name="derivation" />
+				</xsl:if>
+				<xsl:if test="local-name() = 'delegate'">
+					<xsl:call-template name="parameters">
+						<xsl:with-param name="version">long</xsl:with-param>
+						<xsl:with-param name="namespace-name" select="../@name" />
+					</xsl:call-template>
+				</xsl:if>
+			</div>
 		</div>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="derivation">
 		<xsl:if test="@baseType!='' or implements[not(@inherited)]">
-			<b><xsl:text> : </xsl:text>
-			<xsl:if test="@baseType!=''">
-						<a>
-							<xsl:attribute name="href">
-								<xsl:call-template name="get-filename-for-type-name">
-									<xsl:with-param name="type-name" select="./base/@type" />
-								</xsl:call-template>
-							</xsl:attribute>
-							<xsl:call-template name="get-datatype">
-								<xsl:with-param name="datatype" select="@baseType" />
+			<b>
+				<xsl:text> : </xsl:text>
+				<xsl:if test="@baseType!=''">
+					<a>
+						<xsl:attribute name="href">
+							<xsl:call-template name="get-filename-for-type-name">
+								<xsl:with-param name="type-name" select="./base/@type" />
 							</xsl:call-template>
-						</a>
-				<xsl:if test="implements[not(@inherited)]">
-					<xsl:text>, </xsl:text>
+						</xsl:attribute>
+						<xsl:call-template name="get-datatype">
+							<xsl:with-param name="datatype" select="@baseType" />
+						</xsl:call-template>
+					</a>
+					<xsl:if test="implements[not(@inherited)]">
+						<xsl:text>, </xsl:text>
+					</xsl:if>
 				</xsl:if>
-			</xsl:if>
-			<xsl:for-each select="implements[not(@inherited)]">
-						<a>
-							<xsl:attribute name="href">
-								<xsl:call-template name="get-filename-for-type-name">
-									<xsl:with-param name="type-name" select="@type" />
-								</xsl:call-template>
-							</xsl:attribute>
-							<xsl:call-template name="get-datatype">
-								<xsl:with-param name="datatype" select="@type" />
+				<xsl:for-each select="implements[not(@inherited)]">
+					<a>
+						<xsl:attribute name="href">
+							<xsl:call-template name="get-filename-for-type-name">
+								<xsl:with-param name="type-name" select="@type" />
 							</xsl:call-template>
-						</a>
-				<xsl:if test="position()!=last()">
-					<xsl:text>, </xsl:text>
-				</xsl:if>
-			</xsl:for-each>
+						</xsl:attribute>
+						<xsl:call-template name="get-datatype">
+							<xsl:with-param name="datatype" select="@type" />
+						</xsl:call-template>
+					</a>
+					<xsl:if test="position()!=last()">
+						<xsl:text>, </xsl:text>
+					</xsl:if>
+				</xsl:for-each>
 			</b>
 		</xsl:if>
 	</xsl:template>
@@ -102,7 +99,7 @@
 				<span class="lang">[C#]</span>
 				<br />
 			</xsl:if>
-			<xsl:call-template name="attributes"/>
+			<xsl:call-template name="attributes" />
 			<xsl:if test="@hiding">
 				<xsl:text>new&#160;</xsl:text>
 			</xsl:if>
@@ -217,17 +214,17 @@
 					<xsl:with-param name="datatype" select="@returnType" />
 				</xsl:call-template>
 				<xsl:text>&#160;</xsl:text>
-			  <xsl:call-template name="operator-name">
-				  <xsl:with-param name="name">
-				    <xsl:value-of select="@name" />
-				  </xsl:with-param>
-				  <xsl:with-param name="from">
-				    <xsl:value-of select="parameter/@type" />
-				  </xsl:with-param>
-				  <xsl:with-param name="to">
-				    <xsl:value-of select="@returnType" />
-				  </xsl:with-param>
-			  </xsl:call-template>
+				<xsl:call-template name="operator-name">
+					<xsl:with-param name="name">
+						<xsl:value-of select="@name" />
+					</xsl:with-param>
+					<xsl:with-param name="from">
+						<xsl:value-of select="parameter/@type" />
+					</xsl:with-param>
+					<xsl:with-param name="to">
+						<xsl:value-of select="@returnType" />
+					</xsl:with-param>
+				</xsl:call-template>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:call-template name="get-datatype">
@@ -238,10 +235,10 @@
 			</xsl:otherwise>
 		</xsl:choose>
 		<xsl:if test="@name!='op_Implicit' and @name!='op_Explicit'">
-		  <xsl:call-template name="parameters">
-			  <xsl:with-param name="version">short</xsl:with-param>
-			  <xsl:with-param name="namespace-name" select="../../@name" />
-		  </xsl:call-template>
+			<xsl:call-template name="parameters">
+				<xsl:with-param name="version">short</xsl:with-param>
+				<xsl:with-param name="namespace-name" select="../../@name" />
+			</xsl:call-template>
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
@@ -251,7 +248,7 @@
 				<span class="lang">[C#]</span>
 				<br />
 			</xsl:if>
-			<xsl:call-template name="attributes"/>
+			<xsl:call-template name="attributes" />
 			<xsl:if test="@hiding">
 				<xsl:text>new&#160;</xsl:text>
 			</xsl:if>
@@ -297,7 +294,7 @@
 		<xsl:param name="indent" select="true()" />
 		<xsl:param name="display-names" select="true()" />
 		<xsl:param name="link-types" select="true()" />
-		<xsl:call-template name="attributes"/>
+		<xsl:call-template name="attributes" />
 		<xsl:if test="@hiding">
 			<xsl:text>new&#160;</xsl:text>
 		</xsl:if>
@@ -341,7 +338,9 @@
 		<xsl:choose>
 			<xsl:when test="parameter">
 				<xsl:text>this[</xsl:text>
-				<xsl:if test="$indent"><br /></xsl:if>
+				<xsl:if test="$indent">
+					<br />
+				</xsl:if>
 				<xsl:for-each select="parameter">
 					<xsl:if test="$indent">
 						<xsl:text>&#160;&#160;&#160;</xsl:text>
@@ -368,15 +367,19 @@
 					<xsl:if test="$display-names">
 						<xsl:text>&#160;</xsl:text>
 						<i>
-						  <xsl:value-of select="@name" />
+							<xsl:value-of select="@name" />
 						</i>
 					</xsl:if>
 					<xsl:if test="position() != last()">
 						<xsl:text>,&#160;</xsl:text>
-						<xsl:if test="$indent"><br /></xsl:if>
+						<xsl:if test="$indent">
+							<br />
+						</xsl:if>
 					</xsl:if>
 				</xsl:for-each>
-				<xsl:if test="$indent"><br /></xsl:if>
+				<xsl:if test="$indent">
+					<br />
+				</xsl:if>
 				<xsl:text>]</xsl:text>
 			</xsl:when>
 			<xsl:otherwise>
@@ -477,9 +480,11 @@
 		<xsl:if test="$ndoc-document-attributes">
 			<xsl:if test="attribute">
 				<xsl:for-each select="attribute">
-					<div class="attribute"><xsl:call-template name="attribute">
-						<xsl:with-param name="attname" select="@name" />
-					</xsl:call-template></div>
+					<div class="attribute">
+						<xsl:call-template name="attribute">
+							<xsl:with-param name="attname" select="@name" />
+						</xsl:call-template>
+					</div>
 				</xsl:for-each>
 			</xsl:if>
 		</xsl:if>
@@ -487,27 +492,25 @@
 	<!-- -->
 	<xsl:template name="attribute">
 		<xsl:param name="attname" />
-		<xsl:if test="user:isAttributeWanted($ndoc-documented-attributes, @name)">			
-			<xsl:text>[</xsl:text>
-			<xsl:if test="@target"><xsl:value-of select="@target" /> : </xsl:if>
-			<xsl:call-template name="strip-namespace-and-attribute">
-				<xsl:with-param name="name" select="@name" />
-			</xsl:call-template>
-			<xsl:if test="count(property) > 0">
-				<xsl:text>(</xsl:text>
-				<xsl:for-each select="property">
-					<xsl:if test="user:isPropertyWanted($ndoc-documented-attributes, @name) and @value!=''">
-						<xsl:value-of select="@name" />
-						<xsl:text>="</xsl:text>
-						<xsl:value-of select="@value" />
-						<xsl:text>"</xsl:text>
-						<xsl:if test="position()!=last()"><xsl:text>, </xsl:text></xsl:if>
-					</xsl:if>
-				</xsl:for-each>
-				<xsl:text>)</xsl:text>
-			</xsl:if>
-			<xsl:text>]</xsl:text>
+		<xsl:text>[</xsl:text>
+		<xsl:if test="@target"><xsl:value-of select="@target" /> : </xsl:if>
+		<xsl:call-template name="strip-namespace-and-attribute">
+			<xsl:with-param name="name" select="@name" />
+		</xsl:call-template>
+		<xsl:if test="count(property) > 0">
+			<xsl:text>(</xsl:text>
+			<xsl:for-each select="property">
+				<xsl:value-of select="@name" />
+				<xsl:text>="</xsl:text>
+				<xsl:value-of select="@value" />
+				<xsl:text>"</xsl:text>
+				<xsl:if test="position()!=last()">
+					<xsl:text>, </xsl:text>
+				</xsl:if>
+			</xsl:for-each>
+			<xsl:text>)</xsl:text>
 		</xsl:if>
+		<xsl:text>]</xsl:text>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="strip-namespace-and-attribute">
@@ -523,51 +526,5 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
-	<!-- -->
-	<msxsl:script language="C#" implements-prefix="user">
-	<![CDATA[
-		string isAttributeWanted(string sParamWantedList, XPathNodeIterator it) {
-			string[] aWanted = ("" + sParamWantedList).Split('|');
-			it.Current.MoveToFirstAttribute();
-			string sAttributeType = "" + it.Current.Value;
-			for (int i = 0; i != aWanted.Length; i++) {
-				string[] oAttribute = ("" + aWanted[i]).Split(',');
-				if (sAttributeType.IndexOf("" + oAttribute[0]) != -1) {
-					return "true";
-				}
-			}
-			return "";
-		}
-		
-		string isPropertyWanted(string sParamWantedList, XPathNodeIterator it) {
-			string[] aWanted = ("" + sParamWantedList).Split('|');
-			
-			it.Current.MoveToFirstAttribute();
-			string sPropertyType = "" + it.Current.Value;
-			it.Current.MoveToParent();
-			it.Current.MoveToParent();
-			it.Current.MoveToFirstAttribute();
-			string sAttributeType = ""  + it.Current.Value;
-			
-			for (int i = 0; i != aWanted.Length; i++) {
-				string[] oAttribute = ("" + aWanted[i]).Split(',');
-				if (sAttributeType.IndexOf("" + oAttribute[0]) != -1) {
-					if (oAttribute.Length == 1) {
-						return "true";
-					} else if (oAttribute.Length != 0) {
-						for (int j = 1; j != oAttribute.Length; j++) {
-							if (sPropertyType.IndexOf("" + oAttribute[j]) != -1) {
-								if (sPropertyType.Length == oAttribute[j].Length) {
-									return "true";
-								}
-							}
-						}
-					}
-				}
-			}
-			return "";
-		}
-		]]>
-    </msxsl:script>
 	<!-- -->
 </xsl:stylesheet>
