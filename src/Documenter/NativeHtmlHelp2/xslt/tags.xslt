@@ -6,6 +6,8 @@
 	xmlns:NUtil="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities"
 	exclude-result-prefixes="doc NUtil"
 >
+	<!-- NDoc resolves this custom url to a user-supplied extensibility stylesheet -->
+	<xsl:include href="user:extensibility" />
 
 	<!--
 	 | Identity Template
