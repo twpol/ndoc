@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<!-- -->
 	<xsl:include href="filenames.xslt" />
@@ -627,10 +627,18 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="footer-row">
-		<div id="footer">
-			<p><xsl:call-template name="copyright-notice" /></p>
-			<p><xsl:call-template name="generated-from-assembly-version" /></p>
-		</div>
+		<xsl:variable name="copyright-rtf">
+			<xsl:call-template name="copyright-notice" />
+		</xsl:variable>
+		<xsl:variable name="version-rtf">
+			<xsl:call-template name="generated-from-assembly-version" />
+		</xsl:variable>
+		<xsl:if test="string($copyright-rtf) or string($version-rtf)">
+			<div id="footer">
+				<p><xsl:copy-of select="$copyright-rtf" /></p>
+				<p><xsl:copy-of select="$version-rtf" /></p>
+			</div>
+		</xsl:if>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="copyright-notice">
