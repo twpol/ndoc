@@ -22,6 +22,7 @@ using System.Drawing.Design;
 using System.Windows.Forms.Design;
 
 using NDoc.Core;
+using NDoc.Core.Reflection;
 
 namespace NDoc.Documenter.Xml
 {
@@ -71,5 +72,6 @@ namespace NDoc.Documenter.Xml
 				SetDirty();
 			}
 		}
+
 	}
 }

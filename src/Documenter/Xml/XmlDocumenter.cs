@@ -23,6 +23,7 @@ using System.Xml;
 using System.Xml.Serialization;
 
 using NDoc.Core;
+using NDoc.Core.Reflection;
 
 namespace NDoc.Documenter.Xml
 {
