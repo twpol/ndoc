@@ -220,11 +220,11 @@ namespace NDoc.Gui
 		{
 			this.components = new System.ComponentModel.Container();
 			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(MainForm));
+			this.menuDocBuildItem = new System.Windows.Forms.MenuItem();
 			this.progressBar = new System.Windows.Forms.ProgressBar();
 			this.menuFileExitItem = new System.Windows.Forms.MenuItem();
 			this.newToolBarButton = new System.Windows.Forms.ToolBarButton();
 			this.imageList1 = new System.Windows.Forms.ImageList(this.components);
-			this.menuSpacerItem3 = new System.Windows.Forms.MenuItem();
 			this.menuFileSaveItem = new System.Windows.Forms.MenuItem();
 			this.mainMenu1 = new System.Windows.Forms.MainMenu();
 			this.menuFileItem = new System.Windows.Forms.MenuItem();
@@ -234,10 +234,10 @@ namespace NDoc.Gui
 			this.menuFileCloseItem = new System.Windows.Forms.MenuItem();
 			this.menuSpacerItem1 = new System.Windows.Forms.MenuItem();
 			this.menuFileSaveAsItem = new System.Windows.Forms.MenuItem();
-			this.menuFileRecentProjectsItem = new System.Windows.Forms.MenuItem();
 			this.menuSpacerItem2 = new System.Windows.Forms.MenuItem();
+			this.menuFileRecentProjectsItem = new System.Windows.Forms.MenuItem();
+			this.menuSpacerItem3 = new System.Windows.Forms.MenuItem();
 			this.menuDocItem = new System.Windows.Forms.MenuItem();
-			this.menuDocBuildItem = new System.Windows.Forms.MenuItem();
 			this.menuDocViewItem = new System.Windows.Forms.MenuItem();
 			this.menuAboutItem = new System.Windows.Forms.MenuItem();
 			this.comboBoxDocumenters = new System.Windows.Forms.ComboBox();
@@ -267,6 +267,13 @@ namespace NDoc.Gui
 			this.assembliesHeaderGroupBox.SuspendLayout();
 			this.SuspendLayout();
 			// 
+			// menuDocBuildItem
+			// 
+			this.menuDocBuildItem.Index = 0;
+			this.menuDocBuildItem.Shortcut = System.Windows.Forms.Shortcut.CtrlShiftB;
+			this.menuDocBuildItem.Text = "&Build";
+			this.menuDocBuildItem.Click += new System.EventHandler(this.menuDocBuildItem_Click);
+			// 
 			// progressBar
 			// 
 			this.progressBar.Anchor = (System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right);
@@ -294,14 +301,10 @@ namespace NDoc.Gui
 			this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
 			this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
 			// 
-			// menuSpacerItem3
-			// 
-			this.menuSpacerItem3.Index = 8;
-			this.menuSpacerItem3.Text = "-";
-			// 
 			// menuFileSaveItem
 			// 
 			this.menuFileSaveItem.Index = 5;
+			this.menuFileSaveItem.Shortcut = System.Windows.Forms.Shortcut.CtrlS;
 			this.menuFileSaveItem.Text = "&Save";
 			this.menuFileSaveItem.Click += new System.EventHandler(this.menuFileSaveItem_Click);
 			// 
@@ -332,18 +335,21 @@ namespace NDoc.Gui
 			// menuFileNewItem
 			// 
 			this.menuFileNewItem.Index = 0;
+			this.menuFileNewItem.Shortcut = System.Windows.Forms.Shortcut.CtrlN;
 			this.menuFileNewItem.Text = "&New";
 			this.menuFileNewItem.Click += new System.EventHandler(this.menuFileNewItem_Click);
 			// 
 			// menuFileOpenSolution
 			// 
 			this.menuFileOpenSolution.Index = 1;
+			this.menuFileOpenSolution.Shortcut = System.Windows.Forms.Shortcut.CtrlShiftN;
 			this.menuFileOpenSolution.Text = "New from &Visual Studio Solution...";
 			this.menuFileOpenSolution.Click += new System.EventHandler(this.menuFileOpenSolution_Click);
 			// 
 			// menuFileOpenItem
 			// 
 			this.menuFileOpenItem.Index = 2;
+			this.menuFileOpenItem.Shortcut = System.Windows.Forms.Shortcut.CtrlO;
 			this.menuFileOpenItem.Text = "&Open...";
 			this.menuFileOpenItem.Click += new System.EventHandler(this.menuFileOpenItem_Click);
 			// 
@@ -364,15 +370,15 @@ namespace NDoc.Gui
 			this.menuFileSaveAsItem.Text = "Save &As...";
 			this.menuFileSaveAsItem.Click += new System.EventHandler(this.menuFileSaveAsItem_Click);
 			// 
-			// menuFileRecentProjectsItem
-			// 
-			this.menuFileRecentProjectsItem.Index = 8;
-			this.menuFileRecentProjectsItem.Text = "&Recent Projects";
-			// 
 			// menuSpacerItem2
 			// 
 			this.menuSpacerItem2.Index = 7;
 			this.menuSpacerItem2.Text = "-";
+			// 
+			// menuFileRecentProjectsItem
+			// 
+			this.menuFileRecentProjectsItem.Index = 8;
+			this.menuFileRecentProjectsItem.Text = "&Recent Projects";
 			// 
 			// menuSpacerItem3
 			// 
@@ -387,15 +393,10 @@ namespace NDoc.Gui
 																						this.menuDocViewItem});
 			this.menuDocItem.Text = "&Documentation";
 			// 
-			// menuDocBuildItem
-			// 
-			this.menuDocBuildItem.Index = 0;
-			this.menuDocBuildItem.Text = "&Build";
-			this.menuDocBuildItem.Click += new System.EventHandler(this.menuDocBuildItem_Click);
-			// 
 			// menuDocViewItem
 			// 
 			this.menuDocViewItem.Index = 1;
+			this.menuDocViewItem.Shortcut = System.Windows.Forms.Shortcut.CtrlShiftV;
 			this.menuDocViewItem.Text = "&View";
 			this.menuDocViewItem.Click += new System.EventHandler(this.menuDocViewItem_Click);
 			// 
@@ -483,7 +484,7 @@ namespace NDoc.Gui
 			// viewToolBarButton
 			// 
 			this.viewToolBarButton.ImageIndex = 5;
-			this.viewToolBarButton.ToolTipText = "View Documentation";
+			this.viewToolBarButton.ToolTipText = "View Documentation (Ctrl+Shift+V)";
 			// 
 			// statusBar
 			// 
@@ -616,7 +617,7 @@ namespace NDoc.Gui
 			// buildToolBarButton
 			// 
 			this.buildToolBarButton.ImageIndex = 3;
-			this.buildToolBarButton.ToolTipText = "Build Documentation";
+			this.buildToolBarButton.ToolTipText = "Build Documentation (Ctrl+Shift+B)";
 			// 
 			// MainForm
 			// 
@@ -677,12 +678,9 @@ namespace NDoc.Gui
 		/// <param name="bEnable"><b>true</b> for enabling the menu items, <b>false</b> for disabling.</param>
 		private void EnableMenuItems(bool bEnable)
 		{
-			if (!(bEnable == true && projectFilename == untitledProjectName))
-			{
-				menuFileSaveItem.Enabled = bEnable;
-			}
-
+			menuFileSaveItem.Enabled = bEnable;
 			menuFileSaveAsItem.Enabled = bEnable;
+			saveToolBarButton.Enabled = bEnable;
 		}
 
 		/// <summary>
@@ -921,20 +919,14 @@ namespace NDoc.Gui
 			}
 			catch (DocumenterException docEx)
 			{
-				MessageBox.Show(
-					docEx.Message,
-					"Unable to read in project file",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Information);
+				ErrorForm errorForm = new ErrorForm("Unable to read in project file", docEx);
+				errorForm.ShowDialog();
 			}
 			catch (Exception ex)
 			{
-				MessageBox.Show(ex.ToString());
-				MessageBox.Show(
-					"An error occured while trying to read in project file '" + fileName + "'.",
-					"NDoc Error",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Error);
+				string msg = "An error occured while trying to read in project file:\n" + fileName + ".";
+				ErrorForm errorForm = new ErrorForm(msg, ex);
+				errorForm.ShowDialog();
 			}
 
 			if (bFailed)
@@ -948,6 +940,36 @@ namespace NDoc.Gui
 		private void FileSave(string fileName)
 		{
 			project.Write(fileName);
+		}
+
+		private void FileSaveAs()
+		{
+			SaveFileDialog saveFileDlg = new SaveFileDialog();
+
+			if (projectFilename == untitledProjectName)
+			{
+				//TODO: set the initial directory to the last place used to save a project
+				//saveFileDlg.InitialDirectory = processDirectory;
+				saveFileDlg.FileName = @".\Untitled.ndoc";
+			}
+			else
+			{
+				saveFileDlg.InitialDirectory = Path.GetDirectoryName(projectFilename);
+				saveFileDlg.FileName = Path.GetFileName(projectFilename);
+			}
+
+			saveFileDlg.Filter = "Project files (*.ndoc)|*.ndoc|All files (*.*)|*.*" ;
+			saveFileDlg.RestoreDirectory = true ;
+
+			if(saveFileDlg.ShowDialog() == DialogResult.OK)
+			{
+				FileSave(saveFileDlg.FileName);
+
+				projectFilename = saveFileDlg.FileName;
+				SetWindowTitle();
+				UpdateMRUList();
+				EnableMenuItems(true);
+			}
 		}
 
 		private void AddRowToListView(AssemblySlashDoc assemblySlashDoc)
@@ -1096,37 +1118,19 @@ namespace NDoc.Gui
 
 		private void menuFileSaveItem_Click (object sender, System.EventArgs e)
 		{
-			FileSave(projectFilename);
+			if (projectFilename == untitledProjectName)
+			{
+				FileSaveAs();
+			}
+			else
+			{
+				FileSave(projectFilename);
+			}
 		}
 
 		private void menuFileSaveAsItem_Click (object sender, System.EventArgs e)
 		{
-			SaveFileDialog saveFileDlg = new SaveFileDialog();
-
-			if (projectFilename == untitledProjectName)
-			{
-				//TODO: set the initial directory to the last place used to save a project
-				//saveFileDlg.InitialDirectory = processDirectory;
-				saveFileDlg.FileName = @".\Untitled.ndoc";
-			}
-			else
-			{
-				saveFileDlg.InitialDirectory = Path.GetDirectoryName(projectFilename);
-				saveFileDlg.FileName = Path.GetFileName(projectFilename);
-			}
-
-			saveFileDlg.Filter = "Project files (*.ndoc)|*.ndoc|All files (*.*)|*.*" ;
-			saveFileDlg.RestoreDirectory = true ;
-
-			if(saveFileDlg.ShowDialog() == DialogResult.OK)
-			{
-				FileSave(saveFileDlg.FileName);
-
-				projectFilename = saveFileDlg.FileName;
-				SetWindowTitle();
-				UpdateMRUList();
-				EnableMenuItems(true);
-			}
+			FileSaveAs();
 		}
 
 		/// <summary>
@@ -1149,7 +1153,7 @@ namespace NDoc.Gui
 		/// <param name="e">Event arguments (not used).</param>
 		protected void menuMRUItem_Click (object sender, System.EventArgs e)
 		{
-			string    fileName = ((MenuItem)sender).Text.Substring(3);
+			string fileName = ((MenuItem)sender).Text.Substring(3);
 
 			if (File.Exists(fileName))
 			{
@@ -1159,11 +1163,12 @@ namespace NDoc.Gui
 			{
 				try
 				{
-					MessageBox.Show("NDoc project file doesn't exist.", "Unable to open project file");
+					MessageBox.Show(this, "Project file doesn't exist.", "NDoc Unable to Open Project File", 
+						            MessageBoxButtons.OK, MessageBoxIcon.Information);
 					recentProjectFilenames.Remove(fileName);
 					MakeMRUMenu();
 				}
-				catch(Exception)
+				catch
 				{
 					// Remove throws an exception if the item isn't in the list.
 					// But that's ok for us so do nothing.
@@ -1215,11 +1220,12 @@ namespace NDoc.Gui
 
 				// Wait a little for the thread to die
 				buildThread.Join(2000);
-
-				this.Cursor = Cursors.Default;
 			}
 			finally
 			{
+				// Just in case some weird exception happens, we don't get stuck
+				// with a busy cursor.
+				this.Cursor = Cursors.Default;
 				ConfigureUIForBuild(false);
 				statusBarTextPanel.Text = "Ready";
 			}
@@ -1243,17 +1249,17 @@ namespace NDoc.Gui
 			} while (iex != null);
 
 			// Process exception
-			string msg = String.Format("An error occured while trying to build the " +
-  			 	                       "documentation.\n\n{0}", ex.ToString());
+			string msg = "An error occured while trying to build the documentation.";
 			if (ex is DocumenterException)
 			{
-				MessageBox.Show(this, msg, "NDoc Documenter Error",
-						        MessageBoxButtons.OK, MessageBoxIcon.Information);
+				ErrorForm errorForm = new ErrorForm(msg, ex);
+				errorForm.Text = "NDoc Documenter Error";
+				errorForm.ShowDialog(this);
 			}
 			else 
 			{
-				MessageBox.Show(this, msg, "NDoc Error", MessageBoxButtons.OK,
-					            MessageBoxIcon.Error);
+				ErrorForm errorForm = new ErrorForm(msg, ex);
+				errorForm.ShowDialog();
 			}
 		}
 
@@ -1279,7 +1285,17 @@ namespace NDoc.Gui
 
 			foreach (MenuItem menuItem in mainMenu1.MenuItems)
 			{
-				menuItem.Enabled = !starting;
+				// Allowing the top level menu items to disable does not 
+				// seem like typical windows behavior.
+				foreach (MenuItem subMenuItem in menuItem.MenuItems)
+				{
+					subMenuItem.Enabled = !starting;
+				}
+
+				if (menuItem == menuAboutItem)
+				{
+					menuItem.Enabled = !starting;
+				}
 			}
 
 			progressBar.Visible = starting;
@@ -1328,19 +1344,16 @@ namespace NDoc.Gui
 			}
 			catch (DocumenterException ex)
 			{
-				string msg = String.Format("An error occured while trying " +
-					"to view the documentation.\n\n{0}", ex.ToString());
-
-				MessageBox.Show(this, msg, "NDoc Documenter Errorw",
-					MessageBoxButtons.OK, MessageBoxIcon.Information);
+				string msg = "An error occured while trying to view the documentation.";
+				ErrorForm errorForm = new ErrorForm(msg, ex);
+				errorForm.Text = "NDoc Documenter Error";
+				errorForm.ShowDialog();
 			}
 			catch (Exception ex)
 			{
-				string msg = String.Format("An error occured while trying " +
-					"to view the documentation.\n\n{0}", ex.ToString());
-
-				MessageBox.Show(this, msg, "NDoc Error",
-					MessageBoxButtons.OK, MessageBoxIcon.Error);
+				string msg = "An error occured while trying to view the documentation.";
+				ErrorForm errorForm = new ErrorForm(msg, ex);
+				errorForm.ShowDialog();
 			}
 		}
 
@@ -1371,14 +1384,7 @@ namespace NDoc.Gui
 			}
 			else if (e.Button == saveToolBarButton)
 			{
-				if (menuFileSaveItem.Enabled)
-				{
-					menuFileSaveItem_Click(sender, EventArgs.Empty);
-				}
-				else
-				{
-					menuFileSaveAsItem_Click(sender, EventArgs.Empty);
-				}
+				menuFileSaveItem_Click(sender, EventArgs.Empty);
 			}
 			else if (e.Button == buildToolBarButton)
 			{
@@ -1530,6 +1536,5 @@ namespace NDoc.Gui
 			propertyGrid.SelectedObject = ((IDocumenter)project.Documenters[comboBoxDocumenters.SelectedIndex]).Config;
 		}
 		#endregion // Event Handlers
-
 	}
 }

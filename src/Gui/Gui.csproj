@@ -142,6 +142,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ErrorForm.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ErrorForm.resx"
+                    DependentUpon = "ErrorForm.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "HeaderGroupBox.cs"
                     SubType = "Component"
                     BuildAction = "Compile"

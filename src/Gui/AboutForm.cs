@@ -191,7 +191,7 @@ namespace NDoc.Gui
 			// 
 			// assemblyColumnHeader
 			// 
-			this.assemblyColumnHeader.Text = "Assembly";
+			this.assemblyColumnHeader.Text = "Module";
 			this.assemblyColumnHeader.Width = 208;
 			// 
 			// versionColumnHeader
@@ -272,7 +272,7 @@ namespace NDoc.Gui
 			this.AcceptButton = this.closeButton;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.CancelButton = this.closeButton;
-			this.ClientSize = new System.Drawing.Size(538, 408);
+			this.ClientSize = new System.Drawing.Size(540, 410);
 			this.Controls.AddRange(new System.Windows.Forms.Control[] {
 																		  this.contactInfoHeaderGroupBox,
 																		  this.richTextBox,

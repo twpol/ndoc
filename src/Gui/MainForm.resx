@@ -97,11 +97,11 @@
   <data name="mainMenu1.Location" type="System.Drawing.Point, System.Drawing">
     <value>17, 17</value>
   </data>
-  <data name="$this.Name">
-    <value>MainForm</value>
-  </data>
   <data name="$this.TrayHeight" type="System.Int32, mscorlib">
     <value>50</value>
+  </data>
+  <data name="$this.Name">
+    <value>MainForm</value>
   </data>
   <resheader name="ResMimeType">
     <value>text/microsoft-resx</value>
