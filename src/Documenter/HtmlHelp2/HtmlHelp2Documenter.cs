@@ -103,8 +103,15 @@ namespace NDoc.Documenter.HtmlHelp2
 			OnDocBuildingStep( 55, "Converting to Html Help 2..." );
 			ConvertCHMFile();
 
+			//then convert the CHM to an HxC project
+			if ( MyConfig.AugmentXmlDataIslands )
+			{
+				OnDocBuildingStep( 60, "Augmenting Xml data islands..." );
+				AugmentDataIslands();
+			}
+
 			//then compile the HxC into and HxS
-			OnDocBuildingStep( 60, "Compiling Html Help 2 Files..." );
+			OnDocBuildingStep( 75, "Compiling Html Help 2 Files..." );
 			CompileHxCFile();
 
 			if ( MyConfig.DeleteCHM )
@@ -118,6 +125,12 @@ namespace NDoc.Documenter.HtmlHelp2
 
 			// (since it takes 50% of our progress divide its progress by 2)
 			OnDocBuildingStep( e.Progress / 2, e.Status );
+		}
+
+		private void AugmentDataIslands()
+		{
+			HxAugmenter augmenter = new HxAugmenter();
+			augmenter.Augment( new DirectoryInfo( WorkingPath ), MyConfig.HtmlHelpName );
 		}
 
 		private void CleanCHMIntermediates()
