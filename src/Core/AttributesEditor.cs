@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using System.Windows.Forms.ComponentModel;
 using System.Windows.Forms.Design;
 
-namespace NDoc.Documenter.Msdn
+namespace NDoc.Core
 {
 	/// <summary>
 	/// Class which implements a custom UITypeEditor for attributes.

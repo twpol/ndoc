@@ -66,12 +66,23 @@
                     AssemblyName = "System.Xml"
                 />
                 <Reference
-                    Name = "System.Design"
-                    AssemblyName = "System.Design"
-                />
-                <Reference
                     Name = "System.Drawing"
                     AssemblyName = "System.Drawing"
+                />
+                <Reference
+                    Name = "System.Windows.Forms"
+                    AssemblyName = "System.Windows.Forms"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.0.3705\System.Windows.Forms.dll"
+                />
+                <Reference
+                    Name = "System.Drawing.Design"
+                    AssemblyName = "System.Drawing.Design"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.0.3705\System.Drawing.Design.dll"
+                />
+                <Reference
+                    Name = "System.Design"
+                    AssemblyName = "System.Design"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.0.3705\System.Design.dll"
                 />
             </References>
         </Build>
@@ -91,6 +102,21 @@
                     RelPath = "AssemblySlashDoc.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AttributesEditor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AttributesForm.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AttributesForm.resx"
+                    DependentUpon = "AttributesForm.cs"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "BaseDocumenter.cs"
@@ -131,6 +157,16 @@
                     RelPath = "Project.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "SimpleEdit.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "SimpleEdit.resx"
+                    DependentUpon = "SimpleEdit.cs"
+                    BuildAction = "EmbeddedResource"
                 />
             </Include>
         </Files>

@@ -20,6 +20,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Reflection;
 using System.Xml;
+using System.Drawing.Design;
 
 namespace NDoc.Core
 {
@@ -51,6 +52,9 @@ namespace NDoc.Core
 			_SkipNamespacesWithoutSummaries = false;
 			_AutoPropertyBackerSummaries = false;
 			_AutoDocumentConstructors = true;
+
+			DocumentAttributes = false;
+			DocumentedAttributes = "";
 		}
 
 		private Project _Project;
@@ -474,6 +478,41 @@ namespace NDoc.Core
 				SetDirty();
 			}
 		}
+		private bool _DocumentAttributes;
 
+		/// <summary>Gets or sets whether or not to document the attributes.</summary>
+		[
+		Category("Visibility"),
+		Description("Set this to true to output the attributes of the types/members in the syntax portion.")
+		]
+		public bool DocumentAttributes
+		{
+			get { return _DocumentAttributes; }
+
+			set 
+			{ 
+				_DocumentAttributes = value; 
+				SetDirty();
+			}
+		}
+
+		private string _DocumentedAttributes;
+
+		/// <summary>Gets or sets which attributes should be documented.</summary>
+		[
+		Category("Visibility"),
+		Editor(typeof(AttributesEditor), typeof(UITypeEditor)),
+		Description("When DocumentAttributes is set to true, this specifies which attributes/property are visisble.  Empty to show all.  Format: '<attribute-name-starts-with>,<property-to-show>,<property-to-show>|<attribute-name-starts-with>,<property-to-show>,<property-to-show>|(etc...)'."),
+		]
+		public string DocumentedAttributes
+		{
+			get { return _DocumentedAttributes; }
+
+			set
+			{
+				_DocumentedAttributes = value;
+				SetDirty();
+			}
+		}
 	}
 }

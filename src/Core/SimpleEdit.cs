@@ -4,7 +4,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 
-namespace NDoc.Documenter.Msdn
+namespace NDoc.Core
 {
 	/// <summary>
 	/// Summary description for SimpleEdit.

@@ -18,6 +18,11 @@
             <property name="IncludeAssemblyVersion" value="False" />
             <property name="CopyrightText" value="" />
             <property name="CopyrightHref" value="" />
+            <property name="SkipNamespacesWithoutSummaries" value="False" />
+            <property name="AutoPropertyBackerSummaries" value="False" />
+            <property name="AutoDocumentConstructors" value="True" />
+            <property name="DocumentAttributes" value="False" />
+            <property name="DocumentedAttributes" value="" />
         </documenter>
         <documenter name="MSDN">
             <property name="OutputDirectory" value=".\docs\Test\MSDN\" />
@@ -26,7 +31,8 @@
             <property name="Title" value="An NDoc Documented Class Library" />
             <property name="SplitTOCs" value="False" />
             <property name="DefaulTOC" value="" />
-            <property name="ShowVisualBasic" value="True" />
+            <property name="ShowVisualBasic" value="False" />
+            <property name="OmitObjectTags" value="False" />
             <property name="ShowMissingSummaries" value="True" />
             <property name="ShowMissingRemarks" value="True" />
             <property name="ShowMissingParams" value="True" />
@@ -39,6 +45,11 @@
             <property name="IncludeAssemblyVersion" value="True" />
             <property name="CopyrightText" value="" />
             <property name="CopyrightHref" value="" />
+            <property name="SkipNamespacesWithoutSummaries" value="False" />
+            <property name="AutoPropertyBackerSummaries" value="False" />
+            <property name="AutoDocumentConstructors" value="True" />
+            <property name="DocumentAttributes" value="True" />
+            <property name="DocumentedAttributes" value="" />
         </documenter>
         <documenter name="XML">
             <property name="OutputFile" value=".\docs\Test\Test.xml" />
@@ -54,6 +65,11 @@
             <property name="IncludeAssemblyVersion" value="False" />
             <property name="CopyrightText" value="" />
             <property name="CopyrightHref" value="" />
+            <property name="SkipNamespacesWithoutSummaries" value="False" />
+            <property name="AutoPropertyBackerSummaries" value="False" />
+            <property name="AutoDocumentConstructors" value="True" />
+            <property name="DocumentAttributes" value="False" />
+            <property name="DocumentedAttributes" value="" />
         </documenter>
     </documenters>
 </project>
