@@ -17,23 +17,58 @@
 				</table>
 			</div>
 			<div id="TitleRow">
-				<h1 class="dtH1"></h1>
+				<h1 class="dtH1">Getting Started</h1>
 			</div>
 		</div>
 		<div id="nstext">
-			<h1 class="dtH1">How to Begin</h1>
-			<p>Creating help documentation for your project is as easy as:</p>
-			<ol>
-				<li>
-					Set up your Visual Studio projects to generate XML Documentation</li>
-				<li>
-					Decorate you code with code comment tags and attributes</li>
-				<li>
-					Create an NDoc project for your assemblies</li>
-				<li>
-					Compile it and view your new documentation</li>
-			</ol>
-			<hr />
+			<p>
+				There are some additional tools you'll need to get in order to produce certain 
+				kinds of help titles. These tools are available online.
+			</p>
+			<h1 class="dtH1">HTML Help Compilers</h1>
+			<p>The neccessary HTML Help compilers are freely available from Microsoft.</p>
+			<h4 class="dtH4">HTML Help Version 1</h4>
+			<p>
+			HTML Help 1 titles are the CHM files that most applications use for their help 
+			file format. This is the help technology used by MSDN prior to the release of 
+			Visual Studio.NET.
+			<p>
+				If you plan on creating compiled Html Help 1 titles (CHM files) you'll need to 
+				make sure you have <A target="_blank" href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/htmlhelp/html/hwMicrosoftHTMLHelpDownloads.asp">
+					Microsoft's HTML Help Workshop</A>. This download includes the compiler 
+				capable of creating CHM help titles.
+			</p>
+			<P></P>
+			<h4 class="dtH4">HTML Help Version 2</h4>
+			<p>
+			HTML Help 2 is the help technology the Visual Studio.NET 2002 and 2003, and 
+			current versions of MSDN use.
+			<p>If you plan on creating help titles that integrate with the VS.NET help system, 
+				you'll need to <A target="_blank" href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/htmlhelp/html/hwmscextendingnethelp.asp">
+					download the Visual Studio Help Integration Kit (VSHIK)</A>. This download 
+				includes the compiler capable of creating HxS help titles.
+			</p>
+			<h3 class="dtH3">Other Tools</h3>
+			<h4 class="dtH4">H2Reg</h4>
+			<p>
+				Deploying compiled HTML Help 2 titles and integrating them into your customers 
+				Visual Studio.NET help system can be tricky. The VSHIK download <a href="ms-help://ms.vshik.2003/dv_mshlpwrk/html/hxconRedistributingHelpFiles.htm">
+					includes detailed instructions on how to do this</a>
+			using Windows Installer and a set of merge modules that are part of the 
+			integration kit download.
+			<p>An alternative method is to <a target="_blank" href="http://helpware.net/mshelp2/h2reg.htm">
+					use the H2Reg utility</a> from <a target="_blank" href="www.helpware.net">helpware.net</a>.
+			</p>
+			<p>H2Reg is a shareware exectuable that can be included in your help title 
+				deployment projects. It can be used to register help titles, and plug them into 
+				the VS.NET help system.</p>
+			<p>
+				H2Reg uses an INI file to describe the help title and to control how it is 
+				registered and plugged into existing help collections. The VS.NET Documenter 
+				includes an option that will generate an H2Reg compatible INI file for your 
+				NDoc created HTML Help 2 titles.
+			</p>
+			<hr>
 		</div>
 	</body>
 </html>

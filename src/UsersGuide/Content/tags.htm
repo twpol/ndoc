@@ -6,10 +6,8 @@
 		<meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5">
 		<link href="css/ndoc.css" rel="stylesheet" name="ndocstyle">
 		<style type="text/css"> 
-
 		</style>
 	</head>
-	
 	<body id="bodyID" class="dtBODY">
 		<div id="nsbanner">
 			<div id="bannerrow1">
@@ -44,33 +42,32 @@
 				</thead>
 				<tbody>
 					<tr vAlign="top">
-						<td><p><b>&lt;event&gt;</b></p>
+						<td><p><a name="event"><b>&lt;event&gt;</b></a></p>
 						</td>
 						<td><p>Use this tag to declare events that are raised by a member. Syntax:
-								<pre class="csharpcode"><span class="rem">///&lt;event cref="EventName"&gt;
+								<pre class="csharpcode"><span class="codecomment">///&lt;event cref="EventName"&gt;
 ///    Raised when something occurs.
 ///&lt;/event&gt;</span></pre>
-							<P></P>
 						</td>
 					</tr>
 					<tr vAlign="top">
-						<td><p><b>&lt;example&gt;</b></p>
+						<td><p><a name="example"><b>&lt;example&gt;</b></a></p>
 						</td>
 						<td><p>Example section. See Microsoft's <a href="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrfExample.htm">
 									definition</a>.</p>
-							<p>If the example contains one or more <b>&lt;code&gt;</b> blocks, it must be 
-								placed in an include file to avoid indentation problems.</p>
+							<p>If the example contains one or more <b><A href="#code">&lt;code&gt;</A></b> blocks, 
+								it must be placed in an include file to avoid indentation problems.</p>
 						</td>
 					</tr>
 					<tr vAlign="top">
-						<td><p><b>&lt;exception&gt;</b></p>
+						<td><p><a name="exception"><b>&lt;exception&gt;</b></a></p>
 						</td>
 						<td><p>Declares an exception that a member might throw. See Microsoft's <a href="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrfException.htm">
 									definition</a>.</p>
 						</td>
 					</tr>
 					<tr vAlign="top">
-						<td><p><b>&lt;include&gt;</b></p>
+						<td><p><a name="include"><b>&lt;include&gt;</b></a></p>
 						</td>
 						<td><p>References an xml node in an include file that contains one or more 
 								documentation section tags. See Microsoft's <a href="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrfInclude.htm">
@@ -78,7 +75,7 @@
 						</td>
 					</tr>
 					<tr vAlign="top">
-						<td><p><b>&lt;overloads&gt;</b></p>
+						<td><p><a name="overloads"><b>&lt;overloads&gt;</b></a></p>
 						</td>
 						<td>
 							<p>This new tag allows providing documentation that applies to all the overloads of 
@@ -94,23 +91,23 @@
 							</ul>
 							<p>Example:</p>
 							<pre class="csharpcode"><!-- formatted by http://manoli.net/csharpformat/ -->
-<span class="rem">///&lt;overloads&gt;This method has two overloads.&lt;/overloads&gt;</span>
-<span class="rem">///&lt;summary&gt;This overload just says hello.&lt;/summary&gt;</span>
+<span class="codecomment">///&lt;overloads&gt;This method has two overloads.&lt;/overloads&gt;</span>
+<span class="codecomment">///&lt;summary&gt;This overload just says hello.&lt;/summary&gt;</span>
 <span class="kwrd">public</span> <span class="kwrd">void</span> SayHello() { ... }
-<span class="rem">///&lt;summary&gt;This one says hello to someone.&lt;/summary&gt;</span>
+<span class="codecomment">///&lt;summary&gt;This one says hello to someone.&lt;/summary&gt;</span>
 <span class="kwrd">public</span> <span class="kwrd">void</span> SayHello(<span class="kwrd">string</span> toSomeone) { ... }
 </pre>
 						</td>
 					</tr>
 					<tr vAlign="top">
-						<td><p><b>&lt;param&gt;</b></p>
+						<td><p><a name="param"><b>&lt;param&gt;</b></a></p>
 						</td>
 						<td><p>Defines a member parameter. See Microsoft's <a href="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrfParam.htm">
 									definition</a>.</p>
 						</td>
 					</tr>
 					<tr vAlign="top">
-						<td><p><b>&lt;permission&gt;</b></p>
+						<td><p><a name="permission"><b>&lt;permission&gt;</b></a></p>
 						</td>
 						<td><p>Define access permissions. See Microsoft's <a href="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrfPermission.htm">
 									definition</a>.</p>
@@ -118,31 +115,46 @@
 					</tr>
 					<TR>
 						<TD>
-							<P><B>&lt;platform&gt;</B></P>
+							<P><a name="platform"><B>&lt;platform&gt;</B></a></P>
 						</TD>
 						<TD>Used to specify the supported operating systems and framework implementations 
 							supported by a type or member. <FONT color="#ff3366">{TODO}</FONT></TD>
 					</TR>
+					<TR>
+						<TD>
+							<P><A name="preliminary"><B>&lt;preliminary&gt;</B></A></P>
+						</TD>
+						<TD>
+							<P>Used to mark an individual&nbsp;item as preliminary. This tag can include block 
+								tags like <STRONG><A href="#para">&lt;para&gt;</A></STRONG> in order to put a 
+								custom warning into your help topics about preliminary items.</P>
+							<P>If the tag is empty, preliminary topis will include the default message:</P>
+							<P><FONT color="red">[This is preliminary documentation and subject to change.]</FONT></P>
+							<P><FONT color="black">It is also possible to mark an entire help project as 
+									preliminary using the <STRONG>Preliminary</STRONG> project setting.</FONT></P>
+						</TD>
+					</TR>
 					<tr vAlign="top">
-						<td><p><b>&lt;remarks&gt;</b></p>
+						<td><p><a name="remarks"><b>&lt;remarks&gt;</b></a></p>
 						</td>
 						<td><p>Remarks section. See Microsoft's <a href="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrfRemarks.htm">
 									definition</a>.</p>
 						</td>
 					</tr>
 					<tr vAlign="top">
-						<td><p><b>&lt;returns&gt;</b></p>
+						<td><p><a name="returns"><b>&lt;returns&gt;</b></a></p>
 						</td>
 						<td><p>Defines a member's return value. See Microsoft's <a href="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrfReturns.htm">
 									definition</a>.</p>
 						</td>
 					</tr>
 					<tr vAlign="top">
-						<td><p><b>&lt;seealso&gt;</b></p>
+						<td><p><a name="seealso"><b>&lt;seealso&gt;</b></a></p>
 						</td>
 						<td><p>Adds a link to the See Also section. See Microsoft's <a href="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrfSeealso.htm">
 									definition</a>.</p>
-							<p>Do <b>not</b> include this tag in the <b>&lt;remarks&gt;</b> section.</p>
+							<p>Do <b>not</b> include this tag in the <b><A href="#remarks">&lt;remarks&gt;</A></b>
+								section.</p>
 							<p>Alternate syntax:</p>
 							<ul>
 								<li>
@@ -153,7 +165,7 @@
 						</td>
 					</tr>
 					<tr vAlign="top">
-						<td><p><b>&lt;summary&gt;</b></p>
+						<td><p><a name="summary"><b>&lt;summary&gt;</b></a></p>
 						</td>
 						<td><p>The summary section. See Microsoft's <a href="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrfSummary.htm">
 									definition</a>.</p>
@@ -161,7 +173,7 @@
 					</tr>
 					<TR>
 						<TD>
-							<P><B>&lt;threadSafety&gt;</B></P>
+							<P><a name="threadSafety"><B>&lt;threadSafety&gt;</B></a></P>
 						</TD>
 						<TD>
 							<P>Denotes how a class or structure behaves in multi-threaded scenios.</P>
@@ -171,19 +183,20 @@
 								be.</P>
 							<P>Textual content can be included as the inner text of this tag in order to 
 								provide additional information about the thread safety of the type.</P>
-							<P><SPAN class="rem">/// &lt;summary&gt;This overload just says hello.&lt;/summary&gt;</SPAN></P>
-							<P><SPAN class="rem"><SPAN class="rem">/// &lt;threadSafety static="true" 
+							<P><SPAN class="codecomment">/// &lt;summary&gt;This overload just says 
+									hello.&lt;/summary&gt;</SPAN></P>
+							<P><SPAN class="codecomment"><SPAN class="codecomment">/// &lt;threadSafety static="true" 
 										instance="true"&gt;</SPAN></SPAN></P>
-							<P><SPAN class="rem"><SPAN class="rem">/// &lt;para&gt;More information about using this 
-										class across thread&lt;/para&gt;</SPAN></SPAN></P>
-							<P><SPAN class="rem"><SPAN class="rem">/// &lt;/threadSafety&gt;</SPAN></SPAN></P>
-							<P><SPAN class="rem"><SPAN class="rem"></SPAN></SPAN><SPAN class="kwrd">public</SPAN>
+							<P><SPAN class="codecomment"><SPAN class="codecomment">///&nbsp;&nbsp;&nbsp; 
+										&lt;para&gt;More information about using this class across thread&lt;/para&gt;</SPAN></SPAN></P>
+							<P><SPAN class="codecomment"><SPAN class="codecomment">/// &lt;/threadSafety&gt;</SPAN></SPAN></P>
+							<P><SPAN class="codecomment"><SPAN class="codecomment"></SPAN></SPAN><SPAN class="kwrd">public</SPAN>
 								<SPAN class="kwrd">class </SPAN>SafeClass() { ... }
 							</P>
 						</TD>
 					</TR>
 					<tr vAlign="top">
-						<td><p><b>&lt;value&gt;</b></p>
+						<td><p><a name="value"><b>&lt;value&gt;</b></a></p>
 						</td>
 						<td><p>Defines a property value. See Microsoft's <a href="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrfValue.htm">
 									definition</a>.</p>
@@ -204,7 +217,7 @@
 				</thead>
 				<tbody>
 					<tr vAlign="top">
-						<td><p><b>&lt;code&gt;</b></p>
+						<td><p><a name="code"><b>&lt;code&gt;</b></a></p>
 						</td>
 						<td><p>Code block. See Microsoft's <a href="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrfCode.htm">
 									definition</a>.</p>
@@ -213,14 +226,14 @@
 						</td>
 					</tr>
 					<tr vAlign="top">
-						<td><p><b>&lt;list&gt;</b></p>
+						<td><p><a name="list"><b>&lt;list&gt;</b></a></p>
 						</td>
 						<td><p>A definition list or table. See Microsoft's <a href="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrfList.htm">
 									definition</a>.</p>
 						</td>
 					</tr>
 					<tr vAlign="top">
-						<td><p><b>&lt;para&gt;</b></p>
+						<td><p><a name="para"><b>&lt;para&gt;</b></a></p>
 						</td>
 						<td><p>Delimits a text paragraph. See Microsoft's <a href="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrfPara.htm">
 									definition</a>.</p>
@@ -240,21 +253,21 @@
 				</thead>
 				<tbody>
 					<tr vAlign="top">
-						<td><p><b>&lt;c&gt;</b></p>
+						<td><p><a name="c"><b>&lt;c&gt;</b></a></p>
 						</td>
 						<td><p>Marks inline code. See Microsoft's <a href="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrfC.htm">
 									definition</a>.</p>
 						</td>
 					</tr>
 					<tr vAlign="top">
-						<td><p><b>&lt;paramref&gt;</b></p>
+						<td><p><a name="paramref"><b>&lt;paramref&gt;</b></a></p>
 						</td>
 						<td><p>A reference to a parameter. See Microsoft's <a href="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrfParamref.htm">
 									definition</a>.</p>
 						</td>
 					</tr>
 					<tr vAlign="top">
-						<td><p><b>&lt;see&gt;</b></p>
+						<td><p><a name="see"><b>&lt;see&gt;</b></a></p>
 						</td>
 						<td><p>Inline reference to another member or type. See Microsoft's <a href="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrfSee.htm">
 									definition</a>.</p>
@@ -270,7 +283,7 @@
 				</tbody>
 			</table>
 			<p>&nbsp;</p>
-			<hr/>
+			<hr>
 		</div>
 	</body>
 </html>
