@@ -453,18 +453,22 @@ namespace NDoc.Core
 		{
 			Type declaringType = type.DeclaringType;
 
-			return !type.FullName.StartsWith("<PrivateImplementationDetails>") &&
+			return 
+				!type.FullName.StartsWith("<PrivateImplementationDetails>") &&
 				(declaringType == null || MustDocumentType(declaringType)) &&
-				(type.IsPublic ||
+				(
+				(type.IsPublic) ||
 				(type.IsNotPublic && MyConfig.DocumentInternals) ||
-				type.IsNestedPublic ||
+				(type.IsNestedPublic) ||
 				(type.IsNestedFamily && MyConfig.DocumentProtected) ||
 				(type.IsNestedFamORAssem && MyConfig.DocumentProtected) ||
 				(type.IsNestedAssembly && MyConfig.DocumentInternals) ||
 				(type.IsNestedFamANDAssem && MyConfig.DocumentInternals) ||
-				(type.IsNestedPrivate && MyConfig.DocumentPrivates)) &&
+				(type.IsNestedPrivate && MyConfig.DocumentPrivates)
+				) &&
 				IsEditorBrowsable(type) &&
-				(!MyConfig.UseNamespaceDocSummaries || (type.Name != "NamespaceDoc"));
+				(!MyConfig.UseNamespaceDocSummaries || (type.Name != "NamespaceDoc")) &&
+				!HasNodocTag(GetMemberName(type));
 		}
 
 		private bool MustDocumentMethod(MethodBase method)
@@ -491,14 +495,35 @@ namespace NDoc.Core
 			}
 
 			// All other methods
-			return (method.IsPublic ||
+			return 
+				(
+				(method.IsPublic) ||
 				(method.IsFamily && MyConfig.DocumentProtected &&
 					(MyConfig.DocumentSealedProtected || !method.ReflectedType.IsSealed)) ||
 				(method.IsFamilyOrAssembly && MyConfig.DocumentProtected) ||
 				(method.IsAssembly && MyConfig.DocumentInternals) ||
 				(method.IsFamilyAndAssembly && MyConfig.DocumentInternals) ||
-				(method.IsPrivate && MyConfig.DocumentPrivates)) &&
-				IsEditorBrowsable(method);
+				(method.IsPrivate && MyConfig.DocumentPrivates)
+				) &&
+				IsEditorBrowsable(method) &&
+				!HasNodocTag(GetMemberName(method));
+		}
+
+		private bool HasNodocTag(string name)
+		{
+			string xpath = String.Format(
+				"/doc/members/member[@name='{0}']/nodoc",
+				name);
+
+			XmlNode valuenode = currentSlashDoc.SelectSingleNode(xpath);
+			if (valuenode == null)
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
 		}
 
 		private bool IsHidden(MemberInfo member, Type type)
@@ -663,7 +688,8 @@ namespace NDoc.Core
 				(field.IsAssembly && MyConfig.DocumentInternals) ||
 				(field.IsFamilyAndAssembly && MyConfig.DocumentInternals) ||
 				(field.IsPrivate && MyConfig.DocumentPrivates)) &&
-				IsEditorBrowsable(field);
+				IsEditorBrowsable(field) &&
+				!HasNodocTag(GetMemberName(field));
 		}
 
 		private void WriteAssembly(XmlWriter writer, Assembly assembly)
