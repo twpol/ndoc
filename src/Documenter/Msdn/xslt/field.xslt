@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<!-- -->
 	<xsl:output method="html" indent="no" />
@@ -29,6 +29,7 @@
 					<p></p>
 					<xsl:call-template name="remarks-section" />
 					<xsl:call-template name="example-section" />
+					<xsl:call-template name="requirements-section" />
 					<xsl:call-template name="seealso-section">
 						<xsl:with-param name="page">field</xsl:with-param>
 					</xsl:call-template>
