@@ -41,12 +41,21 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <summary>
 		/// Initializes a new instance of class MsdnXsltUtilities
 		/// </summary>
-		/// <param name="mapper">The namespace mapper used to look up XLink help namespace for foreign types</param>	
+		/// <param name="namespaceMapper">The namespace mapper used to look up XLink help namespace for foreign types</param>	
 		/// <param name="fileMapper">The mapper used to look up local filenames</param>	
-		public MsdnXsltUtilities( NamespaceMapper mapper, FileNameMapper fileMapper )
+		public MsdnXsltUtilities( NamespaceMapper namespaceMapper, FileNameMapper fileMapper )
 		{
+			if (namespaceMapper == null)
+			{
+				throw new ArgumentNullException("namespaceMapper");
+			}
+			if (fileMapper == null)
+			{
+				throw new ArgumentNullException("fileMapper");
+			}
+
 			ResetDescriptions();
-			nsMapper = mapper;
+			nsMapper = namespaceMapper;
 			_fileMapper = fileMapper;
 			aIndexCache= new Hashtable();
 		}
