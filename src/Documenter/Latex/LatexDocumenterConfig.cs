@@ -67,7 +67,6 @@ namespace NDoc.Documenter.Latex
 		/// <summary>Gets the full name of the LaTeX document.</summary>
 		[Category("LaTeX")]
 		[Description("Full name of the LaTeX document.")]
-		[ReadOnly(true)]
 		public string TextFileFullName
 		{
 			get
@@ -116,7 +115,6 @@ namespace NDoc.Documenter.Latex
 		/// <summary>Gets the path of the output file.</summary>
 		[Category("LaTeX")]
 		[Description("Full path to the output TeX file.")]
-		[ReadOnly(true)]
 		public string TexFileFullPath
 		{
 			get
