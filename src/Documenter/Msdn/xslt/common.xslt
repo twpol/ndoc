@@ -600,12 +600,26 @@
 		</i>
 	</xsl:template>
 	<!-- -->
+	<xsl:template name="get-lang">
+		<xsl:param name="lang" />
+		<xsl:choose>
+			<xsl:when test="$lang = 'VB' or $lang='Visual Basic'">
+				<xsl:value-of select="'Visual&#160;Basic'" />
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="$lang" />
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	<!-- -->
 	<xsl:template match="code" mode="slashdoc">
 		<pre class="code">
 			<xsl:if test="@lang">
 				<span class="lang">
 					<xsl:text>[</xsl:text>
-					<xsl:value-of select="@lang" />
+					<xsl:call-template name="get-lang">
+						<xsl:with-param name="lang" select="@lang" />
+					</xsl:call-template>
 					<xsl:text>]</xsl:text>
 				</span>
 			</xsl:if>
@@ -712,7 +726,9 @@
 			<xsl:if test="@lang">
 				<span class="lang">
 					<xsl:text>[</xsl:text>
-					<xsl:value-of select="@lang" />
+					<xsl:call-template name="get-lang">
+						<xsl:with-param name="lang" select="@lang" />
+					</xsl:call-template>
 					<xsl:text>]</xsl:text>
 				</span>
 			</xsl:if>

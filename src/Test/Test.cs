@@ -957,9 +957,13 @@ namespace NDoc.Test
 	/// <remarks>
 	///		<para>This paragraph has no lang attribute.</para>
 	///		<para lang="Visual Basic">This paragraph has a Visual Basic lang attribute.</para>
+	///		<para lang="VB">This paragraph has a VB lang attribute.</para>
 	///		<para lang="C#">This paragraph has a C# lang attribute.</para>
 	///		<para lang="C++, JScript">This paragraph has a C++, JScript lang attribute.</para>
 	///		<code lang="Visual Basic">
+	///			' This is some Visual Basic code.
+	///		</code>
+	///		<code lang="VB">
 	///			' This is some VB code.
 	///		</code>
 	///		<code lang="C#">
