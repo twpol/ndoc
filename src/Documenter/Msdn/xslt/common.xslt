@@ -77,7 +77,7 @@
 		<xsl:param name="access" />
 		<xsl:choose>
 			<xsl:when test="$access='Public'">public</xsl:when>
-			<xsl:when test="$access='NotPublic'"></xsl:when>
+			<xsl:when test="$access='NotPublic'">private</xsl:when>
 			<xsl:when test="$access='NestedPublic'">public</xsl:when>
 			<xsl:when test="$access='NestedFamily'">protected</xsl:when>
 			<xsl:when test="$access='NestedFamilyOrAssembly'">protected internal</xsl:when>

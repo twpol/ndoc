@@ -143,13 +143,13 @@
 		<xsl:param name="access" />
 		<xsl:choose>
 			<xsl:when test="$access='Public'">Public</xsl:when>
-			<xsl:when test="$access='NotPublic'"></xsl:when>
+			<xsl:when test="$access='NotPublic'">Private</xsl:when>
 			<xsl:when test="$access='NestedPublic'">Public</xsl:when>
 			<xsl:when test="$access='NestedFamily'">Protected</xsl:when>
 			<xsl:when test="$access='NestedFamilyOrAssembly'">Protected Friend</xsl:when>
 			<xsl:when test="$access='NestedAssembly'">Friend</xsl:when>
 			<xsl:when test="$access='NestedPrivate'">Private</xsl:when>
-			<xsl:otherwise>ERROR</xsl:otherwise>
+			<xsl:otherwise>/* unknown */</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
 	<!-- -->
