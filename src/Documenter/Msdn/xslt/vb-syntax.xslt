@@ -202,7 +202,10 @@
 			</xsl:call-template>
 		</a>
 		<xsl:if test="@optional = 'true'">
-		  <xsl:text> = </xsl:text><xsl:value-of select="@defaultValue" />
+		  <xsl:text> = </xsl:text>
+		  <xsl:if test="@type='System.String'">"</xsl:if>
+		  <xsl:value-of select="@defaultValue" />
+		  <xsl:if test="@type='System.String'">"</xsl:if>
 		</xsl:if>
 		<xsl:if test="position() != last()">
 			<xsl:text>,</xsl:text>
