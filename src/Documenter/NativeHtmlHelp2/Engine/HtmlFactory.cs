@@ -43,6 +43,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		private ExternalHtmlProvider _htmlProvider;
 		private StyleSheetCollection _stylesheets;
 		private SdkDocVersion linkToSdkDocVersion = SdkDocVersion.SDK_v1_1;
+		private string PlatformString = String.Empty;
 
 		private NameMapper mapper;
 
@@ -123,15 +124,15 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			_stylesheets = StyleSheetCollection.LoadStyleSheets( resourceDirectory );
 		}
 
-
 		/// <summary>
 		/// Generates HTML for the NDoc XML
 		/// </summary>
 		/// <param name="documentation">NDoc generated xml</param>
 		/// <param name="sdkVersion">The SDK version to use</param>
 		/// <param name="includeHierarchy">Indicates whether to create a namespace hierarchy page</param>
-		public void MakeHtml( XmlNode documentation, SdkDocVersion sdkVersion, bool includeHierarchy )
+		public void MakeHtml( XmlNode documentation, SdkDocVersion sdkVersion, bool includeHierarchy, string platformString )
 		{
+			PlatformString = platformString;
 			linkToSdkDocVersion = sdkVersion;
 			mapper.MakeFilenames( documentation );
 			MakeHtmlForAssemblies( documentation, includeHierarchy );
@@ -195,8 +196,9 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 				
 				MsdnXsltUtilities utilities = new MsdnXsltUtilities( mapper.ElemNames, linkToSdkDocVersion );
 
+				arguments.AddParam( "ndoc-platforms", String.Empty, PlatformString );
 				arguments.AddParam( "ndoc-sdk-doc-base-url", String.Empty, utilities.SdkDocBaseUrl );
-
+		
 				arguments.AddExtensionObject( "urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities", utilities );
 				arguments.AddExtensionObject( "urn:NDocExternalHtml", _htmlProvider );
 

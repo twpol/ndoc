@@ -19,6 +19,7 @@
 using System;
 using System.IO;
 using System.Xml;
+using System.Text;
 using System.Diagnostics;
 
 using NDoc.Core;
@@ -187,7 +188,35 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			factory.Properties.Add( "ndoc-documented-attributes", MyConfig.DocumentedAttributes );
 
 			// make the html
-			factory.MakeHtml( xmlDocumentation, MyConfig.LinkToSdkDocVersion, MyConfig.IncludeHierarchy );;
+			factory.MakeHtml( xmlDocumentation, MyConfig.LinkToSdkDocVersion, MyConfig.IncludeHierarchy, GetPlatformString() );;
+		}
+
+		private string GetPlatformString()
+		{
+			StringBuilder sb = new StringBuilder();
+
+			if ( MyConfig.PCPlatform == PCPlatforms.DesktopAndServer )
+				sb.Append( "Windows 98, Windows NT 4.0, Windows Millennium Edition, Windows 2000, Windows XP Home Edition, Windows XP Professional, Windows Server 2003 family" );
+			else if ( MyConfig.PCPlatform == PCPlatforms.ServerOnly )
+				sb.Append( "Windows NT 4.0, Windows 2000, Windows XP Professional, Windows Server 2003 family" );
+
+			if ( MyConfig.MONO )
+			{
+				if ( sb.Length > 0 )
+					sb.Append( ", " );
+
+				sb.Append( "MONO" );
+			}
+
+			if ( MyConfig.CompactFramework )
+			{
+				if ( sb.Length > 0 )
+					sb.Append( ", " );
+
+				sb.Append( ".NET Compact Framework - Windows CE .NET" );
+			}
+
+			return sb.ToString();
 		}
 
 		private XmlDocument MergeXml( Project project )

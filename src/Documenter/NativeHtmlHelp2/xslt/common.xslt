@@ -12,6 +12,7 @@
 	<!-- -->
 	<xsl:param name="ndoc-title" />
 	<xsl:param name="ndoc-sdk-doc-base-url" />
+	<xsl:param name="ndoc-platforms"/>
 	<!-- -->
 
 	<!-- -->
@@ -831,11 +832,17 @@
 						</li>
 					</xsl:for-each>
 				</ul>
-				<p>
-					<b class="le">Platforms: </b>
-					<xsl:text>Windows 98, Windows NT 4.0, Windows Millennium Edition, Windows 2000, Windows XP Home Edition, Windows XP Professional, Windows Server 2003 family, .NET Compact Framework - Windows CE .NET</xsl:text>
-				</p>				
+				<xsl:call-template name="platforms-section"/>
 			</p>
+		</xsl:if>
+	</xsl:template>
+	
+	<xsl:template name="platforms-section">
+		<xsl:if test="string-length( $ndoc-platforms ) != 0">
+			<p>
+				<b class="le">Platforms: </b>
+				<xsl:value-of select="$ndoc-platforms"/>
+			</p>				
 		</xsl:if>
 	</xsl:template>
 	<!-- -->

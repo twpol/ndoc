@@ -154,10 +154,7 @@
 						<b>Assembly: </b>
 						<xsl:value-of select="../../../@name" /> (in <xsl:value-of select="../../@name" />)
 					</p>
-					<p>
-						<b class="le">Platforms: </b>
-						<xsl:text>Windows 98, Windows NT 4.0, Windows Millennium Edition, Windows 2000, Windows XP Home Edition, Windows XP Professional, Windows Server 2003 family, .NET Compact Framework - Windows CE .NET</xsl:text>
-					</p>	
+					<xsl:call-template name="platforms-section"/>
 					<xsl:if test="documentation/permission">
 						<p>
 							<b>.NET Framework Security: </b>

@@ -46,6 +46,25 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 	}
 
 	/// <summary>
+	/// The platforms an assembly is supported on
+	/// </summary>
+	public enum PCPlatforms
+	{
+		/// <summary>
+		/// Any .NET desktop platform
+		/// </summary>
+		DesktopAndServer,
+		/// <summary>
+		/// A platform with Server capabilities
+		/// </summary>
+		ServerOnly,
+		/// <summary>
+		/// Compact Framework only
+		/// </summary>
+		None
+	}
+
+	/// <summary>
 	/// Specifies a version of the .NET Framework documentation.
 	/// </summary>
 	public enum SdkDocVersion
@@ -374,5 +393,61 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 				SetDirty();
 			}
 		}
+
+		bool _SupportsMono = false;
+		/// <summary>
+		/// Indicates whether the assembly supports MONO
+		/// </summary>
+		[Category("Supported Platforms")]
+		[Description("Does the assembly support the MONO platform")]
+		[DefaultValue(false)]
+		public bool MONO
+		{
+			get { return _SupportsMono; }
+
+			set
+			{
+				_SupportsMono = value;
+				SetDirty();
+			}
+		}
+
+		bool _CompactFramework = false;
+		/// <summary>
+		/// Indicates whether the assembly supports the Compact Framework
+		/// </summary>
+		[Category("Supported Platforms")]
+		[Description("Does the assembly support the .NET Compact Framework")]
+		[DefaultValue(false)]
+		public bool CompactFramework
+		{
+			get { return _CompactFramework; }
+
+			set
+			{
+				_CompactFramework = value;
+				SetDirty();
+			}
+		}	
+
+
+		PCPlatforms _pcPlatforms = PCPlatforms.DesktopAndServer;
+		/// <summary>
+		/// Indicates the supported PC platforms
+		/// </summary>
+		[Category("Supported Platforms")]
+		[Description("Denotes the PC platforms that the assembly supports")]
+		[DefaultValue(PCPlatforms.DesktopAndServer)]
+		public PCPlatforms PCPlatform
+		{
+			get { return _pcPlatforms; }
+
+			set
+			{
+				_pcPlatforms = value;
+				SetDirty();
+			}
+		}	
+
 	}
 }
