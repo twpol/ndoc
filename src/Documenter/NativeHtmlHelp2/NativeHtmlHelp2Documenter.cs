@@ -426,7 +426,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			EmbeddedResources.WriteEmbeddedResources(
 				this.GetType().Module.Assembly,
 				"NDoc.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping",
-				Path.GetDirectoryName( new Uri( Assembly.GetExecutingAssembly().CodeBase ).AbsolutePath ) );
+				Path.GetDirectoryName( new Uri( Assembly.GetExecutingAssembly().CodeBase, true ).AbsolutePath ) );
 		}
 
 		private void CreateCollectionFiles( Workspace w )
