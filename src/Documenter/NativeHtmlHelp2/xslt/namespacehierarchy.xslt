@@ -28,8 +28,10 @@
 							<xsl:with-param name="type" select="'T:System.Object'" />									
 						</xsl:call-template>
 					</p>
-					<xsl:variable name="roots" select="$ns//*[(local-name()='class' and not(base)) or (local-name()='base' and not(base))]" />
+					<xsl:variable name="context" select="$ns//*[local-name()='class' or local-name()='structure' or local-name()='base']" />
+					<xsl:variable name="roots" select="$ns//*[(local-name()='class' and not(base)) or (local-name()='structure' and not(base)) or (local-name()='base' and not(base))]" />
 					<xsl:call-template name="call-draw">
+						<xsl:with-param name="context" select="$context" />
 						<xsl:with-param name="nodes" select="$roots" />
 						<xsl:with-param name="level" select="1" />
 					</xsl:call-template>
@@ -58,6 +60,7 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="call-draw">
+		<xsl:param name="context" />
 		<xsl:param name="nodes" />
 		<xsl:param name="level" />
 		<xsl:for-each select="$nodes">
@@ -65,6 +68,7 @@
 			<xsl:if test="position() = 1">
 				<xsl:variable name="head" select="." />
 				<xsl:call-template name="draw">
+					<xsl:with-param name="context" select="$context" />
 					<xsl:with-param name="head" select="$head" />
 					<xsl:with-param name="tail" select="$nodes[@name != $head/@name]" />
 					<xsl:with-param name="level" select="$level" />
@@ -74,6 +78,7 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="draw">
+		<xsl:param name="context" />
 		<xsl:param name="head" />
 		<xsl:param name="tail" />
 		<xsl:param name="level" />
@@ -89,7 +94,7 @@
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:variable name="base-class-id" select="$head/@id" />
-					<xsl:variable name="base-class" select="//class[@id=$base-class-id]" />
+					<xsl:variable name="base-class" select="//class[@id=$base-class-id] | //structure[@id=$base-class-id]" />
 					<xsl:choose>
 						<xsl:when test="$base-class">
 						<a href="{NUtil:GetLocalCRef( string( $base-class-id ) ) }">
@@ -109,15 +114,19 @@
 				</xsl:otherwise>
 			</xsl:choose>
 		</p>
-		<xsl:variable name="derivatives" select="/ndoc/assembly/module/namespace/class[base/@id = $head/@id] | /ndoc/assembly/module/namespace/class/descendant::base[base[@id = $head/@id]]" />
+		<xsl:variable name="derivative-classes" select="/ndoc/assembly/module/namespace/class[base/@id = $head/@id and @id = $context/@id] | /ndoc/assembly/module/namespace/class/descendant::base[base[@id = $head/@id] and @id = context/@id]" />
+		<xsl:variable name="derivative-structures" select="/ndoc/assembly/module/namespace/structure[base/@id = $head/@id and @id = $context/@id] | /ndoc/assembly/module/namespace/structure/descendant::base[base[@id = $head/@id] and @id = context/@id]" />
+		<xsl:variable name="derivatives" select="$derivative-classes | $derivative-structures" />
 		<xsl:if test="$derivatives">
 			<xsl:call-template name="call-draw">
+				<xsl:with-param name="context" select="$context" />
 				<xsl:with-param name="nodes" select="$derivatives" />
 				<xsl:with-param name="level" select="$level + 1" />
 			</xsl:call-template>
 		</xsl:if>
 		<xsl:if test="$tail">
 			<xsl:call-template name="call-draw">
+				<xsl:with-param name="context" select="$context" />
 				<xsl:with-param name="nodes" select="$tail" />
 				<xsl:with-param name="level" select="$level" />
 			</xsl:call-template>
