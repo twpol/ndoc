@@ -428,6 +428,12 @@
 		</i>
 	</xsl:template>
 	<!-- -->
+	<xsl:template match="paramref[@name]" mode="slashdoc">
+		<i>
+			<xsl:value-of select="@name" />
+		</i>
+	</xsl:template>
+	<!-- -->
 	<xsl:template match="code" mode="slashdoc">
 		<pre class="code">
 			<xsl:apply-templates />

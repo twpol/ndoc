@@ -312,6 +312,8 @@ namespace NDoc.Test
 		/// <param name="s">a string</param>
 		/// <param name="c">a character</param>
 		/// <param name="d">a double</param>
+		/// <remarks>The <paramref name="i"/> param is an integer.
+		/// The <paramref name="s"/> param is a string.</remarks>
 		public void LotsOfParams(int i, string s, char c, double d)
 		{
 		}
