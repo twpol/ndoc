@@ -18,28 +18,26 @@
 					<xsl:with-param name="type-name" select="concat($ns/@name, ' Hierarchy')" />
 				</xsl:call-template>
 				<div id="nstext">
-					<a>
-						<xsl:attribute name="href">
-							<xsl:call-template name="get-filename-for-system-type">
-								<xsl:with-param name="type-name" select="'System.Object'" />
-							</xsl:call-template>
-						</xsl:attribute>
-						<xsl:text>System.Object</xsl:text>
-					</a>
-					<br />
+					<p>
+						<a>
+							<xsl:attribute name="href">
+								<xsl:call-template name="get-filename-for-system-type">
+									<xsl:with-param name="type-name" select="'System.Object'" />
+								</xsl:call-template>
+							</xsl:attribute>
+							<xsl:text>System.Object</xsl:text>
+						</a>
+					</p>
 					<xsl:variable name="roots" select="$ns//*[(local-name()='class' and not(base)) or (local-name()='base' and not(base))]" />
 					<xsl:call-template name="call-draw">
 						<xsl:with-param name="nodes" select="$roots" />
 						<xsl:with-param name="level" select="1" />
 					</xsl:call-template>
-					<br />
 					<xsl:if test="$ns/interface">
 						<h3 class="dtH3">Interfaces</h3>
-						<p>
-							<xsl:apply-templates select="$ns/interface">
-								<xsl:sort select="@name" />
-							</xsl:apply-templates>
-						</p>
+						<xsl:apply-templates select="$ns/interface">
+							<xsl:sort select="@name" />
+						</xsl:apply-templates>
 					</xsl:if>
 					<xsl:call-template name="footer-row">
 						<xsl:with-param name="type-name" select="concat($ns/@name, ' Hierarchy')" />
@@ -137,15 +135,16 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template match="interface">
-		<a>
-			<xsl:attribute name="href">
-				<xsl:call-template name="get-filename-for-type">
-					<xsl:with-param name="id" select="@id" />
-				</xsl:call-template>
-			</xsl:attribute>
-			<xsl:value-of select="@name" />
-		</a>
-		<br />
+		<p>
+			<a>
+				<xsl:attribute name="href">
+					<xsl:call-template name="get-filename-for-type">
+						<xsl:with-param name="id" select="@id" />
+					</xsl:call-template>
+				</xsl:attribute>
+				<xsl:value-of select="@name" />
+			</a>
+		</p>
 	</xsl:template>
 	<!-- -->
 </xsl:stylesheet>
