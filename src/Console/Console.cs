@@ -20,6 +20,7 @@ using System.Diagnostics;
 
 using NDoc.Core;
 using NDoc.Documenter.Msdn;
+using NDoc.Documenter.Xml;
 
 namespace NDoc.Console
 {
@@ -27,76 +28,76 @@ namespace NDoc.Console
 	{
 		static void Main(string[] args)
 		{
-      try
-      {
-        MsdnDocumenter documenter = new MsdnDocumenter();
+			try
+			{
+				MsdnDocumenter documenter = new MsdnDocumenter();
 
-        if (args.Length < 1)
-        {
-          WriteUsage(documenter);
-        }
-        else
-        {
-          Project project = new Project();
+				if (args.Length < 1)
+				{
+					WriteUsage(documenter);
+				}
+				else
+				{
+					Project project = new Project();
 
-          foreach (string arg in args)
-          {
-            if (arg.StartsWith("-"))
-            {
-              if (string.Compare(arg, "-verbose", true) == 0)
-              {
-                Trace.Listeners.Add(new TextWriterTraceListener(System.Console.Out));
-              }
-              else
-              {
-                string[] pair = arg.Split('=');
+					foreach (string arg in args)
+					{
+						if (arg.StartsWith("-"))
+						{
+							if (string.Compare(arg, "-verbose", true) == 0)
+							{
+								Trace.Listeners.Add(new TextWriterTraceListener(System.Console.Out));
+							}
+							else
+							{
+								string[] pair = arg.Split('=');
 
-                if (pair.Length == 2)
-                {
-                  string name = pair[0].Substring(1);
-                  string value = pair[1];
+								if (pair.Length == 2)
+								{
+									string name = pair[0].Substring(1);
+									string value = pair[1];
 
-                  if (name.ToLower() == "project")
-                  {
-                    project = new Project();
-                    project.Read(value);
-                    documenter = (MsdnDocumenter)project.GetDocumenter(documenter.Name);
-                  }
-                  else
-                  {
-                    documenter.Config.SetValue(name, value);
-                  }
-                }
-              }
-            }
-            else if (arg.IndexOf(',') != -1)
-            {
-              string[] pair = arg.Split(',');
+									if (name.ToLower() == "project")
+									{
+										project = new Project();
+										project.Read(value);
+										documenter = (MsdnDocumenter)project.GetDocumenter(documenter.Name);
+									}
+									else
+									{
+										documenter.Config.SetValue(name, value);
+									}
+								}
+							}
+						}
+						else if (arg.IndexOf(',') != -1)
+						{
+							string[] pair = arg.Split(',');
 
-              if (pair.Length == 2)
-              {
-                project.AddAssemblySlashDoc(
-                  new AssemblySlashDoc(pair[0], pair[1]));
-              }
-            }
-          }
+							if (pair.Length == 2)
+							{
+								project.AddAssemblySlashDoc(
+								new AssemblySlashDoc(pair[0], pair[1]));
+							}
+						}
+					}
 
-          if (project.AssemblySlashDocCount == 0)
-          {
-            WriteUsage(documenter);
-          }
-          else
-          {
-            documenter.DocBuildingStep += new DocBuildingEventHandler(DocBuildingStepHandler);
-            documenter.Build(project);
-          }
-        }
-      }
-      catch( Exception except )
-      {
-        System.Console.WriteLine( "Error: " + except.Message );
-        System.Diagnostics.Trace.WriteLine( "Exception: " + Environment.NewLine + except.ToString() );
-      }
+					if (project.AssemblySlashDocCount == 0)
+					{
+						WriteUsage(documenter);
+					}
+					else
+					{
+						documenter.DocBuildingStep += new DocBuildingEventHandler(DocBuildingStepHandler);
+						documenter.Build(project);
+					}
+				}
+			}
+			catch( Exception except )
+			{
+				System.Console.WriteLine( "Error: " + except.Message );
+				System.Diagnostics.Trace.WriteLine( "Exception: " + Environment.NewLine + except.ToString() );
+			}
 		}
 
 		private static void WriteUsage(IDocumenter documenter)
