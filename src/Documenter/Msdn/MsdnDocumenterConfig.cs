@@ -50,6 +50,9 @@ namespace NDoc.Documenter.Msdn
 			}
 
 			Title = "An NDoc Documented Class Library";
+
+			SplitTOCs = false;
+			DefaulTOC = string.Empty;
 		}
 
 		/// <summary>Gets or sets the OutputDirectory property.</summary>
@@ -148,6 +151,42 @@ namespace NDoc.Documenter.Msdn
 			set 
 			{ 
 				_Title = value; 
+				SetDirty();
+			}
+		}
+
+		private bool _SplitTOCs;
+
+		/// <summary>Gets or sets the SplitTOCs property.</summary>
+		[
+			Category("HTML Help"),
+			Description("Turning this flag on will generate a separate TOC for each assembly.")
+		]
+		public bool SplitTOCs
+		{
+			get { return _SplitTOCs; }
+
+			set 
+			{ 
+				_SplitTOCs = value; 
+				SetDirty();
+			}
+		}
+
+		private string _DefaultTOC;
+
+		/// <summary>Gets or sets the DefaultTOC property.</summary>
+		[
+			Category("HTML Help"),
+			Description("When SplitTOCs is true, this represents the default TOC to use.")
+		]
+		public string DefaulTOC
+		{
+			get { return _DefaultTOC; }
+
+			set 
+			{ 
+				_DefaultTOC = value; 
 				SetDirty();
 			}
 		}

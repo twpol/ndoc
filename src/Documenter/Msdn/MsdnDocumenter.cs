@@ -178,15 +178,23 @@ namespace NDoc.Documenter.Msdn
 				OnDocBuildingStep(60, "Generating HTML pages...");
 
 				htmlHelp.OpenProjectFile();
-				htmlHelp.OpenContentsFile();
+
+				if (!MyConfig.SplitTOCs)
+				{
+					htmlHelp.OpenContentsFile(string.Empty, true);
+				}
 
 				try
 				{
-					MakeHtmlForNamespaces();
+					MakeHtmlForAssemblies();
 				}
 				finally
 				{
-					htmlHelp.CloseContentsFile();
+					if (!MyConfig.SplitTOCs)
+					{
+						htmlHelp.CloseContentsFile();
+					}
+
 					htmlHelp.CloseProjectFile();
 				}
 
@@ -325,9 +333,58 @@ namespace NDoc.Documenter.Msdn
 			return whichType;
 		}
 
-		private void MakeHtmlForNamespaces()
+		private void MakeHtmlForAssemblies()
 		{
-			XmlNodeList namespaceNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace");
+			XmlNodeList assemblyNodes = xmlDocumentation.SelectNodes("/ndoc/assembly");
+			int[] indexes = SortNodesByAttribute(assemblyNodes, "name");
+
+			int nNodes = assemblyNodes.Count;
+
+			for (int i = 0; i < nNodes; i++)
+			{
+				XmlNode assemblyNode = assemblyNodes[indexes[i]];
+
+				if (assemblyNode.ChildNodes.Count > 0)
+				{
+					string assemblyName = (string)assemblyNode.Attributes["name"].Value;
+
+					if (MyConfig.SplitTOCs)
+					{
+						bool isDefault = (assemblyName == MyConfig.DefaulTOC);
+
+						if (isDefault)
+						{
+							XmlNode defaultNamespace =
+								xmlDocumentation.SelectSingleNode("/ndoc/assembly[@name='" + assemblyName + "']/module/namespace");
+
+							if (defaultNamespace != null)
+							{
+								string defaultNamespaceName = (string)defaultNamespace.Attributes["name"].Value;
+								htmlHelp.DefaultTopic = RemoveChar(defaultNamespaceName, '.') + ".html";
+							}
+						}
+
+						htmlHelp.OpenContentsFile(assemblyName, isDefault);
+					}
+
+					try
+					{
+						MakeHtmlForNamespaces(assemblyName);
+					}
+					finally
+					{
+						if (MyConfig.SplitTOCs)
+						{
+							htmlHelp.CloseContentsFile();
+						}
+					}
+				}
+			}
+		}
+
+		private void MakeHtmlForNamespaces(string assemblyName)
+		{
+			XmlNodeList namespaceNodes = xmlDocumentation.SelectNodes("/ndoc/assembly[@name=\"" + assemblyName + "\"]/module/namespace");
 			int[] indexes = SortNodesByAttribute(namespaceNodes, "name");
 
 			int nNodes = namespaceNodes.Count;

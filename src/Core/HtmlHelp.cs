@@ -19,6 +19,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Xml;
+using System.Collections;
 
 namespace NDoc.Core
 {
@@ -36,6 +37,9 @@ namespace NDoc.Core
 		bool _includeFavorites = false;
 
 		StreamWriter streamHtmlHelp = null;
+
+		ArrayList _tocFiles = new ArrayList();
+
 		XmlTextWriter tocWriter;
 
 		/// <summary>Initializes a new instance of the HtmlHelp class.</summary>
@@ -84,6 +88,13 @@ namespace NDoc.Core
 			set { _includeFavorites = value; }
 		}
 
+		/// <summary>Gets or sets the DefaultTopic property.</summary>
+		public string DefaultTopic
+		{
+			get { return _defaultTopic; }
+			set { _defaultTopic = value; }
+		}
+
 		private string GetProjectFilename()
 		{
 			return _projectName + ".hhp";
@@ -91,7 +102,7 @@ namespace NDoc.Core
 
 		private string GetContentsFilename()
 		{
-			return _projectName + ".hhc";
+			return (_tocFiles.Count > 0) ? (string)_tocFiles[0] : string.Empty;
 		}
 
 		private string GetIndexFilename()
@@ -116,7 +127,7 @@ namespace NDoc.Core
 
 		private string GetPathToContentsFile()
 		{
-			return Path.Combine(_directoryName, _projectName) + ".hhc";
+			return Path.Combine(_directoryName, GetContentsFilename());
 		}
 
 		private string GetPathToIndexFile()
@@ -141,38 +152,7 @@ namespace NDoc.Core
 		{
 			streamHtmlHelp = new StreamWriter(File.Open(GetPathToProjectFile(), FileMode.Create));
 
-			string options;
-
-			if (_includeFavorites)
-			{
-				options = "0x63520,220,0x383e,[86,51,872,558],,,,,,,0";
-			}
-			else
-			{
-				options = "0x62520,220,0x383e,[86,51,872,558],,,,,,,0";
-			}
-
-			streamHtmlHelp.Write(
-				"[OPTIONS]\n" +
-				"Auto Index=Yes\n" +
-				"Compatibility=1.1 or later\n" +
-				"Compiled file=" + GetCompiledHtmlFilename() + "\n" +
-				"Contents file=" + GetContentsFilename() + "\n" +
-				"Default Window=MsdnHelp\n" +
-				"Default topic=" + _defaultTopic + "\n" +
-				"Display compile progress=No\n" +
-				"Error log file=" + GetLogFilename() + "\n" +
-				"Full-text search=Yes\n" +
-				"Index file=" + GetIndexFilename() + "\n" +
-				"Language=0x409 English (United States)\n\n" +
-				"[WINDOWS]\n" +
-				"MsdnHelp=\"" +
-				_projectName + " Help\",\"" +
-				GetContentsFilename() + "\",\"" +
-				GetIndexFilename() + "\",,,,,,," +
-				options +
-				"\n\n" +
-				"[FILES]\n");
+			streamHtmlHelp.Write("[FILES]\n");
 		}
 
 		/// <summary>Adds a file to the HTML Help project file.</summary>
@@ -185,18 +165,76 @@ namespace NDoc.Core
 		/// <summary>Closes the HTML Help project file.</summary>
 		public void CloseProjectFile()
 		{
-			streamHtmlHelp.Write("\n[INFOTYPES]\n");
+			string options;
+
+			if (_includeFavorites)
+			{
+				options = "0x63520,220,0x383e,[86,51,872,558],,,,,,,0";
+			}
+			else
+			{
+				options = "0x62520,220,0x383e,[86,51,872,558],,,,,,,0";
+			}
+
+			streamHtmlHelp.Write(
+				"\n[OPTIONS]\n" +
+				"Auto Index=Yes\n" +
+				"Compatibility=1.1 or later\n" +
+				"Compiled file=" + GetCompiledHtmlFilename() + "\n" +
+				"Default Window=MsdnHelp\n" +
+				"Default topic=" + _defaultTopic + "\n" +
+				"Display compile progress=No\n" +
+				"Error log file=" + GetLogFilename() + "\n" +
+				"Full-text search=Yes\n" +
+				"Index file=" + GetIndexFilename() + "\n" +
+				"Language=0x409 English (United States)\n");
+
+			foreach( string tocFile in _tocFiles )
+			{
+				streamHtmlHelp.Write("Contents file=" + tocFile + "\n");
+			}
+
+			streamHtmlHelp.Write(
+				"\n[WINDOWS]\n" +
+				"MsdnHelp=\"" +
+				_projectName + " Help\",\"" +
+				GetContentsFilename() + "\",\"" +
+				GetIndexFilename() + "\",,,,,,," +
+				options + "\n" +
+				"\n[INFOTYPES]\n");
 
 			streamHtmlHelp.Close();
 		}
 
 		/// <summary>Opens a HTML Help contents file for writing.</summary>
-		public void OpenContentsFile()
+		public void OpenContentsFile(string tocName, bool isDefault)
 		{
+			// TODO: we would need a more robust way of maintaining the list
+			//       of tocs that have been opened...
+
+			if (tocName == string.Empty)
+			{
+				tocName = _projectName;
+			}
+
+			if (!tocName.EndsWith(".hhc"))
+			{
+				tocName += ".hhc";
+			}
+
+			if (isDefault)
+			{
+				_tocFiles.Insert(0, tocName);
+			}
+			else
+			{
+				_tocFiles.Add( tocName );
+			}
+
 			// Create the table of contents writer. This can't use
 			// indenting because the HTML Help Compiler doesn't like
 			// newlines between the <LI> and <Object> tags.
-			tocWriter = new XmlTextWriter(GetPathToContentsFile(), null);
+			tocWriter = new XmlTextWriter(Path.Combine(_directoryName, tocName), null);
 
 			// We don't call WriteStartDocument because that outputs
 			// the XML declaration which the HTML Help Compiler doesn't like.
