@@ -302,19 +302,11 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		{
 			string operatorID = operatorNode.Attributes["id"].Value;
 
-			StringBuilder sb;
-
-			int leftParenIndex = operatorID.IndexOf( '(' );
-
-			if ( leftParenIndex != -1 )
-				sb = new StringBuilder( BaseNameFromMemberId( operatorID.Substring( 0, leftParenIndex ) ) );
-			else
-				sb = new StringBuilder( BaseNameFromMemberId( operatorID ) );
-
 			if ( operatorNode.Attributes["overload"] != null )
-				sb.Append( operatorNode.Attributes["overload"].Value );
+				return GetFileNameForMemberOverload( operatorID, operatorNode.Attributes["overload"].Value );
 
-			return sb.Append( "Topic.html" ).ToString();
+			else
+				return GetFileNameForMemberOverload( operatorID, "" );
 		}
 		
 		/// <summary>
@@ -404,19 +396,11 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		{
 			string propertyID = propertyNode.Attributes["id"].Value;
 
-			StringBuilder sb;
-
-			int leftParenIndex = propertyID.IndexOf( '(' );
-
-			if ( leftParenIndex != -1 )
-				sb = new StringBuilder( BaseNameFromMemberId( propertyID.Substring( 0, leftParenIndex ) ) );
-			else
-				sb = new StringBuilder( BaseNameFromMemberId( propertyID ) );
-
 			if ( propertyNode.Attributes["overload"] != null )
-				sb.Append( propertyNode.Attributes["overload"].Value );
+				return GetFileNameForMemberOverload( propertyID, propertyNode.Attributes["overload"].Value );
 
-			return sb.Append( "Topic.html" ).ToString();
+			else
+				return GetFileNameForMemberOverload( propertyID, "" );
 		}
 
 		/// <summary>
@@ -468,6 +452,20 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		{
 			string methodID = methodNode.Attributes["id"].Value;
 
+			if ( methodNode.Attributes["overload"] != null )
+				return GetFileNameForMemberOverload( methodID, methodNode.Attributes["overload"].Value );
+			else
+				return GetFileNameForMemberOverload( methodID, "" );
+		}
+
+		/// <summary>
+		/// Get's the filename for a specific member overload
+		/// </summary>
+		/// <param name="methodID">The NDoc generated member id</param>
+		/// <param name="overload">The overload index of the member (can be empty string)</param>
+		/// <returns>The filename for the member topic</returns>
+		public static string GetFileNameForMemberOverload( string methodID, string overload )
+		{
 			StringBuilder sb;
 
 			int leftParenIndex = methodID.IndexOf( '(' );
@@ -477,8 +475,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			else
 				sb = new StringBuilder( BaseNameFromMemberId( methodID ) );
 
-			if ( methodNode.Attributes["overload"] != null )
-				sb.Append( methodNode.Attributes["overload"].Value );
+			sb.Append( overload );
 			
 			sb.Replace( "#", "" );
 

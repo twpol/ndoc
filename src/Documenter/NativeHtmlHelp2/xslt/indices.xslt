@@ -84,7 +84,7 @@
 			<xsl:choose>
 				<xsl:when test="$overload-page=true()">
 					<!-- need to deal with inherited overloads -->
-					<xsl:value-of select="NUtil:GetMemberOverloadHRef( string( ../@id ), string( @name ) )"/>								
+					<xsl:value-of select="NUtil:GetMemberOverloadsHRef( string( ../@id ), string( @name ) )"/>								
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:value-of select="NUtil:GetMemberHRef( . )"/>								
@@ -100,7 +100,7 @@
 		<xsl:variable name="filename">
 			<xsl:choose>
 				<xsl:when test="$overload-page=true()">
-					<xsl:value-of select="NUtil:GetMemberOverloadHRef( string( ../@id ), string( @name ) )"/>								
+					<xsl:value-of select="NUtil:GetMemberOverloadsHRef( string( ../@id ), string( @name ) )"/>								
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:value-of select="NUtil:GetMemberHRef( . )"/>								

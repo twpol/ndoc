@@ -158,26 +158,41 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>Relative HRef to the Topic</returns>
 		public string GetCustructorHRef( XPathNodeIterator xPathNode )
 		{
+			string href = "";
 			xPathNode.MoveNext();
-			if ( xPathNode.Current != null && xPathNode.Current is IHasXmlNode )
-				return FileNameMapper.GetFilenameForConstructor( ((IHasXmlNode)xPathNode.Current).GetNode() );
 
-			return "";
+			if ( xPathNode.Current != null  ) //&& xPathNode.Current is IHasXmlNode )
+			{
+				XPathNavigator navigator = xPathNode.Current.Clone();
+				
+				string id = GetAttributeValue( navigator, "id" );
+				bool isStatic = GetAttributeValue( navigator, "contract" ) == "Static";
+				string overload = GetAttributeValue( navigator, "overload" );
+
+				if ( overload.Length > 0 )				
+					href = FileNameMapper.GetFilenameForConstructor( id, isStatic, overload );
+				
+				else
+					href = FileNameMapper.GetFilenameForConstructor( id, isStatic );
+
+			}
+
+			return href;
 		}
 
 		/// <summary>
-		/// Get the href for a member overload topic
+		/// Get the href for a member overloads topic
 		/// </summary>
 		/// <param name="typeID">The id of the type</param>
 		/// <param name="methodName">The name of the method</param>
 		/// <returns>Relative HRef to the Topic</returns>
-		public string GetMemberOverloadHRef( string typeID, string methodName )
+		public string GetMemberOverloadsHRef( string typeID, string methodName )
 		{
 			return FileNameMapper.GetFilenameForMethodOverloads( typeID, methodName );
 		}
 
 		/// <summary>
-		/// Get the href for a type member topic
+		/// Get the href for a member topic
 		/// </summary>
 		/// <param name="xPathNode">The member selection</param>
 		/// <returns>Relative HRef to the Topic</returns>			
@@ -185,19 +200,107 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		{
 			xPathNode.MoveNext();
 
-			if ( xPathNode.Current != null && xPathNode.Current is IHasXmlNode )
+			if ( xPathNode.Current != null ) 
 			{
-				XmlNode node = ((IHasXmlNode)xPathNode.Current).GetNode();
+				XPathNavigator navigator = xPathNode.Current.Clone();
+				return GetMemberOverloadsHRef( GetAttributeValue( navigator, "id" ), navigator );
+			}
 
-				switch ( node.Name )
+			return "";
+		}
+
+		/// <summary>
+		/// Returns the topic href for a specific implementation of an inherited member
+		/// </summary>
+		/// <param name="targetMemberID">The id of the source member</param>
+		/// <param name="xPathNode">The current member being processed</param>
+		/// <returns>HRef of the inherited member topic</returns>
+		public string GetInheritedMemberOverloadHRef( string targetMemberID, XPathNodeIterator xPathNode )
+		{
+			xPathNode.MoveNext();
+
+			if ( xPathNode.Current != null ) 
+				return GetMemberOverloadHRef( targetMemberID, xPathNode.Current.Clone() );
+
+			return "";
+		}
+		
+		/// <summary>
+		/// Returns the topic href for a specific implementation of a member
+		/// </summary>
+		/// <param name="xPathNode">The member being processed</param>
+		/// <returns>HRef of the member topic</returns>
+		public string GetMemberOverloadHRef( XPathNodeIterator xPathNode )
+		{
+			xPathNode.MoveNext();
+
+			if ( xPathNode.Current != null ) 
+			{
+				XPathNavigator navigator = xPathNode.Current.Clone();
+				return GetMemberOverloadHRef(  GetAttributeValue( navigator, "id" ), navigator );
+			}
+
+			return "";
+		}
+
+		/// <summary>
+		/// Returns the topic href for an inherited member
+		/// </summary>
+		/// <param name="targetMemberID">The id of the source member</param>
+		/// <param name="xPathNode">The current member being processed</param>
+		/// <returns>HRef of the inherited member topic</returns>
+		public string GetInheritedMemberHRef( string targetMemberID, XPathNodeIterator xPathNode )
+		{
+			xPathNode.MoveNext();
+
+			if ( xPathNode.Current != null ) 
+				return GetMemberOverloadsHRef( targetMemberID, xPathNode.Current.Clone() );
+
+			return "";
+		}
+
+		private string GetMemberOverloadsHRef( string targetMemberId, XPathNavigator navigator )
+		{
+			if ( targetMemberId.Length > 0 )
+			{
+				switch ( navigator.Name )
 				{
-					case "field":		return FileNameMapper.GetFilenameForField( node );
-					case "event":		return FileNameMapper.GetFilenameForEvent( node );
-					case "method":		return FileNameMapper.GetFilenameForMethod( node );
-					case "property":	return FileNameMapper.GetFilenameForProperty( node );
-					case "operator":	return FileNameMapper.GetFilenameForOperator( node );
-					case "constructor":	return FileNameMapper.GetFilenameForConstructor( node );
-					default:			return "";
+					case "field":		
+						return GetFieldHRef( targetMemberId );
+					case "event":		
+						return GetEventHRef( targetMemberId );
+					case "method":		
+					case "property":	
+					case "operator":	
+						return FileNameMapper.GetFileNameForMemberOverload( targetMemberId, "" );
+					case "constructor":	
+						return FileNameMapper.GetFilenameForConstructor( targetMemberId, false, "" );
+					default:			
+						return "";
+				}
+			}
+
+			return "";
+		}
+
+		private string GetMemberOverloadHRef( string targetMemberId, XPathNavigator navigator )
+		{
+			if ( targetMemberId.Length > 0 )
+			{
+				switch ( navigator.Name )
+				{
+					case "field":		
+						return GetFieldHRef( targetMemberId );
+					case "event":		
+						return GetEventHRef( targetMemberId );
+					case "method":		
+					case "property":	
+					case "operator":	
+						return FileNameMapper.GetFileNameForMemberOverload( targetMemberId, GetAttributeValue( navigator, "overload" ) );
+					case "constructor":	
+						return FileNameMapper.GetFilenameForConstructor( targetMemberId, false, GetAttributeValue( navigator, "overload" ) );
+					default:			
+						return "";
 				}
 			}
 
@@ -434,5 +537,28 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			descriptions.Add( description );
 			return false;
 		}
+
+		/// <summary>
+		/// Exposes <see cref="System.String.Replace"/> to XSLT
+		/// </summary>
+		/// <param name="str">The string to search</param>
+		/// <param name="oldValue">The string to search for</param>
+		/// <param name="newValue">The string to replace</param>
+		/// <returns>A new string</returns>
+		public string Replace( string str, string oldValue, string newValue )
+		{
+			return str.Replace( oldValue, newValue );
+		}	
+
+		private string GetAttributeValue( XPathNavigator navigator, string name )
+		{
+			string val = "";
+			if ( navigator.MoveToAttribute( name, "" ) )
+			{
+				val = navigator.Value;
+				navigator.MoveToParent();
+			}
+			return val;
+		}	
 	}
 }

@@ -109,7 +109,6 @@
 							<xsl:call-template name="get-link-for-member">
 								<xsl:with-param name="link-text" select="@name"/>
 								<xsl:with-param name="member" select="."/>
-								<xsl:with-param name="member-prefix" select="'P'"/>
 							</xsl:call-template>
 						</td>
 						<td width="50%">

@@ -145,7 +145,7 @@
 						<xsl:when test="local-name()='operator'">
 							<xsl:if test="@name!='op_Implicit' and @name!='op_Explicit'">
    							<xsl:text> | </xsl:text>
-							<a href="{NUtil:GetMemberOverloadHRef( string( ../@id ), string( @name ) )}">
+							<a href="{NUtil:GetMemberOverloadsHRef( string( ../@id ), string( @name ) )}">
 									<xsl:value-of select="$typeName" />
 									<xsl:text> </xsl:text>
 									<xsl:call-template name="operator-name">
@@ -155,17 +155,17 @@
 								</a>
 						  </xsl:if>
 						</xsl:when>
-						<!-- not sure what an overloaded property is but I'm gonna leave it for now -->
+
 						<xsl:when test="local-name()='property'">
 	 						<xsl:text> | </xsl:text>
-							<a href="{NUtil:GetMemberOverloadHRef( string( ../@id ), string( @name ) )}">
+							<a href="{NUtil:GetMemberOverloadsHRef( string( ../@id ), string( @name ) )}">
 								<xsl:value-of select="concat($typeName, '.', @name)" />
 								<xsl:text> Overload List</xsl:text>
 							</a>
 						</xsl:when>
 						<xsl:when test="local-name()='method'">
 	 						<xsl:text> | </xsl:text>
-							<a href="{NUtil:GetMemberOverloadHRef( string( ../@id ), string( @name ) )}">
+							<a href="{NUtil:GetMemberOverloadsHRef( string( ../@id ), string( @name ) )}">
 								<xsl:value-of select="concat($typeName, '.', @name)" />
 								<xsl:text> Overload List</xsl:text>
 							</a>

@@ -205,10 +205,9 @@
 				<xsl:with-param name="include-type-links" select="false()"/>
 			</xsl:call-template>		
 		</xsl:variable>
-		<xsl:call-template name="get-link-for-member">
+		<xsl:call-template name="get-link-for-member-overload">
 			<xsl:with-param name="link-text" select="$link-text"/>
 			<xsl:with-param name="member" select="."/>
-			<xsl:with-param name="member-prefix" select="'M'"/>										
 		</xsl:call-template>			
 	</xsl:template>
 	

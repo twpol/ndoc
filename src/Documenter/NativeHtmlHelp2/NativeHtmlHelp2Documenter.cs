@@ -153,10 +153,10 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 
 				// create and intialize a HtmlFactory
 				ExternalHtmlProvider htmlProvider = new ExternalHtmlProvider( MyConfig.HeaderHtml, MyConfig.FooterHtml );
-				HtmlFactory factory = new HtmlFactory( w.ContentDirectory, htmlProvider, MyConfig.LinkToSdkDocVersion );
+				HtmlFactory factory = new HtmlFactory( xmlDocumentation, w.ContentDirectory, htmlProvider, MyConfig.LinkToSdkDocVersion );
 
 				using( new TOCBuilder( toc, factory ) )
-					MakeHtml( xmlDocumentation, factory );
+					MakeHtml( factory );
 
 				toc.Save( w.WorkingDirectory );
 
@@ -203,7 +203,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			return project;
 		}
 
-		private void MakeHtml( XmlNode xmlDocumentation, HtmlFactory factory )
+		private void MakeHtml( HtmlFactory factory )
 		{
 			// load the stylesheets
 			OnDocBuildingStep( 20, "Loading StyleSheets..." );
@@ -224,7 +224,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			factory.Properties.Add( "ndoc-includeHierarchy", MyConfig.IncludeHierarchy );
 
 			// make the html
-			factory.MakeHtml( xmlDocumentation );
+			factory.MakeHtml();
 		}
 
 		private string GetPlatformString()

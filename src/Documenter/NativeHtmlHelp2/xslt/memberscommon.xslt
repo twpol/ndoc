@@ -319,7 +319,6 @@
 				<xsl:call-template name="get-link-for-member">
 					<xsl:with-param name="link-text" select="@name"/>
 					<xsl:with-param name="member" select="."/>
-					<xsl:with-param name="member-prefix" select="'P'"/>
 				</xsl:call-template>
 				
 				<xsl:text> (inherited from </xsl:text>
@@ -349,7 +348,6 @@
 				<xsl:call-template name="get-link-for-member">
 					<xsl:with-param name="link-text" select="@name"/>
 					<xsl:with-param name="member" select="."/>
-					<xsl:with-param name="member-prefix" select="'F'"/>
 				</xsl:call-template>
 				
 				<xsl:text> (inherited from </xsl:text>
@@ -381,7 +379,6 @@
 					<xsl:call-template name="get-link-for-member">
 						<xsl:with-param name="link-text" select="@name"/>
 						<xsl:with-param name="member" select="."/>
-						<xsl:with-param name="member-prefix" select="'M'"/>
 					</xsl:call-template>
 
 					<xsl:text> (inherited from </xsl:text>
@@ -418,7 +415,6 @@
 				<xsl:call-template name="get-link-for-member">
 					<xsl:with-param name="link-text" select="@name"/>
 					<xsl:with-param name="member" select="."/>
-					<xsl:with-param name="member-prefix" select="'E'"/>
 				</xsl:call-template>	
 				
 				<xsl:text> (inherited from </xsl:text>
@@ -452,7 +448,7 @@
 								<xsl:with-param name="contract" select="@contract" />
 								<xsl:with-param name="local-name" select="local-name()" />
 							</xsl:call-template>
-							<a href="{NUtil:GetMemberOverloadHRef( string( ../@id ), string( @name ) )}">
+							<a href="{NUtil:GetMemberOverloadsHRef( string( ../@id ), string( @name ) )}">
 								<xsl:choose>
 									<xsl:when test="local-name()='operator'">
 										<xsl:call-template name="operator-name">

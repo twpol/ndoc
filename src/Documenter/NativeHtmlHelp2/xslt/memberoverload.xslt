@@ -88,18 +88,7 @@
 									<xsl:text>.</xsl:text>
 								</p>
 								<blockquote class="dtBlock">
-										<xsl:apply-templates select="self::node()" mode="syntax" />
-									<!--
-									<xsl:variable name="link-text">
-										<xsl:apply-templates select="self::node()" mode="syntax" />
-									</xsl:variable>-->
-									<!--
-									<xsl:call-template name="get-link-for-member">
-										<xsl:with-param name="link-text" select="$link-text"/>
-										<xsl:with-param name="member" select="."/>
-										<xsl:with-param name="member-prefix" select="'M'"/>										
-									</xsl:call-template>	
-									-->									
+										<xsl:apply-templates select="self::node()" mode="syntax" />								
 								</blockquote>
 							</xsl:when>
 							<xsl:otherwise>
@@ -109,17 +98,7 @@
 									</xsl:call-template>
 								</p>
 								<blockquote class="dtBlock">
-										<xsl:apply-templates select="self::node()" mode="syntax" />
-<!--									<xsl:variable name="link-text">
-										<xsl:apply-templates select="self::node()" mode="syntax" />
-									</xsl:variable>-->
-									<!--
-									<xsl:call-template name="get-link-for-member">
-										<xsl:with-param name="link-text" select="$link-text"/>
-										<xsl:with-param name="member" select="."/>
-										<xsl:with-param name="member-prefix" select="'M'"/>										
-									</xsl:call-template>
-									-->						
+										<xsl:apply-templates select="self::node()" mode="syntax" />					
 								</blockquote>
 							</xsl:otherwise>
 						</xsl:choose>

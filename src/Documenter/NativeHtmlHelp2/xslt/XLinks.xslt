@@ -13,14 +13,12 @@
 				<xsl:call-template name="get-link-for-member">
 					<xsl:with-param name="member" select="$interface-method"/>
 					<xsl:with-param name="link-text" select="$link-text"/>		
-					<xsl:with-param name="member-prefix" select="'M'"/>
 				</xsl:call-template>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:call-template name="get-link-for-member">
 					<xsl:with-param name="member" select="$method"/>
 					<xsl:with-param name="link-text" select="$link-text"/>		
-					<xsl:with-param name="member-prefix" select="'M'"/>
 				</xsl:call-template>
 			</xsl:otherwise>
 		</xsl:choose>	
@@ -33,14 +31,12 @@
 		<xsl:choose>
 			<xsl:when test="$interface-event">
 				<xsl:call-template name="get-link-for-member">
-					<xsl:with-param name="member-prefix" select="'E'"/>
 					<xsl:with-param name="member" select="$interface-event"/>
 					<xsl:with-param name="link-text" select="$link-text"/>		
 				</xsl:call-template>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:call-template name="get-link-for-member">
-					<xsl:with-param name="member-prefix" select="'E'"/>
 					<xsl:with-param name="member" select="$event"/>
 					<xsl:with-param name="link-text" select="$link-text"/>		
 				</xsl:call-template>
@@ -57,14 +53,12 @@
 				<xsl:call-template name="get-link-for-member">
 					<xsl:with-param name="member" select="$interface-property"/>
 					<xsl:with-param name="link-text" select="$link-text"/>		
-					<xsl:with-param name="member-prefix" select="'P'"/>
 				</xsl:call-template>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:call-template name="get-link-for-member">
 					<xsl:with-param name="member" select="$property"/>
 					<xsl:with-param name="link-text" select="$link-text"/>		
-					<xsl:with-param name="member-prefix" select="'P'"/>
 				</xsl:call-template>
 			</xsl:otherwise>
 		</xsl:choose>
@@ -73,12 +67,11 @@
 	<xsl:template name="get-link-for-member">		
 		<xsl:param name="member"/>
 		<xsl:param name="link-text"/>
-		<xsl:param name="member-prefix"/>
 		
 		<xsl:variable name="mid">
 			<xsl:choose>
 				<xsl:when test="$member/@declaringType">
-					<xsl:value-of select="concat( $member-prefix, ':', $member/@declaringType, '.', $member/@name )"/>
+					<xsl:value-of select="NUtil:Replace( $member/@id, substring-after( $member/../@id, ':' ), $member/@declaringType )"/>
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:value-of select="$member/@id"/>
@@ -96,9 +89,59 @@
 				</xsl:call-template>					
 			</xsl:when>
 			<xsl:otherwise>
-				<a href="{NUtil:GetMemberHRef( $member )}">			
-					<xsl:value-of select="$link-text"/> 
-				</a>
+				<xsl:choose>
+					<xsl:when test="$member[@declaringType]">
+						<a href="{NUtil:GetInheritedMemberHRef( string( $mid ), $member )}">			
+							<xsl:value-of select="$link-text"/> 
+						</a>					
+					</xsl:when>
+					<xsl:otherwise>
+						<a href="{NUtil:GetMemberHRef( $member )}">			
+							<xsl:value-of select="$link-text"/> 
+						</a>					
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:otherwise>
+		</xsl:choose>		
+	</xsl:template>
+	
+	<xsl:template name="get-link-for-member-overload">		
+		<xsl:param name="member"/>
+		<xsl:param name="link-text"/>
+		
+		<xsl:variable name="mid">
+			<xsl:choose>
+				<xsl:when test="$member/@declaringType">
+					<xsl:value-of select="NUtil:Replace( $member/@id, substring-after( $member/../@id, ':' ), $member/@declaringType )"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="$member/@id"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable> 
+
+		<xsl:choose>
+			<xsl:when test="not( //constructor[@id=$mid] | //field[@id=$mid] | //property[@id=$mid] | //method[@id=$mid] | //event[@id=$mid] | //operator[@id=$mid] )">
+				<xsl:variable name="a-index" select="NUtil:GetAIndex( $mid )"/>
+				<xsl:call-template name="get-xlink">
+					<xsl:with-param name="a-index" select="$a-index"/>
+					<xsl:with-param name="link-text" select="$link-text"/>
+					<xsl:with-param name="ns-key" select="$member/@declaringType"/>			
+				</xsl:call-template>					
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:choose>
+					<xsl:when test="$member[@declaringType]">
+						<a href="{NUtil:GetInheritedMemberOverloadHRef( string( $mid ), $member )}">			
+							<xsl:value-of select="$link-text"/> 
+						</a>					
+					</xsl:when>
+					<xsl:otherwise>
+						<a href="{NUtil:GetMemberOverloadHRef( $member )}">			
+							<xsl:value-of select="$link-text"/> 
+						</a>					
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:otherwise>
 		</xsl:choose>		
 	</xsl:template>
