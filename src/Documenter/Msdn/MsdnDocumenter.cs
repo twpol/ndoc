@@ -871,71 +871,61 @@ namespace NDoc.Documenter.Msdn
 			}
 		}
 
-		private string GetPreviousMethodName(
-			XmlNodeList methodNodes,
-			int[] indexes,
-			int index)
+		private string GetPreviousMethodName(XmlNodeList methodNodes, int[] indexes, int index)
 		{
 			while (--index >= 0)
 			{
 				if (methodNodes[indexes[index]].Attributes["declaringType"] == null)
-				{
 					return methodNodes[indexes[index]].Attributes["name"].Value;
-				}
 			}
-
 			return null;
 		}
 
-		private string GetNextMethodName(
-			XmlNodeList methodNodes,
-			int[] indexes,
-			int index)
+		private string GetNextMethodName(XmlNodeList methodNodes, int[] indexes, int index)
 		{
 			while (++index < methodNodes.Count)
 			{
 				if (methodNodes[indexes[index]].Attributes["declaringType"] == null)
-				{
 					return methodNodes[indexes[index]].Attributes["name"].Value;
-				}
 			}
-
 			return null;
 		}
 
-		private bool IsMethodFirstOverload(
-			XmlNodeList methodNodes,
-			int[] indexes,
-			int index)
+		// returns true, if method is neither overload of a method in the same class,
+		// nor overload of a method in the base class.
+		private bool IsMethodAlone(XmlNodeList methodNodes, int[] indexes, int index)
 		{
-			if (methodNodes[indexes[index]].Attributes["declaringType"] != null)
-			{
-				return false;
-			}
-
 			string name = methodNodes[indexes[index]].Attributes["name"].Value;
-			int count = methodNodes.Count;
+			int lastIndex = methodNodes.Count - 1;
+			if (lastIndex <= 0)
+				return true;
+			bool previousNameDifferent = (index == 0)
+				|| (methodNodes[indexes[index - 1]].Attributes["name"].Value != name);
+			bool nextNameDifferent = (index == lastIndex)
+				|| (methodNodes[indexes[index + 1]].Attributes["name"].Value != name);
+			return (previousNameDifferent && nextNameDifferent);
+		}
 
-			string previousName = GetPreviousMethodName(methodNodes, indexes, index);
-			string nextName = GetNextMethodName(methodNodes, indexes, index);
+		private bool IsMethodFirstOverload(XmlNodeList methodNodes, int[] indexes, int index)
+		{
+			if ((methodNodes[indexes[index]].Attributes["declaringType"] != null)
+				|| IsMethodAlone(methodNodes, indexes, index))
+				return false;
 
-			return previousName != name && name == nextName;
+			string name			= methodNodes[indexes[index]].Attributes["name"].Value;
+			string previousName	= GetPreviousMethodName(methodNodes, indexes, index);
+			return previousName != name;
 		}
 
 		private bool IsMethodLastOverload(XmlNodeList methodNodes, int[] indexes, int index)
 		{
-			if (methodNodes[indexes[index]].Attributes["declaringType"] != null)
-			{
+			if ((methodNodes[indexes[index]].Attributes["declaringType"] != null)
+				|| IsMethodAlone(methodNodes, indexes, index))
 				return false;
-			}
 
-			string name = (string)methodNodes[indexes[index]].Attributes["name"].Value;
-			int count = methodNodes.Count;
-
-			string previousName = GetPreviousMethodName(methodNodes, indexes, index);
-			string nextName = GetNextMethodName(methodNodes, indexes, index);
-
-			return previousName == name && name != nextName;
+			string name		= methodNodes[indexes[index]].Attributes["name"].Value;
+			string nextName	= GetNextMethodName(methodNodes, indexes, index);
+			return nextName != name;
 		}
 
 		private void MakeHtmlForMethods(WhichType whichType, XmlNode typeNode)
