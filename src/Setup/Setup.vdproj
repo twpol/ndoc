@@ -2698,7 +2698,7 @@
             "Name" = "8:NDoc Project File"
             "Description" = "8:NDoc Project File"
             "Extensions" = "8:ndoc"
-            "MIME" = "8:text/xml"
+            "MIME" = "8:"
             "Icon" = "8:_88DDA4B3D56E42D3A5AC2E40CC317FEC"
             "IconIndex" = "3:0"
                 "Command"
