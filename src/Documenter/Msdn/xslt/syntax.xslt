@@ -249,6 +249,9 @@
 			<xsl:if test="@initOnly='true'">
 				<xsl:text>readonly&#160;</xsl:text>
 			</xsl:if>
+			<xsl:if test="local-name() = 'event'">
+				<xsl:text>event&#160;</xsl:text>
+			</xsl:if>
 			<a>
 				<xsl:attribute name="href">
 					<xsl:call-template name="get-filename-for-type-name">

@@ -298,6 +298,9 @@
 				<xsl:if test="@initOnly='true'">
 					<xsl:text>ReadOnly&#160;</xsl:text>
 				</xsl:if>
+				<xsl:if test="local-name() = 'event'">
+					<xsl:text>Event&#160;</xsl:text>
+				</xsl:if>
 				<xsl:value-of select="@name" />
 				<xsl:text>&#160;As&#160;</xsl:text>
 				<a>
