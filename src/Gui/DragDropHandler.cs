@@ -30,6 +30,10 @@ namespace NDoc.Gui
 	/// </summary>
 	public class DragDropHandler
 	{
+		private DragDropHandler()
+		{
+		}
+
 		/// <summary>
 		/// Determines if the list of files is a list of assemblies
 		/// </summary>
