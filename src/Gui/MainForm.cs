@@ -213,7 +213,7 @@ namespace NDoc.Gui
 						}
 					}
 				}
-				if ( this.options.LoadLastProjectOnStart || recentProjectFilenames.Count == 0 )
+				if ( recentProjectFilenames.Count == 0 )
 				{
 					//there was no project to load
 					projectFilename = untitledProjectName;
@@ -752,6 +752,7 @@ namespace NDoc.Gui
 			this.comboBoxDocumenters.Name = "comboBoxDocumenters";
 			this.comboBoxDocumenters.Size = new System.Drawing.Size(160, 21);
 			this.comboBoxDocumenters.TabIndex = 9;
+			this.comboBoxDocumenters.SelectedIndexChanged += new System.EventHandler(this.comboBoxDocumenters_SelectedIndexChanged);
 			// 
 			// propertyGrid
 			// 
