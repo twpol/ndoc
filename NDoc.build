@@ -149,7 +149,7 @@
         <nant buildfile="src/VisualStudio/VisualStudio.build" target="compile" inheritall="true" />
         <nant buildfile="src/Gui/Gui.build" target="compile" inheritall="true" />
         <nant buildfile="src/Documenter/Msdn/Msdn.build" target="compile" inheritall="true" />
-        <nant buildfile="src/Documenter/Msdn/Msdn2.build" target="compile" inheritall="true" />
+        <nant buildfile="src/Documenter/Msdn2/Msdn2.build" target="compile" inheritall="true" />
         <nant buildfile="src/Documenter/JavaDoc/JavaDoc.build" target="compile" inheritall="true" />
         <nant buildfile="src/Documenter/Latex/Latex.build" target="compile" inheritall="true" />
         <nant buildfile="src/Documenter/LinearHtml/LinearHtml.build" target="compile" inheritall="true" />
@@ -168,9 +168,9 @@
         <!-- generate the source file holding the common assembly-level attributes -->
         <asminfo output="src/CommonAssemblyInfo.cs" language="CSharp">
             <imports>
-                <import name="System" />
-                <import name="System.Reflection" />
-                <import name="System.Runtime.InteropServices" />
+                <import namespace="System" />
+                <import namespace="System.Reflection" />
+                <import namespace="System.Runtime.InteropServices" />
             </imports>
             <attributes>
                 <attribute type="ComVisibleAttribute" value="false" />
