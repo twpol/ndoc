@@ -44,17 +44,22 @@ namespace NDoc.Core
 			public Type InterfaceType;
 			public MemberInfo InterfaceMethod;
 		}
-		private class ImplementsCollection : NameObjectCollectionBase
+		private class ImplementsCollection
 		{
+			private Hashtable data;
+			public ImplementsCollection()
+		{
+				data = new Hashtable(15);  // give it an initial capacity...
+			}
 			public ImplementsInfo this [int index]
 			{
-				get { return (ImplementsInfo)BaseGet(index); }
-				set { BaseSet(index, value); }
+				get { return (ImplementsInfo)data[index]; }
+				set { data[index]=value; }
 			}
 			public ImplementsInfo this [string name]
 			{
-				get { return (ImplementsInfo)BaseGet(name); }
-				set { BaseSet(name, value); }
+				get { return (ImplementsInfo)data[name]; }
+				set { data[name]= value; }
 			}
 		}
 		ImplementsCollection implementations;
@@ -227,6 +232,9 @@ namespace NDoc.Core
 		/// <summary>Builds an XmlDocument combining the reflected metadata with the /doc comments.</summary>
 		protected string MakeXml(Project project)
 		{
+#if DEBUG
+			int start = Environment.TickCount;
+#endif
 			Debug.WriteLine("Memory making xml: " + GC.GetTotalMemory(false).ToString());
 
 			//if MyConfig.UseNDocXmlFile is set, skip this stage 
@@ -300,6 +308,9 @@ namespace NDoc.Core
 				writer.WriteEndDocument();
 				writer.Flush();
 
+#if DEBUG
+				Trace.WriteLine("MakeXML : " + ((Environment.TickCount - start)/1000.0).ToString() + " sec.");
+#endif
 				return swriter.ToString();
 
 				// if you want to see NDoc's intermediate XML file, use the XML documenter.
@@ -1808,10 +1819,10 @@ namespace NDoc.Core
 				{
 					writer.WriteStartElement("implements");
 					writer.WriteAttributeString("name", property.Name);
-					MemberInfo InterfaceMethod = (MemberInfo)implements.InterfaceMethod;
-					PropertyInfo InterfaceProperty = 
-						InterfaceMethod.DeclaringType.GetProperty(InterfaceMethod.Name.Substring(4));
-					writer.WriteAttributeString("id",GetMemberName(InterfaceProperty));
+					MethodInfo InterfaceMethod = (MethodInfo)implements.InterfaceMethod;
+					PropertyInfo InterfaceProperty = DerivePropertyFromAccessorMethod(InterfaceMethod);
+					string InterfacePropertyID=GetMemberName(InterfaceProperty);
+					writer.WriteAttributeString("id",InterfacePropertyID);
 					writer.WriteAttributeString("interface", implements.InterfaceType.Name);
 					writer.WriteAttributeString("interfaceId", GetMemberName(implements.InterfaceType));
 					writer.WriteAttributeString("declaringType", implements.InterfaceType.FullName);
@@ -1835,6 +1846,26 @@ namespace NDoc.Core
 			}
 
 			writer.WriteEndElement();
+		}
+
+		private PropertyInfo DerivePropertyFromAccessorMethod(MemberInfo accessor)
+		{
+			MethodInfo accessorMethod = (MethodInfo)accessor;
+			string propertyName = accessorMethod.Name.Substring(4);
+			Type returnType = accessorMethod.ReturnType;
+			ParameterInfo[] parameters;
+			parameters = accessorMethod.GetParameters();
+			Type[] types;
+
+			int parmCount = parameters.GetLength(0);
+			types = new Type[parmCount];
+			for(int i=0; i<parmCount;i++)
+			{
+				types[i]=((ParameterInfo)parameters.GetValue(i)).ParameterType;
+			}
+
+			PropertyInfo derivedProperty= accessorMethod.DeclaringType.GetProperty(propertyName,returnType,types);
+			return derivedProperty;
 		}
 
 		private string GetPropertyContractValue(PropertyInfo property)
