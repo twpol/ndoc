@@ -89,6 +89,11 @@
                     Project = "{DBA75D67-23C9-4A78-ABC2-CF8802FDB7CA}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
+                <Reference
+                    Name = "System.Data"
+                    AssemblyName = "System.Data"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -115,6 +120,11 @@
                 />
                 <File
                     RelPath = "LatexDocumenterConfig.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "LatexWorkspace.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

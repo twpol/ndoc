@@ -40,7 +40,7 @@ namespace NDoc.Documenter.Latex
 	/// </summary>
 	public class LatexDocumenter: BaseDocumenter
 	{
-		private string m_ResourceDirectory;
+		//private string m_ResourceDirectory;
 
 		private static readonly char[] c_LatexEscapeChars =
 			{
@@ -109,8 +109,20 @@ namespace NDoc.Documenter.Latex
 		/// </summary>
 		/// <param name="project"></param>
 		public override void Build(Project project)
-		{			
+		{		
+			Workspace workspace = new LatexWorkspace( WorkingPath );
+			workspace.Clean();
+			workspace.Prepare();
+
+			// copy all of the xslt source files into the workspace
+			DirectoryInfo xsltSource = new DirectoryInfo( Path.GetFullPath(Path.Combine(
+				Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"..\..\..\Documenter\NativeHtmlHelp2\Latex") ) );
+                				
+			foreach ( FileInfo f in xsltSource.GetFiles( "*.xslt" ) )
+				f.CopyTo( Path.Combine( workspace.ResourceDirectory, f.Name ), true );
+
 			#if NO_RESOURCES
+
 				string moduleDir;
 			
 				moduleDir = 
@@ -119,19 +131,11 @@ Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 Path.GetFullPath(Path.Combine(moduleDir, @"..\..\..\Documenter\Latex"));
 
 			#else
-			Assembly assembly;
-
-			m_ResourceDirectory 
-				= 
-				Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)
-				+ @"\NDoc\Latex\";
-
-			assembly = this.GetType().Module.Assembly;
-			
+		
 			EmbeddedResources.WriteEmbeddedResources(
-				assembly,
+				this.GetType().Module.Assembly,
 				"NDoc.Documenter.Latex.xslt",
-				m_ResourceDirectory + @"xslt\");
+				workspace.ResourceDirectory );
 			#endif
 
 			string xmlBuffer = MakeXml(project);
@@ -160,8 +164,20 @@ Path.GetFullPath(Path.Combine(moduleDir, @"..\..\..\Documenter\Latex"));
 			doc.LoadXml(xmlBuffer);
 			MakeTextTeXCompatible(doc);
 			
-			WriteTeXDocument(doc);
+			WriteTeXDocument(workspace, doc);
 			CompileTexDocument();
+		}
+
+		
+		private string WorkingPath
+		{ 
+			get
+			{ 
+				if ( Path.IsPathRooted( LatexConfig.OutputDirectory ) )
+					return LatexConfig.OutputDirectory; 
+
+				return Path.GetFullPath( LatexConfig.OutputDirectory );
+			} 
 		}
 
 		/// <summary>
@@ -307,7 +323,7 @@ Path.GetFullPath(Path.Combine(moduleDir, @"..\..\..\Documenter\Latex"));
 		/// <summary>
 		/// Uses XSLT to transform the current document into LaTeX source.
 		/// </summary>
-		private void WriteTeXDocument(XmlDocument document)
+		private void WriteTeXDocument( Workspace workspace, XmlDocument document)
 		{			
 			XmlWriter writer;
 			XsltArgumentList args;
@@ -316,8 +332,7 @@ Path.GetFullPath(Path.Combine(moduleDir, @"..\..\..\Documenter\Latex"));
 			OnDocBuildingStep(0, "Loading XSLT files...");
 
 			transform = new XslTransform();			
-			transform.Load(Path.Combine(m_ResourceDirectory, 
-				@"xslt\document.xslt"));
+			transform.Load(Path.Combine(workspace.ResourceDirectory, "document.xslt"));
 
 			args = new XsltArgumentList();
 			
