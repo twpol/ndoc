@@ -204,6 +204,11 @@ namespace NDoc.Test
 		/// <summary>This method is declared in the Base class.</summary>
 		public void Overloaded(byte i) { }
 
+		/// <summary>This virtual method is declared in the Base class.</summary>
+		public virtual void TwoVirtualOverloads(string key) { }
+		/// <summary>This virtual method is declared in the Base class.</summary>
+		public virtual void TwoVirtualOverloads(int index) { }
+
 		/// <summary>This field is declared in the Base class.</summary>
 		public int BaseField;
 
@@ -244,6 +249,10 @@ namespace NDoc.Test
 		/// <summary>This method is also overloaded in the Derived class.</summary>
 		/// <remarks>This method accepts a type declared in the same namespace.</remarks>
 		public void Overloaded(Interface i) { }
+
+		/// <summary>This method is overriden in the Derived class.</summary>
+		/// <remarks>Only one of the two overloads is overriden.</remarks>
+		public override void TwoVirtualOverloads(string key) { }
 	}
 
 	/// <summary>Represents another derived class.</summary>
@@ -258,6 +267,19 @@ namespace NDoc.Test
 		{
 			EventInDerived(this, new EventArgs());
 		}
+
+		/// <summary>This method is overriden in the Derived class.</summary>
+		/// <remarks>Both overloads are overriden in this class.</remarks>
+		public override void TwoVirtualOverloads(string key) { }
+
+		/// <summary>This method is overriden in the Derived class.</summary>
+		/// <remarks>Both overloads are overriden in this class.</remarks>
+		public override void TwoVirtualOverloads(int key) { }
+
+		/// <summary>
+		/// Add only one overload in Derived2 class.
+		/// </summary>
+		public void Overloaded(object o) { }
 	}
 
 	/// <summary>Represents an outer class.</summary>
