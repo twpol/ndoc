@@ -43,7 +43,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		private ExternalHtmlProvider _htmlProvider;
 		private StyleSheetCollection _stylesheets;
 		private SdkDocVersion linkToSdkDocVersion = SdkDocVersion.SDK_v1_1;
-		private string PlatformString = String.Empty;
 
 		private NameMapper mapper;
 
@@ -66,8 +65,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			_outputDirectory = outputDirectory;
 
 			_htmlProvider = htmlProvider;
-
-			mapper = new NameMapper();
 		}
 
 		#region events
@@ -129,17 +126,16 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// </summary>
 		/// <param name="documentation">NDoc generated xml</param>
 		/// <param name="sdkVersion">The SDK version to use</param>
-		/// <param name="includeHierarchy">Indicates whether to create a namespace hierarchy page</param>
-		public void MakeHtml( XmlNode documentation, SdkDocVersion sdkVersion, bool includeHierarchy, string platformString )
+		public void MakeHtml( XmlNode documentation, SdkDocVersion sdkVersion )
 		{
-			PlatformString = platformString;
 			linkToSdkDocVersion = sdkVersion;
+			mapper = new NameMapper();
 			mapper.MakeFilenames( documentation );
-			MakeHtmlForAssemblies( documentation, includeHierarchy );
+			MakeHtmlForAssemblies( documentation );
 		}
 
 
-		private void MakeHtmlForAssemblies( XmlNode xmlDocumentation, bool includeHierarchy )
+		private void MakeHtmlForAssemblies( XmlNode xmlDocumentation )
 		{
 			XmlNodeList assemblyNodes = xmlDocumentation.SelectNodes( "/ndoc/assembly" );
 			int[] indexes = SortNodesByAttribute( assemblyNodes, "name" );
@@ -163,7 +159,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			{
 				string namespaceName = namespaces[i];
 				foreach ( string assemblyName in namespaceAssemblies.GetValues( namespaceName ) )
-					MakeHtmlForNamespace( xmlDocumentation, assemblyName, namespaceName, includeHierarchy );
+					MakeHtmlForNamespace( xmlDocumentation, assemblyName, namespaceName );
 			}
 		}
 
@@ -196,7 +192,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 				
 				MsdnXsltUtilities utilities = new MsdnXsltUtilities( mapper.ElemNames, linkToSdkDocVersion );
 
-				arguments.AddParam( "ndoc-platforms", String.Empty, PlatformString );
 				arguments.AddParam( "ndoc-sdk-doc-base-url", String.Empty, utilities.SdkDocBaseUrl );
 		
 				arguments.AddExtensionObject( "urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities", utilities );
@@ -210,7 +205,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		}
 
 
-		private void MakeHtmlForNamespace( XmlNode xmlDocumentation, string assemblyName, string namespaceName, bool includeHierarchy )
+		private void MakeHtmlForNamespace( XmlNode xmlDocumentation, string assemblyName, string namespaceName )
 		{
 			if ( !documentedNamespaces.Contains( namespaceName ) ) 
 			{
@@ -218,7 +213,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 
 				XsltArgumentList arguments = new XsltArgumentList();
 				arguments.AddParam( "namespace", String.Empty, namespaceName );
-				arguments.AddParam( "includeHierarchy", String.Empty, includeHierarchy );
 
 				string fileName = NameMapper.GetFilenameForNamespace( namespaceName );
 				TransformAndWriteResult( xmlDocumentation, "namespace", arguments, fileName );
@@ -227,7 +221,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 				arguments = new XsltArgumentList();
 				arguments.AddParam( "namespace", String.Empty, namespaceName );
 
-				if ( includeHierarchy )
+				if ( Properties.Contains("includeHierarchy") && (bool)Properties["includeHierarchy"] )
 					TransformAndWriteResult( xmlDocumentation, "namespacehierarchy", arguments, NameMapper.GetFileNameForNamespaceHierarchy( namespaceName ) );
 
 				MakeHtmlForTypes( xmlDocumentation, namespaceName );

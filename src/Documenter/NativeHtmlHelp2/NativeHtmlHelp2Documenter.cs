@@ -186,9 +186,12 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			factory.Properties.Add( "ndoc-title", MyConfig.Title );
 			factory.Properties.Add( "ndoc-document-attributes", MyConfig.DocumentAttributes );
 			factory.Properties.Add( "ndoc-documented-attributes", MyConfig.DocumentedAttributes );
+			factory.Properties.Add( "ndoc-platforms", GetPlatformString() );
+			factory.Properties.Add( "ndoc-version", MyConfig.Version );
+			factory.Properties.Add( "includeHierarchy", MyConfig.IncludeHierarchy );
 
 			// make the html
-			factory.MakeHtml( xmlDocumentation, MyConfig.LinkToSdkDocVersion, MyConfig.IncludeHierarchy, GetPlatformString() );;
+			factory.MakeHtml( xmlDocumentation, MyConfig.LinkToSdkDocVersion );
 		}
 
 		private string GetPlatformString()

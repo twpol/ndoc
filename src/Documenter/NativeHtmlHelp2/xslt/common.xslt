@@ -13,6 +13,7 @@
 	<xsl:param name="ndoc-title" />
 	<xsl:param name="ndoc-sdk-doc-base-url" />
 	<xsl:param name="ndoc-platforms"/>
+	<xsl:param name="ndoc-version"/>
 	<!-- -->
 
 	<!-- -->
@@ -639,6 +640,9 @@
 	<!-- -->
 	<xsl:template name="footer-row">
 		<xsl:param name="type-name" />
+		
+		<xsl:call-template name="version-section" />		
+				
 		<xsl:variable name="assembly-name">
 			<xsl:value-of select="ancestor-or-self::assembly/./@name" />
 		</xsl:variable>
@@ -846,4 +850,16 @@
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
+	
+	<xsl:template name="version-section">
+		<xsl:if test="string-length( $ndoc-version ) != 0">
+			<DIV CLASS="footer">
+				<p>
+					<center>
+						<font color="red"><i>Documentation version <xsl:value-of select="$ndoc-version"/>.</i></font>
+					</center>
+				</p>	
+			</DIV>
+		</xsl:if>
+	</xsl:template>
 </xsl:stylesheet>
