@@ -80,9 +80,9 @@ namespace NDoc.Documenter.Xml
 					}
 				}
 
-				if (File.Exists(config.OutputFile)) 
+				if (File.Exists(outputFileName)) 
 				{
-					File.Delete(config.OutputFile);
+					File.Delete(outputFileName);
 				}
 
 				File.Move(tempFileName, outputFileName);
