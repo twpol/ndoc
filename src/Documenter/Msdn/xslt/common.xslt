@@ -671,6 +671,7 @@
 			<xsl:call-template name="generated-from-assembly-version" />
 		</xsl:variable>
 		<xsl:if test="string($copyright-rtf) or string($version-rtf)">
+			<hr />
 			<div id="footer">
 				<p>
 					<xsl:copy-of select="$copyright-rtf" />
