@@ -29,8 +29,10 @@ namespace NDoc.Gui
 	/// <summary>
 	/// Static class with the Main method and application properties
 	/// </summary>
-	public class App
+	public sealed class App
 	{
+		private void App() {}
+
 		/// <summary>
 		/// Application entry point
 		/// </summary>
