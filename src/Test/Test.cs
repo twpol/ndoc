@@ -328,4 +328,15 @@ namespace NDoc.Test
 	public class Example
 	{
 	}
+
+	/// <summary>This class contains a method that throws exceptions.</summary>
+	public class Exceptions
+	{
+		/// <summary>This method throws exceptions.</summary>\
+		/// <exception cref="Exception">A generic exception.</exception>
+		/// <exception cref="ApplicationException">An application-specific exception.</exception>
+		public void Throw()
+		{
+		}
+	}
 }

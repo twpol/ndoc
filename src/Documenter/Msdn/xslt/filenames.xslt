@@ -134,7 +134,9 @@
 		<xsl:param name="cref" />
 		<xsl:choose>
 			<xsl:when test="starts-with($cref, 'T:')">
-				<xsl:value-of select="concat(translate(substring-after($cref, 'T:'), '.', ''), '.html')" />
+				<xsl:call-template name="get-filename-for-type-name">
+					<xsl:with-param name="type-name" select="substring-after($cref, 'T:')" />
+				</xsl:call-template>
 			</xsl:when>
 			<xsl:when test="starts-with($cref, 'M:')">
 				<xsl:choose>

@@ -358,18 +358,17 @@
 						<th width="50%">Exception Type</th>
 						<th width="50%">Condition</th>
 					</tr>
-					<xsl:for-each select="exception">
+					<xsl:for-each select="documentation/exception">
 						<xsl:sort select="@name" />
-						<xsl:variable name="cref" select="@cref" />
 						<tr valign="top">
 							<td width="50%">
 								<xsl:variable name="type-filename">
-									<xsl:call-template name="get-filename-for-type">
-										<xsl:with-param name="id" select="$cref" />
+									<xsl:call-template name="get-filename-for-cref">
+										<xsl:with-param name="cref" select="@cref" />
 									</xsl:call-template>
 								</xsl:variable>
 								<a href="{$type-filename}">
-									<xsl:value-of select="//class[@id=$cref]/@name" />
+									<xsl:value-of select="substring-after(@cref, 'T:')" />
 								</a>
 							</td>
 							<td width="50%">
