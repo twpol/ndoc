@@ -69,10 +69,6 @@
                     AssemblyName = "System"
                 />
                 <Reference
-                    Name = "System.Data"
-                    AssemblyName = "System.Data"
-                />
-                <Reference
                     Name = "System.XML"
                     AssemblyName = "System.Xml"
                 />
