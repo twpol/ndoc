@@ -258,5 +258,46 @@ namespace NDoc.Documenter.Msdn
 				SetDirty();
 			}
 		}
+
+
+		string _RootPageTOCName;
+
+		/// <summary>Gets or sets the RootPageTOCName property.</summary>
+		[
+		Category("Documentation Main Settings"),
+		Description("The name for the Table of Contents entry corresponding "
+			+ " to the root page."
+			+ " If this is not specified and RootPageFileName is, then"
+			+ " the TOC entry will be 'Overview'.")
+		]
+		public string RootPageTOCName
+		{
+			get { return _RootPageTOCName; }
+
+			set
+			{
+				_RootPageTOCName = value;
+				SetDirty();
+			}
+		}
+
+		string _RootPageFileName;
+
+		/// <summary>Gets or sets the RootPageFileName property.</summary>
+		[
+		Category("Documentation Main Settings"),
+		Description("The name of an html file to be included as the root page."
+			+ "This root page also becomes the default page.")
+		]
+		public string RootPageFileName
+		{
+			get { return _RootPageFileName; }
+
+			set
+			{
+				_RootPageFileName = value;
+				SetDirty();
+			}
+		}
 	}
 }
