@@ -330,6 +330,12 @@
 												<xsl:with-param name="method-name" select="@name" />
 											</xsl:call-template>
 										</xsl:attribute>
+										<xsl:if test="@interface">
+											<xsl:call-template name="strip-namespace">
+												<xsl:with-param name="name" select="@interface" />
+											</xsl:call-template>
+											<xsl:text>.</xsl:text>
+										</xsl:if>
 										<xsl:value-of select="@name" />
 									</a>
 									<xsl:text> (inherited from </xsl:text>
@@ -353,6 +359,12 @@
 												<xsl:with-param name="method" select="$declaring-class/method[@name=$name]" />
 											</xsl:call-template>
 										</xsl:attribute>
+										<xsl:if test="@interface">
+											<xsl:call-template name="strip-namespace">
+												<xsl:with-param name="name" select="@interface" />
+											</xsl:call-template>
+											<xsl:text>.</xsl:text>
+										</xsl:if>
 										<xsl:value-of select="@name" />
 									</a>
 									<xsl:text> (inherited from </xsl:text>
@@ -371,6 +383,12 @@
 					</xsl:when>
 					<xsl:otherwise>
 						<td width="50%">
+							<xsl:if test="@interface">
+								<xsl:call-template name="strip-namespace">
+									<xsl:with-param name="name" select="@interface" />
+								</xsl:call-template>
+								<xsl:text>.</xsl:text>
+							</xsl:if>
 							<xsl:value-of select="@name" />
 						</td>
 						<td width="50%">
@@ -389,6 +407,12 @@
 					<xsl:attribute name="href">
 						<xsl:call-template name="get-filename-for-system-method" />
 					</xsl:attribute>
+					<xsl:if test="@interface">
+						<xsl:call-template name="strip-namespace">
+							<xsl:with-param name="name" select="@interface" />
+						</xsl:call-template>
+						<xsl:text>.</xsl:text>
+					</xsl:if>
 					<xsl:value-of select="@name" />
 				</a>
 				<xsl:text> (inherited from </xsl:text>
@@ -431,6 +455,12 @@
 										</xsl:call-template>
 									</xsl:when>
 									<xsl:otherwise>
+										<xsl:if test="@interface">
+											<xsl:call-template name="strip-namespace">
+												<xsl:with-param name="name" select="@interface" />
+											</xsl:call-template>
+											<xsl:text>.</xsl:text>
+										</xsl:if>
 										<xsl:value-of select="@name" />
 									</xsl:otherwise>
 								</xsl:choose>
@@ -457,6 +487,12 @@
 										</xsl:call-template>
 									</xsl:when>
 									<xsl:otherwise>
+										<xsl:if test="@interface">
+											<xsl:call-template name="strip-namespace">
+												<xsl:with-param name="name" select="@interface" />
+											</xsl:call-template>
+											<xsl:text>.</xsl:text>
+										</xsl:if>
 										<xsl:value-of select="@name" />
 									</xsl:otherwise>
 								</xsl:choose>
