@@ -144,6 +144,14 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "html\index.html"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "html\nav_arrow.gif"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "html\tree.css"
                     BuildAction = "EmbeddedResource"
                 />

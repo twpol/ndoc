@@ -46,7 +46,23 @@ namespace NDoc.UsersGuideStager
 			foreach ( IHTMLAnchorElement anchor in doc3.getElementsByTagName( "a" ) )
 				Transform( anchor );
 
+			// fix up all of the img tags
+			foreach ( IHTMLImgElement img in doc3.getElementsByTagName( "img" ) )
+				Transform( img );
+
 			return doc3;
+		}
+
+		private static void Transform( IHTMLImgElement img )
+		{
+			if ( img.src != null )
+			{
+				// replace the local link to the sf logo to the online version tied to our project counter
+				if ( img.src.IndexOf( "sf.gif" ) > -1 )
+					img.src = "http://sourceforge.net/sflogo.php?group_id=36057&amp;type=5";
+				else
+					img.src = TransformLocalLink( img.src );
+			}
 		}
 
 		private static void Transform( IHTMLAnchorElement anchor )
@@ -56,21 +72,36 @@ namespace NDoc.UsersGuideStager
 			if ( anchor.target == "_blank" )
 				anchor.target = "_parent";
 
-			// make sure all hrefs are lower case (Unix compatible)
 			if ( anchor.href != null )
 			{
-				if ( !anchor.href.StartsWith( "file:///" ) )
+				// make sure all hrefs are lower case (Unix compatible)
+				if ( anchor.href.StartsWith( "file:///" ) )
+				{
+					anchor.href = TransformLocalLink( anchor.href );
+				}				
+				else
 				{
 					anchor.href = anchor.href.ToLower();
 
 					// replace all ms-help links with online equivalents
 					if ( anchor.href.IndexOf( "ms-help" ) != -1 )
-						anchor.href = Transform( anchor.href );
+						anchor.href = TransformMSHelpLink( anchor.href );
 				}
 			}
+
+			// make all anchor names lower case as well
+			if ( anchor.name != null )
+				anchor.name = anchor.name.ToLower();
 		}
 
-		private static string Transform( string href )
+		private static string TransformLocalLink( string href )
+		{
+			const string content = "content";
+			Debug.Assert( href.IndexOf( content ) > -1 );
+			return href.Substring( href.IndexOf( content ) + content.Length + 1 ).ToLower();
+		}
+
+		private static string TransformMSHelpLink( string href )
 		{
 			string ret = "";
 			
