@@ -2552,17 +2552,19 @@ namespace NDoc.Core
 		/// This method doesn't lock the assembly file.</remarks>
 		public static Assembly LoadAssembly(string filename)
 		{
-			if (!File.Exists(filename))
-			{
-				throw new ApplicationException("can't find assembly " + filename);
-			}
+//			if (!File.Exists(filename))
+//			{
+//				throw new ApplicationException("can't find assembly " + filename);
+//			}
+//
+//			FileStream fs = File.Open(filename, FileMode.Open, FileAccess.Read);
+//			byte[] buffer = new byte[fs.Length];
+//			fs.Read(buffer, 0, (int)fs.Length);
+//			fs.Close();
+//
+//			return Assembly.Load(buffer);
 
-			FileStream fs = File.Open(filename, FileMode.Open, FileAccess.Read);
-			byte[] buffer = new byte[fs.Length];
-			fs.Read(buffer, 0, (int)fs.Length);
-			fs.Close();
-
-			return Assembly.Load(buffer);
+			return Assembly.LoadFrom(filename);
 		}
 	}
 }
