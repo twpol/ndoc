@@ -20,7 +20,9 @@
 					<includes name="graphics/*.*" />
 					<includes name="includes/*.*" />
 					<includes name="xslt/*.*" />
-					<includes name="HxProject/*.*" />
+					<includes name="Engine/NamespaceMapping/*.x*" />
+					<includes name="HxProject/HelpCollection/*.*" />
+					<includes name="HxProject/HelpTitle/*.*" />
 				</resources>
 			</csc>
 		</if>
