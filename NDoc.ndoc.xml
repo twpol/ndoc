@@ -1,0 +1,45 @@
+<project>
+    <assemblies>
+        <assembly location=".\src\Gui\bin\Debug\NDoc.Core.dll" documentation=".\src\Gui\bin\Debug\NDoc.Core.xml" />
+        <assembly location=".\src\Gui\bin\Debug\NDoc.Documenter.JavaDoc.dll" documentation=".\src\Gui\bin\Debug\NDoc.Documenter.JavaDoc.xml" />
+        <assembly location=".\src\Gui\bin\Debug\NDoc.Documenter.Msdn.dll" documentation=".\src\Gui\bin\Debug\NDoc.Documenter.Msdn.xml" />
+        <assembly location=".\src\Gui\bin\Debug\NDoc.Documenter.Xml.dll" documentation=".\src\Gui\bin\Debug\NDoc.Documenter.Xml.xml" />
+        <assembly location=".\src\Gui\bin\Debug\NDoc.Gui.exe" documentation=".\src\Gui\bin\Debug\NDoc.Gui.xml" />
+    </assemblies>
+    <documenters>
+        <documenter name="JavaDoc">
+            <property name="Title" value="NDoc" />
+            <property name="OutputDirectory" value=".\docs\JavaDoc\" />
+            <property name="ShowMissingSummaries" value="False" />
+            <property name="ShowMissingRemarks" value="False" />
+            <property name="ShowMissingParams" value="False" />
+            <property name="ShowMissingReturns" value="False" />
+            <property name="ShowMissingValues" value="False" />
+            <property name="DocumentInternals" value="False" />
+            <property name="DocumentPrivates" value="False" />
+        </documenter>
+        <documenter name="MSDN">
+            <property name="OutputDirectory" value=".\docs\MSDN\" />
+            <property name="HtmlHelpName" value="NDoc" />
+            <property name="HtmlHelpCompilerFilename" value="C:\Program Files\HTML Help Workshop\hhc.exe" />
+            <property name="IncludeFavorites" value="False" />
+            <property name="ShowMissingSummaries" value="False" />
+            <property name="ShowMissingRemarks" value="False" />
+            <property name="ShowMissingParams" value="False" />
+            <property name="ShowMissingReturns" value="False" />
+            <property name="ShowMissingValues" value="False" />
+            <property name="DocumentInternals" value="False" />
+            <property name="DocumentPrivates" value="False" />
+        </documenter>
+        <documenter name="XML">
+            <property name="OutputFile" value=".\docs\doc.xml" />
+            <property name="ShowMissingSummaries" value="False" />
+            <property name="ShowMissingRemarks" value="False" />
+            <property name="ShowMissingParams" value="False" />
+            <property name="ShowMissingReturns" value="False" />
+            <property name="ShowMissingValues" value="False" />
+            <property name="DocumentInternals" value="False" />
+            <property name="DocumentPrivates" value="False" />
+        </documenter>
+    </documenters>
+</project>

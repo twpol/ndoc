@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ndoc>
+
+	<description>
+		<html xmlns="http://www.w3.org/1999/xhtml">
+			<p>NDoc merges the assemblies and XML documentation files produced by csc.exe and creates a compiled HTML Help file enabling you to browse your own libraries just like the the <a href="http://msdn.microsoft.com/library/en-us/cpref/html/cpref_start.asp">.NET Framework Class Library</a>.</p>
+			<p>The documentation generator uses <a href="http://www.w3.org/Style/XSL">XSLT</a> to produce the HTML. Future versions will make it possible to customize the XSLT to produce documentation with any desired look and feel.</p>			<p>Download the latest release and see the output for yourself.</p>
+			<p>Our SourceForge project page can be found <a href="http://sourceforge.net/projects/xmarks/" title="Break Down the Barriers to Open Source Development">here</a>.</p>
+			<p>The NDoc source code is freely available under a certified <a href="http://www.opensource.org/" title="Learn more about the Open Source Initiative">Open Source</a> license. We welcome everyone to use our software in the hopes that they can provide feedback, submit bug reports and fixes, or even join us as a developer!</p>
+		</html>
+	</description>
+
+	<release 
+		name="DOC.NET 2001-09-20" 
+		date="2001-09-20" 
+		link="http://sourceforge.net/project/showfiles.php?group_id=13899&amp;release_id=53788"
+		direct="http://prdownloads.sourceforge.net/xmarks/doc.2001-09-20.zip"
+	/>
+
+	<developer
+		id="jason"
+		sourceforge-id="injektilo"
+		full-name="Jason Diamond"
+		short-name="Jason"
+		web="http://injektilo.org/"
+		email="jason@injektilo.org"
+	/>
+
+	<developer
+		id="kral"
+		sourceforge-id="kraldon"
+		full-name="Kral Ferch"
+		short-name="Kral"
+		email="kral_ferch@hotmail.com"
+	/>
+
+	<developer
+		id="jc"
+		sourceforge-id="jcman"
+		full-name="Jean-Claude Manoli"
+		short-name="Jean-Claude"
+		web="http://manoli.net/"
+		email="jc@manoli.net"
+	/>
+    
+</ndoc>
