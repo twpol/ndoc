@@ -365,7 +365,7 @@ namespace NDoc.Documenter.Msdn
 							   "NDoc.Documenter.Msdn.onlinetemplates.index.html"))))
 					{
 						indexWriter.CopyToLine("\t\t<title><%TITLE%></title>");
-						indexWriter.WriteLine("\t\t<title>'" + MyConfig.HtmlHelpName + "</title>");
+						indexWriter.WriteLine("\t\t<title>" + MyConfig.HtmlHelpName + "</title>");
 						indexWriter.CopyToLine("\t\t<frame name=\"main\" src=\"<%HOME_PAGE%>\" frameborder=\"1\">");
 						indexWriter.WriteLine("\t\t<frame name=\"main\" src=\"" + defaultTopic + "\" frameborder=\"1\">");
 						indexWriter.CopyToEnd();
