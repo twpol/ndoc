@@ -188,6 +188,24 @@
 		</td>
 	</xsl:template>
 
+	<xsl:template match="list[@type='definition']" mode="slashdoc" doc:group="block" doc:msdn="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrflist.htm">
+		<dl>
+			<xsl:apply-templates select="item" mode="slashdoc" />
+		</dl>
+	</xsl:template>
+
+	<xsl:template match="list[@type='definition']/item/term" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrflist.htm">
+		<dt>
+			<xsl:apply-templates select="./node()" mode="slashdoc" />
+		</dt>
+	</xsl:template>
+
+	<xsl:template match="list[@type='definition']/item/description" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrflist.htm">
+		<dd>
+			<xsl:apply-templates select="./node()" mode="slashdoc" />
+		</dd>
+	</xsl:template>
+
 	<!--
 	 | Inline Tags
 	 +-->

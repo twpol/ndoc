@@ -185,7 +185,7 @@
 	<xsl:template match="property" mode="vb-property-syntax">
 		<xsl:param name="include-type-links"/>
 
-		<xsl:call-template name="cs-member-syntax-prolog">
+		<xsl:call-template name="member-syntax-prolog">
 			<xsl:with-param name="lang" select="'Visual Basic'"/>	
 		</xsl:call-template>		
 		<xsl:if test="parameter">Default&#160;</xsl:if>				
@@ -222,7 +222,7 @@
 	<xsl:template match="property" mode="csharp-property-syntax">
 		<xsl:param name="include-type-links"/>
 
-		<xsl:call-template name="cs-member-syntax-prolog">
+		<xsl:call-template name="member-syntax-prolog">
 			<xsl:with-param name="lang" select="'C#'"/>							
 		</xsl:call-template>
 		<xsl:call-template name="return-type">
@@ -234,7 +234,7 @@
 		<xsl:choose>
 			<xsl:when test="parameter">
 				<xsl:text>this&#160;</xsl:text>			
-				<xsl:call-template name="cs-indexer-params">
+				<xsl:call-template name="indexer-params">
 					<xsl:with-param name="include-type-links" select="$include-type-links"/>		
 					<xsl:with-param name="lang" select="'C#'"/>
 					<xsl:with-param name="namespace-name" select="../../@name" />
@@ -301,7 +301,7 @@
 	<xsl:template name="cpp-property-getter">
 		<xsl:param name="include-type-links"/>
 
-		<xsl:call-template name="cs-member-syntax-prolog">
+		<xsl:call-template name="member-syntax-prolog">
 			<xsl:with-param name="lang" select="'C++'"/>							
 		</xsl:call-template>
 		<xsl:text>__property&#160;</xsl:text>
@@ -317,7 +317,7 @@
 	<xsl:template name="cpp-property-setter">
 		<xsl:param name="include-type-links"/>
 
-		<xsl:call-template name="cs-member-syntax-prolog">
+		<xsl:call-template name="member-syntax-prolog">
 			<xsl:with-param name="lang" select="'C++'"/>							
 		</xsl:call-template>
 		<xsl:text>__property&#160;</xsl:text>
@@ -402,7 +402,7 @@ whose index type is String.</xsl:text>
 	<xsl:template name="js-property-getter">
 		<xsl:param name="include-type-links"/>
 
-		<xsl:call-template name="cs-member-syntax-prolog">
+		<xsl:call-template name="member-syntax-prolog">
 			<xsl:with-param name="lang" select="'JScript'"/>							
 		</xsl:call-template>
 		<xsl:text>function&#160;</xsl:text>
@@ -419,13 +419,13 @@ whose index type is String.</xsl:text>
 	<xsl:template name="js-property-setter">
 		<xsl:param name="include-type-links"/>
 
-		<xsl:call-template name="cs-member-syntax-prolog">
+		<xsl:call-template name="member-syntax-prolog">
 			<xsl:with-param name="lang" select="'JScript'"/>							
 		</xsl:call-template>
 		<xsl:text>function&#160;set&#160;</xsl:text>
 		<xsl:value-of select="@name"/>
 		<xsl:text>(</xsl:text>
-		<xsl:variable name="cs-type">
+		<xsl:variable name="link-type">
 			<xsl:call-template name="get-datatype">
 				<xsl:with-param name="datatype" select="@type" />
 				<xsl:with-param name="lang" select="'JScript'" />				
@@ -435,15 +435,30 @@ whose index type is String.</xsl:text>
 			<xsl:when test="$include-type-links = true()">
 				<xsl:call-template name="get-link-for-type-name">
 					<xsl:with-param name="type-name" select="@type" />
-					<xsl:with-param name="link-text" select="$cs-type" />
+					<xsl:with-param name="link-text" select="$link-type" />
 				</xsl:call-template>					
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:value-of select="$cs-type"/>
+				<xsl:value-of select="$link-type"/>
 			</xsl:otherwise>
 		</xsl:choose>					
 		<xsl:text>);</xsl:text>
 	</xsl:template>	
+
+	
+	<xsl:template match="@* | node() | text()" mode="enum-type"/>
+	<xsl:template match="enumeration" mode="enum-type">
+		<xsl:param name="lang"/>
+		<xsl:text>&#160;</xsl:text>
+			<xsl:choose>
+				<xsl:when test="$lang='Visual Basic'">As</xsl:when>
+				<xsl:when test="$lang='C#'">:</xsl:when>
+				<xsl:when test="$lang='C++'">:</xsl:when>
+				<xsl:when test="$lang='JScript'">:</xsl:when>
+			</xsl:choose>	
+		<xsl:text>&#160;</xsl:text>
+	</xsl:template>
+	
 	
 	<xsl:template match="@* | node() | text()" mode="inherits"/>
 	<xsl:template match="structure | interface | class" mode="inherits">

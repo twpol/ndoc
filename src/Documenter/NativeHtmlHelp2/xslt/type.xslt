@@ -150,11 +150,11 @@
 							<xsl:value-of select="../@name" />
 						</a>
 					</p>
+					<xsl:call-template name="platforms-section"/>
 					<p>
 						<b>Assembly: </b>
 						<xsl:value-of select="../../../@name" /> (in <xsl:value-of select="../../@name" />)
 					</p>
-					<xsl:call-template name="platforms-section"/>
 					<xsl:if test="documentation/permission">
 						<p>
 							<b>.NET Framework Security: </b>

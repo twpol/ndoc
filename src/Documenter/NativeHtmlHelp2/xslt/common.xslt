@@ -349,16 +349,16 @@
 	<xsl:template name="syntax-section">
 	
 		<PRE class="syntax">
-		<xsl:apply-templates select="." mode="cs-syntax">
+		<xsl:apply-templates select="." mode="syntax">
 			<xsl:with-param name="lang" select="'Visual Basic'"/>
 		</xsl:apply-templates>
-		<xsl:apply-templates select="." mode="cs-syntax">
+		<xsl:apply-templates select="." mode="syntax">
 			<xsl:with-param name="lang" select="'C#'"/>
 		</xsl:apply-templates>
-		<xsl:apply-templates select="." mode="cs-syntax">
+		<xsl:apply-templates select="." mode="syntax">
 			<xsl:with-param name="lang" select="'C++'"/>
 		</xsl:apply-templates>	
-		<xsl:apply-templates select="." mode="cs-syntax">
+		<xsl:apply-templates select="." mode="syntax">
 			<xsl:with-param name="lang" select="'JScript'"/>
 		</xsl:apply-templates>
 		</PRE>	
@@ -711,9 +711,6 @@
 			<xsl:when test="$name='op_GreaterThanOrEqual'">Greater Than Or Equal Operator</xsl:when>
 			<xsl:when test="$name='op_Implicit'">
 				<xsl:text>Implicit </xsl:text>
-				<!--<xsl:value-of select="$from" />
-				    <xsl:text> to </xsl:text>
-				    <xsl:value-of select="$to" />-->
 				<xsl:call-template name="strip-namespace">
 					<xsl:with-param name="name" select="$from" />
 				</xsl:call-template>
@@ -721,14 +718,10 @@
 				<xsl:call-template name="strip-namespace">
 					<xsl:with-param name="name" select="$to" />
 				</xsl:call-template>
-				<!--KSD-->
 				<xsl:text> Conversion</xsl:text>
 			</xsl:when>
 			<xsl:when test="$name='op_Explicit'">
 				<xsl:text>Explicit </xsl:text>
-				<!--<xsl:value-of select="$from" />
-				    <xsl:text> to </xsl:text>
-				    <xsl:value-of select="$to" />-->
 				<xsl:call-template name="strip-namespace">
 					<xsl:with-param name="name" select="$from" />
 				</xsl:call-template>
@@ -736,7 +729,6 @@
 				<xsl:call-template name="strip-namespace">
 					<xsl:with-param name="name" select="$to" />
 				</xsl:call-template>
-				<!--KSD-->
 				<xsl:text> Conversion</xsl:text>
 			</xsl:when>
 			<xsl:otherwise>ERROR</xsl:otherwise>
@@ -808,6 +800,7 @@
 		<xsl:if test="documentation/permission">
 			<h4 class="dtH4">Requirements</h4>
 			<p>
+				<xsl:call-template name="platforms-section"/>
 				<b>.NET Framework Security: </b>
 				<ul class="permissions">
 					<xsl:for-each select="documentation/permission">
@@ -821,7 +814,6 @@
 						</li>
 					</xsl:for-each>
 				</ul>
-				<xsl:call-template name="platforms-section"/>
 			</p>
 		</xsl:if>
 	</xsl:template>

@@ -127,29 +127,29 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template match="constructor | method | property" mode="syntax">
-		<xsl:apply-templates select="." mode="cs-inline-syntax">
+		<xsl:apply-templates select="." mode="inline-syntax">
 			<xsl:with-param name="lang" select="'Visual Basic'"/>
 		</xsl:apply-templates>
 		<br/>
-		<xsl:apply-templates select="." mode="cs-inline-syntax">
+		<xsl:apply-templates select="." mode="inline-syntax">
 			<xsl:with-param name="lang" select="'C#'"/>
 		</xsl:apply-templates>
 		<br/>
-		<xsl:apply-templates select="." mode="cs-inline-syntax">
+		<xsl:apply-templates select="." mode="inline-syntax">
 			<xsl:with-param name="lang" select="'C++'"/>
 		</xsl:apply-templates>				
 		<br/>
-		<xsl:apply-templates select="." mode="cs-inline-syntax">
+		<xsl:apply-templates select="." mode="inline-syntax">
 			<xsl:with-param name="lang" select="'JScript'"/>
 		</xsl:apply-templates>		
 	</xsl:template>
 	
 	<xsl:template match="operator" mode="syntax">
-		<xsl:apply-templates select="." mode="cs-inline-syntax">
+		<xsl:apply-templates select="." mode="inline-syntax">
 			<xsl:with-param name="lang" select="'C#'"/>
 		</xsl:apply-templates>
 		<br/>
-		<xsl:apply-templates select="." mode="cs-inline-syntax">
+		<xsl:apply-templates select="." mode="inline-syntax">
 			<xsl:with-param name="lang" select="'C++'"/>
 		</xsl:apply-templates>					
 	</xsl:template>
