@@ -589,6 +589,7 @@
 			</xsl:when>
 			<xsl:when test="@type='table'">
 				<table border="1">
+					<xsl:apply-templates select="listheader" mode="slashdoc" />
 					<xsl:apply-templates select="item" mode="slashdoc" />
 				</table>
 			</xsl:when>
@@ -600,6 +601,14 @@
 		<li>
 			<xsl:apply-templates select="./node()" mode="slashdoc" />
 		</li>
+	</xsl:template>
+	<!-- -->
+	<xsl:template match="list[@type='table']/listheader" mode="slashdoc">
+		<tr>
+			<th>
+				<xsl:apply-templates select="./node()" mode="slashdoc" />
+			</th>
+		</tr>
 	</xsl:template>
 	<!-- -->
 	<xsl:template match="list[@type='table']/item" mode="slashdoc">

@@ -590,12 +590,25 @@ namespace NDoc.Test
 		/// <summary>TableMethodSummary</summary>
 		/// <remarks>
 		///		<list type="table">
-		///			<item>Cell One</item>
-		///			<item>Cell Two</item>
-		///			<item>Cell Three</item>
+		///			<item><description>Cell One</description></item>
+		///			<item><description>Cell Two</description></item>
+		///			<item><description>Cell Three</description></item>
 		///		</list>
 		/// </remarks>
 		public void TableMethod()
+		{
+		}
+
+		/// <summary>TableWithHeaderMethodSummary</summary>
+		/// <remarks>
+		///		<list type="table">
+		///			<listheader><description>Header</description></listheader>
+		///			<item><description>Cell One</description></item>
+		///			<item><description>Cell Two</description></item>
+		///			<item><description>Cell Three</description></item>
+		///		</list>
+		/// </remarks>
+		public void TableWithHeaderMethod()
 		{
 		}
 	}
