@@ -34,11 +34,6 @@ namespace NDoc.Core
 			string prefix,
 			string directory)
 		{
-			if (!directory.EndsWith("\\"))
-			{
-				directory += "\\";
-			}
-
 			if (!Directory.Exists(directory))
 			{
 				Directory.CreateDirectory(directory);
@@ -75,7 +70,7 @@ namespace NDoc.Core
 			int count = 0;
 
 			Stream input = assembly.GetManifestResourceStream(name);
-			Stream output = File.Open(directory + filename, FileMode.Create);
+			Stream output = File.Open(Path.Combine(directory, filename), FileMode.Create);
 
 			try
 			{
