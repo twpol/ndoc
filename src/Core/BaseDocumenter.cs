@@ -428,6 +428,7 @@ namespace NDoc.Core
 			WriteFields(writer, type);
 			WriteProperties(writer, type);
 			WriteMethods(writer, type);
+			WriteOperators(writer, type);
 			WriteEvents(writer, type);
 
 			writer.WriteEndElement();
@@ -536,8 +537,11 @@ namespace NDoc.Core
 
 			foreach (MethodInfo method in methods)
 			{
-				if (!(method.Name.StartsWith("get_")) && !(method.Name.StartsWith("set_")) &&
-					!(method.Name.StartsWith("add_")) && !(method.Name.StartsWith("remove_")))
+				if (!(method.Name.StartsWith("get_")) && 
+					!(method.Name.StartsWith("set_")) &&
+					!(method.Name.StartsWith("add_")) && 
+					!(method.Name.StartsWith("remove_")) &&
+					!(method.Name.StartsWith("op_")))
 				{
 					if (method.IsPublic || 
 						method.IsFamily || 
@@ -550,6 +554,36 @@ namespace NDoc.Core
 							writer, 
 							method, 
 							method.DeclaringType.FullName != type.FullName, 
+							GetMethodOverload(method, methods));
+					}
+				}
+			}
+		}
+
+		private void WriteOperators(XmlWriter writer, Type type)
+		{
+			BindingFlags bindingFlags = 
+				BindingFlags.Instance |
+				BindingFlags.Static |
+				BindingFlags.Public |
+				BindingFlags.NonPublic;
+
+			MethodInfo[] methods = type.GetMethods(bindingFlags);
+
+			foreach (MethodInfo method in methods)
+			{
+				if (method.Name.StartsWith("op_"))
+				{
+					if (method.IsPublic || 
+						method.IsFamily || 
+						method.IsFamilyOrAssembly ||
+						(method.IsAssembly && MyConfig.DocumentInternals) ||
+						(method.IsFamilyAndAssembly && MyConfig.DocumentInternals) ||
+						(method.IsPrivate && MyConfig.DocumentPrivates))
+					{
+						WriteOperator(
+							writer, 
+							method, 
 							GetMethodOverload(method, methods));
 					}
 				}
@@ -956,6 +990,45 @@ namespace NDoc.Core
 			}
 
 			writer.WriteEndElement();
+		}
+
+		private void WriteOperator(
+			XmlWriter writer,
+			MethodInfo method,
+			int overload)
+		{
+			if (method != null)
+			{
+				string memberName = GetMemberName(method);
+
+				writer.WriteStartElement("operator");
+				writer.WriteAttributeString("name", method.Name);
+				writer.WriteAttributeString("id", memberName);
+				writer.WriteAttributeString("access", GetMethodAccessValue(method));
+
+				if (method.DeclaringType != method.ReflectedType)
+				{
+					writer.WriteAttributeString("declaringType", method.DeclaringType.FullName);
+				}
+
+				writer.WriteAttributeString("contract", GetMethodContractValue(method));
+
+				if (overload > 0)
+				{
+					writer.WriteAttributeString("overload", overload.ToString());
+				}
+
+				writer.WriteAttributeString("returnType", method.ReturnType.FullName);
+
+				WriteMethodDocumentation(writer, memberName, method);
+
+				foreach (ParameterInfo parameter in method.GetParameters())
+				{
+					WriteParameter(writer, GetMemberName(method), parameter);
+				}
+
+				writer.WriteEndElement();
+			}
 		}
 
 		/// <summary>Used by GetMemberName(Type type) and by 

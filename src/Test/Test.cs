@@ -61,6 +61,13 @@ namespace NDoc.Test
 
 		/// <summary>Can you do this?</summary>
 		public static event Handler StaticEvent;
+
+		/// <summary>This is my first overloaded operator.</summary>
+		/// <remarks>Why do we have to declare them as static?</remarks>
+		public static bool operator !(Class x)
+		{
+			return false;
+		}
 	}
 
 	/// <summary>This is a simple delegate used by Class.</summary>
@@ -112,6 +119,11 @@ namespace NDoc.Test
 
 		/// <summary>This event is declared in the Base class.</summary>
 		public event Handler BaseEvent;
+
+		private void UseBaseEvent()
+		{
+			BaseEvent(this, new EventArgs());
+		}
 	}
 
 	/// <summary>Represents a derived class.</summary>
