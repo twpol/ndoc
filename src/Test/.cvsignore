@@ -1,0 +1,4 @@
+bin
+obj
+Test.csproj.user
+NDoc.Test.xml
