@@ -244,8 +244,10 @@ namespace NDoc.Documenter.Msdn
 					throw new DocumenterException("There are no documentable types in this project.");
 				}
 
-				XmlNode defaultNamespace =
-					xmlDocumentation.SelectSingleNode("/ndoc/assembly/module/namespace");
+				XmlNodeList namespaceNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace");
+				int[] indexes = SortNodesByAttribute(namespaceNodes, "name");
+
+				XmlNode defaultNamespace = namespaceNodes[indexes[0]];;
 
 				string defaultNamespaceName = (string)defaultNamespace.Attributes["name"].Value;
 				string defaultTopic = defaultNamespaceName + ".html";
