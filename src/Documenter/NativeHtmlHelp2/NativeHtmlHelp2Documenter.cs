@@ -117,6 +117,9 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			if ( MyConfig.EmptyIndexTermPage.Length != 0 && !File.Exists( MyConfig.EmptyIndexTermPage ) )
 				return string.Format( "The file {0} could not be found", MyConfig.EmptyIndexTermPage );
 
+			if ( MyConfig.ExtensibilityStylesheet.Length != 0 && !File.Exists( MyConfig.ExtensibilityStylesheet ) )
+				return string.Format( "The file {0} could not be found", MyConfig.ExtensibilityStylesheet );
+
 			if ( MyConfig.AdditionalContentResourceDirectory.Length != 0 && !Directory.Exists( MyConfig.AdditionalContentResourceDirectory ) )
 				return string.Format( "The directory {0} could not be found", MyConfig.AdditionalContentResourceDirectory );
 
@@ -156,6 +159,9 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 
 			try
 			{
+#if DEBUG
+				int start = Environment.TickCount;
+#endif
 				OnDocBuildingStep( 0, "Initializing..." );
 				UnPackResources();
 
@@ -215,6 +221,10 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 				// create collection level files
 				if( MyConfig.GenerateCollectionFiles )
 					CreateCollectionFiles( w );
+#if DEBUG
+				Trace.WriteLine( string.Format( "It took a total of {0} seconds", ( Environment.TickCount - start ) / 1000 ) );
+#endif
+				Trace.WriteLine( "Build complete" );
 			}
 			catch ( Exception e )
 			{
@@ -279,7 +289,12 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		{
 			// load the stylesheets
 			OnDocBuildingStep( 20, "Loading StyleSheets..." );
-			factory.LoadStylesheets( ResourceDirectory );
+
+			if ( MyConfig.ExtensibilityStylesheet.Length > 0 )
+				factory.LoadStylesheets( MyConfig.ExtensibilityStylesheet, ResourceDirectory );
+
+			else
+				factory.LoadStylesheets( ResourceDirectory );
 
 			OnDocBuildingStep( 30, "Generating HTML..." );
 
@@ -288,16 +303,23 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 
 			// add properties to the factory
 			// these get passed to the stylesheets
-			factory.Properties.Add( "ndoc-title", MyConfig.Title );
-			factory.Properties.Add( "ndoc-document-attributes", MyConfig.DocumentAttributes );
-			factory.Properties.Add( "ndoc-documented-attributes", MyConfig.DocumentedAttributes );
-			//factory.Properties.Add( "ndoc-platforms", GetPlatformString() );
-			factory.Properties.Add( "ndoc-net-framework-version", GetNETVersionString() );
-			factory.Properties.Add( "ndoc-version", MyConfig.Version );
-			factory.Properties.Add( "ndoc-includeHierarchy", MyConfig.IncludeHierarchy );
+			factory.Arguments.AddParam( "ndoc-title", "", MyConfig.Title );
+			factory.Arguments.AddParam( "ndoc-document-attributes", "", MyConfig.DocumentAttributes );
+			factory.Arguments.AddParam( "ndoc-documented-attributes", "", MyConfig.DocumentedAttributes );
+			factory.Arguments.AddParam( "ndoc-net-framework-version", "", GetNETVersionString() );
+			factory.Arguments.AddParam( "ndoc-version", "", MyConfig.Version );
+			factory.Arguments.AddParam( "ndoc-includeHierarchy", "", MyConfig.IncludeHierarchy );
+			factory.Arguments.AddParam( "ndoc-omit-syntax", "", MyConfig.OmitSyntaxSection );
+			
 
+#if DEBUG
+			int start = Environment.TickCount;
+#endif
 			// make the html
 			factory.MakeHtml();
+#if DEBUG
+			Trace.WriteLine( string.Format( "It took {0} seconds to make the html", ( Environment.TickCount - start ) / 1000 ) );
+#endif
 		}
 
 		private string GetNETVersionString()
@@ -316,7 +338,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			// Load the XML documentation into a DOM.
 			XmlDocument xmlDocumentation = new XmlDocument();
 			xmlDocumentation.LoadXml( MakeXml( project ) );
-xmlDocumentation.Save( @"C:\Tests.xml" );
+//xmlDocumentation.Save( @"C:\Tests.xml" );
 			XmlNodeList typeNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace/*[name()!='documentation']");
 			
 			if ( typeNodes.Count == 0 )			
@@ -468,8 +490,15 @@ xmlDocumentation.Save( @"C:\Tests.xml" );
 		{
 			try
 			{
+				Trace.WriteLine( "Compiling Html Help 2 file" );
+#if DEBUG
+				int start = Environment.TickCount;
+#endif				
 				HxCompiler compiler = new HxCompiler();
 				compiler.Compile( new DirectoryInfo( w.WorkingDirectory ), MyConfig.HtmlHelpName, MyConfig.LangID );
+#if DEBUG
+				Trace.WriteLine( string.Format( "It took {0} seconds to compile the html", ( Environment.TickCount - start ) / 1000 ) );
+#endif
 			}
 			catch ( Exception e )
 			{

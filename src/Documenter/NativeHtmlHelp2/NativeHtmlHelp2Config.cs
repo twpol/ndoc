@@ -478,6 +478,23 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 				SetDirty();
 			}
 		}
+
+		bool _OmitSyntaxSection = false;
+
+		/// <summary>If true, the syntax section on member topics will not be generated (improves performance)</summary>
+		[Category(HTMLHELP2_CONFIG_CATEGORY)]
+		[Description("If true, the syntax section on member topics will not be generated (improves performance)")]
+		[DefaultValue(false)]
+		public bool OmitSyntaxSection
+		{
+			get { return _OmitSyntaxSection; }
+
+			set
+			{
+				_OmitSyntaxSection = value;
+				SetDirty();
+			}
+		}
 		#endregion
 
 		#region Additonal content properties
@@ -592,5 +609,23 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			}
 		}	
 		#endregion
+
+		string _ExtensibilityStylesheet = string.Empty;
+
+		/// <summary>Path to an xslt stylesheet that contains templates for documenting extensibility tags</summary>
+		[Category("Extensibility")]
+		[Description("Path to an xslt stylesheet that contains templates for documenting extensibility tags. Extensibility templates should match your custom nodes and have a mode of 'slashdoc'")]
+		[DefaultValue("")]
+		[Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
+		public string ExtensibilityStylesheet
+		{
+			get { return _ExtensibilityStylesheet; }
+
+			set
+			{
+				_ExtensibilityStylesheet = value;
+				SetDirty();
+			}
+		}	
 	}
 }
