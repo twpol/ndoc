@@ -470,13 +470,11 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		/// <summary>Gets or sets the UseHelpNamespaceMappingFile property.</summary>
 		/// <remarks>If the documentation includes references to types registered in a seperate html help 2 
 		/// namespace, supplying a mapping file allows XLinks to be created to topics within that namespace.
-		/// The schema for the mapping file can be found in the location you installed NDoc in a file named 
-		/// 'NamespaceMap.xsd'</remarks>
+		/// </remarks>
 		[Category(HTMLHELP2_CONFIG_CATEGORY)]
 		[Description("If the documentation includes references to types registered in a seperate html help 2 " +
 			 "namespace, supplying a mapping file allows XLinks to be created to topics within that namespace. " +
-			 "The schema for the mapping file can be found in the location you installed NDoc in a file named " +
-			 "'NamespaceMap.xsd'")]
+			 "Refer to the user's guide for more information about XLinks to other topics.")]
 		[DefaultValue("")]
 		[Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
 		public string UseHelpNamespaceMappingFile
