@@ -122,10 +122,7 @@ namespace NDoc.Gui
 		private System.Windows.Forms.ToolBarButton solutionToolBarButton;
 		private System.Windows.Forms.MenuItem menuFileOpenSolution;
 		private System.Windows.Forms.MenuItem menuHelpItem;
-		private System.Windows.Forms.MenuItem menuReleaseNotes;
 		private System.Windows.Forms.MenuItem menuAboutItem;
-		private System.Windows.Forms.MenuItem menuSpacerItem5;
-		private System.Windows.Forms.MenuItem menuHelpIndexItem;
 		private System.Windows.Forms.MenuItem menuTagReferenceItem;
 		private System.Windows.Forms.MenuItem menuSpacerItem4;
 		private System.Windows.Forms.MenuItem menuSpacerItem6;
@@ -265,11 +262,8 @@ namespace NDoc.Gui
 			this.menuSpacerItem6 = new System.Windows.Forms.MenuItem();
 			this.menuCancelBuildItem = new System.Windows.Forms.MenuItem();
 			this.menuHelpItem = new System.Windows.Forms.MenuItem();
-			this.menuHelpIndexItem = new System.Windows.Forms.MenuItem();
 			this.menuTagReferenceItem = new System.Windows.Forms.MenuItem();
 			this.menuSpacerItem4 = new System.Windows.Forms.MenuItem();
-			this.menuReleaseNotes = new System.Windows.Forms.MenuItem();
-			this.menuSpacerItem5 = new System.Windows.Forms.MenuItem();
 			this.menuAboutItem = new System.Windows.Forms.MenuItem();
 			this.comboBoxDocumenters = new System.Windows.Forms.ComboBox();
 			this.addButton = new System.Windows.Forms.Button();
@@ -450,47 +444,26 @@ namespace NDoc.Gui
 			// 
 			this.menuHelpItem.Index = 2;
 			this.menuHelpItem.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																						 this.menuHelpIndexItem,
 																						 this.menuTagReferenceItem,
 																						 this.menuSpacerItem4,
-																						 this.menuReleaseNotes,
-																						 this.menuSpacerItem5,
 																						 this.menuAboutItem});
 			this.menuHelpItem.Text = "&Help";
 			// 
-			// menuHelpIndexItem
-			// 
-			this.menuHelpIndexItem.Enabled = false;
-			this.menuHelpIndexItem.Index = 0;
-			this.menuHelpIndexItem.Text = "&NDoc Help";
-			this.menuHelpIndexItem.Click += new System.EventHandler(this.menuHelpIndexItem_Click);
-			// 
 			// menuTagReferenceItem
 			// 
-			this.menuTagReferenceItem.Index = 1;
+			this.menuTagReferenceItem.Index = 0;
 			this.menuTagReferenceItem.Shortcut = System.Windows.Forms.Shortcut.F1;
-			this.menuTagReferenceItem.Text = "&Documentation Tag Reference";
+			this.menuTagReferenceItem.Text = "&Documentation Tags Reference";
 			this.menuTagReferenceItem.Click += new System.EventHandler(this.menuTagReferenceItem_Click);
 			// 
 			// menuSpacerItem4
 			// 
-			this.menuSpacerItem4.Index = 2;
+			this.menuSpacerItem4.Index = 1;
 			this.menuSpacerItem4.Text = "-";
-			// 
-			// menuReleaseNotes
-			// 
-			this.menuReleaseNotes.Index = 3;
-			this.menuReleaseNotes.Text = "Open &Release Notes";
-			this.menuReleaseNotes.Click += new System.EventHandler(this.menuReleaseNotes_Click);
-			// 
-			// menuSpacerItem5
-			// 
-			this.menuSpacerItem5.Index = 4;
-			this.menuSpacerItem5.Text = "-";
 			// 
 			// menuAboutItem
 			// 
-			this.menuAboutItem.Index = 5;
+			this.menuAboutItem.Index = 2;
 			this.menuAboutItem.Text = "&About NDoc";
 			this.menuAboutItem.Click += new System.EventHandler(this.menuAboutItem_Click);
 			// 
