@@ -11,7 +11,7 @@
 	<xsl:param name='namespace' />
 	<!-- -->
 	<xsl:template match="/">
-		<xsl:variable name="ns" select="ndoc/assembly/module/namespace[@name=$namespace]" />
+		<xsl:variable name="ns" select="ndoc/namespaceHierarchies/namespaceHierarchy[@name=$namespace][1]" />
 		<html dir="LTR">
 			<xsl:call-template name="html-head">
 				<xsl:with-param name="title" select="concat($ns/@name, 'Hierarchy')" />
@@ -23,7 +23,7 @@
 					<xsl:with-param name="type-name" select="concat($ns/@name, ' Hierarchy')" />
 				</xsl:call-template>
 				<div id="nstext" valign="bottom">
-					<xsl:apply-templates select="$ns/typeHierarchy" />
+					<xsl:apply-templates select="$ns" />
 					<h4 class="dtH4">See Also</h4>
 					<p>
 						<a>
@@ -41,7 +41,7 @@
 		</html>
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="typeHierarchy">
+	<xsl:template match="namespaceHierarchy">
 		<xsl:for-each select="type">
 			<div>
 				<xsl:call-template name="get-link-for-type">

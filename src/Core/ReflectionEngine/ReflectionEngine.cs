@@ -178,6 +178,8 @@ namespace NDoc.Core
 					if (this.rep.Preliminary)
 						writer.WriteElementString("preliminary", "");
 
+					WriteNamespaceHierarchies(writer);
+
 					foreach (string AssemblyFileName in this.rep.AssemblyFileNames)
 					{
 						currentAssemblyFilename = AssemblyFileName;
@@ -738,8 +740,6 @@ namespace NDoc.Core
 							WriteEndDocumentation(writer);
 						}
 
-						WriteNamespaceTypeHierarchy(writer, ourNamespaceName);
-						
 						int classCount = WriteClasses(writer, types, namespaceName);
 						Trace.WriteLine(string.Format("Wrote {0} classes.", classCount));
 
@@ -3612,6 +3612,17 @@ namespace NDoc.Core
 			}
 		}
 		
+
+		private void WriteNamespaceHierarchies(XmlWriter writer)
+		{
+			writer.WriteStartElement("namespaceHierarchies");
+			foreach(string namespaceName in namespaceHierarchies.DefinedNamespaces)
+			{
+				WriteNamespaceTypeHierarchy(writer, namespaceName);
+			}
+			writer.WriteEndElement();
+		}
+		
 		private void WriteNamespaceTypeHierarchy(XmlWriter writer, string namespaceName)
 		{
 			//get all base types from which members of this namespace are derived
@@ -3619,7 +3630,8 @@ namespace NDoc.Core
 			if (derivedTypesCollection != null)
 			{
 				//we will always start the hierarchy with System.Object (hopefully for obvious reasons)
-				writer.WriteStartElement("typeHierarchy");
+				writer.WriteStartElement("namespaceHierarchy");
+				writer.WriteAttributeString("name",namespaceName);
 				WriteTypeHierarchy(writer, derivedTypesCollection, "T:System.Object");
 				writer.WriteEndElement();
 			}
