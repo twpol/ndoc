@@ -43,6 +43,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HtmlHelp2", "Documenter\Htm
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Latex", "Documenter\Latex\Latex.csproj", "{2929DFA6-FFCF-4110-B8B5-3005A087B58A}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -91,6 +95,10 @@ Global
 		{6244333B-BF87-4F04-B2DE-56AB9A53B65A}.Debug.Build.0 = Debug|.NET
 		{6244333B-BF87-4F04-B2DE-56AB9A53B65A}.Release.ActiveCfg = Release|.NET
 		{6244333B-BF87-4F04-B2DE-56AB9A53B65A}.Release.Build.0 = Release|.NET
+		{2929DFA6-FFCF-4110-B8B5-3005A087B58A}.Debug.ActiveCfg = Debug|.NET
+		{2929DFA6-FFCF-4110-B8B5-3005A087B58A}.Debug.Build.0 = Debug|.NET
+		{2929DFA6-FFCF-4110-B8B5-3005A087B58A}.Release.ActiveCfg = Release|.NET
+		{2929DFA6-FFCF-4110-B8B5-3005A087B58A}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 		Help\tags.html = Help\tags.html

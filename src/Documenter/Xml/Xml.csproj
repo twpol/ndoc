@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Library"
                 PreBuildEvent = ""
-                PostBuildEvent = ""
+                PostBuildEvent = "copy $(TargetName).* $(SolutionDir)Gui\bin\$(ConfigurationName)\&#xd;&#xa;copy $(TargetName).* $(SolutionDir)Console\bin\$(ConfigurationName)\&#xd;&#xa;"
                 RootNamespace = "NDoc.Documenter.Xml"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""

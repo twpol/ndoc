@@ -77,31 +77,6 @@
                     Project = "{DBA75D67-23C9-4A78-ABC2-CF8802FDB7CA}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
-                <Reference
-                    Name = "JavaDoc"
-                    Project = "{17A4026E-1790-4965-A670-861AE002BEF0}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
-                    Name = "Xml"
-                    Project = "{C90E801B-30AF-45DA-A138-E6BCCB1E99A7}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
-                    Name = "LinearHtml"
-                    Project = "{8844E0D9-FCA0-419D-9168-BCD420B38378}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
-                    Name = "Msdn"
-                    Project = "{8282F072-D966-4075-A8DA-8911E36F4980}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
-                    Name = "HtmlHelp2"
-                    Project = "{6244333B-BF87-4F04-B2DE-56AB9A53B65A}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
             </References>
         </Build>
         <Files>
