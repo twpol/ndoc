@@ -49,7 +49,7 @@ namespace NDoc.Gui
 				{
 					strBld.AppendFormat("Exception: {0}\n", tmpEx.GetType().ToString());
 					strBld.Append(tmpEx.Message);
-					strBld.Append("\n");
+					strBld.Append("\n\n");
 					tmpEx = tmpEx.InnerException;
 				}
 				strBld.Append("\n");
@@ -69,10 +69,11 @@ namespace NDoc.Gui
 						strBld.Append("Unable to load: " + fileLoadEx.FileName + "\n");
 						}
 					}
-					else
-					{
+//					else
+//					{
 						strBld.Append(loaderEx.Message + "\n");
-					}
+						strBld.Append(loaderEx.StackTrace + Environment.NewLine);
+//					}
 				}
 			}
 			string[] lines = strBld.ToString().Split('\n');
@@ -143,8 +144,9 @@ namespace NDoc.Gui
 			this.m_closeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.m_closeButton.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.m_closeButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.m_closeButton.Location = new System.Drawing.Point(552, 408);
+			this.m_closeButton.Location = new System.Drawing.Point(536, 408);
 			this.m_closeButton.Name = "m_closeButton";
+			this.m_closeButton.Size = new System.Drawing.Size(88, 24);
 			this.m_closeButton.TabIndex = 4;
 			this.m_closeButton.Text = "&Close";
 			// 
@@ -178,7 +180,7 @@ namespace NDoc.Gui
 			this.btnCopy.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.btnCopy.Location = new System.Drawing.Point(8, 408);
 			this.btnCopy.Name = "btnCopy";
-			this.btnCopy.Size = new System.Drawing.Size(120, 24);
+			this.btnCopy.Size = new System.Drawing.Size(104, 24);
 			this.btnCopy.TabIndex = 9;
 			this.btnCopy.Text = "Copy to clipboard";
 			this.btnCopy.Click += new System.EventHandler(this.btnCopy_Click);
