@@ -68,7 +68,8 @@
 		<tr valign="top">
 			<td>
 			<b>DocSetList</b></td>
-			<td>A comma-separated list of <b>DocSet</b> filter identifiers 
+			<td>A comma-separated list of <b>
+			<a href="ms-help://ms.vshik.2003/dv_vshik_2/html/vhconDynamicHelpAttributeConventions.htm#vhcondocsetattribute">DocSet</a></b> filter identifiers 
 			in which topics in this title will included.</td>
 		</tr>
 		<tr valign="top">
@@ -80,7 +81,7 @@
 		<tr valign="top">
 			<td>
 			<b>ExtensibilityStylesheet</b></td>
-			<td>Path to an xslt stylesheet that contains templates for 
+			<td>Path to an XSLT stylesheet that contains templates for 
 			documenting extensibility tags.</td>
 		</tr>
 		<tr valign="top">
@@ -173,14 +174,17 @@
 			<td>
 			<b>RegisterTitleAsCollection</b></td>
 			<td>If true the HxS title will be registered as a collection 
-			(ignored if <b>RegisterTitleWithNamespace</b> is true)</td>
+			after a successful compilation of the documentation. (ignored if <b>RegisterTitleWithNamespace</b> is true)
+			<p><i>Note: This is a development aid and only applies to the 
+			machine where the build is run.</i></td>
 		</tr>
 		<tr valign="top">
 			<td>
 			<b>RegisterTitleWithNamespace</b></td>
 			<td>Should the compiled Html 2 title be registered on this 
 			machine after it is compiled. Good for testing. (If true <b>CollectionNamespace</b> 
-			is required)</td>
+			is required)<p><i>Note: This is a development aid and only applies 
+			to the machine where the build is run.</i></td>
 		</tr>
 		<tr valign="top">
 			<td>

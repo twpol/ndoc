@@ -34,13 +34,14 @@ EXAMPLEDIR = content\examples
 
 # the UsersGuide.hhp pseudotarget is dependent on all of the html files in the content directory
 # as well as the css, image, and script files
-UsersGuide.hhp: $(HTML) $(CSS) $(SCRIPTS) $(IMAGES) $(EXAMPLEDIR)\NamespaceMap.xsd 
+UsersGuide.hhp: $(HTML) $(CSS) $(SCRIPTS) $(IMAGES) $(EXAMPLEDIR)\NamespaceMap.xsd  $(EXAMPLEDIR)\NamespaceMap.xml
 
 
 NAMESPACEMAPPINGDIR = ..\Documenter\NativeHtmlHelp2\Engine\NamespaceMapping
 
-$(EXAMPLEDIR)\NamespaceMap.xsd: $(NAMESPACEMAPPINGDIR)\NamespaceMap.xsd
+$(EXAMPLEDIR)\NamespaceMap.xsd: $(NAMESPACEMAPPINGDIR)\NamespaceMap.xsd $(NAMESPACEMAPPINGDIR)\NamespaceMap.xml
 # copy examples into the content directory
 	mkdir $(EXAMPLEDIR)
-	xcopy $(NAMESPACEMAPPINGDIR)\NamespaceMap.xsd $(EXAMPLEDIR)\NamespaceMap.xsd /y
-	xcopy $(NAMESPACEMAPPINGDIR)\NamespaceMap.xml $(EXAMPLEDIR)\NamespaceMap.xml /y 
+	copy /a $(NAMESPACEMAPPINGDIR)\NamespaceMap.xsd+,, $(EXAMPLEDIR)\NamespaceMap.xsd /y
+	copy /a $(NAMESPACEMAPPINGDIR)\NamespaceMap.xml+,, $(EXAMPLEDIR)\NamespaceMap.xml /y 
+
