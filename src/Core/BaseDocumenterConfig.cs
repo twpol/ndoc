@@ -54,6 +54,9 @@ namespace NDoc.Core
 			_ShowMissingReturns = false;
 			_ShowMissingValues = false;
 
+			_DocumentInheritedMembers = true;
+			_DocumentExplicitInterfaceImplementations = false;
+
 			_DocumentInternals = false;
 			_DocumentProtected = true;
 			_DocumentSealedProtected = false;
@@ -411,6 +414,25 @@ namespace NDoc.Core
 
 		#region Visibility Options
 		
+		private bool _DocumentInheritedMembers;
+
+		/// <summary>Gets or sets the DocumentInheritedMembers property.</summary>
+		/// <remarks>If this is true, members inherited from base classes will
+		/// be included in the documentation.</remarks>
+		[Category("Visibility")]
+		[Description("Turn this flag on to document inherited members.")]
+		[DefaultValue(true)]
+		public bool DocumentInheritedMembers
+		{
+			get { return _DocumentInheritedMembers; }
+
+			set
+			{
+				_DocumentInheritedMembers = value;
+				SetDirty();
+			}
+		}
+
 		private bool _DocumentExplicitInterfaceImplementations;
 
 		/// <summary>Gets or sets the DocumentInternals property.</summary>

@@ -1434,10 +1434,15 @@ namespace NDoc.Core
 		{
 			int overload = 0;
 
-			const BindingFlags bindingFlags =
+			BindingFlags bindingFlags =
 					  BindingFlags.Instance |
 					  BindingFlags.Public |
 					  BindingFlags.NonPublic;
+
+			if (!MyConfig.DocumentInheritedMembers)
+			{
+				bindingFlags = bindingFlags | BindingFlags.DeclaredOnly;
+			}
 
 			ConstructorInfo[] constructors = type.GetConstructors(bindingFlags);
 
@@ -1457,10 +1462,15 @@ namespace NDoc.Core
 
 		private void WriteStaticConstructor(XmlWriter writer, Type type)
 		{
-			const BindingFlags bindingFlags =
+			BindingFlags bindingFlags =
 					  BindingFlags.Static |
 					  BindingFlags.Public |
 					  BindingFlags.NonPublic;
+
+			if (!MyConfig.DocumentInheritedMembers)
+			{
+				bindingFlags = bindingFlags | BindingFlags.DeclaredOnly;
+			}
 
 			ConstructorInfo[] constructors = type.GetConstructors(bindingFlags);
 
@@ -1475,11 +1485,16 @@ namespace NDoc.Core
 
 		private void WriteFields(XmlWriter writer, Type type)
 		{
-			const BindingFlags bindingFlags =
+			BindingFlags bindingFlags =
 					  BindingFlags.Instance |
 					  BindingFlags.Static |
 					  BindingFlags.Public |
 					  BindingFlags.NonPublic;
+
+			if (!MyConfig.DocumentInheritedMembers)
+			{
+				bindingFlags = bindingFlags | BindingFlags.DeclaredOnly;
+			}
 
 			FieldInfo [] fields = type.GetFields(bindingFlags);
 			foreach (FieldInfo field in fields)
@@ -1499,11 +1514,16 @@ namespace NDoc.Core
 
 		private void WriteProperties(XmlWriter writer, Type type)
 		{
-			const BindingFlags bindingFlags =
+			BindingFlags bindingFlags =
 					  BindingFlags.Instance |
 					  BindingFlags.Static |
 					  BindingFlags.Public |
 					  BindingFlags.NonPublic;
+
+			if (!MyConfig.DocumentInheritedMembers)
+			{
+				bindingFlags = bindingFlags | BindingFlags.DeclaredOnly;
+			}
 
 			PropertyInfo[] properties = type.GetProperties(bindingFlags);
 
@@ -1545,11 +1565,16 @@ namespace NDoc.Core
 
 		private void WriteMethods(XmlWriter writer, Type type)
 		{
-			const BindingFlags bindingFlags =
+			BindingFlags bindingFlags =
 					  BindingFlags.Instance |
 					  BindingFlags.Static |
 					  BindingFlags.Public |
 					  BindingFlags.NonPublic;
+
+			if (!MyConfig.DocumentInheritedMembers)
+			{
+				bindingFlags = bindingFlags | BindingFlags.DeclaredOnly;
+			}
 
 			MethodInfo[] methods = type.GetMethods(bindingFlags);
 
@@ -1591,11 +1616,16 @@ namespace NDoc.Core
 
 		private void WriteOperators(XmlWriter writer, Type type)
 		{
-			const BindingFlags bindingFlags =
+			BindingFlags bindingFlags =
 					  BindingFlags.Instance |
 					  BindingFlags.Static |
 					  BindingFlags.Public |
 					  BindingFlags.NonPublic;
+
+			if (!MyConfig.DocumentInheritedMembers)
+			{
+				bindingFlags = bindingFlags | BindingFlags.DeclaredOnly;
+			}
 
 			MethodInfo[] methods = type.GetMethods(bindingFlags);
 			foreach (MethodInfo method in methods)
@@ -1613,11 +1643,19 @@ namespace NDoc.Core
 
 		private void WriteEvents(XmlWriter writer, Type type)
 		{
-			foreach (EventInfo eventInfo in type.GetEvents(
-				BindingFlags.Instance 
-				| BindingFlags.Static
-				| BindingFlags.Public
-				| BindingFlags.NonPublic))
+			BindingFlags bindingFlags =
+					  BindingFlags.Instance |
+					  BindingFlags.Static |
+					  BindingFlags.Public |
+					  BindingFlags.NonPublic;
+
+			if (!MyConfig.DocumentInheritedMembers)
+			{
+				bindingFlags = bindingFlags | BindingFlags.DeclaredOnly;
+			}
+
+			EventInfo[] events = type.GetEvents(bindingFlags);
+			foreach (EventInfo eventInfo in events)
 			{
 				MethodInfo addMethod = eventInfo.GetAddMethod(true);
 
