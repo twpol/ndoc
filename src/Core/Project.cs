@@ -404,9 +404,9 @@ namespace NDoc.Core
 		/// <summary>Reads an NDoc project file.</summary>
 		public void Read(string filename)
 		{
-			_projectFile = Path.GetFullPath(filename);
-
 			Clear();
+
+			_projectFile = Path.GetFullPath(filename);
 
 			XmlTextReader reader = null;
 
