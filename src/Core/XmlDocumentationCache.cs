@@ -27,6 +27,8 @@ using System.IO;
 using System.Collections;
 using System.Xml;
 using System.Reflection;
+using Microsoft.Win32;
+using System.Diagnostics;
 
 namespace NDoc.Core
 {
@@ -78,7 +80,7 @@ namespace NDoc.Core
 
 								if (File.Exists(infoPath))
 								{
-									System.Diagnostics.Debug.WriteLine("Loading __AssemblyInfo__.ini.");
+									Debug.WriteLine("Loading __AssemblyInfo__.ini.");
 									TextReader reader = new StreamReader(infoPath);
 									string line;
 									try
@@ -99,9 +101,20 @@ namespace NDoc.Core
 								}
 							}
 
+							// If still not found, try locating the assembly in the Framework folder
+							if (docPath == null )
+							{
+								string frameworkPath = this.GetDotnetFrameworkPath(FileVersionInfo.GetVersionInfo(assemblyPath));
+
+								if (frameworkPath != null)
+								{
+									docPath = Path.Combine(frameworkPath, a.GetName().Name + ".xml");
+								}
+							}
+
 							if ((docPath != null) && (File.Exists(docPath)))
 							{
-								System.Diagnostics.Debug.WriteLine("Loading XML Doc for " + type.Assembly.FullName);
+								Debug.WriteLine("Loading XML Doc for " + type.Assembly.FullName);
 								doc = new XmlDocument();
 								doc.Load(docPath);
 							}
@@ -111,7 +124,7 @@ namespace NDoc.Core
 					//if the doc was still not found, create an empty document
 					if (doc == null)
 					{
-						System.Diagnostics.Debug.WriteLine("XML Doc not found for " + type.Name);
+						Debug.WriteLine("XML Doc not found for " + type.Name);
 						doc = new XmlDocument();
 					}
 
@@ -165,7 +178,7 @@ namespace NDoc.Core
 				//if the node was not found, create an empty one
 				if (summary == null)
 				{
-					System.Diagnostics.Debug.WriteLine("Summary node not found for " + key);
+					Debug.WriteLine("Summary node not found for " + key);
 					summary = new XmlDocument();
 				}
 
@@ -173,6 +186,28 @@ namespace NDoc.Core
 				summaries.Add(key, summary);
 			}
 			return summary;
+		}
+
+		private string GetDotnetFrameworkPath(FileVersionInfo version)
+		{
+			using (RegistryKey regKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\.NETFramework"))
+			{
+				if (regKey == null)
+					return null;
+
+				string installRoot = regKey.GetValue("InstallRoot") as string;
+
+				if (installRoot == null)
+					return null;
+
+				string stringVersion = string.Format(
+					"v{0}.{1}.{2}", 
+					version.FileMajorPart, 
+					version.FileMinorPart, 
+					version.FileBuildPart);
+
+				return Path.Combine(installRoot, stringVersion);
+			}
 		}
 	}
 }
