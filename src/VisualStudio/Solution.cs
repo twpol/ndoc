@@ -78,7 +78,12 @@ namespace NDoc.VisualStudio
 			using (reader = new StreamReader(path))
 			{
 				string line = reader.ReadLine();
-				if (!line.StartsWith("Microsoft Visual Studio Solution File"))
+				while (line!=null && line.Length==0)
+				{
+					line = reader.ReadLine();
+				}
+
+				if (line==null || !line.StartsWith("Microsoft Visual Studio Solution File"))
 				{
 					throw new ApplicationException("This is not a Microsoft Visual Studio Solution file.");
 				}
@@ -176,18 +181,21 @@ namespace NDoc.VisualStudio
 		{			
 			//string pattern = @"^Project\(""(?<unknown>\S+)""\) = ""(?<name>\S+)"", ""(?<path>\S+)"", ""(?<id>\S+)""";
 			// fix for bug 887476 
-			string pattern = @"^Project\(""(?<unknown>.*?)""\) = ""(?<name>.*?)"", ""(?<path>.*?)"", ""(?<id>.*?)""";
+			string pattern = @"^Project\(""(?<projecttype>.*?)""\) = ""(?<name>.*?)"", ""(?<path>.*?)"", ""(?<id>.*?)""";
 			Regex regex = new Regex(pattern);
 			Match match = regex.Match(projectLine);
 		
 			if (match.Success)
 			{
-				string unknown = match.Groups["unknown"].Value;
+				string projectTypeGUID = match.Groups["projecttype"].Value;
 				string name = match.Groups["name"].Value;
 				string path = match.Groups["path"].Value;
 				string id = match.Groups["id"].Value;
 
-				if ((!path.StartsWith("http://")) && (Path.GetExtension(path) != ".vdproj"))
+				//we check the GUID as this tells us what type of VS project to process
+				//this ensures that it a standard project type, and not an third-party one,
+				//which might have a completely differant structure that we could not handle!
+				if (projectTypeGUID=="{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") //C# project
 				{
 					Project project = new Project(this, new Guid(id), name);
 					string absoluteProjectPath = Path.Combine(_directory, path);
