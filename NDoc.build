@@ -121,10 +121,22 @@
 	<!-- Target for compiling all runtime configurations in the current build configuration -->
 	<target name="compile-build" description="Compile current build configurations for all runtime configurations">
 		<echo message="Compiling all runtime configurations for the ${current.build.config} build configuration." />
+		<!-- build .NET Framework 1.0 version if both Framework and SDK are available -->
 		<available type="Framework" resource="net-1.0" property="temp.framework.available" />
 		<if propertytrue="temp.framework.available">
-			<call target="set-net-1.0-runtime-configuration" force="true" />
-			<call target="compile" force="true" />
+			<available type="FrameworkSDK" resource="net-1.0" property="temp.frameworksdk.available" />
+			<if propertytrue="temp.frameworksdk.available">
+				<call target="set-net-1.0-runtime-configuration" force="true" />
+				<call target="compile" force="true" />
+			</if>
+			<ifnot propertytrue="temp.frameworksdk.available">
+				<if propertyexists="project.build.package" propertytrue="project.build.package">
+					<fail message="The .NET Framework SDK 1.0 is not available." />
+				</if>
+				<ifnot propertyexists="project.build.package" propertytrue="project.build.package">
+					<echo message="The .NET Framework SDK 1.0 is not available. Build skipped." />
+				</ifnot>
+			</ifnot>
 		</if>
 		<ifnot propertytrue="temp.framework.available">
 			<if propertyexists="project.build.package" propertytrue="project.build.package">
@@ -134,10 +146,23 @@
 				<echo message="The .NET Framework 1.0 is not available. Build skipped." />
 			</ifnot>
 		</ifnot>
+		
+		<!-- build .NET Framework 1.0 version if both Framework and SDK are available -->
 		<available type="Framework" resource="net-1.1" property="temp.framework.available" />
 		<if propertytrue="temp.framework.available">
-			<call target="set-net-1.1-runtime-configuration" force="true" />
-			<call target="compile" force="true" />
+			<available type="FrameworkSDK" resource="net-1.1" property="temp.frameworksdk.available" />
+			<if propertytrue="temp.frameworksdk.available">
+				<call target="set-net-1.1-runtime-configuration" force="true" />
+				<call target="compile" force="true" />
+			</if>
+			<ifnot propertytrue="temp.frameworksdk.available">
+				<if propertyexists="project.build.package" propertytrue="project.build.package">
+					<fail message="The .NET Framework SDK 1.1 is not available." />
+				</if>
+				<ifnot propertyexists="project.build.package" propertytrue="project.build.package">
+					<echo message="The .NET Framework SDK 1.1 is not available. Build skipped." />
+				</ifnot>
+			</ifnot>
 		</if>
 		<ifnot propertytrue="temp.framework.available">
 			<if propertyexists="project.build.package" propertytrue="project.build.package">
@@ -147,10 +172,22 @@
 				<echo message="The .NET Framework 1.1 is not available. Build skipped." />
 			</ifnot>
 		</ifnot>
+		<!-- build Mono 1.0 version if both Framework and SDK are available -->
 		<available type="Framework" resource="mono-1.0" property="temp.framework.available" />
 		<if propertytrue="temp.framework.available">
-			<call target="set-mono-1.0-runtime-configuration" force="true" />
-			<call target="compile" force="true" />
+			<available type="FrameworkSDK" resource="mono-1.0" property="temp.frameworksdk.available" />
+			<if propertytrue="temp.frameworksdk.available">
+				<call target="set-mono-1.0-runtime-configuration" force="true" />
+				<call target="compile" force="true" />
+			</if>
+			<ifnot propertytrue="temp.frameworksdk.available">
+				<if propertyexists="project.build.package" propertytrue="project.build.package">
+					<fail message="The Mono SDK 1.0 is not available." />
+				</if>
+				<ifnot propertyexists="project.build.package" propertytrue="project.build.package">
+					<echo message="The Mono SDK 1.0 is not available. Build skipped." />
+				</ifnot>
+			</ifnot>
 		</if>
 		<ifnot propertytrue="temp.framework.available">
 			<if propertyexists="project.build.package" propertytrue="project.build.package">
