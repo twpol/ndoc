@@ -16,7 +16,7 @@
                 DefaultTargetSchema = "IE50"
                 DelaySign = "false"
                 OutputType = "WinExe"
-                PreBuildEvent = 'if $(ConfigurationName)==Release copy "$(SolutionDir)src\ndoc.snk" "$(ProjectDir)obj\$(ConfigurationName)"'
+                PreBuildEvent = 'if $(ConfigurationName)==Release copy "$(SolutionDir)ndoc.snk" "$(ProjectDir)obj\$(ConfigurationName)"'
                 PostBuildEvent = 'copy "$(ProjectDir)$(TargetFileName).manifest" "$(TargetDir)"'
                 RootNamespace = "NDoc.Gui"
                 RunPostBuildEvent = "OnBuildSuccess"
