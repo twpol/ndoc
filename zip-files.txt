@@ -2,6 +2,7 @@ readme.txt
 copying.txt
 examples\
 src\NDoc.sln
+src\ndoc.build
 src\Addins\NDocBuild\
 src\Addins\NDocBuild\NDocBuildSetup\
 src\Console\

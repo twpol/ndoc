@@ -92,15 +92,14 @@ Global
 		{8844E0D9-FCA0-419D-9168-BCD420B38378}.Release.ActiveCfg = Release|.NET
 		{8844E0D9-FCA0-419D-9168-BCD420B38378}.Release.Build.0 = Release|.NET
 		{6244333B-BF87-4F04-B2DE-56AB9A53B65A}.Debug.ActiveCfg = Debug|.NET
-		{6244333B-BF87-4F04-B2DE-56AB9A53B65A}.Debug.Build.0 = Debug|.NET
 		{6244333B-BF87-4F04-B2DE-56AB9A53B65A}.Release.ActiveCfg = Release|.NET
-		{6244333B-BF87-4F04-B2DE-56AB9A53B65A}.Release.Build.0 = Release|.NET
 		{2929DFA6-FFCF-4110-B8B5-3005A087B58A}.Debug.ActiveCfg = Debug|.NET
 		{2929DFA6-FFCF-4110-B8B5-3005A087B58A}.Debug.Build.0 = Debug|.NET
 		{2929DFA6-FFCF-4110-B8B5-3005A087B58A}.Release.ActiveCfg = Release|.NET
 		{2929DFA6-FFCF-4110-B8B5-3005A087B58A}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
+		ndoc.build = ndoc.build
 		Help\tags.html = Help\tags.html
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
