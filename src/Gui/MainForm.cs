@@ -577,7 +577,7 @@ namespace NDoc.Gui
 			// 
 			this.addButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.addButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.addButton.Location = new System.Drawing.Point(413, 24);
+			this.addButton.Location = new System.Drawing.Point(408, 18);
 			this.addButton.Name = "addButton";
 			this.addButton.TabIndex = 14;
 			this.addButton.Text = "Add";
@@ -646,7 +646,7 @@ namespace NDoc.Gui
 			this.editButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.editButton.Enabled = false;
 			this.editButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.editButton.Location = new System.Drawing.Point(413, 56);
+			this.editButton.Location = new System.Drawing.Point(408, 50);
 			this.editButton.Name = "editButton";
 			this.editButton.TabIndex = 15;
 			this.editButton.Text = "Edit";
@@ -656,7 +656,7 @@ namespace NDoc.Gui
 			// 
 			this.namespaceSummariesButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.namespaceSummariesButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.namespaceSummariesButton.Location = new System.Drawing.Point(413, 120);
+			this.namespaceSummariesButton.Location = new System.Drawing.Point(408, 114);
 			this.namespaceSummariesButton.Name = "namespaceSummariesButton";
 			this.namespaceSummariesButton.Size = new System.Drawing.Size(75, 32);
 			this.namespaceSummariesButton.TabIndex = 17;
@@ -702,7 +702,7 @@ namespace NDoc.Gui
 			this.deleteButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.deleteButton.Enabled = false;
 			this.deleteButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.deleteButton.Location = new System.Drawing.Point(413, 88);
+			this.deleteButton.Location = new System.Drawing.Point(408, 82);
 			this.deleteButton.Name = "deleteButton";
 			this.deleteButton.TabIndex = 16;
 			this.deleteButton.Text = "Remove";
@@ -1733,6 +1733,14 @@ namespace NDoc.Gui
 				{
 					string msg = string.Format(
 						"Unable to load types from {0}.\nIs {1} missing a dependency?", 
+						form.AssemblyFilename, Path.GetFileName(form.AssemblyFilename));
+					ErrorForm errorForm = new ErrorForm(msg, ex);
+					errorForm.ShowDialog(this);
+				}
+				catch(BadImageFormatException ex)
+				{
+					string msg = string.Format(
+						"Unable to load the file {0}.\n{1} doesn't appear to be a managed assembly.", 
 						form.AssemblyFilename, Path.GetFileName(form.AssemblyFilename));
 					ErrorForm errorForm = new ErrorForm(msg, ex);
 					errorForm.ShowDialog(this);
