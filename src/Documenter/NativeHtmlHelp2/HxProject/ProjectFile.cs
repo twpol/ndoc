@@ -23,16 +23,16 @@ using System.Xml;
 namespace NDoc.Documenter.NativeHtmlHelp2.HxProject
 {
 	/// <summary>
-	/// Summary description for HxProject.
+	/// Represents the contents of an Html Help 2 HxC project file
 	/// </summary>
 	public class ProjectFile : HxFile
 	{
 		/// <summary>
-		/// 
+		/// Creates a new instance of a ProjectFile based on a templae
 		/// </summary>
-		/// <param name="templateFile"></param>
-		/// <param name="name"></param>
-		/// <returns></returns>
+		/// <param name="templateFile">The path to the template</param>
+		/// <param name="name">The name of the new file</param>
+		/// <returns>A new project file</returns>
 		public static ProjectFile CreateFrom( string templateFile, string name )
 		{
 			if ( !File.Exists( templateFile ) )
@@ -50,55 +50,77 @@ namespace NDoc.Documenter.NativeHtmlHelp2.HxProject
 			return new ProjectFile( name, doc.DocumentElement );
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="name"></param>
-		/// <param name="node"></param>
+
 		private ProjectFile( string name, XmlNode node ) : base( name, node )
 		{
 
 		}
 
+		/// <summary>
+		/// <see cref="HxFile"/>.
+		/// </summary>
 		public override  string FileName{ get{ return Name + ".HxC"; } }
 
-
+		/// <summary>
+		/// The project title
+		/// </summary>
 		public string Title
 		{
 			get{ return GetProperty( "@Title" ); }
 			set{ SetProperty( "@Title", value ); }
 		}
+		/// <summary>
+		/// Language identifier for the project
+		/// </summary>
 		public int LangId
 		{
 			get{ return int.Parse( GetProperty( "@LangId" ) ); }
 			set{ SetProperty( "@LangId", value ); }
 		}
+		/// <summary>
+		/// Copyright text for the project
+		/// </summary>
 		public string Copyright
 		{
 			get{ return GetProperty( "@Copyright" ); }
 			set{ SetProperty( "@Copyright", value ); }
 		}
+		/// <summary>
+		/// Help project version
+		/// </summary>
 		public string FileVersion
 		{
 			get{ return GetProperty( "@FileVersion" ); }
 			set{ SetProperty( "@FileVersion", value ); }
 		}
+		/// <summary>
+		/// When true builds both an HxI and an HxS file. Otherwise the index is compiled into the HxS
+		/// </summary>
 		public bool BuildSeperateIndexFile
 		{
 			get{ return GetProperty( "CompilerOptions/@CompileResult" ) == "HxiHxs"; }
 			set{ SetProperty( "CompilerOptions/@CompileResult", value ? "HxiHxs" : "Hxs" ); }
 		}
-
+		/// <summary>
+		/// Indicates whether to creare a full text index while compiling the porject
+		/// </summary>
 		public bool CreateFullTextIndex
 		{
 			get{ return GetProperty( "CompilerOptions/@CreateFullTextIndex" ) == "Yes"; }
 			set{ SetProperty( "CompilerOptions/@CreateFullTextIndex", value ? "Yes" : "No" ); }
 		}
+		/// <summary>
+		/// The name of the stop word list to include in the project. A stop word list
+		/// is a list of common words that will be ignored during full text searching
+		/// </summary>
 		public string StopWordFile
 		{
 			get{ return GetProperty( "CompilerOptions/@StopWordFile" ); }
 			set{ SetProperty( "CompilerOptions/@StopWordFile", value ); }
 		}
+		/// <summary>
+		/// The name of the table fo contents file for the project
+		/// </summary>
 		public string TOCFile
 		{
 			get{ return GetProperty( "TOCDef/@File" ); }

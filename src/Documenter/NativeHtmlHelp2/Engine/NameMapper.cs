@@ -39,7 +39,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 	};
 
 	/// <summary>
-	/// Summary description for NameMapper.
+	/// Provides methods for mapping type name to file names
 	/// </summary>
 	public class NameMapper
 	{
@@ -58,7 +58,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		}
 
 		/// <summary>
-		/// 
+		/// The collection of lower class type names
 		/// </summary>
 		public static Hashtable LowerCaseTypeNames
 		{

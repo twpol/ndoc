@@ -25,7 +25,7 @@ using System.Diagnostics;
 namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 {
 	/// <summary>
-	/// Summary description for StyleSheetCollection.
+	/// The collection of xslt stylesheets used to generate the Html
 	/// </summary>
 	public class StyleSheetCollection : DictionaryBase
 	{

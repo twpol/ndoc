@@ -22,17 +22,17 @@ using System.Xml;
 namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 {
 	/// <summary>
-	/// Summary description for MethodHelper.
+	/// Helper functions to get information about a method
 	/// </summary>
 	public class MethodHelper
 	{
 		/// <summary>
 		/// Determines if an overload exists
 		/// </summary>
-		/// <param name="methodNodes"></param>
+		/// <param name="methodNodes">The list of methods</param>
 		/// <param name="indexes"></param>
 		/// <param name="index"></param>
-		/// <returns></returns>
+		/// <returns>True if no overload exists</returns>
 		public static bool IsMethodAlone(XmlNodeList methodNodes, int[] indexes, int index)
 		{
 			string name = methodNodes[indexes[index]].Attributes["name"].Value;
@@ -47,7 +47,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		}
 
 		/// <summary>
-		/// 
+		/// Determines if a method is the first overload
 		/// </summary>
 		/// <param name="methodNodes"></param>
 		/// <param name="indexes"></param>
@@ -65,7 +65,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		}
 
 		/// <summary>
-		/// 
+		/// Determines if a method is the alst overload
 		/// </summary>
 		/// <param name="methodNodes"></param>
 		/// <param name="indexes"></param>
@@ -91,7 +91,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns></returns>
 		public static string GetPreviousMethodName(XmlNodeList methodNodes, int[] indexes, int index)
 		{
-			while (--index >= 0)
+			while ( --index >= 0 )
 			{
 				if (methodNodes[indexes[index]].Attributes["declaringType"] == null)
 					return methodNodes[indexes[index]].Attributes["name"].Value;
@@ -131,10 +131,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			{
 				paramList += StripNamespace(parameterNode.Attributes["type"].Value);
 
-				if (nodeIndex < numberOfNodes)
-				{
-					paramList += ", ";
-				}
+				if (nodeIndex < numberOfNodes)				
+					paramList += ", ";				
 
 				nodeIndex++;
 			}
@@ -145,10 +143,10 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		}
 
 		/// <summary>
-		/// 
+		/// Determines a human readable name for an operator method
 		/// </summary>
-		/// <param name="operatorNode"></param>
-		/// <returns></returns>
+		/// <param name="operatorNode">The operator Xml</param>
+		/// <returns>Operator name</returns>
 		public static string GetOperatorName( XmlNode operatorNode )
 		{
 			string name = operatorNode.Attributes["name"].Value;
@@ -218,7 +216,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			}
 		}
 
-
 		private static string StripNamespace(string name)
 		{
 			string result = name;
@@ -232,7 +229,5 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 
 			return result;
 		}
-
-
 	}
 }

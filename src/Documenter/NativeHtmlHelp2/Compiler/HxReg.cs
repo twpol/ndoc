@@ -24,7 +24,7 @@ using System.Diagnostics;
 namespace NDoc.Documenter.NativeHtmlHelp2.Compiler
 {
 	/// <summary>
-	/// Wraps the HxReg.exe registry component
+	/// Wraps the HxReg.exe help registry component
 	/// </summary>
 	public class HxReg : HxObject
 	{

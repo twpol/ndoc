@@ -162,7 +162,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Compiler
 
 			void IHxCompError.ReportMessage( HxCompErrorSeverity Severity , String DescriptionString )
 			{
-				Trace.WriteLine( String.Format( "HxComp [{0}]: {1}", Severity, DescriptionString ) );
+				Trace.WriteLine( String.Format( "{0}: {1}", Severity, DescriptionString ) );
 				_logFile.WriteLine( String.Format( "{0}: {1}", Severity, DescriptionString ) );
 
 				//If enough non-fatal errors accumulate (more than half of the topics

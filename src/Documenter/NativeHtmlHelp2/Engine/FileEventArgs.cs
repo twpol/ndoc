@@ -21,21 +21,20 @@ using System;
 namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 {
 	/// <summary>
-	/// Summary description for FileEventArgs.
+	/// EventArgs calss used by the HtmlFactory calss when new files are being added
 	/// </summary>
 	public class FileEventArgs : EventArgs
 	{
 
 		/// <summary>
-		/// 
+		/// The name of the file being added or inserted
 		/// </summary>
 		public readonly string File;
 
 		/// <summary>
-		/// 
+		/// Creates a new instnace of a FileEventArgs class
 		/// </summary>
-		/// <param name="title"></param>
-		/// <param name="file"></param>
+		/// <param name="file">The name of the file being added or inserted</param>
 		public FileEventArgs( string file )
 		{
 			File = file;

@@ -63,6 +63,9 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Compiler
 
 
 		private static bool HxCompFound = false;
+		/// <summary>
+		/// Determines if the Html Help 2 compiler was found
+		/// </summary>
 		public static bool HxCompIsInstalled
 		{
 			get
@@ -72,6 +75,9 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Compiler
 		}
 
 		private static string _HtmlHelp2CompilerPath; 
+		/// <summary>
+		/// Returns the path to the Html Help 2 compiler
+		/// </summary>
 		protected static string HtmlHelp2CompilerPath
 		{
 			get

@@ -6,7 +6,7 @@ using NDoc.Documenter.NativeHtmlHelp2.Engine;
 namespace NDoc.Documenter.NativeHtmlHelp2
 {
 	/// <summary>
-	/// Summary description for TOCBuilder.
+	/// Orchestrates building the tabel of contents file base on HTMLFactory events
 	/// </summary>
 	public class TOCBuilder : IDisposable
 	{
@@ -14,6 +14,11 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 
 		private HtmlFactory factory = null;
 
+		/// <summary>
+		/// Contruct a enw instance of the TOCBuilder class
+		/// </summary>
+		/// <param name="_toc">The table of contents file to write to</param>
+		/// <param name="_factory">The HTMLFactory creating each file to be added</param>
 		public TOCBuilder( TOCFile _toc, HtmlFactory _factory )
 		{
 			if ( _toc == null )
@@ -34,6 +39,9 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			factory.AddFileToTopic += new FileEventHandler(factory_AddFileToTopic);
 		}
 
+		/// <summary>
+		/// Finalizer
+		/// </summary>
 		~TOCBuilder()
 		{
 			Dispose( false );
@@ -58,12 +66,19 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			toc.InsertNode( "/html/" + args.File );
 		}
 
+		/// <summary>
+		/// Disposes the TOCBuilder instance
+		/// </summary>
 		public void Dispose()
 		{
 			Dispose( true );
 			GC.SuppressFinalize( this );
 		}
 
+		/// <summary>
+		/// Disposes teh TOCBuilder instance
+		/// </summary>
+		/// <param name="disposing">Was this method called from the Dispsose() method</param>
 		protected virtual void Dispose( bool disposing )
 		{
 			if ( disposing )

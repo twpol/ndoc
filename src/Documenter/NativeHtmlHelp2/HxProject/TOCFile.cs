@@ -32,11 +32,11 @@ namespace NDoc.Documenter.NativeHtmlHelp2.HxProject
 	{
 
 		/// <summary>
-		/// 
+		/// Creates a new instance of a TOCFile based on a templae
 		/// </summary>
-		/// <param name="templateFile"></param>
-		/// <param name="name"></param>
-		/// <returns></returns>
+		/// <param name="templateFile">The path to the template</param>
+		/// <param name="name">The name of the new file</param>
+		/// <returns>A new toc file</returns>
 		public static TOCFile CreateFrom( string templateFile, string name )
 		{
 			if ( !File.Exists( templateFile ) )
@@ -57,18 +57,20 @@ namespace NDoc.Documenter.NativeHtmlHelp2.HxProject
 		private XmlTextWriter xmlWriter = null;
 		private StringWriter stringWriter = null;
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="name"></param>
-		/// <param name="node"></param>
+
 		private TOCFile( string name, XmlNode node ) : base( name, node )
 		{
 
 		}
 
+		/// <summary>
+		/// <see cref="HxFile"/>.
+		/// </summary>
 		public override string FileName{ get{ return Name + ".HxT"; } }
 
+		/// <summary>
+		/// Opens the tables of contents for writing
+		/// </summary>
 		public void Open()
 		{
 			Debug.Assert( xmlWriter == null );
@@ -79,23 +81,37 @@ namespace NDoc.Documenter.NativeHtmlHelp2.HxProject
 			xmlWriter.WriteStartElement( "tmp" );
 		}
 
+		/// <summary>
+		/// Starts a new node at the current context
+		/// </summary>
+		/// <param name="url">Url associated with the new node</param>
 		public void OpenNode( string url )
 		{
 			xmlWriter.WriteStartElement( "HelpTOCNode" );
 			xmlWriter.WriteAttributeString( "", "Url", "", url );
 		}
 
+		/// <summary>
+		/// Inserts a new node into the current context without starting a new context
+		/// </summary>
+		/// <param name="url">Url associated with the new node</param>
 		public void InsertNode( string url )
 		{
 			OpenNode( url );
 			CloseNode();
 		}
 
+		/// <summary>
+		/// Closes the current context
+		/// </summary>
 		public void CloseNode()
 		{
 			xmlWriter.WriteFullEndElement();
 		}
 
+		/// <summary>
+		/// Closes the table of contents and saves the file
+		/// </summary>
 		public void Close()
 		{
 			Debug.Assert( xmlWriter != null );

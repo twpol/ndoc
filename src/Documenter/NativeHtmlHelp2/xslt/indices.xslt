@@ -45,21 +45,102 @@
 		<MSHelp:RLTitle Title="{$title}"/>
 	</xsl:template>
 		
-	<!--
-	<xsl:template match="field | property | method | event" mode="MSHelpTitle">
-		<xsl:param name="title" />
-		<xsl:param name="page-type"/>	
-
-		<MSHelp:TOCTitle Title="{concat( @name, ' ', $page-type )}"/>	
-		<MSHelp:RLTitle Title="{$title}"/>			
-	</xsl:template>
-	-->
-	
 	<xsl:template match="operator" mode="MSHelpTitle">
 		<xsl:param name="title" />
 		<xsl:param name="page-type"/>	
 		<MSHelp:TOCTitle Title="{$page-type}"/>	
 		<MSHelp:RLTitle Title="{$title}"/>
+	</xsl:template>
+		
+	<xsl:template name="filename-to-aindex">
+		<xsl:param name="filename"/>
+		<xsl:value-of select="concat( 'ndoc', translate( substring-before( $filename, '.html' ), '.', '' ) )"/>
+	</xsl:template>
+	
+	<xsl:template match="ndoc" mode="AIndex">
+		<xsl:variable name="filename">
+			<xsl:call-template name="get-filename-for-namespace">
+				<xsl:with-param name="name" select="$namespace"/>
+			</xsl:call-template>
+		</xsl:variable>	
+		<xsl:call-template name="add-a-index">
+			<xsl:with-param name="filename" select="$filename"/>
+		</xsl:call-template>		
+	</xsl:template>
+	<xsl:template match="ndoc" mode="AIndex-hierarchy">
+		<xsl:variable name="filename">
+			<xsl:call-template name="get-filename-for-current-namespace-hierarchy">
+				<xsl:with-param name="id" select="@id"/>
+			</xsl:call-template>
+		</xsl:variable>	
+		<xsl:call-template name="add-a-index">
+			<xsl:with-param name="filename" select="$filename"/>
+		</xsl:call-template>		
+	</xsl:template>
+	<xsl:template match="enumeration | delegate" mode="AIndex">
+		<xsl:variable name="filename">
+			<xsl:call-template name="get-filename-for-type">
+				<xsl:with-param name="id" select="@id"/>
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:call-template name="add-a-index">
+			<xsl:with-param name="filename" select="$filename"/>
+		</xsl:call-template>
+	</xsl:template>
+	<xsl:template match="property" mode="AIndex">
+		<xsl:variable name="filename">
+			<xsl:call-template name="get-filename-for-property"/>
+		</xsl:variable>
+		<xsl:call-template name="add-a-index">
+			<xsl:with-param name="filename" select="$filename"/>
+		</xsl:call-template>
+	</xsl:template>
+	<xsl:template match="event" mode="AIndex">
+		<xsl:variable name="filename">
+			<xsl:call-template name="get-filename-for-event"/>
+		</xsl:variable>
+		<xsl:call-template name="add-a-index">
+			<xsl:with-param name="filename" select="$filename"/>
+		</xsl:call-template>
+	</xsl:template>
+	<xsl:template match="field" mode="AIndex">
+		<xsl:variable name="filename">
+			<xsl:call-template name="get-filename-for-field"/>
+		</xsl:variable>
+		<xsl:call-template name="add-a-index">
+			<xsl:with-param name="filename" select="$filename"/>
+		</xsl:call-template>
+	</xsl:template>
+	<xsl:template match="method" mode="AIndex">
+		<xsl:param name="overload-page"/>
+		<xsl:variable name="filename">
+			<xsl:choose>
+				<xsl:when test="$overload-page=true()">
+					<!-- need to deal with inherited overloads -->
+					<xsl:call-template name="get-filename-for-current-method-overloads"/>								
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:call-template name="get-filename-for-method"/>				
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:call-template name="add-a-index">
+			<xsl:with-param name="filename" select="$filename"/>
+		</xsl:call-template>
+	</xsl:template>
+				
+	<xsl:template name="add-a-index">
+		<xsl:param name="filename"/>
+		
+		<xsl:variable name="aindex">
+			<xsl:call-template name="filename-to-aindex">
+				<xsl:with-param name="filename" select="$filename"/>
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:call-template name="add-index-term">
+			<xsl:with-param name="index">A</xsl:with-param>
+			<xsl:with-param name="term" select="$aindex"/>
+		</xsl:call-template>		
 	</xsl:template>
 		
 		
@@ -74,14 +155,14 @@
 	<xsl:template match="delegate" mode="FIndex">
 		<xsl:call-template name="add-index-term">
 			<xsl:with-param name="index">F</xsl:with-param>
-			<xsl:with-param name="term" select="substring-after( @id, ':')"/>
+			<xsl:with-param name="term" select="substring-after( @id, ':' )"/>
 		</xsl:call-template>
 	</xsl:template>	
 
 	<xsl:template match="enumeration" mode="FIndex">
 		<xsl:call-template name="add-index-term">
 			<xsl:with-param name="index">F</xsl:with-param>
-			<xsl:with-param name="term" select="substring-after( @id, ':')"/>
+			<xsl:with-param name="term" select="substring-after( @id, ':' )"/>
 		</xsl:call-template>
 		<xsl:apply-templates select="field" mode="FIndex"/>
 	</xsl:template>	

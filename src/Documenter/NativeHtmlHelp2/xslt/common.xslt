@@ -701,20 +701,30 @@
 					<xsl:with-param name="overload-page" select="$overload-page"/>
 				</xsl:apply-templates>
 				
-				<xsl:if test="$page-type!='hierarchy'">
-					<xsl:apply-templates select="." mode="KIndex">
-						<xsl:with-param name="title" select="$title"/>
-						<xsl:with-param name="page-type" select="$page-type"/>		
-						<xsl:with-param name="overload-page" select="$overload-page"/>				
-					</xsl:apply-templates>
+				<xsl:choose>
+					<xsl:when test="$page-type!='hierarchy'">
+						<xsl:apply-templates select="." mode="KIndex">
+							<xsl:with-param name="title" select="$title"/>
+							<xsl:with-param name="page-type" select="$page-type"/>		
+							<xsl:with-param name="overload-page" select="$overload-page"/>				
+						</xsl:apply-templates>
+						
+						<xsl:apply-templates select="." mode="FIndex">
+							<xsl:with-param name="title" select="$title"/>
+							<xsl:with-param name="page-type" select="$page-type"/>
+							<xsl:with-param name="overload-page" select="$overload-page"/>
+						</xsl:apply-templates>
+						
+						<xsl:apply-templates select="." mode="AIndex">
+							<xsl:with-param name="overload-page" select="$overload-page"/>				
+						</xsl:apply-templates>
+					</xsl:when>
 					
-					<xsl:apply-templates select="." mode="FIndex">
-						<xsl:with-param name="title" select="$title"/>
-						<xsl:with-param name="page-type" select="$page-type"/>
-						<xsl:with-param name="overload-page" select="$overload-page"/>
-					</xsl:apply-templates>
-				</xsl:if>
-				<!--<xsl:apply-templates select="." mode="AIndex"/>-->
+					<xsl:otherwise>
+						<xsl:apply-templates select="ndoc" mode="AIndex-hierarchy"/>		
+					</xsl:otherwise>
+				</xsl:choose>
+				
 				<MSHelp:Attr Name="DocSet" Value="NETFramework"/>
 				<MSHelp:Attr Name="TopicType" Value="kbSyntax"/>
 				<MSHelp:Attr Name="DevLang" Value="CSharp"/>
@@ -961,6 +971,10 @@
 						</li>
 					</xsl:for-each>
 				</ul>
+				<p>
+					<b class="le">Platforms: </b>
+					<xsl:text>Windows 98, Windows NT 4.0, Windows Millennium Edition, Windows 2000, Windows XP Home Edition, Windows XP Professional, Windows Server 2003 family, .NET Compact Framework - Windows CE .NET</xsl:text>
+				</p>				
 			</p>
 		</xsl:if>
 	</xsl:template>

@@ -33,7 +33,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 	public delegate void FileEventHandler( object sender, FileEventArgs args );
 
 	/// <summary>
-	/// Summary description for HtmlFactory.
+	/// The Html factory orchestrates the transformation of the NDoc Xml into the
+	/// set of Html files that will be compiled into the help project
 	/// </summary>
 	public class HtmlFactory
 	{
@@ -53,10 +54,13 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <summary>
 		/// Constructs a new instance of HtmlFactory
 		/// </summary>
-		/// <param name="outputDirectory"></param>
-		/// <param name="htmlProvider"></param>
+		/// <param name="outputDirectory">The directory to write the Html files to</param>
+		/// <param name="htmlProvider">Object the provides additional Html content</param>
 		public HtmlFactory( string outputDirectory, ExternalHtmlProvider htmlProvider )
 		{			
+			if ( !Directory.Exists( outputDirectory ) )
+				throw new Exception( string.Format( "The output directory {0}, does not exist", outputDirectory ) );
+
 			documentedNamespaces = new ArrayList();
 			_outputDirectory = outputDirectory;
 
@@ -112,7 +116,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <summary>
 		/// loads and compiles all the stylesheets
 		/// </summary>
-		/// <param name="resourceDirectory"></param>
+		/// <param name="resourceDirectory">The location of the xslt files</param>
 		public void LoadStylesheets( string resourceDirectory )
 		{
 			_stylesheets = StyleSheetCollection.LoadStyleSheets( resourceDirectory );
@@ -627,7 +631,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 				OnTopicEnd();
 			}
 		}
-
 
 		private static int[] SortNodesByAttribute( XmlNodeList nodes, string attributeName )
 		{
