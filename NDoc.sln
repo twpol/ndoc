@@ -1,6 +1,8 @@
 Microsoft Visual Studio Solution File, Format Version 8.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gui", "src\Gui\Gui.csproj", "{905285AD-A830-4BEB-A243-22A26A8E9827}"
 	ProjectSection(ProjectDependencies) = postProject
+		{8282F072-D966-4075-A8DA-8911E36F4980} = {8282F072-D966-4075-A8DA-8911E36F4980}
+		{5B088ED3-EEED-4DD4-AE4C-A7E9323B634C} = {5B088ED3-EEED-4DD4-AE4C-A7E9323B634C}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "src\Core\Core.csproj", "{DBA75D67-23C9-4A78-ABC2-CF8802FDB7CA}"
@@ -35,10 +37,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinearHtml", "src\Documente
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HtmlHelp2", "src\Documenter\HtmlHelp2\HtmlHelp2.csproj", "{6244333B-BF87-4F04-B2DE-56AB9A53B65A}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Latex", "src\Documenter\Latex\Latex.csproj", "{2929DFA6-FFCF-4110-B8B5-3005A087B58A}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
@@ -48,6 +46,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NativeHtmlHelp2", "src\Docu
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UsersGuide", "src\UsersGuide\UsersGuide.vcproj", "{D250CF6D-13ED-4B69-AE7C-345D7C686B49}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtendedUI", "src\ExtendedUI\ExtendedUI.csproj", "{0E14C115-C99D-49F7-A892-3AEF74320A61}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
@@ -93,8 +95,6 @@ Global
 		{8844E0D9-FCA0-419D-9168-BCD420B38378}.Debug.Build.0 = Debug|.NET
 		{8844E0D9-FCA0-419D-9168-BCD420B38378}.Release.ActiveCfg = Release|.NET
 		{8844E0D9-FCA0-419D-9168-BCD420B38378}.Release.Build.0 = Release|.NET
-		{6244333B-BF87-4F04-B2DE-56AB9A53B65A}.Debug.ActiveCfg = Debug|.NET
-		{6244333B-BF87-4F04-B2DE-56AB9A53B65A}.Release.ActiveCfg = Release|.NET
 		{2929DFA6-FFCF-4110-B8B5-3005A087B58A}.Debug.ActiveCfg = Debug|.NET
 		{2929DFA6-FFCF-4110-B8B5-3005A087B58A}.Debug.Build.0 = Debug|.NET
 		{2929DFA6-FFCF-4110-B8B5-3005A087B58A}.Release.ActiveCfg = Release|.NET
@@ -106,6 +106,10 @@ Global
 		{D250CF6D-13ED-4B69-AE7C-345D7C686B49}.Debug.ActiveCfg = Debug|Win32
 		{D250CF6D-13ED-4B69-AE7C-345D7C686B49}.Release.ActiveCfg = Release|Win32
 		{D250CF6D-13ED-4B69-AE7C-345D7C686B49}.Release.Build.0 = Release|Win32
+		{0E14C115-C99D-49F7-A892-3AEF74320A61}.Debug.ActiveCfg = Debug|.NET
+		{0E14C115-C99D-49F7-A892-3AEF74320A61}.Debug.Build.0 = Debug|.NET
+		{0E14C115-C99D-49F7-A892-3AEF74320A61}.Release.ActiveCfg = Release|.NET
+		{0E14C115-C99D-49F7-A892-3AEF74320A61}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 		src\CommonAssemblyInfo.cs = src\CommonAssemblyInfo.cs
