@@ -5,7 +5,7 @@ using System.Reflection;
 [assembly: AssemblyTitle("NDoc MSDN Documenter")]
 [assembly: AssemblyDescription("MSDN-like documenter for the NDoc code documentation generator.")]
 
-#if (!DEBUG)
+#if (OFFICIAL_RELEASE)
 [assembly: AssemblyDelaySign(false)]
 [assembly: AssemblyKeyFile("NDoc.snk")]
 [assembly: AssemblyKeyName("")]

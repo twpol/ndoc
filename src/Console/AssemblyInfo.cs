@@ -5,7 +5,7 @@ using System.Reflection;
 [assembly: AssemblyTitle("NDoc Console")]
 [assembly: AssemblyDescription("Command-line NDoc code documentation generator.")]
 
-#if (!DEBUG)
+#if (OFFICIAL_RELEASE)
 [assembly: AssemblyDelaySign(false)]
 [assembly: AssemblyKeyFile("NDoc.snk")]
 [assembly: AssemblyKeyName("")]

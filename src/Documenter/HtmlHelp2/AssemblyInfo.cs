@@ -5,7 +5,7 @@ using System.Reflection;
 [assembly: AssemblyTitle("NDoc HTML Help 2 Documenter")]
 [assembly: AssemblyDescription("HTML Help 2.0 documenter for the NDoc code documentation generator.")]
 
-#if (!DEBUG)
+#if (OFFICIAL_RELEASE)
 [assembly: AssemblyDelaySign(false)]
 [assembly: AssemblyKeyFile("NDoc.snk")]
 [assembly: AssemblyKeyName("")]
