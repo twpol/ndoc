@@ -23,11 +23,11 @@ using System.IO;
 namespace NDoc.Core
 {
 	/// <summary>	
-	/// This class resolves references to urls that point to resources
-	/// that are stored as embedded resources in an assembly.
+	/// Resolves URLs stored as embedded resources in an assembly.
 	/// </summary> 
-	/// <remarks>It is also possible to direct the resolver to look for resouces in a disk directory. 
-	/// This is especially usefull for debugging purposes as it allows the sytlesheets to be changed 
+	/// <remarks>for debugging purposes, it is possible to direct the resolver to look for the resources in a 
+	/// disk directory rather than extracting them from the assembly. 
+	/// This is especially useful  as it allows the stylesheets to be changed 
 	/// and re-run without recompiling the assembly.</remarks>
 	public class XsltResourceResolver : XmlUrlResolver
 	{
@@ -38,7 +38,7 @@ namespace NDoc.Core
 
 
 		/// <summary>
-		/// Creates and initializes a XsltResourceResolver.
+		/// Creates a new instance of the <see cref="XsltResourceResolver"/> class.
 		/// </summary>
 		/// <param name="resourceBase">Either, the namespace of the embedded resources, or a file URI to a disk directory where the recources may be found.</param>
 		public XsltResourceResolver(string resourceBase)

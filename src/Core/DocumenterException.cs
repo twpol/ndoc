@@ -20,23 +20,23 @@ using System.Runtime.Serialization;
 
 namespace NDoc.Core
 {
-	/// <summary>Represents the exceptions that are thrown when attempting to build documentation.</summary>
+	/// <summary>Represents an exception thrown when attempting to build documentation.</summary>
 	[Serializable]
 	public class DocumenterException : ApplicationException
 	{
 
-		/// <summary>Initializes a new instance of the DocumenterException class with the specified message.</summary>
+		/// <summary>Initializes a new instance of the <see cref="DocumenterException"/> class with the specified message.</summary>
 		/// <param name="message">The message to display when the exception is thrown.</param>
 		public DocumenterException(string message) : base(message)
 		{
 		}
 
-		/// <summary>Initializes a new instance of the Exception class 
+		/// <summary>Initializes a new instance of the <see cref="DocumenterException"/> class 
 		/// with a specified error message and a reference to the 
 		/// inner exception that is the root cause of this exception.</summary>
 		/// <param name="message">The error message that explains the reason for the exception.</param>
 		/// <param name="inner">An instance of Exception that is the cause of the current Exception. 
-		/// If inner is non-null, then the current Exception is raised in a catch block handling inner.</param>
+		/// If inner is non-null, then the current Exception is raised in a catch block handling the inner exception.</param>
 		public DocumenterException(string message, Exception inner) : base(message, inner)
 		{
 		}
