@@ -92,6 +92,10 @@ namespace NDoc.Documenter.Msdn
 		{
 #endif
 			System.Diagnostics.Trace.WriteLine("cref:    " + cref);
+
+			if ((cref.Length < 2) || (cref[1] != ':'))
+				return string.Empty;
+
 			if ((cref.Length < 9)
 				|| (cref.Substring(2, 7) != systemPrefix))
 			{
@@ -118,7 +122,7 @@ namespace NDoc.Documenter.Msdn
 					case "E:":	// Event
 						return GetFilenameForSystemMember(cref);
 					default:
-						return "";
+						return string.Empty;
 				}
 			}
 		}
@@ -145,21 +149,27 @@ namespace NDoc.Documenter.Msdn
 		public string GetName(string cref)
 		{
 #endif
-			if ((cref.Length < 9)
-				|| (cref.Substring(2, 7) != systemPrefix))
-			{
-				string name = elemNames[cref];
-				if (name != null)
-					return name;
-			}
+			if (cref.Length < 2)
+				return cref;
 
-			int index;
-			if ((index = cref.IndexOf(".#c")) >= 0)
-				cref = cref.Substring(2, index - 2);
-			else if ((index = cref.IndexOf("(")) >= 0)
-				cref = cref.Substring(2, index - 2);
-			else
-				cref = cref.Substring(2);
+			if (cref[1] == ':')
+			{
+				if ((cref.Length < 9)
+					|| (cref.Substring(2, 7) != systemPrefix))
+				{
+					string name = elemNames[cref];
+					if (name != null)
+						return name;
+				}
+
+				int index;
+				if ((index = cref.IndexOf(".#c")) >= 0)
+					cref = cref.Substring(2, index - 2);
+				else if ((index = cref.IndexOf("(")) >= 0)
+					cref = cref.Substring(2, index - 2);
+				else
+					cref = cref.Substring(2);
+			}
 
 			return cref.Substring(cref.LastIndexOf(".") + 1);
 		}
@@ -181,6 +191,28 @@ namespace NDoc.Documenter.Msdn
 		}
 
 		//TODO: if the author of this method could enlighten us on its purpose...
+		// ... He will try:
+		/// <summary>
+		/// Looks up, whether a member has similar overloads, that have already been documented.
+		/// </summary>
+		/// <param name="description">A string describing this overload.</param>
+		/// <returns>true, if there has been a member with the same description.</returns>
+		/// <remarks>
+		/// <para>On the members pages overloads are cumulated. Instead of adding all overloads
+		/// to the members page, a link is added to the members page, that points
+		/// to an overloads page.</para>
+		/// <para>If for example one overload is public, while another one is protected,
+		/// we want both to appear on the members page. This is to make the search
+		/// for suitable members easier.</para>
+		/// <para>This leads us to the similarity of overloads. Two overloads are considered
+		/// similar, if they have the same name, declaring type, access (public, protected, ...)
+		/// and contract (static, non static). The description contains these four attributes
+		/// of the member. This means, that two members are similar, when they have the same
+		/// description.</para>
+		/// <para>Asking for the first time, if a member has similar overloads, will return false.
+		/// After that, if asking with the same description again, it will return true, so
+		/// the overload does not need to be added to the members page.</para>
+		/// </remarks>
 		public bool HasSimilarOverloads(string description)
 		{
 			if (descriptions.Contains(description))
