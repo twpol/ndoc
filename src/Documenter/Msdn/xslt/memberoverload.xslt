@@ -60,10 +60,14 @@
 						<p class="i1">
 							<xsl:choose>
 								<xsl:when test="@declaringType">
-									<xsl:apply-templates select="//class[@id=concat('T:', current()/@declaringType)]/*[@name=$memberName]/documentation/summary/node()" mode="slashdoc" />
+									<xsl:call-template name="summary-with-no-paragraph">
+										<xsl:with-param name="member" select="//class[@id=concat('T:', current()/@declaringType)]/*[@name=$memberName]" />
+									</xsl:call-template>
 								</xsl:when>
 								<xsl:otherwise>
-									<xsl:apply-templates select="documentation/summary/node()" mode="slashdoc" />
+									<xsl:call-template name="summary-with-no-paragraph">
+										<xsl:with-param name="member" select="." />
+									</xsl:call-template>
 								</xsl:otherwise>
 							</xsl:choose>
 						</p>
