@@ -30,6 +30,7 @@ namespace NDoc.Core
 		/// <summary>Document me.</summary>
 		public override void View()
 		{
+			Process.Start(Path.Combine(MyConfig.OutputDirectory, GetFilenameForNamespaces()));
 		}
 
 		/// <summary>Document me.</summary>
@@ -165,6 +166,10 @@ namespace NDoc.Core
 
 		private void TransformNamespaces()
 		{
+			Transform(
+				"namespaces",
+				GetFilenameForNamespaces());
+
 			XmlNodeList namespaceNodeList = Document.SelectNodes("/ndoc/assembly/module/namespace");
 			XmlNode[] namespaceNodes = SortNodes(namespaceNodeList, "name");
 			
@@ -181,6 +186,11 @@ namespace NDoc.Core
 
 				previousNamespaceName = currentNamespaceName;
 			}
+		}
+
+		private string GetFilenameForNamespaces()
+		{
+			return "index.html";
 		}
 
 		private string GetFilenameForNamespace(string namespaceName)
