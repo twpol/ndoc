@@ -812,13 +812,19 @@
 				<xsl:with-param name="lang" select="$lang"/>
 			</xsl:apply-templates>
 			<xsl:if test="@baseType!=''">
-				<xsl:value-of select="@baseType" />
+				<xsl:call-template name="get-datatype">
+					<xsl:with-param name="datatype" select="@baseType" />
+					<xsl:with-param name="lang" select="$lang" />						
+				</xsl:call-template>
 				<xsl:if test="implements[not(@inherited)]">
 					<xsl:text>, </xsl:text>
 				</xsl:if>
 			</xsl:if>
 			<xsl:for-each select="implements[not(@inherited)]">
-				<xsl:value-of select="." />
+				<xsl:call-template name="get-datatype">
+					<xsl:with-param name="datatype" select="." />
+					<xsl:with-param name="lang" select="$lang" />						
+				</xsl:call-template>
 				<xsl:if test="position()!=last()">
 					<xsl:text>, </xsl:text>
 				</xsl:if>
