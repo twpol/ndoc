@@ -33,14 +33,12 @@
 		</html>
 	</description>
 
-<!--
 	<release
-		name="DOC.NET 2001-09-20"
-		date="2001-09-20"
-		link="http://sourceforge.net/project/showfiles.php?group_id=13899&amp;release_id=53788"
-		direct="http://prdownloads.sourceforge.net/xmarks/doc.2001-09-20.zip"
+		name="ndoc-devel-1.0-beta1"
+		date="2001-10-15"
+		link="https://sourceforge.net/project/showfiles.php?group_id=36057&amp;release_id=57086"
+		direct="http://prdownloads.sourceforge.net/ndoc/ndoc-devel-1.0-beta1.zip"
 	/>
--->
 
 	<developer
 		id="jason"

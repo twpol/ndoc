@@ -49,9 +49,9 @@
       <xsl:for-each select="/ndoc/release">
         <a
           href="{@link}"
-          title="Download {@name}"
+          title="Download {@name} (released on {@date})"
         >
-          <xsl:value-of select="@date"/>
+          <xsl:value-of select="@name"/>
         </a>
         <br/>
       </xsl:for-each>
