@@ -57,6 +57,22 @@ namespace NDoc.Core
 	}
 
 	/// <summary>
+	/// This is used to indicate the development status of each documenter.
+	/// </summary>
+	public enum DocumenterDevelopmentStatus
+	{
+		/// <summary>Still in development, not really ready for anyone 
+		/// else to use except to provide feedback.</summary>
+		Alpha,
+		/// <summary>Ready for users to try out, with the understanding that
+		/// bugs are likely.</summary>
+		Beta,
+		/// <summary>Ready for use, or at least as stable as free 
+		/// software gets!</summary>
+		Stable
+	}
+
+	/// <summary>
 	/// Used by IDocumenter's events to notify doc building progress.
 	/// </summary>
 	/// <param name="sender">The source of the event.</param>
@@ -68,6 +84,11 @@ namespace NDoc.Core
 	{
 		/// <summary>Gets the display name for the documenter.</summary>
 		string Name { get; }
+
+		/// <summary>
+		/// The development status (alpha, beta, stable) of this documenter.
+		/// </summary>
+		DocumenterDevelopmentStatus DevelopmentStatus { get; }
 
 		/// <summary>
 		/// Raised to update the overall percent complete value and the current step name.
