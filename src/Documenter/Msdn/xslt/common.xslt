@@ -605,18 +605,38 @@
 	<!-- -->
 	<xsl:template match="list[@type='table']/listheader" mode="slashdoc">
 		<tr>
-			<th>
-				<xsl:apply-templates select="./node()" mode="slashdoc" />
-			</th>
+			<xsl:apply-templates mode="slashdoc" />
 		</tr>
+	</xsl:template>
+	<!-- -->
+	<xsl:template match="list[@type='table']/listheader/term" mode="slashdoc">
+		<th>
+			<xsl:apply-templates select="./node()" mode="slashdoc" />
+		</th>
+	</xsl:template>
+	<!-- -->
+	<xsl:template match="list[@type='table']/listheader/description" mode="slashdoc">
+		<th>
+			<xsl:apply-templates select="./node()" mode="slashdoc" />
+		</th>
 	</xsl:template>
 	<!-- -->
 	<xsl:template match="list[@type='table']/item" mode="slashdoc">
 		<tr>
-			<td>
-				<xsl:apply-templates select="./node()" mode="slashdoc" />
-			</td>
+			<xsl:apply-templates mode="slashdoc" />
 		</tr>
+	</xsl:template>
+	<!-- -->
+	<xsl:template match="list[@type='table']/item/term" mode="slashdoc">
+		<td>
+			<xsl:apply-templates select="./node()" mode="slashdoc" />
+		</td>
+	</xsl:template>
+	<!-- -->
+	<xsl:template match="list[@type='table']/item/description" mode="slashdoc">
+		<td>
+			<xsl:apply-templates select="./node()" mode="slashdoc" />
+		</td>
 	</xsl:template>
 	<!-- -->
 	<xsl:template match="term" mode="slashdoc">
