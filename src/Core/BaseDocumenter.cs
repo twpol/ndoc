@@ -282,7 +282,14 @@ namespace NDoc.Core
 
 				if (MyConfig.CopyrightHref != string.Empty)
 				{
-					writer.WriteAttributeString("href", MyConfig.CopyrightHref);
+					if (!MyConfig.CopyrightHref.StartsWith("http:"))
+					{
+						writer.WriteAttributeString("href", Path.GetFileName(MyConfig.CopyrightHref));
+					}
+					else
+					{
+						writer.WriteAttributeString("href", MyConfig.CopyrightHref);
+					}
 				}
 
 				writer.WriteEndElement();

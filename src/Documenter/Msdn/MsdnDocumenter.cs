@@ -217,6 +217,15 @@ namespace NDoc.Documenter.Msdn
 
 				htmlHelp.OpenProjectFile();
 
+				if (MyConfig.CopyrightHref != null && MyConfig.CopyrightHref != String.Empty)
+				{
+					if (!MyConfig.CopyrightHref.StartsWith("http:"))
+					{
+						File.Copy(MyConfig.CopyrightHref, Path.Combine(MyConfig.OutputDirectory, Path.GetFileName(MyConfig.CopyrightHref)), true);
+						htmlHelp.AddFileToProject(Path.GetFileName(MyConfig.CopyrightHref));
+					}
+				}
+
 				if (!MyConfig.SplitTOCs)
 				{
 					htmlHelp.OpenContentsFile(string.Empty, true);
