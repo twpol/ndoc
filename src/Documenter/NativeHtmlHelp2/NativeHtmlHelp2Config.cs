@@ -27,24 +27,6 @@ using NDoc.Core;
 
 namespace NDoc.Documenter.NativeHtmlHelp2
 {
-	/// <summary>
-	/// Represents the character set  that will be used when compiling the Hxs file
-	/// </summary>
-	public enum CharacterSet
-	{
-		/// <summary>
-		/// Ascii characters set
-		/// </summary>
-		Ascii,
-		/// <summary>
-		/// UTF 8 character set
-		/// </summary>
-		UTF8,
-		/// <summary>
-		/// Unicode chacracters
-		/// </summary>
-		Unicode
-	}
 
 	/// <summary>
 	/// Specifies how the collection will be integrated with the help browser
@@ -68,6 +50,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 	/// <remarks>
 	/// <para></para>
 	/// </remarks>
+	[DefaultProperty("OutputDirectory")]
 	public class NativeHtmlHelp2Config : BaseDocumenterConfig
 	{
 		private const string HTMLHELP2_CONFIG_CATEGORY = "Html Help 2 Settings";
@@ -154,26 +137,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			}
 		}
 
-		private bool _IncludeHierarchy = false;
-
-		/// <summary>Gets or sets the IncludeHierarchy property.</summary>
-		/// <remarks>To include a class hiararchy page for each namespace. 
-		/// Don't turn it on if your project has a namespace with many types, 
-		/// as NDoc will become very slow and might crash.</remarks>
-		/// <remarks></remarks>
-		[Category("Documentation Main Settings")]
-		[Description("To include a class hiararchy page for each namespace. Don't turn it on if your project has a namespace with many types, as NDoc will become very slow and might crash.")]
-		[DefaultValue(false)]
-		public bool IncludeHierarchy
-		{
-			get { return _IncludeHierarchy; }
-
-			set 
-			{ 
-				_IncludeHierarchy = value; 
-				SetDirty();
-			}
-		}
 		#endregion
 
 		#region Deployment properties
@@ -305,24 +268,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 
 		#region HTML Help 2 properties
 
-		CharacterSet _CharacterSet = CharacterSet.UTF8;
-		/// <summary>
-		/// Gets or sets the CharacterSet property
-		/// </summary>
-		/// <remarks>The character set that will be used when compiling the help file</remarks>
-		[Category(HTMLHELP2_CONFIG_CATEGORY)]
-		[Description("Gets or sets the character set that will be used when compiling the help file")]
-		[DefaultValue(CharacterSet.UTF8)]
-		public CharacterSet CharacterSet
-		{
-			get{ return _CharacterSet; }
-			set
-			{
-				_CharacterSet = value;
-				SetDirty();
-			}
-		}
-		
 		short _LangID = 1033;
 
 		/// <summary>Gets or sets the LangID property</summary>
