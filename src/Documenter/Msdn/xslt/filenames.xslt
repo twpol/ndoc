@@ -130,6 +130,9 @@
       <xsl:when test="starts-with($cref, 'F:') or starts-with($cref, 'P:') or starts-with($cref, 'M:') or starts-with($cref, 'E:')">
         <xsl:variable name="cref-name">
           <xsl:choose>
+            <xsl:when test="contains($cref, '.#c')">
+              <xsl:value-of select="concat(substring-after(substring-before($cref, '.#c'), 'M:'), '.ctor')" />
+            </xsl:when>
             <xsl:when test="contains($cref, '(')">
               <xsl:value-of select="substring-after(substring-before($cref, '('), ':')" />
             </xsl:when>
@@ -215,8 +218,17 @@
     </xsl:choose>
   </xsl:template>
   <!-- -->
-  <xsl:template name="get-filename-for-cref">
+	<xsl:template name="get-filename-for-cref">
+		<xsl:param name="cref" />
+		<xsl:call-template name="get-filename-for-cref-overload">
+			<xsl:with-param name="cref" select="$cref" />
+			<xsl:with-param name="overload" select="''" />
+		</xsl:call-template>
+	</xsl:template>
+  <!-- -->
+  <xsl:template name="get-filename-for-cref-overload">
     <xsl:param name="cref" />
+	<xsl:param name="overload" />
     <xsl:choose>
       <xsl:when test="starts-with($cref, 'T:')">
         <xsl:call-template name="get-filename-for-type-name">
@@ -225,27 +237,30 @@
       </xsl:when>
       <xsl:when test="starts-with($cref, 'M:')">
         <xsl:choose>
+          <xsl:when test="contains($cref, '.#c')">
+		    <xsl:value-of select="concat(translate(substring-after(substring-before($cref, '.#c'), 'M:'), '[,]', ''), 'Constructor', $overload, '.html')" />
+          </xsl:when>
           <xsl:when test="contains($cref, '(')">
-            <xsl:value-of select="concat(translate(substring-after(substring-before($cref, '('), 'M:'), '[,]', ''), '.html')" />
+            <xsl:value-of select="concat(translate(substring-after(substring-before($cref, '('), 'M:'), '[,]', ''), $overload, '.html')" />
           </xsl:when>
           <xsl:otherwise>
-            <xsl:value-of select="concat(translate(substring-after($cref, 'M:'), '[,]', ''), '.html')" />
+            <xsl:value-of select="concat(translate(substring-after($cref, 'M:'), '[,]', ''), $overload, '.html')" />
           </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
       <xsl:when test="starts-with($cref, 'E:')">
-        <xsl:value-of select="concat(translate(substring-after($cref, 'E:'), '[,]', ''), '.html')" />
+        <xsl:value-of select="concat(translate(substring-after($cref, 'E:'), '[,]', ''), $overload, '.html')" />
       </xsl:when>
       <xsl:when test="starts-with($cref, 'F:')">
-        <xsl:value-of select="concat(translate(substring-after($cref, 'F:'), '[,]', ''), '.html')" />
+        <xsl:value-of select="concat(translate(substring-after($cref, 'F:'), '[,]', ''), $overload, '.html')" />
       </xsl:when>
       <xsl:when test="starts-with($cref, 'P:')">
         <xsl:choose>
           <xsl:when test="contains($cref, '(')">
-            <xsl:value-of select="concat(translate(substring-after(substring-before($cref, '('), 'P:'), '[,]', ''), '.html')" />
+            <xsl:value-of select="concat(translate(substring-after(substring-before($cref, '('), 'P:'), '[,]', ''), $overload, '.html')" />
           </xsl:when>
           <xsl:otherwise>
-            <xsl:value-of select="concat(translate(substring-after($cref, 'P:'), '[,]', ''), '.html')" />
+            <xsl:value-of select="concat(translate(substring-after($cref, 'P:'), '[,]', ''), $overload, '.html')" />
           </xsl:otherwise>
         </xsl:choose>
       </xsl:when>

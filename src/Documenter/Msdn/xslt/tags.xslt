@@ -204,7 +204,7 @@
 	</xsl:template>
 
 	<xsl:template match="see[@cref]" mode="slashdoc" doc:group="inline" doc:msdn="ms-help://MS.NETFrameworkSDK/csref/html/vclrfsee.htm">
-		<xsl:call-template name="get-href">
+		<xsl:call-template name="get-a-href">
 			<xsl:with-param name="cref" select="@cref" />
 		</xsl:call-template>
 	</xsl:template>

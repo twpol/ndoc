@@ -300,40 +300,9 @@
 					<xsl:text> | </xsl:text>
 					<xsl:choose>
 						<xsl:when test="@cref">
-							<xsl:variable name="cref" select="@cref" />
-							<xsl:variable name="seethis" select="//*[@id=$cref]" />
-							<xsl:choose>
-								<xsl:when test="$seethis">
-									<a>
-										<xsl:attribute name="href">
-											<xsl:call-template name="get-filename-for-cref">
-												<xsl:with-param name="cref" select="@cref" />
-											</xsl:call-template>
-										</xsl:attribute>
-										<xsl:value-of select="$seethis/@name" />
-									</a>
-								</xsl:when>
-								<xsl:when test="starts-with(substring-after($cref, ':'), 'System.')">
-									<a>
-										<xsl:attribute name="href">
-											<xsl:call-template name="get-filename-for-system-cref">
-												<xsl:with-param name="cref" select="@cref" />
-											</xsl:call-template>
-										</xsl:attribute>
-										<xsl:choose>
-											<xsl:when test="contains($cref, '(')">
-												<xsl:value-of select="substring-after(substring-before($cref, '('), ':')" />
-											</xsl:when>
-											<xsl:otherwise>
-												<xsl:value-of select="substring-after($cref, ':')" />
-											</xsl:otherwise>
-										</xsl:choose>
-									</a>
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:value-of select="substring(@cref, 3)" />
-								</xsl:otherwise>
-							</xsl:choose>
+							<xsl:call-template name="get-a-href">
+								<xsl:with-param name="cref" select="@cref"/>
+							</xsl:call-template>
 						</xsl:when>
 						<xsl:when test="@href">
 							<a href="{@href}">
@@ -650,43 +619,113 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
-	<!-- -->
+	<!-- get-a-href -->
+	<xsl:template name="get-a-href">
+		<xsl:param name="cref" />
+		<xsl:variable name="href">
+			<xsl:call-template name="get-href">
+				<xsl:with-param name="cref" select="$cref" />
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:choose>
+			<xsl:when test="$href=''">
+				<b>
+					<xsl:call-template name="get-a-name">
+						<xsl:with-param name="cref" select="$cref" />
+					</xsl:call-template>
+				</b>
+			</xsl:when>
+			<xsl:otherwise>
+				<a>
+					<xsl:attribute name="href">
+						<xsl:value-of select="$href" />
+					</xsl:attribute>
+					<xsl:call-template name="get-a-name">
+						<xsl:with-param name="cref" select="$cref" />
+					</xsl:call-template>
+				</a>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	<!-- get-href -->
 	<xsl:template name="get-href">
 		<xsl:param name="cref" />
 		<xsl:choose>
 			<xsl:when test="starts-with(substring-after($cref, ':'), 'System.')">
-				<a>
-					<xsl:attribute name="href">
-						<xsl:call-template name="get-filename-for-system-cref">
-							<xsl:with-param name="cref" select="@cref" />
-						</xsl:call-template>
-					</xsl:attribute>
-					<xsl:choose>
-						<xsl:when test="contains($cref, '(')">
-							<xsl:call-template name="strip-namespace">
-								<xsl:with-param name="name" select="substring-after(substring-before($cref, '('), ':')" />
-							</xsl:call-template>
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:call-template name="strip-namespace">
-								<xsl:with-param name="name" select="substring-after($cref, ':')" />
-							</xsl:call-template>
-						</xsl:otherwise>
-					</xsl:choose>
-				</a>
+				<xsl:call-template name="get-filename-for-system-cref">
+					<xsl:with-param name="cref" select="$cref" />
+				</xsl:call-template>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:variable name="seethis" select="//*[@id=$cref]" />
 				<xsl:choose>
 					<xsl:when test="$seethis">
-						<xsl:variable name="href">
-							<xsl:call-template name="get-filename-for-cref">
-								<xsl:with-param name="cref" select="@cref" />
+						<xsl:for-each select="$seethis">
+							<xsl:call-template name="get-filename-for-cref-overload">
+								<xsl:with-param name="cref" select="@id" />
+								<xsl:with-param name="overload" select="@overload" />
 							</xsl:call-template>
-						</xsl:variable>
-						<a href="{$href}">
-							<xsl:value-of select="$seethis/@name" />
-						</a>
+						</xsl:for-each>
+					</xsl:when>
+					<xsl:otherwise>
+						<!-- this is an incredibly lame hack. -->
+						<!-- it can go away once microsoft stops prefix event crefs with 'F:'. -->
+						<xsl:if test="starts-with($cref, 'F:')">
+							<xsl:variable name="event-cref" select="concat('E:', substring-after($cref, 'F:'))" />
+							<xsl:variable name="event-seethis" select="//*[@id=$event-cref]" />
+							<xsl:if test="$event-seethis">
+								<xsl:call-template name="get-filename-for-cref">
+									<xsl:with-param name="cref" select="$event-cref" />
+								</xsl:call-template>
+							</xsl:if>
+						</xsl:if>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	<!-- get-a-name -->
+	<xsl:template name="get-a-name">
+		<xsl:param name="cref" />
+		<xsl:choose>
+			<xsl:when test="starts-with(substring-after($cref, ':'), 'System.')">
+				<xsl:choose>
+					<xsl:when test="contains($cref, '.#c')">
+						<xsl:call-template name="strip-namespace">
+						<xsl:with-param name="name" select="substring-after(substring-before($cref, '.#c'), 'M:')" />
+						</xsl:call-template>
+					</xsl:when>
+					<xsl:when test="contains($cref, '(')">
+						<xsl:call-template name="strip-namespace">
+							<xsl:with-param name="name" select="substring-after(substring-before($cref, '('), ':')" />
+						</xsl:call-template>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:call-template name="strip-namespace">
+							<xsl:with-param name="name" select="substring-after($cref, ':')" />
+						</xsl:call-template>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:variable name="seethis" select="//*[@id=$cref]" />
+				<xsl:choose>
+					<xsl:when test="$seethis">
+						<xsl:for-each select="$seethis">
+							<xsl:choose>
+								<xsl:when test="local-name()='constructor'">
+									<xsl:value-of select="../@name" />
+								</xsl:when>
+								<xsl:when test="local-name()='operator'">
+									<xsl:call-template name="operator-name">
+										<xsl:with-param name="name" select="@name" />
+									</xsl:call-template>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:value-of select="@name" />
+								</xsl:otherwise>
+							</xsl:choose>
+						</xsl:for-each>
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:choose>
@@ -697,28 +736,24 @@
 								<xsl:variable name="event-seethis" select="//*[@id=$event-cref]" />
 								<xsl:choose>
 									<xsl:when test="$event-seethis">
-										<xsl:variable name="href">
-											<xsl:call-template name="get-filename-for-cref">
-												<xsl:with-param name="cref" select="$event-cref" />
-											</xsl:call-template>
-										</xsl:variable>
-										<a href="{$href}">
-											<xsl:value-of select="$event-seethis/@name" />
-										</a>
+										<xsl:value-of select="$event-seethis/@name" />
+									</xsl:when>
+									<xsl:when test="string-length(substring-before($cref, ':')) = 1">
+										<xsl:value-of select="substring($cref, 3)" />
 									</xsl:when>
 									<xsl:when test="string-length(substring-before($cref, ':')) = 1">
 										<b><xsl:value-of select="substring($cref, 3)" /></b>
 									</xsl:when>
 									<xsl:otherwise>
-										<b><xsl:value-of select="$cref" /></b>
+										<xsl:value-of select="$cref" />
 									</xsl:otherwise>
 								</xsl:choose>
 							</xsl:when>
 							<xsl:when test="string-length(substring-before($cref, ':')) = 1">
-								<b><xsl:value-of select="substring($cref, 3)" /></b>
+								<xsl:value-of select="substring($cref, 3)" />
 							</xsl:when>
 							<xsl:otherwise>
-								<b><xsl:value-of select="$cref" /></b>
+								<xsl:value-of select="$cref" />
 							</xsl:otherwise>
 						</xsl:choose>
 					</xsl:otherwise>
