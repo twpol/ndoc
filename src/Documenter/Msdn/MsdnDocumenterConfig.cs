@@ -56,7 +56,7 @@ namespace NDoc.Documenter.Msdn
 		[
 		Category("Documentation Main Settings"),
 		Editor(typeof(FolderNameEditor), typeof(UITypeEditor)),
-		Description("The directory in which .html files and the .chm file will be generated.")
+		Description("The directory in which .html files and the .chm file will be generated."),
 		]
 		public string OutputDirectory
 		{
@@ -80,7 +80,7 @@ namespace NDoc.Documenter.Msdn
 		/// use this property plus the appropriate extension as names.</remarks>
 		[
 		Category("Documentation Main Settings"),
-		Description("The name of the HTML Help project and the Compiled HTML Help file.")
+		Description("The name of the HTML Help project and the Compiled HTML Help file."),
 		]
 		public string HtmlHelpName
 		{

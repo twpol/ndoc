@@ -800,6 +800,7 @@
 			</title>
 			<xml></xml>
 			<link rel="stylesheet" type="text/css" href="MSDN.css" />
+			<script language="javascript" type="text/javascript" src="scroll.js" />
 		</head>
 	</xsl:template>
 	<!-- -->

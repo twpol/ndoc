@@ -180,7 +180,13 @@ namespace NDoc.Documenter.Msdn
 				// Write the embedded icons to the html output directory
 				EmbeddedResources.WriteEmbeddedResources(
 					this.GetType().Module.Assembly,
-					"NDoc.Documenter.Msdn.icons",
+					"NDoc.Documenter.Msdn.images",
+					MyConfig.OutputDirectory);
+
+				// Write the embedded scripts to the html output directory
+				EmbeddedResources.WriteEmbeddedResources(
+					this.GetType().Module.Assembly,
+					"NDoc.Documenter.Msdn.scripts",
 					MyConfig.OutputDirectory);
 
 				OnDocBuildingStep(10, "Merging XML documentation...");

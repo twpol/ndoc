@@ -279,14 +279,14 @@
 					<td width="50%">
 						<xsl:choose>
 							<xsl:when test="@access='Public'">
-								<img src="property.bmp" />
+								<img src="property.gif" />
 							</xsl:when>
 							<xsl:otherwise>
-								<img src="protectedproperty.bmp" />
+								<img src="protectedproperty.gif" />
 							</xsl:otherwise>
 						</xsl:choose>
 						<xsl:if test="@contract='Static'">
-							<img src="static.bmp" />
+							<img src="static.gif" />
 						</xsl:if>
 						<a>
 							<xsl:attribute name="href">
@@ -314,14 +314,14 @@
 					<td width="50%">
 						<xsl:choose>
 							<xsl:when test="@access='Public'">
-								<img src="property.bmp" />
+								<img src="property.gif" />
 							</xsl:when>
 							<xsl:otherwise>
-								<img src="protectedproperty.bmp" />
+								<img src="protectedproperty.gif" />
 							</xsl:otherwise>
 						</xsl:choose>
 						<xsl:if test="@contract='Static'">
-							<img src="static.bmp" />
+							<img src="static.gif" />
 						</xsl:if>
 						<xsl:value-of select="@name" />
 						<xsl:text> (inherited from </xsl:text>
@@ -349,14 +349,14 @@
 					<td width="50%">
 						<xsl:choose>
 							<xsl:when test="@access='Public'">
-								<img src="field.bmp" />
+								<img src="field.gif" />
 							</xsl:when>
 							<xsl:otherwise>
-								<img src="protectedfield.bmp" />
+								<img src="protectedfield.gif" />
 							</xsl:otherwise>
 						</xsl:choose>
 						<xsl:if test="@contract='Static'">
-							<img src="static.bmp" />
+							<img src="static.gif" />
 						</xsl:if>
 						<a>
 							<xsl:attribute name="href">
@@ -384,14 +384,14 @@
 					<td width="50%">
 						<xsl:choose>
 							<xsl:when test="@access='Public'">
-								<img src="field.bmp" />
+								<img src="field.gif" />
 							</xsl:when>
 							<xsl:otherwise>
-								<img src="protectedfield.bmp" />
+								<img src="protectedfield.gif" />
 							</xsl:otherwise>
 						</xsl:choose>
 						<xsl:if test="@contract='Static'">
-							<img src="static.bmp" />
+							<img src="static.gif" />
 						</xsl:if>
 						<xsl:value-of select="@name" />
 						<xsl:text> (inherited from </xsl:text>
@@ -414,14 +414,14 @@
 			<td width="50%">
 				<xsl:choose>
 					<xsl:when test="@access='Public'">
-						<img src="property.bmp" />
+						<img src="property.gif" />
 					</xsl:when>
 					<xsl:otherwise>
-						<img src="protectedproperty.bmp" />
+						<img src="protectedproperty.gif" />
 					</xsl:otherwise>
 				</xsl:choose>
 				<xsl:if test="@contract='Static'">
-					<img src="static.bmp" />
+					<img src="static.gif" />
 				</xsl:if>
 				<a>
 					<xsl:attribute name="href">
@@ -457,14 +457,14 @@
 								<td width="50%">
 								  <xsl:choose>
 								    <xsl:when test="@access='Public'">
-								      <img src="method.bmp" />
+								      <img src="method.gif" />
 								    </xsl:when>
 								    <xsl:otherwise>
-								      <img src="protectedmethod.bmp" />
+								      <img src="protectedmethod.gif" />
 								    </xsl:otherwise>
 								  </xsl:choose>
 								  <xsl:if test="@contract='Static'">
-								    <img src="static.bmp" />
+								    <img src="static.gif" />
 								  </xsl:if>
 									<a>
 										<xsl:attribute name="href">
@@ -494,14 +494,14 @@
 								<td width="50%">
 								  <xsl:choose>
 								    <xsl:when test="@access='Public'">
-								      <img src="method.bmp" />
+								      <img src="method.gif" />
 								    </xsl:when>
 								    <xsl:otherwise>
-								      <img src="protectedmethod.bmp" />
+								      <img src="protectedmethod.gif" />
 								    </xsl:otherwise>
 								  </xsl:choose>
 								  <xsl:if test="@contract='Static'">
-								    <img src="static.bmp" />
+								    <img src="static.gif" />
 								  </xsl:if>
 									<a>
 										<xsl:attribute name="href">
@@ -531,14 +531,14 @@
 						<td width="50%">
 							<xsl:choose>
 								<xsl:when test="@access='Public'">
-								  <img src="method.bmp" />
+								  <img src="method.gif" />
 								</xsl:when>
 								<xsl:otherwise>
-								  <img src="protectedmethod.bmp" />
+								  <img src="protectedmethod.gif" />
 								</xsl:otherwise>
 							</xsl:choose>
 							<xsl:if test="@contract='Static'">
-								<img src="static.bmp" />
+								<img src="static.gif" />
 							</xsl:if>
 							<xsl:value-of select="@name" />
 							<xsl:text> (inherited from </xsl:text>
@@ -562,14 +562,14 @@
 			<td width="50%">
 				<xsl:choose>
 					<xsl:when test="@access='Public'">
-						<img src="method.bmp" />
+						<img src="method.gif" />
 					</xsl:when>
 					<xsl:otherwise>
-						<img src="protectedmethod.bmp" />
+						<img src="protectedmethod.gif" />
 					</xsl:otherwise>
 				</xsl:choose>
 				<xsl:if test="@contract='Static'">
-					<img src="static.bmp" />
+					<img src="static.gif" />
 				</xsl:if>
 				<a>
 					<xsl:attribute name="href">
@@ -602,14 +602,14 @@
 					<td width="50%">
 						<xsl:choose>
 							<xsl:when test="@access='Public'">
-								<img src="event.bmp" />
+								<img src="event.gif" />
 							</xsl:when>
 							<xsl:otherwise>
-								<img src="protectedevent.bmp" />
+								<img src="protectedevent.gif" />
 							</xsl:otherwise>
 						</xsl:choose>
 						<xsl:if test="@contract='Static'">
-							<img src="static.bmp" />
+							<img src="static.gif" />
 						</xsl:if>
 						<a>
 							<xsl:attribute name="href">
@@ -637,14 +637,14 @@
 					<td width="50%">
 						<xsl:choose>
 							<xsl:when test="@access='Public'">
-								<img src="event.bmp" />
+								<img src="event.gif" />
 							</xsl:when>
 							<xsl:otherwise>
-								<img src="protectedevent.bmp" />
+								<img src="protectedevent.gif" />
 							</xsl:otherwise>
 						</xsl:choose>
 						<xsl:if test="@contract='Static'">
-							<img src="static.bmp" />
+							<img src="static.gif" />
 						</xsl:if>
 						<xsl:value-of select="@name" />
 						<xsl:text> (inherited from </xsl:text>
@@ -667,14 +667,14 @@
 			<td width="50%">
 				<xsl:choose>
 					<xsl:when test="@access='Public'">
-						<img src="event.bmp" />
+						<img src="event.gif" />
 					</xsl:when>
 					<xsl:otherwise>
-						<img src="protectedevent.bmp" />
+						<img src="protectedevent.gif" />
 					</xsl:otherwise>
 				</xsl:choose>
 				<xsl:if test="@contract='Static'">
-					<img src="static.bmp" />
+					<img src="static.gif" />
 				</xsl:if>
 				<a>
 					<xsl:attribute name="href">
@@ -710,7 +710,7 @@
 								<xsl:when test="@access='Public'">
 								  <img>
 								    <xsl:attribute name="src">
-								      <xsl:value-of select="local-name()"/><xsl:text>.bmp</xsl:text>
+								      <xsl:value-of select="local-name()"/><xsl:text>.gif</xsl:text>
 								    </xsl:attribute>
 								  </img>
 								</xsl:when>
@@ -719,13 +719,13 @@
 								    <xsl:attribute name="src">
 								      <xsl:text>protected</xsl:text>
 								      <xsl:value-of select="local-name()"/>
-								      <xsl:text>.bmp</xsl:text>
+								      <xsl:text>.gif</xsl:text>
 								    </xsl:attribute>
 								  </img>
 								</xsl:otherwise>
 							</xsl:choose>
 							<xsl:if test="@contract='Static'">
-								<img src="static.bmp" />
+								<img src="static.gif" />
 							</xsl:if>
 							<a>
 								<xsl:attribute name="href">
@@ -760,7 +760,7 @@
 								<xsl:when test="@access='Public'">
 								  <img>
 								    <xsl:attribute name="src">
-								      <xsl:value-of select="local-name()"/><xsl:text>.bmp</xsl:text>
+								      <xsl:value-of select="local-name()"/><xsl:text>.gif</xsl:text>
 								    </xsl:attribute>
 								  </img>
 								</xsl:when>
@@ -769,13 +769,13 @@
 								    <xsl:attribute name="src">
 								      <xsl:text>protected</xsl:text>
 								      <xsl:value-of select="local-name()"/>
-								      <xsl:text>.bmp</xsl:text>
+								      <xsl:text>.gif</xsl:text>
 								    </xsl:attribute>
 								  </img>
 								</xsl:otherwise>
 							</xsl:choose>
 							<xsl:if test="@contract='Static'">
-								<img src="static.bmp" />
+								<img src="static.gif" />
 							</xsl:if>
 							<a>
 								<xsl:attribute name="href">

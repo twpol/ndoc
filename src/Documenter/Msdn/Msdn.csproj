@@ -115,43 +115,47 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "icons\event.bmp"
+                    RelPath = "images\event.gif"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "icons\field.bmp"
+                    RelPath = "images\field.gif"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "icons\method.bmp"
+                    RelPath = "images\method.gif"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "icons\operator.bmp"
+                    RelPath = "images\operator.gif"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "icons\property.bmp"
+                    RelPath = "images\property.gif"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "icons\protectedevent.bmp"
+                    RelPath = "images\protectedevent.gif"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "icons\protectedfield.bmp"
+                    RelPath = "images\protectedfield.gif"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "icons\protectedmethod.bmp"
+                    RelPath = "images\protectedmethod.gif"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "icons\protectedproperty.bmp"
+                    RelPath = "images\protectedproperty.gif"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "icons\static.bmp"
+                    RelPath = "images\static.gif"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "scripts\scroll.js"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
