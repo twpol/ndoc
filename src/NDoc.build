@@ -30,11 +30,6 @@
         <includes name="System.Windows.Forms.dll" />
         <includes name="System.Xml.dll" />
         <includes name="System.Data.dll" />
-        <includes name="${build.dir}\NDoc.Core.dll" />
-        <includes name="${build.dir}\NDoc.Documenter.Msdn.dll" />
-        <includes name="${build.dir}\NDoc.Documenter.Xml.dll" />
-        <includes name="${build.dir}\NDoc.Documenter.JavaDoc.dll" />
-        <includes name="${build.dir}\NDoc.VisualStudio.dll" />
       </references>
       <arg value="/resource:Gui\About.rtf,NDoc.Gui.About.rtf" />
       <arg value="/resource:${build.dir}\NDoc.Gui.AboutForm.resources" />
@@ -54,10 +49,6 @@
       <references>
         <includes name="System.dll" />
         <includes name="System.Xml.dll" />
-        <includes name="${build.dir}\NDoc.Core.dll" />
-        <includes name="${build.dir}\NDoc.Documenter.JavaDoc.dll" />
-        <includes name="${build.dir}\NDoc.Documenter.Msdn.dll" />
-        <includes name="${build.dir}\NDoc.Documenter.Xml.dll" />
       </references>
     </csc>
   </target>
@@ -97,7 +88,6 @@
         <includes name="System.Design.dll" />
         <includes name="System.Drawing.Design.dll" />
         <includes name="System.Drawing.dll" />
-        <includes name="${build.dir}\NDoc.Core.dll" />
       </references>
     </csc>
   </target>
@@ -141,7 +131,6 @@
         <includes name="System.Drawing.Design.dll" />
         <includes name="System.Design.dll" />
         <includes name="System.Drawing.dll" />
-        <includes name="${build.dir}\NDoc.Core.dll" />
       </references>
       <arg value="/resource:Documenter\Msdn\css\MSDN.css,NDoc.Documenter.Msdn.css.MSDN.css" />
       <arg value="/resource:Documenter\Msdn\xslt\allmembers.xslt,NDoc.Documenter.Msdn.xslt.allmembers.xslt" />
@@ -173,7 +162,6 @@
         <includes name="System.Design.dll" />
         <includes name="System.Drawing.Design.dll" />
         <includes name="System.Drawing.dll" />
-        <includes name="${build.dir}\NDoc.Core.dll" />
       </references>
       <arg value="/resource:Documenter\JavaDoc\css\JavaDoc.css,NDoc.Documenter.JavaDoc.css.JavaDoc.css" />
       <arg value="/resource:Documenter\JavaDoc\xslt\javadoc.xslt,NDoc.Documenter.JavaDoc.xslt.javadoc.xslt" />

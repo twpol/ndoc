@@ -13,3 +13,4 @@ ndoc\src\Documenter\Xml\NDoc.Documenter.Xml.xml
 ndoc\src\Gui\NDocGui.xml
 ndoc\src\Test\NDoc.Test.xml
 ndoc\src\VisualStudio\NDoc.VisualStudio.xml
+ndoc\web\*
