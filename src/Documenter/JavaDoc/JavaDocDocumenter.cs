@@ -102,14 +102,20 @@ namespace NDoc.Documenter.JavaDoc
 
 			try
 			{
-				tempFileName = MakeXmlFile(project);
+				// determine temp file name
+				tempFileName = Path.GetTempFileName();
+				// Let the Documenter base class do it's thing.
+				MakeXmlFile(project, tempFileName);
 
 				WriteOverviewSummary();
 				WriteNamespaceSummaries();
 			}
 			finally
 			{
-				if (File.Exists(tempFileName)) File.Delete(tempFileName);
+				if (tempFileName != null && File.Exists(tempFileName)) 
+				{
+					File.Delete(tempFileName);
+				}
 				workspace.RemoveResourceDirectory();
 			}
 

@@ -314,12 +314,29 @@ namespace NDoc.Documenter.LinearHtml
 
 				OnDocBuildingStep(10, "Merging XML documentation...");
 
-				// Let the Documenter base class do it's thing.
-				string xmlFileName = MakeXmlFile(project);
-				//File.Copy(xmlFileName, "ndoc-tmp.xml", true); // just for debugging
-				XmlDocument xmlDocumentation = new XmlDocument();
-				xmlDocumentation.Load(xmlFileName);
-				File.Delete(xmlFileName);
+				// Will hold the name of the file name containing the XML doc
+				string tempFileName = null;
+
+				// Will hold the DOM representation of the XML doc
+				XmlDocument xmlDocumentation = null;
+
+				try 
+				{
+					// determine temp file name
+					tempFileName = Path.GetTempFileName();
+					// Let the Documenter base class do it's thing.
+					MakeXmlFile(project, tempFileName);
+					// Load the XML into DOM
+					xmlDocumentation = new XmlDocument();
+					xmlDocumentation.Load(tempFileName);
+				} 
+				finally 
+				{
+					if (tempFileName != null && File.Exists(tempFileName)) 
+					{
+						File.Delete(tempFileName);
+					}
+				}
 
 #if USE_XML_DOCUMENT
 				xPathNavigator = xmlDocumentation.CreateNavigator();

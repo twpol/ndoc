@@ -192,12 +192,31 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 
 				// get the ndoc xml
 				OnDocBuildingStep( 10, "Merging XML documentation..." );
-				string tempFileName = MakeXmlFile( project );
-				//Note: Temp file will be deleted by factory after loading...
 
-				// create and intialize a HtmlFactory
-				ExternalHtmlProvider htmlProvider = new ExternalHtmlProvider( MyConfig.HeaderHtml, MyConfig.FooterHtml );
-				HtmlFactory factory = new HtmlFactory( tempFileName, workspace.ContentDirectory, htmlProvider, MyConfig);
+				// Will hold the name of the file name containing the XML doc
+				string tempFileName = null;
+
+				HtmlFactory factory = null;
+
+				try 
+				{
+					// determine temp file name
+					tempFileName = Path.GetTempFileName();
+					// Let the Documenter base class do it's thing.
+					MakeXmlFile(project, tempFileName);
+					// create and intialize a HtmlFactory
+					ExternalHtmlProvider htmlProvider = new ExternalHtmlProvider(
+						MyConfig.HeaderHtml, MyConfig.FooterHtml);
+					factory = new HtmlFactory(tempFileName, 
+						workspace.ContentDirectory, htmlProvider, MyConfig);
+				} 
+				finally 
+				{
+					if (tempFileName != null && File.Exists(tempFileName)) 
+					{
+						File.Delete(tempFileName);
+					}
+				}
 
 				// generate all the html content - builds the toc along the way
 				using( new TOCBuilder( toc, factory ) )

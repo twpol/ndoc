@@ -213,22 +213,30 @@ namespace NDoc.Documenter.Msdn
 				}
 				OnDocBuildingStep(10, "Merging XML documentation...");
 
-				// Let the Documenter base class do it's thing.
-				string tempFileName = MakeXmlFile(project);
-				// Load the XML documentation into a DOM.
-				xmlDocumentation = new XmlDocument();
-				Stream tempFile=null;
-				try
-				{
-					tempFile=File.Open(tempFileName,FileMode.Open,FileAccess.Read);
-					xmlDocumentation.Load(tempFile);
-					tempFile.Seek(0,SeekOrigin.Begin);
-					xpathDocument = new XPathDocument(tempFile);
+				// Will hold the name of the file name containing the XML doc
+				string tempFileName = null;
+
+				try {
+					// determine temp file name
+					tempFileName = Path.GetTempFileName();
+					// Let the Documenter base class do it's thing.
+					MakeXmlFile(project, tempFileName);
+
+					// Load the XML documentation into DOM and XPATH doc.
+					using (FileStream tempFile = File.Open(tempFileName, FileMode.Open, FileAccess.Read)) 
+					{
+						xmlDocumentation = new XmlDocument();
+						xmlDocumentation.Load(tempFile);
+						tempFile.Seek(0,SeekOrigin.Begin);
+						xpathDocument = new XPathDocument(tempFile);
+					}
 				}
 				finally
 				{
-					if (tempFile!=null) tempFile.Close();
-					if (File.Exists(tempFileName)) File.Delete(tempFileName);
+					if (tempFileName != null && File.Exists(tempFileName)) 
+					{
+						File.Delete(tempFileName);
+					}
 				}
 
 				XmlNodeList typeNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace/*[name()!='documentation']");

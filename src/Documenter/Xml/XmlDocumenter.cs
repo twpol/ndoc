@@ -57,25 +57,43 @@ namespace NDoc.Documenter.Xml
 
 			XmlDocumenterConfig config = (XmlDocumenterConfig)Config;
 
-			string xmlFileName = MakeXmlFile(project);
-
-			OnDocBuildingStep(50, "Saving XML documentation...");
-
-			string directoryName = Path.GetDirectoryName(config.OutputFile);
-
-			if (directoryName != null && directoryName.Length > 0)
+			string tempFileName = null;
+			
+			try 
 			{
-				if (!Directory.Exists(directoryName))
+				// Determine temp file name
+				tempFileName = Path.GetTempFileName();
+				// Let the Documenter base class do it's thing.
+				MakeXmlFile(project, tempFileName);
+
+				OnDocBuildingStep(50, "Saving XML documentation...");
+
+				string directoryName = Path.GetDirectoryName(config.OutputFile);
+
+				if (directoryName != null && directoryName.Length > 0)
 				{
-					Directory.CreateDirectory(directoryName);
+					if (!Directory.Exists(directoryName))
+					{
+						Directory.CreateDirectory(directoryName);
+					}
+				}
+
+				if (File.Exists(config.OutputFile)) 
+				{
+					File.Delete(config.OutputFile);
+				}
+
+				File.Move(tempFileName, config.OutputFile);
+
+				OnDocBuildingStep(100, "Done.");
+			} 
+			finally 
+			{
+				if (tempFileName != null && File.Exists(tempFileName)) 
+				{
+					File.Delete(tempFileName);
 				}
 			}
-
-			if(File.Exists(config.OutputFile))
-				File.Delete(config.OutputFile);
-			File.Move(xmlFileName,config.OutputFile);
-
-			OnDocBuildingStep(100, "Done.");
 		}
 	}
 }
