@@ -114,29 +114,20 @@ namespace NDoc.Documenter.Latex
 			workspace.Clean();
 			workspace.Prepare();
 
+#if NO_RESOURCES
 			// copy all of the xslt source files into the workspace
 			DirectoryInfo xsltSource = new DirectoryInfo( Path.GetFullPath(Path.Combine(
-				Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"..\..\..\Documenter\NativeHtmlHelp2\Latex") ) );
+				Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"..\..\..\Documenter\Latex") ) );
                 				
 			foreach ( FileInfo f in xsltSource.GetFiles( "*.xslt" ) )
 				f.CopyTo( Path.Combine( workspace.ResourceDirectory, f.Name ), true );
-
-			#if NO_RESOURCES
-
-				string moduleDir;
-			
-				moduleDir = 
-Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-				m_ResourceDirectory = 
-Path.GetFullPath(Path.Combine(moduleDir, @"..\..\..\Documenter\Latex"));
-
-			#else
+#else
 		
 			EmbeddedResources.WriteEmbeddedResources(
 				this.GetType().Module.Assembly,
 				"NDoc.Documenter.Latex.xslt",
 				workspace.ResourceDirectory );
-			#endif
+#endif
 
 			string xmlBuffer = MakeXml(project);
 
