@@ -43,6 +43,10 @@
 				<includes name="src/**/*" />
 				<excludes name="src/Addins/**" />
 				<excludes name="src/NDocGen/**" />
+				<excludes name="src/Setup/Debug/**" />
+				<excludes name="src/Setup/Release/**" />
+				<excludes name="src/UsersGuide/Debug/**" />
+				<excludes name="src/UsersGuide/Release/**" />
 				<excludes name="src/**/bin/**" />
 				<excludes name="src/**/obj/**" />
 								
@@ -61,7 +65,8 @@
 			<arg file="src/UsersGuide/UsersGuide.vcproj" />
 			<arg value="/build" />
 			<arg value="release" />
-		</exec> 
+		</exec>
+		<echo message="NDoc ${project.version} user guide created at '${path::get-full-path('src/UsersGuide/NDocUsersGuide.chm')}'." level="Info" />
 	</target>	
 	<!--
 
@@ -71,6 +76,7 @@
 			<arg file="src/Setup/Setup.vdproj" />
 			<arg value="/build" />
 			<arg value="release" />
-		</exec> 
+		</exec>
+		<echo message="NDoc ${project.version} setup package created at '${path::get-full-path('src/Setup/Release/NDoc.msi')}'." level="Info" />
 	</target>	
 </project>
