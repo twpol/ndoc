@@ -190,7 +190,7 @@
         <echo message="Creating SDK Documentation for NDoc Core." />
         <ndoc>
             <assemblies basedir="${build.dir}/net/1.1">
-                <includes name="NDoc.Core.dll" />
+                <include name="NDoc.Core.dll" />
             </assemblies>
             <documenters>
                 <documenter name="MSDN">
