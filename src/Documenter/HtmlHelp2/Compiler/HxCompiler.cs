@@ -28,6 +28,7 @@ namespace NDoc.Documenter.HtmlHelp2.Compiler
 		public void Compile( DirectoryInfo projectRoot, string helpName, short langID )
 		{
 			string ProjectPathAndName = Path.Combine( projectRoot.FullName, helpName );
+
 			using( CompilerStatus status = new CompilerStatus( ProjectPathAndName + ".HxComp.log" ) )
 			{ 
 				int cookie = -1;
@@ -139,6 +140,15 @@ namespace NDoc.Documenter.HtmlHelp2.Compiler
 			{
 				Trace.WriteLine( String.Format( "HxComp [{0}]: {1}", Severity, DescriptionString ) );
 				_logFile.WriteLine( String.Format( "{0}: {1}", Severity, DescriptionString ) );
+
+				//If enough non-fatal errors accumulate (more than half of the topics
+				//HxComp will abort, reporting the error here not in ReportError
+				if ( Severity == HxCompErrorSeverity.HxCompErrorSeverity_Fatal )
+				{
+					_compileFailed = true;
+					_errorMsg = DescriptionString;
+				}
+
 			}
 			#endregion
 
