@@ -1413,7 +1413,7 @@ namespace NDoc.Test.Attributes
 	/// Class with the "Author" attribute
 	/// </summary>
 	[Author("Joe Programmer")]
-	class Account
+	public class Account
 	{
 		/// <summary>
 		/// Method with the "IsTested" attribute
@@ -1429,7 +1429,7 @@ namespace NDoc.Test.Attributes
 	/// </summary>
 	[Author("Jane Programmer", Version = 2), IsTested()]
 	[XmlType(Namespace="NDoc/Test/Order")]
-	class Order
+	public class Order
 	{
 		/// <summary>
 		/// Field with XmlElement attribute
