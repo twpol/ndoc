@@ -12,6 +12,7 @@ license. We welcome everyone to use our software in the hopes that they can
 provide feedback, submit bug reports and fixes, or even join us as a 
 developer!
 
+
 Status
 ------
 
@@ -20,11 +21,12 @@ a bit of work to be done on the JavaDoc and the LaTeX documenters.
 
 See http://ndoc.sf.net/ for the latest information on releases.
 
+
 Building NDoc
 -------------
 
-If you have Visual Studio .NET, you can build NDoc using the NDoc.sln 
-file located in this folder.
+If you have Visual Studio .NET 2003, you can build NDoc using the 
+NDoc.sln file located in this folder.
 
 If you don't have VS.NET but do have the .NET Framework SDK and NAnt 
 v0.8.4 or above (http://nant.sf.net/) installed, then you can 
@@ -33,6 +35,7 @@ nant from within that directory and you should be good to go.
 
 If you don't have the .NET Framework SDK installed then why do you even
 want to use this?
+
 
 Using NDoc
 ----------
@@ -54,6 +57,7 @@ automated builds.
 
 After you build NDoc, you can load one of our example projects from the
 examples directory. This should give you a good idea of what NDoc outputs.
+
 
 Support
 -------
