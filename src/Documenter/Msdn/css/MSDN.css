@@ -75,6 +75,14 @@ pre
 	margin-bottom: .5em;
 }
 
+pre.code
+{
+        font: Monospace, Courier New, Courier;
+        color: #000066;
+        font-size: 100%;
+        margin-left: -5.7em;
+}
+
 .syntax
 {
 	font: Monospace, Courier New, Courier;
