@@ -177,10 +177,15 @@ namespace NDoc.Documenter.Msdn
 				htmlHelp.OpenProjectFile();
 				htmlHelp.OpenContentsFile();
 
-				MakeHtmlForNamespaces();
-
-				htmlHelp.CloseContentsFile();
-				htmlHelp.CloseProjectFile();
+				try
+				{
+					MakeHtmlForNamespaces();
+				}
+				finally
+				{
+					htmlHelp.CloseContentsFile();
+					htmlHelp.CloseProjectFile();
+				}
 
 				htmlHelp.WriteEmptyIndexFile();
 
