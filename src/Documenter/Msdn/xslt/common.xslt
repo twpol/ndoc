@@ -7,6 +7,7 @@
 	<xsl:include href="tags.xslt" />
 	<!-- -->
 	<xsl:param name="ndoc-title" />
+	<xsl:param name="ndoc-omit-object-tags" select="false" />
 	<!-- -->
 	<xsl:template name="csharp-type">
 		<xsl:param name="runtime-type" />

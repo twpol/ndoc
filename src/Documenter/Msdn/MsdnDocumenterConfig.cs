@@ -46,6 +46,7 @@ namespace NDoc.Documenter.Msdn
 			DefaulTOC = string.Empty;
 
 			ShowVisualBasic = true;
+			OmitObjectTags = false;
 		}
 
 
@@ -236,6 +237,24 @@ namespace NDoc.Documenter.Msdn
 			set 
 			{ 
 				_ShowVisualBasic = value; 
+				SetDirty();
+			}
+		}
+
+		private bool _OmitObjectTags;
+
+		/// <summary>Gets or sets the OmitObjectTags property.</summary>
+		[
+		Category("HTML Help Options"),
+		Description("Set this to true to not output the <object> tags used by the HTML Help compiler.")
+		]
+		public bool OmitObjectTags
+		{
+			get { return _OmitObjectTags; }
+
+			set 
+			{ 
+				_OmitObjectTags = value; 
 				SetDirty();
 			}
 		}
