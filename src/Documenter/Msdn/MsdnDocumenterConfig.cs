@@ -17,6 +17,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing.Design;
 using System.IO;
 using System.Windows.Forms.Design;
@@ -245,7 +246,7 @@ namespace NDoc.Documenter.Msdn
 		/// It cannot be set if SortTOCByNamespace is set or RootPageFileName is specified.</remarks>
 		[Category("HTML Help Options")]
 		[Description("Turning this flag on will generate a separate table-of-contents for each assembly. "
-			+ "It cannot be set if SortTOCByNamespace is set or RootPageFileName is specified.")]
+			 + "It cannot be set if SortTOCByNamespace is set or RootPageFileName is specified.")]
 		[DefaultValue(false)]
 		private bool SplitTOCs
 		{
@@ -288,9 +289,9 @@ namespace NDoc.Documenter.Msdn
 		/// the TOC entry will be 'Overview'.</remarks>
 		[Category("HTML Help Options")]
 		[Description("The name for the table-of-contents entry corresponding "
-			+ " to the root page."
-			+ " If this is not specified and RootPageFileName is, then"
-			+ " the TOC entry will be 'Overview'.")]
+			 + " to the root page."
+			 + " If this is not specified and RootPageFileName is, then"
+			 + " the TOC entry will be 'Overview'.")]
 		[DefaultValue("")]
 		public string RootPageTOCName
 		{
@@ -310,7 +311,7 @@ namespace NDoc.Documenter.Msdn
 		/// SplitTOCs is disabled when this property is set.</remarks>
 		[Category("HTML Help Options")]
 		[Description("The name of an html file to be included as the root home page. "
-			+ "SplitTOCs is disabled when this property is set.")]
+			 + "SplitTOCs is disabled when this property is set.")]
 		[DefaultValue("")]
 		[Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
 		public string RootPageFileName
@@ -334,9 +335,9 @@ namespace NDoc.Documenter.Msdn
 		/// the namespaces in the table-of-contents.</remarks>
 		[Category("HTML Help Options")]
 		[Description("If true, the Root Page will be made the container"
-			+ " of the namespaces in the table-of-contents."
-			+ " If false, the Root Page will be made a peer of"
-			+ " the namespaces in the table-of-contents.")]
+			 + " of the namespaces in the table-of-contents."
+			 + " If false, the Root Page will be made a peer of"
+			 + " the namespaces in the table-of-contents.")]
 		[DefaultValue(false)]
 		public bool RootPageContainsNamespaces
 		{
@@ -356,7 +357,7 @@ namespace NDoc.Documenter.Msdn
 		/// SplitTOCs is disabled when this option is selected.</remarks>
 		[Category("HTML Help Options")]
 		[Description("Sorts the table-of-contents by namespace name. "
-			+ "SplitTOCs is disabled when this option is selected.")]
+			 + "SplitTOCs is disabled when this option is selected.")]
 		private bool SortTOCByNamespace
 		{
 			get { return _SortTOCByNamespace; }
@@ -398,8 +399,8 @@ namespace NDoc.Documenter.Msdn
 		/// "%TOPIC_TITLE%\" is dynamically replaced by the title of the current page.</remarks>
 		[Category("HTML Help Options")]
 		[Description("Raw HTML that is used as a page header instead of the default blue banner. " +
-			"\"%FILE_NAME%\" is dynamically replaced by the name of the file for the current html page. " +
-			"\"%TOPIC_TITLE%\" is dynamically replaced by the title of the current page.")]
+			 "\"%FILE_NAME%\" is dynamically replaced by the name of the file for the current html page. " +
+			 "\"%TOPIC_TITLE%\" is dynamically replaced by the title of the current page.")]
 		[DefaultValue("")]
 		[Editor(typeof(TextEditor), typeof(UITypeEditor))]
 		public string HeaderHtml
@@ -423,10 +424,10 @@ namespace NDoc.Documenter.Msdn
 		/// "%TOPIC_TITLE%\" is dynamically replaced by the title of the current page.</remarks>
 		[Category("HTML Help Options")]
 		[Description("Raw HTML that is used as a page footer instead of the default footer." +
-			"\"%FILE_NAME%\" is dynamically replaced by the name of the file for the current html page. " +
-			"\"%ASSEMBLY_NAME%\" is dynamically replaced by the name of the assembly for the current page. " +
-			"\"%ASSEMBLY_VERSION%\" is dynamically replaced by the version of the assembly for the current page. " +
-			"\"%TOPIC_TITLE%\" is dynamically replaced by the title of the current page.")]
+			 "\"%FILE_NAME%\" is dynamically replaced by the name of the file for the current html page. " +
+			 "\"%ASSEMBLY_NAME%\" is dynamically replaced by the name of the assembly for the current page. " +
+			 "\"%ASSEMBLY_VERSION%\" is dynamically replaced by the version of the assembly for the current page. " +
+			 "\"%TOPIC_TITLE%\" is dynamically replaced by the title of the current page.")]
 		[DefaultValue("")]
 		[Editor(typeof(TextEditor), typeof(UITypeEditor))]
 		public string FooterHtml
@@ -457,7 +458,7 @@ namespace NDoc.Documenter.Msdn
 				_FilesToInclude = value;
 				SetDirty();
 			}
- 		}
+		}
 
 		string _ExtensibilityStylesheet = string.Empty;
 
@@ -478,6 +479,40 @@ namespace NDoc.Documenter.Msdn
 				SetDirty();
 			}
 		}
+	
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="name"></param>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		protected override string HandleUnknownPropertyType(string name, string value)
+		{
+			string FailureMessages="";
+			//SdkDocVersion has been split into two separate options
+			// - value "MsdnOnline" replaced by "SDK_v1_1" and setting option SdkLinksOnWeb to true
+			//note: case insensitive comparison
+			if (String.Compare(name,"LinkToSdkDocVersion",true) == 0) 
+			{
+				if (String.Compare(value,"MsdnOnline",true) == 0)
+				{
+					Trace.WriteLine("WARNING: " + base.Name + " Configuration - value 'MsdnOnline' of property 'LinkSdkDocVersion' is OBSOLETE. Please use new option 'SdkLinksOnWeb'\n");
+					FailureMessages += base.ReadProperty("SdkDocVersion", "SDK_v1_1");
+					FailureMessages += base.ReadProperty("SdkLinksOnWeb", "True");
+				}
+				else
+				{
+					Trace.WriteLine("WARNING: " + base.Name + " Configuration - property 'LinkToSdkDocVersion' is OBSOLETE. Please use new property 'SdkDocVersion'\n");
+					FailureMessages += base.ReadProperty("SdkDocVersion", value);
+				}
+			}
+			else
+			{
+				// if we don't know how to handle this, let the base class have a go
+				FailureMessages = base.HandleUnknownPropertyType (name, value);
+			}
+			return FailureMessages;
+		}
 	}
 
 	/// <summary>
@@ -487,12 +522,15 @@ namespace NDoc.Documenter.Msdn
 	public enum OutputType
 	{
 		/// <summary>Output only an HTML Help file (.chm).</summary>
-		[Description("HTML Help")] HtmlHelp = 1,
+		[Description("HTML Help")]
+		HtmlHelp = 1,
 
 		/// <summary>Output only Web pages.</summary>
-		[Description("Web")] Web = 2,
+		[Description("Web")]
+		Web = 2,
 
 		/// <summary>Output both HTML Help and Web.</summary>
-		[Description("HTML Help and Web")] HtmlHelpAndWeb = HtmlHelp | Web
+		[Description("HTML Help and Web")]
+		HtmlHelpAndWeb = HtmlHelp | Web
 	}
 }
