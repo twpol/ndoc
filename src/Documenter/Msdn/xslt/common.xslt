@@ -471,9 +471,9 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template match="c" mode="slashdoc">
-		<i>
+		<code class="ce">
 			<xsl:apply-templates mode="slashdoc" />
-		</i>
+		</code>
 	</xsl:template>
 	<!-- -->
 	<xsl:template match="paramref[@name]" mode="slashdoc">
