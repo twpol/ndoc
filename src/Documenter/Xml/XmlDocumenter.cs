@@ -27,7 +27,7 @@ using NDoc.Core;
 namespace NDoc.Documenter.Xml
 {
 	/// <summary>The XmlDocumenter class.</summary>
-	public class XmlDocumenter : BaseDocumenter
+	public class XmlDocumenter : BaseReflectionDocumenter
 	{
 		/// <summary>Initializes a new instance of the XmlDocumenter class.</summary>
 		public XmlDocumenter() : base("XML")

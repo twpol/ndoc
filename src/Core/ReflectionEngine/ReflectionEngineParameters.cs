@@ -20,7 +20,7 @@ namespace NDoc.Core
 		/// <summary>
 		/// constructor for ReflectionEngineParameters.
 		/// </summary>
-		public ReflectionEngineParameters(Project project, BaseDocumenterConfig config)
+		public ReflectionEngineParameters(Project project, BaseReflectionDocumenterConfig config)
 		{
 			CopyProject(project);
 			CopyConfig(config);
@@ -53,7 +53,7 @@ namespace NDoc.Core
 			}
 		}
 
-		private void CopyConfig(BaseDocumenterConfig config)
+		private void CopyConfig(BaseReflectionDocumenterConfig config)
 		{
 			#region Documentation Control
 			this.IncludeAssemblyVersion=config.IncludeAssemblyVersion;
