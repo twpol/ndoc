@@ -50,7 +50,7 @@
 	<xsl:template name="vb-type-syntax">
 		<xsl:if test="$ndoc-vb-syntax">
 			<pre class="syntax">
-				<span class="lang">[Visual Basic]</span>
+				<span class="lang">[Visual&#160;Basic]</span>
 				<br />
 				<xsl:if test="@abstract = 'true'">
 					<xsl:text>MustInherit&#160;</xsl:text>
@@ -182,7 +182,7 @@
 	<xsl:template name="vb-member-syntax">
 		<xsl:if test="$ndoc-vb-syntax">
 			<pre class="syntax">
-				<span class="lang">[Visual Basic]</span>
+				<span class="lang">[Visual&#160;Basic]</span>
 				<br />
 				<xsl:choose>
 					<xsl:when test="local-name() != 'operator'">
@@ -253,7 +253,7 @@
 	<xsl:template name="vb-field-or-event-syntax">
 		<xsl:if test="$ndoc-vb-syntax">
 			<pre class="syntax">
-				<span class="lang">[Visual Basic]</span>
+				<span class="lang">[Visual&#160;Basic]</span>
 				<br />
 				<xsl:if test="not(parent::interface)">
 					<xsl:call-template name="vb-method-access">
