@@ -1334,49 +1334,49 @@ namespace NDoc.Core
 		}
 
         private void WriteCustomAttributes(XmlWriter writer, Assembly assembly) {
-            WriteCustomAttributes(writer, assembly.GetCustomAttributes(true),"assembly");
+            WriteCustomAttributes(writer, assembly.GetCustomAttributes(MyConfig.DocumentInheritedAttributes),"assembly");
         }
 
         private void WriteCustomAttributes(XmlWriter writer, Module module) {
-            WriteCustomAttributes(writer, module.GetCustomAttributes(true),"module");
+            WriteCustomAttributes(writer, module.GetCustomAttributes(MyConfig.DocumentInheritedAttributes),"module");
         }
 
 		private void WriteCustomAttributes(XmlWriter writer, Type type)
 		{
 			WriteSpecialAttributes(writer, type);
-			WriteCustomAttributes(writer, type.GetCustomAttributes(true), "");
+			WriteCustomAttributes(writer, type.GetCustomAttributes(MyConfig.DocumentInheritedAttributes), "");
 		}
 
 		private void WriteCustomAttributes(XmlWriter writer, FieldInfo field)
 		{
 			WriteSpecialAttributes(writer, field);
-			WriteCustomAttributes(writer, field.GetCustomAttributes(true), "");
+			WriteCustomAttributes(writer, field.GetCustomAttributes(MyConfig.DocumentInheritedAttributes), "");
 		}
 
 		private void WriteCustomAttributes(XmlWriter writer, ConstructorInfo constructorInfo)
 		{
-			WriteCustomAttributes(writer, constructorInfo.GetCustomAttributes(true),"");
+			WriteCustomAttributes(writer, constructorInfo.GetCustomAttributes(MyConfig.DocumentInheritedAttributes),"");
 		}
 
 		private void WriteCustomAttributes(XmlWriter writer, MethodInfo methodInfo)
 		{
-			WriteCustomAttributes(writer, methodInfo.GetCustomAttributes(true),"");
-			WriteCustomAttributes(writer, methodInfo.ReturnTypeCustomAttributes.GetCustomAttributes(true),"return");
+			WriteCustomAttributes(writer, methodInfo.GetCustomAttributes(MyConfig.DocumentInheritedAttributes),"");
+			WriteCustomAttributes(writer, methodInfo.ReturnTypeCustomAttributes.GetCustomAttributes(MyConfig.DocumentInheritedAttributes),"return");
 		}
 
 		private void WriteCustomAttributes(XmlWriter writer, PropertyInfo propertyInfo)
 		{
-			WriteCustomAttributes(writer, propertyInfo.GetCustomAttributes(true),"");
+			WriteCustomAttributes(writer, propertyInfo.GetCustomAttributes(MyConfig.DocumentInheritedAttributes),"");
 		}
 
 		private void WriteCustomAttributes(XmlWriter writer, ParameterInfo parameterInfo)
 		{
-			WriteCustomAttributes(writer, parameterInfo.GetCustomAttributes(true),"");
+			WriteCustomAttributes(writer, parameterInfo.GetCustomAttributes(MyConfig.DocumentInheritedAttributes),"");
 		}
 
 		private void WriteCustomAttributes(XmlWriter writer, EventInfo eventInfo)
 		{
-			WriteCustomAttributes(writer, eventInfo.GetCustomAttributes(true),"");
+			WriteCustomAttributes(writer, eventInfo.GetCustomAttributes(MyConfig.DocumentInheritedAttributes),"");
 		}
 
 		private void WriteCustomAttributes(XmlWriter writer, object[] attributes, string target)

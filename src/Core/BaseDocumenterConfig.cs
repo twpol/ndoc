@@ -77,6 +77,7 @@ namespace NDoc.Core
 			_GetExternalSummaries = true;
 
 			_DocumentAttributes = false;
+			_DocumentInheritedAttributes = true;
 			_ShowTypeIdInAttributes = false;
 			_DocumentedAttributes = string.Empty;
 
@@ -966,6 +967,25 @@ namespace NDoc.Core
 			set 
 			{ 
 				_DocumentAttributes = value; 
+				SetDirty();
+			}
+		}
+
+		private bool _DocumentInheritedAttributes;
+
+		/// <summary>Gets or sets whether or not to document the attributes inherited from base types.</summary>
+		/// <remarks>Set this to true to output the attributes of the base types/members 
+		/// in the syntax portion of topics.</remarks>
+		[Category("Show Attributes")]
+		[Description("Set this to true to output the attributes of the base types/members in the syntax portion.\nNote: This attribute has no effect unless DocumentAttributes is set to true.")]
+		[DefaultValue(true)]
+		public bool DocumentInheritedAttributes
+		{
+			get { return _DocumentInheritedAttributes; }
+
+			set 
+			{ 
+				_DocumentInheritedAttributes = value; 
 				SetDirty();
 			}
 		}
