@@ -1015,9 +1015,9 @@
 		<xsl:call-template name="strip-namespace-and-attribute">
 			<xsl:with-param name="name" select="@name" />
 		</xsl:call-template>
-		<xsl:if test="count(property) > 0">
+		<xsl:if test="count(property | field) > 0">
 			<xsl:text>(</xsl:text>
-			<xsl:for-each select="property">
+			<xsl:for-each select="property | field">
 				<xsl:value-of select="@name" />
 				<xsl:text>="</xsl:text>
 				<xsl:value-of select="@value" />
