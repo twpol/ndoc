@@ -577,34 +577,13 @@ namespace NDoc.Documenter.Msdn2
 #endif
 		}
 
-		private void MakeHtmlForNamespaces(string assemblyName)
-		{
-			XmlNodeList namespaceNodes = xmlDocumentation.SelectNodes("/ndoc/assembly[@name=\"" + assemblyName + "\"]/module/namespace");
-			int[] indexes = SortNodesByAttribute(namespaceNodes, "name");
-
-			int nNodes = namespaceNodes.Count;
-
-			for (int i = 0; i < nNodes; i++)
-			{
-				OnDocBuildingProgress(i*100/nNodes);
-
-				XmlNode namespaceNode = namespaceNodes[indexes[i]];
-
-				if (namespaceNode.ChildNodes.Count > 0)
-				{
-					string namespaceName = (string)namespaceNode.Attributes["name"].Value;
-
-					MakeHtmlForNamespace(assemblyName, namespaceName);
-				}
-			}
-
-			OnDocBuildingProgress(100);
-		}
-
 		private void MakeHtmlForAssembliesSorted()
 		{
 			XmlNodeList assemblyNodes = xmlDocumentation.SelectNodes("/ndoc/assembly");
+			bool        heirTOC = (this.MyConfig.NamespaceTOCStyle == TOCStyle.Hierarchical);
+			int         level = 0;
 			int[] indexes = SortNodesByAttribute(assemblyNodes, "name");
+			string[]    last = new string[0];
 
 			System.Collections.Specialized.NameValueCollection namespaceAssemblies
 				= new System.Collections.Specialized.NameValueCollection();
@@ -623,15 +602,72 @@ namespace NDoc.Documenter.Msdn2
 			string [] namespaces = namespaceAssemblies.AllKeys;
 			Array.Sort(namespaces);
 			nNodes = namespaces.Length;
+
 			for (int i = 0; i < nNodes; i++)
 			{
 				OnDocBuildingProgress(i*100/nNodes);
-				string namespaceName = namespaces[i];
-				foreach (string assemblyName in namespaceAssemblies.GetValues(namespaceName))
-					MakeHtmlForNamespace(assemblyName, namespaceName);
+				
+				if (heirTOC) 
+				{
+					string[] split = namespaces[i].Split('.');
+
+					for (level = last.Length; level >= 0 &&
+						ArrayEquals(split, 0, last, 0, level) == false; level--)
+					{
+						if (level > last.Length) 
+							continue;
+						
+						MakeHtmlForTypes(string.Join(".", last, 0, level));
+						htmlHelp.CloseBookInContents();
+					}
+	        
+					if (level < 0) level = 0;
+
+					for (; level < split.Length; level++)
+					{
+						string ns = string.Join(".", split, 0, level + 1);
+						
+						if (Array.BinarySearch(namespaces, ns) < 0)
+							MakeHtmlForNamespace(split[level], ns, false);
+						else
+							MakeHtmlForNamespace(split[level], ns, true);
+
+						htmlHelp.OpenBookInContents();
+					}
+
+					last = split;
+				}
+				else
+				{
+					MakeHtmlForNamespace(namespaces[i], namespaces[i], true);
+					htmlHelp.OpenBookInContents();
+					MakeHtmlForTypes(namespaces[i]);
+					htmlHelp.CloseBookInContents();
+				}
+			}
+
+			
+			if (heirTOC && last.Length > 0)
+			{
+				for (; level >= 1; level--)
+				{
+					MakeHtmlForTypes(string.Join(".", last, 0, level));
+					htmlHelp.CloseBookInContents();
+				}
 			}
 
 			OnDocBuildingProgress(100);
+		}
+
+		private bool ArrayEquals(string[] array1, int from1, string[] array2, int from2, int count)
+		{
+			for (int i = 0; i < count; i++)
+			{
+				if (array1[from1 + i] != array2[from2 + i])
+					return false;
+			}
+
+			return true;
 		}
 
 		private void GetNamespacesFromAssembly(string assemblyName, System.Collections.Specialized.NameValueCollection namespaceAssemblies)
@@ -644,15 +680,30 @@ namespace NDoc.Documenter.Msdn2
 			}
 		}
 
-		private void MakeHtmlForNamespace(string assemblyName, string namespaceName)
+		/// <summary>
+		/// Add the namespace elements to the output
+		/// </summary>
+		/// <remarks>
+		/// The namespace 
+		/// </remarks>
+		/// <param name="namespacePart">If nested, the namespace part will be the current
+		/// namespace element being documented</param>
+		/// <param name="namespaceName">The full namespace name being documented</param>
+		/// <param name="addDocumentation">If true, the namespace will be documented, if false
+		/// the node in the TOC will not link to a page</param>
+		private void MakeHtmlForNamespace(string namespacePart, string namespaceName, 
+			bool addDocumentation)
 		{
 			if (documentedNamespaces.Contains(namespaceName)) 
 				return;
 
 			documentedNamespaces.Add(namespaceName);
 
+			if (addDocumentation)
+			{
 			string fileName = GetFilenameForNamespace(namespaceName);
-			htmlHelp.AddFileToContents(namespaceName, fileName);
+				
+				htmlHelp.AddFileToContents(namespacePart, fileName);
 
 			XsltArgumentList arguments = new XsltArgumentList();
 			arguments.AddParam("namespace", String.Empty, namespaceName);
@@ -666,8 +717,9 @@ namespace NDoc.Documenter.Msdn2
 				"namespacehierarchy",
 				arguments,
 				fileName.Insert(fileName.Length - 5, "Hierarchy"));
-
-			MakeHtmlForTypes(namespaceName);
+			}
+			else
+				htmlHelp.AddFileToContents(namespacePart);
 		}
 
 		private void MakeHtmlForTypes(string namespaceName)
@@ -677,8 +729,6 @@ namespace NDoc.Documenter.Msdn2
 
 			int[] indexes = SortNodesByAttribute(typeNodes, "id");
 			int nNodes = typeNodes.Count;
-
-			htmlHelp.OpenBookInContents();
 
 			for (int i = 0; i < nNodes; i++)
 			{
@@ -707,8 +757,6 @@ namespace NDoc.Documenter.Msdn2
 						break;
 				}
 			}
-
-			htmlHelp.CloseBookInContents();
 		}
 
 		private void MakeHtmlForEnumerationOrDelegate(WhichType whichType, XmlNode typeNode)

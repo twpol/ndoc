@@ -382,6 +382,45 @@ namespace NDoc.Documenter.Msdn2
 			tocWriter.WriteStartElement("UL");
 		}
 
+		/// <summary>Adds a topic to the contents file.</summary>
+		/// <param name="headingName">The name as it should appear in the contents.</param>
+		/// <remarks>Adds a topic node with no URL associated with the node into the
+		/// table of contents.</remarks>
+		public void AddFileToContents(string headingName)
+		{
+			tocWriter.WriteStartElement("LI");
+			tocWriter.WriteStartElement("OBJECT");
+			tocWriter.WriteAttributeString("type", "text/sitemap");
+			tocWriter.WriteStartElement("param");
+			tocWriter.WriteAttributeString("name", "Name");
+			tocWriter.WriteAttributeString("value", headingName.Replace('$', '.'));
+			tocWriter.WriteEndElement(); // param
+			tocWriter.WriteEndElement(); // OBJECT
+			tocWriter.WriteEndElement(); // LI
+		}
+
+		/// <summary>Adds a topic to the contents file.</summary>
+		/// <param name="headingName">The name as it should appear in the contents.</param>
+		/// <remarks>Adds a topic node with no URL associated with the node into the
+		/// table of contents.</remarks>
+		/// <param name="icon">The image for this entry.</param>
+		public void AddFileToContents(string headingName, HtmlHelpIcon icon)
+		{
+			tocWriter.WriteStartElement("LI");
+			tocWriter.WriteStartElement("OBJECT");
+			tocWriter.WriteAttributeString("type", "text/sitemap");
+			tocWriter.WriteStartElement("param");
+			tocWriter.WriteAttributeString("name", "Name");
+			tocWriter.WriteAttributeString("value", headingName.Replace('$', '.'));
+			tocWriter.WriteEndElement(); // param
+			tocWriter.WriteStartElement("param");
+			tocWriter.WriteAttributeString("name", "ImageNumber");
+			tocWriter.WriteAttributeString("value", ((int)icon).ToString());
+			tocWriter.WriteEndElement(); // param
+			tocWriter.WriteEndElement(); // OBJECT
+			tocWriter.WriteEndElement(); // LI
+		}
+
 		/// <summary>Adds a file to the contents file.</summary>
 		/// <param name="headingName">The name as it should appear in the contents.</param>
 		/// <param name="htmlFilename">The filename for this entry.</param>
