@@ -162,12 +162,12 @@
 	<!-- 
 	
 	-->
-    	<target name="set-framework-configuration">
-        	<if test="${not(target::exists('set-'+framework::get-target-framework()+'-framework-configuration'))}">
-            		<fail message="The '${framework::get-target-framework()}' framework is not supported by this version of NDoc." />
-        	</if>
-        	<call target="set-${framework::get-target-framework()}-framework-configuration" />
-    	</target>
+		<target name="set-framework-configuration">
+			<if test="${not(target::exists('set-'+framework::get-target-framework()+'-framework-configuration'))}">
+				<fail message="The '${framework::get-target-framework()}' framework is not supported by this version of NDoc." />
+			</if>
+			<call target="set-${framework::get-target-framework()}-framework-configuration" />
+		</target>
 	<!--
 
 	-->
@@ -176,8 +176,8 @@
 		<property name="current.build.debug" value="${build.debug}" dynamic="true" readonly="false" />
 		<property name="current.build.defines" value="${build.defines},NET,NET_1_0" dynamic="true" readonly="false" />
 		<property name="current.build.optimize" value="${build.optimize}" dynamic="true" readonly="false" />
-    		<property name="current.bin.dir" value="${build.dir}/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
-    		<property name="current.sdkdoc.dir" value="${nant.project.basedir}/doc/sdk/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
+		<property name="current.bin.dir" value="${build.dir}/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
+		<property name="current.sdkdoc.dir" value="${nant.project.basedir}/doc/sdk/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
 		<property name="current.sdkdoc.debug" value="${sdkdoc.debug}" dynamic="true" readonly="false" />
 	</target>
 	<!--
@@ -188,8 +188,8 @@
 		<property name="current.build.debug" value="${build.debug}" dynamic="true" readonly="false" />
 		<property name="current.build.defines" value="${build.defines},NET,NET_1_1" dynamic="true" readonly="false" />
 		<property name="current.build.optimize" value="${build.optimize}" dynamic="true" readonly="false" />
-    		<property name="current.bin.dir" value="${build.dir}/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
-    		<property name="current.sdkdoc.dir" value="${nant.project.basedir}/doc/sdk/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
+		<property name="current.bin.dir" value="${build.dir}/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
+		<property name="current.sdkdoc.dir" value="${nant.project.basedir}/doc/sdk/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
 		<property name="current.sdkdoc.debug" value="${sdkdoc.debug}" dynamic="true" readonly="false" />
 	</target>
 	<!--
@@ -200,8 +200,8 @@
 		<property name="current.build.debug" value="${build.debug}" dynamic="true" readonly="false" />
 		<property name="current.build.defines" value="${build.defines},NET,NET_2_0" dynamic="true" readonly="false" />
 		<property name="current.build.optimize" value="${build.optimize}" dynamic="true" readonly="false" />
-    		<property name="current.bin.dir" value="${build.dir}/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
-    		<property name="current.sdkdoc.dir" value="${nant.project.basedir}/doc/sdk/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
+		<property name="current.bin.dir" value="${build.dir}/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
+		<property name="current.sdkdoc.dir" value="${nant.project.basedir}/doc/sdk/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
 		<property name="current.sdkdoc.debug" value="${sdkdoc.debug}" dynamic="true" readonly="false" />
 	</target>
 	<!--
@@ -212,8 +212,8 @@
 		<property name="current.build.debug" value="${build.debug}" dynamic="true" readonly="false" />
 		<property name="current.build.defines" value="${build.defines},NETCF,NETCF_1_0" dynamic="true" readonly="false" />
 		<property name="current.build.optimize" value="${build.optimize}" dynamic="true" readonly="false" />
-    		<property name="current.bin.dir" value="${build.dir}/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
-    		<property name="current.sdkdoc.dir" value="${nant.project.basedir}/doc/sdk/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
+		<property name="current.bin.dir" value="${build.dir}/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
+		<property name="current.sdkdoc.dir" value="${nant.project.basedir}/doc/sdk/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
 		<property name="current.sdkdoc.debug" value="${sdkdoc.debug}" dynamic="true" readonly="false" />
 	</target>
 	<!--
@@ -224,8 +224,8 @@
 		<property name="current.build.debug" value="${build.debug}" dynamic="true" readonly="false" />
 		<property name="current.build.defines" value="${build.defines},MONO,MONO_1_0" dynamic="true" readonly="false" />
 		<property name="current.build.optimize" value="${build.optimize}" dynamic="true" readonly="false" />
-    		<property name="current.bin.dir" value="${build.dir}/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
-    		<property name="current.sdkdoc.dir" value="${nant.project.basedir}/doc/sdk/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
+		<property name="current.bin.dir" value="${build.dir}/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
+		<property name="current.sdkdoc.dir" value="${nant.project.basedir}/doc/sdk/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
 		<property name="current.sdkdoc.debug" value="${sdkdoc.debug}" dynamic="true" readonly="false" />
 	</target>
 	<!--
@@ -236,8 +236,8 @@
 		<property name="current.build.debug" value="${build.debug}" dynamic="true" readonly="false" />
 		<property name="current.build.defines" value="${build.defines},SSCLI,SSCLI_1_0" dynamic="true" readonly="false" />
 		<property name="current.build.optimize" value="${build.optimize}" dynamic="true" readonly="false" />
-    		<property name="current.bin.dir" value="${build.dir}/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
-    		<property name="current.sdkdoc.dir" value="${nant.project.basedir}/doc/sdk/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
+		<property name="current.bin.dir" value="${build.dir}/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
+		<property name="current.sdkdoc.dir" value="${nant.project.basedir}/doc/sdk/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
 		<property name="current.sdkdoc.debug" value="${sdkdoc.debug}" dynamic="true" readonly="false" />
 	</target>
 	<!--
@@ -246,7 +246,7 @@
 	<target name="display-current-runtime">
 		<echo message="" />
 		<echo message="----------------------------------------------------------" />
-		<echo message=" ${nant.settings.currentframework.description}" />
+		<echo message=" ${framework::get-description(framework::get-target-framework())}" />
 		<echo message="----------------------------------------------------------" />
 		<echo message="" />
 		<echo message="framework : ${framework::get-target-framework()}" />
@@ -340,13 +340,13 @@
 		</if>
 	</target>
 	<!-- 
-	clean-up targets	
+	clean-up targets
 	-->
 	<target name="clean-current-bin-dir" description="Checks the current bin directory and cleans it up.">
 		<call target="check-current-bin-dir" />
 		<delete>
 			<fileset basedir="${current.bin.dir}">
-				<includes name="**/*" />
+				<include name="**/*" />
 			</fileset>
 		</delete>
 	</target>

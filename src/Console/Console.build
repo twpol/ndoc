@@ -3,13 +3,13 @@
 	<target name="compile">
 		<csc target="exe" output="${current.bin.dir}/${nant.project.name}.exe" debug="${current.build.debug}" optimize="${current.build.optimize}" unsafe="false" checked="false" define="${current.build.defines}">
 			<sources>
-				<includes name="**/*.cs" />
-				<includes name="../CommonAssemblyInfo.cs" />
+				<include name="**/*.cs" />
+				<include name="../CommonAssemblyInfo.cs" />
 			</sources>
 			<references>
-				<includes name="System.dll" />
-				<includes name="System.Xml.dll" />
-				<includes name="${current.bin.dir}/NDoc.Core.dll" />
+				<include name="System.dll" />
+				<include name="System.Xml.dll" />
+				<include name="${current.bin.dir}/NDoc.Core.dll" />
 			</references>
 		</csc>
 	</target>

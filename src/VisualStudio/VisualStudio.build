@@ -3,12 +3,12 @@
 	<target name="compile">
 		<csc target="library" output="${current.bin.dir}/${nant.project.name}.dll" debug="${current.build.debug}" optimize="${current.build.optimize}" unsafe="false" checked="false" define="${current.build.defines}" doc="${current.bin.dir}/${nant.project.name}.xml">
 			<sources>
-				<includes name="**/*.cs" />
-				<includes name="../CommonAssemblyInfo.cs" />
+				<include name="**/*.cs" />
+				<include name="../CommonAssemblyInfo.cs" />
 			</sources>
 			<references>
-				<includes name="System.dll" />
-				<includes name="System.Xml.dll" />
+				<include name="System.dll" />
+				<include name="System.Xml.dll" />
 			</references>
 		</csc>
 	</target>
