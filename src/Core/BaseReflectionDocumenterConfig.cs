@@ -67,7 +67,7 @@ namespace NDoc.Core
 			_DocumentEmptyNamespaces = false;
 			_EditorBrowsableFilter = EditorBrowsableFilterLevel.Off;
 
-			_IncludeAssemblyVersion = false;
+			_AssemblyVersionInfo = AssemblyVersionInformationType.None;
 			_CopyrightText = string.Empty;
 			_CopyrightHref = string.Empty;
 
@@ -425,21 +425,22 @@ namespace NDoc.Core
 
 		#region Documentation Main Settings 
 		
-		private bool _IncludeAssemblyVersion;
+		private AssemblyVersionInformationType _AssemblyVersionInfo;
 
-		/// <summary>Gets or sets the IncludeAssemblyVersion property.</summary>
-		/// <remarks>If this is true, the assembly version will appear at the bottom
-		/// of each topic.</remarks>
+		/// <summary>Gets or sets the AssemblyVersion property.</summary>
+		/// <remarks>Determines what type of Assembly Version information is documented. 
+		/// </remarks>
 		[Category("Documentation Main Settings")]
-		[Description("Turn this flag on to include the assembly version number in the documentation.")]
+		[Description("Determines what type of Assembly Version information is documented.")]
 		[DefaultValue(false)]
-		public bool IncludeAssemblyVersion
+		[System.ComponentModel.TypeConverter(typeof(EnumDescriptionConverter))]
+		public AssemblyVersionInformationType AssemblyVersionInfo
 		{
-			get { return _IncludeAssemblyVersion; }
+			get { return _AssemblyVersionInfo; }
 
 			set
 			{
-				_IncludeAssemblyVersion = value;
+				_AssemblyVersionInfo = value;
 				SetDirty();
 			}
 		}
@@ -802,6 +803,45 @@ namespace NDoc.Core
 		}
 		#endregion
 
+	
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="name"></param>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		protected override string HandleUnknownPropertyType(string name, string value)
+		{
+			string FailureMessages = "";
+
+			if (String.Compare(name, "IncludeAssemblyVersion", true) == 0) 
+			{
+				if (value.Length>0)
+				{
+					Trace.WriteLine("WARNING: " + base.Name + " Configuration - property 'IncludeAssemblyVersion' is OBSOLETE. Please use new property 'AssemblyVersionInfo'\n");
+
+					Project.SuspendDirtyCheck=false;
+					string newValue=String.Empty;
+					if (String.Compare(value, "true", true) == 0)
+					{
+						newValue="AssemblyVersion";
+					}
+					else
+					{
+						newValue="None";
+					}
+
+					FailureMessages += base.ReadProperty("AssemblyVersionInfo", newValue);
+					Project.SuspendDirtyCheck=true;
+				}
+			}
+			else
+			{
+				// if we don't know how to handle this, let the base class have a go
+				FailureMessages = base.HandleUnknownPropertyType(name, value);
+			}
+			return FailureMessages;
+		}
 	}
 
 	/// <summary>
@@ -878,12 +918,39 @@ namespace NDoc.Core
 		/// </summary>
 		[Description("None")] None, 
 		/// <summary>
-		/// French
+		/// Instance Members
 		/// </summary>
 		[Description("Instance Members")] Instance, 
 		/// <summary>
-		/// German
+		/// Instance and Static Members
 		/// </summary>
 		[Description("Instance and Static Members")] InstanceAndStatic
+	}
+
+	/// <summary>
+	/// The type of version information to document.
+	/// </summary>
+	public enum AssemblyVersionInformationType
+	{
+		/// <summary>
+		/// None
+		/// </summary>
+		[Description("None")] None, 
+		/// <summary>
+		/// AssemblyVersion Attrribute.
+		/// <para>
+		/// This is the standard /.Net version information specified in the AssemblyVersionAttribute.
+		/// </para>
+		/// </summary>
+		[Description("Assembly Version")] AssemblyVersion,
+		/// <summary>
+		/// AssemblyFileVersion Attribute
+		/// <para>
+		/// This is the file version specified in the AssemblyFileVersion attribute, as opposed to the /.Net standard Assembly Version.
+		/// </para>
+		/// <para>This type of version information is useful if an Assembly is to installed in the GAC, and the developer need to avoid side-by-side versioning issues, but wishes to provide build version information...
+		/// </para>
+		/// </summary>
+		[Description("File Version")] AssemblyFileVersion
 	}
 }

@@ -644,9 +644,18 @@ namespace NDoc.Core
 			writer.WriteStartElement("assembly");
 			writer.WriteAttributeString("name", assemblyName.Name);
 
-			if (this.rep.IncludeAssemblyVersion)
+			if (this.rep.AssemblyVersionInfo==AssemblyVersionInformationType.AssemblyVersion)
 			{
 				writer.WriteAttributeString("version", assemblyName.Version.ToString());
+			}
+			if (this.rep.AssemblyVersionInfo==AssemblyVersionInformationType.AssemblyFileVersion)
+			{
+				object[] attrs = assembly.GetCustomAttributes(typeof(AssemblyFileVersionAttribute),false);
+				if (attrs.Length>0)
+				{
+					string version = ((AssemblyFileVersionAttribute)attrs[0]).Version;
+					writer.WriteAttributeString("version", version);
+				}
 			}
 
 			WriteCustomAttributes(writer, assembly);
