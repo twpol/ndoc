@@ -943,6 +943,11 @@ namespace NDoc.Test
 	public class LangAttributes
 	{
 	}
+
+	/// <include file='include.xml' path='documentation/class[@name="IncludeExample"]/*'/>
+	public class IncludeExample
+	{
+	}
 }
 
 namespace NDoc.Test.InternalStuff
