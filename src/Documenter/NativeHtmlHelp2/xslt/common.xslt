@@ -461,6 +461,7 @@
 							<td width="50%">
 								<xsl:call-template name="get-a-href">
 									<xsl:with-param name="cref" select="@cref" />
+									<xsl:with-param name="ignore-text" select="true()" />									
 								</xsl:call-template>
 							</td>
 							<td width="50%">
@@ -551,6 +552,8 @@
 	<!-- get-a-href -->
 	<xsl:template name="get-a-href">
 		<xsl:param name="cref" />
+		<xsl:param name="ignore-text"/>
+		
 		<xsl:variable name="filename">
 			<xsl:value-of select="NUtil:GetLocalCRef( $cref )"/>
 		</xsl:variable>
@@ -566,7 +569,7 @@
 				<a>
 					<xsl:attribute name="href"><xsl:value-of select="$filename"/></xsl:attribute> 			
 					<xsl:choose>
-						<xsl:when test="node()">
+						<xsl:when test="node() and $ignore-text!=true()">
 							<xsl:value-of select="." />
 						</xsl:when>
 						<xsl:otherwise>
