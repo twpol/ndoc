@@ -14,7 +14,8 @@ src\Documenter\Latex\xslt\
 src\Documenter\Msdn\
 src\Documenter\Msdn\css\
 src\Documenter\Msdn\images\
-src\Documenter\Msdn\scripts\
+src\Documenter\Msdn\onlinefiles\
+src\Documenter\Msdn\onlinetemplates\
 src\Documenter\Msdn\xslt\
 src\Documenter\Xml\
 src\Gui\
