@@ -147,6 +147,9 @@ namespace NDoc.Gui
 			//
 			InitializeComponent();
 
+			// Allow developers to continue to compile their assemblies while NDoc is running.
+			AppDomain.CurrentDomain.SetShadowCopyFiles();
+
 			this.SetStyle(ControlStyles.DoubleBuffer, true);
 
 			Thread.CurrentThread.Name = "GUI";
