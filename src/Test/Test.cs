@@ -1192,7 +1192,7 @@ namespace NDoc.Test
 	///			// This is some C# code.
 	///		</code>
 	///		<code lang="C++, JScript">
-	///			/* This is either C++ or JScript code. */
+	///			// This is either C++ or JScript code.
 	///		</code>
 	/// </remarks>
 	public class LangAttributes
@@ -2033,6 +2033,129 @@ namespace NDoc.Test.NewStuff
 		/// Works, so MoreDerived.F is there, but where?
 		/// </summary>
 		static void G() { MoreDerived.F(); }         // Invokes Base.F
+	}
+}
+
+namespace NDoc.Test.EditorBrowsableAttr
+{
+	using System.ComponentModel;
+
+	/// <summary>This class is marked with EditorBrowsableState.Never.</summary>
+	[EditorBrowsable(EditorBrowsableState.Never)]
+	public class NotBrowsableClass
+	{
+	}
+
+	/// <summary>This delegate is marked with EditorBrowsableState.Advanced</summary>
+	[EditorBrowsable(EditorBrowsableState.Advanced)]
+	public delegate void BrowsableHandler(object sender, EventArgs e);
+
+
+
+	/// <summary>This class is marked with EditorBrowsableState.Always. </summary>
+	[EditorBrowsable(EditorBrowsableState.Always)]
+	public class BrowsableClass
+	{
+		/// <summary>This member is marked as EditorBrowsableState.Always.</summary>
+		[EditorBrowsable(EditorBrowsableState.Always)]
+		public BrowsableClass() {}
+
+		/// <summary>This member is marked as EditorBrowsableState.Advanced.</summary>
+		[EditorBrowsable(EditorBrowsableState.Advanced)]
+		public BrowsableClass(int advanced) {}
+
+		/// <summary>This member is marked as EditorBrowsableState.Never.</summary>
+		[EditorBrowsable(EditorBrowsableState.Never)]
+		public BrowsableClass(bool never) {}
+
+
+
+		/// <summary>This member is marked as EditorBrowsableState.Always.</summary>
+		[EditorBrowsable(EditorBrowsableState.Always)]
+		public void AlwaysMethod() {}
+
+		/// <summary>This member is marked as EditorBrowsableState.Advanced.</summary>
+		[EditorBrowsable(EditorBrowsableState.Advanced)]
+		public void AdvancedMethod() {}
+
+		/// <summary>This member is marked as EditorBrowsableState.Never.</summary>
+		[EditorBrowsable(EditorBrowsableState.Never)]
+		public void NeverMethod() {}
+
+
+
+		/// <summary>This member is marked as EditorBrowsableState.Always.</summary>
+		[EditorBrowsable(EditorBrowsableState.Always)]
+		public int AlwaysField;
+
+		/// <summary>This member is marked as EditorBrowsableState.Advanced.</summary>
+		[EditorBrowsable(EditorBrowsableState.Advanced)]
+		public int AdvancedField;
+
+		/// <summary>This member is marked as EditorBrowsableState.Never.</summary>
+		[EditorBrowsable(EditorBrowsableState.Never)]
+		public int NeverField;
+
+
+
+		/// <summary>This member is marked as EditorBrowsableState.Always.</summary>
+		[EditorBrowsable(EditorBrowsableState.Always)]
+		public int AlwaysProperty
+		{
+			get { return -1; }
+			set {}
+		}
+
+		/// <summary>This member is marked as EditorBrowsableState.Advanced.</summary>
+		[EditorBrowsable(EditorBrowsableState.Advanced)]
+		public int AdvancedProperty
+		{
+			get { return -1; }
+			set {}
+		}
+
+		/// <summary>This member is marked as EditorBrowsableState.Never.</summary>
+		[EditorBrowsable(EditorBrowsableState.Never)]
+		public int NeverProperty
+		{
+			get { return -1; }
+			set {}
+		}
+
+
+
+		/// <summary>This member is marked as EditorBrowsableState.Always.</summary>
+		[EditorBrowsable(EditorBrowsableState.Always)]
+		public static BrowsableClass operator ++(BrowsableClass a) { return null; }
+
+		/// <summary>This member is marked as EditorBrowsableState.Advanced.</summary>
+		[EditorBrowsable(EditorBrowsableState.Advanced)]
+		public static BrowsableClass operator ~(BrowsableClass a) { return null; }
+
+		/// <summary>This member is marked as EditorBrowsableState.Never.</summary>
+		[EditorBrowsable(EditorBrowsableState.Never)]
+		public static BrowsableClass operator --(BrowsableClass a) { return null; }
+
+
+
+		/// <summary>This member is marked as EditorBrowsableState.Always.</summary>
+		[EditorBrowsable(EditorBrowsableState.Always)]
+		public event BrowsableHandler AlwaysEvent;
+
+		/// <summary>This member is marked as EditorBrowsableState.Advanced.</summary>
+		[EditorBrowsable(EditorBrowsableState.Advanced)]
+		public event BrowsableHandler AdvancedEvent;
+
+		/// <summary>This member is marked as EditorBrowsableState.Never.</summary>
+		[EditorBrowsable(EditorBrowsableState.Never)]
+		public event BrowsableHandler NeverEvent;
+
+		private void EatEvents()
+		{
+			AlwaysEvent(this, new EventArgs());
+			AdvancedEvent(this, new EventArgs());
+			NeverEvent(this, new EventArgs());
+		}
 	}
 }
 
