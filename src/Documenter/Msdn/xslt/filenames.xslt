@@ -66,6 +66,18 @@
     </xsl:choose>
   </xsl:template>
   <!-- -->
+  <xsl:template name="get-filename-for-field">
+    <xsl:param name="field" select="." />
+    <xsl:choose>
+      <xsl:when test="contains($field/@id, '(')">
+        <xsl:value-of select="concat(translate(substring-after(substring-before($field/@id, '('), 'F:'), '[,]', ''), $field/@overload, '.html')" />
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="concat(translate(substring-after($field/@id, 'F:'), '[,]', ''), $field/@overload, '.html')" />
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  <!-- -->
   <xsl:template name="get-filename-for-current-method-overloads">
     <xsl:variable name="type-part" select="translate(substring-after(../@id, 'T:'), '[,]', '')" />
     <xsl:value-of select="concat($type-part, '.', @name, '.html')" />

@@ -662,7 +662,7 @@ namespace NDoc.Documenter.Msdn
 
 		private void MakeHtmlForFields(WhichType whichType, XmlNode typeNode)
 		{
-			XmlNodeList fields = typeNode.SelectNodes("field");
+			XmlNodeList fields = typeNode.SelectNodes("field[not(@declaringType)]");
 
 			if (fields.Count > 0)
 			{

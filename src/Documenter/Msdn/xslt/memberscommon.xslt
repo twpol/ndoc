@@ -294,6 +294,49 @@
 		</tr>
 	</xsl:template>
 	<!-- -->
+	<xsl:template match="field[@declaringType]">
+		<xsl:variable name="name" select="@name" />
+		<xsl:variable name="declaring-type-id" select="concat('T:', @declaringType)" />
+		<xsl:text>&#10;</xsl:text>
+		<tr VALIGN="top">
+			<xsl:variable name="declaring-class" select="//class[@id=$declaring-type-id]" />
+			<xsl:choose>
+				<xsl:when test="$declaring-class">
+					<td width="50%">
+						<a>
+							<xsl:attribute name="href">
+								<xsl:call-template name="get-filename-for-field">
+									<xsl:with-param name="field" select="$declaring-class/field[@name=$name]" />
+								</xsl:call-template>
+							</xsl:attribute>
+							<xsl:value-of select="@name" />
+						</a>
+						<xsl:text> (inherited from </xsl:text>
+						<b>
+							<xsl:call-template name="get-datatype">
+								<xsl:with-param name="datatype" select="@declaringType" />
+							</xsl:call-template>
+						</b>
+						<xsl:text>)</xsl:text>
+					</td>
+					<td width="50%">
+						<xsl:call-template name="summary-with-no-paragraph">
+							<xsl:with-param name="member" select="//class[@id=$declaring-type-id]/field[@name=$name]" />
+						</xsl:call-template>
+					</td>
+				</xsl:when>
+				<xsl:otherwise>
+					<td width="50%">
+						<xsl:value-of select="@name" />
+					</td>
+					<td width="50%">
+						<xsl:text>See the third party documentation for more information.</xsl:text>
+					</td>
+				</xsl:otherwise>
+			</xsl:choose>
+		</tr>
+	</xsl:template>
+	<!-- -->
 	<xsl:template match="property[@declaringType and starts-with(@declaringType, 'System.')]">
 		<xsl:text>&#10;</xsl:text>
 		<tr VALIGN="top">
@@ -439,7 +482,7 @@
 		</tr>
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="field|property[not(@declaringType)]|event|method[not(@declaringType)]|operator">
+	<xsl:template match="field[not(@declaringType)]|property[not(@declaringType)]|event|method[not(@declaringType)]|operator">
 		<xsl:variable name="member" select="local-name()" />
 		<xsl:variable name="name" select="@name" />
 		<xsl:variable name="contract" select="@contract" />
