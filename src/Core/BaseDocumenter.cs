@@ -1134,7 +1134,11 @@ namespace NDoc.Core
 
 		private void WriteEvents(XmlWriter writer, Type type)
 		{
-			foreach (EventInfo eventInfo in type.GetEvents())
+			foreach (EventInfo eventInfo in type.GetEvents(
+				BindingFlags.Instance 
+				| BindingFlags.Static
+				| BindingFlags.Public
+				| BindingFlags.NonPublic))
 			{
 				MethodInfo addMethod = eventInfo.GetAddMethod(true);
 
