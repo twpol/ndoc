@@ -85,10 +85,10 @@ namespace NDoc.Gui
 			// 
 			// okButton
 			// 
-			this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.okButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.okButton.Location = new System.Drawing.Point(216, 256);
+			this.okButton.Location = new System.Drawing.Point(216, 248);
 			this.okButton.Name = "okButton";
 			this.okButton.Size = new System.Drawing.Size(88, 24);
 			this.okButton.TabIndex = 4;
@@ -97,10 +97,10 @@ namespace NDoc.Gui
 			// 
 			// cancelButton
 			// 
-			this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.cancelButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.cancelButton.Location = new System.Drawing.Point(312, 256);
+			this.cancelButton.Location = new System.Drawing.Point(312, 248);
 			this.cancelButton.Name = "cancelButton";
 			this.cancelButton.Size = new System.Drawing.Size(88, 24);
 			this.cancelButton.TabIndex = 5;
@@ -114,7 +114,7 @@ namespace NDoc.Gui
 			this.summaryTextBox.Location = new System.Drawing.Point(8, 80);
 			this.summaryTextBox.Multiline = true;
 			this.summaryTextBox.Name = "summaryTextBox";
-			this.summaryTextBox.Size = new System.Drawing.Size(392, 168);
+			this.summaryTextBox.Size = new System.Drawing.Size(392, 160);
 			this.summaryTextBox.TabIndex = 3;
 			this.summaryTextBox.Text = "";
 			// 
@@ -152,7 +152,7 @@ namespace NDoc.Gui
 			// 
 			// statusBar1
 			// 
-			this.statusBar1.Location = new System.Drawing.Point(0, 296);
+			this.statusBar1.Location = new System.Drawing.Point(0, 280);
 			this.statusBar1.Name = "statusBar1";
 			this.statusBar1.Size = new System.Drawing.Size(408, 22);
 			this.statusBar1.TabIndex = 6;
@@ -163,7 +163,7 @@ namespace NDoc.Gui
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.AutoScroll = true;
 			this.CancelButton = this.cancelButton;
-			this.ClientSize = new System.Drawing.Size(408, 318);
+			this.ClientSize = new System.Drawing.Size(408, 302);
 			this.Controls.Add(this.statusBar1);
 			this.Controls.Add(this.cancelButton);
 			this.Controls.Add(this.okButton);
@@ -173,7 +173,7 @@ namespace NDoc.Gui
 			this.Controls.Add(this.namespaceComboBox);
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.MinimumSize = new System.Drawing.Size(416, 200);
+			this.MinimumSize = new System.Drawing.Size(416, 232);
 			this.Name = "NamespaceSummariesForm";
 			this.ShowInTaskbar = false;
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
