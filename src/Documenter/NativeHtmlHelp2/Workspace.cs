@@ -233,7 +233,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 				foreach ( string f in Directory.GetFiles( RootDirectory, ext ) )
 					File.Delete( f );
 			}
-			Directory.Delete( WorkingDirectory, true );
+			if ( Directory.Exists( WorkingDirectory ) )
+				Directory.Delete( WorkingDirectory, true );
 		}
 
 	}
