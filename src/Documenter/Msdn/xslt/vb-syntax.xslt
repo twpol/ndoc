@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<xsl:transform version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:transform version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+	xmlns:msxsl="urn:schemas-microsoft-com:xslt"
+    xmlns:user="urn:my-scripts"
+    exclude-result-prefixes="msxsl user"
+>
 	<!-- -->
 	<xsl:param name="ndoc-vb-syntax" />
 	<!-- -->
@@ -53,59 +57,59 @@
 		<xsl:if test="$ndoc-vb-syntax">
 			<div class="syntax">
 				<span class="lang">[Visual&#160;Basic]</span>
-				<div>
-				  <xsl:if test="@abstract = 'true'">
-					  <xsl:text>MustInherit&#160;</xsl:text>
-				  </xsl:if>
-				  <xsl:if test="@sealed = 'true'">
-					  <xsl:text>NotInheritable&#160;</xsl:text>
-				  </xsl:if>
-				  <xsl:call-template name="vb-type-access">
-					  <xsl:with-param name="access" select="@access" />
-					  <xsl:with-param name="type" select="local-name()" />
-				  </xsl:call-template>
-				  <xsl:text>&#160;</xsl:text>
-				  <xsl:choose>
-					  <xsl:when test="local-name() = 'class'">Class</xsl:when>
-					  <xsl:when test="local-name() = 'interface'">Interface</xsl:when>
-					  <xsl:when test="local-name() = 'structure'">Structure</xsl:when>
-					  <xsl:when test="local-name() = 'enumeration'">Enum</xsl:when>
-					  <xsl:when test="local-name() = 'delegate'">
-						  <xsl:text>Delegate&#160;</xsl:text>
-						  <xsl:choose>
-							  <xsl:when test="@returnType = 'System.Void'">Sub</xsl:when>
-							  <xsl:otherwise>Function</xsl:otherwise>
-						  </xsl:choose>
-					  </xsl:when>
-					  <xsl:otherwise>ERROR</xsl:otherwise>
-				  </xsl:choose>
-				  <xsl:text>&#160;</xsl:text>
-				  <xsl:value-of select="@name" />
-				  <xsl:choose>
-					  <xsl:when test="local-name() != 'delegate'">
-						  <xsl:if test="@baseType">
-							  <div>
-							    <xsl:text>Inherits&#160;</xsl:text>
-							    <xsl:value-of select="@baseType" />
-							  </div>
-						  </xsl:if>
-						  <xsl:if test="implements[not(@inherited)]">
-							  <div>
-							    <xsl:text>Implements&#160;</xsl:text>
-							    <xsl:for-each select="implements[not(@inherited)]">
-								    <xsl:value-of select="." />
-								    <xsl:if test="position()!=last()">
-									    <xsl:text>, </xsl:text>
-								    </xsl:if>
-							    </xsl:for-each>
-							   </div>
-						  </xsl:if>
-					  </xsl:when>
-					  <xsl:otherwise>
-						  <xsl:call-template name="vb-parameters" />
-					  </xsl:otherwise>
-				  </xsl:choose>
-				 </div>
+				<br/>
+				<xsl:call-template name="vb-attributes"/>
+				<xsl:if test="@abstract = 'true'">
+					<xsl:text>MustInherit&#160;</xsl:text>
+				</xsl:if>
+				<xsl:if test="@sealed = 'true'">
+					<xsl:text>NotInheritable&#160;</xsl:text>
+				</xsl:if>
+				<xsl:call-template name="vb-type-access">
+					<xsl:with-param name="access" select="@access" />
+					<xsl:with-param name="type" select="local-name()" />
+				</xsl:call-template>
+				<xsl:text>&#160;</xsl:text>
+				<xsl:choose>
+					<xsl:when test="local-name() = 'class'">Class</xsl:when>
+					<xsl:when test="local-name() = 'interface'">Interface</xsl:when>
+					<xsl:when test="local-name() = 'structure'">Structure</xsl:when>
+					<xsl:when test="local-name() = 'enumeration'">Enum</xsl:when>
+					<xsl:when test="local-name() = 'delegate'">
+						<xsl:text>Delegate&#160;</xsl:text>
+						<xsl:choose>
+							<xsl:when test="@returnType = 'System.Void'">Sub</xsl:when>
+							<xsl:otherwise>Function</xsl:otherwise>
+						</xsl:choose>
+					</xsl:when>
+					<xsl:otherwise>ERROR</xsl:otherwise>
+				</xsl:choose>
+				<xsl:text>&#160;</xsl:text>
+				<xsl:value-of select="@name" />
+				<xsl:choose>
+					<xsl:when test="local-name() != 'delegate'">
+						<xsl:if test="@baseType">
+							<div>
+							<xsl:text>Inherits&#160;</xsl:text>
+							<xsl:value-of select="@baseType" />
+							</div>
+						</xsl:if>
+						<xsl:if test="implements[not(@inherited)]">
+							<div>
+							<xsl:text>Implements&#160;</xsl:text>
+							<xsl:for-each select="implements[not(@inherited)]">
+								<xsl:value-of select="." />
+								<xsl:if test="position()!=last()">
+									<xsl:text>, </xsl:text>
+								</xsl:if>
+							</xsl:for-each>
+							</div>
+						</xsl:if>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:call-template name="vb-parameters" />
+					</xsl:otherwise>
+				</xsl:choose>
 			</div>
 		</xsl:if>
 	</xsl:template>
@@ -213,6 +217,7 @@
 			<div class="syntax">
 				<span class="lang">[Visual&#160;Basic]</span>
 				<br />
+				<xsl:call-template name="vb-attributes"/>
 				<xsl:choose>
 					<xsl:when test="local-name() != 'operator'">
 						<xsl:if test="not(parent::interface or @interface)">
@@ -286,6 +291,7 @@
 			<div class="syntax">
 				<span class="lang">[Visual&#160;Basic]</span>
 				<br />
+				<xsl:call-template name="vb-attributes"/>
 				<xsl:if test="not(parent::interface)">
 					<xsl:call-template name="vb-method-access">
 						<xsl:with-param name="access" select="@access" />
@@ -319,6 +325,7 @@
 	<!-- -->
 	<xsl:template name="vb-property-syntax">
 		<xsl:if test="$ndoc-vb-syntax">
+			<xsl:call-template name="vb-attributes"/>
 			<xsl:if test="not(parent::interface)">
 				<xsl:choose>
 					<xsl:when test="@contract='Abstract'">
@@ -372,6 +379,43 @@
 				<br /><xsl:text>&#160;&#160;&#160;</xsl:text>
 				<xsl:value-of select="implements/@interface" /><xsl:text>.</xsl:text><xsl:value-of select="implements/@name" />
 			</xsl:if>
+		</xsl:if>
+	</xsl:template>
+	<!-- -->
+	<!-- ATTRIBUTES -->
+	<xsl:template name="vb-attributes">
+		<xsl:if test="$ndoc-document-attributes">
+			<xsl:if test="attribute">
+				<xsl:for-each select="attribute">
+					<div class="attribute"><xsl:call-template name="vb-attribute">
+						<xsl:with-param name="attname" select="@name" />
+					</xsl:call-template></div>
+				</xsl:for-each>
+			</xsl:if>
+		</xsl:if>
+	</xsl:template>
+	<!-- -->	
+	<xsl:template name="vb-attribute">
+		<xsl:param name="attname" />
+		<xsl:if test="user:isAttributeWanted($ndoc-documented-attributes, @name)">			
+			<xsl:text>&lt;</xsl:text>
+			<xsl:call-template name="strip-namespace-and-attribute">
+				<xsl:with-param name="name" select="@name" />
+			</xsl:call-template>
+			<xsl:if test="count(property) > 0">
+				<xsl:text>(</xsl:text>
+				<xsl:for-each select="property">
+					<xsl:if test="user:isPropertyWanted($ndoc-documented-attributes, @name) and @value!=''">
+						<xsl:value-of select="@name" />
+						<xsl:text>="</xsl:text>
+						<xsl:value-of select="@value" />
+						<xsl:text>"</xsl:text>
+						<xsl:if test="position()!=last()"><xsl:text>, </xsl:text></xsl:if>
+					</xsl:if>
+				</xsl:for-each>
+				<xsl:text>)</xsl:text>
+			</xsl:if>
+			<xsl:text>&gt;</xsl:text>
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
