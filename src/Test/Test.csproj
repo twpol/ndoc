@@ -28,7 +28,7 @@
                     BaseAddress = "285212672"
                     CheckForOverflowUnderflow = "false"
                     ConfigurationOverrideFile = ""
-                    DefineConstants = "DEBUG;TRACE"
+                    DefineConstants = "DEBUG;TRACE;MONO"
                     DocumentationFile = "NDoc.Test.xml"
                     DebugSymbols = "true"
                     FileAlignment = "4096"
@@ -70,7 +70,8 @@
                 />
                 <Reference
                     Name = "System.XML"
-                    AssemblyName = "System.Xml"
+                    AssemblyName = "System.XML"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
             </References>
         </Build>
@@ -84,6 +85,10 @@
                 <File
                     RelPath = "include.xml"
                     BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Test.build"
+                    BuildAction = "None"
                 />
                 <File
                     RelPath = "Test.cs"

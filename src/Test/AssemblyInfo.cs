@@ -1,9 +1,6 @@
 using System;
 using System.Reflection;
 
-[assembly: CLSCompliant(true)]
-
-// Common
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("ndoc.sourceforge.net")]
 [assembly: AssemblyProduct("NDoc")]
@@ -15,10 +12,4 @@ using System.Reflection;
 [assembly: AssemblyDescription("Test class library for the NDoc code documentation generator.")]
 
 // When kept constant, results of tests can be compared (windiffed) against older output.
-[assembly: AssemblyVersion("1.2.1285.524")]
-
-#if !DEBUG
-[assembly: AssemblyDelaySign(false)]
-[assembly: AssemblyKeyFile(@"..\..\..\ndoc.snk")]
-[assembly: AssemblyKeyName("")]
-#endif
+[assembly: AssemblyVersion("1.2.0.0")]
