@@ -42,7 +42,9 @@ namespace NDoc.Documenter.Latex
 		[
 		Category("LaTeX"),
 		Description("The directory to output the files to."),
+#if !MONO //System.Windows.Forms.Design.FolderNameEditor is not implemented in mono 0.25
 		Editor(typeof(FolderNameEditor), typeof(UITypeEditor))
+#endif
 		]
 		public string OutputDirectory
 		{

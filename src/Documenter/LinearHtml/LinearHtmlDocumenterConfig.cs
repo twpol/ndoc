@@ -75,7 +75,9 @@ namespace NDoc.Documenter.LinearHtml
 		/// <summary>Gets or sets the OutputDirectory property.</summary>
 		[
 		Category("Documentation Main Settings"),
+#if !MONO //System.Windows.Forms.Design.FolderNameEditor is not implemented in mono 0.25
 		Editor(typeof(FolderNameEditor), typeof(UITypeEditor)),
+#endif
 		Description("The directory in which .html file will be generated."),
 		]
 		public string OutputDirectory

@@ -101,6 +101,7 @@ namespace NDoc.Core
 								}
 							}
 
+#if !MONO //TODO: search in the mono lib folder, if they ever give us the xml documentation
 							// If still not found, try locating the assembly in the Framework folder
 							if (docPath == null )
 							{
@@ -111,6 +112,7 @@ namespace NDoc.Core
 									docPath = Path.Combine(frameworkPath, a.GetName().Name + ".xml");
 								}
 							}
+#endif
 
 							if ((docPath != null) && (File.Exists(docPath)))
 							{
@@ -178,7 +180,7 @@ namespace NDoc.Core
 				//if the node was not found, create an empty one
 				if (summary == null)
 				{
-					Debug.WriteLine("Summary node not found for " + key);
+					//Debug.WriteLine("Summary node not found for " + key);
 					summary = new XmlDocument();
 				}
 

@@ -71,7 +71,12 @@ namespace NDoc.Documenter.Xml
 				}
 			}
 
-			Document.Save(config.OutputFile);
+			string buffer = XmlBuffer;
+			using (StreamWriter sr = File.CreateText(config.OutputFile))
+			{
+				sr.Write(buffer);
+			}
+			//Document.Save(config.OutputFile);
 
 			OnDocBuildingStep(100, "Done.");
 		}

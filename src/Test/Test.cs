@@ -142,7 +142,9 @@ namespace NDoc.Test
 		{
 			Event(this, new EventArgs());
 			ProtectedEvent(this, new EventArgs());
+#if !MONO //mono does not like this:
 			StaticEvent(this, new EventArgs());
+#endif
 			EventWithArgs(this, new EventArgsTest());
 			EventWithMoreArgs(this, new EventArgsDerived());
 			MultiEvent(this, new EventArgsOne());
@@ -1816,10 +1818,12 @@ namespace NDoc.Test.NewStuff
 	/// </summary>
 	public class NewDerived : NewBase, IInterfaceC, IInterfaceD
 	{
+#if !MONO //mono does not like this:
 		/// <summary>no comment</summary>
 		new public class NewClass
 		{
 		}
+#endif
 		/// <summary>This indexer is new</summary>
 		new public int this[int n]
 		{

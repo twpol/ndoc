@@ -24,6 +24,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
+using System.Xml.XPath;
 using System.ComponentModel;
 
 namespace NDoc.Core
@@ -38,6 +39,7 @@ namespace NDoc.Core
 		Assembly currentAssembly;
 		XmlDocument currentSlashDoc;
 
+		string xmlBuffer;
 		XmlDocument xmlDocument;
 
 		XmlDocumentationCache docCache;
@@ -68,7 +70,7 @@ namespace NDoc.Core
 		protected BaseDocumenter(string name)
 		{
 			_Name = name;
-			xmlDocument = new XmlDocument();
+			//xmlDocument = new XmlDocument();
 			docCache = new XmlDocumentationCache();
 		}
 
@@ -94,10 +96,40 @@ namespace NDoc.Core
 			set { config = value; }
 		}
 
+		//TODO: change this into a method or completely remove it.
 		/// <summary>Gets the XmlDocument containing the combined relected metadata and /doc comments.</summary>
+		[Obsolete("This property is obsolete.  Use the string XmlBuffer property instead.", false)]
 		protected XmlDocument Document
 		{
-			get { return xmlDocument; }
+			get 
+			{ 
+				xmlDocument = new XmlDocument();
+				xmlDocument.LoadXml(XmlBuffer);
+				return xmlDocument;
+			}
+		}
+
+		/// <summary>
+		/// The XML string containing the combined relected metadata and /doc comments.
+		/// </summary>
+		protected string XmlBuffer
+		{
+			get 
+			{ 
+				if (xmlBuffer == null)
+				{
+					throw new InvalidOperationException("MakeXml() has not been called yet.");
+				}
+				return xmlBuffer; 
+			}
+		}
+
+		/// <summary>
+		/// Returns the XPathDocument to access the combined relected metadata and /doc comments.
+		/// </summary>
+		protected XPathDocument GetXPathDocument()
+		{
+			return new XPathDocument(new StringReader(XmlBuffer));
 		}
 
 		private string _Name;
@@ -130,21 +162,11 @@ namespace NDoc.Core
 		/// <summary>See <see cref="IDocumenter"/>.</summary>
 		public event DocBuildingEventHandler DocBuildingProgress;
 
-		private DateTime lastStepDateTime;
-
 		/// <summary>Raises the DocBuildingStep event.</summary>
 		/// <param name="step">The overall percent complete value.</param>
 		/// <param name="label">A description of the work currently beeing done.</param>
 		protected void OnDocBuildingStep(int step, string label)
 		{
-			// timing
-			if (lastStepDateTime.Ticks > 0)
-			{
-				TimeSpan ts = DateTime.Now - lastStepDateTime;
-				Console.WriteLine(String.Format("	Last step took {0:f1} s", ts.TotalSeconds));
-			}
-			lastStepDateTime = DateTime.Now;
-
 			if (DocBuildingStep != null)
 				DocBuildingStep(this, new ProgressArgs(step, label));
 		}
@@ -252,11 +274,8 @@ namespace NDoc.Core
 			_Project = project;
 			AssemblyResolver assemblyResolver = SetupAssemblyResolver(project);
 
-			// Sucks that there's no XmlNodeWriter. Instead we
-			// have to write out to a file then load back in.
-			// For performance, we'll write to a memory stream instead of a file.
-			MemoryStream memoryStream = new MemoryStream();
-			XmlWriter writer = new XmlTextWriter(memoryStream, System.Text.Encoding.UTF8);
+			StringWriter swriter = new StringWriter();
+			XmlWriter writer = new XmlTextWriter(swriter);
 
 			string currentAssemblyFilename = "";
 
@@ -304,8 +323,14 @@ namespace NDoc.Core
 					currentAssembly = LoadAssembly(path);
 
 					currentSlashDoc = new XmlDocument();
-					currentSlashDoc.Load(assemblySlashDoc.SlashDocFilename);
 
+#if MONO //mono v0.25 does not support XmlDocument.Load()
+					TextReader reader = new StreamReader(assemblySlashDoc.SlashDocFilename);
+					string xml = reader.ReadToEnd();
+					currentSlashDoc.LoadXml(xml);
+#else
+					currentSlashDoc.Load(assemblySlashDoc.SlashDocFilename);
+#endif
 					WriteAssembly(writer);
 
 					i++;
@@ -314,24 +339,20 @@ namespace NDoc.Core
 				OnDocBuildingProgress(100);
 
 				writer.WriteEndElement();
-
 				writer.WriteEndDocument();
-
-				//writer.Close();
 				writer.Flush();
 
-				// write our intermediate xml to a file for debugging
 #if DEBUG
+				// write our intermediate xml to a file for debugging
 //				string testFile = Path.Combine(Path.GetPathRoot(Environment.SystemDirectory), "ndoc-test.xml");
 //				FileStream fs = new FileStream(testFile, FileMode.Create);
 //				fs.Write(memoryStream.GetBuffer(), 0, (int)memoryStream.Length);
 //				fs.Close();
 #endif
 
-				// xmlDocument.Load(new MemoryStream(memoryStream.GetBuffer()));
-				memoryStream.Position = 0;
-				xmlDocument.Load(memoryStream);
-				writer.Close();
+				xmlBuffer = swriter.ToString();
+				//xmlDocument = new XmlDocument();
+				//xmlDocument.LoadXml(xmlBuffer);
 			}
 			catch (Exception e)
 			{
@@ -343,6 +364,7 @@ namespace NDoc.Core
 			finally
 			{
 				writer.Close();
+				swriter.Close();
 
 				if (null != assemblyResolver)
 				{
@@ -360,16 +382,17 @@ namespace NDoc.Core
 				return true;
 			}
 
-			EditorBrowsableAttribute browsable = 
-				Attribute.GetCustomAttribute(minfo, typeof(EditorBrowsableAttribute), false)
-				as EditorBrowsableAttribute;
-
-			if (browsable == null)
+			EditorBrowsableAttribute[] browsables = 
+				Attribute.GetCustomAttributes(minfo, typeof(EditorBrowsableAttribute), false)
+				as EditorBrowsableAttribute[];
+			
+			if (browsables.Length == 0)
 			{
 				return true;
 			}
 			else
 			{
+				EditorBrowsableAttribute browsable = browsables[0];
 				return (browsable.State == EditorBrowsableState.Always) || 
 					((browsable.State == EditorBrowsableState.Advanced) && 
 					(MyConfig.EditorBrowsableFilter != EditorBrowsableFilterLevel.HideAdvanced));
@@ -624,7 +647,13 @@ namespace NDoc.Core
 
 		private void WriteNamespaces(XmlWriter writer, Module module)
 		{
+#if MONO    //Module.GetTypes() is not implemented in mono v0.25
+			//HACK: so we cheat and load assembly types
+			Type[] types = module.Assembly.GetTypes();
+#else
 			Type[] types = module.GetTypes();
+#endif
+
 			StringCollection namespaceNames = GetNamespaceNames(types);
 
 			foreach (string namespaceName in namespaceNames)
@@ -667,7 +696,7 @@ namespace NDoc.Core
 				{
 					Trace.WriteLine(string.Format("Writing namespace {0}...", namespaceName));
 
-					MemoryStream xmlMemoryStream = null;
+					StringWriter swriter = null;
 					XmlWriter tempWriter = writer;
 
 					// If we don't want empty namespaces, we need to write the XML to a temporary
@@ -676,8 +705,8 @@ namespace NDoc.Core
 
 					if (!MyConfig.DocumentEmptyNamespaces)
 					{
-						xmlMemoryStream = new MemoryStream();
-						tempWriter = new XmlTextWriter(xmlMemoryStream, System.Text.Encoding.UTF8);
+						swriter = new StringWriter();
+						tempWriter = new XmlTextWriter(swriter);
 					}
 
 					tempWriter.WriteStartElement("namespace");
@@ -718,7 +747,6 @@ namespace NDoc.Core
 					if (!MyConfig.DocumentEmptyNamespaces)
 					{
 						tempWriter.Close();
-
 						if (nbClasses == 0 && nbInterfaces == 0 && nbStructures == 0 &&
 							nbDelegates == 0 && nbEnums == 0)
 						{
@@ -726,9 +754,9 @@ namespace NDoc.Core
 						}
 						else
 						{
-							string rawXml = System.Text.Encoding.UTF8.GetString( xmlMemoryStream.ToArray() );
-							writer.WriteRaw( rawXml.Substring(1) );
+							writer.WriteRaw(swriter.ToString());
 						}
+						swriter.Close();
 					}
 				}
 			}
@@ -1198,6 +1226,7 @@ namespace NDoc.Core
 					  BindingFlags.NonPublic;
 
 			MethodInfo[] methods = type.GetMethods(bindingFlags);
+
 			foreach (MethodInfo method in methods)
 			{
 				string name = method.Name;
@@ -1817,6 +1846,7 @@ namespace NDoc.Core
 				{
 					WriteMethodDocumentation(writer, memberName, method, true);
 				}
+
 				WriteCustomAttributes(writer, method);
 
 				foreach (ParameterInfo parameter in method.GetParameters())

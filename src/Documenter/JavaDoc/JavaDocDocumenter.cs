@@ -20,6 +20,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Xml;
 using System.Xml.Xsl;
+using System.Xml.XPath;
 using System.Reflection;
 using NDoc.Core;
 
@@ -139,7 +140,8 @@ namespace NDoc.Documenter.JavaDoc
 
 			TextWriter writer = new StreamWriter(resultPath);
 
-			transform.Transform(Document, args, writer);
+			XPathDocument doc = GetXPathDocument();
+			transform.Transform(doc, args, writer, new XmlUrlResolver());
 
 			writer.Close();
 		}
@@ -160,7 +162,10 @@ namespace NDoc.Documenter.JavaDoc
 
 		private void WriteNamespaceSummaries()
 		{
-			XmlNodeList namespaceNodes = Document.SelectNodes("/ndoc/assembly/module/namespace");
+			XmlDocument doc = new XmlDocument();
+			doc.LoadXml(XmlBuffer);
+
+			XmlNodeList namespaceNodes = doc.SelectNodes("/ndoc/assembly/module/namespace");
 
 			foreach (XmlElement namespaceElement in namespaceNodes)
 			{

@@ -230,8 +230,8 @@ namespace NDoc.Documenter.Msdn
 				MakeXml(project);
 
 				// Load the XML documentation into a DOM.
-				xmlDocumentation = Document;
-				//xmlDocumentation.LoadXml(Document.OuterXml);				
+				xmlDocumentation = new XmlDocument();
+				xmlDocumentation.LoadXml(XmlBuffer);
 
 				XmlNodeList typeNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace/*[name()!='documentation']");
 
@@ -262,8 +262,12 @@ namespace NDoc.Documenter.Msdn
 					}
 				}
 
+#if MONO //Environment.ExpandEnvironmentVariables is not implemented in mono v0.25
+				string compiler = MyConfig.HtmlHelpCompilerFilename;
+#else
 				string compiler = Environment.ExpandEnvironmentVariables(
 						MyConfig.HtmlHelpCompilerFilename);
+#endif
 
 				htmlHelp = new HtmlHelp(
 					MyConfig.OutputDirectory,
@@ -376,7 +380,8 @@ namespace NDoc.Documenter.Msdn
 					XslTransform xsltContents = new XslTransform();
 					MakeTransform(xsltContents, "htmlcontents.xslt");
 					xsltContents.Transform(htmlHelp.GetPathToContentsFile(), 
-						Path.Combine(MyConfig.OutputDirectory, "contents.html"));
+						Path.Combine(MyConfig.OutputDirectory, "contents.html"), 
+						new XmlUrlResolver());
 				}
 
 				if ((MyConfig.OutputTarget & OutputType.HtmlHelp) > 0)
@@ -483,6 +488,7 @@ namespace NDoc.Documenter.Msdn
 		private void MakeTransforms()
 		{
 			OnDocBuildingProgress(0);
+			Trace.Indent();
 
 			xsltNamespace = new XslTransform();
 			xsltNamespaceHierarchy = new XslTransform();
@@ -495,55 +501,67 @@ namespace NDoc.Documenter.Msdn
 			xsltProperty = new XslTransform();
 			xsltField = new XslTransform();
 
+			Trace.WriteLine("namespace.xslt");
 			OnDocBuildingProgress(10);
 			MakeTransform(
 				xsltNamespace,
 				"namespace.xslt");
 
+			Trace.WriteLine("namespacehierarchy.xslt");
 			OnDocBuildingProgress(20);
 			MakeTransform(
 				xsltNamespaceHierarchy,
 				"namespacehierarchy.xslt");
 
+			Trace.WriteLine("type.xslt");
 			OnDocBuildingProgress(30);
 			MakeTransform(
 				xsltType,
 				"type.xslt");
 
+			Trace.WriteLine("allmembers.xslt");
 			OnDocBuildingProgress(40);
 			MakeTransform(
 				xsltAllMembers,
 				"allmembers.xslt");
 
+			Trace.WriteLine("individualmembers.xslt");
 			OnDocBuildingProgress(50);
 			MakeTransform(
 				xsltIndividualMembers,
 				"individualmembers.xslt");
 
+			Trace.WriteLine("event.xslt");
 			OnDocBuildingProgress(60);
 			MakeTransform(
 				xsltEvent,
 				"event.xslt");
 
+			Trace.WriteLine("member.xslt");
 			OnDocBuildingProgress(70);
 			MakeTransform(
 				xsltMember,
 				"member.xslt");
 
+			Trace.WriteLine("memberoverload.xslt");
 			OnDocBuildingProgress(80);
 			MakeTransform(
 				xsltMemberOverload,
 				"memberoverload.xslt");
 
+			Trace.WriteLine("property.xslt");
 			OnDocBuildingProgress(90);
 			MakeTransform(
 				xsltProperty,
 				"property.xslt");
 
+			Trace.WriteLine("field.xslt");
 			OnDocBuildingProgress(100);
 			MakeTransform(
 				xsltField,
 				"field.xslt");
+
+			Trace.Unindent();
 		}
 
 		private WhichType GetWhichType(XmlNode typeNode)
@@ -1436,7 +1454,7 @@ namespace NDoc.Documenter.Msdn
 				arguments.AddExtensionObject("urn:NDocUtil", utilities);
 				arguments.AddExtensionObject("urn:NDocExternalHtml", htmlProvider);
 
-				transform.Transform(xmlDocumentation, arguments, streamWriter);
+				transform.Transform(xmlDocumentation, arguments, streamWriter, new XmlUrlResolver());
 			}
 			finally
 			{

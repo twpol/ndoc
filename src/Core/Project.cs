@@ -224,7 +224,11 @@ namespace NDoc.Core
 		{
 			ArrayList documenters = new ArrayList();
 
+#if MONO //System.Windows.Forms.Application.StartupPath is not implemented in mono v0.25
+			string mainModuleDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+#else
 			string mainModuleDirectory = System.Windows.Forms.Application.StartupPath;
+#endif
 
 			foreach (string fileName in Directory.GetFiles(mainModuleDirectory, "NDoc.Documenter.*.dll"))
 			{

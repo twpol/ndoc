@@ -60,7 +60,9 @@ namespace NDoc.Documenter.JavaDoc
 		[
 			Category("Documentation Main Settings"),
 			Description("The output folder."),
-			Editor(typeof(FolderNameEditor), typeof(UITypeEditor))
+#if !MONO //System.Windows.Forms.Design.FolderNameEditor is not implemented in mono 0.25
+		Editor(typeof(FolderNameEditor), typeof(UITypeEditor))
+#endif
 		]
 		public string OutputDirectory
 		{

@@ -35,6 +35,18 @@ namespace NDoc.ConsoleApplication
 			{
 				project = new Project();
 				documenter = project.GetDocumenter("MSDN");
+				if (documenter == null)
+				{
+					//MSDN documenter not found, pick the first one available.
+					if (project.Documenters.Count > 0)
+					{
+						documenter = (IDocumenter)project.Documenters[0];
+					}
+					else
+					{
+						throw new ApplicationException("Could not find any documenter assemblies.");
+					}
+				}
 				int maxDepth = 20; //to limit recursion depth
 				bool propertiesSet = false;
 				bool projectSet = false;
@@ -146,8 +158,8 @@ namespace NDoc.ConsoleApplication
 			{
 				Console.WriteLine( "Error: " + except.Message );
 				System.Diagnostics.Trace.WriteLine( "Exception: " + Environment.NewLine + except.ToString() );
+				return 2;
 			}
-			return 2;
 		}
 
 		private static void WriteUsage()
@@ -166,7 +178,7 @@ namespace NDoc.ConsoleApplication
 			Console.WriteLine("                    [[-property=value] [-property=value]...]");
 			Console.WriteLine("                    [-verbose]");
 			Console.WriteLine();
-			Console.WriteLine("or     NDocConsole  -project=ndocfile [-documenter=docname] [-verbose]");
+			Console.WriteLine("or     NDocConsole  [-documenter=docname] -project=ndocfile [-verbose]");
 			Console.WriteLine();
 
 			Console.Write("available documenters: ");
@@ -194,8 +206,18 @@ namespace NDoc.ConsoleApplication
 
 		}
 
+		private static DateTime lastStepDateTime;
+
 		private static void DocBuildingStepHandler(object sender, ProgressArgs e)
 		{
+			// timing
+			if (lastStepDateTime.Ticks > 0)
+			{
+				TimeSpan ts = DateTime.UtcNow - lastStepDateTime;
+				Console.WriteLine(String.Format("	Last step took {0:f1} s", ts.TotalSeconds));
+			}
+			lastStepDateTime = DateTime.UtcNow;
+
 			Console.WriteLine( e.Status );
 		}
 

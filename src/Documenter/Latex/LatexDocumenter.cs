@@ -156,9 +156,11 @@ Path.GetFullPath(Path.Combine(moduleDir, @"..\..\..\Documenter\Latex"));
 						
 			OnDocBuildingStep(10, "Scanning document text...");
 
-			MakeTextTeXCompatible(Document);
+			XmlDocument doc = new XmlDocument();
+			doc.LoadXml(XmlBuffer);
+			MakeTextTeXCompatible(doc);
 			
-			WriteTeXDocument();
+			WriteTeXDocument(doc);
 			CompileTexDocument();
 		}
 
@@ -305,7 +307,7 @@ Path.GetFullPath(Path.Combine(moduleDir, @"..\..\..\Documenter\Latex"));
 		/// <summary>
 		/// Uses XSLT to transform the current document into LaTeX source.
 		/// </summary>
-		private void WriteTeXDocument()
+		private void WriteTeXDocument(XmlDocument document)
 		{			
 			XmlWriter writer;
 			XsltArgumentList args;
@@ -324,7 +326,7 @@ Path.GetFullPath(Path.Combine(moduleDir, @"..\..\..\Documenter\Latex"));
 							
 			OnDocBuildingStep(20, "Building TeX file...");
 
-			transform.Transform(Document, args, writer);
+			transform.Transform(document, args, writer, new XmlUrlResolver());
 
 			writer.Close();
 		}

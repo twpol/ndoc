@@ -3,6 +3,9 @@ using System.Collections.Specialized;
 
 namespace NDoc.Documenter.Msdn
 {
+	/// <summary>
+	/// Provides an extension object for the xslt transformations.
+	/// </summary>
 	public class MsdnXsltUtilities
 	{
 		private const string sdkDoc10BaseUrl = "ms-help://MS.NETFrameworkSDK/cpref/html/frlrf";
@@ -15,7 +18,7 @@ namespace NDoc.Documenter.Msdn
 		private string sdkDocExt; 
 		private StringDictionary fileNames;
 		private StringDictionary elemNames;
-		private StringCollection descriptions = new StringCollection();
+		private StringCollection descriptions;
 
 		/// <summary>
 		/// Initializes a new instance of class MsdnXsltUtilities
@@ -67,6 +70,19 @@ namespace NDoc.Documenter.Msdn
 			get { return sdkDocExt; }
 		}
 
+#if MONO // with mono, an arraylist is sent instead of a string
+		/// <summary>
+		/// Returns an HRef for a CRef
+		/// </summary>
+		/// <param name="list">The argument list containing the 
+		/// cRef for which the HRef will be looked up.</param>
+		/// <returns></returns>
+		public string GetHRef(System.Collections.ArrayList list)
+		{
+			System.Diagnostics.Trace.WriteLine("Count:   " + list.Count);
+			System.Diagnostics.Trace.WriteLine("Type[0]: " + list[0].GetType().FullName);
+			string cref = (string)list[0];
+#else
 		/// <summary>
 		/// Returns an HRef for a CRef
 		/// </summary>
@@ -74,6 +90,8 @@ namespace NDoc.Documenter.Msdn
 		/// <returns></returns>
 		public string GetHRef(string cref)
 		{
+#endif
+			System.Diagnostics.Trace.WriteLine("cref:    " + cref);
 			if (cref.Substring(2, 7) != systemPrefix)
 			{
 				string fileName = fileNames[cref];
@@ -103,6 +121,21 @@ namespace NDoc.Documenter.Msdn
 				}
 			}
 		}
+
+
+#if MONO // with mono, an arraylist is sent instead of a string
+		/// <summary>
+		/// Returns an HRef for a CRef
+		/// </summary>
+		/// <param name="list">The argument list containing the 
+		/// cRef for which the HRef will be looked up.</param>
+		/// <returns></returns>
+		public string GetName(System.Collections.ArrayList list)
+		{
+			System.Diagnostics.Trace.WriteLine("Count:   " + list.Count);
+			System.Diagnostics.Trace.WriteLine("Type[0]: " + list[0].GetType().FullName);
+			string cref = (string)list[0];
+#else
 		/// <summary>
 		/// Returns a name for a CRef
 		/// </summary>
@@ -110,6 +143,7 @@ namespace NDoc.Documenter.Msdn
 		/// <returns></returns>
 		public string GetName(string cref)
 		{
+#endif
 			if (cref.Substring(2, 7) != systemPrefix)
 			{
 				string name = elemNames[cref];
@@ -144,6 +178,7 @@ namespace NDoc.Documenter.Msdn
 			return sdkDocBaseUrl + crefType.Replace(".", "") + "Class" + crefMember + "Topic" + sdkDocExt;
 		}
 
+		//TODO: if the author of this method could enlighten us on its purpose...
 		public bool HasSimilarOverloads(string description)
 		{
 			if (descriptions.Contains(description))
