@@ -399,12 +399,13 @@ namespace NDoc.Documenter.Msdn
 					File.Delete(htmlHelp.GetPathToContentsFile());
 				}
 
-				// if we're build a CHM copy that to the Outpur dir
-				if ((MyConfig.OutputTarget & OutputType.HtmlHelp) > 0)
+				// if we're only building a CHM, copy that to the Outpur dir
+				if ((MyConfig.OutputTarget & OutputType.HtmlHelp) > 0 && (MyConfig.OutputTarget & OutputType.Web) == 0) {
 					workspace.SaveOutputs( "*.chm" );
-				// otherwise copy everything to the output dir (cause the help file is all the html, not jsut one chm)
-				else
+				} else {
+					// otherwise copy everything to the output dir (cause the help file is all the html, not just one chm)
 					workspace.SaveOutputs( "*.*" );
+				}
 				
 				if ( MyConfig.CleanIntermediates )
 					workspace.CleanIntermediates();
