@@ -75,8 +75,6 @@ namespace NDoc.Core
 			_AutoPropertyBackerSummaries = false;
 			_AutoDocumentConstructors = true;
 
-			_GetExternalSummaries = true;
-
 			_DocumentAttributes = false;
 			_DocumentInheritedAttributes = true;
 			_ShowTypeIdInAttributes = false;
@@ -317,6 +315,7 @@ namespace NDoc.Core
 			// we cannot handle this, so return an error message
 			return String.Format("     Property '{0}' has an invalid value for type {1} ('{2}') \n", property.Name, property.PropertyType.ToString() ,value);
 		}
+
 
 		#region Show Missing Documentation Options
 
@@ -829,27 +828,6 @@ namespace NDoc.Core
 			set
 			{
 				_AutoDocumentConstructors = value;
-				SetDirty();
-			}
-		}
-
-		private bool _GetExternalSummaries;
-
-		/// <summary>Load external xml files?</summary>
-		/// <remarks>If true, NDoc will try loading external xml files to 
-		/// retreive the summaries of inherited members. Setting this to true results 
-		/// in more complete documentation as NDoc will attempt to retrieve summaries
-		/// for any inherited members from types external to the project, including CLR types.</remarks>
-		[Category("Documentation Main Settings")]
-		[Description("If true, NDoc will try loading external xml files to retreive the summaries of inherited members.")]
-		[DefaultValue(true)]
-		public bool GetExternalSummaries
-		{
-			get { return _GetExternalSummaries; }
-
-			set
-			{
-				_GetExternalSummaries = value;
 				SetDirty();
 			}
 		}
