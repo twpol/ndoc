@@ -92,7 +92,8 @@ namespace NDoc.Documenter.Msdn
 		{
 #endif
 			System.Diagnostics.Trace.WriteLine("cref:    " + cref);
-			if (cref.Substring(2, 7) != systemPrefix)
+			if ((cref.Length < 9)
+				|| (cref.Substring(2, 7) != systemPrefix))
 			{
 				string fileName = fileNames[cref];
 				if ((fileName == null) && cref.StartsWith("F:"))
@@ -144,7 +145,8 @@ namespace NDoc.Documenter.Msdn
 		public string GetName(string cref)
 		{
 #endif
-			if (cref.Substring(2, 7) != systemPrefix)
+			if ((cref.Length < 9)
+				|| (cref.Substring(2, 7) != systemPrefix))
 			{
 				string name = elemNames[cref];
 				if (name != null)
