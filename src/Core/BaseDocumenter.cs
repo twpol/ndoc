@@ -839,6 +839,22 @@ namespace NDoc.Core
 			writer.WriteEndElement();
 		}
 
+		private string GetEnumerationName(Type type)
+		{
+			int indexOfPlus = type.FullName.IndexOf('+');
+
+			if (indexOfPlus != -1)
+			{
+				int lastIndexOfDot = type.FullName.LastIndexOf('.');
+
+				return type.FullName.Substring(lastIndexOfDot + 1).Replace('+', '.');
+			}
+			else
+			{
+				return type.Name;
+			}
+		}
+
 		/// <summary>Writes XML documenting an enumeration.</summary>
 		/// <param name="writer">XmlWriter to write on.</param>
 		/// <param name="type">Enumeration to document.</param>
@@ -847,7 +863,7 @@ namespace NDoc.Core
 			string memberName = GetMemberName(type);
 
 			writer.WriteStartElement("enumeration");
-			writer.WriteAttributeString("name", type.Name.Replace('+', '.'));
+			writer.WriteAttributeString("name", GetEnumerationName(type));
 			writer.WriteAttributeString("id", memberName);
 			writer.WriteAttributeString("access", GetTypeAccessValue(type));
 
