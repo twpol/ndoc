@@ -642,9 +642,17 @@
 					<xsl:attribute name="href">
 						<xsl:value-of select="$href" />
 					</xsl:attribute>
-					<xsl:call-template name="get-a-name">
-						<xsl:with-param name="cref" select="$cref" />
-					</xsl:call-template>
+
+					<xsl:choose>
+						<xsl:when test="node()">
+							<xsl:value-of select="." />
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:call-template name="get-a-name">
+								<xsl:with-param name="cref" select="$cref" />
+							</xsl:call-template>
+						</xsl:otherwise>
+					</xsl:choose>
 				</a>
 			</xsl:otherwise>
 		</xsl:choose>
