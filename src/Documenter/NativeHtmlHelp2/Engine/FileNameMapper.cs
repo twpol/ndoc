@@ -1,6 +1,6 @@
 // MsdnDocumenter.cs - a MSDN-like documenter
-// Copyright (C) 2003 Don Kackman
-// Parts Copyright (C) 2004 Kevin Downs
+// Copyright (C) 2004 Kevin Downs
+// Parts Copyright (C) 2003 Don Kackman
 // Parts copyright (C) 2001 Kral Ferch, Jason Diamond
 //
 // This program is free software; you can redistribute it and/or modify
@@ -31,29 +31,17 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 	/// </summary>
 	public enum WhichType
 	{
-		/// <summary>
-		/// classes
-		/// </summary>
+		/// <summary>classes</summary>
 		Class, 
-		/// <summary>
-		/// interfaces
-		/// </summary>
+		/// <summary>interfaces</summary>
 		Interface, 
-		/// <summary>
-		/// structs
-		/// </summary>
+		/// <summary>structs</summary>
 		Structure, 
-		/// <summary>
-		/// enumberations
-		/// </summary>
+		/// <summary>enumberations</summary>
 		Enumeration, 
-		/// <summary>
-		/// delegates
-		/// </summary>
+		/// <summary>delegates</summary>
 		Delegate, 
-		/// <summary>
-		/// error case
-		/// </summary>
+		/// <summary>error case</summary>
 		Unknown
 	};
 
@@ -63,7 +51,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 	public class FileNameMapper
 	{
 		private Hashtable fileNames;
-		private StringDictionary DuplicateCheckDictionary;
 
 		private const string FilenamePrefix = "ndoc";
 
@@ -86,12 +73,12 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		{
 			switch (typeNode.Name)
 			{
-				case "class" : return WhichType.Class;
-				case "interface" : return WhichType.Interface;
-				case "structure" : return WhichType.Structure;
+				case "class"       : return WhichType.Class;
+				case "interface"   : return WhichType.Interface;
+				case "structure"   : return WhichType.Structure;
 				case "enumeration" : return WhichType.Enumeration;
-				case "delegate" : return WhichType.Delegate;
-				default : return WhichType.Unknown;
+				case "delegate"    : return WhichType.Delegate;
+				default            : return WhichType.Unknown;
 			}
 		}
 
@@ -102,7 +89,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>Topic Filename</returns>
 		public static string GetFileNameForNamespaceHierarchy(string namespaceName)
 		{
-			return namespaceName.Replace(".", "") + "~Hierarchy.html";
+			return FilenamePrefix + namespaceName.Replace(".", "") + 
+				"Hierarchy" + GetHashCodeForId("N:" + namespaceName) + ".html";
 		}
 
 		/// <summary>
@@ -112,7 +100,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForNamespace(string namespaceName)
 		{
-			return namespaceName.Replace(".", "") + ".html";
+			return FilenamePrefix + namespaceName.Replace(".", "") + 
+				GetHashCodeForId("N:" + namespaceName) + ".html";
 		}
 
 		/// <summary>
@@ -122,7 +111,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForType(string typeID)
 		{
-			return BaseNameFromTypeId(typeID) + "Topic.html";
+			return BaseNameFromTypeId(typeID) + "Topic" + GetHashCodeForId(typeID) + ".html";
 		}
 
 
@@ -139,7 +128,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 				(pageType == "Fields") || (pageType == "Operators") || (pageType == "Events")), 
 				"Unknown Overview Page Type '" + pageType + "' requested");
 
-			return BaseNameFromTypeId(typeID) + "~" + pageType + "Topic.html";
+			return BaseNameFromTypeId(typeID) + pageType + "Topic" + GetHashCodeForId(typeID) + ".html";
 		}
 
 		/// <summary>
@@ -152,12 +141,12 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		{
 			int dotHash = constructorID.IndexOf(".#"); // constructors could be #ctor or #cctor
 
-			StringBuilder sb = new StringBuilder(BaseNameFromTypeId(constructorID.Substring(0, dotHash)));
+			string filename = BaseNameFromTypeId(constructorID.Substring(0, dotHash));
 		
 			if (isStatic)
-				sb.Append("Static");
+				filename += "Static";
 
-			return sb.Append("ctorTopic.html").ToString();
+			return filename + "ctorTopic" + GetHashCodeForId(constructorID) + ".html";
 		}
 
 		/// <summary>
@@ -171,12 +160,12 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		{
 			int dotHash = constructorID.IndexOf(".#"); // constructors could be #ctor or #cctor
 
-			StringBuilder sb = new StringBuilder(BaseNameFromTypeId(constructorID.Substring(0, dotHash)));
+			string filename = BaseNameFromTypeId(constructorID.Substring(0, dotHash));
 		
 			if (isStatic)
-				sb.Append("Static");
+				filename += "Static";
 
-			return sb.AppendFormat("ctorTopic{0}.html", overLoad).ToString();
+			return filename + "ctorTopic" + overLoad + GetHashCodeForId(constructorID) + ".html";
 		}
 
 		/// <summary>
@@ -186,7 +175,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForField(string fieldID)
 		{
-			return BaseNameFromMemberId(fieldID) + "Topic.html";
+			return BaseNameFromMemberId(fieldID) + "Topic" + 
+				GetHashCodeForId(fieldID) + ".html";
 		}
 
 		/// <summary>
@@ -197,7 +187,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForOperatorsOverloads(string typeID, string opName)
 		{
-			return BaseNameFromTypeId(typeID) + opName + "Topic.html";
+			return BaseNameFromTypeId(typeID) + opName.Replace("_","") + "Topic" + 
+				GetHashCodeForId(typeID) + ".html";
 		}
 
 		/// <summary>
@@ -207,7 +198,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForEvent(string eventID)
 		{
-			return BaseNameFromMemberId(eventID) + "Topic.html";
+			return BaseNameFromMemberId(eventID) + "Topic" + 
+				GetHashCodeForId(eventID) + ".html";
 		}
 		
 		/// <summary>
@@ -218,7 +210,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForPropertyOverloads(string typeID, string propertyName)
 		{
-			return BaseNameFromTypeId(typeID) + propertyName + "Topic.html";
+			return BaseNameFromTypeId(typeID) + propertyName + "Topic" + 
+				GetHashCodeForId(typeID + "." + propertyName) + ".html";
 		}
 
 		/// <summary>
@@ -229,7 +222,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForMethodOverloads(string typeID, string methodName)
 		{
-			return BaseNameFromTypeId(typeID) + methodName + "Topic.html";
+			return BaseNameFromTypeId(typeID) + methodName + "Topic" + 
+				GetHashCodeForId(typeID + "." + methodName) + ".html";
 		}
 
 		/// <summary>
@@ -240,18 +234,18 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>The filename for the member topic</returns>
 		public static string GetFileNameForMemberOverload(string methodID, string overload)
 		{
-			StringBuilder sb;
-
 			int leftParenIndex = methodID.IndexOf('(');
 
-			if (leftParenIndex != -1)
-				sb = new StringBuilder(BaseNameFromMemberId(methodID.Substring(0, leftParenIndex)));
-			else
-				sb = new StringBuilder(BaseNameFromMemberId(methodID));
-			
-			sb.Replace("#", "");
+			string filename;
 
-			return sb.AppendFormat("Topic{0}.html", overload).ToString();
+			if (leftParenIndex != -1)
+				filename = BaseNameFromMemberId(methodID.Substring(0, leftParenIndex));
+			else
+				filename = BaseNameFromMemberId(methodID);
+			
+			filename=filename.Replace("#", "");
+
+			return filename + "Topic" + overload + GetHashCodeForId(methodID) + ".html";
 		}
 
 		/// <summary>
@@ -262,7 +256,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>Topic's base name</returns>
 		private static string BaseNameFromTypeId(string typeID)
 		{
-			return String.Format("ndoc{0}Class", typeID.Substring(2).Replace(".", ""));
+			return FilenamePrefix + typeID.Substring(2).Replace(".", "") + "Class";
 		}
 
 		/// <summary>
@@ -300,7 +294,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 #if DEBUG
 			int start = Environment.TickCount;
 #endif
-			DuplicateCheckDictionary = new StringDictionary();
 
 			XmlNodeList namespaces = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace");
 			foreach (XmlElement namespaceNode in namespaces)
@@ -308,39 +301,12 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 				string namespaceName = namespaceNode.Attributes["name"].Value;
 				string namespaceId = "N:" + namespaceName;
 				string namespaceFilename = GetFilenameForNamespace(namespaceName);
-				AddCacheItem(namespaceId, namespaceFilename);
 
-				XmlNodeList types;
-				
-				types = namespaceNode.SelectNodes("*[@id and @access='Public']");
-				CacheTypes(types);
-				
-				types = namespaceNode.SelectNodes("*[@id and @access='NestedPublic']");
-				CacheTypes(types);
+				fileNames[namespaceId] = namespaceFilename;
 
-				types = namespaceNode.SelectNodes("*[@id and @access='NestedFamilyOrAssembly']");
+				XmlNodeList types = namespaceNode.SelectNodes("*[@id]");
 				CacheTypes(types);
-
-				types = namespaceNode.SelectNodes("*[@id and @access='NestedFamily']");
-				CacheTypes(types);
-
-				types = namespaceNode.SelectNodes("*[@id and @access='NestedAssembly']");
-				CacheTypes(types);
-
-				types = namespaceNode.SelectNodes("*[@id and @access='NestedFamilyAndAssembly']");
-				CacheTypes(types);
-
-				types = namespaceNode.SelectNodes("*[@id and @access='NestedPrivate']");
-				CacheTypes(types);
-
-				types = namespaceNode.SelectNodes("*[@id and @access='NotPublic']");
-				CacheTypes(types);
-
-				types = namespaceNode.SelectNodes("*[@id and @access='Unknown']");
-				CacheTypes(types);
-
 			}
-			DuplicateCheckDictionary = null;
 
 #if DEBUG
 			Trace.WriteLine("Building File Map: " + ((Environment.TickCount - start) / 1000.0).ToString() + " sec.");
@@ -359,38 +325,15 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 				string typeId = typeNode.Attributes["id"].Value;
 				string typeFilename = GetFilenameForType(typeId);
 
-				AddCacheItem(typeId, typeFilename);
+				fileNames[typeId] = typeFilename;
 
-				XmlNodeList members;
-					
-				members	= typeNode.SelectNodes("*[@id and not(@declaringType) and @access='Public']");
-				CacheMembers(members,typeNode);
-
-				members	= typeNode.SelectNodes("*[@id and not(@declaringType) and @access='Family']");
-				CacheMembers(members,typeNode);
-
-				members	= typeNode.SelectNodes("*[@id and not(@declaringType) and @access='FamilyOrAssembly']");
-				CacheMembers(members,typeNode);
-
-				members	= typeNode.SelectNodes("*[@id and not(@declaringType) and @access='Assembly']");
-				CacheMembers(members,typeNode);
-
-				members	= typeNode.SelectNodes("*[@id and not(@declaringType) and @access='FamilyAndAssembly']");
-				CacheMembers(members,typeNode);
-
-				members	= typeNode.SelectNodes("*[@id and not(@declaringType) and @access='Private']");
-				CacheMembers(members,typeNode);
-
-				members	= typeNode.SelectNodes("*[@id and not(@declaringType) and @access='PrivateScope']");
-				CacheMembers(members,typeNode);
-
-				members	= typeNode.SelectNodes("*[@id and not(@declaringType) and @access='Unknown']");
+				XmlNodeList members	= typeNode.SelectNodes("*[@id and not(@declaringType)]");
 				CacheMembers(members,typeNode);
 			}
 		}
 
 		/// <summary>
-		/// Cahces Filenames for a given list of members
+		/// Caches Filenames for a given list of members
 		/// </summary>
 		/// <param name="members">a list of member nodes to cache</param>
 		/// <param name="typeNode">the owning type's node</param>
@@ -427,29 +370,20 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 
 				if (filename.Length > 0)
 				{
-					if (typeNode.Name == "enumeration")
-						fileNames[id] = filename;
-					else
-						AddCacheItem(id, filename);
+					fileNames[id] = filename;
 				}
 			}
 		}
 
 
 		/// <summary>
-		/// Adds a filename to the cache, disambiguating where required
+		/// Generate a HashCode for the given ID
 		/// </summary>
-		/// <param name="id">The ID of the item to cache</param>
-		/// <param name="filename">The filename for the given ID</param>
-		private void AddCacheItem(string id, string filename)
+		/// <param name="id">ID to hash</param>
+		/// <returns>A hash code as an 8 character string</returns>
+		private static string GetHashCodeForId(string id)
 		{
-			while (DuplicateCheckDictionary.ContainsKey(filename))
-			{
-				filename = filename.Replace(".html","~.html");
-			}
-			DuplicateCheckDictionary.Add(filename,id);
-			//Debug.WriteLine(id + "\t" + filename);
-			fileNames[id] = filename;
+			return "_" + id.GetHashCode().ToString("x8");
 		}
 
 
