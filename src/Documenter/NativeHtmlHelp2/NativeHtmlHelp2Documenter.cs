@@ -103,25 +103,25 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 
 			// validate that all of the additional content resources are present
 			if ( MyConfig.IntroductionPage.Length != 0 && !File.Exists( MyConfig.IntroductionPage ) )
-				return string.Format( "The file {0} could not be found", MyConfig.IntroductionPage );
+				return string.Format( "The IntroductionPage file {0} could not be found", MyConfig.IntroductionPage );
 
 			if ( MyConfig.AboutPageIconPage.Length != 0 && !File.Exists( MyConfig.AboutPageIconPage ) )
-				return string.Format( "The file {0} could not be found", MyConfig.AboutPageIconPage );
+				return string.Format( "The AboutPageIconPage file {0} could not be found", MyConfig.AboutPageIconPage );
 
 			if ( MyConfig.AboutPageInfo.Length != 0 && !File.Exists( MyConfig.AboutPageInfo ) )
-				return string.Format( "The file {0} could not be found", MyConfig.AboutPageInfo );
+				return string.Format( "The AboutPageInfo file {0} could not be found", MyConfig.AboutPageInfo );
 
 			if ( MyConfig.NavFailPage.Length != 0 && !File.Exists( MyConfig.NavFailPage ) )
-				return string.Format( "The file {0} could not be found", MyConfig.NavFailPage );
+				return string.Format( "The NavFailPage file {0} could not be found", MyConfig.NavFailPage );
 
 			if ( MyConfig.EmptyIndexTermPage.Length != 0 && !File.Exists( MyConfig.EmptyIndexTermPage ) )
-				return string.Format( "The file {0} could not be found", MyConfig.EmptyIndexTermPage );
+				return string.Format( "The EmptyIndexTermPage file {0} could not be found", MyConfig.EmptyIndexTermPage );
 
 			if ( MyConfig.ExtensibilityStylesheet.Length != 0 && !File.Exists( MyConfig.ExtensibilityStylesheet ) )
-				return string.Format( "The file {0} could not be found", MyConfig.ExtensibilityStylesheet );
+				return string.Format( "The Extensibility Stylesheet file {0} could not be found", MyConfig.ExtensibilityStylesheet );
 
 			if ( MyConfig.AdditionalContentResourceDirectory.Length != 0 && !Directory.Exists( MyConfig.AdditionalContentResourceDirectory ) )
-				return string.Format( "The directory {0} could not be found", MyConfig.AdditionalContentResourceDirectory );
+				return string.Format( "The Additional Content Resource Directory {0} could not be found", MyConfig.AdditionalContentResourceDirectory );
 
 			// make sure we have a collection namespace
 			if ( ( MyConfig.GenerateCollectionFiles || MyConfig.RegisterTitleWithNamespace ) && MyConfig.CollectionNamespace.Length == 0 )
