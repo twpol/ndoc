@@ -140,7 +140,7 @@
 		<h4 class="dtH4">See Also</h4>
 		<p>
 			<xsl:if test="$page!='type' and $page!='enumeration' and $page!='delegate'">
-				<a href="{NUtil:GetTypeHRef( string( $typeID ) ) }">
+				<a href="{NUtil:GetLocalCRef( string( $typeID ) ) }">
 					<xsl:value-of select="concat($typeName, ' ', $typeMixed)" />
 				</a>
 				<xsl:text> | </xsl:text>
@@ -161,7 +161,7 @@
 				<xsl:if test="count(parent::node()/*[@name=$memberName]) &gt; 1">
 					<xsl:choose>
 						<xsl:when test="local-name()='constructor'">
- 				      <xsl:text> | </xsl:text>
+ 							<xsl:text> | </xsl:text>
 							<a href="{NUtil:GetOverviewHRef( string( ../@id ), 'Constructor' )}">
 								<xsl:value-of select="$typeName" />
 								<xsl:text> Constructor Overload List</xsl:text>

@@ -28,7 +28,7 @@
 				<div id="nstext" valign="bottom">
 					<div id="allHistory" class="saveHistory" onsave="saveAll()" onload="loadAll()"></div>
 					<p>
-						<a href="{NUtil:GetTypeHRef( string( @id ) ) }">
+						<a href="{NUtil:GetLocalCRef( string( @id ) ) }">
 							<xsl:value-of select="@name" />
 							<xsl:text> overview</xsl:text>
 						</a>
