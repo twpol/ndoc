@@ -22,6 +22,11 @@ namespace NDoc.Test
 		protected Class(double d) { }
 
 		/// <summary>Initializes a new instance of the Class class.</summary>
+		/// <param name="i1">This is the first integer parameter. 
+		/// This is the first integer parameter. This is the first integer 
+		/// parameter. This is the first integer parameter.</param>
+		/// <param name="i2">This is the second integer parameter.</param>
+		/// <param name="i3">This is the third integer parameter.</param>
 		public Class(int i1, int i2, int i3) { }
 
 		/// <summary>Holds an <c>int</c> value.</summary>

@@ -566,6 +566,7 @@
 				<p>
 					<xsl:apply-templates select="documentation/remarks" mode="doc" />
 				</p>
+				<xsl:call-template name="param-section" />
 			</dd>
 		</dl>
 	</xsl:template>
@@ -619,6 +620,8 @@
 				<p>
 					<xsl:apply-templates select="documentation/remarks" mode="doc" />
 				</p>
+				<xsl:call-template name="param-section" />
+				<xsl:call-template name="value-section" />
 			</dd>
 		</dl>
 	</xsl:template>
@@ -683,6 +686,8 @@
 				<p>
 					<xsl:apply-templates select="documentation/remarks" mode="doc" />
 				</p>
+				<xsl:call-template name="param-section" />
+				<xsl:call-template name="returns-section" />
 			</dd>
 		</dl>
 	</xsl:template>
@@ -715,6 +720,47 @@
 				</p>
 			</dd>
 		</dl>
+	</xsl:template>
+	<!-- -->
+	<xsl:template name="param-section">
+		<xsl:if test="documentation/param">
+			<b>Parameters:</b>
+			<dl>
+				<xsl:apply-templates select="documentation/param" />
+			</dl>
+		</xsl:if>
+	</xsl:template>
+	<!-- -->
+	<xsl:template match="param">
+		<dd>
+			<code>
+				<xsl:value-of select="@name" />
+			</code>
+			<xsl:text> - </xsl:text>
+			<xsl:apply-templates mode="doc" />
+		</dd>
+	</xsl:template>
+	<!-- -->
+	<xsl:template name="value-section">
+		<xsl:if test="documentation/value">
+			<b>Value:</b>
+			<dl>
+				<dd>
+					<xsl:apply-templates select="documentation/value/node()" mode="doc" />
+				</dd>
+			</dl>
+		</xsl:if>
+	</xsl:template>
+	<!-- -->
+	<xsl:template name="returns-section">
+		<xsl:if test="documentation/returns">
+			<b>Returns:</b>
+			<dl>
+				<dd>
+					<xsl:apply-templates select="documentation/returns/node()" mode="doc" />
+				</dd>
+			</dl>
+		</xsl:if>
 	</xsl:template>
 	<!-- -->
 </xsl:transform>
