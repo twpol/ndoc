@@ -1476,7 +1476,15 @@ namespace NDoc.Test
 		{
 		}
 		/// <summary>This overload accepts one int parameter.</summary>
-		public void FullDocOverloadedMethod(int i)
+		public void FullDocOverloadedMethod(int i1)
+		{
+		}
+		/// <summary>This overload accepts one int parameter.</summary>
+		public void FullDocOverloadedMethod(int i1, int i2)
+		{
+		}
+		/// <summary>This overload accepts one int parameter.</summary>
+		public void FullDocOverloadedMethod(int i1, int i2, int i3)
 		{
 		}
 
@@ -1503,7 +1511,7 @@ namespace NDoc.Test
 	{
 		/// <summary>
 		///   <para>This summary has a note.</para>
-		///   <note>This is a note.</note>
+		///   <note>This is a test of a note tag which has lots of text in it and so should, if we are lucky, wrap to more than one line. To ensure this, here is another extremely long sentence that is probably gramatically incorrect and may have terrible spelling, but who cares, it is long isn't it?</note>
 		/// </summary>
 		public void NoteInSummary()
 		{
@@ -1512,7 +1520,7 @@ namespace NDoc.Test
 		/// <summary>This method has a note in its remarks.</summary>
 		/// <remarks>
 		///   <para>These remarks have a note.</para>
-		///   <note>This is a note.</note>
+		///   <note>This is a test of a note tag which has lots of text in it and so should, if we are lucky, wrap to more than one line. To ensure this, here is another extremely long sentence that is probably gramatically incorrect and may have terrible spelling, but who cares, it is long isn't it?</note>
 		/// </remarks>
 		public void NoteInRemarks()
 		{
@@ -1521,11 +1529,21 @@ namespace NDoc.Test
 		/// <summary>This method has cautionary note in its remarks.</summary>
 		/// <remarks>
 		///   <para>These remarks have a cautionary note.</para>
-		///   <note type="caution">Watch out!</note>
+		///   <note type="caution">This is a test of a note tag which has lots of text in it and so should, if we are lucky, wrap to more than one line. To ensure this, here is another extremely long sentence that is probably gramatically incorrect and may have terrible spelling, but who cares, it is long isn't it?</note>
 		/// </remarks>
 		public void CautionNote()
 		{
 		}
+
+		/// <summary>This method has a note in its remarks.</summary>
+		/// <remarks>
+		///   <para>These remarks have a note.</para>
+		///   <note style="background-color:PaleGoldenrod;">This is a test of a note tag which has lots of text in it and so should, if we are lucky, wrap to more than one line. To ensure this, here is another extremely long sentence that is probably gramatically incorrect and may have terrible spelling, but who cares, it is long isn't it?</note>
+		/// </remarks>
+		public void NoteInRemarksColored()
+		{
+		}
+
 	}
 
 	/// <summary>This class has an indexer with a name other than Item.</summary>
@@ -1786,18 +1804,35 @@ namespace NDoc.Test
 	/// <para><em>This text is surrounded by &lt;em&gt;</em></para>
 	/// <para><strong>This text is surrounded by &lt;strong&gt;</strong></para>
 	/// <para>this line has a break<br/>here</para>
+	/// <para align="center">this line is centered</para>
+	/// <para style="padding 2px;border:2px solid red;background-color:PaleGoldenrod">this has a red border and PaleGoldenrod background.</para>
 	/// </remarks>
 	public class HtmlTags
 	{
 	}
+
+	/// <summary>
+	/// This class has ecma block tags in the remarks
+	/// </summary>
+	/// <remarks>
+	/// <block type="note">This is a test of an ECMA "note" block tag which has lots of text in it and so should, if we are lucky, wrap to more than one line. To ensure this, here is another extremely long sentence that is probably gramatically incorrect and may have terrible spelling, but who cares, it is long isn't it?</block>
+	/// <block type="example">This is a test of an ECMA "example" block tag which has lots of text in it and so should, if we are lucky, wrap to more than one line. To ensure this, here is another extremely long sentence that is probably gramatically incorrect and may have terrible spelling, but who cares, it is long isn't it?</block>
+	/// <block type="behaviors">This is a test of an ECMA "behaviors" block tag which has lots of text in it and so should, if we are lucky, wrap to more than one line. To ensure this, here is another extremely long sentence that is probably gramatically incorrect and may have terrible spelling, but who cares, it is long isn't it?</block>
+	/// <block type="overrides">This is a test of an ECMA "overrides" block tag which has lots of text in it and so should, if we are lucky, wrap to more than one line. To ensure this, here is another extremely long sentence that is probably gramatically incorrect and may have terrible spelling, but who cares, it is long isn't it?</block>
+	/// <block type="usage">This is a test of an ECMA "usage" block tag which has lots of text in it and so should, if we are lucky, wrap to more than one line. To ensure this, here is another extremely long sentence that is probably gramatically incorrect and may have terrible spelling, but who cares, it is long isn't it?</block>
+	/// <block type="default">This is a test of an ECMA "default" block tag which has lots of text in it and so should, if we are lucky, wrap to more than one line. To ensure this, here is another extremely long sentence that is probably gramatically incorrect and may have terrible spelling, but who cares, it is long isn't it?</block>
+	/// </remarks>
+	public class EcmaBlocks
+	{
+	}
 }
 
-/// <summary>
-/// This class is in the global (unqualified) namespace.
-/// </summary>
-public class GlobalNamespaceClass
-{
-}
+///// <summary>
+///// This class is in the global (unqualified) namespace.
+///// </summary>
+//public class GlobalNamespaceClass
+//{
+//}
 
 
 
