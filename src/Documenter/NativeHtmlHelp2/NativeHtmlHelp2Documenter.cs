@@ -367,12 +367,16 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		private void UnPackResources( Workspace workspace )
 		{
 #if NO_RESOURCES
-				// copy all of the xslt source files into the workspace
-				DirectoryInfo xsltSource = new DirectoryInfo( Path.GetFullPath(Path.Combine(
-					System.Windows.Forms.Application.StartupPath, @"..\..\..\Documenter\NativeHtmlHelp2\xslt") ) );
+			// copy all of the xslt source files into the workspace
+			DirectoryInfo xsltSource = new DirectoryInfo( Path.GetFullPath(Path.Combine(
+				System.Windows.Forms.Application.StartupPath, @"..\..\..\Documenter\NativeHtmlHelp2\xslt") ) );
                 				
-				foreach ( FileInfo f in xsltSource.GetFiles( "*.xslt" ) )
-					f.CopyTo( Path.Combine( workspace.ResourceDirectory, f.Name ), true );
+			foreach ( FileInfo f in xsltSource.GetFiles( "*.xslt" ) )
+			{
+				string fname = Path.Combine( workspace.ResourceDirectory, f.Name );
+				f.CopyTo( fname, true );
+				File.SetAttributes( fname, FileAttributes.Normal );
+			}
 #else
 			EmbeddedResources.WriteEmbeddedResources(
 				this.GetType().Module.Assembly,

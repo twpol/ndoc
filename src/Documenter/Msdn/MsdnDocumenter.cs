@@ -180,7 +180,11 @@ namespace NDoc.Documenter.Msdn
 					System.Windows.Forms.Application.StartupPath, @"..\..\..\Documenter\Msdn\xslt") ) );
 
 				foreach ( FileInfo f in xsltSource.GetFiles( "*.xslt" ) )
-					f.CopyTo( Path.Combine( workspace.ResourceDirectory, f.Name ), true );
+				{
+					string fname = Path.Combine( workspace.ResourceDirectory, f.Name );
+					f.CopyTo( fname, true );
+					File.SetAttributes( fname, FileAttributes.Normal );
+				}
 #else
 				EmbeddedResources.WriteEmbeddedResources(
 					this.GetType().Module.Assembly,
