@@ -370,7 +370,8 @@ namespace NDoc.Core
 		/// <summary>Gets or sets the CopyrightText property.</summary>
 		[
 		Category("Documentation Main Settings"),
-		Description("A copyright notice text that will be included in the generated docs.")
+		Description("A copyright notice text that will be included in the generated docs."),
+		Editor(typeof(TextEditor), typeof(UITypeEditor))
 		]
 		public string CopyrightText
 		{
@@ -388,7 +389,7 @@ namespace NDoc.Core
 		/// <summary>Gets or sets the CopyrightHref property.</summary>
 		[
 		Category("Documentation Main Settings"),
-		Description("An URL referenced by the copyright notice.")
+		Description("An URL referenced by the copyright notice."),
 		]
 		public string CopyrightHref
 		{
