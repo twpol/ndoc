@@ -106,7 +106,9 @@
 								<xsl:with-param name="id" select="@id" />
 							</xsl:call-template>
 						</xsl:variable>
-						<p class="i1">For a list of all members of this type, see <a href="{$members-href}"><xsl:value-of select="@name" /> Members</a>.</p>
+						<xsl:if test="constructor|field|property|method|operator|event">
+							<p class="i1">For a list of all members of this type, see <a href="{$members-href}"><xsl:value-of select="@name" /> Members</a>.</p>
+						</xsl:if>
 					</xsl:if>
 					<xsl:if test="local-name() != 'delegate' and local-name() != 'enumeration'">
 						<p class="i1">

@@ -525,27 +525,35 @@ namespace NDoc.Documenter.Msdn
 
 			htmlHelp.AddFileToContents(typeName + " " + mixedCaseTypeNames[whichType], fileName);
 
-			htmlHelp.OpenBookInContents();
+			bool hasMembers = typeNode.SelectNodes("constructor|field|property|method|operator|event").Count > 0;
+
+			if (hasMembers)
+			{
+				htmlHelp.OpenBookInContents();
+			}
 
 			XsltArgumentList arguments = new XsltArgumentList();
 			arguments.AddParam("type-id", String.Empty, typeID);
 			TransformAndWriteResult(xsltType, arguments, fileName);
 
-			fileName = GetFilenameForTypeMembers(typeNode);
-			htmlHelp.AddFileToContents(typeName + " Members", fileName);
+			if (hasMembers)
+			{
+				fileName = GetFilenameForTypeMembers(typeNode);
+				htmlHelp.AddFileToContents(typeName + " Members", fileName);
 
-			arguments = new XsltArgumentList();
-			arguments.AddParam("id", String.Empty, typeID);
-			TransformAndWriteResult(xsltAllMembers, arguments, fileName);
+				arguments = new XsltArgumentList();
+				arguments.AddParam("id", String.Empty, typeID);
+				TransformAndWriteResult(xsltAllMembers, arguments, fileName);
 
-			MakeHtmlForConstructors(whichType, typeNode);
-			MakeHtmlForFields(whichType, typeNode);
-			MakeHtmlForProperties(whichType, typeNode);
-			MakeHtmlForMethods(whichType, typeNode);
-			MakeHtmlForOperators(whichType, typeNode);
-			MakeHtmlForEvents(whichType, typeNode);
+				MakeHtmlForConstructors(whichType, typeNode);
+				MakeHtmlForFields(whichType, typeNode);
+				MakeHtmlForProperties(whichType, typeNode);
+				MakeHtmlForMethods(whichType, typeNode);
+				MakeHtmlForOperators(whichType, typeNode);
+				MakeHtmlForEvents(whichType, typeNode);
 
-			htmlHelp.CloseBookInContents();
+				htmlHelp.CloseBookInContents();
+			}
 		}
 
 		private void MakeHtmlForConstructors(WhichType whichType, XmlNode typeNode)
