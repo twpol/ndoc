@@ -78,7 +78,10 @@
 							<xsl:call-template name="obsolete-inline"/>
 							<xsl:call-template name="summary-with-no-paragraph"/>
 							<xsl:if test="@declaringType">
-								<br/><i>
+								<xsl:if test="./documentation/summary or ./documentation/obsolete">
+									<br/>
+								</xsl:if>
+								<i>
 								<xsl:text>Inherited from </xsl:text></i>
 								<xsl:variable name="link-text">
 									<xsl:call-template name="strip-namespace">
@@ -144,6 +147,7 @@
 					</xsl:apply-templates>		
 				</blockquote>
 			</xsl:if>
-		</xsl:if>		
+		</xsl:if>
+		<br/>		
 	</xsl:template>
 </xsl:stylesheet>
