@@ -12,7 +12,7 @@ namespace NDoc.Core
 	public class AssemblyXmlDocCache
 	{
 		private Hashtable docs;
-		private Hashtable nodocTags;
+		private Hashtable excludeTags;
 
 		/// <summary>
 		/// Initializes a new instance of the AssemblyXmlDocCache class.
@@ -30,7 +30,7 @@ namespace NDoc.Core
 		public void Flush()
 		{
 			docs = new Hashtable();
-			nodocTags = new Hashtable();
+			excludeTags = new Hashtable();
 		}
 
 		/// <summary>
@@ -72,7 +72,7 @@ namespace NDoc.Core
 		}
 
 		/// <summary>
-		/// strip out redundant newlines and spaces from documatation
+		/// strip out redundant newlines and spaces from documentation
 		/// </summary>
 		/// <param name="id">member</param>
 		/// <param name="nodes">list of nodes</param>
@@ -82,7 +82,7 @@ namespace NDoc.Core
 			{
 				if (node.NodeType == XmlNodeType.Element) 
 				{
-					if (node.Name == "nodoc") nodocTags.Add(id, null);
+					if (node.Name == "exclude") excludeTags.Add(id, null);
 					
 					if (node.Name == "code")
 						FixupCodeTag(node);
@@ -140,13 +140,13 @@ namespace NDoc.Core
 		}
 
 		/// <summary>
-		/// Returns whether a member has a nodoc tag
+		/// Returns whether a member has an exclude tag
 		/// </summary>
 		/// <param name="memberID">ID to check</param>
-		/// <returns>true if the member has a nodoc tag, otherwise false</returns>
-		public bool HasNodocTag(string memberID)
+		/// <returns>true if the member has an exclude tag, otherwise false</returns>
+		public bool HasExcludeTag(string memberID)
 		{
-			return nodocTags.ContainsKey(memberID);
+			return excludeTags.ContainsKey(memberID);
 		}
 	}
 }
