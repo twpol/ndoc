@@ -241,11 +241,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "NonRelocatableFilePath.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "PathItemBase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
