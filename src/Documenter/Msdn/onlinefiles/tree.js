@@ -51,6 +51,8 @@ function findNode(el)
 
 function clickAnchor(el)
 {
+// handles click on a TOC link
+//
 	expandNode(el.parentNode);
 	selectNode(el.parentNode);
 	el.blur();
@@ -72,6 +74,8 @@ function selectNode(el)
 
 function setSubNodeClass(el, nodeName, className)
 {
+// Sets the specified class name on el's first child that is a nodeName element
+//
 	var child;
 	for (var i=0; i < el.childNodes.length; i++)
 	{

@@ -49,6 +49,7 @@ namespace NDoc.Core
 		/// <param name="projectName">The name of the HTML Help project.</param>
 		/// <param name="defaultTopic">The default topic for the compiled HTML Help file.</param>
 		/// <param name="htmlHelpCompiler">The path to the HTML Help compiler.</param>
+		/// <param name="generateTocOnly">When true, HtmlHelp only outputs the HHC file and does not compile the CHM.</param>
 		public HtmlHelp(
 			string directoryName, 
 			string projectName, 
@@ -103,7 +104,7 @@ namespace NDoc.Core
 			return _projectName + ".hhp";
 		}
 
-		public string GetContentsFilename()
+		private string GetContentsFilename()
 		{
 			return (_tocFiles.Count > 0) ? (string)_tocFiles[0] : string.Empty;
 		}
