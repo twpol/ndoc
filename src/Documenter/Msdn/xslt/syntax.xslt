@@ -2,48 +2,49 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<!-- -->
 	<xsl:template name="cs-type-syntax">
-		<pre class="syntax">
+		<div class="syntax">
 			<xsl:if test="$ndoc-vb-syntax">
 				<span class="lang">[C#]</span>
-				<br />
 			</xsl:if>
-			<xsl:call-template name="type-access">
-				<xsl:with-param name="access" select="@access" />
-			</xsl:call-template>
-			<xsl:text>&#160;</xsl:text>
-			<xsl:if test="local-name() != 'interface' and @abstract = 'true'">abstract&#160;</xsl:if>
-			<xsl:if test="@sealed = 'true'">
-				<xsl:text>sealed&#160;</xsl:text>
-			</xsl:if>
-			<xsl:choose>
-				<xsl:when test="local-name()='structure'">
-					<xsl:text>struct</xsl:text>
-				</xsl:when>
-				<xsl:when test="local-name()='enumeration'">
-					<xsl:text>enum</xsl:text>
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:value-of select="local-name()" />
-				</xsl:otherwise>
-			</xsl:choose>
-			<xsl:text>&#160;</xsl:text>
-			<xsl:if test="local-name()='delegate'">
-				<xsl:call-template name="get-datatype">
-					<xsl:with-param name="datatype" select="@returnType" />
-				</xsl:call-template>
-				<xsl:text>&#160;</xsl:text>
-			</xsl:if>
-			<xsl:value-of select="@name" />
-			<xsl:if test="local-name() != 'enumeration' and local-name() != 'delegate'">
-				<xsl:call-template name="derivation" />
-			</xsl:if>
-			<xsl:if test="local-name() = 'delegate'">
-				<xsl:call-template name="parameters">
-					<xsl:with-param name="version">long</xsl:with-param>
-					<xsl:with-param name="namespace-name" select="../@name" />
-				</xsl:call-template>
-			</xsl:if>
-		</pre>
+			<div>
+			  <xsl:call-template name="type-access">
+				  <xsl:with-param name="access" select="@access" />
+			  </xsl:call-template>
+			  <xsl:text>&#160;</xsl:text>
+			  <xsl:if test="local-name() != 'interface' and @abstract = 'true'">abstract&#160;</xsl:if>
+			  <xsl:if test="@sealed = 'true'">
+				  <xsl:text>sealed&#160;</xsl:text>
+			  </xsl:if>
+			  <xsl:choose>
+				  <xsl:when test="local-name()='structure'">
+					  <xsl:text>struct</xsl:text>
+				  </xsl:when>
+				  <xsl:when test="local-name()='enumeration'">
+					  <xsl:text>enum</xsl:text>
+				  </xsl:when>
+				  <xsl:otherwise>
+					  <xsl:value-of select="local-name()" />
+				  </xsl:otherwise>
+			  </xsl:choose>
+			  <xsl:text>&#160;</xsl:text>
+			  <xsl:if test="local-name()='delegate'">
+				  <xsl:call-template name="get-datatype">
+					  <xsl:with-param name="datatype" select="@returnType" />
+				  </xsl:call-template>
+				  <xsl:text>&#160;</xsl:text>
+			  </xsl:if>
+			  <xsl:value-of select="@name" />
+			  <xsl:if test="local-name() != 'enumeration' and local-name() != 'delegate'">
+				  <xsl:call-template name="derivation" />
+			  </xsl:if>
+			  <xsl:if test="local-name() = 'delegate'">
+				  <xsl:call-template name="parameters">
+					  <xsl:with-param name="version">long</xsl:with-param>
+					  <xsl:with-param name="namespace-name" select="../@name" />
+				  </xsl:call-template>
+			  </xsl:if>
+			 </div>
+		</div>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="derivation">
@@ -75,7 +76,7 @@
 					<xsl:with-param name="access" select="@access" />
 				</xsl:call-template>
 				<xsl:text>&#160;</xsl:text>
-				<xsl:if test="@contract and @contract!='Normal'">
+				<xsl:if test="@contract and @contract!='Normal' and @contract!='Final'">
 					<xsl:call-template name="contract">
 						<xsl:with-param name="contract" select="@contract" />
 					</xsl:call-template>
@@ -164,7 +165,7 @@
 				<xsl:with-param name="access" select="@access" />
 			</xsl:call-template>
 			<xsl:text>&#160;</xsl:text>
-			<xsl:if test="@contract and @contract!='Normal'">
+			<xsl:if test="@contract and @contract!='Normal' and @contract!='Final'">
 				<xsl:call-template name="contract">
 					<xsl:with-param name="contract" select="@contract" />
 				</xsl:call-template>
@@ -309,7 +310,7 @@
 		<xsl:text>&#160;{</xsl:text>
 		<xsl:if test="@get='true'">
 			<xsl:if test="not(parent::interface)">
-				<xsl:if test="@contract!='Normal' and @contract!='Static'">
+				<xsl:if test="@contract!='Normal' and @contract!='Static' and @contract!='Final'">
 					<xsl:call-template name="contract">
 						<xsl:with-param name="contract" select="@contract" />
 					</xsl:call-template>
@@ -323,7 +324,7 @@
 		</xsl:if>
 		<xsl:if test="@set='true'">
 			<xsl:if test="not(parent::interface)">
-				<xsl:if test="@contract!='Normal' and @contract!='Static'">
+				<xsl:if test="@contract!='Normal' and @contract!='Static' and @contract!='Final'">
 					<xsl:call-template name="contract">
 						<xsl:with-param name="contract" select="@contract" />
 					</xsl:call-template>
