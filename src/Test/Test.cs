@@ -586,6 +586,18 @@ namespace NDoc.Test
 		public void TermMethod()
 		{
 		}
+
+		/// <summary>TableMethodSummary</summary>
+		/// <remarks>
+		///		<list type="table">
+		///			<item>Cell One</item>
+		///			<item>Cell Two</item>
+		///			<item>Cell Three</item>
+		///		</list>
+		/// </remarks>
+		public void TableMethod()
+		{
+		}
 	}
 
 	/// <summary>This class has para elements in its remarks.</summary>

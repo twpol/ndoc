@@ -587,7 +587,12 @@
 					<xsl:apply-templates select="item" mode="slashdoc" />
 				</ol>
 			</xsl:when>
-			<xsl:otherwise> <!-- table not implemented yet. --></xsl:otherwise>
+			<xsl:when test="@type='table'">
+				<table border="1">
+					<xsl:apply-templates select="item" mode="slashdoc" />
+				</table>
+			</xsl:when>
+			<xsl:otherwise> <!-- do nothing? --></xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
 	<!-- -->
@@ -595,6 +600,14 @@
 		<li>
 			<xsl:apply-templates select="./node()" mode="slashdoc" />
 		</li>
+	</xsl:template>
+	<!-- -->
+	<xsl:template match="list[@type='table']/item" mode="slashdoc">
+		<tr>
+			<td>
+				<xsl:apply-templates select="./node()" mode="slashdoc" />
+			</td>
+		</tr>
 	</xsl:template>
 	<!-- -->
 	<xsl:template match="term" mode="slashdoc">
