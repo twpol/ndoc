@@ -96,8 +96,7 @@
 							</li>
 						</ul>
 						<p>Example:</p>
-						<pre class="csharpcode"><!-- formatted by http://manoli.net/csharpformat/ -->
-<span class=codecomment>///&lt;overloads&gt;This method has two overloads.&lt;/overloads&gt;</SPAN>
+						<pre class="csharpcode"><span class=codecomment>///&lt;overloads&gt;This method has two overloads.&lt;/overloads&gt;</span>
 <span class=codecomment>///&lt;summary&gt;This overload just says hello.&lt;/summary&gt;</SPAN>
 <span class=kwrd>public</SPAN> <span class=kwrd>void</SPAN> SayHello() { ... }
 <span class=codecomment>///&lt;summary&gt;This one says hello to someone.&lt;/summary&gt;</SPAN>
@@ -253,6 +252,22 @@
 				</tr>
 				<tr vAlign="top">
 					<td>
+						<p><a name="note"><b>&lt;note&gt;</b></a></p>
+					</td>
+					<td>
+						<p>A formatted note block.</p>
+						<P>Example:</P>
+						<pre class="csharpcode"><span class=codecomment>/// &lt;summary&gt;</SPAN>
+<span class=codecomment>/// </SPAN><span class=codecomment>&lt;note&gt;This is a note in the summary.&lt;/note&gt;</SPAN>
+<span class=codecomment>/// &lt;/summary&gt;</SPAN>
+<span class=kwrd>public</SPAN> <span class=kwrd>class</SPAN> SomeClass() { ... }
+						</pre>
+						<p>gives,</p>
+						<blockquote class="dtBlock"><b>Note</b> This is a note in the summary.</blockquote>
+					</td>
+				</tr>
+				<tr vAlign="top">
+					<td>
 						<p><a name="para"><b>&lt;para&gt;</b></a></p>
 					</td>
 					<td>
@@ -302,6 +317,10 @@
 								<code class="rem">&lt;see href="url"&gt;[label]&lt;/see&gt;</code>
 							<li>
 								<code class="rem">&lt;see cref="member"&gt;[label]&lt;/see&gt;</code>
+							<li>
+								<code class="rem">&lt;see langword="<em>xxx</em>"/&gt;</code><br>
+								where <em>xxx</em> is <b>null</b>, <b>sealed</b>, <b>static</b>, <b>abstract</b>
+								or <b>virtual</b>
 							</li>
 						</ul>
 					</td>
