@@ -183,6 +183,11 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "IBuildStatus.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "MainForm.cs"
                     SubType = "Form"
                     BuildAction = "Compile"

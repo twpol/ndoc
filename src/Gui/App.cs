@@ -23,6 +23,7 @@ using System.Windows.Forms;
 using System.Globalization;
 using System.Collections;
 using System.Diagnostics;
+using System.Threading;
 
 namespace NDoc.Gui
 {
@@ -42,9 +43,9 @@ namespace NDoc.Gui
 		[STAThread]
 		public static void Main(string[] args)
 		{
-			string projectFilename = (args.Length == 1) ? args[0] : null;
+			Thread.CurrentThread.Name = "GUI";
 
-			Application.Run(new MainForm(projectFilename));
+			Application.Run( new MainForm( (args.Length == 1) ? args[0] : null ) );
 		}
 
 		/// <summary>
@@ -65,8 +66,8 @@ namespace NDoc.Gui
 		{
 			get
 			{
-				Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase, true);
-				return Path.GetDirectoryName(uri.AbsolutePath);
+				Uri uri = new Uri( Assembly.GetExecutingAssembly().CodeBase, true );
+				return Path.GetDirectoryName( uri.AbsolutePath );
 			}
 		}
 
@@ -78,9 +79,9 @@ namespace NDoc.Gui
 			get
 			{
 				// first try to locate license file in directory in which NDocGui is located
-				string path = Path.Combine(RuntimeLocation, "gpl.rtf");
-				if (File.Exists(path) == false) 
-					path = GetSourceTreePath(@"setup\gpl.rtf");
+				string path = Path.Combine( RuntimeLocation, "gpl.rtf" );
+				if ( File.Exists( path ) == false ) 
+					path = GetSourceTreePath( @"setup\gpl.rtf" );
 
 				return path;
 			}
@@ -97,7 +98,7 @@ namespace NDoc.Gui
 		{
 			return Path.Combine(
 				RuntimeLocation, 
-				string.Format(CultureInfo.InvariantCulture, "..{0}..{0}..{0}{1}", Path.DirectorySeparatorChar, fileName));
+				string.Format( CultureInfo.InvariantCulture, "..{0}..{0}..{0}{1}", Path.DirectorySeparatorChar, fileName ) );
 		}
 
 		/// <summary>
@@ -107,14 +108,37 @@ namespace NDoc.Gui
 		{
 			get
 			{
-				// first try to locate help file in directory in which NDocGui is
-				// located
-				string path = Path.Combine(RuntimeLocation, "NDocUsersGuide.chm");
-				if (File.Exists(path) == false) 
-					path = GetSourceTreePath(@"UsersGuide\NDocUsersGuide.chm");
+				// first try to locate help file in directory in which NDocGui is located
+				string path = Path.Combine( RuntimeLocation, "NDocUsersGuide.chm" );
+				if ( File.Exists( path ) == false ) 
+					path = GetSourceTreePath( @"UsersGuide\NDocUsersGuide.chm" );
 
 				return path;
 			}
+		}
+
+		/// <summary>
+		/// Given an <see cref="Exception"/> returns the deepest
+		/// non-null InnerException
+		/// </summary>
+		/// <param name="e">The top Exception</param>
+		/// <returns>The innermost Exception</returns>
+		public static Exception GetInnermostException( Exception e )
+		{
+			if ( e == null )
+				return null;
+
+			return WalkExceptionStack( e, e.InnerException );
+		}
+
+		private static Exception WalkExceptionStack( Exception parent, Exception inner )
+		{
+			Debug.Assert( parent != null );
+
+			if ( inner == null )
+				return parent;
+
+			return WalkExceptionStack( inner, inner.InnerException );
 		}
 
 		/// <summary>

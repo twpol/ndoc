@@ -1,76 +1,118 @@
 using System;
 using System.Diagnostics;
-using System.Drawing;
-using System.Collections;
-using System.ComponentModel;
-using System.Windows.Forms;
 using System.Threading;
+
 using NDoc.Core;
 
 namespace NDoc.Gui
 {
 	/// <summary>
-	/// Summary description for BuildWorker.
+	/// Class that manages the build thread and status notification
 	/// </summary>
 	public class BuildWorker
 	{
 		private IDocumenter m_documenter;
 		private Project     m_project;
-		private Exception   m_exception;
-		private bool        m_isComplete = false;
+
+		private Thread m_workerThread;
+		private IBuildStatus m_buildStatus;
 
 		/// <summary>
-		/// 
+		/// Creates a new instance of the class
 		/// </summary>
-		/// <param name="documenter"></param>
-		/// <param name="project"></param>
-		public BuildWorker(IDocumenter documenter, Project project)
+		/// <param name="status">A status sink for build notifications</param>
+		public BuildWorker( IBuildStatus status )
 		{
+			Debug.Assert( status != null );
+
+			m_buildStatus = status;
+		}
+
+		/// <summary>
+		/// Return true if the build thread is active
+		/// </summary>
+		public bool IsBuilding
+		{
+			get
+			{
+				lock ( this )
+					return m_workerThread != null && m_workerThread.IsAlive;
+			}
+		}
+
+		/// <summary>
+		/// Builds the project using the specified <see cref="IDocumenter"/>
+		/// </summary>
+		/// <param name="documenter">The <see cref="IDocumenter"/> to use</param>
+		/// <param name="project">The <see cref="Project"/> to build</param>
+		public void Build( IDocumenter documenter, Project project )
+		{
+			Debug.Assert( documenter != null );
+			Debug.Assert( project != null );
+
+			Debug.Assert( m_workerThread == null );
+
 			m_documenter = documenter;
 			m_project = project;
+
+			m_workerThread = new Thread( new ThreadStart( ThreadProc ) );
+			m_workerThread.Name = "Build";
+			m_workerThread.IsBackground = true;
+			m_workerThread.Priority = ThreadPriority.Normal;
+
+			m_workerThread.Start();
 		}
 
 		/// <summary>
-		/// 
+		/// Cancels the build
 		/// </summary>
-		public Exception Exception
+		public void Cancel()
 		{
-			get { return m_exception; }
+			if ( IsBuilding )
+			{
+				m_workerThread.Abort();
+				m_workerThread.Join( 1000 );
+				m_workerThread = null;
+			}
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		public bool IsComplete
+		private void ThreadProc()
 		{
-			get { return m_isComplete; }
-		}
+			GC.Collect();
+			Debug.WriteLine("Memory before build: " + GC.GetTotalMemory(false).ToString());
 
-		/// <summary>
-		/// Tells the documenter to build the documentation for the given assembly
-		/// /doc pairs and their namespace summaries.
-		/// </summary>
-		public void ThreadProc()
-		{
 			try
 			{
-				m_isComplete = false;
-
-				GC.Collect();
-				Debug.WriteLine("Memory before build: " + GC.GetTotalMemory(false).ToString());
-
+				m_documenter.DocBuildingStep += new DocBuildingEventHandler(m_documenter_DocBuildingStep);
 				// Build the documentation.
 				m_documenter.Build(m_project);
+			}
+			catch ( Exception ex )
+			{
+				if ( App.GetInnermostException( ex ) is ThreadAbortException )
+					m_buildStatus.BuildCancelled();
+				else
+					m_buildStatus.BuildException( ex );
+			}
+			finally
+			{
+				m_documenter.DocBuildingStep -= new DocBuildingEventHandler(m_documenter_DocBuildingStep);
+
+				m_buildStatus.BuildComplete();
+
+				m_project = null;
+				m_documenter = null;
+				lock( this )
+					m_workerThread = null;
 
 				GC.Collect();
 				Debug.WriteLine("Memory after build: " + GC.GetTotalMemory(false).ToString());
+			}
+		}
 
-				m_isComplete = true;
-			}
-			catch (Exception ex)
-			{
-				m_exception = ex;
-			}
+		private void m_documenter_DocBuildingStep(object sender, ProgressArgs e)
+		{
+			m_buildStatus.ReportProgress( e );
 		}
 	}
 }

@@ -27,9 +27,7 @@ using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Windows.Forms;
-using System.Windows.Forms.Design;
 using System.IO;
-using System.Threading;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Serialization;
@@ -67,8 +65,10 @@ namespace NDoc.Gui
 	/// a property grid.  You can edit the properties of the selected
 	/// documenter via this property grid.</para>
 	/// </remarks>
-	public class MainForm : System.Windows.Forms.Form
+	public class MainForm : System.Windows.Forms.Form, IBuildStatus
 	{
+		private const string UNTITLED_PROJECT_NAME = "(Untitled)";
+
 		#region Fields
 		#region Required Designer Fields
 		private System.ComponentModel.IContainer components;
@@ -103,11 +103,9 @@ namespace NDoc.Gui
 		private System.Windows.Forms.ToolBarButton cancelToolBarButton;
 		#endregion // Required Designer Fields
 
+		private BuildWorker m_buildWorker;
 		private Project project;
-		private string processDirectory;
 		private string projectFilename;
-		private const string untitledProjectName = "(Untitled)";
-		private Thread buildThread;
 		private System.Windows.Forms.ToolBarButton solutionToolBarButton;
 		private System.Windows.Forms.MenuItem menuFileOpenSolution;
 		private System.Windows.Forms.MenuItem menuHelpItem;
@@ -193,8 +191,6 @@ namespace NDoc.Gui
 		/// <param name="e">event arguments</param>
 		protected override void OnLoad(EventArgs e)
 		{
-			Thread.CurrentThread.Name = "GUI";
-
 			project = new Project();
 			project.Modified += new ProjectModifiedEventHandler(OnProjectModified);
 			project.ActiveConfigChanged += new EventHandler(project_ActiveConfigChanged);
@@ -205,23 +201,10 @@ namespace NDoc.Gui
 			assemblyListControl.AssemblySlashDocs = project.AssemblySlashDocs;
 
 			foreach ( IDocumenterInfo documenter in InstalledDocumenters.Documenters )
-			{
-				// build a development status string (alpha, beta, etc)
-				string devStatus = string.Empty;
-				if ( documenter.DevelopmentStatus != DocumenterDevelopmentStatus.Stable )
-				{
-					devStatus = documenter.DevelopmentStatus.ToString();
-					// want it uncapitalized
-					devStatus = string.Format( " ({0}{1})", Char.ToLower( devStatus[0] ), devStatus.Substring(1) );
-				}
-
-				comboBoxDocumenters.Items.Add( documenter.Name + devStatus );
-			}
+				comboBoxDocumenters.Items.Add( documenter );
 
 			options = new NDocOptions();
 			ReadConfig();
-
-			processDirectory = Directory.GetCurrentDirectory();
 
 			Clear();
 
@@ -271,6 +254,8 @@ namespace NDoc.Gui
 			SetWindowTitle();
 		
 			this.traceWindow1.TraceText = string.Format( "[NDoc version {0}]\n", Assembly.GetExecutingAssembly().GetName().Version );
+
+			m_buildWorker = new BuildWorker( this );
 
 			base.OnLoad (e);
 		}
@@ -868,7 +853,7 @@ namespace NDoc.Gui
 
 			if (projectFilename != null)
 			{
-				if (projectFilename == untitledProjectName)
+				if (projectFilename == UNTITLED_PROJECT_NAME)
 				{
 					projectName = projectFilename;
 				}
@@ -1011,7 +996,7 @@ namespace NDoc.Gui
 
 			int index = 0;
 
-			foreach ( IDocumenterInfo documenter in InstalledDocumenters.Documenters )
+			foreach ( IDocumenterInfo documenter in comboBoxDocumenters.Items )
 			{
 				if ( documenter.Name == documenterName )
 				{
@@ -1048,8 +1033,8 @@ namespace NDoc.Gui
 				settings.SetSetting( "gui", "showDescriptions", this.ShowDescriptions );
 				settings.SetSetting( "gui", "detailedAssemblyView", this.assemblyListControl.DetailsView );
 
-				if ( comboBoxDocumenters.SelectedIndex >= 0 )
-					settings.SetSetting( "gui", "documenter", ((IDocumenterInfo)InstalledDocumenters.Documenters[comboBoxDocumenters.SelectedIndex]).Name );
+				if ( project.ActiveDocumenter != null )
+					settings.SetSetting( "gui", "documenter", project.ActiveDocumenter.Name );
 
 				// Trim our MRU list down to max amount before writing the config.
 				while (recentProjectFilenames.Count > this.options.MRUSize)
@@ -1113,7 +1098,10 @@ namespace NDoc.Gui
 		{
 			try
 			{
-				project.Write(fileName);
+				project.Write( fileName );
+				using ( Settings settings = new Settings( Settings.UserSettingsFile ) )
+					settings.SetSetting( "gui", "lastSaveDirectory", Path.GetDirectoryName( fileName ) );
+
 				SetWindowTitle();
 			}
 			catch (Exception ex)
@@ -1127,10 +1115,10 @@ namespace NDoc.Gui
 		{
 			using ( SaveFileDialog saveFileDlg = new SaveFileDialog() )
 			{
-				if (projectFilename == untitledProjectName)
+				if (projectFilename == UNTITLED_PROJECT_NAME)
 				{
-					//TODO: set the initial directory to the last place used to save a project
-					//saveFileDlg.InitialDirectory = processDirectory;
+					Settings settings = new Settings( Settings.UserSettingsFile );
+					saveFileDlg.InitialDirectory = settings.GetSetting( "gui", "lastSaveDirectory", App.RuntimeLocation );
 					saveFileDlg.FileName = @".\Untitled.ndoc";
 				}
 				else
@@ -1156,14 +1144,13 @@ namespace NDoc.Gui
 
 		private void Clear()
 		{
-			projectFilename = untitledProjectName;
+			projectFilename = UNTITLED_PROJECT_NAME;
 			project.Clear();
 
 			RefreshPropertyGrid();
 
 			EnableAssemblyItems();
 
-			projectFilename = untitledProjectName;
 			EnableMenuItems(false);
 			SetWindowTitle();
 		}
@@ -1184,7 +1171,7 @@ namespace NDoc.Gui
 		/// <param name="sender">The File->New menu item (not used).</param>
 		/// <param name="e">Event arguments (not used).</param>
 		/// <seealso cref="Clear"/>
-		protected void menuFileNewItem_Click (object sender, System.EventArgs e)
+		private void menuFileNewItem_Click (object sender, System.EventArgs e)
 		{
 			if ( QueryContinueDiscardProject() )
 				Clear();
@@ -1335,7 +1322,7 @@ namespace NDoc.Gui
 
 		private void SaveOrSaveAs()
 		{
-			if ( projectFilename == untitledProjectName )
+			if ( projectFilename == UNTITLED_PROJECT_NAME )
 				FileSaveAs();
 
 			else
@@ -1347,16 +1334,7 @@ namespace NDoc.Gui
 			FileSaveAs();
 		}
 
-		/// <summary>
-		/// Opens the project file of the selected MRU menu item.
-		/// </summary>
-		/// <remarks>
-		/// If the project file exists, it opens it.  Otherwise that project
-		/// file is removed from the MRU menu.
-		/// </remarks>
-		/// <param name="sender">The selected menu item.</param>
-		/// <param name="e">Event arguments (not used).</param>
-		protected void menuMRUItem_Click (object sender, System.EventArgs e)
+		private void menuMRUItem_Click (object sender, System.EventArgs e)
 		{
 			string fileName = ((MenuItem)sender).Text.Substring(3);
 
@@ -1390,117 +1368,44 @@ namespace NDoc.Gui
 
 		private void menuDocBuildItem_Click(object sender, System.EventArgs e)
 		{
-			IDocumenter documenter = project.ActiveConfig.CreateDocumenter();
+			Debug.Assert( m_buildWorker != null && m_buildWorker.IsBuilding == false );
+			Debug.Assert( project.ActiveConfig != null );
 
-			//make sure the current directory is the project directory
-			if ( projectFilename != untitledProjectName )
-				Directory.SetCurrentDirectory( Path.GetDirectoryName( projectFilename ) );
+			IDocumenter documenter = project.ActiveConfig.CreateDocumenter();
 
 			string message = documenter.CanBuild( project );
 
-			if ( message != null )
+			if ( message == null )
+			{
+				this.Cursor = Cursors.AppStarting;
+
+				//make sure the current directory is the project directory
+				if ( projectFilename != UNTITLED_PROJECT_NAME )
+					Directory.SetCurrentDirectory( Path.GetDirectoryName( projectFilename ) );
+
+				if ( Directory.Exists( Path.GetDirectoryName( documenter.MainOutputFile ) ) == false )
+					Directory.CreateDirectory( Path.GetDirectoryName( documenter.MainOutputFile ) );
+
+				string logPath = Path.Combine( Path.GetDirectoryName(documenter.MainOutputFile ), "ndoc.log" );
+
+				ConfigureUIForBuild( true );
+
+				Trace.Listeners.Add( new TextWriterTraceListener( new StreamWriter( logPath, false, new System.Text.UTF8Encoding( false ) ),"ndoc" ) );
+
+				UpdateProgress( "Building documentation...", 0 );
+
+				m_buildWorker.Build( documenter, project );	
+			}
+			else
 			{
 				MessageBox.Show( this, message, "NDoc", MessageBoxButtons.OK, MessageBoxIcon.Stop );
-				return;
-			}
-
-			documenter.DocBuildingStep += new DocBuildingEventHandler( OnStepUpdate );
-			if ( !Directory.Exists( Path.GetDirectoryName( documenter.MainOutputFile ) ) )
-				Directory.CreateDirectory( Path.GetDirectoryName( documenter.MainOutputFile ) );
-
-			string logPath = Path.Combine( Path.GetDirectoryName(documenter.MainOutputFile ), "ndoc.log" );
-
-			using( StreamWriter logWriter = new StreamWriter( logPath, false, new System.Text.UTF8Encoding( false ) ) )
-			using( new WaitCursor( this, Cursors.AppStarting ) )
-			{
-				Trace.Listeners.Add(new TextWriterTraceListener(logWriter,"ndoc"));
-
-				BuildWorker buildWorker = new BuildWorker(documenter, project);
-				buildThread = new Thread(new ThreadStart(buildWorker.ThreadProc));
-				buildThread.Name = "Build";
-				buildThread.IsBackground = true;
-				buildThread.Priority = ThreadPriority.BelowNormal;
-
-				ConfigureUIForBuild(true);
-
-				try
-				{
-					UpdateProgress("Building documentation...", 0);
-
-					buildThread.Start();
-
-					// Wait for thread to start
-					while ( !buildThread.IsAlive );
-
-					// Now wait for thread to complete
-					while (!buildWorker.IsComplete && buildThread.IsAlive)
-					{
-						// Keep GUI responsive
-						Application.DoEvents();
-
-						// Don't chew up all CPU cycles
-						Thread.Sleep(100);
-					}
-
-					// Wait a little for the thread to die
-					buildThread.Join(200);
-				}
-				finally
-				{
-					// disconnect from the documenter's events
-					documenter.DocBuildingStep -= new DocBuildingEventHandler(OnStepUpdate);
-
-					// keep us from accessing parts of the window when it is closed while a build is in progress
-					if ( !this.IsDisposed )
-					{
-						ConfigureUIForBuild(false);
-						statusBarTextPanel.Text = "Ready";
-						if ( !this.traceWindow1.IsDisposed && this.traceWindow1.Visible )
-							this.traceWindow1.Disconnect();
-					}
-				}
-
-				Exception ex = buildWorker.Exception;
-				if (ex != null)
-				{
-
-					//check if thread has been aborted
-					Exception iex = ex;
-					Exception innermostException;
-					do
-					{
-						if (iex is ThreadAbortException)
-						{
-							// disconnect from the trace listener
-							Trace.Listeners.Remove("ndoc");
-							return;
-						}
-						innermostException = iex;
-						iex = iex.InnerException;
-					} while (iex != null);
-
-					// Process exception
-					Trace.WriteLine( "An error occured while trying to build the documentation." );
-					Trace.WriteLine( "" );
-					App.BuildTraceError( ex );
-
-					// we do not want to show any dialogs if the app is shutting down
-					if ( innermostException is DocumenterException )
-						ErrorForm.ShowError( "NDoc Documenter Error", ex, this );
-
-					else 
-						ErrorForm.ShowError( ex, this );
-				}
-				// disconnect from the trace listener
-				Trace.Listeners.Remove("ndoc");
 			}
 		}
 
 		private void menuCancelBuildItem_Click(object sender, System.EventArgs e)
 		{
 			statusBarTextPanel.Text = "Cancelling build ...";
-			buildThread.Abort();
-			Trace.WriteLine( "Build cancelled" );
+			m_buildWorker.Cancel();
 		}
 
 		private void ConfigureUIForBuild(bool starting)
@@ -1541,13 +1446,6 @@ namespace NDoc.Gui
 			progressBar.Visible = starting;
 		}
 
-		private void OnStepUpdate(object sender, ProgressArgs e)
-		{
-			// This gets called from another thread so we must thread marhal back to the GUI thread.
-			Delegate d = new UpdateProgressDelegate( UpdateProgress );
-			this.Invoke( d, new Object[] { e.Status, e.Progress } );
-		}
-
 		private delegate void UpdateProgressDelegate(string text, int percent);
 		private void UpdateProgress(string text, int percent)
 		{
@@ -1562,10 +1460,11 @@ namespace NDoc.Gui
 
 		private void menuDocViewItem_Click(object sender, System.EventArgs e)
 		{
-			IDocumenter documenter = (IDocumenter)InstalledDocumenters.Documenters[comboBoxDocumenters.SelectedIndex];
+			Debug.Assert( project.ActiveConfig != null );
+			IDocumenter documenter = project.ActiveConfig.CreateDocumenter();
 
 			//make sure the current directory is the project directory
-			if ( projectFilename != untitledProjectName )
+			if ( projectFilename != UNTITLED_PROJECT_NAME )
 				Directory.SetCurrentDirectory( Path.GetDirectoryName( projectFilename ) );
 
 			try
@@ -1574,18 +1473,11 @@ namespace NDoc.Gui
 			}
 			catch (FileNotFoundException)
 			{
-				DialogResult result = MessageBox.Show(
-					this,
-					"The documentation has not been built yet.\nWould you like to build it now?",
-					"NDoc",
-					MessageBoxButtons.YesNoCancel,
-					MessageBoxIcon.Question);
+				string msg = "The documentation has not been built yet.\nWould you like to build it now?";
+				DialogResult result = MessageBox.Show( this, msg, "NDoc", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question );
 
 				if ( result == DialogResult.Yes )
-				{
 					menuDocBuildItem_Click(sender, e);
-					menuDocViewItem_Click(sender, e);
-				}
 			}
 			catch (DocumenterException ex)
 			{
@@ -1633,11 +1525,7 @@ namespace NDoc.Gui
 
 		private void SelectedDocumenterChanged()
 		{
-			if ( comboBoxDocumenters.SelectedIndex != -1 )
-			{
-				IDocumenterInfo info = (IDocumenterInfo)InstalledDocumenters.Documenters[comboBoxDocumenters.SelectedIndex];
-				project.ActiveDocumenter = info;
-			}
+			project.ActiveDocumenter = comboBoxDocumenters.SelectedItem as IDocumenterInfo;
 		}
 
 		private DialogResult PromptToSave()
@@ -1646,17 +1534,28 @@ namespace NDoc.Gui
 		}
 
 		/// <summary>Prompts the user to save the project if it's dirty.</summary>
+		/// <param name="e">Cancel args</param>
 		protected override void OnClosing(CancelEventArgs e)
 		{
-			if ( buildThread != null && buildThread.IsAlive )
-				buildThread.Abort();
-
-			WriteConfig();
 			e.Cancel = !QueryContinueDiscardProject();
 
+			if ( e.Cancel == false && m_buildWorker.IsBuilding )
+			{
+				string message = "A build is currently in process.\nExiting now will abort this build.\n\nExit anyway?";
+				e.Cancel = MessageBox.Show( this, message, "Abort build?", MessageBoxButtons.YesNo, MessageBoxIcon.Question ) == DialogResult.No;
+			}																				  
 			base.OnClosing(e);
 		}
 
+		/// <summary>
+		/// Writes app configuration file
+		/// </summary>
+		/// <param name="e">args</param>
+		protected override void OnClosed(EventArgs e)
+		{
+			WriteConfig();
+			base.OnClosed (e);
+		}
 
 		//This makes the property grid more responsive on update
 		private void propertyGrid_PropertyValueChanged(object s, System.Windows.Forms.PropertyValueChangedEventArgs e)
@@ -1846,7 +1745,8 @@ namespace NDoc.Gui
 
 		private void assemblyListControl_EditNamespaces(object sender, System.EventArgs e)
 		{
-			IDocumenter documenter = (IDocumenter)InstalledDocumenters.Documenters[comboBoxDocumenters.SelectedIndex];
+			Debug.Assert( project.ActiveConfig != null );
+			IDocumenter documenter = project.ActiveConfig.CreateDocumenter();
 
 			string message = documenter.CanBuild(project, true);
 			if ( message == null )
@@ -1908,5 +1808,77 @@ namespace NDoc.Gui
 		{
 			propertyGrid.SelectedObject = project.ActiveConfig;
 		}
+
+		#region IBuildStatus Members
+
+		private delegate void ExceptionDelegate( Exception e );
+
+		/// <summary>
+		/// Called from teh build worker when an exception occurs
+		/// </summary>
+		/// <param name="e">The exception</param>
+		public void BuildException(Exception e)
+		{
+			if ( this.InvokeRequired )
+			{
+				this.Invoke( new ExceptionDelegate( this.BuildException ), new object[]{ e } );
+			}
+			else
+			{
+				// Process exception
+				Trace.WriteLine( "An error occured while trying to build the documentation." );
+				Trace.WriteLine( "" );
+				App.BuildTraceError( e );
+
+				if ( App.GetInnermostException( e ) is DocumenterException )
+					ErrorForm.ShowError( "NDoc Documenter Error", e, this );
+
+				else 
+					ErrorForm.ShowError( e, this );	
+			}
+		}
+
+		/// <summary>
+		/// Called from the build worker when the build is complete
+		/// </summary>
+		/// <remarks>This method is called regardless if the build is successful or not</remarks>
+		public void BuildComplete()
+		{
+			if ( this.InvokeRequired )
+			{
+				this.Invoke( new MethodInvoker( this.BuildComplete ) );
+			}
+			else
+			{
+				statusBarTextPanel.Text = "Ready";
+
+				if ( this.traceWindow1.IsDisposed == false && this.traceWindow1.Visible )
+					this.traceWindow1.Disconnect();
+
+				TraceListener listener = Trace.Listeners["ndoc"];
+				listener.Close();
+				listener.Dispose();
+				Trace.Listeners.Remove("ndoc");
+		
+				ConfigureUIForBuild( false );
+				this.Cursor = Cursors.Default;
+			}
+		}
+
+		/// <summary>
+		/// Called from teh build worker when the build is aborted
+		/// </summary>
+		public void BuildCancelled()
+		{
+			Trace.WriteLine( "Build cancelled" );
+		}
+
+		public void ReportProgress(ProgressArgs e)
+		{
+			// This gets called from another thread so we must thread marhal back to the GUI thread.
+			Delegate d = new UpdateProgressDelegate( UpdateProgress );
+			this.Invoke( d, new Object[] { e.Status, e.Progress } );
+		}
+		#endregion
 	}
 }
