@@ -133,6 +133,7 @@ namespace NDoc.Gui
 			this.Controls.Add(this.Ok);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.Name = "OptionsForm";
+			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "NDoc Options";
 			this.ResumeLayout(false);
