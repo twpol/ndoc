@@ -2026,7 +2026,7 @@ namespace NDoc.Core.Reflection
 					}
 				}
 			}
-			
+
 			return value.ToString();
 
 		}
@@ -3764,15 +3764,15 @@ namespace NDoc.Core.Reflection
 		
 		private void WriteTypeHierarchy(XmlWriter writer, DerivedTypesCollection derivedTypes, string TypeMemberID)
 		{
-			writer.WriteStartElement("type");
+			writer.WriteStartElement("hierarchyType");
 			writer.WriteAttributeString("id", TypeMemberID);
 			ArrayList interfaces = baseInterfaces.GetBaseInterfaceTypes(TypeMemberID);
 			if (interfaces.Count > 0)
 			{
-				writer.WriteStartElement("interfaces");
+				writer.WriteStartElement("hierarchyInterfaces");
 				foreach (string baseInterfaceTypeID in interfaces)
 				{
-					writer.WriteStartElement("interface");
+					writer.WriteStartElement("hierarchyInterface");
 					writer.WriteAttributeString("id", baseInterfaceTypeID);
 					writer.WriteEndElement();
 				}
