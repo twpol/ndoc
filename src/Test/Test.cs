@@ -263,12 +263,32 @@ namespace NDoc.Test
 			/// <summary>This is a method of the inner class.</summary>
 			/// <remarks>These are some remarks</remarks>
 			public void InnerMethod() { }
+
+			/// <summary>This is an enumeration nested in a nested class.</summary>
+			public enum InnerInnerEnum
+			{
+				/// <summary>Foo</summary>
+				Foo
+			}
 		}
 
 		/// <summary>Represents a private inner class.</summary>
 		private class PrivateInner
 		{
 		}
+
+		/// <summary>This is a nested enumeration.</summary>
+		public enum InnerEnum
+		{
+			/// <summary>Foo</summary>
+			Foo
+		}
+
+		/// <summary>This is a nested interface.</summary>
+		public interface InnerInterface {}
+
+		/// <summary>This is a nested structure.</summary>
+		public struct InnerStruct {}
 	}
 
 	/// <summary>This is an internal class.</summary>

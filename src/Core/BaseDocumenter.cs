@@ -779,8 +779,15 @@ namespace NDoc.Core
 		{
 			string memberName = GetMemberName(type);
 
+			string fullNameWithoutNamespace = type.FullName.Replace('+', '.');
+
+			if (type.Namespace != null)
+			{
+				fullNameWithoutNamespace = fullNameWithoutNamespace.Substring(type.Namespace.Length + 1);
+			}
+
 			writer.WriteStartElement("interface");
-			writer.WriteAttributeString("name", type.Name.Replace('+', '.'));
+			writer.WriteAttributeString("name", fullNameWithoutNamespace);
 			writer.WriteAttributeString("id", memberName);
 			writer.WriteAttributeString("access", GetTypeAccessValue(type));
 
