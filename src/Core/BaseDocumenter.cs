@@ -261,6 +261,9 @@ namespace NDoc.Core
 				// Start the root element
 				writer.WriteStartElement("ndoc");
 
+				if (MyConfig.FeedbackEmailAddress != string.Empty)
+					WriteFeedBackEmailAddress( writer );
+
 				if (MyConfig.CopyrightText != string.Empty)
 					WriteCopyright( writer );
 
@@ -379,6 +382,12 @@ namespace NDoc.Core
 			writer.WriteEndElement();			
 		}
 
+		
+		private void WriteFeedBackEmailAddress( XmlWriter writer )
+		{
+			writer.WriteElementString( "feedbackEmail", MyConfig.FeedbackEmailAddress );
+		}
+		
 		// writes the copyright node to the documentation
 		private void WriteCopyright( XmlWriter writer )
 		{

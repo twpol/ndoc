@@ -503,6 +503,23 @@ namespace NDoc.Core
 				SetDirty();
 			}
 		}
+
+		string _FeedbackEmailAddress  = string.Empty;
+
+		/// <summary>Gets or sets the FeedbackEmailAddress property.</summary>
+		[Category("Documentation Main Settings")]
+		[Description("If an email address is supplied, a mailto link will be placed at the bottom of each page using this address")]
+		[DefaultValue("")]
+		public string FeedbackEmailAddress
+		{
+			get { return _FeedbackEmailAddress ; }
+			set
+			{
+				_FeedbackEmailAddress  = value;
+				SetDirty();
+			}
+		}			
+		
 		bool _SkipNamespacesWithoutSummaries;
 
 		/// <summary>Gets or sets the SkipNamespacesWithoutSummaries property.</summary>
