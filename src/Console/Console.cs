@@ -63,6 +63,7 @@ namespace NDoc.Console
 										case "project":
 											project = new Project();
 											project.Read(value);
+											documenter = (MsdnDocumenter)project.GetDocumenter(documenter.Name);
 											break;
 										case "recurse":
 											string[] recPair = value.Split(',');
