@@ -123,7 +123,6 @@ Global
 		NDoc.build.include = NDoc.build.include
 		NDoc.build.package = NDoc.build.package
 		README.txt = README.txt
-		doc\tags.html = doc\tags.html
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
