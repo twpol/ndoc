@@ -214,6 +214,13 @@ namespace NDoc.Core
 				}
 			}
 
+			// add references path
+			foreach(string dir in project.GetReferencePaths())
+			{
+				if (!assemblyResolveDirs.Contains(dir))
+					assemblyResolveDirs.Add(dir);
+			}
+
 			// put dirs containing assemblies in also
 			foreach(AssemblySlashDoc assemblySlashDoc in project.GetAssemblySlashDocs())
 			{
