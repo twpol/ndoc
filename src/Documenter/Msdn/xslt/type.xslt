@@ -189,12 +189,11 @@
 								</xsl:call-template>
 							</xsl:attribute>
 							<xsl:value-of select="../@name" />
-							<xsl:text> Namespace</xsl:text>
 						</a>
 					</p>
 					<p>
 						<b>Assembly: </b>
-						<xsl:value-of select="../../@name" />
+						<xsl:value-of select="../../../@name" /> (in <xsl:value-of select="../../@name" />)
 					</p>
 					<xsl:if test="documentation/permission">
 						<p>
