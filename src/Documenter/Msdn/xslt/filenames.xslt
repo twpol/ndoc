@@ -215,11 +215,6 @@
       <xsl:when test="$member = 'event'">
         <xsl:call-template name="get-filename-for-current-event" />
       </xsl:when>
-      <xsl:when test="$member = 'operator'">
-        <xsl:call-template name="get-filename-for-operator">
-          <xsl:with-param name="operator" select="." />
-        </xsl:call-template>
-      </xsl:when>
       <xsl:otherwise>
         <xsl:call-template name="get-filename-for-method" />
       </xsl:otherwise>
