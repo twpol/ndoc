@@ -6,7 +6,7 @@
             for an actual final release 
         -->
         <if test="${project.release.type=='release'}">
-            <property name="current.package.zipfile" value="${nant.project.name}-devel-v${project.version}.zip" />
+            <property name="current.package.zipfile" value="${nant.project.name}-devel-v${project.version}.${project.patchversion}.zip" />
         </if>
         <if test="${not(project.release.type=='release')}">
             <property name="current.package.zipfile" value="${nant.project.name}-devel-v${project.version}-${project.release.type}.zip" />
@@ -106,7 +106,7 @@
             to sf.net
         -->
         <if test="${project.release.type=='release'}">
-            <move file="src/Setup/Release/NDoc.msi" tofile="NDoc-v${project.version}.msi" overwrite="true" />
+            <move file="src/Setup/Release/NDoc.msi" tofile="NDoc-v${project.version}.${project.patchversion}.msi" overwrite="true" />
         </if>
         <if test="${not(project.release.type=='release')}">
             <move file="src/Setup/Release/NDoc.msi" tofile="NDoc-v${project.version}-${project.release.type}.msi" overwrite="true" />
@@ -135,7 +135,7 @@
                 <attribute type="AssemblyTrademarkAttribute" value="" />
                 <attribute type="AssemblyCultureAttribute" value="" />
                 <attribute type="AssemblyVersionAttribute" value="${project.version}.${build.number}.0" />
-                <attribute type="AssemblyInformationalVersionAttribute" value="${project.version}" />
+                <attribute type="AssemblyInformationalVersionAttribute" value="${project.version}.${project.patchversion}" />
             </attributes>
         </asminfo>
     </target>
