@@ -375,7 +375,7 @@ namespace NDoc.Documenter.Msdn
 		private void MakeHtmlForTypes(string namespaceName)
 		{
 			XmlNodeList typeNodes = 
-				xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace[@name=\"" + namespaceName + "\"]/*[local-name()!='summary']");
+				xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace[@name=\"" + namespaceName + "\"]/*[local-name()!='documentation']");
 
 			int[] indexes = SortNodesByAttribute(typeNodes, "id");
 			int nNodes = typeNodes.Count;
