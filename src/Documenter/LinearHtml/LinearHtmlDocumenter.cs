@@ -126,9 +126,19 @@ namespace NDoc.Documenter.LinearHtml
 
 		#region Properties
 
+		/// <summary>Cast to my type.</summary>
 		private LinearHtmlDocumenterConfig MyConfig
 		{
 			get { return (LinearHtmlDocumenterConfig)Config; }
+		}
+
+		/// <summary>
+		/// The development status (alpha, beta, stable) of this documenter.
+		/// Documenters should override this if they aren't stable.
+		/// </summary>
+		public override DocumenterDevelopmentStatus DevelopmentStatus
+		{
+			get { return(DocumenterDevelopmentStatus.Alpha); }
 		}
 
 		#endregion
@@ -992,7 +1002,6 @@ namespace NDoc.Documenter.LinearHtml
 		{
 			string nodeName = nav.GetAttribute("name", "");
 			string nodeType = nav.LocalName;
-
 			string capsItemType = char.ToUpper(nodeType[0]) + nodeType.Substring(1);
 
 			// put in an h3 anchor for links to this type
@@ -1031,40 +1040,9 @@ namespace NDoc.Documenter.LinearHtml
 			// Summary/declaration
 			//
 			xtw.WriteElementString("h4", "Summary");
-			string typeAccess = nav.GetAttribute("access", "");
-			string baseType = nav.GetAttribute("baseType", "");
-			string abstractString = nav.GetAttribute("abstract", "");
-			if (abstractString.Length == 0) abstractString = " ";
-			else if (abstractString.Equals("true")) abstractString = " abstract ";
+			string declarationString = MakeHtmlTypeDeclaration(nav);
 
-			// put in declaration
-			string lcTypeAccess = Char.ToLower(typeAccess[0]) + typeAccess.Substring(1);
-			xtw.WriteStartElement("p");
-			//xtw.WriteRaw("<b>Declaration:</b> ");
-			xtw.WriteStartElement("code");
-			string declarationString = lcTypeAccess + abstractString + nodeType + " " + nodeName;
-			if (baseType.Length > 0) declarationString += " : " + baseType;
-
-			// add interfaces to declaration string
-			ArrayList implKids = GetChildren(nav, "implements");
-			if (implKids.Count > 0)
-			{
-				// add appropriate separator
-				if (baseType.Length == 0) declarationString += " : ";
-				else declarationString += ", ";
-
-				bool first = true;
-				foreach(XPathNavigator n3 in implKids)
-				{
-					if (!first) declarationString += ", ";
-					first = false;
-					declarationString += n3.Value;
-				}
-			}
-
-			xtw.WriteRaw(declarationString);
-			xtw.WriteEndElement(); // code
-			xtw.WriteEndElement(); // p
+			xtw.WriteRaw("<p><code>" + declarationString + "</code></p>");
 
 			//
 			// documentation/summary
@@ -1095,10 +1073,7 @@ namespace NDoc.Documenter.LinearHtml
 						FixCodeNodes(n); // change <code> to <pre class="code">
 						xtw.WriteRaw(n.InnerXml);
 					}
-					else 
-					{
-						xtw.WriteRaw(summaryNav.Value);
-					}
+					else xtw.WriteRaw(summaryNav.Value);
 					xtw.WriteEndElement();
 				}
 			}
@@ -1146,10 +1121,7 @@ namespace NDoc.Documenter.LinearHtml
 					FixCodeNodes(n); // change <code> to <pre class="code">
 					xtw.WriteRaw(n.InnerXml);
 				}
-				else 
-				{
-					xtw.WriteRaw(remarksNav.Value);
-				}
+				else xtw.WriteRaw(remarksNav.Value);
 				xtw.WriteEndElement();
 			}
 
@@ -1174,76 +1146,165 @@ namespace NDoc.Documenter.LinearHtml
 					// sort by member id (approximately the member name?)
 					SortedList sortedMemberIds = new SortedList(navTable);
 
-					foreach(string memberId in sortedMemberIds.Keys) // navTable.Keys
+					foreach(string memberId in sortedMemberIds.Keys)
 					{
 						XPathNavigator nav2 = (XPathNavigator)navTable[memberId];
-						string memberAccess = nav2.GetAttribute("access", "");
-						string memberName = nav2.GetAttribute("name", "");
-						string typeName = nav2.GetAttribute("type", "");
-						string typeBaseName = TypeBaseName(typeName);
-						string declaringType = nav2.GetAttribute("declaringType", "");
-						XPathNavigator summaryNav = GetDescendantNodeWithName(nav2, "summary");
-						//DumpNavTree(summaryNav, "    ");
-
-						//
-						// create a string for the name column
-						//
-						string nameString = memberName;
-						switch(memberType)
-						{
-							case "field":
-								nameString = KeyWrap(memberName) + TypeRefWrap(" : " + typeBaseName);
-								break;
-							case "property":
-								nameString = KeyWrap(memberName)  + TypeRefWrap(" : " + typeBaseName);
-								break;
-							case "method":
-								typeBaseName = TypeBaseName(nav2.GetAttribute("returnType", ""));
-								nameString = KeyWrap(memberName + "()") + TypeRefWrap(" : " + typeBaseName);
-								break;
-							case "constructor":
-								nameString = KeyWrap(nodeName + "()");
-								break;
-						}
-
-						//
-						// write the member if it isn't from System.Object
-						//
-						if (!declaringType.Equals("System.Object"))
-						{
-							xtw.WriteStartElement("TR");
-							xtw.WriteStartElement("TD");
-							xtw.WriteRaw(nameString);
-							xtw.WriteEndElement();
-							xtw.WriteElementString("TD", memberAccess);
-
-							if (declaringType.Length > 0)
-							{
-								//xtw.WriteElementString("TD", "<em>(from " + declaringType + ")</em> " + summaryNav.Value);
-
-								// declared by an ancestor
-								xtw.WriteStartElement("TD");
-								xtw.WriteStartElement("em");
-								xtw.WriteRaw("(from " + TypeRefWrap(declaringType) + ")");
-								xtw.WriteEndElement(); // em
-								xtw.WriteString(" ");
-								if (summaryNav != null) xtw.WriteString(summaryNav.Value);
-								xtw.WriteEndElement(); // TD
-							}
-							else
-							{
-								if (summaryNav != null)
-									xtw.WriteElementString("TD", summaryNav.Value);
-								else xtw.WriteElementString("TD", " ");
-							}
-
-							xtw.WriteEndElement();
-						}
+						MakeHtmlForTypeMember(nodeName, memberType, nav2, xtw);
 					}
 
 					EndTable(xtw);
 				}
 			}
+		}
+
+		/// <summary>
+		/// Make (and write) html for a Type (class, interface, ...) member, such
+		/// as a property, field, etc.
+		/// </summary>
+		/// <param name="typeName">The Type's name.</param>
+		/// <param name="memberType">The type of the member (property, field, 
+		/// method, etc)</param>
+		/// <param name="nav">Pointing to the member's node.</param>
+		/// <param name="xtw"></param>
+		void MakeHtmlForTypeMember(string parentTypeName, string memberType, 
+			XPathNavigator nav, XmlTextWriter xtw)
+		{
+			bool includeMethodSignature = MyConfig.MethodParametersInTable;
+			string memberAccess = nav.GetAttribute("access", "");
+			string memberName = nav.GetAttribute("name", "");
+			string typeName = nav.GetAttribute("type", "");
+			string typeBaseName = TypeBaseName(typeName);
+			string declaringType = nav.GetAttribute("declaringType", "");
+			XPathNavigator summaryNav = GetDescendantNodeWithName(nav, "summary");
+			//DumpNavTree(summaryNav, "    ");
+
+			//
+			// create a string for the name column
+			//
+			string nameString = memberName;
+			switch(memberType)
+			{
+				case "field":
+					nameString = KeyWrap(memberName) + TypeRefWrap(" : " + typeBaseName);
+					break;
+				case "property":
+					nameString = KeyWrap(memberName)  + TypeRefWrap(" : " + typeBaseName);
+					break;
+				case "method":
+					typeBaseName = TypeBaseName(nav.GetAttribute("returnType", ""));
+					string args = "";
+					if (includeMethodSignature) args = MakeMethodParameterList(nav);
+					nameString = KeyWrap(memberName + "(" + args + ")") + TypeRefWrap(" : " + typeBaseName);
+					break;
+				case "constructor":
+					nameString = KeyWrap(parentTypeName + "()");
+					break;
+			}
+
+			//
+			// write the member if it isn't from System.Object
+			//
+			if (!declaringType.Equals("System.Object"))
+			{
+				xtw.WriteStartElement("TR");
+				xtw.WriteStartElement("TD");
+				xtw.WriteRaw(nameString);
+				xtw.WriteEndElement();
+				xtw.WriteElementString("TD", memberAccess);
+
+				if (declaringType.Length > 0)
+				{
+					//xtw.WriteElementString("TD", "<em>(from " + declaringType + ")</em> " + summaryNav.Value);
+
+					// declared by an ancestor
+					xtw.WriteStartElement("TD");
+					xtw.WriteStartElement("em");
+					xtw.WriteRaw("(from " + TypeRefWrap(declaringType) + ")");
+					xtw.WriteEndElement(); // em
+					xtw.WriteString(" ");
+					if (summaryNav != null) xtw.WriteString(summaryNav.Value);
+					xtw.WriteEndElement(); // TD
+				}
+				else
+				{
+					if (summaryNav != null)
+						xtw.WriteElementString("TD", summaryNav.Value);
+					else xtw.WriteElementString("TD", " ");
+				}
+
+				xtw.WriteEndElement();
+			}
+		}
+
+		/// <summary>
+		/// Make a string for a method's parameter list, such as 
+		/// "int x, int y, string s".
+		/// </summary>
+		/// <param name="nav">Navigator to the Method's node.</param>
+		/// <returns>The declaration string.</returns>
+		string MakeMethodParameterList(XPathNavigator nav)
+		{
+			StringBuilder sb = new StringBuilder();
+
+			// add interfaces to declaration string
+			ArrayList paramList = GetChildren(nav, "parameter");
+			if (paramList.Count > 0)
+			{
+				bool first = true;
+				foreach(XPathNavigator n3 in paramList)
+				{
+					if (!first) sb.Append(", ");
+					first = false;
+					string name = n3.GetAttribute("name", "");
+					string type = n3.GetAttribute("type", "");
+					string inOutRef = n3.GetAttribute("huh?", "");
+					if (inOutRef.Length > 0) sb.Append(inOutRef + " ");
+					sb.Append(type + " " + name);
+				}
+			}
+
+			return(TypeRefWrap(sb.ToString()));
+		}
+
+		/// <summary>
+		/// Make a string for a Type declaration, such as 
+		/// "public class Foo : IComparable".
+		/// </summary>
+		/// <param name="nav">Navigator to the Type's node.</param>
+		/// <returns>The declaration string.</returns>
+		string MakeHtmlTypeDeclaration(XPathNavigator nav)
+		{
+			string nodeName = nav.GetAttribute("name", "");
+			string nodeType = nav.LocalName;
+			string typeAccess = nav.GetAttribute("access", "");
+			string baseType = nav.GetAttribute("baseType", "");
+			string abstractString = nav.GetAttribute("abstract", "");
+			if (abstractString.Length == 0) abstractString = " ";
+			else if (abstractString.Equals("true")) abstractString = " abstract ";
+
+			// put in declaration
+			string lcTypeAccess = Char.ToLower(typeAccess[0]) + typeAccess.Substring(1);
+			string declarationString = lcTypeAccess + abstractString + nodeType + " " + nodeName;
+			if (baseType.Length > 0) declarationString += " : " + baseType;
+
+			// add interfaces to declaration string
+			ArrayList implKids = GetChildren(nav, "implements");
+			if (implKids.Count > 0)
+			{
+				// add appropriate separator
+				if (baseType.Length == 0) declarationString += " : ";
+				else declarationString += ", ";
+
+				bool first = true;
+				foreach(XPathNavigator n3 in implKids)
+				{
+					if (!first) declarationString += ", ";
+					first = false;
+					declarationString += n3.Value;
+				}
+			}
+
+			return(declarationString);
 		}
 
 		#endregion
