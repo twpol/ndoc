@@ -88,7 +88,7 @@ namespace NDoc.Gui
 			this.okButton.Anchor = (System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right);
 			this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.okButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.okButton.Location = new System.Drawing.Point(320, 16);
+			this.okButton.Location = new System.Drawing.Point(320, 32);
 			this.okButton.Name = "okButton";
 			this.okButton.TabIndex = 4;
 			this.okButton.Text = "OK";
@@ -99,7 +99,7 @@ namespace NDoc.Gui
 			this.cancelButton.Anchor = (System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right);
 			this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.cancelButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.cancelButton.Location = new System.Drawing.Point(320, 48);
+			this.cancelButton.Location = new System.Drawing.Point(320, 64);
 			this.cancelButton.Name = "cancelButton";
 			this.cancelButton.TabIndex = 5;
 			this.cancelButton.Text = "Cancel";
@@ -109,10 +109,10 @@ namespace NDoc.Gui
 			this.summaryTextBox.Anchor = (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
 				| System.Windows.Forms.AnchorStyles.Left) 
 				| System.Windows.Forms.AnchorStyles.Right);
-			this.summaryTextBox.Location = new System.Drawing.Point(8, 64);
+			this.summaryTextBox.Location = new System.Drawing.Point(8, 80);
 			this.summaryTextBox.Multiline = true;
 			this.summaryTextBox.Name = "summaryTextBox";
-			this.summaryTextBox.Size = new System.Drawing.Size(296, 93);
+			this.summaryTextBox.Size = new System.Drawing.Size(296, 104);
 			this.summaryTextBox.TabIndex = 3;
 			this.summaryTextBox.Text = "";
 			// 
@@ -120,10 +120,11 @@ namespace NDoc.Gui
 			// 
 			this.namespaceComboBox.Anchor = ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
 				| System.Windows.Forms.AnchorStyles.Right);
+			this.namespaceComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.namespaceComboBox.DropDownWidth = 192;
-			this.namespaceComboBox.Location = new System.Drawing.Point(112, 16);
+			this.namespaceComboBox.Location = new System.Drawing.Point(8, 32);
 			this.namespaceComboBox.Name = "namespaceComboBox";
-			this.namespaceComboBox.Size = new System.Drawing.Size(192, 21);
+			this.namespaceComboBox.Size = new System.Drawing.Size(296, 21);
 			this.namespaceComboBox.Sorted = true;
 			this.namespaceComboBox.TabIndex = 0;
 			this.namespaceComboBox.SelectedIndexChanged += new System.EventHandler(this.namespaceComboBox_SelectedIndexChanged);
@@ -131,7 +132,7 @@ namespace NDoc.Gui
 			// label1
 			// 
 			this.label1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.label1.Location = new System.Drawing.Point(8, 18);
+			this.label1.Location = new System.Drawing.Point(8, 16);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(104, 16);
 			this.label1.TabIndex = 1;
@@ -141,9 +142,9 @@ namespace NDoc.Gui
 			// label2
 			// 
 			this.label2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.label2.Location = new System.Drawing.Point(8, 48);
+			this.label2.Location = new System.Drawing.Point(8, 64);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(56, 16);
+			this.label2.Size = new System.Drawing.Size(64, 16);
 			this.label2.TabIndex = 2;
 			this.label2.Text = "Summary:";
 			// 
@@ -153,7 +154,7 @@ namespace NDoc.Gui
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.AutoScroll = true;
 			this.CancelButton = this.cancelButton;
-			this.ClientSize = new System.Drawing.Size(408, 166);
+			this.ClientSize = new System.Drawing.Size(410, 200);
 			this.Controls.AddRange(new System.Windows.Forms.Control[] {
 																		  this.cancelButton,
 																		  this.okButton,
