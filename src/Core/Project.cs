@@ -59,11 +59,11 @@ namespace NDoc.Core
 
 		private ArrayList _AssemblySlashDocs = new ArrayList();
 
-//		/// <summary>Gets or sets the AssemblySlashDocs property.</summary>
-//		private ArrayList AssemblySlashDocs
-//		{
-//			get { return _AssemblySlashDocs; }
-//		}
+		//		/// <summary>Gets or sets the AssemblySlashDocs property.</summary>
+		//		private ArrayList AssemblySlashDocs
+		//		{
+		//			get { return _AssemblySlashDocs; }
+		//		}
 
 		/// <summary>
 		/// A custom exception to detect if a duplicate assembly is beeing added.
@@ -84,9 +84,19 @@ namespace NDoc.Core
 				throw new AssemblyAlreadyExistsException("Assembly already exists.");
 			}
 
-			_AssemblySlashDocs.Add(assemblySlashDoc);
-			AddNamespacesFromAssembly(assemblySlashDoc.AssemblyFilename);
-			IsDirty = true;
+			try
+			{
+				AddNamespacesFromAssembly(assemblySlashDoc.AssemblyFilename);
+				_AssemblySlashDocs.Add(assemblySlashDoc);
+			}
+			catch (FileNotFoundException) 
+			{
+				//ignore
+			}
+			finally
+			{
+				IsDirty = true;
+			}
 		}
 
 		private bool FindAssemblySlashDoc(AssemblySlashDoc assemblySlashDoc)
@@ -261,6 +271,8 @@ namespace NDoc.Core
 
 			XmlTextReader reader = null;
 
+			bool assembliesLoadErrorFlag = false;
+
 			try
 			{
 				StreamReader streamReader = new StreamReader(filename);
@@ -276,7 +288,14 @@ namespace NDoc.Core
 						switch (reader.Name)
 						{
 							case "assemblies":
-								ReadAssemblySlashDocs(reader);
+								try
+								{
+									ReadAssemblySlashDocs(reader);
+								}
+								catch (CouldNotLoadAllAssembliesException)
+								{
+									assembliesLoadErrorFlag = true;
+								}
 								break;
 							case "namespaces":
 								ReadNamespaceSummaries(reader);
@@ -310,11 +329,19 @@ namespace NDoc.Core
 				}
 			}
 
+			if (assembliesLoadErrorFlag)
+			{
+				//re-throw the exception caught earlier
+				throw new CouldNotLoadAllAssembliesException(
+					"Some assemblies could not be loaded.");
+			}
+
 			IsDirty = false;
 		}
 
 		private void ReadAssemblySlashDocs(XmlReader reader)
 		{
+			int count = 0;
 			while (!reader.EOF && !(reader.NodeType == XmlNodeType.EndElement && reader.Name == "assemblies"))
 			{
 				if (reader.NodeType == XmlNodeType.Element && reader.Name == "assembly")
@@ -322,9 +349,15 @@ namespace NDoc.Core
 					AssemblySlashDoc assemblySlashDoc = new AssemblySlashDoc();
 					assemblySlashDoc.AssemblyFilename = reader["location"];
 					assemblySlashDoc.SlashDocFilename = reader["documentation"];
+					count++;
 					AddAssemblySlashDoc(assemblySlashDoc);
 				}
 				reader.Read();
+			}
+			if (count > AssemblySlashDocCount)
+			{
+				throw new CouldNotLoadAllAssembliesException(
+					"Some assemblies could not be loaded.");
 			}
 		}
 
@@ -494,4 +527,28 @@ namespace NDoc.Core
 
 	/// <summary>Handles ProjectModified events.</summary>
 	public delegate void ProjectModifiedEventHandler(object sender, EventArgs e);
+
+	/// <summary>
+	/// This exception is thrown when one or more assemblies can not be loaded.
+	/// </summary>
+	[Serializable]
+	public class CouldNotLoadAllAssembliesException : ApplicationException
+	{ 
+		/// <summary/>
+		public CouldNotLoadAllAssembliesException() { }
+
+		/// <summary/>
+		public CouldNotLoadAllAssembliesException(string message)
+			: base(message) { }
+
+		/// <summary/>
+		public CouldNotLoadAllAssembliesException(string message, Exception inner)
+			: base(message, inner) { }
+
+		/// <summary/>
+		protected CouldNotLoadAllAssembliesException(
+			System.Runtime.Serialization.SerializationInfo info,
+			System.Runtime.Serialization.StreamingContext context
+			) : base (info, context) { }
+	}
 }

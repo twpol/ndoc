@@ -1019,7 +1019,15 @@ namespace NDoc.Gui
 				string directoryName = Path.GetDirectoryName(fileName);
 				Directory.SetCurrentDirectory(directoryName);
 
-				project.Read(fileName);
+				try
+				{
+					project.Read(fileName);
+				}
+				catch (CouldNotLoadAllAssembliesException)
+				{
+					MessageBox.Show(this, "One or more of the project's assemblies could not be loaded.", 
+						"Open", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+				}
 
 				projectFilename = fileName;
 				SetWindowTitle();
@@ -1068,7 +1076,7 @@ namespace NDoc.Gui
 			}
 			catch (Exception ex)
 			{
-				MessageBox.Show(this, ex.InnerException.Message, "Project Save", 
+				MessageBox.Show(this, ex.InnerException.Message, "Save", 
 					MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 				FileSaveAs();
 			}
@@ -1090,7 +1098,7 @@ namespace NDoc.Gui
 				saveFileDlg.FileName = Path.GetFileName(projectFilename);
 			}
 
-			saveFileDlg.Filter = "Project files (*.ndoc)|*.ndoc|All files (*.*)|*.*" ;
+			saveFileDlg.Filter = "NDoc Project files (*.ndoc)|*.ndoc|All files (*.*)|*.*" ;
 
 			if(saveFileDlg.ShowDialog() == DialogResult.OK)
 			{
@@ -1284,7 +1292,7 @@ namespace NDoc.Gui
 			}
 			OpenFileDialog openFileDlg = new OpenFileDialog();
 			openFileDlg.InitialDirectory = Directory.GetCurrentDirectory();
-			openFileDlg.Filter = "Project files (*.ndoc)|*.ndoc|All files (*.*)|*.*" ;
+			openFileDlg.Filter = "NDoc Project files (*.ndoc)|*.ndoc|All files (*.*)|*.*" ;
 
 			if(openFileDlg.ShowDialog() == DialogResult.OK)
 			{
@@ -1358,7 +1366,7 @@ namespace NDoc.Gui
 			{
 				try
 				{
-					MessageBox.Show(this, "Project file doesn't exist.", "Open Project",
+					MessageBox.Show(this, "Project file doesn't exist.", "Open",
 						            MessageBoxButtons.OK, MessageBoxIcon.Information);
 					recentProjectFilenames.Remove(fileName);
 					MakeMRUMenu();
@@ -1806,8 +1814,8 @@ namespace NDoc.Gui
 		private DialogResult PromptToSave()
 		{
 			return MessageBox.Show(
-				"Save changes to " + projectFilename + "?",
-				"NDoc",
+				"Save changes to project " + projectFilename + "?",
+				"Save?",
 				MessageBoxButtons.YesNoCancel,
 				MessageBoxIcon.Exclamation,
 				MessageBoxDefaultButton.Button1);
