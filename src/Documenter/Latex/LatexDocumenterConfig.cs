@@ -36,6 +36,7 @@ namespace NDoc.Documenter.Latex
 	public class LatexDocumenterConfig
 		: BaseDocumenterConfig
 	{
+		/// <summary/>
 		public LatexDocumenterConfig() : base("LaTeX")
 		{			
 			OutputDirectory = @".\doc\";
@@ -43,6 +44,7 @@ namespace NDoc.Documenter.Latex
 			LatexCompiler = "latex";
 		}
 
+		/// <summary>Gets or sets the output directory.</summary>
 		[
 		Category("LaTeX"),
 		Description("The directory to output the files to."),
@@ -64,6 +66,7 @@ namespace NDoc.Documenter.Latex
 		}
 		private string m_OutputDirectory;
 
+		/// <summary>Gets the full name of the LaTeX document.</summary>
 		[
 		ReadOnly(true),
 		Category("LaTeX"),
@@ -77,6 +80,7 @@ namespace NDoc.Documenter.Latex
 			}
 		}
 		
+		/// <summary>Gets or sets the name of the LaTeX document excluding the file extension.</summary>
 		[
 		Category("LaTeX"),
 		Description("Name of the LaTeX document excluding the file extension."),
@@ -95,6 +99,7 @@ namespace NDoc.Documenter.Latex
 		}
 		private string m_TexFileBaseName;
 
+		/// <summary>Gets or sets the LaTeX compiler path.</summary>
 		[
 		Category("LaTeX"),
 		Description("Path to the LaTeX executable (Set to empty if you do not have LaTeX installed)."),
@@ -119,6 +124,7 @@ namespace NDoc.Documenter.Latex
 		}
 		private string m_LatexCompiler;
 
+		/// <summary>Gets the path of the output file.</summary>
 		[
 		Category("LaTeX"),
 		Description("Full path to the output TeX file."),
