@@ -372,6 +372,10 @@ namespace NDoc.Documenter.Msdn
 						indexWriter.Close();
 					}
 
+					Trace.WriteLine("transform the HHC contents file into html");
+#if DEBUG
+					int start = Environment.TickCount;
+#endif
 					//transform the HHC contents file into html
 					using(StreamReader contentsFile = new StreamReader(htmlHelp.GetPathToContentsFile(),Encoding.Default))
 					{
@@ -388,6 +392,9 @@ namespace NDoc.Documenter.Msdn
 						stylesheets["htmlcontents"].Transform(xpathDocument,null,streamWriter, null);
 #endif
 					}
+#if DEBUG
+					Trace.WriteLine((Environment.TickCount - start).ToString() + " msec.");
+#endif
 				}
 
 				if ((MyConfig.OutputTarget & OutputType.HtmlHelp) > 0)
@@ -397,8 +404,10 @@ namespace NDoc.Documenter.Msdn
 				}
 				else
 				{
+#if !DEBUG
 					//remove .hhc file
 					File.Delete(htmlHelp.GetPathToContentsFile());
+#endif
 				}
 
 				// if we're only building a CHM, copy that to the Outpur dir
@@ -611,20 +620,16 @@ namespace NDoc.Documenter.Msdn
 
 			XsltArgumentList arguments = new XsltArgumentList();
 			arguments.AddParam("namespace", String.Empty, namespaceName);
-			arguments.AddParam("includeHierarchy", String.Empty, MyConfig.IncludeHierarchy);
 
 			TransformAndWriteResult("namespace", arguments, fileName);
 
 			arguments = new XsltArgumentList();
 			arguments.AddParam("namespace", String.Empty, namespaceName);
 
-			if (MyConfig.IncludeHierarchy)
-			{
 				TransformAndWriteResult(
 					"namespacehierarchy",
 					arguments,
 					fileName.Insert(fileName.Length - 5, "Hierarchy"));
-			}
 
 			MakeHtmlForTypes(namespaceName);
 		}
@@ -632,7 +637,7 @@ namespace NDoc.Documenter.Msdn
 		private void MakeHtmlForTypes(string namespaceName)
 		{
 			XmlNodeList typeNodes =
-				xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace[@name=\"" + namespaceName + "\"]/*[local-name()!='documentation']");
+				xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace[@name=\"" + namespaceName + "\"]/*[local-name()!='documentation' and local-name()!='typeHierarchy']");
 
 			int[] indexes = SortNodesByAttribute(typeNodes, "id");
 			int nNodes = typeNodes.Count;
