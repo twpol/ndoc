@@ -7,6 +7,10 @@ body /* This body tag requires the use of one of the sets of banner and/or text 
 	font-size: 100%;
 	width: 100%;
 	}
+div.indent1
+{
+	text-indent: 2em;
+}
 span.keyword
 {
 	font-size: 100%;
@@ -198,6 +202,10 @@ ol, ul
 li
 	{
 	margin-bottom: .5em;
+	}
+li.indent1
+	{
+	padding-left: 1em;
 	}
 ul p, ol p, dl p
 	{
