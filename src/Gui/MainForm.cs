@@ -32,9 +32,11 @@ using System.Threading;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Serialization;
+using System.Diagnostics;
 
 using NDoc.Core;
 using NDoc.Documenter.Xml;
+using VS = NDoc.VisualStudio;
 
 namespace NDoc.Gui
 {
@@ -117,6 +119,8 @@ namespace NDoc.Gui
 		private string untitledProjectName = "(Untitled)";
 		private int maxMRU = 5;
 		private Thread buildThread;
+		private System.Windows.Forms.ToolBarButton solutionToolBarButton;
+		private System.Windows.Forms.MenuItem menuFileOpenSolution;
 		private StringCollection recentProjectFilenames = new StringCollection();
 		#endregion // Fields
 
@@ -225,12 +229,13 @@ namespace NDoc.Gui
 			this.mainMenu1 = new System.Windows.Forms.MainMenu();
 			this.menuFileItem = new System.Windows.Forms.MenuItem();
 			this.menuFileNewItem = new System.Windows.Forms.MenuItem();
+			this.menuFileOpenSolution = new System.Windows.Forms.MenuItem();
 			this.menuFileOpenItem = new System.Windows.Forms.MenuItem();
 			this.menuFileCloseItem = new System.Windows.Forms.MenuItem();
 			this.menuSpacerItem1 = new System.Windows.Forms.MenuItem();
 			this.menuFileSaveAsItem = new System.Windows.Forms.MenuItem();
-			this.menuSpacerItem2 = new System.Windows.Forms.MenuItem();
 			this.menuFileRecentProjectsItem = new System.Windows.Forms.MenuItem();
+			this.menuSpacerItem2 = new System.Windows.Forms.MenuItem();
 			this.menuDocItem = new System.Windows.Forms.MenuItem();
 			this.menuDocBuildItem = new System.Windows.Forms.MenuItem();
 			this.menuDocViewItem = new System.Windows.Forms.MenuItem();
@@ -248,6 +253,7 @@ namespace NDoc.Gui
 			this.assemblyHeader = new System.Windows.Forms.ColumnHeader();
 			this.openToolBarButton = new System.Windows.Forms.ToolBarButton();
 			this.separatorToolBarButton = new System.Windows.Forms.ToolBarButton();
+			this.solutionToolBarButton = new System.Windows.Forms.ToolBarButton();
 			this.saveToolBarButton = new System.Windows.Forms.ToolBarButton();
 			this.editButton = new System.Windows.Forms.Button();
 			this.namespaceSummariesButton = new System.Windows.Forms.Button();
@@ -272,7 +278,7 @@ namespace NDoc.Gui
 			// 
 			// menuFileExitItem
 			// 
-			this.menuFileExitItem.Index = 9;
+			this.menuFileExitItem.Index = 10;
 			this.menuFileExitItem.Text = "&Exit";
 			this.menuFileExitItem.Click += new System.EventHandler(this.menuFileExitItem_Click);
 			// 
@@ -295,7 +301,7 @@ namespace NDoc.Gui
 			// 
 			// menuFileSaveItem
 			// 
-			this.menuFileSaveItem.Index = 4;
+			this.menuFileSaveItem.Index = 5;
 			this.menuFileSaveItem.Text = "&Save";
 			this.menuFileSaveItem.Click += new System.EventHandler(this.menuFileSaveItem_Click);
 			// 
@@ -311,6 +317,7 @@ namespace NDoc.Gui
 			this.menuFileItem.Index = 0;
 			this.menuFileItem.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
 																						 this.menuFileNewItem,
+																						 this.menuFileOpenSolution,
 																						 this.menuFileOpenItem,
 																						 this.menuFileCloseItem,
 																						 this.menuSpacerItem1,
@@ -320,7 +327,7 @@ namespace NDoc.Gui
 																						 this.menuFileRecentProjectsItem,
 																						 this.menuSpacerItem3,
 																						 this.menuFileExitItem});
-			this.menuFileItem.Text = "&File";
+			this.menuFileItem.Text = "&Project";
 			// 
 			// menuFileNewItem
 			// 
@@ -328,38 +335,49 @@ namespace NDoc.Gui
 			this.menuFileNewItem.Text = "&New";
 			this.menuFileNewItem.Click += new System.EventHandler(this.menuFileNewItem_Click);
 			// 
+			// menuFileOpenSolution
+			// 
+			this.menuFileOpenSolution.Index = 1;
+			this.menuFileOpenSolution.Text = "New from &Visual Studio Solution...";
+			this.menuFileOpenSolution.Click += new System.EventHandler(this.menuFileOpenSolution_Click);
+			// 
 			// menuFileOpenItem
 			// 
-			this.menuFileOpenItem.Index = 1;
+			this.menuFileOpenItem.Index = 2;
 			this.menuFileOpenItem.Text = "&Open...";
 			this.menuFileOpenItem.Click += new System.EventHandler(this.menuFileOpenItem_Click);
 			// 
 			// menuFileCloseItem
 			// 
-			this.menuFileCloseItem.Index = 2;
+			this.menuFileCloseItem.Index = 3;
 			this.menuFileCloseItem.Text = "&Close";
 			this.menuFileCloseItem.Click += new System.EventHandler(this.menuFileCloseItem_Click);
 			// 
 			// menuSpacerItem1
 			// 
-			this.menuSpacerItem1.Index = 3;
+			this.menuSpacerItem1.Index = 4;
 			this.menuSpacerItem1.Text = "-";
 			// 
 			// menuFileSaveAsItem
 			// 
-			this.menuFileSaveAsItem.Index = 5;
+			this.menuFileSaveAsItem.Index = 6;
 			this.menuFileSaveAsItem.Text = "Save &As...";
 			this.menuFileSaveAsItem.Click += new System.EventHandler(this.menuFileSaveAsItem_Click);
 			// 
-			// menuSpacerItem2
-			// 
-			this.menuSpacerItem2.Index = 6;
-			this.menuSpacerItem2.Text = "-";
-			// 
 			// menuFileRecentProjectsItem
 			// 
-			this.menuFileRecentProjectsItem.Index = 7;
+			this.menuFileRecentProjectsItem.Index = 8;
 			this.menuFileRecentProjectsItem.Text = "&Recent Projects";
+			// 
+			// menuSpacerItem2
+			// 
+			this.menuSpacerItem2.Index = 7;
+			this.menuSpacerItem2.Text = "-";
+			// 
+			// menuSpacerItem3
+			// 
+			this.menuSpacerItem3.Index = 9;
+			this.menuSpacerItem3.Text = "-";
 			// 
 			// menuDocItem
 			// 
@@ -498,6 +516,11 @@ namespace NDoc.Gui
 			// 
 			this.separatorToolBarButton.Style = System.Windows.Forms.ToolBarButtonStyle.Separator;
 			// 
+			// solutionToolBarButton
+			// 
+			this.solutionToolBarButton.ImageIndex = 6;
+			this.solutionToolBarButton.ToolTipText = "New from Visual Studio Solution";
+			// 
 			// saveToolBarButton
 			// 
 			this.saveToolBarButton.ImageIndex = 2;
@@ -573,6 +596,7 @@ namespace NDoc.Gui
 			this.toolBar.Appearance = System.Windows.Forms.ToolBarAppearance.Flat;
 			this.toolBar.Buttons.AddRange(new System.Windows.Forms.ToolBarButton[] {
 																					   this.newToolBarButton,
+																					   this.solutionToolBarButton,
 																					   this.openToolBarButton,
 																					   this.saveToolBarButton,
 																					   this.separatorToolBarButton,
@@ -983,13 +1007,86 @@ namespace NDoc.Gui
 			Clear();
 		}
 
-		private void menuFileOpenItem_Click (object sender, System.EventArgs e)
+		private void menuFileOpenSolution_Click (object sender, System.EventArgs e)
 		{
 			OpenFileDialog openFileDlg = new OpenFileDialog();
 
-			openFileDlg.InitialDirectory = processDirectory;
-			openFileDlg.Filter = "Project files (*.ndoc)|*.ndoc|All files (*.*)|*.*" ;
+			//openFileDlg.InitialDirectory = processDirectory;
+			openFileDlg.Filter = "Visual Studio Solution files (*.sln)|*.sln|All files (*.*)|*.*" ;
 			openFileDlg.RestoreDirectory = true ;
+
+			if(openFileDlg.ShowDialog() == DialogResult.OK)
+			{
+				VS.Solution sol = new VS.Solution(openFileDlg.FileName);
+
+				try
+				{
+					this.Cursor = Cursors.WaitCursor;
+
+					SolutionForm sf = new SolutionForm();
+					sf.Text = "Solution " + sol.Name;
+
+					sf.ConfigList.Items.Clear();
+					foreach (string configkey in sol.GetConfigurations())
+					{
+						sf.ConfigList.Items.Add(configkey);
+					}
+
+					sf.ShowDialog(this);
+					if (sf.ConfigList.SelectedIndex < 0)
+						return;
+
+					string solconfig = (string)sf.ConfigList.SelectedItem;
+
+					//clear current ndoc project settings
+					Clear();
+
+					foreach (VS.Project p in sol.GetProjects())
+					{
+						string projid = p.ID.ToString();
+						string projconfig = sol.GetProjectConfigName(solconfig, projid);
+
+						if (projconfig == null)
+							continue;
+
+						string apath = p.GetRelativeOutputPathForConfiguration(projconfig);
+						string xpath = p.GetRelativePathToDocumentationFile(projconfig);
+						string spath = sol.Directory;
+
+						if ((apath == null) || (xpath == null))
+						{
+							Debug.WriteLine("! " + apath);
+							continue;
+						}
+
+						AssemblySlashDoc asd = new AssemblySlashDoc(
+							Path.Combine(spath, apath), 
+							Path.Combine(spath, xpath));
+						project.AssemblySlashDocs.Add(asd);
+						AddRowToListView(asd);
+					}
+
+					EnableMenuItems(true);
+					EnableAssemblyItems();
+		
+					projectFilename =  Path.Combine(
+						sol.Directory, 
+						sol.Name + ".ndoc");
+					//FileSave(projectFilename);
+				}
+				finally
+				{
+					this.Cursor = Cursors.Arrow;
+				}
+			}
+		}
+
+		private void menuFileOpenItem_Click (object sender, System.EventArgs e)
+		{
+			OpenFileDialog openFileDlg = new OpenFileDialog();
+			//TODO: set the initial directory to the last place where we opened/saved a project
+			//openFileDlg.InitialDirectory = processDirectory;
+			openFileDlg.Filter = "Project files (*.ndoc)|*.ndoc|All files (*.*)|*.*" ;
 
 			if(openFileDlg.ShowDialog() == DialogResult.OK)
 			{
@@ -1008,7 +1105,8 @@ namespace NDoc.Gui
 
 			if (projectFilename == untitledProjectName)
 			{
-				saveFileDlg.InitialDirectory = processDirectory;
+				//TODO: set the initial directory to the last place used to save a project
+				//saveFileDlg.InitialDirectory = processDirectory;
 				saveFileDlg.FileName = @".\Untitled.ndoc";
 			}
 			else
@@ -1089,13 +1187,16 @@ namespace NDoc.Gui
 			BuildWorker buildWorker = new BuildWorker(documenter, project);
 			buildThread = new Thread(new ThreadStart(buildWorker.ThreadProc));
 			buildThread.Name = "Build";
+			buildThread.IsBackground = true;
 			buildThread.Priority = ThreadPriority.BelowNormal;
 
 			ConfigureUIForBuild(true);
 
 			try
 			{
-				UpdateProgress("Building documentation ...", 0);
+				this.Cursor = Cursors.AppStarting;
+
+				UpdateProgress("Building documentation...", 0);
 
 				buildThread.Start();
 
@@ -1114,6 +1215,8 @@ namespace NDoc.Gui
 
 				// Wait a little for the thread to die
 				buildThread.Join(2000);
+
+				this.Cursor = Cursors.Default;
 			}
 			finally
 			{
@@ -1257,6 +1360,10 @@ namespace NDoc.Gui
 			else if (e.Button == newToolBarButton)
 			{
 				menuFileNewItem_Click(sender, EventArgs.Empty);
+			}
+			else if (e.Button == solutionToolBarButton)
+			{
+				menuFileOpenSolution_Click(sender, EventArgs.Empty);
 			}
 			else if (e.Button == openToolBarButton)
 			{
@@ -1423,5 +1530,6 @@ namespace NDoc.Gui
 			propertyGrid.SelectedObject = ((IDocumenter)project.Documenters[comboBoxDocumenters.SelectedIndex]).Config;
 		}
 		#endregion // Event Handlers
+
 	}
 }

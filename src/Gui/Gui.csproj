@@ -98,6 +98,11 @@
                     Name = "System.Data"
                     AssemblyName = "System.Data"
                 />
+                <Reference
+                    Name = "VisualStudio"
+                    Project = "{ED78444A-4734-41F7-8688-4BA9994BEBF5}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
             </References>
         </Build>
         <Files>
@@ -168,6 +173,16 @@
                 <File
                     RelPath = "NamespaceSummariesForm.resx"
                     DependentUpon = "NamespaceSummariesForm.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "SolutionForm.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "SolutionForm.resx"
+                    DependentUpon = "SolutionForm.cs"
                     BuildAction = "EmbeddedResource"
                 />
             </Include>
