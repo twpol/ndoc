@@ -145,6 +145,72 @@ namespace NDoc.Core
 		}
 		InterfaceImplementingTypesCollection interfaceImplementingTypes;
 
+		private class NamespaceHierarchyCollection
+		{
+			private Hashtable namespaces;
+			public NamespaceHierarchyCollection()
+			{
+				namespaces = new Hashtable(15);
+			}
+			public void Add(string namespaceName, string baseTypeMemberID, string derivedTypeMemberID)
+			{
+				DerivedTypesCollection derivedTypesCollection = namespaces[namespaceName] as DerivedTypesCollection;
+				if(derivedTypesCollection==null)
+				{
+					derivedTypesCollection=new DerivedTypesCollection();
+					namespaces.Add(namespaceName,derivedTypesCollection);
+				}
+				derivedTypesCollection.Add(baseTypeMemberID, derivedTypeMemberID);
+			}
+
+			public DerivedTypesCollection GetDerivedTypesCollection(string namespaceName)
+			{
+				DerivedTypesCollection derivedTypesCollection = namespaces[namespaceName] as DerivedTypesCollection;
+				return derivedTypesCollection;
+			}
+		}
+		NamespaceHierarchyCollection namespaceHierarchies;
+
+		/// <summary>
+		/// Maintains a cache of all interfaces directly declared on class declaration
+		/// </summary>
+		private class BaseInterfacesCollection
+		{
+			private Hashtable data;
+			public BaseInterfacesCollection()
+			{
+				data = new Hashtable(7);
+			}
+			public void Add(string baseTypeMemberID, string baseInterfaceID)
+			{
+				ArrayList baseInterfaceList = data[baseTypeMemberID] as ArrayList;
+				if(baseInterfaceList==null)
+				{
+					baseInterfaceList=new ArrayList();
+					data.Add(baseTypeMemberID,baseInterfaceList);
+				}
+				if (!baseInterfaceList.Contains(baseInterfaceID))
+				{
+					baseInterfaceList.Add(baseInterfaceID);
+				}
+			}
+
+			public ArrayList GetBaseInterfaceTypes(string baseTypeMemberID)
+			{
+				ArrayList baseInterfaceList = data[baseTypeMemberID] as ArrayList;
+				if(baseInterfaceList==null)
+				{
+					baseInterfaceList=new ArrayList();
+				}
+				else
+				{
+					baseInterfaceList.Sort();
+				}
+				return baseInterfaceList;
+			}
+		}
+		BaseInterfacesCollection baseInterfaces;
+
 
 
 		/// <summary>Initialized a new BaseDocumenter instance.</summary>
@@ -424,6 +490,8 @@ namespace NDoc.Core
 
 			notEmptyNamespaces = new Hashtable();
 
+			namespaceHierarchies= new NamespaceHierarchyCollection();
+			baseInterfaces = new BaseInterfacesCollection();
 			derivedTypes= new DerivedTypesCollection();
 			interfaceImplementingTypes= new InterfaceImplementingTypesCollection();
 			
@@ -509,6 +577,8 @@ namespace NDoc.Core
 
 				externalSummaryCache=null;
 				assemblyDocCache=null;
+				namespaceHierarchies=null;
+				baseInterfaces=null;
 				derivedTypes=null;
 				interfaceImplementingTypes=null;
 
@@ -735,6 +805,47 @@ namespace NDoc.Core
 			}
 
 			return IsEditorBrowsable(method);
+		}
+
+		private bool MustDocumentProperty(PropertyInfo property)
+		{
+			// here we decide if the property is to be documented
+			// note that we cannot directly test 'visibility' - it has to
+			// be done for both the accessors individualy...
+			if (IsEditorBrowsable(property))
+			{
+				MethodInfo getMethod = null;
+				MethodInfo setMethod = null;
+				if (property.CanRead)
+				{
+					try{getMethod = property.GetGetMethod(true);}
+					catch(System.Security.SecurityException){}
+				}
+				if (property.CanWrite)
+				{
+					try{setMethod = property.GetSetMethod(true);}
+					catch(System.Security.SecurityException){}
+				}
+
+				bool hasGetter = (getMethod != null) && MustDocumentMethod(getMethod);
+				bool hasSetter = (setMethod != null) && MustDocumentMethod(setMethod);
+
+				bool IsExcluded=false;
+				//check if the member has an exclude tag
+				if (property.DeclaringType != property.ReflectedType) // inherited
+				{
+					IsExcluded=assemblyDocCache.HasExcludeTag(GetMemberName(property,property.DeclaringType));
+				}
+				else
+				{
+					IsExcluded=assemblyDocCache.HasExcludeTag(GetMemberName(property));
+				}
+
+				if ((hasGetter || hasSetter)
+					&& !IsExcluded)
+					return true;
+			}
+			return false;
 		}
 
 
@@ -1037,6 +1148,8 @@ namespace NDoc.Core
 							WriteEndDocumentation(writer);
 						}
 
+						WriteNamespaceTypeHierarchy(writer,namespaceName);
+						
 						int classCount = WriteClasses(writer, types, namespaceName);
 						Trace.WriteLine(string.Format("Wrote {0} classes.", classCount));
 
@@ -1478,7 +1591,10 @@ namespace NDoc.Core
 			{
 				if (this.MyConfig.DocumentAttributes)
 				{
+					if (MustDocumentType(attribute.GetType()))
+					{
 					WriteCustomAttribute(writer, attribute, target);
+				}
 				}
 
 				if (attribute.GetType().FullName == "System.ObsoleteAttribute") 
@@ -1503,12 +1619,15 @@ namespace NDoc.Core
 
 			foreach (FieldInfo field in attribute.GetType().GetFields(bindingFlags))
 			{
+				if (MustDocumentField(field))
+				{
 				writer.WriteStartElement("field");
 				writer.WriteAttributeString("name", field.Name);
 				writer.WriteAttributeString("type", field.FieldType.FullName);
 				object value = field.GetValue(attribute);
 				writer.WriteAttributeString("value", value != null ? value.ToString() : "");
 				writer.WriteEndElement(); // field
+			}
 			}
 
 			foreach (PropertyInfo property in attribute.GetType().GetProperties(bindingFlags))
@@ -1518,6 +1637,9 @@ namespace NDoc.Core
 				{
 					continue;
 				}
+
+				if (MustDocumentProperty(property))
+				{
 
 				writer.WriteStartElement("property");
 				writer.WriteAttributeString("name", property.Name);
@@ -1540,6 +1662,7 @@ namespace NDoc.Core
 				}
 
 				writer.WriteEndElement(); // property
+			}
 			}
 
 			writer.WriteEndElement(); // attribute
@@ -1664,40 +1787,7 @@ namespace NDoc.Core
 
 			foreach (PropertyInfo property in properties)
 			{
-				// here we decide if the property is to be documented
-				// note that we cannot directly test 'visibility' - it has to
-				// be done for both the accessors individualy...
-				if (IsEditorBrowsable(property))
-				{
-					MethodInfo getMethod = null;
-					MethodInfo setMethod = null;
-					if (property.CanRead)
-					{
-						try{getMethod = property.GetGetMethod(true);}
-						catch(System.Security.SecurityException){}
-					}
-					if (property.CanWrite)
-					{
-						try{setMethod = property.GetSetMethod(true);}
-						catch(System.Security.SecurityException){}
-					}
-
-					bool hasGetter = (getMethod != null) && MustDocumentMethod(getMethod);
-					bool hasSetter = (setMethod != null) && MustDocumentMethod(setMethod);
-
-					bool IsExcluded=false;
-					//check if the member has an exclude tag
-					if (property.DeclaringType != property.ReflectedType) // inherited
-					{
-						IsExcluded=assemblyDocCache.HasExcludeTag(GetMemberName(property,property.DeclaringType));
-					}
-					else
-					{
-						IsExcluded=assemblyDocCache.HasExcludeTag(GetMemberName(property));
-					}
-
-					if ((hasGetter || hasSetter)
-						&& !IsExcluded
+				if (MustDocumentProperty(property)
 						&& !IsAlsoAnEvent(property)
 						&& !IsHidden(property, type)
 						)
@@ -1709,7 +1799,7 @@ namespace NDoc.Core
 							GetPropertyOverload(property, properties),
 							IsHiding(property, type));
 					}
-				}
+				
 			}
 		}
 
@@ -3823,6 +3913,7 @@ namespace NDoc.Core
 					{
 						BuildDerivedMemberXref(type);
 						BuildDerivedInterfaceXref(type);
+						BuildNamespaceHierarchy(type.Namespace,type);
 						if (type.Namespace == null)
 						{
 							notEmptyNamespaces["(global)"]=null;
@@ -3845,6 +3936,42 @@ namespace NDoc.Core
 			{
 				string baseMemberID=GetMemberName(type.BaseType);
 				derivedTypes.Add(baseMemberID,derivedMemberID);
+			}
+		}
+
+		private void BuildNamespaceHierarchy(string namespaceName ,Type type)
+		{
+			string derivedMemberID=GetMemberName(type);
+			if ((type.BaseType!=null) &&
+				MustDocumentType(type.BaseType)) // we don't care about undocumented types
+			{
+				string baseMemberID=GetMemberName(type.BaseType);
+				namespaceHierarchies.Add(namespaceName,baseMemberID,derivedMemberID);
+				BuildNamespaceHierarchy(namespaceName,type.BaseType);
+			}
+			if (type.IsInterface)
+			{
+				namespaceHierarchies.Add(namespaceName,"T:System.Object",derivedMemberID);
+			}
+			//build a collection of the base type's interfaces
+			//to determine which have been inherited
+			StringCollection interfacesOnBase = new StringCollection();
+			if (type.BaseType!=null)
+			{
+				foreach(Type baseInterfaceType in type.BaseType.GetInterfaces())
+				{
+					interfacesOnBase.Add(baseInterfaceType.FullName);
+				}
+			}
+			foreach(Type interfaceType in type.GetInterfaces())
+			{
+				if(MustDocumentType(interfaceType))
+				{
+					if (!interfacesOnBase.Contains(interfaceType.FullName))
+					{
+						baseInterfaces.Add(derivedMemberID,GetMemberName(interfaceType));
+					}
+				}
 			}
 		}
 
@@ -3889,5 +4016,43 @@ namespace NDoc.Core
 			}
 		}
 		
+		private void WriteNamespaceTypeHierarchy(XmlWriter writer, string namespaceName)
+		{
+			//get all base types from which members of this namespace are derived
+			DerivedTypesCollection derivedTypesCollection = namespaceHierarchies.GetDerivedTypesCollection(namespaceName);
+			if(derivedTypesCollection!=null)
+			{
+				//we will always start the hierarchy with System.Object (hopefully for obvious reasons)
+				writer.WriteStartElement("typeHierarchy");
+				WriteTypeHierarchy(writer, derivedTypesCollection, "T:System.Object");
+				writer.WriteEndElement();
+			}
+		}
+		
+		private void WriteTypeHierarchy(XmlWriter writer, DerivedTypesCollection derivedTypes, string TypeMemberID)
+		{
+			writer.WriteStartElement("type");
+			writer.WriteAttributeString("id",TypeMemberID);
+			ArrayList interfaces = baseInterfaces.GetBaseInterfaceTypes(TypeMemberID);
+			if (interfaces.Count>0)
+			{
+				writer.WriteStartElement("interfaces");
+				foreach(string baseInterfaceTypeID in interfaces)
+				{
+					writer.WriteStartElement("interface");
+					writer.WriteAttributeString("id",baseInterfaceTypeID);
+					writer.WriteEndElement();
+				}
+				writer.WriteEndElement();
+			}
+			ArrayList childTypesList = derivedTypes.GetDerivedTypes(TypeMemberID);
+			foreach(string childTypeID in childTypesList)
+			{
+				WriteTypeHierarchy(writer, derivedTypes, childTypeID);
+			}
+			writer.WriteEndElement();
+		}
+
+	
 	}
 }
