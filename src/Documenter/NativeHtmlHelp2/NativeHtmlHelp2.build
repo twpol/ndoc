@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <project name="NDoc.Documenter.NativeHtmlHelp2" default="compile">
-	<target name="compile" depends="locate-help-compilerservices-typelib" unless="${framework::get-family(framework::get-target-framework())='mono'}">
+	<target name="compile" depends="locate-help-compilerservices-typelib" unless="${framework::get-family(framework::get-target-framework())=='mono'}">
 		<if test="${property::exists('help.compilerservices.typelib')}">
 			<!-- generate COM interop assembly for Microsoft Help Compiler Services 1.0 -->
 			<tlbimp typelib="${help.compilerservices.typelib}" output="${current.bin.dir}/Interop.MSHelpCompiler.dll" namespace="MSHelpCompiler" asmversion="1.0.0.0" keyfile="../../../NDoc.snk" />
@@ -27,7 +27,7 @@
 			</csc>
 		</if>
 	</target>
-	<target name="locate-help-compilerservices-typelib" unless="${framework::get-family(framework::get-target-framework())='mono'}">
+	<target name="locate-help-compilerservices-typelib" unless="${framework::get-family(framework::get-target-framework())=='mono'}">
 		<readregistry property="help.compilerservices.typelib" key="TypeLib\{314111EE-A502-11D2-BBCA-00C04F8EC294}\1.0\0\win32\"
 			hive="ClassesRoot" failonerror="false" />
 		<if test="${not property::exists('help.compilerservices.typelib')}">
