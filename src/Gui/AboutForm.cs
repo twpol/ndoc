@@ -65,10 +65,11 @@ namespace NDoc.Gui
 			richTextBox.LoadFile(stream, RichTextBoxStreamType.RichText);
 
 			// Set up email links
-			mailLinkLabel.Links.Add(13, 13, "mailto:jason@injektilo.org");
-			mailLinkLabel.Links.Add(28, 10, "mailto:kral_ferch@hotmail.com");
-			mailLinkLabel.Links.Add(40, 18, "mailto:jc@manoli.net");
-			mailLinkLabel.Links.Add(63, 10, "mailto:r_keith_hill@hotmail.com");
+			mailLinkLabel.Links.Add(13, 13, "http://sourceforge.net/sendmessage.php?touser=87620");
+			mailLinkLabel.Links.Add(28, 10, "http://sourceforge.net/sendmessage.php?touser=97544");
+			mailLinkLabel.Links.Add(40, 18, "http://sourceforge.net/sendmessage.php?touser=235364");
+			mailLinkLabel.Links.Add(60, 10, "http://sourceforge.net/sendmessage.php?touser=129858");
+			mailLinkLabel.Links.Add(75, 14, "http://sourceforge.net/sendmessage.php?touser=399623");
 
 			// Set up web links
 			webLinkLabel.Links.Add(12, 12, "http://sourceforge.net/projects/ndoc");
@@ -170,7 +171,8 @@ namespace NDoc.Gui
 			this.mailLinkLabel.Name = "mailLinkLabel";
 			this.mailLinkLabel.Size = new System.Drawing.Size(504, 16);
 			this.mailLinkLabel.TabIndex = 0;
-			this.mailLinkLabel.Text = "Developers:  Jason Diamond, Kral Ferch, Jean-Claude Manoli and Keith Hill";
+			this.mailLinkLabel.Text = "Developers:  Jason Diamond, Kral Ferch, Jean-Claude Manoli, Keith Hill and Pascal" +
+				" Bourque";
 			this.mailLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.mailLinkLabel_LinkClicked);
 			// 
 			// assembliesListView
@@ -279,7 +281,6 @@ namespace NDoc.Gui
 																		  this.versionHeaderGroupBox,
 																		  this.closeButton});
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-			this.Icon = null;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "AboutForm";

@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.0.9254"
+        ProductVersion = "7.0.9466"
         SchemaVersion = "1.0"
         ProjectGuid = "{905285AD-A830-4BEB-A243-22A26A8E9827}"
     >
@@ -15,7 +15,6 @@
                 DefaultHTMLPageLayout = "Grid"
                 DefaultTargetSchema = "IE50"
                 DelaySign = "false"
-                NoStandardLibraries = "false"
                 OutputType = "WinExe"
                 RootNamespace = "NDoc.Gui"
                 StartupObject = ""
@@ -160,10 +159,6 @@
                     RelPath = "HeaderGroupBox.resx"
                     DependentUpon = "HeaderGroupBox.cs"
                     BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "licenses.licx"
-                    BuildAction = "Content"
                 />
                 <File
                     RelPath = "MainForm.cs"
