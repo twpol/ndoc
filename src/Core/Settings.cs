@@ -44,7 +44,7 @@ namespace NDoc.Core
 		private static string UserSettingsLocation
 		{
 			get
-			{
+			{				
 				return Path.Combine( Environment.GetFolderPath( Environment.SpecialFolder.LocalApplicationData ), SettingsFolderName );
 			}
 		}
@@ -107,7 +107,7 @@ namespace NDoc.Core
 
 			// if we weren't able to open the file for any reason
 			// create a new one
-			if ( data == null )			
+			if ( data == null )		
 				data = CreateNew( filePath );
 			
 			Debug.Assert( data != null );
@@ -120,6 +120,7 @@ namespace NDoc.Core
 		/// </summary>
 		public void Dispose()
 		{			
+			this.SetSetting( "versions", "lastSavedBy", Assembly.GetExecutingAssembly().GetName().Version.ToString() );
 			data.OwnerDocument.Save( path );
 		}
 		/// <summary>
@@ -360,7 +361,7 @@ namespace NDoc.Core
 			}
 		}
 
-		private string SerializeObject( object o )
+		private static string SerializeObject( object o )
 		{
 			Debug.Assert( !object.ReferenceEquals( o, null ) );
 			Debug.Assert( o.GetType().IsSerializable );
@@ -400,8 +401,9 @@ namespace NDoc.Core
 				Directory.CreateDirectory( folder );
 
 			XmlDocument doc = new XmlDocument();
-			doc.LoadXml( "<?xml version='1.0'?><setttings/>" );
+			doc.LoadXml( "<?xml version='1.0'?><setttings SchemaVersion='1.3'/>" );
 			doc.Save( path );
+
 			return doc.DocumentElement;
 		}
 
