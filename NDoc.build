@@ -84,6 +84,7 @@
         <!-- 
             build .NET Framework 2.0 version if both Framework and SDK are available 
         -->
+        <!--
         <if test="${framework::exists('net-2.0')}">
             <if test="${framework::sdk-exists('net-2.0')}">
                 <call target="set-net-2.0-framework-configuration" />
@@ -106,6 +107,7 @@
                 <echo message="The .NET Framework 2.0 is not available. Build skipped." />
             </if>
         </if>
+        -->
         <!-- 
             build Mono 1.0 version if both Framework and SDK are available 
         -->
