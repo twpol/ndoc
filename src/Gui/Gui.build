@@ -26,5 +26,6 @@
 				<includes name="About.rtf" />
 			</resources>
 		</csc>
+		<copy file="NDocGui.exe.manifest" todir="${current.bin.dir}" />
 	</target>
 </project>

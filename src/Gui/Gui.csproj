@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "WinExe"
                 PreBuildEvent = ""
-                PostBuildEvent = ""
+                PostBuildEvent = "copy $(ProjectDir)$(TargetFileName).manifest $(TargetDir)"
                 RootNamespace = "NDoc.Gui"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
@@ -185,6 +185,10 @@
                 <File
                     RelPath = "ndoc.ico"
                     BuildAction = "Content"
+                />
+                <File
+                    RelPath = "NDocGui.exe.manifest"
+                    BuildAction = "None"
                 />
                 <File
                     RelPath = "SolutionForm.cs"
