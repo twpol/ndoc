@@ -40,9 +40,7 @@
 								<xsl:with-param name="type-name" select="$list[$last]/@type" />
 							</xsl:call-template>
 						</xsl:attribute>
-						<xsl:call-template name="get-datatype">
-							<xsl:with-param name="datatype" select="$list[$last]/@type" />
-						</xsl:call-template>
+						<xsl:value-of select="substring-after($list[$last]/@id, ':' )" />
 					</a>
 				</xsl:when>
 				<xsl:otherwise>
@@ -56,15 +54,11 @@
 										<xsl:with-param name="id" select="$list[$last]/@id" />
 									</xsl:call-template>
 								</xsl:attribute>
-								<xsl:call-template name="get-datatype">
-									<xsl:with-param name="datatype" select="$list[$last]/@type" />
-								</xsl:call-template>
+								<xsl:value-of select="substring-after($list[$last]/@id, ':' )" />
 							</a>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:call-template name="get-datatype">
-								<xsl:with-param name="datatype" select="$list[$last]/@type" />
-							</xsl:call-template>
+								<xsl:value-of select="substring-after($list[$last]/@id, ':' )" />
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:otherwise>
@@ -161,9 +155,7 @@
 										<xsl:with-param name="id" select="@id" />
 									</xsl:call-template>
 								</xsl:attribute>
-								<xsl:call-template name="get-datatype">
-									<xsl:with-param name="datatype" select="substring-after(@id, ':' )" />
-								</xsl:call-template>
+								<xsl:value-of select="substring-after(@id, ':' )" />
 							</a>
 												</xsl:for-each>
 											</xsl:when>
@@ -201,7 +193,7 @@
 										<xsl:with-param name="count" select="$typeIndent+1" />
 									</xsl:call-template>
 									<b>
-										<xsl:value-of select="@name" />
+										<xsl:value-of select="substring-after( @id, ':' )" />
 									</b>
 									<xsl:if test="derivedBy">
 												<xsl:variable name="derivedTypeIndent" select="$typeIndent+2" />
@@ -218,9 +210,7 @@
 										<xsl:with-param name="id" select="@id" />
 									</xsl:call-template>
 								</xsl:attribute>
-								<xsl:call-template name="get-datatype">
-									<xsl:with-param name="datatype" select="substring-after(@id, ':' )" />
-								</xsl:call-template>
+								<xsl:value-of select="substring-after(@id, ':' )" />
 							</a>
 												</xsl:for-each>
 											</xsl:when>
