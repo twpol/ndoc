@@ -48,7 +48,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		/// </summary>
 		public override DocumenterDevelopmentStatus DevelopmentStatus
 		{
-			get { return(DocumenterDevelopmentStatus.Alpha); }
+			get { return DocumenterDevelopmentStatus.Beta; }
 		}
 
 		/// <summary>See <see cref="IDocumenter"/>.</summary>
