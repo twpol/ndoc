@@ -65,7 +65,7 @@
     <xsl:param name="property" select="." />
     <xsl:choose>
       <xsl:when test="contains($property/@id, '(')">
-        <xsl:value-of select="concat(translate(substring-after(substring-before($property/@id, '('), 'P:'), '[,]', ''), $property/@overload, '.html')" />
+        <xsl:value-of select="concat(translate(substring-after(substring-before($property/@id, '('), 'P:'), '[,]#', ''), $property/@overload, '.html')" />
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="concat(translate(substring-after($property/@id, 'P:'), '[,]', ''), $property/@overload, '.html')" />

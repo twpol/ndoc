@@ -283,13 +283,13 @@
 	<!-- -->
 	<xsl:template name="explicit-interface-implementations">
 		<xsl:param name="member" />
-		<xsl:if test="*[local-name()=$member and @access='Private' and not(@contract='Static') and @interface]">
+		<xsl:if test="*[(local-name()='property' or local-name()='method'or local-name()='event') and @access='Private' and not(@contract='Static') and @interface]">
 			<h4 class="dtH4">
 				<xsl:text>Explicit Interface Implementations</xsl:text>
 			</h4>
 			<div class="tablediv">
 				<table class="dtTABLE" cellspacing="0">
-					<xsl:apply-templates select="*[local-name()=$member and @access='Private' and not(@contract='Static') and @interface]">
+					<xsl:apply-templates select="*[(local-name()='property' or local-name()='method'or local-name()='event') and @access='Private' and not(@contract='Static') and @interface]">
 						<xsl:sort select="@name" />
 					</xsl:apply-templates>
 				</table>
