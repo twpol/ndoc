@@ -23,7 +23,7 @@ namespace NDoc.Core
 
 	/// <summary>Utilties to help reading and writing embedded resources.</summary>
 	/// <remarks>This is used to access the stylesheets.</remarks>
-	public class EmbeddedResources
+	public sealed class EmbeddedResources
 	{
 		private EmbeddedResources(){}
 		/// <summary>Writes all the embedded resources with the specified prefix to disk.</summary>
