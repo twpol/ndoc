@@ -16,7 +16,7 @@
         "Entry"
         {
         "MsmKey" = "8:_11664D6EFD0988726A7C9489422D738E"
-        "OwnerKey" = "8:_812EE023B4F24F659A57C4569004BA72"
+        "OwnerKey" = "8:_29CCA2F98046461E97D0CF4B8D2D7FDF"
         "MsmSig" = "8:ndoc.documenter.xml_ce1de429e5c6b1d65a50c2983fc66824"
         }
         "Entry"
@@ -28,7 +28,7 @@
         "Entry"
         {
         "MsmKey" = "8:_11664D6EFD0988726A7C9489422D738E"
-        "OwnerKey" = "8:_29CCA2F98046461E97D0CF4B8D2D7FDF"
+        "OwnerKey" = "8:_812EE023B4F24F659A57C4569004BA72"
         "MsmSig" = "8:ndoc.documenter.xml_ce1de429e5c6b1d65a50c2983fc66824"
         }
         "Entry"
@@ -42,6 +42,108 @@
         "MsmKey" = "8:_14F887CA1B8BEC738FFC8DFA2DAA9520"
         "OwnerKey" = "8:_812EE023B4F24F659A57C4569004BA72"
         "MsmSig" = "8:office_736ce26e3972ad23e1298f97ce43db19"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_25DF4F3D62444D889159C9C2AE88BE86"
+        "OwnerKey" = "8:_262C60A8277B4E909D31E72C04D3B14A"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_25DF4F3D62444D889159C9C2AE88BE86"
+        "OwnerKey" = "8:_4736BEA8D5436A6FB1A111727C4D7113"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_25DF4F3D62444D889159C9C2AE88BE86"
+        "OwnerKey" = "8:_CFED1F927ADE40DFBBEC61462A291094"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_25DF4F3D62444D889159C9C2AE88BE86"
+        "OwnerKey" = "8:_73CFE874731A8A022BC7D0184BF2CD81"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_25DF4F3D62444D889159C9C2AE88BE86"
+        "OwnerKey" = "8:_889D9D49BDBB45458FD56C894AF19559"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_25DF4F3D62444D889159C9C2AE88BE86"
+        "OwnerKey" = "8:_842EF8D20DBE412ABCD972DF8DEA7B38"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_25DF4F3D62444D889159C9C2AE88BE86"
+        "OwnerKey" = "8:_812EE023B4F24F659A57C4569004BA72"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_25DF4F3D62444D889159C9C2AE88BE86"
+        "OwnerKey" = "8:_14F887CA1B8BEC738FFC8DFA2DAA9520"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_25DF4F3D62444D889159C9C2AE88BE86"
+        "OwnerKey" = "8:_5F6D7EF73B4EFCB9E2B8819EDB37BC5E"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_25DF4F3D62444D889159C9C2AE88BE86"
+        "OwnerKey" = "8:_D3C26DC3569DC63BEDFF4C2A97BD8B4A"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_25DF4F3D62444D889159C9C2AE88BE86"
+        "OwnerKey" = "8:_6CA92C81E4F34BDE83D964E2D6C8EADC"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_25DF4F3D62444D889159C9C2AE88BE86"
+        "OwnerKey" = "8:_35FB84BBF1C141139A615FF996372554"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_25DF4F3D62444D889159C9C2AE88BE86"
+        "OwnerKey" = "8:_29CCA2F98046461E97D0CF4B8D2D7FDF"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_25DF4F3D62444D889159C9C2AE88BE86"
+        "OwnerKey" = "8:_11664D6EFD0988726A7C9489422D738E"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_25DF4F3D62444D889159C9C2AE88BE86"
+        "OwnerKey" = "8:_EC485F22660DE94672621D6FA5506310"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_25DF4F3D62444D889159C9C2AE88BE86"
+        "OwnerKey" = "8:_C0576E71739DBDA231B02CA51BB731B9"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_25DF4F3D62444D889159C9C2AE88BE86"
+        "OwnerKey" = "8:_6BD68C9295476722E36BD61CF710E70D"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
         }
         "Entry"
         {
@@ -75,108 +177,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_52E4292904CF49018F570D3F6B236A14"
-        "OwnerKey" = "8:_29CCA2F98046461E97D0CF4B8D2D7FDF"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_52E4292904CF49018F570D3F6B236A14"
-        "OwnerKey" = "8:_73CFE874731A8A022BC7D0184BF2CD81"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_52E4292904CF49018F570D3F6B236A14"
-        "OwnerKey" = "8:_C0576E71739DBDA231B02CA51BB731B9"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_52E4292904CF49018F570D3F6B236A14"
-        "OwnerKey" = "8:_6CA92C81E4F34BDE83D964E2D6C8EADC"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_52E4292904CF49018F570D3F6B236A14"
-        "OwnerKey" = "8:_262C60A8277B4E909D31E72C04D3B14A"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_52E4292904CF49018F570D3F6B236A14"
-        "OwnerKey" = "8:_812EE023B4F24F659A57C4569004BA72"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_52E4292904CF49018F570D3F6B236A14"
-        "OwnerKey" = "8:_14F887CA1B8BEC738FFC8DFA2DAA9520"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_52E4292904CF49018F570D3F6B236A14"
-        "OwnerKey" = "8:_5F6D7EF73B4EFCB9E2B8819EDB37BC5E"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_52E4292904CF49018F570D3F6B236A14"
-        "OwnerKey" = "8:_D3C26DC3569DC63BEDFF4C2A97BD8B4A"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_52E4292904CF49018F570D3F6B236A14"
-        "OwnerKey" = "8:_4736BEA8D5436A6FB1A111727C4D7113"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_52E4292904CF49018F570D3F6B236A14"
-        "OwnerKey" = "8:_11664D6EFD0988726A7C9489422D738E"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_52E4292904CF49018F570D3F6B236A14"
-        "OwnerKey" = "8:_EC485F22660DE94672621D6FA5506310"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_52E4292904CF49018F570D3F6B236A14"
-        "OwnerKey" = "8:_842EF8D20DBE412ABCD972DF8DEA7B38"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_52E4292904CF49018F570D3F6B236A14"
-        "OwnerKey" = "8:_889D9D49BDBB45458FD56C894AF19559"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_52E4292904CF49018F570D3F6B236A14"
-        "OwnerKey" = "8:_6BD68C9295476722E36BD61CF710E70D"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_52E4292904CF49018F570D3F6B236A14"
-        "OwnerKey" = "8:_35FB84BBF1C141139A615FF996372554"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_52E4292904CF49018F570D3F6B236A14"
-        "OwnerKey" = "8:_CFED1F927ADE40DFBBEC61462A291094"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_5F6D7EF73B4EFCB9E2B8819EDB37BC5E"
         "OwnerKey" = "8:_812EE023B4F24F659A57C4569004BA72"
         "MsmSig" = "8:envdte_d890e65cda365bb06db21a11aabba008"
@@ -184,7 +184,7 @@
         "Entry"
         {
         "MsmKey" = "8:_6BD68C9295476722E36BD61CF710E70D"
-        "OwnerKey" = "8:_889D9D49BDBB45458FD56C894AF19559"
+        "OwnerKey" = "8:_29CCA2F98046461E97D0CF4B8D2D7FDF"
         "MsmSig" = "8:ndoc.core_5946ebe9c7d4b6cf678674e42dd713c8"
         }
         "Entry"
@@ -196,13 +196,19 @@
         "Entry"
         {
         "MsmKey" = "8:_6BD68C9295476722E36BD61CF710E70D"
-        "OwnerKey" = "8:_C0576E71739DBDA231B02CA51BB731B9"
+        "OwnerKey" = "8:_889D9D49BDBB45458FD56C894AF19559"
         "MsmSig" = "8:ndoc.core_5946ebe9c7d4b6cf678674e42dd713c8"
         }
         "Entry"
         {
         "MsmKey" = "8:_6BD68C9295476722E36BD61CF710E70D"
-        "OwnerKey" = "8:_29CCA2F98046461E97D0CF4B8D2D7FDF"
+        "OwnerKey" = "8:_842EF8D20DBE412ABCD972DF8DEA7B38"
+        "MsmSig" = "8:ndoc.core_5946ebe9c7d4b6cf678674e42dd713c8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_6BD68C9295476722E36BD61CF710E70D"
+        "OwnerKey" = "8:_812EE023B4F24F659A57C4569004BA72"
         "MsmSig" = "8:ndoc.core_5946ebe9c7d4b6cf678674e42dd713c8"
         }
         "Entry"
@@ -226,13 +232,7 @@
         "Entry"
         {
         "MsmKey" = "8:_6BD68C9295476722E36BD61CF710E70D"
-        "OwnerKey" = "8:_812EE023B4F24F659A57C4569004BA72"
-        "MsmSig" = "8:ndoc.core_5946ebe9c7d4b6cf678674e42dd713c8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_6BD68C9295476722E36BD61CF710E70D"
-        "OwnerKey" = "8:_842EF8D20DBE412ABCD972DF8DEA7B38"
+        "OwnerKey" = "8:_C0576E71739DBDA231B02CA51BB731B9"
         "MsmSig" = "8:ndoc.core_5946ebe9c7d4b6cf678674e42dd713c8"
         }
         "Entry"
@@ -328,20 +328,20 @@
         "Entry"
         {
         "MsmKey" = "8:_EC485F22660DE94672621D6FA5506310"
-        "OwnerKey" = "8:_812EE023B4F24F659A57C4569004BA72"
-        "MsmSig" = "8:ndoc.documenter.msdn_59300779750ef3ad36bba67a0e1ee0a5"
+        "OwnerKey" = "8:_29CCA2F98046461E97D0CF4B8D2D7FDF"
+        "MsmSig" = "8:ndoc.documenter.msdn_2bdb1a31539c355465b6143ed61d208e"
         }
         "Entry"
         {
         "MsmKey" = "8:_EC485F22660DE94672621D6FA5506310"
         "OwnerKey" = "8:_CFED1F927ADE40DFBBEC61462A291094"
-        "MsmSig" = "8:ndoc.documenter.msdn_59300779750ef3ad36bba67a0e1ee0a5"
+        "MsmSig" = "8:ndoc.documenter.msdn_2bdb1a31539c355465b6143ed61d208e"
         }
         "Entry"
         {
         "MsmKey" = "8:_EC485F22660DE94672621D6FA5506310"
-        "OwnerKey" = "8:_29CCA2F98046461E97D0CF4B8D2D7FDF"
-        "MsmSig" = "8:ndoc.documenter.msdn_59300779750ef3ad36bba67a0e1ee0a5"
+        "OwnerKey" = "8:_812EE023B4F24F659A57C4569004BA72"
+        "MsmSig" = "8:ndoc.documenter.msdn_2bdb1a31539c355465b6143ed61d208e"
         }
     }
     "Configurations"
@@ -466,14 +466,14 @@
             }
             "{54DA9790-1474-11D3-8E00-00C04F6837D0}:_3231C770A5CC255C64D76B7F341FB907"
             {
-            "Signature" = "8:2000000020e2d56fd465c201d04b89dfd865c201c0eda16fd465c20100000000a00d000000000000000000004e0044006f0063004200750069006c0064002e0074006c00620000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004e0044004f004300420055007e0031002e0054004c00420000000000"
+            "Signature" = "8:2000000020e2d56fd465c20150f8e74cfa65c201b03ba6aaed65c20100000000a00d000000000000000000004e0044006f0063004200750069006c0064002e0074006c00620000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004e0044004f004300420055007e0031002e0054004c00420000000000"
             "SourcePath" = "8:NDocBuild.tlb"
             "TargetName" = "8:NDocBuild.tlb"
             "Tag" = "8:"
             "Folder" = "8:_5AEF2DA019D34ADBB7904E937B93D5D5"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
+            "Condition" = "8:ENVDTEEXISTS AND EXTEXISTS AND OFFICEEXISTS"
+            "Transitive" = "11:TRUE"
+            "Vital" = "11:FALSE"
             "ReadOnly" = "11:FALSE"
             "Hidden" = "11:FALSE"
             "System" = "11:FALSE"
@@ -631,7 +631,7 @@
             }
             "{54DA9790-1474-11D3-8E00-00C04F6837D0}:_87ED86BD48897BE7D27591B8CDEFE7B7"
             {
-            "Signature" = "8:2000000080d72ba5ce95c101809dd86ed765c20180d72ba5ce95c1010000000000e0050000000000000000006400740065002e006f006c006200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+            "Signature" = "8:2000000080d72ba5ce95c101c094691af765c20180d72ba5ce95c1010000000000e0050000000000000000006400740065002e006f006c006200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
             "SourcePath" = "8:dte.olb"
             "TargetName" = "8:dte.olb"
             "Tag" = "8:"
@@ -776,7 +776,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:NDoc.Documenter.Msdn, Version=1.1.999.37010, Culture=neutral, PublicKeyToken=b9896512f28c0f09"
+            "AssemblyAsmDisplayName" = "8:NDoc.Documenter.Msdn, Version=1.1.1000.543, Culture=neutral, PublicKeyToken=b9896512f28c0f09"
                 "ScatterAssemblies"
                 {
                     "_EC485F22660DE94672621D6FA5506310"
@@ -867,6 +867,67 @@
         }
         "Locator"
         {
+            "{328616F4-3D88-44AA-B041-F8100F0FDCF1}:_4C7E43D7781F46238E5E6A91ED27ECCC"
+            {
+            "Name" = "8:FrameworkInstallRoot"
+            "Root" = "2:1"
+            "RegKey" = "8:Software\\Microsoft\\.NETFramework\\InstallRoot"
+            "Value" = "8:"
+            "Property" = "8:NETROOT"
+            }
+            "{2FE6D2F8-018A-4BDC-95B1-BEBF75E5ABB5}:_5B807A5F0FCE44CABB9D0226CE303A58"
+            {
+            "Name" = "8:EnvDTE"
+            "Folder" = "8:[NETROOT]"
+            "Depth" = "2:1"
+            "FileName" = "8:EnvDTE.dll"
+            "MinVesion" = "8:7.0.0.0"
+            "MaxVersion" = "8:"
+            "MinSize" = "8:"
+            "MaxSize" = "8:"
+            "MinDate" = "8:"
+            "MaxDate" = "8:"
+            "Languages" = "8:"
+            "Property" = "8:ENVDTEEXISTS"
+            }
+            "{2FE6D2F8-018A-4BDC-95B1-BEBF75E5ABB5}:_69A87359CE60480BA49F0A7EFCF65638"
+            {
+            "Name" = "8:Extensibility"
+            "Folder" = "8:[PUBASMDIR]"
+            "Depth" = "2:1"
+            "FileName" = "8:Extensibility.dll"
+            "MinVesion" = "8:7.0.0.0"
+            "MaxVersion" = "8:"
+            "MinSize" = "8:"
+            "MaxSize" = "8:"
+            "MinDate" = "8:"
+            "MaxDate" = "8:"
+            "Languages" = "8:"
+            "Property" = "8:EXTEXISTS"
+            }
+            "{328616F4-3D88-44AA-B041-F8100F0FDCF1}:_9B63C2EEEC1E47939D60C26F3CD0E173"
+            {
+            "Name" = "8:PublicAssembliesDir"
+            "Root" = "2:1"
+            "RegKey" = "8:Software\\Microsoft\\VisualStudio\\7.0\\AssemblyFolders\\PublicAssemblies"
+            "Value" = "8:"
+            "Property" = "8:PUBASMDIR"
+            }
+            "{2FE6D2F8-018A-4BDC-95B1-BEBF75E5ABB5}:_D7B8013E53F34F949595CB648D55DAA6"
+            {
+            "Name" = "8:Office"
+            "Folder" = "8:[NETROOT]"
+            "Depth" = "2:1"
+            "FileName" = "8:Office.dll"
+            "MinVesion" = "8:7.0.0.0"
+            "MaxVersion" = "8:"
+            "MinSize" = "8:"
+            "MaxSize" = "8:"
+            "MinDate" = "8:"
+            "MaxDate" = "8:"
+            "Languages" = "8:"
+            "Property" = "8:OFFICEEXISTS"
+            }
         }
         "Shortcut"
         {
@@ -942,10 +1003,10 @@
                                                             "{7DF0CD0A-FF27-11D2-8D6B-00A0C9CFCEE6}:_08C4C8DAFDE54506B418B8A4D5D71A21"
                                                             {
                                                             "Name" = "8:NDoc.Connect"
-                                                            "Condition" = "8:"
+                                                            "Condition" = "8:ENVDTEEXISTS AND EXTEXISTS AND OFFICEEXISTS"
                                                             "AlwaysCreate" = "11:FALSE"
-                                                            "DeleteAtUninstall" = "11:FALSE"
-                                                            "Transitive" = "11:FALSE"
+                                                            "DeleteAtUninstall" = "11:TRUE"
+                                                            "Transitive" = "11:TRUE"
                                                                 "Keys"
                                                                 {
                                                                 }
@@ -954,56 +1015,56 @@
                                                                     "{B73D4F5A-FF29-11D2-8D6B-00A0C9CFCEE6}:_0FAC8B2363B84F3CBDAC791B3188870F"
                                                                     {
                                                                     "Name" = "8:CommandPreload"
-                                                                    "Condition" = "8:"
-                                                                    "Transitive" = "11:FALSE"
+                                                                    "Condition" = "8:ENVDTEEXISTS AND EXTEXISTS AND OFFICEEXISTS"
+                                                                    "Transitive" = "11:TRUE"
                                                                     "ValueTypes" = "3:3"
                                                                     "Value" = "3:1"
                                                                     }
                                                                     "{B73D4F5A-FF29-11D2-8D6B-00A0C9CFCEE6}:_639689D3E9484944AF973702AECA1E02"
                                                                     {
                                                                     "Name" = "8:CommandLineSafe"
-                                                                    "Condition" = "8:"
-                                                                    "Transitive" = "11:FALSE"
+                                                                    "Condition" = "8:ENVDTEEXISTS AND EXTEXISTS AND OFFICEEXISTS"
+                                                                    "Transitive" = "11:TRUE"
                                                                     "ValueTypes" = "3:3"
                                                                     "Value" = "3:0"
                                                                     }
                                                                     "{B73D4F5A-FF29-11D2-8D6B-00A0C9CFCEE6}:_6574995D1DEA41EABF872A61B875A1B6"
                                                                     {
                                                                     "Name" = "8:LoadBehavior"
-                                                                    "Condition" = "8:"
-                                                                    "Transitive" = "11:FALSE"
+                                                                    "Condition" = "8:ENVDTEEXISTS AND EXTEXISTS AND OFFICEEXISTS"
+                                                                    "Transitive" = "11:TRUE"
                                                                     "ValueTypes" = "3:3"
                                                                     "Value" = "3:0"
                                                                     }
                                                                     "{B73D4F5A-FF29-11D2-8D6B-00A0C9CFCEE6}:_872EB0C91AB3414199D096EAD39CC29F"
                                                                     {
                                                                     "Name" = "8:AboutBoxDetails"
-                                                                    "Condition" = "8:"
-                                                                    "Transitive" = "11:FALSE"
+                                                                    "Condition" = "8:ENVDTEEXISTS AND EXTEXISTS AND OFFICEEXISTS"
+                                                                    "Transitive" = "11:TRUE"
                                                                     "ValueTypes" = "3:1"
                                                                     "Value" = "8:NDoc - Documentation Generator (http://ndoc.sourceforge.net)"
                                                                     }
                                                                     "{B73D4F5A-FF29-11D2-8D6B-00A0C9CFCEE6}:_940111576C914B7FB7CC528C2470C44E"
                                                                     {
                                                                     "Name" = "8:FriendlyName"
-                                                                    "Condition" = "8:"
-                                                                    "Transitive" = "11:FALSE"
+                                                                    "Condition" = "8:ENVDTEEXISTS AND EXTEXISTS AND OFFICEEXISTS"
+                                                                    "Transitive" = "11:TRUE"
                                                                     "ValueTypes" = "3:1"
                                                                     "Value" = "8:NDoc Build"
                                                                     }
                                                                     "{B73D4F5A-FF29-11D2-8D6B-00A0C9CFCEE6}:_A593B735C8834E11921027D1553131C1"
                                                                     {
                                                                     "Name" = "8:AboutBoxIcon"
-                                                                    "Condition" = "8:"
-                                                                    "Transitive" = "11:FALSE"
+                                                                    "Condition" = "8:ENVDTEEXISTS AND EXTEXISTS AND OFFICEEXISTS"
+                                                                    "Transitive" = "11:TRUE"
                                                                     "ValueTypes" = "3:4"
                                                                     "Value" = "8:0000010001002020000000000000A8080000160000002800000020000000400000000100080000000000000400000000000000000000000100000001000000000000000080000080000000808000800000008000800080800000C0C0C000C0DCC000F0CAA60004040400080808000C0C0C0011111100161616001C1C1C002222220029292900555555004D4D4D004242420039393900807CFF005050FF009300D600FFECCC00C6D6EF00D6E7E70090A9AD000000330000006600000099000000CC00003300000033330000336600003399000033CC000033FF00006600000066330000666600006699000066CC000066FF00009900000099330000996600009999000099CC000099FF0000CC000000CC330000CC660000CC990000CCCC0000CCFF0000FF660000FF990000FFCC00330000003300330033006600330099003300CC003300FF00333300003333330033336600333399003333CC003333FF00336600003366330033666600336699003366CC003366FF00339900003399330033996600339999003399CC003399FF0033CC000033CC330033CC660033CC990033CCCC0033CCFF0033FF330033FF660033FF990033FFCC0033FFFF00660000006600330066006600660099006600CC006600FF00663300006633330066336600663399006633CC006633FF00666600006666330066666600666699006666CC00669900006699330066996600669999006699CC006699FF0066CC000066CC330066CC990066CCCC0066CCFF0066FF000066FF330066FF990066FFCC00CC00FF00FF00CC009999000099339900990099009900CC009900000099333300990066009933CC009900FF00996600009966330099336600996699009966CC009933FF009999330099996600999999009999CC009999FF0099CC000099CC330066CC660099CC990099CCCC0099CCFF0099FF000099FF330099CC660099FF990099FFCC0099FFFF00CC00000099003300CC006600CC009900CC00CC0099330000CC333300CC336600CC339900CC33CC00CC33FF00CC660000CC66330099666600CC669900CC66CC009966FF00CC990000CC993300CC996600CC999900CC99CC00CC99FF00CCCC0000CCCC3300CCCC6600CCCC9900CCCCCC00CCCCFF00CCFF0000CCFF330099FF6600CCFF9900CCFFCC00CCFFFF00CC003300FF006600FF009900CC330000FF333300FF336600FF339900FF33CC00FF33FF00FF660000FF663300CC666600FF669900FF66CC00CC66FF00FF990000FF993300FF996600FF999900FF99CC00FF99FF00FFCC0000FFCC3300FFCC6600FFCC9900FFCCCC00FFCCFF00FFFF3300CCFF6600FFFF9900FFFFCC006666FF0066FF660066FFFF00FF666600FF66FF00FFFF66002100A5005F5F5F00777777008686860096969600CBCBCB00B2B2B200D7D7D700DDDDDD00E3E3E300EAEAEA00F1F1F100F8F8F800F0FBFF00A4A0A000808080000000FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF000000000000000000000000000000000000000A0A0A0A0A0000000000000000000000000000000000000000000000000A0AEEF1191919F1EF430000000000000000000000000000000000000000000AF8F1F3F4F4F4F4F4F3F1430A00000000000000000000000000000000000066F1F4F4F3BBB4ADB4B5F4F4F4F30A000000000000000000000000000000000AF1F4F4F3ADADADB4ADADB4EEF4F4EF0A00000000000000000000000000000AEEF4F4ADADADAD07F609ADADADB4F4F4190A00000000000000000000000000F819F4F1ADADADAD07FFBBADADADADB4F4F40E00000000000000000000000000F1FFBCADADADADADADADADADADADADADF3F4BC0A000000000000000000000000F3FFB4ADADADADADB409ADADADADADADBBF6F110000000000000000000000000F6FFADADADADADADEFFF09ADADADADADADF3F3EF0A0A0A0A0A0A0A0A0A0A0A0AFFFFADADADADADADB4F4F4B4ADADADADADF1F3EF0AF8FFFFFFFFFFFFFFFFFFFFFFFFADADADADADADADADF6FFB4ADADADADF1F3EF0AF8FFFFFFFFFFFFFFFFFFFFFFFFADADADADADADADADEEFFF3ADADADADF3F3EF0AF8FFFFFFFFFFFFFFFFFFFFF3FFD5D5ADADBB09ADADAD09FF09ADAD09FF19AE0AF8FFFF0707070707070707F3FF09D5ADADF4FFADADADF3FF09ADAD19FFF10A00F8FFFFFFFFFFFFFFFFFFFF19F3FF19D5D507FFFFF4FFFF09B4D5D5FFFF150A00F8FFFF070707070707070707F1FFFFDCDCD5EEF6FFFFF4D5D5D519FFF30A0000F8FFFFFFFFFFFFFFFFFFFFFFFFF3FFFFFF1919DCDCDCDCDC09FFFF19AE000000F8FFFF0707070707070707070719F3FFFFFFFF19191919F4FFFFFF910A000000F8FFFFFFFFFFFFFFFFFFFFFFFFFFFF19F3FFFFFFFFFFFFFFF409AE0A00000000F8FFFF07070707070707070707FFFF070919F3FFFFF4F4F1090A000000000000F8FFFFFFFFFFFFFFFFFFFFFFFFFFFF070A000000000000000000000000000000F8FFFF02FFFFFFFFFFFFFFFFFFFFFF070A000000000000000000000000000000F8FF0202FF02FFFFFFFFFFFFFFFFFF070A000000000000000000000000000000F8FFFF020202FFFFFFFFFFFFFFFFFF070A000000000000000000000000000000F8FFFF02FF0202FFFFFFFFFFFFFFFF070A000000000000000000000000000000F8FF0202FF02FFFFFFFFFFFFF80707070A000000000000000000000000000000F8FFFF020202FFFFFFFFFFFFF8FF070A00000000000000000000000000000000F8FFFF02FF0202FFFFFFFFFFF807F80000000000000000000000000000000000F8FFFFFFFF02FFFFFFFFFFFFF80A000000000000000000000000000000000000F8F8F8F8F8F8F8F8F8F8F8F8F8000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000FFFFC1FFFFFE007FFFFC001FFFF8000FFFF00007FFE00003FFE00003FFE00001FFE00001FFE000000000000000000000000000000000000000000001000000010000000300000007000000070000000F0000003F00007FFF00007FFF00007FFF00007FFF00007FFF00007FFF0000FFFF0001FFFF0003FFFF0007FFFFFFFFFFFF0A"
                                                                     }
                                                                     "{B73D4F5A-FF29-11D2-8D6B-00A0C9CFCEE6}:_EC6FC6660AD846AA8208CDB83766669E"
                                                                     {
                                                                     "Name" = "8:Description"
-                                                                    "Condition" = "8:"
-                                                                    "Transitive" = "11:FALSE"
+                                                                    "Condition" = "8:ENVDTEEXISTS AND EXTEXISTS AND OFFICEEXISTS"
+                                                                    "Transitive" = "11:TRUE"
                                                                     "ValueTypes" = "3:1"
                                                                     "Value" = "8:Support for building and viewing MSDN-like documentation of C# projects in your solution."
                                                                     }
@@ -1185,9 +1246,9 @@
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_5AEF2DA019D34ADBB7904E937B93D5D5"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
+            "Condition" = "8:ENVDTEEXISTS AND EXTEXISTS AND OFFICEEXISTS"
+            "Transitive" = "11:TRUE"
+            "Vital" = "11:FALSE"
             "ReadOnly" = "11:FALSE"
             "Hidden" = "11:FALSE"
             "System" = "11:FALSE"
@@ -1300,13 +1361,13 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:NDoc"
-        "ProductCode" = "8:{C271CAD9-9D07-4E2F-BFAD-7C213A01A7EE}"
-        "PackageCode" = "8:{F3ADE88E-0EFD-400C-913E-3F0DED4D41BD}"
+        "ProductCode" = "8:{62FE51EA-B3D6-4D50-A8F7-12E12F363347}"
+        "PackageCode" = "8:{2EC94577-FA75-4B59-8554-3A21A8D0DB7A}"
         "UpgradeCode" = "8:{C7002E8C-E7B1-43B5-85FD-BD364AD576E4}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
-        "ProductVersion" = "8:1.1.2"
+        "ProductVersion" = "8:1.1.5"
         "Manufacturer" = "8:NDoc"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:http://sourceforge.net/tracker/?group_id=36057&atid=416079"
@@ -1327,7 +1388,7 @@
         }
         "MergeModule"
         {
-            "{AC8774A4-3E09-11D3-8E14-00C04F6837D0}:_52E4292904CF49018F570D3F6B236A14"
+            "{AC8774A4-3E09-11D3-8E14-00C04F6837D0}:_25DF4F3D62444D889159C9C2AE88BE86"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
