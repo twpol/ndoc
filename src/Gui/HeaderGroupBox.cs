@@ -24,10 +24,8 @@ namespace NDoc.Gui
 		/// <summary>
 		/// 
 		/// </summary>
-		[
-		Category("Appearance"),
-		Description("Adds some extra spacing around the header")
-		]
+		[Category("Appearance")]
+		[Description("Adds some extra spacing around the header")]
 		public int Padding
 		{
 			get { return padding; }

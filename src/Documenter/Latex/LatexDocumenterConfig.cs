@@ -45,13 +45,11 @@ namespace NDoc.Documenter.Latex
 		}
 
 		/// <summary>Gets or sets the output directory.</summary>
-		[
-		Category("LaTeX"),
-		Description("The directory to output the files to."),
+		[Category("LaTeX")]
+		[Description("The directory to output the files to.")]
 #if !MONO //System.Windows.Forms.Design.FolderNameEditor is not implemented in mono 0.25
-		Editor(typeof(FolderNameEditor), typeof(UITypeEditor))
+		[Editor(typeof(FolderNameEditor), typeof(UITypeEditor))]
 #endif
-		]
 		public string OutputDirectory
 		{
 			get
@@ -67,11 +65,9 @@ namespace NDoc.Documenter.Latex
 		private string m_OutputDirectory;
 
 		/// <summary>Gets the full name of the LaTeX document.</summary>
-		[
-		ReadOnly(true),
-		Category("LaTeX"),
-		Description("Full name of the LaTeX document.")
-		]
+		[Category("LaTeX")]
+		[Description("Full name of the LaTeX document.")]
+		[ReadOnly(true)]
 		public string TextFileFullName
 		{
 			get
@@ -81,10 +77,8 @@ namespace NDoc.Documenter.Latex
 		}
 		
 		/// <summary>Gets or sets the name of the LaTeX document excluding the file extension.</summary>
-		[
-		Category("LaTeX"),
-		Description("Name of the LaTeX document excluding the file extension."),
-		]
+		[Category("LaTeX")]
+		[Description("Name of the LaTeX document excluding the file extension.")]
 		public string TexFileBaseName
 		{
 			get
@@ -100,16 +94,11 @@ namespace NDoc.Documenter.Latex
 		private string m_TexFileBaseName;
 
 		/// <summary>Gets or sets the LaTeX compiler path.</summary>
-		[
-		Category("LaTeX"),
-		Description("Path to the LaTeX executable (Set to empty if you do not have LaTeX installed)."),
-#if (!MONO)
-		// In mono 0.25 most classes in the System.Windows.Forms.Design assembly 
-		// are located in the System.Windows.Forms assembly while they should 
-		// actually be in the System.Design assembly.
-		Editor(typeof(FileNameEditor), typeof(UITypeEditor))
+		[Category("LaTeX")]
+		[Description("Path to the LaTeX executable (Set to empty if you do not have LaTeX installed).")]
+#if !MONO //System.Windows.Forms.Design.FolderNameEditor is not implemented in mono 0.25
+		[Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
 #endif
-		]
 		public string LatexCompiler
 		{
 			get
@@ -125,11 +114,9 @@ namespace NDoc.Documenter.Latex
 		private string m_LatexCompiler;
 
 		/// <summary>Gets the path of the output file.</summary>
-		[
-		Category("LaTeX"),
-		Description("Full path to the output TeX file."),
-		ReadOnly(true)
-		]
+		[Category("LaTeX")]
+		[Description("Full path to the output TeX file.")]
+		[ReadOnly(true)]
 		public string TexFileFullPath
 		{
 			get

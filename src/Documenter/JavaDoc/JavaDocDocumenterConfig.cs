@@ -40,10 +40,8 @@ namespace NDoc.Documenter.JavaDoc
 		private string _Title;
 
 		/// <summary>Gets or sets the Title property.</summary>
-		[
-			Category("Documentation Main Settings"),
-			Description("The name of the JavaDoc project.")
-		]
+		[Category("Documentation Main Settings")]
+		[Description("The name of the JavaDoc project.")]
 		public string Title
 		{
 			get
@@ -61,13 +59,11 @@ namespace NDoc.Documenter.JavaDoc
 		private string _OutputDirectory;
 
 		/// <summary>Gets or sets the OutputDirectory property.</summary>
-		[
-			Category("Documentation Main Settings"),
-			Description("The output folder."),
+		[Category("Documentation Main Settings")]
+		[Description("The output folder.")]
 #if !MONO //System.Windows.Forms.Design.FolderNameEditor is not implemented in mono 0.25
-		Editor(typeof(FolderNameEditor), typeof(UITypeEditor))
+		[Editor(typeof(FolderNameEditor), typeof(UITypeEditor))]
 #endif
-		]
 		public string OutputDirectory
 		{
 			get 

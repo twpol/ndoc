@@ -194,10 +194,8 @@ namespace NDoc.Core
 		/// <remarks>If this is true, all members without /doc summary
 		/// comments will contain the phrase "Missing Documentation" in the
 		/// generated documentation.</remarks>
-		[
-		Category("Show Missing Documentation"),
-		Description("Turning this flag on will show you where you are missing summaries.")
-		]
+		[Category("Show Missing Documentation")]
+		[Description("Turning this flag on will show you where you are missing summaries.")]
 		public bool ShowMissingSummaries
 		{
 			get { return _ShowMissingSummaries; }
@@ -215,10 +213,8 @@ namespace NDoc.Core
 		/// <remarks>If this is true, all members without /doc summary
 		/// comments will contain the phrase "Missing Documentation" in the
 		/// generated documentation.</remarks>
-		[
-		Category("Show Missing Documentation"),
-		Description("Turning this flag on will show you where you are missing Remarks.")
-		]
+		[Category("Show Missing Documentation")]
+		[Description("Turning this flag on will show you where you are missing Remarks.")]
 		public bool ShowMissingRemarks
 		{
 			get { return _ShowMissingRemarks; }
@@ -236,10 +232,8 @@ namespace NDoc.Core
 		/// <remarks>If this is true, all members without /doc summary
 		/// comments will contain the phrase "Missing Documentation" in the
 		/// generated documentation.</remarks>
-		[
-		Category("Show Missing Documentation"),
-		Description("Turning this flag on will show you where you are missing Params.")
-		]
+		[Category("Show Missing Documentation")]
+		[Description("Turning this flag on will show you where you are missing Params.")]
 		public bool ShowMissingParams
 		{
 			get { return _ShowMissingParams; }
@@ -257,10 +251,8 @@ namespace NDoc.Core
 		/// <remarks>If this is true, all members without /doc summary
 		/// comments will contain the phrase "Missing Documentation" in the
 		/// generated documentation.</remarks>
-		[
-		Category("Show Missing Documentation"),
-		Description("Turning this flag on will show you where you are missing Returns.")
-		]
+		[Category("Show Missing Documentation")]
+		[Description("Turning this flag on will show you where you are missing Returns.")]
 		public bool ShowMissingReturns
 		{
 			get { return _ShowMissingReturns; }
@@ -278,10 +270,8 @@ namespace NDoc.Core
 		/// <remarks>If this is true, all members without /doc summary
 		/// comments will contain the phrase "Missing Documentation" in the
 		/// generated documentation.</remarks>
-		[
-		Category("Show Missing Documentation"),
-		Description("Turning this flag on will show you where you are missing Values.")
-		]
+		[Category("Show Missing Documentation")]
+		[Description("Turning this flag on will show you where you are missing Values.")]
 		public bool ShowMissingValues
 		{
 			get { return _ShowMissingValues; }
@@ -296,10 +286,8 @@ namespace NDoc.Core
 		bool _DocumentInternals;
 
 		/// <summary>Gets or sets the DocumentInternals property.</summary>
-		[
-		Category("Visibility"),
-		Description("Turn this flag on to document internal code.")
-		]
+		[Category("Visibility")]
+		[Description("Turn this flag on to document internal code.")]
 		public bool DocumentInternals
 		{
 			get { return _DocumentInternals; }
@@ -314,10 +302,8 @@ namespace NDoc.Core
 		bool _DocumentProtected;
 
 		/// <summary>Gets or sets the DocumentProtected property.</summary>
-		[
-		Category("Visibility"),
-		Description("Turn this flag on to document protected code.")
-		]
+		[Category("Visibility")]
+		[Description("Turn this flag on to document protected code.")]
 		public bool DocumentProtected
 		{
 			get { return _DocumentProtected; }
@@ -332,10 +318,8 @@ namespace NDoc.Core
 		bool _DocumentPrivates;
 
 		/// <summary>Gets or sets the DocumentPrivates property.</summary>
-		[
-		Category("Visibility"),
-		Description("Turn this flag on to document private code.")
-		]
+		[Category("Visibility")]
+		[Description("Turn this flag on to document private code.")]
 		public bool DocumentPrivates
 		{
 			get { return _DocumentPrivates; }
@@ -350,10 +334,8 @@ namespace NDoc.Core
 		private bool _DocumentProtectedInternalAsProtected;
 
 		/// <summary>Gets or sets the DocumentProtectedInternalAsProtected property.</summary>
-		[
-		Category("Visibility"),
-		Description("If true, NDoc will treat \"protected internal\" members as \"protected\" only."),
-		]
+		[Category("Visibility")]
+		[Description("If true, NDoc will treat \"protected internal\" members as \"protected\" only.")]
 		public bool DocumentProtectedInternalAsProtected
 		{
 			get { return _DocumentProtectedInternalAsProtected; }
@@ -368,10 +350,8 @@ namespace NDoc.Core
 		bool _DocumentEmptyNamespaces;
 
 		/// <summary>Gets or sets the DocumentPrivates property.</summary>
-		[
-		Category("Visibility"),
-		Description("Turn this flag on to document empty namespaces.")
-		]
+		[Category("Visibility")]
+		[Description("Turn this flag on to document empty namespaces.")]
 		public bool DocumentEmptyNamespaces
 		{
 			get { return _DocumentEmptyNamespaces; }
@@ -386,10 +366,8 @@ namespace NDoc.Core
 		bool _IncludeAssemblyVersion;
 
 		/// <summary>Gets or sets the IncludeAssemblyVersion property.</summary>
-		[
-		Category("Documentation Main Settings"),
-		Description("Turn this flag on to include the assembly version number in the documentation.")
-		]
+		[Category("Documentation Main Settings")]
+		[Description("Turn this flag on to include the assembly version number in the documentation.")]
 		public bool IncludeAssemblyVersion
 		{
 			get { return _IncludeAssemblyVersion; }
@@ -404,11 +382,9 @@ namespace NDoc.Core
 		string _CopyrightText;
 
 		/// <summary>Gets or sets the CopyrightText property.</summary>
-		[
-		Category("Documentation Main Settings"),
-		Description("A copyright notice text that will be included in the generated docs."),
-		Editor(typeof(TextEditor), typeof(UITypeEditor))
-		]
+		[Category("Documentation Main Settings")]
+		[Description("A copyright notice text that will be included in the generated docs.")]
+		[Editor(typeof(TextEditor), typeof(UITypeEditor))]
 		public string CopyrightText
 		{
 			get { return _CopyrightText; }
@@ -423,10 +399,8 @@ namespace NDoc.Core
 		string _CopyrightHref;
 
 		/// <summary>Gets or sets the CopyrightHref property.</summary>
-		[
-		Category("Documentation Main Settings"),
-		Description("An URL referenced by the copyright notice.")
-		]
+		[Category("Documentation Main Settings")]
+		[Description("An URL referenced by the copyright notice.")]
 		public string CopyrightHref
 		{
 			get { return _CopyrightHref; }
@@ -442,13 +416,11 @@ namespace NDoc.Core
 		string _ReferencesPath;
 
 		/// <summary>Gets or sets the base directory used to resolve directory and assembly references.</summary>
-		[
-		Category("Documentation Main Settings"),
-		Description("The directory used to resolve path specifications and assembly references. The search for assemblies includes this directory and all subdirectories."),
+		[Category("Documentation Main Settings")]
+		[Description("The directory used to resolve path specifications and assembly references. The search for assemblies includes this directory and all subdirectories.")]
 #if !MONO //System.Windows.Forms.Design.FolderNameEditor is not implemented in mono 0.25
-		Editor(typeof(System.Windows.Forms.Design.FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor)),
+		[Editor(typeof(System.Windows.Forms.Design.FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
 #endif
-		]
 		public string ReferencesPath
 		{
 			get { return _ReferencesPath; }
@@ -462,10 +434,8 @@ namespace NDoc.Core
 		bool _SkipNamespacesWithoutSummaries;
 
 		/// <summary>Gets or sets the SkipNamespacesWithoutSummaries property.</summary>
-		[
-		Category("Visibility"),
-		Description("Setting this property to true will not document namespaces that don't have an associated namespace summary."),
-		]
+		[Category("Visibility")]
+		[Description("Setting this property to true will not document namespaces that don't have an associated namespace summary.")]
 		public bool SkipNamespacesWithoutSummaries
 		{
 			get { return _SkipNamespacesWithoutSummaries; }
@@ -480,15 +450,13 @@ namespace NDoc.Core
 		bool _UseNamespaceDocSummaries;
 
 		/// <summary>Gets or sets the UseNamespaceDocSummaries property.</summary>
-		[
-		Category("Documentation Main Settings"),
-		Description("If true, the documenter will look for a class with the name "
+		[Category("Documentation Main Settings")]
+		[Description("If true, the documenter will look for a class with the name "
 			+ "\"NamespaceDoc\" in each namespace. The summary from that class "
 			+ "will then be used as the namespace summary.  The class itself will not "
 			+ "show up in the resulting documentation output. You may want to use "
 			+ "#if ... #endif together with conditional compilation constants to "
-			+ "exclude the NamespaceDoc classes from release build assemblies."),
-		]
+			+ "exclude the NamespaceDoc classes from release build assemblies.")]
 		public bool UseNamespaceDocSummaries
 		{
 			get { return _UseNamespaceDocSummaries; }
@@ -503,15 +471,13 @@ namespace NDoc.Core
 		bool _AutoPropertyBackerSummaries;
 
 		/// <summary>Gets or sets the AutoPropertyBackerSummaries property.</summary>
-		[
-		Category("Documentation Main Settings"),
-		Description("If true, the documenter will automatically add a summary "
+		[Category("Documentation Main Settings")]
+		[Description("If true, the documenter will automatically add a summary "
 			+ "for fields which look like they back (hold the value for) a "
 			+ "property. The summary is only added if there is no existing summary, "
 			+ "which gives you a way to opt out of this behavior in particular cases. "
 			+ "Currently the naming conventions supported are such that "
-			+ "fields '_Length' and 'length' will be inferred to back property 'Length'."),
-		]
+			+ "fields '_Length' and 'length' will be inferred to back property 'Length'.")]
 		public bool AutoPropertyBackerSummaries
 		{
 			get { return _AutoPropertyBackerSummaries; }
@@ -528,10 +494,8 @@ namespace NDoc.Core
 		/// <summary>Gets or sets the AutoDocumentConstructors property.</summary>
 		/// <remarks>If this is true, default constructors without /doc summary
 		/// comments will be automatically documented.</remarks>
-		[
-		Category("Documentation Main Settings"),
-		Description("Turning this flag on will enable automatic summary documentation for default constructors.")
-		]
+		[Category("Documentation Main Settings")]
+		[Description("Turning this flag on will enable automatic summary documentation for default constructors.")]
 		public bool AutoDocumentConstructors
 		{
 			get { return _AutoDocumentConstructors; }
@@ -546,10 +510,8 @@ namespace NDoc.Core
 		private bool _DocumentAttributes;
 
 		/// <summary>Gets or sets whether or not to document the attributes.</summary>
-		[
-		Category("Show Attributes"),
-		Description("Set this to true to output the attributes of the types/members in the syntax portion.")
-		]
+		[Category("Show Attributes")]
+		[Description("Set this to true to output the attributes of the types/members in the syntax portion.")]
 		public bool DocumentAttributes
 		{
 			get { return _DocumentAttributes; }
@@ -564,10 +526,8 @@ namespace NDoc.Core
 		private bool _ShowTypeIdInAttributes;
 
 		/// <summary>Gets or sets whether or not to show the TypeId property in attributes.</summary>
-		[
-		Category("Show Attributes"),
-		Description("Set this to true to output the TypeId property in the attributes.")
-		]
+		[Category("Show Attributes")]
+		[Description("Set this to true to output the TypeId property in the attributes.")]
 		public bool ShowTypeIdInAttributes
 		{
 			get { return _ShowTypeIdInAttributes; }
@@ -582,11 +542,9 @@ namespace NDoc.Core
 		private string _DocumentedAttributes;
 
 		/// <summary>Gets or sets which attributes should be documented.</summary>
-		[
-		Category("Show Attributes"),
-		Editor(typeof(AttributesEditor), typeof(UITypeEditor)),
-		Description("When DocumentAttributes is set to true, this specifies which attributes/property are visisble.  Empty to show all.  Format: '<attribute-name-starts-with>,<property-to-show>,<property-to-show>|<attribute-name-starts-with>,<property-to-show>,<property-to-show>|(etc...)'."),
-		]
+		[Category("Show Attributes")]
+		[Description("When DocumentAttributes is set to true, this specifies which attributes/property are visisble.  Empty to show all.  Format: '<attribute-name-starts-with>,<property-to-show>,<property-to-show>|<attribute-name-starts-with>,<property-to-show>,<property-to-show>|(etc...)'.")]
+		[Editor(typeof(AttributesEditor), typeof(UITypeEditor))]
 		public string DocumentedAttributes
 		{
 			get { return _DocumentedAttributes; }
@@ -601,10 +559,8 @@ namespace NDoc.Core
 		private bool _GetExternalSummaries;
 
 		/// <summary>Load external xml files?</summary>
-		[
-		Category("Documentation Main Settings"),
-		Description("If true, NDoc will try loading external xml files to retreive the summaries of inherited members."),
-		]
+		[Category("Documentation Main Settings")]
+		[Description("If true, NDoc will try loading external xml files to retreive the summaries of inherited members.")]
 		public bool GetExternalSummaries
 		{
 			get { return _GetExternalSummaries; }
@@ -619,10 +575,8 @@ namespace NDoc.Core
 		private EditorBrowsableFilterLevel _EditorBrowsableFilter;
 
 		/// <summary>Specifies the level of filtering on the EditorBrowsable attribute.</summary>
-		[
-		Category("Visibility"),
-		Description("Sets the level of filtering to apply on types/members marked with the EditorBrowsable attribute.  Warning: enabling this filter might result in invalid links in the documentation.")
-		]
+		[Category("Visibility")]
+		[Description("Sets the level of filtering to apply on types/members marked with the EditorBrowsable attribute.  Warning: enabling this filter might result in invalid links in the documentation.")]
 		public EditorBrowsableFilterLevel EditorBrowsableFilter
 		{
 			get { return _EditorBrowsableFilter; }

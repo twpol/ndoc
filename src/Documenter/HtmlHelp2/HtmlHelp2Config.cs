@@ -45,10 +45,8 @@ namespace NDoc.Documenter.HtmlHelp2
 		/// Gets or sets the character set that will be used when compiling the help file.
 		/// Defaults to Ascii.
 		/// </summary>
-		[
-		Category(HTMLHELP2_CONFIG_CATEGORY),
-		Description("Gets or sets the character set that will be used when compiling the help file")
-		]
+		[Category(HTMLHELP2_CONFIG_CATEGORY)]
+		[Description("Gets or sets the character set that will be used when compiling the help file")]
 		public CharacterSet CharacterSet
 		{
 			get{ return _CharacterSet; }
@@ -125,10 +123,8 @@ namespace NDoc.Documenter.HtmlHelp2
 		short _LangID = 1033;
 
 		/// <summary>The language ID of the locale used by the compiled helpfile</summary>
-		[
-		Category(HTMLHELP2_CONFIG_CATEGORY),
-		Description("The ID of the language the help file is in.")
-		]
+		[Category(HTMLHELP2_CONFIG_CATEGORY)]
+		[Description("The ID of the language the help file is in.")]
 		public short LangID
 		{
 			get { return _LangID; }
@@ -143,10 +139,8 @@ namespace NDoc.Documenter.HtmlHelp2
 		bool _DeleteCHM = false;
 
 		/// <summary>Flag that indicates whether to keep the CHM file after successful conversion</summary>
-		[
-		Category(HTMLHELP2_CONFIG_CATEGORY),
-		Description("If true the CHM file will be deleted after the HxS file is created")
-		]
+		[Category(HTMLHELP2_CONFIG_CATEGORY)]
+		[Description("If true the CHM file will be deleted after the HxS file is created")]
 		public bool DeleteCHM
 		{
 			get { return _DeleteCHM; }
@@ -161,10 +155,8 @@ namespace NDoc.Documenter.HtmlHelp2
 		bool _AugmentXmlDataIslands = true;
 
 		/// <summary>Adds additional tags to the embedded Xml data islands (results in slower builds but tighter VS.NET integration)</summary>
-		[
-		Category(HTMLHELP2_CONFIG_CATEGORY),
-		Description("Adds additional tags to the embedded Xml data islands (results in slower builds but tighter VS.NET integration)")
-		]
+		[Category(HTMLHELP2_CONFIG_CATEGORY)]
+		[Description("Adds additional tags to the embedded Xml data islands (results in slower builds but tighter VS.NET integration)")]
 		public bool AugmentXmlDataIslands
 		{
 			get { return _AugmentXmlDataIslands; }
@@ -181,10 +173,8 @@ namespace NDoc.Documenter.HtmlHelp2
 		/// <summary>
 		/// Should the compiled Html 2 title be registered after it is compiled. (If true ParentCollectionNamespace is required)
 		/// </summary>
-		[
-		Category(HTMLHELP2_CONFIG_CATEGORY),
-		Description("Should the compiled Html 2 title be registered after it is compiled. (If true ParentCollectionNamespace is required)")
-		]
+		[Category(HTMLHELP2_CONFIG_CATEGORY)]
+		[Description("Should the compiled Html 2 title be registered after it is compiled. (If true ParentCollectionNamespace is required)")]
 		public bool RegisterTitleWithNamespace
 		{
 			get { return _RegisterTitleWithNamespace; }
@@ -201,10 +191,8 @@ namespace NDoc.Documenter.HtmlHelp2
 		/// <summary>
 		/// If RegisterTitleWithNamespace is true this is the namesapce to which it will be added.
 		/// </summary>
-		[
-		Category(HTMLHELP2_CONFIG_CATEGORY),
-		Description("The Html Help 2 registry namespace (avoid spaces). Only used if RegisterTitleWithNamespace is True.")
-		]
+		[Category(HTMLHELP2_CONFIG_CATEGORY)]
+		[Description("The Html Help 2 registry namespace (avoid spaces). Only used if RegisterTitleWithNamespace is True.")]
 		public string ParentCollectionNamespace
 		{
 			get { return _ParentCollectionNamespace; }
@@ -221,10 +209,8 @@ namespace NDoc.Documenter.HtmlHelp2
 		/// <summary>
 		/// If true the HxS title will be registered as a collection (ignored if RegisterTitleWithNamespace is ture)
 		/// </summary>
-		[
-		Category(HTMLHELP2_CONFIG_CATEGORY),
-		Description("If true the HxS title will be registered as a collection (ignored if RegisterTitleWithNamespace is ture)")
-		]
+		[Category(HTMLHELP2_CONFIG_CATEGORY)]
+		[Description("If true the HxS title will be registered as a collection (ignored if RegisterTitleWithNamespace is ture)")]
 		public bool RegisterTitleAsCollection
 		{
 			get { return _RegisterTitleAsCollection; }
@@ -241,10 +227,8 @@ namespace NDoc.Documenter.HtmlHelp2
 //		bool _BuildSeperateIndexFile = true;
 //
 //		/// <summary>Gets or sets the property that causes a seperate index file to be generated.</summary>
-//		[
-//		Category(HTMLHELP2_CONFIG_CATEGORY),
-//		Description("If true, create a seperate index file (HxI), otherwise the index is compiled into the HxS file.")
-//		]
+//		[Category(HTMLHELP2_CONFIG_CATEGORY)]
+//		[Description("If true, create a seperate index file (HxI), otherwise the index is compiled into the HxS file.")]
 //		public bool BuildSeperateIndexFile
 //		{
 //			get { return _BuildSeperateIndexFile; }
@@ -260,10 +244,8 @@ namespace NDoc.Documenter.HtmlHelp2
 //		string _Version = "1.0.0.0";
 //
 //		/// <summary>Gets or sets the base directory used to resolve directory and assembly references.</summary>
-//		[
-//		Category(HTMLHELP2_CONFIG_CATEGORY),
-//		Description("The version number for the help file (#.#.#.#)")
-//		]
+//		[Category(HTMLHELP2_CONFIG_CATEGORY)]
+//		[Description("The version number for the help file (#.#.#.#)")]
 //		public string Version
 //		{
 //			get { return _Version; }

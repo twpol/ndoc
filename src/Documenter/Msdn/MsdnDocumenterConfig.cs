@@ -75,13 +75,11 @@ namespace NDoc.Documenter.Msdn
 		}
 
 		/// <summary>Gets or sets the OutputDirectory property.</summary>
-		[
-		Category("Documentation Main Settings"),
+		[Category("Documentation Main Settings")]
+		[Description("The directory in which .html files and the .chm file will be generated.")]
 #if !MONO //System.Windows.Forms.Design.FolderNameEditor is not implemented in mono 0.25
-		Editor(typeof(FolderNameEditor), typeof(UITypeEditor)),
+		[Editor(typeof(FolderNameEditor), typeof(UITypeEditor))]
 #endif
-		Description("The directory in which .html files and the .chm file will be generated."),
-		]
 		public string OutputDirectory
 		{
 			get { return outputDirectory; }
@@ -102,10 +100,8 @@ namespace NDoc.Documenter.Msdn
 		/// <summary>Gets or sets the HtmlHelpName property.</summary>
 		/// <remarks>The HTML Help project file and the compiled HTML Help file
 		/// use this property plus the appropriate extension as names.</remarks>
-		[
-		Category("Documentation Main Settings"),
-		Description("The name of the HTML Help project and the Compiled HTML Help file."),
-		]
+		[Category("Documentation Main Settings")]
+		[Description("The name of the HTML Help project and the Compiled HTML Help file.")]
 		public string HtmlHelpName
 		{
 			get { return htmlHelpName; }
@@ -178,10 +174,8 @@ namespace NDoc.Documenter.Msdn
 		}
 
 		/// <summary>Gets or sets the IncludeFavorites property.</summary>
-		[
-		Category("HTML Help Options"),
-		Description("Turning this flag on will include a Favorites tab in the HTML Help file.")
-		]
+		[Category("HTML Help Options")]
+		[Description("Turning this flag on will include a Favorites tab in the HTML Help file.")]
 		public bool IncludeFavorites
 		{
 			get { return includeFavorites; }
@@ -196,10 +190,8 @@ namespace NDoc.Documenter.Msdn
 		private string _Title;
 
 		/// <summary>Gets or sets the Title property.</summary>
-		[
-		Category("Documentation Main Settings"),
-		Description("This is the title displayed at the top of every page.")
-		]
+		[Category("Documentation Main Settings")]
+		[Description("This is the title displayed at the top of every page.")]
 		public string Title
 		{
 			get { return _Title; }
@@ -214,11 +206,9 @@ namespace NDoc.Documenter.Msdn
 		private bool _SplitTOCs;
 
 		/// <summary>Gets or sets the SplitTOCs property.</summary>
-		[
-		Category("HTML Help Options"),
-		Description("Turning this flag on will generate a separate TOC for each assembly. "
-			+ "It cannot be set if SortTOCByNamespace is set or RootPageFileName is specified.")
-		]
+		[Category("HTML Help Options")]
+		[Description("Turning this flag on will generate a separate TOC for each assembly. "
+			+ "It cannot be set if SortTOCByNamespace is set or RootPageFileName is specified.")]
 		public bool SplitTOCs
 		{
 			get { return _SplitTOCs; }
@@ -236,10 +226,8 @@ namespace NDoc.Documenter.Msdn
 		private string _DefaultTOC;
 
 		/// <summary>Gets or sets the DefaultTOC property.</summary>
-		[
-		Category("HTML Help Options"),
-		Description("When SplitTOCs is true, this represents the default TOC to use.")
-		]
+		[Category("HTML Help Options")]
+		[Description("When SplitTOCs is true, this represents the default TOC to use.")]
 		public string DefaulTOC
 		{
 			get { return _DefaultTOC; }
@@ -254,10 +242,8 @@ namespace NDoc.Documenter.Msdn
 		private bool _IncludeHierarchy;
 
 		/// <summary>Gets or sets the IncludeHierarchy property.</summary>
-		[
-		Category("Documentation Main Settings"),
-		Description("To include a class hiararchy page for each namespace. Don't turn it on if your project has a namespace with many types, as NDoc will become very slow and might crash.")
-		]
+		[Category("Documentation Main Settings")]
+		[Description("To include a class hiararchy page for each namespace. Don't turn it on if your project has a namespace with many types, as NDoc will become very slow and might crash.")]
 		public bool IncludeHierarchy
 		{
 			get { return _IncludeHierarchy; }
@@ -274,10 +260,8 @@ namespace NDoc.Documenter.Msdn
 		/// <summary>Gets or sets the ShowVisualBasic property.</summary>
 		/// <remarks>This is a temporary property until we get a working
 		/// language filter in the output like MSDN.</remarks>
-		[
-		Category("Documentation Main Settings"),
-		Description("Show Visual Basic syntax for types and members.")
-		]
+		[Category("Documentation Main Settings")]
+		[Description("Show Visual Basic syntax for types and members.")]
 		public bool ShowVisualBasic
 		{
 			get { return _ShowVisualBasic; }
@@ -292,13 +276,11 @@ namespace NDoc.Documenter.Msdn
 		string _RootPageTOCName;
 
 		/// <summary>Gets or sets the RootPageTOCName property.</summary>
-		[
-		Category("HTML Help Options"),
-		Description("The name for the Table of Contents entry corresponding "
+		[Category("HTML Help Options")]
+		[Description("The name for the Table of Contents entry corresponding "
 			+ " to the root page."
 			+ " If this is not specified and RootPageFileName is, then"
-			+ " the TOC entry will be 'Overview'.")
-		]
+			+ " the TOC entry will be 'Overview'.")]
 		public string RootPageTOCName
 		{
 			get { return _RootPageTOCName; }
@@ -313,17 +295,15 @@ namespace NDoc.Documenter.Msdn
 		string _RootPageFileName;
 
 		/// <summary>Gets or sets the RootPageFileName property.</summary>
-		[
-		Category("HTML Help Options"),
-		Description("The name of an html file to be included as the root home page. "
-			+ "SplitTOCs is disabled when this property is set."),
+		[Category("HTML Help Options")]
+		[Description("The name of an html file to be included as the root home page. "
+			+ "SplitTOCs is disabled when this property is set.")]
 #if (!MONO)
 		// In mono 0.25 most classes in the System.Windows.Forms.Design assembly 
 		// are located in the System.Windows.Forms assembly while they should 
 		// actually be in the System.Design assembly.
-		Editor(typeof(FileNameEditor), typeof(UITypeEditor))
+		[Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
 #endif
-		]
 		public string RootPageFileName
 		{
 			get { return _RootPageFileName; }
@@ -339,13 +319,11 @@ namespace NDoc.Documenter.Msdn
 		bool _RootPageContainsNamespaces;
 
 		/// <summary>Gets or sets the RootPageContainsNamespaces property.</summary>
-		[
-		Category("HTML Help Options"),
-		Description("If true, the Root Page will be made the container"
+		[Category("HTML Help Options")]
+		[Description("If true, the Root Page will be made the container"
 			+ " of the namespaces in the TOC."
 			+ " If false, the Root Page will be made a peer of"
-			+ " the namespaces in the TOC.")
-		]
+			+ " the namespaces in the TOC.")]
 		public bool RootPageContainsNamespaces
 		{
 			get { return _RootPageContainsNamespaces; }
@@ -360,11 +338,9 @@ namespace NDoc.Documenter.Msdn
 		bool _SortTOCByNamespace;
 
 		/// <summary>Gets or sets the SortTOCByNamespace property.</summary>
-		[
-		Category("HTML Help Options"),
-		Description("Sorts the TOC by namespace name. "
-			+ "SplitTOCs is disabled when this option is selected.")
-		]
+		[Category("HTML Help Options")]
+		[Description("Sorts the TOC by namespace name. "
+			+ "SplitTOCs is disabled when this option is selected.")]
 		public bool SortTOCByNamespace
 		{
 			get { return _SortTOCByNamespace; }
@@ -380,10 +356,8 @@ namespace NDoc.Documenter.Msdn
 		private OutputType _OutputTarget;
 
 		/// <summary>Gets or sets the OutputTarget property.</summary>
-		[
-		Category("Documentation Main Settings"),
-		Description("Sets this property to .")
-		]
+		[Category("Documentation Main Settings")]
+		[Description("Sets this property to .")]
 		public OutputType OutputTarget
 		{
 			get { return _OutputTarget; }
@@ -398,13 +372,11 @@ namespace NDoc.Documenter.Msdn
 		string _HeaderHtml;
 
 		/// <summary>Gets or sets the HeaderHtml property.</summary>
-		[
-		Category("HTML Help Options"),
-		Editor(typeof(TextEditor), typeof(UITypeEditor)),
-		Description("Raw HTML that is used as a page header instead of the default blue banner. " +
+		[Category("HTML Help Options")]
+		[Description("Raw HTML that is used as a page header instead of the default blue banner. " +
 			"\"%FILE_NAME%\" is dynamically replaced by the name of the file for the current html page. " +
-			"\"%TOPIC_TITLE%\" is dynamically replaced by the title of the current page.")
-		]
+			"\"%TOPIC_TITLE%\" is dynamically replaced by the title of the current page.")]
+		[Editor(typeof(TextEditor), typeof(UITypeEditor))]
 		public string HeaderHtml
 		{
 			get { return _HeaderHtml; }
@@ -419,15 +391,13 @@ namespace NDoc.Documenter.Msdn
 		string _FooterHtml;
 
 		/// <summary>Gets or sets the FooterHtml property.</summary>
-		[
-		Category("HTML Help Options"),
-		Editor(typeof(TextEditor), typeof(UITypeEditor)),
-		Description("Raw HTML that is used as a page footer instead of the default footer." +
+		[Category("HTML Help Options")]
+		[Description("Raw HTML that is used as a page footer instead of the default footer." +
 			"\"%FILE_NAME%\" is dynamically replaced by the name of the file for the current html page. " +
 			"\"%ASSEMBLY_NAME%\" is dynamically replaced by the name of the assembly for the current page. " +
 			"\"%ASSEMBLY_VERSION%\" is dynamically replaced by the version of the assembly for the current page. " +
-			"\"%TOPIC_TITLE%\" is dynamically replaced by the title of the current page.")
-		]
+			"\"%TOPIC_TITLE%\" is dynamically replaced by the title of the current page.")]
+		[Editor(typeof(TextEditor), typeof(UITypeEditor))]
 		public string FooterHtml
 		{
 			get { return _FooterHtml; }
@@ -442,10 +412,8 @@ namespace NDoc.Documenter.Msdn
 		string _FilesToInclude;
 
 		/// <summary>Gets or sets the FilesToInclude property.</summary>
-		[
-		Category("HTML Help Options"),
-		Description("Specifies external files that must be included in the compiled CHM file. Multiple files must be separated by a pipe ('|').")
-		]
+		[Category("HTML Help Options")]
+		[Description("Specifies external files that must be included in the compiled CHM file. Multiple files must be separated by a pipe ('|').")]
 		public string FilesToInclude
 		{
 			get { return _FilesToInclude; }
@@ -460,10 +428,8 @@ namespace NDoc.Documenter.Msdn
 		SdkDocVersion _LinkToSdkDocVersion;
 
 		/// <summary>Gets or sets the LinkToSdkDocVersion property.</summary>
-		[
-		Category("HTML Help Options"),
-		Description("Specifies to which version of the .NET Framework SDK documentation the links to system types will be pointing.")
-		]
+		[Category("HTML Help Options")]
+		[Description("Specifies to which version of the .NET Framework SDK documentation the links to system types will be pointing.")]
 		public SdkDocVersion LinkToSdkDocVersion
 		{
 			get { return _LinkToSdkDocVersion; }
