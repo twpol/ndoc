@@ -199,7 +199,7 @@
 		<xsl:variable name="namespaceName">
 			<xsl:call-template name="namespace-name" />
 		</xsl:variable>
-		<h3>See Also</h3>
+		<h4>See Also</h4>
 		<p class="i1">
 			<xsl:if test="$page!='type' and $page!='enumeration' and $page!='delegate'">
 				<xsl:variable name="type-filename">
@@ -317,14 +317,14 @@
 	<!-- -->
 	<xsl:template name="parameter-section">
 		<xsl:if test="parameter">
-			<h3>Parameters</h3>
+			<h4>Parameters</h4>
 			<xsl:call-template name="parameter-topic" />
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="returnvalue-section">
 		<xsl:if test="returns">
-			<h3>Return Value</h3>
+			<h4>Return Value</h4>
 			<p class="i1">
 				<xsl:apply-templates select="documentation/returns/node()" mode="slashdoc" />
 			</p>
@@ -333,7 +333,7 @@
 	<!-- -->
 	<xsl:template name="remarks-section">
 		<xsl:if test="documentation/remarks">
-			<h3>Remarks</h3>
+			<h4>Remarks</h4>
 			<p class="i1">
 				<xsl:apply-templates select="documentation/remarks/node()" mode="slashdoc" />
 			</p>
@@ -342,7 +342,7 @@
 	<!-- -->
 	<xsl:template name="value-section">
 		<xsl:if test="value">
-			<h3>Property Value</h3>
+			<h4>Property Value</h4>
 			<p class="i1">
 				<xsl:apply-templates select="documentation/value/node()" mode="slashdoc" />
 			</p>
@@ -351,7 +351,7 @@
 	<!-- -->
 	<xsl:template name="exceptions-section">
 		<xsl:if test="exception">
-			<h3>Exceptions</h3>
+			<h4>Exceptions</h4>
 			<div class="table">
 				<table cellspacing="0">
 					<tr valign="top">
@@ -384,7 +384,7 @@
 	<!-- -->
 	<xsl:template name="example-section">
 		<xsl:if test="example">
-			<h3>Example</h3>
+			<h4>Example</h4>
 			<p class="i1">
 				<xsl:apply-templates select="documentation/example/node()" mode="slashdoc" />
 			</p>
@@ -393,7 +393,7 @@
 	<!-- -->
 	<xsl:template name="members-section">
 		<xsl:if test="field">
-			<h3>Members</h3>
+			<h4>Members</h4>
 			<div class="table">
 				<table cellspacing="0">
 					<tr valign="top">

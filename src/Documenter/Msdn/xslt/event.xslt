@@ -30,7 +30,7 @@
 					<xsl:variable name="eventargs-id" select="concat('T:', //delegate[@id=concat('T:', $type)]/parameter[contains(@type, 'EventArgs')][1]/@type)" />
 					<xsl:variable name="thisevent" select="//class[@id=$eventargs-id]" />
 					<xsl:if test="$thisevent/property[@access='Public' and not(@static)]">
-						<h3>Event Data</h3>
+						<h4>Event Data</h4>
 						<p class="i1">
 							<xsl:text>The event handler receives a </xsl:text>
 							<a>

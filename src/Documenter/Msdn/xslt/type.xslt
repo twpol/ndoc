@@ -159,7 +159,7 @@
 					<xsl:if test="local-name() = 'enumeration'">
 						<xsl:call-template name="members-section" />
 					</xsl:if>
-					<h3>Requirements</h3>
+					<h4>Requirements</h4>
 					<p class="i1">
 						<b>Namespace: </b>
 						<a>

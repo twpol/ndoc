@@ -46,12 +46,12 @@
 	<xsl:template name="public-static-section">
 		<xsl:param name="member" />
 		<xsl:if test="*[local-name()=$member and @access='Public' and @contract='Static']">
-			<h3>
+			<h4>
 				<xsl:text>Public Static (Shared) </xsl:text>
 				<xsl:call-template name="get-big-member-plural">
 					<xsl:with-param name="member" select="$member" />
 				</xsl:call-template>
-			</h3>
+			</h4>
 			<div class="table">
 				<table cellspacing="0">
 					<xsl:apply-templates select="*[local-name()=$member and @access='Public' and @contract='Static']">
@@ -65,12 +65,12 @@
 	<xsl:template name="protected-static-section">
 		<xsl:param name="member" />
 		<xsl:if test="*[local-name()=$member and @access='Family' and @contract='Static']">
-			<h3>
+			<h4>
 				<xsl:text>Protected Static (Shared) </xsl:text>
 				<xsl:call-template name="get-big-member-plural">
 					<xsl:with-param name="member" select="$member" />
 				</xsl:call-template>
-			</h3>
+			</h4>
 			<div class="table">
 				<table cellspacing="0">
 					<xsl:apply-templates select="*[local-name()=$member and @access='Family' and @contract='Static']">
@@ -84,12 +84,12 @@
 	<xsl:template name="protected-internal-static-section">
 		<xsl:param name="member" />
 		<xsl:if test="*[local-name()=$member and @access='FamilyOrAssembly' and @contract='Static']">
-			<h3>
+			<h4>
 				<xsl:text>Protected Internal Static (Shared) </xsl:text>
 				<xsl:call-template name="get-big-member-plural">
 					<xsl:with-param name="member" select="$member" />
 				</xsl:call-template>
-			</h3>
+			</h4>
 			<div class="table">
 				<table cellspacing="0">
 					<xsl:apply-templates select="*[local-name()=$member and @access='FamilyOrAssembly' and @contract='Static']">
@@ -103,12 +103,12 @@
 	<xsl:template name="internal-static-section">
 		<xsl:param name="member" />
 		<xsl:if test="*[local-name()=$member and @access='Assembly' and @contract='Static']">
-			<h3>
+			<h4>
 				<xsl:text>Internal Static (Shared) </xsl:text>
 				<xsl:call-template name="get-big-member-plural">
 					<xsl:with-param name="member" select="$member" />
 				</xsl:call-template>
-			</h3>
+			</h4>
 			<div class="table">
 				<table cellspacing="0">
 					<xsl:apply-templates select="*[local-name()=$member and @access='Assembly' and @contract='Static']">
@@ -122,12 +122,12 @@
 	<xsl:template name="private-static-section">
 		<xsl:param name="member" />
 		<xsl:if test="*[local-name()=$member and @access='Private' and @contract='Static']">
-			<h3>
+			<h4>
 				<xsl:text>Private Static (Shared) </xsl:text>
 				<xsl:call-template name="get-big-member-plural">
 					<xsl:with-param name="member" select="$member" />
 				</xsl:call-template>
-			</h3>
+			</h4>
 			<div class="table">
 				<table cellspacing="0">
 					<xsl:apply-templates select="*[local-name()=$member and @access='Private' and @contract='Static']">
@@ -141,12 +141,12 @@
 	<xsl:template name="public-instance-section">
 		<xsl:param name="member" />
 		<xsl:if test="*[local-name()=$member and @access='Public' and not(@contract='Static')]">
-			<h3>
+			<h4>
 				<xsl:text>Public Instance </xsl:text>
 				<xsl:call-template name="get-big-member-plural">
 					<xsl:with-param name="member" select="$member" />
 				</xsl:call-template>
-			</h3>
+			</h4>
 			<div class="table">
 				<table cellspacing="0">
 					<xsl:apply-templates select="*[local-name()=$member and @access='Public' and not(@contract='Static')]">
@@ -160,12 +160,12 @@
 	<xsl:template name="protected-instance-section">
 		<xsl:param name="member" />
 		<xsl:if test="*[local-name()=$member and @access='Family' and not(@contract='Static')]">
-			<h3>
+			<h4>
 				<xsl:text>Protected Instance </xsl:text>
 				<xsl:call-template name="get-big-member-plural">
 					<xsl:with-param name="member" select="$member" />
 				</xsl:call-template>
-			</h3>
+			</h4>
 			<div class="table">
 				<table cellspacing="0">
 					<xsl:apply-templates select="*[local-name()=$member and @access='Family' and not(@contract='Static')]">
@@ -179,12 +179,12 @@
 	<xsl:template name="protected-internal-instance-section">
 		<xsl:param name="member" />
 		<xsl:if test="*[local-name()=$member and @access='FamilyOrAssembly' and not(@contract='Static')]">
-			<h3>
+			<h4>
 				<xsl:text>Protected Internal Instance </xsl:text>
 				<xsl:call-template name="get-big-member-plural">
 					<xsl:with-param name="member" select="$member" />
 				</xsl:call-template>
-			</h3>
+			</h4>
 			<div class="table">
 				<table cellspacing="0">
 					<xsl:apply-templates select="*[local-name()=$member and @access='FamilyOrAssembly' and not(@contract='Static')]">
@@ -198,12 +198,12 @@
 	<xsl:template name="internal-instance-section">
 		<xsl:param name="member" />
 		<xsl:if test="*[local-name()=$member and @access='Assembly' and not(@contract='Static')]">
-			<h3>
+			<h4>
 				<xsl:text>Internal Instance </xsl:text>
 				<xsl:call-template name="get-big-member-plural">
 					<xsl:with-param name="member" select="$member" />
 				</xsl:call-template>
-			</h3>
+			</h4>
 			<div class="table">
 				<table cellspacing="0">
 					<xsl:apply-templates select="*[local-name()=$member and @access='Assembly' and not(@contract='Static')]">
@@ -217,12 +217,12 @@
 	<xsl:template name="private-instance-section">
 		<xsl:param name="member" />
 		<xsl:if test="*[local-name()=$member and @access='Private' and not(@contract='Static')]">
-			<h3>
+			<h4>
 				<xsl:text>Private Instance </xsl:text>
 				<xsl:call-template name="get-big-member-plural">
 					<xsl:with-param name="member" select="$member" />
 				</xsl:call-template>
-			</h3>
+			</h4>
 			<div class="table">
 				<table cellspacing="0">
 					<xsl:apply-templates select="*[local-name()=$member and @access='Private' and not(@contract='Static')]">

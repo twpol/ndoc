@@ -88,7 +88,7 @@
 					</xsl:call-template>
 					<!-- public instance members -->
 					<xsl:if test="constructor[@access='Public']">
-						<h3>Public Instance Constructors</h3>
+						<h4>Public Instance Constructors</h4>
 						<div class="table">
 							<table cellspacing="0">
 								<xsl:apply-templates select="constructor[@access='Public']" />
@@ -109,7 +109,7 @@
 					</xsl:call-template>
 					<!-- protected instance members -->
 					<xsl:if test="constructor[@access='Family']">
-						<h3>Protected Instance Constructors</h3>
+						<h4>Protected Instance Constructors</h4>
 						<div class="table">
 							<table cellspacing="0">
 								<xsl:apply-templates select="constructor[@access='Family']" />
@@ -130,7 +130,7 @@
 					</xsl:call-template>
 					<!-- protected internal instance members -->
 					<xsl:if test="constructor[@access='FamilyOrAssembly']">
-						<h3>Protected Internal Instance Constructors</h3>
+						<h4>Protected Internal Instance Constructors</h4>
 						<div class="table">
 							<table cellspacing="0">
 								<xsl:apply-templates select="constructor[@access='FamilyOrAssembly']" />
@@ -151,7 +151,7 @@
 					</xsl:call-template>
 					<!-- internal instance members -->
 					<xsl:if test="constructor[@access='Assembly']">
-						<h3>Internal Instance Constructors</h3>
+						<h4>Internal Instance Constructors</h4>
 						<div class="table">
 							<table cellspacing="0">
 								<xsl:apply-templates select="constructor[@access='Assembly']" />
@@ -172,7 +172,7 @@
 					</xsl:call-template>
 					<!-- private instance members -->
 					<xsl:if test="constructor[@access='Private']">
-						<h3>Private Instance Constructors</h3>
+						<h4>Private Instance Constructors</h4>
 						<div class="table">
 							<table cellspacing="0">
 								<xsl:apply-templates select="constructor[@access='Private']" />
