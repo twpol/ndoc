@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-	xmlns:doc="http://ndoc.sf.net/doc"
-	xmlns:MSHelp="http://msdn.microsoft.com/mshelp" 
-	xmlns:NUtil="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities"
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:doc="http://ndoc.sf.net/doc"
+	xmlns:MSHelp="http://msdn.microsoft.com/mshelp" xmlns:NUtil="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities"
 	exclude-result-prefixes="doc NUtil">
 	<!-- NDoc resolves this custom url to a user-supplied extensibility stylesheet -->
 	<xsl:include href="user:extensibility" />
@@ -50,8 +48,18 @@
 		<summary>Multiple lines of code.</summary>
 	</doc:template>
 	<xsl:template match="code" mode="slashdoc" doc:group="block" doc:msdn="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrfcode.htm">
-		<pre class="code">
-			<xsl:apply-templates select="@*" mode="slashdoc" />
+		<pre>
+			<xsl:choose>
+				<xsl:when test="@class">
+					<xsl:attribute name="class">
+						<xsl:value-of select="@class" />
+					</xsl:attribute>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:attribute name="class">code</xsl:attribute>
+				</xsl:otherwise>
+			</xsl:choose>
+			<xsl:apply-templates select="@*[not(name()='class')]" mode="slashdoc" />
 			<xsl:apply-templates mode="slashdoc" />
 		</pre>
 	</xsl:template>
@@ -61,8 +69,18 @@
 		sample is only appropriate for a specific language.</summary>
 	</doc:template>
 	<xsl:template match="code[@lang]" mode="slashdoc" doc:group="block">
-		<pre class="code">
-			<xsl:apply-templates select="@*[not(name()='lang')]" mode="slashdoc" />
+		<pre>
+			<xsl:choose>
+				<xsl:when test="@class">
+					<xsl:attribute name="class">
+						<xsl:value-of select="@class" />
+					</xsl:attribute>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:attribute name="class">code</xsl:attribute>
+				</xsl:otherwise>
+			</xsl:choose>
+			<xsl:apply-templates select="@*[not(name()='class') and not(name()='lang')]" mode="slashdoc" />
 			<span class="lang">
 				<xsl:text>[</xsl:text>
 				<xsl:call-template name="get-lang">
@@ -356,6 +374,6 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template match="br" mode="slashdoc" doc:group="inline">
-		<br/>
+		<br />
 	</xsl:template>
 </xsl:stylesheet>
