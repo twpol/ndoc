@@ -1135,7 +1135,7 @@ namespace NDoc.Core
 
 			writer.WriteStartElement("parameter");
 			writer.WriteAttributeString("name", parameter.Name);
-			writer.WriteAttributeString("type", parameter.ParameterType.FullName);
+			writer.WriteAttributeString("type", GetTypeName(parameter.ParameterType));
 			writer.WriteAttributeString("optional", parameter.IsOptional ? "true" : "false");
 
 			if (direction != "in")
@@ -1216,6 +1216,13 @@ namespace NDoc.Core
 			return GetTypeNamespaceName(member.ReflectedType);
 		}
 
+		/// <summary>Derives the ID for a type. Used to match nodes in the /doc XML.</summary>
+		/// <param name="type">The type to derive the member name ID from.</param>
+		private string GetTypeName(Type type)
+		{
+			return type.FullName.Replace('+', '.');
+		}
+
 		/// <summary>Derives the member name ID for a type. Used to match nodes in the /doc XML.</summary>
 		/// <param name="type">The type to derive the member name ID from.</param>
 		private string GetMemberName(Type type)
@@ -1275,7 +1282,11 @@ namespace NDoc.Core
 		{
 			string memberName;
 
-			memberName = "M:" + GetFullNamespaceName(method) + "." + method.Name.Replace('.', '#');
+			memberName =
+				"M:" +
+				GetFullNamespaceName(method) +
+				"." +
+				method.Name.Replace('.', '#');
 
 			int i = 0;
 
@@ -1291,7 +1302,7 @@ namespace NDoc.Core
 				}
 
 				// XML Documentation file appends a "@" to reference and out types, not a "&"
-				memberName += parameter.ParameterType.FullName.Replace('&', '@');
+				memberName += parameter.ParameterType.FullName.Replace('&', '@').Replace('+', '.');
 
 				++i;
 			}

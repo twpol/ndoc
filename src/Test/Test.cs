@@ -1012,6 +1012,13 @@ namespace NDoc.Test
 		public jjj(fred f)
 		{
 		}
+
+		/// <summary>mmm method</summary>
+		/// <remarks>mmm blah</remarks>
+		/// <param name="f">f blah</param>
+		public void mmm(fred f)
+		{
+		}
 	}
 }
 
