@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
 	xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
 	<!-- -->
-	<xsl:output method="xml" indent="yes" encoding="utf-8" omit-xml-declaration="yes"/>
+	<xsl:output method="xml" indent="yes" encoding="utf-8" omit-xml-declaration="yes" />
 	<!-- -->
 	<xsl:include href="common.xslt" />
 	<xsl:include href="syntax.xslt" />
@@ -41,11 +41,11 @@
 					</xsl:if>
 					<xsl:if test="local-name()='operator'">
 						<xsl:call-template name="operator-name">
-							<xsl:with-param name="name" select="@name" />							
-							<xsl:with-param name="from" select="parameter/@type" />							
+							<xsl:with-param name="name" select="@name" />
+							<xsl:with-param name="from" select="parameter/@type" />
 							<xsl:with-param name="to" select="@returnType" />
 						</xsl:call-template>
-					</xsl:if>					
+					</xsl:if>
 					<xsl:if test="local-name()!='operator'">
 						<xsl:text>&#32;</xsl:text>
 						<xsl:value-of select="$childType" />
@@ -55,7 +55,7 @@
 						</xsl:if>
 					</xsl:if>
 				</xsl:with-param>
-				<xsl:with-param name="page-type" select="$childType"/>					
+				<xsl:with-param name="page-type" select="$childType" />
 			</xsl:call-template>
 			<body topmargin="0" id="bodyID" class="dtBODY">
 				<object id="obj_cook" classid="clsid:59CC0C20-679B-11D2-88BD-0800361A1803" style="display:none;"></object>
@@ -71,11 +71,11 @@
 						</xsl:if>
 						<xsl:if test="local-name()='operator'">
 							<xsl:call-template name="operator-name">
-								<xsl:with-param name="name" select="@name" />							
-								<xsl:with-param name="from" select="parameter/@type" />							
+								<xsl:with-param name="name" select="@name" />
+								<xsl:with-param name="from" select="parameter/@type" />
 								<xsl:with-param name="to" select="@returnType" />
 							</xsl:call-template>
-						</xsl:if>					
+						</xsl:if>
 						<xsl:if test="local-name()!='operator'">
 							<xsl:text>&#160;</xsl:text>
 							<xsl:value-of select="$childType" />
@@ -88,7 +88,7 @@
 				</xsl:call-template>
 				<div id="nstext" valign="bottom">
 					<xsl:call-template name="summary-section" />
-					<xsl:call-template name="syntax-section"/>
+					<xsl:call-template name="syntax-section" />
 					<xsl:call-template name="parameter-section" />
 					<xsl:call-template name="returnvalue-section" />
 					<xsl:call-template name="implements-section" />
@@ -100,8 +100,6 @@
 					<xsl:call-template name="seealso-section">
 						<xsl:with-param name="page">member</xsl:with-param>
 					</xsl:call-template>
-															  
-					
 					<xsl:call-template name="footer-row">
 						<xsl:with-param name="type-name">
 							<xsl:value-of select="../@name" />

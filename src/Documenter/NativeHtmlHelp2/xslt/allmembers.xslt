@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
 	xmlns:MSHelp="http://msdn.microsoft.com/mshelp"
-	xmlns:NUtil="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities"
-	exclude-result-prefixes="NUtil" >
-	
+	xmlns:NUtil="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities" 
+	exclude-result-prefixes="NUtil">
 	<!-- -->
-	<xsl:output method="xml" indent="yes" encoding="utf-8" omit-xml-declaration="yes"/>
+	<xsl:output method="xml" indent="yes" encoding="utf-8" omit-xml-declaration="yes" />
 	<!-- -->
 	<xsl:include href="common.xslt" />
 	<xsl:include href="memberscommon.xslt" />
@@ -28,7 +27,10 @@
 				<div id="nstext" valign="bottom">
 					<div id="allHistory" class="saveHistory" onsave="saveAll()" onload="loadAll()"></div>
 					<p>
-						<a href="{NUtil:GetLocalCRef( string( @id ) ) }">
+						<a>
+							<xsl:attribute name="href">
+								<xsl:value-of select="NUtil:GetLocalCRef( string( @id ) )" />
+							</xsl:attribute>
 							<xsl:value-of select="@name" />
 							<xsl:text> overview</xsl:text>
 						</a>
@@ -219,7 +221,7 @@
 					</xsl:call-template>
 					<xsl:call-template name="seealso-section">
 						<xsl:with-param name="page">members</xsl:with-param>
-					</xsl:call-template>														
+					</xsl:call-template>
 					<xsl:call-template name="footer-row">
 						<xsl:with-param name="type-name">
 							<xsl:value-of select="@name" /> Members

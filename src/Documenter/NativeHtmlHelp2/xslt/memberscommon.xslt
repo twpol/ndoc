@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
 	xmlns:MSHelp="http://msdn.microsoft.com/mshelp"
-	xmlns:NUtil="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities"
-	exclude-result-prefixes="NUtil" >
+	xmlns:NUtil="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities" 
+	exclude-result-prefixes="NUtil">
 	<!-- -->
 	<xsl:template match="/">
 		<xsl:apply-templates select="ndoc/assembly/module/namespace/*[@id=$id]" />
@@ -37,7 +37,7 @@
 					<xsl:when test="*[local-name()=$member and @name!='op_Implicit' and @name!='op_Explicit']">
 						<xsl:choose>
 							<xsl:when test="*[local-name()=$member and (@name='op_Implicit' or @name='op_Explicit')]">
-							<xsl:text>Operators and Type Conversions</xsl:text>
+								<xsl:text>Operators and Type Conversions</xsl:text>
 							</xsl:when>
 							<xsl:otherwise>Operators</xsl:otherwise>
 						</xsl:choose>
@@ -77,7 +77,7 @@
 		<xsl:if test="*[local-name()=$member and @access='Public' and @contract='Static']">
 			<h4 class="dtH4">
 				<xsl:text>Public Static </xsl:text>
-  				<xsl:text>(Shared) </xsl:text>
+				<xsl:text>(Shared) </xsl:text>
 				<xsl:call-template name="get-big-member-plural">
 					<xsl:with-param name="member" select="$member" />
 				</xsl:call-template>
@@ -100,7 +100,7 @@
 								<xsl:sort select="@name" />
 							</xsl:apply-templates>
 						</xsl:otherwise>
-					</xsl:choose>	
+					</xsl:choose>
 				</table>
 			</div>
 		</xsl:if>
@@ -111,7 +111,7 @@
 		<xsl:if test="*[local-name()=$member and @access='Family' and @contract='Static']">
 			<h4 class="dtH4">
 				<xsl:text>Protected Static </xsl:text>
-  				<xsl:text>(Shared) </xsl:text>
+				<xsl:text>(Shared) </xsl:text>
 				<xsl:call-template name="get-big-member-plural">
 					<xsl:with-param name="member" select="$member" />
 				</xsl:call-template>
@@ -131,7 +131,7 @@
 		<xsl:if test="*[local-name()=$member and @access='FamilyOrAssembly' and @contract='Static']">
 			<h4 class="dtH4">
 				<xsl:text>Protected Internal Static </xsl:text>
-  				<xsl:text>(Shared) </xsl:text>
+				<xsl:text>(Shared) </xsl:text>
 				<xsl:call-template name="get-big-member-plural">
 					<xsl:with-param name="member" select="$member" />
 				</xsl:call-template>
@@ -151,7 +151,7 @@
 		<xsl:if test="*[local-name()=$member and @access='Assembly' and @contract='Static']">
 			<h4 class="dtH4">
 				<xsl:text>Internal Static </xsl:text>
-  				<xsl:text>(Shared) </xsl:text>
+				<xsl:text>(Shared) </xsl:text>
 				<xsl:call-template name="get-big-member-plural">
 					<xsl:with-param name="member" select="$member" />
 				</xsl:call-template>
@@ -171,7 +171,7 @@
 		<xsl:if test="*[local-name()=$member and @access='Private' and @contract='Static']">
 			<h4 class="dtH4">
 				<xsl:text>Private Static </xsl:text>
-  				<xsl:text>(Shared) </xsl:text>
+				<xsl:text>(Shared) </xsl:text>
 				<xsl:call-template name="get-big-member-plural">
 					<xsl:with-param name="member" select="$member" />
 				</xsl:call-template>
@@ -195,7 +195,7 @@
 					<xsl:with-param name="member" select="$member" />
 				</xsl:call-template>
 			</h4>
-			<div class="tablediv">				
+			<div class="tablediv">
 				<table class="dtTABLE" cellspacing="0">
 					<xsl:apply-templates select="*[local-name()=$member and @access='Public' and not(@contract='Static')]">
 						<xsl:sort select="@name" />
@@ -306,7 +306,7 @@
 				<img>
 					<xsl:attribute name="src">
 						<xsl:text>pub</xsl:text>
-						<xsl:value-of select="$local-name"/>
+						<xsl:value-of select="$local-name" />
 						<xsl:text>.gif</xsl:text>
 					</xsl:attribute>
 				</img>
@@ -315,7 +315,7 @@
 				<img>
 					<xsl:attribute name="src">
 						<xsl:text>prot</xsl:text>
-						<xsl:value-of select="$local-name"/>
+						<xsl:value-of select="$local-name" />
 						<xsl:text>.gif</xsl:text>
 					</xsl:attribute>
 				</img>
@@ -324,7 +324,7 @@
 				<img>
 					<xsl:attribute name="src">
 						<xsl:text>priv</xsl:text>
-						<xsl:value-of select="$local-name"/>
+						<xsl:value-of select="$local-name" />
 						<xsl:text>.gif</xsl:text>
 					</xsl:attribute>
 				</img>
@@ -333,7 +333,7 @@
 				<img>
 					<xsl:attribute name="src">
 						<xsl:text>int</xsl:text>
-						<xsl:value-of select="$local-name"/>
+						<xsl:value-of select="$local-name" />
 						<xsl:text>.gif</xsl:text>
 					</xsl:attribute>
 				</img>
@@ -353,33 +353,31 @@
 					<xsl:with-param name="contract" select="@contract" />
 					<xsl:with-param name="local-name" select="local-name()" />
 				</xsl:call-template>
-				
 				<xsl:choose>
 					<xsl:when test="@interface">
 						<xsl:call-template name="get-link-for-explicit-interface-member">
-							<xsl:with-param name="link-text" select="@name"/>
-							<xsl:with-param name="member" select="."/>
+							<xsl:with-param name="link-text" select="@name" />
+							<xsl:with-param name="member" select="." />
 						</xsl:call-template>
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:call-template name="get-link-for-member">
-							<xsl:with-param name="link-text" select="@name"/>
-							<xsl:with-param name="member" select="."/>
+							<xsl:with-param name="link-text" select="@name" />
+							<xsl:with-param name="member" select="." />
 						</xsl:call-template>
 					</xsl:otherwise>
 				</xsl:choose>
-				
 				<xsl:text> (inherited from </xsl:text>
 				<b>
 					<xsl:call-template name="strip-namespace">
 						<xsl:with-param name="name" select="@declaringType" />
 					</xsl:call-template>
 				</b>
-				<xsl:text>)</xsl:text>				
-				<xsl:call-template name="member-list-platform"/>
+				<xsl:text>)</xsl:text>
+				<xsl:call-template name="member-list-platform" />
 			</td>
 			<td width="50%">
-				<xsl:call-template name="obsolete-inline"/>
+				<xsl:call-template name="obsolete-inline" />
 				<xsl:call-template name="summary-with-no-paragraph" />
 			</td>
 		</tr>
@@ -394,22 +392,20 @@
 					<xsl:with-param name="contract" select="@contract" />
 					<xsl:with-param name="local-name" select="local-name()" />
 				</xsl:call-template>
-					
 				<xsl:choose>
 					<xsl:when test="@interface">
 						<xsl:call-template name="get-link-for-explicit-interface-member">
-							<xsl:with-param name="link-text" select="@name"/>
-							<xsl:with-param name="member" select="."/>
+							<xsl:with-param name="link-text" select="@name" />
+							<xsl:with-param name="member" select="." />
 						</xsl:call-template>
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:call-template name="get-link-for-member">
-							<xsl:with-param name="link-text" select="@name"/>
-							<xsl:with-param name="member" select="."/>
+							<xsl:with-param name="link-text" select="@name" />
+							<xsl:with-param name="member" select="." />
 						</xsl:call-template>
 					</xsl:otherwise>
 				</xsl:choose>
-				
 				<xsl:text> (inherited from </xsl:text>
 				<b>
 					<xsl:call-template name="strip-namespace">
@@ -417,17 +413,16 @@
 					</xsl:call-template>
 				</b>
 				<xsl:text>)</xsl:text>
-				<xsl:call-template name="member-list-platform"/>
+				<xsl:call-template name="member-list-platform" />
 			</td>
 			<td width="50%">
-				<xsl:call-template name="obsolete-inline"/>
+				<xsl:call-template name="obsolete-inline" />
 				<xsl:call-template name="summary-with-no-paragraph" />
 			</td>
 		</tr>
 	</xsl:template>
 	<!-- -->
 	<xsl:template match="method[@declaringType]">
-	
 		<xsl:if test="not(NUtil:HasSimilarOverloads(concat(@name,':',@declaringType,':',@access,':',(@contract='Static'))))">
 			<xsl:text>&#10;</xsl:text>
 			<tr VALIGN="top">
@@ -437,22 +432,20 @@
 						<xsl:with-param name="contract" select="@contract" />
 						<xsl:with-param name="local-name" select="local-name()" />
 					</xsl:call-template>
-					
 					<xsl:choose>
 						<xsl:when test="@interface">
 							<xsl:call-template name="get-link-for-explicit-interface-member">
-								<xsl:with-param name="link-text" select="@name"/>
-								<xsl:with-param name="member" select="."/>
+								<xsl:with-param name="link-text" select="@name" />
+								<xsl:with-param name="member" select="." />
 							</xsl:call-template>
 						</xsl:when>
 						<xsl:otherwise>
 							<xsl:call-template name="get-link-for-member">
-								<xsl:with-param name="link-text" select="@name"/>
-								<xsl:with-param name="member" select="."/>
+								<xsl:with-param name="link-text" select="@name" />
+								<xsl:with-param name="member" select="." />
 							</xsl:call-template>
 						</xsl:otherwise>
 					</xsl:choose>
-
 					<xsl:text> (inherited from </xsl:text>
 					<b>
 						<xsl:call-template name="strip-namespace">
@@ -460,7 +453,7 @@
 						</xsl:call-template>
 					</b>
 					<xsl:text>)</xsl:text>
-					<xsl:call-template name="member-list-platform"/>
+					<xsl:call-template name="member-list-platform" />
 				</td>
 				<td width="50%">
 					<xsl:if test="@contract='Override'">
@@ -470,14 +463,14 @@
 						<xsl:text>Overloaded. </xsl:text>
 					</xsl:if>
 					<xsl:if test="(not(@overload) and @contract!='Override')">
-						<xsl:call-template name="obsolete-inline"/>
+						<xsl:call-template name="obsolete-inline" />
 					</xsl:if>
 					<xsl:call-template name="summary-with-no-paragraph" />
 				</td>
 			</tr>
 		</xsl:if>
 	</xsl:template>
-
+	<!-- -->
 	<xsl:template match="event[@declaringType]">
 		<xsl:text>&#10;</xsl:text>
 		<tr VALIGN="top">
@@ -487,12 +480,10 @@
 					<xsl:with-param name="contract" select="@contract" />
 					<xsl:with-param name="local-name" select="local-name()" />
 				</xsl:call-template>
-				
 				<xsl:call-template name="get-link-for-member">
-					<xsl:with-param name="link-text" select="@name"/>
-					<xsl:with-param name="member" select="."/>
-				</xsl:call-template>	
-				
+					<xsl:with-param name="link-text" select="@name" />
+					<xsl:with-param name="member" select="." />
+				</xsl:call-template>
 				<xsl:text> (inherited from </xsl:text>
 				<b>
 					<xsl:call-template name="strip-namespace">
@@ -500,42 +491,45 @@
 					</xsl:call-template>
 				</b>
 				<xsl:text>)</xsl:text>
-				<xsl:call-template name="member-list-platform"/>
+				<xsl:call-template name="member-list-platform" />
 			</td>
 			<td width="50%">
-				<xsl:call-template name="obsolete-inline"/>
+				<xsl:call-template name="obsolete-inline" />
 				<xsl:call-template name="summary-with-no-paragraph" />
 			</td>
 		</tr>
 	</xsl:template>
 	<!-- -->
-	<!-- -->
 	<xsl:template match="constructor">
 		<xsl:variable name="access" select="@access" />
+		<xsl:variable name="contract" select="@contract" />
 		<xsl:if test="not(preceding-sibling::constructor[@access=$access])">
-			<xsl:variable name="contract" select="@contract" />
+			<xsl:text>&#10;</xsl:text>
 			<tr VALIGN="top">
 				<xsl:choose>
 					<xsl:when test="(count(../constructor[@contract!='Static']) &gt; 1) and ($contract!='Static')">
 						<td width="50%">
-						  <xsl:choose>
-							<xsl:when test="@access='Public'">
-								<img src="pubmethod.gif" />
-							</xsl:when>
-							<xsl:when test="@access='Family'">
-								<img src="protmethod.gif" />
-							</xsl:when>
-							<xsl:when test="@access='Private'">
-								<img src="privmethod.gif" />
-							</xsl:when>
-							<xsl:when test="@access='Assembly' or @access='FamilyOrAssembly'">
-								<img src="intmethod.gif" />
-							</xsl:when>
-						  </xsl:choose>
-							<a href="{NUtil:GetOverviewHRef( string( ../@id ), 'Constructor' )}">
+							<xsl:choose>
+								<xsl:when test="@access='Public'">
+									<img src="pubmethod.gif" />
+								</xsl:when>
+								<xsl:when test="@access='Family'">
+									<img src="protmethod.gif" />
+								</xsl:when>
+								<xsl:when test="@access='Private'">
+									<img src="privmethod.gif" />
+								</xsl:when>
+								<xsl:when test="@access='Assembly' or @access='FamilyOrAssembly'">
+									<img src="intmethod.gif" />
+								</xsl:when>
+							</xsl:choose>
+							<a>
+								<xsl:attribute name="href">
+									<xsl:value-of select="NUtil:GetOverviewHRef( string( ../@id ), 'Constructor' )" />
+								</xsl:attribute>
 								<xsl:value-of select="../@name" />
 							</a>
-							<xsl:call-template name="member-list-platform"/>							
+							<xsl:call-template name="member-list-platform" />
 						</td>
 						<td width="50%">
 							<xsl:text>Overloaded. </xsl:text>
@@ -555,38 +549,41 @@
 					</xsl:when>
 					<xsl:otherwise>
 						<td width="50%">
-						  <xsl:choose>
-							<xsl:when test="@access='Public'">
-								<img src="pubmethod.gif" />
-							</xsl:when>
-							<xsl:when test="@access='Family'">
-								<img src="protmethod.gif" />
-							</xsl:when>
-							<xsl:when test="@access='Private'">
-								<img src="privmethod.gif" />
-							</xsl:when>
-							<xsl:when test="@access='Assembly' or @access='FamilyOrAssembly'">
-								<img src="intmethod.gif" />
-							</xsl:when>
-						  </xsl:choose>
-						  <xsl:if test="$contract='Static'">
-							 <img src="static.gif" />
-						  </xsl:if>
-							<a href="{NUtil:GetConstructorHRef( . )}">
+							<xsl:choose>
+								<xsl:when test="@access='Public'">
+									<img src="pubmethod.gif" />
+								</xsl:when>
+								<xsl:when test="@access='Family'">
+									<img src="protmethod.gif" />
+								</xsl:when>
+								<xsl:when test="@access='Private'">
+									<img src="privmethod.gif" />
+								</xsl:when>
+								<xsl:when test="@access='Assembly' or @access='FamilyOrAssembly'">
+									<img src="intmethod.gif" />
+								</xsl:when>
+							</xsl:choose>
+							<xsl:if test="$contract='Static'">
+								<img src="static.gif" />
+							</xsl:if>
+							<a>
+								<xsl:attribute name="href">
+									<xsl:value-of select="NUtil:GetConstructorHRef( . )" />
+								</xsl:attribute>
 								<xsl:value-of select="../@name" />
 								<xsl:text> Constructor</xsl:text>
 							</a>
-							<xsl:call-template name="member-list-platform"/>							
+							<xsl:call-template name="member-list-platform" />
 						</td>
 						<td width="50%">
-							<xsl:call-template name="obsolete-inline"/>
+							<xsl:call-template name="obsolete-inline" />
 							<xsl:apply-templates select="documentation/summary/node()" mode="slashdoc" />
 						</td>
 					</xsl:otherwise>
 				</xsl:choose>
 			</tr>
 		</xsl:if>
-	</xsl:template>	
+	</xsl:template>
 	<!-- -->
 	<xsl:template match="operator[@declaringType]">
 		<xsl:text>&#10;</xsl:text>
@@ -600,42 +597,40 @@
 				<xsl:variable name="link-text">
 					<xsl:call-template name="operator-name">
 						<xsl:with-param name="name" select="@name" />
-						<xsl:with-param name="from" select="parameter/@type"/>
+						<xsl:with-param name="from" select="parameter/@type" />
 						<xsl:with-param name="to" select="@returnType" />
 					</xsl:call-template>
 				</xsl:variable>
 				<xsl:choose>
 					<xsl:when test="@interface">
 						<xsl:call-template name="get-link-for-explicit-interface-member">
-							<xsl:with-param name="link-text" select="$link-text"/>
-							<xsl:with-param name="member" select="."/>
+							<xsl:with-param name="link-text" select="$link-text" />
+							<xsl:with-param name="member" select="." />
 						</xsl:call-template>
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:call-template name="get-link-for-member">
-							<xsl:with-param name="link-text" select="$link-text"/>
-							<xsl:with-param name="member" select="."/>
+							<xsl:with-param name="link-text" select="$link-text" />
+							<xsl:with-param name="member" select="." />
 						</xsl:call-template>
 					</xsl:otherwise>
 				</xsl:choose>
-				
 				<xsl:text> (inherited from </xsl:text>
 				<b>
 					<xsl:call-template name="strip-namespace">
 						<xsl:with-param name="name" select="@declaringType" />
 					</xsl:call-template>
 				</b>
-				<xsl:text>)</xsl:text>				
-				<xsl:call-template name="member-list-platform"/>
+				<xsl:text>)</xsl:text>
+				<xsl:call-template name="member-list-platform" />
 			</td>
 			<td width="50%">
-				<xsl:call-template name="obsolete-inline"/>
+				<xsl:call-template name="obsolete-inline" />
 				<xsl:call-template name="summary-with-no-paragraph" />
 			</td>
 		</tr>
 	</xsl:template>
 	<!-- -->
-	<!--<xsl:template match="field[not(@declaringType)]|property[not(@declaringType)]|event[not(@declaringType)]|method[not(@declaringType)]|operator">-->
 	<xsl:template match="field | property | event | method | operator">
 		<xsl:variable name="member" select="local-name()" />
 		<xsl:variable name="name" select="@name" />
@@ -652,12 +647,15 @@
 								<xsl:with-param name="contract" select="@contract" />
 								<xsl:with-param name="local-name" select="local-name()" />
 							</xsl:call-template>
-							<a href="{NUtil:GetMemberOverloadsHRef( string( ../@id ), string( @name ) )}">
+							<a>
+								<xsl:attribute name="href">
+									<xsl:value-of select="NUtil:GetMemberOverloadsHRef( string( ../@id ), string( @name ) )" />
+								</xsl:attribute>
 								<xsl:choose>
 									<xsl:when test="local-name()='operator'">
 										<xsl:call-template name="operator-name">
 											<xsl:with-param name="name" select="@name" />
-											<xsl:with-param name="from" select="parameter/@type"/>
+											<xsl:with-param name="from" select="parameter/@type" />
 											<xsl:with-param name="to" select="@returnType" />
 										</xsl:call-template>
 									</xsl:when>
@@ -666,7 +664,7 @@
 									</xsl:otherwise>
 								</xsl:choose>
 							</a>
-							<xsl:call-template name="member-list-platform"/>
+							<xsl:call-template name="member-list-platform" />
 						</td>
 						<td width="50%">
 							<xsl:text>Overloaded. </xsl:text>
@@ -680,12 +678,15 @@
 								<xsl:with-param name="contract" select="@contract" />
 								<xsl:with-param name="local-name" select="local-name()" />
 							</xsl:call-template>
-							<a href="{NUtil:GetLocalCRef( ./@id )}">
+							<a>
+								<xsl:attribute name="href">
+									<xsl:value-of select="NUtil:GetLocalCRef( ./@id )" />
+								</xsl:attribute>
 								<xsl:choose>
 									<xsl:when test="local-name()='operator'">
 										<xsl:call-template name="operator-name">
 											<xsl:with-param name="name" select="@name" />
-											<xsl:with-param name="from" select="parameter/@type"/>
+											<xsl:with-param name="from" select="parameter/@type" />
 											<xsl:with-param name="to" select="@returnType" />
 										</xsl:call-template>
 									</xsl:when>
@@ -694,7 +695,7 @@
 									</xsl:otherwise>
 								</xsl:choose>
 							</a>
-							<xsl:call-template name="member-list-platform"/>							
+							<xsl:call-template name="member-list-platform" />
 						</td>
 						<td width="50%">
 							<xsl:if test="@contract='Override'">
@@ -704,7 +705,7 @@
 								<xsl:text>Overloaded. </xsl:text>
 							</xsl:if>
 							<xsl:if test="((not(@contract) or @contract!='Override') and (not(@overload) or @name='op_Implicit' or @name='op_Explicit'))">
-								<xsl:call-template name="obsolete-inline"/>
+								<xsl:call-template name="obsolete-inline" />
 							</xsl:if>
 							<xsl:call-template name="summary-with-no-paragraph" />
 						</td>
@@ -718,47 +719,50 @@
 		<xsl:choose>
 			<!-- first see if the member has a platform specified -->
 			<xsl:when test="documentation/platform/frameworks">
-				<xsl:apply-templates select="documentation/platform/frameworks" mode="member-list"/>
+				<xsl:apply-templates select="documentation/platform/frameworks" mode="member-list" />
 			</xsl:when>
 			<!-- then look in the containing type -->
 			<xsl:when test="parent::node()/documentation/platform/frameworks">
-				<xsl:apply-templates select="parent::node()/documentation/platform/frameworks" mode="member-list"/>			
-			</xsl:when>			
+				<xsl:apply-templates select="parent::node()/documentation/platform/frameworks" mode="member-list" />
+			</xsl:when>
 			<!-- otherwise use the project defaults -->
 			<xsl:otherwise>
-				<xsl:apply-templates select="/ndoc/platform/frameworks" mode="member-list"/>
-			</xsl:otherwise>		
+				<xsl:apply-templates select="/ndoc/platform/frameworks" mode="member-list" />
+			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
-	
+	<!-- -->
 	<xsl:template match="frameworks" mode="member-list">
 		<xsl:if test="count( node()[text()='true'] | custom ) != 0">
 			<p>
 				<xsl:text>Supported by </xsl:text>
-				<xsl:apply-templates select="compact | mono | custom" mode="member-list"/>
+				<xsl:apply-templates select="compact | mono | custom" mode="member-list" />
 				<xsl:text>.</xsl:text>
 			</p>
-		</xsl:if>		
+		</xsl:if>
 	</xsl:template>
-	
-	<xsl:template match="mono" mode="member-list"/>
+	<!-- -->
+	<xsl:template match="mono" mode="member-list" />
+	<!-- -->
 	<xsl:template match="mono[text() = 'true']" mode="member-list">
 		<xsl:if test="position()=last() and count( preceding-sibling::node()[text() = 'true'] ) != 0">and </xsl:if>
 		<xsl:text>the MONO Open Source Framework</xsl:text>
 		<xsl:if test="position()!=last()">, </xsl:if>
-	</xsl:template>		
-	
-	<xsl:template match="compact" mode="member-list"/>
+	</xsl:template>
+	<!-- -->
+	<xsl:template match="compact" mode="member-list" />
+	<!-- -->
 	<xsl:template match="compact[text() = 'true']" mode="member-list">
 		<xsl:if test="position()=last() and count( preceding-sibling::node()[text() = 'true'] ) != 0">and </xsl:if>
 		<xsl:text>the .NET Compact Framework</xsl:text>
 		<xsl:if test="position()!=last()">, </xsl:if>
-	</xsl:template>		
-	
+	</xsl:template>
+	<!-- -->
 	<xsl:template match="frameworks/custom" mode="member-list">
 		<xsl:if test="position()=last() and count( preceding-sibling::node()[text() = 'true'] ) != 0">and </xsl:if>
 		<xsl:text>the </xsl:text>
-		<xsl:value-of select="."/>
+		<xsl:value-of select="." />
 		<xsl:if test="position()!=last()">, </xsl:if>
-	</xsl:template>		
+	</xsl:template>
+	<!-- -->
 </xsl:stylesheet>

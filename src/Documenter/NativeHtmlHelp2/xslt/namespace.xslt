@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
 	xmlns:MSHelp="http://msdn.microsoft.com/mshelp"
-	xmlns:NUtil="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities"
-	exclude-result-prefixes="NUtil" >
-
+	xmlns:NUtil="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities" 
+	exclude-result-prefixes="NUtil">
 	<!-- -->
-	<xsl:output method="xml" indent="yes" encoding="utf-8" omit-xml-declaration="yes"/>
+	<xsl:output method="xml" indent="yes" encoding="utf-8" omit-xml-declaration="yes" />
 	<!-- -->
 	<xsl:include href="common.xslt" />
 	<!-- -->
@@ -19,7 +18,7 @@
 		<html dir="LTR">
 			<xsl:call-template name="html-head">
 				<xsl:with-param name="title" select="$namespace" />
-				<xsl:with-param name="page-type" select="'namespace'"/>				
+				<xsl:with-param name="page-type" select="'namespace'" />
 			</xsl:call-template>
 			<body topmargin="0" id="bodyID" class="dtBODY">
 				<object id="obj_cook" classid="clsid:59CC0C20-679B-11D2-88BD-0800361A1803" style="display:none;"></object>
@@ -33,11 +32,14 @@
 					<div id="allHistory" class="saveHistory" onsave="saveAll()" onload="loadAll()"></div>
 					<!-- the namespace template just gets the summary. -->
 					<xsl:apply-templates select="(assembly/module/namespace[(@name=$namespace) and documentation])[1]" />
-					  <p>
-						  <a href="{NUtil:GetNamespaceHierarchyHRef( string( $namespace ) )}">
-							  <xsl:text>Namespace hierarchy</xsl:text>
-						  </a>
-					  </p>
+					<p>
+						<a>
+							<xsl:attribute name="href">
+								<xsl:value-of select="NUtil:GetNamespaceHierarchyHRef( string( $namespace ) )" />
+							</xsl:attribute>
+							<xsl:text>Namespace hierarchy</xsl:text>
+						</a>
+					</p>
 					<xsl:if test="assembly/module/namespace[@name=$namespace]/class">
 						<h3 class="dtH3">Classes</h3>
 						<div class="tablediv">
@@ -126,12 +128,15 @@
 	<xsl:template match="enumeration | delegate | structure | interface | class">
 		<tr valign="top">
 			<td width="50%">
-				<a href="{NUtil:GetLocalCRef( string( @id ) ) }">
+				<a>
+					<xsl:attribute name="href">
+						<xsl:value-of select="NUtil:GetLocalCRef( string( @id ) )" />
+					</xsl:attribute>
 					<xsl:value-of select="@name" />
 				</a>
 			</td>
 			<td width="50%">
-				<xsl:call-template name="obsolete-inline"/>
+				<xsl:call-template name="obsolete-inline" />
 				<xsl:apply-templates select="(documentation/summary)[1]/node()" mode="slashdoc" />
 				<xsl:if test="not((documentation/summary)[1]/node())">&#160;</xsl:if>
 			</td>

@@ -1,25 +1,26 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
 	xmlns:NUtil="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities"
-	xmlns:NHtmlProvider="urn:NDocExternalHtml"
-	xmlns:MSHelp="http://msdn.microsoft.com/mshelp"
-	exclude-result-prefixes="NUtil NHtmlProvider" >
+	xmlns:NHtmlProvider="urn:NDocExternalHtml" 
+	xmlns:MSHelp="http://msdn.microsoft.com/mshelp" 
+	exclude-result-prefixes="NUtil NHtmlProvider">
+	<!-- -->
 	<xsl:include href="tags.xslt" />
 	<xsl:include href="indices.xslt" />
 	<xsl:include href="XLinks.xslt" />
 	<!-- -->
 	<xsl:param name="ndoc-title" />
-	<xsl:param name="ndoc-net-framework-version"/>
-	<xsl:param name="ndoc-version"/>
+	<xsl:param name="ndoc-net-framework-version" />
+	<xsl:param name="ndoc-version" />
 	<!-- -->
 	<!--
 	 | no-op extensibility templates
 	 +-->
-	<xsl:template match="node()|@*|text()" mode="preliminary-section"/>
+	<xsl:template match="node()|@*|text()" mode="preliminary-section" />
 	<xsl:template match="node()|@*|text()" mode="summary-section" />
 	<xsl:template match="node()|@*|text()" mode="thread-safety-section" />
-	<xsl:template match="node()|@*|text()" mode="syntax-section"/>
-	<xsl:template match="node()|@*|text()" mode="value-section"/>
+	<xsl:template match="node()|@*|text()" mode="syntax-section" />
+	<xsl:template match="node()|@*|text()" mode="value-section" />
 	<xsl:template match="node()|@*|text()" mode="parameter-section" />
 	<xsl:template match="node()|@*|text()" mode="returnvalue-section" />
 	<xsl:template match="node()|@*|text()" mode="implements-section" />
@@ -30,30 +31,28 @@
 	<xsl:template match="node()|@*|text()" mode="example-section" />
 	<xsl:template match="node()|@*|text()" mode="member-requirements-section" />
 	<xsl:template match="node()|@*|text()" mode="type-requirements-section" />
-	<xsl:template match="node()|@*|text()" mode="seealso-section"/>
-	<xsl:template match="node()|@*|text()" mode="enumeration-members-section"/>
-	<xsl:template match="node()|@*|text()" mode="footer-row"/>
-	<xsl:template match="node()|@*|text()" mode="title-row"/>
-	<xsl:template match="node()|@*|text()" mode="overloads-remarks-section"/>
-	<xsl:template match="node()|@*|text()" mode="overloads-example-section"/>
-	<xsl:template match="node()|@*|text()" mode="overloads-summary-section"/>
-	<xsl:template match="node()|@*|text()" mode="header-section"/>
-	
+	<xsl:template match="node()|@*|text()" mode="seealso-section" />
+	<xsl:template match="node()|@*|text()" mode="enumeration-members-section" />
+	<xsl:template match="node()|@*|text()" mode="footer-row" />
+	<xsl:template match="node()|@*|text()" mode="title-row" />
+	<xsl:template match="node()|@*|text()" mode="overloads-remarks-section" />
+	<xsl:template match="node()|@*|text()" mode="overloads-example-section" />
+	<xsl:template match="node()|@*|text()" mode="overloads-summary-section" />
+	<xsl:template match="node()|@*|text()" mode="header-section" />
 	<!-- -->
-	
 	<xsl:template name="parameter-topic">
 		<dl>
-		<xsl:for-each select="parameter">
-			<xsl:variable name="name" select="@name" />
-			<dt>
-				<i>
-					<xsl:value-of select="@name" />
-				</i>
-			</dt>
-			<dd>
-				<xsl:apply-templates select="parent::node()/documentation/param[@name=$name]/node()" mode="slashdoc" />
-			</dd>
-		</xsl:for-each>
+			<xsl:for-each select="parameter">
+				<xsl:variable name="name" select="@name" />
+				<dt>
+					<i>
+						<xsl:value-of select="@name" />
+					</i>
+				</dt>
+				<dd>
+					<xsl:apply-templates select="parent::node()/documentation/param[@name=$name]/node()" mode="slashdoc" />
+				</dd>
+			</xsl:for-each>
 		</dl>
 	</xsl:template>
 	<!-- -->
@@ -140,19 +139,28 @@
 		<h4 class="dtH4">See Also</h4>
 		<p>
 			<xsl:if test="$page!='type' and $page!='enumeration' and $page!='delegate'">
-				<a href="{NUtil:GetLocalCRef( string( $typeID ) ) }">
+				<a>
+					<xsl:attribute name="href">
+						<xsl:value-of select="NUtil:GetLocalCRef( string( $typeID ) )" />
+					</xsl:attribute>
 					<xsl:value-of select="concat($typeName, ' ', $typeMixed)" />
 				</a>
 				<xsl:text> | </xsl:text>
 			</xsl:if>
 			<xsl:if test="(constructor|field|property|method|operator|event) and $page!='members' and $page!='enumeration' and $page!='delegate' and $page!='methods' and $page!='properties' and $page!='fields' and $page!='events'">
-				<a href="{NUtil:GetOverviewHRef( string( $typeID ), 'Members' )}">
+				<a>
+					<xsl:attribute name="href">
+						<xsl:value-of select="NUtil:GetOverviewHRef(string( $typeID ), 'Members')" />
+					</xsl:attribute>
 					<xsl:value-of select="$typeName" />
 					<xsl:text> Members</xsl:text>
 				</a>
 				<xsl:text> | </xsl:text>
 			</xsl:if>
-			<a href="{NUtil:GetNamespaceHRef( string( $namespaceName ) )}">
+			<a>
+				<xsl:attribute name="href">
+					<xsl:value-of select="NUtil:GetNamespaceHRef( string( $namespaceName ) )" />
+				</xsl:attribute>
 				<xsl:value-of select="$namespaceName" />
 				<xsl:text> Namespace</xsl:text>
 			</a>
@@ -161,36 +169,49 @@
 				<xsl:if test="count(parent::node()/*[@name=$memberName]) &gt; 1">
 					<xsl:choose>
 						<xsl:when test="local-name()='constructor'">
- 							<xsl:text> | </xsl:text>
-							<a href="{NUtil:GetOverviewHRef( string( ../@id ), 'Constructor' )}">
+							<xsl:text> | </xsl:text>
+							<a>
+								<xsl:attribute name="href">
+									<xsl:value-of select="NUtil:GetOverviewHRef( string( ../@id ), 'Constructor' )" />
+								</xsl:attribute>
 								<xsl:value-of select="$typeName" />
 								<xsl:text> Constructor Overload List</xsl:text>
 							</a>
 						</xsl:when>
 						<xsl:when test="local-name()='operator'">
 							<xsl:if test="@name!='op_Implicit' and @name!='op_Explicit'">
-   							<xsl:text> | </xsl:text>
-							<a href="{NUtil:GetMemberOverloadsHRef( string( ../@id ), string( @name ) )}">
+								<xsl:text> | </xsl:text>
+								<a>
+									<xsl:attribute name="href">
+										<xsl:value-of select="NUtil:GetMemberOverloadsHRef( string( ../@id ), string( @name ) )" />
+									</xsl:attribute>
 									<xsl:value-of select="$typeName" />
-									<xsl:text> </xsl:text>
+									<xsl:text></xsl:text>
 									<xsl:call-template name="operator-name">
-										<xsl:with-param name="name"><xsl:value-of select="@name" /></xsl:with-param>
+										<xsl:with-param name="name">
+											<xsl:value-of select="@name" />
+										</xsl:with-param>
 									</xsl:call-template>
 									<xsl:text> Overload List</xsl:text>
 								</a>
-						  </xsl:if>
+							</xsl:if>
 						</xsl:when>
-
 						<xsl:when test="local-name()='property'">
-	 						<xsl:text> | </xsl:text>
-							<a href="{NUtil:GetMemberOverloadsHRef( string( ../@id ), string( @name ) )}">
+							<xsl:text> | </xsl:text>
+							<a>
+								<xsl:attribute name="href">
+									<xsl:value-of select="NUtil:GetMemberOverloadsHRef( string( ../@id ), string( @name ) )" />
+								</xsl:attribute>
 								<xsl:value-of select="concat($typeName, '.', @name)" />
 								<xsl:text> Overload List</xsl:text>
 							</a>
 						</xsl:when>
 						<xsl:when test="local-name()='method'">
-	 						<xsl:text> | </xsl:text>
-							<a href="{NUtil:GetMemberOverloadsHRef( string( ../@id ), string( @name ) )}">
+							<xsl:text> | </xsl:text>
+							<a>
+								<xsl:attribute name="href">
+									<xsl:value-of select="NUtil:GetMemberOverloadsHRef( string( ../@id ), string( @name ) )" />
+								</xsl:attribute>
 								<xsl:value-of select="concat($typeName, '.', @name)" />
 								<xsl:text> Overload List</xsl:text>
 							</a>
@@ -204,18 +225,21 @@
 					<xsl:choose>
 						<xsl:when test="@cref">
 							<xsl:call-template name="get-a-href">
-								<xsl:with-param name="cref" select="@cref"/>
+								<xsl:with-param name="cref" select="@cref" />
 							</xsl:call-template>
 						</xsl:when>
 						<xsl:when test="@href">
-							<a href="{@href}">
+							<a>
+								<xsl:attribute name="href">
+									<xsl:value-of select="@href" />
+								</xsl:attribute>
 								<xsl:value-of select="." />
 							</a>
 						</xsl:when>
 					</xsl:choose>
 				</xsl:for-each>
 			</xsl:if>
-			<xsl:apply-templates select="documentation/node()" mode="seealso-section"/>
+			<xsl:apply-templates select="documentation/node()" mode="seealso-section" />
 		</p>
 	</xsl:template>
 	<!-- -->
@@ -251,33 +275,44 @@
 	<!-- -->
 	<xsl:template name="obsolete-section">
 		<xsl:if test="./obsolete">
-			<P><FONT color="red"><B>NOTE: This <xsl:value-of select="name()"/> is now obsolete.</B></FONT></P>
+			<P>
+				<FONT color="red">
+					<B>NOTE: This <xsl:value-of select="name()" /> is now obsolete.</B>
+				</FONT>
+			</P>
 			<xsl:if test="./obsolete!=''">
-				<P><B><xsl:value-of select="obsolete"/></B></P>
+				<P>
+					<B>
+						<xsl:value-of select="obsolete" />
+					</B>
+				</P>
 			</xsl:if>
 			<xsl:if test="./documentation/obsolete!=''">
 				<xsl:call-template name="output-paragraph">
 					<xsl:with-param name="nodes" select="(documentation/obsolete)[1]/node()" />
 				</xsl:call-template>
 			</xsl:if>
-			<xsl:apply-templates select="documentation/node()" mode="obsolete-section"/>
-			<HR/>
+			<xsl:apply-templates select="documentation/node()" mode="obsolete-section" />
+			<HR />
 		</xsl:if>
 	</xsl:template>
+	<!-- -->
 	<xsl:template name="obsolete-inline">
 		<xsl:param name="member" select="." />
 		<xsl:if test="$member/obsolete">
-			<FONT color="red"><B>Obsolete. </B></FONT>
+			<FONT color="red">
+				<B>Obsolete. </B>
+			</FONT>
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="summary-section">
 		<div id="allHistory" class="saveHistory" onsave="saveAll()" onload="loadAll()"></div>
-		<xsl:call-template name="obsolete-section"/>
+		<xsl:call-template name="obsolete-section" />
 		<xsl:call-template name="output-paragraph">
 			<xsl:with-param name="nodes" select="(documentation/summary)[1]/node()" />
 		</xsl:call-template>
-		<xsl:apply-templates select="documentation/node()" mode="summary-section"/>
+		<xsl:apply-templates select="documentation/node()" mode="summary-section" />
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="summary-with-no-paragraph">
@@ -304,7 +339,7 @@
 				<xsl:call-template name="output-paragraph">
 					<xsl:with-param name="nodes" select="(documentation/summary)[1]/node()" />
 				</xsl:call-template>
-				<xsl:apply-templates select="documentation/node()" mode="summary-section"/>
+				<xsl:apply-templates select="documentation/node()" mode="summary-section" />
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
@@ -314,10 +349,12 @@
 		<xsl:variable name="memberName" select="@name" />
 		<xsl:choose>
 			<xsl:when test="$overloads/../*[@name=$memberName]/documentation/overloads/summary">
-				<xsl:apply-templates select="($overloads/../*[@name=$memberName]/documentation/overloads/summary)[1]/node()" mode="no-para" />
+				<xsl:apply-templates select="($overloads/../*[@name=$memberName]/documentation/overloads/summary)[1]/node()"
+					mode="no-para" />
 			</xsl:when>
 			<xsl:when test="$overloads/../*[@name=$memberName]/documentation/overloads">
-				<xsl:apply-templates select="($overloads/../*[@name=$memberName]/documentation/overloads)[1]/node()" mode="no-para" />
+				<xsl:apply-templates select="($overloads/../*[@name=$memberName]/documentation/overloads)[1]/node()"
+					mode="no-para" />
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:call-template name="summary-with-no-paragraph">
@@ -368,7 +405,7 @@
 				<xsl:call-template name="parameter-topic" />
 			</xsl:when>
 		</xsl:choose>
-		<xsl:apply-templates select="documentation/node()" mode="parameter-section"/>			
+		<xsl:apply-templates select="documentation/node()" mode="parameter-section" />
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="returnvalue-section">
@@ -377,7 +414,7 @@
 			<p>
 				<xsl:apply-templates select="documentation/returns/node()" mode="slashdoc" />
 			</p>
-			<xsl:apply-templates select="documentation/node()" mode="returnvalue-section"/>			
+			<xsl:apply-templates select="documentation/node()" mode="returnvalue-section" />
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
@@ -388,10 +425,10 @@
 			<xsl:for-each select="implements">
 				<xsl:call-template name="get-link-for-implements-member">
 					<xsl:with-param name="id" select="@id" />
-					<xsl:with-param name="link-text" select="concat( @interface, '.', @name )"/>	
+					<xsl:with-param name="link-text" select="concat( @interface, '.', @name )" />
 				</xsl:call-template>
 			</xsl:for-each>
-			<xsl:apply-templates select="documentation/node()" mode="implements-section"/>			
+			<xsl:apply-templates select="documentation/node()" mode="implements-section" />
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
@@ -409,7 +446,7 @@
 					<xsl:apply-templates select="documentation/remarks/node()" mode="slashdoc" />
 				</xsl:otherwise>
 			</xsl:choose>
-			<xsl:apply-templates select="documentation/node()" mode="remarks-section"/>			
+			<xsl:apply-templates select="documentation/node()" mode="remarks-section" />
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
@@ -419,7 +456,7 @@
 			<p>
 				<xsl:apply-templates select="documentation/value/node()" mode="slashdoc" />
 			</p>
-			<xsl:apply-templates select="documentation/node()" mode="value-section"/>			
+			<xsl:apply-templates select="documentation/node()" mode="value-section" />
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
@@ -448,7 +485,7 @@
 					</xsl:for-each>
 				</table>
 			</div>
-			<xsl:apply-templates select="documentation/node()" mode="events-section"/>			
+			<xsl:apply-templates select="documentation/node()" mode="events-section" />
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
@@ -467,7 +504,7 @@
 							<td width="50%">
 								<xsl:call-template name="get-a-href">
 									<xsl:with-param name="cref" select="@cref" />
-									<xsl:with-param name="ignore-text" select="true()" />									
+									<xsl:with-param name="ignore-text" select="true()" />
 								</xsl:call-template>
 							</td>
 							<td width="50%">
@@ -478,7 +515,7 @@
 					</xsl:for-each>
 				</table>
 			</div>
-			<xsl:apply-templates select="documentation/node()" mode="exceptions-section"/>			
+			<xsl:apply-templates select="documentation/node()" mode="exceptions-section" />
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
@@ -488,21 +525,21 @@
 			<p>
 				<xsl:apply-templates select="documentation/example/node()" mode="slashdoc" />
 			</p>
-			<xsl:apply-templates select="documentation/node()" mode="example-section"/>			
+			<xsl:apply-templates select="documentation/node()" mode="example-section" />
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="thread-safety-section">
 		<xsl:choose>
 			<xsl:when test="documentation/threadsafety">
-				<xsl:apply-templates select="documentation/threadsafety"/>
+				<xsl:apply-templates select="documentation/threadsafety" />
 			</xsl:when>
-			<xsl:otherwise><!-- document the project default theadsafety tag -->
-				<xsl:apply-templates select="/ndoc/threadsafety"/>
+			<xsl:otherwise> <!-- document the project default theadsafety tag -->
+				<xsl:apply-templates select="/ndoc/threadsafety" />
 			</xsl:otherwise>
 		</xsl:choose>
-	</xsl:template>	
-	
+	</xsl:template>
+	<!-- -->
 	<xsl:template match="threadsafety">
 		<H4 class="dtH4">Thread Safety</H4>
 		<xsl:choose>
@@ -513,19 +550,18 @@
 				<P>This type is <b>not</b> safe for multithreaded operations.</P>
 			</xsl:when>
 			<xsl:when test="@static='true' and @instance='false'">
-				<P>Public static (Shared in Visual Basic) members of this type are 
+				<P>Public static (<b>Shared</b> in Visual Basic) members of this type are 
 				safe for multithreaded operations. Instance members are <b>not</b> guaranteed to be 
 				thread-safe.</P>
 			</xsl:when>
 			<xsl:when test="@static='false' and @instance='true'">
-				<P>Public static (Shared in Visual Basic) members of this type are <b>not</b> guaranteed 
+				<P>Public static (<b>Shared</b> in Visual Basic) members of this type are <b>not</b> guaranteed 
 				to be safe for multithreaded operations. Instance members are thread-safe.</P>
 			</xsl:when>
-		</xsl:choose>					
+		</xsl:choose>
 		<xsl:apply-templates select="node()" mode="slashdoc" />
-		<xsl:apply-templates select="." mode="thread-safety-section"/>				
+		<xsl:apply-templates select="." mode="thread-safety-section" />
 	</xsl:template>
-	
 	<!-- -->
 	<xsl:template name="enumeration-members-section">
 		<xsl:if test="field">
@@ -565,7 +601,9 @@
 										<B>Obsolete.</B>&#160;
 									</FONT>
 									<xsl:if test="./obsolete!=''">
-										<B><xsl:value-of select="obsolete" /></B>
+										<B>
+											<xsl:value-of select="obsolete" />
+										</B>
 										<br />
 									</xsl:if>
 								</xsl:if>
@@ -573,15 +611,15 @@
 								<xsl:if test="not(documentation/summary/node())">&#160;</xsl:if>
 							</td>
 							<xsl:if test="$asflags='true'">
-							<td>
-								<xsl:value-of select="@value" />
-							</td>
+								<td>
+									<xsl:value-of select="@value" />
+								</td>
 							</xsl:if>
 						</tr>
 					</xsl:for-each>
 				</table>
 			</div>
-			<xsl:apply-templates select="documentation/node()" mode="enumeration-members-section"/>						
+			<xsl:apply-templates select="documentation/node()" mode="enumeration-members-section" />
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
@@ -596,13 +634,12 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
-	<!-- get-a-href -->
+	<!-- -->
 	<xsl:template name="get-a-href">
 		<xsl:param name="cref" />
-		<xsl:param name="ignore-text"/>
-		
+		<xsl:param name="ignore-text" />
 		<xsl:variable name="filename">
-			<xsl:value-of select="NUtil:GetLocalCRef( $cref )"/>
+			<xsl:value-of select="NUtil:GetLocalCRef( $cref )" />
 		</xsl:variable>
 		<xsl:variable name="link-text">
 			<xsl:choose>
@@ -618,110 +655,111 @@
 			<xsl:when test="$filename=''">
 				<xsl:choose>
 					<xsl:when test="substring-before( $cref, ':' )='!'">
-						<FONT color="red"><b><xsl:value-of select="." /></b> 
-						(broken link "<xsl:value-of select="$cref"/>")</FONT>
+						<FONT color="red"><b>
+								<xsl:value-of select="." />
+							</b> 
+						(broken link "<xsl:value-of select="$cref" />")</FONT>
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:call-template name="get-xlink">
-							<xsl:with-param name="a-index" select="NUtil:GetAIndex( $cref )"/>
-							<xsl:with-param name="link-text" select="$link-text"/>	
-							<xsl:with-param name="ns-key" select="substring-after( $cref, ':' )"/>										
+							<xsl:with-param name="a-index" select="NUtil:GetAIndex( $cref )" />
+							<xsl:with-param name="link-text" select="$link-text" />
+							<xsl:with-param name="ns-key" select="substring-after( $cref, ':' )" />
 						</xsl:call-template>
-				</xsl:otherwise>	
+					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:when>
 			<xsl:otherwise>
 				<a>
-					<xsl:attribute name="href"><xsl:value-of select="$filename"/></xsl:attribute> 			
-					<xsl:value-of select="$link-text"/>
-				</a>				
+					<xsl:attribute name="href">
+						<xsl:value-of select="$filename" />
+					</xsl:attribute>
+					<xsl:value-of select="$link-text" />
+				</a>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
 	<!-- -->
-
 	<xsl:template name="html-head">
 		<xsl:param name="title" />
-		<xsl:param name="page-type"/>
-		<xsl:param name="overload-page"/>
+		<xsl:param name="page-type" />
+		<xsl:param name="overload-page" />
 		<head>
-			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 			<title>
 				<xsl:value-of select="$title" />
 			</title>
 			<xml>
 				<xsl:apply-templates select="." mode="MSHelpTitle">
-					<xsl:with-param name="title" select="$title"/>
-					<xsl:with-param name="page-type" select="$page-type"/>						
+					<xsl:with-param name="title" select="$title" />
+					<xsl:with-param name="page-type" select="$page-type" />
 				</xsl:apply-templates>
-				
 				<xsl:choose>
 					<xsl:when test="$page-type='hierarchy'">
-						<xsl:apply-templates select="ndoc" mode="AIndex-hierarchy"/>		
+						<xsl:apply-templates select="ndoc" mode="AIndex-hierarchy" />
 					</xsl:when>
-					
 					<xsl:when test="$page-type='TypeHierarchy'">
 						<xsl:apply-templates select="." mode="AIndex">
-							<xsl:with-param name="page-type" select="$page-type"/>
-							<xsl:with-param name="overload-page" select="$overload-page"/>				
+							<xsl:with-param name="page-type" select="$page-type" />
+							<xsl:with-param name="overload-page" select="$overload-page" />
 						</xsl:apply-templates>
 					</xsl:when>
-
 					<xsl:otherwise>
 						<xsl:apply-templates select="." mode="KIndex">
-							<xsl:with-param name="title" select="$title"/>
-							<xsl:with-param name="page-type" select="$page-type"/>		
-							<xsl:with-param name="overload-page" select="$overload-page"/>				
+							<xsl:with-param name="title" select="$title" />
+							<xsl:with-param name="page-type" select="$page-type" />
+							<xsl:with-param name="overload-page" select="$overload-page" />
 						</xsl:apply-templates>
-						
 						<xsl:apply-templates select="." mode="FIndex">
-							<xsl:with-param name="title" select="$title"/>
-							<xsl:with-param name="page-type" select="$page-type"/>
-							<xsl:with-param name="overload-page" select="$overload-page"/>
+							<xsl:with-param name="title" select="$title" />
+							<xsl:with-param name="page-type" select="$page-type" />
+							<xsl:with-param name="overload-page" select="$overload-page" />
 						</xsl:apply-templates>
-						
 						<xsl:apply-templates select="." mode="AIndex">
-							<xsl:with-param name="page-type" select="$page-type"/>
-							<xsl:with-param name="overload-page" select="$overload-page"/>				
+							<xsl:with-param name="page-type" select="$page-type" />
+							<xsl:with-param name="overload-page" select="$overload-page" />
 						</xsl:apply-templates>
 					</xsl:otherwise>
 				</xsl:choose>
-				
 				<!--MSHelp:Attr Name="DocSet" Value="NETFramework"/-->
 				<xsl:for-each select="/ndoc/docSet">
-					<MSHelp:Attr Name="DocSet" Value="{text()}"/>					
+					<MSHelp:Attr Name="DocSet">
+						<xsl:attribute name="Value">
+							<xsl:value-of select="text()" />
+						</xsl:attribute>
+					</MSHelp:Attr>
 				</xsl:for-each>
-				<MSHelp:Attr Name="TopicType" Value="kbSyntax"/>
-				<MSHelp:Attr Name="DevLang" Value="CSharp"/>
-				<MSHelp:Attr Name="DevLang" Value="VB"/>
-				<MSHelp:Attr Name="DevLang" Value="C++"/>
-				<MSHelp:Attr Name="DevLang" Value="JScript"/>
-				<MSHelp:Attr Name="DevLang" Value="VJ#"/>
-				<MSHelp:Attr Name="Technology" Value="ManagedCode"/>
-				<MSHelp:Attr Name="Locale" Value="kbEnglish"/>
+				<MSHelp:Attr Name="TopicType" Value="kbSyntax" />
+				<MSHelp:Attr Name="DevLang" Value="CSharp" />
+				<MSHelp:Attr Name="DevLang" Value="VB" />
+				<MSHelp:Attr Name="DevLang" Value="C++" />
+				<MSHelp:Attr Name="DevLang" Value="JScript" />
+				<MSHelp:Attr Name="DevLang" Value="VJ#" />
+				<MSHelp:Attr Name="Technology" Value="ManagedCode" />
+				<MSHelp:Attr Name="Locale" Value="kbEnglish" />
 				<!-- Microsoft reserves priority of 1 and 2 for framework types -->
-				<MSHelp:Attr Name="HelpPriority" Value="3"/>	
+				<MSHelp:Attr Name="HelpPriority" Value="3" />
 			</xml>
 			<SCRIPT SRC="dtuelink.js"></SCRIPT>
-			<xsl:apply-templates select="/ndoc" mode="header-section"/>			
+			<xsl:apply-templates select="/ndoc" mode="header-section" />
 		</head>
 	</xsl:template>
-	
 	<!-- -->
 	<xsl:template name="title-row">
 		<xsl:param name="type-name" />
-		<div id="nsbanner">		
-			<xsl:variable name="headerHtml" select="NHtmlProvider:GetHeaderHtml(string($type-name))" />			
+		<div id="nsbanner">
+			<xsl:variable name="headerHtml" select="NHtmlProvider:GetHeaderHtml(string($type-name))" />
 			<xsl:choose>
 				<xsl:when test="$headerHtml=''">
 					<div id="bannerrow1">
-						<table class="bannerparthead" cellspacing="0"><tr id="hdr">
-							<td class="runninghead" nowrap="true">
-								<xsl:value-of select="$ndoc-title" />
-							</td>
-							<td class="product" nowrap="true">
-							</td>
-						</tr></table>
+						<table class="bannerparthead" cellspacing="0">
+							<tr id="hdr">
+								<td class="runninghead" nowrap="true">
+									<xsl:value-of select="$ndoc-title" />
+								</td>
+								<td class="product" nowrap="true"></td>
+							</tr>
+						</table>
 					</div>
 					<div id="TitleRow">
 						<h1 class="dtH1">
@@ -733,18 +771,16 @@
 					<xsl:value-of select="$headerHtml" disable-output-escaping="yes" />
 				</xsl:otherwise>
 			</xsl:choose>
+			<xsl:apply-templates select="documentation/node()" mode="title-row" />
 			<xsl:if test="ancestor-or-self::node()/documentation/preliminary | /ndoc/preliminary">
-				<xsl:call-template name="preliminary-section"/>
-			</xsl:if>					
-			<xsl:apply-templates select="documentation/node()" mode="title-row"/>
+				<xsl:call-template name="preliminary-section" />
+			</xsl:if>
 		</div>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="footer-row">
 		<xsl:param name="type-name" />
-		
-		<xsl:call-template name="version-section" />		
-				
+		<xsl:call-template name="version-section" />
 		<xsl:variable name="assembly-name">
 			<xsl:value-of select="ancestor-or-self::assembly/./@name" />
 		</xsl:variable>
@@ -762,7 +798,7 @@
 			<hr />
 			<div id="footer">
 				<xsl:apply-templates select="/ndoc/feedbackEmail">
-					<xsl:with-param name="page" select="$type-name"/>
+					<xsl:with-param name="page" select="$type-name" />
 				</xsl:apply-templates>
 				<xsl:choose>
 					<xsl:when test="$footerHtml=''">
@@ -777,29 +813,30 @@
 						<xsl:value-of select="$footerHtml" disable-output-escaping="yes" />
 					</xsl:otherwise>
 				</xsl:choose>
-				<xsl:apply-templates select="documentation/node()" mode="footer-row"/>	
+				<xsl:apply-templates select="documentation/node()" mode="footer-row" />
 			</div>
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="preliminary-section">
 		<p class="topicstatus">
-			<!-- use the appropriate custom text if present, otherwise just the feault -->
+			<xsl:text>&#160;</xsl:text>
+			<!-- use the appropriate custom text if present, otherwise just the default -->
 			<xsl:choose>
 				<xsl:when test="documentation/preliminary[text()]">
-					<xsl:value-of select="documentation/preliminary"/>
+					<xsl:value-of select="documentation/preliminary" />
 				</xsl:when>
 				<xsl:when test="ancestor::node()/documentation/preliminary[text()]">
-					<xsl:value-of select="ancestor::node()/documentation/preliminary"/>				
+					<xsl:value-of select="ancestor::node()/documentation/preliminary" />
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:text>[This is preliminary documentation and subject to change.]</xsl:text>
 				</xsl:otherwise>
 			</xsl:choose>
 		</p>
-		<xsl:apply-templates select="documentation/node()" mode="preliminary-section"/>			
+		<xsl:apply-templates select="documentation/node()" mode="preliminary-section" />
 	</xsl:template>
-	<!-- -->	
+	<!-- -->
 	<xsl:template name="copyright-notice">
 		<xsl:variable name="copyright-text">
 			<xsl:value-of select="/ndoc/copyright/@text" />
@@ -880,13 +917,12 @@
 	<!-- -->
 	<xsl:template name="csharp-operator-name">
 		<xsl:param name="name" />
-
 		<xsl:text>operator&#160;</xsl:text>
 		<xsl:call-template name="operator-symbol">
-			<xsl:with-param name="name" select="$name"/>
+			<xsl:with-param name="name" select="$name" />
 		</xsl:call-template>
 	</xsl:template>
-
+	<!-- -->
 	<xsl:template name="operator-symbol">
 		<xsl:param name="name" />
 		<xsl:choose>
@@ -948,88 +984,90 @@
 		</xsl:choose>
 	</xsl:template>
 	<!-- -->
-	
 	<xsl:template name="type-requirements-section">
 		<h4 class="dtH4">Requirements</h4>
 		<p>
 			<b>Namespace: </b>
-			<a href="{NUtil:GetNamespaceHRef( string( ../@name ) )}">
+			<a>
+				<xsl:attribute name="href">
+					<xsl:value-of select="NUtil:GetNamespaceHRef( string( ../@name ) )" />
+				</xsl:attribute>
 				<xsl:value-of select="../@name" />
 			</a>
 		</p>
 		<xsl:choose>
 			<xsl:when test="documentation/platform">
-				<xsl:apply-templates select="documentation/platform"/>
+				<xsl:apply-templates select="documentation/platform" />
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:apply-templates select="/ndoc/platform"/>			
+				<xsl:apply-templates select="/ndoc/platform" />
 			</xsl:otherwise>
 		</xsl:choose>
 		<p>
 			<b>Assembly: </b>
 			<xsl:value-of select="../../../@name" /> (in <xsl:value-of select="../../@name" />)
 		</p>
-		<xsl:call-template name="permsissions"/>
-		<xsl:apply-templates select="documentation/node()" mode="type-requirements-section"/>								
+		<xsl:call-template name="permsissions" />
+		<xsl:apply-templates select="documentation/node()" mode="type-requirements-section" />
 	</xsl:template>
-	
+	<!-- -->
 	<xsl:template name="member-requirements-section">
 		<xsl:if test="documentation/permission | documentation/platform | parent::node()/documentation/platform | /ndoc/platform">
 			<h4 class="dtH4">Requirements</h4>
-			<xsl:call-template name="member-platform"/>
-			<xsl:call-template name="permsissions"/>
-			<xsl:apply-templates select="documentation/node()" mode="member-requirements-section"/>									
+			<xsl:call-template name="member-platform" />
+			<xsl:call-template name="permsissions" />
+			<xsl:apply-templates select="documentation/node()" mode="member-requirements-section" />
 		</xsl:if>
 	</xsl:template>
-	
+	<!-- -->
 	<xsl:template name="permsissions">
 		<xsl:if test="documentation/permission">
 			<p>
 				<b>.NET Framework Security: </b>
 				<ul class="permissions">
-					<xsl:apply-templates select="documentation/permission"/>
-				</ul>	
+					<xsl:apply-templates select="documentation/permission" />
+				</ul>
 			</p>
-			<xsl:apply-templates select="documentation/node()" mode="permissions-section"/>									
+			<xsl:apply-templates select="documentation/node()" mode="permissions-section" />
 		</xsl:if>
 	</xsl:template>
-	
+	<!-- -->
 	<xsl:template match="documentation/permission">
 		<li>
 			<xsl:call-template name="get-link-for-type">
 				<xsl:with-param name="type" select="@cref" />
-				<xsl:with-param name="link-text" select="substring-after(@cref, 'T:')"/>
-			</xsl:call-template>	
+				<xsl:with-param name="link-text" select="substring-after(@cref, 'T:')" />
+			</xsl:call-template>
 			<xsl:text>&#160;</xsl:text>
 			<xsl:apply-templates mode="slashdoc" />
-		</li>	
+		</li>
 	</xsl:template>
-	
-			
+	<!-- -->
 	<xsl:template name="member-platform">
 		<xsl:choose>
 			<!-- first see if the member has a platform specified -->
 			<xsl:when test="documentation/platform">
-				<xsl:apply-templates select="documentation/platform"/>			
+				<xsl:apply-templates select="documentation/platform" />
 			</xsl:when>
 			<!-- then look in the containing type -->
 			<xsl:when test="parent::node()/documentation/platform">
-				<xsl:apply-templates select="parent::node()/documentation/platform"/>			
+				<xsl:apply-templates select="parent::node()/documentation/platform" />
 			</xsl:when>
 			<!-- otherwise use the project defaults -->
 			<xsl:otherwise>
-				<xsl:apply-templates select="/ndoc/platform"/>			
+				<xsl:apply-templates select="/ndoc/platform" />
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
-
+	<!-- -->
 	<xsl:template match="ndoc/platform">
 		<p>
 			<b class="le">Platforms: </b>
-			<xsl:apply-templates select="os"/>
-			<xsl:apply-templates select="frameworks"/>	
+			<xsl:apply-templates select="os" />
+			<xsl:apply-templates select="frameworks" />
 		</p>
 	</xsl:template>
+	<!-- -->
 	<xsl:template match="documentation/platform">
 		<p>
 			<b class="le">Platforms: </b>
@@ -1037,23 +1075,23 @@
 					if it can't find it, then it looks to the project defaults -->
 			<xsl:choose>
 				<xsl:when test="os">
-					<xsl:apply-templates select="os"/>
+					<xsl:apply-templates select="os" />
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:apply-templates select="/ndoc/platform/os"/>
+					<xsl:apply-templates select="/ndoc/platform/os" />
 				</xsl:otherwise>
 			</xsl:choose>
 			<xsl:choose>
 				<xsl:when test="frameworks">
-					<xsl:apply-templates select="frameworks"/>
+					<xsl:apply-templates select="frameworks" />
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:apply-templates select="/ndoc/platform/frameworks"/>
+					<xsl:apply-templates select="/ndoc/platform/frameworks" />
 				</xsl:otherwise>
-			</xsl:choose>		
+			</xsl:choose>
 		</p>
 	</xsl:template>
-		
+	<!-- -->
 	<xsl:template match="os">
 		<xsl:choose>
 			<xsl:when test="@predefined = 'all'">
@@ -1064,37 +1102,38 @@
 			</xsl:when>
 			<xsl:when test="@predefined = 'enterprise'">
 				<xsl:text>Windows 2000, Windows XP Professional, Windows Server 2003 family</xsl:text>
-			</xsl:when>			
-		</xsl:choose>	
+			</xsl:when>
+		</xsl:choose>
 		<xsl:if test="string-length(.)">
 			<xsl:text>, </xsl:text>
-			<xsl:value-of select="."/>
+			<xsl:value-of select="." />
 		</xsl:if>
 	</xsl:template>
-	
+	<!-- -->
 	<xsl:template match="frameworks">
 		<xsl:if test="count( node()[text()='true'] | custom ) != 0">, </xsl:if>
-		<xsl:apply-templates select="compact | mono | custom"/>
-	</xsl:template>	
-	
-	<xsl:template match="mono"/>
+		<xsl:apply-templates select="compact | mono | custom" />
+	</xsl:template>
+	<!-- -->
+	<xsl:template match="mono" />
+	<!-- -->
 	<xsl:template match="mono[text() = 'true']">
 		<xsl:text>MONO Open Source Framework</xsl:text>
 		<xsl:if test="position()!=last()">, </xsl:if>
-	</xsl:template>		
-	
-	<xsl:template match="compact"/>
+	</xsl:template>
+	<!-- -->
+	<xsl:template match="compact" />
+	<!-- -->
 	<xsl:template match="compact[text() = 'true']">
 		<xsl:text>.NET Compact Framework</xsl:text>
 		<xsl:if test="position()!=last()">, </xsl:if>
-	</xsl:template>		
-	
+	</xsl:template>
+	<!-- -->
 	<xsl:template match="frameworks/custom">
-		<xsl:value-of select="."/>
+		<xsl:value-of select="." />
 		<xsl:if test="position()!=last()">, </xsl:if>
-	</xsl:template>		
-	
-	<!-- -->	
+	</xsl:template>
+	<!-- -->
 	<xsl:template name="version-section">
 		<DIV CLASS="footer">
 			<p>
@@ -1102,34 +1141,38 @@
 					<font color="red">
 						<i>
 							<xsl:if test="string-length( $ndoc-net-framework-version ) != 0">
-								Syntax based on .NET Framework version <xsl:value-of select="$ndoc-net-framework-version"/>.<br/>
-							</xsl:if>							
+								Syntax based on .NET Framework version <xsl:value-of select="$ndoc-net-framework-version" />.<br />
+							</xsl:if>
 							<xsl:if test="string-length( $ndoc-version ) != 0">
-								Documentation version <xsl:value-of select="$ndoc-version"/>.
+								Documentation version <xsl:value-of select="$ndoc-version" />.
 							</xsl:if>
 						</i>
 					</font>
 				</center>
-			</p>	
+			</p>
 		</DIV>
 	</xsl:template>
-	
+	<!-- -->
 	<xsl:template match="feedbackEmail">
-		<xsl:param name="page"/>
+		<xsl:param name="page" />
 		<xsl:variable name="href">
 			<xsl:text>mailto:</xsl:text>
-			<xsl:value-of select="."/>
+			<xsl:value-of select="." />
 			<xsl:text>?subject=</xsl:text>
 			<xsl:value-of select="$ndoc-title" />
-			<xsl:text> </xsl:text>
+			<xsl:text></xsl:text>
 			<xsl:value-of select="$ndoc-version" />
 			<xsl:text> Documentation Feedback: </xsl:text>
-			<xsl:value-of select="$page"/>		
+			<xsl:value-of select="$page" />
 		</xsl:variable>
 		<p>
-			<a href="{NUtil:Replace( $href, ' ', '%20' )}">
+			<a>
+				<xsl:attribute name="href">
+					<xsl:value-of select="NUtil:Replace( $href, ' ', '%20' )" />
+				</xsl:attribute>
 				<xsl:text>Send comments on this topic.</xsl:text>
 			</a>
 		</p>
 	</xsl:template>
+	<!-- -->
 </xsl:stylesheet>

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:MSHelp="http://msdn.microsoft.com/mshelp"
-	xmlns:NUtil="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities" exclude-result-prefixes="NUtil">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+	xmlns:MSHelp="http://msdn.microsoft.com/mshelp"
+	xmlns:NUtil="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities" 
+	exclude-result-prefixes="NUtil">
 	<!-- -->
 	<xsl:output method="xml" indent="yes" encoding="utf-8" omit-xml-declaration="yes" />
 	<!-- -->
@@ -90,7 +92,16 @@
 					<xsl:if test="local-name()!='delegate' and local-name()!='enumeration'">
 						<xsl:variable name="members-href" select="NUtil:GetOverviewHRef( string( @id ), 'Members' )" />
 						<xsl:if test="constructor|field|property|method|operator|event">
-							<p>For a list of all members of this type, see <a href="{$members-href}"><xsl:value-of select="@name" /> Members</a>.</p>
+							<p>
+								<xsl:text>For a list of all members of this type, see </xsl:text>
+								<a>
+									<xsl:attribute name="href">
+										<xsl:value-of select="$members-href" />
+									</xsl:attribute>
+									<xsl:value-of select="@name" /> Members
+								</a>
+								<xsl:text>.</xsl:text>
+							</p>
 						</xsl:if>
 					</xsl:if>
 					<xsl:if test="local-name()='enumeration' and @flags">
@@ -122,11 +133,14 @@
 												</xsl:for-each>
 											</xsl:when>
 											<xsl:otherwise>
-													<br />
-													<xsl:call-template name="indent">
-														<xsl:with-param name="count" select="1" />
-													</xsl:call-template>
-												<a href="{NUtil:GetTypeHierarchyHRef( string( @id ))}">
+												<br />
+												<xsl:call-template name="indent">
+													<xsl:with-param name="count" select="1" />
+												</xsl:call-template>
+												<a>
+													<xsl:attribute name="href">
+														<xsl:value-of select="NUtil:GetTypeHierarchyHRef( string( @id ))" />
+													</xsl:attribute>
 													<xsl:text>Derived interfaces</xsl:text>
 												</a>
 											</xsl:otherwise>
@@ -150,7 +164,7 @@
 										<xsl:value-of select="substring-after( @id, ':' )" />
 									</b>
 									<xsl:if test="derivedBy">
-												<xsl:variable name="derivedTypeIndent" select="$typeIndent+2" />
+										<xsl:variable name="derivedTypeIndent" select="$typeIndent+2" />
 										<xsl:choose>
 											<xsl:when test="count(derivedBy) &lt; 6">
 												<xsl:for-each select="derivedBy">
@@ -169,7 +183,10 @@
 												<xsl:call-template name="indent">
 													<xsl:with-param name="count" select="$derivedTypeIndent" />
 												</xsl:call-template>
-												<a href="{NUtil:GetTypeHierarchyHRef( string( @id ))}">
+												<a>
+													<xsl:attribute name="href">
+														<xsl:value-of select="NUtil:GetTypeHierarchyHRef( string( @id ))" />
+													</xsl:attribute>
 													<xsl:text>Derived types</xsl:text>
 												</a>
 											</xsl:otherwise>
@@ -236,7 +253,10 @@
 	<xsl:template match="structure | class" mode="implementingType">
 		<tr valign="top">
 			<td>
-				<a href="{NUtil:GetLocalCRef( string( @id ) ) }">
+				<a>
+					<xsl:attribute name="href">
+						<xsl:value-of select="NUtil:GetLocalCRef( string( @id ) )" />
+					</xsl:attribute>
 					<xsl:value-of select="@name" />
 				</a>
 			</td>

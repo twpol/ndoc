@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:MSHelp="http://msdn.microsoft.com/mshelp"
-	xmlns:NUtil="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities" exclude-result-prefixes="NUtil">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+	xmlns:MSHelp="http://msdn.microsoft.com/mshelp"
+	xmlns:NUtil="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities" 
+	exclude-result-prefixes="NUtil">
 	<!-- -->
 	<xsl:output method="xml" indent="yes" encoding="utf-8" omit-xml-declaration="yes" />
 	<!-- -->
@@ -24,7 +26,10 @@
 					<xsl:apply-templates select="$ns/typeHierarchy" />
 					<h4 class="dtH4">See Also</h4>
 					<p>
-						<a href="{NUtil:GetNamespaceHRef( string( $namespace ) )}">
+						<a>
+							<xsl:attribute name="href">
+								<xsl:value-of select="NUtil:GetNamespaceHRef( string( $namespace ) )" />
+							</xsl:attribute>
 							<xsl:value-of select="$namespace" /> Namespace
 						</a>
 					</p>
@@ -45,9 +50,9 @@
 				</xsl:call-template>
 				<xsl:apply-templates mode="hierarchy" />
 			</div>
-				<xsl:if test="interfaces">
-					<h4 class="dth4">Interfaces</h4>
-					<xsl:apply-templates select="./interfaces/interface"  mode="hierarchy" />
+			<xsl:if test="interfaces">
+				<h4 class="dth4">Interfaces</h4>
+				<xsl:apply-templates select="./interfaces/interface" mode="hierarchy" />
 			</xsl:if>
 		</xsl:for-each>
 	</xsl:template>
@@ -58,21 +63,21 @@
 				<xsl:with-param name="type" select="@id" />
 				<xsl:with-param name="link-text" select="substring-after(@id, ':' )" />
 			</xsl:call-template>
-				<xsl:if test="interfaces">
-					<xsl:text>&#160;---- </xsl:text>
-					<xsl:apply-templates select="./interfaces/interface"  mode="baseInterfaces" />
-		</xsl:if>
+			<xsl:if test="interfaces">
+				<xsl:text>&#160;---- </xsl:text>
+				<xsl:apply-templates select="./interfaces/interface" mode="baseInterfaces" />
+			</xsl:if>
 			<xsl:apply-templates select="type" mode="hierarchy" />
 		</div>
 	</xsl:template>
 	<!-- -->
 	<xsl:template match="interface" mode="baseInterfaces">
-			<xsl:call-template name="get-link-for-type">
-				<xsl:with-param name="type" select="@id" />
-				<xsl:with-param name="link-text" select="substring-after(@id, ':' )" />
-			</xsl:call-template>
-				<xsl:if test="position() != last()">
-					<xsl:text>, </xsl:text>
+		<xsl:call-template name="get-link-for-type">
+			<xsl:with-param name="type" select="@id" />
+			<xsl:with-param name="link-text" select="substring-after(@id, ':' )" />
+		</xsl:call-template>
+		<xsl:if test="position() != last()">
+			<xsl:text>, </xsl:text>
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
