@@ -518,8 +518,12 @@
 		</pre>
 		<dl>
 			<dd>
-				<xsl:apply-templates select="documentation/summary" mode="doc" />
-				<xsl:apply-templates select="documentation/remarks" mode="doc" />
+				<p>
+					<xsl:apply-templates select="documentation/summary" mode="doc" />
+				</p>
+				<p>
+					<xsl:apply-templates select="documentation/remarks" mode="doc" />
+				</p>
 			</dd>
 		</dl>
 	</xsl:template>
@@ -556,8 +560,12 @@
 		</pre>
 		<dl>
 			<dd>
-				<xsl:apply-templates select="documentation/summary" mode="doc" />
-				<xsl:apply-templates select="documentation/remarks" mode="doc" />
+				<p>
+					<xsl:apply-templates select="documentation/summary" mode="doc" />
+				</p>
+				<p>
+					<xsl:apply-templates select="documentation/remarks" mode="doc" />
+				</p>
 			</dd>
 		</dl>
 	</xsl:template>
@@ -605,8 +613,12 @@
 		</pre>
 		<dl>
 			<dd>
-				<xsl:apply-templates select="documentation/summary" mode="doc" />
-				<xsl:apply-templates select="documentation/remarks" mode="doc" />
+				<p>
+					<xsl:apply-templates select="documentation/summary" mode="doc" />
+				</p>
+				<p>
+					<xsl:apply-templates select="documentation/remarks" mode="doc" />
+				</p>
 			</dd>
 		</dl>
 	</xsl:template>
@@ -665,8 +677,12 @@
 		</pre>
 		<dl>
 			<dd>
-				<xsl:apply-templates select="documentation/summary" mode="doc" />
-				<xsl:apply-templates select="documentation/remarks" mode="doc" />
+				<p>
+					<xsl:apply-templates select="documentation/summary" mode="doc" />
+				</p>
+				<p>
+					<xsl:apply-templates select="documentation/remarks" mode="doc" />
+				</p>
 			</dd>
 		</dl>
 	</xsl:template>
@@ -691,8 +707,12 @@
 		</pre>
 		<dl>
 			<dd>
-				<xsl:apply-templates select="documentation/summary" mode="doc" />
-				<xsl:apply-templates select="documentation/remarks" mode="doc" />
+				<p>
+					<xsl:apply-templates select="documentation/summary" mode="doc" />
+				</p>
+				<p>
+					<xsl:apply-templates select="documentation/remarks" mode="doc" />
+				</p>
 			</dd>
 		</dl>
 	</xsl:template>

@@ -290,54 +290,6 @@
 		</xsl:choose>
 	</xsl:template>
 	<!-- -->
-	<xsl:template name="get-href-to-cref">
-		<xsl:param name="cref" />
-		<xsl:choose>
-			<xsl:when test="starts-with($cref, 'T:')">
-				<xsl:variable name="namespace">
-					<xsl:call-template name="get-namespace">
-						<xsl:with-param name="name" select="substring-after($cref, 'T:')" />
-					</xsl:call-template>
-				</xsl:variable>
-				<xsl:variable name="name">
-					<xsl:call-template name="strip-namespace">
-						<xsl:with-param name="name" select="substring-after($cref, 'T:')" />
-					</xsl:call-template>
-				</xsl:variable>
-				<xsl:value-of select="concat($global-path-to-root, translate($namespace, '.', '/'), '/', $name, '.html')" />
-			</xsl:when>
-			<xsl:when test="starts-with($cref, 'M:')">
-				<xsl:variable name="type">
-					<xsl:call-template name="get-namespace">
-						<xsl:with-param name="name" select="substring-after($cref, 'M:')" />
-					</xsl:call-template>
-				</xsl:variable>
-				<xsl:variable name="path">
-					<xsl:call-template name="get-href-to-cref">
-						<xsl:with-param name="cref" select="concat('T:', $type)" />
-					</xsl:call-template>
-				</xsl:variable>
-				<xsl:variable name="member">
-					<xsl:call-template name="strip-namespace">
-						<xsl:with-param name="name" select="substring-after($cref, 'M:')" />
-					</xsl:call-template>
-				</xsl:variable>
-				<xsl:value-of select="concat($path, '#', $member)" />
-			</xsl:when>
-		</xsl:choose>
-	</xsl:template>
-	<!-- -->
-	<xsl:template match="see[@cref]" mode="doc">
-		<a>
-			<xsl:attribute name="href">
-				<xsl:call-template name="get-href-to-cref">
-					<xsl:with-param name="cref" select="@cref" />
-				</xsl:call-template>
-			</xsl:attribute>
-			<xsl:value-of select="substring(@cref, 3)" />
-		</a>
-	</xsl:template>
-	<!-- -->
 	<xsl:template name="csharp-type">
 		<xsl:param name="type" />
 		<xsl:variable name="old-type">
@@ -457,6 +409,142 @@
 			<xsl:when test="$name='op_LessThanOrEqual'">operator &lt;=</xsl:when>
 			<xsl:when test="$name='op_GreaterThanOrEqual'">operator >=</xsl:when>
 			<xsl:otherwise>ERROR</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	<!-- -->
+	<xsl:template match="c" mode="doc">
+		<i>
+			<xsl:apply-templates mode="doc" />
+		</i>
+	</xsl:template>
+	<!-- -->
+	<xsl:template match="code" mode="doc">
+		<pre class="code">
+			<xsl:apply-templates mode="doc" />
+		</pre>
+	</xsl:template>
+	<!-- -->
+	<xsl:template match="list[@type='bullet']" mode="doc">
+		<ul>
+			<xsl:apply-templates select="item" mode="doc" />
+		</ul>
+	</xsl:template>
+	<!-- -->
+	<xsl:template match="list[@type='number']" mode="doc">
+		<ol>
+			<xsl:apply-templates select="item" mode="doc" />
+		</ol>
+	</xsl:template>
+	<!-- -->
+	<xsl:template match="item" mode="doc">
+		<li>
+			<xsl:apply-templates mode="doc" />
+		</li>
+	</xsl:template>
+	<!-- -->
+	<xsl:template match="term" mode="doc">
+		<b>
+			<xsl:apply-templates mode="doc" />
+			<xsl:text> - </xsl:text>
+		</b>
+	</xsl:template>
+	<!-- -->
+	<xsl:template match="description" mode="doc">
+		<xsl:apply-templates mode="doc" />
+	</xsl:template>
+	<!-- -->
+	<xsl:template match="para" mode="doc">
+		<p>
+			<xsl:apply-templates mode="doc" />
+		</p>
+	</xsl:template>
+	<!-- -->
+	<xsl:template match="paramref[@name]" mode="doc">
+		<i>
+			<xsl:value-of select="@name" />
+		</i>
+	</xsl:template>
+	<!-- -->
+	<xsl:template match="see[@cref]" mode="doc">
+		<a>
+			<xsl:attribute name="href">
+				<xsl:call-template name="get-href-to-cref">
+					<xsl:with-param name="cref" select="@cref" />
+				</xsl:call-template>
+			</xsl:attribute>
+			<xsl:value-of select="substring(@cref, 3)" />
+		</a>
+	</xsl:template>
+	<!-- -->
+	<xsl:template name="get-href-to-cref">
+		<xsl:param name="cref" />
+		<xsl:choose>
+			<xsl:when test="starts-with($cref, 'T:')">
+				<xsl:variable name="namespace">
+					<xsl:call-template name="get-namespace">
+						<xsl:with-param name="name" select="substring-after($cref, 'T:')" />
+					</xsl:call-template>
+				</xsl:variable>
+				<xsl:variable name="name">
+					<xsl:call-template name="strip-namespace">
+						<xsl:with-param name="name" select="substring-after($cref, 'T:')" />
+					</xsl:call-template>
+				</xsl:variable>
+				<xsl:value-of select="concat($global-path-to-root, translate($namespace, '.', '/'), '/', $name, '.html')" />
+			</xsl:when>
+			<xsl:when test="starts-with($cref, 'M:')">
+				<xsl:variable name="type">
+					<xsl:call-template name="get-namespace">
+						<xsl:with-param name="name" select="substring-after($cref, 'M:')" />
+					</xsl:call-template>
+				</xsl:variable>
+				<xsl:variable name="path">
+					<xsl:call-template name="get-href-to-cref">
+						<xsl:with-param name="cref" select="concat('T:', $type)" />
+					</xsl:call-template>
+				</xsl:variable>
+				<xsl:variable name="member">
+					<xsl:call-template name="strip-namespace">
+						<xsl:with-param name="name" select="substring-after($cref, 'M:')" />
+					</xsl:call-template>
+				</xsl:variable>
+				<xsl:value-of select="concat($path, '#', $member)" />
+			</xsl:when>
+		</xsl:choose>
+	</xsl:template>
+	<!-- -->
+	<xsl:template match="see[@langword]" mode="doc">
+		<xsl:choose>
+			<xsl:when test="@langword='null'">
+				<xsl:text>a null reference (</xsl:text>
+				<b>Nothing</b>
+				<xsl:text> in Visual Basic)</xsl:text>
+			</xsl:when>
+			<xsl:when test="@langword='sealed'">
+				<xsl:text>sealed (</xsl:text>
+				<b>NotInheritable</b>
+				<xsl:text> in Visual Basic)</xsl:text>
+			</xsl:when>
+			<xsl:when test="@langword='static'">
+				<xsl:text>static (</xsl:text>
+				<b>Shared</b>
+				<xsl:text> in Visual Basic)</xsl:text>
+			</xsl:when>
+			<xsl:when test="@langword='abstract'">
+				<xsl:text>abstract (</xsl:text>
+				<b>MustInherit</b>
+				<xsl:text> in Visual Basic)</xsl:text>
+			</xsl:when>
+			<xsl:when test="@langword='virtual'">
+				<xsl:text>virtual (</xsl:text>
+				<b>CanOverride</b>
+				<xsl:text> in Visual Basic)</xsl:text>
+			</xsl:when>
+			<xsl:otherwise>
+				<b>
+					<xsl:value-of select="@langword" />
+				</b>
+			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
 	<!-- -->
