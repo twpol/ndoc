@@ -16,6 +16,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 using System;
+using System.Diagnostics;
 
 using NDoc.Core;
 using NDoc.Documenter.Msdn;
@@ -40,22 +41,29 @@ namespace NDoc.Console
 				{
 					if (arg.StartsWith("-"))
 					{
-						string[] pair = arg.Split('=');
-
-						if (pair.Length == 2)
+						if (string.Compare(arg, "-verbose", true) == 0)
 						{
-							string name = pair[0].Substring(1);
-							string value = pair[1];
+							Trace.Listeners.Add(new TextWriterTraceListener(System.Console.Out));
+						}
+						else
+						{
+							string[] pair = arg.Split('=');
 
-							if (name.ToLower() == "project")
+							if (pair.Length == 2)
 							{
-								project = new Project();
-								project.Read(value);
-								documenter = (MsdnDocumenter)project.GetDocumenter(documenter.Name);
-							}
-							else
-							{
-								documenter.Config.SetValue(name, value);
+								string name = pair[0].Substring(1);
+								string value = pair[1];
+
+								if (name.ToLower() == "project")
+								{
+									project = new Project();
+									project.Read(value);
+									documenter = (MsdnDocumenter)project.GetDocumenter(documenter.Name);
+								}
+								else
+								{
+									documenter.Config.SetValue(name, value);
+								}
 							}
 						}
 					}
@@ -77,7 +85,7 @@ namespace NDoc.Console
 				}
 				else
 				{
-					documenter.DocBuildingProgress += new DocBuildingEventHandler(Handler);
+					documenter.DocBuildingStep += new DocBuildingEventHandler(DocBuildingStepHandler);
 					documenter.Build(project);
 				}
 			}
@@ -85,7 +93,7 @@ namespace NDoc.Console
 
 		private static void WriteUsage(IDocumenter documenter)
 		{
-			System.Console.WriteLine("usage: NDoc.Console [-project=file] [-property=value...] assembly,xml [assembly,xml...]");
+			System.Console.WriteLine("usage: NDoc.Console [-verbose] [-project=file] [-property=value...] assembly,xml [assembly,xml...]");
 			System.Console.WriteLine("  available properties:");
 
 			foreach (string property in documenter.Config.GetProperties())
@@ -94,9 +102,9 @@ namespace NDoc.Console
 			}
 		}
 
-		private static void Handler(object sender, ProgressArgs e)
+		private static void DocBuildingStepHandler(object sender, ProgressArgs e)
 		{
-			System.Console.Write(".");
+			System.Console.WriteLine( e.Status );
 		}
 	}
 }
