@@ -640,7 +640,7 @@ namespace NDoc.Documenter.Msdn
 
 					if (MyConfig.SplitTOCs)
 					{
-						bool isDefault = (assemblyName == MyConfig.DefaulTOC);
+						bool isDefault = (assemblyName == MyConfig.DefaultTOC);
 
 						if (isDefault)
 						{

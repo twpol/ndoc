@@ -228,7 +228,7 @@ namespace NDoc.Documenter.Msdn
 		/// <summary>Gets or sets the DefaultTOC property.</summary>
 		[Category("HTML Help Options")]
 		[Description("When SplitTOCs is true, this represents the default TOC to use.")]
-		public string DefaulTOC
+		public string DefaultTOC
 		{
 			get { return _DefaultTOC; }
 
