@@ -281,6 +281,7 @@ namespace NDoc.Core
 			}
 		}
 
+    /// <summary>Retrieves a documenter by name.</summary>
 		public IDocumenter GetDocumenter(string name)
 		{
 			foreach (IDocumenter documenter in Documenters)
