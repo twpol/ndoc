@@ -469,8 +469,7 @@ namespace NDoc.Core
 				BindingFlags.Instance |
 				BindingFlags.Static |
 				BindingFlags.Public |
-				BindingFlags.NonPublic |
-				BindingFlags.DeclaredOnly;
+				BindingFlags.NonPublic;
 
 			foreach (FieldInfo field in type.GetFields(bindingFlags))
 			{
@@ -731,6 +730,11 @@ namespace NDoc.Core
 			writer.WriteAttributeString("access", GetFieldAccessValue(field));
 			writer.WriteAttributeString("type", field.FieldType.FullName.Replace('+', '.'));
 
+			if (field.DeclaringType != field.ReflectedType)
+			{
+				writer.WriteAttributeString("declaringType", field.DeclaringType.FullName);
+			}
+
 			if (field.IsStatic)
 			{
 				writer.WriteAttributeString("contract", "Static");
@@ -759,6 +763,11 @@ namespace NDoc.Core
 			writer.WriteAttributeString("access", GetMethodAccessValue(eventInfo.GetAddMethod(true)));
 			writer.WriteAttributeString("contract", GetMethodContractValue(eventInfo.GetAddMethod(true)));
 			writer.WriteAttributeString("type", eventInfo.EventHandlerType.FullName.Replace('+', '.'));
+
+			if (eventInfo.DeclaringType != eventInfo.ReflectedType)
+			{
+				writer.WriteAttributeString("declaringType", eventInfo.DeclaringType.FullName);
+			}
 
 			if (eventInfo.IsMulticast)
 			{
