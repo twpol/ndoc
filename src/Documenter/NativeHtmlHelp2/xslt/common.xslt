@@ -572,11 +572,19 @@
 		</xsl:variable>
 		<xsl:choose>
 			<xsl:when test="$filename=''">
-				<xsl:call-template name="get-xlink">
-					<xsl:with-param name="a-index" select="NUtil:GetAIndex( $cref )"/>
-					<xsl:with-param name="link-text" select="string(NUtil:GetName($cref))"/>	
-					<xsl:with-param name="ns-key" select="substring-after( $cref, ':' )"/>										
-				</xsl:call-template>	
+				<xsl:choose>
+					<xsl:when test="substring-before( $cref, ':' )='!'">
+						<FONT color="red"><b><xsl:value-of select="." /></b> 
+						(broken link "<xsl:value-of select="$cref"/>")</FONT>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:call-template name="get-xlink">
+							<xsl:with-param name="a-index" select="NUtil:GetAIndex( $cref )"/>
+							<xsl:with-param name="link-text" select="string(NUtil:GetName($cref))"/>	
+							<xsl:with-param name="ns-key" select="substring-after( $cref, ':' )"/>										
+						</xsl:call-template>
+				</xsl:otherwise>	
+				</xsl:choose>
 			</xsl:when>
 			<xsl:otherwise>
 				<a>
