@@ -4,7 +4,12 @@
 		<p>The following links might be useful to NDoc users:</p>
 		<ul>
 			<li><a href="http://nant.sf.net/">NAnt - includes an NDoc task for automating documentation builds</a></li>
-			<li><a href="http://sourceforge.net/projects/vbdoc">vbDoc - Visual Basic Doc Generator</a></li>
+		</ul>
+		<p>VB .NET programmers can also document their code with:</p>
+		<ul>
+			<li><a href="http://vb-doc.sourceforge.net/">VB.DOC - generate xml comments from VB source files</a></li>
+			<li><a href="http://www.fesersoft.com/products/VBXmlComments/">VB.NET XML Comments Creator</a></li>
+			<li><a href="http://vbxmldoc.tor-erik.net/">VBXC - VB.NET XML Commentor</a></li>
 		</ul>
 		<p>If you'd like a link added to this list, just let <a href="mailto:jason@injektilo.org">us</a> know!</p>
 	</body>
