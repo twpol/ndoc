@@ -1349,9 +1349,6 @@ namespace NDoc.Core.Reflection
 			{
 				if (MustDocumentField(field) && attributeFilter.Show(fullName, field.Name))
 				{
-					writer.WriteStartElement("field");
-					writer.WriteAttributeString("name", field.Name);
-					writer.WriteAttributeString("type", field.FieldType.FullName);
 					string fieldValue=null;
 					try
 					{
@@ -1371,8 +1368,14 @@ namespace NDoc.Core.Reflection
 
 						fieldValue="***UNKNOWN***";
 					}
-					writer.WriteAttributeString("value", fieldValue);
-					writer.WriteEndElement(); // field
+					if (fieldValue.Length>0)
+					{
+						writer.WriteStartElement("field");
+						writer.WriteAttributeString("name", field.Name);
+						writer.WriteAttributeString("type", field.FieldType.FullName);
+						writer.WriteAttributeString("value", fieldValue);
+						writer.WriteEndElement(); // field
+					}
 				}
 			}
 
@@ -1386,11 +1389,6 @@ namespace NDoc.Core.Reflection
 
 				if (MustDocumentProperty(property) && attributeFilter.Show(fullName, property.Name))
 				{
-
-					writer.WriteStartElement("property");
-					writer.WriteAttributeString("name", property.Name);
-					writer.WriteAttributeString("type", property.PropertyType.FullName);
-
 					if (property.CanRead)
 					{
 						string propertyValue=null;
@@ -1412,10 +1410,15 @@ namespace NDoc.Core.Reflection
 
 							propertyValue="***UNKNOWN***";
 						}
-						writer.WriteAttributeString("value", propertyValue);
+						if (propertyValue.Length>0)
+						{
+							writer.WriteStartElement("property");
+							writer.WriteAttributeString("name", property.Name);
+							writer.WriteAttributeString("type", property.PropertyType.FullName);
+							writer.WriteAttributeString("value", propertyValue);
+							writer.WriteEndElement(); // property
+						}
 					}
-
-					writer.WriteEndElement(); // property
 				}
 			}
 
