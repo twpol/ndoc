@@ -388,7 +388,15 @@ namespace NDoc.Core
 						{
 							if (type.IsClass && !type.IsAbstract && (type.GetInterface("NDoc.Core.IDocumenter") != null))
 							{
-								documenters.Add(Activator.CreateInstance(type));
+								IDocumenter documenter = Activator.CreateInstance(type) as IDocumenter;
+								if (documenter != null)
+								{
+									documenters.Add(documenter);
+								}
+								else
+								{
+									Trace.WriteLine(String.Format("Documenter {0} in file {1} does not implement a current version of IDocumenter and so was not instantiated.", type.FullName, fileName));
+								}
 							}
 						}
 					}
