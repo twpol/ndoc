@@ -1065,6 +1065,12 @@ namespace NDoc.Core
 
 			foreach (PropertyInfo property in attribute.GetType().GetProperties(bindingFlags))
 			{
+				//skip the TypeId property
+				if ((!MyConfig.ShowTypeIdInAttributes) && (property.Name == "TypeId"))
+				{
+					continue;
+				}
+
 				writer.WriteStartElement("property");
 				writer.WriteAttributeString("name", property.Name);
 				writer.WriteAttributeString("type", property.PropertyType.FullName);
@@ -1901,6 +1907,8 @@ namespace NDoc.Core
 				{
 					WriteMethodDocumentation(writer, memberName, method, true);
 				}
+
+				WriteCustomAttributes(writer, method);
 
 				foreach (ParameterInfo parameter in method.GetParameters())
 				{
