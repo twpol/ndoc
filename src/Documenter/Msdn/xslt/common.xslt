@@ -346,7 +346,32 @@
 				</a>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:value-of select="substring(@cref, 3)" />
+				<xsl:choose>
+					<!-- this is an incredibly lame hack. -->
+					<!-- it can go away once microsoft stops prefix event crefs with 'F:'. -->
+					<xsl:when test="starts-with($cref, 'F:')">
+						<xsl:variable name="event-cref" select="concat('E:', substring-after($cref, 'F:'))" />
+						<xsl:variable name="event-seethis" select="//*[@id=$event-cref]" />
+						<xsl:choose>
+							<xsl:when test="$event-seethis">
+								<xsl:variable name="href">
+									<xsl:call-template name="get-filename-for-cref">
+										<xsl:with-param name="cref" select="$event-cref" />
+									</xsl:call-template>
+								</xsl:variable>
+								<a href="{$href}">
+									<xsl:value-of select="$event-seethis/@name" />
+								</a>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="substring($cref, 3)" />
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="substring($cref, 3)" />
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
@@ -635,8 +660,12 @@
 		</xsl:variable>
 		<xsl:if test="string($copyright-rtf) or string($version-rtf)">
 			<div id="footer">
-				<p><xsl:copy-of select="$copyright-rtf" /></p>
-				<p><xsl:copy-of select="$version-rtf" /></p>
+				<p>
+					<xsl:copy-of select="$copyright-rtf" />
+				</p>
+				<p>
+					<xsl:copy-of select="$version-rtf" />
+				</p>
 			</div>
 		</xsl:if>
 	</xsl:template>

@@ -35,7 +35,7 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="get-filename-for-current-event">
-		<xsl:value-of select="concat(translate(substring-after(@id, 'F:'), '.[]', ''), 'FieldOrEvent.html')" />
+		<xsl:value-of select="concat(translate(substring-after(@id, 'E:'), '.[]', ''), 'FieldOrEvent.html')" />
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="get-filename-for-current-property-overloads">
