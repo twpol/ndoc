@@ -26,8 +26,8 @@ Building NDoc
 If you have Visual Studio .NET, you can build NDoc using the NDoc.sln 
 file located in this folder.
 
-If you don't have VS.NET but do have the .NET Framework SDK and the 
-latest version of NAnt (http://nant.sf.net/) installed, then you can 
+If you don't have VS.NET but do have the .NET Framework SDK and NAnt 
+v0.8.4 or above (http://nant.sf.net/) installed, then you can 
 build NDoc using the ndoc.build file located in this folder. Just type 
 nant from within that directory and you should be good to go.
 
