@@ -141,12 +141,14 @@
 			<xsl:when test="local-name()='constructor' or local-name()='property' or local-name()='method' or local-name()='event' or local-name()='operator'">
 				<xsl:choose>
 					<xsl:when test="local-name(..)='interface'">Interface</xsl:when>
+					<xsl:when test="local-name(..)='structure'">Structure</xsl:when>
 					<xsl:otherwise>Class</xsl:otherwise>
 				</xsl:choose>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:choose>
 					<xsl:when test="local-name()='interface'">Interface</xsl:when>
+					<xsl:when test="local-name(..)='structure'">Structure</xsl:when>
 					<xsl:otherwise>Class</xsl:otherwise>
 				</xsl:choose>
 			</xsl:otherwise>
@@ -682,9 +684,11 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
+
 	<!-- -->
 	<xsl:template name="html-head">
 		<xsl:param name="title" />
+		<xsl:param name="page-type"/>
 		<head>
 			<title>
 				<xsl:value-of select="$title" />
@@ -692,11 +696,21 @@
 			<xml>
 				<xsl:apply-templates select="." mode="MSHelpTitle">
 					<xsl:with-param name="title" select="$title"/>
+					<xsl:with-param name="page-type" select="$page-type"/>						
 				</xsl:apply-templates>
 				
-				<xsl:apply-templates select="." mode="KIndex"/>
-				<xsl:apply-templates select="." mode="FIndex"/>
-				<xsl:apply-templates select="." mode="AIndex"/>
+				<xsl:if test="$page-type!='hierarchy'">
+					<xsl:apply-templates select="." mode="KIndex">
+						<xsl:with-param name="title" select="$title"/>
+						<xsl:with-param name="page-type" select="$page-type"/>						
+					</xsl:apply-templates>
+					
+					<xsl:apply-templates select="." mode="FIndex">
+						<xsl:with-param name="title" select="$title"/>
+						<xsl:with-param name="page-type" select="$page-type"/>
+					</xsl:apply-templates>
+				</xsl:if>
+				<!--<xsl:apply-templates select="." mode="AIndex"/>-->
 
 				<MSHelp:Attr Name="DocSet" Value="NETFramework"/>
 				<MSHelp:Attr Name="TopicType" Value="kbSyntax"/>
@@ -710,7 +724,7 @@
 				<MSHelp:Attr Name="TechnologyVers" Value="kbWFC"/>
 				<MSHelp:Attr Name="TechnologyVers" Value="kbManagedC"/>
 				<MSHelp:Attr Name="Locale" Value="kbEnglish"/>
-				<MSHelp:Attr Name="HelpPriority" Value="2"/>
+				<MSHelp:Attr Name="HelpPriority" Value="3"/>
 			</xml>
 			<SCRIPT SRC="dtuelink.js"></SCRIPT>
 		</head>

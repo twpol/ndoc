@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
-
+<!-- good for debugging -->
+<xsl:output indent="yes"/>
 	<!-- provide no-op override for all non-specified types -->
 	<xsl:template match="* | node() | text()" mode="FIndex"/>
 	<xsl:template match="* | node() | text()" mode="KIndex"/>
@@ -8,41 +9,84 @@
 	
 	<!-- this is just here until each type has it's own title logic -->
 	<xsl:template match="* | node() | text()" mode="MSHelpTitle">
-		<MSHelp:TOCTitle>
-			<xsl:attribute name="Title"><xsl:value-of select="@id"/></xsl:attribute>
-		</MSHelp:TOCTitle>
-		<MSHelp:RLTitle>
-			<xsl:attribute name="Title"><xsl:value-of select="@id"/></xsl:attribute>
-		</MSHelp:RLTitle>	
+		<MSHelp:TOCTitle Title="{@id}"/>
+		<MSHelp:RLTitle Title="{@id}"/>
 	</xsl:template>
 	
 	<xsl:template match="ndoc" mode="MSHelpTitle">
 		<xsl:param name="title" />
-		<MSHelp:TOCTitle>
-			<xsl:attribute name="Title"><xsl:value-of select="$title"/></xsl:attribute>
-		</MSHelp:TOCTitle>
-		<MSHelp:RLTitle>
-			<xsl:attribute name="Title"><xsl:value-of select="concat( $title, ' Namespace' )"/></xsl:attribute>
-		</MSHelp:RLTitle>	
+		<MSHelp:TOCTitle Title="{$title}"/>
+		<MSHelp:RLTitle Title="{concat( $title, ' Namespace' )}"/>
 	</xsl:template>
 	
-	<xsl:template match="enumeration" mode="MSHelpTitle">
+	<xsl:template match="enumeration | delegate | constructor" mode="MSHelpTitle">
 		<xsl:param name="title" />
-		<MSHelp:TOCTitle>
-			<xsl:attribute name="Title"><xsl:value-of select="$title"/></xsl:attribute>
-		</MSHelp:TOCTitle>
-		<MSHelp:RLTitle>
-			<xsl:attribute name="Title"><xsl:value-of select="$title"/></xsl:attribute>
-		</MSHelp:RLTitle>	
+		<MSHelp:TOCTitle Title="{$title}"/>
+		<MSHelp:RLTitle Title="{$title}"/>	
 	</xsl:template>
 	
 	
+	<xsl:template match="class | interface | structure" mode="MSHelpTitle">
+		<xsl:param name="title" />
+		<xsl:param name="page-type"/>
+		<xsl:choose>
+			<xsl:when test="$page-type='type' or $page-type='hierarchy' or $page-type='Members'">
+				<MSHelp:TOCTitle Title="{$title}"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<MSHelp:TOCTitle Title="{concat( @name, ' ', $page-type )}"/>
+			</xsl:otherwise>
+		</xsl:choose>
+		<MSHelp:RLTitle Title="{$title}"/>
+	</xsl:template>
+		
+	<xsl:template match="method" mode="MSHelpTitle">
+		<xsl:param name="title" />
+		<xsl:param name="page-type"/>	
+		<MSHelp:TOCTitle Title="{concat( @name, ' ', $page-type )}"/>	
+		<MSHelp:RLTitle Title="{$title}"/>
+	</xsl:template>
+	
+	<xsl:template match="operator" mode="MSHelpTitle">
+		<xsl:param name="title" />
+		<xsl:param name="page-type"/>	
+		<MSHelp:TOCTitle Title="{$page-type}"/>	
+		<MSHelp:RLTitle Title="{$title}"/>
+	</xsl:template>
+		
+	<xsl:template match="ndoc" mode="FIndex">
+		<xsl:param name="title"/>
+		<xsl:call-template name="add-index-term">
+			<xsl:with-param name="index">F</xsl:with-param>
+			<xsl:with-param name="term" select="$title"/>
+		</xsl:call-template>
+	</xsl:template>		
+	
+	<xsl:template match="delegate" mode="FIndex">
+		<xsl:call-template name="add-index-term">
+			<xsl:with-param name="index">F</xsl:with-param>
+			<xsl:with-param name="term" select="substring-after( @id, ':')"/>
+		</xsl:call-template>
+	</xsl:template>	
+
 	<xsl:template match="enumeration" mode="FIndex">
 		<xsl:call-template name="add-index-term">
 			<xsl:with-param name="index">F</xsl:with-param>
 			<xsl:with-param name="term" select="substring-after( @id, ':')"/>
 		</xsl:call-template>
 		<xsl:apply-templates select="field" mode="FIndex"/>
+	</xsl:template>	
+
+	<xsl:template match="class | structure | interface" mode="FIndex">
+		<xsl:param name="title"/>
+		<xsl:param name="page-type"/>
+
+		<xsl:if test="$page-type='Members' or $page-type='type'">
+			<xsl:call-template name="add-index-term">
+				<xsl:with-param name="index">F</xsl:with-param>
+				<xsl:with-param name="term" select="substring-after( @id, ':' )"/>
+			</xsl:call-template>
+		</xsl:if>			
 	</xsl:template>	
 
 	<xsl:template match="enumeration/field" mode="FIndex">
@@ -56,21 +100,78 @@
 		</xsl:call-template>		
 	</xsl:template>	
 	
-	<xsl:template match="namespace" mode="FIndex">
-		<!-- TODO - look at how nested namespace appear -->
-		<xsl:call-template name="add-index-term">
-			<xsl:with-param name="index">F</xsl:with-param>
-			<xsl:with-param name="term" select="@name"/>
-		</xsl:call-template>
-	</xsl:template>
 	
-	<xsl:template match="namespace" mode="KIndex">
-		<!-- TODO - look at how nested namespace appear -->
+	<xsl:template match="ndoc" mode="KIndex">
+		<xsl:param name="title" />
+		<xsl:if test="contains( $title, '.' )">
+			<xsl:call-template name="add-index-term">
+				<xsl:with-param name="index">K</xsl:with-param>
+				<xsl:with-param name="term" select="concat( substring-after( $title, '.' ), ' Namespace' )"/>
+			</xsl:call-template>		
+		</xsl:if>
 		<xsl:call-template name="add-index-term">
 			<xsl:with-param name="index">K</xsl:with-param>
-			<xsl:with-param name="term" select="concat( @name, ' namespace' )"/>
-		</xsl:call-template>
-	</xsl:template>
+			<xsl:with-param name="term" select="concat( $title, ' Namespace' )"/>
+		</xsl:call-template>		
+	</xsl:template>	
+	
+		
+	<xsl:template match="class | interface | structure" mode="KIndex">
+		<xsl:param name="title"/>
+		<xsl:param name="page-type"/>		
+		<xsl:choose>
+			<xsl:when test="$page-type='Members'">
+				<xsl:call-template name="add-index-term">
+					<xsl:with-param name="index">K</xsl:with-param>
+					<xsl:with-param name="term" select="concat( @name, ' ', local-name() )"/>
+				</xsl:call-template>					
+				<xsl:call-template name="add-index-term">
+					<xsl:with-param name="index">K</xsl:with-param>
+					<xsl:with-param name="term" select="concat( @name, ' ', local-name(), ', all members' )"/>
+				</xsl:call-template>					
+				<xsl:call-template name="add-index-term">
+					<xsl:with-param name="index">K</xsl:with-param>
+					<xsl:with-param name="term" select="concat( substring-after( @id, ':' ), ' ', local-name() )"/>
+				</xsl:call-template>					
+			</xsl:when>
+			<xsl:when test="$page-type='Properties'">
+				<xsl:call-template name="add-index-term">
+					<xsl:with-param name="index">K</xsl:with-param>
+					<xsl:with-param name="term" select="concat( @name, ' ', local-name(), ', properties' )"/>
+				</xsl:call-template>									
+			</xsl:when>
+			<xsl:when test="$page-type='Events'">
+				<xsl:call-template name="add-index-term">
+					<xsl:with-param name="index">K</xsl:with-param>
+					<xsl:with-param name="term" select="concat( @name, ' ', local-name(), ', events' )"/>
+				</xsl:call-template>									
+			</xsl:when>
+			<xsl:when test="$page-type='Operators'">
+				<xsl:call-template name="add-index-term">
+					<xsl:with-param name="index">K</xsl:with-param>
+					<xsl:with-param name="term" select="concat( @name, ' ', local-name(), ', operators' )"/>
+				</xsl:call-template>									
+			</xsl:when>
+			<xsl:when test="$page-type='Methods'">
+				<xsl:call-template name="add-index-term">
+					<xsl:with-param name="index">K</xsl:with-param>
+					<xsl:with-param name="term" select="concat( @name, ' ', local-name(), ', methods' )"/>
+				</xsl:call-template>									
+			</xsl:when>
+			<xsl:when test="$page-type='Fields'">
+				<xsl:call-template name="add-index-term">
+					<xsl:with-param name="index">K</xsl:with-param>
+					<xsl:with-param name="term" select="concat( @name, ' ', local-name(), ', fields' )"/>
+				</xsl:call-template>									
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:call-template name="add-index-term">
+					<xsl:with-param name="index">K</xsl:with-param>
+					<xsl:with-param name="term" select="concat( @name, ' ', local-name(), ', about ', @name, ' ', local-name() )"/>
+				</xsl:call-template>					
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>	
 	
 	<xsl:template match="enumeration" mode="KIndex">
 		<xsl:apply-templates select="field" mode="KIndex"/>
@@ -87,24 +188,22 @@
 		</xsl:call-template>		
 	</xsl:template>
 	
+		<xsl:template match="delegate" mode="KIndex">
+		<xsl:call-template name="add-index-term">
+			<xsl:with-param name="index">K</xsl:with-param>
+			<xsl:with-param name="term" select="concat( @name, ' delegate' )"/>
+		</xsl:call-template>		
+		<xsl:call-template name="add-index-term">
+			<xsl:with-param name="index">K</xsl:with-param>
+			<xsl:with-param name="term" select="concat( substring-after( @id, ':' ), ' delegate' )"/>
+		</xsl:call-template>		
+	</xsl:template>
 	
-	<xsl:template match="enumeration | namespace" mode="AIndex">
-		<MSHelp:Keyword Index="A">
-			<xsl:attribute name="Term">
-				<xsl:call-template name="get-filename-for-type">
-					<xsl:with-param name="id" select="@id"/>
-				</xsl:call-template>
-			</xsl:attribute>
-		</MSHelp:Keyword>			
-	</xsl:template>		
 	
 	<xsl:template name="add-index-term">
 		<xsl:param name="index"/>
 		<xsl:param name="term"/>
-		<MSHelp:Keyword>
-			<xsl:attribute name="Index"><xsl:value-of select="$index"/></xsl:attribute>
-			<xsl:attribute name="Term"><xsl:value-of select="$term"/></xsl:attribute>
-		</MSHelp:Keyword>
+		<MSHelp:Keyword Index="{$index}" Term="{$term}"/>
 	</xsl:template>	
 	
 </xsl:stylesheet>

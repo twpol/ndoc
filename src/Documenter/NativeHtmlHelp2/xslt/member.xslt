@@ -16,6 +16,7 @@
 		<xsl:variable name="type">
 			<xsl:choose>
 				<xsl:when test="local-name(..)='interface'">Interface</xsl:when>
+				<xsl:when test="local-name(..)='structure'">Structure</xsl:when>
 				<xsl:otherwise>Class</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
@@ -23,17 +24,17 @@
 			<xsl:choose>
 				<xsl:when test="local-name()='method'">Method</xsl:when>
 				<xsl:when test="local-name()='operator'">
-			    <xsl:call-template name="operator-name">
-				    <xsl:with-param name="name">
-				      <xsl:value-of select="@name" />
-				    </xsl:with-param>
-				    <xsl:with-param name="from">
-				      <xsl:value-of select="parameter/@type" />
-				    </xsl:with-param>
-				    <xsl:with-param name="to">
-				      <xsl:value-of select="@returnType" />
-				    </xsl:with-param>
-			    </xsl:call-template>
+					<xsl:call-template name="operator-name">
+						<xsl:with-param name="name">
+						<xsl:value-of select="@name" />
+						</xsl:with-param>
+						<xsl:with-param name="from">
+						<xsl:value-of select="parameter/@type" />
+						</xsl:with-param>
+						<xsl:with-param name="to">
+						<xsl:value-of select="@returnType" />
+						</xsl:with-param>
+					</xsl:call-template>
 				</xsl:when>
 				<xsl:when test="@contract='Static'">Static Constructor</xsl:when>
 				<xsl:otherwise>Constructor</xsl:otherwise>
@@ -57,6 +58,7 @@
 					  </xsl:if>
 					</xsl:if>
 				</xsl:with-param>
+				<xsl:with-param name="page-type" select="$childType"/>					
 			</xsl:call-template>
 			<body topmargin="0" id="bodyID" class="dtBODY">
 				<object id="obj_cook" classid="clsid:59CC0C20-679B-11D2-88BD-0800361A1803" style="display:none;"></object>
@@ -70,7 +72,7 @@
 						<xsl:text>&#160;</xsl:text>
 						<xsl:value-of select="$childType" />
 						<xsl:text>&#160;</xsl:text>
-					  <xsl:if test="local-name()!='operator'">
+						<xsl:if test="local-name()!='operator'">
 						  <xsl:if test="count(parent::node()/*[@name=$memberName]) &gt; 1">
 							  <xsl:call-template name="get-param-list" />
 						  </xsl:if>
@@ -92,37 +94,6 @@
 						<xsl:with-param name="page">member</xsl:with-param>
 					</xsl:call-template>
 															  
-					<xsl:if test="local-name()='constructor'">
-						<xsl:if test="count(parent::node()/constructor) &lt; 2">
-							<xsl:if test="not($ndoc-omit-object-tags)">
-								<object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e" viewastext="true" style="display: none;">
-									<xsl:element name="param">
-										<xsl:attribute name="name">Keyword</xsl:attribute>
-										<xsl:attribute name="value"><xsl:value-of select='../@name' /> class, constructor</xsl:attribute>
-									</xsl:element>
-								</object>
-							</xsl:if>
-						</xsl:if>
-					</xsl:if>
-					
-					<xsl:if test="local-name()='method'">
-						<xsl:if test="not($ndoc-omit-object-tags)">
-							<object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e" viewastext="true" style="display: none;">
-								<xsl:element name="param">
-									<xsl:attribute name="name">Keyword</xsl:attribute>
-									<xsl:attribute name="value"><xsl:value-of select='@name' /> method</xsl:attribute>
-								</xsl:element>
-								<xsl:element name="param">
-									<xsl:attribute name="name">Keyword</xsl:attribute>
-									<xsl:attribute name="value"><xsl:value-of select="concat(@name, ' method, ', ../@name, ' ', local-name(parent::*))" /></xsl:attribute>
-								</xsl:element>
-								<xsl:element name="param">
-									<xsl:attribute name="name">Keyword</xsl:attribute>
-									<xsl:attribute name="value"><xsl:value-of select='../@name' />.<xsl:value-of select='@name' /> method</xsl:attribute>
-								</xsl:element>
-							</object>
-						</xsl:if>
-					</xsl:if>
 					
 					<xsl:call-template name="footer-row">
 						<xsl:with-param name="type-name">

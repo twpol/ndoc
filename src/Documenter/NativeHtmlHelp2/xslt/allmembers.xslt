@@ -14,6 +14,7 @@
 		<html dir="LTR">
 			<xsl:call-template name="html-head">
 				<xsl:with-param name="title" select="concat(@name, ' Members')" />
+				<xsl:with-param name="page-type" select="'Members'" />
 			</xsl:call-template>
 			<body topmargin="0" id="bodyID" class="dtBODY">
 				<xsl:call-template name="title-row">
@@ -222,22 +223,6 @@
 						<xsl:with-param name="page">members</xsl:with-param>
 					</xsl:call-template>
 					
-					<xsl:if test="not($ndoc-omit-object-tags)">
-						<object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e" viewastext="true" style="display: none;">
-							<xsl:element name="param">
-								<xsl:attribute name="name">Keyword</xsl:attribute>
-								<xsl:attribute name="value"><xsl:value-of select="concat(@name, ' ', local-name())" /></xsl:attribute>
-							</xsl:element>
-							<xsl:element name="param">
-								<xsl:attribute name="name">Keyword</xsl:attribute>
-								<xsl:attribute name="value"><xsl:value-of select="concat(substring-after(@id, ':'), ' ', local-name())" /></xsl:attribute>
-							</xsl:element>
-							<xsl:element name="param">
-								<xsl:attribute name="name">Keyword</xsl:attribute>
-								<xsl:attribute name="value"><xsl:value-of select="concat(@name, ' ', local-name(), ', all members')" /></xsl:attribute>
-							</xsl:element>
-						</object>
-					</xsl:if>
 										
 					<xsl:call-template name="footer-row">
 						<xsl:with-param name="type-name">

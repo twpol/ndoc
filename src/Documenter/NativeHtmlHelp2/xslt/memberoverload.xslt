@@ -16,6 +16,7 @@
 		<xsl:variable name="type">
 			<xsl:choose>
 				<xsl:when test="local-name(..)='interface'">Interface</xsl:when>
+				<xsl:when test="local-name(..)='structure'">Structure</xsl:when>
 				<xsl:otherwise>Class</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
@@ -48,6 +49,7 @@
 					<xsl:text>&#32;</xsl:text>
 					<xsl:value-of select="$childType" />
 				</xsl:with-param>
+				<xsl:with-param name="page-type" select="'member-overload'"/>				
 			</xsl:call-template>
 			<body topmargin="0" id="bodyID" class="dtBODY">
 				<object id="obj_cook" classid="clsid:59CC0C20-679B-11D2-88BD-0800361A1803" style="display:none;"></object>
@@ -144,16 +146,7 @@
 					<xsl:call-template name="seealso-section">
 						<xsl:with-param name="page">memberoverload</xsl:with-param>
 					</xsl:call-template>
-					<xsl:if test="local-name()='constructor'">
-						<xsl:if test="not($ndoc-omit-object-tags)">
-							<object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e" viewastext="true" style="display: none;">
-								<xsl:element name="param">
-									<xsl:attribute name="name">Keyword</xsl:attribute>
-									<xsl:attribute name="value"><xsl:value-of select='../@name' /> class, constructors</xsl:attribute>
-								</xsl:element>
-							</object>
-						</xsl:if>
-					</xsl:if>
+
 					<xsl:call-template name="footer-row">
 						<xsl:with-param name="type-name">
 							<xsl:value-of select="../@name" />
