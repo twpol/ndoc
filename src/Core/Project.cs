@@ -583,7 +583,7 @@ namespace NDoc.Core
 					string summary = reader.ReadInnerXml();
 
 					//ignore duplicate summaries
-					if (_namespaces.ContainsKey(name))
+					if (!_namespaces.ContainsKey(name))
 					{
 						_namespaces[name] = summary;
 					}
