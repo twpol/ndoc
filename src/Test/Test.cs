@@ -100,10 +100,16 @@ namespace	NDoc.Test
     /// <summary>
     /// Raises some events.
     /// </summary>
-    /// <event cref="Class.Event">
+    /// <remarks><para>
+    /// Raises the <see cref="Event"/> event when <see cref="OnEvent"/> is called,
+    /// if <see cref="Field"/> is greater than 0.
+    /// </para><para>
+    /// The above paragraph is only intended to test crefs on different member types...
+    /// </para></remarks>
+    /// <event cref="Event">
     /// Raised when something occurs.
     /// </event>
-    /// <event cref="Class.ProtectedEvent">
+    /// <event cref="ProtectedEvent">
     /// Raised when something else occurs.
     /// </event>
     public void RaisesSomeEvents()
