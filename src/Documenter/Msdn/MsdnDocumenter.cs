@@ -456,6 +456,8 @@ namespace NDoc.Documenter.Msdn
 			finally
 			{
 				xmlDocumentation = null;
+ 				xpathDocument = null;
+ 				stylesheets = null;
 				workspace.RemoveResourceDirectory();
 			}
 		}
