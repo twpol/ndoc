@@ -2294,6 +2294,7 @@ namespace NDoc.Core
 			MethodInfo method)
 		{
 			CheckForMissingParams(writer, memberName, method.GetParameters());
+			CheckForMissingReturns(writer, memberName, method);
 			WriteTypeDocumentation(writer, memberName, type);
 			WriteEndDocumentation(writer);
 		}
