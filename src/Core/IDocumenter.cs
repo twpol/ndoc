@@ -57,7 +57,7 @@ namespace NDoc.Core
 	}
 
 	/// <summary>
-	/// This is used to indicate the development status of each documenter.
+	/// Specifies the development status of a documenter.
 	/// </summary>
 	public enum DocumenterDevelopmentStatus
 	{
@@ -77,7 +77,7 @@ namespace NDoc.Core
 	}
 
 	/// <summary>
-	/// Used by IDocumenter's events to notify doc building progress.
+	/// Used by events raised by <see cref="IDocumenter"/> to notify doc building progress.
 	/// </summary>
 	/// <param name="sender">The source of the event.</param>
 	/// <param name="e">An <c>ProgressArgs</c> that contains the event data.</param>
