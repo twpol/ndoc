@@ -275,6 +275,12 @@ namespace NDoc.Test
 			}
 		}
 
+		/// <summary>Function returning a public inner class oject.</summary>
+		public Inner GetInnerClassObject() { return new Inner(); }
+
+		/// <summary>Function with a public inner class oject parameter.</summary>
+		public void TestInnerClassObject(Inner TheInner) { }
+
 		/// <summary>Represents a private inner class.</summary>
 		private class PrivateInner
 		{
