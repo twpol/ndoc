@@ -1386,7 +1386,7 @@ namespace NDoc.Gui
 				if ( Directory.Exists( Path.GetDirectoryName( documenter.MainOutputFile ) ) == false )
 					Directory.CreateDirectory( Path.GetDirectoryName( documenter.MainOutputFile ) );
 
-				string logPath = Path.Combine( Path.GetDirectoryName(documenter.MainOutputFile ), "ndoc.log" );
+				string logPath = Path.Combine( Path.GetDirectoryName( documenter.MainOutputFile ), "ndoc.log" );
 
 				ConfigureUIForBuild( true );
 
@@ -1827,8 +1827,7 @@ namespace NDoc.Gui
 			else
 			{
 				// Process exception
-				Trace.WriteLine( "An error occured while trying to build the documentation." );
-				Trace.WriteLine( "" );
+				Trace.WriteLine( "An error occured while trying to build the documentation.\n" );
 				App.BuildTraceError( e );
 
 				if ( App.GetInnermostException( e ) is DocumenterException )
@@ -1874,6 +1873,10 @@ namespace NDoc.Gui
 			Trace.WriteLine( "Build cancelled" );
 		}
 
+		/// <summary>
+		/// Receives progress reporting
+		/// </summary>
+		/// <param name="e">progress arguments</param>
 		public void ReportProgress(ProgressArgs e)
 		{
 			// This gets called from another thread so we must thread marhal back to the GUI thread.
