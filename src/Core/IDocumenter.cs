@@ -69,7 +69,11 @@ namespace NDoc.Core
 		Beta,
 		/// <summary>Ready for use, or at least as stable as free 
 		/// software gets!</summary>
-		Stable
+		Stable,
+		/// <summary>
+		/// No longer actively maintained.
+		/// </summary>
+		Obsolete
 	}
 
 	/// <summary>
