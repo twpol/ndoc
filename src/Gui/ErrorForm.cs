@@ -23,7 +23,7 @@ namespace NDoc.Gui
 		/// </summary>
 		private System.ComponentModel.Container components = null;
 
-		public ErrorForm(string message, Exception ex)
+		internal ErrorForm(string message, Exception ex)
 		{
 			//
 			// Required for Windows Form Designer support
