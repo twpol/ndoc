@@ -27,7 +27,7 @@
 			</csc>
 		</if>
 	</target>
-	<target name="locate-help-compilerservices-typelib">
+	<target name="locate-help-compilerservices-typelib" unless="${framework::get-family(framework::get-target-framework())='mono'}">
 		<readregistry property="help.compilerservices.typelib" key="TypeLib\{314111EE-A502-11D2-BBCA-00C04F8EC294}\1.0\0\win32\"
 			hive="ClassesRoot" failonerror="false" />
 		<if test="${not property::exists('help.compilerservices.typelib')}">
