@@ -190,8 +190,6 @@ namespace NDoc.Documenter.Msdn
 			return sdkDocBaseUrl + crefType.Replace(".", "") + "Class" + crefMember + "Topic" + sdkDocExt;
 		}
 
-		//TODO: if the author of this method could enlighten us on its purpose...
-		// ... He will try:
 		/// <summary>
 		/// Looks up, whether a member has similar overloads, that have already been documented.
 		/// </summary>
