@@ -108,7 +108,7 @@
 					<b>Note</b>
 				</xsl:otherwise>
 			</xsl:choose>
-			<xsl:text></xsl:text>
+			<xsl:text>&#160;&#160;</xsl:text>
 			<xsl:apply-templates mode="slashdoc" />
 		</blockquote>
 	</xsl:template>
