@@ -4,7 +4,7 @@
 	xmlns:MSHelp="http://msdn.microsoft.com/mshelp"
 	exclude-result-prefixes="NUtil" >
 	<!-- -->
-	<xsl:output method="xml" indent="no" encoding="utf-8" omit-xml-declaration="yes"/>
+	<xsl:output method="xml" indent="yes" encoding="utf-8" omit-xml-declaration="yes"/>
 	<!-- -->
 	<xsl:include href="common.xslt" />
 	<xsl:include href="syntax.xslt" />

@@ -2,7 +2,7 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
 	<!-- -->
-	<xsl:output method="xml" indent="no" encoding="utf-8" omit-xml-declaration="yes"/>
+	<xsl:output method="xml" indent="yes" encoding="utf-8" omit-xml-declaration="yes"/>
 	<!-- -->
 	<xsl:include href="common.xslt" />
 	<xsl:include href="syntax.xslt" />

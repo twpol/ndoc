@@ -4,7 +4,7 @@
 	xmlns:NUtil="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities"
 	exclude-result-prefixes="NUtil">
 	<!-- -->
-	<xsl:output method="xml" indent="no" encoding="utf-8" omit-xml-declaration="yes"/>
+	<xsl:output method="xml" indent="yes" encoding="utf-8" omit-xml-declaration="yes"/>
 	<!-- -->
 	<xsl:include href="common.xslt" />
 	<xsl:include href="syntax.xslt" />
@@ -47,7 +47,7 @@
 	<!-- -->
 	<xsl:template match="class">
 		<xsl:call-template name="type">
-			<xsl:with-param name="type">Class</xsl:with-param>
+			<xsl:with-param name="type">ClassXXX</xsl:with-param>
 		</xsl:call-template>
 	</xsl:template>
 	<!-- -->

@@ -4,7 +4,7 @@
 	xmlns:NUtil="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities"
 	exclude-result-prefixes="NUtil">	
 	<!-- -->
-	<xsl:output method="xml" indent="no" encoding="utf-8" omit-xml-declaration="yes"/>
+	<xsl:output method="xml" indent="yes" encoding="utf-8" omit-xml-declaration="yes"/>
 	<!-- -->
 	<xsl:include href="common.xslt" />
 	<!-- -->
