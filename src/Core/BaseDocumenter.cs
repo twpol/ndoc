@@ -2573,7 +2573,7 @@ namespace NDoc.Core
 									bMissingSummary=false;
 								}
 							}
-							else if (reader.Name=="remarks")
+							if (reader.Name=="remarks")
 							{
 								string remarksdetails =reader.ReadInnerXml();
 								if (remarksdetails.Length>0)
