@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Specialized;
 using System.Globalization;
-using MSHelpServices;
+using NDoc.Core;
 
 namespace NDoc.Documenter.Msdn
 {
@@ -30,32 +30,40 @@ namespace NDoc.Documenter.Msdn
 		/// <param name="fileNames">A StringDictionary holding id to file name mappings.</param>
 		/// <param name="elemNames">A StringDictionary holding id to element name mappings</param>
 		/// <param name="linkToSdkDocVersion">Specifies the version of the SDK documentation.</param>
+		/// <param name="linkToSdkDocLangauge">Specifies the version of the SDK documentation.</param>
+		/// <param name="SdkLinksOnWeb">Specifies if links should be to ms online documentation.</param>
 		public MsdnXsltUtilities(
 			StringDictionary fileNames, 
 			StringDictionary elemNames, 
-			SdkDocVersion linkToSdkDocVersion)
+			SdkVersion  linkToSdkDocVersion,
+			string linkToSdkDocLangauge,
+			bool SdkLinksOnWeb)
 		{
 			Reset();
 
 			this.fileNames = fileNames;
 			this.elemNames = elemNames;
 			
+
+			if (SdkLinksOnWeb)
+			{
+				sdkDocBaseUrl = msdnOnlineSdkBaseUrl;
+				sdkDocExt = msdnOnlineSdkPageExt;
+			}
+			else
+			{
 			switch (linkToSdkDocVersion)
 			{
-				case SdkDocVersion.SDK_v1_0:
-					sdkDocBaseUrl = GetLocalizedFrameworkURL(sdkDoc10BaseNamespace);
+					case SdkVersion.SDK_v1_0:
+						sdkDocBaseUrl = GetLocalizedFrameworkURL(sdkDoc10BaseNamespace,linkToSdkDocLangauge);
 					sdkDocExt = sdkDocPageExt;
 					break;
-				case SdkDocVersion.SDK_v1_1:
-					sdkDocBaseUrl = GetLocalizedFrameworkURL(sdkDoc11BaseNamespace);
+					case SdkVersion.SDK_v1_1:
+						sdkDocBaseUrl = GetLocalizedFrameworkURL(sdkDoc11BaseNamespace,linkToSdkDocLangauge);
 					sdkDocExt = sdkDocPageExt;
-					break;
-				case SdkDocVersion.MsdnOnline:
-					sdkDocBaseUrl = msdnOnlineSdkBaseUrl;
-					sdkDocExt = msdnOnlineSdkPageExt;
 					break;
 			}
-
+			}
 		}
 
 		/// <summary>
@@ -215,24 +223,20 @@ namespace NDoc.Documenter.Msdn
 		/// returns a localized sdk url if one exists for the <see cref="CultureInfo.CurrentCulture"/>.
 		/// </summary>
 		/// <param name="searchNamespace">base namespace to search for</param>
+		/// <param name="langCode">the localization language code</param>
 		/// <returns>ms-help url for sdk</returns>
-		private string GetLocalizedFrameworkURL(string searchNamespace)
+		private string GetLocalizedFrameworkURL(string searchNamespace, string langCode)
 		{
-			string localizedNamespace = searchNamespace + "." + CultureInfo.CurrentCulture.TwoLetterISOLanguageName.ToUpper();
-
-			HxRegistryWalkerClass hrw = new HxRegistryWalkerClass();
-
-			IHxRegNamespaceList HRNList = hrw.get_RegisteredNamespaceList("");
-			foreach(MSHelpServices.IHxRegNamespace HRN in HRNList)
+			if (langCode!="en")
 			{
-				if (HRN.Name == localizedNamespace)
+				return helpURL + searchNamespace + "." + langCode.ToUpper() + sdkRoot;
+				}
+			else
 				{
-					return helpURL + localizedNamespace + sdkRoot;
+			//default to non-localized namespace
+			return helpURL + searchNamespace + sdkRoot;
 				}
 			}
 
-			//default to non-localized namespace
-			return helpURL + searchNamespace + sdkRoot;
-		}
 	}
 }

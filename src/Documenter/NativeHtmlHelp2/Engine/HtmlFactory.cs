@@ -68,8 +68,9 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <param name="tempFileName">NDoc generated temp xml file</param>
 		/// <param name="outputDirectory">The directory to write the Html files to</param>
 		/// <param name="htmlProvider">Object the provides additional Html content</param>
-		/// <param name="sdkVersion">The SDK version to use for System references</param>
-		public HtmlFactory( string tempFileName, string outputDirectory, ExternalHtmlProvider htmlProvider, SdkDocVersion sdkVersion )
+		/// <param name="sdkDocVersion">The SDK version to use for System references</param>
+		/// <param name="sdkDocLangCode">The SDK language to use for System references</param>
+		public HtmlFactory( string tempFileName, string outputDirectory, ExternalHtmlProvider htmlProvider, SdkVersion sdkDocVersion, string sdkDocLangCode )
 		{			
 			// Load the XML documentation.
 			xmlDocumentation = new XmlDocument();
@@ -107,13 +108,16 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			this.Arguments.AddExtensionObject( "urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities", _utilities );
 			this.Arguments.AddExtensionObject( "urn:NDocExternalHtml", _htmlProvider );
 
-			if ( sdkVersion == SdkDocVersion.SDK_v1_0 )
-				nsMapper.SetSystemNamespace( "ms-help://MS.NETFrameworkSDK" );
-			else if ( sdkVersion == SdkDocVersion.SDK_v1_1 )
-				nsMapper.SetSystemNamespace( "ms-help://MS.NETFrameworkSDKv1.1" );
+			string NSName="";
+			if ( sdkDocVersion == SdkVersion.SDK_v1_0 )
+				NSName = "ms-help://MS.NETFrameworkSDK";
+			else if ( sdkDocVersion == SdkVersion.SDK_v1_1 )
+				NSName = "ms-help://MS.NETFrameworkSDKv1.1";
 			else
 				Debug.Assert( false );		// remind ourselves to update this list when new framework versions are supported
-
+			if (sdkDocLangCode != "en")
+				NSName = NSName + "." + sdkDocLangCode;
+			nsMapper.SetSystemNamespace(NSName);
 		}
 
 		#region events

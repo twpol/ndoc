@@ -281,7 +281,8 @@ namespace NDoc.Documenter.Msdn
 
 				MakeFilenames();
 
-				utilities = new MsdnXsltUtilities(fileNames, elemNames, MyConfig.LinkToSdkDocVersion);
+				string DocLangCode = Enum.GetName(typeof(SdkLanguage),MyConfig.SdkDocLanguage).Replace("_","-");
+				utilities = new MsdnXsltUtilities(fileNames, elemNames, MyConfig.SdkDocVersion, DocLangCode, MyConfig.SdkLinksOnWeb);
 
 				OnDocBuildingStep(30, "Loading XSLT files...");
 
