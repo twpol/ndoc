@@ -1198,14 +1198,7 @@ namespace NDoc.Core
 		/// <param name="type"></param>
 		private string GetTypeNamespaceName(Type type)
 		{
-			string theNamespace = "";
-
-			if (type.Namespace != null && type.Namespace.Length > 0)
-			{
-				theNamespace = type.Namespace + ".";
-			}
-
-			return theNamespace + type.Name.Replace('+', '.');
+			return type.FullName.Replace('+', '.');
 		}
 
 		/// <summary>Used by all the GetMemberName() functions except the

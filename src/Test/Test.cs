@@ -252,6 +252,17 @@ namespace NDoc.Test
 		/// <remarks>These are some remarks.</remarks>
 		public class Inner
 		{
+			/// <summary>This is a field of the inner class.</summary>
+			/// <remarks>These are some remarks</remarks>
+			public int InnerField;
+
+			/// <summary>This is a property of the inner class.</summary>
+			/// <remarks>These are some remarks</remarks>
+			public int InnerProperty { get { return 0; } }
+
+			/// <summary>This is a method of the inner class.</summary>
+			/// <remarks>These are some remarks</remarks>
+			public void InnerMethod() { }
 		}
 
 		/// <summary>Represents a private inner class.</summary>
