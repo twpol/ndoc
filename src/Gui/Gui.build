@@ -18,8 +18,9 @@
 			<resources>
 				<include name="**/*.resx" />
 			</resources>
-			<resources prefix="NDoc.Gui">
+			<resources prefix="NDoc.Gui" dynamicprefix="true">
 				<include name="About.rtf" />
+				<include name="graphics/*.ico" />
 			</resources>
 		</csc>
 		<copy file="NDocGui.exe.manifest" todir="${current.bin.dir}" />
