@@ -190,11 +190,12 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 
 				// get the ndoc xml
 				OnDocBuildingStep( 10, "Merging XML documentation..." );
-				XmlDocument xmlDocumentation = MergeXml( project );
+				string tempFileName = MakeXmlFile( project );
+				//Note: Temp file will be deleted by factory after loading...
 
 				// create and intialize a HtmlFactory
 				ExternalHtmlProvider htmlProvider = new ExternalHtmlProvider( MyConfig.HeaderHtml, MyConfig.FooterHtml );
-				HtmlFactory factory = new HtmlFactory( xmlDocumentation, w.ContentDirectory, htmlProvider, MyConfig.LinkToSdkDocVersion );
+				HtmlFactory factory = new HtmlFactory( tempFileName, w.ContentDirectory, htmlProvider, MyConfig.LinkToSdkDocVersion );
 
 				// generate all the html content - builds the toc along the way
 				using( new TOCBuilder( toc, factory ) )
@@ -336,35 +337,27 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			}
 		}
 
-		private XmlDocument MergeXml( Project project )
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="writer"></param>
+		protected override void AddDocumenterSpecificXmlData(XmlWriter writer)
 		{
-			// Let the Documenter base class do it's thing.
-			// Load the XML documentation into a DOM.
-			XmlDocument xmlDocumentation = new XmlDocument();
-			xmlDocumentation.LoadXml( MakeXml( project ) );
-
-			XmlNodeList typeNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace/*[name()!='documentation']");
-			
-			if ( typeNodes.Count == 0 )			
-				throw new DocumenterException("There are no documentable types in this project.");
-
 			// add the default docset for this help title
-			AddDocSet( xmlDocumentation, MyConfig.HtmlHelpName );
+			AddDocSet( writer, MyConfig.HtmlHelpName );
 
 			// also add the items from the custom docset list
 			foreach ( string s in MyConfig.DocSetList.Split( new char [] { ',' } ) )
-				AddDocSet( xmlDocumentation, s );
-
-			return xmlDocumentation;
+				AddDocSet( writer, s );
 		}
 
-		private void AddDocSet( XmlDocument xmlDocumentation, string id )
+		private void AddDocSet(XmlWriter writer, string id )
 		{
 			if ( id.Length > 0 )
 			{
-				XmlElement e = xmlDocumentation.CreateElement( "docSet" );
-				e.InnerText = id.Trim();
-				xmlDocumentation.DocumentElement.PrependChild( e );
+				writer.WriteStartElement( "docSet" );
+				writer.WriteString(id.Trim());
+				writer.WriteEndElement();
 			}
 		}
 
@@ -592,6 +585,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 
 			Process.Start( dexplore, s );
 		}
+	
 	}
 }
 

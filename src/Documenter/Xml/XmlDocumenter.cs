@@ -57,7 +57,7 @@ namespace NDoc.Documenter.Xml
 
 			XmlDocumenterConfig config = (XmlDocumenterConfig)Config;
 
-			string xmlBuffer = MakeXml(project);
+			string xmlFileName = MakeXmlFile(project);
 
 			OnDocBuildingStep(50, "Saving XML documentation...");
 
@@ -71,10 +71,9 @@ namespace NDoc.Documenter.Xml
 				}
 			}
 
-			using (StreamWriter sr = new StreamWriter(config.OutputFile, false, System.Text.Encoding.Unicode))
-			{
-				sr.Write(xmlBuffer);
-			}
+			if(File.Exists(xmlFileName))
+				File.Delete(xmlFileName);
+			File.Move(xmlFileName,config.OutputFile);
 
 			OnDocBuildingStep(100, "Done.");
 		}

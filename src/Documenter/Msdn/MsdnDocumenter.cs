@@ -221,13 +221,22 @@ namespace NDoc.Documenter.Msdn
 				OnDocBuildingStep(10, "Merging XML documentation...");
 
 				// Let the Documenter base class do it's thing.
+				string tempFileName = MakeXmlFile(project);
 				// Load the XML documentation into a DOM.
 				xmlDocumentation = new XmlDocument();
-				xmlDocumentation.LoadXml(MakeXml(project));
-
-                // create XPATH document
-                StringReader sr = new StringReader(xmlDocumentation.OuterXml);
-                xpathDocument = new XPathDocument(sr);
+				Stream tempFile=null;
+				try
+				{
+					tempFile=File.Open(tempFileName,FileMode.Open,FileAccess.Read);
+					xmlDocumentation.Load(tempFile);
+					tempFile.Seek(0,SeekOrigin.Begin);
+					xpathDocument = new XPathDocument(tempFile);
+				}
+				finally
+				{
+					if (tempFile!=null) tempFile.Close();
+					if (File.Exists(tempFileName)) File.Delete(tempFileName);
+				}
 
 				XmlNodeList typeNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace/*[name()!='documentation']");
 				if (typeNodes.Count == 0)

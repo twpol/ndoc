@@ -26,6 +26,7 @@ using System.Diagnostics;
 using System.Collections;
 using System.Collections.Specialized;
 
+using NDoc.Core; //for DocumenterException
 using NDoc.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping;
 
 namespace NDoc.Documenter.NativeHtmlHelp2.Engine
@@ -49,8 +50,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		private FileNameMapper  fileNameMapper;
 		private NamespaceMapper nsMapper;
 
+		private XmlDocument xmlDocumentation;			// the NDoc generates summary Xml
 		private XPathDocument xPathDocumentation;	// XPath version of the xmlDocumentation node (improves performance)
-		private XmlNode xmlDocumentation;			// the NDoc generates summary Xml
 
 		//for performance reasons we are going to re-use one XsltArguments collection
 		//rather than re-creating an empty one for each transformation
@@ -64,20 +65,40 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <summary>
 		/// Constructs a new instance of HtmlFactory
 		/// </summary>
-		/// <param name="documentationNode">NDoc generated xml</param>
+		/// <param name="tempFileName">NDoc generated temp xml file</param>
 		/// <param name="outputDirectory">The directory to write the Html files to</param>
 		/// <param name="htmlProvider">Object the provides additional Html content</param>
 		/// <param name="sdkVersion">The SDK version to use for System references</param>
-		public HtmlFactory( XmlNode documentationNode, string outputDirectory, ExternalHtmlProvider htmlProvider, SdkDocVersion sdkVersion )
+		public HtmlFactory( string tempFileName, string outputDirectory, ExternalHtmlProvider htmlProvider, SdkDocVersion sdkVersion )
 		{			
+			// Load the XML documentation.
+			xmlDocumentation = new XmlDocument();
+			Stream tempFile=null;
+			try
+			{
+				tempFile=File.Open(tempFileName,FileMode.Open,FileAccess.Read);
+				xmlDocumentation.Load(tempFile);
+				tempFile.Seek(0,SeekOrigin.Begin);
+				xPathDocumentation = new XPathDocument(tempFile);
+			}
+			finally
+			{
+				if (tempFile!=null) tempFile.Close();
+				if (File.Exists(tempFileName)) File.Delete(tempFileName);
+			}
+
+			//check if there is anything to document
+			XmlNodeList typeNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace/*[name()!='documentation']");
+			if ( typeNodes.Count == 0 )			
+				throw new DocumenterException("There are no documentable types in this project.");
+
 			if ( !Directory.Exists( outputDirectory ) )
 				throw new Exception( string.Format( "The output directory {0}, does not exist", outputDirectory ) );
 
 			_outputDirectory = outputDirectory;
-			xmlDocumentation = documentationNode;
 			documentedNamespaces = new ArrayList();
 		
-			fileNameMapper = new FileNameMapper(documentationNode);
+			fileNameMapper = new FileNameMapper(xmlDocumentation);
 			nsMapper = new NamespaceMapper( Path.Combine( Directory.GetParent( _outputDirectory ).ToString(), "NamespaceMap.xml" ) );
 			_htmlProvider = htmlProvider;
 			_utilities = new MsdnXsltUtilities( this.nsMapper, this.fileNameMapper );
@@ -93,7 +114,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			else
 				Debug.Assert( false );		// remind ourselves to update this list when new framework versions are supported
 
-			xPathDocumentation = new XPathDocument( new StringReader( xmlDocumentation.OuterXml ) );
 		}
 
 		#region events
