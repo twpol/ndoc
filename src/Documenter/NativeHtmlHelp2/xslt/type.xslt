@@ -108,7 +108,8 @@
 						<p>This enumeration has a 
 						<xsl:call-template name="get-a-href">
 								<xsl:with-param name="cref" select="'T:System.FlagsAttribute'" />
-							</xsl:call-template>
+								<xsl:with-param name="ignore-text" select="true()"/>
+						</xsl:call-template>
 						attribute that allows a bitwise combination of its member values.</p>
 					</xsl:if>
 					<xsl:if test="local-name() != 'delegate' and local-name() != 'enumeration'">
