@@ -2,12 +2,12 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:MSHelp="http://msdn.microsoft.com/mshelp" >
 	
 	<!-- html help 2 data island template -->
-	<xsl:template match="ndoc" mode="xml-data-island">
+	<xsl:template match="node()" mode="xml-data-island" priority="1">
 		<MSHelp:Attr Name="TargetOS" Value="Windows"/>
 	</xsl:template>
 	
 	<!-- header template -->
-	<xsl:template match="node()" mode="header-section">
+	<xsl:template match="ndoc" mode="header-section">
 		<style type="text/css">
 			.green
 			{
