@@ -27,6 +27,7 @@ using System.Collections;
 using System.Collections.Specialized;
 
 using NDoc.Core; //for DocumenterException
+using NDoc.Core.Reflection;
 using NDoc.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping;
 
 namespace NDoc.Documenter.NativeHtmlHelp2.Engine
