@@ -76,6 +76,9 @@ namespace NDoc.Test
 		}
 
 		/// <summary>This overloaded indexer accepts an int.</summary>
+		/// <param name="i">The int index.</param>
+		/// <value>Always returns 0.</value>
+		/// <remarks>No comment.</remarks>
 		public int this[int i]
 		{
 			get { return 0; }
