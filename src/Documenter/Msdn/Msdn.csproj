@@ -130,6 +130,46 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "images\intevent.gif"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "images\intfield.gif"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "images\intmethod.gif"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "images\intoperator.gif"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "images\intproperty.gif"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "images\privevent.gif"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "images\privfield.gif"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "images\privmethod.gif"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "images\privoperator.gif"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "images\privproperty.gif"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "images\protevent.gif"
                     BuildAction = "EmbeddedResource"
                 />
@@ -139,6 +179,10 @@
                 />
                 <File
                     RelPath = "images\protmethod.gif"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "images\protoperator.gif"
                     BuildAction = "EmbeddedResource"
                 />
                 <File

@@ -281,9 +281,15 @@
 							<xsl:when test="@access='Public'">
 								<img src="pubproperty.gif" />
 							</xsl:when>
-							<xsl:otherwise>
+							<xsl:when test="@access='Family'">
 								<img src="protproperty.gif" />
-							</xsl:otherwise>
+							</xsl:when>
+							<xsl:when test="@access='Private'">
+								<img src="privproperty.gif" />
+							</xsl:when>
+							<xsl:when test="@access='Assembly' or @access='FamilyOrAssembly'">
+								<img src="intproperty.gif" />
+							</xsl:when>
 						</xsl:choose>
 						<xsl:if test="@contract='Static'">
 							<img src="static.gif" />
@@ -316,9 +322,15 @@
 							<xsl:when test="@access='Public'">
 								<img src="pubproperty.gif" />
 							</xsl:when>
-							<xsl:otherwise>
+							<xsl:when test="@access='Family'">
 								<img src="protproperty.gif" />
-							</xsl:otherwise>
+							</xsl:when>
+							<xsl:when test="@access='Private'">
+								<img src="privproperty.gif" />
+							</xsl:when>
+							<xsl:when test="@access='Assembly' or @access='FamilyOrAssembly'">
+								<img src="intproperty.gif" />
+							</xsl:when>
 						</xsl:choose>
 						<xsl:if test="@contract='Static'">
 							<img src="static.gif" />
@@ -351,9 +363,15 @@
 							<xsl:when test="@access='Public'">
 								<img src="pubfield.gif" />
 							</xsl:when>
-							<xsl:otherwise>
+							<xsl:when test="@access='Family'">
 								<img src="protfield.gif" />
-							</xsl:otherwise>
+							</xsl:when>
+							<xsl:when test="@access='Private'">
+								<img src="privfield.gif" />
+							</xsl:when>
+							<xsl:when test="@access='Assembly' or @access='FamilyOrAssembly'">
+								<img src="intfield.gif" />
+							</xsl:when>
 						</xsl:choose>
 						<xsl:if test="@contract='Static'">
 							<img src="static.gif" />
@@ -386,9 +404,15 @@
 							<xsl:when test="@access='Public'">
 								<img src="pubfield.gif" />
 							</xsl:when>
-							<xsl:otherwise>
+							<xsl:when test="@access='Family'">
 								<img src="protfield.gif" />
-							</xsl:otherwise>
+							</xsl:when>
+							<xsl:when test="@access='Private'">
+								<img src="privfield.gif" />
+							</xsl:when>
+							<xsl:when test="@access='Assembly' or @access='FamilyOrAssembly'">
+								<img src="intfield.gif" />
+							</xsl:when>
 						</xsl:choose>
 						<xsl:if test="@contract='Static'">
 							<img src="static.gif" />
@@ -416,9 +440,15 @@
 					<xsl:when test="@access='Public'">
 						<img src="pubproperty.gif" />
 					</xsl:when>
-					<xsl:otherwise>
+					<xsl:when test="@access='Family'">
 						<img src="protproperty.gif" />
-					</xsl:otherwise>
+					</xsl:when>
+					<xsl:when test="@access='Private'">
+						<img src="privproperty.gif" />
+					</xsl:when>
+					<xsl:when test="@access='Assembly' or @access='FamilyOrAssembly'">
+						<img src="intproperty.gif" />
+					</xsl:when>
 				</xsl:choose>
 				<xsl:if test="@contract='Static'">
 					<img src="static.gif" />
@@ -456,12 +486,18 @@
 							<xsl:when test="following-sibling::method[@name=$name]">
 								<td width="50%">
 								  <xsl:choose>
-								    <xsl:when test="@access='Public'">
-								      <img src="pubmethod.gif" />
-								    </xsl:when>
-								    <xsl:otherwise>
-								      <img src="protmethod.gif" />
-								    </xsl:otherwise>
+									<xsl:when test="@access='Public'">
+										<img src="pubmethod.gif" />
+									</xsl:when>
+									<xsl:when test="@access='Family'">
+										<img src="protmethod.gif" />
+									</xsl:when>
+									<xsl:when test="@access='Private'">
+										<img src="privmethod.gif" />
+									</xsl:when>
+									<xsl:when test="@access='Assembly' or @access='FamilyOrAssembly'">
+										<img src="intmethod.gif" />
+									</xsl:when>
 								  </xsl:choose>
 								  <xsl:if test="@contract='Static'">
 								    <img src="static.gif" />
@@ -493,12 +529,18 @@
 							<xsl:otherwise>
 								<td width="50%">
 								  <xsl:choose>
-								    <xsl:when test="@access='Public'">
-								      <img src="pubmethod.gif" />
-								    </xsl:when>
-								    <xsl:otherwise>
-								      <img src="protmethod.gif" />
-								    </xsl:otherwise>
+									<xsl:when test="@access='Public'">
+										<img src="pubmethod.gif" />
+									</xsl:when>
+									<xsl:when test="@access='Family'">
+										<img src="protmethod.gif" />
+									</xsl:when>
+									<xsl:when test="@access='Private'">
+										<img src="privmethod.gif" />
+									</xsl:when>
+									<xsl:when test="@access='Assembly' or @access='FamilyOrAssembly'">
+										<img src="intmethod.gif" />
+									</xsl:when>
 								  </xsl:choose>
 								  <xsl:if test="@contract='Static'">
 								    <img src="static.gif" />
@@ -531,11 +573,17 @@
 						<td width="50%">
 							<xsl:choose>
 								<xsl:when test="@access='Public'">
-								  <img src="pubmethod.gif" />
+									<img src="pubmethod.gif" />
 								</xsl:when>
-								<xsl:otherwise>
-								  <img src="protmethod.gif" />
-								</xsl:otherwise>
+								<xsl:when test="@access='Family'">
+									<img src="protmethod.gif" />
+								</xsl:when>
+								<xsl:when test="@access='Private'">
+									<img src="privmethod.gif" />
+								</xsl:when>
+								<xsl:when test="@access='Assembly' or @access='FamilyOrAssembly'">
+									<img src="intmethod.gif" />
+								</xsl:when>
 							</xsl:choose>
 							<xsl:if test="@contract='Static'">
 								<img src="static.gif" />
@@ -564,9 +612,15 @@
 					<xsl:when test="@access='Public'">
 						<img src="pubmethod.gif" />
 					</xsl:when>
-					<xsl:otherwise>
+					<xsl:when test="@access='Family'">
 						<img src="protmethod.gif" />
-					</xsl:otherwise>
+					</xsl:when>
+					<xsl:when test="@access='Private'">
+						<img src="privmethod.gif" />
+					</xsl:when>
+					<xsl:when test="@access='Assembly' or @access='FamilyOrAssembly'">
+						<img src="intmethod.gif" />
+					</xsl:when>
 				</xsl:choose>
 				<xsl:if test="@contract='Static'">
 					<img src="static.gif" />
@@ -604,9 +658,15 @@
 							<xsl:when test="@access='Public'">
 								<img src="pubevent.gif" />
 							</xsl:when>
-							<xsl:otherwise>
+							<xsl:when test="@access='Family'">
 								<img src="protevent.gif" />
-							</xsl:otherwise>
+							</xsl:when>
+							<xsl:when test="@access='Private'">
+								<img src="privevent.gif" />
+							</xsl:when>
+							<xsl:when test="@access='Assembly' or @access='FamilyOrAssembly'">
+								<img src="intevent.gif" />
+							</xsl:when>
 						</xsl:choose>
 						<xsl:if test="@contract='Static'">
 							<img src="static.gif" />
@@ -639,9 +699,15 @@
 							<xsl:when test="@access='Public'">
 								<img src="pubevent.gif" />
 							</xsl:when>
-							<xsl:otherwise>
+							<xsl:when test="@access='Family'">
 								<img src="protevent.gif" />
-							</xsl:otherwise>
+							</xsl:when>
+							<xsl:when test="@access='Private'">
+								<img src="privevent.gif" />
+							</xsl:when>
+							<xsl:when test="@access='Assembly' or @access='FamilyOrAssembly'">
+								<img src="intevent.gif" />
+							</xsl:when>
 						</xsl:choose>
 						<xsl:if test="@contract='Static'">
 							<img src="static.gif" />
@@ -669,9 +735,15 @@
 					<xsl:when test="@access='Public'">
 						<img src="pubevent.gif" />
 					</xsl:when>
-					<xsl:otherwise>
+					<xsl:when test="@access='Family'">
 						<img src="protevent.gif" />
-					</xsl:otherwise>
+					</xsl:when>
+					<xsl:when test="@access='Private'">
+						<img src="privevent.gif" />
+					</xsl:when>
+					<xsl:when test="@access='Assembly' or @access='FamilyOrAssembly'">
+						<img src="intevent.gif" />
+					</xsl:when>
 				</xsl:choose>
 				<xsl:if test="@contract='Static'">
 					<img src="static.gif" />
@@ -716,7 +788,7 @@
 								    </xsl:attribute>
 								  </img>
 								</xsl:when>
-								<xsl:otherwise>
+								<xsl:when test="@access='Family'">
 								  <img>
 								    <xsl:attribute name="src">
 								      <xsl:text>prot</xsl:text>
@@ -724,7 +796,25 @@
 								      <xsl:text>.gif</xsl:text>
 								    </xsl:attribute>
 								  </img>
-								</xsl:otherwise>
+								</xsl:when>
+								<xsl:when test="@access='Private'">
+								  <img>
+								    <xsl:attribute name="src">
+								      <xsl:text>priv</xsl:text>
+								      <xsl:value-of select="local-name()"/>
+								      <xsl:text>.gif</xsl:text>
+								    </xsl:attribute>
+								  </img>
+								</xsl:when>
+								<xsl:when test="@access='Assembly' or @access='FamilyOrAssembly'">
+								  <img>
+								    <xsl:attribute name="src">
+								      <xsl:text>int</xsl:text>
+								      <xsl:value-of select="local-name()"/>
+								      <xsl:text>.gif</xsl:text>
+								    </xsl:attribute>
+								  </img>
+								</xsl:when>
 							</xsl:choose>
 							<xsl:if test="@contract='Static'">
 								<img src="static.gif" />
@@ -762,13 +852,13 @@
 								<xsl:when test="@access='Public'">
 								  <img>
 								    <xsl:attribute name="src">
-									  <xsl:text>pub</xsl:text>
+								      <xsl:text>pub</xsl:text>
 								      <xsl:value-of select="local-name()"/>
 								      <xsl:text>.gif</xsl:text>
 								    </xsl:attribute>
 								  </img>
 								</xsl:when>
-								<xsl:otherwise>
+								<xsl:when test="@access='Family'">
 								  <img>
 								    <xsl:attribute name="src">
 								      <xsl:text>prot</xsl:text>
@@ -776,7 +866,25 @@
 								      <xsl:text>.gif</xsl:text>
 								    </xsl:attribute>
 								  </img>
-								</xsl:otherwise>
+								</xsl:when>
+								<xsl:when test="@access='Private'">
+								  <img>
+								    <xsl:attribute name="src">
+								      <xsl:text>priv</xsl:text>
+								      <xsl:value-of select="local-name()"/>
+								      <xsl:text>.gif</xsl:text>
+								    </xsl:attribute>
+								  </img>
+								</xsl:when>
+								<xsl:when test="@access='Assembly' or @access='FamilyOrAssembly'">
+								  <img>
+								    <xsl:attribute name="src">
+								      <xsl:text>int</xsl:text>
+								      <xsl:value-of select="local-name()"/>
+								      <xsl:text>.gif</xsl:text>
+								    </xsl:attribute>
+								  </img>
+								</xsl:when>
 							</xsl:choose>
 							<xsl:if test="@contract='Static'">
 								<img src="static.gif" />
