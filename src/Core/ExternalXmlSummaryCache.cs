@@ -58,24 +58,33 @@ namespace NDoc.Core
 		/// <summary>
 		/// Adds given XML document to the summary cache.
 		/// </summary>
+		/// <param name="xmlFileName">The filename of XML document to cache.</param>
 		/// <param name="assemblyName">The fullname of the assembly to which to XML document refers.</param>
-		/// <param name="fileName">The filename of XML document to cache.</param>
-		public void AddXmlDoc(string assemblyName, string fileName)
+		public void AddXmlDoc(string xmlFileName, string assemblyName)
 		{
 			int start = Environment.TickCount;
 
 			XmlTextReader reader = null;
 			try
 			{
-				reader = new XmlTextReader(fileName);
+				reader = new XmlTextReader(xmlFileName);
 				CacheSummaries(reader);
 			}
 			finally
 			{
 				if (reader != null) reader.Close();
 			}
-			cachedDocs.Add(assemblyName, fileName);
+			cachedDocs.Add(assemblyName, xmlFileName);
 			Trace.WriteLine("Cached doc : " + ((Environment.TickCount - start) / 1000.0).ToString() + " sec.");
+		}
+
+		/// <summary>
+		/// Adds given XML document to the summary cache.
+		/// </summary>
+		/// <param name="xmlFileName">The filename of XML document to cache.</param>
+		public void AddXmlDoc(string xmlFileName)
+		{
+			AddXmlDoc(xmlFileName, "");
 		}
 
 		/// <summary>
@@ -162,7 +171,7 @@ namespace NDoc.Core
 						{
 							Debug.WriteLine("Loading XML Doc for " + type.Assembly.FullName);
 							Debug.WriteLine("at " + docPath);
-							AddXmlDoc(type.Assembly.FullName, docPath);
+							AddXmlDoc(docPath, type.Assembly.FullName);
 							searchedDoc = docPath;
 						}
 					}
