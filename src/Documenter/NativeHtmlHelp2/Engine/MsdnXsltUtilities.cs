@@ -45,10 +45,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <param name="fileNames">A StringDictionary holding id to file name mappings.</param>
 		/// <param name="elemNames">A StringDictionary holding id to element name mappings</param>
 		/// <param name="linkToSdkDocVersion">Specifies the version of the SDK documentation.</param>
-		public MsdnXsltUtilities(
-			StringDictionary fileNames, 
-			StringDictionary elemNames, 
-			SdkDocVersion linkToSdkDocVersion)
+		public MsdnXsltUtilities( StringDictionary fileNames, StringDictionary elemNames, SdkDocVersion linkToSdkDocVersion )
 		{
 			descriptions = new StringCollection();
 

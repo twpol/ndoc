@@ -76,7 +76,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		}
 
 		/// <summary>
-		/// Disposes teh TOCBuilder instance
+		/// Disposes the TOCBuilder instance
 		/// </summary>
 		/// <param name="disposing">Was this method called from the Dispsose() method</param>
 		protected virtual void Dispose( bool disposing )

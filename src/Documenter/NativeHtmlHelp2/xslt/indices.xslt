@@ -6,6 +6,7 @@
 	<xsl:template match="* | node() | text()" mode="FIndex"/>
 	<xsl:template match="* | node() | text()" mode="KIndex"/>
 	<xsl:template match="* | node() | text()" mode="AIndex"/>
+	<xsl:template match="* | node() | text()" mode="AIndex-hierarchy"/>
 	
 	<!-- this is just here until each type has it's own title logic -->
 	<xsl:template match="* | node() | text()" mode="MSHelpTitle">
@@ -52,11 +53,7 @@
 		<MSHelp:RLTitle Title="{$title}"/>
 	</xsl:template>
 		
-	<xsl:template name="filename-to-aindex">
-		<xsl:param name="filename"/>
-		<xsl:value-of select="concat( 'ndoc', translate( substring-before( $filename, '.html' ), '.', '' ) )"/>
-	</xsl:template>
-	
+		
 	<xsl:template match="ndoc" mode="AIndex">
 		<xsl:variable name="filename">
 			<xsl:call-template name="get-filename-for-namespace">
@@ -127,8 +124,81 @@
 		<xsl:call-template name="add-a-index">
 			<xsl:with-param name="filename" select="$filename"/>
 		</xsl:call-template>
+	</xsl:template>	
+	<xsl:template match="operator" mode="AIndex">
+		<xsl:param name="overload-page"/>
+		<xsl:variable name="filename">
+			<xsl:choose>
+				<xsl:when test="$overload-page=true()">
+					<xsl:call-template name="get-filename-for-current-method-overloads"/>								
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:call-template name="get-filename-for-operator"/>								
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:call-template name="add-a-index">
+			<xsl:with-param name="filename" select="$filename"/>
+		</xsl:call-template>
 	</xsl:template>
-				
+	<xsl:template match="constructor" mode="AIndex">
+		<xsl:param name="overload-page"/>
+		<xsl:variable name="filename">
+			<xsl:choose>
+				<xsl:when test="$overload-page=true()">
+					<xsl:call-template name="get-filename-for-current-constructor-overloads"/>								
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:call-template name="get-filename-for-current-constructor"/>				
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:call-template name="add-a-index">
+			<xsl:with-param name="filename" select="$filename"/>
+		</xsl:call-template>
+	</xsl:template>	
+	<xsl:template match="class | interface | structure" mode="AIndex">
+		<xsl:param name="page-type"/>		
+		
+		<xsl:variable name="filename">
+			<xsl:choose>
+				<xsl:when test="$page-type='Members'">
+					<xsl:call-template name="get-filename-for-type-members"/>				
+				</xsl:when>
+				<xsl:when test="$page-type='Properties'">
+					<xsl:call-template name="get-filename-for-type-properties"/>				
+				</xsl:when>
+				<xsl:when test="$page-type='Events'">
+					<xsl:call-template name="get-filename-for-type-events"/>				
+				</xsl:when>
+				<xsl:when test="$page-type='Operators'">
+					<xsl:call-template name="get-filename-for-type-operators"/>				
+				</xsl:when>
+				<xsl:when test="$page-type='Methods'">
+					<xsl:call-template name="get-filename-for-type-methods"/>				
+				</xsl:when>
+				<xsl:when test="$page-type='Fields'">
+					<xsl:call-template name="get-filename-for-type-fields"/>				
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:call-template name="get-filename-for-type">
+						<xsl:with-param name="id" select="@id"/>
+					</xsl:call-template>					
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		
+		<xsl:call-template name="add-a-index">
+			<xsl:with-param name="filename" select="$filename"/>
+		</xsl:call-template>
+	</xsl:template>
+					
+	<xsl:template name="filename-to-aindex">
+		<xsl:param name="filename"/>
+		<!-- there is a bug in this line in that if a type has ".html" in its full name this will fail to produce the correct result -->
+		<xsl:value-of select="concat( 'ndoc', translate( substring-before( $filename, '.html' ), '.', '' ) )"/>
+	</xsl:template>
+	
 	<xsl:template name="add-a-index">
 		<xsl:param name="filename"/>
 		

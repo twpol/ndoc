@@ -716,6 +716,7 @@
 						</xsl:apply-templates>
 						
 						<xsl:apply-templates select="." mode="AIndex">
+							<xsl:with-param name="page-type" select="$page-type"/>
 							<xsl:with-param name="overload-page" select="$overload-page"/>				
 						</xsl:apply-templates>
 					</xsl:when>

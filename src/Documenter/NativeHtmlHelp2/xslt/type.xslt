@@ -132,6 +132,18 @@
 							<p>For a list of all members of this type, see <a href="{$members-href}"><xsl:value-of select="@name" /> Members</a>.</p>
 						</xsl:if>
 					</xsl:if>
+<!--
+					<MSHelp:link
+   keywords = "frlrfSystemObjectClassTopic"
+   indexMoniker = "!DefaultAssociativeIndex"
+   namespace = "ms-help://MS.VSCC.2003"
+   tabindex = "0">with namesapce</MSHelp:link>
+					<MSHelp:link
+   keywords = "frlrfSystemObjectClassTopic"
+   indexMoniker = "!DefaultAssociativeIndex"
+   tabindex = "0">relative</MSHelp:link>
+-->   
+					<p>frlrfSystemObjectClassTopic</p>
 					<xsl:if test="local-name() != 'delegate' and local-name() != 'enumeration'">
 						<p>
 							<xsl:choose>

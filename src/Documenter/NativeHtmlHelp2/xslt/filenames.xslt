@@ -13,51 +13,72 @@
   <!-- -->
   <xsl:template name="get-filename-for-type">
     <xsl:param name="id" />
-    <xsl:value-of select="concat(translate(substring-after($id, 'T:'), '[,]', ''), '.html')" />
+    <xsl:value-of select="concat(translate(substring-after($id, 'T:'), '[,]', ''), 'Topic.html')" />
   </xsl:template>
   <!-- -->
   <xsl:template name="get-filename-for-current-constructor-overloads">
     <xsl:variable name="type-part" select="translate(substring-after(../@id, 'T:'), '[,]', '')" />
-    <xsl:value-of select="concat($type-part, 'Constructor.html')" />
+    <xsl:value-of select="concat($type-part, 'ConstructorTopic.html')" />
   </xsl:template>
   <!-- -->
   <xsl:template name="get-filename-for-current-constructor">
     <!-- .#ctor or .#cctor -->
     <xsl:choose>
 		<xsl:when test="@contract != 'Static'">
-		    <xsl:value-of select="concat(translate(substring-after(substring-before(@id, '.#c'), 'M:'), '[,]', ''), 'Constructor', @overload, '.html')" />
+		    <xsl:value-of select="concat(translate(substring-after(substring-before(@id, '.#c'), 'M:'), '[,]', ''), 'Constructor', @overload, 'Topic.html')" />
 		</xsl:when>
 		<xsl:otherwise>
-		    <xsl:value-of select="concat(translate(substring-after(substring-before(@id, '.#c'), 'M:'), '[,]', ''), 'StaticConstructor', @overload, '.html')" />
+		    <xsl:value-of select="concat(translate(substring-after(substring-before(@id, '.#c'), 'M:'), '[,]', ''), 'StaticConstructor', @overload, 'Topic.html')" />
 		</xsl:otherwise>
     </xsl:choose>
   </xsl:template>
   <!-- -->
   <xsl:template name="get-filename-for-type-members">
     <xsl:param name="id" />
-    <xsl:value-of select="concat(translate(substring-after($id, 'T:'), '[,]', ''), 'Members.html')" />
+    <xsl:value-of select="concat(translate(substring-after($id, 'T:'), '[,]', ''), 'MembersTopic.html')" />
   </xsl:template>
+  <xsl:template name="get-filename-for-type-events">
+    <xsl:param name="id" />
+    <xsl:value-of select="concat(translate(substring-after($id, 'T:'), '[,]', ''), 'EventsTopic.html')" />
+  </xsl:template>
+  <xsl:template name="get-filename-for-type-properties">
+    <xsl:param name="id" />
+    <xsl:value-of select="concat(translate(substring-after($id, 'T:'), '[,]', ''), 'PropertiesTopic.html')" />
+  </xsl:template>
+  <xsl:template name="get-filename-for-type-fields">
+    <xsl:param name="id" />
+    <xsl:value-of select="concat(translate(substring-after($id, 'T:'), '[,]', ''), 'FieldsTopic.html')" />
+  </xsl:template>
+  <xsl:template name="get-filename-for-type-operators">
+    <xsl:param name="id" />
+    <xsl:value-of select="concat(translate(substring-after($id, 'T:'), '[,]', ''), 'OperatorsTopic.html')" />
+  </xsl:template>
+  <xsl:template name="get-filename-for-type-methods">
+    <xsl:param name="id" />
+    <xsl:value-of select="concat(translate(substring-after($id, 'T:'), '[,]', ''), 'MethodsTopic.html')" />
+  </xsl:template>
+  
   <!-- -->
   <xsl:template name="get-filename-for-current-field">
-    <xsl:value-of select="concat(translate(substring-after(@id, 'F:'), '[,]', ''), '.html')" />
+    <xsl:value-of select="concat(translate(substring-after(@id, 'F:'), '[,]', ''), 'Topic.html')" />
   </xsl:template>
   <!-- -->
   <xsl:template name="get-filename-for-current-event">
-    <xsl:value-of select="concat(translate(substring-after(@id, 'E:'), '[,]', ''), '.html')" />
+    <xsl:value-of select="concat(translate(substring-after(@id, 'E:'), '[,]', ''), 'Topic.html')" />
   </xsl:template>
   <!-- -->
   <xsl:template name="get-filename-for-current-property-overloads">
     <xsl:variable name="type-part" select="translate(substring-after(../@id, 'T:'), '[,]', '')" />
-    <xsl:value-of select="concat($type-part, @name, '.html')" />
+    <xsl:value-of select="concat($type-part, @name, 'Topic.html')" />
   </xsl:template>
   <!-- -->
   <xsl:template name="get-filename-for-current-property">
     <xsl:choose>
       <xsl:when test="contains(@id, '(')">
-        <xsl:value-of select="concat(translate(substring-after(substring-before(@id, '('), 'P:'), '[,]', ''), @overload, '.html')" />
+        <xsl:value-of select="concat(translate(substring-after(substring-before(@id, '('), 'P:'), '[,]', ''), @overload, 'Topic.html')" />
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="concat(translate(substring-after(@id, 'P:'), '[,]', ''), @overload, '.html')" />
+        <xsl:value-of select="concat(translate(substring-after(@id, 'P:'), '[,]', ''), @overload, 'Topic.html')" />
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -66,10 +87,10 @@
     <xsl:param name="property" select="." />
     <xsl:choose>
       <xsl:when test="contains($property/@id, '(')">
-        <xsl:value-of select="concat(translate(substring-after(substring-before($property/@id, '('), 'P:'), '[,]', ''), $property/@overload, '.html')" />
+        <xsl:value-of select="concat(translate(substring-after(substring-before($property/@id, '('), 'P:'), '[,]', ''), $property/@overload, 'Topic.html')" />
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="concat(translate(substring-after($property/@id, 'P:'), '[,]', ''), $property/@overload, '.html')" />
+        <xsl:value-of select="concat(translate(substring-after($property/@id, 'P:'), '[,]', ''), $property/@overload, 'Topic.html')" />
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -78,10 +99,10 @@
     <xsl:param name="event" select="." />
     <xsl:choose>
       <xsl:when test="contains($event/@id, '(')">
-        <xsl:value-of select="concat(translate(substring-after(substring-before($event/@id, '('), 'E:'), '[,]#', ''), $event/@overload, '.html')" />
+        <xsl:value-of select="concat(translate(substring-after(substring-before($event/@id, '('), 'E:'), '[,]#', ''), $event/@overload, 'Topic.html')" />
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="concat(translate(substring-after($event/@id, 'E:'), '[,]#', ''), $event/@overload, '.html')" />
+        <xsl:value-of select="concat(translate(substring-after($event/@id, 'E:'), '[,]#', ''), $event/@overload, 'Topic.html')" />
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -90,24 +111,24 @@
     <xsl:param name="field" select="." />
     <xsl:choose>
       <xsl:when test="contains($field/@id, '(')">
-        <xsl:value-of select="concat(translate(substring-after(substring-before($field/@id, '('), 'F:'), '[,]', ''), $field/@overload, '.html')" />
+        <xsl:value-of select="concat(translate(substring-after(substring-before($field/@id, '('), 'F:'), '[,]', ''), $field/@overload, 'Topic.html')" />
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="concat(translate(substring-after($field/@id, 'F:'), '[,]', ''), $field/@overload, '.html')" />
+        <xsl:value-of select="concat(translate(substring-after($field/@id, 'F:'), '[,]', ''), $field/@overload, 'Topic.html')" />
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
   <!-- -->
   <xsl:template name="get-filename-for-current-method-overloads">
     <xsl:variable name="type-part" select="translate(substring-after(../@id, 'T:'), '[,]', '')" />
-    <xsl:value-of select="concat($type-part, '.', @name, '_overloads.html')" />
+    <xsl:value-of select="concat($type-part, '.', @name, 'Topic.html')" />
   </xsl:template>
   <!-- -->
   <xsl:template name="get-filename-for-inherited-method-overloads">
     <xsl:param name="declaring-type" />
     <xsl:param name="method-name" />
     <xsl:variable name="type-part" select="translate($declaring-type, '[,]', '')" />
-    <xsl:value-of select="concat($type-part, '.', $method-name, '_overloads.html')" />
+    <xsl:value-of select="concat($type-part, '.', $method-name, 'Topic.html')" />
   </xsl:template>
   <!-- -->
   <xsl:template name="get-filename-for-method">
@@ -116,20 +137,20 @@
       <xsl:when test="contains($method/@id, '(')">
 		<xsl:choose>
 			<xsl:when test="string-length($method/@overload) &gt; 0">
-		        <xsl:value-of select="concat(translate(substring-after(substring-before($method/@id, '('), 'M:'), '[,]#', ''), '_overload_', $method/@overload, '.html')" />
+		        <xsl:value-of select="concat(translate(substring-after(substring-before($method/@id, '('), 'M:'), '[,]#', ''), $method/@overload, 'Topic.html')" />
 			</xsl:when>
 			<xsl:otherwise>
-		        <xsl:value-of select="concat(translate(substring-after(substring-before($method/@id, '('), 'M:'), '[,]#', ''), '.html')" />
+		        <xsl:value-of select="concat(translate(substring-after(substring-before($method/@id, '('), 'M:'), '[,]#', ''), 'Topic.html')" />
 			</xsl:otherwise>
 		</xsl:choose>
       </xsl:when>
       <xsl:otherwise>
 		<xsl:choose>
 			<xsl:when test="string-length($method/@overload) &gt; 0">
-		        <xsl:value-of select="concat(translate(substring-after($method/@id, 'M:'), '[,]#', ''), '_overload_', $method/@overload, '.html')" />
+		        <xsl:value-of select="concat(translate(substring-after($method/@id, 'M:'), '[,]#', ''), $method/@overload, 'Topic.html')" />
 			</xsl:when>
 			<xsl:otherwise>
-		        <xsl:value-of select="concat(translate(substring-after($method/@id, 'M:'), '[,]#', ''), '.html')" />
+		        <xsl:value-of select="concat(translate(substring-after($method/@id, 'M:'), '[,]#', ''), 'Topic.html')" />
 			</xsl:otherwise>
 		</xsl:choose>
       </xsl:otherwise>
@@ -259,32 +280,32 @@
       <xsl:when test="starts-with($cref, 'M:')">
         <xsl:choose>
           <xsl:when test="contains($cref, '.#c')">
-		    <xsl:value-of select="concat(translate(substring-after(substring-before($cref, '.#c'), 'M:'), '[,]', ''), 'Constructor', $overload, '.html')" />
+		    <xsl:value-of select="concat(translate(substring-after(substring-before($cref, '.#c'), 'M:'), '[,]', ''), 'Constructor', $overload, 'Topic.html')" />
           </xsl:when>
           <xsl:when test="contains($cref, '(')">
 			<xsl:choose>
 				<xsl:when test="string-length($overload) &gt; 0">
-					<xsl:value-of select="concat(translate(substring-after(substring-before($cref, '('), 'M:'), '[,]', ''), '_overload_', $overload, '.html')" />
+					<xsl:value-of select="concat(translate(substring-after(substring-before($cref, '('), 'M:'), '[,]', ''), $overload, 'Topic.html')" />
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:value-of select="concat(translate(substring-after(substring-before($cref, '('), 'M:'), '[,]', ''), '.html')" />
+					<xsl:value-of select="concat(translate(substring-after(substring-before($cref, '('), 'M:'), '[,]', ''), 'Topic.html')" />
 				</xsl:otherwise>
 			</xsl:choose>
           </xsl:when>
           <xsl:otherwise>
 			<xsl:choose>
 				<xsl:when test="string-length($overload) &gt; 0">
-					<xsl:value-of select="concat(translate(substring-after($cref, 'M:'), '[,]', ''), '_overload_', $overload, '.html')" />
+					<xsl:value-of select="concat(translate(substring-after($cref, 'M:'), '[,]', ''), $overload, 'Topic.html')" />
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:value-of select="concat(translate(substring-after($cref, 'M:'), '[,]', ''), '.html')" />
+					<xsl:value-of select="concat(translate(substring-after($cref, 'M:'), '[,]', ''), 'Topic.html')" />
 				</xsl:otherwise>
 			</xsl:choose>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
       <xsl:when test="starts-with($cref, 'E:')">
-        <xsl:value-of select="concat(translate(substring-after($cref, 'E:'), '[,]', ''), $overload, '.html')" />
+        <xsl:value-of select="concat(translate(substring-after($cref, 'E:'), '[,]', ''), $overload, 'Topic.html')" />
       </xsl:when>
       <xsl:when test="starts-with($cref, 'F:')">
 		<xsl:variable name="enum" select="/ndoc/assembly/module/namespace//enumeration[field/@id = $cref]" />
@@ -295,17 +316,17 @@
 				</xsl:call-template>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:value-of select="concat(translate(substring-after($cref, 'F:'), '[,]', ''), $overload, '.html')" />
+				<xsl:value-of select="concat(translate(substring-after($cref, 'F:'), '[,]', ''), $overload, 'Topic.html')" />
 			</xsl:otherwise>
 		</xsl:choose>
       </xsl:when>
       <xsl:when test="starts-with($cref, 'P:')">
         <xsl:choose>
           <xsl:when test="contains($cref, '(')">
-            <xsl:value-of select="concat(translate(substring-after(substring-before($cref, '('), 'P:'), '[,]', ''), $overload, '.html')" />
+            <xsl:value-of select="concat(translate(substring-after(substring-before($cref, '('), 'P:'), '[,]', ''), $overload, 'Topic.html')" />
           </xsl:when>
           <xsl:otherwise>
-            <xsl:value-of select="concat(translate(substring-after($cref, 'P:'), '[,]', ''), $overload, '.html')" />
+            <xsl:value-of select="concat(translate(substring-after($cref, 'P:'), '[,]', ''), $overload, 'Topic.html')" />
           </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
@@ -324,7 +345,7 @@
         </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="concat(translate($type-name, '[,]', ''), '.html')" />
+        <xsl:value-of select="concat(translate($type-name, '[,]', ''), 'Topic.html')" />
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -334,10 +355,10 @@
     <xsl:variable name="filename">
       <xsl:choose>
         <xsl:when test="contains($operator/@id, '(')">
-          <xsl:value-of select="concat(translate(substring-after(substring-before($operator/@id, '('), 'M:'), '[,]', ''), $operator/@overload, '.html')" />
+          <xsl:value-of select="concat(translate(substring-after(substring-before($operator/@id, '('), 'M:'), '[,]', ''), $operator/@overload, 'Topic.html')" />
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="concat(translate(substring-after($operator/@id, 'M:'), '[,]', ''), $operator/@overload, '.html')" />
+          <xsl:value-of select="concat(translate(substring-after($operator/@id, 'M:'), '[,]', ''), $operator/@overload, 'Topic.html')" />
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
