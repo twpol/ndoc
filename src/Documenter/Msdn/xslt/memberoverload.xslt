@@ -151,8 +151,8 @@
 							</object>
 						</xsl:if>
 					</xsl:if>
+					<xsl:call-template name="footer-row" />
 				</div>
-				<xsl:call-template name="footer-row" />
 			</body>
 		</html>
 	</xsl:template>
