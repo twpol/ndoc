@@ -10,7 +10,7 @@ namespace NDoc.Core
 	/// Static class containing the collection of documenters 
 	/// currently avialable
 	/// </summary>
-	public class InstalledDocumenters
+	public sealed class InstalledDocumenters
 	{
 		/// <summary>
 		/// Holds the list of directories that will be scanned for documenters.
