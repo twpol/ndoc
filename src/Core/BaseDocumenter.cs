@@ -71,6 +71,15 @@ namespace NDoc.Core
 			docCache = new XmlDocumentationCache();
 		}
 
+		/// <summary>
+		/// The development status (alpha, beta, stable) of this documenter.
+		/// Documenters should override this if they aren't stable.
+		/// </summary>
+		public virtual DocumenterDevelopmentStatus DevelopmentStatus
+		{
+			get { return(DocumenterDevelopmentStatus.Stable); }
+		}
+
 		/// <summary>Compares the currrent document to another documenter.</summary>
 		public int CompareTo(object obj)
 		{
@@ -120,11 +129,21 @@ namespace NDoc.Core
 		/// <summary>See <see cref="IDocumenter"/>.</summary>
 		public event DocBuildingEventHandler DocBuildingProgress;
 
+		private DateTime lastStepDateTime;
+
 		/// <summary>Raises the DocBuildingStep event.</summary>
 		/// <param name="step">The overall percent complete value.</param>
 		/// <param name="label">A description of the work currently beeing done.</param>
 		protected void OnDocBuildingStep(int step, string label)
 		{
+			// timing
+			if (lastStepDateTime.Ticks > 0)
+			{
+				TimeSpan ts = DateTime.Now - lastStepDateTime;
+				Console.WriteLine(String.Format("	Last step took {0:f1} s", ts.TotalSeconds));
+			}
+			lastStepDateTime = DateTime.Now;
+
 			if (DocBuildingStep != null)
 				DocBuildingStep(this, new ProgressArgs(step, label));
 		}
