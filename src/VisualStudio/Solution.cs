@@ -75,11 +75,8 @@ namespace NDoc.VisualStudio
 			_name = Path.GetFileNameWithoutExtension(path);
 
 			StreamReader reader = null;
-
-			try
+			using (reader = new StreamReader(path))
 			{
-				reader = new StreamReader(path);
-
 				string line = reader.ReadLine();
 				if (!line.StartsWith("Microsoft Visual Studio Solution File"))
 				{
@@ -100,13 +97,6 @@ namespace NDoc.VisualStudio
 					{
 						ReadProjectConfig(reader);
 					}
-				}
-			}
-			finally
-			{
-				if (reader != null)
-				{
-					reader.Close();
 				}
 			}
 		}
