@@ -1238,36 +1238,78 @@ namespace NDoc.Core.Reflection
 			}
 		}
 
-		private void WriteCustomAttributes(XmlWriter writer, FieldInfo field)
+		private void WriteCustomAttributes(XmlWriter writer, FieldInfo fieldInfo)
 		{
-			WriteSpecialAttributes(writer, field);
-			WriteCustomAttributes(writer, field.GetCustomAttributes(this.rep.DocumentInheritedAttributes), "");
+			try
+			{
+				WriteSpecialAttributes(writer, fieldInfo);
+				WriteCustomAttributes(writer, fieldInfo.GetCustomAttributes(this.rep.DocumentInheritedAttributes), "");
+			}
+			catch(Exception e)
+			{
+				throw new DocumenterException("Error retrieving custom attributes for " + GetMemberName(fieldInfo),e);
+			}
 		}
 
 		private void WriteCustomAttributes(XmlWriter writer, ConstructorInfo constructorInfo)
 		{
-			WriteCustomAttributes(writer, constructorInfo.GetCustomAttributes(this.rep.DocumentInheritedAttributes), "");
+			try
+			{
+				WriteCustomAttributes(writer, constructorInfo.GetCustomAttributes(this.rep.DocumentInheritedAttributes), "");
+			}
+			catch(Exception e)
+			{
+				throw new DocumenterException("Error retrieving custom attributes for " + GetMemberName(constructorInfo),e);
+			}
 		}
 
 		private void WriteCustomAttributes(XmlWriter writer, MethodInfo methodInfo)
 		{
-			WriteCustomAttributes(writer, methodInfo.GetCustomAttributes(this.rep.DocumentInheritedAttributes), "");
-			WriteCustomAttributes(writer, methodInfo.ReturnTypeCustomAttributes.GetCustomAttributes(this.rep.DocumentInheritedAttributes), "return");
+			try
+			{
+				WriteCustomAttributes(writer, methodInfo.GetCustomAttributes(this.rep.DocumentInheritedAttributes), "");
+				WriteCustomAttributes(writer, methodInfo.ReturnTypeCustomAttributes.GetCustomAttributes(this.rep.DocumentInheritedAttributes), "return");
+			}
+			catch(Exception e)
+			{
+				throw new DocumenterException("Error retrieving custom attributes for " + GetMemberName(methodInfo),e);
+			}
 		}
 
 		private void WriteCustomAttributes(XmlWriter writer, PropertyInfo propertyInfo)
 		{
-			WriteCustomAttributes(writer, propertyInfo.GetCustomAttributes(this.rep.DocumentInheritedAttributes), "");
+			try
+			{
+				WriteCustomAttributes(writer, propertyInfo.GetCustomAttributes(this.rep.DocumentInheritedAttributes), "");
+			}
+			catch(Exception e)
+			{
+				throw new DocumenterException("Error retrieving custom attributes for " + GetMemberName(propertyInfo),e);
+			}
 		}
 
 		private void WriteCustomAttributes(XmlWriter writer, ParameterInfo parameterInfo)
 		{
-			WriteCustomAttributes(writer, parameterInfo.GetCustomAttributes(this.rep.DocumentInheritedAttributes), "");
+			try
+			{
+				WriteCustomAttributes(writer, parameterInfo.GetCustomAttributes(this.rep.DocumentInheritedAttributes), "");
+			}
+			catch(Exception e)
+			{
+				throw new DocumenterException("Error retrieving custom attributes for " + parameterInfo.Member.ReflectedType.FullName + "." + parameterInfo.Member.Name + " param " + parameterInfo.Name,e);
+			}
 		}
 
 		private void WriteCustomAttributes(XmlWriter writer, EventInfo eventInfo)
 		{
-			WriteCustomAttributes(writer, eventInfo.GetCustomAttributes(this.rep.DocumentInheritedAttributes), "");
+			try
+			{
+				WriteCustomAttributes(writer, eventInfo.GetCustomAttributes(this.rep.DocumentInheritedAttributes), "");
+			}
+			catch(Exception e)
+			{
+				throw new DocumenterException("Error retrieving custom attributes for " + GetMemberName(eventInfo),e);
+			}
 		}
 
 		private void WriteCustomAttributes(XmlWriter writer, object[] attributes, string target)
