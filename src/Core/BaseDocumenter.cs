@@ -1544,11 +1544,18 @@ namespace NDoc.Core
 					name = method.Name.Substring(lastIndexOfDot + 1);
 				}
 
-				if (!name.StartsWith("get_") &&
-					!name.StartsWith("set_") &&
-					!name.StartsWith("add_") &&
-					!name.StartsWith("remove_") &&
-					!name.StartsWith("op_") &&
+				if (
+					!(
+					method.IsSpecialName &&
+					(
+					name.StartsWith("get_") ||
+					name.StartsWith("set_") ||
+					name.StartsWith("add_") ||
+					name.StartsWith("remove_") ||
+					name.StartsWith("raise_") ||
+					name.StartsWith("op_")
+					)
+					) && 
 					MustDocumentMethod(method) &&
 					!IsHidden(method, type))
 				{
