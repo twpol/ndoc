@@ -1,41 +1,48 @@
 <project name="NDoc" default="all">
   <property name="build.dir" value="build" />
   <property name="debug" value="true" />
+  <target name="all" depends="Gui,Console,Core,Xml,VisualStudio,Test,Msdn,JavaDoc" />
   <target name="setup">
     <mkdir dir="${build.dir}" />
   </target>
-  <target name="all" depends="Gui,Console,Core,Xml,Test,Msdn,JavaDoc" />
-  <target name="Gui" depends="setup,Core,Msdn,Xml,JavaDoc">
+  <target name="Gui" depends="setup,Core,Msdn,Xml,JavaDoc,VisualStudio">
     <exec program="C:\Program Files\Microsoft.NET\FrameworkSDK\Bin\resgen.exe" commandline="Gui\AboutForm.resx ${build.dir}\NDoc.Gui.AboutForm.resources" />
     <exec program="C:\Program Files\Microsoft.NET\FrameworkSDK\Bin\resgen.exe" commandline="Gui\AssemblySlashDocForm.resx ${build.dir}\NDoc.Gui.AssemblySlashDocForm.resources" />
+    <exec program="C:\Program Files\Microsoft.NET\FrameworkSDK\Bin\resgen.exe" commandline="Gui\ErrorForm.resx ${build.dir}\NDoc.Gui.ErrorForm.resources" />
     <exec program="C:\Program Files\Microsoft.NET\FrameworkSDK\Bin\resgen.exe" commandline="Gui\MainForm.resx ${build.dir}\NDoc.Gui.MainForm.resources" />
     <exec program="C:\Program Files\Microsoft.NET\FrameworkSDK\Bin\resgen.exe" commandline="Gui\NamespaceSummariesForm.resx ${build.dir}\NDoc.Gui.NamespaceSummariesForm.resources" />
+    <exec program="C:\Program Files\Microsoft.NET\FrameworkSDK\Bin\resgen.exe" commandline="Gui\SolutionForm.resx ${build.dir}\NDoc.Gui.SolutionForm.resources" />
     <csc target="winexe" output="${build.dir}\NDocGui.exe" debug="${debug}">
       <sources>
         <includes name="Gui\AboutForm.cs" />
         <includes name="Gui\AssemblyInfo.cs" />
         <includes name="Gui\AssemblySlashDocForm.cs" />
         <includes name="Gui\BuildWorker.cs" />
+        <includes name="Gui\ErrorForm.cs" />
         <includes name="Gui\HeaderGroupBox.cs" />
         <includes name="Gui\MainForm.cs" />
         <includes name="Gui\NamespaceSummariesForm.cs" />
+        <includes name="Gui\SolutionForm.cs" />
       </sources>
-      <arg value="/reference:System.dll" />
-      <arg value="/reference:System.Drawing.dll" />
-      <arg value="/reference:System.Windows.Forms.dll" />
-      <arg value="/reference:System.Xml.dll" />
-      <arg value="/reference:System.Data.dll" />
       <references>
+        <includes name="System.dll" />
+        <includes name="System.Drawing.dll" />
+        <includes name="System.Windows.Forms.dll" />
+        <includes name="System.Xml.dll" />
+        <includes name="System.Data.dll" />
         <includes name="${build.dir}\NDoc.Core.dll" />
         <includes name="${build.dir}\NDoc.Documenter.Msdn.dll" />
         <includes name="${build.dir}\NDoc.Documenter.Xml.dll" />
         <includes name="${build.dir}\NDoc.Documenter.JavaDoc.dll" />
+        <includes name="${build.dir}\NDoc.VisualStudio.dll" />
       </references>
       <arg value="/resource:Gui\About.rtf,NDoc.Gui.About.rtf" />
       <arg value="/resource:${build.dir}\NDoc.Gui.AboutForm.resources" />
       <arg value="/resource:${build.dir}\NDoc.Gui.AssemblySlashDocForm.resources" />
+      <arg value="/resource:${build.dir}\NDoc.Gui.ErrorForm.resources" />
       <arg value="/resource:${build.dir}\NDoc.Gui.MainForm.resources" />
       <arg value="/resource:${build.dir}\NDoc.Gui.NamespaceSummariesForm.resources" />
+      <arg value="/resource:${build.dir}\NDoc.Gui.SolutionForm.resources" />
     </csc>
   </target>
   <target name="Console" depends="setup,Core,JavaDoc,Msdn,Xml">
@@ -44,9 +51,9 @@
         <includes name="Console\AssemblyInfo.cs" />
         <includes name="Console\Console.cs" />
       </sources>
-      <arg value="/reference:System.dll" />
-      <arg value="/reference:System.Xml.dll" />
       <references>
+        <includes name="System.dll" />
+        <includes name="System.Xml.dll" />
         <includes name="${build.dir}\NDoc.Core.dll" />
         <includes name="${build.dir}\NDoc.Documenter.JavaDoc.dll" />
         <includes name="${build.dir}\NDoc.Documenter.Msdn.dll" />
@@ -69,10 +76,12 @@
         <includes name="Core\Project.cs" />
         <includes name="Core\XsltDocumenter.cs" />
       </sources>
-      <arg value="/reference:System.dll" />
-      <arg value="/reference:System.Xml.dll" />
-      <arg value="/reference:System.Design.dll" />
-      <arg value="/reference:System.Drawing.dll" />
+      <references>
+        <includes name="System.dll" />
+        <includes name="System.Xml.dll" />
+        <includes name="System.Design.dll" />
+        <includes name="System.Drawing.dll" />
+      </references>
     </csc>
   </target>
   <target name="Xml" depends="setup,Core">
@@ -82,13 +91,28 @@
         <includes name="Documenter\Xml\XmlDocumenter.cs" />
         <includes name="Documenter\Xml\XmlDocumenterConfig.cs" />
       </sources>
-      <arg value="/reference:System.dll" />
-      <arg value="/reference:System.XML.dll" />
-      <arg value="/reference:System.Design.dll" />
-      <arg value="/reference:System.Drawing.Design.dll" />
-      <arg value="/reference:System.Drawing.dll" />
       <references>
+        <includes name="System.dll" />
+        <includes name="System.XML.dll" />
+        <includes name="System.Design.dll" />
+        <includes name="System.Drawing.Design.dll" />
+        <includes name="System.Drawing.dll" />
         <includes name="${build.dir}\NDoc.Core.dll" />
+      </references>
+    </csc>
+  </target>
+  <target name="VisualStudio" depends="setup">
+    <csc target="library" output="${build.dir}\NDoc.VisualStudio.dll" debug="${debug}">
+      <sources>
+        <includes name="VisualStudio\AssemblyInfo.cs" />
+        <includes name="VisualStudio\Project.cs" />
+        <includes name="VisualStudio\ProjectConfig.cs" />
+        <includes name="VisualStudio\Solution.cs" />
+      </sources>
+      <references>
+        <includes name="System.dll" />
+        <includes name="System.Data.dll" />
+        <includes name="System.Xml.dll" />
       </references>
     </csc>
   </target>
@@ -98,8 +122,10 @@
         <includes name="Test\AssemblyInfo.cs" />
         <includes name="Test\Test.cs" />
       </sources>
-      <arg value="/reference:System.dll" />
-      <arg value="/reference:System.Xml.dll" />
+      <references>
+        <includes name="System.dll" />
+        <includes name="System.Xml.dll" />
+      </references>
     </csc>
   </target>
   <target name="Msdn" depends="setup,Core">
@@ -109,12 +135,12 @@
         <includes name="Documenter\Msdn\MsdnDocumenter.cs" />
         <includes name="Documenter\Msdn\MsdnDocumenterConfig.cs" />
       </sources>
-      <arg value="/reference:System.dll" />
-      <arg value="/reference:System.Xml.dll" />
-      <arg value="/reference:System.Drawing.Design.dll" />
-      <arg value="/reference:System.Design.dll" />
-      <arg value="/reference:System.Drawing.dll" />
       <references>
+        <includes name="System.dll" />
+        <includes name="System.Xml.dll" />
+        <includes name="System.Drawing.Design.dll" />
+        <includes name="System.Design.dll" />
+        <includes name="System.Drawing.dll" />
         <includes name="${build.dir}\NDoc.Core.dll" />
       </references>
       <arg value="/resource:Documenter\Msdn\css\MSDN.css,NDoc.Documenter.Msdn.css.MSDN.css" />
@@ -141,12 +167,12 @@
         <includes name="Documenter\JavaDoc\JavaDocDocumenter.cs" />
         <includes name="Documenter\JavaDoc\JavaDocDocumenterConfig.cs" />
       </sources>
-      <arg value="/reference:System.dll" />
-      <arg value="/reference:System.Xml.dll" />
-      <arg value="/reference:System.Design.dll" />
-      <arg value="/reference:System.Drawing.Design.dll" />
-      <arg value="/reference:System.Drawing.dll" />
       <references>
+        <includes name="System.dll" />
+        <includes name="System.Xml.dll" />
+        <includes name="System.Design.dll" />
+        <includes name="System.Drawing.Design.dll" />
+        <includes name="System.Drawing.dll" />
         <includes name="${build.dir}\NDoc.Core.dll" />
       </references>
       <arg value="/resource:Documenter\JavaDoc\css\JavaDoc.css,NDoc.Documenter.JavaDoc.css.JavaDoc.css" />
