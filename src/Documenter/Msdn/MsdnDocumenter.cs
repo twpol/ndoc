@@ -238,35 +238,43 @@ namespace NDoc.Documenter.Msdn
 					htmlHelp.OpenContentsFile(string.Empty, true);
 				}
 
-				if (MyConfig.CopyrightHref != null && MyConfig.CopyrightHref != String.Empty)
-				{
-					if (!MyConfig.CopyrightHref.StartsWith("http:"))
-					{
-						File.Copy(MyConfig.CopyrightHref, Path.Combine(MyConfig.OutputDirectory, Path.GetFileName(MyConfig.CopyrightHref)), true);
-						htmlHelp.AddFileToProject(Path.GetFileName(MyConfig.CopyrightHref));
-					}
-				}
-
-				// add root page if requested
-				if (rootPageFileName != null)
-				{
-					// add the file
-					string rootPageOutputName = Path.Combine(MyConfig.OutputDirectory, 
-							Path.GetFileName(rootPageFileName));
-					if (File.Exists(rootPageOutputName))
-					{
-						File.SetAttributes(rootPageOutputName, FileAttributes.Normal);
-					}
-					File.Copy(rootPageFileName, rootPageOutputName, true);
-					htmlHelp.AddFileToProject(Path.GetFileName(rootPageFileName));
-					htmlHelp.AddFileToContents(rootPageTOCName, 
-						Path.GetFileName(rootPageFileName));
-				}
-
 				try
 				{
+					if (MyConfig.CopyrightHref != null && MyConfig.CopyrightHref != String.Empty)
+					{
+						if (!MyConfig.CopyrightHref.StartsWith("http:"))
+						{
+							File.Copy(MyConfig.CopyrightHref, Path.Combine(MyConfig.OutputDirectory, Path.GetFileName(MyConfig.CopyrightHref)), true);
+							htmlHelp.AddFileToProject(Path.GetFileName(MyConfig.CopyrightHref));
+						}
+					}
+
+					// add root page if requested
+					if (rootPageFileName != null)
+					{
+						// add the file
+						string rootPageOutputName = Path.Combine(MyConfig.OutputDirectory, 
+							Path.GetFileName(rootPageFileName));
+						if (File.Exists(rootPageOutputName))
+						{
+							File.SetAttributes(rootPageOutputName, FileAttributes.Normal);
+						}
+						File.Copy(rootPageFileName, rootPageOutputName, true);
+						htmlHelp.AddFileToProject(Path.GetFileName(rootPageFileName));
+						htmlHelp.AddFileToContents(rootPageTOCName, 
+							Path.GetFileName(rootPageFileName));
+						htmlHelp.OpenBookInContents();
+					}
+
 					documentedNamespaces = new ArrayList();
 					MakeHtmlForAssemblies();
+
+					// close root book if applicable
+					if (rootPageFileName != null)
+					{
+						htmlHelp.CloseBookInContents();
+					}
+
 				}
 				finally
 				{
