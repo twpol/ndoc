@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NDocBuild", "Addins\NDocBui
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "NDocBuildSetup", "Addins\NDocBuild\NDocBuildSetup\NDocBuildSetup.vdproj", "{CB7E2BED-653A-4E8F-9A81-E188D5219511}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NDocGen", "NDocGen\NDocGen.csproj", "{E425AB4F-B068-4508-A0E3-20CE8C577F14}"
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		ConfigName.0 = Debug
@@ -67,6 +69,10 @@ Global
 		{FE4CE1CE-DA73-4C3D-B85A-72390E159AB7}.Release.ActiveCfg = Release|.NET
 		{CB7E2BED-653A-4E8F-9A81-E188D5219511}.Debug.ActiveCfg = Debug
 		{CB7E2BED-653A-4E8F-9A81-E188D5219511}.Release.ActiveCfg = Release
+		{E425AB4F-B068-4508-A0E3-20CE8C577F14}.Debug.ActiveCfg = Debug|.NET
+		{E425AB4F-B068-4508-A0E3-20CE8C577F14}.Debug.Build.0 = Debug|.NET
+		{E425AB4F-B068-4508-A0E3-20CE8C577F14}.Release.ActiveCfg = Release|.NET
+		{E425AB4F-B068-4508-A0E3-20CE8C577F14}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
