@@ -317,8 +317,13 @@
 		</xsl:call-template>	
 		<xsl:text>get_</xsl:text>
 		<xsl:value-of select="@name"/>
-		<xsl:text>();</xsl:text>
+		<xsl:text>()</xsl:text>
+		<xsl:if test="contains(@type, '[')">
+			<xsl:text>&#160;__gc[]</xsl:text>
+		</xsl:if>
+		<xsl:text>;</xsl:text>
 	</xsl:template>
+
 	<xsl:template name="cpp-property-setter">
 		<xsl:param name="include-type-links"/>
 
@@ -338,7 +343,7 @@
 			<xsl:with-param name="include-type-links" select="$include-type-links"/>		
 			<xsl:with-param name="lang" select="'C++'"/>
 			<xsl:with-param name="namespace-name" select="../../@name" />
-		</xsl:call-template>		
+		</xsl:call-template>
 		<xsl:if test="parameter">
 			<xsl:text>&#160;&#160;&#160;</xsl:text>
 		</xsl:if>
@@ -347,6 +352,9 @@
 			<xsl:with-param name="lang" select="'C++'"/>
 			<xsl:with-param name="type" select="@type"/>
 		</xsl:call-template>					
+		<xsl:if test="contains(@type, '[')">
+			<xsl:text>&#160;__gc[]</xsl:text>
+		</xsl:if>
 		<xsl:if test="parameter">
 			<xsl:text>&#10;</xsl:text>
 		</xsl:if>
@@ -857,7 +865,7 @@
 					</xsl:choose>
 				</xsl:variable>
 				<xsl:value-of select="$new-type" />
-				<xsl:if test="$new-type = $old-type and @valuetype='False'">
+				<xsl:if test="$new-type = $old-type and @valueType='false'">
 					<xsl:text>*</xsl:text>
 				</xsl:if>
 			</xsl:when>

@@ -1613,7 +1613,9 @@ namespace NDoc.Core
 			{
 				if (method.Name == "Invoke")
 				{
-					writer.WriteAttributeString("returnType", method.ReturnType.FullName);
+					Type t = method.ReturnType;
+					writer.WriteAttributeString("returnType", GetTypeName(t));
+					writer.WriteAttributeString("valueType", t.IsValueType.ToString().ToLower());
 
 					WriteDelegateDocumentation(writer, memberName, type, method);
 					WriteCustomAttributes(writer, type);
@@ -1737,7 +1739,9 @@ namespace NDoc.Core
 				writer.WriteAttributeString("contract", "Normal");
 			}
 
-			writer.WriteAttributeString("type", field.FieldType.FullName.Replace('+', '.'));
+			Type t = field.FieldType;
+			writer.WriteAttributeString("type", GetTypeName(t));
+			writer.WriteAttributeString("valueType", t.IsValueType.ToString().ToLower());
 
 			bool inherited = (field.DeclaringType != field.ReflectedType);
 			if (inherited)
@@ -2001,7 +2005,9 @@ namespace NDoc.Core
 				writer.WriteAttributeString("id", memberName);
 				writer.WriteAttributeString("access", GetPropertyAccessValue(property));
 				writer.WriteAttributeString("contract", GetPropertyContractValue(property));
-				writer.WriteAttributeString("type", property.PropertyType.FullName.Replace('+', '.'));
+				Type t = property.PropertyType;
+				writer.WriteAttributeString("type", GetTypeName(t));
+				writer.WriteAttributeString("valueType", t.IsValueType.ToString().ToLower());
 
 				if (inherited)
 				{
@@ -2210,7 +2216,9 @@ namespace NDoc.Core
 				writer.WriteAttributeString("id", memberName);
 				writer.WriteAttributeString("access", GetMethodAccessValue(method));
 				writer.WriteAttributeString("contract", GetMethodContractValue(method));
-				writer.WriteAttributeString("returnType", GetTypeName(method.ReturnType));
+				Type t = method.ReturnType;
+				writer.WriteAttributeString("returnType", GetTypeName(t));
+				writer.WriteAttributeString("valueType", t.IsValueType.ToString().ToLower());
 
 				if (inherited)
 				{
@@ -2290,7 +2298,7 @@ namespace NDoc.Core
 			
 			Type t = parameter.ParameterType;
 			writer.WriteAttributeString("type", GetTypeName(t));
-			writer.WriteAttributeString("valuetype", t.IsValueType.ToString());
+			writer.WriteAttributeString("valueType", t.IsValueType.ToString().ToLower());
 
 			if ( t.IsPointer )
 				writer.WriteAttributeString( "unsafe", "true" );

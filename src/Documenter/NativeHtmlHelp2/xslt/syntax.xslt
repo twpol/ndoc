@@ -176,6 +176,9 @@
 				<xsl:with-param name="lang" select="$lang"/>
 				<xsl:with-param name="namespace-name" select="../@name" />
 			</xsl:call-template>
+			<xsl:if test=" $lang = 'C++' and contains(@returnType, '[')">
+				<xsl:text>&#160;[]</xsl:text>
+			</xsl:if>
 			<xsl:if test="$lang='Visual Basic'">
 				<xsl:call-template name="return-type">
 					<xsl:with-param name="lang" select="$lang"/>
@@ -374,6 +377,9 @@
 				<xsl:with-param name="type" select="@returnType"/>
 			</xsl:call-template>
 		</xsl:if>
+		<xsl:if test="$lang='C++' and contains(@returnType, '[')">
+			<xsl:text>&#160;&#160;__gc[]</xsl:text>
+		</xsl:if>
 		<xsl:call-template name="statement-end">
 			<xsl:with-param name="lang" select="$lang"/>			
 		</xsl:call-template>			
@@ -521,6 +527,10 @@
 			<xsl:text>&#160;</xsl:text>
 		</xsl:if>	
 		
+		<xsl:if test="$lang='C++' and contains(@type, '[')">
+			<xsl:text>&#160;__gc[]</xsl:text>
+		</xsl:if>
+
 		<xsl:call-template name="statement-end">
 			<xsl:with-param name="lang" select="$lang"/>
 		</xsl:call-template>
@@ -578,6 +588,10 @@
 				<xsl:text>&#160;</xsl:text>
 			</xsl:if>	
 			
+			<xsl:if test="$lang='C++' and contains(@type, '[')">
+				<xsl:text>__gc[]&#160;</xsl:text>
+			</xsl:if>
+
 			<xsl:call-template name="statement-end">
 				<xsl:with-param name="lang" select="$lang"/>
 			</xsl:call-template>
