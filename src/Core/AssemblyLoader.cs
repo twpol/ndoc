@@ -48,7 +48,7 @@ namespace NDoc.Core
 		/// <term>If the requested assembly has not been loaded, but is in this list, then the file is loaded.</term>
 		/// <term>Once all search paths have been exhausted in an exact name match, this list is checked for a 'partial' match.</term>
 		/// </list></remarks>
-		private NameValueCollection AssemblyNameFileNameMap;
+		private Hashtable AssemblyNameFileNameMap;
 
 		/// <summary>Whether or not to include subdirectories in searches.</summary>
 		private bool includeSubdirs = false;
@@ -64,11 +64,11 @@ namespace NDoc.Core
 		/// </summary>
 		/// <param name="projectDirectories">Project directories.</param>
 		/// <param name="referenceDirectories">Reference directories.</param>
-		public AssemblyLoader(ArrayList projectDirectories,ArrayList referenceDirectories)
+		public AssemblyLoader(ArrayList projectDirectories, ArrayList referenceDirectories)
 		{
 			this.assemblysLoadedAssyName = new Hashtable();
 			this.assemblysLoadedFileName = new Hashtable();
-			this.AssemblyNameFileNameMap = new NameValueCollection();
+			this.AssemblyNameFileNameMap = new Hashtable();
 			this.projectDirectories = projectDirectories;
 			this.referenceDirectories = referenceDirectories;
 			this.directoryLists = new Hashtable();
@@ -146,16 +146,16 @@ namespace NDoc.Core
 					// If the assembly loaded OK, cache the Assembly ref using the fileName as key.
 					assemblysLoadedFileName.Add(fileName, assy);
 				}
-				catch(System.IO.FileLoadException e)
+				catch (System.IO.FileLoadException e)
 				{
-					if (e.Message.IndexOf("0x80131019")!=-1)
+					if (e.Message.IndexOf("0x80131019") != -1)
 					{
 						try
 						{
 							// LoadFile is really preferable, 
 							// but since .Net 1.0 doesn't have it,
 							// we have to use LoadFrom on that framework...
-#if(NET_1_0)
+#if (NET_1_0)
 							assy = Assembly.LoadFrom(fileName);
 #else
 							assy = Assembly.LoadFile(fileName);
@@ -209,75 +209,75 @@ namespace NDoc.Core
 			string fileName;
 
 			// we may have already located the assembly but not loaded it...
-			fileName = AssemblyNameFileNameMap[args.Name];
-			if (fileName!=null && fileName.Length>0)
+			fileName = (string)AssemblyNameFileNameMap[args.Name];
+			if (fileName != null && fileName.Length > 0)
 			{
-				return LoadAssembly(AssemblyNameFileNameMap[args.Name]);
+				return LoadAssembly((string)AssemblyNameFileNameMap[args.Name]);
 			}
 
-			string[] assemblyInfo = args.Name.Split(new char[]{','});
+			string[] assemblyInfo = args.Name.Split(new char[] {','});
 
 			string fullName = args.Name;
 			
-			Assembly assy=null;
+			Assembly assy = null;
 
 			// first we will try filenames derived from the assembly name.
 	
 			// Project Path DLLs
-			if (assy==null)
+			if (assy == null)
 			{
 				fileName = assemblyInfo[0] + ".dll";
 				assy = LoadAssemblyFrom(this.projectDirectories, fullName, fileName, this.includeSubdirs);
 			}
 
 			// Project Path Exes
-			if (assy==null)
+			if (assy == null)
 			{
 				fileName = assemblyInfo[0] + ".exe";
 				assy = LoadAssemblyFrom(this.projectDirectories, fullName, fileName, this.includeSubdirs);
 			}
 
 			// Reference Path DLLs
-			if (assy==null)
+			if (assy == null)
 			{
 				fileName = assemblyInfo[0] + ".dll";
 				assy = LoadAssemblyFrom(this.referenceDirectories, fullName, fileName, this.includeSubdirs);
 			}
 
 			// Reference Path Exes
-			if (assy==null)
+			if (assy == null)
 			{
 				fileName = assemblyInfo[0] + ".exe";
 				assy = LoadAssemblyFrom(this.referenceDirectories, fullName, fileName, this.includeSubdirs);
 			}
 
-			if (assy==null)
+			if (assy == null)
 			{
 				//nothing found so far, get desperate and start looking for partial name matches in
 				//the assemblies we have already loaded...
 				assemblies = AppDomain.CurrentDomain.GetAssemblies();
 				foreach (Assembly a in assemblies) 
 				{
-					string[] assemblyNameParts = a.FullName.Split(new char[]{','});
+					string[] assemblyNameParts = a.FullName.Split(new char[] {','});
 					if (assemblyNameParts[0] == assemblyInfo[0])
 					{
-						assy =  a;
+						assy = a;
 						break;
 					}
 				}
 			}
 
-			if (assy==null)
+			if (assy == null)
 			{
 				//get even more desperate and start looking for partial name matches in
 				//the assemblies we have already scanned...
 				foreach (string assemblyName in AssemblyNameFileNameMap.Keys)
 				{
 
-					string[] assemblyNameParts = assemblyName.Split(new char[]{','});
+					string[] assemblyNameParts = assemblyName.Split(new char[] {','});
 					if (assemblyNameParts[0] == assemblyInfo[0])
 					{
-						assy =  LoadAssembly(AssemblyNameFileNameMap[assemblyName]);
+						assy = LoadAssembly((string)AssemblyNameFileNameMap[assemblyName]);
 						break;
 					}
 				}
@@ -314,7 +314,7 @@ namespace NDoc.Core
 						try
 						{
 							AssemblyName assyName = AssemblyName.GetAssemblyName(fn);
-							if (assyName.FullName==fullName)
+							if (assyName.FullName == fullName)
 							{
 								//This looks like the right assembly, try loading it
 								try
@@ -331,7 +331,11 @@ namespace NDoc.Core
 							{
 								//nope, names don't match; save the FileName and AssemblyName map
 								//in case we need this assembly later...
-								AssemblyNameFileNameMap.Add(assyName.FullName,fn);
+								//only first found occurence of fully-qualifed assembly name is cached
+								if (!AssemblyNameFileNameMap.ContainsKey(assyName.FullName))
+								{
+									AssemblyNameFileNameMap.Add(assyName.FullName, fn);
+								}
 							}
 						}
 						catch (Exception e)
