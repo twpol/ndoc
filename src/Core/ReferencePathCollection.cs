@@ -453,6 +453,8 @@ namespace NDoc.Core
 					}
 					else
 					{
+						//HACK: we must collapse any child members, otherwise a PropertyGrid bug will cause an error msg to appear
+						CollapseChildren(gridItem);
 						returnObject = value;
 					}
 
@@ -460,6 +462,18 @@ namespace NDoc.Core
 				}
 				else
 					return value;
+			}
+
+			private void CollapseChildren(GridItem gridItem)
+			{
+				if (!gridItem.Expanded) return;
+				foreach(GridItem childGridItem in gridItem.GridItems)
+				{
+					if(childGridItem.Expanded)
+					{
+						childGridItem.Expanded=false;
+					}
+				}
 			}
 	
 			/// <summary>
@@ -470,14 +484,6 @@ namespace NDoc.Core
 			public override System.Drawing.Design.UITypeEditorEditStyle GetEditStyle(System.ComponentModel.ITypeDescriptorContext context)
 			{
 				return UITypeEditorEditStyle.Modal;
-			}
-
-			private void ClearChildren(object gridEntry)
-			{
-				Type type = gridEntry.GetType();
-				BindingFlags flags = BindingFlags.Instance | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
-				PropertyInfo prop = type.GetProperty("ChildCollection", flags);
-				prop.SetValue(gridEntry, null, BindingFlags.SetProperty, null, null, null);
 			}
 
 			private void RemoveBlankPaths(ReferencePathCollection coll)
