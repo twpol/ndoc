@@ -152,6 +152,10 @@
             <param name="Local" value="Content\gettinginvolved.htm">
             <param name="ImageNumber" value="41">
           </OBJECT>
+      <LI><OBJECT type="text/sitemap">
+            <param name="Name" value="Getting Support">
+            <param name="Local" value="content\support.htm">
+          </OBJECT>
    </UL>
 </BODY>
 </HTML>
