@@ -102,7 +102,7 @@ table.bannerparthead td /* General Values for cells in the top row of running he
 	margin: 0px 0px 0px 0px;
 	padding: 2px 0px 0px 4px;
 	vertical-align: middle;
-	border-width: 0px
+	border-width: 0px;
 	border-style: solid;
 	border-color: #999999;
 	background: transparent; 
