@@ -63,7 +63,7 @@ a:hover {background-color:#eee;}
 #Header 
 {
 	font-size:11px;
-	margin:50px 0px 10px 0px;
+	margin:20px 0px 10px 0px;
 	padding:15px 0px 2px 20px;
 	/* For IE5/Win's benefit height = [correct height] + [top padding] + [top and bottom border widths] */
 	height:33px; /* 14px + 17px + 2px = 33px */
