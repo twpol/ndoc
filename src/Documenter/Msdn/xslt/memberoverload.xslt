@@ -11,7 +11,7 @@
 		<xsl:apply-templates select="ndoc/assembly/module/namespace/*/*[@id=$member-id][1]" />
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="method | constructor | property">
+	<xsl:template match="method | constructor | property | operator">
 		<xsl:variable name="type">
 			<xsl:choose>
 				<xsl:when test="local-name(..)='interface'">Interface</xsl:when>
@@ -22,6 +22,13 @@
 			<xsl:choose>
 				<xsl:when test="local-name()='method'">Method</xsl:when>
 				<xsl:when test="local-name()='constructor'">Constructor</xsl:when>
+				<xsl:when test="local-name()='operator'">
+			    <xsl:call-template name="operator-name">
+				    <xsl:with-param name="name">
+				      <xsl:value-of select="@name" />
+				    </xsl:with-param>
+			    </xsl:call-template>
+				</xsl:when>
 				<xsl:otherwise>Property</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
@@ -30,11 +37,11 @@
 			<xsl:call-template name="html-head">
 				<xsl:with-param name="title">
 					<xsl:choose>
-						<xsl:when test="local-name()!='constructor'">
-							<xsl:value-of select="@name" />
+						<xsl:when test="local-name()='constructor' or local-name()='operator'">
+							<xsl:value-of select="../@name" />
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of select="../@name" />
+							<xsl:value-of select="@name" />
 						</xsl:otherwise>
 					</xsl:choose>
 					<xsl:text>&#32;</xsl:text>
@@ -45,12 +52,12 @@
 				<xsl:call-template name="title-row">
 					<xsl:with-param name="type-name">
 						<xsl:value-of select="../@name" />
-						<xsl:if test="local-name()!='constructor'">
+						<xsl:if test="local-name()='method' or local-name()='property' ">
 							<xsl:text>.</xsl:text>
 							<xsl:value-of select="@name" />
 						</xsl:if>
 						<xsl:text>&#160;</xsl:text>
-						<xsl:value-of select="childType" />
+						<xsl:value-of select="$childType" />
 					</xsl:with-param>
 				</xsl:call-template>
 				<div id="nstext">
@@ -81,6 +88,9 @@
 										<xsl:when test="local-name()='method'">
 											<xsl:call-template name="get-filename-for-method" />
 										</xsl:when>
+										<xsl:when test="local-name()='operator'">
+											<xsl:call-template name="get-filename-for-operator" />
+										</xsl:when>
 										<xsl:otherwise>
 											<xsl:call-template name="get-filename-for-current-property" />
 										</xsl:otherwise>
@@ -101,7 +111,7 @@
 		</html>
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="constructor | method" mode="syntax">
+	<xsl:template match="constructor | method | operator" mode="syntax">
 		<xsl:call-template name="member-syntax2" />
 	</xsl:template>
 	<!-- -->

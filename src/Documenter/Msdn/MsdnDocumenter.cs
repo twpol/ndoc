@@ -943,7 +943,7 @@ namespace NDoc.Documenter.Msdn
 						TransformAndWriteResult(xsltMember, arguments2, fileName);
 					}
 
-					if (IsMethodLastOverload(methodNodes, indexes, i))
+					if (bOverloaded && IsMethodLastOverload(methodNodes, indexes, i))
 					{
 						bOverloaded = false;
 						htmlHelp.CloseBookInContents();
@@ -962,7 +962,9 @@ namespace NDoc.Documenter.Msdn
 			{
 				string typeName = (string)typeNode.Attributes["name"].Value;
 				string typeID = (string)typeNode.Attributes["id"].Value;
+				XmlNodeList opNodes = typeNode.SelectNodes("operator");
 				string fileName = GetFilenameForOperators(whichType, typeNode);
+				bool bOverloaded = false;
 
 				string title = "Operators";
 
@@ -981,20 +983,53 @@ namespace NDoc.Documenter.Msdn
 				htmlHelp.OpenBookInContents();
 
 				int[] indexes = SortNodesByAttribute(operators, "id");
+				int nNodes = opNodes.Count;
 
-				foreach (int index in indexes)
+				for (int i = 0; i < nNodes; i++)
 				{
-					XmlNode operatorNode = operators[index];
+					XmlNode operatorNode = operators[indexes[i]];
 					string operatorID = operatorNode.Attributes["id"].Value;
 
+					if (IsMethodFirstOverload(opNodes, indexes, i))
+					{
+						string opName = (string)operatorNode.Attributes["name"].Value;
+						if ((opName != "op_Implicit") 
+							&& (opName != "op_Implicit"))
+						{
+							bOverloaded = true;
+
+							fileName = GetFilenameForOperatorsOverloads(typeNode, operatorNode);
+							htmlHelp.AddFileToContents(GetOperatorName(operatorNode), fileName);
+
+							arguments = new XsltArgumentList();
+							arguments.AddParam("member-id", String.Empty, operatorID);
+							TransformAndWriteResult(xsltMemberOverload, arguments, fileName);
+
+							htmlHelp.OpenBookInContents();
+						}
+					}
+
+
 					fileName = GetFilenameForOperator(operatorNode);
-					htmlHelp.AddFileToContents(
-						GetOperatorName(operatorNode),
-						fileName);
+					if (bOverloaded)
+					{
+						XmlNodeList parameterNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace/" + lowerCaseTypeNames[whichType] + "[@name=\"" + typeName + "\"]/operator[@id=\"" + operatorID + "\"]/parameter");
+						htmlHelp.AddFileToContents(GetOperatorName(operatorNode) + GetParamList(parameterNodes), fileName);
+					}
+					else
+					{
+						htmlHelp.AddFileToContents(GetOperatorName(operatorNode), fileName);
+					}
 
 					arguments = new XsltArgumentList();
 					arguments.AddParam("member-id", String.Empty, operatorID);
 					TransformAndWriteResult(xsltMember, arguments, fileName);
+
+					if (bOverloaded && IsMethodLastOverload(opNodes, indexes, i))
+					{
+						bOverloaded = false;
+						htmlHelp.CloseBookInContents();
+					}
 				}
 
 				htmlHelp.CloseBookInContents();
@@ -1059,9 +1094,12 @@ namespace NDoc.Documenter.Msdn
 					XmlNode parameterNode = operatorNode.SelectSingleNode("parameter");
 					string from = parameterNode.Attributes["type"].Value;
 					string to = operatorNode.Attributes["returnType"].Value;
-					return StripNamespace(from) + " to " + StripNamespace(to) + " Conversion";
+					return "Explicit " + StripNamespace(from) + " to " + StripNamespace(to) + " Conversion";
 				case "op_Implicit":
-					goto case "op_Explicit";
+					XmlNode parameterNode2 = operatorNode.SelectSingleNode("parameter");
+					string from2 = parameterNode2.Attributes["type"].Value;
+					string to2 = operatorNode.Attributes["returnType"].Value;
+					return "Implicit " + StripNamespace(from2) + " to " + StripNamespace(to2) + " Conversion";
 				default:
 					return "ERROR";
 			}
@@ -1275,6 +1313,14 @@ namespace NDoc.Documenter.Msdn
 		{
 			string typeID = typeNode.Attributes["id"].Value;
 			string fileName = typeID.Substring(2) + "Operators.html";
+			return fileName;
+		}
+
+		private string GetFilenameForOperatorsOverloads(XmlNode typeNode, XmlNode opNode)
+		{
+			string typeID = (string)typeNode.Attributes["id"].Value;
+			string opName = (string)opNode.Attributes["name"].Value;
+			string fileName = typeID.Substring(2) + "." + opName + ".html";
 			return fileName;
 		}
 

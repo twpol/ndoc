@@ -783,7 +783,15 @@
 			<xsl:when test="$name='op_GreaterThan'">Greater Than Operator</xsl:when>
 			<xsl:when test="$name='op_LessThanOrEqual'">Less Than Or Equal Operator</xsl:when>
 			<xsl:when test="$name='op_GreaterThanOrEqual'">Greater Than Or Equal Operator</xsl:when>
-			<xsl:when test="$name='op_Implicit' or $name='op_Explicit'">
+			<xsl:when test="$name='op_Implicit'">
+				<xsl:text>Implicit </xsl:text>
+				<xsl:value-of select="$from" />
+				<xsl:text> to </xsl:text>
+				<xsl:value-of select="$to" />
+				<xsl:text> Conversion</xsl:text>
+			</xsl:when>
+			<xsl:when test="$name='op_Explicit'">
+				<xsl:text>Explicit </xsl:text>
 				<xsl:value-of select="$from" />
 				<xsl:text> to </xsl:text>
 				<xsl:value-of select="$to" />

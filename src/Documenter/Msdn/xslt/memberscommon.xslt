@@ -602,11 +602,11 @@
 		<xsl:variable name="member" select="local-name()" />
 		<xsl:variable name="name" select="@name" />
 		<xsl:variable name="contract" select="@contract" />
-		<xsl:if test="not(preceding-sibling::*[local-name()=$member and @name=$name and (($contract='Static' and @contract='Static') or ($contract!='Static' and @contract!='Static'))])">
+		<xsl:if test="@name='op_Implicit' or @name='op_Explicit' or not(preceding-sibling::*[local-name()=$member and @name=$name and (($contract='Static' and @contract='Static') or ($contract!='Static' and @contract!='Static'))])">
 			<xsl:text>&#10;</xsl:text>
 			<tr VALIGN="top">
 				<xsl:choose>
-					<xsl:when test="following-sibling::*[local-name()=$member and @name=$name and (($contract='Static' and @contract='Static') or ($contract!='Static' and @contract!='Static'))]">
+					<xsl:when test="@name!='op_Implicit' and @name!='op_Explicit' and following-sibling::*[local-name()=$member and @name=$name and (($contract='Static' and @contract='Static') or ($contract!='Static' and @contract!='Static'))]">
 						<td width="50%">
 							<xsl:choose>
 								<xsl:when test="@access='Public'">

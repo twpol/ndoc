@@ -184,6 +184,23 @@
 			<xsl:when test="local-name()='constructor'">
 				<xsl:value-of select="../@name" />
 			</xsl:when>
+			<xsl:when test="local-name()='operator'">
+				<xsl:call-template name="get-datatype">
+					<xsl:with-param name="datatype" select="@returnType" />
+				</xsl:call-template>
+				<xsl:text>&#160;</xsl:text>
+			  <xsl:call-template name="operator-name">
+				  <xsl:with-param name="name">
+				    <xsl:value-of select="@name" />
+				  </xsl:with-param>
+				  <xsl:with-param name="from">
+				    <xsl:value-of select="parameter/@type" />
+				  </xsl:with-param>
+				  <xsl:with-param name="to">
+				    <xsl:value-of select="@returnType" />
+				  </xsl:with-param>
+			  </xsl:call-template>
+			</xsl:when>
 			<xsl:otherwise>
 				<xsl:call-template name="get-datatype">
 					<xsl:with-param name="datatype" select="@returnType" />
@@ -192,10 +209,12 @@
 				<xsl:value-of select="@name" />
 			</xsl:otherwise>
 		</xsl:choose>
-		<xsl:call-template name="parameters">
-			<xsl:with-param name="version">short</xsl:with-param>
-			<xsl:with-param name="namespace-name" select="../../@name" />
-		</xsl:call-template>
+		<xsl:if test="@name!='op_Implicit' and @name!='op_Explicit'">
+		  <xsl:call-template name="parameters">
+			  <xsl:with-param name="version">short</xsl:with-param>
+			  <xsl:with-param name="namespace-name" select="../../@name" />
+		  </xsl:call-template>
+		</xsl:if>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="cs-field-or-event-syntax">
