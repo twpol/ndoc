@@ -722,6 +722,9 @@
 					<xsl:with-param name="lang" select="$lang"/>
 					<xsl:with-param name="namespace-name" select="../../@name" />
 				</xsl:call-template>	
+				<xsl:if test="$lang='C++' and contains(@returnType, '[')">
+					<xsl:text>&#160;&#160;__gc[]</xsl:text>
+				</xsl:if>
 				<xsl:text>&#10;</xsl:text></b>	
 			</xsl:when>
 			<xsl:when test="$lang = 'Visual Basic'">
