@@ -56,7 +56,7 @@ namespace NDoc.Core
 
 			_DocumentInheritedMembers = DocumentedInheritedMembers.Instance;
 			_DocumentInheritedFrameworkMembers = true; 
-			_DocumentExplicitInterfaceImplementations = true;
+			_DocumentExplicitInterfaceImplementations = false;
 
 			_DocumentInternals = false;
 			_DocumentProtected = true;
@@ -185,6 +185,13 @@ namespace NDoc.Core
 						}
 					}
 					else
+					{
+						writeProperty=false;
+					}
+
+					//being lazy and assuming only one BrowsableAttribute...
+					BrowsableAttribute[] browsableAttributes=(BrowsableAttribute[])property.GetCustomAttributes(typeof(BrowsableAttribute),true);
+					if (browsableAttributes.Length>0 && !browsableAttributes[0].Browsable)
 					{
 						writeProperty=false;
 					}
