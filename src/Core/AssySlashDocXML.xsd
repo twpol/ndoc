@@ -213,6 +213,7 @@
 					</xs:sequence>
 					<xs:attribute name="access" type="typeAccess" use="required"/>
 					<xs:attribute name="returnType" type="xs:string" use="optional"/>
+					<xs:attribute name="valueType" type="xs:boolean" use="required"/>
 				</xs:extension>
 			</xs:complexContent>
 		</xs:complexType>
@@ -266,6 +267,7 @@
 						<xs:element name="implements" type="memberimplements" minOccurs="0" maxOccurs="unbounded"/>
 					</xs:sequence>
 					<xs:attribute name="type" type="xs:string" use="required"/>
+					<xs:attribute name="valueType" type="xs:boolean" use="required"/>
 					<xs:attribute name="declaringType" type="xs:string" use="optional"/>
 					<xs:attribute name="unsafe" type="xs:boolean" use="optional"/>
 					<xs:attribute name="hiding" type="xs:string" use="optional"/>
@@ -285,6 +287,7 @@
 						<xs:element name="implements" type="memberimplements" minOccurs="0" maxOccurs="unbounded"/>
 					</xs:sequence>
 					<xs:attribute name="type" type="xs:string" use="required"/>
+					<xs:attribute name="valueType" type="xs:boolean" use="required"/>
 					<xs:attribute name="declaringType" type="xs:string" use="optional"/>
 					<xs:attribute name="overload" type="xs:unsignedInt" use="optional"/>
 					<xs:attribute name="unsafe" type="xs:boolean" use="optional"/>
@@ -306,6 +309,7 @@
 						<xs:element name="implements" type="memberimplements" minOccurs="0" maxOccurs="unbounded"/>
 					</xs:sequence>
 					<xs:attribute name="returnType" type="xs:string" use="required"/>
+					<xs:attribute name="valueType" type="xs:boolean" use="required"/>
 					<xs:attribute name="declaringType" type="xs:string" use="optional"/>
 					<xs:attribute name="overload" type="xs:unsignedInt" use="optional"/>
 					<xs:attribute name="unsafe" type="xs:boolean" use="optional"/>
@@ -324,6 +328,7 @@
 						<xs:element name="implements" type="memberimplements" minOccurs="0" maxOccurs="unbounded"/>
 					</xs:sequence>
 					<xs:attribute name="type" type="xs:string" use="required"/>
+					<xs:attribute name="valueType" type="xs:boolean" use="required"/>
 					<xs:attribute name="declaringType" type="xs:string" use="optional"/>
 					<xs:attribute name="interface" type="xs:string" use="optional"/>
 					<xs:attribute name="multicast" type="xs:boolean" use="optional"/>
@@ -340,6 +345,7 @@
 						<xs:element ref="parameter" minOccurs="0" maxOccurs="unbounded"/>
 					</xs:sequence>
 					<xs:attribute name="returnType" type="xs:string" use="required"/>
+					<xs:attribute name="valueType" type="xs:boolean" use="required"/>
 					<xs:attribute name="declaringType" type="xs:string" use="optional"/>
 					<xs:attribute name="overload" type="xs:unsignedInt" use="optional"/>
 					<xs:attribute name="unsafe" type="xs:boolean" use="optional"/>
@@ -355,6 +361,7 @@
 			</xs:sequence>
 			<xs:attribute name="name" type="xs:string" use="required"/>
 			<xs:attribute name="type" type="xs:string" use="required"/>
+			<xs:attribute name="valueType" type="xs:boolean" use="required"/>
 			<xs:attribute name="unsafe" type="xs:string" use="optional"/>
 			<xs:attribute name="direction" type="xs:string" use="optional"/>
 			<xs:attribute name="isParamArray" type="xs:boolean" use="optional"/>
