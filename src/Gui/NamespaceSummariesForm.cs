@@ -51,6 +51,7 @@ namespace NDoc.Gui
 		private System.Windows.Forms.StatusBar statusBar1;
 
 		private Project _Project;
+		private bool scanInitiated=false;
 
 		/// <summary>Allows the user to associate a summaries with the
 		/// namespaces found in the assemblies that are being 
@@ -87,8 +88,9 @@ namespace NDoc.Gui
 			this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.okButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.okButton.Location = new System.Drawing.Point(414, 32);
+			this.okButton.Location = new System.Drawing.Point(216, 256);
 			this.okButton.Name = "okButton";
+			this.okButton.Size = new System.Drawing.Size(88, 24);
 			this.okButton.TabIndex = 4;
 			this.okButton.Text = "OK";
 			this.okButton.Click += new System.EventHandler(this.okButton_Click);
@@ -98,8 +100,9 @@ namespace NDoc.Gui
 			this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.cancelButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.cancelButton.Location = new System.Drawing.Point(414, 64);
+			this.cancelButton.Location = new System.Drawing.Point(312, 256);
 			this.cancelButton.Name = "cancelButton";
+			this.cancelButton.Size = new System.Drawing.Size(88, 24);
 			this.cancelButton.TabIndex = 5;
 			this.cancelButton.Text = "Cancel";
 			// 
@@ -111,7 +114,7 @@ namespace NDoc.Gui
 			this.summaryTextBox.Location = new System.Drawing.Point(8, 80);
 			this.summaryTextBox.Multiline = true;
 			this.summaryTextBox.Name = "summaryTextBox";
-			this.summaryTextBox.Size = new System.Drawing.Size(390, 104);
+			this.summaryTextBox.Size = new System.Drawing.Size(392, 168);
 			this.summaryTextBox.TabIndex = 3;
 			this.summaryTextBox.Text = "";
 			// 
@@ -123,7 +126,7 @@ namespace NDoc.Gui
 			this.namespaceComboBox.DropDownWidth = 192;
 			this.namespaceComboBox.Location = new System.Drawing.Point(8, 32);
 			this.namespaceComboBox.Name = "namespaceComboBox";
-			this.namespaceComboBox.Size = new System.Drawing.Size(390, 21);
+			this.namespaceComboBox.Size = new System.Drawing.Size(392, 21);
 			this.namespaceComboBox.Sorted = true;
 			this.namespaceComboBox.TabIndex = 0;
 			this.namespaceComboBox.SelectedIndexChanged += new System.EventHandler(this.namespaceComboBox_SelectedIndexChanged);
@@ -149,9 +152,9 @@ namespace NDoc.Gui
 			// 
 			// statusBar1
 			// 
-			this.statusBar1.Location = new System.Drawing.Point(0, 200);
+			this.statusBar1.Location = new System.Drawing.Point(0, 296);
 			this.statusBar1.Name = "statusBar1";
-			this.statusBar1.Size = new System.Drawing.Size(504, 22);
+			this.statusBar1.Size = new System.Drawing.Size(408, 22);
 			this.statusBar1.TabIndex = 6;
 			// 
 			// NamespaceSummariesForm
@@ -160,7 +163,7 @@ namespace NDoc.Gui
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.AutoScroll = true;
 			this.CancelButton = this.cancelButton;
-			this.ClientSize = new System.Drawing.Size(504, 222);
+			this.ClientSize = new System.Drawing.Size(408, 318);
 			this.Controls.Add(this.statusBar1);
 			this.Controls.Add(this.cancelButton);
 			this.Controls.Add(this.okButton);
@@ -213,29 +216,43 @@ namespace NDoc.Gui
 
 		private void NamespaceSummariesForm_Activated(object sender, System.EventArgs e)
 		{
-			statusBar1.Text="Scanning assemblies for namespace names...";
-			namespaceComboBox.Enabled=false;
-			summaryTextBox.Enabled=false;
-			okButton.Enabled=false;
-			cancelButton.Enabled=false;
-
-			Application.DoEvents();
-			namespaceComboBox.Items.Clear();
-
-			_Project.Namespaces.LoadNamespacesFromAssemblies(_Project);
-			foreach (string namespaceName in _Project.Namespaces.NamespaceNames)
+			if (!scanInitiated)
 			{
-				namespaceComboBox.Items.Add(namespaceName);
+				scanInitiated=true;
+				try
+				{
+					statusBar1.Text="Scanning assemblies for namespace names...";
+					namespaceComboBox.Enabled=false;
+					summaryTextBox.Enabled=false;
+					okButton.Enabled=false;
+					cancelButton.Enabled=false;
+
+					Application.DoEvents();
+					namespaceComboBox.Items.Clear();
+
+					_Project.Namespaces.LoadNamespacesFromAssemblies(_Project);
+					foreach (string namespaceName in _Project.Namespaces.NamespaceNames)
+					{
+						namespaceComboBox.Items.Add(namespaceName);
+					}
+
+					if (namespaceComboBox.Items.Count>0) namespaceComboBox.SelectedIndex = 0;
+
+					namespaceComboBox.Enabled=true;
+					summaryTextBox.Enabled=true;
+					okButton.Enabled=true;
+				}
+				catch(Exception docEx)
+				{
+					ErrorForm errorForm = new ErrorForm("Unable to complete namspace scan...", docEx);
+					errorForm.ShowDialog(this);
+				}
+				finally
+				{
+					statusBar1.Text="";
+					cancelButton.Enabled=true;
+				}
 			}
-
-			if (namespaceComboBox.Items.Count>0) namespaceComboBox.SelectedIndex = 0;
-
-			statusBar1.Text="";
-			namespaceComboBox.Enabled=true;
-			summaryTextBox.Enabled=true;
-			okButton.Enabled=true;
-			cancelButton.Enabled=true;
-
 		}
 	}
 }
