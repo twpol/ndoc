@@ -177,7 +177,7 @@
 				<xsl:with-param name="access" select="@access" />
 			</xsl:call-template>
 			<xsl:text>&#160;</xsl:text>
-			<xsl:if test="@static">
+			<xsl:if test="@contract='Static'">
 				<xsl:text>static&#160;</xsl:text>
 			</xsl:if>
 			<xsl:if test="@initOnly='true'">
@@ -209,7 +209,7 @@
 			</xsl:call-template>
 			<xsl:text>&#160;</xsl:text>
 		</xsl:if>
-		<xsl:if test="@static">
+		<xsl:if test="@contract='Static'">
 			<xsl:text>static&#160;</xsl:text>
 		</xsl:if>
 		<xsl:choose>
