@@ -355,6 +355,11 @@ namespace NDoc.Core
 		//EditorBrowsableState.Never value
 		private bool IsEditorBrowsable(MemberInfo minfo)
 		{
+			if (MyConfig.EditorBrowsableFilter == EditorBrowsableFilterLevel.Off)
+			{
+				return true;
+			}
+
 			EditorBrowsableAttribute browsable = 
 				Attribute.GetCustomAttribute(minfo, typeof(EditorBrowsableAttribute), false)
 				as EditorBrowsableAttribute;
@@ -365,7 +370,9 @@ namespace NDoc.Core
 			}
 			else
 			{
-				return (browsable.State != EditorBrowsableState.Never);
+				return (browsable.State == EditorBrowsableState.Always) || 
+					((browsable.State == EditorBrowsableState.Advanced) && 
+					(MyConfig.EditorBrowsableFilter != EditorBrowsableFilterLevel.HideAdvanced));
 			}
 		}
 
@@ -383,7 +390,7 @@ namespace NDoc.Core
 				(type.IsNestedAssembly && MyConfig.DocumentInternals) ||
 				(type.IsNestedFamANDAssem && MyConfig.DocumentInternals) ||
 				(type.IsNestedPrivate && MyConfig.DocumentPrivates)) &&
-				(!MyConfig.DocumentOnlyEditorBrowsable || IsEditorBrowsable(type)) &&
+				IsEditorBrowsable(type) &&
 				(!MyConfig.UseNamespaceDocSummaries || (type.Name != "NamespaceDoc"));
 		}
 
@@ -405,7 +412,7 @@ namespace NDoc.Core
 					if(  interfaceType != null && (interfaceType.IsPublic || 
 						(interfaceType.IsNotPublic && MyConfig.DocumentInternals)))
 					{
-						return (!MyConfig.DocumentOnlyEditorBrowsable || IsEditorBrowsable(method));
+						return IsEditorBrowsable(method);
 					}
 				}
 			}
@@ -417,7 +424,7 @@ namespace NDoc.Core
 				(method.IsAssembly && MyConfig.DocumentInternals) ||
 				(method.IsFamilyAndAssembly && MyConfig.DocumentInternals) ||
 				(method.IsPrivate && MyConfig.DocumentPrivates)) &&
-				(!MyConfig.DocumentOnlyEditorBrowsable || IsEditorBrowsable(method));
+				IsEditorBrowsable(method);
 		}
 
 		private bool IsHidden(MemberInfo member, Type type)
@@ -581,7 +588,7 @@ namespace NDoc.Core
 				(field.IsAssembly && MyConfig.DocumentInternals) ||
 				(field.IsFamilyAndAssembly && MyConfig.DocumentInternals) ||
 				(field.IsPrivate && MyConfig.DocumentPrivates)) &&
-				(!MyConfig.DocumentOnlyEditorBrowsable || IsEditorBrowsable(field));
+				IsEditorBrowsable(field);
 		}
 
 		private void WriteAssembly(XmlWriter writer)
@@ -1159,7 +1166,7 @@ namespace NDoc.Core
 
 			foreach (PropertyInfo property in properties)
 			{
-				if (!MyConfig.DocumentOnlyEditorBrowsable || IsEditorBrowsable(property))
+				if (IsEditorBrowsable(property))
 				{
 					MethodInfo getMethod = property.GetGetMethod(true);
 					MethodInfo setMethod = property.GetSetMethod(true);
@@ -1254,7 +1261,7 @@ namespace NDoc.Core
 
 				if (addMethod != null &&
 					MustDocumentMethod(addMethod) &&
-					(!MyConfig.DocumentOnlyEditorBrowsable || IsEditorBrowsable(eventInfo)))
+					IsEditorBrowsable(eventInfo))
 				{
 					WriteEvent(writer, eventInfo);
 				}

@@ -45,7 +45,7 @@ namespace NDoc.Core
 			_DocumentPrivates = false;
 			_DocumentProtectedInternalAsProtected = false;
 			_DocumentEmptyNamespaces = false;
-			_DocumentOnlyEditorBrowsable = true;
+			_EditorBrowsableFilter = EditorBrowsableFilterLevel.Off;
 
 			_IncludeAssemblyVersion = false;
 			_CopyrightText = string.Empty;
@@ -614,22 +614,30 @@ namespace NDoc.Core
 			}
 		}
 
-		private bool _DocumentOnlyEditorBrowsable;
+		private EditorBrowsableFilterLevel _EditorBrowsableFilter;
 
-		/// <summary>Document only members that are flagged as editor-browsable.</summary>
+		/// <summary>Specifies the level of filtering on the EditorBrowsable attribute.</summary>
 		[
 		Category("Visibility"),
-		Description("When true, NDoc checks the EditorBrowsable attribute on all members and excludes the ones flagged as EditorBrowsableState.Never.")
+		Description("Sets the level of filtering to apply on types/members marked with the EditorBrowsable attribute.  Warning: enabling this filter might result in invalid links in the documentation.")
 		]
-		public bool DocumentOnlyEditorBrowsable
+		public EditorBrowsableFilterLevel EditorBrowsableFilter
 		{
-			get { return _DocumentOnlyEditorBrowsable; }
+			get { return _EditorBrowsableFilter; }
 
 			set
 			{
-				_DocumentOnlyEditorBrowsable = value;
+				_EditorBrowsableFilter = value;
 				SetDirty();
 			}
 		}
+	}
+
+	/// <summary>
+	/// Define the levels of filtering on the EditorBrowsable attribute.
+	/// </summary>
+	public enum EditorBrowsableFilterLevel
+	{
+		Off, HideNever, HideAdvanced
 	}
 }
