@@ -289,4 +289,64 @@
 		</a>
 	</xsl:template>
 	<!-- -->
+	<xsl:template name="csharp-type">
+		<xsl:param name="type" />
+		<xsl:variable name="old-type">
+			<xsl:choose>
+				<xsl:when test="contains($type, '[]')">
+					<xsl:value-of select="substring-before($type, '[]')" />
+				</xsl:when>
+				<xsl:when test="contains($type, '&amp;')">
+					<xsl:value-of select="substring-before($type, '&amp;')" />
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="$type" />
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:variable name="new-type">
+			<xsl:choose>
+				<xsl:when test="$old-type='System.Byte'">byte</xsl:when>
+				<xsl:when test="$old-type='System.SByte'">sbyte</xsl:when>
+				<xsl:when test="$old-type='System.Int16'">short</xsl:when>
+				<xsl:when test="$old-type='System.UInt16'">ushort</xsl:when>
+				<xsl:when test="$old-type='System.Int32'">int</xsl:when>
+				<xsl:when test="$old-type='System.UInt32'">uint</xsl:when>
+				<xsl:when test="$old-type='System.Int64'">long</xsl:when>
+				<xsl:when test="$old-type='System.UInt64'">ulong</xsl:when>
+				<xsl:when test="$old-type='System.Single'">float</xsl:when>
+				<xsl:when test="$old-type='System.Double'">double</xsl:when>
+				<xsl:when test="$old-type='System.Decimal'">decimal</xsl:when>
+				<xsl:when test="$old-type='System.String'">string</xsl:when>
+				<xsl:when test="$old-type='System.Char'">char</xsl:when>
+				<xsl:when test="$old-type='System.Boolean'">bool</xsl:when>
+				<xsl:when test="$old-type='System.Void'">void</xsl:when>
+				<xsl:when test="$old-type='System.Object'">object</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="$old-type" />
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:choose>
+			<xsl:when test="contains($type, '[]')">
+				<xsl:value-of select="concat($new-type, '[]')" />
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="$new-type" />
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	<!-- -->
+	<xsl:template name="csharp-member-access">
+		<xsl:param name="access" />
+		<xsl:choose>
+			<xsl:when test="$access='Public'">public</xsl:when>
+			<xsl:when test="$access='Family'">protected</xsl:when>
+			<xsl:when test="$access='FamilyOrAssembly'">protected internal</xsl:when>
+			<xsl:when test="$access='Assembly'">internal</xsl:when>
+			<xsl:when test="$access='Private'">private</xsl:when>
+			<xsl:otherwise>ERROR</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	<!-- -->
 </xsl:transform>

@@ -276,7 +276,9 @@
 		<tr>
 			<!-- Is there a CSS property that can emulate the valign attribute? -->
 			<td class="fieldType" valign="top">
-				<xsl:value-of select="@type" />
+				<xsl:call-template name="csharp-type">
+					<xsl:with-param name="type" select="@type" />
+				</xsl:call-template>
 			</td>
 			<td class="field">
 				<a href="#{substring-after(@id, 'F:')}">
@@ -300,7 +302,9 @@
 				</a>
 				<xsl:text>(</xsl:text>
 				<xsl:for-each select="parameter">
-					<xsl:value-of select="@type" />
+					<xsl:call-template name="csharp-type">
+						<xsl:with-param name="type" select="@type" />
+					</xsl:call-template>
 					<xsl:text>&#160;</xsl:text>
 					<xsl:value-of select="@name" />
 					<xsl:if test="position()!=last()">
@@ -321,7 +325,9 @@
 		<tr>
 			<!-- Is there a CSS property that can emulate the valign attribute? -->
 			<td class="propertyType" valign="top">
-				<xsl:value-of select="@type" />
+				<xsl:call-template name="csharp-type">
+					<xsl:with-param name="type" select="@type" />
+				</xsl:call-template>
 			</td>
 			<td class="property">
 				<a href="#{substring-after(@id, 'P:')}">
@@ -330,7 +336,9 @@
 				<xsl:if test="parameter">
 					<xsl:text>[</xsl:text>
 					<xsl:for-each select="parameter">
-						<xsl:value-of select="@type" />
+						<xsl:call-template name="csharp-type">
+							<xsl:with-param name="type" select="@type" />
+						</xsl:call-template>
 						<xsl:text>&#160;</xsl:text>
 						<xsl:value-of select="@name" />
 						<xsl:if test="position()!=last()">
@@ -352,7 +360,9 @@
 		<tr>
 			<!-- Is there a CSS property that can emulate the valign attribute? -->
 			<td class="returnType" valign="top">
-				<xsl:value-of select="@returnType" />
+				<xsl:call-template name="csharp-type">
+					<xsl:with-param name="type" select="@returnType" />
+				</xsl:call-template>
 			</td>
 			<td class="method">
 				<a href="#{substring-after(@id, 'M:')}">
@@ -360,7 +370,9 @@
 				</a>
 				<xsl:text>(</xsl:text>
 				<xsl:for-each select="parameter">
-					<xsl:value-of select="@type" />
+					<xsl:call-template name="csharp-type">
+						<xsl:with-param name="type" select="@type" />
+					</xsl:call-template>
 					<xsl:text>&#160;</xsl:text>
 					<xsl:value-of select="@name" />
 					<xsl:if test="position()!=last()">
@@ -381,7 +393,9 @@
 		<tr>
 			<!-- Is there a CSS property that can emulate the valign attribute? -->
 			<td class="eventType" valign="top">
-				<xsl:value-of select="@type" />
+				<xsl:call-template name="csharp-type">
+					<xsl:with-param name="type" select="@type" />
+				</xsl:call-template>
 			</td>
 			<td class="event">
 				<a href="#{substring-after(@id, 'E:')}">
@@ -442,9 +456,13 @@
 			<xsl:value-of select="@name" />
 		</h3>
 		<pre>
-			<xsl:value-of select="@access" />
+			<xsl:call-template name="csharp-member-access">
+				<xsl:with-param name="access" select="@access" />
+			</xsl:call-template>
 			<xsl:text>&#32;</xsl:text>
-			<xsl:value-of select="@type" />
+			<xsl:call-template name="csharp-type">
+				<xsl:with-param name="type" select="@type" />
+			</xsl:call-template>
 			<xsl:text>&#32;</xsl:text>
 			<b>
 				<xsl:value-of select="@name" />
@@ -465,7 +483,9 @@
 		</h3>
 		<pre>
 			<xsl:variable name="constructor">
-				<xsl:value-of select="@access" />
+				<xsl:call-template name="csharp-member-access">
+					<xsl:with-param name="access" select="@access" />
+				</xsl:call-template>
 				<xsl:text>&#32;</xsl:text>
 				<b>
 					<xsl:value-of select="../@name" />
@@ -474,7 +494,9 @@
 			<xsl:value-of select="$constructor" />
 			<xsl:text>(</xsl:text>
 			<xsl:for-each select="parameter">
-				<xsl:value-of select="@type" />
+				<xsl:call-template name="csharp-type">
+					<xsl:with-param name="type" select="@type" />
+				</xsl:call-template>
 				<xsl:text>&#32;</xsl:text>
 				<xsl:value-of select="@name" />
 				<xsl:if test="position()!=last()">
@@ -499,19 +521,30 @@
 		</h3>
 		<pre>
 			<xsl:variable name="property">
-				<xsl:value-of select="@access" />
+				<xsl:call-template name="csharp-member-access">
+					<xsl:with-param name="access" select="@access" />
+				</xsl:call-template>
 				<xsl:text>&#32;</xsl:text>
-				<xsl:value-of select="@type" />
+				<xsl:call-template name="csharp-type">
+					<xsl:with-param name="type" select="@type" />
+				</xsl:call-template>
 				<xsl:text>&#32;</xsl:text>
 				<b>
-					<xsl:value-of select="@name" />
+					<xsl:choose>
+						<xsl:when test="@name='Item'">this</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="@name" />
+						</xsl:otherwise>
+					</xsl:choose>
 				</b>
 			</xsl:variable>
 			<xsl:value-of select="$property" />
 			<xsl:if test="parameter">
 				<xsl:text>[</xsl:text>
 				<xsl:for-each select="parameter">
-					<xsl:value-of select="@type" />
+					<xsl:call-template name="csharp-type">
+						<xsl:with-param name="type" select="@type" />
+					</xsl:call-template>
 					<xsl:text>&#32;</xsl:text>
 					<xsl:value-of select="@name" />
 					<xsl:if test="position()!=last()">
@@ -537,7 +570,13 @@
 		</h3>
 		<pre>
 			<xsl:variable name="method">
-				<xsl:value-of select="@access" />
+				<xsl:call-template name="csharp-member-access">
+					<xsl:with-param name="access" select="@access" />
+				</xsl:call-template>
+				<xsl:text>&#32;</xsl:text>
+				<xsl:call-template name="csharp-type">
+					<xsl:with-param name="type" select="@returnType" />
+				</xsl:call-template>
 				<xsl:text>&#32;</xsl:text>
 				<b>
 					<xsl:value-of select="@name" />
@@ -546,7 +585,9 @@
 			<xsl:value-of select="$method" />
 			<xsl:text>(</xsl:text>
 			<xsl:for-each select="parameter">
-				<xsl:value-of select="@type" />
+				<xsl:call-template name="csharp-type">
+					<xsl:with-param name="type" select="@type" />
+				</xsl:call-template>
 				<xsl:text>&#32;</xsl:text>
 				<xsl:value-of select="@name" />
 				<xsl:if test="position()!=last()">
@@ -570,9 +611,13 @@
 			<xsl:value-of select="@name" />
 		</h3>
 		<pre>
-			<xsl:value-of select="@access" />
+			<xsl:call-template name="csharp-member-access">
+				<xsl:with-param name="access" select="@access" />
+			</xsl:call-template>
 			<xsl:text>&#32;</xsl:text>
-			<xsl:value-of select="@type" />
+			<xsl:call-template name="csharp-type">
+				<xsl:with-param name="type" select="@type" />
+			</xsl:call-template>
 			<xsl:text>&#32;</xsl:text>
 			<b>
 				<xsl:value-of select="@name" />
