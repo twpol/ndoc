@@ -19,7 +19,11 @@ using System;
 using System.ComponentModel;
 using System.Drawing.Design;
 using System.IO;
+// In mono 0.25, most classes that should actually be in the System.Design assembly
+// are in the System.Windows.Forms assembly.
+#if !MONO 
 using System.Windows.Forms.Design;
+#endif
 
 using NDoc.Core;
 
