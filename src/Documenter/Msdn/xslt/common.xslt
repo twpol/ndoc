@@ -512,13 +512,10 @@
 	<!-- -->
 	<xsl:template name="implements-section">
 		<xsl:if test="implements">
-			<xsl:variable name="member" select="local-name()" />
 			<h4 class="dtH4">Implements</h4>
 			<xsl:for-each select="implements">
 				<p>
-					<xsl:call-template name="implements-member">
-						<xsl:with-param name="member" select="$member" />
-					</xsl:call-template>
+					<xsl:call-template name="implements-member"/>
 				</p>
 			</xsl:for-each>
 			<xsl:apply-templates select="documentation/node()" mode="implements-section" />
@@ -526,50 +523,10 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="implements-member">
-		<xsl:param name="member" />
-		<xsl:variable name="declaring-type-id" select="@interfaceId" />
-		<xsl:variable name="name" select="@name" />
-		<xsl:variable name="declaring-interface" select="//interface[@id=$declaring-type-id]" />
+		<xsl:variable name="href" select="string(NUtil:GetHRef(@id))" />
 		<a>
 			<xsl:attribute name="href">
-				<xsl:choose>
-					<xsl:when test="$member='property'">
-						<xsl:choose>
-							<xsl:when test="starts-with(@declaringType, 'System.')">
-								<xsl:call-template name="get-filename-for-system-property" />
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:call-template name="get-filename-for-property">
-									<xsl:with-param name="property" select="$declaring-interface/property[@name=$name]" />
-								</xsl:call-template>
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:when>
-					<xsl:when test="$member='event'">
-						<xsl:choose>
-							<xsl:when test="starts-with(@declaringType, 'System.')">
-								<xsl:call-template name="get-filename-for-system-event" />
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:call-template name="get-filename-for-event">
-									<xsl:with-param name="event" select="$declaring-interface/event[@name=$name]" />
-								</xsl:call-template>
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:choose>
-							<xsl:when test="starts-with(@declaringType, 'System.')">
-								<xsl:call-template name="get-filename-for-system-method" />
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:call-template name="get-filename-for-method">
-									<xsl:with-param name="method" select="$declaring-interface/method[@name=$name]" />
-								</xsl:call-template>
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:otherwise>
-				</xsl:choose>
+				<xsl:value-of select="$href" />
 			</xsl:attribute>
 			<xsl:value-of select="@interface" />
 			<xsl:text>.</xsl:text>
