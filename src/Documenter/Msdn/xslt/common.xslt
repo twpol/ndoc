@@ -678,4 +678,29 @@
 		</xsl:choose>
 	</xsl:template>
 	<!-- -->
+	<xsl:template name="requirements-section">
+		<xsl:if test="documentation/permission">
+			<h4>Requirements</h4>
+			<p class="i1">
+				<b>.NET Framework Security: </b>
+				<ul class="permissions">
+					<xsl:for-each select="documentation/permission">
+						<li>
+							<a>
+								<xsl:attribute name="href">
+									<xsl:call-template name="get-filename-for-type-name">
+										<xsl:with-param name="type-name" select="substring-after(@cref, 'T:')" />
+									</xsl:call-template>
+								</xsl:attribute>
+								<xsl:value-of select="substring-after(@cref, 'T:')" />
+							</a>
+							<xsl:text>&#160;</xsl:text>
+							<xsl:apply-templates mode="slashdoc" />
+						</li>
+					</xsl:for-each>
+				</ul>
+			</p>
+		</xsl:if>
+	</xsl:template>
+	<!-- -->
 </xsl:stylesheet>

@@ -163,3 +163,8 @@ pre.syntax span.lang
 	margin: 0;
 	font-weight: normal;
 }
+
+.permissions
+{
+	margin-top: 6px;
+}
