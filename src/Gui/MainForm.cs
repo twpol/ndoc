@@ -88,7 +88,7 @@ namespace NDoc.Gui
 		private System.Windows.Forms.MainMenu mainMenu1;
 		private System.Windows.Forms.ToolBar toolBar;
 		private System.Windows.Forms.ToolBarButton openToolBarButton;
-		private System.Windows.Forms.ImageList imageList1;
+		private System.Windows.Forms.ImageList toolBarImageList;
 		private System.Windows.Forms.ToolBarButton newToolBarButton;
 		private System.Windows.Forms.ToolBarButton saveToolBarButton;
 		private System.Windows.Forms.ToolBarButton separatorToolBarButton;
@@ -167,8 +167,21 @@ namespace NDoc.Gui
 			//
 			InitializeComponent();
 
-			this.startingProjectFilename = startingProjectFilename;
+			// manually add image resources.
+			// This avoids problems with VS.NET designer versioning. 
 
+			Assembly assembly= Assembly.GetExecutingAssembly();
+
+			ImageList.ImageCollection imlcol = this.toolBarImageList.Images;
+			imlcol.Add(new Icon(assembly.GetManifestResourceStream("NDoc.Gui.graphics.New.ico")));
+			imlcol.Add(new Icon(assembly.GetManifestResourceStream("NDoc.Gui.graphics.OpenSolution.ico")));
+			imlcol.Add(new Icon(assembly.GetManifestResourceStream("NDoc.Gui.graphics.OpenFile.ico")));
+			imlcol.Add(new Icon(assembly.GetManifestResourceStream("NDoc.Gui.graphics.Save.ico")));
+			imlcol.Add(new Icon(assembly.GetManifestResourceStream("NDoc.Gui.graphics.Build.ico")));
+			imlcol.Add(new Icon(assembly.GetManifestResourceStream("NDoc.Gui.graphics.Cancel.ico")));
+			imlcol.Add(new Icon(assembly.GetManifestResourceStream("NDoc.Gui.graphics.View.ico")));
+
+			this.startingProjectFilename = startingProjectFilename;
 		}
 
 		private void MainForm_Load(object sender, System.EventArgs e)
@@ -273,7 +286,7 @@ namespace NDoc.Gui
 			this.progressBar = new System.Windows.Forms.ProgressBar();
 			this.menuFileExitItem = new System.Windows.Forms.MenuItem();
 			this.newToolBarButton = new System.Windows.Forms.ToolBarButton();
-			this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+			this.toolBarImageList = new System.Windows.Forms.ImageList(this.components);
 			this.menuFileSaveItem = new System.Windows.Forms.MenuItem();
 			this.mainMenu1 = new System.Windows.Forms.MainMenu();
 			this.menuFileItem = new System.Windows.Forms.MenuItem();
@@ -360,17 +373,10 @@ namespace NDoc.Gui
 			this.newToolBarButton.ImageIndex = 0;
 			this.newToolBarButton.ToolTipText = "New";
 			// 
-			// imageList1
+			// toolBarImageList
 			// 
-			this.imageList1.ImageSize = new System.Drawing.Size(16, 16);
-            this.imageList1.Images.Add((System.Drawing.Bitmap) resources.GetObject("imageList1.Images.New"));
-            this.imageList1.Images.Add((System.Drawing.Bitmap) resources.GetObject("imageList1.Images.Solution"));
-            this.imageList1.Images.Add((System.Drawing.Bitmap) resources.GetObject("imageList1.Images.Open"));
-            this.imageList1.Images.Add((System.Drawing.Bitmap) resources.GetObject("imageList1.Images.Save"));
-            this.imageList1.Images.Add((System.Drawing.Bitmap) resources.GetObject("imageList1.Images.Build"));
-            this.imageList1.Images.Add((System.Drawing.Bitmap) resources.GetObject("imageList1.Images.Cancel"));
-            this.imageList1.Images.Add((System.Drawing.Bitmap) resources.GetObject("imageList1.Images.View"));
-			this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
+			this.toolBarImageList.ImageSize = new System.Drawing.Size(16, 16);
+			this.toolBarImageList.TransparentColor = System.Drawing.Color.Transparent;
 			// 
 			// menuFileSaveItem
 			// 
@@ -732,7 +738,7 @@ namespace NDoc.Gui
 																					   this.cancelToolBarButton,
 																					   this.viewToolBarButton});
 			this.toolBar.DropDownArrows = true;
-			this.toolBar.ImageList = this.imageList1;
+			this.toolBar.ImageList = this.toolBarImageList;
 			this.toolBar.Location = new System.Drawing.Point(0, 0);
 			this.toolBar.Name = "toolBar";
 			this.toolBar.ShowToolTips = true;
@@ -838,8 +844,8 @@ namespace NDoc.Gui
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = "NDoc";
-			((System.ComponentModel.ISupportInitialize)(this.statusBarTextPanel)).EndInit();
 			this.Load += new System.EventHandler(this.MainForm_Load);
+			((System.ComponentModel.ISupportInitialize)(this.statusBarTextPanel)).EndInit();
 			this.assembliesHeaderGroupBox.ResumeLayout(false);
 			this.documenterHeaderGroupBox.ResumeLayout(false);
 			this.ResumeLayout(false);
