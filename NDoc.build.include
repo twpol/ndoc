@@ -6,80 +6,125 @@
 		</ifnot>
 		<mkdir dir="${build.dir}" />
 	</target>
+	<!--
+
+	-->
 	<target name="check-build-debug">
 		<ifnot propertyexists="build.debug">
 			<fail message="The build debug setting has not been specified." />
 		</ifnot>
 	</target>
+	<!--
+
+	-->
 	<target name="check-build-defines">
 		<ifnot propertyexists="build.defines">
 			<fail message="The build defines have not been specified." />
 		</ifnot>
 	</target>
+	<!--
+
+	-->
 	<target name="check-build-optimize">
 		<ifnot propertyexists="build.optimize">
 			<fail message="The build optimize setting has not been specified." />
 		</ifnot>
 	</target>
+	<!--
+
+	-->
 	<target name="check-doc-dir">
 		<ifnot propertyexists="doc.dir">
 			<property name="doc.dir" value="doc" readonly="false" />
 		</ifnot>
 		<mkdir dir="${doc.dir}" />
 	</target>
+	<!--
+
+	-->
 	<target name="check-sdkdoc-dir" depends="check-doc-dir">
 		<ifnot propertyexists="sdkdoc.dir">
 			<property name="sdkdoc.dir" value="${doc.dir}/sdk" readonly="false" />
 		</ifnot>
 		<mkdir dir="${sdkdoc.dir}" />
 	</target>
+	<!--
+
+	-->
 	<target name="check-sdkdoc-debug">
 		<ifnot propertyexists="sdkdoc.debug">
 			<fail message="The sdk documentation debug setting has not been specified." />
 		</ifnot>
 	</target>
+	<!--
+	
+	-->
 	<target name="check-current-bin-dir">
 		<ifnot propertyexists="current.bin.dir">
 			<fail message="The current binaries directory has not been specified." />
 		</ifnot>
 		<mkdir dir="${current.bin.dir}" />
 	</target>
+	<!--
+	
+	-->
 	<target name="check-current-build-debug">
 		<ifnot propertyexists="current.build.debug">
 			<fail message="The current build debug setting has not been specified." />
 		</ifnot>
 	</target>
+	<!--
+	
+	-->
 	<target name="check-current-build-defines">
 		<ifnot propertyexists="current.build.defines">
 			<fail message="The current build defines for have not been specified." />
 		</ifnot>
 	</target>
+	<!--
+	
+	-->
 	<target name="check-current-build-optimize">
 		<ifnot propertyexists="current.build.optimize">
 			<fail message="The current build optimize setting has not been specified." />
 		</ifnot>
 	</target>
+	<!--
+	
+	-->
 	<target name="check-current-sdkdoc-dir">
 		<ifnot propertyexists="current.sdkdoc.dir">
 			<fail message="The current sdk document directory has not been specified." />
 		</ifnot>
 		<mkdir dir="${sdkdoc.dir}" />
 	</target>
+	<!--
+	
+	-->
 	<target name="check-current-sdkdoc-debug">
 		<ifnot propertyexists="current.sdkdoc.debug">
 			<fail message="The curernt sdk documentation debug setting has not been specified." />
 		</ifnot>
 	</target>
+	<!--
+	
+	-->
 	<target name="check-current-runtime-config">
 		<ifnot propertyexists="current.runtime.config">
 			<fail message="The current runtime configuration has not been specified." />
 		</ifnot>
 	</target>
+	<!--
+	
+	-->
 	<target name="check-current-runtime-version">
 		<ifnot propertyexists="current.runtime.config">
 			<fail message="The current runtime version has not been specified." />
 		</ifnot>
 	</target>
+	<!--
+	
+	-->
 	<target name="check-current-runtime-description">
 		<ifnot propertyexists="current.runtime.description">
 			<ifnot propertyexists="project.runtime.description">
@@ -90,6 +135,9 @@
 			</if>
 		</ifnot>
 	</target>
+	<!--
+	
+	-->
 	<target name="check-current-build-config">
 		<ifnot propertyexists="current.build.config">
 			<ifnot propertyexists="project.build.config">
@@ -100,10 +148,16 @@
 			</if>
 		</ifnot>
 	</target>
+	<!--
+	
+	-->
 	<target name="check-current-runtime-available" depends="check-current-runtime-config, check-current-runtime-version">
 		<available type="Framework" resource="${current.runtime.config}-${current.runtime.version}"
 			property="current.runtime.available" />
 	</target>
+	<!--
+	
+	-->
 	<!-- Targets for setting up the environment -->
 	<target name="set-build-configuration" depends="check-current-build-config">
 		<ifnot targetexists="set-${current.build.config}-build-configuration">
@@ -111,6 +165,9 @@
 		</ifnot>
 		<call target="set-${current.build.config}-build-configuration" force="true" />
 	</target>
+	<!--
+	
+	-->
 	<target name="set-debug-build-configuration">
 		<property name="build.debug" value="true" readonly="false" />
 		<property name="build.defines" value="DEBUG,TRACE" readonly="false" />
@@ -119,6 +176,9 @@
 		<property name="current.build.config" value="debug" readonly="false" />
 		<call target="set-build-configuration-flags" force="true" />
 	</target>
+	<!--
+	
+	-->
 	<target name="set-release-build-configuration">
 		<property name="build.debug" value="false" readonly="false" />
 		<property name="build.defines" value="TRACE" readonly="false" />
@@ -127,11 +187,17 @@
 		<property name="current.build.config" value="release" readonly="false" />
 		<call target="set-build-configuration-flags" force="true" />
 	</target>
+	<!--
+	
+	-->
 	<target name="set-build-configuration-flags" depends="check-current-build-config">
 		<property name="current.build.config.debug" value="false" readonly="false" />
 		<property name="current.build.config.release" value="false" readonly="false" />
 		<property name="current.build.config.${current.build.config}" value="true" readonly="false" />
 	</target>
+	<!--
+	
+	-->
 	<target name="set-runtime-configuration-flags" depends="check-current-runtime-config, check-current-runtime-version">
 		<property name="current.runtime.config.net" value="false" readonly="false" />
 		<property name="current.runtime.config.netcf" value="false" readonly="false" />
@@ -143,8 +209,12 @@
 		<property name="current.runtime.netcf-1.0" value="false" readonly="false" />
 		<property name="current.runtime.mono-1.0" value="false" readonly="false" />
 		<property name="current.runtime.sscli-1.0" value="false" readonly="false" />
-		<property name="current.runtime.config.${current.runtime.config}-${current.runtime.version}" value="true" readonly="false" />
+		<property name="current.runtime.config.${current.runtime.config}-${current.runtime.version}"
+			value="true" readonly="false" />
 	</target>
+	<!-- 
+	
+	-->
 	<target name="set-runtime-configuration" depends="check-current-build-config">
 		<ifnot propertyexists="current.runtime.config">
 			<ifnot propertyexists="nant.settings.currentframework">
@@ -170,6 +240,9 @@
 		<call target="set-${current.runtime.config}-${current.runtime.version}-runtime-configuration"
 			force="true" />
 	</target>
+	<!--
+
+	-->
 	<target name="set-net-1.0-runtime-configuration" depends="check-build-dir, check-current-build-config, check-build-debug, check-build-defines, check-build-optimize">
 		<property name="current.runtime.config" value="net" readonly="false" />
 		<property name="current.runtime.version" value="1.0" readonly="false" />
@@ -185,6 +258,9 @@
 		<property name="nant.settings.currentframework" value="${current.runtime.config}-${current.runtime.version}" />
 		<call target="set-runtime-configuration-flags" force="true" />
 	</target>
+	<!--
+
+	-->
 	<target name="set-net-1.1-runtime-configuration" depends="check-build-dir, check-current-build-config, check-build-debug, check-build-defines, check-build-optimize">
 		<property name="current.runtime.config" value="net" readonly="false" />
 		<property name="current.runtime.version" value="1.1" readonly="false" />
@@ -200,6 +276,9 @@
 		<property name="nant.settings.currentframework" value="${current.runtime.config}-${current.runtime.version}" />
 		<call target="set-runtime-configuration-flags" force="true" />
 	</target>
+	<!--
+
+	-->
 	<target name="set-netcf-1.0-runtime-configuration" depends="check-build-dir, check-current-build-config, check-build-debug, check-build-defines, check-build-optimize">
 		<property name="current.runtime.config" value="netcf" readonly="false" />
 		<property name="current.runtime.version" value="1.0" readonly="false" />
@@ -216,6 +295,9 @@
 		<property name="nant.settings.currentframework" value="${current.runtime.config}-${current.runtime.version}" />
 		<call target="set-runtime-configuration-flags" force="true" />
 	</target>
+	<!--
+
+	-->
 	<target name="set-mono-1.0-runtime-configuration" depends="check-build-dir, check-current-build-config, check-build-debug, check-build-defines, check-build-optimize">
 		<property name="current.runtime.config" value="mono" readonly="false" />
 		<property name="current.runtime.version" value="1.0" readonly="false" />
@@ -231,6 +313,9 @@
 		<property name="nant.settings.currentframework" value="${current.runtime.config}-${current.runtime.version}" />
 		<call target="set-runtime-configuration-flags" force="true" />
 	</target>
+	<!--
+
+	-->
 	<target name="set-sscli-1.0-runtime-configuration" depends="check-build-dir, check-current-build-config, check-build-debug, check-build-defines, check-build-optimize">
 		<property name="current.runtime.config" value="sscli" readonly="false" />
 		<property name="current.runtime.version" value="1.0" readonly="false" />
@@ -245,5 +330,107 @@
 		<property name="current.sdkdoc.debug" value="${sdkdoc.debug}" readonly="false" />
 		<property name="nant.settings.currentframework" value="${current.runtime.config}-${current.runtime.version}" />
 		<call target="set-runtime-configuration-flags" force="true" />
+	</target>
+	<!--
+
+	-->
+	<target name="display-current-runtime">
+		<echo message="" />
+		<echo message="----------------------------------------------------------" />
+		<echo message=" ${nant.settings.currentframework.description}" />
+		<echo message="----------------------------------------------------------" />
+		<echo message="" />
+		<echo message="framework : ${nant.settings.currentframework}" />
+		<echo message="description : ${nant.settings.currentframework.description}" />
+		<if propertyexists="nant.settings.currentframework.sdkdirectory">
+			<echo message="sdk directory : ${nant.settings.currentframework.sdkdirectory}" />
+		</if>
+		<ifnot propertyexists="nant.settings.currentframework.sdkdirectory">
+			<echo message="sdk directory : &lt;not configured/available&gt;" />
+		</ifnot>
+		<echo message="framework directory : ${nant.settings.currentframework.frameworkdirectory}" />
+		<echo message="assembly directory : ${nant.settings.currentframework.frameworkassemblydirectory}" />
+		<if propertyexists="nant.settings.currentframework.runtimeengine">
+			<echo message="runtime engine : ${nant.settings.currentframework.runtimeengine}" />
+		</if>
+		<echo message="" />
+	</target>
+	<!--
+
+	-->
+	<target name="display-setup" depends="check-htmlhelp-compiler">
+		<!-- .NET Framework 1.0 -->
+		<available type="Framework" resource="net-1.0" property="temp.framework.available" />
+		<ifnot propertytrue="temp.framework.available">
+			<echo message=".NET Framework 1.0 runtime is not available." />
+		</ifnot>
+		<if propertytrue="temp.framework.available">
+			<property name="nant.settings.currentframework" value="net-1.0" />
+			<call target="display-current-runtime" force="true" />
+		</if>
+		<!-- .NET Framework 1.1 -->
+		<available type="Framework" resource="net-1.1" property="temp.framework.available" />
+		<ifnot propertytrue="temp.framework.available">
+			<echo message=".NET Framework 1.1 runtime is not available." />
+		</ifnot>
+		<if propertytrue="temp.framework.available">
+			<property name="nant.settings.currentframework" value="net-1.1" />
+			<call target="display-current-runtime" force="true" />
+		</if>
+		<!-- Mono 1.0 -->
+		<available type="Framework" resource="mono-1.0" property="temp.framework.available" />
+		<ifnot propertytrue="temp.framework.available">
+			<echo message="Mono 1.0 runtime is not available." />
+		</ifnot>
+		<if propertytrue="temp.framework.available">
+			<property name="nant.settings.currentframework" value="mono-1.0" />
+			<call target="display-current-runtime" force="true" />
+		</if>
+		<!-- SSCLI 1.0 -->
+		<available type="Framework" resource="sscli-1.0" property="temp.framework.available" />
+		<ifnot propertytrue="temp.framework.available">
+			<echo message="SSCLI 1.0 runtime is not available." />
+		</ifnot>
+		<if propertytrue="temp.framework.available">
+			<property name="nant.settings.currentframework" value="sscli-1.0" />
+			<call target="display-current-runtime" force="true" />
+		</if>
+		<!-- HTML Help Compiler -->
+		<echo message="" />
+		<echo message="----------------------------------------------------------" />
+		<echo message="" />
+		<echo message="htmlhelp.compiler: ${htmlhelp.compiler}" />
+		<echo message="" />
+	</target>
+	<!-- Targets that check settings -->
+	<target name="check-project-version">
+		<ifnot propertyexists="project.version">
+			<fail message="A project version has not been specified." />
+		</ifnot>
+	</target>
+	<!--
+
+	-->
+	<target name="check-current-package-zipfile">
+		<ifnot propertyexists="current.package.zipfile">
+			<fail message="The current package zipfile has not been specified." />
+		</ifnot>
+	</target>
+	<!--
+
+	-->
+	<target name="check-htmlhelp-compiler">
+		<ifnot propertyexists="htmlhelp.compiler">
+			<readregistry property="htmlhelp.workshop.installroot" key="SOFTWARE\Microsoft\HTML Help Workshop\InstallDir"
+				hive="CurrentUser" failonerror="false" />
+			<if propertyexists="htmlhelp.workshop.installroot">
+				<property name="htmlhelp.compiler" value="${htmlhelp.workshop.installroot}/hhc.exe" readonly="false" />
+			</if>
+		</ifnot>
+		<ifnot propertyexists="htmlhelp.compiler">
+			<sysinfo />
+			<property name="htmlhelp.compiler" value="${sys.os.folder.programfiles}/HTML Help Worshop/hhc.exe"
+				readonly="false" />
+		</ifnot>
 	</target>
 </project>

@@ -95,6 +95,7 @@ Global
 	GlobalSection(SolutionItems) = postSolution
 		NDoc.build = NDoc.build
 		NDoc.build.include = NDoc.build.include
+		NDoc.build.package = NDoc.build.package
 		doc\tags.html = doc\tags.html
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
