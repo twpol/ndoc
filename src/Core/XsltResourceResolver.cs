@@ -61,7 +61,7 @@ namespace NDoc.Core
 		/// User-defined Extensibility Stylesheet
 		/// </summary>
 		/// <value>fully-qualified filename of exstensibility stylesheet</value>
-		public string ExtensibiltyStylesheet 
+		public string ExtensibilityStylesheet 
 		{
 			get 
 			{
@@ -94,13 +94,13 @@ namespace NDoc.Core
 			}
 			else if (relativeUri.StartsWith("user:"))
 			{
-				if (ExtensibiltyStylesheet.Length==0)
+				if (ExtensibilityStylesheet.Length==0)
 				{
 					temp = new Uri("res:blank.xslt" );
 				}
 				else
 				{
-					temp = base.ResolveUri (baseUri, ExtensibiltyStylesheet);
+					temp = base.ResolveUri (baseUri, ExtensibilityStylesheet);
 				}
 			}
 			else if (relativeUri.StartsWith("file:"))
