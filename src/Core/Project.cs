@@ -150,7 +150,6 @@ namespace NDoc.Core
 		/// <summary>Removes an assembly/doc pair from the project.</summary>
 		public void RemoveAssemblySlashDoc(int index)
 		{
-			string assemblyFile = ((AssemblySlashDoc)_AssemblySlashDocs[index]).AssemblyFilename;
 			_AssemblySlashDocs.RemoveAt(index);
 			IsDirty = true;
 		}
@@ -361,7 +360,12 @@ namespace NDoc.Core
 			}
 		}
 
-		private void ReadNamespaceSummaries(XmlReader reader)
+		/// <summary>
+		/// Loads namespace summaries from an XML document.
+		/// </summary>
+		/// <param name="reader">
+		/// An open XmlReader positioned before the namespace elements.</param>
+		public void ReadNamespaceSummaries(XmlReader reader)
 		{
 			while (!reader.EOF && !(reader.NodeType == XmlNodeType.EndElement && reader.Name == "namespaces"))
 			{

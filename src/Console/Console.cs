@@ -18,7 +18,8 @@
 using System;
 using System.Diagnostics;
 using System.Collections;
-
+using System.Xml;
+using System.IO;
 using NDoc.Core;
 using NDoc.Documenter.Msdn;
 using NDoc.Documenter.Xml;
@@ -92,6 +93,16 @@ namespace NDoc.ConsoleApplication
 										}
 										RecurseDir(recPair[0], maxDepth);
 										break;
+									case "namespacesummaries":
+										using(StreamReader streamReader = new StreamReader(val))
+										{
+											XmlTextReader reader = new XmlTextReader(streamReader);
+											reader.MoveToContent();
+											project.ReadNamespaceSummaries(reader);
+											reader.Close();
+											streamReader.Close();
+										}
+										break;
 									default:
 										documenter.Config.SetValue(name, val);
 										propertiesSet = true;
@@ -121,7 +132,6 @@ namespace NDoc.ConsoleApplication
 					documenter.DocBuildingStep += new DocBuildingEventHandler(DocBuildingStepHandler);
 					documenter.Build(project);
 				}
-				
 			}
 			catch( Exception except )
 			{
@@ -132,9 +142,13 @@ namespace NDoc.ConsoleApplication
 
 		private static void WriteUsage()
 		{
-			Console.WriteLine("usage: NDoc.Console [-verbose] [-documenter=docname] [-project=file]");
+			Console.WriteLine("usage: NDocConsole  [-verbose] [-documenter=docname]");
 			Console.WriteLine("                    [-recurse=dir[,maxDepth]] [-property=val...]");
 			Console.WriteLine("                    assembly,xml [assembly,xml...]");
+			Console.WriteLine("                    [-namespacesummaries=filename]");
+			Console.WriteLine();
+			Console.WriteLine("or     NDocConsole  [-verbose] [-documenter=docname] [-project=file]");
+			Console.WriteLine("                    [-recurse=dir[,maxDepth]] [-property=val...]");
 			Console.WriteLine();
 
 			Console.Write("available documenters: ");
@@ -168,7 +182,7 @@ namespace NDoc.ConsoleApplication
 			{
 				foreach (string file in System.IO.Directory.GetFiles(dirName, extension))
 				{
-					docFile = System.IO.Path.GetDirectoryName(file) + "\\" + System.IO.Path.GetFileNameWithoutExtension(file) + ".xml";
+					docFile = Path.ChangeExtension(file, ".xml");
 					if (System.IO.File.Exists(docFile))
 					{
 						project.AddAssemblySlashDoc(new AssemblySlashDoc(file, docFile));
