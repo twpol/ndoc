@@ -312,25 +312,39 @@
 			</xsl:call-template>
 		</xsl:variable>		
 		
-		<xsl:if test="$lang = 'Visual Basic' or $lang = 'JScript'">
-			<xsl:if test="$type != 'System.Void'">
-				<xsl:call-template name="param-seperator">
-					<xsl:with-param name="lang" select="$lang" />
-				</xsl:call-template>
-			</xsl:if>
-		</xsl:if>	
-
 		<xsl:choose>
-			<xsl:when test="$include-type-links = true()">
-				<xsl:call-template name="get-link-for-type-name">
-					<xsl:with-param name="type-name" select="$type" />
-					<xsl:with-param name="link-text" select="$cs-type" />
-				</xsl:call-template>					
-			</xsl:when>
+			<xsl:when test="$lang = 'Visual Basic' or $lang = 'JScript'">
+				<xsl:if test="$type != 'System.Void'">
+					<xsl:call-template name="param-seperator">
+						<xsl:with-param name="lang" select="$lang" />
+					</xsl:call-template>
+					<xsl:choose>
+						<xsl:when test="$include-type-links = true()">
+							<xsl:call-template name="get-link-for-type-name">
+								<xsl:with-param name="type-name" select="$type" />
+								<xsl:with-param name="link-text" select="$cs-type" />
+							</xsl:call-template>					
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="$cs-type"/>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:if>
+			</xsl:when>	
 			<xsl:otherwise>
-				<xsl:value-of select="$cs-type"/>
-			</xsl:otherwise>
-		</xsl:choose>				
+				<xsl:choose>
+					<xsl:when test="$include-type-links = true()">
+						<xsl:call-template name="get-link-for-type-name">
+							<xsl:with-param name="type-name" select="$type" />
+							<xsl:with-param name="link-text" select="$cs-type" />
+						</xsl:call-template>					
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="$cs-type"/>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:otherwise>				
+		</xsl:choose>
 		<xsl:text>&#160;</xsl:text>	
 	</xsl:template>
 
@@ -341,29 +355,10 @@
 			<xsl:with-param name="lang" select="$lang"/>		
 		</xsl:call-template>
 		<b>
-		<xsl:choose>
-			<xsl:when test="$lang='C++' or $lang='JScript'">
-				<xsl:call-template name="cs-property-syntax">
-					<xsl:with-param name="lang" select="$lang"/>			
-					<xsl:with-param name="include-type-links" select="true()"/>
-					<xsl:with-param name="dir" select="'get'"/>
-				</xsl:call-template>
-<xsl:text>
-</xsl:text>				
-				<xsl:call-template name="cs-property-syntax">
-					<xsl:with-param name="lang" select="$lang"/>			
-					<xsl:with-param name="include-type-links" select="true()"/>
-					<xsl:with-param name="dir" select="'set'"/>
-				</xsl:call-template>			
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:call-template name="cs-property-syntax">
-					<xsl:with-param name="lang" select="$lang"/>			
-					<xsl:with-param name="include-type-links" select="true()"/>
-					<xsl:with-param name="dir" select="'both'"/>
-				</xsl:call-template>
-			</xsl:otherwise>
-		</xsl:choose>		
+			<xsl:call-template name="cs-property-syntax">
+				<xsl:with-param name="lang" select="$lang"/>			
+				<xsl:with-param name="include-type-links" select="true()"/>
+			</xsl:call-template>
 <xsl:text>
 </xsl:text></b>	
 	</xsl:template>
@@ -558,118 +553,29 @@
 	<xsl:template name="cs-property-syntax">
 		<xsl:param name="include-type-links"/>
 		<xsl:param name="lang"/>
-		<xsl:param name="dir"/>
-		
-		<xsl:call-template name="cs-member-syntax-prolog">
-			<xsl:with-param name="lang" select="$lang"/>							
-		</xsl:call-template>
-		<xsl:apply-templates select="." mode="keyword">
-			<xsl:with-param name="lang" select="$lang"/>
-		</xsl:apply-templates>
-		<xsl:if test="$lang != 'Visual Basic' and $lang != 'JScript' and $dir='both'">
-			<xsl:call-template name="return-type">
-				<xsl:with-param name="include-type-links" select="$include-type-links"/>
-				<xsl:with-param name="lang" select="$lang"/>
-				<xsl:with-param name="type" select="@type"/>
-			</xsl:call-template>
-		</xsl:if>
-		<xsl:if test="$lang='C++'">
-			<xsl:choose>
-				<xsl:when test="$dir='set'">
-					<xsl:call-template name="return-type">
-						<xsl:with-param name="include-type-links" select="$include-type-links"/>
-						<xsl:with-param name="lang" select="$lang"/>
-						<xsl:with-param name="type" select="'System.Void'"/>
-					</xsl:call-template>				
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:call-template name="return-type">
-						<xsl:with-param name="include-type-links" select="$include-type-links"/>
-						<xsl:with-param name="lang" select="$lang"/>
-						<xsl:with-param name="type" select="@type"/>
-					</xsl:call-template>					
-				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:if>
+				
 		<xsl:choose>
-			<xsl:when test="parameter">
-			
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:apply-templates select="." mode="property-name">
-					<xsl:with-param name="lang" select="$lang"/>
-					<xsl:with-param name="dir" select="$dir"/>
+			<xsl:when test="$lang = 'Visual Basic'">
+				<xsl:apply-templates select="." mode="vb-property-syntax">
+					<xsl:with-param name="include-type-links" select="$include-type-links"/>
 				</xsl:apply-templates>
-			</xsl:otherwise>
-		</xsl:choose>
-		<xsl:if test="$lang='C++'">
-			<xsl:choose>
-				<xsl:when test="$dir='get'">();</xsl:when>
-				<xsl:otherwise>
-					<xsl:text>(</xsl:text>
-					<xsl:call-template name="return-type">
-						<xsl:with-param name="include-type-links" select="$include-type-links"/>
-						<xsl:with-param name="lang" select="$lang"/>
-						<xsl:with-param name="type" select="@type"/>
-					</xsl:call-template>					
-					<xsl:text>);</xsl:text>
-				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:if>
-		<xsl:if test="$lang='C#'">
-			<xsl:text>&#160;{</xsl:text>
-			<xsl:if test="@get='true'">
-				<xsl:text>get;</xsl:text>
-				<xsl:if test="@set='true'">
-					<xsl:text>&#160;</xsl:text>
-				</xsl:if>
-			</xsl:if>
-			<xsl:if test="@set='true'">
-				<xsl:text>set;</xsl:text>
-			</xsl:if>
-			<xsl:text>}</xsl:text>
-		</xsl:if>
-		<xsl:if test="$lang = 'Visual Basic'">
-			<xsl:call-template name="return-type">
-				<xsl:with-param name="include-type-links" select="$include-type-links"/>
-				<xsl:with-param name="lang" select="$lang"/>
-				<xsl:with-param name="type" select="@type"/>
-			</xsl:call-template>
-		</xsl:if>		
-		<xsl:if test="$lang = 'JScript'">
-			<xsl:choose>
-				<xsl:when test="$dir='get'">
-					<xsl:text>()</xsl:text>
-					<xsl:call-template name="return-type">
-						<xsl:with-param name="include-type-links" select="$include-type-links"/>
-						<xsl:with-param name="lang" select="$lang"/>
-						<xsl:with-param name="type" select="@type"/>
-					</xsl:call-template>				
-					<xsl:text>;</xsl:text>
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:text>(</xsl:text>
-					<xsl:variable name="cs-type">
-						<xsl:call-template name="get-datatype">
-							<xsl:with-param name="datatype" select="@type" />
-							<xsl:with-param name="lang" select="$lang" />				
-						</xsl:call-template>
-					</xsl:variable>						
-					<xsl:choose>	
-						<xsl:when test="$include-type-links = true()">
-							<xsl:call-template name="get-link-for-type-name">
-								<xsl:with-param name="type-name" select="@type" />
-								<xsl:with-param name="link-text" select="$cs-type" />
-							</xsl:call-template>					
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:value-of select="$cs-type"/>
-						</xsl:otherwise>
-					</xsl:choose>									
-					<xsl:text>);</xsl:text>				
-				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:if>
+			</xsl:when>
+			<xsl:when test="$lang = 'C#'">
+				<xsl:apply-templates select="." mode="csharp-property-syntax">
+					<xsl:with-param name="include-type-links" select="$include-type-links"/>
+				</xsl:apply-templates>
+			</xsl:when>
+			<xsl:when test="$lang = 'C++'">
+				<xsl:apply-templates select="." mode="cpp-property-syntax">
+					<xsl:with-param name="include-type-links" select="$include-type-links"/>
+				</xsl:apply-templates>
+			</xsl:when>
+			<xsl:when test="$lang = 'JScript'">
+				<xsl:apply-templates select="." mode="js-property-syntax">
+					<xsl:with-param name="include-type-links" select="$include-type-links"/>
+				</xsl:apply-templates>
+			</xsl:when>
+		</xsl:choose>		
 	</xsl:template>
 	
 	<xsl:template match="property[parameter]" mode="params">
