@@ -78,7 +78,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 				case "structure"   : return WhichType.Structure;
 				case "enumeration" : return WhichType.Enumeration;
 				case "delegate"    : return WhichType.Delegate;
-				default            : return WhichType.Unknown;
+				default : return WhichType.Unknown;
 			}
 		}
 
@@ -187,7 +187,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForOperatorsOverloads(string typeID, string opName)
 		{
-			return BaseNameFromTypeId(typeID) + opName.Replace("_","") + "Topic" + 
+			return BaseNameFromTypeId(typeID) + opName.Replace("_", "") + "Topic" + 
 				GetHashCodeForId(typeID) + ".html";
 		}
 
@@ -243,7 +243,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			else
 				filename = BaseNameFromMemberId(methodID);
 			
-			filename=filename.Replace("#", "");
+			filename = filename.Replace("#", "");
 
 			return filename + "Topic" + overload + GetHashCodeForId(methodID) + ".html";
 		}
@@ -327,8 +327,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 
 				fileNames[typeId] = typeFilename;
 
-				XmlNodeList members	= typeNode.SelectNodes("*[@id and not(@declaringType)]");
-				CacheMembers(members,typeNode);
+				XmlNodeList members = typeNode.SelectNodes("*[@id and not(@declaringType)]");
+				CacheMembers(members, typeNode);
 			}
 		}
 
@@ -337,7 +337,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// </summary>
 		/// <param name="members">a list of member nodes to cache</param>
 		/// <param name="typeNode">the owning type's node</param>
-		private void CacheMembers(XmlNodeList members,XmlNode typeNode)
+		private void CacheMembers(XmlNodeList members, XmlNode typeNode)
 		{
 			foreach (XmlElement memberNode in members)
 			{
@@ -381,9 +381,30 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// </summary>
 		/// <param name="id">ID to hash</param>
 		/// <returns>A hash code as an 8 character string</returns>
+		/// <remarks>
+		/// This is based on the classic hash alogrithm attributed to
+		/// Dan Bernstein. It is used in cdb, Berkley DB, Perl, and pretty much
+		/// everywhere else.
+		/// <para>Surprise, surprise, it gives exactly the same results as
+		/// the .Net v1.1 String.GetHashCode() .......
+		/// </para>
+		/// </remarks>
 		private static string GetHashCodeForId(string id)
 		{
-			return "_" + id.GetHashCode().ToString("x8");
+			int hash = 5381;
+
+			char[] stringchars = id.ToCharArray();
+			int stringcharsLength = stringchars.Length;
+
+			unchecked
+			{
+				for (int i = 0; i < stringcharsLength; i++)
+				{
+					hash = ((hash << 5) + hash) ^ stringchars[i];
+				}
+			}
+
+			return "_" + hash.ToString("x8");
 		}
 
 
