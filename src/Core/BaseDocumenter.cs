@@ -734,7 +734,7 @@ namespace NDoc.Core
 						{
 							tempWriter.Flush();
 							if (classCount == 0 && interfaceCount == 0 && structureCount == 0 &&
-								delegateCount == 0 && enumCount == 0 && (namespaceSummary == null || namespaceSummary.Length == 0))
+								delegateCount == 0 && enumCount == 0)
 							{
 								Trace.WriteLine(string.Format("Discarding namespace {0} because it does not contain any documented types.", namespaceName));
 							}
@@ -977,24 +977,24 @@ namespace NDoc.Core
 			implementations = new ImplementsCollection();
 
 			//build a collection of the base type's interfaces
- 			//to determine which have been inherited
- 			StringCollection baseInterfaces = new StringCollection();
- 			foreach(Type baseInterfaceType in type.BaseType.GetInterfaces())
- 			{
- 				baseInterfaces.Add(baseInterfaceType.FullName);
- 			}
+			//to determine which have been inherited
+			StringCollection baseInterfaces = new StringCollection();
+			foreach(Type baseInterfaceType in type.BaseType.GetInterfaces())
+			{
+				baseInterfaces.Add(baseInterfaceType.FullName);
+			}
  
 			foreach(Type interfaceType in type.GetInterfaces())
 			{
 				if(MustDocumentType(interfaceType))
 				{
- 					writer.WriteStartElement("implements");
- 					if (baseInterfaces.Contains(interfaceType.FullName))
- 					{
- 						writer.WriteAttributeString("inherited", "true");
- 					}
- 					writer.WriteString(interfaceType.Name);
- 					writer.WriteEndElement();
+					writer.WriteStartElement("implements");
+					if (baseInterfaces.Contains(interfaceType.FullName))
+					{
+						writer.WriteAttributeString("inherited", "true");
+					}
+					writer.WriteString(interfaceType.Name);
+					writer.WriteEndElement();
  
 					InterfaceMapping interfaceMap = type.GetInterfaceMap(interfaceType);
 					int numberOfMethods = interfaceMap.InterfaceMethods.Length;
@@ -1113,8 +1113,8 @@ namespace NDoc.Core
 				if (property.CanRead)
 				{
 					object value = null;
-/* WV030802: if an exception occurs while trying to read the value of the Attribute,
- * write out the Exception as "value" */
+					/* WV030802: if an exception occurs while trying to read the value of the Attribute,
+					 * write out the Exception as "value" */
 					try
 					{
 						value = property.GetValue(attribute, null);
@@ -2645,9 +2645,9 @@ namespace NDoc.Core
 			// only do this if there is no summary already
 			XmlNode summary;
 			if ((xmlNode == null
-					|| (summary = xmlNode.SelectSingleNode("summary")) == null
-					|| summary.InnerText.Length == 0
-					|| summary.InnerText.Trim().StartsWith("Summary description for"))
+				|| (summary = xmlNode.SelectSingleNode("summary")) == null
+				|| summary.InnerText.Length == 0
+				|| summary.InnerText.Trim().StartsWith("Summary description for"))
 				&& isNonPublic)
 			{
 				// find the property (if any) that this field backs
@@ -2666,9 +2666,9 @@ namespace NDoc.Core
 				PropertyInfo propertyInfo;
 
 				if (((propertyInfo = FindProperty(camelCasePropertyName,
-						type)) != null)
+					type)) != null)
 					|| ((propertyInfo = FindProperty(usPropertyName,
-						type)) != null))
+					type)) != null))
 				{
 					WritePropertyBackerDocumentation(writer, "summary", 
 						propertyInfo);
