@@ -263,6 +263,15 @@
 			</Filter>
 		</Filter>
 		<File
+			RelativePath=".\contents.HHC">
+		</File>
+		<File
+			RelativePath=".\index.HHK">
+		</File>
+		<File
+			RelativePath=".\UsersGuide.hhp">
+		</File>
+		<File
 			RelativePath=".\UsersGuide.mak">
 		</File>
 	</Files>
