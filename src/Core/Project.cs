@@ -40,7 +40,19 @@ namespace NDoc.Core
 		public bool IsDirty
 		{
 			get { return _IsDirty; }
-			set { _IsDirty = value; }
+
+			set 
+			{ 
+				if (!_IsDirty && value && Modified != null)
+				{
+					_IsDirty = true;
+					Modified(this, new EventArgs());
+				}
+				else
+				{
+					_IsDirty = value; 
+				}
+			}
 		}
 
 		private ArrayList _AssemblySlashDocs = new ArrayList();
@@ -79,7 +91,7 @@ namespace NDoc.Core
 		/// <summary>Removes an assembly/doc pair from the project.</summary>
 		public void RemoveAssemblySlashDoc(int index)
 		{
-            _AssemblySlashDocs.RemoveAt(index);
+			_AssemblySlashDocs.RemoveAt(index);
 			IsDirty = true;
 		}
 
@@ -366,7 +378,13 @@ namespace NDoc.Core
 				documenter.Clear();
 			}
 
-			IsDirty = true;
+			IsDirty = false;
 		}
+
+		/// <summary>Raised by projects when they're dirty state changes from false to true.</summary>
+		public event ProjectModifiedEventHandler Modified;
 	}
+
+	/// <summary>Handles ProjectModified events.</summary>
+	public delegate void ProjectModifiedEventHandler(object sender, EventArgs e);
 }

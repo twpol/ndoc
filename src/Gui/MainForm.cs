@@ -152,6 +152,7 @@ namespace NDoc.Gui
 			Thread.CurrentThread.Name = "GUI";
 
 			project = new Project();
+			project.Modified += new ProjectModifiedEventHandler(OnProjectModified);
 
 			foreach (IDocumenter documenter in project.Documenters)
 			{
@@ -656,21 +657,30 @@ namespace NDoc.Gui
 		#endregion // Main
 
 		#region Methods
+		
+		private void OnProjectModified(object sender, EventArgs e)
+		{
+			SetWindowTitle();
+		}
+
 		private void SetWindowTitle()
 		{
 			string projectName;
 
-			if (projectFilename == untitledProjectName)
+			if (projectFilename != null)
 			{
-				projectName = projectFilename;
-			}
-			else
-			{
-				projectName = Path.GetFileName(projectFilename);
-				projectName = projectName.Substring(0, projectName.LastIndexOf('.'));
-			}
+				if (projectFilename == untitledProjectName)
+				{
+					projectName = projectFilename;
+				}
+				else
+				{
+					projectName = Path.GetFileName(projectFilename);
+					projectName = projectName.Substring(0, projectName.LastIndexOf('.'));
+				}
 
-			this.Text = "NDoc - " + projectName;
+				this.Text = "NDoc - " + projectName + (project.IsDirty ? "*" : "");
+			}
 		}
 
 		/// <summary>
