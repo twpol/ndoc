@@ -201,9 +201,24 @@ namespace NDoc.Documenter.Msdn
 					if ((srcFilePattern == null) || (srcFilePattern.Length == 0))
 						continue;
 
-					int i = srcFilePattern.LastIndexOfAny(new char[]{Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar}) ;
-					string path = srcFilePattern.Substring(0,i);
-					string pattern = srcFilePattern.Substring(i+1);
+					string path = Path.GetDirectoryName(srcFilePattern);
+					string pattern = Path.GetFileName(srcFilePattern);
+
+					// Path.GetDirectoryName can return null in some cases.
+					// Treat this as an empty string.
+					if (path == null)
+						path = string.Empty;
+
+					// Make sure we have a fully-qualified path name
+					if (!Path.IsPathRooted(path))
+						path = Path.Combine(Environment.CurrentDirectory, path);
+
+					// Directory.GetFiles does not accept null or empty string
+					// for the searchPattern parameter. When no pattern was
+					// specified, assume all files (*) are wanted.
+					if ((pattern == null) || (pattern.Length == 0))
+						pattern = "*";
+
 					foreach(string srcFile in Directory.GetFiles(path, pattern))
 					{
 						string dstFile = Path.Combine(workspace.WorkingDirectory, Path.GetFileName(srcFile));
