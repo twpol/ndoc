@@ -426,7 +426,7 @@
 				<xsl:text>)</xsl:text>
 			</td>
 			<td width="50%">
-				<xsl:text>Select the method name to go to the Microsoft documentation.</xsl:text>
+				<xsl:text>Select the property name to go to the Microsoft documentation.</xsl:text>
 			</td>
 		</tr>
 	</xsl:template>
@@ -574,7 +574,107 @@
 		</tr>
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="field[not(@declaringType)]|property[not(@declaringType)]|event|method[not(@declaringType)]|operator">
+	<xsl:template match="event[@declaringType]">
+		<xsl:variable name="name" select="@name" />
+		<xsl:variable name="declaring-type-id" select="concat('T:', @declaringType)" />
+		<xsl:text>&#10;</xsl:text>
+		<tr VALIGN="top">
+			<xsl:variable name="declaring-class" select="//class[@id=$declaring-type-id]" />
+			<xsl:choose>
+				<xsl:when test="$declaring-class">
+					<td width="50%">
+						<xsl:choose>
+							<xsl:when test="@access='Public'">
+								<img src="event.bmp" />
+							</xsl:when>
+							<xsl:otherwise>
+								<img src="protectedevent.bmp" />
+							</xsl:otherwise>
+						</xsl:choose>
+						<xsl:if test="@contract='Static'">
+							<img src="static.bmp" />
+						</xsl:if>
+						<a>
+							<xsl:attribute name="href">
+								<xsl:call-template name="get-filename-for-event">
+									<xsl:with-param name="event" select="$declaring-class/event[@name=$name]" />
+								</xsl:call-template>
+							</xsl:attribute>
+							<xsl:value-of select="@name" />
+						</a>
+						<xsl:text> (inherited from </xsl:text>
+						<b>
+							<xsl:call-template name="get-datatype">
+								<xsl:with-param name="datatype" select="@declaringType" />
+							</xsl:call-template>
+						</b>
+						<xsl:text>)</xsl:text>
+					</td>
+					<td width="50%">
+						<xsl:call-template name="summary-with-no-paragraph">
+							<xsl:with-param name="member" select="//class[@id=$declaring-type-id]/event[@name=$name]" />
+						</xsl:call-template>
+					</td>
+				</xsl:when>
+				<xsl:otherwise>
+					<td width="50%">
+						<xsl:choose>
+							<xsl:when test="@access='Public'">
+								<img src="event.bmp" />
+							</xsl:when>
+							<xsl:otherwise>
+								<img src="protectedevent.bmp" />
+							</xsl:otherwise>
+						</xsl:choose>
+						<xsl:if test="@contract='Static'">
+							<img src="static.bmp" />
+						</xsl:if>
+						<xsl:value-of select="@name" />
+					</td>
+					<td width="50%">
+						<xsl:text>See the third party documentation for more information.</xsl:text>
+					</td>
+				</xsl:otherwise>
+			</xsl:choose>
+		</tr>
+	</xsl:template>
+	<!-- -->
+	<xsl:template match="event[@declaringType and starts-with(@declaringType, 'System.')]">
+		<xsl:text>&#10;</xsl:text>
+		<tr VALIGN="top">
+			<td width="50%">
+				<xsl:choose>
+					<xsl:when test="@access='Public'">
+						<img src="event.bmp" />
+					</xsl:when>
+					<xsl:otherwise>
+						<img src="protectedevent.bmp" />
+					</xsl:otherwise>
+				</xsl:choose>
+				<xsl:if test="@contract='Static'">
+					<img src="static.bmp" />
+				</xsl:if>
+				<a>
+					<xsl:attribute name="href">
+						<xsl:call-template name="get-filename-for-system-event" />
+					</xsl:attribute>
+					<xsl:value-of select="@name" />
+				</a>
+				<xsl:text> (inherited from </xsl:text>
+				<b>
+					<xsl:call-template name="strip-namespace">
+						<xsl:with-param name="name" select="@declaringType" />
+					</xsl:call-template>
+				</b>
+				<xsl:text>)</xsl:text>
+			</td>
+			<td width="50%">
+				<xsl:text>Select the event name to go to the Microsoft documentation.</xsl:text>
+			</td>
+		</tr>
+	</xsl:template>
+	<!-- -->
+	<xsl:template match="field[not(@declaringType)]|property[not(@declaringType)]|event[not(@declaringType)]|method[not(@declaringType)]|operator">
 		<xsl:variable name="member" select="local-name()" />
 		<xsl:variable name="name" select="@name" />
 		<xsl:variable name="contract" select="@contract" />

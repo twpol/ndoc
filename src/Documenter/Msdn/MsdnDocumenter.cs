@@ -1181,40 +1181,49 @@ namespace NDoc.Documenter.Msdn
 
 		private void MakeHtmlForEvents(WhichType whichType, XmlNode typeNode)
 		{
-			XmlNodeList events = typeNode.SelectNodes("event");
+			XmlNodeList declaredEventNodes = typeNode.SelectNodes("event[not(@declaringType)]");
 
-			if (events.Count > 0)
+			if (declaredEventNodes.Count > 0)
 			{
-				string typeName = (string)typeNode.Attributes["name"].Value;
-				string typeID = (string)typeNode.Attributes["id"].Value;
-				string fileName = GetFilenameForEvents(whichType, typeNode);
+				XmlNodeList events = typeNode.SelectNodes("event");
 
-				htmlHelp.AddFileToContents("Events", fileName);
-
-				XsltArgumentList arguments = new XsltArgumentList();
-				arguments.AddParam("id", String.Empty, typeID);
-				arguments.AddParam("member-type", String.Empty, "event");
-				TransformAndWriteResult(xsltIndividualMembers, arguments, fileName);
-
-				htmlHelp.OpenBookInContents();
-
-				int[] indexes = SortNodesByAttribute(events, "id");
-
-				foreach (int index in indexes)
+				if (events.Count > 0)
 				{
-					XmlNode eventElement = events[index];
+					string typeName = (string)typeNode.Attributes["name"].Value;
+					string typeID = (string)typeNode.Attributes["id"].Value;
+					string fileName = GetFilenameForEvents(whichType, typeNode);
 
-					string eventName = (string)eventElement.Attributes["name"].Value;
-					string eventID = (string)eventElement.Attributes["id"].Value;
-					fileName = GetFilenameForEvent(eventElement);
-					htmlHelp.AddFileToContents(eventName + " Event", fileName);
+					htmlHelp.AddFileToContents("Events", fileName);
 
-					arguments = new XsltArgumentList();
-					arguments.AddParam("event-id", String.Empty, eventID);
-					TransformAndWriteResult(xsltEvent, arguments, fileName);
+					XsltArgumentList arguments = new XsltArgumentList();
+					arguments.AddParam("id", String.Empty, typeID);
+					arguments.AddParam("member-type", String.Empty, "event");
+					TransformAndWriteResult(xsltIndividualMembers, arguments, fileName);
+
+					htmlHelp.OpenBookInContents();
+
+					int[] indexes = SortNodesByAttribute(events, "id");
+
+					foreach (int index in indexes)
+					{
+						XmlNode eventElement = events[index];
+
+						if (eventElement.Attributes["declaringType"] == null)
+						{
+							string eventName = (string)eventElement.Attributes["name"].Value;
+							string eventID = (string)eventElement.Attributes["id"].Value;
+
+							fileName = GetFilenameForEvent(eventElement);
+							htmlHelp.AddFileToContents(eventName + " Event", fileName);
+
+							arguments = new XsltArgumentList();
+							arguments.AddParam("event-id", String.Empty, eventID);
+							TransformAndWriteResult(xsltEvent, arguments, fileName);
+						}
+					}
+
+					htmlHelp.CloseBookInContents();
 				}
-
-				htmlHelp.CloseBookInContents();
 			}
 		}
 

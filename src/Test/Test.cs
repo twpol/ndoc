@@ -249,6 +249,15 @@ namespace NDoc.Test
 	/// <summary>Represents another derived class.</summary>
 	public class Derived2 : Derived
 	{
+		/// <summary>
+		/// This event is declared in the Derived2 class.
+		/// </summary>
+		public event Handler EventInDerived;
+
+		private void UseDerivedEvent()
+		{
+			EventInDerived(this, new EventArgs());
+		}
 	}
 
 	/// <summary>Represents an outer class.</summary>
