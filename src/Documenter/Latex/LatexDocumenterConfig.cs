@@ -34,6 +34,7 @@ namespace NDoc.Documenter.Latex
 	/// <para>This documenter requires that a LaTeX compiler be installed.
 	/// You can download a free one from <a href="http://www.miktex.org">www.MiKTeX.org</a>.</para>
 	/// </remarks>
+	[DefaultProperty("OutputDirectory")]
 	public class LatexDocumenterConfig
 		: BaseDocumenterConfig
 	{
