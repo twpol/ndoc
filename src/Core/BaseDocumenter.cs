@@ -350,6 +350,7 @@ namespace NDoc.Core
 
 				// Start the root element
 				writer.WriteStartElement("ndoc");
+				writer.WriteAttributeString("SchemaVersion","1.0");
 
 				//add any documenter specific elements.
 				AddDocumenterSpecificXmlData(writer);
