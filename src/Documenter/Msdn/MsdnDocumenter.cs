@@ -704,6 +704,14 @@ namespace NDoc.Documenter.Msdn
 			arguments.AddParam("type-id", String.Empty, typeID);
 			TransformAndWriteResult("type", arguments, fileName);
 
+			if ( typeNode.SelectNodes( "derivedBy" ).Count > 5 )
+			{
+				fileName = GetFilenameForTypeHierarchy(typeNode);
+				arguments = new XsltArgumentList();
+				arguments.AddParam("type-id", String.Empty, typeID);
+				TransformAndWriteResult("typehierarchy", arguments, fileName);
+			}
+
 			if (hasMembers)
 			{
 				fileName = GetFilenameForTypeMembers(typeNode);
@@ -1416,6 +1424,12 @@ namespace NDoc.Documenter.Msdn
 			return fileName;
 		}
 
+		private string GetFilenameForTypeHierarchy(XmlNode typeNode)
+		{
+			string typeID = (string)typeNode.Attributes["id"].Value;
+			string fileName = typeID.Substring(2) + "Hierarchy.html";
+			return fileName;
+		}
 		private string GetFilenameForTypeMembers(XmlNode typeNode)
 		{
 			string typeID = (string)typeNode.Attributes["id"].Value;
