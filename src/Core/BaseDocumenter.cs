@@ -3779,6 +3779,7 @@ namespace NDoc.Core
 
 		private void PreLoadXmlDocumentation()
 		{
+			if (assemblyDocCache==null)	assemblyDocCache = new AssemblyXmlDocCache();
 			//preload all xml documentation
 			foreach (AssemblySlashDoc assemblySlashDoc in _Project.GetAssemblySlashDocs())
 			{
@@ -3791,7 +3792,7 @@ namespace NDoc.Core
 				{
 					string slashdocpath = Path.GetFullPath(assemblySlashDoc.SlashDocFilename);
 					externalSummaryCache.AddXmlDoc(assembly.FullName, slashdocpath);
-					assemblyDocCache = new AssemblyXmlDocCache(slashdocpath);
+					assemblyDocCache.CacheDocFile(slashdocpath);
 				}
 				
 				// loop through all types in assembly
@@ -3804,8 +3805,6 @@ namespace NDoc.Core
 					}
 				}
 			}
-			//it is possible that no xml docs were found, if so create an empty AssemblyXmlDocCache
-			if (assemblyDocCache==null)	assemblyDocCache = new AssemblyXmlDocCache();
 		}
 		
 		private void BuildXrefs()

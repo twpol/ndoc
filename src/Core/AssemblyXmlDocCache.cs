@@ -40,19 +40,6 @@ namespace NDoc.Core
 		}
 
 		/// <summary>
-		/// Creates a new instance of the AssemblyXmlDocCache class and and populates it from the given file.
-		/// </summary>
-		/// <param name="fileName">Fully-qualified filename of xml file with which to populate the cache.</param>
-		public AssemblyXmlDocCache(string fileName)
-		{
-			if(docs==null) docs = new Hashtable();
-			if(excludeTags==null) excludeTags = new Hashtable();
-			XmlTextReader reader = new XmlTextReader(fileName);
-			reader.WhitespaceHandling=WhitespaceHandling.All;
-			CacheDocs(reader);
-		}
-
-		/// <summary>
 		/// Flushes the Cache.
 		/// </summary>
 		public void Flush()
@@ -61,6 +48,19 @@ namespace NDoc.Core
 			excludeTags = new Hashtable();
 		}
 
+
+		/// <summary>
+		/// Populates cache from the given file.
+		/// </summary>
+		/// <param name="fileName">Fully-qualified filename of xml file with which to populate the cache.</param>
+		public void CacheDocFile(string fileName)
+		{
+			XmlTextReader reader = new XmlTextReader(fileName);
+			reader.WhitespaceHandling=WhitespaceHandling.All;
+			CacheDocs(reader);
+		}
+		
+		
 		/// <summary>
 		/// Cache the xmld docs into a hashtable for faster access.
 		/// </summary>
