@@ -244,7 +244,7 @@ namespace NDoc.Core
 				(type.IsNestedFamORAssem && MyConfig.DocumentProtected) ||
 				(type.IsNestedAssembly && MyConfig.DocumentInternals) ||
 				(type.IsNestedFamANDAssem && MyConfig.DocumentInternals) ||
-				(type.IsNestedPrivate && MyConfig.DocumentInternals));
+				(type.IsNestedPrivate && MyConfig.DocumentPrivates));
 		}
 
 		private bool MustDocumentMethod( MethodBase method )

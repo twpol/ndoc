@@ -1263,6 +1263,17 @@ namespace NDoc.Test
 			return null;
 		}
 	}
+
+	/// <summary>This public class contains a private enum.</summary>
+	public class PublicClassWithPrivateEnum
+	{
+		/// <summary>This is a private enum in a public class.</summary>
+		private enum PrivateEnum
+		{
+			/// <summary>foo</summary>
+			Foo
+		}
+	}
 }
 
 namespace NDoc.Test.InternalStuff
