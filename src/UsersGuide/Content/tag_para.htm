@@ -2,31 +2,39 @@
 <html>
 	<head>
 		<title>para</title>
-		<meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5">
-		<link href="css/ndoc.css" rel="stylesheet" name="ndocstyle" type="text/css">
+		<meta content="http://schemas.microsoft.com/intellisense/ie5" name="vs_targetSchema">
+		<LINK href="css/ndoc.css" type="text/css" rel="stylesheet" name="ndocstyle">
 		<script src="script/ndoc_tags.js"></script>
 	</head>
 	<body class="dtBODY" id="bodyID" onload="InitTitle()">
 		<div id="nstext">
 			<p>The &lt;para&gt; tag is used to add structure to text.</p>
-			<pre class="syntax">&lt;para&gt;<I>content</I>&lt;/para&gt;</pre>
+			<pre class="syntax">&lt;para [lang="<EM>language</EM>"]&gt;<I>content</I>&lt;/para&gt;</pre>
 			<p>where:</p>
 			<dl>
-				<dt><I>content</I>
+				<dt>lang="<I>language</I>"
 					<dd>
-						The text of the paragraph.</dd>
+						Applies a filter for this language. (Optional) <dt><I>content</I>
+							<dd>
+								The text of the paragraph.
+							</dd>
 			</dl>
 			<h4 class="dtH4">Applies To</h4>
 			<p>Can be used inline within any other markup.</p>
 			<h4 class="dtH4">Remarks</h4>
-			<p>This tag is for use inside a tag, such as <a href="tag_summary.htm">&lt;summary&gt;</a>,
-				<a href="tag_remarks.htm">&lt;remarks&gt;</a>, or <a href="tag_returns.htm">&lt;returns&gt;</a>, 
+			<p>This tag is for use inside a tag, such as <A href="tag_summary.htm">&lt;summary&gt;</A>,
+				<A href="tag_remarks.htm">&lt;remarks&gt;</A>, or <A href="tag_returns.htm">&lt;returns&gt;</A>, 
 				and lets you add structure to the text.</p>
-			<h4 class="dtH4">Example</h4>
-			<p>See <a href="tag_summary.htm">&lt;summary&gt;</a> for an example of using this 
+			<p>A language filter can be attached using the optional <em>lang</em> attribute. 
+				Standard languages are <b>VB</b>, <b>C#</b>, <b>C++</b> and <b>JScript</b>. 
+				Multiple languages can be specified as a comma separated list such as "VB, C#, 
+				C++".
+			</p>
+			<h4 class="dtH4">ExampleV</h4>
+			<p>See <A href="tag_summary.htm">&lt;summary&gt;</A> for an example of using this 
 				tag.</p>
 			<h4 class="dtH4">See Also</h4>
-			<p><a href="tagsusage.htm">Tag Usage</a> | <a href="tags.htm"> NDoc&nbsp;Tags</a></p>
+			<p><a href="tagsusage.htm">Tag Usage</a> | <a href="tags.htm">NDoc&nbsp;Tags</a></p>
 		</div>
 	</body>
 </html>

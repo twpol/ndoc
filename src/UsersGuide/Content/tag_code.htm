@@ -9,16 +9,23 @@
 	<body class="dtBODY" id="bodyID" onload="InitTitle()">
 		<div id="nstext">
 			<p>The &lt;code&gt; is used to indicate multiple lines as code.</p>
-			<pre class="syntax">&lt;code&gt;<I>content</I>&lt;/code&gt;</pre>
+			<pre class="syntax">&lt;code [lang="<EM>language</EM>"]&gt;<EM>content</EM>&lt;/code&gt;</pre>
 			<p>where:</p>
 			<dl>
-				<dt><I>content</I></dt>
-				<dd>
-					The text you want marked as code.</dd>
+				<dt>lang="<I>language</I>"
+					<dd>
+						Applies a filter for this language. (Optional)</dd>
+					<dt><I>content</I>
+						<dd>
+							The text you want marked as code.</dd>
 			</dl>
 			<h4 class="dtH4">Applies To</h4>
 			<p>Can be used inline within any other markup.</p>
 			<h4 class="dtH4">Remarks</h4>
+			<p>A language filter can be attached using the optional <em>lang</em> attribute. 
+				Standard languages are <b>VB</b>, <b>C#</b>, <b>C++</b> and <b>JScript</b>. 
+				Multiple languages can be specified as a comma separated list such as "VB, C#, 
+				C++".</p>
 			<p>
 				Use <a href="tag_c.htm">&lt;c&gt;</a> to indicate that text within a 
 				description should be marked as code.</p>
@@ -26,7 +33,7 @@
 			<p>See the <a href="tag_example.htm">&lt;example&gt;</a> topic for an example of 
 				how to use the &lt;code&gt; tag.</p>
 			<h4 class="dtH4">See Also</h4>
-			<p><a href="tagsusage.htm">Tag Usage</a> | <a href="tags.htm"> NDoc&nbsp;Tags</a>&nbsp;|&nbsp;<a href="c_tag.htm">&lt;c&gt;</a></p>
+			<p><a href="tagsusage.htm">Tag Usage</a> | <a href="tags.htm">NDoc&nbsp;Tags</a>&nbsp;|&nbsp;<a href="c_tag.htm">&lt;c&gt;</a></p>
 		</div>
 	</body>
 </html>
