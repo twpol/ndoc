@@ -1,3 +1,20 @@
+// Copyright (C) 2004  Kevin Downs
+// Parts Copyright (c) 2002 Jean-Claude Manoli
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
 using System;
 using System.IO;
 using System.Collections;
@@ -44,7 +61,7 @@ namespace NDoc.Core
 		{
 			int start = Environment.TickCount;
 
-			XmlTextReader reader=null;
+			XmlTextReader reader = null;
 			try
 			{
 				reader = new XmlTextReader(fileName);
@@ -52,10 +69,10 @@ namespace NDoc.Core
 			}
 			finally
 			{
-				if (reader!=null) reader.Close();
+				if (reader != null) reader.Close();
 			}
 			cachedDocs.Add(assemblyName, fileName);
-			Trace.WriteLine("Cached doc : " + ((Environment.TickCount - start)/1000.0).ToString() + " sec.");
+			Trace.WriteLine("Cached doc : " + ((Environment.TickCount - start) / 1000.0).ToString() + " sec.");
 		}
 
 		/// <summary>
@@ -107,10 +124,10 @@ namespace NDoc.Core
 							}
 						}
 
-#if !MONO 
+#if!MONO 
 						//TODO: search in the mono lib folder, if they ever give us the xml documentation
 						// If still not found, try locating the assembly in the Framework folder
-						if (docPath == null )
+						if (docPath == null)
 						{
 							string frameworkPath = this.GetDotnetFrameworkPath(FileVersionInfo.GetVersionInfo(assemblyPath));
 
@@ -125,8 +142,8 @@ namespace NDoc.Core
 						{
 							Debug.WriteLine("Loading XML Doc for " + type.Assembly.FullName);
 							Debug.WriteLine("at " + docPath);
-							AddXmlDoc(type.Assembly.FullName,docPath);
-							searchedDoc=docPath;
+							AddXmlDoc(type.Assembly.FullName, docPath);
+							searchedDoc = docPath;
 						}
 					}
 				}
@@ -151,43 +168,43 @@ namespace NDoc.Core
 		/// <remarks>If a member does not have a summary, a zero-length string is stored instead.</remarks>
 		private void CacheSummaries(XmlTextReader reader)
 		{
-			object oMember  = reader.NameTable.Add("member");
+			object oMember = reader.NameTable.Add("member");
 			object oSummary = reader.NameTable.Add("summary");
 
 			reader.MoveToContent();
 
-			string MemberID="";
-			string Summary="";
+			string MemberID = "";
+			string Summary = "";
 			while (reader.Read()) 
 			{
 				switch (reader.NodeType)
 				{
-					case XmlNodeType.Element: 
+					case XmlNodeType.Element : 
 
 						if (reader.Name.Equals(oMember)) 
 						{
 							MemberID = reader.GetAttribute("name");
-							Summary="";
+							Summary = "";
 						}      
 						if (reader.Name.Equals(oSummary)) 
 						{
 							Summary = reader.ReadInnerXml();
-							Summary=Summary.Replace("\t"," ").Replace("\n"," ").Replace("\r"," ").Trim().Replace("        "," ").Replace("    "," ").Replace("   "," ").Replace("  "," ").Trim();
+							Summary = Summary.Replace("\t", " ").Replace("\n", " ").Replace("\r", " ").Trim().Replace("        ", " ").Replace("    ", " ").Replace("   ", " ").Replace("  ", " ").Trim();
 						}
 						break;
 
-					case XmlNodeType.EndElement:
+					case XmlNodeType.EndElement : 
  
 						if (reader.Name.Equals(oMember)) 
 						{
 							if (!summaries.ContainsKey(MemberID))
 							{
-								summaries.Add(MemberID,Summary);
+								summaries.Add(MemberID, Summary);
 							}
 						}
 						break;
 
-					default:
+					default : 
 						break;
 				}
 			}
