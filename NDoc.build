@@ -143,6 +143,7 @@
         <!-- copy the ndoc signing key file to the bin dir -->
         <copy file="${nant.project.basedir}/NDoc.snk" todir="${current.bin.dir}" />
         <!-- build all projects -->
+        <nant buildfile="src/ExtendedUI/ExtendedUI.build" target="compile" inheritall="true" />
         <nant buildfile="src/Core/Core.build" target="compile" inheritall="true" />
         <nant buildfile="src/Console/Console.build" target="compile" inheritall="true" />
         <nant buildfile="src/VisualStudio/VisualStudio.build" target="compile" inheritall="true" />
