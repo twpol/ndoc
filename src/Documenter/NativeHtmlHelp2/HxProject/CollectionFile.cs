@@ -28,5 +28,18 @@ namespace NDoc.Documenter.NativeHtmlHelp2.HxProject
 		{
 
 		}
+
+		/// <summary>
+		/// Adds a KeyWordIndexDef node to the collection file
+		/// </summary>
+		/// <param name="fileName">Name of the index def</param>
+		public void AddKeywordIndex( string fileName )
+		{
+			XmlElement e = base.dataNode.OwnerDocument.CreateElement( "KeywordIndexDef" );
+			e.SetAttribute( "File", fileName );
+			XmlNode tocDef = base.dataNode.SelectSingleNode( "TOCDef" );
+
+			base.dataNode.InsertAfter( e, tocDef );
+		}
 	}
 }

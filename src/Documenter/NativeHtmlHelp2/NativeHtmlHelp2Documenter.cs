@@ -233,6 +233,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 
 			if ( MyConfig.PCPlatform == PCPlatforms.DesktopAndServer )
 				sb.Append( "Windows 98, Windows NT 4.0, Windows Millennium Edition, Windows 2000, Windows XP Home Edition, Windows XP Professional, Windows Server 2003 family" );
+			
 			else if ( MyConfig.PCPlatform == PCPlatforms.ServerOnly )
 				sb.Append( "Windows 2000, Windows XP Professional, Windows Server 2003 family" );
 
@@ -241,7 +242,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 				if ( sb.Length > 0 )
 					sb.Append( ", " );
 
-				sb.Append( "MONO" );
+				sb.Append( "MONO Open Source Framework" );
 			}
 
 			if ( MyConfig.CompactFramework )
@@ -263,6 +264,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			xmlDocumentation.LoadXml( MakeXml( project ) );
 //xmlDocumentation.Save( @"C:\NRefDocTests.xml" );
 			XmlNodeList typeNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace/*[name()!='documentation']");
+			
 			if ( typeNodes.Count == 0 )			
 				throw new DocumenterException("There are no documentable types in this project.");
 
@@ -350,26 +352,23 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			collection.FileVersion = MyConfig.Version;
 			collection.Title = MyConfig.Title;
 			collection.TOCFile = toc.FileName;
+
+			AddIndexToCollection( w, collection, "Collection_A.HxK", collectionName + "_A" );
+			AddIndexToCollection( w, collection, "Collection_F.HxK", collectionName + "_F" );
+			AddIndexToCollection( w, collection, "Collection_K.HxK", collectionName + "_K" );
+
 			
 			collection.Save( w.RootDirectory );
-
-			// add the various index files
-			IndexFile index = IndexFile.CreateFrom( 
-				Path.Combine( ResourceDirectory, @"HxProject\HelpCollection\Collection_A.HxK" ), collectionName + "_A" );
-			index.LangId = MyConfig.LangID;
-			index.Save( w.RootDirectory );
-
-			index = IndexFile.CreateFrom( 
-				Path.Combine( ResourceDirectory, @"HxProject\HelpCollection\Collection_F.HxK" ), collectionName + "_F" );
-			index.LangId = MyConfig.LangID;
-			index.Save( w.RootDirectory );
-
-			index = IndexFile.CreateFrom( 
-				Path.Combine( ResourceDirectory, @"HxProject\HelpCollection\Collection_K.HxK" ), collectionName + "_K" );
-			index.LangId = MyConfig.LangID;
-			index.Save( w.RootDirectory );
-
 			//TODO set up an H2Reg ini file and save it the workspace
+		}
+
+		private void AddIndexToCollection( Workspace w, CollectionFile collection, string templateName, string fileName )
+		{
+			IndexFile index = IndexFile.CreateFrom( 
+				Path.Combine( ResourceDirectory, @"HxProject\HelpCollection\" + templateName ), fileName );
+			index.LangId = collection.LangId;
+			collection.AddKeywordIndex( index.FileName );
+			index.Save( w.RootDirectory );
 		}
 	
 		private void RegisterCollection( Workspace w )

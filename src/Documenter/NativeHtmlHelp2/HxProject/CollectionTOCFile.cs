@@ -64,5 +64,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2.HxProject
 			get{ return GetProperty( "HelpTOCNode/@Url" ); }
 			set{ SetProperty( "HelpTOCNode/@Url", value ); }
 		}
+
 	}
 }
