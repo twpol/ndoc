@@ -11,7 +11,6 @@
 	<xsl:param name="ndoc-title" />
 	<xsl:param name="ndoc-net-framework-version"/>
 	<xsl:param name="ndoc-version"/>
-	<xsl:param name="ndoc-omit-syntax"/>
 	<!-- -->
 	<!--
 	 | no-op extensibility templates

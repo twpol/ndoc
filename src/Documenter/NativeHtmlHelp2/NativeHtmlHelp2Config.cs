@@ -453,23 +453,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			}
 		}
 
-		bool _OmitSyntaxSection = false;
-
-		/// <summary>Gets or sets the OmitSyntaxSection property</summary>
-		/// <remarks>If true, the syntax section on member topics will not be generated (improves performance)</remarks>
-		[Category(HTMLHELP2_CONFIG_CATEGORY)]
-		[Description("If true, the syntax section on member topics will not be generated (improves performance)")]
-		[DefaultValue(false)]
-		public bool OmitSyntaxSection
-		{
-			get { return _OmitSyntaxSection; }
-
-			set
-			{
-				_OmitSyntaxSection = value;
-				SetDirty();
-			}
-		}
 		#endregion
 
 		#region Additonal content properties

@@ -139,7 +139,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			this.Arguments.AddParam( "ndoc-documented-attributes", "", config.DocumentedAttributes );
 			this.Arguments.AddParam( "ndoc-net-framework-version", "", FrameworkVersion );
 			this.Arguments.AddParam( "ndoc-version", "", config.Version );
-			this.Arguments.AddParam( "ndoc-omit-syntax", "", config.OmitSyntaxSection );
 			
 		}
 
