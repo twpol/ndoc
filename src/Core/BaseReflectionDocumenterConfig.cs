@@ -823,9 +823,7 @@ namespace NDoc.Core.Reflection
 				if (value.Length>0)
 				{
 					Trace.WriteLine("WARNING: " + base.Name + " Configuration - property 'ReferencesPath' is OBSOLETE. Please use the project level property 'ReferencePath'\n");
-					Project.SuspendDirtyCheck=false;
 					Project.ReferencePaths.Add(new ReferencePath(value));
-					Project.SuspendDirtyCheck=true;
 				}
 			}
 			else if (String.Compare(name, "IncludeAssemblyVersion", true) == 0) 
@@ -834,7 +832,6 @@ namespace NDoc.Core.Reflection
 				{
 					Trace.WriteLine("WARNING: " + base.Name + " Configuration - property 'IncludeAssemblyVersion' is OBSOLETE. Please use new property 'AssemblyVersionInfo'\n");
 
-					Project.SuspendDirtyCheck=false;
 					string newValue=String.Empty;
 					if (String.Compare(value, "true", true) == 0)
 					{
@@ -846,7 +843,6 @@ namespace NDoc.Core.Reflection
 					}
 
 					FailureMessages += base.ReadProperty("AssemblyVersionInfo", newValue);
-					Project.SuspendDirtyCheck=true;
 				}
 			}
 			else
