@@ -1,6 +1,12 @@
 // MainForm.cs - main GUI interface to NDoc
 // Copyright (C) 2001  Kral Ferch
 //
+// Modified by: Keith Hill on Sep 28, 2001.  
+//   Tweaked the layout quite a bit. Uses new HeaderGroupBox from Matthew Adams 
+//   from DOTNET list.  Added to menu, added a toolbar and status bar.  Changed 
+//   the way docs are built on separate thread so that you can cancel from the 
+//   toolbar and so that the updates use the statusbar to indicate progress.
+//
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation; either version 2 of the License, or
@@ -1134,16 +1140,15 @@ namespace NDoc.Gui
 			} while (iex != null);
 
 			// Process exception
+			string msg = String.Format("An error occured while trying to build the " +
+  			 	                       "documentation.\n\n{0}", ex.ToString());
 			if (ex is DocumenterException)
 			{
-				MessageBox.Show(this, ex.Message, "NDoc Failed to Build Documentation",
+				MessageBox.Show(this, msg, "NDoc Documenter Error",
 						        MessageBoxButtons.OK, MessageBoxIcon.Information);
 			}
 			else 
 			{
-				string msg = String.Format("An error occured while trying to build the " +
-						                    "documentation.\n\n{0}", ex.ToString());
-
 				MessageBox.Show(this, msg, "NDoc Error", MessageBoxButtons.OK,
 					            MessageBoxIcon.Error);
 			}
@@ -1218,21 +1223,21 @@ namespace NDoc.Gui
 			{
 				((IDocumenter)project.Documenters[comboBoxDocumenters.SelectedIndex]).View();
 			}
-			catch (DocumenterException docEx)
+			catch (DocumenterException ex)
 			{
-				MessageBox.Show(
-					docEx.Message,
-					"Unable to View",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Information);
+				string msg = String.Format("An error occured while trying " +
+					"to view the documentation.\n\n{0}", ex.ToString());
+
+				MessageBox.Show(this, msg, "NDoc Documenter Errorw",
+					MessageBoxButtons.OK, MessageBoxIcon.Information);
 			}
-			catch (Exception)
+			catch (Exception ex)
 			{
-				MessageBox.Show(
-					"An error occured while trying to view the documentation.",
-					"NDoc Error",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Error);
+				string msg = String.Format("An error occured while trying " +
+					"to view the documentation.\n\n{0}", ex.ToString());
+
+				MessageBox.Show(this, msg, "NDoc Error",
+					MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
 
@@ -1296,7 +1301,7 @@ namespace NDoc.Gui
 		{
 			AssemblySlashDocForm  form = new AssemblySlashDocForm();
 
-			form.Text = "Add Assembly Filename and /doc Filename";
+			form.Text = "Add Assembly Filename and XML Documentation Filename";
 			form.StartPosition = FormStartPosition.CenterParent;
 
 			if (form.ShowDialog(this) == System.Windows.Forms.DialogResult.OK)
@@ -1320,7 +1325,7 @@ namespace NDoc.Gui
 				AssemblySlashDocForm form = new AssemblySlashDocForm();
 				int nIndex = assembliesListView.SelectedItems[0].Index;
 
-				form.Text = "Edit Assembly Filename and /doc Filename";
+				form.Text = "Edit Assembly Filename and XML Documentation Filename";
 				form.StartPosition = FormStartPosition.CenterParent;
 				form.AssemblyFilename = ((AssemblySlashDoc)project.AssemblySlashDocs[nIndex]).AssemblyFilename;
 				form.SlashDocFilename = ((AssemblySlashDoc)project.AssemblySlashDocs[nIndex]).SlashDocFilename;
