@@ -166,6 +166,16 @@
 			<xsl:when test="starts-with($cref, 'F:')">
 				<xsl:value-of select="concat(translate(substring-after($cref, 'F:'), '.[]', ''), 'FieldOrEvent.html')" />
 			</xsl:when>
+			<xsl:when test="starts-with($cref, 'P:')">
+				<xsl:choose>
+					<xsl:when test="contains($cref, '(')">
+						<xsl:value-of select="concat(translate(substring-after(substring-before($cref, '('), 'P:'), '.[]', ''), 'Property', '.html')" />
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="concat(translate(substring-after($cref, 'P:'), '.[]', ''), 'Property', '.html')" />
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:when>
 			<xsl:otherwise>
 				<xsl:value-of select="$cref" />
 			</xsl:otherwise>
