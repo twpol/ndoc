@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Library"
                 PreBuildEvent = ""
-                PostBuildEvent = ""
+                PostBuildEvent = "if exist $(SolutionDir)\bin\.net-1.1 copy $(TargetDir)\$(TargetName).* $(SolutionDir)\bin\.net-1.1\"
                 RootNamespace = "NDoc.Test"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
@@ -70,7 +70,7 @@
                 />
                 <Reference
                     Name = "System.XML"
-                    AssemblyName = "System.XML"
+                    AssemblyName = "System.Xml"
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
             </References>
