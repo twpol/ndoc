@@ -42,7 +42,7 @@ namespace NDoc.Core
 	}
 
 	/// <summary>
-	/// Summary description for AttributesForm.
+	/// A form to build attributes filter criteria.
 	/// </summary>
 	public class AttributesForm : System.Windows.Forms.Form
 	{

@@ -7,7 +7,7 @@ using System.Windows.Forms;
 namespace NDoc.Core
 {
 	/// <summary>
-	/// Summary description for SimpleEdit.
+	/// This is a dialog box to prompt for a name.
 	/// </summary>
 	public class SimpleEdit : System.Windows.Forms.Form
 	{
