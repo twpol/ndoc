@@ -1,6 +1,11 @@
 // AssemblySlashDocForm.cs - form for adding assembly and /doc filename pairs
 // Copyright (C) 2001  Kral Ferch
 //
+// Modified by: Keith Hill on Sep 28, 2001.  
+//   Tweaked the layout, made the dialog not show up in the task bar and changed 
+//   to title to reflect the terminology used by VS.NET Beta 2 (XML Documentation 
+//   vs. /doc).
+//
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation; either version 2 of the License, or
@@ -103,7 +108,7 @@ namespace NDoc.Gui
 			this.okButton.Anchor = (System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left);
 			this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.okButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.okButton.Location = new System.Drawing.Point(116, 102);
+			this.okButton.Location = new System.Drawing.Point(131, 112);
 			this.okButton.Name = "okButton";
 			this.okButton.TabIndex = 4;
 			this.okButton.Text = "OK";
@@ -113,7 +118,7 @@ namespace NDoc.Gui
 			this.cancelButton.Anchor = (System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left);
 			this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.cancelButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.cancelButton.Location = new System.Drawing.Point(204, 102);
+			this.cancelButton.Location = new System.Drawing.Point(219, 112);
 			this.cancelButton.Name = "cancelButton";
 			this.cancelButton.TabIndex = 5;
 			this.cancelButton.Text = "Cancel";
@@ -124,7 +129,7 @@ namespace NDoc.Gui
 				| System.Windows.Forms.AnchorStyles.Right);
 			this.assemblyTextBox.Location = new System.Drawing.Point(120, 24);
 			this.assemblyTextBox.Name = "assemblyTextBox";
-			this.assemblyTextBox.Size = new System.Drawing.Size(242, 20);
+			this.assemblyTextBox.Size = new System.Drawing.Size(272, 20);
 			this.assemblyTextBox.TabIndex = 2;
 			this.assemblyTextBox.Text = "";
 			// 
@@ -134,7 +139,7 @@ namespace NDoc.Gui
 				| System.Windows.Forms.AnchorStyles.Right);
 			this.slashDocTextBox.Location = new System.Drawing.Point(120, 64);
 			this.slashDocTextBox.Name = "slashDocTextBox";
-			this.slashDocTextBox.Size = new System.Drawing.Size(242, 20);
+			this.slashDocTextBox.Size = new System.Drawing.Size(272, 20);
 			this.slashDocTextBox.TabIndex = 3;
 			this.slashDocTextBox.Text = "";
 			// 
@@ -143,7 +148,7 @@ namespace NDoc.Gui
 			this.assemblyButton.Anchor = (System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right);
 			this.assemblyButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.assemblyButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
-			this.assemblyButton.Location = new System.Drawing.Point(362, 24);
+			this.assemblyButton.Location = new System.Drawing.Point(392, 24);
 			this.assemblyButton.Name = "assemblyButton";
 			this.assemblyButton.Size = new System.Drawing.Size(16, 20);
 			this.assemblyButton.TabIndex = 6;
@@ -155,7 +160,7 @@ namespace NDoc.Gui
 			this.slashDocButton.Anchor = (System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right);
 			this.slashDocButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.slashDocButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
-			this.slashDocButton.Location = new System.Drawing.Point(362, 64);
+			this.slashDocButton.Location = new System.Drawing.Point(392, 64);
 			this.slashDocButton.Name = "slashDocButton";
 			this.slashDocButton.Size = new System.Drawing.Size(16, 20);
 			this.slashDocButton.TabIndex = 7;
@@ -188,7 +193,7 @@ namespace NDoc.Gui
 			this.AcceptButton = this.okButton;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.CancelButton = this.cancelButton;
-			this.ClientSize = new System.Drawing.Size(394, 148);
+			this.ClientSize = new System.Drawing.Size(424, 148);
 			this.Controls.AddRange(new System.Windows.Forms.Control[] {
 																		  this.slashDocButton,
 																		  this.assemblyButton,
@@ -200,10 +205,11 @@ namespace NDoc.Gui
 																		  this.label1});
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.MinimumSize = new System.Drawing.Size(402, 182);
+			this.MinimumSize = new System.Drawing.Size(432, 182);
 			this.Name = "AssemblySlashDocForm";
+			this.ShowInTaskbar = false;
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
-			this.Text = "Select Assembly and XML Documentation File";
+			this.Text = "Edit Assembly Filename and XML Documentation Filename";
 			this.ResumeLayout(false);
 
 		}
