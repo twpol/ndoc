@@ -39,7 +39,7 @@ namespace NDoc.Documenter.Msdn2
 		/// </summary>
 		/// <param name="extensibiltyStylesheet"></param>
 		/// <returns>The populated collection</returns>
-		public static StyleSheetCollection LoadStyleSheets( string extensibiltyStylesheet )
+		public static StyleSheetCollection LoadStyleSheets( string extensibilityStylesheet )
 		{
 			StyleSheetCollection stylesheets = new StyleSheetCollection();
 
@@ -52,7 +52,7 @@ namespace NDoc.Documenter.Msdn2
 #endif
 
 			XsltResourceResolver resolver = new XsltResourceResolver(resourceBase);
-			resolver.ExtensibiltyStylesheet=extensibiltyStylesheet;
+			resolver.ExtensibilityStylesheet=extensibilityStylesheet;
 			Trace.Indent();
 
 			stylesheets.AddFrom( "namespace", resolver );
