@@ -102,7 +102,7 @@ $(CONSOLE): $(CORE) $(JAVADOC) $(MSDN) $(XML)
 
 $(CORE):
 	if not exist $(CORE_DIRECTORY) md $(CORE_DIRECTORY)
-	csc /nologo /target:library /out:$(CORE) $(CORE_DEBUG) Core\AssemblyInfo.cs Core\AssemblySlashDoc.cs Core\BaseDocumenter.cs Core\BaseDocumenterConfig.cs Core\DocumenterException.cs Core\EmbeddedResources.cs Core\HtmlHelp.cs Core\IDocumenter.cs Core\IDocumenterConfig.cs Core\Project.cs Core\XsltDocumenter.cs /reference:System.dll /reference:System.Xml.dll /reference:System.Design.dll /reference:System.Drawing.dll
+	csc /nologo /target:library /out:$(CORE) $(CORE_DEBUG) Core\AssemblyInfo.cs Core\AssemblySlashDoc.cs Core\BaseDocumenter.cs Core\BaseDocumenterConfig.cs Core\DocumenterException.cs Core\EmbeddedResources.cs Core\HtmlHelp.cs Core\IDocumenter.cs Core\IDocumenterConfig.cs Core\Project.cs /reference:System.dll /reference:System.Xml.dll /reference:System.Design.dll /reference:System.Drawing.dll
 
 $(XML): $(CORE)
 	if not exist $(XML_DIRECTORY) md $(XML_DIRECTORY)
