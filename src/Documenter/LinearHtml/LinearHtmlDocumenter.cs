@@ -286,6 +286,7 @@ namespace NDoc.Documenter.LinearHtml
 
 					string dstFile = Path.Combine(MyConfig.OutputDirectory, Path.GetFileName(srcFile));
 					File.Copy(srcFile, dstFile, true);
+					File.SetAttributes(dstFile, FileAttributes.Archive);
 				}
 
 				OnDocBuildingStep(10, "Merging XML documentation...");
