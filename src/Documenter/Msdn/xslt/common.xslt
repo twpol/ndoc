@@ -104,7 +104,7 @@
 		<xsl:choose>
 			<xsl:when test="$contract='Static'">static</xsl:when>
 			<xsl:when test="$contract='Abstract'">abstract</xsl:when>
-			<xsl:when test="$contract='Final'">final</xsl:when>
+			<xsl:when test="$contract='Final'"></xsl:when>
 			<xsl:when test="$contract='Virtual'">virtual</xsl:when>
 			<xsl:when test="$contract='Override'">override</xsl:when>
 			<xsl:when test="$contract='Normal'"></xsl:when>
