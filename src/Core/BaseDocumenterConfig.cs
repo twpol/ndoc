@@ -44,6 +44,13 @@ namespace NDoc.Core
 		}
 
 		private Project _Project;
+		/// <summary>
+		/// 
+		/// </summary>
+		protected Project Project
+		{
+			get{return _Project;}
+		}
 
 		/// <summary>Associates this documenter with a project;</summary>
 		public void SetProject(Project project)
@@ -82,7 +89,12 @@ namespace NDoc.Core
 			return properties;
 		}
 
-		/// <summary>Sets the value of a property.</summary>
+		/// <summary>
+		/// Sets the value of a config property.
+		/// </summary>
+		/// <param name="name">The name of the property to set.</param>
+		/// <param name="value">A string representation of the desired property value.</param>
+		/// <remarks>Property name matching is case-insensitive.</remarks>
 		public void SetValue(string name, string value)
 		{
 			name = name.ToLower();
@@ -91,19 +103,11 @@ namespace NDoc.Core
 			{
 				if (name == property.Name.ToLower())
 				{
-					// fix for bug 839384 
-					object value2 = null;
-					if(property.PropertyType.IsEnum) 
+					string result = ReadProperty(property.Name, value);
+					if (result.Length>0)
 					{
-						value2 = Enum.Parse(property.PropertyType, value);
+						System.Diagnostics.Trace.WriteLine(result);
 					}
-					else 
-					{
-						value2 = System.Convert.ChangeType(value, property.PropertyType);
-					}
-
-					property.SetValue(this, value2, null);
-					break;
 				}
 			}
 		}
@@ -120,48 +124,51 @@ namespace NDoc.Core
 
 			foreach (PropertyInfo property in properties)
 			{
-				object value = property.GetValue(this, null);
-
-				if (value != null)
+				if (!property.IsDefined(typeof(NonPersistedAttribute),true))
 				{
-					bool writeProperty = true;
-					string value2 = Convert.ToString(value);
+					object value = property.GetValue(this, null);
 
-					if (value2 != null)
+					if (value != null)
 					{
-						//see if the property has a default value
-						object[] defaultValues=property.GetCustomAttributes(typeof(DefaultValueAttribute),true);
-						if (defaultValues.Length > 0)
+						bool writeProperty = true;
+						string value2 = Convert.ToString(value);
+
+						if (value2 != null)
 						{
-							if(Convert.ToString(((DefaultValueAttribute)defaultValues[0]).Value)==value2)
-								writeProperty=false;
+							//see if the property has a default value
+							object[] defaultValues=property.GetCustomAttributes(typeof(DefaultValueAttribute),true);
+							if (defaultValues.Length > 0)
+							{
+								if(Convert.ToString(((DefaultValueAttribute)defaultValues[0]).Value)==value2)
+									writeProperty=false;
+							}
+							else
+							{
+								if(value2=="")
+									writeProperty=false;
+							}
 						}
 						else
 						{
-							if(value2=="")
-								writeProperty=false;
+							writeProperty=false;
+						}
+
+						//being lazy and assuming only one BrowsableAttribute...
+						BrowsableAttribute[] browsableAttributes=(BrowsableAttribute[])property.GetCustomAttributes(typeof(BrowsableAttribute),true);
+						if (browsableAttributes.Length>0 && !browsableAttributes[0].Browsable)
+						{
+							writeProperty=false;
+						}
+
+						if (writeProperty)
+						{
+							writer.WriteStartElement("property");
+							writer.WriteAttributeString("name", property.Name);
+							writer.WriteAttributeString("value", value2);
+							writer.WriteEndElement();
 						}
 					}
-					else
-					{
-						writeProperty=false;
-					}
-
-					//being lazy and assuming only one BrowsableAttribute...
-					BrowsableAttribute[] browsableAttributes=(BrowsableAttribute[])property.GetCustomAttributes(typeof(BrowsableAttribute),true);
-					if (browsableAttributes.Length>0 && !browsableAttributes[0].Browsable)
-					{
-						writeProperty=false;
-					}
-
-					if (writeProperty)
-					{
-						writer.WriteStartElement("property");
-						writer.WriteAttributeString("name", property.Name);
-						writer.WriteAttributeString("value", value2);
-						writer.WriteEndElement();
-					}
-				}
+				}			
 			}
 
 			writer.WriteEndElement();
@@ -172,11 +179,9 @@ namespace NDoc.Core
 		/// <remarks>This method uses reflection to set all of the public properties in the documenter.</remarks>
 		public void Read(XmlReader reader)
 		{
-			// If there's an associated project, we don't want to set it as
-			// dirty during the read. Temporarily set it to null so that
-			// calls to SetDirty get ignored.
-			Project project = _Project;
-			_Project = null;
+			// we don't want to set the project isdirty flag during the read...
+			_Project.SuspendDirtyCheck=true;
+
 			string FailureMessages="";
 
 			while(!reader.EOF && !(reader.NodeType == XmlNodeType.EndElement && reader.Name == "documenter"))
@@ -188,8 +193,8 @@ namespace NDoc.Core
 				reader.Read(); // Advance.
 			}
 
-			// Restore the saved project.
-			_Project = project;
+			// Restore the project IsDirty checking.
+			_Project.SuspendDirtyCheck=false;
 			if (FailureMessages.Length > 0)
 				throw new DocumenterPropertyFormatException(FailureMessages);
 		}
@@ -202,7 +207,11 @@ namespace NDoc.Core
 		/// <returns></returns>
 		protected string ReadProperty(string name, string value)
 		{
-			string FailureMessages="";
+			// if value is an empty string, do not bother with anything else
+			if (value==null) return String.Empty;
+			if (value.Length==0) return String.Empty;
+
+			string FailureMessages=String.Empty;
 			PropertyInfo property = GetType().GetProperty(name);
 
 			if (property == null)
@@ -230,7 +239,8 @@ namespace NDoc.Core
 					}
 					else
 					{
-						value2 = Convert.ChangeType(value, property.PropertyType);
+						TypeConverter tc = TypeDescriptor.GetConverter(property.PropertyType);
+						value2 = tc.ConvertFromString(value);
 						ValueParsedOK = true;
 					}
 				}
@@ -327,4 +337,11 @@ namespace NDoc.Core
 		
 	}
 
+	/// <summary>
+	/// 
+	/// </summary>
+	[AttributeUsage(AttributeTargets.Property)]
+	public class NonPersistedAttribute : Attribute
+	{
+	}
 }
