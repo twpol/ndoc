@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" >
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<!-- -->
 	<xsl:output method="xml" indent="yes" encoding="utf-8" omit-xml-declaration="yes" />
 	<!-- -->
@@ -31,8 +31,6 @@
 							<xsl:value-of select="$namespace" /> Namespace
 						</a>
 					</p>
-					
-					
 					<xsl:call-template name="footer-row">
 						<xsl:with-param name="type-name" select="concat($ns/@name, ' Hierarchy')" />
 					</xsl:call-template>
@@ -44,7 +42,7 @@
 	<xsl:template match="typeHierarchy">
 		<xsl:for-each select="type">
 			<div>
-				<xsl:call-template name="get-type-link" >
+				<xsl:call-template name="get-type-link">
 					<xsl:with-param name="id" select="@id" />
 				</xsl:call-template>
 				<xsl:apply-templates mode="hierarchy" />
@@ -58,7 +56,7 @@
 	<!-- -->
 	<xsl:template match="type" mode="hierarchy">
 		<div class="Hierarchy">
-			<xsl:call-template name="get-type-link" >
+			<xsl:call-template name="get-type-link">
 				<xsl:with-param name="id" select="@id" />
 			</xsl:call-template>
 			<xsl:if test="interfaces">
@@ -70,35 +68,35 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template match="interface" mode="baseInterfaces">
-		<xsl:call-template name="get-type-link" >
+		<xsl:call-template name="get-type-link">
 			<xsl:with-param name="id" select="@id" />
-			</xsl:call-template>
+		</xsl:call-template>
 		<xsl:if test="position() != last()">
 			<xsl:text>, </xsl:text>
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
-	<xsl:template name="get-type-link" >
+	<xsl:template name="get-type-link">
 		<xsl:param name="id" />
 		<a>
 			<xsl:choose>
 				<xsl:when test="starts-with($id, 'T:System.') or starts-with($id, 'T:Microsoft.')">
-						<xsl:attribute name="href">
-							<xsl:call-template name="get-filename-for-system-type">
-							<xsl:with-param name="type-name" select="substring-after($id, ':')" />
-							</xsl:call-template>
-						</xsl:attribute>
-				</xsl:when>
-				<xsl:otherwise>
-								<xsl:attribute name="href">
+					<xsl:attribute name="href">
 						<xsl:call-template name="get-filename-for-system-type">
 							<xsl:with-param name="type-name" select="substring-after($id, ':')" />
-									</xsl:call-template>
-								</xsl:attribute>
-						</xsl:otherwise>
-					</xsl:choose>
+						</xsl:call-template>
+					</xsl:attribute>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:attribute name="href">
+						<xsl:call-template name="get-filename-for-type">
+							<xsl:with-param name="id" select="$id" />
+						</xsl:call-template>
+					</xsl:attribute>
+				</xsl:otherwise>
+			</xsl:choose>
 			<xsl:value-of select="substring-after(@id, ':')" />
-			</a>
+		</a>
 	</xsl:template>
 	<!-- -->
 </xsl:stylesheet>
