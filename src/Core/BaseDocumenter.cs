@@ -2287,17 +2287,12 @@ namespace NDoc.Core
 
 			writer.WriteStartElement("parameter");
 			writer.WriteAttributeString("name", parameter.Name);
-			writer.WriteAttributeString("type", GetTypeName(parameter.ParameterType));
-			if (parameter.ParameterType.BaseType!=null && parameter.ParameterType.BaseType.FullName!="System.ValueType")
-			{
-				writer.WriteAttributeString("valuetype", "false");
-			}
-			else
-			{
-				writer.WriteAttributeString("valuetype", "true");
-			}
+			
+			Type t = parameter.ParameterType;
+			writer.WriteAttributeString("type", GetTypeName(t));
+			writer.WriteAttributeString("valuetype", t.IsValueType.ToString());
 
-			if ( parameter.ParameterType.IsPointer )
+			if ( t.IsPointer )
 				writer.WriteAttributeString( "unsafe", "true" );
 
 			if (parameter.IsOptional)

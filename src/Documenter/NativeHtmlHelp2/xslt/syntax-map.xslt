@@ -857,7 +857,7 @@
 					</xsl:choose>
 				</xsl:variable>
 				<xsl:value-of select="$new-type" />
-				<xsl:if test="$new-type = $old-type and @valuetype='false'">
+				<xsl:if test="$new-type = $old-type and @valuetype='False'">
 					<xsl:text>*</xsl:text>
 				</xsl:if>
 			</xsl:when>
