@@ -20,6 +20,7 @@ using System;
 using System.Xml;
 using System.IO;
 using System.Diagnostics;
+using System.Text;
 
 namespace NDoc.Documenter.NativeHtmlHelp2.HxProject
 {
@@ -29,6 +30,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2.HxProject
 	/// </summary>
 	public abstract class HxFile
 	{
+		private static readonly UTF8Encoding encoding = new UTF8Encoding( false );
+
 		/// <summary>
 		/// Fetches the document element of the specified XML document
 		/// </summary>
@@ -101,7 +104,11 @@ namespace NDoc.Documenter.NativeHtmlHelp2.HxProject
 				throw new ArgumentException( string.Format( "The specified directory {0}, does not exist", location ) );
 
 			Debug.Assert( dataNode.OwnerDocument != null );
-			dataNode.OwnerDocument.Save( Path.Combine( location, FileName ) );
+			XmlTextWriter writer = new XmlTextWriter(Path.Combine( location, FileName ), encoding);
+			writer.Formatting=Formatting.Indented;
+			writer.Indentation=2;
+			dataNode.OwnerDocument.Save(writer);
+			writer.Close();
 		}
 
 		/// <summary>

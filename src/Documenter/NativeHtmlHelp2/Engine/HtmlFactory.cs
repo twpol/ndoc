@@ -53,6 +53,9 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		private XmlDocument xmlDocumentation;			// the NDoc generates summary Xml
 		private XPathDocument xPathDocumentation;	// XPath version of the xmlDocumentation node (improves performance)
 
+		//this encoding is used for all generated html...
+		private static readonly UTF8Encoding encoding = new UTF8Encoding( false );
+
 		//for performance reasons we are going to re-use one XsltArguments collection
 		//rather than re-creating an empty one for each transformation
 		// IMPORTANT - any method that adds paramater must be sure to remove them
@@ -263,8 +266,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			Trace.WriteLine( ( Environment.TickCount - start ).ToString() + " msec." );
 #endif
 		}
-
-		private static readonly UTF8Encoding encoding = new UTF8Encoding( true );
 
 		private void MakeHtmlForNamespace( string assemblyName, string namespaceName )
 		{
