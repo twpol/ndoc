@@ -450,7 +450,7 @@
 								<xsl:with-param name="attname" select="@name" />
 							</xsl:call-template>
 							<xsl:if test="position()!=last()">
-								<xsl:text>, </xsl:text> 
+								<xsl:text>, _&#10;&#160;</xsl:text> 
 							</xsl:if>
 					</xsl:for-each>
 					<xsl:text>&gt;</xsl:text>

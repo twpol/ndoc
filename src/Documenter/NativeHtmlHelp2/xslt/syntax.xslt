@@ -1072,7 +1072,7 @@
 									<xsl:with-param name="lang" select="$lang" />
 								</xsl:call-template>
 								<xsl:if test="position()!=last()">
-									<xsl:text>, </xsl:text>
+									<xsl:text>, _&#10;&#160;</xsl:text>
 								</xsl:if>
 							</xsl:for-each>
 							<xsl:apply-templates select="." mode="attribute-close">
