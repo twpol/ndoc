@@ -41,6 +41,7 @@ namespace NDoc.Core
 		AssemblyXmlDocCache		assemblyDocCache;
 		ExternalXmlSummaryCache	externalSummaryCache;
 		Hashtable               notEmptyNamespaces;
+		Hashtable				documentedTypes;
 
 		private class ImplementsInfo
 		{
@@ -489,6 +490,7 @@ namespace NDoc.Core
 			externalSummaryCache = new ExternalXmlSummaryCache(DocLangCode);
 
 			notEmptyNamespaces = new Hashtable();
+			documentedTypes    = new Hashtable();
 
 			namespaceHierarchies= new NamespaceHierarchyCollection();
 			baseInterfaces = new BaseInterfacesCollection();
@@ -581,6 +583,9 @@ namespace NDoc.Core
 				baseInterfaces=null;
 				derivedTypes=null;
 				interfaceImplementingTypes=null;
+				notEmptyNamespaces = null;
+				documentedTypes    = null;
+
 
 				GC.Collect();
 				GC.WaitForPendingFinalizers();
@@ -1182,15 +1187,20 @@ namespace NDoc.Core
 
 			foreach (Type type in types)
 			{
-				if (type.IsClass &&
-					!IsDelegate(type) &&
-					type.Namespace == namespaceName &&
-					MustDocumentType(type))
+				string typeID = GetMemberName(type);
+				if (!documentedTypes.ContainsKey(typeID))
 				{
-					bool hiding = ((type.MemberType & MemberTypes.NestedType) != 0)
-						&& IsHiding(type, type.DeclaringType);
-					WriteClass(writer, type, hiding);
-					nbWritten++;
+					documentedTypes.Add(typeID,null);
+					if (type.IsClass &&
+						!IsDelegate(type) &&
+						type.Namespace == namespaceName &&
+						MustDocumentType(type))
+					{
+						bool hiding = ((type.MemberType & MemberTypes.NestedType) != 0)
+							&& IsHiding(type, type.DeclaringType);
+						WriteClass(writer, type, hiding);
+						nbWritten++;
+					}
 				}
 			}
 
