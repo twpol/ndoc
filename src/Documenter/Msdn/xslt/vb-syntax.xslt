@@ -415,9 +415,8 @@
 			<xsl:text>(</xsl:text>
 			<xsl:for-each select="property">
 				<xsl:value-of select="@name" />
-				<xsl:text>="</xsl:text>
+				<xsl:text>=</xsl:text>
 				<xsl:value-of select="@value" />
-				<xsl:text>"</xsl:text>
 				<xsl:if test="position()!=last()"><xsl:text>, </xsl:text></xsl:if>
 			</xsl:for-each>
 			<xsl:text>)</xsl:text>
