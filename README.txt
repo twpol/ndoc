@@ -42,6 +42,10 @@ want to use this?
 Using NDoc
 ----------
 
+If you want to create a .CHM file and you don't have VS.NET installed then
+you're going to need to download and install Microsoft's HTML Help
+Workshop!
+
 Start NDocGui.exe. You can add your assembly/doc files manually or import
 them from a VS.NET .sln file. If this UI's not intuitive enough then feel
 free to add a bug report to our project as described below.
@@ -49,6 +53,9 @@ free to add a bug report to our project as described below.
 You can also invoke NDoc from the command line. Try typing NDocConsole.exe
 with no options to see how it's supposed to be used. This is great for 
 automated builds.
+
+After you build NDoc, you can load one of our example projects from the
+examples directory. This should give you a good idea of what NDoc outputs.
 
 Support
 -------
