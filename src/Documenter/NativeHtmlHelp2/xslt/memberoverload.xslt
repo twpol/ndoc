@@ -74,35 +74,25 @@
 					<h4 class="dtH4">Overload List</h4>
 					<xsl:for-each select="parent::node()/*[@name=$memberName]">
 						<xsl:sort order="ascending" select="@id"/>
-						<xsl:choose>
-							<xsl:when test="@declaringType">
-								<p>
-									<xsl:text>Inherited from </xsl:text>
-									<xsl:variable name="link-text">
-										<xsl:call-template name="strip-namespace">
-											<xsl:with-param name="name" select="@declaringType" />
-										</xsl:call-template>
-									</xsl:variable>
-									<xsl:call-template name="get-link-for-type-name">
-										<xsl:with-param name="type-name" select="@declaringType" />
-										<xsl:with-param name="link-text" select="$link-text" />
-									</xsl:call-template>										
-									<xsl:text>.</xsl:text>
-								</p>
-								<blockquote class="dtBlock">
-										<xsl:apply-templates select="self::node()" mode="syntax" />								
-								</blockquote>
-							</xsl:when>
-							<xsl:otherwise>
-								<p>
-								    <xsl:call-template name="obsolete-inline"/>
-									<xsl:call-template name="summary-with-no-paragraph">
-										<xsl:with-param name="member" select="." />
+						<p>
+							<xsl:call-template name="obsolete-inline"/>
+							<xsl:call-template name="summary-with-no-paragraph"/>
+							<xsl:if test="@declaringType">
+								<br/><i>
+								<xsl:text>Inherited from </xsl:text></i>
+								<xsl:variable name="link-text">
+									<xsl:call-template name="strip-namespace">
+										<xsl:with-param name="name" select="@declaringType" />
 									</xsl:call-template>
-								</p>
-								<xsl:apply-templates select="self::node()" mode="syntax" />					
-							</xsl:otherwise>
-						</xsl:choose>
+								</xsl:variable>
+								<xsl:call-template name="get-link-for-type-name">
+									<xsl:with-param name="type-name" select="@declaringType" />
+									<xsl:with-param name="link-text" select="$link-text" />
+								</xsl:call-template>										
+								<xsl:text>.</xsl:text>
+							</xsl:if>
+						</p>
+						<xsl:apply-templates select="self::node()" mode="syntax" />					
 					</xsl:for-each>
 					<xsl:call-template name="overloads-remarks-section" />
 					<xsl:call-template name="overloads-example-section" />
@@ -124,6 +114,12 @@
 				</div>
 			</body>
 		</html>
+	</xsl:template>
+	<!-- -->
+	<xsl:template name="overload-member-sumary">
+		<xsl:param name="member"/>
+		<xsl:message>member:<xsl:value-of select="$member/@id"/></xsl:message>
+
 	</xsl:template>
 	<!-- -->
 	<xsl:template match="constructor | method | property | operator" mode="syntax">
