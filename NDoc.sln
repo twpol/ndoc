@@ -31,10 +31,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisualStudio", "src\VisualS
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "src\Setup\Setup.vdproj", "{0CC76B02-6822-47F2-9C7A-2C63B3B813A7}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinearHtml", "src\Documenter\LinearHtml\LinearHtml.csproj", "{8844E0D9-FCA0-419D-9168-BCD420B38378}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
@@ -84,13 +80,12 @@ Global
 		{ED78444A-4734-41F7-8688-4BA9994BEBF5}.Debug.Build.0 = Debug|.NET
 		{ED78444A-4734-41F7-8688-4BA9994BEBF5}.Release.ActiveCfg = Release|.NET
 		{ED78444A-4734-41F7-8688-4BA9994BEBF5}.Release.Build.0 = Release|.NET
-		{0CC76B02-6822-47F2-9C7A-2C63B3B813A7}.Debug.ActiveCfg = Debug
-		{0CC76B02-6822-47F2-9C7A-2C63B3B813A7}.Release.ActiveCfg = Release
 		{8844E0D9-FCA0-419D-9168-BCD420B38378}.Debug.ActiveCfg = Debug|.NET
 		{8844E0D9-FCA0-419D-9168-BCD420B38378}.Debug.Build.0 = Debug|.NET
 		{8844E0D9-FCA0-419D-9168-BCD420B38378}.Release.ActiveCfg = Release|.NET
 		{8844E0D9-FCA0-419D-9168-BCD420B38378}.Release.Build.0 = Release|.NET
 		{6244333B-BF87-4F04-B2DE-56AB9A53B65A}.Debug.ActiveCfg = Debug|.NET
+		{6244333B-BF87-4F04-B2DE-56AB9A53B65A}.Debug.Build.0 = Debug|.NET
 		{6244333B-BF87-4F04-B2DE-56AB9A53B65A}.Release.ActiveCfg = Release|.NET
 		{2929DFA6-FFCF-4110-B8B5-3005A087B58A}.Debug.ActiveCfg = Debug|.NET
 		{2929DFA6-FFCF-4110-B8B5-3005A087B58A}.Debug.Build.0 = Debug|.NET
