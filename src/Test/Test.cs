@@ -1612,6 +1612,23 @@ namespace NDoc.Test
 		/// <summary>
 		/// This should be visible
 		/// </summary>
+		public string VisibleProperty {
+			get { return ""; }
+			set { }
+		}
+
+		/// <summary>
+		/// This should NOT be visible
+		/// </summary>
+		/// <exclude />
+		public string NotVisibleProperty {
+			get { return ""; }
+			set { }
+		}
+
+		/// <summary>
+		/// This should be visible
+		/// </summary>
 		/// <returns></returns>
 		public int VisibleMethod(){return 0;}
 
