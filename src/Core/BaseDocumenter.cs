@@ -2288,6 +2288,14 @@ namespace NDoc.Core
 			writer.WriteStartElement("parameter");
 			writer.WriteAttributeString("name", parameter.Name);
 			writer.WriteAttributeString("type", GetTypeName(parameter.ParameterType));
+			if (parameter.ParameterType.BaseType!=null && parameter.ParameterType.BaseType.FullName!="System.ValueType")
+			{
+				writer.WriteAttributeString("valuetype", "false");
+			}
+			else
+			{
+				writer.WriteAttributeString("valuetype", "true");
+			}
 
 			if ( parameter.ParameterType.IsPointer )
 				writer.WriteAttributeString( "unsafe", "true" );

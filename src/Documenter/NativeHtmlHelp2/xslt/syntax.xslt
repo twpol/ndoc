@@ -935,6 +935,9 @@
 						<xsl:value-of select="@name" />
 					</i>
 				</xsl:if>
+				<xsl:if test="$lang='C++' and contains(@type, '[')">
+					<xsl:text>&#160;__gc[]</xsl:text>
+				</xsl:if>
 				<!-- c++ indexer setters also include the return type in the param list -->
 				<xsl:if test="position()!= last() or ($lang='C++' and parent::node()[local-name()='property'])">
 					<xsl:text>,</xsl:text>
