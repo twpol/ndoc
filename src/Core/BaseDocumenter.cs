@@ -490,7 +490,6 @@ namespace NDoc.Core
 			externalSummaryCache = new ExternalXmlSummaryCache(DocLangCode);
 
 			notEmptyNamespaces = new Hashtable();
-			documentedTypes    = new Hashtable();
 
 			namespaceHierarchies= new NamespaceHierarchyCollection();
 			baseInterfaces = new BaseInterfacesCollection();
@@ -584,7 +583,6 @@ namespace NDoc.Core
 				derivedTypes=null;
 				interfaceImplementingTypes=null;
 				notEmptyNamespaces = null;
-				documentedTypes    = null;
 
 
 				GC.Collect();
@@ -1155,6 +1153,8 @@ namespace NDoc.Core
 
 						WriteNamespaceTypeHierarchy(writer,namespaceName);
 						
+						documentedTypes    = new Hashtable();
+
 						int classCount = WriteClasses(writer, types, namespaceName);
 						Trace.WriteLine(string.Format("Wrote {0} classes.", classCount));
 
@@ -1172,6 +1172,7 @@ namespace NDoc.Core
 
 						writer.WriteEndElement();
 
+						documentedTypes    = null;
 					}
 				}
 				else
@@ -1201,6 +1202,10 @@ namespace NDoc.Core
 						WriteClass(writer, type, hiding);
 						nbWritten++;
 					}
+				}
+				else
+				{
+					Debug.WriteLine(typeID + " skipped...");
 				}
 			}
 
