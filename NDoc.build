@@ -16,24 +16,20 @@
 	<!--
 
 	-->
-	<target name="compile-debug" description="Compile for all runtime configurations in debug mode.">
-		<echo message="Compiling for all runtime configurations in debug mode." />
+	<target name="debug" description="Change the build configuration to debug mode.">
 		<call target="set-debug-build-configuration" />
-		<call target="compile-build" />
 	</target>
 	<!--
 
 	-->
-	<target name="compile-release" description="Compile for all runtime configurations in release mode.">
-		<echo message="Compiling for all runtime configurations in release mode." />
+	<target name="release" description="Change the build configuration to release mode.">
 		<call target="set-release-build-configuration" />
-		<call target="compile-build" />
 	</target>
 	<!--
 
 	-->
-	<target name="compile-build" description="Compile current build configuration for all runtime configurations">
-		<echo message="Compiling all runtime configurations for the ${current.build.config} build configuration." />
+	<target name="compile-build" description="Compile current build configuration for all supports target frameworks">
+		<echo message="Compiling the ${current.build.config} build configuration for all supported target frameworks." />
 		<!-- 
 			build .NET Framework 1.0 version if both the Framework and SDK are available 
 		-->
@@ -113,7 +109,7 @@
 	<!--
 
 	-->
-	<target name="compile" description="Builds the current build configuration for the current runtime configuration.">
+	<target name="compile" description="Builds the current build configuration for the current target framework.">
 		<!-- ensure the bin dir has been created, and clean it up if needed -->
 		<call target="clean-current-bin-dir" />
 		<!-- copy the ndoc signing key file to the bin dir -->
@@ -130,7 +126,7 @@
 		<nant buildfile="src/Documenter/LinearHtml/LinearHtml.build" target="compile" inheritall="true" />
 		<nant buildfile="src/Documenter/NativeHtmlHelp2/NativeHtmlHelp2.build" target="compile" inheritall="true" />
 		<nant buildfile="src/Documenter/Xml/Xml.build" target="compile" inheritall="true" />
-		<nant buildfile="src/Test/Test.build" target="compile" inheritall="true" />
+		<nant buildfile="src/Test/Test.build" target="compile" inheritall="true" if="${framework::get-family(framework::get-target-framework())='net'}" />
 		<!-- remove the ndoc signing key file -->
 		<delete file="${current.bin.dir}/ndoc.snk" />
 	</target>
