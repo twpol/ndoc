@@ -56,7 +56,7 @@
 	<!-- -->
 	<xsl:template name="vb-type-syntax">
 		<xsl:if test="$ndoc-vb-syntax">
-			<div class="syntax">
+			<pre class="syntax">
 				<span class="lang">[Visual&#160;Basic]</span>
 				<br/>
 				<xsl:call-template name="vb-attributes"/>
@@ -111,7 +111,7 @@
 						<xsl:call-template name="vb-parameters" />
 					</xsl:otherwise>
 				</xsl:choose>
-			</div>
+			</pre>
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
@@ -214,7 +214,7 @@
 	<!-- -->
 	<xsl:template name="vb-member-syntax">
 		<xsl:if test="$ndoc-vb-syntax">
-			<div class="syntax">
+			<pre class="syntax">
 				<span class="lang">[Visual&#160;Basic]</span>
 				<br />
 				<xsl:call-template name="vb-attributes"/>
@@ -282,13 +282,13 @@
 						<xsl:text>)</xsl:text>
 					</xsl:otherwise>
 				</xsl:choose>
-			</div>
+			</pre>
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="vb-field-or-event-syntax">
 		<xsl:if test="$ndoc-vb-syntax">
-			<div class="syntax">
+			<pre class="syntax">
 				<span class="lang">[Visual&#160;Basic]</span>
 				<br />
 				<xsl:call-template name="vb-attributes"/>
@@ -326,7 +326,7 @@
 						<xsl:with-param name="runtime-type" select="@type" />
 					</xsl:call-template>
 				</a>
-			</div>
+			</pre>
 		</xsl:if>
 	</xsl:template>
 	<!-- -->

@@ -10,7 +10,7 @@
 	<xsl:param name="ndoc-documented-attributes" />
 	<!-- -->
 	<xsl:template name="cs-type-syntax">
-		<div class="syntax">
+		<pre class="syntax">
 			<xsl:if test="$ndoc-vb-syntax">
 				<span class="lang">[C#]</span>
 			</xsl:if>
@@ -57,7 +57,7 @@
 				  </xsl:call-template>
 			  </xsl:if>
 			 </div>
-		</div>
+		</pre>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="derivation">
@@ -79,7 +79,7 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="cs-member-syntax">
-		<div class="syntax">
+		<pre class="syntax">
 			<xsl:if test="$ndoc-vb-syntax">
 				<span class="lang">[C#]</span>
 				<br />
@@ -169,7 +169,7 @@
 				<xsl:with-param name="version">long</xsl:with-param>
 				<xsl:with-param name="namespace-name" select="../../@name" />
 			</xsl:call-template>
-		</div>
+		</pre>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="member-syntax2">
@@ -228,7 +228,7 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="cs-field-or-event-syntax">
-		<div class="syntax">
+		<pre class="syntax">
 			<xsl:if test="$ndoc-vb-syntax">
 				<span class="lang">[C#]</span>
 				<br />
@@ -272,7 +272,7 @@
 			<xsl:text>&#160;</xsl:text>
 			<xsl:value-of select="@name" />
 			<xsl:text>;</xsl:text>
-		</div>
+		</pre>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="cs-property-syntax">

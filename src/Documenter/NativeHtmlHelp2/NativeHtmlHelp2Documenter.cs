@@ -19,7 +19,6 @@
 using System;
 using System.IO;
 using System.Xml;
-using System.Text;
 using System.Diagnostics;
 
 using NDoc.Core;
@@ -33,8 +32,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 	/// <summary>Native Html Help 2 MSDN.Net documenter</summary>
 	public class NativeHtmlHelp2Documenter : BaseDocumenter
 	{
-
-		private TOCFile workingToc = null;
 
 		/// <summary>Initializes a new instance of the NativeHtmlHelp2Documenter class.</summary>
 		public NativeHtmlHelp2Documenter() : base( "Native HtmlHelp2" )
@@ -117,15 +114,19 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 				OnDocBuildingStep( 10, "Merging XML documentation..." );
 				XmlDocument xmlDocumentation = MergeXml( project );
 
-				workingToc = TOCFile.CreateFrom( Path.Combine( ResourceDirectory, @"HxProject\project.HxT" ), MyConfig.HtmlHelpName );
-				HxProject.TOCFile = workingToc.FileName;
+				TOCFile toc = TOCFile.CreateFrom( Path.Combine( ResourceDirectory, @"HxProject\project.HxT" ), MyConfig.HtmlHelpName );
+				
+				HxProject.TOCFile = toc.FileName;
 				HxProject.Save( w.RootDirectory );
 
-				workingToc.Open();
-				MakeHtml( xmlDocumentation );
-				workingToc.Close();
+				// create and intialize a HtmlFactory
+				ExternalHtmlProvider htmlProvider = new ExternalHtmlProvider( MyConfig.HeaderHtml, MyConfig.FooterHtml );
+				HtmlFactory factory = new HtmlFactory( Path.Combine( this.WorkingPath, "html" ), htmlProvider );
 
-				workingToc.Save( w.RootDirectory );
+				using( new TOCBuilder( toc, factory ) )
+					MakeHtml( xmlDocumentation, factory );
+
+				toc.Save( w.RootDirectory );
 
 				//then compile the HxC into and HxS
 				OnDocBuildingStep( 75, "Compiling Html Help 2 Files..." );
@@ -141,10 +142,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			catch ( Exception e )
 			{
 				throw new DocumenterException( "An error occured while creating the documentation", e );
-			}
-			finally
-			{
-				workingToc = null;
 			}
 		}
 
@@ -169,12 +166,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			return project;
 		}
 
-		private void MakeHtml( XmlNode xmlDocumentation )
+		private void MakeHtml( XmlNode xmlDocumentation, HtmlFactory factory )
 		{
-			// create and intialize a HtmlFactory
-			ExternalHtmlProvider htmlProvider = new ExternalHtmlProvider( MyConfig.HeaderHtml, MyConfig.FooterHtml );
-			HtmlFactory factory = new HtmlFactory( Path.Combine( this.WorkingPath, "html" ), htmlProvider );
-
 			// load the stylesheets
 			OnDocBuildingStep( 15, "Loading StyleSheets..." );
 			factory.LoadStylesheets( ResourceDirectory );
@@ -184,24 +177,13 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			// add properties to the factory
 			// these get passed to the stylesheets
 			factory.Properties.Add( "ndoc-title", MyConfig.Title );
-			factory.Properties.Add( "ndoc-vb-syntax", false );
-			factory.Properties.Add( "ndoc-omit-object-tags", false );
+			factory.Properties.Add( "ndoc-vb-syntax", true );
+			factory.Properties.Add( "ndoc-omit-object-tags", true );
 			factory.Properties.Add( "ndoc-document-attributes", MyConfig.DocumentAttributes );
 			factory.Properties.Add( "ndoc-documented-attributes", MyConfig.DocumentedAttributes );
 
-			// connect to factory events
-			// this is so we can build the TOC as we go
-			factory.TopicStart += new FileEventHandler(factory_TopicStart);
-			factory.TopicEnd += new EventHandler(factory_TopicEnd);
-			factory.AddFileToTopic += new FileEventHandler(factory_AddFileToTopic);
-
 			// make the html
-			factory.MakeHtml( xmlDocumentation, MyConfig.LinkToSdkDocVersion, MyConfig.IncludeHierarchy );
-
-			// disconnect from factory events
-			factory.TopicStart -= new FileEventHandler(factory_TopicStart);
-			factory.TopicEnd -= new EventHandler(factory_TopicEnd);
-			factory.AddFileToTopic -= new FileEventHandler(factory_AddFileToTopic);
+			factory.MakeHtml( xmlDocumentation, MyConfig.LinkToSdkDocVersion, MyConfig.IncludeHierarchy );;
 		}
 
 		private XmlDocument MergeXml( Project project )
@@ -302,21 +284,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		}
 
 		private NativeHtmlHelp2Config MyConfig{ get{ return (NativeHtmlHelp2Config)Config; } }
-
-		private void factory_TopicStart(object sender, FileEventArgs e)
-		{
-			workingToc.OpenNode( "/html/" + e.File );
-		}
-
-		private void factory_TopicEnd(object sender, EventArgs e)
-		{
-			workingToc.CloseNode();
-		}
-
-		private void factory_AddFileToTopic(object sender, FileEventArgs args)
-		{
-			workingToc.InsertNode( "/html/" + args.File );
-		}
 	}
 }
 

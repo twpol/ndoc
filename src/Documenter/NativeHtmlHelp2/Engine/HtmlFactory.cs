@@ -46,7 +46,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		private NameMapper mapper;
 
 		/// <summary>
-		/// Return the collection of properties that are passed to each stylesheet
+		/// The collection of properties that are passed to each stylesheet
 		/// </summary>
 		public readonly Hashtable Properties = new Hashtable();
 
@@ -64,7 +64,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 
 			mapper = new NameMapper();
 		}
-
 
 		#region events
 		/// <summary>
@@ -136,27 +135,25 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 
 		private void MakeHtmlForAssemblies( XmlNode xmlDocumentation, bool includeHierarchy )
 		{
-			XmlNodeList assemblyNodes = xmlDocumentation.SelectNodes("/ndoc/assembly");
-			int[] indexes = SortNodesByAttribute(assemblyNodes, "name");
+			XmlNodeList assemblyNodes = xmlDocumentation.SelectNodes( "/ndoc/assembly" );
+			int[] indexes = SortNodesByAttribute( assemblyNodes, "name" );
 
-			System.Collections.Specialized.NameValueCollection namespaceAssemblies
-				= new System.Collections.Specialized.NameValueCollection();
+			NameValueCollection namespaceAssemblies	= new NameValueCollection();
 
-			int nNodes = assemblyNodes.Count;
-			for (int i = 0; i < nNodes; i++)
+			for ( int i = 0; i < assemblyNodes.Count; i++ )
 			{
 				XmlNode assemblyNode = assemblyNodes[indexes[i]];
-				if (assemblyNode.ChildNodes.Count > 0)
+				if ( assemblyNode.ChildNodes.Count > 0 )
 				{
-					string assemblyName = (string)assemblyNode.Attributes["name"].Value;
+					string assemblyName = assemblyNode.Attributes["name"].Value;
 					GetNamespacesFromAssembly( xmlDocumentation, assemblyName, namespaceAssemblies );
 				}
 			}
 
 			string [] namespaces = namespaceAssemblies.AllKeys;
-			Array.Sort(namespaces);
-			nNodes = namespaces.Length;
-			for (int i = 0; i < nNodes; i++)
+			Array.Sort( namespaces );
+
+			for ( int i = 0; i < namespaces.Length; i++ )
 			{
 				string namespaceName = namespaces[i];
 				foreach ( string assemblyName in namespaceAssemblies.GetValues( namespaceName ) )
@@ -167,26 +164,25 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		private static void GetNamespacesFromAssembly( XmlNode xmlDocumentation, string assemblyName, System.Collections.Specialized.NameValueCollection namespaceAssemblies)
 		{
 			XmlNodeList namespaceNodes = xmlDocumentation.SelectNodes("/ndoc/assembly[@name=\"" + assemblyName + "\"]/module/namespace");
-			foreach (XmlNode namespaceNode in namespaceNodes)
+			foreach ( XmlNode namespaceNode in namespaceNodes )
 			{
-				string namespaceName = (string)namespaceNode.Attributes["name"].Value;
-				namespaceAssemblies.Add(namespaceName, assemblyName);
+				string namespaceName = namespaceNode.Attributes["name"].Value;
+				namespaceAssemblies.Add( namespaceName, assemblyName );
 			}
 		}
 
 
 		private void TransformAndWriteResult( XmlNode xmlDocumentation, string transformName, XsltArgumentList arguments, string fileName )
 		{
-			Trace.WriteLine(fileName);
+			Trace.WriteLine( fileName );
 #if DEBUG
 			int start = Environment.TickCount;
 #endif
-
 			XslTransform transform = _stylesheets[transformName];
 
 			_htmlProvider.SetFilename( fileName );
 
-			using ( StreamWriter streamWriter =  new StreamWriter(
+			using ( StreamWriter streamWriter = new StreamWriter(
 				File.Open( Path.Combine( _outputDirectory, fileName ), FileMode.Create ), new UTF8Encoding( true ) ) )
 			{
 				foreach ( DictionaryEntry entry in Properties )				
@@ -194,45 +190,44 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 				
 				MsdnXsltUtilities utilities = new MsdnXsltUtilities( mapper.FileNames, mapper.ElemNames, linkToSdkDocVersion );
 
-				arguments.AddParam("ndoc-sdk-doc-base-url", String.Empty, utilities.SdkDocBaseUrl );
-				arguments.AddParam("ndoc-sdk-doc-file-ext", String.Empty, utilities.SdkDocExt );
+				arguments.AddParam( "ndoc-sdk-doc-base-url", String.Empty, utilities.SdkDocBaseUrl );
+				arguments.AddParam( "ndoc-sdk-doc-file-ext", String.Empty, utilities.SdkDocExt );
 
 				arguments.AddExtensionObject( "urn:NDocUtil", utilities );
 				arguments.AddExtensionObject( "urn:NDocExternalHtml", _htmlProvider );
 
 				transform.Transform( xmlDocumentation, arguments, streamWriter, null );
 			}
-
 #if DEBUG
-			Trace.WriteLine((Environment.TickCount - start).ToString() + " msec.");
+			Trace.WriteLine( ( Environment.TickCount - start ).ToString() + " msec.");
 #endif
 		}
 
 
 		private void MakeHtmlForNamespace( XmlNode xmlDocumentation, string assemblyName, string namespaceName, bool includeHierarchy )
 		{
-			if (documentedNamespaces.Contains(namespaceName)) 
-				return;
+			if ( !documentedNamespaces.Contains( namespaceName ) ) 
+			{
+				documentedNamespaces.Add( namespaceName );
 
-			documentedNamespaces.Add(namespaceName);
+				XsltArgumentList arguments = new XsltArgumentList();
+				arguments.AddParam( "namespace", String.Empty, namespaceName );
+				arguments.AddParam( "includeHierarchy", String.Empty, includeHierarchy );
 
-			XsltArgumentList arguments = new XsltArgumentList();
-			arguments.AddParam( "namespace", String.Empty, namespaceName );
-			arguments.AddParam( "includeHierarchy", String.Empty, includeHierarchy );
+				string fileName = NameMapper.GetFilenameForNamespace( namespaceName );
+				TransformAndWriteResult( xmlDocumentation, "namespace", arguments, fileName );
+				OnTopicStart( fileName );
 
-			string fileName = NameMapper.GetFilenameForNamespace(namespaceName);
-			TransformAndWriteResult( xmlDocumentation, "namespace", arguments, fileName );
-			OnTopicStart( fileName );
+				arguments = new XsltArgumentList();
+				arguments.AddParam( "namespace", String.Empty, namespaceName );
 
-			arguments = new XsltArgumentList();
-			arguments.AddParam( "namespace", String.Empty, namespaceName );
+				if ( includeHierarchy )
+					TransformAndWriteResult( xmlDocumentation, "namespacehierarchy", arguments, fileName.Insert( fileName.Length - 5, "Hierarchy" ) );
 
-			if ( includeHierarchy )
-				TransformAndWriteResult( xmlDocumentation, "namespacehierarchy", arguments, fileName.Insert( fileName.Length - 5, "Hierarchy" ) );
+				MakeHtmlForTypes( xmlDocumentation, namespaceName );
 
-			MakeHtmlForTypes( xmlDocumentation, namespaceName );
-
-			OnTopicEnd();
+				OnTopicEnd();
+			}
 		}
 
 		private void MakeHtmlForTypes( XmlNode xmlDocumentation, string namespaceName )
@@ -240,16 +235,15 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			XmlNodeList typeNodes =
 				xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace[@name=\"" + namespaceName + "\"]/*[local-name()!='documentation']");
 
-			int[] indexes = SortNodesByAttribute(typeNodes, "id");
-			int nNodes = typeNodes.Count;
+			int[] indexes = SortNodesByAttribute( typeNodes, "id" );
 
-			for (int i = 0; i < nNodes; i++)
+			for ( int i = 0; i < typeNodes.Count; i++ )
 			{
-				XmlNode typeNode = typeNodes[indexes[i]];
+				XmlNode typeNode = typeNodes[ indexes[i] ];
 
-				WhichType whichType = NameMapper.GetWhichType(typeNode);
+				WhichType whichType = NameMapper.GetWhichType( typeNode );
 
-				switch(whichType)
+				switch( whichType )
 				{
 					case WhichType.Class:
 						MakeHtmlForInterfaceOrClassOrStructure( xmlDocumentation, whichType, typeNode );
@@ -280,7 +274,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			XsltArgumentList arguments = new XsltArgumentList();
 			arguments.AddParam( "type-id", String.Empty, typeID );
 
-			string fileName = NameMapper.GetFilenameForType(typeNode);
+			string fileName = NameMapper.GetFilenameForType( typeNode );
 			TransformAndWriteResult( xmlDocumentation, "type", arguments, fileName );
 			OnAddFileToTopic( fileName );
 		}
@@ -290,16 +284,14 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			string typeName = typeNode.Attributes["name"].Value;
 			string typeID = typeNode.Attributes["id"].Value;
 
-			bool hasMembers = typeNode.SelectNodes("constructor|field|property|method|operator|event").Count > 0;
-
 			XsltArgumentList arguments = new XsltArgumentList();
 			arguments.AddParam( "type-id", String.Empty, typeID );
 
-			string fileName = NameMapper.GetFilenameForType(typeNode);
+			string fileName = NameMapper.GetFilenameForType( typeNode );
 			TransformAndWriteResult( xmlDocumentation, "type", arguments, fileName );
 			OnTopicStart( fileName );
 
-			if (hasMembers)
+			if ( typeNode.SelectNodes( "constructor|field|property|method|operator|event" ).Count > 0 )
 			{
 				arguments = new XsltArgumentList();
 				arguments.AddParam("id", String.Empty, typeID);
@@ -321,37 +313,31 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 
 		private void MakeHtmlForConstructors( XmlNode xmlDocumentation, WhichType whichType, XmlNode typeNode)
 		{
-			XmlNodeList   constructorNodes;
-			string        constructorID;
-			string        typeName;
-			string        typeID;
-			string        fileName;
-
-			typeName = typeNode.Attributes["name"].Value;
-			typeID = typeNode.Attributes["id"].Value;
-			constructorNodes = typeNode.SelectNodes("constructor[@contract!='Static']");
+			string typeName = typeNode.Attributes["name"].Value;
+			string typeID = typeNode.Attributes["id"].Value;
+			XmlNodeList constructorNodes = typeNode.SelectNodes( "constructor[@contract!='Static']" );
 
 			// If the constructor is overloaded then make an overload page.
 			if ( constructorNodes.Count > 1 )
 			{
-				constructorID = constructorNodes[0].Attributes["id"].Value;
+				string constructorID = constructorNodes[0].Attributes["id"].Value;
 
 				XsltArgumentList arguments = new XsltArgumentList();
 				arguments.AddParam( "member-id", String.Empty, constructorID );
 
-				fileName = NameMapper.GetFilenameForConstructors(typeNode);
+				string fileName = NameMapper.GetFilenameForConstructors(typeNode);
 				TransformAndWriteResult( xmlDocumentation, "memberoverload", arguments, fileName );
 				OnTopicStart( fileName );
 			}
 
 			foreach ( XmlNode constructorNode in constructorNodes )
 			{
-				constructorID = constructorNode.Attributes["id"].Value;
+				string constructorID = constructorNode.Attributes["id"].Value;
 
 				XsltArgumentList arguments = new XsltArgumentList();
 				arguments.AddParam( "member-id", String.Empty, constructorID );
 
-				fileName = NameMapper.GetFilenameForConstructor(constructorNode);
+				string fileName = NameMapper.GetFilenameForConstructor(constructorNode);
 				TransformAndWriteResult( xmlDocumentation, "member", arguments, fileName );
 				OnAddFileToTopic( fileName );
 			}
@@ -362,12 +348,12 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			XmlNode staticConstructorNode = typeNode.SelectSingleNode("constructor[@contract='Static']");
 			if ( staticConstructorNode != null )
 			{
-				constructorID = staticConstructorNode.Attributes["id"].Value;
+				string constructorID = staticConstructorNode.Attributes["id"].Value;
 
 				XsltArgumentList arguments = new XsltArgumentList();
 				arguments.AddParam("member-id", String.Empty, constructorID);
 
-				fileName = NameMapper.GetFilenameForConstructor(staticConstructorNode);
+				string fileName = NameMapper.GetFilenameForConstructor(staticConstructorNode);
 				TransformAndWriteResult( xmlDocumentation, "member", arguments, fileName );
 				OnAddFileToTopic( fileName );
 			}
@@ -377,7 +363,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		{
 			XmlNodeList fields = typeNode.SelectNodes("field[not(@declaringType)]");
 
-			if (fields.Count > 0)
+			if ( fields.Count > 0 )
 			{
 				string typeName = typeNode.Attributes["name"].Value;
 				string typeID = typeNode.Attributes["id"].Value;
@@ -392,7 +378,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 
 				int[] indexes = SortNodesByAttribute(fields, "id");
 
-				foreach (int index in indexes)
+				foreach ( int index in indexes )
 				{
 					XmlNode field = fields[index];
 
@@ -417,24 +403,14 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 
 			if ( declaredPropertyNodes.Count > 0 )
 			{
-				XmlNodeList   propertyNodes;
-				XmlNode     propertyNode;
-				string        propertyName;
-				string        propertyID;
-				string        previousPropertyName;
-				string        nextPropertyName;
-				string        typeName;
-				string        typeID;
-				int         nNodes;
-				int[]       indexes;
-				int         i;
+				string previousPropertyName;
+				string nextPropertyName;
 
-				typeName = typeNode.Attributes["name"].Value;
-				typeID = typeNode.Attributes["id"].Value;
-				propertyNodes = typeNode.SelectNodes( "property[not(@declaringType)]" );
-				nNodes = propertyNodes.Count;
+				string typeName = typeNode.Attributes["name"].Value;
+				string typeID = typeNode.Attributes["id"].Value;
+				XmlNodeList propertyNodes = typeNode.SelectNodes( "property[not(@declaringType)]" );
 
-				indexes = SortNodesByAttribute( propertyNodes, "id" );
+				int[] indexes = SortNodesByAttribute( propertyNodes, "id" );
 
 				XsltArgumentList arguments = new XsltArgumentList();
 				arguments.AddParam( "id", String.Empty, typeID );
@@ -444,22 +420,22 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 				TransformAndWriteResult( xmlDocumentation, "individualmembers", arguments, fileName );
 				OnTopicStart( fileName );
 
-				for (i = 0; i < nNodes; i++)
+				for ( int i = 0; i < propertyNodes.Count; i++ )
 				{
-					propertyNode = propertyNodes[indexes[i]];
+					XmlNode propertyNode = propertyNodes[indexes[i]];
 
-					propertyName = (string)propertyNode.Attributes["name"].Value;
-					propertyID = (string)propertyNode.Attributes["id"].Value;
+					string propertyName = propertyNode.Attributes["name"].Value;
+					string propertyID = propertyNode.Attributes["id"].Value;
 
-					previousPropertyName = ((i - 1 < 0) || (propertyNodes[indexes[i - 1]].Attributes.Count == 0))
+					previousPropertyName = ( (i - 1 < 0 ) || ( propertyNodes[indexes[i - 1]].Attributes.Count == 0 ) )
 						? "" : propertyNodes[indexes[i - 1]].Attributes[0].Value;
-					nextPropertyName = ((i + 1 == nNodes) || (propertyNodes[indexes[i + 1]].Attributes.Count == 0))
+					nextPropertyName = ( ( i + 1 == propertyNodes.Count ) || ( propertyNodes[indexes[i + 1]].Attributes.Count == 0 ) )
 						? "" : propertyNodes[indexes[i + 1]].Attributes[0].Value;
 
 					if ( ( previousPropertyName != propertyName ) && ( nextPropertyName == propertyName ) )
 					{
 						arguments = new XsltArgumentList();
-						arguments.AddParam("member-id", String.Empty, propertyID);
+						arguments.AddParam( "member-id", String.Empty, propertyID );
 
 						fileName = NameMapper.GetFilenameForPropertyOverloads( typeNode, propertyNode );
 						TransformAndWriteResult( xmlDocumentation, "memberoverload", arguments, fileName );
@@ -467,15 +443,14 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 					}
 
 					XsltArgumentList arguments2 = new XsltArgumentList();
-					arguments2.AddParam("property-id", String.Empty, propertyID );
+					arguments2.AddParam( "property-id", String.Empty, propertyID );
 
-					fileName = NameMapper.GetFilenameForProperty(propertyNode);
+					fileName = NameMapper.GetFilenameForProperty( propertyNode );
 					TransformAndWriteResult( xmlDocumentation, "property", arguments2, fileName );
 					OnAddFileToTopic( fileName );
 
 					if ( ( previousPropertyName == propertyName ) && ( nextPropertyName != propertyName ) )
 						OnTopicEnd();
-
 				}
 
 				OnTopicEnd();
@@ -483,56 +458,55 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		}
 		private void MakeHtmlForMethods( XmlNode xmlDocumentation, WhichType whichType, XmlNode typeNode)
 		{
-			XmlNodeList declaredMethodNodes = typeNode.SelectNodes("method[not(@declaringType)]");
+			XmlNodeList declaredMethodNodes = typeNode.SelectNodes( "method[not(@declaringType)]" );
 
-			if (declaredMethodNodes.Count > 0)
+			if ( declaredMethodNodes.Count > 0 )
 			{
 				bool bOverloaded = false;
 
 				string typeName = typeNode.Attributes["name"].Value;
 				string typeID = typeNode.Attributes["id"].Value;
-				XmlNodeList methodNodes = typeNode.SelectNodes("method");
-				int nNodes = methodNodes.Count;
+				XmlNodeList methodNodes = typeNode.SelectNodes( "method" );
 
-				int[] indexes = SortNodesByAttribute(methodNodes, "id");
+				int[] indexes = SortNodesByAttribute( methodNodes, "id" );
 
 				XsltArgumentList arguments = new XsltArgumentList();
-				arguments.AddParam("id", String.Empty, typeID);
-				arguments.AddParam("member-type", String.Empty, "method");
+				arguments.AddParam( "id", String.Empty, typeID );
+				arguments.AddParam( "member-type", String.Empty, "method" );
 
-				string fileName = NameMapper.GetFilenameForMethods(whichType, typeNode);
-				TransformAndWriteResult( xmlDocumentation, "individualmembers", arguments, fileName);
+				string fileName = NameMapper.GetFilenameForMethods( whichType, typeNode );
+				TransformAndWriteResult( xmlDocumentation, "individualmembers", arguments, fileName );
 				OnTopicStart( fileName );
 
-				for (int i = 0; i < nNodes; i++)
+				for (int i = 0; i < methodNodes.Count; i++)
 				{
 					XmlNode methodNode = methodNodes[indexes[i]];
-					string methodName = (string)methodNode.Attributes["name"].Value;
-					string methodID = (string)methodNode.Attributes["id"].Value;
+					string methodName = methodNode.Attributes["name"].Value;
+					string methodID = methodNode.Attributes["id"].Value;
 
 					if ( MethodHelper.IsMethodFirstOverload( methodNodes, indexes, i ) )
 					{
 						bOverloaded = true;
 
 						arguments = new XsltArgumentList();
-						arguments.AddParam("member-id", String.Empty, methodID);
+						arguments.AddParam( "member-id", String.Empty, methodID );
 
 						fileName = NameMapper.GetFilenameForMethodOverloads( typeNode, methodNode );
 						TransformAndWriteResult( xmlDocumentation, "memberoverload", arguments, fileName );
 						OnTopicStart( fileName );
 					}
 
-					if (methodNode.Attributes["declaringType"] == null)
+					if ( methodNode.Attributes["declaringType"] == null )
 					{
 						XsltArgumentList arguments2 = new XsltArgumentList();
-						arguments2.AddParam("member-id", String.Empty, methodID);
+						arguments2.AddParam( "member-id", String.Empty, methodID );
 
-						fileName = NameMapper.GetFilenameForMethod(methodNode);
-						TransformAndWriteResult( xmlDocumentation, "member", arguments2, fileName);
+						fileName = NameMapper.GetFilenameForMethod( methodNode );
+						TransformAndWriteResult( xmlDocumentation, "member", arguments2, fileName );
 						OnAddFileToTopic( fileName );
 					}
 
-					if ( bOverloaded && MethodHelper.IsMethodLastOverload( methodNodes, indexes, i) )
+					if ( bOverloaded && MethodHelper.IsMethodLastOverload( methodNodes, indexes, i ) )
 					{
 						bOverloaded = false;
 						OnTopicEnd();
@@ -545,41 +519,41 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 
 		private void MakeHtmlForEvents( XmlNode xmlDocumentation, WhichType whichType, XmlNode typeNode)
 		{
-			XmlNodeList declaredEventNodes = typeNode.SelectNodes("event[not(@declaringType)]");
+			XmlNodeList declaredEventNodes = typeNode.SelectNodes( "event[not(@declaringType)]" );
 
-			if (declaredEventNodes.Count > 0)
+			if ( declaredEventNodes.Count > 0 )
 			{
-				XmlNodeList events = typeNode.SelectNodes("event");
+				XmlNodeList events = typeNode.SelectNodes( "event" );
 
-				if (events.Count > 0)
+				if ( events.Count > 0 )
 				{
-					string typeName = (string)typeNode.Attributes["name"].Value;
-					string typeID = (string)typeNode.Attributes["id"].Value;
+					string typeName = typeNode.Attributes["name"].Value;
+					string typeID = typeNode.Attributes["id"].Value;
 
 					XsltArgumentList arguments = new XsltArgumentList();
-					arguments.AddParam("id", String.Empty, typeID);
-					arguments.AddParam("member-type", String.Empty, "event");
+					arguments.AddParam( "id", String.Empty, typeID );
+					arguments.AddParam( "member-type", String.Empty, "event" );
 
-					string fileName = NameMapper.GetFilenameForEvents(whichType, typeNode);
-					TransformAndWriteResult( xmlDocumentation, "individualmembers", arguments, fileName);
+					string fileName = NameMapper.GetFilenameForEvents( whichType, typeNode );
+					TransformAndWriteResult( xmlDocumentation, "individualmembers", arguments, fileName );
 					OnTopicStart( fileName );
 
-					int[] indexes = SortNodesByAttribute(events, "id");
+					int[] indexes = SortNodesByAttribute( events, "id" );
 
-					foreach (int index in indexes)
+					foreach ( int index in indexes )
 					{
 						XmlNode eventElement = events[index];
 
-						if (eventElement.Attributes["declaringType"] == null)
+						if ( eventElement.Attributes["declaringType"] == null )
 						{
-							string eventName = (string)eventElement.Attributes["name"].Value;
-							string eventID = (string)eventElement.Attributes["id"].Value;
+							string eventName = eventElement.Attributes["name"].Value;
+							string eventID = eventElement.Attributes["id"].Value;
 
 							arguments = new XsltArgumentList();
-							arguments.AddParam("event-id", String.Empty, eventID);
+							arguments.AddParam( "event-id", String.Empty, eventID );
 
-							TransformAndWriteResult( xmlDocumentation, "event", arguments, fileName);
-							fileName = NameMapper.GetFilenameForEvent(eventElement);
+							fileName = NameMapper.GetFilenameForEvent( eventElement );
+							TransformAndWriteResult( xmlDocumentation, "event", arguments, fileName );
 							OnAddFileToTopic( fileName );
 						}
 					}
@@ -589,54 +563,52 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			}
 		}
 
-		private void MakeHtmlForOperators( XmlNode xmlDocumentation, WhichType whichType, XmlNode typeNode)
+		private void MakeHtmlForOperators( XmlNode xmlDocumentation, WhichType whichType, XmlNode typeNode )
 		{
-			XmlNodeList operators = typeNode.SelectNodes("operator");
+			XmlNodeList operators = typeNode.SelectNodes( "operator" );
 
-			if (operators.Count > 0)
+			if ( operators.Count > 0 )
 			{
-				string typeName = (string)typeNode.Attributes["name"].Value;
-				string typeID = (string)typeNode.Attributes["id"].Value;
-				XmlNodeList opNodes = typeNode.SelectNodes("operator");
+				string typeName = typeNode.Attributes["name"].Value;
+				string typeID = typeNode.Attributes["id"].Value;
+				XmlNodeList opNodes = typeNode.SelectNodes( "operator" );
 				bool bOverloaded = false;
 
 				string title = "Operators";
 
-				if (typeNode.SelectSingleNode("operator[@name = 'op_Explicit' or @name = 'op_Implicit']") != null)
+				if ( typeNode.SelectSingleNode( "operator[@name = 'op_Explicit' or @name = 'op_Implicit']" ) != null )
 					title += " and Type Conversions";
 				
 				XsltArgumentList arguments = new XsltArgumentList();
-				arguments.AddParam("id", String.Empty, typeID);
-				arguments.AddParam("member-type", String.Empty, "operator");
+				arguments.AddParam( "id", String.Empty, typeID );
+				arguments.AddParam( "member-type", String.Empty, "operator" );
 
-				string fileName = NameMapper.GetFilenameForOperators(whichType, typeNode);
-				TransformAndWriteResult( xmlDocumentation, "individualmembers", arguments, fileName);
+				string fileName = NameMapper.GetFilenameForOperators( whichType, typeNode );
+				TransformAndWriteResult( xmlDocumentation, "individualmembers", arguments, fileName );
 				OnTopicStart( fileName );
 
-				int[] indexes = SortNodesByAttribute(operators, "id");
-				int nNodes = opNodes.Count;
+				int[] indexes = SortNodesByAttribute( operators, "id" );
 
-				for (int i = 0; i < nNodes; i++)
+				for ( int i = 0; i < opNodes.Count; i++ )
 				{
 					XmlNode operatorNode = operators[indexes[i]];
 					string operatorID = operatorNode.Attributes["id"].Value;
 
 					if ( MethodHelper.IsMethodFirstOverload( opNodes, indexes, i ) )
 					{
-						string opName = (string)operatorNode.Attributes["name"].Value;
+						string opName = operatorNode.Attributes["name"].Value;
 						if ( ( opName != "op_Implicit" ) && ( opName != "op_Implicit" ) )
 						{
 							bOverloaded = true;
 
 							arguments = new XsltArgumentList();
-							arguments.AddParam("member-id", String.Empty, operatorID);
+							arguments.AddParam( "member-id", String.Empty, operatorID );
 
-							fileName = NameMapper.GetFilenameForOperatorsOverloads(typeNode, operatorNode);
+							fileName = NameMapper.GetFilenameForOperatorsOverloads( typeNode, operatorNode );
 							TransformAndWriteResult( xmlDocumentation, "memberoverload", arguments, fileName );
 							OnTopicStart( fileName );
 						}
 					}
-
 
 					arguments = new XsltArgumentList();
 					arguments.AddParam("member-id", String.Empty, operatorID);
@@ -663,13 +635,13 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			int[] indexes = new int[nodes.Count];
 			int i = 0;
 
-			foreach (XmlNode node in nodes)
+			foreach ( XmlNode node in nodes )
 			{
-				names[i] = (string)node.Attributes[attributeName].Value;
+				names[i] = node.Attributes[attributeName].Value;
 				indexes[i] = i++;
 			}
 
-			Array.Sort(names, indexes);
+			Array.Sort( names, indexes );
 
 			return indexes;
 		}
