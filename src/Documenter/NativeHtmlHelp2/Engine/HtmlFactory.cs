@@ -56,9 +56,9 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		//this encoding is used for all generated html...
 		private static readonly UTF8Encoding encoding = new UTF8Encoding( false );
 
- 		//for performance reasons we are going to re-use one XsltArguments collection
- 		//rather than re-creating an empty one for each transformation
- 		// IMPORTANT - any method that adds paramater must be sure to remove them
+		//for performance reasons we are going to re-use one XsltArguments collection
+		//rather than re-creating an empty one for each transformation
+		// IMPORTANT - any method that adds paramater must be sure to remove them
 		/// <summary>
 		/// Xslt arguments passed to each transformation context
 		/// </summary>
@@ -73,15 +73,20 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <param name="htmlProvider">Object the provides additional Html content</param>
 		/// <param name="config"></param>
 		public HtmlFactory( string tempFileName, string outputDirectory, ExternalHtmlProvider htmlProvider, NativeHtmlHelp2Config config )
-		{			
+		{
+			Debug.WriteLine("mem before doc load " + GC.GetTotalMemory(true).ToString());
 			// Load the XML documentation.
 			xmlDocumentation = new XmlDocument();
 			Stream tempFile=null;
 			try
 			{
 				tempFile=File.Open(tempFileName,FileMode.Open,FileAccess.Read);
-				xmlDocumentation.Load(tempFile);
+
+				FilteringXmlTextReader fxtr = new FilteringXmlTextReader(tempFile);
+				xmlDocumentation.Load(fxtr);
+
 				tempFile.Seek(0,SeekOrigin.Begin);
+
 				xPathDocumentation = new XPathDocument(tempFile);
 			}
 			finally
@@ -283,7 +288,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			}
 
 #if DEBUG
-			Trace.WriteLine( ( Environment.TickCount - start ).ToString() + " msec." );
+			Debug.WriteLine( ( Environment.TickCount - start ).ToString() + " msec." );
 #endif
 		}
 
@@ -299,7 +304,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 				TransformAndWriteResult( "namespace", fileName );
 				OnTopicStart( fileName );
 
-					TransformAndWriteResult( "namespacehierarchy", FileNameMapper.GetFileNameForNamespaceHierarchy( namespaceName ) );
+				TransformAndWriteResult( "namespacehierarchy", FileNameMapper.GetFileNameForNamespaceHierarchy( namespaceName ) );
 
 				MakeHtmlForTypes( namespaceName );
 				this.Arguments.RemoveParam( "namespace", string.Empty );
@@ -311,7 +316,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		private void MakeHtmlForTypes( string namespaceName )
 		{
 			XmlNodeList typeNodes =
-				xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace[@name=\"" + namespaceName + "\"]/*[local-name()!='documentation' and local-name()!='typeHierarchy']");
+				xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace[@name=\"" + namespaceName + "\"]/*[local-name()!='documentation']");
 
 			int[] indexes = SortNodesByAttribute( typeNodes, "id" );
 
@@ -788,7 +793,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			XPathDocument xpd = new XPathDocument(reader);
 
 			return xpd;
- 		}   
+		}   
     
 		private void AddDocSet(XmlWriter writer, string id )   
 		{   
@@ -798,6 +803,68 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 				writer.WriteString(id.Trim());   
 				writer.WriteEndElement();   
 			}   
-		} 
+		}
+ 
+		/// <summary>
+		/// This custom reader is used to load the XmlDocument. It removes elements that are not required *before* 
+		/// they are loaded into memory, and hence lowers memory requirements significantly.
+		/// </summary>
+		private class FilteringXmlTextReader:XmlTextReader
+		{
+			object oNamespaceHierarchy;
+			object oDocumentation;
+			object oImplements;
+			object oParameter;
+			object oAttribute;
+
+			public FilteringXmlTextReader(System.IO.Stream file):base(file)
+			{
+				base.WhitespaceHandling=WhitespaceHandling.None;
+				oNamespaceHierarchy = base.NameTable.Add("namespaceHierarchy");
+				oDocumentation = base.NameTable.Add("documentation");
+				oImplements = base.NameTable.Add("implements");
+				oParameter = base.NameTable.Add("parameter");
+				oAttribute = base.NameTable.Add("attribute");
+			}
+		
+			private bool ShouldSkipElement()
+			{
+				return
+					(
+					base.Name.Equals(oNamespaceHierarchy)||
+					base.Name.Equals(oDocumentation)||
+					base.Name.Equals(oImplements)||
+					base.Name.Equals(oParameter)||
+					base.Name.Equals(oAttribute)
+					);
+			}
+
+			public override bool Read()
+			{
+				bool notEndOfDoc=base.Read();
+				if (!notEndOfDoc) return false;
+				while (notEndOfDoc && (base.NodeType == XmlNodeType.Element) && ShouldSkipElement() )
+				{
+					notEndOfDoc=SkipElement();
+				}
+				return notEndOfDoc;
+			}
+
+			private bool SkipElement()
+			{
+				if (base.IsEmptyElement) return base.Read();
+				bool notEndOfDoc=true;
+				while (notEndOfDoc)
+				{
+					notEndOfDoc=base.Read();
+					if ((base.NodeType == XmlNodeType.EndElement) && ShouldSkipElement() ) 
+						break;
+				}
+				if (notEndOfDoc) notEndOfDoc=base.Read();
+				return notEndOfDoc;
+			}
+
+		}
 	}
+
 }
