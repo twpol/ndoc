@@ -18,10 +18,11 @@ function InsertHeader()
 	html += "<div id=TitleRow><h1 class=dtH1>";
 	html += document.title;
 	html += "</h1></div></div>";
+	
 	document.body.insertAdjacentHTML( "afterBegin", html );
 }
 
-function InsertFooter( title )
+function InsertFooter()
 {
 	var lastChild = document.body.lastChild;
 	if ( lastChild == null ) return;
