@@ -1051,7 +1051,12 @@ namespace NDoc.Documenter.LinearHtml
 			}
 
 			// get summary
-			XPathNavigator summaryNav = GetChildNodeWithName(nav, "summary");
+			XPathNavigator documentationNav = GetChildNodeWithName(nav, "documentation");
+			XPathNavigator summaryNav = null;
+			if (documentationNav != null)
+			{
+				summaryNav = GetChildNodeWithName(documentationNav, "summary");
+			}
 			string namespaceSummary = string.Empty;
 			if (summaryNav != null) namespaceSummary = summaryNav.Value;
 
@@ -1677,7 +1682,7 @@ namespace NDoc.Documenter.LinearHtml
 				{
 					if (!first) declarationString += ", ";
 					first = false;
-					declarationString += n3.Value;
+					declarationString += n3.GetAttribute("type", "");
 				}
 			}
 
