@@ -74,9 +74,11 @@ namespace NDoc.Gui
 			// 
 			// cancelButton
 			// 
+			this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+				| System.Windows.Forms.AnchorStyles.Right)));
 			this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.cancelButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.cancelButton.Location = new System.Drawing.Point(200, 64);
+			this.cancelButton.Location = new System.Drawing.Point(96, 112);
 			this.cancelButton.Name = "cancelButton";
 			this.cancelButton.Size = new System.Drawing.Size(80, 24);
 			this.cancelButton.TabIndex = 3;
@@ -86,7 +88,7 @@ namespace NDoc.Gui
 			// label1
 			// 
 			this.label1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.label1.Location = new System.Drawing.Point(16, 8);
+			this.label1.Location = new System.Drawing.Point(8, 8);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(184, 16);
 			this.label1.TabIndex = 1;
@@ -94,8 +96,10 @@ namespace NDoc.Gui
 			// 
 			// okButton
 			// 
+			this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+				| System.Windows.Forms.AnchorStyles.Right)));
 			this.okButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.okButton.Location = new System.Drawing.Point(200, 32);
+			this.okButton.Location = new System.Drawing.Point(8, 112);
 			this.okButton.Name = "okButton";
 			this.okButton.Size = new System.Drawing.Size(80, 24);
 			this.okButton.TabIndex = 3;
@@ -104,9 +108,12 @@ namespace NDoc.Gui
 			// 
 			// configList
 			// 
-			this.configList.Location = new System.Drawing.Point(16, 24);
+			this.configList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+				| System.Windows.Forms.AnchorStyles.Left) 
+				| System.Windows.Forms.AnchorStyles.Right)));
+			this.configList.Location = new System.Drawing.Point(8, 24);
 			this.configList.Name = "configList";
-			this.configList.Size = new System.Drawing.Size(168, 69);
+			this.configList.Size = new System.Drawing.Size(168, 82);
 			this.configList.TabIndex = 2;
 			this.configList.DoubleClick += new System.EventHandler(this.okButton_Click);
 			// 
@@ -115,15 +122,14 @@ namespace NDoc.Gui
 			this.AcceptButton = this.okButton;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.CancelButton = this.cancelButton;
-			this.ClientSize = new System.Drawing.Size(300, 112);
-			this.Controls.AddRange(new System.Windows.Forms.Control[] {
-																		  this.cancelButton,
-																		  this.okButton,
-																		  this.configList,
-																		  this.label1});
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+			this.ClientSize = new System.Drawing.Size(186, 144);
+			this.Controls.Add(this.cancelButton);
+			this.Controls.Add(this.okButton);
+			this.Controls.Add(this.configList);
+			this.Controls.Add(this.label1);
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
+			this.MinimumSize = new System.Drawing.Size(194, 178);
 			this.Name = "SolutionForm";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;

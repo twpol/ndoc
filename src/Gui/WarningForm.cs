@@ -103,9 +103,9 @@ namespace NDoc.Gui
 			this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.btnOK.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.btnOK.Location = new System.Drawing.Point(392, 280);
+			this.btnOK.Location = new System.Drawing.Point(384, 280);
 			this.btnOK.Name = "btnOK";
-			this.btnOK.Size = new System.Drawing.Size(72, 24);
+			this.btnOK.Size = new System.Drawing.Size(88, 24);
 			this.btnOK.TabIndex = 3;
 			this.btnOK.Text = "Close";
 			// 
@@ -124,7 +124,7 @@ namespace NDoc.Gui
 			// 
 			this.AcceptButton = this.btnOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.ClientSize = new System.Drawing.Size(480, 310);
+			this.ClientSize = new System.Drawing.Size(480, 318);
 			this.Controls.Add(this.btnCopy);
 			this.Controls.Add(this.btnOK);
 			this.Controls.Add(this.txtMessage);
