@@ -46,6 +46,7 @@ namespace NDoc.Documenter.Msdn
 			_SplitTOCs = false;
 			_DefaultTOC = string.Empty;
 
+			_IncludeHierarchy = false;
 			_ShowVisualBasic = false;
 			_OmitObjectTags = false;
 		}
@@ -222,6 +223,24 @@ namespace NDoc.Documenter.Msdn
 			set 
 			{ 
 				_DefaultTOC = value; 
+				SetDirty();
+			}
+		}
+
+		private bool _IncludeHierarchy;
+
+		/// <summary>Gets or sets the IncludeHierarchy property.</summary>
+		[
+		Category("Documentation Main Settings"),
+		Description("To include a class hiararchy page for each namespace. Don't turn it on if your project has a namespace with many types, as NDoc will become very slow and might crash.")
+		]
+		public bool IncludeHierarchy
+		{
+			get { return _IncludeHierarchy; }
+
+			set 
+			{ 
+				_IncludeHierarchy = value; 
 				SetDirty();
 			}
 		}

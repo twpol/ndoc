@@ -574,16 +574,20 @@ namespace NDoc.Documenter.Msdn
 
 			XsltArgumentList arguments = new XsltArgumentList();
 			arguments.AddParam("namespace", String.Empty, namespaceName);
+			arguments.AddParam("includeHierarchy", String.Empty, MyConfig.IncludeHierarchy);
 
 			TransformAndWriteResult(xsltNamespace, arguments, fileName);
 
 			arguments = new XsltArgumentList();
 			arguments.AddParam("namespace", String.Empty, namespaceName);
 
-			TransformAndWriteResult(
-				xsltNamespaceHierarchy,
-				arguments,
-				fileName.Insert(fileName.Length - 5, "Hierarchy"));
+			if (MyConfig.IncludeHierarchy)
+			{
+				TransformAndWriteResult(
+					xsltNamespaceHierarchy,
+					arguments,
+					fileName.Insert(fileName.Length - 5, "Hierarchy"));
+			}
 
 			MakeHtmlForTypes(namespaceName);
 		}
