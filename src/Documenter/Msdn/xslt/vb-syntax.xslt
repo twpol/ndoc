@@ -50,19 +50,30 @@
 					</xsl:if>
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:text>( _</xsl:text>
-					<br />
-					<xsl:apply-templates select="parameter" mode="vb" />
-					<xsl:text>)</xsl:text>
-					<xsl:if test="@returnType != 'System.Void'">
-						<xsl:text>&#160;As&#160;</xsl:text>
-						<xsl:call-template name="strip-namespace">
-							<xsl:with-param name="name" select="@returnType" />
-						</xsl:call-template>
-					</xsl:if>
+					<xsl:call-template name="vb-parameters" />
 				</xsl:otherwise>
 			</xsl:choose>
 		</pre>
+	</xsl:template>
+	<!-- -->
+	<xsl:template name="vb-parameters">
+		<xsl:choose>
+			<xsl:when test="parameter">
+				<xsl:text>( _</xsl:text>
+				<br />
+				<xsl:apply-templates select="parameter" mode="vb" />
+				<xsl:text>)</xsl:text>
+				<xsl:if test="@returnType != 'System.Void'">
+					<xsl:text>&#160;As&#160;</xsl:text>
+					<xsl:call-template name="strip-namespace">
+						<xsl:with-param name="name" select="@returnType" />
+					</xsl:call-template>
+				</xsl:if>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:text>()</xsl:text>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="vb-type-access">
@@ -168,24 +179,22 @@
 							</xsl:if>
 						</xsl:otherwise>
 					</xsl:choose>
-					<xsl:choose>
-						<xsl:when test="parameter">
-							<xsl:text>( _</xsl:text>
-							<br />
-							<xsl:apply-templates select="parameter" mode="vb" />
-							<xsl:text>)</xsl:text>
-							<xsl:if test="@returnType != 'System.Void'">
-								<xsl:text>&#160;As&#160;</xsl:text>
-								<xsl:call-template name="strip-namespace">
-									<xsl:with-param name="name" select="@returnType" />
-								</xsl:call-template>
-							</xsl:if>
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:text>()</xsl:text>
-						</xsl:otherwise>
-					</xsl:choose>
+					<xsl:call-template name="vb-parameters" />
 				</xsl:when>
+				<xsl:otherwise>
+					<span class="meta">returnValue = </span>
+					<xsl:value-of select="../@name" />
+					<xsl:text>.</xsl:text>
+					<xsl:value-of select="@name" />
+					<xsl:text>(</xsl:text>
+					<xsl:for-each select="parameter">
+						<xsl:value-of select="@name" />
+						<xsl:if test="position() &lt; last()">
+							<xsl:text>,&#160;</xsl:text>
+						</xsl:if>
+					</xsl:for-each>
+					<xsl:text>)</xsl:text>
+				</xsl:otherwise>
 			</xsl:choose>
 		</pre>
 	</xsl:template>
