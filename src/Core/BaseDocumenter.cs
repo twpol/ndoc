@@ -1441,6 +1441,11 @@ namespace NDoc.Core
 				bindingFlags = bindingFlags | BindingFlags.DeclaredOnly;
 			}
 
+			if (MyConfig.DocumentInheritedStaticMembers)
+			{
+				bindingFlags = bindingFlags | BindingFlags.FlattenHierarchy;
+			}
+
 			ConstructorInfo[] constructors = type.GetConstructors(bindingFlags);
 
 			if (constructors.Length > 1)
@@ -1493,6 +1498,11 @@ namespace NDoc.Core
 				bindingFlags = bindingFlags | BindingFlags.DeclaredOnly;
 			}
 
+			if (MyConfig.DocumentInheritedStaticMembers)
+			{
+				bindingFlags = bindingFlags | BindingFlags.FlattenHierarchy;
+			}
+
 			FieldInfo [] fields = type.GetFields(bindingFlags);
 			foreach (FieldInfo field in fields)
 			{
@@ -1520,6 +1530,11 @@ namespace NDoc.Core
 			if (!MyConfig.DocumentInheritedMembers)
 			{
 				bindingFlags = bindingFlags | BindingFlags.DeclaredOnly;
+			}
+
+			if (MyConfig.DocumentInheritedStaticMembers)
+			{
+				bindingFlags = bindingFlags | BindingFlags.FlattenHierarchy;
 			}
 
 			PropertyInfo[] properties = type.GetProperties(bindingFlags);
@@ -1573,6 +1588,11 @@ namespace NDoc.Core
 				bindingFlags = bindingFlags | BindingFlags.DeclaredOnly;
 			}
 
+			if (MyConfig.DocumentInheritedStaticMembers)
+			{
+				bindingFlags = bindingFlags | BindingFlags.FlattenHierarchy;
+			}
+
 			MethodInfo[] methods = type.GetMethods(bindingFlags);
 
 			foreach (MethodInfo method in methods)
@@ -1624,6 +1644,11 @@ namespace NDoc.Core
 				bindingFlags = bindingFlags | BindingFlags.DeclaredOnly;
 			}
 
+			if (MyConfig.DocumentInheritedStaticMembers)
+			{
+				bindingFlags = bindingFlags | BindingFlags.FlattenHierarchy;
+			}
+
 			MethodInfo[] methods = type.GetMethods(bindingFlags);
 			foreach (MethodInfo method in methods)
 			{
@@ -1649,6 +1674,11 @@ namespace NDoc.Core
 			if (!MyConfig.DocumentInheritedMembers)
 			{
 				bindingFlags = bindingFlags | BindingFlags.DeclaredOnly;
+			}
+
+			if (MyConfig.DocumentInheritedStaticMembers)
+			{
+				bindingFlags = bindingFlags | BindingFlags.FlattenHierarchy;
 			}
 
 			EventInfo[] events = type.GetEvents(bindingFlags);

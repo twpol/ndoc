@@ -55,6 +55,7 @@ namespace NDoc.Core
 			_ShowMissingValues = false;
 
 			_DocumentInheritedMembers = true;
+			_DocumentInheritedStaticMembers = false;
 			_DocumentExplicitInterfaceImplementations = false;
 
 			_DocumentInternals = false;
@@ -429,6 +430,25 @@ namespace NDoc.Core
 			set
 			{
 				_DocumentInheritedMembers = value;
+				SetDirty();
+			}
+		}
+
+		private bool _DocumentInheritedStaticMembers;
+
+		/// <summary>Gets or sets the DocumentInheritedStaticMembers property.</summary>
+		/// <remarks>If this is true, static members inherited from base classes will
+		/// be included in the documentation.</remarks>
+		[Category("Visibility")]
+		[Description("Turn this flag on to document inherited members.")]
+		[DefaultValue(false)]
+		public bool DocumentInheritedStaticMembers
+		{
+			get { return _DocumentInheritedStaticMembers; }
+
+			set
+			{
+				_DocumentInheritedStaticMembers = value;
 				SetDirty();
 			}
 		}
