@@ -286,6 +286,9 @@ namespace NDoc.Test
 	/// in its documentation.</summary>
 	public class Links
 	{
+		/// <summary>Holds an integer.</summary>
+		public int IntField;
+
 		/// <summary>Gets or sets an integer.</summary>
 		/// <value>an integer</value>
 		public int IntProperty

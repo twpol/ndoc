@@ -135,10 +135,17 @@
 			<xsl:if test="@initOnly='true'">
 				<xsl:text>readonly&#160;</xsl:text>
 			</xsl:if>
-			<xsl:call-template name="get-datatype">
-				<xsl:with-param name="datatype" select="@type" />
-				<xsl:with-param name="namespace-name" select="../../@name" />
-			</xsl:call-template>
+			<a>
+				<xsl:attribute name="href">
+					<xsl:call-template name="get-filename-for-type-name">
+						<xsl:with-param name="type-name" select="@type" />
+					</xsl:call-template>
+				</xsl:attribute>
+				<xsl:call-template name="get-datatype">
+					<xsl:with-param name="datatype" select="@type" />
+					<xsl:with-param name="namespace-name" select="../../@name" />
+				</xsl:call-template>
+			</a>
 			<xsl:text>&#160;</xsl:text>
 			<xsl:value-of select="@name" />
 			<xsl:text>;</xsl:text>
