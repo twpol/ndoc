@@ -569,6 +569,7 @@ namespace NDoc.Gui
 			this.propertyGrid.Text = "PropertyGrid";
 			this.propertyGrid.ViewBackColor = System.Drawing.SystemColors.Window;
 			this.propertyGrid.ViewForeColor = System.Drawing.SystemColors.WindowText;
+			this.propertyGrid.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propertyGrid_PropertyValueChanged);
 			// 
 			// viewToolBarButton
 			// 
@@ -1769,7 +1770,12 @@ namespace NDoc.Gui
 				}
 			}
 		}
-		#endregion // Event Handlers
 
+		private void propertyGrid_PropertyValueChanged(object s, System.Windows.Forms.PropertyValueChangedEventArgs e)
+		{
+			propertyGrid.Refresh();
+		}
+
+		#endregion // Event Handlers
 	}
 }

@@ -191,16 +191,20 @@ namespace NDoc.Documenter.Msdn
 		/// <summary>Gets or sets the SplitTOCs property.</summary>
 		[
 		Category("HTML Help Options"),
-		Description("Turning this flag on will generate a separate TOC for each assembly.")
+		Description("Turning this flag on will generate a separate TOC for each assembly. "
+			+ "It cannot be set if SortTOCByNamespace is set or RootPageFileName is specified.")
 		]
 		public bool SplitTOCs
 		{
 			get { return _SplitTOCs; }
 
 			set 
-			{ 
-				_SplitTOCs = value; 
-				SetDirty();
+			{
+				if ((!_SortTOCByNamespace) && (_RootPageFileName.Length == 0))
+				{
+					_SplitTOCs = value; 
+					SetDirty();
+				}
 			}
 		}
 
@@ -287,8 +291,8 @@ namespace NDoc.Documenter.Msdn
 		/// <summary>Gets or sets the RootPageFileName property.</summary>
 		[
 		Category("HTML Help Options"),
-		Description("The name of an html file to be included as the root page. "
-			+ "This root page also becomes the default page.")
+		Description("The name of an html file to be included as the root home page. "
+			+ "SplitTOCs is disabled when this property is set.")
 		]
 		public string RootPageFileName
 		{
@@ -297,6 +301,7 @@ namespace NDoc.Documenter.Msdn
 			set
 			{
 				_RootPageFileName = value;
+				_SplitTOCs = _SplitTOCs && (value.Length == 0);
 				SetDirty();
 			}
 		}
@@ -307,7 +312,7 @@ namespace NDoc.Documenter.Msdn
 		[
 		Category("HTML Help Options"),
 		Description("Sorts the TOC by namespace name. "
-			+ "SplitTOCs is disabled, when this option is selected.")
+			+ "SplitTOCs is disabled when this option is selected.")
 		]
 		public bool SortTOCByNamespace
 		{
@@ -316,6 +321,7 @@ namespace NDoc.Documenter.Msdn
 			set
 			{
 				_SortTOCByNamespace = value;
+				_SplitTOCs = _SplitTOCs && !value;
 				SetDirty();
 			}
 		}
