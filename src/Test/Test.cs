@@ -750,9 +750,9 @@ namespace NDoc.Test
 	/// <summary>This class contains some example code.</summary>
 	/// <example><code>
 	/// public class HelloWorld {
-	///  static void Main() {
-	///   System.Console.WriteLine("Hello, World!");
-	///  }
+	///		static void Main() {
+	///			System.Console.WriteLine("Hello, World!");
+	///		}
 	/// }
 	/// </code></example>
 	public class Example
@@ -1587,6 +1587,74 @@ namespace NDoc.Test
 		{
 		}
 	}
+	/// <summary>
+	/// This class should be visible - it does not have an exclude tag
+	/// </summary>
+	public class VisibleClass
+	{
+		/// <summary>
+		/// This should be visible
+		/// </summary>
+		public int VisibleField;
+
+		/// <summary>
+		/// This should NOT be visible
+		/// </summary>
+		/// <exclude/>
+		public int NotVisibleField;
+
+		/// <summary>
+		/// This should NOT be visible
+		/// </summary>
+		/// <exclude />
+		public int NotVisibleField2;
+
+		/// <summary>
+		/// This should be visible
+		/// </summary>
+		/// <returns></returns>
+		public int VisibleMethod(){return 0;}
+
+		/// <summary>
+		/// This should NOT be visible
+		/// </summary>
+		/// <returns></returns>
+		/// <exclude/>
+		public int NotVisibleMethod(){return 0;}
+
+		/// <overloads>There should only be two overloads visible</overloads>
+		/// <summary>
+		/// This should be visible
+		/// </summary>
+		/// <returns></returns>
+		public int Overload1(){return 0;}
+		/// <summary>
+		/// This should NOT be visible
+		/// </summary>
+		/// <param name="a"></param>
+		/// <returns></returns>
+		/// <exclude />
+		public int Overload1(int a){return 0;}
+		/// <summary>
+		/// This should be visible
+		/// </summary>
+		/// <param name="a"></param>
+		/// <returns></returns>
+		public int Overload1(long a){return 0;}
+	}
+
+	/// <summary>
+	/// This class should NOT be visible - it has an exclude tag
+	/// </summary>
+	/// <exclude/>
+	public class NotVisibleClass
+	{
+		/// <summary>
+		/// This should NOT be visible
+		/// </summary>
+		public int VisibleField;
+
+	}
 }
 
 namespace NDoc.Test.NewStuff
@@ -1767,6 +1835,7 @@ namespace NDoc.Test.NewStuff
 		}
 		#endregion
 	}
+
 	/// <summary>
 	/// This class provides new implementations for the base class members.
 	/// </summary>
@@ -2952,3 +3021,5 @@ namespace NDoc.Test.Preliminary
 		void Method();
 	}
 }
+
+
