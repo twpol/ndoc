@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsl:transform version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-	xmlns:msxsl="urn:schemas-microsoft-com:xslt"
-	xmlns:user="urn:my-scripts" 
-	exclude-result-prefixes="msxsl user">
+	xmlns:NUtil="urn:NDocUtil"
+	exclude-result-prefixes="NUtil" >
 	<!-- -->
 	<xsl:param name="ndoc-vb-syntax" />
 	<!-- -->
@@ -466,17 +465,20 @@
 		<xsl:call-template name="strip-namespace-and-attribute">
 			<xsl:with-param name="name" select="@name" />
 		</xsl:call-template>
-		<xsl:if test="count(property) > 0">
+		<xsl:if test="count(property | field) > 0">
 			<xsl:text>(</xsl:text>
-			<xsl:for-each select="property">
+			<xsl:for-each select="property | field">
 				<xsl:value-of select="@name" />
-				<xsl:text>=</xsl:text>
+				<xsl:text>:=</xsl:text>
 				<xsl:choose>
 					<xsl:when test="@value">
 						<xsl:if test="@type='System.String'">
 							<xsl:text>"</xsl:text>
 						</xsl:if>
-						<xsl:value-of select="@value" />
+						<xsl:choose>
+						<xsl:when test="@type!='System.String'"><xsl:value-of select="NUtil:Replace(@value,'|',' Or ')" /></xsl:when>
+						<xsl:otherwise><xsl:value-of select="@value" /></xsl:otherwise>
+						</xsl:choose>
 						<xsl:if test="@type='System.String'">
 							<xsl:text>"</xsl:text>
 						</xsl:if>

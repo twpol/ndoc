@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+	xmlns:NUtil="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities"
+	xmlns:MSHelp="http://msdn.microsoft.com/mshelp" 
+	exclude-result-prefixes="NUtil">
 	<!-- -->
 	<xsl:include href="syntax-map.xslt" />
 	<!-- -->
@@ -1109,13 +1112,19 @@
 			<xsl:text>(</xsl:text>
 			<xsl:for-each select="property | field">
 				<xsl:value-of select="@name" />
-				<xsl:text>=</xsl:text>
+				<xsl:choose>
+				<xsl:when test="$lang='Visual Basic'"><xsl:text>:=</xsl:text></xsl:when>
+				<xsl:otherwise><xsl:text>=</xsl:text></xsl:otherwise>
+				</xsl:choose>
 				<xsl:choose>
 					<xsl:when test="@value">
 						<xsl:if test="@type='System.String'">
 							<xsl:text>"</xsl:text>
 						</xsl:if>
-						<xsl:value-of select="@value" />
+						<xsl:choose>
+						<xsl:when test="@type!='System.String' and $lang='Visual Basic'"><xsl:value-of select="NUtil:Replace(@value,'|',' Or ')" /></xsl:when>
+						<xsl:otherwise><xsl:value-of select="@value" /></xsl:otherwise>
+						</xsl:choose>
 						<xsl:if test="@type='System.String'">
 							<xsl:text>"</xsl:text>
 						</xsl:if>
