@@ -23,7 +23,6 @@
 			<xsl:if test="local-name()='delegate'">
 				<xsl:call-template name="get-datatype">
 					<xsl:with-param name="datatype" select="@returnType" />
-					<xsl:with-param name="namespace-name" select="../@name" />
 				</xsl:call-template>
 				<xsl:text>&#160;</xsl:text>
 			</xsl:if>
@@ -85,7 +84,6 @@
 						</xsl:attribute>
 						<xsl:call-template name="get-datatype">
 							<xsl:with-param name="datatype" select="@returnType" />
-							<xsl:with-param name="namespace-name" select="../../@name" />
 						</xsl:call-template>
 					</a>
 					<xsl:text>&#160;</xsl:text>
@@ -120,7 +118,6 @@
 			<xsl:otherwise>
 				<xsl:call-template name="get-datatype">
 					<xsl:with-param name="datatype" select="@returnType" />
-					<xsl:with-param name="namespace-name" select="../../@name" />
 				</xsl:call-template>
 				<xsl:text>&#160;</xsl:text>
 				<xsl:value-of select="@name" />
@@ -152,7 +149,6 @@
 				</xsl:attribute>
 				<xsl:call-template name="get-datatype">
 					<xsl:with-param name="datatype" select="@type" />
-					<xsl:with-param name="namespace-name" select="../../@name" />
 				</xsl:call-template>
 			</a>
 			<xsl:text>&#160;</xsl:text>
@@ -290,14 +286,12 @@
 							</xsl:attribute>
 							<xsl:call-template name="get-datatype">
 								<xsl:with-param name="datatype" select="@type" />
-								<xsl:with-param name="namespace-name" select="$namespace-name" />
 							</xsl:call-template>
 						</a>
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:call-template name="get-datatype">
 							<xsl:with-param name="datatype" select="@type" />
-							<xsl:with-param name="namespace-name" select="$namespace-name" />
 						</xsl:call-template>
 					</xsl:otherwise>
 				</xsl:choose>
@@ -320,17 +314,13 @@
 	<!-- -->
 	<xsl:template name="get-datatype">
 		<xsl:param name="datatype" />
-		<xsl:param name="namespace-name" />
-		<xsl:choose>
-			<xsl:when test="contains($datatype, $namespace-name)">
-				<xsl:value-of select="substring-after($datatype, concat($namespace-name, '.'))" />
-			</xsl:when>
-			<xsl:otherwise>
+		<xsl:call-template name="strip-namespace">
+			<xsl:with-param name="name">
 				<xsl:call-template name="csharp-type">
 					<xsl:with-param name="runtime-type" select="$datatype" />
 				</xsl:call-template>
-			</xsl:otherwise>
-		</xsl:choose>
+			</xsl:with-param>
+		</xsl:call-template>
 	</xsl:template>
 	<!-- -->
 	<!-- member.xslt is using this for title and h1.  should try and use parameters template above. -->

@@ -626,4 +626,18 @@
 		</xsl:choose>
 	</xsl:template>
 	<!-- -->
+	<xsl:template name="strip-namespace">
+		<xsl:param name="name" />
+		<xsl:choose>
+			<xsl:when test="contains($name, '.')">
+				<xsl:call-template name="strip-namespace">
+					<xsl:with-param name="name" select="substring-after($name, '.')" />
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="$name" />
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	<!-- -->
 </xsl:stylesheet>

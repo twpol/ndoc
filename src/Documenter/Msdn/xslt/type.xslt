@@ -48,7 +48,6 @@
 				</xsl:attribute>
 				<xsl:call-template name="get-datatype">
 					<xsl:with-param name="datatype" select="$list[$last]/@type" />
-					<xsl:with-param name="namespace-name" select="../@name" />
 				</xsl:call-template>
 			</a>
 			<br />

@@ -255,7 +255,6 @@
 						<b>
 							<xsl:call-template name="get-datatype">
 								<xsl:with-param name="datatype" select="@declaringType" />
-								<xsl:with-param name="namespace-name" select="../../@name" />
 							</xsl:call-template>
 						</b>
 						<xsl:text>)</xsl:text>
@@ -317,7 +316,6 @@
 						<b>
 							<xsl:call-template name="get-datatype">
 								<xsl:with-param name="datatype" select="@declaringType" />
-								<xsl:with-param name="namespace-name" select="../../@name" />
 							</xsl:call-template>
 						</b>
 						<xsl:text>)</xsl:text>
@@ -349,7 +347,9 @@
 				</a>
 				<xsl:text> (inherited from </xsl:text>
 				<b>
-					<xsl:value-of select="@declaringType" />
+					<xsl:call-template name="strip-namespace">
+						<xsl:with-param name="name" select="@declaringType" />
+					</xsl:call-template>
 				</b>
 				<xsl:text>)</xsl:text>
 			</td>

@@ -104,7 +104,6 @@
 				</xsl:attribute>
 				<xsl:call-template name="get-datatype">
 					<xsl:with-param name="datatype" select="substring-after($current/@id, 'T:')" />
-					<xsl:with-param name="namespace-name" select="$namespace" />
 				</xsl:call-template>
 			</a>
 			<br />
