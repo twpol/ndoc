@@ -16,7 +16,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping
 	{
 
 		#region Static Members
-		private static string mapXmlNamespace = "urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.schemas.namespaceMap";
+		private readonly static string mapXmlNamespace = "urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.schemas.namespaceMap";
 
 		private static XmlSchema namespaceMapSchema = null;
 		private static XmlNamespaceManager nsmgr;
@@ -85,6 +85,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping
 				XmlDocument doc = new XmlDocument();
 				doc.Load( reader );
 				map = doc.DocumentElement;
+				Debug.Assert( map != null );
 			}
 			finally
 			{
@@ -174,7 +175,9 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping
 		public void SetSystemNamespace( string systemHelpNamespace )
 		{
 			XmlNode systemNode = map.SelectSingleNode( "//map:managedNamespace[ @ns = 'System' ]", nsmgr );
+			Debug.Assert( systemNode != null );
 			XmlNode helpNSNode = systemNode.SelectSingleNode( "parent::node()/@ns", nsmgr );
+			Debug.Assert( helpNSNode != null );
 			helpNSNode.Value = systemHelpNamespace;
 		}
 
@@ -237,8 +240,10 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping
 
 		private string GetNSFromManagedNameNode( XmlNode node )
 		{
+			Debug.Assert( node != null );
 			Debug.Assert( node.Name == "managedNamespace" );
 			XmlNode helpNSNode = node.SelectSingleNode( "parent::node()/@ns", nsmgr );
+			Debug.Assert( helpNSNode != null );
 			return helpNSNode.Value;
 		}
 
