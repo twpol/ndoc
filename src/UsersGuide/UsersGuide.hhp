@@ -1,0 +1,40 @@
+
+[OPTIONS]
+Binary TOC=No
+Binary Index=Yes
+Compiled File=NDocUsersGuide.chm
+Contents File=contents.HHC
+Index File=index.HHK
+Default Window=
+Default Topic=Content\Default.htm
+Default Font=
+Full-text search=Yes
+Auto Index=Yes
+Language=0x409 English (United States)
+Title=NDoc User's Guide
+Create CHI file=No
+Compatibility=1.1 or later
+Error log file=_errorlog.txt
+
+[WINDOWS]
+
+[FILES]
+Content\blank.htm
+Content\consoleapplication.htm
+Content\Default.htm
+Content\documenters.htm
+Content\documentersgenral.htm
+Content\gettinginvolved.htm
+Content\gettingstarted.htm
+Content\javadoc.htm
+Content\latex.htm
+Content\linear.htm
+Content\msdn.htm
+Content\projectdesigner.htm
+Content\reference.htm
+Content\vsnet.htm
+Content\xml.htm
+Content\css\ndoc.css
+Content\images\sf.GIF
+
+[MERGE FILES]
