@@ -7,8 +7,8 @@
 		<xsl:param name="runtime-type" />
 		<xsl:variable name="old-type">
 			<xsl:choose>
-				<xsl:when test="contains($runtime-type, '[]')">
-					<xsl:value-of select="substring-before($runtime-type, '[]')" />
+				<xsl:when test="contains($runtime-type, '[')">
+					<xsl:value-of select="substring-before($runtime-type, '[')" />
 				</xsl:when>
 				<xsl:when test="contains($runtime-type, '&amp;')">
 					<xsl:value-of select="substring-before($runtime-type, '&amp;')" />
@@ -38,8 +38,8 @@
 			</xsl:choose>
 		</xsl:variable>
 		<xsl:choose>
-			<xsl:when test="contains($runtime-type, '[]')">
-				<xsl:value-of select="concat($new-type, '()')" />
+			<xsl:when test="contains($runtime-type, '[')">
+				<xsl:value-of select="concat($new-type, '(', translate(substring-after($runtime-type, '['), ']', ')'))" />
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:value-of select="$new-type" />
