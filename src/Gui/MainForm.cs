@@ -1280,27 +1280,41 @@ namespace NDoc.Gui
 					//clear current ndoc project settings
 					Clear();
 
+					string warningMessages="";
+
 					foreach (VS.Project p in sol.GetProjects())
 					{
 						string projid = p.ID.ToString();
 						string projconfig = sol.GetProjectConfigName(solconfig, projid);
 
 						if (projconfig == null)
+						{
+							warningMessages += String.Format("VS Project {0} could not be imported.\n- There are no settings in the project file for configuration '{2}'\n\n",p.Name,solconfig);
 							continue;
+						}
 
 						string apath = p.GetRelativeOutputPathForConfiguration(projconfig);
 						string xpath = p.GetRelativePathToDocumentationFile(projconfig);
 						string spath = sol.Directory;
 
-						if ((apath == null) || (xpath == null))
+						AssemblySlashDoc asd = new AssemblySlashDoc();
+						asd.AssemblyFilename=Path.Combine(spath, apath);
+
+						if (!File.Exists(asd.AssemblyFilename))
 						{
-							Debug.WriteLine("! " + apath);
-							continue;
+							warningMessages += String.Format("VS Project '{0}' has been imported, but the specified assembly does not exist.\n- You will not be able to build documentation for this project until its assembly has been successfully compiled...\n\n",p.Name);
 						}
 
-						AssemblySlashDoc asd = new AssemblySlashDoc(
-							Path.Combine(spath, apath),
-							Path.Combine(spath, xpath));
+						if (xpath!=null && xpath.Length>0)
+						{
+							asd.SlashDocFilename=Path.Combine(spath, xpath);
+							warningMessages += String.Format("VS Project '{0}' has been imported, but the XML documentation file specified in the project cannot be found.\n- This can occur if the project is set to do 'incremental' compiles.\n- NDoc output will be very limited until the VS project is rebuilt with XML documntation...\n",p.Name);
+						}
+						else
+						{
+							warningMessages += String.Format("VS Project '{0}' has been imported, but the project is not set to produce XML documentation.\n- NDoc output for this assembly will be very limited...\n\n",p.Name);
+						}
+
 						project.AddAssemblySlashDoc(asd);
 						AddRowToListView(asd);
 					}
@@ -1312,6 +1326,12 @@ namespace NDoc.Gui
 						sol.Directory,
 						sol.Name + ".ndoc");
 					//FileSave(projectFilename);
+
+					if (warningMessages.Length>0)
+					{
+						WarningForm warningForm = new WarningForm("VS Solution Import Warnings", warningMessages);
+						warningForm.ShowDialog(this);
+					}
 				}
 				finally
 				{
