@@ -647,6 +647,7 @@ namespace NDoc.Gui
 			// 
 			// assembliesListView
 			// 
+			this.assembliesListView.AllowDrop = true;
 			this.assembliesListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
 				| System.Windows.Forms.AnchorStyles.Left) 
 				| System.Windows.Forms.AnchorStyles.Right)));
@@ -657,6 +658,8 @@ namespace NDoc.Gui
 			this.assembliesListView.TabIndex = 13;
 			this.assembliesListView.View = System.Windows.Forms.View.List;
 			this.assembliesListView.DoubleClick += new System.EventHandler(this.assembliesListView_DoubleClick);
+			this.assembliesListView.DragDrop += new System.Windows.Forms.DragEventHandler(this.assembliesListView_DragDrop);
+			this.assembliesListView.DragEnter += new System.Windows.Forms.DragEventHandler(this.assembliesListView_DragEnter);
 			this.assembliesListView.SelectedIndexChanged += new System.EventHandler(this.assembliesListView_SelectedIndexChanged);
 			// 
 			// deleteButton
@@ -1930,6 +1933,49 @@ namespace NDoc.Gui
 		private void statusBar_VisibleChanged(object sender, System.EventArgs e)
 		{
 			this.menuViewStatusBar.Checked = this.statusBar.Visible;		
+		}
+
+		private void assembliesListView_DragDrop(object sender, System.Windows.Forms.DragEventArgs e)
+		{
+			string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+			foreach ( AssemblySlashDoc assemblySlashDoc in DragDropHandler.HandleDrop( files ) )
+			{			
+				this.Cursor = Cursors.WaitCursor;
+				try
+				{
+					project.AddAssemblySlashDoc(assemblySlashDoc);
+					AddRowToListView(assemblySlashDoc);
+					EnableMenuItems(true);
+				}
+				catch(Project.AssemblyAlreadyExistsException)
+				{
+					//ignore this exception
+				}
+				catch(ReflectionTypeLoadException ex)
+				{
+					string msg = string.Format(
+						"Unable to load types from {0}.\nIs {1} missing a dependency?", 
+						assemblySlashDoc.AssemblyFilename, Path.GetFileName(assemblySlashDoc.AssemblyFilename));
+					ErrorForm errorForm = new ErrorForm(msg, ex);
+					errorForm.ShowDialog(this);
+				}
+				finally
+				{
+					this.Cursor = Cursors.Default;
+				}
+			}
+		}
+
+		private void assembliesListView_DragEnter(object sender, System.Windows.Forms.DragEventArgs e)
+		{
+			if( e.Data.GetDataPresent(DataFormats.FileDrop) && DragDropHandler.CanDrop( (string[])e.Data.GetData(DataFormats.FileDrop) ) )
+			{
+				e.Effect = DragDropEffects.Link;
+			}
+			else
+			{
+				e.Effect = DragDropEffects.None;
+			}		
 		}
 
 	}
