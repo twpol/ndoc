@@ -17,7 +17,7 @@ using System.Collections;
 using System.Reflection;
 using System.Diagnostics;
 
-namespace NDoc.Core.WB {
+namespace NDoc.Core {
 
 	/// <summary> 
 	/// Class AssemblyResolver resolves assemblies not found by the system.

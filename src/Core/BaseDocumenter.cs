@@ -25,9 +25,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 
-// WB020102
-using NDoc.Core.WB;
-
 namespace NDoc.Core
 {
 	/// <summary>Provides the base class for documenters.</summary>
