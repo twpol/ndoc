@@ -56,9 +56,9 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		//this encoding is used for all generated html...
 		private static readonly UTF8Encoding encoding = new UTF8Encoding( false );
 
-		//for performance reasons we are going to re-use one XsltArguments collection
-		//rather than re-creating an empty one for each transformation
-		// IMPORTANT - any method that adds paramater must be sure to remove them
+ 		//for performance reasons we are going to re-use one XsltArguments collection
+ 		//rather than re-creating an empty one for each transformation
+ 		// IMPORTANT - any method that adds paramater must be sure to remove them
 		/// <summary>
 		/// Xslt arguments passed to each transformation context
 		/// </summary>
@@ -71,9 +71,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <param name="tempFileName">NDoc generated temp xml file</param>
 		/// <param name="outputDirectory">The directory to write the Html files to</param>
 		/// <param name="htmlProvider">Object the provides additional Html content</param>
-		/// <param name="sdkDocVersion">The SDK version to use for System references</param>
-		/// <param name="sdkDocLangCode">The SDK language to use for System references</param>
-		public HtmlFactory( string tempFileName, string outputDirectory, ExternalHtmlProvider htmlProvider, SdkVersion sdkDocVersion, string sdkDocLangCode )
+		/// <param name="config"></param>
+		public HtmlFactory( string tempFileName, string outputDirectory, ExternalHtmlProvider htmlProvider, NativeHtmlHelp2Config config )
 		{			
 			// Load the XML documentation.
 			xmlDocumentation = new XmlDocument();
@@ -102,8 +101,31 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			_outputDirectory = outputDirectory;
 			documentedNamespaces = new ArrayList();
 		
-			fileNameMapper = new FileNameMapper(xmlDocumentation);
+
+
+			string NSName="";
+			string FrameworkVersion="";
+			if ( config.SdkDocVersion == SdkVersion.SDK_v1_0 )
+			{
+				NSName = "ms-help://MS.NETFrameworkSDK";
+				FrameworkVersion="1.0";
+			}
+			else if ( config.SdkDocVersion == SdkVersion.SDK_v1_1 )
+			{
+				NSName = "ms-help://MS.NETFrameworkSDKv1.1";
+				FrameworkVersion="1.1";
+			}
+			else
+				Debug.Assert( false );		// remind ourselves to update this list when new framework versions are supported
+
+			string DocLangCode = Enum.GetName(typeof(SdkLanguage),config.SdkDocLanguage).Replace("_","-");
+			if (DocLangCode != "en")
+				NSName = NSName + "." + DocLangCode;
+
 			nsMapper = new NamespaceMapper( Path.Combine( Directory.GetParent( _outputDirectory ).ToString(), "NamespaceMap.xml" ) );
+			nsMapper.SetSystemNamespace(NSName);
+
+			fileNameMapper = new FileNameMapper(xmlDocumentation);
 			_htmlProvider = htmlProvider;
 			_utilities = new MsdnXsltUtilities( this.nsMapper, this.fileNameMapper );
 
@@ -111,16 +133,15 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			this.Arguments.AddExtensionObject( "urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities", _utilities );
 			this.Arguments.AddExtensionObject( "urn:NDocExternalHtml", _htmlProvider );
 
-			string NSName="";
-			if ( sdkDocVersion == SdkVersion.SDK_v1_0 )
-				NSName = "ms-help://MS.NETFrameworkSDK";
-			else if ( sdkDocVersion == SdkVersion.SDK_v1_1 )
-				NSName = "ms-help://MS.NETFrameworkSDKv1.1";
-			else
-				Debug.Assert( false );		// remind ourselves to update this list when new framework versions are supported
-			if (sdkDocLangCode != "en")
-				NSName = NSName + "." + sdkDocLangCode;
-			nsMapper.SetSystemNamespace(NSName);
+			// add properties passed to the stylesheets
+			this.Arguments.AddParam( "ndoc-title", "", config.Title );
+			this.Arguments.AddParam( "ndoc-document-attributes", "", config.DocumentAttributes );
+			this.Arguments.AddParam( "ndoc-documented-attributes", "", config.DocumentedAttributes );
+			this.Arguments.AddParam( "ndoc-net-framework-version", "", FrameworkVersion );
+			this.Arguments.AddParam( "ndoc-version", "", config.Version );
+			this.Arguments.AddParam( "ndoc-includeHierarchy", "", config.IncludeHierarchy );
+			this.Arguments.AddParam( "ndoc-omit-syntax", "", config.OmitSyntaxSection );
+			
 		}
 
 		#region events
@@ -171,21 +192,11 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <summary>
 		/// loads and compiles all the stylesheets
 		/// </summary>
-		/// <param name="resourceDirectory">The location of the xslt files</param>
-		public void LoadStylesheets( string resourceDirectory )
+		public void LoadStylesheets(string extensibiltyStylesheet)
 		{
-			_stylesheets = StyleSheetCollection.LoadStyleSheets( resourceDirectory );
+			_stylesheets = StyleSheetCollection.LoadStyleSheets(extensibiltyStylesheet);
 		}
 
-		/// <summary>
-		/// loads and compiles all the stylesheets
-		/// </summary>
-		/// <param name="extensibilityStylesheet">Path to an xslt stylesheet used for displaying custom tags</param>
-		/// <param name="resourceDirectory">The location of the xslt files</param>
-		public void LoadStylesheets( string extensibilityStylesheet, string resourceDirectory )
-		{
-			_stylesheets = StyleSheetCollection.LoadStyleSheets( extensibilityStylesheet, resourceDirectory );
-		}
 
 		/// <summary>
 		/// Sets the custom namespace map to use while constructing XLinks
