@@ -204,7 +204,7 @@ namespace NDoc.Gui
 
 			assemblyListControl.AssemblySlashDocs = project.AssemblySlashDocs;
 
-			foreach ( IDocumenter documenter in project.Documenters )
+			foreach ( IDocumenter documenter in InstalledDocumenters.Documenters )
 			{
 				// build a development status string (alpha, beta, etc)
 				string devStatus = string.Empty;
@@ -1011,7 +1011,7 @@ namespace NDoc.Gui
 
 			int index = 0;
 
-			foreach ( IDocumenter documenter in project.Documenters )
+			foreach ( IDocumenter documenter in InstalledDocumenters.Documenters )
 			{
 				if ( documenter.Name == documenterName )
 				{
@@ -1049,7 +1049,7 @@ namespace NDoc.Gui
 				settings.SetSetting( "gui", "detailedAssemblyView", this.assemblyListControl.DetailsView );
 
 				if ( comboBoxDocumenters.SelectedIndex >= 0 )
-					settings.SetSetting( "gui", "documenter", ((IDocumenter)project.Documenters[comboBoxDocumenters.SelectedIndex]).Name );
+					settings.SetSetting( "gui", "documenter", ((IDocumenter)InstalledDocumenters.Documenters[comboBoxDocumenters.SelectedIndex]).Name );
 
 				// Trim our MRU list down to max amount before writing the config.
 				while (recentProjectFilenames.Count > this.options.MRUSize)
@@ -1387,7 +1387,7 @@ namespace NDoc.Gui
 
 		private void menuDocBuildItem_Click(object sender, System.EventArgs e)
 		{
-			IDocumenter documenter = (IDocumenter)project.Documenters[comboBoxDocumenters.SelectedIndex];
+			IDocumenter documenter = (IDocumenter)InstalledDocumenters.Documenters[comboBoxDocumenters.SelectedIndex];
 
 			//make sure the current directory is the project directory
 			if ( projectFilename != untitledProjectName )
@@ -1559,7 +1559,7 @@ namespace NDoc.Gui
 
 		private void menuDocViewItem_Click(object sender, System.EventArgs e)
 		{
-			IDocumenter documenter = (IDocumenter)project.Documenters[comboBoxDocumenters.SelectedIndex];
+			IDocumenter documenter = (IDocumenter)InstalledDocumenters.Documenters[comboBoxDocumenters.SelectedIndex];
 
 			//make sure the current directory is the project directory
 			if ( projectFilename != untitledProjectName )
@@ -1632,7 +1632,7 @@ namespace NDoc.Gui
 		{
 			if ( comboBoxDocumenters.SelectedIndex != -1 )
 			{
-				IDocumenterConfig documenterConfig = ((IDocumenter)project.Documenters[comboBoxDocumenters.SelectedIndex]).Config;
+				IDocumenterConfig documenterConfig = ((IDocumenter)InstalledDocumenters.Documenters[comboBoxDocumenters.SelectedIndex]).Config;
 				propertyGrid.SelectedObject = documenterConfig;
 			}
 		}
@@ -1845,7 +1845,7 @@ namespace NDoc.Gui
 
 		private void assemblyListControl_EditNamespaces(object sender, System.EventArgs e)
 		{
-			IDocumenter documenter = (IDocumenter)project.Documenters[comboBoxDocumenters.SelectedIndex];
+			IDocumenter documenter = (IDocumenter)InstalledDocumenters.Documenters[comboBoxDocumenters.SelectedIndex];
 
 			string message = documenter.CanBuild(project, true);
 			if ( message == null )

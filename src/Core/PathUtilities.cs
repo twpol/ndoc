@@ -27,6 +27,50 @@ namespace NDoc.Core
 		// no public constructor - only static methods...
 		private PathUtilities(){}
 
+		
+		/// <summary>
+		/// Combines the specified path with basePath 
+		/// to form a full path to file or directory.
+		/// </summary>
+		/// <param name="basePath">The reference path.</param>
+		/// <param name="path">The relative or absolute path.</param>
+		/// <returns>
+		/// A rooted path.
+		/// </returns>
+		public static string GetFullPath(string basePath, string path) 
+		{
+			if (path != null && path.Length > 0)
+			{
+				if (!Path.IsPathRooted(path)) 
+				{
+					path = Path.GetFullPath(Path.Combine(basePath, path));
+				}
+			}
+
+			return path;
+		}
+
+		/// <summary>
+		/// Gets the relative path of the passed path with respect to basePath
+		/// </summary>
+		/// <param name="basePath">The reference path.</param>
+		/// <param name="path">The relative or absolute path.</param>
+		/// <returns>
+		/// A relative path.
+		/// </returns>
+		public static string GetRelativePath(string basePath, string path) 
+		{
+			if (path != null && path.Length > 0)
+			{
+				if (Path.IsPathRooted(path)) 
+				{
+					path = PathUtilities.AbsoluteToRelativePath(basePath, path);
+				}
+			}
+
+			return path;
+		}
+
 		/// <summary>
 		/// Converts an absolute path to one relative to the given base directory path
 		/// </summary>

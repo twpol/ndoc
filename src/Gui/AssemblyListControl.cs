@@ -320,17 +320,18 @@ namespace NDoc.Gui
 
 		private void addButton_Click (object sender, System.EventArgs e)
 		{
-			AssemblySlashDocForm  form = new AssemblySlashDocForm();
-
-			form.Text = "Add Assembly Filename and XML Documentation Filename";
-			form.StartPosition = FormStartPosition.CenterParent;
-
-			if ( form.ShowDialog( this ) == System.Windows.Forms.DialogResult.OK )
+			using ( AssemblySlashDocForm  form = new AssemblySlashDocForm() )
 			{
-				if ( this._AssemblySlashDocs.Contains( form.AssySlashDoc ) )
-					MessageBox.Show( this, "The selected assembly already exists in this project", "Duplicate Entry", MessageBoxButtons.OK, MessageBoxIcon.Asterisk );
-				else
-					_AssemblySlashDocs.Add( form.AssySlashDoc );
+				form.Text = "Add Assembly Filename and XML Documentation Filename";
+				form.StartPosition = FormStartPosition.CenterParent;
+
+				if ( form.ShowDialog( this ) == System.Windows.Forms.DialogResult.OK )
+				{
+					if ( this._AssemblySlashDocs.Contains( form.AssySlashDoc ) )
+						MessageBox.Show( this, "The selected assembly already exists in this project", "Duplicate Entry", MessageBoxButtons.OK, MessageBoxIcon.Asterisk );
+					else
+						_AssemblySlashDocs.Add( form.AssySlashDoc );
+				}
 			}
 		}
 
@@ -338,24 +339,24 @@ namespace NDoc.Gui
 		{
 			if ( assembliesListView.SelectedItems.Count > 0 )
 			{
-				AssemblySlashDocForm form = new AssemblySlashDocForm();
-
-				form.Text = "Edit Assembly Filename and XML Documentation Filename";
-				form.StartPosition = FormStartPosition.CenterParent;
-
-				ListViewItem item = assembliesListView.SelectedItems[0];
-				form.AssySlashDoc = ((AssemblySlashDoc)item.Tag).Clone() as AssemblySlashDoc;
-
-				if ( form.ShowDialog(this) == System.Windows.Forms.DialogResult.OK )
+				using ( AssemblySlashDocForm form = new AssemblySlashDocForm() )
 				{
-					this.assembliesListView.BeginUpdate();
+					form.Text = "Edit Assembly Filename and XML Documentation Filename";
+					form.StartPosition = FormStartPosition.CenterParent;
 
-					this._AssemblySlashDocs.Remove( (AssemblySlashDoc)item.Tag );
-					this._AssemblySlashDocs.Add( form.AssySlashDoc );
+					ListViewItem item = assembliesListView.SelectedItems[0];
+					form.AssySlashDoc = ((AssemblySlashDoc)item.Tag).Clone() as AssemblySlashDoc;
 
-					this.assembliesListView.EndUpdate();
+					if ( form.ShowDialog(this) == System.Windows.Forms.DialogResult.OK )
+					{
+						this.assembliesListView.BeginUpdate();
+
+						this._AssemblySlashDocs.Remove( (AssemblySlashDoc)item.Tag );
+						this._AssemblySlashDocs.Add( form.AssySlashDoc );
+
+						this.assembliesListView.EndUpdate();
+					}
 				}
-
 				this.Refresh();
 			}
 		}

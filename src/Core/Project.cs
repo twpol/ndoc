@@ -32,7 +32,6 @@ namespace NDoc.Core
 		public Project()
 		{
 			_IsDirty = false;
-			_probePath = new ArrayList();
 			_referencePaths = new ReferencePathCollection();
 			_namespaces = new Namespaces();
 			_namespaces.ContentsChanged += new EventHandler(ContentsChanged);
@@ -179,16 +178,7 @@ namespace NDoc.Core
 		/// </returns>
 		public string GetFullPath(string path) 
 		{
-
-			if (path != null && path.Length > 0)
-			{
-				if (!Path.IsPathRooted(path)) 
-				{
-					path = Path.GetFullPath(Path.Combine(BaseDirectory, path));
-				}
-			}
-
-			return path;
+			return PathUtilities.GetFullPath( BaseDirectory, path );
 		}
 
 		/// <summary>
@@ -201,19 +191,8 @@ namespace NDoc.Core
 		/// </returns>
 		public string GetRelativePath(string path) 
 		{
-
-			if (path != null && path.Length > 0)
-			{
-				if (Path.IsPathRooted(path)) 
-				{
-					path = PathUtilities.AbsoluteToRelativePath(BaseDirectory, path);
-				}
-			}
-
-			return path;
+			return PathUtilities.GetRelativePath( BaseDirectory, path );
 		}
-
-
 		#endregion
 
 		#region Namespaces
@@ -228,152 +207,6 @@ namespace NDoc.Core
 		{
 			get { return _namespaces; }
 		} 
-
-		#endregion
-
-		#region Documenters
-
-		private ArrayList _Documenters;
-
-		/// <summary>
-		/// Gets the list of available documenters.
-		/// </summary>
-		public ArrayList Documenters
-		{
-			get
-			{
-				if (_Documenters == null)
-				{
-					_Documenters = FindDocumenters();
-				}
-				return _Documenters;
-			}
-		}
-
-		/// <summary>
-		/// Holds the list of directories that will be scanned for documenters.
-		/// </summary>
-		private ArrayList _probePath;
-
-		/// <summary>
-		/// Appends the specified directory to the documenter probe path.
-		/// </summary>
-		/// <param name="path">The directory to add to the probe path.</param>
-		/// <exception cref="ArgumentNullException"><paramref name="path" /> is <see langword="null" />.</exception>
-		/// <exception cref="ArgumentException"><paramref name="path" /> is a zero-length <see cref="string" />.</exception>
-		/// <remarks>
-		/// <para>
-		/// The probe path is the list of directories that will be scanned for
-		/// assemblies that have classes implementing <see cref="IDocumenter" />.
-		/// </para>
-		/// </remarks>
-		public void AppendProbePath(string path) 
-		{
-			if (path == null)
-			{
-				throw new ArgumentNullException("path");
-			}
-
-			if (path.Length == 0)
-			{
-				throw new ArgumentException("A zero-length string is not a valid value.", "path");
-			}
-
-			// resolve relative path to full path
-			string fullPath = GetFullPath(path);
-
-			if (!_probePath.Contains(fullPath)) 
-			{
-				_probePath.Add(fullPath);
-			}
-		}
-
-		/// <summary>
-		/// Searches the module directory and all directories in the probe path
-		/// for assemblies containing classes that implement <see cref="IDocumenter" />.
-		/// </summary>
-		/// <returns>
-		/// An <see cref="ArrayList" /> containing new instances of all the 
-		/// found documenters.
-		/// </returns>
-		private ArrayList FindDocumenters()
-		{
-			ArrayList documenters = new ArrayList();
-
-#if MONO //System.Windows.Forms.Application.StartupPath is not implemented in mono v0.31
-			string mainModuleDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-#else
-			string mainModuleDirectory = System.Windows.Forms.Application.StartupPath;
-#endif
-			// make sure module directory is probed
-			AppendProbePath(mainModuleDirectory);
-
-			// scan all assemblies in probe path for documenters
-			foreach (string path in _probePath) 
-			{
-				// find documenters in given path
-				FindDocumentersInPath(documenters, path);
-			}
-
-			// sort documenters
-			documenters.Sort();
-
-			return documenters;
-		}
-
-		/// <summary>
-		/// Searches the specified directory for assemblies containing classes 
-		/// that implement <see cref="IDocumenter" />.
-		/// </summary>
-		/// <param name="documenters">The collection of <see cref="IDocumenter" /> instances to fill.</param>
-		/// <param name="path">The directory to scan for assemblies containing documenters.</param>
-		private void FindDocumentersInPath(ArrayList documenters, string path) 
-		{
-			foreach (string fileName in Directory.GetFiles(path, "NDoc.Documenter.*.dll")) 
-			{
-				Assembly assembly = null;
-
-				try
-				{
-					assembly = Assembly.LoadFrom(fileName);
-				}
-				catch (BadImageFormatException) 
-				{
-					// The DLL must not be a .NET assembly.
-					// Don't need to do anything since the
-					// assembly reference should still be null.
-					Debug.WriteLine("BadImageFormatException loading " + fileName);
-				}
-
-				if (assembly != null) 
-				{
-					try 
-					{
-						foreach (Type type in assembly.GetTypes()) 
-						{
-							if (type.IsClass && !type.IsAbstract && (type.GetInterface("NDoc.Core.IDocumenter") != null))
-							{
-								IDocumenter documenter = Activator.CreateInstance(type) as IDocumenter;
-								if (documenter != null)
-								{
-									documenter.Config.SetProject(this);
-									documenters.Add(documenter);
-								}
-								else
-								{
-									Trace.WriteLine(String.Format("Documenter {0} in file {1} does not implement a current version of IDocumenter and so was not instantiated.", type.FullName, fileName));
-								}
-							}
-						}
-					}
-					catch (ReflectionTypeLoadException) 
-					{
-						// eat this exception and just ignore this assembly
-						Debug.WriteLine("ReflectionTypeLoadException reflecting " + fileName);
-					}
-				}
-			}
-		}
 
 		#endregion
 
@@ -514,7 +347,7 @@ namespace NDoc.Core
 		/// <summary>Retrieves a documenter by name.</summary>
 		public IDocumenter GetDocumenter(string name)
 		{
-			foreach (IDocumenter documenter in Documenters)
+			foreach (IDocumenter documenter in InstalledDocumenters.Documenters)
 			{
 				if (documenter.Name == name)
 				{
@@ -605,11 +438,11 @@ namespace NDoc.Core
 
 		private void WriteDocumenters(XmlWriter writer)
 		{
-			if (Documenters.Count > 0)
+			if (InstalledDocumenters.Documenters.Count > 0)
 			{
 				writer.WriteStartElement("documenters");
 
-				foreach (IDocumenter documenter in Documenters)
+				foreach (IDocumenter documenter in InstalledDocumenters.Documenters)
 				{
 					documenter.Config.Write(writer);
 				}
@@ -627,7 +460,7 @@ namespace NDoc.Core
 			if (_namespaces != null) _namespaces = new Namespaces();
 			if (_referencePaths != null) _referencePaths = new ReferencePathCollection();
 
-			foreach (IDocumenter documenter in Documenters)
+			foreach (IDocumenter documenter in InstalledDocumenters.Documenters)
 			{
 				documenter.Clear();
 				documenter.Config.SetProject(this);
@@ -702,6 +535,4 @@ namespace NDoc.Core
 			System.Runtime.Serialization.SerializationInfo info, 
 			System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
 	}
-
-
 }

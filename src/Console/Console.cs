@@ -44,9 +44,9 @@ namespace NDoc.ConsoleApplication
 				if (documenter == null)
 				{
 					//MSDN documenter not found, pick the first one available.
-					if (project.Documenters.Count > 0)
+					if (InstalledDocumenters.Documenters.Count > 0)
 					{
-						documenter = (IDocumenter)project.Documenters[0];
+						documenter = (IDocumenter)InstalledDocumenters.Documenters[0];
 					}
 					else
 					{
@@ -256,7 +256,7 @@ namespace NDoc.ConsoleApplication
 		private static void WriteHelpAvailableDocumenters()
 		{
 			Console.Write("available documenters: ");
-			ArrayList docs = project.Documenters;
+			ArrayList docs = InstalledDocumenters.Documenters;
 			for (int i = 0; i < docs.Count; i++)
 			{
 				if (i > 0) Console.Write(", ");
