@@ -4,7 +4,7 @@
 		<title>exception</title>
 		<meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5">
 		<link href="css/ndoc.css" rel="stylesheet" name="ndocstyle" type="text/css">
-		<script src="script/ndoc.js"></script>
+		<script src="script/ndoc_tags.js"></script>
 	</head>
 	<body class="dtBODY" id="bodyID" onload="InitTitle()">
 		<div id="nstext">
@@ -28,28 +28,29 @@
 			<p>
 				This tag is applied to a method definition.</p>
 			<h4 class="dtH4">Example</h4>
-			<pre class="code"><SPAN class="lang">[C#]</SPAN>
-using System;
+			<pre class="csharpcode"><SPAN class="lang">[C#]</SPAN>
+<span class="kwrd">using</span> System;
 
-/// comment for class
-public class EClass : Exception 
+<span class="rem">/// comment for class</span>
+<span class="kwrd">public</span> <span class="kwrd">class</span> EClass : Exception 
 {
-   // class definition ...
+   <span class="rem">// class definition ...</span>
 }
 
-/// &lt;exception cref="System.Exception"&gt;Thrown when... .&lt;/exception&gt;
-class TestClass 
+<span class="rem">/// &lt;exception cref="System.Exception"&gt;Thrown when... .&lt;/exception&gt;</span>
+<span class="kwrd">class</span> TestClass 
 {
-   public static void Main() 
+   <span class="kwrd">public</span> <span class="kwrd">static</span> <span class="kwrd">void</span> Main() 
    {
-      try 
+      <span class="kwrd">try</span> 
       {
       }
-      catch(EClass) 
+      <span class="kwrd">catch</span>(EClass) 
       {
       }
    }
-}</pre>
+}
+</pre>
 			<h4 class="dtH4">See Also</h4>
 			<p><a href="tags.htm"> NDoc&nbsp;Tags</a></p>
 		</div>

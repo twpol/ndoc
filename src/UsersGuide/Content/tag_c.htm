@@ -4,40 +4,38 @@
 		<title>c</title>
 		<meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5">
 		<link href="css/ndoc.css" rel="stylesheet" name="ndocstyle" type="text/css">
-		<script src="script/ndoc.js"></script>
+		<script src="script/ndoc_tags.js"></script>
 	</head>
 	<body class="dtBODY" id="bodyID" onload="InitTitle()">
 		<div id="nstext">
-			<p>The &lt;c&gt; tag is used to indicate that text within a description 
-				should be marked as code.</p>
+			<p>The &lt;c&gt; tag is used to indicate that text within a description should be 
+				marked as code.</p>
 			<pre class="syntax">&lt;c&gt;<I>text</I>&lt;/c&gt;</pre>
 			<p>where:</p>
 			<dl>
-				<dt><I>text</I></dt>
-				<dd>
-					The text you would like to indicate as code.</dd>
+				<dt><I>text</I>
+					<dd>
+						The text you would like to indicate as code.</dd>
 			</dl>
 			<h4 class="dtH4">Applies To</h4>
 			<p>Can be used inline within any other markup.</p>
 			<h4 class="dtH4">Remarks</h4>
 			<p>Use <a href="tag_code.htm">&lt;code&gt;</a> to indicate multiple lines as code.</p>
 			<h4 class="dtH4">Example</h4>
-			<pre class="code"><SPAN class="lang">[C#]</SPAN>
-/// text for class MyClass
-public class MyClass 
+			<PRE class="csharpcode"><SPAN class="lang">[C#]</SPAN>
+<SPAN class=kwrd>public</SPAN> <SPAN class=kwrd>class</SPAN> MyClass 
 {
-   /// &lt;summary&gt;&lt;c&gt;MyMethod&lt;/c&gt; is a method in the &lt;c&gt;MyClass&lt;/c&gt; class.
-   /// &lt;/summary&gt;
-   public static void MyMethod(int Int1) 
+   <SPAN class=rem>/// &lt;summary&gt;</SPAN>
+   <SPAN class=rem>/// &lt;c&gt;MyMethod&lt;/c&gt; is a method in the &lt;c&gt;MyClass&lt;/c&gt; class.</SPAN>
+   <SPAN class=rem>/// &lt;/summary&gt;</SPAN>
+   <SPAN class=kwrd>public</SPAN> <SPAN class=kwrd>static</SPAN> <SPAN class=kwrd>void</SPAN> MyMethod(<SPAN class=kwrd>int</SPAN> Int1) 
    {
    }
-   /// text for Main
-   public static void Main () 
-   {
-   }
-}</pre>
+}</PRE>
 			<h4 class="dtH4">See Also</h4>
-			<p><a href="tags.htm"> NDoc&nbsp;Tags</a></p>
+			<p>
+				<a href="tags.htm">NDoc&nbsp;Tags</a>&nbsp;&nbsp; <a href="tag_code.htm">&lt;code&gt;</a>
+			</p>
 		</div>
 	</body>
 </html>

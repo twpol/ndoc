@@ -4,7 +4,7 @@
 		<title>remarks</title>
 		<meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5">
 		<link href="css/ndoc.css" rel="stylesheet" name="ndocstyle" type="text/css">
-		<script src="script/ndoc.js"></script>
+		<script src="script/ndoc_tags.js"></script>
 	</head>
 	<body class="dtBODY" id="bodyID" onload="InitTitle()">
 		<div id="nstext">
@@ -22,17 +22,17 @@
 			<p>All Types and Members.</p>
 			<h4 class="dtH4">Remarks</h4>
 			<h4 class="dtH4">Example</h4>
-			<pre class="code"><SPAN class="lang">[C#]</SPAN>
-/// &lt;summary&gt;
-/// You may have some primary information about this class.
-/// &lt;/summary&gt;
-/// &lt;remarks&gt;
-/// You may have some additional information about this class.
-/// &lt;/remarks&gt;
-public class MyClass
+			<pre class="csharpcode"><SPAN class="lang">[C#]</SPAN>
+<span class="rem">/// &lt;summary&gt;</span>
+<span class="rem">/// You may have some primary information about this class.</span>
+<span class="rem">/// &lt;/summary&gt;</span>
+<span class="rem">/// &lt;remarks&gt;</span>
+<span class="rem">/// You may have some additional information about this class.</span>
+<span class="rem">/// &lt;/remarks&gt;</span>
+<span class="kwrd">public</span> <span class="kwrd">class</span> MyClass
 {
-   /// text for Main
-   public static void Main ()
+   <span class="rem">/// text for Main</span>
+   <span class="kwrd">public</span> <span class="kwrd">static</span> <span class="kwrd">void</span> Main ()
    {
    }
 }</pre>

@@ -4,7 +4,7 @@
 		<title>permission</title>
 		<meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5">
 		<link href="css/ndoc.css" rel="stylesheet" name="ndocstyle" type="text/css" />
-		<script src="script/ndoc.js"></script>
+		<script src="script/ndoc_tags.js"></script>
 	</head>
 	<body class="dtBODY" id="bodyID" onload="InitTitle()">
 		<div id="nstext">
@@ -27,15 +27,15 @@
 			<p>The &lt;permission&gt; tag lets you document the access of a member. The <B>System.Security.PermissionSet</B>
 				lets you specify access to a member.</p>
 			<h4 class="dtH4">Example</h4>
-			<pre class="code"><SPAN class="lang">[C#]</SPAN>
-using System;
-class TestClass
+			<pre class="csharpcode"><SPAN class="lang">[C#]</SPAN>
+<span class="kwrd">using</span> System;
+<span class="kwrd">class</span> TestClass
 {
-   /// &lt;permission cref="System.Security.PermissionSet"&gt;Everyone can access this method.&lt;/permission&gt;
-   public static void Test()
+   <span class="rem">/// &lt;permission cref="System.Security.PermissionSet"&gt;Everyone can access this method.&lt;/permission&gt;</span>
+   <span class="kwrd">public</span> <span class="kwrd">static</span> <span class="kwrd">void</span> Test()
    {
    }
-   public static void Main()
+   <span class="kwrd">public</span> <span class="kwrd">static</span> <span class="kwrd">void</span> Main()
    {
    }
 }</pre>
