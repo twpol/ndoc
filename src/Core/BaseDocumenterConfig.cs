@@ -591,7 +591,6 @@ namespace NDoc.Core
 			}
 		}
 
-#if DEBUG
 		string _UseNDocXmlFile = string.Empty;
 
 		/// <summary>Gets or sets the UseNDocXmlFile property.</summary>
@@ -609,7 +608,6 @@ namespace NDoc.Core
 				SetDirty();
 			}
 		}
-#endif
 	}
 
 	/// <summary>
