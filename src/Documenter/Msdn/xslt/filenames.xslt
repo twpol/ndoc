@@ -173,6 +173,11 @@
     <xsl:value-of select="concat('ms-help://MS.NETFrameworkSDK/cpref/html/frlrf', translate(@declaringType, '.[,]', ''), 'Class', translate(@name, '.[,]', ''), 'Topic.htm')" />
   </xsl:template>
   <!-- -->
+  <xsl:template name="get-filename-for-system-field">
+    <!-- RTM Example: ms-help://MS.NETFrameworkSDK/cpref/html/frlrfsystemresourcesresourcemanagerclassheaderversionnumbertopic.htm -->
+    <xsl:value-of select="concat('ms-help://MS.NETFrameworkSDK/cpref/html/frlrf', translate(@declaringType, '.[,]', ''), 'Class', translate(@name, '.[,]', ''), 'Topic.htm')" />
+  </xsl:template>
+  <!-- -->
   <xsl:template name="get-filename-for-system-method">
     <!-- RTM Example: ms-help://MS.NETFrameworkSDK/cpref/html/frlrfsystemobjectclassequalstopic.htm -->
     <xsl:value-of select="concat('ms-help://MS.NETFrameworkSDK/cpref/html/frlrf', translate(@declaringType, '.[,]', ''), 'Class', translate(@name, '.[,]', ''), 'Topic.htm')" />

@@ -473,6 +473,47 @@
 		</tr>
 	</xsl:template>
 	<!-- -->
+	<xsl:template match="field[@declaringType and starts-with(@declaringType, 'System.')]">
+		<xsl:text>&#10;</xsl:text>
+		<tr VALIGN="top">
+			<td width="50%">
+				<xsl:choose>
+					<xsl:when test="@access='Public'">
+						<img src="pubfield.gif" />
+					</xsl:when>
+					<xsl:when test="@access='Family'">
+						<img src="protfield.gif" />
+					</xsl:when>
+					<xsl:when test="@access='Private'">
+						<img src="privfield.gif" />
+					</xsl:when>
+					<xsl:when test="@access='Assembly' or @access='FamilyOrAssembly'">
+						<img src="intfield.gif" />
+					</xsl:when>
+				</xsl:choose>
+				<xsl:if test="@contract='Static'">
+					<img src="static.gif" />
+				</xsl:if>
+				<a>
+					<xsl:attribute name="href">
+						<xsl:call-template name="get-filename-for-system-field" />
+					</xsl:attribute>
+					<xsl:value-of select="@name" />
+				</a>
+				<xsl:text> (inherited from </xsl:text>
+				<b>
+					<xsl:call-template name="strip-namespace">
+						<xsl:with-param name="name" select="@declaringType" />
+					</xsl:call-template>
+				</b>
+				<xsl:text>)</xsl:text>
+			</td>
+			<td width="50%">
+				<xsl:call-template name="summary-with-no-paragraph" />
+			</td>
+		</tr>
+	</xsl:template>
+	<!-- -->
 	<xsl:template match="method[@declaringType]">
 		<xsl:variable name="name" select="@name" />
 		<xsl:variable name="declaring-type-id" select="concat('T:', @declaringType)" />
