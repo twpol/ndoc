@@ -12,7 +12,7 @@ namespace NDoc.Documenter.Msdn
 		/// <summary>
 		/// Creates a new instance of the class
 		/// </summary>
-		public MsdnDocumenterInfo() : base( "Msdn" )
+		public MsdnDocumenterInfo() : base( "MSDN" )
 		{
 		}
 
