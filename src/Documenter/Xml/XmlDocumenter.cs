@@ -72,11 +72,10 @@ namespace NDoc.Documenter.Xml
 			}
 
 			string buffer = XmlBuffer;
-			using (StreamWriter sr = File.CreateText(config.OutputFile))
+			using (StreamWriter sr = new StreamWriter(config.OutputFile, false, System.Text.Encoding.Unicode))
 			{
 				sr.Write(buffer);
 			}
-			//Document.Save(config.OutputFile);
 
 			OnDocBuildingStep(100, "Done.");
 		}
