@@ -36,6 +36,8 @@ namespace NDoc.Core
 
 		bool _includeFavorites = false;
 
+		bool _generateTocOnly;
+
 		StreamWriter streamHtmlHelp = null;
 
 		ArrayList _tocFiles = new ArrayList();
@@ -51,13 +53,14 @@ namespace NDoc.Core
 			string directoryName, 
 			string projectName, 
 			string defaultTopic,
-			string htmlHelpCompiler)
+			string htmlHelpCompiler,
+			bool generateTocOnly)
 		{
 			_directoryName = directoryName;
 			_projectName = projectName;
 			_defaultTopic = defaultTopic;
-
 			_htmlHelpCompiler = htmlHelpCompiler;
+			_generateTocOnly = generateTocOnly;
 		}
 
 		/// <summary>Gets the directory name containing the HTML Help files.</summary>
@@ -100,7 +103,7 @@ namespace NDoc.Core
 			return _projectName + ".hhp";
 		}
 
-		private string GetContentsFilename()
+		public string GetContentsFilename()
 		{
 			return (_tocFiles.Count > 0) ? (string)_tocFiles[0] : string.Empty;
 		}
@@ -120,22 +123,26 @@ namespace NDoc.Core
 			return _projectName + ".chm";
 		}
 
-		private string GetPathToProjectFile()
+		/// <summary>Gets the path the the HHP file.</summary>
+		public string GetPathToProjectFile()
 		{
 			return Path.Combine(_directoryName, _projectName) + ".hhp";
 		}
 
-		private string GetPathToContentsFile()
+		/// <summary>Gets the path the the HHC file.</summary>
+		public string GetPathToContentsFile()
 		{
 			return Path.Combine(_directoryName, GetContentsFilename());
 		}
 
-		private string GetPathToIndexFile()
+		/// <summary>Gets the path the the HHK file.</summary>
+		public string GetPathToIndexFile()
 		{
 			return Path.Combine(_directoryName, _projectName) + ".hhk";
 		}
 
-		private string GetPathToLogFile()
+		/// <summary>Gets the path the the LOG file.</summary>
+		public string GetPathToLogFile()
 		{
 			return Path.Combine(_directoryName, _projectName) + ".log";
 		}
@@ -150,8 +157,10 @@ namespace NDoc.Core
 		/// <summary>Opens an HTML Help project file for writing.</summary>
 		public void OpenProjectFile()
 		{
-			streamHtmlHelp = new StreamWriter(File.Open(GetPathToProjectFile(), FileMode.Create));
+			if (_generateTocOnly) 
+				return;
 
+			streamHtmlHelp = new StreamWriter(File.Open(GetPathToProjectFile(), FileMode.Create));
 			streamHtmlHelp.Write("[FILES]\n");
 		}
 
@@ -159,12 +168,18 @@ namespace NDoc.Core
 		/// <param name="filename">The filename to add.</param>
 		public void AddFileToProject(string filename)
 		{
+			if (_generateTocOnly) 
+				return;
+
 			streamHtmlHelp.Write(filename + "\n");
 		}
 
 		/// <summary>Closes the HTML Help project file.</summary>
 		public void CloseProjectFile()
 		{
+			if (_generateTocOnly) 
+				return;
+
 			string options;
 
 			if (_includeFavorites)
@@ -176,7 +191,7 @@ namespace NDoc.Core
 				options = "0x62520,220";						  
 			}
 
-			if (_defaultTopic == "index.html")
+			if (_defaultTopic == "default.html")
 			{
 				options += ",0x387e,[86,51,872,558],,,,,,,0";
 			}
@@ -295,6 +310,9 @@ namespace NDoc.Core
 		/// <remarks>The HTML Help Compiler will complain if this file doesn't exist.</remarks>
 		public void WriteEmptyIndexFile()
 		{
+			if (_generateTocOnly) 
+				return;
+
 			// Create an empty index file to avoid compilation errors.
 
 			XmlTextWriter indexWriter = new XmlTextWriter(GetPathToIndexFile(), null);
@@ -315,6 +333,9 @@ namespace NDoc.Core
 		/// <summary>Compiles the HTML Help project.</summary>
 		public void CompileProject()
 		{
+			if (_generateTocOnly) 
+				return;
+
 			Process helpCompileProcess = new Process();
 
 			try

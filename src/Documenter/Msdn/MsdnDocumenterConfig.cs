@@ -48,7 +48,7 @@ namespace NDoc.Documenter.Msdn
 
 			_IncludeHierarchy = false;
 			_ShowVisualBasic = false;
-			_OmitObjectTags = false;
+			_OutputTarget = OutputType.HtmlHelpAndWeb;
 
 			_RootPageContainsNamespaces = false;
 		}
@@ -267,25 +267,6 @@ namespace NDoc.Documenter.Msdn
 			}
 		}
 
-		private bool _OmitObjectTags;
-
-		/// <summary>Gets or sets the OmitObjectTags property.</summary>
-		[
-		Category("HTML Help Options"),
-		Description("Set this to true to not output the <object> tags used by the HTML Help compiler.")
-		]
-		public bool OmitObjectTags
-		{
-			get { return _OmitObjectTags; }
-
-			set 
-			{ 
-				_OmitObjectTags = value; 
-				SetDirty();
-			}
-		}
-
-
 		string _RootPageTOCName;
 
 		/// <summary>Gets or sets the RootPageTOCName property.</summary>
@@ -368,5 +349,40 @@ namespace NDoc.Documenter.Msdn
 				SetDirty();
 			}
 		}
+
+		private OutputType _OutputTarget;
+
+		/// <summary>Gets or sets the OutputTarget property.</summary>
+		[
+		Category("Documentation Main Settings"),
+		Description("Sets this property to .")
+		]
+		public OutputType OutputTarget
+		{
+			get { return _OutputTarget; }
+
+			set 
+			{ 
+				_OutputTarget = value; 
+				SetDirty();
+			}
+		}
+
+	}
+
+	/// <summary>
+	/// Defines the output types for this documenter.
+	/// </summary>
+	[Flags]
+	public enum OutputType
+	{
+		/// <summary>Output only an HTML Help file (.chm).</summary>
+		HtmlHelp = 1,
+
+		/// <summary>Output only Web pages.</summary>
+		Web = 2,
+
+		/// <summary>Output both HTML Help and Web.</summary>
+		HtmlHelpAndWeb = HtmlHelp | Web
 	}
 }

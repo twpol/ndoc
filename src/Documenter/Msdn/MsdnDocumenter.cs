@@ -95,8 +95,15 @@ namespace NDoc.Documenter.Msdn
 		{ 
 			get 
 			{
-				return Path.Combine(MyConfig.OutputDirectory, 
-					MyConfig.HtmlHelpName + ".chm");
+				if ((MyConfig.OutputTarget & OutputType.HtmlHelp) > 0)
+				{
+					return Path.Combine(MyConfig.OutputDirectory, 
+						MyConfig.HtmlHelpName + ".chm");
+				}
+				else
+				{
+					return Path.Combine(MyConfig.OutputDirectory, "index.html");
+				}
 			} 
 		}
 
@@ -151,19 +158,14 @@ namespace NDoc.Documenter.Msdn
 					resourceDirectory = Path.GetFullPath(Path.Combine(mainModuleDirectory, @"..\..\..\Documenter\Msdn\"));
 				#else
 
-					resourceDirectory = Path.Combine(Path.Combine(
-						Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-						"NDoc"), "MSDN");
+				resourceDirectory = Path.Combine(Path.Combine(
+					Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+					"NDoc"), "MSDN");
 
-					EmbeddedResources.WriteEmbeddedResources(
-						this.GetType().Module.Assembly,
-						"NDoc.Documenter.Msdn.css",
-						Path.Combine(resourceDirectory, "css"));
-
-					EmbeddedResources.WriteEmbeddedResources(
-						this.GetType().Module.Assembly,
-						"NDoc.Documenter.Msdn.xslt",
-						Path.Combine(resourceDirectory, "xslt"));
+				EmbeddedResources.WriteEmbeddedResources(
+					this.GetType().Module.Assembly,
+					"NDoc.Documenter.Msdn.xslt",
+					Path.Combine(resourceDirectory, "xslt"));
 				#endif
 
 				// Create the html output directory if it doesn't exist.
@@ -172,10 +174,11 @@ namespace NDoc.Documenter.Msdn
 					Directory.CreateDirectory(MyConfig.OutputDirectory);
 				}
 
-				// Copy our cascading style sheet to the html output directory
-				string cssfile = Path.Combine(MyConfig.OutputDirectory, "MSDN.css");
-				File.Copy(Path.Combine(Path.Combine(resourceDirectory, "css"), "MSDN.css"), cssfile, true);
-				File.SetAttributes(cssfile, FileAttributes.Normal); //ensure it's not read only
+				// Write the embedded css files to the html output directory
+				EmbeddedResources.WriteEmbeddedResources(
+					this.GetType().Module.Assembly,
+					"NDoc.Documenter.Msdn.css",
+					MyConfig.OutputDirectory);
 
 				// Write the embedded icons to the html output directory
 				EmbeddedResources.WriteEmbeddedResources(
@@ -217,7 +220,7 @@ namespace NDoc.Documenter.Msdn
 				if ((MyConfig.RootPageFileName != null) && (MyConfig.RootPageFileName != string.Empty))
 				{
 					rootPageFileName = MyConfig.RootPageFileName;
-					defaultTopic = "index.html";
+					defaultTopic = "default.html";
 
 					// what to call the top page in the table of contents?
 					if ((MyConfig.RootPageTOCName != null) && (MyConfig.RootPageTOCName != string.Empty))
@@ -233,15 +236,16 @@ namespace NDoc.Documenter.Msdn
 					MyConfig.OutputDirectory,
 					MyConfig.HtmlHelpName,
 					defaultTopic,
-					compiler);
+					compiler,
+					((MyConfig.OutputTarget & OutputType.HtmlHelp) == 0));
 
 				htmlHelp.IncludeFavorites = MyConfig.IncludeFavorites;
 
-				OnDocBuildingStep(40, "Loading XSLT files...");
+				OnDocBuildingStep(30, "Loading XSLT files...");
 
 				MakeTransforms();
 
-				OnDocBuildingStep(60, "Generating HTML pages...");
+				OnDocBuildingStep(40, "Generating HTML pages...");
 
 				htmlHelp.OpenProjectFile();
 
@@ -271,7 +275,7 @@ namespace NDoc.Documenter.Msdn
 						}
 
 						// add the file
-						string rootPageOutputName = Path.Combine(MyConfig.OutputDirectory, "index.html");
+						string rootPageOutputName = Path.Combine(MyConfig.OutputDirectory, "default.html");
 						if (Path.GetFullPath(rootPageFileName) != Path.GetFullPath(rootPageOutputName))
 						{
 							if (File.Exists(rootPageOutputName))
@@ -309,8 +313,37 @@ namespace NDoc.Documenter.Msdn
 
 				htmlHelp.WriteEmptyIndexFile();
 
-				OnDocBuildingStep(85, "Compiling HTML Help file...");
+				if ((MyConfig.OutputTarget & OutputType.Web) > 0)
+				{
+					OnDocBuildingStep(75, "Generating HTML content file...");
 
+					// Write the embedded online templates to the html output directory
+					EmbeddedResources.WriteEmbeddedResources(
+						this.GetType().Module.Assembly,
+						"NDoc.Documenter.Msdn.onlinefiles",
+						MyConfig.OutputDirectory);
+
+					using (TemplateWriter indexWriter = new TemplateWriter(
+							   Path.Combine(MyConfig.OutputDirectory, "index.html"),
+							   new StreamReader(this.GetType().Module.Assembly.GetManifestResourceStream(
+							   "NDoc.Documenter.Msdn.onlinetemplates.index.html"))))
+					{
+						indexWriter.CopyToLine("\t\t<title><%TITLE%></title>");
+						indexWriter.WriteLine("\t\t<title>'" + MyConfig.HtmlHelpName + "</title>");
+						indexWriter.CopyToLine("\t\t<frame name=\"main\" src=\"<%HOME_PAGE%>\" frameborder=\"1\">");
+						indexWriter.WriteLine("\t\t<frame name=\"main\" src=\"" + defaultTopic + "\" frameborder=\"1\">");
+						indexWriter.CopyToEnd();
+						indexWriter.Close();
+					}
+
+					//transform the HHC contents file into html
+					XslTransform xsltContents = new XslTransform();
+					MakeTransform(xsltContents, "htmlcontents.xslt");
+					xsltContents.Transform(htmlHelp.GetPathToContentsFile(), 
+						Path.Combine(MyConfig.OutputDirectory, "contents.html"));
+				}
+
+				OnDocBuildingStep(85, "Compiling HTML Help file...");
 				htmlHelp.CompileProject();
 
 				OnDocBuildingStep(100, "Done.");
@@ -1279,7 +1312,7 @@ namespace NDoc.Documenter.Msdn
 
 				arguments.AddParam("ndoc-title", String.Empty, MyConfig.Title);
 				arguments.AddParam("ndoc-vb-syntax", String.Empty, MyConfig.ShowVisualBasic);
-				arguments.AddParam("ndoc-omit-object-tags", String.Empty, MyConfig.OmitObjectTags);
+				arguments.AddParam("ndoc-omit-object-tags", String.Empty, ((MyConfig.OutputTarget & OutputType.HtmlHelp) == 0));
 				arguments.AddParam("ndoc-document-attributes", String.Empty, MyConfig.DocumentAttributes);
 				arguments.AddParam("ndoc-documented-attributes", String.Empty, MyConfig.DocumentedAttributes);
 

@@ -155,6 +155,30 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "onlinefiles\tree.css"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "onlinefiles\tree.js"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "onlinefiles\treenodedot.gif"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "onlinefiles\treenodeminus.gif"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "onlinefiles\treenodeplus.gif"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "onlinetemplates\index.html"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "xslt\allmembers.xslt"
                     BuildAction = "EmbeddedResource"
                 />
@@ -172,6 +196,10 @@
                 />
                 <File
                     RelPath = "xslt\filenames.xslt"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "xslt\htmlcontents.xslt"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
