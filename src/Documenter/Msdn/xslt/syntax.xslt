@@ -3,8 +3,10 @@
 	<!-- -->
 	<xsl:template name="cs-type-syntax">
 		<pre class="syntax">
-			<span class="lang">[C#]</span>
-			<br />
+			<xsl:if test="$ndoc-vb-syntax">
+				<span class="lang">[C#]</span>
+				<br />
+			</xsl:if>
 			<xsl:call-template name="type-access">
 				<xsl:with-param name="access" select="@access" />
 			</xsl:call-template>
@@ -64,8 +66,10 @@
 	<!-- -->
 	<xsl:template name="cs-member-syntax">
 		<pre class="syntax">
-			<span class="lang">[C#]</span>
-			<br />
+			<xsl:if test="$ndoc-vb-syntax">
+				<span class="lang">[C#]</span>
+				<br />
+			</xsl:if>
 			<xsl:if test="not(parent::interface or @interface)">
 				<xsl:call-template name="method-access">
 					<xsl:with-param name="access" select="@access" />
@@ -187,8 +191,10 @@
 	<!-- -->
 	<xsl:template name="cs-field-or-event-syntax">
 		<pre class="syntax">
-			<span class="lang">[C#]</span>
-			<br />
+			<xsl:if test="$ndoc-vb-syntax">
+				<span class="lang">[C#]</span>
+				<br />
+			</xsl:if>
 			<xsl:if test="not(parent::interface)">
 				<xsl:call-template name="method-access">
 					<xsl:with-param name="access" select="@access" />
@@ -335,7 +341,7 @@
 				<xsl:choose>
 					<xsl:when test="@direction = 'ref'">ref&#160;</xsl:when>
 					<xsl:when test="@direction = 'out'">out&#160;</xsl:when>
-  			  <xsl:when test="@isParamArray = 'true'">params&#160;</xsl:when>
+					<xsl:when test="@isParamArray = 'true'">params&#160;</xsl:when>
 				</xsl:choose>
 				<xsl:choose>
 					<xsl:when test="$version='long'">

@@ -39,8 +39,10 @@
 						</pre>
 					</xsl:if>
 					<pre class="syntax">
-						<span class="lang">[C#]</span>
-						<br />
+						<xsl:if test="$ndoc-vb-syntax">
+							<span class="lang">[C#]</span>
+							<br />
+						</xsl:if>
 						<xsl:call-template name="cs-property-syntax" />
 					</pre>
 					<p></p>
