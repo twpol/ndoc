@@ -76,14 +76,25 @@ namespace NDoc.Core
 			get { return _Name;}
 		}
 
-		/// <summary>Gets a list of property names.</summary>
+		/// <summary>Gets a list of properties.</summary>
 		public IEnumerable GetProperties()
 		{
 			ArrayList properties = new ArrayList();
 
 			foreach (PropertyInfo property in GetType().GetProperties())
 			{
-				properties.Add(property.Name);
+				object[] attr = property.GetCustomAttributes(typeof(BrowsableAttribute),true);
+				if (attr.Length>0)
+				{
+					if( ((BrowsableAttribute)attr[0]).Browsable )
+					{
+						properties.Add(property);
+					}
+				}
+				else
+				{
+					properties.Add(property);
+				}
 			}
 
 			return properties;
