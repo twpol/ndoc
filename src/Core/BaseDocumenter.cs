@@ -841,8 +841,12 @@ namespace NDoc.Core
 						namespaceSummary = assemblyDocCache.GetDoc("T:" + namespaceName + ".NamespaceDoc");
 				}
 
+				bool isNamespaceDoc = false;
+
 				if ((namespaceSummary == null) || (namespaceSummary.Length == 0))
 					namespaceSummary = _Project.GetNamespaceSummary(ourNamespaceName);
+				else
+					isNamespaceDoc = true;
 
 				if (MyConfig.SkipNamespacesWithoutSummaries &&
 					(namespaceSummary == null || namespaceSummary.Length == 0))
@@ -879,7 +883,15 @@ namespace NDoc.Core
 						if (namespaceSummary != null && namespaceSummary.Length > 0)
 						{
 							WriteStartDocumentation(myWriter);
-							myWriter.WriteElementString("summary",namespaceSummary);
+
+							if ( isNamespaceDoc )
+							{
+								myWriter.WriteRaw( namespaceSummary );
+							}
+							else
+							{
+								myWriter.WriteElementString("summary",namespaceSummary);
+							}
 							WriteEndDocumentation(myWriter);
 						}
 						else if (MyConfig.ShowMissingSummaries)
