@@ -96,6 +96,7 @@
 			<b>
 				<xsl:choose>
 					<xsl:when test="$lang='Visual Basic'">
+						<xsl:if test="@hiding">Shadows&#160;</xsl:if>
 						<xsl:apply-templates select="." mode="abstract">
 							<xsl:with-param name="lang" select="$lang"/>
 						</xsl:apply-templates>
@@ -107,6 +108,7 @@
 						</xsl:apply-templates>
 					</xsl:when>
 					<xsl:otherwise>
+						<xsl:if test="$lang = 'C#' and @hiding">new&#160;</xsl:if>
 						<xsl:apply-templates select="." mode="access">
 							<xsl:with-param name="lang" select="$lang"/>
 						</xsl:apply-templates>

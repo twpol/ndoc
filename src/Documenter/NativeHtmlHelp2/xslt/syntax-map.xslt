@@ -111,6 +111,7 @@
 		<xsl:param name="lang"/>
 		<xsl:choose>
 			<xsl:when test="$lang='Visual Basic'">
+				<xsl:if test="@hiding">Shadows&#160;</xsl:if>
 				<xsl:choose>
 					<xsl:when test="@contract='Static'">Shared</xsl:when>
 					<xsl:when test="@contract='Abstract'">MustOverride</xsl:when>
@@ -119,9 +120,10 @@
 					<xsl:when test="@contract='Override'">Overrides</xsl:when>
 					<xsl:when test="@contract='Normal'"></xsl:when>
 					<xsl:otherwise>/* unknown */</xsl:otherwise>
-				</xsl:choose>			
+				</xsl:choose>
 			</xsl:when>		
 			<xsl:when test="$lang='C#'">
+				<xsl:if test="@hiding">new&#160;</xsl:if>
 				<xsl:choose>
 					<xsl:when test="@contract='Static'">static</xsl:when>
 					<xsl:when test="@contract='Abstract'">abstract</xsl:when>
