@@ -1,6 +1,9 @@
 // NamespaceSummariesForm.cs - form for adding namespace summaries
 // Copyright (C) 2001  Kral Ferch
 //
+// Modified by: Keith Hill on Sep 28, 2001.
+//   Tweaked the layout, made the dialog not show up in the task bar.
+//
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation; either version 2 of the License, or
@@ -165,6 +168,7 @@ namespace NDoc.Gui
 			this.MinimizeBox = false;
 			this.MinimumSize = new System.Drawing.Size(416, 200);
 			this.Name = "NamespaceSummariesForm";
+			this.ShowInTaskbar = false;
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
 			this.Text = "Edit Namespace Summaries";
 			this.ResumeLayout(false);
