@@ -1737,10 +1737,8 @@ namespace NDoc.Gui
 		/// <param name="e">The event arguments (not used).</param>
 		protected void deleteButton_Click (object sender, System.EventArgs e)
 		{
-			if (assembliesListView.SelectedItems.Count > 0)
+			foreach(ListViewItem listViewItem in assembliesListView.SelectedItems)
 			{
-				ListViewItem  listViewItem = assembliesListView.SelectedItems[0];
-
 				project.RemoveAssemblySlashDoc(listViewItem.Index);
 				listViewItem.Remove();
 			}
