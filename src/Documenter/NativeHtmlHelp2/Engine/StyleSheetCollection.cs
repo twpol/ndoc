@@ -93,7 +93,5 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 				throw new Exception( string.Format(	"Error compiling the {0} stylesheet", name ), e );
 			}
 		}
-
-
 	}
 }

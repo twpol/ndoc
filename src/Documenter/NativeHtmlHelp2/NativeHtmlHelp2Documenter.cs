@@ -292,11 +292,22 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			factory.Properties.Add( "ndoc-document-attributes", MyConfig.DocumentAttributes );
 			factory.Properties.Add( "ndoc-documented-attributes", MyConfig.DocumentedAttributes );
 			factory.Properties.Add( "ndoc-platforms", GetPlatformString() );
+			factory.Properties.Add( "ndoc-net-framework-version", GetNETVersionString() );
 			factory.Properties.Add( "ndoc-version", MyConfig.Version );
 			factory.Properties.Add( "ndoc-includeHierarchy", MyConfig.IncludeHierarchy );
 
 			// make the html
 			factory.MakeHtml();
+		}
+
+		private string GetNETVersionString()
+		{
+			switch ( MyConfig.LinkToSdkDocVersion )
+			{
+				case SdkDocVersion.SDK_v1_1:	return "1.1";
+				case SdkDocVersion.SDK_v1_0:	return "1.0";
+				default:						return "";
+			}
 		}
 
 		private string GetPlatformString()

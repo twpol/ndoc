@@ -12,6 +12,7 @@
 	<!-- -->
 	<xsl:param name="ndoc-title" />
 	<xsl:param name="ndoc-platforms"/>
+	<xsl:param name="ndoc-net-framework-version"/>
 	<xsl:param name="ndoc-version"/>
 	<!-- -->
 
@@ -833,17 +834,23 @@
 			</p>				
 		</xsl:if>
 	</xsl:template>
-	<!-- -->
-	
+	<!-- -->	
 	<xsl:template name="version-section">
-		<xsl:if test="string-length( $ndoc-version ) != 0">
-			<DIV CLASS="footer">
-				<p>
-					<center>
-						<font color="red"><i>Documentation version <xsl:value-of select="$ndoc-version"/>.</i></font>
-					</center>
-				</p>	
-			</DIV>
-		</xsl:if>
+		<DIV CLASS="footer">
+			<p>
+				<center>
+					<font color="red">
+						<i>
+							<xsl:if test="string-length( $ndoc-net-framework-version ) != 0">
+								Syntax based on .NET Framework version <xsl:value-of select="$ndoc-net-framework-version"/>.<br/>
+							</xsl:if>							
+							<xsl:if test="string-length( $ndoc-version ) != 0">
+								Documentation version <xsl:value-of select="$ndoc-version"/>.
+							</xsl:if>
+						</i>
+					</font>
+				</center>
+			</p>	
+		</DIV>
 	</xsl:template>
 </xsl:stylesheet>
