@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+	xmlns:NUtil="urn:NDocUtil"
+	exclude-result-prefixes="NUtil" >
 	<!-- -->
 	<xsl:template match="/">
 		<xsl:apply-templates select="ndoc/assembly/module/namespace/*[@id=$id]" />
@@ -493,7 +495,7 @@
 		<xsl:variable name="access" select="@access" />
 		<xsl:variable name="declaringType" select="@declaringType" />
 		<xsl:variable name="declaring-type-id" select="concat('T:', @declaringType)" />
-		<xsl:if test="not(preceding-sibling::method[(@name=$name) and (@declaringType=$declaringType) and (@access=$access) and (($contract='Static' and @contract='Static') or ($contract!='Static' and @contract!='Static'))])">
+		<xsl:if test="not(NUtil:HasSimilarOverloads(concat($name,':',$declaringType,':',$access,':',($contract='Static'))))">
 			<xsl:text>&#10;</xsl:text>
 			<tr VALIGN="top">
 				<xsl:variable name="declaring-class" select="//class[@id=$declaring-type-id]" />
@@ -565,34 +567,6 @@
 							</xsl:otherwise>
 						</xsl:choose>
 					</xsl:when>
-					<xsl:when test="starts-with(@declaringType, 'System.')">
-						<td width="50%">
-							<xsl:call-template name="images">
-								<xsl:with-param name="access" select="$access" />
-								<xsl:with-param name="contract" select="$contract" />
-								<xsl:with-param name="local-name" select="local-name()" />
-							</xsl:call-template>
-							<a>
-								<xsl:attribute name="href">
-									<xsl:call-template name="get-filename-for-system-method" />
-								</xsl:attribute>
-								<xsl:value-of select="@name" />
-							</a>
-							<xsl:text> (inherited from </xsl:text>
-							<b>
-								<xsl:call-template name="strip-namespace">
-									<xsl:with-param name="name" select="@declaringType" />
-								</xsl:call-template>
-							</b>
-							<xsl:text>)</xsl:text>
-						</td>
-						<td width="50%">
-							<xsl:if test="@overload">
-								<xsl:text>Overloaded. </xsl:text>
-							</xsl:if>
-							<xsl:call-template name="summary-with-no-paragraph" />
-						</td>
-					</xsl:when>
 					<xsl:otherwise>
 						<td width="50%">
 							<xsl:call-template name="images">
@@ -615,6 +589,44 @@
 						</td>
 					</xsl:otherwise>
 				</xsl:choose>
+			</tr>
+		</xsl:if>
+	</xsl:template>
+	<!-- -->
+	<xsl:template match="method[@declaringType and starts-with(@declaringType, 'System.')]">
+		<xsl:variable name="name" select="@name" />
+		<xsl:variable name="contract" select="@contract" />
+		<xsl:variable name="access" select="@access" />
+		<xsl:variable name="declaringType" select="@declaringType" />
+		<xsl:if test="not(NUtil:HasSimilarOverloads(concat($name,':',$declaringType,':',$access,':',($contract='Static'))))">
+			<xsl:text>&#10;</xsl:text>
+			<tr VALIGN="top">
+				<td width="50%">
+					<xsl:call-template name="images">
+						<xsl:with-param name="access" select="$access" />
+						<xsl:with-param name="contract" select="$contract" />
+						<xsl:with-param name="local-name" select="local-name()" />
+					</xsl:call-template>
+					<a>
+						<xsl:attribute name="href">
+							<xsl:call-template name="get-filename-for-system-method" />
+						</xsl:attribute>
+						<xsl:value-of select="@name" />
+					</a>
+					<xsl:text> (inherited from </xsl:text>
+					<b>
+						<xsl:call-template name="strip-namespace">
+							<xsl:with-param name="name" select="@declaringType" />
+						</xsl:call-template>
+					</b>
+					<xsl:text>)</xsl:text>
+				</td>
+				<td width="50%">
+					<xsl:if test="@overload">
+						<xsl:text>Overloaded. </xsl:text>
+					</xsl:if>
+					<xsl:call-template name="summary-with-no-paragraph" />
+				</td>
 			</tr>
 		</xsl:if>
 	</xsl:template>
@@ -711,7 +723,7 @@
 		<xsl:variable name="name" select="@name" />
 		<xsl:variable name="contract" select="@contract" />
 		<xsl:variable name="access" select="@access" />
-		<xsl:if test="@name='op_Implicit' or @name='op_Explicit' or not(preceding-sibling::*[(local-name()=$member) and (@name=$name) and (@access=$access) and (not(@declaringType)) and (($contract='Static' and @contract='Static') or ($contract!='Static' and @contract!='Static'))])">
+		<xsl:if test="@name='op_Implicit' or @name='op_Explicit' or not(NUtil:HasSimilarOverloads(concat($name,'::',$access,':',($contract='Static'))))">
 			<xsl:text>&#10;</xsl:text>
 			<tr VALIGN="top">
 				<xsl:choose>

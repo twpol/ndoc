@@ -101,5 +101,15 @@ namespace NDoc.Documenter.Msdn
 
 		private StringDictionary _fileNames;
 		private StringDictionary _elemNames;
+
+		public bool HasSimilarOverloads(string description)
+		{
+			if (_descriptions.Contains(description))
+				return true;
+			_descriptions.Add(description);
+			return false;
+		}
+
+		private StringCollection _descriptions = new StringCollection();
 	}
 }
