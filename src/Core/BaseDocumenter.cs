@@ -1047,7 +1047,7 @@ namespace NDoc.Core
 					  BindingFlags.Public |
 					  BindingFlags.NonPublic;
 
-			#warning explicitly implemented properties are not returned here.
+			//explicitly implemented properties are not returned here.
 			PropertyInfo[] properties = type.GetProperties(bindingFlags);
 
 			foreach (PropertyInfo property in properties)
@@ -1381,7 +1381,7 @@ namespace NDoc.Core
 			}
 			else
 			{
-				WriteFieldDocumentation(writer, memberName, true, type);
+				WriteFieldDocumentation(writer, memberName, type);
 			}
 			WriteCustomAttributes(writer, field);
 
@@ -2353,14 +2353,12 @@ namespace NDoc.Core
 		private void WriteFieldDocumentation(
 			XmlWriter writer,
 			string memberName,
-			bool writeMissing,
 			Type type)
 		{
-			if (writeMissing)
+			if (!CheckForPropertyBacker(writer, memberName, type))
 			{
 				CheckForMissingSummaryAndRemarks(writer, memberName);
 			}
-			CheckForPropertyBacker(writer, memberName, type);
 			WriteSlashDocElements(writer, memberName);
 			WriteEndDocumentation(writer);
 		}
@@ -2413,17 +2411,17 @@ namespace NDoc.Core
 		/// <summary>
 		/// This checks whether a field is a property backer, meaning
 		/// it stores the information for the property.
-		/// This takes advantage of the fact that most people
+		/// </summary>
+		/// <remarks>
+		/// <para>This takes advantage of the fact that most people
 		/// have a simple convention for the names of the fields
 		/// and the properties that they back.
 		/// If the field doesn't have a summary already, and it
 		/// looks like it backs a property, and the BaseDocumenterConfig
 		/// property is set appropriately, then this adds a
-		/// summary indicating that.
-		/// </summary>
-		/// <remarks>
-		/// Note that this design will call multiple fields the backer
-		/// for a single property.
+		/// summary indicating that.</para>
+		/// <para>Note that this design will call multiple fields the 
+		/// backer for a single property.</para>
 		/// <para/>This also will call a public field a backer for a
 		/// property, when typically that wouldn't be the case.
 		/// </remarks>
@@ -2431,12 +2429,13 @@ namespace NDoc.Core
 		/// <param name="memberName">The full name of the field.</param>
 		/// <param name="type">The Type which contains the field
 		/// and potentially the property.</param>
-		private void CheckForPropertyBacker(
+		/// <returns>True only if a property backer is auto-documented.</returns>
+		private bool CheckForPropertyBacker(
 			XmlWriter writer,
 			string memberName,
 			Type type)
 		{
-			if (!MyConfig.AutoPropertyBackerSummaries) return;
+			if (!MyConfig.AutoPropertyBackerSummaries) return false;
 
 			string xPathExpr = "/doc/members/member[@name=\"" + memberName + "\"]";
 			XmlNode xmlNode = currentSlashDoc.SelectSingleNode(xPathExpr);
@@ -2475,8 +2474,10 @@ namespace NDoc.Core
 				{
 					WritePropertyBackerDocumentation(writer, "summary", 
 						propertyInfo);
+					return true;
 				}
 			}
+			return false;
 		}
 
 		/// <summary>
@@ -2534,12 +2535,11 @@ namespace NDoc.Core
 			string propertyName = property.Name;
 			string propertyId = "P:" + property.DeclaringType.FullName + "."
 				+ propertyName; 
-			string memberName = GetMemberName(property);
 
 			WriteStartDocumentation(writer);
 			writer.WriteStartElement(element);
 			writer.WriteRaw("Backer for property <see cref=\"" 
-				+ propertyId + "\">" + memberName + "</see>");
+				+ propertyId + "\">" + property.Name + "</see>");
 			writer.WriteEndElement();
 		}
 
