@@ -111,14 +111,6 @@ namespace NDoc.Core
 			this.InstanceMembersDefaultToSafe=config.InstanceMembersDefaultToSafe;
 			#endregion
 
-			#region platform/framework
-			this.InheritPlatformSupport=config.InheritPlatformSupport;
-			this.DefaultOSSupport=config.DefaultOSSupport;
-			this.SupportCompactFrameworkByDefault=config.SupportCompactFrameworkByDefault;
-			this.SupportMONOFrameworkByDefault=config.SupportMONOFrameworkByDefault;
-			this.AdditionalFrameworkList=config.AdditionalFrameworkList;
-			this.AdditionalOSList=config.AdditionalOSList;
-			#endregion
 		}
 
 
@@ -290,36 +282,6 @@ namespace NDoc.Core
 		public bool InstanceMembersDefaultToSafe ;
 
 		#endregion
-
-		#region platform/framework
-		/// <summary>
-		/// 
-		/// </summary>
-		public bool InheritPlatformSupport ;
-		/// <summary>
-		/// 
-		/// </summary>
-		public OSSupport DefaultOSSupport ;
-		/// <summary>
-		/// 
-		/// </summary>
-		public bool SupportCompactFrameworkByDefault ;
-		/// <summary>
-		/// 
-		/// </summary>
-		public bool SupportMONOFrameworkByDefault ;
-		/// <summary>
-		/// 
-		/// </summary>
-		public string AdditionalFrameworkList ;
-		/// <summary>
-		/// 
-		/// </summary>
-		public string AdditionalOSList ;
-
-		#endregion
-
-
 
 	}
 }

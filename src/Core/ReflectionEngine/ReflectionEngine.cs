@@ -162,16 +162,13 @@ namespace NDoc.Core
 
 				// Start the root element
 				writer.WriteStartElement("ndoc");
-				writer.WriteAttributeString("SchemaVersion", "1.0");
+				writer.WriteAttributeString("SchemaVersion", "1.3");
 
 				if (this.rep.FeedbackEmailAddress.Length > 0)
 					WriteFeedBackEmailAddress(writer);
 
 				if (this.rep.CopyrightText.Length > 0)
 					WriteCopyright(writer);
-
-				if (this.rep.InheritPlatformSupport)
-					WriteDefaultPlatform(writer);
 
 				if (this.rep.IncludeDefaultThreadSafety)
 					WriteDefaultThreadSafety(writer);
@@ -225,60 +222,6 @@ namespace NDoc.Core
 			writer.WriteEndElement();
 		}
 
-		// writes out the list of default supported operating systems and frameworks 
-		private void WriteDefaultPlatform(XmlWriter writer)
-		{			
-			writer.WriteStartElement("platform");
-
-			//write out the supported operating systems
-			if (this.rep.DefaultOSSupport != OSSupport.none)
-			{
-				writer.WriteStartElement("os");
-
-				switch (this.rep.DefaultOSSupport)
-				{
-					case OSSupport.all : 
-						writer.WriteAttributeString("predefined", "all");
-						break;
-					case OSSupport.nt5plus : 
-						writer.WriteAttributeString("predefined", "nt5plus");
-						break;
-					case OSSupport.enterprise : 
-						writer.WriteAttributeString("predefined", "enterprise");
-						break;
-					default : 
-						Debug.Assert(false); //remind ourselves to update this switch if new items are added
-						break;
-				}	
-			
-				if (this.rep.AdditionalOSList.Length > 0)
-					writer.WriteString(this.rep.AdditionalOSList);
-
-				writer.WriteEndElement();
-			}
-			
-			//write out the supported frameworks
-			if (this.rep.AdditionalFrameworkList.Length > 0 || this.rep.SupportCompactFrameworkByDefault || this.rep.SupportMONOFrameworkByDefault)
-			{
-				writer.WriteStartElement("frameworks");
-
-				if (this.rep.AdditionalFrameworkList.Length > 0)
-					writer.WriteElementString("custom", this.rep.AdditionalFrameworkList);
-
-				if (this.rep.SupportCompactFrameworkByDefault)			
-					writer.WriteElementString("compact", "true");
-			
-
-				if (this.rep.SupportMONOFrameworkByDefault)
-					writer.WriteElementString("mono", "true");
-
-				writer.WriteEndElement();
-			}
-
-			writer.WriteEndElement();
-		}
-
-		
 		private void WriteFeedBackEmailAddress(XmlWriter writer)
 		{
 			writer.WriteElementString("feedbackEmail", this.rep.FeedbackEmailAddress);
