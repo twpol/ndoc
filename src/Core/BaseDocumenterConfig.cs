@@ -45,6 +45,7 @@ namespace NDoc.Core
 			_DocumentPrivates = false;
 			_DocumentProtectedInternalAsProtected = false;
 			_DocumentEmptyNamespaces = false;
+			_DocumentOnlyEditorBrowsable = true;
 
 			_IncludeAssemblyVersion = false;
 			_CopyrightText = string.Empty;
@@ -588,6 +589,24 @@ namespace NDoc.Core
 			set
 			{
 				_GetExternalSummaries = value;
+				SetDirty();
+			}
+		}
+
+		private bool _DocumentOnlyEditorBrowsable;
+
+		/// <summary>Document only members that are flagged as editor-browsable.</summary>
+		[
+		Category("Visibility"),
+		Description("When true, NDoc checks the EditorBrowsable attribute on all members and excludes the ones flagged as EditorBrowsableState.Never.")
+		]
+		public bool DocumentOnlyEditorBrowsable
+		{
+			get { return _DocumentOnlyEditorBrowsable; }
+
+			set
+			{
+				_DocumentOnlyEditorBrowsable = value;
 				SetDirty();
 			}
 		}

@@ -24,6 +24,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
+using System.ComponentModel;
 
 namespace NDoc.Core
 {
@@ -350,6 +351,24 @@ namespace NDoc.Core
 			}
 		}
 
+		//checks if the member has been flagged with the 
+		//EditorBrowsableState.Never value
+		private bool IsEditorBrowsable(MemberInfo minfo)
+		{
+			EditorBrowsableAttribute browsable = 
+				Attribute.GetCustomAttribute(minfo, typeof(EditorBrowsableAttribute), false)
+				as EditorBrowsableAttribute;
+
+			if (browsable == null)
+			{
+				return true;
+			}
+			else
+			{
+				return (browsable.State != EditorBrowsableState.Never);
+			}
+		}
+
 		private bool MustDocumentType(Type type)
 		{
 			Type declaringType = type.DeclaringType;
@@ -364,6 +383,7 @@ namespace NDoc.Core
 				(type.IsNestedAssembly && MyConfig.DocumentInternals) ||
 				(type.IsNestedFamANDAssem && MyConfig.DocumentInternals) ||
 				(type.IsNestedPrivate && MyConfig.DocumentPrivates)) &&
+				(!MyConfig.DocumentOnlyEditorBrowsable || IsEditorBrowsable(type)) &&
 				(!MyConfig.UseNamespaceDocSummaries || (type.Name != "NamespaceDoc"));
 		}
 
@@ -385,7 +405,7 @@ namespace NDoc.Core
 					if(  interfaceType != null && (interfaceType.IsPublic || 
 						(interfaceType.IsNotPublic && MyConfig.DocumentInternals)))
 					{
-						return true;
+						return (!MyConfig.DocumentOnlyEditorBrowsable || IsEditorBrowsable(method));
 					}
 				}
 			}
@@ -396,7 +416,8 @@ namespace NDoc.Core
 				(method.IsFamilyOrAssembly && MyConfig.DocumentProtected) ||
 				(method.IsAssembly && MyConfig.DocumentInternals) ||
 				(method.IsFamilyAndAssembly && MyConfig.DocumentInternals) ||
-				(method.IsPrivate && MyConfig.DocumentPrivates));
+				(method.IsPrivate && MyConfig.DocumentPrivates)) &&
+				(!MyConfig.DocumentOnlyEditorBrowsable || IsEditorBrowsable(method));
 		}
 
 		private bool IsHidden(MemberInfo member, Type type)
@@ -559,7 +580,8 @@ namespace NDoc.Core
 				(field.IsFamilyOrAssembly && MyConfig.DocumentProtected) ||
 				(field.IsAssembly && MyConfig.DocumentInternals) ||
 				(field.IsFamilyAndAssembly && MyConfig.DocumentInternals) ||
-				(field.IsPrivate && MyConfig.DocumentPrivates));
+				(field.IsPrivate && MyConfig.DocumentPrivates)) &&
+				(!MyConfig.DocumentOnlyEditorBrowsable || IsEditorBrowsable(field));
 		}
 
 		private void WriteAssembly(XmlWriter writer)
@@ -1131,22 +1153,25 @@ namespace NDoc.Core
 
 			foreach (PropertyInfo property in properties)
 			{
-				MethodInfo getMethod = property.GetGetMethod(true);
-				MethodInfo setMethod = property.GetSetMethod(true);
-
-				bool hasGetter = (getMethod != null) && MustDocumentMethod(getMethod);
-				bool hasSetter = (setMethod != null) && MustDocumentMethod(setMethod);
-
-				if ((hasGetter || hasSetter)
-					&& !IsAlsoAnEvent(property)
-					&& !IsHidden(property, type))
+				if (!MyConfig.DocumentOnlyEditorBrowsable || IsEditorBrowsable(property))
 				{
-					WriteProperty(
-						writer,
-						property,
-						property.DeclaringType.FullName != type.FullName,
-						GetPropertyOverload(property, properties),
-						IsHiding(property, type));
+					MethodInfo getMethod = property.GetGetMethod(true);
+					MethodInfo setMethod = property.GetSetMethod(true);
+
+					bool hasGetter = (getMethod != null) && MustDocumentMethod(getMethod);
+					bool hasSetter = (setMethod != null) && MustDocumentMethod(setMethod);
+
+					if ((hasGetter || hasSetter)
+						&& !IsAlsoAnEvent(property)
+						&& !IsHidden(property, type))
+					{
+						WriteProperty(
+							writer,
+							property,
+							property.DeclaringType.FullName != type.FullName,
+							GetPropertyOverload(property, properties),
+							IsHiding(property, type));
+					}
 				}
 			}
 		}
@@ -1222,7 +1247,8 @@ namespace NDoc.Core
 				MethodInfo addMethod = eventInfo.GetAddMethod(true);
 
 				if (addMethod != null &&
-					MustDocumentMethod(addMethod))
+					MustDocumentMethod(addMethod) &&
+					(!MyConfig.DocumentOnlyEditorBrowsable || IsEditorBrowsable(eventInfo)))
 				{
 					WriteEvent(writer, eventInfo);
 				}
