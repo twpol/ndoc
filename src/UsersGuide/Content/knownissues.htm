@@ -27,8 +27,14 @@
 							type or member being documented. If the total number of characters in an item's 
 							full name (namespace + type + member name) exceed the value of <b>_MAX_FNAME</b>
 							(256 characters), NDoc will fail because it attempts to create a file with a 
-							name that is longer than the file system supports.</p>
-						<p>There is no work-around for this issue.</p>
+							name that is longer than the file system supports. In addition, the fully 
+							qualified path to a file cannot exceed <STRONG>_MAX_PATH</STRONG> (260 
+							characters).</p>
+						<p>For fully qualified names under about 200 characters, the work around for this 
+							issue is to set the <STRONG>OutputDirectory</STRONG> setting to a location as 
+							close to the root of a volume as possible. This will reduce the likely hood the 
+							full path to the html files will exceed 260 characters.</p>
+						<P>There is no work around for names that exceed these lengths.</P>
 						<p>This issue will be addressed in a future version of NDoc.</p>
 					</td>
 				</tr>
@@ -70,14 +76,12 @@
 				<TR>
 					<TD>StrongNameIdentityPermissionAttribute</TD>
 					<TD>
-						Assemblies decorated with the <b>
-						StrongNameIdentityPermission</b> attribute can only be 
-						called by other assemblies that are marked with the 
-						specified key. NDoc will fail when it attempts to 
-						document an assembly compiled with this attribute.<p>To 
-						work around this issue conditionally compile a version 
-						of the assembly that does not include the 
-						StrongNameIdentityPermission attribute.</TD>
+						Assemblies decorated with the <b>StrongNameIdentityPermission</b> attribute can 
+						only be called by other assemblies that are marked with the specified key. NDoc 
+						will fail when it attempts to document an assembly compiled with this 
+						attribute.<p>To work around this issue conditionally compile a version of the 
+							assembly that does not include the StrongNameIdentityPermission attribute.</p>
+					</TD>
 				</TR>
 				<TR>
 					<TD>Compact Framework incompatibilities</TD>
