@@ -17,6 +17,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Drawing.Design;
 using System.ComponentModel;
@@ -668,5 +669,28 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			}
 		}	
 		#endregion
+	
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="name"></param>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		protected override string HandleUnknownPropertyType(string name, string value)
+		{
+			string FailureMessages="";
+
+			if (String.Compare(name,"LinkToSdkDocVersion",true) == 0) 
+			{
+					Trace.WriteLine("WARNING: " + base.Name + " Configuration - property 'LinkToSdkDocVersion' is OBSOLETE. Please use new property 'SdkDocVersion'\n");
+					FailureMessages += base.ReadProperty("SdkDocVersion", value);
+			}
+			else
+			{
+				// if we don't know how to handle this, let the base class have a go
+				FailureMessages = base.HandleUnknownPropertyType (name, value);
+			}
+			return FailureMessages;
+		}
 	}
 }
