@@ -1,0 +1,42 @@
+<?xml version="1.0" ?>
+<project name="NDoc.Documenter.NativeHtmlHelp2" default="compile">
+	<target name="compile" unless="${current.runtime.config.mono}" depends="locate-help-compilerservices-typelib">
+		<if propertyexists="help.compilerservices.typelib">
+			<if propertyexists="mshtml.primary.interop.assembly">
+				<!-- generate COM interop assembly for Microsoft Help Compiler Services 1.0 -->
+				<tlbimp typelib="${help.compilerservices.typelib}" output="${current.bin.dir}/Interop.MSHelpCompiler.dll" namespace="MSHelpCompiler" asmversion="1.0.0.0" keyfile="../../ndoc.snk" />
+				<!-- compile the assembly -->
+				<csc target="library" output="${current.bin.dir}/${nant.project.name}.dll" debug="${current.build.debug}" optimize="${current.build.optimize}" unsafe="false" checked="false" define="${current.build.defines}" doc="${current.bin.dir}/${nant.project.name}.xml">
+					<sources>
+						<includes name="**/*.cs" />
+						<includes name="../../CommonAssemblyInfo.cs" />
+					</sources>
+					<references>
+						<includes name="System.dll" />
+						<includes name="System.Xml.dll" />
+						<includes name="${current.bin.dir}/Interop.MSHelpCompiler.dll" />
+						<includes name="${current.bin.dir}/NDoc.Core.dll" />
+					</references>
+					<resources prefix="NDoc.Documenter.NativeHtmlHelp2" dynamicprefix="true">
+						<includes name="graphics/*.*" />
+						<includes name="includes/*.*" />
+						<includes name="xslt/*.*" />
+						<includes name="HxProject/*.*" />
+					</resources>
+				</csc>
+			</if>
+		</if>
+	</target>
+	<target name="locate-help-compilerservices-typelib">
+		<readregistry property="help.compilerservices.typelib" key="TypeLib\{314111EE-A502-11D2-BBCA-00C04F8EC294}\1.0\0\win32\"
+			hive="ClassesRoot" failonerror="false" />
+			<ifnot propertyexists="help.compilerservices.typelib">
+			<if propertyexists="project.build.package" propertytrue="project.build.package">
+				<fail message="Microsoft Help Compiler Services 1.0 is not available. Please ensure that you've installed the Visual Studio Help Integration Kit 2002 or 2003." />
+			</if>
+			<ifnot propertyexists="project.build.package" propertytrue="project.build.package">
+				<echo message="Microsoft Help Compiler Services 1.0 is not available. Build skipped." />
+			</ifnot>
+		</ifnot>
+	</target>
+</project>
