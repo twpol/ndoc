@@ -372,113 +372,6 @@
 		</xsl:if>
 		<xsl:text>}</xsl:text>
 	</xsl:template>
-	<!-- ATTRIBUTES -->
-	<msxsl:script implements-prefix="user">
-	<![CDATA[
-		function isAttributeWanted(sParamWantedList, oElement)
-		{
-			var aWanted = (''+sParamWantedList).split('|');
-			oElement.Current.MoveToFirstAttribute();
-			var sAttributeType = ''+oElement.Current.Value;
-			for(var i = 0; i != aWanted.length; i++)
-			{
-				var oAttribute = (''+aWanted[i]).split(',');
-				if(sAttributeType.indexOf(""+oAttribute[0]) != -1)
-				{
-					return 'true';
-				}
-			}
-			return '';
-		}
-		
-		function isPropertyWanted(sParamWantedList, oElement)
-		{
-			var aWanted = (''+sParamWantedList).split('|');
-			
-			oElement.Current.MoveToFirstAttribute();
-			var sPropertyType = ''+oElement.Current.Value;
-			oElement.Current.MoveToParent();
-			oElement.Current.MoveToParent();
-			oElement.Current.MoveToFirstAttribute();
-			var sAttributeType = ''+oElement.Current.Value;
-			
-			for(var i = 0; i != aWanted.length; i++)
-			{
-				var oAttribute = (''+aWanted[i]).split(',');
-				if(sAttributeType.indexOf(""+oAttribute[0]) != -1)
-				{
-					if (oAttribute.length == 1)
-					{
-						return 'true';
-					}
-					else if (oAttribute.length != 0)
-					{
-						for(var j = 1; j != oAttribute.length; j++)
-						{
-							if(sPropertyType.indexOf(""+oAttribute[j]) != -1)
-							{
-								if (sPropertyType.length == oAttribute[j].length)
-								{
-									return 'true';
-								}
-							}
-						}
-					}
-				}
-			}
-			return '';
-		}
-		]]>
-    </msxsl:script>
-	<!-- -->
-	<xsl:template name="attributes">
-		<xsl:if test="$ndoc-document-attributes">
-			<xsl:if test="attribute">
-				<xsl:for-each select="attribute">
-						<div class="attribute"><xsl:call-template name="attribute">
-								<xsl:with-param name="attname" select="@name" />
-						</xsl:call-template></div>
-				</xsl:for-each>
-			</xsl:if>
-		</xsl:if>
-	</xsl:template>
-	<!-- -->
-	<xsl:template name="strip-namespace-and-attribute">
-		<xsl:param name="name" />
-		<xsl:choose>
-			<xsl:when test="contains($name, '.')">
-				<xsl:call-template name="strip-namespace-and-attribute">
-					<xsl:with-param name="name" select="substring-after($name, '.')" />
-				</xsl:call-template>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:value-of select="substring-before(concat($name, '_____'), 'Attribute_____')" />
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:template>
-	<!-- -->
-	<xsl:template name="attribute">
-		<xsl:param name="attname" />
-		<xsl:if test="user:isAttributeWanted($ndoc-documented-attributes, @name)">			
-			<xsl:text>[</xsl:text><xsl:call-template name="strip-namespace-and-attribute">
-				<xsl:with-param name="name" select="@name" />
-			</xsl:call-template>
-			<xsl:if test="count(property) > 0">
-				<xsl:text>(</xsl:text>
-				<xsl:for-each select="property">
-					<xsl:if test="user:isPropertyWanted($ndoc-documented-attributes, @name) and @value!=''">
-						<xsl:value-of select="@name" />
-						<xsl:text>="</xsl:text>
-						<xsl:value-of select="@value" />
-						<xsl:text>"</xsl:text>
-						<xsl:if test="position()!=last()"><xsl:text>, </xsl:text></xsl:if>
-					</xsl:if>
-				</xsl:for-each>
-				<xsl:text>)</xsl:text>
-			</xsl:if>
-			<xsl:text>]</xsl:text>
-		</xsl:if>
-	</xsl:template>
 	<!-- -->
 	<xsl:template name="parameters">
 		<xsl:param name="version" />
@@ -555,5 +448,114 @@
 		</xsl:for-each>
 		<xsl:text>)</xsl:text>
 	</xsl:template>
+	<!-- -->
+	<!-- ATTRIBUTES -->
+	<xsl:template name="attributes">
+		<xsl:if test="$ndoc-document-attributes">
+			<xsl:if test="attribute">
+				<xsl:for-each select="attribute">
+					<div class="attribute"><xsl:call-template name="attribute">
+						<xsl:with-param name="attname" select="@name" />
+					</xsl:call-template></div>
+				</xsl:for-each>
+			</xsl:if>
+		</xsl:if>
+	</xsl:template>
+	<!-- -->
+	<xsl:template name="attribute">
+		<xsl:param name="attname" />
+		<xsl:if test="user:isAttributeWanted($ndoc-documented-attributes, @name)">			
+			<xsl:text>[</xsl:text>
+			<xsl:call-template name="strip-namespace-and-attribute">
+				<xsl:with-param name="name" select="@name" />
+			</xsl:call-template>
+			<xsl:if test="count(property) > 0">
+				<xsl:text>(</xsl:text>
+				<xsl:for-each select="property">
+					<xsl:if test="user:isPropertyWanted($ndoc-documented-attributes, @name) and @value!=''">
+						<xsl:value-of select="@name" />
+						<xsl:text>="</xsl:text>
+						<xsl:value-of select="@value" />
+						<xsl:text>"</xsl:text>
+						<xsl:if test="position()!=last()"><xsl:text>, </xsl:text></xsl:if>
+					</xsl:if>
+				</xsl:for-each>
+				<xsl:text>)</xsl:text>
+			</xsl:if>
+			<xsl:text>]</xsl:text>
+		</xsl:if>
+	</xsl:template>
+	<!-- -->
+	<xsl:template name="strip-namespace-and-attribute">
+		<xsl:param name="name" />
+		<xsl:choose>
+			<xsl:when test="contains($name, '.')">
+				<xsl:call-template name="strip-namespace-and-attribute">
+					<xsl:with-param name="name" select="substring-after($name, '.')" />
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="substring-before(concat($name, '_____'), 'Attribute_____')" />
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	<!-- -->
+	<msxsl:script implements-prefix="user">
+	<![CDATA[
+		function isAttributeWanted(sParamWantedList, oElement)
+		{
+			var aWanted = (''+sParamWantedList).split('|');
+			oElement.Current.MoveToFirstAttribute();
+			var sAttributeType = ''+oElement.Current.Value;
+			for(var i = 0; i != aWanted.length; i++)
+			{
+				var oAttribute = (''+aWanted[i]).split(',');
+				if(sAttributeType.indexOf(""+oAttribute[0]) != -1)
+				{
+					return 'true';
+				}
+			}
+			return '';
+		}
+		
+		function isPropertyWanted(sParamWantedList, oElement)
+		{
+			var aWanted = (''+sParamWantedList).split('|');
+			
+			oElement.Current.MoveToFirstAttribute();
+			var sPropertyType = ''+oElement.Current.Value;
+			oElement.Current.MoveToParent();
+			oElement.Current.MoveToParent();
+			oElement.Current.MoveToFirstAttribute();
+			var sAttributeType = ''+oElement.Current.Value;
+			
+			for(var i = 0; i != aWanted.length; i++)
+			{
+				var oAttribute = (''+aWanted[i]).split(',');
+				if(sAttributeType.indexOf(""+oAttribute[0]) != -1)
+				{
+					if (oAttribute.length == 1)
+					{
+						return 'true';
+					}
+					else if (oAttribute.length != 0)
+					{
+						for(var j = 1; j != oAttribute.length; j++)
+						{
+							if(sPropertyType.indexOf(""+oAttribute[j]) != -1)
+							{
+								if (sPropertyType.length == oAttribute[j].length)
+								{
+									return 'true';
+								}
+							}
+						}
+					}
+				}
+			}
+			return '';
+		}
+		]]>
+    </msxsl:script>
 	<!-- -->
 </xsl:stylesheet>
