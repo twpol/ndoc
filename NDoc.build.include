@@ -195,6 +195,18 @@
 	<!--
 
 	-->
+	<target name="set-net-2.0-framework-configuration" depends="check-build-dir, check-current-build-config, check-build-debug, check-build-defines, check-build-optimize">
+		<property name="nant.settings.currentframework" value="net-2.0" />
+		<property name="current.build.debug" value="${build.debug}" dynamic="true" readonly="false" />
+		<property name="current.build.defines" value="${build.defines},NET,NET_2_0" dynamic="true" readonly="false" />
+		<property name="current.build.optimize" value="${build.optimize}" dynamic="true" readonly="false" />
+    		<property name="current.bin.dir" value="${build.dir}/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
+    		<property name="current.sdkdoc.dir" value="${nant.project.basedir}/doc/sdk/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
+		<property name="current.sdkdoc.debug" value="${sdkdoc.debug}" dynamic="true" readonly="false" />
+	</target>
+	<!--
+
+	-->
 	<target name="set-netcf-1.0-framework-configuration" depends="check-build-dir, check-current-build-config, check-build-debug, check-build-defines, check-build-optimize">
 		<property name="nant.settings.currentframework" value="netcf-1.0" />
 		<property name="current.build.debug" value="${build.debug}" dynamic="true" readonly="false" />
@@ -263,6 +275,14 @@
 		</if>
 		<if test="${framework::exists('net-1.1')}">
 			<property name="nant.settings.currentframework" value="net-1.1" />
+			<call target="display-current-runtime" />
+		</if>
+		<!-- .NET Framework 2.0 -->
+		<if test="${not framework::exists('net-2.0')}">
+			<echo message=".NET Framework 2.0 runtime is not available." />
+		</if>
+		<if test="${framework::exists('net-2.0')}">
+			<property name="nant.settings.currentframework" value="net-2.0" />
 			<call target="display-current-runtime" />
 		</if>
 		<!-- Mono 1.0 -->
