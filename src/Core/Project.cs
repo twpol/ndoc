@@ -33,7 +33,7 @@ namespace NDoc.Core
 		{
 			_IsDirty = false;
 			_probePath = new ArrayList();
-			_referencePaths = new ArrayList();
+			_referencePaths = new ReferencePathCollection();
 			_namespaces = new Namespaces();
 			_namespaces.ContentsChanged += new EventHandler(ContentsChanged);
 		}
@@ -49,25 +49,15 @@ namespace NDoc.Core
 			get { return _projectFile; }
 			set 
 			{ 
+				//set the base path for project Path Items
+				if ((value != null) && (value.Length > 0))
+					PathItemBase.BasePath=Path.GetDirectoryName(value);
+				else
+					PathItemBase.BasePath=null;
+
 				_projectFile = value; 
 			}
 		} 
-
-		/// <summary>
-		/// Holds the list of directories that will be scanned for documenters.
-		/// </summary>
-		private ArrayList _probePath;
-
-		/// <summary>
-		/// Holds the list of additional directories that will be probed when loading assemblies.
-		/// </summary>
-		private ArrayList _referencePaths;
-		/// <summary>Gets an enumerable list of ReferencePaths.</summary>
-		public IEnumerable GetReferencePaths()
-		{
-			return _referencePaths;
-		}
-
 
 		#region 'Dirty' flag handling
 
@@ -103,7 +93,7 @@ namespace NDoc.Core
 			}
 		}
 
-		private bool _suspendDirtyCheck = false;
+		private bool _suspendDirtyCheck=false;
 
 		/// <summary>
 		/// Gets or sets a value indicating whether [suspend dirty check].
@@ -119,7 +109,18 @@ namespace NDoc.Core
 
 		#endregion
 
-		private ArrayList _AssemblySlashDocs = new ArrayList();
+		#region AssemblySlashDocs
+
+		private AssemblySlashDocCollection _AssemblySlashDocs = new AssemblySlashDocCollection();
+
+		/// <summary>
+		/// Gets the AssemblySlashDocCollection.
+		/// </summary>
+		/// <value></value>
+		public AssemblySlashDocCollection AssemblySlashDocs 
+		{
+			get { return _AssemblySlashDocs; }
+		} 
 
 		/// <summary>
 		/// A custom exception to detect if a duplicate assembly is beeing added.
@@ -132,55 +133,35 @@ namespace NDoc.Core
 			{}
 		}
 
-		/// <summary>Adds an assembly/doc pair to the project.</summary>
-		public void AddAssemblySlashDoc(AssemblySlashDoc assemblySlashDoc)
+		#endregion
+
+		#region ReferencePaths
+
+		/// <summary>
+		/// Holds the list of additional directories that will be probed when loading assemblies.
+		/// </summary>
+		internal ReferencePathCollection _referencePaths;
+		/// <summary>Gets an enumerable list of ReferencePaths.</summary>
+		public ReferencePathCollection ReferencePaths
 		{
-			if (FindAssemblySlashDoc(assemblySlashDoc))
+			get
 			{
-				throw new AssemblyAlreadyExistsException("Assembly already exists.");
+				return _referencePaths;
 			}
-
-			IsDirty = true;
-
-			_AssemblySlashDocs.Add(assemblySlashDoc);
 		}
 
-		private bool FindAssemblySlashDoc(AssemblySlashDoc assemblySlashDoc)
+		/// <summary>
+		/// Adds a reference path.
+		/// </summary>
+		/// <param name="path">Path.</param>
+		public void AddReferencePath(string path)
 		{
-			foreach (AssemblySlashDoc a in this._AssemblySlashDocs)
-			{
-				if (Path.GetFullPath(a.AssemblyFilename) == Path.GetFullPath(assemblySlashDoc.AssemblyFilename))
-				{
-					return true;
-				}
-			}
-			return false;
+			_referencePaths.Add(new ReferencePath(path));
 		}
 
-		/// <summary>Gets an assembly/doc pair.</summary>
-		public AssemblySlashDoc GetAssemblySlashDoc(int index)
-		{
-			return _AssemblySlashDocs[index] as AssemblySlashDoc;
-		}
+		#endregion
 
-		/// <summary>Gets an enumerable list of assembly/doc pairs.</summary>
-		public IEnumerable GetAssemblySlashDocs()
-		{
-			return _AssemblySlashDocs;
-		}
-
-		/// <summary>Gets the number of assembly/doc pairs in the project.</summary>
-		public int AssemblySlashDocCount
-		{
-			get { return _AssemblySlashDocs.Count; }
-		}
-
-		/// <summary>Removes an assembly/doc pair from the project.</summary>
-		public void RemoveAssemblySlashDoc(int index)
-		{
-			_AssemblySlashDocs.RemoveAt(index);
-			IsDirty = true;
-		}
+		#region Fixed/Relative Paths
 
 		/// <summary>
 		/// Gets the base directory used for relative references.
@@ -189,13 +170,15 @@ namespace NDoc.Core
 		/// The directory of the project file, or the current working directory 
 		/// if the project was not loaded from a project file.
 		/// </value>
-		public string BaseDirectory {
+		public string BaseDirectory 
+		{
 			get 
 			{ 
-				if (_projectFile == null) {
-					_projectFile = Directory.GetCurrentDirectory();
+				if (_projectFile == null) 
+				{
+					ProjectFile = Directory.GetCurrentDirectory();
 				}
-				return Path.GetDirectoryName(_projectFile);
+				return Path.GetDirectoryName(ProjectFile);
 			}
 		}
 
@@ -207,14 +190,15 @@ namespace NDoc.Core
 		/// <returns>
 		/// A rooted path.
 		/// </returns>
-		public string GetFullPath(string path) {
+		public string GetFullPath(string path) 
+		{
 
 			if (path != null && path.Length > 0)
 			{
 				if (!Path.IsPathRooted(path)) 
 				{
-				path = Path.GetFullPath(Path.Combine(BaseDirectory, path));
-			}
+					path = Path.GetFullPath(Path.Combine(BaseDirectory, path));
+				}
 			}
 
 			return path;
@@ -235,69 +219,17 @@ namespace NDoc.Core
 			{
 				if (Path.IsPathRooted(path)) 
 				{
-					path = AbsoluteToRelativePath(BaseDirectory, path);
+					path = PathUtilities.AbsoluteToRelativePath(BaseDirectory, path);
 				}
 			}
 
 			return path;
 		}
 
-		/// <summary>
-		/// Converts an absolute path to one relative to the given base directory path
-		/// </summary>
-		/// <param name="basePath">The base directory path</param>
-		/// <param name="absolutePath">An absolute path</param>
-		/// <returns>A path to the given absolute path, relative to the base path</returns>
-		public string AbsoluteToRelativePath(string basePath, string absolutePath)
-		{
-			char[] separators = {
-									Path.DirectorySeparatorChar, 
-									Path.AltDirectorySeparatorChar, 
-									Path.VolumeSeparatorChar 
-								};
 
-			//split the paths into their component parts
-			string[] basePathParts = basePath.Split(separators);
-			string[] absPathParts = absolutePath.Split(separators);
-			int indx = 0;
+		#endregion
 
-			//work out how much they have in common
-			int minLength=Math.Min(basePathParts.Length, absPathParts.Length);
-			for(; indx < minLength; ++indx)
-			{
-				if(!basePathParts[indx].Equals(absPathParts[indx]))
-					break;
-			}
-			
-			//if they have nothing in common, just return the absolute path
-			if (indx == 0) 
-			{
-				return absolutePath;
-			}
-			
-			
-			//start constructing the relative path
-			string relPath = "";
-			
-			if(indx == basePathParts.Length)
-			{
-				// the entire base path is in the abs path
-				// so the rel path starts with "./"
-				relPath += "." + Path.DirectorySeparatorChar;
-			} 
-			else 
-			{
-				//step up from the base to the common root 
-				for (int i = indx; i < basePathParts.Length; ++i) 
-				{
-					relPath += ".." + Path.DirectorySeparatorChar;
-				}
-			}
-			//add the path from the common root to the absPath
-			relPath += String.Join(Path.DirectorySeparatorChar.ToString(), absPathParts, indx, absPathParts.Length-indx);
-			
-			return relPath;
-		}
+		#region Namespaces
 
 		private Namespaces _namespaces;
 
@@ -310,6 +242,9 @@ namespace NDoc.Core
 			get { return _namespaces; }
 		} 
 
+		#endregion
+
+		#region Documenters
 
 		private ArrayList _Documenters;
 
@@ -327,6 +262,11 @@ namespace NDoc.Core
 				return _Documenters;
 			}
 		}
+
+		/// <summary>
+		/// Holds the list of directories that will be scanned for documenters.
+		/// </summary>
+		private ArrayList _probePath;
 
 		/// <summary>
 		/// Appends the specified directory to the probe path.
@@ -448,12 +388,16 @@ namespace NDoc.Core
 			}
 		}
 
-		/// <summary>Reads an NDoc project file.</summary>
+		#endregion
+
+		#region Read from Disk
+
+		/// <summary>Reads an NDoc project file from disk.</summary>
 		public void Read(string filename)
 		{
 			Clear();
 
-			_projectFile = Path.GetFullPath(filename);
+			ProjectFile = Path.GetFullPath(filename);
 
 			XmlTextReader reader = null;
 
@@ -481,7 +425,7 @@ namespace NDoc.Core
 								// continue even if we don't load all assemblies
 								try
 								{
-									ReadAssemblySlashDocs(reader);
+									_AssemblySlashDocs.ReadXml(reader);
 								}
 								catch (CouldNotLoadAllAssembliesException e)
 								{
@@ -489,7 +433,7 @@ namespace NDoc.Core
 								}
 								break;
 							case "referencePaths" : 
-								ReadReferencePaths(reader);
+								_referencePaths.ReadXml(reader);
 								break;
 							case "namespaces" : 
 								//GetNamespacesFromAssemblies();
@@ -499,7 +443,7 @@ namespace NDoc.Core
 								// continue even if we have errors in documenter properties
 								try
 								{
-								ReadDocumenters(reader);
+									ReadDocumenters(reader);
 								}
 								catch (DocumenterPropertyFormatException e)
 								{
@@ -519,10 +463,11 @@ namespace NDoc.Core
 			}
 			catch (Exception ex)
 			{
+				//Clear the project to ensure everything is back to default state
+				Clear();
+
 				throw new DocumenterException("Error reading in project file " 
 					+ filename + ".\n" + ex.Message, ex);
-
-				// Set all the documenters to a default state since unable to load them.
 			}
 			finally
 			{
@@ -542,80 +487,10 @@ namespace NDoc.Core
 				throw documenterPropertyFormatExceptions;
 			}
 
-			IsDirty = false;
-		}
-
-		private void ReadAssemblySlashDocs(XmlReader reader)
-		{
-			int count = 0;
-
-			// keep a list of slash-docs which we fail to load
-			ArrayList failedDocs = new ArrayList();
-			// keep a list of load exceptions.
-			ArrayList loadExceptions = new ArrayList();
-
-			while (!reader.EOF && !(reader.NodeType == XmlNodeType.EndElement && reader.Name == "assemblies"))
-			{
-				if (reader.NodeType == XmlNodeType.Element && reader.Name == "assembly")
-				{
-					AssemblySlashDoc assemblySlashDoc = new AssemblySlashDoc();
-
-					if (reader.GetAttribute("location") == null) 
-					{
-						throw new DocumenterException("\"location\" attribute is"
-							+ " required for <assembly> element in project file.");
-					}
-					if (reader.GetAttribute("location").Trim().Length == 0) {
-						throw new DocumenterException("\"location\" attribute of"
-							+ " <assembly> element cannot be empty in project file.");
-					}
-					assemblySlashDoc.AssemblyFilename = reader["location"];
-					assemblySlashDoc.SlashDocFilename = reader["documentation"];
-					count++;
-					try
-					{
-						AddAssemblySlashDoc(assemblySlashDoc);
-					}
-					catch (FileNotFoundException e)
-					{
-						failedDocs.Add(assemblySlashDoc);
-						loadExceptions.Add(e);
-					}
-				}
-				reader.Read();
-			}
-			if (failedDocs.Count > 0)
-			{
-				StringBuilder sb = new StringBuilder();
-				for (int i = 0; i < failedDocs.Count; i++)
-				{
-					FileNotFoundException LoadException = (FileNotFoundException)loadExceptions[i];
-					sb.Append(LoadException.Message + "\n");
-					sb.Append(LoadException.FusionLog);
-					sb.Append("\n");
-				}
-				throw new CouldNotLoadAllAssembliesException(sb.ToString());
-			}
+//			IsDirty = false;
 		}
 
 
-		/// <summary>
-		/// Loads reference paths from an XML document.
-		/// </summary>
-		/// <param name="reader">
-		/// An open XmlReader positioned before the referencePath elements.</param>
-		public void ReadReferencePaths(XmlReader reader)
-		{
-			while (!reader.EOF && !(reader.NodeType == XmlNodeType.EndElement && reader.Name == "referencePaths"))
-			{
-				if (reader.NodeType == XmlNodeType.Element && reader.Name == "referencePath")
-				{
-					string path = reader["path"];
-					_referencePaths.Add(path);
-				}
-				reader.Read();
-			}
-		}
 
 		private void ReadDocumenters(XmlReader reader)
 		{
@@ -633,8 +508,8 @@ namespace NDoc.Core
 						reader.Read(); // Advance to next node.
 						try
 						{
-						documenter.Config.Read(reader);
-					}
+							documenter.Config.Read(reader);
+						}
 						catch (DocumenterPropertyFormatException e)
 						{
 							FailureMessages += name + " Documenter\n" + e.Message + "\n";
@@ -663,33 +538,69 @@ namespace NDoc.Core
 			return null;
 		}
 
-		/// <summary>Writes an NDoc project file.</summary>
+		#endregion
+
+		#region Write to Disk
+
+		/// <summary>Writes an NDoc project to a disk file.</summary>
+		/// <remarks>A project is written to file in a 2 stage process.
+		/// <list type="number">
+		/// <description>The project data is serialised to an in-memory store.</description>
+		/// <description>If no errors occured during serialization, the data is written to disk.</description>
+		/// </list>
+		/// <p>This technique ensures that any fatal error during serialization will not cause a
+		/// a corrupt or incomplete project file to be written to disk.</p>
+		/// </remarks>
 		public void Write(string filename)
 		{
-			_projectFile = Path.GetFullPath(filename);
+			//save the previous project file location.
+			//If an error occurs during serialization, we we need to restore this...
+			string oldProjectFile = ProjectFile;
 
+			//Let the project know where it is being stored. This is used when deriving
+			//pathnames relative to the project file
+			ProjectFile = Path.GetFullPath(filename);
+
+			
+			//We will assume an reasonable initial capacity of 8k,
+			//So the store does not normally need to grow.
+			MemoryStream tempDataStore = new MemoryStream(8192);
 			XmlTextWriter writer = null;
 
 			try
 			{
-				StreamWriter streamWriter = new StreamWriter(filename);
-				writer = new XmlTextWriter(streamWriter);
+				//open an xml text writer to the memory stream
+				writer = new XmlTextWriter(tempDataStore,new UTF8Encoding( false ));
 				writer.Formatting = Formatting.Indented;
 				writer.Indentation = 4;
 
 				writer.WriteStartElement("project");
 				writer.WriteAttributeString("SchemaVersion", "1.3");
 
-				//do not change the order of those lines
-				WriteAssemblySlashDocs(writer);
-				WriteReferencePaths(writer);
+				//do not change the order of those lines!
+				_AssemblySlashDocs.WriteXml(writer);
+				_referencePaths.WriteXml(writer);
 				Namespaces.Write(writer);
 				WriteDocumenters(writer);
 
 				writer.WriteEndElement();
+				//Flush the writer - note that we cannot close it yet,
+				//as that would also close the temporary data store
+				writer.Flush();
+
+				//OK, we have managed to create the project file in memory.
+				//Now we can try to write it to disk
+				using(Stream stream = File.Create(filename))
+				{
+					tempDataStore.WriteTo(stream);
+				}
 			}
 			catch (Exception ex)
 			{
+				//ouch, something went horribly wrong!
+				//restore the original filename
+				ProjectFile = oldProjectFile ;
+
 				throw new DocumenterException("Error saving project file "
 					+ ".\n" + ex.Message, ex);
 			}
@@ -704,40 +615,6 @@ namespace NDoc.Core
 			IsDirty = false;
 		}
 
-		private void WriteAssemblySlashDocs(XmlWriter writer)
-		{
-			if (_AssemblySlashDocs.Count > 0)
-			{
-				writer.WriteStartElement("assemblies");
-
-				foreach (AssemblySlashDoc assemblySlashDoc in _AssemblySlashDocs)
-				{
-					writer.WriteStartElement("assembly");
-					writer.WriteAttributeString("location", GetRelativePath(assemblySlashDoc.AssemblyFilename));
-					writer.WriteAttributeString("documentation", GetRelativePath(assemblySlashDoc.SlashDocFilename));
-					writer.WriteEndElement();
-				}
-
-				writer.WriteEndElement();
-			}
-		}
-
-		private void WriteReferencePaths(XmlWriter writer)
-		{
-			if (_referencePaths.Count > 0)
-			{
-				writer.WriteStartElement("referencePaths");
-
-				foreach (string refPath in _referencePaths)
-				{
-					writer.WriteStartElement("referencePath");
-					writer.WriteAttributeString("path", refPath);
-					writer.WriteEndElement();
-				}
-
-				writer.WriteEndElement();
-			}
-		}
 
 		private void WriteDocumenters(XmlWriter writer)
 		{
@@ -754,11 +631,14 @@ namespace NDoc.Core
 			}
 		}
 
+		#endregion
+
 		/// <summary>Clears the project.</summary>
 		public void Clear()
 		{
 			_AssemblySlashDocs.Clear();
 			if (_namespaces != null) _namespaces = new Namespaces();
+			if (_referencePaths != null) _referencePaths = new ReferencePathCollection();
 
 			foreach (IDocumenter documenter in Documenters)
 			{
@@ -769,6 +649,7 @@ namespace NDoc.Core
 			IsDirty = false;
 			ProjectFile = "";
 		}
+
 
 	}
 
@@ -795,9 +676,10 @@ namespace NDoc.Core
 		/// <summary/>
 		protected CouldNotLoadAllAssembliesException(
 			System.Runtime.Serialization.SerializationInfo info, 
-			System.Runtime.Serialization.StreamingContext context
-) : base(info, context) { }
+			System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
 	}
+
+
 	/// <summary>
 	/// This exception is thrown when there were invalid values in the documenter properties.
 	/// </summary>
@@ -818,7 +700,8 @@ namespace NDoc.Core
 		/// <summary/>
 		protected DocumenterPropertyFormatException(
 			System.Runtime.Serialization.SerializationInfo info, 
-			System.Runtime.Serialization.StreamingContext context
-) : base(info, context) { }
+			System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
 	}
+
+
 }
