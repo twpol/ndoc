@@ -78,6 +78,14 @@ namespace NDoc.Documenter.Latex
 		}
 
 		/// <summary>
+		/// The development status (alpha, beta, stable) of this documenter.
+		/// </summary>
+		public override DocumenterDevelopmentStatus DevelopmentStatus
+		{
+			get { return(DocumenterDevelopmentStatus.Alpha); }
+		}
+
+		/// <summary>
 		/// Gets the Configuration object for this documenter.
 		/// </summary>
 		private LatexDocumenterConfig LatexConfig
