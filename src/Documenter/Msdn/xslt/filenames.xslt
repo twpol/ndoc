@@ -106,10 +106,24 @@
     <xsl:param name="method" select="." />
     <xsl:choose>
       <xsl:when test="contains($method/@id, '(')">
-        <xsl:value-of select="concat(translate(substring-after(substring-before($method/@id, '('), 'M:'), '[,]#', ''), $method/@overload, '.html')" />
+		<xsl:choose>
+			<xsl:when test="string-length($method/@overload) &gt; 0">
+		        <xsl:value-of select="concat(translate(substring-after(substring-before($method/@id, '('), 'M:'), '[,]#', ''), '_overload_', $method/@overload, '.html')" />
+			</xsl:when>
+			<xsl:otherwise>
+		        <xsl:value-of select="concat(translate(substring-after(substring-before($method/@id, '('), 'M:'), '[,]#', ''), '.html')" />
+			</xsl:otherwise>
+		</xsl:choose>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="concat(translate(substring-after($method/@id, 'M:'), '[,]#', ''), $method/@overload, '.html')" />
+		<xsl:choose>
+			<xsl:when test="string-length($method/@overload) &gt; 0">
+		        <xsl:value-of select="concat(translate(substring-after($method/@id, 'M:'), '[,]#', ''), '_overload_', $method/@overload, '.html')" />
+			</xsl:when>
+			<xsl:otherwise>
+		        <xsl:value-of select="concat(translate(substring-after($method/@id, 'M:'), '[,]#', ''), '.html')" />
+			</xsl:otherwise>
+		</xsl:choose>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -240,20 +254,24 @@
 		    <xsl:value-of select="concat(translate(substring-after(substring-before($cref, '.#c'), 'M:'), '[,]', ''), 'Constructor', $overload, '.html')" />
           </xsl:when>
           <xsl:when test="contains($cref, '(')">
-			<xsl:if test="string-length($overload) &gt; 0">
-	            <xsl:value-of select="concat(translate(substring-after(substring-before($cref, '('), 'M:'), '[,]', ''), '_overload_', $overload, '.html')" />
-			</xsl:if>
-			<xsl:if test="string-length($overload) = 0">
-            <xsl:value-of select="concat(translate(substring-after(substring-before($cref, '('), 'M:'), '[,]', ''), $overload, '.html')" />
-			</xsl:if>
+			<xsl:choose>
+				<xsl:when test="string-length($overload) &gt; 0">
+					<xsl:value-of select="concat(translate(substring-after(substring-before($cref, '('), 'M:'), '[,]', ''), '_overload_', $overload, '.html')" />
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="concat(translate(substring-after(substring-before($cref, '('), 'M:'), '[,]', ''), '.html')" />
+				</xsl:otherwise>
+			</xsl:choose>
           </xsl:when>
           <xsl:otherwise>
-			<xsl:if test="string-length($overload) &gt; 0">
-				<xsl:value-of select="concat(translate(substring-after($cref, 'M:'), '[,]', ''), '_overload_', $overload, '.html')" />
-			</xsl:if>
-			<xsl:if test="string-length($overload) = 0">
-				<xsl:value-of select="concat(translate(substring-after($cref, 'M:'), '[,]', ''), $overload, '.html')" />
-			</xsl:if>
+			<xsl:choose>
+				<xsl:when test="string-length($overload) &gt; 0">
+					<xsl:value-of select="concat(translate(substring-after($cref, 'M:'), '[,]', ''), '_overload_', $overload, '.html')" />
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="concat(translate(substring-after($cref, 'M:'), '[,]', ''), '.html')" />
+				</xsl:otherwise>
+			</xsl:choose>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
