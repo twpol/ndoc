@@ -409,6 +409,14 @@ namespace NDoc.Core.Reflection
 
 		private bool MustDocumentMethod(MethodBase method)
 		{
+			//Ignore MC++ destructor.
+			//The __dtor function is just a wrapper that just calls the 
+			//Finalize method; all code you write in the destructor is 
+			//actually written to the finalize method. So, we will filter
+			//it out of the documentation by default...
+			if (method.Name=="__dtor") 
+				return false;
+			
 			//check the basic visibility options
 			if (!
 				(
