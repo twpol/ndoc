@@ -307,7 +307,8 @@ namespace NDoc.Core
 		/// <returns></returns>
 		public static string GetTypeName(Type type)
 		{
-			string result = type.FullName.Replace("&", "").Replace('+', '#');
+			// XML Documentation file appends a "@" to reference and out types, not a "&"
+			string result = type.FullName.Replace("&", "@").Replace('+', '#');
 			return result;
 		}
 
@@ -393,10 +394,6 @@ namespace NDoc.Core
 			if (method.ContainsGenericParameters)
                 paramList.Replace("`", "``");
 #endif
-
-			// XML Documentation file appends a "@" to reference and out types, not a "&"
-			paramList.Replace('&', '@');
-			paramList.Replace('+', '.');
 
 			return paramList.ToString();
 		}
