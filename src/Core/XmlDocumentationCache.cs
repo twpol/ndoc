@@ -115,8 +115,9 @@ namespace NDoc.Core
 						if ((docPath != null) && (File.Exists(docPath)))
 						{
 							Debug.WriteLine("Loading XML Doc for " + type.Assembly.FullName);
+							Debug.WriteLine("at " + docPath);
 							doc = new XmlDocument();
-							doc.Load(docPath);
+							doc.Load(new StreamReader(docPath));
 						}
 					}
 				}
