@@ -209,17 +209,18 @@
 		<nant buildfile="src/VisualStudio/VisualStudio.build" target="compile" inheritall="true" />
 		<!-- build NDocGui -->
 		<nant buildfile="src/Gui/Gui.build" target="compile" inheritall="true" />
-		<!-- build Documenters -->
-		<foreach item="File" property="filename">
-			<in>
-				<items basedir="src/Documenter">
-					<includes name="**/*.build"/>
-				</items>
-			</in>
-			<do>
-				<nant buildfile="${filename}" target="compile" inheritall="true" />
-			</do>
-		</foreach>
+		<!-- build Msdn Documenter -->
+		<nant buildfile="src/Documenter/Msdn/Msdn.build" target="compile" inheritall="true" />
+		<!-- build HtmlHelp2 Documenter -->
+		<nant buildfile="src/Documenter/HtmlHelp2/HtmlHelp2.build" target="compile" inheritall="true" />
+		<!-- build JavaDoc Documenter -->
+		<nant buildfile="src/Documenter/JavaDoc/JavaDoc.build" target="compile" inheritall="true" />
+		<!-- build Latex Documenter -->
+		<nant buildfile="src/Documenter/Latex/Latex.build" target="compile" inheritall="true" />
+		<!-- build LinearHtml Documenter -->
+		<nant buildfile="src/Documenter/LinearHtml/LinearHtml.build" target="compile" inheritall="true" />
+		<!-- build Xml Documenter -->
+		<nant buildfile="src/Documenter/Xml/Xml.build" target="compile" inheritall="true" />
 	</target>
 	<target name="package" depends="set-package-configuration" description="Build and Package distribution">
 		<property name="current.package.zipfile" value="${nant.project.name}-${project.version}.zip" />
@@ -251,7 +252,7 @@
 		<!-- create the package distribution zipfile -->
 		<call target="create-package-zipfile" force="true" />
 	</target>
-	<target name="package-examples">
+	<target name="package-examples" depends="check-build-dir">
 		<mkdir dir="${build.dir}/examples" />
 		<copy todir="${build.dir}/examples">
 			<fileset basedir="examples">
@@ -259,7 +260,7 @@
 			</fileset>
 		</copy>
 	</target>
-	<target name="package-src">
+	<target name="package-src" depends="check-build-dir">
 		<mkdir dir="${build.dir}/src" />
 		<copy todir="${build.dir}/src">
 			<fileset basedir="src">
@@ -271,7 +272,7 @@
 			</fileset>
 		</copy>
 	</target>
-	<target name="package-doc">
+	<target name="package-doc" depends="check-build-dir">
 		<mkdir dir="${build.dir}/doc" />
 		<copy todir="${build.dir}/doc">
 			<fileset basedir="doc">
@@ -279,7 +280,7 @@
 			</fileset>
 		</copy>
 	</target>
-	<target name="package-release-files">
+	<target name="package-release-files" depends="check-build-dir">
 		<copy todir="${build.dir}">
 			<fileset basedir=".">
 				<includes name="COPYING.txt" />
@@ -290,7 +291,7 @@
 			</fileset>
 		</copy>
 	</target>
-	<target name="create-package-zipfile" depends="check-current-package-dir, check-current-package-zipfile, check-log4net-basedir">
+	<target name="create-package-zipfile" depends="check-build-dir, check-current-package-dir, check-current-package-zipfile, check-log4net-basedir">
 		<!-- delete the specified zipfile if it already exists -->
 		<delete>
 			<fileset basedir=".">
