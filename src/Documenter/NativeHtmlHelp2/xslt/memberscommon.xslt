@@ -32,7 +32,19 @@
 			<xsl:when test="$member='field'">Fields</xsl:when>
 			<xsl:when test="$member='property'">Properties</xsl:when>
 			<xsl:when test="$member='event'">Events</xsl:when>
-			<xsl:when test="$member='operator'">Operators</xsl:when>
+			<xsl:when test="$member='operator'">
+				<xsl:choose>
+					<xsl:when test="*[local-name()=$member and @name!='op_Implicit' and @name!='op_Explicit']">
+						<xsl:choose>
+							<xsl:when test="*[local-name()=$member and (@name='op_Implicit' or @name='op_Explicit')]">
+							Operators and Type Conversions
+							</xsl:when>
+							<xsl:otherwise>Operators</xsl:otherwise>
+						</xsl:choose>
+					</xsl:when>
+					<xsl:otherwise>Type Conversions</xsl:otherwise>
+				</xsl:choose>
+			</xsl:when>
 			<xsl:otherwise>Methods</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
@@ -43,7 +55,19 @@
 			<xsl:when test="$member='field'">fields</xsl:when>
 			<xsl:when test="$member='property'">properties</xsl:when>
 			<xsl:when test="$member='event'">events</xsl:when>
-			<xsl:when test="$member='operator'">operators</xsl:when>
+			<xsl:when test="$member='operator'">
+				<xsl:choose>
+					<xsl:when test="*[local-name()=$member and @name!='op_Implicit' and @name!='op_Explicit']">
+						<xsl:choose>
+							<xsl:when test="*[local-name()=$member and (@name='op_Implicit' or @name='op_Explicit')]">
+								<xsl:text>operators and type conversions</xsl:text>
+							</xsl:when>
+							<xsl:otherwise>operators</xsl:otherwise>
+						</xsl:choose>
+					</xsl:when>
+					<xsl:otherwise>type conversions</xsl:otherwise>
+				</xsl:choose>
+			</xsl:when>
 			<xsl:otherwise>methods</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
@@ -60,9 +84,23 @@
 			</h4>
 			<div class="tablediv">
 				<table class="dtTABLE" cellspacing="0">
-					<xsl:apply-templates select="*[local-name()=$member and @access='Public' and @contract='Static']">
-						<xsl:sort select="@name" />
-					</xsl:apply-templates>
+					<xsl:choose>
+						<!-- since operators must be public static this is 
+							 the only place we need to do this -->
+						<xsl:when test="$member='operator'">
+							<xsl:apply-templates select="*[local-name()=$member and @name!='op_Implicit' and @name!='op_Explicit']">
+								<xsl:sort select="@id" />
+							</xsl:apply-templates>
+							<xsl:apply-templates select="*[local-name()=$member and (@name='op_Implicit' or @name='op_Explicit')]">
+								<xsl:sort select="@id" />
+							</xsl:apply-templates>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:apply-templates select="*[local-name()=$member and @access='Public' and @contract='Static']">
+								<xsl:sort select="@name" />
+							</xsl:apply-templates>
+						</xsl:otherwise>
+					</xsl:choose>	
 				</table>
 			</div>
 		</xsl:if>

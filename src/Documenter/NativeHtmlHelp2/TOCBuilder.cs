@@ -6,7 +6,7 @@ using NDoc.Documenter.NativeHtmlHelp2.Engine;
 namespace NDoc.Documenter.NativeHtmlHelp2
 {
 	/// <summary>
-	/// Orchestrates building the tabel of contents file base on HTMLFactory events
+	/// Orchestrates building the table of contents file base on HTMLFactory events
 	/// </summary>
 	public class TOCBuilder : IDisposable
 	{

@@ -53,7 +53,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// </summary>
 		public readonly Hashtable Properties = new Hashtable();
 
-		private XPathDocument xPathDocumentation;	// XPath version of the xmlDocumentation node (improves performace)
+		private XPathDocument xPathDocumentation;	// XPath version of the xmlDocumentation node (improves performance)
 		private XmlNode xmlDocumentation;			// the NDoc generates summary Xml
 
 		/// <summary>
@@ -85,8 +85,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 				Debug.Assert( false );		// remind ourselves to update this list when new framework versions are supported
 
 			fileNameMapper = new FileNameMapper();
-			StringReader sr = new StringReader( xmlDocumentation.OuterXml );
-			xPathDocumentation = new XPathDocument( sr );
+
+			xPathDocumentation = new XPathDocument( new StringReader( xmlDocumentation.OuterXml ) );
 		}
 
 		#region events
@@ -266,20 +266,16 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 				switch( FileNameMapper.GetWhichType( typeNode ) )
 				{
 					case WhichType.Class:
-						MakeHtmlForInterfaceOrClassOrStructure( typeNode );
-						break;
 					case WhichType.Interface:
-						MakeHtmlForInterfaceOrClassOrStructure( typeNode );
-						break;
 					case WhichType.Structure:
 						MakeHtmlForInterfaceOrClassOrStructure( typeNode );
 						break;
+
 					case WhichType.Enumeration:
-						MakeHtmlForEnumerationOrDelegate( typeNode );
-						break;
 					case WhichType.Delegate:
 						MakeHtmlForEnumerationOrDelegate( typeNode );
 						break;
+
 					default:
 						break;
 				}

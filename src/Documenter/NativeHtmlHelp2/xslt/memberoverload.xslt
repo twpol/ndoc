@@ -26,15 +26,7 @@
 			<xsl:choose>
 				<xsl:when test="local-name()='method'">Method</xsl:when>
 				<xsl:when test="local-name()='constructor'">Constructor</xsl:when>
-				<xsl:when test="local-name()='operator'">Operator</xsl:when>
-				<!--
-			    <xsl:call-template name="operator-name">
-				    <xsl:with-param name="name">
-				      <xsl:value-of select="@name" />
-				    </xsl:with-param>
-			    </xsl:call-template>
-				</xsl:when>
-				-->
+				<xsl:when test="local-name()='operator'"></xsl:when>
 				<xsl:otherwise>Property</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
@@ -45,6 +37,13 @@
 					<xsl:choose>
 						<xsl:when test="local-name()='constructor'">
 							<xsl:value-of select="../@name" />
+						</xsl:when>
+						<xsl:when test="local-name()='operator'">
+							<xsl:call-template name="operator-name">
+								<xsl:with-param name="name" select="@name" />							
+								<xsl:with-param name="from" select="parameter/@type" />							
+								<xsl:with-param name="to" select="@returnType" />
+							</xsl:call-template>							
 						</xsl:when>
 						<xsl:otherwise>
 							<xsl:value-of select="@name" />

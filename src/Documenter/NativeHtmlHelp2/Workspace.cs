@@ -25,10 +25,10 @@ using System.Collections.Specialized;
 
 namespace NDoc.Documenter.NativeHtmlHelp2
 {
-		/// <summary>
-		/// Handler for content directory events
-		/// </summary>
-		public delegate void ContentDirectoryEventHandler( string path );
+	/// <summary>
+	/// Handler for content directory events
+	/// </summary>
+	public delegate void ContentDirectoryEventHandler( string path );
 
 	/// <summary>
 	/// Summary description for Workspace.
@@ -43,7 +43,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		/// <summary>
 		/// The name of the directory where the html file are created
 		/// </summary>
-		public static string ContentDirectoryName = "html";
+		public readonly static string ContentDirectoryName = "html";
 
 		/// <summary>
 		/// The location of the workspace and files
@@ -224,13 +224,11 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 				}
 				catch ( UnauthorizedAccessException )
 				{
-					Trace.WriteLine("Could not delete " + file 
-						+ " from the output directory.  It might be read-only.");
+					Trace.WriteLine("Could not delete " + file + " from the output directory.  It might be read-only.");
 				}
 				catch ( IOException )
 				{
-					Trace.WriteLine("Could not delete " + file 
-						+ " from the output directory because it is in use.");
+					Trace.WriteLine("Could not delete " + file + " from the output directory because it is in use.");
 				}
 			}
 

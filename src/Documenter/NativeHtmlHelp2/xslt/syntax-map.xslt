@@ -620,7 +620,7 @@ by a type, but you cannot define your own.</xsl:when>
 		</xsl:choose>
 	</xsl:template>	
 	
-	<xsl:template match="operator[@name='opExplicit']" mode="cast-type">
+	<xsl:template match="operator[@name='op_Explicit']" mode="cast-type">
 		<xsl:param name="lang"/>
 		<xsl:choose>
 			<xsl:when test="$lang='C#'">explicit&#160;</xsl:when>

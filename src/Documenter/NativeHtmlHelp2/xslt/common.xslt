@@ -710,16 +710,32 @@
 			<xsl:when test="$name='op_GreaterThanOrEqual'">Greater Than Or Equal Operator</xsl:when>
 			<xsl:when test="$name='op_Implicit'">
 				<xsl:text>Implicit </xsl:text>
-				<xsl:value-of select="$from" />
+				<!--<xsl:value-of select="$from" />
+				    <xsl:text> to </xsl:text>
+				    <xsl:value-of select="$to" />-->
+				<xsl:call-template name="strip-namespace">
+					<xsl:with-param name="name" select="$from" />
+				</xsl:call-template>
 				<xsl:text> to </xsl:text>
-				<xsl:value-of select="$to" />
+				<xsl:call-template name="strip-namespace">
+					<xsl:with-param name="name" select="$to" />
+				</xsl:call-template>
+				<!--KSD-->
 				<xsl:text> Conversion</xsl:text>
 			</xsl:when>
 			<xsl:when test="$name='op_Explicit'">
 				<xsl:text>Explicit </xsl:text>
-				<xsl:value-of select="$from" />
+				<!--<xsl:value-of select="$from" />
+				    <xsl:text> to </xsl:text>
+				    <xsl:value-of select="$to" />-->
+				<xsl:call-template name="strip-namespace">
+					<xsl:with-param name="name" select="$from" />
+				</xsl:call-template>
 				<xsl:text> to </xsl:text>
-				<xsl:value-of select="$to" />
+				<xsl:call-template name="strip-namespace">
+					<xsl:with-param name="name" select="$to" />
+				</xsl:call-template>
+				<!--KSD-->
 				<xsl:text> Conversion</xsl:text>
 			</xsl:when>
 			<xsl:otherwise>ERROR</xsl:otherwise>

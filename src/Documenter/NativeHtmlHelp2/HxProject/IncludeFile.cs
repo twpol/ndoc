@@ -38,7 +38,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.HxProject
 		/// <summary>
 		/// Adds a directory to the include file (includes *.* in that directory)
 		/// </summary>
-		/// <param name="path">Releative path (from the include file) to the directory</param>
+		/// <param name="path">Relative path (from the include file) to the directory</param>
 		public void AddDirectory( string path )
 		{
 			XmlElement fileNode = base.dataNode.OwnerDocument.CreateElement( "File" );

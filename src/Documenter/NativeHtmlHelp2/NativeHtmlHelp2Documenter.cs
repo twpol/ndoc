@@ -179,12 +179,12 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 
 				// set up the project file
 				ProjectFile HxProject = CreateProjectFile();
+				HxProject.TOCFile = toc.FileName;
+				HxProject.Save( w.WorkingDirectory );
 
 				// get the ndoc xml
 				OnDocBuildingStep( 10, "Merging XML documentation..." );
 				XmlDocument xmlDocumentation = MergeXml( project );
-				HxProject.TOCFile = toc.FileName;
-				HxProject.Save( w.WorkingDirectory );
 
 				// create and intialize a HtmlFactory
 				ExternalHtmlProvider htmlProvider = new ExternalHtmlProvider( MyConfig.HeaderHtml, MyConfig.FooterHtml );
