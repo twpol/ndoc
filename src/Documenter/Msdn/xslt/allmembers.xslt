@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<!-- -->
 	<xsl:output method="html" indent="no" />
@@ -220,7 +220,21 @@
 								<xsl:value-of select="../@name" />
 							</a>
 						</td>
-						<td width="50%">Overloaded. Initialize a new instance of the <xsl:value-of select="../@name" /> class.</td>
+						<td width="50%">
+							<xsl:text>Overloaded. </xsl:text>
+							<xsl:choose>
+								<xsl:when test="../constructor/documentation/overloads/summary">
+									<xsl:call-template name="overloads-summary-with-no-paragraph">
+										<xsl:with-param name="overloads" select="../constructor" />
+									</xsl:call-template>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:text>Initialize a new instance of the </xsl:text>
+									<xsl:value-of select="../@name" />
+									<xsl:text> class.</xsl:text>
+								</xsl:otherwise>
+							</xsl:choose>
+						</td>
 					</xsl:when>
 					<xsl:otherwise>
 						<td width="50%">

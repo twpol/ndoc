@@ -348,7 +348,9 @@
 								</td>
 								<td width="50%">
 									<xsl:text>Overloaded. </xsl:text>
-									<xsl:apply-templates select="//class[@id=$declaring-type-id]/method[@name=$name][1]/documentation/summary/node()" mode="slashdoc" />
+									<xsl:call-template name="overloads-summary-with-no-paragraph">
+										<xsl:with-param name="overloads" select="//class[@id=$declaring-type-id]/method[@name=$name]" />
+									</xsl:call-template>
 								</td>
 							</xsl:when>
 							<xsl:otherwise>
@@ -466,7 +468,10 @@
 								</xsl:choose>
 							</a>
 						</td>
-						<td width="50%">Overloaded. <xsl:apply-templates select="documentation/summary/node()" mode="slashdoc" /></td>
+						<td width="50%">
+							<xsl:text>Overloaded. </xsl:text>
+							<xsl:call-template name="overloads-summary-with-no-paragraph" />
+						</td>
 					</xsl:when>
 					<xsl:otherwise>
 						<td width="50%">

@@ -1124,6 +1124,56 @@ namespace NDoc.Test
 		{
 		}
 	}
+
+	/// <summary>Test the new overloads tag.</summary>
+	public class OverloadsTag
+	{
+		/// <overloads>
+		///   <summary>This constructor is overloaded.</summary>
+		/// </overloads>
+		/// <summary>This overloaded constructor accepts no parameters.</summary>
+		public OverloadsTag()
+		{
+		}
+
+		/// <summary>This overloaded constructor accepts one int parameter.</summary>
+		public OverloadsTag(int i)
+		{
+		}
+
+		/// <overloads>
+		///   <summary>This indexer is overloaded.</summary>
+		/// </overloads>
+		/// <summary>This overloaded indexer accepts one int parameter.</summary>
+		public int this[int i]
+		{
+			get { return 0; }
+		}
+
+		/// <summary>This overloaded indexer accepts one string parameter.</summary>
+		public int this[string s]
+		{
+			get { return 0; }
+		}
+
+		/// <overloads>
+		///   <summary>This method is overloaded.</summary>
+		///   <note>This is a note.</note>
+		///   <example>
+		///     <para>This is some example code.</para>
+		///     <code>Foo.Bar.Baz.Quux();</code>
+		///   </example>
+		/// </overloads>
+		/// <summary>This overload accepts no parameters.</summary>
+		public void OverloadedMethod()
+		{
+		}
+
+		/// <summary>This overload accepts one int parameter.</summary>
+		public void OverloadedMethod(int i)
+		{
+		}
+	}
 }
 
 namespace NDoc.Test.InternalStuff

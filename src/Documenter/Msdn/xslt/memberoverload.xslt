@@ -54,7 +54,8 @@
 					</xsl:with-param>
 				</xsl:call-template>
 				<div id="content">
-					<xsl:call-template name="summary-section" />
+					<xsl:call-template name="overloads-summary-section" />
+					<xsl:call-template name="overloads-note-section" />
 					<h3>Overload List</h3>
 					<xsl:for-each select="parent::node()/*[@name=$memberName]">
 						<p class="i1">
@@ -86,6 +87,7 @@
 							</a>
 						</p>
 					</xsl:for-each>
+					<xsl:call-template name="overloads-example-section" />
 					<xsl:call-template name="seealso-section">
 						<xsl:with-param name="page">memberoverload</xsl:with-param>
 					</xsl:call-template>
