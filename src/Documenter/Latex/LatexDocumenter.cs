@@ -130,7 +130,7 @@ Path.GetFullPath(Path.Combine(moduleDir, @"..\..\..\Documenter\Latex"));
 			
 			EmbeddedResources.WriteEmbeddedResources(
 				assembly,
-				"NDoc.Latex.Documenter.xslt",
+				"NDoc.Documenter.Latex.xslt",
 				m_ResourceDirectory + @"xslt\");
 			#endif
 
