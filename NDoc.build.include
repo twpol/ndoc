@@ -177,7 +177,7 @@
 		<property name="current.build.debug" value="${build.debug}" readonly="false" />
 		<property name="current.build.defines" value="${build.defines},NET,NET_1_0" readonly="false" />
 		<property name="current.build.optimize" value="${build.optimize}" readonly="false" />
-		<property name="current.bin.dir" value="${build.dir}/bin/${current.runtime.config}/${current.runtime.version}/${current.build.config}"
+		<property name="current.bin.dir" value="${build.dir}/bin/.net/${current.runtime.version}/${current.build.config}"
 			readonly="false" />
 		<property name="current.sdkdoc.dir" value="${build.dir}/doc/sdk/${current.runtime.config}/${current.runtime.version}"
 			readonly="false" />
@@ -192,7 +192,7 @@
 		<property name="current.build.debug" value="${build.debug}" readonly="false" />
 		<property name="current.build.defines" value="${build.defines},NET,NET_1_1" readonly="false" />
 		<property name="current.build.optimize" value="${build.optimize}" readonly="false" />
-		<property name="current.bin.dir" value="${build.dir}/bin/${current.runtime.config}/${current.runtime.version}/${current.build.config}"
+		<property name="current.bin.dir" value="${build.dir}/bin/.net/${current.runtime.version}/${current.build.config}"
 			readonly="false" />
 		<property name="current.sdkdoc.dir" value="${build.dir}/doc/sdk/${current.runtime.config}/${current.runtime.version}"
 			readonly="false" />
