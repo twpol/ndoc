@@ -14,7 +14,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyVersion("1.0.*")]
 
 #if !DEBUG
-[assembly: AssemblyDelaySign(false)]
-[assembly: AssemblyKeyFile(@"..\..\..\..\ndoc.snk")]
-[assembly: AssemblyKeyName("")]
+//[assembly: AssemblyDelaySign(false)]
+//[assembly: AssemblyKeyFile(@"..\..\..\..\ndoc.snk")]
+//[assembly: AssemblyKeyName("")]
 #endif
