@@ -1073,7 +1073,6 @@ namespace NDoc.Core.Reflection
 				WriteBaseType(writer, type.BaseType);
 			WriteDerivedTypes(writer, memberName);
 
-			//Debug.Assert(implementations == null);
 			implementations = new ImplementsCollection();
 
 			//build a collection of the base type's interfaces
@@ -1251,7 +1250,7 @@ namespace NDoc.Core.Reflection
 			}
 			catch(Exception e)
 			{
-				throw new DocumenterException("Error retrieving custom attributes for " + GetMemberName(type),e);
+				TraceErrorOutput("Error retrieving custom attributes for " + GetMemberName(type),e);
 			}
 		}
 
@@ -1264,7 +1263,7 @@ namespace NDoc.Core.Reflection
 			}
 			catch(Exception e)
 			{
-				throw new DocumenterException("Error retrieving custom attributes for " + GetMemberName(fieldInfo),e);
+				TraceErrorOutput("Error retrieving custom attributes for " + GetMemberName(fieldInfo),e);
 			}
 		}
 
@@ -1276,7 +1275,7 @@ namespace NDoc.Core.Reflection
 			}
 			catch(Exception e)
 			{
-				throw new DocumenterException("Error retrieving custom attributes for " + GetMemberName(constructorInfo),e);
+				TraceErrorOutput("Error retrieving custom attributes for " + GetMemberName(constructorInfo),e);
 			}
 		}
 
@@ -1289,7 +1288,7 @@ namespace NDoc.Core.Reflection
 			}
 			catch(Exception e)
 			{
-				throw new DocumenterException("Error retrieving custom attributes for " + GetMemberName(methodInfo),e);
+				TraceErrorOutput("Error retrieving custom attributes for " + GetMemberName(methodInfo),e);
 			}
 		}
 
@@ -1301,7 +1300,7 @@ namespace NDoc.Core.Reflection
 			}
 			catch(Exception e)
 			{
-				throw new DocumenterException("Error retrieving custom attributes for " + GetMemberName(propertyInfo),e);
+				TraceErrorOutput("Error retrieving custom attributes for " + GetMemberName(propertyInfo),e);
 			}
 		}
 
@@ -1313,7 +1312,7 @@ namespace NDoc.Core.Reflection
 			}
 			catch(Exception e)
 			{
-				throw new DocumenterException("Error retrieving custom attributes for " + parameterInfo.Member.ReflectedType.FullName + "." + parameterInfo.Member.Name + " param " + parameterInfo.Name,e);
+				TraceErrorOutput("Error retrieving custom attributes for " + parameterInfo.Member.ReflectedType.FullName + "." + parameterInfo.Member.Name + " param " + parameterInfo.Name,e);
 			}
 		}
 
@@ -1325,7 +1324,7 @@ namespace NDoc.Core.Reflection
 			}
 			catch(Exception e)
 			{
-				throw new DocumenterException("Error retrieving custom attributes for " + GetMemberName(eventInfo),e);
+				TraceErrorOutput("Error retrieving custom attributes for " + GetMemberName(eventInfo),e);
 			}
 		}
 
@@ -1373,16 +1372,7 @@ namespace NDoc.Core.Reflection
 					}
 					catch(Exception e)
 					{
-						Trace.WriteLine("");
-						Trace.WriteLine("### value for attribute field " + GetMemberName(field).Substring(2) + " cannot be determined");
-						Exception ex = e;
-						do
-						{
-							Trace.WriteLine("-> " + ex.Message);
-							ex=ex.InnerException;
-						} while(ex!=null);
-						Trace.WriteLine("");
-
+						TraceErrorOutput("Value for attribute field " + GetMemberName(field).Substring(2) + " cannot be determined",e);
 						fieldValue="***UNKNOWN***";
 					}
 					if (fieldValue.Length>0)
@@ -1415,16 +1405,7 @@ namespace NDoc.Core.Reflection
 						}
 						catch(Exception e)
 						{
-							Trace.WriteLine("");
-							Trace.WriteLine("### value for attribute property " + GetMemberName(property).Substring(2) + " cannot be determined");
-							Exception ex = e;
-							do
-							{
-								Trace.WriteLine("-> " + ex.Message);
-								ex=ex.InnerException;
-							} while(ex!=null);
-							Trace.WriteLine("");
-
+							TraceErrorOutput("Value for attribute property " + GetMemberName(property).Substring(2) + " cannot be determined",e);
 							propertyValue="***UNKNOWN***";
 						}
 						if (propertyValue.Length>0)
@@ -1974,15 +1955,7 @@ namespace NDoc.Core.Reflection
 				}
 				catch(Exception e)
 				{
-					Trace.WriteLine("");
-					Trace.WriteLine("### Literal value for " + memberName.Substring(2) + " cannot be determined");
-					Exception ex = e;
-					do
-					{
-						Trace.WriteLine("-> " + ex.Message);
-						ex=ex.InnerException;
-					} while(ex!=null);
-					Trace.WriteLine("");
+					TraceErrorOutput("Literal value for " + memberName.Substring(2) + " cannot be determined",e);
 				}
 				if (fieldValue!=null)
 				{
@@ -3801,6 +3774,26 @@ namespace NDoc.Core.Reflection
 				WriteTypeHierarchy(writer, derivedTypes, childTypeID);
 			}
 			writer.WriteEndElement();
+		}
+
+		private void TraceErrorOutput(string message)
+		{
+			TraceErrorOutput(message,null);
+		}
+
+		private void TraceErrorOutput(string message, Exception ex)
+		{
+			Trace.WriteLine("[WARNING] " + message);
+			if (ex!=null)
+			{
+				Exception tempEx = ex;
+				do
+				{
+					Trace.WriteLine("-> " + tempEx.GetType().ToString() + ":" + ex.Message);
+					tempEx=tempEx.InnerException;
+				} while(tempEx!=null);
+				Trace.WriteLine(ex.StackTrace);
+			}
 		}
 
 		private AssemblyLoader SetupAssemblyLoader()
