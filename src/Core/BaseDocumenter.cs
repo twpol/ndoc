@@ -1565,17 +1565,26 @@ namespace NDoc.Core
 
 				if (MyConfig.ShowMissingSummaries)
 				{
-					if (xmlNode == null || xmlNode.SelectSingleNode("summary") == null)
+					XmlNode summary;
+					if (xmlNode == null 
+						|| (summary = xmlNode.SelectSingleNode("summary")) == null
+						|| summary.InnerText.Length == 0
+						|| summary.InnerText.Trim().StartsWith("Summary description for"))
 					{
-						WriteMissingDocumentation(writer, "summary", null, "Missing <summary> Documentation for " + memberName);
+						WriteMissingDocumentation(writer, "summary", null, 
+							"Missing <summary> documentation for " + memberName);
 					}
 				}
 
 				if (MyConfig.ShowMissingRemarks)
 				{
-					if (xmlNode == null || xmlNode.SelectSingleNode("remarks") == null)
+					XmlNode remarks;
+					if (xmlNode == null 
+						|| (remarks = xmlNode.SelectSingleNode("remarks")) == null
+						|| remarks.InnerText.Length == 0)
 					{
-						WriteMissingDocumentation(writer, "remarks", null, "Missing <remarks> Documentation for " + memberName);
+						WriteMissingDocumentation(writer, "remarks", null, 
+							"Missing <remarks> documentation for " + memberName);
 					}
 				}
 			}
@@ -1595,9 +1604,12 @@ namespace NDoc.Core
 						memberName,
 						parameter.Name);
 
-					if (currentSlashDoc.SelectSingleNode(xpath) == null)
+					XmlNode param;
+					if ((param = currentSlashDoc.SelectSingleNode(xpath)) == null
+						|| param.InnerText.Length == 0)
 					{
-						WriteMissingDocumentation(writer, "param", parameter.Name, "Missing <param> Documentation for " + parameter.Name);
+						WriteMissingDocumentation(writer, "param", parameter.Name, 
+							"Missing <param> documentation for " + parameter.Name);
 					}
 				}
 			}
@@ -1615,9 +1627,12 @@ namespace NDoc.Core
 					"/doc/members/member[@name='{0}']/returns",
 					memberName);
 
-				if (currentSlashDoc.SelectSingleNode(xpath) == null)
+				XmlNode returns;
+				if ((returns = currentSlashDoc.SelectSingleNode(xpath)) == null
+					|| returns.InnerText.Length == 0)
 				{
-					WriteMissingDocumentation(writer, "returns", null, "Missing <returns> Documentation for " + memberName);
+					WriteMissingDocumentation(writer, "returns", null, 
+						"Missing <returns> documentation for " + memberName);
 				}
 			}
 		}
@@ -1632,9 +1647,12 @@ namespace NDoc.Core
 					"/doc/members/member[@name='{0}']/value",
 					memberName);
 
-				if (currentSlashDoc.SelectSingleNode(xpath) == null)
+				XmlNode valuenode;
+				if ((valuenode = currentSlashDoc.SelectSingleNode(xpath)) == null
+					|| valuenode.InnerText.Length == 0)
 				{
-					WriteMissingDocumentation(writer, "value", null, "Missing <value> Documentation for " + memberName);
+					WriteMissingDocumentation(writer, "value", null, 
+						"Missing <value> documentation for " + memberName);
 				}
 			}
 		}
@@ -1687,8 +1705,8 @@ namespace NDoc.Core
 			string memberName,
 			Type type)
 		{
-			WriteSlashDocElements(writer, memberName);
 			CheckForMissingSummaryAndRemarks(writer, memberName);
+			WriteSlashDocElements(writer, memberName);
 			WriteEndDocumentation(writer);
 		}
 
@@ -1698,15 +1716,15 @@ namespace NDoc.Core
 			Type type,
 			MethodInfo method)
 		{
-			WriteTypeDocumentation(writer, memberName, type);
 			CheckForMissingParams(writer, memberName, method.GetParameters());
+			WriteTypeDocumentation(writer, memberName, type);
 			WriteEndDocumentation(writer);
 		}
 
 		private void WriteEnumerationDocumentation(XmlWriter writer, string memberName)
 		{
-			WriteSlashDocElements(writer, memberName);
 			CheckForMissingSummaryAndRemarks(writer, memberName);
+			WriteSlashDocElements(writer, memberName);
 			WriteEndDocumentation(writer);
 		}
 
@@ -1715,9 +1733,9 @@ namespace NDoc.Core
 			string memberName,
 			ConstructorInfo constructor)
 		{
-			WriteSlashDocElements(writer, memberName);
 			CheckForMissingSummaryAndRemarks(writer, memberName);
 			CheckForMissingParams(writer, memberName, constructor.GetParameters());
+			WriteSlashDocElements(writer, memberName);
 			WriteEndDocumentation(writer);
 		}
 
@@ -1726,14 +1744,12 @@ namespace NDoc.Core
 			string memberName,
 			bool writeMissing)
 		{
-			WriteSlashDocElements(writer, memberName);
-
 			if (writeMissing)
 			{
 				CheckForMissingSummaryAndRemarks(writer, memberName);
 			}
-
- 			WriteEndDocumentation(writer);
+			WriteSlashDocElements(writer, memberName);
+			WriteEndDocumentation(writer);
 		}
 
 		private void WritePropertyDocumentation(
@@ -1742,15 +1758,13 @@ namespace NDoc.Core
 			PropertyInfo property,
 			bool writeMissing)
 		{
-			WriteSlashDocElements(writer, memberName);
-
 			if (writeMissing)
 			{
 				CheckForMissingSummaryAndRemarks(writer, memberName);
 				CheckForMissingParams(writer, memberName, GetIndexParameters(property));
 				CheckForMissingValue(writer, memberName);
 			}
-
+			WriteSlashDocElements(writer, memberName);
 			WriteEndDocumentation(writer);
 		}
 
@@ -1760,15 +1774,13 @@ namespace NDoc.Core
 			MethodInfo method,
 			bool writeMissing)
 		{
-			WriteSlashDocElements(writer, memberName);
-
 			if (writeMissing)
 			{
 				CheckForMissingSummaryAndRemarks(writer, memberName);
 				CheckForMissingParams(writer, memberName, method.GetParameters());
 				CheckForMissingReturns(writer, memberName, method);
 			}
-
+			WriteSlashDocElements(writer, memberName);
 			WriteEndDocumentation(writer);
 		}
 
@@ -1777,13 +1789,11 @@ namespace NDoc.Core
 			string memberName,
 			bool writeMissing)
 		{
-			WriteSlashDocElements(writer, memberName);
-
 			if (writeMissing)
 			{
 				CheckForMissingSummaryAndRemarks(writer, memberName);
 			}
-
+			WriteSlashDocElements(writer, memberName);
 			WriteEndDocumentation(writer);
 		}
 
