@@ -1629,7 +1629,7 @@ namespace NDoc.Documenter.Msdn
 		{
 			string typeID = (string)typeNode.Attributes["id"].Value;
 			string methodName = (string)methodNode.Attributes["name"].Value;
-			string fileName = typeID.Substring(2) + "." + methodName + ".html";
+			string fileName = typeID.Substring(2) + "." + methodName + "_overloads.html";
 			return fileName;
 		}
 
@@ -1649,7 +1649,7 @@ namespace NDoc.Documenter.Msdn
 
 			if (methodNode.Attributes["overload"] != null)
 			{
-				fileName += (string)methodNode.Attributes["overload"].Value;
+				fileName += "_overload_" + (string)methodNode.Attributes["overload"].Value;
 			}
 
 			fileName += ".html";

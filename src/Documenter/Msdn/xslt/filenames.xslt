@@ -92,7 +92,7 @@
   <!-- -->
   <xsl:template name="get-filename-for-current-method-overloads">
     <xsl:variable name="type-part" select="translate(substring-after(../@id, 'T:'), '[,]', '')" />
-    <xsl:value-of select="concat($type-part, '.', @name, '.html')" />
+    <xsl:value-of select="concat($type-part, '.', @name, '_overloads.html')" />
   </xsl:template>
   <!-- -->
   <xsl:template name="get-filename-for-inherited-method-overloads">
@@ -246,10 +246,20 @@
 		    <xsl:value-of select="concat(translate(substring-after(substring-before($cref, '.#c'), 'M:'), '[,]', ''), 'Constructor', $overload, '.html')" />
           </xsl:when>
           <xsl:when test="contains($cref, '(')">
+			<xsl:if test="string-length($overload) &gt; 0">
+	            <xsl:value-of select="concat(translate(substring-after(substring-before($cref, '('), 'M:'), '[,]', ''), '_overload_', $overload)" />
+			</xsl:if>
+			<xsl:if test="string-length($overload) = 0">
             <xsl:value-of select="concat(translate(substring-after(substring-before($cref, '('), 'M:'), '[,]', ''), $overload, '.html')" />
+			</xsl:if>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:value-of select="concat(translate(substring-after($cref, 'M:'), '[,]', ''), $overload, '.html')" />
+			<xsl:if test="string-length($overload) &gt; 0">
+				<xsl:value-of select="concat(translate(substring-after($cref, 'M:'), '[,]', ''), '_overload_', $overload)" />
+			</xsl:if>
+			<xsl:if test="string-length($overload) = 0">
+				<xsl:value-of select="concat(translate(substring-after($cref, 'M:'), '[,]', ''), $overload, '.html')" />
+			</xsl:if>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
