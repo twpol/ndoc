@@ -264,7 +264,11 @@ table.HxLinkTable td /* Keep in sync with general table settings below */
 	background: #ffffff;
 	vertical-align: top;
 	}
-
+pre.code
+	{
+	background-color: #eeeeee;
+	padding: 4px 6px 4px 6px;
+	}
 pre, div.syntax
 	{
 	margin-top: .5em;

@@ -7,13 +7,11 @@
 			<para>This is an included example.</para>
 			<code>
 				Foo foo = new Foo();
-				foo.Bar();
-			</code>
+				foo.Bar();</code>
 			<para>This next example is not indented in the include file.</para>
 			<code>
 Foo foo = new Foo();
-foo.Bar();
-			</code>
+foo.Bar();</code>
 		</example>
 	</class>
 </documentation>
