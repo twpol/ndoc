@@ -224,6 +224,10 @@
                <param name="Name" value="Sections">
                <param name="Local" value="Content\extensibility-sections.htm">
              </OBJECT>
+         <LI><OBJECT type="text/sitemap">
+               <param name="Name" value="NDoc User Contributions">
+               <param name="Local" value="Content\contrib.htm">
+             </OBJECT>
       </UL>
       <LI><OBJECT type="text/sitemap">
             <param name="Name" value="Getting Involved">

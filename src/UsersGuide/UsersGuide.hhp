@@ -1,27 +1,32 @@
 
+[INFOTYPES]
+
 [OPTIONS]
 Auto Index=Yes
 Binary TOC=Yes
 Compatibility=1.1 or later
-Compiled file=NDocUsersGuide.chm
-Contents file=contents.HHC
+Compiled File=NDocUsersGuide.chm
+Contents File=contents.HHC
 Default Window=MsdnHelp
-Default topic=Content\Default.htm
+Default Topic=Content\Default.htm
 Display compile progress=No
 Error log file=_errorlog.txt
 Full-text search=Yes
-Index file=index.HHK
+Index File=index.HHK
 Language=0x409 English (United States)
 Title=NDoc 1.3 User's Guide
+Binary Index=Yes
+Default Font=
+Create CHI file=No
 
 [WINDOWS]
-MsdnHelp="NDoc 1.3 Help","contents.hhc","index.hhk","Content\Default.htm","Content\Default.htm",,,,,0x73520,220,0x60387e,[86,51,872,558],0xb0000,,,,,,0
-TP=,"contents.HHC","index.HHK","Content\Default.htm",,,,,,0x20,,0x0,[271,372,593,566],0xb0000,,,,,,0
-
+MsdnHelp="NDoc 1.3 Help","contents.hhc","index.hhk","Content\Default.htm","Content\Default.htm",,,,,0x73520,220,0x60387E,[86,51,872,558],0xB0000,,,,,,0
+TP=,"contents.HHC","index.HHK","Content\Default.htm",,,,,,0x20,0,0x0,[271,372,593,566],0xB0000,,,,,,0
 
 [FILES]
 Content\attributes.htm
 Content\blank.htm
+Content\build_process.htm
 Content\consoleapplication.htm
 Content\createproject.htm
 Content\decorating.htm
@@ -77,7 +82,6 @@ Content\examples\NamespaceMap.xsd
 Content\images\logo.jpg
 Content\images\sf.GIF
 Content\script\ndoc.js
-Content\build_process.htm
+Content\contrib.htm
 
-[INFOTYPES]
-
+[MERGE FILES]

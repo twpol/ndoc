@@ -71,6 +71,10 @@
 				DeploymentContent="TRUE">
 			</File>
 			<File
+				RelativePath=".\Content\contrib.htm"
+				DeploymentContent="TRUE">
+			</File>
+			<File
 				RelativePath=".\Content\createproject.htm"
 				DeploymentContent="TRUE">
 			</File>
