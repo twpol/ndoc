@@ -1,6 +1,6 @@
 
 [OPTIONS]
-Binary TOC=No
+Binary TOC=Yes
 Binary Index=Yes
 Compiled File=NDocUsersGuide.chm
 Contents File=contents.HHC
@@ -36,5 +36,6 @@ Content\vsnet.htm
 Content\xml.htm
 Content\css\ndoc.css
 Content\images\sf.GIF
+Content\tags.html
 
 [MERGE FILES]
