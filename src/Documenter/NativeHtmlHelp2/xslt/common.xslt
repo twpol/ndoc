@@ -266,7 +266,8 @@
 		</xsl:if>
 	</xsl:template>
 	<xsl:template name="obsolete-inline">
-		<xsl:if test="./obsolete">
+		<xsl:param name="member" select="." />
+		<xsl:if test="$member/obsolete">
 			<FONT color="red"><B>Obsolete. </B></FONT>
 		</xsl:if>
 	</xsl:template>
@@ -301,7 +302,10 @@
 				</xsl:call-template>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:call-template name="summary-section" />
+				<xsl:call-template name="output-paragraph">
+					<xsl:with-param name="nodes" select="(documentation/summary)[1]/node()" />
+				</xsl:call-template>
+				<xsl:apply-templates select="documentation/node()" mode="summary-section"/>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
@@ -601,6 +605,16 @@
 		<xsl:variable name="filename">
 			<xsl:value-of select="NUtil:GetLocalCRef( $cref )"/>
 		</xsl:variable>
+		<xsl:variable name="link-text">
+			<xsl:choose>
+				<xsl:when test="node() and $ignore-text!=true()">
+					<xsl:value-of select="." />
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="NUtil:GetName($cref)" />
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
 		<xsl:choose>
 			<xsl:when test="$filename=''">
 				<xsl:choose>
@@ -611,7 +625,7 @@
 					<xsl:otherwise>
 						<xsl:call-template name="get-xlink">
 							<xsl:with-param name="a-index" select="NUtil:GetAIndex( $cref )"/>
-							<xsl:with-param name="link-text" select="string(NUtil:GetName($cref))"/>	
+							<xsl:with-param name="link-text" select="$link-text"/>	
 							<xsl:with-param name="ns-key" select="substring-after( $cref, ':' )"/>										
 						</xsl:call-template>
 				</xsl:otherwise>	
@@ -620,14 +634,7 @@
 			<xsl:otherwise>
 				<a>
 					<xsl:attribute name="href"><xsl:value-of select="$filename"/></xsl:attribute> 			
-					<xsl:choose>
-						<xsl:when test="node() and $ignore-text!=true()">
-							<xsl:value-of select="." />
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:value-of select="NUtil:GetName($cref)" />
-						</xsl:otherwise>
-					</xsl:choose>
+					<xsl:value-of select="$link-text"/>
 				</a>				
 			</xsl:otherwise>
 		</xsl:choose>
