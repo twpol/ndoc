@@ -136,9 +136,12 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			// add properties passed to the stylesheets
 			this.Arguments.AddParam( "ndoc-title", "", config.Title );
 			this.Arguments.AddParam( "ndoc-document-attributes", "", config.DocumentAttributes );
-			this.Arguments.AddParam( "ndoc-documented-attributes", "", config.DocumentedAttributes );
 			this.Arguments.AddParam( "ndoc-net-framework-version", "", FrameworkVersion );
 			this.Arguments.AddParam( "ndoc-version", "", config.Version );
+
+			XPathDocument DocumenterSpecificXml = GetDocumenterSpecificXmlData(config);
+			XPathNodeIterator it = DocumenterSpecificXml.CreateNavigator().Select("*");
+			this.Arguments.AddParam( "documenter-specific-xml", "", it );
 			
 		}
 
@@ -762,5 +765,39 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 
 			return indexes;
 		}
+
+		private XPathDocument GetDocumenterSpecificXmlData(NativeHtmlHelp2Config config)   
+		{
+			// create a StringWriter to hold the constructed xml
+			StringWriter sw = new StringWriter();
+			XmlTextWriter writer = new XmlTextWriter(sw);
+ 
+			writer.WriteStartElement("root");
+
+			// add the default docset for this help title   
+			AddDocSet( writer, config.HtmlHelpName );   
+    
+			// also add the items from the custom docset list   
+			foreach ( string s in config.DocSetList.Split( new char [] { ',' } ) )   
+				AddDocSet( writer, s );
+   
+			writer.WriteEndElement();   
+
+			// now we load the constructed xml into an XPathDoc
+			XmlTextReader reader = new XmlTextReader(sw.ToString(), XmlNodeType.Document, null);
+			XPathDocument xpd = new XPathDocument(reader);
+
+			return xpd;
+ 		}   
+    
+		private void AddDocSet(XmlWriter writer, string id )   
+		{   
+			if ( id.Length > 0 )   
+			{   
+				writer.WriteStartElement( "docSet" );   
+				writer.WriteString(id.Trim());   
+				writer.WriteEndElement();   
+			}   
+		} 
 	}
 }
