@@ -20,6 +20,7 @@ using System.Collections;
 using System.Xml;
 using System.Reflection;
 using System.IO;
+using System.Diagnostics;
 
 namespace NDoc.Core
 {
@@ -167,22 +168,24 @@ namespace NDoc.Core
 				//do a quick check to make sure there are some namespace summaries
 				//if not, we don't need to write this section out
 				bool summariesExist=false;
-				foreach (string ns in _namespaces.Keys)
+				foreach (DictionaryEntry ns in _namespaces)
 				{
-					string summary = (string)_namespaces[ns];
-					if (summary!=null && summary.Length>0) summariesExist = true;
+					if (ns.Value!=null && ((string)ns.Value).Length>0) summariesExist = true;
 				}
 
 				if (summariesExist)
 				{
 					writer.WriteStartElement("namespaces");
 
-					foreach (string ns in _namespaces.Keys)
+					foreach (DictionaryEntry ns in _namespaces)
 					{
-						writer.WriteStartElement("namespace");
-						writer.WriteAttributeString("name", ns);
-						writer.WriteRaw((string)_namespaces[ns]);
-						writer.WriteEndElement();
+						if (ns.Value!=null && ((string)ns.Value).Length>0)
+						{
+							writer.WriteStartElement("namespace");
+							writer.WriteAttributeString("name", (string)ns.Key);
+							writer.WriteRaw((string)ns.Value);
+							writer.WriteEndElement();
+						}
 					}
 
 					writer.WriteEndElement();
