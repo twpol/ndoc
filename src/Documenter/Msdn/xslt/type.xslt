@@ -134,6 +134,7 @@
 						<xsl:attribute name="href">
 							<xsl:call-template name="get-filename-for-system-type">
 								<xsl:with-param name="type-name" select="'System.FlagsAttribute'" />
+								<xsl:with-param name="ignore-text" select="true()"/>
 							</xsl:call-template>
 						</xsl:attribute>
 						FlagsAttribute</a>
