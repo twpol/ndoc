@@ -71,11 +71,16 @@ color:blue">&lt;/</span><span style="font-size:8.0pt;font-family:&quot;Lucida Co
 color:maroon">xsl:stylesheet</span><span style="font-size:8.0pt;font-family:
 &quot;Lucida Console&quot;;color:blue">&gt;</span></p><p>This stylesheet must be valid XSLT markup, and must also have the XSLT 
 		namespace.</p><p>The templates in this stylesheet need to be written to match the names 
-		of your tags. The <b>mode</b> attribute is used to specify which section 
+		of your tags. The <b>match</b> attribute is an XPath query that defines 
+		the context at which your template will execute. The most common usage 
+		is to simply match the name of your custom tag, but it is also possible 
+		to change the behavior of your tag based on what sort of code artifact 
+		it is associated with.</p>
+		<p>The <b>mode</b> attribute is used to specify which section 
 		in the documentation your tag will be displayed.
 		<a href="extensibility-sections.htm">Refer to the section topic</a> for 
 		a complete list of sections and their descriptions.</p><p><i><b>Remember</b></i>: XSLT is case sensitive; so both the <b>match</b> 
-		pattern and the <b>mode</b> names must match exactly or your template will 
+		pattern and the <b>mode</b> names must be correct or your templates will 
 		be ignored.</p></li><li>
 		<p>Next set the <b>ExtensibilityStylesheet</b> property of your MSDN or 
 		VS.NET project to the path to your stylesheet. When NDoc builds the documentation 
