@@ -49,18 +49,13 @@
 		<p><a href="{@href}"><xsl:value-of select="." /></a></p>
 	</xsl:template>
 
-	<xsl:template match="insert-releases">
-		<xsl:apply-templates select="$releases/release">
-			<xsl:sort select="@date" order="descending" />
-		</xsl:apply-templates>
-	</xsl:template>
-
 	<xsl:template match="release">
-		<p><a href="{@link}"><xsl:value-of select="@name" /></a></p>
+		<a href="{@link}"><xsl:value-of select="@name" /></a>
 	</xsl:template>
 
 	<xsl:template match="insert-latest-release">
-		<xsl:apply-templates select="$releases/release[last()]" />
+		<xsl:variable name="latest" select="$releases/release[last()]" />
+		<a href="{$latest/@link}"><xsl:value-of select="$latest/@name" /></a>
 	</xsl:template>
 
 </xsl:transform>
