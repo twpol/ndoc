@@ -10,6 +10,10 @@
 		<call target="release" />
 		<!-- compile current build configuration for all supported frameworks -->
 		<call target="compile-build" />
+		<!-- build user guide -->
+		<call target="build-userguide" />
+		<!-- build setup -->
+		<call target="build-setup" />
 		<!-- create distribution zip file -->
 		<call target="zip" />
 	</target>
@@ -48,4 +52,24 @@
 			</fileset>
 		</zip>
 	</target>
+	<!--
+
+	-->
+	<target name="build-userguide">
+		<exec program="devenv.com">
+			<arg file="src/UsersGuide/UsersGuide.vcproj" />
+			<arg value="/build" />
+			<arg value="release" />
+		</exec> 
+	</target>	
+	<!--
+
+	-->
+	<target name="build-setup">
+		<exec program="devenv.com">
+			<arg file="src/Setup/Setup.vdproj" />
+			<arg value="/build" />
+			<arg value="release" />
+		</exec> 
+	</target>	
 </project>
