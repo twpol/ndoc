@@ -99,6 +99,22 @@ namespace NDoc.Gui
 			}
 		} 
 
+		public override void Refresh()
+		{
+			foreach ( ListViewItem item in this.assembliesListView.Items )
+			{
+				AssemblySlashDoc assemblySlashDoc = item.Tag as AssemblySlashDoc;
+				Debug.Assert( assemblySlashDoc != null );
+
+				if ( File.Exists( assemblySlashDoc.Assembly.Path ) )
+					item.ForeColor = Color.Black;
+				else
+					item.ForeColor = Color.Red;
+			}
+
+			base.Refresh ();
+		}
+
 		private void AddListViewItem( AssemblySlashDoc assemblySlashDoc )
 		{
 			Debug.Assert( assemblySlashDoc != null );
@@ -107,6 +123,10 @@ namespace NDoc.Gui
 			item.SubItems.Add( Path.GetDirectoryName( assemblySlashDoc.Assembly.Path ) );
 			item.SubItems.Add( GetFixedPathType( assemblySlashDoc ) );
 			item.Tag = assemblySlashDoc;
+
+			if ( File.Exists( assemblySlashDoc.Assembly.Path ) == false )
+				item.ForeColor = Color.Red;
+
 			assembliesListView.Items.Add( item );
 			item.EnsureVisible();
 		}
@@ -335,6 +355,8 @@ namespace NDoc.Gui
 
 					this.assembliesListView.EndUpdate();
 				}
+
+				this.Refresh();
 			}
 		}
 
