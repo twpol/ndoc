@@ -137,6 +137,7 @@ namespace NDoc.Gui
 		private System.Windows.Forms.MenuItem menuHelpIndex;
 		private System.Windows.Forms.MenuItem menuNDocOnline;
 		private System.Windows.Forms.MenuItem menuItem3;
+		private System.Windows.Forms.MenuItem menuViewDescriptions;
 
 		private StringCollection recentProjectFilenames = new StringCollection();
 		#endregion // Fields
@@ -321,6 +322,7 @@ namespace NDoc.Gui
 			this.labelDocumenters = new System.Windows.Forms.Label();
 			this.comboBoxDocumenters = new System.Windows.Forms.ComboBox();
 			this.propertyGrid = new System.Windows.Forms.PropertyGrid();
+			this.menuViewDescriptions = new System.Windows.Forms.MenuItem();
 			((System.ComponentModel.ISupportInitialize)(this.statusBarTextPanel)).BeginInit();
 			this.assembliesHeaderGroupBox.SuspendLayout();
 			this.documenterHeaderGroupBox.SuspendLayout();
@@ -480,6 +482,7 @@ namespace NDoc.Gui
 			this.menuView.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
 																					 this.menuViewBuildProgress,
 																					 this.menuViewStatusBar,
+																					 this.menuViewDescriptions,
 																					 this.menuItem1,
 																					 this.menuViewOptions});
 			this.menuView.Text = "View";
@@ -500,12 +503,12 @@ namespace NDoc.Gui
 			// 
 			// menuItem1
 			// 
-			this.menuItem1.Index = 2;
+			this.menuItem1.Index = 3;
 			this.menuItem1.Text = "-";
 			// 
 			// menuViewOptions
 			// 
-			this.menuViewOptions.Index = 3;
+			this.menuViewOptions.Index = 4;
 			this.menuViewOptions.Text = "Options...";
 			this.menuViewOptions.Click += new System.EventHandler(this.menuViewOptions_Click);
 			// 
@@ -798,6 +801,13 @@ namespace NDoc.Gui
 			this.propertyGrid.ViewBackColor = System.Drawing.SystemColors.Window;
 			this.propertyGrid.ViewForeColor = System.Drawing.SystemColors.WindowText;
 			// 
+			// menuViewDescriptions
+			// 
+			this.menuViewDescriptions.Checked = true;
+			this.menuViewDescriptions.Index = 2;
+			this.menuViewDescriptions.Text = "Descriptions";
+			this.menuViewDescriptions.Click += new System.EventHandler(this.menuViewDescriptions_Click);
+			// 
 			// MainForm
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
@@ -968,16 +978,19 @@ namespace NDoc.Gui
 			Screen screen = Screen.FromControl( this );
 			this.Size = (Size)settings.GetSetting( "gui", "size", new Size( screen.WorkingArea.Width / 3, screen.WorkingArea.Height - 20 ) );
 			
+			// size the window to the working area if it is larger (can happen when resolution changes)
 			if ( this.Height > screen.WorkingArea.Height )
 				this.Height = screen.WorkingArea.Height;
+			if ( this.Width > screen.WorkingArea.Width )
+				this.Width = screen.WorkingArea.Width;
 
 			if ( settings.GetSetting( "gui", "maximized", false ) )
 				this.WindowState = FormWindowState.Maximized;			
 
 			this.traceWindow1.Visible = settings.GetSetting( "gui", "viewTrace", true );
 			this.traceWindow1.Height = settings.GetSetting( "gui", "traceWindowHeight", this.traceWindow1.Height );
-
 			this.statusBar.Visible = settings.GetSetting( "gui", "statusBar", true );
+			this.ShowDescriptions = settings.GetSetting( "gui", "showDescriptions", true );
 
 			IList list = recentProjectFilenames;
 			settings.GetSettingList( "gui", "mru", typeof( string ), ref list );		
@@ -1024,6 +1037,7 @@ namespace NDoc.Gui
 				settings.SetSetting( "gui", "viewTrace", this.traceWindow1.Visible );
 				settings.SetSetting( "gui", "traceWindowHeight", this.traceWindow1.Height );
 				settings.SetSetting( "gui", "statusBar", this.statusBar.Visible );
+				settings.SetSetting( "gui", "showDescriptions", this.ShowDescriptions );
 				
 				if ( comboBoxDocumenters.SelectedIndex >= 0 )
 					settings.SetSetting( "gui", "documenter", ((IDocumenter)project.Documenters[comboBoxDocumenters.SelectedIndex]).Name );
@@ -2010,6 +2024,24 @@ namespace NDoc.Gui
 		private void menuHelpIndex_Click(object sender, System.EventArgs e)
 		{
 			Help.ShowHelpIndex( this, HelpFilePath );
+		}
+
+		private void menuViewDescriptions_Click(object sender, System.EventArgs e)
+		{
+			ShowDescriptions = !ShowDescriptions;
+		}
+
+		private bool ShowDescriptions
+		{
+			get
+			{
+				return this.propertyGrid.HelpVisible;
+			}
+			set
+			{
+				this.propertyGrid.HelpVisible = value;
+				menuViewDescriptions.Checked = value;
+			}
 		}
 	}
 }
