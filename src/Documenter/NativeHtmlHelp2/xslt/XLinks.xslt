@@ -31,7 +31,7 @@
 	<xsl:template name="get-link-for-member">		
 		<xsl:param name="member"/>
 		<xsl:param name="link-text"/>
-		
+
 		<xsl:variable name="mid">
 			<xsl:choose>
 				<xsl:when test="$member/@declaringType">
@@ -70,6 +70,36 @@
 						</a>					
 					</xsl:otherwise>
 				</xsl:choose>
+			</xsl:otherwise>
+		</xsl:choose>		
+	</xsl:template>
+	
+	<xsl:template name="get-link-for-explicit-interface-member">		
+		<xsl:param name="member"/>
+		<xsl:param name="link-text"/>
+
+		<xsl:variable name="mid">
+			<xsl:value-of select="$member/implements[1]/@id"/>
+		</xsl:variable>
+
+		<xsl:variable name="cref">
+			<xsl:value-of select="NUtil:GetLocalCRef( $mid )"/>
+		</xsl:variable>
+		
+		<xsl:choose>
+			<xsl:when test="$cref=''">
+				<xsl:variable name="a-index" select="NUtil:GetAIndex( $mid )"/>
+				<xsl:call-template name="get-xlink">
+					<xsl:with-param name="a-index" select="$a-index"/>
+					<xsl:with-param name="link-text" select="$link-text"/>
+					<xsl:with-param name="ns-key" select="$member/@declaringType"/>			
+				</xsl:call-template>					
+			</xsl:when>
+			<xsl:otherwise>
+				<a>
+					<xsl:attribute name="href"><xsl:value-of select="$cref"/></xsl:attribute> 			
+					<xsl:value-of select="$link-text"/> 
+				</a>					
 			</xsl:otherwise>
 		</xsl:choose>		
 	</xsl:template>

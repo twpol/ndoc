@@ -354,10 +354,20 @@
 					<xsl:with-param name="local-name" select="local-name()" />
 				</xsl:call-template>
 				
-				<xsl:call-template name="get-link-for-member">
-					<xsl:with-param name="link-text" select="@name"/>
-					<xsl:with-param name="member" select="."/>
-				</xsl:call-template>
+				<xsl:choose>
+					<xsl:when test="@interface">
+						<xsl:call-template name="get-link-for-explicit-interface-member">
+							<xsl:with-param name="link-text" select="@name"/>
+							<xsl:with-param name="member" select="."/>
+						</xsl:call-template>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:call-template name="get-link-for-member">
+							<xsl:with-param name="link-text" select="@name"/>
+							<xsl:with-param name="member" select="."/>
+						</xsl:call-template>
+					</xsl:otherwise>
+				</xsl:choose>
 				
 				<xsl:text> (inherited from </xsl:text>
 				<b>
@@ -385,10 +395,20 @@
 					<xsl:with-param name="local-name" select="local-name()" />
 				</xsl:call-template>
 					
-				<xsl:call-template name="get-link-for-member">
-					<xsl:with-param name="link-text" select="@name"/>
-					<xsl:with-param name="member" select="."/>
-				</xsl:call-template>
+				<xsl:choose>
+					<xsl:when test="@interface">
+						<xsl:call-template name="get-link-for-explicit-interface-member">
+							<xsl:with-param name="link-text" select="@name"/>
+							<xsl:with-param name="member" select="."/>
+						</xsl:call-template>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:call-template name="get-link-for-member">
+							<xsl:with-param name="link-text" select="@name"/>
+							<xsl:with-param name="member" select="."/>
+						</xsl:call-template>
+					</xsl:otherwise>
+				</xsl:choose>
 				
 				<xsl:text> (inherited from </xsl:text>
 				<b>
@@ -418,10 +438,20 @@
 						<xsl:with-param name="local-name" select="local-name()" />
 					</xsl:call-template>
 					
-					<xsl:call-template name="get-link-for-member">
-						<xsl:with-param name="link-text" select="@name"/>
-						<xsl:with-param name="member" select="."/>
-					</xsl:call-template>
+					<xsl:choose>
+						<xsl:when test="@interface">
+							<xsl:call-template name="get-link-for-explicit-interface-member">
+								<xsl:with-param name="link-text" select="@name"/>
+								<xsl:with-param name="member" select="."/>
+							</xsl:call-template>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:call-template name="get-link-for-member">
+								<xsl:with-param name="link-text" select="@name"/>
+								<xsl:with-param name="member" select="."/>
+							</xsl:call-template>
+						</xsl:otherwise>
+					</xsl:choose>
 
 					<xsl:text> (inherited from </xsl:text>
 					<b>
