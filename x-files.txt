@@ -2,7 +2,7 @@
 *.user
 .#*
 .cvsignore
-ndoc\zip-source.bat
+ndoc\zip-src.bat
 ndoc\zip-release.bat
 ndoc\files.txt
 ndoc\x-files.txt
