@@ -378,7 +378,7 @@ namespace NDoc.Documenter.Msdn
 		[
 		Category("HTML Help Options"),
 		Description("Raw HTML that is used as a page header instead of the default blue banner. " +
-			"\"%TOPIC-TITLE%\" is dynamically replaced by the title of the current page.")
+			"\"%TOPIC_TITLE%\" is dynamically replaced by the title of the current page.")
 		]
 		public string HeaderHtml
 		{
@@ -397,9 +397,9 @@ namespace NDoc.Documenter.Msdn
 		[
 		Category("HTML Help Options"),
 		Description("Raw HTML that is used as a page footer instead of the default footer." +
-			"\"%ASSEMBLY-NAME%\" is dynamically replaced by the name of the assembly for the current page. " +
-			"\"%ASSEMBLY-VERSION%\" is dynamically replaced by the version of the assembly for the current page. " +
-			"\"%TOPIC-TITLE%\" is dynamically replaced by the title of the current page.")
+			"\"%ASSEMBLY_NAME%\" is dynamically replaced by the name of the assembly for the current page. " +
+			"\"%ASSEMBLY_VERSION%\" is dynamically replaced by the version of the assembly for the current page. " +
+			"\"%TOPIC_TITLE%\" is dynamically replaced by the title of the current page.")
 		]
 		public string FooterHtml
 		{

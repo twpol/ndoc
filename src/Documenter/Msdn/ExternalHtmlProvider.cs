@@ -29,7 +29,7 @@ namespace NDoc.Documenter.Msdn
 			if (headerHtml == null)
 				return string.Empty;
 
-			headerHtml = headerHtml.Replace("%TOPIC-TITLE%", topicTitle);
+			headerHtml = headerHtml.Replace("%TOPIC_TITLE%", topicTitle);
 
 			return headerHtml;
 		}
@@ -48,9 +48,9 @@ namespace NDoc.Documenter.Msdn
 			if (footerHtml == null)
 				return string.Empty;
 
-			footerHtml = footerHtml.Replace("%ASSEMBLY-NAME%", assemblyName);
-			footerHtml = footerHtml.Replace("%ASSEMBLY-VERSION%", assemblyVersion);
-			footerHtml = footerHtml.Replace("%TOPIC-TITLE%", topicTitle);
+			footerHtml = footerHtml.Replace("%ASSEMBLY_NAME%", assemblyName);
+			footerHtml = footerHtml.Replace("%ASSEMBLY_VERSION%", assemblyVersion);
+			footerHtml = footerHtml.Replace("%TOPIC_TITLE%", topicTitle);
 
 			return footerHtml;
 		}
