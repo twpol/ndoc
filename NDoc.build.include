@@ -129,7 +129,7 @@
         <property name="current.runtime.net-1.0" value="false" readonly="false" />
         <property name="current.runtime.net-1.1" value="false" readonly="false" />
         <property name="current.runtime.netcf-1.0" value="false" readonly="false" />
-        <property name="current.runtime.mono-1.0" value="false" readonly="false" />
+        <property name="current.runtime.mono-0.25" value="false" readonly="false" />
         <property name="current.runtime.sscli-1.0" value="false" readonly="false" />
         <property name="current.runtime.config.${current.runtime.config}-${current.runtime.version}" value="true" readonly="false" />
     </target>
@@ -201,12 +201,12 @@
         <property name="nant.settings.currentframework" value="${current.runtime.config}-${current.runtime.version}" />
         <call target="set-runtime-configuration-flags" force="true" />
     </target>
-    <target name="set-mono-1.0-runtime-configuration" depends="check-bin-dir, check-sdkdoc-dir, check-sdkdoc-debug, check-current-build-config, check-build-debug, check-build-defines">
+    <target name="set-mono-0.25-runtime-configuration" depends="check-bin-dir, check-sdkdoc-dir, check-sdkdoc-debug, check-current-build-config, check-build-debug, check-build-defines">
         <property name="current.runtime.config" value="mono" readonly="false" />
-        <property name="current.runtime.version" value="1.0" readonly="false" />
-        <property name="current.runtime.description" value="Mono 1.0" readonly="false" />
+        <property name="current.runtime.version" value="0.25" readonly="false" />
+        <property name="current.runtime.description" value="Mono 0.25" readonly="false" />
         <property name="current.build.debug" value="${build.debug}" readonly="false" />
-        <property name="current.build.defines" value="${build.defines},MONO,MONO_1_0" readonly="false" />
+        <property name="current.build.defines" value="${build.defines},MONO,MONO_0_25" readonly="false" />
         <property name="current.bin.dir" value="${build.dir}/bin/${current.runtime.config}/${current.runtime.version}/${current.build.config}"
             readonly="false" />
         <property name="current.sdkdoc.dir" value="${build.dir}/doc/sdk/${current.runtime.config}/${current.runtime.version}"

@@ -51,13 +51,13 @@
             <property name="nant.settings.currentframework" value="net-1.1" />
             <call target="display-current-runtime" force="true" />
         </if>
-        <!-- Mono 1.0 -->
-        <available type="Framework" resource="mono-1.0" property="temp.framework.available" />
+        <!-- Mono 0.25 -->
+        <available type="Framework" resource="mono-0.25" property="temp.framework.available" />
         <ifnot propertytrue="temp.framework.available">
-            <echo message="Mono 1.0 runtime is not available." />
+            <echo message="Mono 0.25 runtime is not available." />
         </ifnot>
         <if propertytrue="temp.framework.available">
-            <property name="nant.settings.currentframework" value="mono-1.0" />
+            <property name="nant.settings.currentframework" value="mono-0.25" />
             <call target="display-current-runtime" force="true" />
         </if>
         <!-- HTML Help Compiler -->
@@ -134,17 +134,17 @@
                 <echo message="The .NET Framework 1.1 is not available. Build skipped." />
             </ifnot>
         </ifnot>
-        <available type="Framework" resource="mono-1.0" property="temp.framework.available" />
+        <available type="Framework" resource="mono-0.25" property="temp.framework.available" />
         <if propertytrue="temp.framework.available">
-            <call target="set-mono-1.0-runtime-configuration" force="true" />
+            <call target="set-mono-0.25-runtime-configuration" force="true" />
             <call target="compile" force="true" />
         </if>
         <ifnot propertytrue="temp.framework.available">
             <if propertyexists="project.build.package" propertytrue="project.build.package">
-                <fail message="Mono 1.0 is not available." />
+                <fail message="Mono 0.25 is not available." />
             </if>
             <ifnot propertyexists="project.build.package" propertytrue="project.build.package">
-                <echo message="Mono 1.0 is not available. Build skipped." />
+                <echo message="Mono 0.25 is not available. Build skipped." />
             </ifnot>
         </ifnot>
     </target>
