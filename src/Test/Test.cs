@@ -156,6 +156,9 @@ namespace NDoc.Test
 		{
 			return false;
 		}
+
+		/// <summary>This summary contains a link to an enum value: <see cref="Enum.Bar"/>.</summary>
+		public void LinksToEnumValue() {}
 	}
 
 	/// <summary>This event has one property.</summary>
