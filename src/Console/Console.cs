@@ -142,6 +142,7 @@ namespace NDoc.ConsoleApplication
 
 		private static void WriteUsage()
 		{
+			Console.WriteLine();
 			Console.WriteLine("usage: NDocConsole  [-verbose] [-documenter=docname]");
 			Console.WriteLine("                    [-recurse=dir[,maxDepth]] [-property=val...]");
 			Console.WriteLine("                    assembly,xml [assembly,xml...]");
@@ -166,6 +167,14 @@ namespace NDoc.ConsoleApplication
 			{
 				Console.WriteLine("    " + property);
 			}
+			Console.WriteLine();
+
+			Console.WriteLine(@"namespace summaries file syntax:
+    <namespaces>
+        <namespace name=""My.NameSpace"">My summary.</namespace>
+        ...
+    </namespaces>");
+
 		}
 
 		private static void DocBuildingStepHandler(object sender, ProgressArgs e)
