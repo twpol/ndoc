@@ -63,6 +63,10 @@
 				DeploymentContent="TRUE">
 			</File>
 			<File
+				RelativePath=".\Content\build_process.htm"
+				DeploymentContent="TRUE">
+			</File>
+			<File
 				RelativePath=".\Content\consoleapplication.htm"
 				DeploymentContent="TRUE">
 			</File>
@@ -256,7 +260,40 @@
 					RelativePath=".\Content\images\assemblynamedialog.JPG">
 				</File>
 				<File
+					RelativePath=".\Content\images\build_event.JPG">
+				</File>
+				<File
+					RelativePath=".\Content\images\buildbutton.JPG">
+				</File>
+				<File
+					RelativePath=".\Content\images\buildprogress.JPG">
+				</File>
+				<File
+					RelativePath=".\Content\images\configuration.JPG">
+				</File>
+				<File
+					RelativePath=".\Content\images\designer.JPG">
+				</File>
+				<File
+					RelativePath=".\Content\images\editnamespace.JPG">
+				</File>
+				<File
+					RelativePath=".\Content\images\extendexample.JPG">
+				</File>
+				<File
+					RelativePath=".\Content\images\logo.PNG">
+				</File>
+				<File
+					RelativePath=".\Content\images\newfromvsnet.JPG">
+				</File>
+				<File
+					RelativePath=".\Content\images\selectdocumenter.JPG">
+				</File>
+				<File
 					RelativePath=".\Content\images\sf.GIF">
+				</File>
+				<File
+					RelativePath=".\Content\images\toolbar.JPG">
 				</File>
 				<File
 					RelativePath=".\Content\images\xmldocnamedialog.JPG">
