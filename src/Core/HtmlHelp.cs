@@ -193,7 +193,7 @@ namespace NDoc.Core
 				options = "0x62520,220";						  
 			}
 
-			if (_defaultTopic == "default.html")
+			if (_defaultTopic.Length > 0)
 			{
 				options += ",0x387e,[86,51,872,558],,,,,,,0";
 			}
@@ -226,7 +226,9 @@ namespace NDoc.Core
 			streamHtmlHelp.WriteLine("MsdnHelp=\"" +
 				_projectName + " Help\",\"" +
 				GetContentsFilename() + "\",\"" +
-				GetIndexFilename() + "\",,,,,,," +
+				GetIndexFilename() + "\",\"" +
+				_defaultTopic + "\",\"" +
+				_defaultTopic + "\",,,,," +
 				options);
 
 			streamHtmlHelp.WriteLine();
