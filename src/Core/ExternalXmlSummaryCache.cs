@@ -30,7 +30,7 @@ namespace NDoc.Core.Reflection
 	/// <summary>
 	/// Caches XML summaries.
 	/// </summary>
-	public class ExternalXmlSummaryCache
+	internal class ExternalXmlSummaryCache
 	{
 		private Hashtable cachedDocs;
 		private Hashtable summaries;

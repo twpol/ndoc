@@ -30,7 +30,7 @@ namespace NDoc.Core.Reflection
 	/// <summary>
 	/// Handles the resolution and loading of assemblies.
 	/// </summary>
-	public class AssemblyLoader
+	internal class AssemblyLoader
 	{
 		/// <summary>primary search directories.</summary>
 		private ReferencePathCollection SearchDirectories;
@@ -61,7 +61,7 @@ namespace NDoc.Core.Reflection
 		private Hashtable assemblysLoadedFileName;
 
 		/// <summary>
-		/// Creates a new <see cref="AssemblyLoader"/> instance.
+		/// Initializes a new instance of the <see cref="AssemblyLoader"/> class.
 		/// </summary>
 		/// <param name="referenceDirectories">Reference directories.</param>
 		public AssemblyLoader(ReferencePathCollection referenceDirectories)

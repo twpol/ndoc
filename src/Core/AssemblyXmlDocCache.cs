@@ -26,13 +26,13 @@ namespace NDoc.Core.Reflection
 	/// <summary>
 	/// AssemblyXmlDocCache.
 	/// </summary>
-	public class AssemblyXmlDocCache
+	internal class AssemblyXmlDocCache
 	{
 		private Hashtable docs;
 		private Hashtable excludeTags;
 
 		/// <summary>
-		/// Creates a new instance of the AssemblyXmlDocCache class.
+		/// Creates a new instance of the <see cref="AssemblyXmlDocCache"/> class.
 		/// </summary>
 		public AssemblyXmlDocCache()
 		{
