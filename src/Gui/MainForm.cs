@@ -1567,9 +1567,27 @@ namespace NDoc.Gui
 
 		private void menuTagReferenceItem_Click(object sender, System.EventArgs e)
 		{
+			//try to find the documentation in several possible locations
+			string tagsFile = Path.Combine(Application.StartupPath, "tags.html");
+			if (!File.Exists(tagsFile))
+			{
+				tagsFile = Path.Combine(Application.StartupPath, @"..\..\..\doc\tags.html");
+
+				if (!File.Exists(tagsFile))
+				{
+					tagsFile = Path.Combine(Application.StartupPath, @"..\..\..\..\doc\tags.html");
+
+					if (!File.Exists(tagsFile))
+					{
+						MessageBox.Show(this, "The tags documentation file was not found.", "Help", 
+							MessageBoxButtons.OK, MessageBoxIcon.Information);
+						return;
+					}
+				}
+			}
 			try
 			{
-				System.Diagnostics.Process.Start(Path.Combine(Application.StartupPath, "tags.html"));
+				System.Diagnostics.Process.Start(tagsFile);
 			}
 			catch(System.ComponentModel.Win32Exception ex)
 			{
