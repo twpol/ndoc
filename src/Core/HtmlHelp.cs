@@ -204,6 +204,7 @@ namespace NDoc.Core
 
 			streamHtmlHelp.WriteLine();
 			streamHtmlHelp.WriteLine("[OPTIONS]");
+			streamHtmlHelp.WriteLine("Title=" + _projectName);
 			streamHtmlHelp.WriteLine("Auto Index=Yes");
 			streamHtmlHelp.WriteLine("Compatibility=1.1 or later");
 			streamHtmlHelp.WriteLine("Compiled file=" + GetCompiledHtmlFilename());
@@ -263,6 +264,12 @@ namespace NDoc.Core
 			// indenting because the HTML Help Compiler doesn't like
 			// newlines between the <LI> and <Object> tags.
 			tocWriter = new XmlTextWriter(Path.Combine(_directoryName, tocName), null);
+
+			// these formatting options cannot be used, because they make the 
+			// Html Help Compiler hang.
+//			tocWriter.Formatting = Formatting.Indented;
+//			tocWriter.IndentChar = '\t';
+//			tocWriter.Indentation = 1;
 
 			// We don't call WriteStartDocument because that outputs
 			// the XML declaration which the HTML Help Compiler doesn't like.
