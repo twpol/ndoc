@@ -286,6 +286,12 @@
 			</a>
 			<xsl:text>&#160;</xsl:text>
 			<xsl:value-of select="@name" />
+			<xsl:if test="@literal='true'">
+				<xsl:text> = </xsl:text>
+				<xsl:if test="@type='System.String'"><xsl:text>"</xsl:text></xsl:if>
+				<xsl:value-of select="@value" />
+				<xsl:if test="@type='System.String'"><xsl:text>"</xsl:text></xsl:if>
+			</xsl:if>
 			<xsl:text>;</xsl:text>
 		</div>
 	</xsl:template>
@@ -502,7 +508,16 @@
 			<xsl:for-each select="property | field">
 				<xsl:value-of select="@name" />
 				<xsl:text>=</xsl:text>
-				<xsl:value-of select="@value" />
+				<xsl:choose>
+					<xsl:when test="@value">
+						<xsl:if test="@type='System.String'"><xsl:text>"</xsl:text></xsl:if>
+						<xsl:value-of select="@value" />
+						<xsl:if test="@type='System.String'"><xsl:text>"</xsl:text></xsl:if>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:text>**UNKNOWN**</xsl:text>
+					</xsl:otherwise>
+				</xsl:choose>
 				<xsl:if test="position()!=last()">
 					<xsl:text>, </xsl:text>
 				</xsl:if>

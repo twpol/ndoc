@@ -411,9 +411,9 @@
 						<xsl:value-of select="$link-type" />
 					</xsl:otherwise>
 				</xsl:choose>
+				<xsl:text>&#160;</xsl:text>
 			</xsl:otherwise>
 		</xsl:choose>
-		<xsl:text>&#160;</xsl:text>
 	</xsl:template>
 	<!-- -->
 	<xsl:template match="property" mode="syntax">
@@ -498,10 +498,15 @@
 					<xsl:with-param name="include-type-links" select="true()" />
 					<xsl:with-param name="type" select="@type" />
 				</xsl:call-template>
-				<xsl:text>&#160;</xsl:text>
 			</xsl:if>
 			<xsl:if test="$lang='C++' and contains(@type, '[')">
 				<xsl:text>&#160;__gc[]</xsl:text>
+			</xsl:if>
+			<xsl:if test="@literal='true' and @value">
+				<xsl:text> = </xsl:text>
+				<xsl:if test="@type='System.String'"><xsl:text>"</xsl:text></xsl:if>
+				<xsl:value-of select="@value" />
+				<xsl:if test="@type='System.String'"><xsl:text>"</xsl:text></xsl:if>
 			</xsl:if>
 			<xsl:call-template name="statement-end">
 				<xsl:with-param name="lang" select="$lang" />
@@ -1019,7 +1024,16 @@
 			<xsl:for-each select="property | field">
 				<xsl:value-of select="@name" />
 				<xsl:text>=</xsl:text>
-				<xsl:value-of select="@value" />
+				<xsl:choose>
+					<xsl:when test="@value">
+						<xsl:if test="@type='System.String'"><xsl:text>"</xsl:text></xsl:if>
+						<xsl:value-of select="@value" />
+						<xsl:if test="@type='System.String'"><xsl:text>"</xsl:text></xsl:if>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:text>**UNKNOWN**</xsl:text>
+					</xsl:otherwise>
+				</xsl:choose>
 				<xsl:if test="position()!=last()">
 					<xsl:text>, </xsl:text>
 				</xsl:if>
