@@ -81,5 +81,23 @@ namespace NDoc.Core
 			Debug.Assert( obj is IDocumenterInfo );
 			return String.Compare(Name, ((IDocumenterInfo)obj).Name);
 		}
+
+		/// <summary>
+		/// Override
+		/// </summary>
+		/// <returns>Formatted name of the documenter</returns>
+		public override string ToString()
+		{
+			// build a development status string (alpha, beta, etc)
+			string devStatus = string.Empty;
+			if ( DevelopmentStatus != DocumenterDevelopmentStatus.Stable )
+			{
+				devStatus = DevelopmentStatus.ToString();
+				// want it uncapitalized
+				devStatus = string.Format( " ({0}{1})", Char.ToLower( devStatus[0] ), devStatus.Substring(1) );
+			}
+
+			return Name + devStatus;
+		}
 	}
 }
