@@ -1464,6 +1464,9 @@ namespace NDoc.Gui
 			}
 			finally
 			{
+				// disconnect from the documenter's events
+				documenter.DocBuildingStep -= new DocBuildingEventHandler(OnStepUpdate);
+
 				// keep us from accessing parts of the window when it is closed while a build is in progress
 				if ( !this.IsDisposed )
 				{
