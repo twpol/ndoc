@@ -622,6 +622,8 @@ namespace NDoc.Core
 		/// <summary>Writes an NDoc project file.</summary>
 		public void Write(string filename)
 		{
+			_projectFile = Path.GetFullPath(filename);
+
 			XmlTextWriter writer = null;
 
 			try
@@ -720,6 +722,7 @@ namespace NDoc.Core
 			}
 
 			IsDirty = false;
+			_projectFile = "";
 		}
 
 		/// <summary>Raised by projects when they're dirty state changes from false to true.</summary>
