@@ -122,7 +122,10 @@
 								<xsl:value-of select="@name" />
 							</a>
 						</td>
-						<td width="50%">Overloaded. <xsl:apply-templates select="documentation/summary/node()" mode="slashdoc" /></td>
+						<td width="50%">
+							<xsl:text>Overloaded. </xsl:text>
+							<xsl:call-template name="summary-with-no-paragraph" />
+						</td>
 					</xsl:when>
 					<xsl:otherwise>
 						<td width="50%">
@@ -165,7 +168,8 @@
 							</xsl:choose>
 						</td>
 						<td width="50%">
-							<xsl:apply-templates select="documentation/summary/node()" mode="nopara" />
+							<xsl:call-template name="obsolete-inline"/>
+							<xsl:call-template name="summary-with-no-paragraph" />
 						</td>
 					</xsl:otherwise>
 				</xsl:choose>
