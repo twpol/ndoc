@@ -68,7 +68,9 @@ namespace NDoc.Documenter.Xml
 
 				OnDocBuildingStep(50, "Saving XML documentation...");
 
-				string directoryName = Path.GetDirectoryName(config.OutputFile);
+				string outputFileName = project.GetFullPath(config.OutputFile);
+
+				string directoryName = Path.GetDirectoryName(outputFileName);
 
 				if (directoryName != null && directoryName.Length > 0)
 				{
@@ -83,7 +85,7 @@ namespace NDoc.Documenter.Xml
 					File.Delete(config.OutputFile);
 				}
 
-				File.Move(tempFileName, config.OutputFile);
+				File.Move(tempFileName, outputFileName);
 
 				OnDocBuildingStep(100, "Done.");
 			} 
