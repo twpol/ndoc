@@ -51,20 +51,21 @@
       </UL>
       <LI><OBJECT type="text/sitemap">
             <param name="Name" value="Project Designer">
+            <param name="Local" value="Content\projectdesigner.htm">
           </OBJECT>
       <UL>
          <LI><OBJECT type="text/sitemap">
-               <param name="Name" value="** New **">
-               <param name="Local" value="Content\projectdesigner.htm">
+               <param name="Name" value="Options">
+               <param name="Local" value="Content\desgineroptions.htm">
              </OBJECT>
       </UL>
       <LI><OBJECT type="text/sitemap">
             <param name="Name" value="Console Application">
+            <param name="Local" value="Content\consoleapplication.htm">
           </OBJECT>
       <UL>
          <LI><OBJECT type="text/sitemap">
-               <param name="Name" value="** New **">
-               <param name="Local" value="Content\consoleapplication.htm">
+               <param name="Name" value="Using NDoc in a Build Process">
              </OBJECT>
       </UL>
       <LI><OBJECT type="text/sitemap">
