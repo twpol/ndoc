@@ -264,15 +264,6 @@ namespace NDoc.Documenter.Msdn
 				}
 				finally
 				{
-					// add copyright to TOC last
-					if (MyConfig.CopyrightHref != null && MyConfig.CopyrightHref != String.Empty)
-					{
-						if (!MyConfig.CopyrightHref.StartsWith("http:"))
-						{
-							htmlHelp.AddFileToContents("Copyright", Path.GetFileName(MyConfig.CopyrightHref));
-						}
-					}
-
 					if (!MyConfig.SplitTOCs)
 					{
 						htmlHelp.CloseContentsFile();
