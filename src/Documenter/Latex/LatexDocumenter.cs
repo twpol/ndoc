@@ -120,7 +120,11 @@ namespace NDoc.Documenter.Latex
 				Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"..\..\..\Documenter\Latex\xslt") ) );
                 				
 			foreach ( FileInfo f in xsltSource.GetFiles( "*.xslt" ) )
-				f.CopyTo( Path.Combine( workspace.ResourceDirectory, f.Name ), true );
+			{
+				string fname = Path.Combine( workspace.ResourceDirectory, f.Name );
+				f.CopyTo( fname, true );
+				File.SetAttributes( fname, FileAttributes.Normal );
+			}
 #else
 		
 			EmbeddedResources.WriteEmbeddedResources(

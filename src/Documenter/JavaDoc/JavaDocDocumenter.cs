@@ -68,13 +68,21 @@ namespace NDoc.Documenter.JavaDoc
 				System.Windows.Forms.Application.StartupPath, @"..\..\..\Documenter\JavaDoc\xslt") ) );
                 				
 			foreach ( FileInfo f in xsltSource.GetFiles( "*.xslt" ) )
-				f.CopyTo( Path.Combine( Path.Combine( workspace.ResourceDirectory, "xslt" ), f.Name ), true );
+			{
+				string fname = Path.Combine( Path.Combine( workspace.ResourceDirectory, "xslt" ), f.Name );
+				f.CopyTo( fname, true );
+				File.SetAttributes( fname, FileAttributes.Normal );
+			}
 
 			DirectoryInfo cssSource = new DirectoryInfo( Path.GetFullPath(Path.Combine(
 				System.Windows.Forms.Application.StartupPath, @"..\..\..\Documenter\JavaDoc\css") ) );
                 				
 			foreach ( FileInfo f in cssSource.GetFiles( "*.css" ) )
-				f.CopyTo( Path.Combine( Path.Combine( workspace.ResourceDirectory, "css" ), f.Name ), true );
+			{
+				string cssname = Path.Combine( Path.Combine( workspace.ResourceDirectory, "css" ), f.Name );
+				f.CopyTo( cssname, true );
+				File.SetAttributes( cssname, FileAttributes.Normal );
+			}
 
 #else
 				EmbeddedResources.WriteEmbeddedResources(
