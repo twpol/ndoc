@@ -33,6 +33,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 	{
 		private Hashtable descriptions;
 
+		private Hashtable aIndexCache;
+
 		private NamespaceMapper nsMapper;
 		private FileNameMapper _fileMapper;
 
@@ -46,6 +48,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			ResetDescriptions();
 			nsMapper = mapper;
 			_fileMapper = fileMapper;
+			aIndexCache= new Hashtable();
 		}
 
 		/// <summary>
@@ -361,15 +364,23 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			if ( ( cref.Length <= 2 ) || ( cref[1] != ':' ) )
 				return string.Empty;
 
+			string aindex = (string)aIndexCache[cref];
+
+			if (aindex!=null && aindex.Length>0)
+				return aindex;
+
 			ManagedName name = new ManagedName( cref );
 
 			// if the cref is from the system or microsoft namespace generate a MS AIndex
 			if ( name.RootNamespace == "System" || name.RootNamespace == "Microsoft" )
-				return GetSystemAIndex( cref );
+				aindex= GetSystemAIndex( cref );
 			// otherwise we're going to assume that the foreign type was documented with NDoc
 			// and generate an NDoc AIndex
 			else
-				return GetNDocAIndex( cref );
+				aindex= GetNDocAIndex( cref );
+
+			aIndexCache[cref]=aindex;
+			return aindex;
 		}
 
 		private string GetNDocAIndex( string cref )
