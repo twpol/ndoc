@@ -68,6 +68,8 @@ namespace NDoc.Documenter.Msdn
 
 		private ArrayList documentedNamespaces;
 
+		private Workspace workspace;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MsdnDocumenter" />
 		/// class.
@@ -164,6 +166,7 @@ namespace NDoc.Documenter.Msdn
 			{
 				OnDocBuildingStep(0, "Initializing...");
 
+
 				// Define this when you want to edit the stylesheets
 				// without having to shutdown the application to rebuild.
 #if NO_RESOURCES
@@ -179,51 +182,29 @@ namespace NDoc.Documenter.Msdn
 					"NDoc.Documenter.Msdn.xslt",
 					Path.Combine(resourceDirectory, "xslt"));
 #endif
-
-				// Create the html output directory if it doesn't exist.
-				if (!Directory.Exists(MyConfig.OutputDirectory))
-				{
-					Directory.CreateDirectory(MyConfig.OutputDirectory);
-				}
-				else
-				{
-					//clean-up output path
-					foreach (string file in Directory.GetFiles(MyConfig.OutputDirectory, "*.*"))
-					{
-						try
-						{
-							File.Delete(file);
-						}
-						catch (UnauthorizedAccessException)
-						{
-							Trace.WriteLine("Could not delete " + file 
-								+ " from the output directory.  It might be read-only.");
-						}
-						catch (IOException)
-						{
-							Trace.WriteLine("Could not delete " + file 
-								+ " from the output directory because it is in use.");
-						}
-					}
-				}
+				// the workspace class is responsible for maintaining the outputdirectory
+				// and compile intermediate locations
+				workspace = new MsdnWorkspace( Path.GetFullPath( MyConfig.OutputDirectory ) );
+				workspace.Prepare();
+				workspace.Clean();
 
 				// Write the embedded css files to the html output directory
 				EmbeddedResources.WriteEmbeddedResources(
 					this.GetType().Module.Assembly,
 					"NDoc.Documenter.Msdn.css",
-					MyConfig.OutputDirectory);
+					workspace.WorkingDirectory);
 
 				// Write the embedded icons to the html output directory
 				EmbeddedResources.WriteEmbeddedResources(
 					this.GetType().Module.Assembly,
 					"NDoc.Documenter.Msdn.images",
-					MyConfig.OutputDirectory);
+					workspace.WorkingDirectory);
 
 				// Write the embedded scripts to the html output directory
 				EmbeddedResources.WriteEmbeddedResources(
 					this.GetType().Module.Assembly,
 					"NDoc.Documenter.Msdn.scripts",
-					MyConfig.OutputDirectory);
+					workspace.WorkingDirectory);
 
 				// Write the external files (FilesToInclude) to the html output directory
 
@@ -232,7 +213,7 @@ namespace NDoc.Documenter.Msdn
 					if ((srcFile == null) || (srcFile.Length == 0))
 						continue;
 
-					string dstFile = Path.Combine(MyConfig.OutputDirectory, Path.GetFileName(srcFile));
+					string dstFile = Path.Combine(workspace.WorkingDirectory, Path.GetFileName(srcFile));
 					File.Copy(srcFile, dstFile, true);
 					File.SetAttributes(dstFile, FileAttributes.Archive);
 				}
@@ -284,7 +265,7 @@ namespace NDoc.Documenter.Msdn
 #endif
 
 				htmlHelp = new HtmlHelp(
-					MyConfig.OutputDirectory,
+					workspace.WorkingDirectory,
 					MyConfig.HtmlHelpName,
 					defaultTopic,
 					compiler,
@@ -315,7 +296,7 @@ namespace NDoc.Documenter.Msdn
 					{
 						if (!MyConfig.CopyrightHref.StartsWith("http:"))
 						{
-							string copyrightFile = Path.Combine(MyConfig.OutputDirectory, Path.GetFileName(MyConfig.CopyrightHref));
+							string copyrightFile = Path.Combine(workspace.WorkingDirectoryName, Path.GetFileName(MyConfig.CopyrightHref));
 							File.Copy(MyConfig.CopyrightHref, copyrightFile, true);
 							File.SetAttributes(copyrightFile, FileAttributes.Archive);
 							htmlHelp.AddFileToProject(Path.GetFileName(MyConfig.CopyrightHref));
@@ -332,7 +313,7 @@ namespace NDoc.Documenter.Msdn
 						}
 
 						// add the file
-						string rootPageOutputName = Path.Combine(MyConfig.OutputDirectory, "default.html");
+						string rootPageOutputName = Path.Combine(workspace.WorkingDirectory, "default.html");
 						if (Path.GetFullPath(rootPageFileName) != Path.GetFullPath(rootPageOutputName))
 						{
 							File.Copy(rootPageFileName, rootPageOutputName, true);
@@ -375,10 +356,10 @@ namespace NDoc.Documenter.Msdn
 					EmbeddedResources.WriteEmbeddedResources(
 						this.GetType().Module.Assembly,
 						"NDoc.Documenter.Msdn.onlinefiles",
-						MyConfig.OutputDirectory);
+						workspace.WorkingDirectory);
 
 					using (TemplateWriter indexWriter = new TemplateWriter(
-							   Path.Combine(MyConfig.OutputDirectory, "index.html"),
+							   Path.Combine(workspace.WorkingDirectory, "index.html"),
 							   new StreamReader(this.GetType().Module.Assembly.GetManifestResourceStream(
 							   "NDoc.Documenter.Msdn.onlinetemplates.index.html"))))
 					{
@@ -394,7 +375,7 @@ namespace NDoc.Documenter.Msdn
 					XslTransform xsltContents = new XslTransform();
 					MakeTransform(xsltContents, "htmlcontents.xslt");
 					xsltContents.Transform(htmlHelp.GetPathToContentsFile(), 
-						Path.Combine(MyConfig.OutputDirectory, "contents.html"));
+						Path.Combine(workspace.WorkingDirectory, "contents.html"));
 				}
 
 				if ((MyConfig.OutputTarget & OutputType.HtmlHelp) > 0)
@@ -408,6 +389,14 @@ namespace NDoc.Documenter.Msdn
 					File.Delete(htmlHelp.GetPathToContentsFile());
 				}
 
+				// if we're build a CHM copy that to the Outpur dir
+				if ((MyConfig.OutputTarget & OutputType.HtmlHelp) > 0)
+					workspace.SaveOutputs( "*.chm" );
+				// otherwise copy everything to the output dir (cause the help file is all the html, not jsut one chm)
+				else
+					workspace.SaveOutputs( "*.*" );
+				
+				
 				OnDocBuildingStep(100, "Done.");
 			}
 			catch(Exception ex)
@@ -504,10 +493,17 @@ namespace NDoc.Documenter.Msdn
 
 		/// <summary>
 		/// Addes the ExtensibilityStylesheet to the tags.xslt stylesheet
-		/// so that custom template will get called during processing
+		/// so that custom templates will get called during processing
 		/// </summary>
 		private void AddExtensibilityStylesheet()
 		{
+#if NO_RESOURCES
+			// when NO_RESOURCES is defined resourceDirectory points directly to the source
+			// files (assuming ndoc is running from the IDE, which it usually would be for a debug build)
+			// When resourceDirectory points directly to the source files, the code below ends up modifying
+			// application source, rather than application resource.
+			#warning Because NO_RESOURCES is defined, ndoc extensiblity is disabled in this build
+#else
 			XmlDocument tags = new XmlDocument();
 			tags.Load( Path.Combine( Path.Combine( resourceDirectory, "xslt" ), "tags.xslt" ) );
 			
@@ -515,6 +511,7 @@ namespace NDoc.Documenter.Msdn
 
 			string extensibilityStylesheet = MyConfig.ExtensibilityStylesheet;
 
+			// make relative paths absolute
 			if ( !Path.IsPathRooted( extensibilityStylesheet ) )
 				extensibilityStylesheet = Path.GetFullPath( extensibilityStylesheet );
 
@@ -523,6 +520,7 @@ namespace NDoc.Documenter.Msdn
 			tags.DocumentElement.PrependChild( include );
 
 			tags.Save( Path.Combine( Path.Combine( resourceDirectory, "xslt" ), "tags.xslt" ) );
+#endif
 		}
 
 		private void MakeTransforms()
@@ -1527,7 +1525,7 @@ namespace NDoc.Documenter.Msdn
 			StreamWriter streamWriter = null;
 
 			using (streamWriter =  new StreamWriter(
-					File.Open(Path.Combine(MyConfig.OutputDirectory, filename), FileMode.Create),
+					File.Open(Path.Combine(workspace.WorkingDirectory, filename), FileMode.Create),
 					new UTF8Encoding(true)))
 			{
 				arguments.AddParam("ndoc-title", String.Empty, MyConfig.Title);
