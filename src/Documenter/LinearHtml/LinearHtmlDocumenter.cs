@@ -171,7 +171,6 @@ namespace NDoc.Documenter.LinearHtml
 		public override void Clear()
 		{
 			Config = new LinearHtmlDocumenterConfig();
-			//MyConfig.UseNamespaceDocSummaries = true; // temporary, just for testing
 		}
 
 		/// <summary>See <see cref="IDocumenter"/>.</summary>
@@ -274,23 +273,6 @@ namespace NDoc.Documenter.LinearHtml
 				{
 					Directory.CreateDirectory(MyConfig.OutputDirectory);
 				}
-				else
-				{
-					//clean-up output path
-					foreach (string file in Directory.GetFiles(MyConfig.OutputDirectory, "*.*"))
-					{
-						try
-						{
-							File.Delete(file);
-						}
-						catch (IOException)
-						{
-							Trace.WriteLine("Could not delete " + file 
-								+ " from the output directory because it is in use.");
-							// IOException means the file is in use. Swallow the exception and continue.
-						}
-					}
-				}
 
 				// Write the embedded css files to the html output directory
 				EmbeddedResources.WriteEmbeddedResources(this.GetType().Module.Assembly,
@@ -352,8 +334,6 @@ namespace NDoc.Documenter.LinearHtml
 		{
 			// namespace list
 			namespaceListWriter = new XmlTextWriter(new MemoryStream(), Encoding.UTF8);
-			//namespaceListWriter.Formatting = Formatting.Indented;
-			namespaceListWriter.Indentation = 4;
 
 			namespaceListWriter.WriteElementString("h1", "Namespace List");
 			namespaceListWriter.WriteElementString("p", "The namespaces specified in this document are:");
@@ -381,6 +361,42 @@ namespace NDoc.Documenter.LinearHtml
 		{
 			namespaceListWriter.WriteEndElement(); // table
 			namespaceListWriter.Flush();
+
+			return(true);
+		}
+
+		/// <summary>
+		/// Close all writers.  They need to be re-created for the next build.
+		/// </summary>
+		/// <returns></returns>
+		private bool DeleteWriters()
+		{
+			if (namespaceListWriter != null) namespaceListWriter.Close();
+			namespaceListWriter = null;
+
+			ArrayList nsSectionList = new ArrayList(orderedNamespaceSections);
+			nsSectionList.Insert(0, "typeList"); // use this for the type list too
+
+			foreach(string namespaceName in namespaceWriters.Keys)
+			{
+				Hashtable nsSectionWriters = (Hashtable)namespaceWriters[namespaceName];
+
+				foreach(string sectionKey in nsSectionList)
+				{
+					string sectionName = (string)namespaceSections[sectionKey];
+					XmlTextWriter xtw = (XmlTextWriter)nsSectionWriters[sectionName];
+					if (xtw != null) 
+					{
+						xtw.Close();
+						nsSectionWriters.Remove(sectionName);
+					}
+				}
+
+				nsSectionWriters.Clear();
+			}
+
+			namespaceWriters.Clear();
+
 			return(true);
 		}
 
@@ -891,8 +907,10 @@ namespace NDoc.Documenter.LinearHtml
 				MakeHtmlForAssembly(xPathNavigator);
 			} while(xPathNavigator.MoveToNext());
 
-			EndWriters();
+			EndWriters(); // prep for emit
 			EmitHtml(outputFileName);
+			DeleteWriters(); // close them so re-build doesn't accumulate html
+
 			return(true);
 		}
 
@@ -1349,6 +1367,7 @@ namespace NDoc.Documenter.LinearHtml
 			// create a string for the name column
 			//
 			string nameString = memberName;
+			string args = "";
 			switch(memberType)
 			{
 				case "field":
@@ -1359,21 +1378,21 @@ namespace NDoc.Documenter.LinearHtml
 					break;
 				case "method":
 					typeBaseName = TypeBaseName(nav.GetAttribute("returnType", ""));
-					string args = "";
 					if (includeMethodSignature) args = MakeMethodParametersString(nav);
 					nameString = KeyWrap(memberName + "(" + args + ")") + TypeRefWrap(" : " + typeBaseName);
 					remarksString = string.Empty; // don't include remarks for methods
 					break;
 				case "constructor":
-					nameString = KeyWrap(parentTypeName + "()");
+					if (includeMethodSignature) args = MakeMethodParametersString(nav);
+					nameString = KeyWrap(parentTypeName + "(" + args + ")");
 					remarksString = string.Empty; // don't include remarks for methods
 					break;
 			}
 
 			//
-			// write the member if it isn't from System.Object
+			// write the member if it isn't from a System class
 			//
-			if (!declaringType.Equals("System.Object"))
+			if (declaringType.IndexOf("System") != 0)
 			{
 				xtw.WriteStartElement("TR");
 				xtw.WriteStartElement("TD");
