@@ -34,7 +34,7 @@ namespace NDoc.Documenter.JavaDoc
 		/// <summary>Initializes a new instance of the JavaDocDocumenterConfig class.</summary>
 		public JavaDocDocumenterConfig() : base("JavaDoc")
 		{
-			OutputDirectory = @".\docs\JavaDoc\";
+			OutputDirectory = @".\doc\";
 		}
 
 		private string _Title;

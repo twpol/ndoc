@@ -38,7 +38,7 @@ namespace NDoc.Documenter.Latex
 	{
 		public LatexDocumenterConfig() : base("LaTeX")
 		{			
-			OutputDirectory = "Tex";
+			OutputDirectory = @".\doc\";
 			TexFileBaseName = "Documentation";
 			LatexCompiler = "latex";
 		}
