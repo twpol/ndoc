@@ -20,7 +20,7 @@ using System.ComponentModel;
 using System.Drawing.Design;
 using System.IO;
 using System.Windows.Forms.Design;
-
+using Microsoft.Win32;
 using NDoc.Core;
 
 namespace NDoc.Documenter.Msdn
@@ -40,15 +40,6 @@ namespace NDoc.Documenter.Msdn
 
 			HtmlHelpName = "Documentation";
 
-			HtmlHelpCompilerFilename = @"%ProgramFiles%\HTML Help Workshop\hhc.exe";
-
-			if (!File.Exists(
-				Environment.ExpandEnvironmentVariables(
-					htmlHelpCompilerFilename)))
-			{
-				HtmlHelpCompilerFilename = "hhc.exe";
-			}
-
 			Title = "An NDoc Documented Class Library";
 
 			SplitTOCs = false;
@@ -56,6 +47,7 @@ namespace NDoc.Documenter.Msdn
 
 			ShowVisualBasic = true;
 		}
+
 
 		/// <summary>Gets or sets the OutputDirectory property.</summary>
 		[
@@ -106,20 +98,55 @@ namespace NDoc.Documenter.Msdn
 			}
 		}
 
-		/// <summary>Gets or sets the HtmlHelpCompilerFilename property.</summary>
-		[
-		Category("HTML Help Options"),
-		Editor(typeof(FileNameEditor), typeof(UITypeEditor)),
-		Description("The full path to the Html Help Compiler (installed with Microsoft Visual Studio .NET).")
-		]
-		public string HtmlHelpCompilerFilename
+		/// <summary>The path to the Html Help Compiler.</summary>
+		internal string HtmlHelpCompilerFilename
 		{
-			get { return htmlHelpCompilerFilename; }
+			get
+			{
+				if ((htmlHelpCompilerFilename != null) 
+					&&(File.Exists(htmlHelpCompilerFilename)))
+				{
+					return htmlHelpCompilerFilename;
+				}
 
-			set 
-			{ 
-				htmlHelpCompilerFilename = value; 
-				SetDirty();
+				//try the default Html Help Workshop installation directory
+				htmlHelpCompilerFilename = 	Path.Combine(
+					Environment.GetFolderPath(
+						Environment.SpecialFolder.ProgramFiles),
+					@"HTML Help Workshop\hhc.exe");
+				if (File.Exists(htmlHelpCompilerFilename))
+				{
+					return htmlHelpCompilerFilename;
+				}
+
+				//not in default dir, try to locate it from the registry
+				RegistryKey key = Registry.ClassesRoot.OpenSubKey("hhc.file");
+				if (key != null)
+				{
+					key = key.OpenSubKey("DefaultIcon");
+					if (key != null)
+					{
+						object val = key.GetValue(null);
+						if (val != null)				
+						{
+							string hhw = (string)val;
+							if (hhw.Length > 0)
+							{
+								hhw = hhw.Split(new Char[] {','})[0];
+								hhw = Path.GetDirectoryName(hhw);
+								htmlHelpCompilerFilename = Path.Combine(hhw, "hhc.exe");
+							}
+						}
+					}
+				}
+				if (File.Exists(htmlHelpCompilerFilename))
+				{
+					return htmlHelpCompilerFilename;
+				}
+
+				//still not finding the compiler, give up
+				throw new DocumenterException(
+					"Unable to find the HTML Help Compiler. Please verify that the HTML Help Workshop has been installed.");
 			}
 		}
 
