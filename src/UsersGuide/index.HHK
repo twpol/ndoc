@@ -180,11 +180,6 @@
             <param name="Local" value="Content\tag_permission.htm">
          </OBJECT>
     <LI><OBJECT type="text/sitemap">
-            <param name="Name" value="platform">
-            <param name="Name" value="platform">
-            <param name="Local" value="Content\tag_platform.htm">
-         </OBJECT>
-    <LI><OBJECT type="text/sitemap">
             <param name="Name" value="preliminary">
             <param name="Name" value="preliminary">
             <param name="Local" value="Content\tag_preliminary.htm">
@@ -232,6 +227,11 @@
     <LI><OBJECT type="text/sitemap">
             <param name="Name" value="Tag Reference">
             <param name="Name" value="Tag Reference">
+            <param name="Local" value="Content\tags.htm">
+         </OBJECT>
+    <LI><OBJECT type="text/sitemap">
+            <param name="Name" value="Tag Usage Matrix">
+            <param name="Name" value="Tag Usage Matrix">
             <param name="Local" value="Content\tagsusage.htm">
          </OBJECT>
     <LI><OBJECT type="text/sitemap">
@@ -250,9 +250,14 @@
             <param name="Local" value="Content\vsnet.htm">
          </OBJECT>
     <LI><OBJECT type="text/sitemap">
-            <param name="Name" value="What's New">
-            <param name="Name" value="What's New">
+            <param name="Name" value="Welcome">
+            <param name="Name" value="Welcome">
             <param name="Local" value="Content\Default.htm">
+         </OBJECT>
+    <LI><OBJECT type="text/sitemap">
+            <param name="Name" value="What's New">
+            <param name="Name" value="What's New">
+            <param name="Local" value="Content\whatsnew.htm">
          </OBJECT>
     <LI><OBJECT type="text/sitemap">
             <param name="Name" value="XML">
