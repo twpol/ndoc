@@ -126,7 +126,7 @@ namespace NDoc.Documenter.Msdn
 				return string.Format( "The Additional Content Resource Directory {0} could not be found", MyConfig.AdditionalContentResourceDirectory );
 
 			if ( MyConfig.ExtensibilityStylesheet.Length != 0 && !File.Exists( MyConfig.ExtensibilityStylesheet ) )
-				return string.Format( "The file {0} could not be found", MyConfig.ExtensibilityStylesheet );
+				return string.Format( "The Extensibility Stylesheet file {0} could not be found", MyConfig.ExtensibilityStylesheet );
 
 			if (checkInputOnly) 
 			{
