@@ -1,8 +1,16 @@
 <?xml version="1.0" ?>
 <project name="NDoc-package" default="package">
     <target name="package" description="Build and Package distribution" depends="check-project-version">
-        <!-- set name of package zip file -->
-        <property name="current.package.zipfile" value="${nant.project.name}-devel-v${project.version}.zip" />
+        <!-- 
+            set name of package zip file (do not use release type as suffix 
+            for an actual final release 
+        -->
+        <if test="${project.release.type='release'}">
+            <property name="current.package.zipfile" value="${nant.project.name}-devel-v${project.version}.zip" />
+        </if>
+        <if test="${not(project.release.type='release')}">
+            <property name="current.package.zipfile" value="${nant.project.name}-devel-v${project.version}-${project.release.type}.zip" />
+        </if>
         <!-- set flag to indicate that this is a package build -->
         <property name="project.build.package" value="true" readonly="false" />
         <call target="clean-build-dir" />
@@ -10,8 +18,8 @@
         <call target="release" />
         <!-- compile current build configuration for all supported frameworks -->
         <call target="compile-build" />
-	<!-- build SDK doc -->
-	<call target="sdkdoc" />
+        <!-- build SDK doc -->
+        <call target="sdkdoc" />
         <!-- build user guide -->
         <call target="build-userguide" />
         <!-- build setup -->
@@ -79,8 +87,16 @@
             <arg value="/rebuild" />
             <arg value="release" />
         </exec>
-        <echo message="NDoc ${project.version} setup package created at '${path::get-full-path('src/Setup/Release/NDoc.msi')}'."
-            level="Info" />
+        <!-- 
+            copy created msi file to actual filename that will be uploaded
+            to sf.net
+        -->
+        <if test="${project.release.type='release'}">
+            <move file="src/Setup/Release/NDoc.msi" tofile="NDoc-${project.version}.msi" overwrite="true" />
+        </if>
+        <if test="${not(project.release.type='release')}">
+            <move file="src/Setup/Release/NDoc.msi" tofile="NDoc-${project.version}-${project.release.type}.msi" overwrite="true" />
+        </if>
     </target>
     <!--
         Create a CommonAssemblyInfo.cs that can be included in the developer 
