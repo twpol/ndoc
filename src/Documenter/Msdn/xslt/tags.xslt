@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:doc="http://ndoc.sf.net/doc" exclude-result-prefixes="doc">
-  <xsl:include href="E:\CVS\ndoc\src\Test\extend-ndoc.xslt" />
   <!--
 	 | Identity Template
 	 +-->
