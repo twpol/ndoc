@@ -24,6 +24,7 @@ using System.Diagnostics;
 using System.Reflection;
 
 using NDoc.Core;
+using NDoc.Core.Reflection;
 
 using NDoc.Documenter.NativeHtmlHelp2.Compiler;
 using NDoc.Documenter.NativeHtmlHelp2.HxProject;
@@ -82,19 +83,20 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 				return "The output directory must be set";
 
 			// validate the namespace map
-			if ( MyConfig.UseHelpNamespaceMappingFile.Length != 0 )
+			string NamespaceMappingFilePath=MyConfig.UseHelpNamespaceMappingFile;
+			if ( NamespaceMappingFilePath.Length != 0 )
 			{
-				if ( !File.Exists( MyConfig.UseHelpNamespaceMappingFile ) )
-					return string.Format( "Could not find the namespace mapping file: {0}", Path.GetFullPath( MyConfig.UseHelpNamespaceMappingFile ) );
+				if ( !File.Exists( NamespaceMappingFilePath ) )
+					return string.Format( "Could not find the namespace mapping file: {0}", NamespaceMappingFilePath );
 
 				try
 				{
-					NamespaceMapper mapper = new NamespaceMapper( Path.GetFullPath( MyConfig.UseHelpNamespaceMappingFile ) );
+					NamespaceMapper mapper = new NamespaceMapper( NamespaceMappingFilePath );
 				}
 				catch ( Exception e )
 				{
 					StringBuilder sb = new StringBuilder();
-					sb.AppendFormat( "The namespace mapping file {0} failed to validate.\n", Path.GetFullPath( MyConfig.UseHelpNamespaceMappingFile ) );
+					sb.AppendFormat( "The namespace mapping file {0} failed to validate.\n", NamespaceMappingFilePath );
 					sb.Append( "Make sure that it conforms to the NamespaceMap.xsd schema that can be found in the NDoc installation directory.\n" );
 					sb.AppendFormat( "Parse error={0}", e.Message );
 					return sb.ToString();
@@ -102,26 +104,33 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			}
 
 			// validate that all of the additional content resources are present
-			if ( MyConfig.IntroductionPage.Length != 0 && !File.Exists( MyConfig.IntroductionPage ) )
-				return string.Format( "The IntroductionPage file {0} could not be found", MyConfig.IntroductionPage );
+			string IntroductionPage = MyConfig.IntroductionPage;
+			if ( IntroductionPage.Length != 0 && !File.Exists( IntroductionPage ) )
+				return string.Format( "The IntroductionPage file {0} could not be found", IntroductionPage );
 
-			if ( MyConfig.AboutPageIconPage.Length != 0 && !File.Exists( MyConfig.AboutPageIconPage ) )
-				return string.Format( "The AboutPageIconPage file {0} could not be found", MyConfig.AboutPageIconPage );
+			string AboutPageIconPage = MyConfig.AboutPageIconPage;
+			if ( AboutPageIconPage.Length != 0 && !File.Exists( AboutPageIconPage ) )
+				return string.Format( "The AboutPageIconPage file {0} could not be found", AboutPageIconPage );
 
-			if ( MyConfig.AboutPageInfo.Length != 0 && !File.Exists( MyConfig.AboutPageInfo ) )
-				return string.Format( "The AboutPageInfo file {0} could not be found", MyConfig.AboutPageInfo );
+			string AboutPageInfo = MyConfig.AboutPageInfo;
+			if ( AboutPageInfo.Length != 0 && !File.Exists( AboutPageInfo ) )
+				return string.Format( "The AboutPageInfo file {0} could not be found", AboutPageInfo );
 
-			if ( MyConfig.NavFailPage.Length != 0 && !File.Exists( MyConfig.NavFailPage ) )
-				return string.Format( "The NavFailPage file {0} could not be found", MyConfig.NavFailPage );
+			string NavFailPage = MyConfig.NavFailPage;
+			if ( NavFailPage.Length != 0 && !File.Exists( NavFailPage ) )
+				return string.Format( "The NavFailPage file {0} could not be found", NavFailPage );
 
-			if ( MyConfig.EmptyIndexTermPage.Length != 0 && !File.Exists( MyConfig.EmptyIndexTermPage ) )
-				return string.Format( "The EmptyIndexTermPage file {0} could not be found", MyConfig.EmptyIndexTermPage );
+			string EmptyIndexTermPage = MyConfig.EmptyIndexTermPage;
+			if ( EmptyIndexTermPage.Length != 0 && !File.Exists( EmptyIndexTermPage ) )
+				return string.Format( "The EmptyIndexTermPage file {0} could not be found", EmptyIndexTermPage );
 
-			if ( MyConfig.ExtensibilityStylesheet.Length != 0 && !File.Exists( MyConfig.ExtensibilityStylesheet ) )
-				return string.Format( "The Extensibility Stylesheet file {0} could not be found", MyConfig.ExtensibilityStylesheet );
+			string ExtensibilityStylesheet = MyConfig.ExtensibilityStylesheet;
+			if ( ExtensibilityStylesheet.Length != 0 && !File.Exists( ExtensibilityStylesheet ) )
+				return string.Format( "The Extensibility Stylesheet file {0} could not be found", ExtensibilityStylesheet );
 
-			if ( MyConfig.AdditionalContentResourceDirectory.Length != 0 && !Directory.Exists( MyConfig.AdditionalContentResourceDirectory ) )
-				return string.Format( "The Additional Content Resource Directory {0} could not be found", MyConfig.AdditionalContentResourceDirectory );
+			string AdditionalContentResourceDirectory = MyConfig.AdditionalContentResourceDirectory;
+			if ( AdditionalContentResourceDirectory.Length != 0 && !Directory.Exists( AdditionalContentResourceDirectory ) )
+				return string.Format( "The Additional Content Resource Directory {0} could not be found", AdditionalContentResourceDirectory );
 
 			// make sure we have a collection namespace
 			if ( ( MyConfig.GenerateCollectionFiles || MyConfig.RegisterTitleWithNamespace ) && MyConfig.CollectionNamespace.Length == 0 )
@@ -264,22 +273,22 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			NamedUrlFile namedUrlIndex = NamedUrlFile.CreateFrom( Path.Combine( workspace.ResourceDirectory, "NamedURL.HxK" ), "NamedURL" );
 			namedUrlIndex.LangId = MyConfig.LangID;
 
-			if ( MyConfig.IntroductionPage.Length > 0 )			
+			if ( ((string) MyConfig.IntroductionPage).Length > 0 )			
 				namedUrlIndex.IntroductionPage = ImportContentFileToWorkspace( MyConfig.IntroductionPage, workspace );
 
-			if ( MyConfig.AboutPageIconPage.Length > 0 )			
+			if ( ((string) MyConfig.AboutPageIconPage).Length > 0 )			
 				namedUrlIndex.AboutPageIcon = ImportContentFileToWorkspace( MyConfig.AboutPageIconPage, workspace );
 
-			if ( MyConfig.AboutPageInfo.Length > 0 )			
+			if ( ((string) MyConfig.AboutPageInfo).Length > 0 )			
 				namedUrlIndex.AboutPageInfo = ImportContentFileToWorkspace( MyConfig.AboutPageInfo, workspace );
 
-			if ( MyConfig.EmptyIndexTermPage.Length > 0 )			
+			if ( ((string) MyConfig.EmptyIndexTermPage).Length > 0 )			
 				namedUrlIndex.EmptyIndexTerm = ImportContentFileToWorkspace( MyConfig.EmptyIndexTermPage, workspace );
 
-			if ( MyConfig.NavFailPage.Length > 0 )			
+			if ( ((string) MyConfig.NavFailPage).Length > 0 )			
 				namedUrlIndex.NavFailPage = ImportContentFileToWorkspace( MyConfig.NavFailPage, workspace );
 			
-			if ( MyConfig.AdditionalContentResourceDirectory.Length > 0 )			
+			if ( ((string) MyConfig.AdditionalContentResourceDirectory).Length > 0 )			
 				workspace.ImportContentDirectory( MyConfig.AdditionalContentResourceDirectory );
 
 			namedUrlIndex.Save( workspace.WorkingDirectory );
@@ -321,7 +330,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 
 			OnDocBuildingStep( 30, "Generating HTML..." );
 
-			if ( MyConfig.UseHelpNamespaceMappingFile.Length != 0 )
+			if ( ((string)MyConfig.UseHelpNamespaceMappingFile).Length != 0 )
 				factory.SetNamespaceMap( MyConfig.UseHelpNamespaceMappingFile );
 
 

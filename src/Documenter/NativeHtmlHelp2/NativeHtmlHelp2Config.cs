@@ -24,6 +24,8 @@ using System.ComponentModel;
 using System.Windows.Forms.Design;
 
 using NDoc.Core;
+using NDoc.Core.Reflection;
+using NDoc.Core.PropertyGridUI;
 
 namespace NDoc.Documenter.NativeHtmlHelp2
 {
@@ -36,7 +38,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		/// <summary>
 		/// Each root topic in the TOC is appears at the plug in point
 		/// </summary>
-		Flat,
+		Flat, 
 
 		/// <summary>
 		/// Creates a root node in the browser at the plug in point
@@ -58,7 +60,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		private const string ADDITIONAL_CONTENT_CATEGORY = "Html Help 2 Additional Content";
 
 		/// <summary>Initializes a new instance of the NativeHtmlHelp2Config class.</summary>
-		public NativeHtmlHelp2Config() : base( "VS.NET 2003" )
+		public NativeHtmlHelp2Config() : base("VS.NET 2003")
 		{
 		}
 
@@ -66,9 +68,10 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		string _outputDirectory = string.Format( ".{0}doc{0}", Path.DirectorySeparatorChar );
 		
 		/// <summary>Gets or sets the OutputDirectory property.</summary>
-		/// <remarks>The directory in which .html files and the .Hx* files will be generated.</remarks>
+		/// <remarks>The folder where the root of the HTML set will be located.
+		/// This can be absolute or relative from the .ndoc project file.</remarks>
 		[Category("Documentation Main Settings")]
-		[Description("The directory in which .html files and the .Hx* files will be generated.")]
+		[Description("The directory in which .html files and the .Hx* files will be generated.\nThis can be absolute or relative from the .ndoc project file.")]
 		[Editor(typeof(FolderNameEditor), typeof(UITypeEditor))]
 		public string OutputDirectory
 		{
@@ -93,6 +96,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 				SetDirty();
 			}
 		}
+		void ResetOutputDirectory() { _outputDirectory = string.Format( ".{0}doc{0}", Path.DirectorySeparatorChar ); }
+
 
 		string _htmlHelpName = "Documentation";
 
@@ -113,7 +118,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 				}
 				else
 				{
-					_htmlHelpName = value; 
+					_htmlHelpName = value;
 				}
 
 				SetDirty();
@@ -132,7 +137,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 
 			set 
 			{ 
-				_Title = value; 
+				_Title = value;
 				SetDirty();
 			}
 		}
@@ -367,8 +372,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		/// <remarks>If true the default stop word list is compiled into the help file. 
 		/// (A stop word list is a list of words that will be ignored during a full text search)</remarks>
 		[Category(HTMLHELP2_CONFIG_CATEGORY)]
-		[Description("If true the default stop word list is compiled into the help file. (A stop word list is a " +
-			"list of words that will be ignored during a full text search)")]
+		[Description("If true the default stop word list is compiled into the help file. (A stop word list is a " + 
+			 "list of words that will be ignored during a full text search)")]
 		[DefaultValue(true)]
 		public bool IncludeDefaultStopWordList
 		{
@@ -381,28 +386,32 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			}
 		}
 
-		string _UseHelpNamespaceMappingFile = string.Empty;
+		FilePath _UseHelpNamespaceMappingFile = new FilePath();
 
 		/// <summary>Gets or sets the UseHelpNamespaceMappingFile property.</summary>
 		/// <remarks>If the documentation includes references to types registered in a seperate html help 2 
 		/// namespace, supplying a mapping file allows XLinks to be created to topics within that namespace.
 		/// </remarks>
 		[Category(HTMLHELP2_CONFIG_CATEGORY)]
-		[Description("If the documentation includes references to types registered in a seperate html help 2 " +
-			 "namespace, supplying a mapping file allows XLinks to be created to topics within that namespace. " +
+		[Description("If the documentation includes references to types registered in a seperate html help 2 " + 
+			 "namespace, supplying a mapping file allows XLinks to be created to topics within that namespace. " + 
 			 "Refer to the user's guide for more information about XLinks to other topics.")]
-		[DefaultValue("")]
-		[Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
-		public string UseHelpNamespaceMappingFile
+		[NDoc.Core.PropertyGridUI.FilenameEditor.FileDialogFilter
+			 ("Select Namespace Mapping File", "XML files (*.xml)|*.xml|All files (*.*)|*.*")]
+		public FilePath UseHelpNamespaceMappingFile
 		{
 			get { return _UseHelpNamespaceMappingFile; }
 
 			set
 			{
-				_UseHelpNamespaceMappingFile = value;
-				SetDirty();
+				if (_UseHelpNamespaceMappingFile.Path != value.Path)
+				{
+					_UseHelpNamespaceMappingFile = value;
+					SetDirty();
+				}
 			}
 		}
+		void ResetUseHelpNamespaceMappingFile() { _UseHelpNamespaceMappingFile = new FilePath(); }
 
 		
 		string _HeaderHtml;
@@ -412,8 +421,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		/// %FILE_NAME%\" is dynamically replaced by the name of the file for the current html page. 
 		/// %TOPIC_TITLE%\" is dynamically replaced by the title of the current page.</remarks>
 		[Category(HTMLHELP2_CONFIG_CATEGORY)]
-		[Description("Raw HTML that is used as a page header instead of the default blue banner. " +
-			 "\"%FILE_NAME%\" is dynamically replaced by the name of the file for the current html page. " +
+		[Description("Raw HTML that is used as a page header instead of the default blue banner. " + 
+			 "\"%FILE_NAME%\" is dynamically replaced by the name of the file for the current html page. " + 
 			 "\"%TOPIC_TITLE%\" is dynamically replaced by the title of the current page.")]
 		[Editor(typeof(TextEditor), typeof(UITypeEditor))]
 		public string HeaderHtml
@@ -436,10 +445,10 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		/// %ASSEMBLY_VERSION% is dynamically replaced by the version of the assembly for the current page.
 		/// %TOPIC_TITLE% is dynamically replaced by the title of the current page.</remarks>
 		[Category(HTMLHELP2_CONFIG_CATEGORY)]
-		[Description("Raw HTML that is used as a page footer instead of the default footer." +
-			 "\"%FILE_NAME%\" is dynamically replaced by the name of the file for the current html page. " +
-			 "\"%ASSEMBLY_NAME%\" is dynamically replaced by the name of the assembly for the current page. " +
-			 "\"%ASSEMBLY_VERSION%\" is dynamically replaced by the version of the assembly for the current page. " +
+		[Description("Raw HTML that is used as a page footer instead of the default footer." + 
+			 "\"%FILE_NAME%\" is dynamically replaced by the name of the file for the current html page. " + 
+			 "\"%ASSEMBLY_NAME%\" is dynamically replaced by the name of the assembly for the current page. " + 
+			 "\"%ASSEMBLY_VERSION%\" is dynamically replaced by the version of the assembly for the current page. " + 
 			 "\"%TOPIC_TITLE%\" is dynamically replaced by the title of the current page.")]
 		[Editor(typeof(TextEditor), typeof(UITypeEditor))]
 		public string FooterHtml
@@ -457,142 +466,175 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 
 		#region Additonal content properties
 		
-		string _IntroductionPage = string.Empty;
+		FilePath _IntroductionPage = new FilePath();
 
 		/// <summary>Gets or sets the IntroductionPage property</summary>
 		/// <remarks>An HTML page that will be dispayed when the root TOC node is selected.</remarks>
 		[Category(ADDITIONAL_CONTENT_CATEGORY)]
 		[Description("An HTML page that will be dispayed when the root TOC node is selected")]
-		[DefaultValue("")]
-		[Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
-		public string IntroductionPage
+		[NDoc.Core.PropertyGridUI.FilenameEditor.FileDialogFilter
+			 ("Select Introduction Page", "HTML files (*.html;*.htm)|*.html;*.htm|All files (*.*)|*.*")]
+		public FilePath IntroductionPage
 		{
 			get { return _IntroductionPage; }
 
 			set
 			{
-				_IntroductionPage = value;
-				SetDirty();
+				if (_IntroductionPage.Path != value.Path)
+				{
+					_IntroductionPage = value;
+					SetDirty();
+				}
 			}
 		}
+		void ResetIntroductionPage() { _IntroductionPage = new FilePath(); }
+
 		
-		string _AboutPageInfo = string.Empty;
+		FilePath _AboutPageInfo = new FilePath();
 
 		/// <summary>Gets or sets the AboutPageInfo property</summary>
 		/// <remarks>Displays product information in Help About.</remarks>
 		[Category(ADDITIONAL_CONTENT_CATEGORY)]
 		[Description("Displays product information in Help About.")]
-		[DefaultValue("")]
-		[Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
-		public string AboutPageInfo
+		[NDoc.Core.PropertyGridUI.FilenameEditor.FileDialogFilter
+			 ("Select AboutPageInfo", "HTML files (*.html;*.htm)|*.html;*.htm|All files (*.*)|*.*")]
+		public FilePath AboutPageInfo
 		{
 			get { return _AboutPageInfo; }
 
 			set
 			{
-				_AboutPageInfo = value;
-				SetDirty();
+				if (_AboutPageInfo.Path != value.Path)
+				{
+					_AboutPageInfo = value;
+					SetDirty();
+				}
 			}
 		}
+		void ResetAboutPageInfo() { _AboutPageInfo = new FilePath(); }
 
-		string _EmptyIndexTermPage = string.Empty;
+
+		FilePath _EmptyIndexTermPage = new FilePath();
 
 		/// <summary>Gets or sets the EmptyIndexTermPage property</summary>
 		/// <remarks>Displays when a user chooses a keyword index term that has 
 		/// subkeywords but is not directly associated with a topic itself.</remarks>
 		[Category(ADDITIONAL_CONTENT_CATEGORY)]
 		[Description("Displays when a user chooses a keyword index term that has subkeywords but is not directly associated with a topic itself.")]
-		[DefaultValue("")]
-		[Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
-		public string EmptyIndexTermPage
+		[NDoc.Core.PropertyGridUI.FilenameEditor.FileDialogFilter
+			 ("Select EmptyIndexTerm Page", "HTML files (*.html;*.htm)|*.html;*.htm|All files (*.*)|*.*")]
+		public FilePath EmptyIndexTermPage
 		{
 			get { return _EmptyIndexTermPage; }
 
 			set
 			{
-				_EmptyIndexTermPage = value;
-				SetDirty();
+				if (_EmptyIndexTermPage.Path != value.Path)
+				{
+					_EmptyIndexTermPage = value;
+					SetDirty();
+				}
 			}
 		}		
+		void ResetEmptyIndexTermPage() { _EmptyIndexTermPage = new FilePath(); }
 
-		string _NavFailPage = string.Empty;
+
+		FilePath _NavFailPage = new FilePath();
 
 		/// <summary>Gets or sets the NavFailPage property</summary>
 		/// <remarks>Page that opens if a link to a topic or URL is broken.</remarks>
 		[Category(ADDITIONAL_CONTENT_CATEGORY)]
 		[Description("Opens if a link to a topic or URL is broken.")]
-		[DefaultValue("")]
-		[Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
-		public string NavFailPage
+		[NDoc.Core.PropertyGridUI.FilenameEditor.FileDialogFilter
+			 ("Select NavFail Page", "HTML files (*.html;*.htm)|*.html;*.htm|All files (*.*)|*.*")]
+		public FilePath NavFailPage
 		{
 			get { return _NavFailPage; }
 
 			set
 			{
-				_NavFailPage = value;
-				SetDirty();
+				if (_NavFailPage.Path != value.Path)
+				{
+					_NavFailPage = value;
+					SetDirty();
+				}
 			}
 		}	
+		void ResetNavFailPage() { _NavFailPage = new FilePath(); }
+
 	
-		string _AboutPageIconPage = string.Empty;
+		FilePath _AboutPageIconPage = new FilePath();
 
 		/// <summary>Gets or sets the AboutPageIconPage property</summary>
 		/// <remarks>HTML file that displays the Help About image.</remarks>
 		[Category(ADDITIONAL_CONTENT_CATEGORY)]
 		[Description("HTML file that displays the Help About image.")]
-		[DefaultValue("")]
-		[Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
-		public string AboutPageIconPage
+		[NDoc.Core.PropertyGridUI.FilenameEditor.FileDialogFilter
+			 ("Select AboutPageIcon Page", "HTML files (*.html;*.htm)|*.html;*.htm|All files (*.*)|*.*")]
+		public FilePath AboutPageIconPage
 		{
 			get { return _AboutPageIconPage; }
 
 			set
 			{
-				_AboutPageIconPage = value;
-				SetDirty();
+				if (_AboutPageIconPage.Path != value.Path)
+				{
+					_AboutPageIconPage = value;
+					SetDirty();
+				}
 			}
 		}		
+		void ResetAboutPageIconPage() { _AboutPageIconPage = new FilePath(); }
 
-		string _AdditionalContentResourceDirectory = string.Empty;
+
+		FolderPath _AdditionalContentResourceDirectory = new FolderPath();
 
 		/// <summary>Gets or sets the AdditionalContentResourceDirectory property</summary>
 		/// <remarks>Directory that contains resources (images etc.) used by the additional content pages. 
 		/// This directory will be recursively compiled into the help file.</remarks>
 		[Category(ADDITIONAL_CONTENT_CATEGORY)]
 		[Description("Directory that contains resources (images etc.) used by the additional content pages. This directory will be recursively compiled into the help file.")]
-		[DefaultValue("")]
-		[Editor(typeof(FolderNameEditor), typeof(UITypeEditor))]
-		public string AdditionalContentResourceDirectory
+		[NDoc.Core.PropertyGridUI.FoldernameEditor.FolderDialogTitle("Select AdditionalContentResourceDirectory")]
+		public FolderPath AdditionalContentResourceDirectory
 		{
 			get { return _AdditionalContentResourceDirectory; }
 
 			set
 			{
-				_AdditionalContentResourceDirectory = value;
-				SetDirty();
+				if (_AdditionalContentResourceDirectory.Path != value.Path)
+				{
+					_AdditionalContentResourceDirectory = value;
+					SetDirty();
+				}
 			}
 		}	
+		void ResetAdditionalContentResourceDirectory() { _AdditionalContentResourceDirectory = new FolderPath(); }
 		#endregion
 
+
 		#region Extensibility properties
-		string _ExtensibilityStylesheet = string.Empty;
+		FilePath _ExtensibilityStylesheet = new FilePath();
 
 		/// <summary>Gets or sets the ExtensibilityStylesheet property</summary>
 		/// <remarks>Path to an xslt stylesheet that contains templates for documenting extensibility tags.</remarks>
 		[Category("Extensibility")]
 		[Description("Path to an xslt stylesheet that contains templates for documenting extensibility tags. Refer to the NDoc user's guide for more details on extending NDoc.")]
-		[DefaultValue("")]
-		[Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
-		public string ExtensibilityStylesheet
+		[NDoc.Core.PropertyGridUI.FilenameEditor.FileDialogFilter
+			 ("Select Extensibility Stylesheet", "Stylesheet files (*.xslt)|*.xslt|All files (*.*)|*.*")]
+		public FilePath ExtensibilityStylesheet
 		{
 			get { return _ExtensibilityStylesheet; }
 
 			set
 			{
-				_ExtensibilityStylesheet = value;
-				SetDirty();
+				if (_ExtensibilityStylesheet != value)
+				{
+					_ExtensibilityStylesheet = value;
+					SetDirty();
+				}
 			}
 		}	
+		void ResetExtensibilityStylesheet() { _ExtensibilityStylesheet = new FilePath(); }
 		#endregion
 	
 		/// <summary>
@@ -603,17 +645,19 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		/// <returns></returns>
 		protected override string HandleUnknownPropertyType(string name, string value)
 		{
-			string FailureMessages="";
+			string FailureMessages = "";
 
-			if (String.Compare(name,"LinkToSdkDocVersion",true) == 0) 
+			if (String.Compare(name, "LinkToSdkDocVersion", true) == 0) 
 			{
-					Trace.WriteLine("WARNING: " + base.Name + " Configuration - property 'LinkToSdkDocVersion' is OBSOLETE. Please use new property 'SdkDocVersion'\n");
-					FailureMessages += base.ReadProperty("SdkDocVersion", value);
+				Trace.WriteLine("WARNING: " + base.Name + " Configuration - property 'LinkToSdkDocVersion' is OBSOLETE. Please use new property 'SdkDocVersion'\n");
+				Project.SuspendDirtyCheck=false;
+				FailureMessages += base.ReadProperty("SdkDocVersion", value);
+				Project.SuspendDirtyCheck=true;
 			}
 			else
 			{
 				// if we don't know how to handle this, let the base class have a go
-				FailureMessages = base.HandleUnknownPropertyType (name, value);
+				FailureMessages = base.HandleUnknownPropertyType(name, value);
 			}
 			return FailureMessages;
 		}
