@@ -91,7 +91,7 @@ namespace NDoc.Gui
 			this.txtMessage.Multiline = true;
 			this.txtMessage.Name = "txtMessage";
 			this.txtMessage.ReadOnly = true;
-			this.txtMessage.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.txtMessage.ScrollBars = System.Windows.Forms.ScrollBars.Both;
 			this.txtMessage.Size = new System.Drawing.Size(464, 240);
 			this.txtMessage.TabIndex = 2;
 			this.txtMessage.TabStop = false;
