@@ -1,0 +1,15 @@
+*.suo
+*.user
+.#*
+.cvsignore
+ndoc\zip-source.bat
+ndoc\zip-release.bat
+ndoc\files.txt
+ndoc\x-files.txt
+ndoc\src\Core\NDoc.Core.xml
+ndoc\src\Documenter\JavaDoc\NDoc.Documenter.JavaDoc.xml
+ndoc\src\Documenter\Msdn\NDoc.Documenter.Msdn.xml
+ndoc\src\Documenter\Xml\NDoc.Documenter.Xml.xml
+ndoc\src\Gui\NDocGui.xml
+ndoc\src\Test\NDoc.Test.xml
+ndoc\src\VisualStudio\NDoc.VisualStudio.xml
