@@ -311,11 +311,12 @@
 				<xsl:if test="$version='long'">
 					<br />
 					<xsl:text>&#160;&#160;&#160;</xsl:text>
-					<xsl:choose>
-						<xsl:when test="@direction = 'ref'">ref&#160;</xsl:when>
-						<xsl:when test="@direction = 'out'">out&#160;</xsl:when>
-					</xsl:choose>
 				</xsl:if>
+				<xsl:choose>
+					<xsl:when test="@direction = 'ref'">ref&#160;</xsl:when>
+					<xsl:when test="@direction = 'out'">out&#160;</xsl:when>
+  			  <xsl:when test="@isParamArray = 'true'">params&#160;</xsl:when>
+				</xsl:choose>
 				<xsl:choose>
 					<xsl:when test="$version='long'">
 						<a>

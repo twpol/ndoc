@@ -7,97 +7,109 @@ namespace NDoc.Test
 	/// provides reach extentions enterprise wide. Respective divisions 
 	/// historically insignificant, upscale trendlines in a management 
 	/// inventory analysis survivabilty format.</remarks>
-	public class Class
-	{
-		/// <summary>Initializes a new instance of the Class class.</summary>
-		public Class() { }
+  public class Class
+  {
+    /// <summary>Initializes a new instance of the Class class.</summary>
+    public Class() { }
 
-		/// <summary>Initializes a new instance of the Class class.</summary>
-		public Class(int i) { }
+    /// <summary>Initializes a new instance of the Class class.</summary>
+    public Class(int i) { }
 		
-		/// <summary>Initializes a new instance of the Class class.</summary>
-		public Class(string s) { }
+    /// <summary>Initializes a new instance of the Class class.</summary>
+    public Class(string s) { }
 		
-		/// <summary>Initializes a new instance of the Class class.</summary>
-		protected Class(double d) { }
+    /// <summary>Initializes a new instance of the Class class.</summary>
+    protected Class(double d) { }
 
-		/// <summary>Initializes a new instance of the Class class.</summary>
-		/// <param name="i1">This is the first integer parameter. 
-		/// This is the first integer parameter. This is the first integer 
-		/// parameter. This is the first integer parameter.</param>
-		/// <param name="i2">This is the second integer parameter.</param>
-		/// <param name="i3">This is the third integer parameter.</param>
-		public Class(int i1, int i2, int i3) { }
+    /// <summary>Initializes a new instance of the Class class.</summary>
+    /// <param name="i1">This is the first integer parameter. 
+    /// This is the first integer parameter. This is the first integer 
+    /// parameter. This is the first integer parameter.</param>
+    /// <param name="i2">This is the second integer parameter.</param>
+    /// <param name="i3">This is the third integer parameter.</param>
+    public Class(int i1, int i2, int i3) { }
 
-		/// <summary>Holds an <c>int</c> value.</summary>
-		public int Field;
+    /// <summary>Holds an <c>int</c> value.</summary>
+    public int Field;
 
-		/// <summary>Holds a static <c>int</c> value.</summary>
-		public static int StaticField;
+    /// <summary>Holds a static <c>int</c> value.</summary>
+    public static int StaticField;
 
-		/// <summary>Gets a value.</summary>
-		public int Property
-		{
-			get { return 0; }
-		}
+    /// <summary>Gets a value.</summary>
+    public int Property
+    {
+      get { return 0; }
+    }
 
-		/// <summary>Gets a static value.</summary>
-		public static int StaticProperty
-		{
-			get { return 0; }
-		}
+    /// <summary>Gets a static value.</summary>
+    public static int StaticProperty
+    {
+      get { return 0; }
+    }
 
-		/// <summary>This overloaded indexer accepts an int.</summary>
-		public int this[int i]
-		{
-			get { return 0; }
-		}
+    /// <summary>This overloaded indexer accepts an int.</summary>
+    public int this[int i]
+    {
+      get { return 0; }
+    }
 
-		/// <summary>This overloaded indexer accepts a string.</summary>
-		public int this[string s]
-		{
-			get { return 0; }
-		}
+    /// <summary>This overloaded indexer accepts a string.</summary>
+    public int this[string s]
+    {
+      get { return 0; }
+    }
 
-		/// <summary>This overloaded indexer accepts three ints.</summary>
-		public int this[int i1, int i2, int i3]
-		{
-			get { return 0; }
-		}
+    /// <summary>This overloaded indexer accepts three ints.</summary>
+    public int this[int i1, int i2, int i3]
+    {
+      get { return 0; }
+    }
 
-		/// <summary>Executes some code.</summary>
-		public void Method() { }
+    /// <summary>Executes some code.</summary>
+    public void Method() { }
 
-		/// <summary>Executes some code.</summary>
-		public void Method(int i1, int i2, int i3) { }
+    /// <summary>Executes some code.</summary>
+    public void Method(int i1, int i2, int i3) { }
 
-		/// <summary>Executes some static code.</summary>
-		public static void StaticMethod() { }
+    /// <summary>Executes some static code.</summary>
+    public static void StaticMethod() { }
 
-		/// <summary>This is a simple event that uses the Handler delegate.</summary>
-		public event Handler Event;
+    /// <summary>Uses some parameter modifyers.</summary>
+    public void ParameterModifyers( ref int refParam, out int outParam, params object[] paramArray ) 
+    { 
+      outParam = 0;
+    }
 
-		/// <summary>Stop warning me about Event not being used.</summary>
-		public void OnEvent()
-		{
-			Event(this, new EventArgs());
-			ProtectedEvent(this, new EventArgs());
-			StaticEvent(this, new EventArgs());
-		}
+    /// <summary>An overload.</summary>
+    public void ParameterModifyers( int a, ref int refParam, out int outParam, params object[] paramArray ) 
+    { 
+      outParam = 0;
+    }
 
-		/// <summary>This event is protected.</summary>
-		protected event Handler ProtectedEvent;
+    /// <summary>This is a simple event that uses the Handler delegate.</summary>
+    public event Handler Event;
 
-		/// <summary>Can you do this?</summary>
-		public static event Handler StaticEvent;
+    /// <summary>Stop warning me about Event not being used.</summary>
+    public void OnEvent()
+    {
+      Event(this, new EventArgs());
+      ProtectedEvent(this, new EventArgs());
+      StaticEvent(this, new EventArgs());
+    }
 
-		/// <summary>This is my first overloaded operator.</summary>
-		/// <remarks>Why do we have to declare them as static?</remarks>
-		public static bool operator !(Class x)
-		{
-			return false;
-		}
-	}
+    /// <summary>This event is protected.</summary>
+    protected event Handler ProtectedEvent;
+
+    /// <summary>Can you do this?</summary>
+    public static event Handler StaticEvent;
+
+    /// <summary>This is my first overloaded operator.</summary>
+    /// <remarks>Why do we have to declare them as static?</remarks>
+    public static bool operator !(Class x)
+    {
+      return false;
+    }
+  }
 
 	/// <summary>This is a simple delegate used by Class.</summary>
 	public delegate void Handler(object sender, EventArgs e);

@@ -976,13 +976,19 @@ namespace NDoc.Core
 		private void WriteParameter(XmlWriter writer, string memberName, ParameterInfo parameter)
 		{
 			string direction = "in";
+      bool isParamArray = false;
 
 			if (parameter.ParameterType.IsByRef)
 			{
 				direction = parameter.IsOut ? "out" : "ref";
 			}
 
-			writer.WriteStartElement("parameter");
+      if (parameter.GetCustomAttributes(typeof(ParamArrayAttribute), false).Length > 0)
+      {
+        isParamArray = true;
+      }
+
+      writer.WriteStartElement("parameter");
 			writer.WriteAttributeString("name", parameter.Name);
 			writer.WriteAttributeString("type", parameter.ParameterType.FullName);
 			writer.WriteAttributeString("optional", parameter.IsOptional ? "true" : "false");
@@ -992,7 +998,12 @@ namespace NDoc.Core
 				writer.WriteAttributeString("direction", direction);
 			}
 
-			writer.WriteEndElement();
+      if (isParamArray)
+      {
+        writer.WriteAttributeString("isParamArray", "true");
+      }
+
+      writer.WriteEndElement();
 		}
 
 		private void WriteOperator(
