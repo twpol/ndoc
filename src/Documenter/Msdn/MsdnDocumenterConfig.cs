@@ -435,6 +435,24 @@ namespace NDoc.Documenter.Msdn
 				SetDirty();
 			}
 		}
+
+		string _ExtensibilityStylesheet = string.Empty;
+
+		/// <summary>Path to an xslt stylesheet that contains templates for documenting extensibility tags</summary>
+		[Category("Extensibility")]
+		[Description("Path to an xslt stylesheet that contains templates for documenting extensibility tags. Extensibility templates should match your custom nodes and have a mode of 'slashdoc'")]
+		[DefaultValue("")]
+		[Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
+		public string ExtensibilityStylesheet
+		{
+			get { return _ExtensibilityStylesheet; }
+
+			set
+			{
+				_ExtensibilityStylesheet = value;
+				SetDirty();
+			}
+		}
 	}
 
 	/// <summary>

@@ -13,6 +13,33 @@
 	<xsl:param name="ndoc-omit-object-tags" select="false" />
 	<xsl:param name="ndoc-sdk-doc-base-url" />
 	<xsl:param name="ndoc-sdk-doc-file-ext" />
+	
+	<!--
+	 | no-op extensibility templates
+	 +-->
+	<xsl:template match="node()|@*|text()" mode="seealso-section"/>
+	<xsl:template match="node()|@*|text()" mode="overloads-remarks-section"/>
+	<xsl:template match="node()|@*|text()" mode="overloads-example-section"/>
+	<xsl:template match="node()|@*|text()" mode="overloads-summary-section"/>	
+	<xsl:template match="node()|@*|text()" mode="requirements-section" />
+	<xsl:template match="node()|@*|text()" mode="enumeration-members-section"/>
+	<xsl:template match="node()|@*|text()" mode="example-section" />
+	<xsl:template match="node()|@*|text()" mode="exceptions-section" />
+	<xsl:template match="node()|@*|text()" mode="events-section" />
+	<xsl:template match="node()|@*|text()" mode="value-section"/>
+	<xsl:template match="node()|@*|text()" mode="remarks-section" />
+	<xsl:template match="node()|@*|text()" mode="implements-section" />
+	<xsl:template match="node()|@*|text()" mode="returnvalue-section" />
+	<xsl:template match="node()|@*|text()" mode="parameter-section" />
+	<xsl:template match="node()|@*|text()" mode="summary-section" />
+	<xsl:template match="node()|@*|text()" mode="obsolete-section" />
+	<xsl:template match="node()|@*|text()" mode="footer-row"/>
+	<xsl:template match="node()|@*|text()" mode="title-row"/>
+<!--	
+	<xsl:template match="node()|@*|text()" mode="syntax-section"/>
+	<xsl:template match="node()|@*|text()" mode="type-requirements-section" />
+	<xsl:template match="node()|@*|text()" mode="member-requirements-section" />
+	-->
 	<!-- -->
 	<xsl:template name="csharp-type">
 		<xsl:param name="runtime-type" />
@@ -316,6 +343,7 @@
 					</xsl:choose>
 				</xsl:for-each>
 			</xsl:if>
+			<xsl:apply-templates select="documentation/node()" mode="seealso-section"/>
 		</p>
 	</xsl:template>
 	<!-- -->
@@ -360,6 +388,7 @@
 					<xsl:with-param name="nodes" select="(documentation/obsolete)[1]/node()" />
 				</xsl:call-template>
 			</xsl:if>
+			<xsl:apply-templates select="documentation/node()" mode="obsolete-section"/>					
 			<HR/>
 		</xsl:if>
 	</xsl:template>
@@ -375,6 +404,7 @@
 		<xsl:call-template name="output-paragraph">
 			<xsl:with-param name="nodes" select="(documentation/summary)[1]/node()" />
 		</xsl:call-template>
+		<xsl:apply-templates select="documentation/node()" mode="summary-section"/>					
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="summary-with-no-paragraph">
@@ -399,6 +429,7 @@
 				<xsl:call-template name="summary-section" />
 			</xsl:otherwise>
 		</xsl:choose>
+		<xsl:apply-templates select="documentation/node()" mode="overloads-summary-section"/>					
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="overloads-summary-with-no-paragraph">
@@ -425,6 +456,7 @@
 			<p>
 				<xsl:apply-templates select="(documentation/overloads/remarks)[1]/node()" mode="slashdoc" />
 			</p>
+			<xsl:apply-templates select="documentation/node()" mode="overloads-remarks-section"/>			
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
@@ -434,6 +466,7 @@
 			<p>
 				<xsl:apply-templates select="(documentation/overloads/example)[1]/node()" mode="slashdoc" />
 			</p>
+			<xsl:apply-templates select="documentation/node()" mode="overloads-example-section"/>			
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
@@ -441,6 +474,7 @@
 		<xsl:if test="documentation/param">
 			<h4 class="dtH4">Parameters</h4>
 			<xsl:call-template name="parameter-topic" />
+			<xsl:apply-templates select="documentation/node()" mode="parameter-section"/>			
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
@@ -450,6 +484,7 @@
 			<p>
 				<xsl:apply-templates select="documentation/returns/node()" mode="slashdoc" />
 			</p>
+			<xsl:apply-templates select="documentation/node()" mode="returnvalue-section"/>			
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
@@ -507,6 +542,7 @@
 					</a>
 				</p>
 			</xsl:for-each>
+			<xsl:apply-templates select="documentation/node()" mode="implements-section"/>			
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
@@ -524,6 +560,7 @@
 					<xsl:apply-templates select="documentation/remarks/node()" mode="slashdoc" />
 				</xsl:otherwise>
 			</xsl:choose>
+			<xsl:apply-templates select="documentation/node()" mode="remarks-section"/>			
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
@@ -533,6 +570,7 @@
 			<p>
 				<xsl:apply-templates select="documentation/value/node()" mode="slashdoc" />
 			</p>
+			<xsl:apply-templates select="documentation/node()" mode="value-section"/>			
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
@@ -560,6 +598,7 @@
 					</xsl:for-each>
 				</table>
 			</div>
+			<xsl:apply-templates select="documentation/node()" mode="events-section"/>			
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
@@ -587,6 +626,7 @@
 					</xsl:for-each>
 				</table>
 			</div>
+			<xsl:apply-templates select="documentation/node()" mode="exceptions-section"/>			
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
@@ -596,10 +636,11 @@
 			<p>
 				<xsl:apply-templates select="documentation/example/node()" mode="slashdoc" />
 			</p>
+			<xsl:apply-templates select="documentation/node()" mode="example-section"/>			
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
-	<xsl:template name="members-section">
+	<xsl:template name="enumeration-members-section">
 		<xsl:if test="field">
 			<h4 class="dtH4">Members</h4>
 			<div class="tablediv">
@@ -623,6 +664,7 @@
 					</xsl:for-each>
 				</table>
 			</div>
+			<xsl:apply-templates select="documentation/node()" mode="enumeration-members-section"/>			
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
@@ -735,6 +777,7 @@
 					<xsl:value-of select="$headerHtml" disable-output-escaping="yes" />
 				</xsl:otherwise>
 			</xsl:choose>
+			<xsl:apply-templates select="documentation/node()" mode="title-row"/>			
 		</div>
 	</xsl:template>
 	<!-- -->
@@ -773,6 +816,7 @@
 					</xsl:otherwise>
 				</xsl:choose>
 			</div>
+			<xsl:apply-templates select="documentation/node()" mode="footer-row"/>			
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
@@ -957,6 +1001,7 @@
 					</xsl:for-each>
 				</ul>
 			</p>
+			<xsl:apply-templates select="documentation/node()" mode="requirements-section"/>			
 		</xsl:if>
 	</xsl:template>
 	<!-- -->

@@ -126,6 +126,9 @@ namespace NDoc.Documenter.Msdn
 				return result;
 			}
 
+			if ( MyConfig.ExtensibilityStylesheet.Length != 0 && !File.Exists( MyConfig.ExtensibilityStylesheet ) )
+				return string.Format( "The file {0} could not be found", MyConfig.ExtensibilityStylesheet );
+
 			if (checkInputOnly) 
 			{
 				return null;
@@ -499,6 +502,29 @@ namespace NDoc.Documenter.Msdn
 			}
 		}
 
+		/// <summary>
+		/// Addes the ExtensibilityStylesheet to the tags.xslt stylesheet
+		/// so that custom template will get called during processing
+		/// </summary>
+		private void AddExtensibilityStylesheet()
+		{
+			XmlDocument tags = new XmlDocument();
+			tags.Load( Path.Combine( Path.Combine( resourceDirectory, "xslt" ), "tags.xslt" ) );
+			
+			XmlElement include = tags.CreateElement( "xsl", "include", "http://www.w3.org/1999/XSL/Transform" );
+
+			string extensibilityStylesheet = MyConfig.ExtensibilityStylesheet;
+
+			if ( !Path.IsPathRooted( extensibilityStylesheet ) )
+				extensibilityStylesheet = Path.GetFullPath( extensibilityStylesheet );
+
+			include.SetAttribute( "href", extensibilityStylesheet );
+
+			tags.DocumentElement.PrependChild( include );
+
+			tags.Save( Path.Combine( Path.Combine( resourceDirectory, "xslt" ), "tags.xslt" ) );
+		}
+
 		private void MakeTransforms()
 		{
 			OnDocBuildingProgress(0);
@@ -514,6 +540,10 @@ namespace NDoc.Documenter.Msdn
 			xsltMemberOverload = new XslTransform();
 			xsltProperty = new XslTransform();
 			xsltField = new XslTransform();
+
+			// if we have an extensibility stylesheet, add it before compiling the transforms
+			if ( MyConfig.ExtensibilityStylesheet.Length > 0 )
+				AddExtensibilityStylesheet();
 
 			Trace.WriteLine("namespace.xslt");
 			OnDocBuildingProgress(10);

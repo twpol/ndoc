@@ -177,7 +177,7 @@
 					<xsl:call-template name="remarks-section" />
 					<xsl:call-template name="example-section" />
 					<xsl:if test="local-name() = 'enumeration'">
-						<xsl:call-template name="members-section" />
+						<xsl:call-template name="enumeration-members-section" />
 					</xsl:if>
 					<h4 class="dtH4">Requirements</h4>
 					<p>
