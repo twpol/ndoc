@@ -340,9 +340,17 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="summary-section">
-		<p class="i1">
-			<xsl:apply-templates select="documentation/summary/node()" mode="slashdoc" />
-		</p>
+		<xsl:variable name="first-element" select="local-name(documentation/summary/*[1])" />
+		<xsl:choose>
+			<xsl:when test="$first-element!='para' and $first-element!='p'">
+				<p class="i1">
+					<xsl:apply-templates select="documentation/summary/node()" mode="slashdoc" />
+				</p>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:apply-templates select="documentation/summary/node()" mode="slashdoc" />
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="parameter-section">
@@ -364,9 +372,17 @@
 	<xsl:template name="remarks-section">
 		<xsl:if test="documentation/remarks">
 			<h4>Remarks</h4>
-			<p class="i1">
-				<xsl:apply-templates select="documentation/remarks/node()" mode="slashdoc" />
-			</p>
+			<xsl:variable name="first-element" select="local-name(documentation/remarks/*[1])" />
+			<xsl:choose>
+				<xsl:when test="$first-element!='para' and $first-element!='p'">
+					<p class="i1">
+						<xsl:apply-templates select="documentation/remarks/node()" mode="slashdoc" />
+					</p>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:apply-templates select="documentation/remarks/node()" mode="slashdoc" />
+				</xsl:otherwise>
+			</xsl:choose>
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
