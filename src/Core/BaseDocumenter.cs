@@ -20,8 +20,11 @@ using System;
 using System.Collections;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Xml;
 using System.Xml.XPath;
@@ -792,6 +795,8 @@ namespace NDoc.Core
 				writer.WriteAttributeString("version", assemblyName.Version.ToString());
 			}
 
+            WriteCustomAttributes(writer, assembly);
+
 			foreach (Module module in assembly.GetModules())
 			{
 				WriteModule(writer, module);
@@ -807,6 +812,7 @@ namespace NDoc.Core
 		{
 			writer.WriteStartElement("module");
 			writer.WriteAttributeString("name", module.ScopeName);
+            WriteCustomAttributes(writer, module);
 			WriteNamespaces(writer, module);
 			writer.WriteEndElement();
 		}
@@ -1215,6 +1221,70 @@ namespace NDoc.Core
 			writer.WriteEndElement();
 		}
 
+        private void WriteStructLayoutAttribute(XmlWriter writer, Type type) {
+            string charSet = null;
+            string layoutKind = null;
+
+            // determine if CharSet property should be documented
+            if ((type.Attributes & TypeAttributes.AutoClass) == TypeAttributes.AutoClass)
+            {
+                charSet = CharSet.Auto.ToString(CultureInfo.InvariantCulture);
+            } 
+            if ((type.Attributes & TypeAttributes.AnsiClass) == TypeAttributes.AnsiClass)
+            {
+                charSet = CharSet.Ansi.ToString(CultureInfo.InvariantCulture);
+            } 
+            if ((type.Attributes & TypeAttributes.UnicodeClass) == TypeAttributes.UnicodeClass)
+            {
+                charSet = CharSet.Unicode.ToString(CultureInfo.InvariantCulture);
+            }
+
+            // determine if Value property should be documented
+            if ((type.Attributes & TypeAttributes.AutoLayout) == TypeAttributes.AutoLayout)
+            {
+                layoutKind = LayoutKind.Auto.ToString(CultureInfo.InvariantCulture);
+            } 
+            if ((type.Attributes & TypeAttributes.ExplicitLayout) == TypeAttributes.ExplicitLayout)
+            {
+                layoutKind = LayoutKind.Explicit.ToString(CultureInfo.InvariantCulture);
+            } 
+            if ((type.Attributes & TypeAttributes.SequentialLayout) == TypeAttributes.SequentialLayout)
+            {
+                layoutKind = LayoutKind.Sequential.ToString(CultureInfo.InvariantCulture);
+            }
+
+            if (charSet == null && layoutKind == null)
+            {
+                return;
+            }
+
+            // create attribute element
+            writer.WriteStartElement("attribute");
+            writer.WriteAttributeString("name", "System.Runtime.InteropServices.StructLayoutAttribute");
+
+            if (charSet != null)
+            {
+                // create CharSet property element
+                writer.WriteStartElement("property");
+                writer.WriteAttributeString("name", "CharSet");
+                writer.WriteAttributeString("type", "System.Runtime.InteropServices.CharSet");
+                writer.WriteAttributeString("value", charSet);
+                writer.WriteEndElement();
+            }
+
+            if (layoutKind != null) {
+                // create Value property element
+                writer.WriteStartElement("property");
+                writer.WriteAttributeString("name", "Value");
+                writer.WriteAttributeString("type", "System.Runtime.InteropServices.LayoutKind");
+                writer.WriteAttributeString("value", layoutKind);
+                writer.WriteEndElement();
+            }
+
+            // end attribute element
+            writer.WriteEndElement();
+        }
+
 		private void WriteSpecialAttributes(XmlWriter writer, Type type)
 		{
 			if ((type.Attributes & TypeAttributes.Serializable) == TypeAttributes.Serializable)
@@ -1223,7 +1293,8 @@ namespace NDoc.Core
 				writer.WriteAttributeString("name", "System.SerializableAttribute");
 				writer.WriteEndElement(); // attribute
 			}
-			//TODO: more special attributes here?
+
+            WriteStructLayoutAttribute(writer, type);
 		}
 
 		private void WriteSpecialAttributes(XmlWriter writer, FieldInfo field)
@@ -1234,8 +1305,17 @@ namespace NDoc.Core
 				writer.WriteAttributeString("name", "System.NonSerializedAttribute");
 				writer.WriteEndElement(); // attribute
 			}
+
 			//TODO: more special attributes here?
 		}
+
+        private void WriteCustomAttributes(XmlWriter writer, Assembly assembly) {
+            WriteCustomAttributes(writer, assembly.GetCustomAttributes(true));
+        }
+
+        private void WriteCustomAttributes(XmlWriter writer, Module module) {
+            WriteCustomAttributes(writer, module.GetCustomAttributes(true));
+        }
 
 		private void WriteCustomAttributes(XmlWriter writer, Type type)
 		{
@@ -1265,11 +1345,10 @@ namespace NDoc.Core
 			{
 				if (this.MyConfig.DocumentAttributes)
 				{
-					if (attribute.GetType().FullName!="System.ObsoleteAttribute") 
-						WriteCustomAttribute(writer, attribute);
+					WriteCustomAttribute(writer, attribute);
 				}
 
-				if (attribute.GetType().FullName=="System.ObsoleteAttribute") 
+				if (attribute.GetType().FullName == "System.ObsoleteAttribute") 
 				{
 					writer.WriteElementString("obsolete",((ObsoleteAttribute)attribute).Message);
 				}
