@@ -25,7 +25,7 @@ NDocUsersGuide.chm: UsersGuide.hhp
 
 
 # these are the various file types that the chm is dependent on
-IMAGES = {content\images}*.gif {content\images}*.png {content\images}*.jpg
+IMAGES = {content\images}*.gif {content\images}*.jpg
 SCRIPTS = {content\script}*.js
 CSS = {content\css}*.css
 HTML = {content}*.htm 
