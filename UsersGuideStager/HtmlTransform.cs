@@ -85,7 +85,10 @@ namespace NDoc.UsersGuideStager
 
 					// replace all ms-help links with online equivalents
 					if ( anchor.href.IndexOf( "ms-help" ) != -1 )
+					{
 						anchor.href = TransformMSHelpLink( anchor.href );
+						anchor.target = "_parent";
+					}
 				}
 			}
 
@@ -98,7 +101,10 @@ namespace NDoc.UsersGuideStager
 		{
 			const string content = "content";
 			Debug.Assert( href.IndexOf( content ) > -1 );
-			return href.Substring( href.IndexOf( content ) + content.Length + 1 ).ToLower();
+
+			// strip off the absolute part of the path
+			// and replace back slashes with forward slashes
+			return href.Substring( href.IndexOf( content ) + content.Length + 1 ).ToLower().Replace( @"\", "/" );
 		}
 
 		private static string TransformMSHelpLink( string href )
