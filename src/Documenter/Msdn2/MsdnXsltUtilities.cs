@@ -229,7 +229,7 @@ namespace NDoc.Documenter.Msdn2
 		}
 
 		/// <summary>
-		/// Exposes <see cref="System.String.Replace"/> to XSLT
+		/// Exposes <see cref="String.Replace(string, string)"/> to XSLT
 		/// </summary>
 		/// <param name="str">The string to search</param>
 		/// <param name="oldValue">The string to search for</param>
