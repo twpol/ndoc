@@ -1064,18 +1064,19 @@
 	
 	<xsl:template match="feedbackEmail">
 		<xsl:param name="page"/>
+		<xsl:variable name="href">
+			<xsl:text>mailto:</xsl:text>
+			<xsl:value-of select="."/>
+			<xsl:text>?subject=</xsl:text>
+			<xsl:value-of select="$ndoc-title" />
+			<xsl:text> Documentation Feedback: </xsl:text>
+			<xsl:value-of select="$page"/>		
+		</xsl:variable>
 		<p>
-			<a>
-				<xsl:attribute name="href">
-					<xsl:text>mailto:</xsl:text>
-					<xsl:value-of select="."/>
-					<xsl:text>?subject=</xsl:text>
-					<xsl:value-of select="$ndoc-title" />
-					<xsl:text> Documentation Feedback: </xsl:text>
-					<xsl:value-of select="$page"/>
-				</xsl:attribute>
+			<a href="{NUtil:Replace( $href, ' ', '%20' )}">
 				<xsl:text>Send comments on this topic.</xsl:text>
 			</a>
 		</p>
 	</xsl:template>	
+
 </xsl:stylesheet>

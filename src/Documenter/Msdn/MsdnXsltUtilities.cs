@@ -192,6 +192,18 @@ namespace NDoc.Documenter.Msdn
 		}
 
 		/// <summary>
+		/// Exposes <see cref="System.String.Replace"/> to XSLT
+		/// </summary>
+		/// <param name="str">The string to search</param>
+		/// <param name="oldValue">The string to search for</param>
+		/// <param name="newValue">The string to replace</param>
+		/// <returns>A new string</returns>
+		public string Replace( string str, string oldValue, string newValue )
+		{
+			return str.Replace( oldValue, newValue );
+		}	
+
+		/// <summary>
 		/// returns a localized sdk url if one exists for the <see cref="CultureInfo.CurrentCulture"/>.
 		/// </summary>
 		/// <param name="searchNamespace">base namespace to search for</param></param>
