@@ -16,6 +16,12 @@ namespace NDoc.Test.Extensibility
 	/// <remarks>This is a test of an inline <null/> tag</remarks>
 	/// <custom>This is a custom tag</custom>
 	/// <mySeeAlso>This should appear in the "See Also" section</mySeeAlso>
+	/// <history><date>2004-10-01</date><user>ksd</user><scr>17482</scr>
+	/// Initial comment
+	/// </history>
+	/// <history><date>2004-10-02</date><user>ksd</user><scr>18212</scr>
+	/// Some adiitional comments
+	/// </history>
 	public class ABunchOfCustomTags
 	{
 
