@@ -37,9 +37,9 @@ namespace NDoc.Documenter.Intellisense
 		/// <summary>
 		/// Load the predefined set of xslt stylesheets into a dictionary
 		/// </summary>
-		/// <param name="extensibiltyStylesheet"></param>
+		/// <param name="extensibilityStylesheet"></param>
 		/// <returns>The populated collection</returns>
-		public static StyleSheetCollection LoadStyleSheets(string extensibiltyStylesheet)
+		public static StyleSheetCollection LoadStyleSheets(string extensibilityStylesheet)
 		{
 			StyleSheetCollection stylesheets = new StyleSheetCollection();
 
@@ -50,7 +50,7 @@ namespace NDoc.Documenter.Intellisense
 #endif
 
 			XsltResourceResolver resolver = new XsltResourceResolver(resourceBase);
-			resolver.ExtensibiltyStylesheet = extensibiltyStylesheet;
+			resolver.ExtensibilityStylesheet = extensibilityStylesheet;
 			Trace.Indent();
 
 			stylesheets.AddFrom("assembly", resolver);
