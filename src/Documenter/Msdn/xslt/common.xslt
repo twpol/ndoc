@@ -669,15 +669,15 @@
 				</xsl:call-template>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:variable name="seethis" select="//*[@id=$cref]" />
+				<xsl:variable name="seethis" select="//*[@id=$cref][name()!='base']" />
 				<xsl:choose>
 					<xsl:when test="$seethis">
-						<xsl:for-each select="$seethis">
+						<!--<xsl:for-each select="$seethis">-->
 							<xsl:call-template name="get-filename-for-cref-overload">
-								<xsl:with-param name="cref" select="@id" />
-								<xsl:with-param name="overload" select="@overload" />
+								<xsl:with-param name="cref" select="$seethis/@id" />
+								<xsl:with-param name="overload" select="$seethis/@overload" />
 							</xsl:call-template>
-						</xsl:for-each>
+						<!--</xsl:for-each>-->
 					</xsl:when>
 					<xsl:otherwise>
 						<!-- this is an incredibly lame hack. -->
@@ -720,24 +720,24 @@
 				</xsl:choose>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:variable name="seethis" select="//*[@id=$cref]" />
+				<xsl:variable name="seethis" select="//*[@id=$cref][name()!='base']" />
 				<xsl:choose>
 					<xsl:when test="$seethis">
-						<xsl:for-each select="$seethis">
+						<!--<xsl:for-each select="$seethis">-->
 							<xsl:choose>
 								<xsl:when test="local-name()='constructor'">
-									<xsl:value-of select="../@name" />
+									<xsl:value-of select="$seethis/../@name" />
 								</xsl:when>
 								<xsl:when test="local-name()='operator'">
 									<xsl:call-template name="operator-name">
-										<xsl:with-param name="name" select="@name" />
+										<xsl:with-param name="name" select="$seethis/@name" />
 									</xsl:call-template>
 								</xsl:when>
 								<xsl:otherwise>
-									<xsl:value-of select="@name" />
+									<xsl:value-of select="$seethis/@name" />
 								</xsl:otherwise>
 							</xsl:choose>
-						</xsl:for-each>
+						<!--</xsl:for-each>-->
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:choose>
