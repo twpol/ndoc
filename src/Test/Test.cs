@@ -366,4 +366,91 @@ namespace NDoc.Test
 	public class Langword
 	{
 	}
+
+	/// <summary>This class contains all the overloadable operators.</summary>
+	public class Operators
+	{
+		/// <summary>Unary plus operator.</summary>
+		public static int operator +(Operators o) { return 0; }
+
+		/// <summary>Unary minus operator.</summary>
+		public static int operator -(Operators o) { return 0; }
+
+		/// <summary>Logical negation operator.</summary>
+		public static int operator !(Operators o) { return 0; }
+
+		/// <summary>Bitwise complement operator.</summary>
+		public static int operator ~(Operators o) { return 0; }
+
+		/// <summary>Increment operator.</summary>
+		public static Operators operator ++(Operators o) { return null; }
+
+		/// <summary>Decrement operator.</summary>
+		public static Operators operator --(Operators o) { return null; }
+
+		/// <summary>Definitely true operator.</summary>
+		public static bool operator true(Operators o) { return true; }
+
+		/// <summary>Definitely false operator.</summary>
+		public static bool operator false(Operators o) { return false; }
+
+		/// <summary>Addition operator.</summary>
+		public static int operator +(Operators x, Operators y) { return 0; }
+
+		/// <summary>Subtraction operator.</summary>
+		public static int operator -(Operators x, Operators y) { return 0; }
+
+		/// <summary>Multiplication operator.</summary>
+		public static int operator *(Operators x, Operators y) { return 0; }
+
+		/// <summary>Division operator.</summary>
+		public static int operator /(Operators x, Operators y) { return 0; }
+
+		/// <summary>Remainder operator.</summary>
+		public static int operator %(Operators x, Operators y) { return 0; }
+
+		/// <summary>And operator.</summary>
+		public static int operator &(Operators x, Operators y) { return 0; }
+
+		/// <summary>Or operator.</summary>
+		public static int operator |(Operators x, Operators y) { return 0; }
+
+		/// <summary>Exclusive-or operator.</summary>
+		public static int operator ^(Operators x, Operators y) { return 0; }
+
+		/// <summary>Left-shift operator.</summary>
+		public static int operator <<(Operators x, Operators y) { return 0; }
+
+		/// <summary>Right-shift operator.</summary>
+		public static int operator >>(Operators x, Operators y) { return 0; }
+
+		/// <summary>Equality operator.</summary>
+		public static bool operator ==(Operators x, Operators y) { return false; }
+
+		/// <summary>Inequality operator.</summary>
+		public static bool operator !=(Operators x, Operators y) { return false; }
+
+		/// <summary>Equals method.</summary>
+		public override bool Equals(Object o) { return false; }
+
+		/// <summary>GetHashCode method.</summary>
+		public override int GetHashCode() { return 0; }
+
+		/// <summary>Less-than operator.</summary>
+		public static bool operator <(Operators x, Operators y) { return false; }
+
+		/// <summary>Greater-than operator.</summary>
+		public static bool operator >(Operators x, Operators y) { return false; }
+
+		/// <summary>Less-than-or-equal operator.</summary>
+		public static bool operator <=(Operators x, Operators y) { return false; }
+
+		/// <summary>Greater-than-or-equal operator.</summary>
+		public static bool operator >=(Operators x, Operators y) { return false; }
+	}
+
+	/// <summary>This class inherits all the operators.</summary>
+	public class DerivedOperators : Operators
+	{
+	}
 }
