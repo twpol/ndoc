@@ -4,7 +4,7 @@
         <assembly location=".\src\Gui\bin\Debug\NDoc.Documenter.JavaDoc.dll" documentation=".\src\Gui\bin\Debug\NDoc.Documenter.JavaDoc.xml" />
         <assembly location=".\src\Gui\bin\Debug\NDoc.Documenter.Msdn.dll" documentation=".\src\Gui\bin\Debug\NDoc.Documenter.Msdn.xml" />
         <assembly location=".\src\Gui\bin\Debug\NDoc.Documenter.Xml.dll" documentation=".\src\Gui\bin\Debug\NDoc.Documenter.Xml.xml" />
-        <assembly location=".\src\Gui\bin\Debug\NDoc.Gui.exe" documentation=".\src\Gui\bin\Debug\NDoc.Gui.xml" />
+        <assembly location=".\src\Gui\bin\Debug\NDocGui.exe" documentation=".\src\Gui\bin\Debug\NDocGui.xml" />
     </assemblies>
     <documenters>
         <documenter name="JavaDoc">
@@ -33,6 +33,17 @@
         </documenter>
         <documenter name="XML">
             <property name="OutputFile" value=".\docs\doc.xml" />
+            <property name="ShowMissingSummaries" value="False" />
+            <property name="ShowMissingRemarks" value="False" />
+            <property name="ShowMissingParams" value="False" />
+            <property name="ShowMissingReturns" value="False" />
+            <property name="ShowMissingValues" value="False" />
+            <property name="DocumentInternals" value="False" />
+            <property name="DocumentPrivates" value="False" />
+        </documenter>
+        <documenter name="XSLT">
+            <property name="XsltDirectory" value=".\src\Simple" />
+            <property name="OutputDirectory" value=".\docs\Test\XSLT" />
             <property name="ShowMissingSummaries" value="False" />
             <property name="ShowMissingRemarks" value="False" />
             <property name="ShowMissingParams" value="False" />
