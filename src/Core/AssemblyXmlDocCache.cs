@@ -24,7 +24,7 @@ using System.IO;
 namespace NDoc.Core
 {
 	/// <summary>
-	/// Summary description for AssemblyXmlDocCache.
+	/// AssemblyXmlDocCache.
 	/// </summary>
 	public class AssemblyXmlDocCache
 	{
@@ -32,12 +32,22 @@ namespace NDoc.Core
 		private Hashtable excludeTags;
 
 		/// <summary>
-		/// Initializes a new instance of the AssemblyXmlDocCache class.
+		/// Creates a new instance of the AssemblyXmlDocCache class.
 		/// </summary>
+		public AssemblyXmlDocCache()
+		{
+			Flush();
+		}
+
+		/// <summary>
+		/// Creates a new instance of the AssemblyXmlDocCache class and and populates it from the given file.
+		/// </summary>
+		/// <param name="fileName">Fully-qualified filename of xml file with which to populate the cache.</param>
 		public AssemblyXmlDocCache(string fileName)
 		{
 			Flush();
 			XmlTextReader reader = new XmlTextReader(fileName);
+			reader.WhitespaceHandling=WhitespaceHandling.All;
 			CacheDocs(reader);
 		}
 
@@ -51,7 +61,7 @@ namespace NDoc.Core
 		}
 
 		/// <summary>
-		/// Cache the xmld docs into a hashtable for fater access.
+		/// Cache the xmld docs into a hashtable for faster access.
 		/// </summary>
 		/// <param name="reader">An XMLTextReader containg the docs the cache</param>
 		private void CacheDocs(XmlTextReader reader)
@@ -69,7 +79,6 @@ namespace NDoc.Core
 					if (docs.ContainsKey(ID))
 					{
 						Trace.WriteLine("Warning: Multiple <member> tags found with id=\"" + ID + "\"");
-						docs[ID] += doc;
 					}
 					else
 					{
