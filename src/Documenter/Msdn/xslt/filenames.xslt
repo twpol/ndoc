@@ -152,16 +152,16 @@
 		</xsl:choose>
 	</xsl:template>
 	<!-- -->
-	<xsl:template name="get-filename-for-parameter-type">
-		<xsl:param name="parameter-type" />
+	<xsl:template name="get-filename-for-type-name">
+		<xsl:param name="type-name" />
 		<xsl:choose>
-			<xsl:when test="starts-with($parameter-type, 'System.')">
+			<xsl:when test="starts-with($type-name, 'System.')">
 				<xsl:call-template name="get-filename-for-system-class">
-					<xsl:with-param name="class-name" select="$parameter-type" />
+					<xsl:with-param name="class-name" select="$type-name" />
 				</xsl:call-template>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:value-of select="concat(translate($parameter-type, '.', ''), '.html')" />
+				<xsl:value-of select="concat(translate($type-name, '.', ''), '.html')" />
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>

@@ -281,4 +281,36 @@ namespace NDoc.Test
 			get { return 0; }
 		}
 	}
+
+	/// <summary>Represents a class that has lots of links 
+	/// in its documentation.</summary>
+	public class Links
+	{
+		/// <summary>Gets or sets an integer.</summary>
+		/// <value>an integer</value>
+		public int IntProperty
+		{
+			get { return 0; }
+			set { }
+		}
+
+		/// <summary>Returns nothing.</summary>
+		/// <returns>Nada.</returns>
+		public void VoidMethod() { }
+
+		/// <summary>Returns an int.</summary>
+		public int IntMethod() { return 0; }
+		
+		/// <summary>Returns a string.</summary>
+		public string StringMethod() { return null; }
+
+		/// <summary>This method accepts lots of parameters.</summary>
+		/// <param name="i">an integer</param>
+		/// <param name="s">a string</param>
+		/// <param name="c">a character</param>
+		/// <param name="d">a double</param>
+		public void LotsOfParams(int i, string s, char c, double d)
+		{
+		}
+	}
 }

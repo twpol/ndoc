@@ -77,10 +77,17 @@
 					<xsl:value-of select="../@name" />
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:call-template name="get-datatype">
-						<xsl:with-param name="datatype" select="@returnType" />
-						<xsl:with-param name="namespace-name" select="../../@name" />
-					</xsl:call-template>
+					<a>
+						<xsl:attribute name="href">
+							<xsl:call-template name="get-filename-for-type-name">
+								<xsl:with-param name="type-name" select="@returnType" />
+							</xsl:call-template>
+						</xsl:attribute>
+						<xsl:call-template name="get-datatype">
+							<xsl:with-param name="datatype" select="@returnType" />
+							<xsl:with-param name="namespace-name" select="../../@name" />
+						</xsl:call-template>
+					</a>
 					<xsl:text>&#160;</xsl:text>
 					<xsl:value-of select="@name" />
 				</xsl:otherwise>
@@ -150,9 +157,16 @@
 		<xsl:if test="@static">
 			<xsl:text>static&#160;</xsl:text>
 		</xsl:if>
-		<xsl:call-template name="value">
-			<xsl:with-param name="type" select="@type" />
-		</xsl:call-template>
+		<a>
+			<xsl:attribute name="href">
+				<xsl:call-template name="get-filename-for-type-name">
+					<xsl:with-param name="type-name" select="@type" />
+				</xsl:call-template>
+			</xsl:attribute>
+			<xsl:call-template name="value">
+				<xsl:with-param name="type" select="@type" />
+			</xsl:call-template>
+		</a>
 		<xsl:text>&#160;</xsl:text>
 		<xsl:choose>
 			<xsl:when test="@name='Item'">
@@ -162,9 +176,16 @@
 					<xsl:if test="$indent">
 						<xsl:text>&#160;&#160;&#160;</xsl:text>
 					</xsl:if>
-					<xsl:call-template name="csharp-type">
-						<xsl:with-param name="runtime-type" select="@type" />
-					</xsl:call-template>
+					<a>
+						<xsl:attribute name="href">
+							<xsl:call-template name="get-filename-for-type-name">
+								<xsl:with-param name="type-name" select="@type" />
+							</xsl:call-template>
+						</xsl:attribute>
+						<xsl:call-template name="csharp-type">
+							<xsl:with-param name="runtime-type" select="@type" />
+						</xsl:call-template>
+					</a>
 					<xsl:if test="$display-names">
 						<xsl:text>&#160;</xsl:text>
 						<xsl:value-of select="@name" />
@@ -228,8 +249,8 @@
 					<xsl:when test="$version='long'">
 						<a>
 							<xsl:attribute name="href">
-								<xsl:call-template name="get-filename-for-parameter-type">
-									<xsl:with-param name="parameter-type" select="@type" />
+								<xsl:call-template name="get-filename-for-type-name">
+									<xsl:with-param name="type-name" select="@type" />
 								</xsl:call-template>
 							</xsl:attribute>
 							<xsl:call-template name="get-datatype">
