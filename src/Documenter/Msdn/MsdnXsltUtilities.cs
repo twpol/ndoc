@@ -70,27 +70,29 @@ namespace NDoc.Documenter.Msdn
 			get { return sdkDocExt; }
 		}
 
-#if MONO // with mono, an arraylist is sent instead of a string
+#if MONO
 		/// <summary>
-		/// Returns an HRef for a CRef
+		/// Returns an HRef for a CRef.
 		/// </summary>
 		/// <param name="list">The argument list containing the 
 		/// cRef for which the HRef will be looked up.</param>
-		/// <returns></returns>
+		/// <remarks>Mono needs this overload, as its XsltTransform can only
+		/// call methods with an ArraList parameter.</remarks>
 		public string GetHRef(System.Collections.ArrayList list)
 		{
 			System.Diagnostics.Trace.WriteLine("Count:   " + list.Count);
 			System.Diagnostics.Trace.WriteLine("Type[0]: " + list[0].GetType().FullName);
 			string cref = (string)list[0];
-#else
+			return GetHRef(cref);
+		}
+#endif
+
 		/// <summary>
-		/// Returns an HRef for a CRef
+		/// Returns an HRef for a CRef.
 		/// </summary>
 		/// <param name="cref">CRef for which the HRef will be looked up.</param>
-		/// <returns></returns>
 		public string GetHRef(string cref)
 		{
-#endif
 			System.Diagnostics.Trace.WriteLine("cref:    " + cref);
 
 			if ((cref.Length < 2) || (cref[1] != ':'))
@@ -128,27 +130,29 @@ namespace NDoc.Documenter.Msdn
 		}
 
 
-#if MONO // with mono, an arraylist is sent instead of a string
+#if MONO
 		/// <summary>
-		/// Returns an HRef for a CRef
+		/// Returns a name for a CRef.
 		/// </summary>
 		/// <param name="list">The argument list containing the 
 		/// cRef for which the HRef will be looked up.</param>
-		/// <returns></returns>
+		/// <remarks>Mono needs this overload, as its XsltTransform can only
+		/// call methods with an ArraList parameter.</remarks>
 		public string GetName(System.Collections.ArrayList list)
 		{
 			System.Diagnostics.Trace.WriteLine("Count:   " + list.Count);
 			System.Diagnostics.Trace.WriteLine("Type[0]: " + list[0].GetType().FullName);
 			string cref = (string)list[0];
-#else
+			return GetName(cref);
+		}
+#endif
+
 		/// <summary>
-		/// Returns a name for a CRef
+		/// Returns a name for a CRef.
 		/// </summary>
 		/// <param name="cref">CRef for which the name will be looked up.</param>
-		/// <returns></returns>
 		public string GetName(string cref)
 		{
-#endif
 			if (cref.Length < 2)
 				return cref;
 
