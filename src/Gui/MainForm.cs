@@ -59,7 +59,7 @@ namespace NDoc.Gui
 	/// </list>
 	/// </para>
 	/// <para>NDoc allows you to save documentation projects. NDoc project 
-	/// files have the .ndoc.xml extension.</para>
+	/// files have the .ndoc extension.</para>
 	/// <para>The bottom part of the main application form contains 
 	/// a property grid.  You can edit the properties of the selected 
 	/// documenter via this property grid.</para>
@@ -123,8 +123,8 @@ namespace NDoc.Gui
 		#region Constructors / Dispose
 		/// <summary>Initializes the main application form, locates 
 		/// available documenters, and sets up the menus.</summary>
-		/// <remarks>NDoc project files have a .ndoc.xml extension which 
-		/// could be a registered file type in the system.  If a .ndoc.xml 
+		/// <remarks>NDoc project files have a .ndoc extension which 
+		/// could be a registered file type in the system.  If a .ndoc 
 		/// project file is double-clicked from explorer then the NDoc 
 		/// application is called and passed the project file as a command line 
 		/// argument.  This project filename will get passed into this 
@@ -988,7 +988,7 @@ namespace NDoc.Gui
 			OpenFileDialog openFileDlg = new OpenFileDialog();
 
 			openFileDlg.InitialDirectory = processDirectory;
-			openFileDlg.Filter = "Project files (*.ndoc.xml)|*.ndoc.xml|All files (*.*)|*.*" ;
+			openFileDlg.Filter = "Project files (*.ndoc)|*.ndoc|All files (*.*)|*.*" ;
 			openFileDlg.RestoreDirectory = true ;
 
 			if(openFileDlg.ShowDialog() == DialogResult.OK)
@@ -1009,7 +1009,7 @@ namespace NDoc.Gui
 			if (projectFilename == untitledProjectName)
 			{
 				saveFileDlg.InitialDirectory = processDirectory;
-				saveFileDlg.FileName = @".\Untitled.ndoc.xml";
+				saveFileDlg.FileName = @".\Untitled.ndoc";
 			}
 			else
 			{
@@ -1017,7 +1017,7 @@ namespace NDoc.Gui
 				saveFileDlg.FileName = Path.GetFileName(projectFilename);
 			}
 
-			saveFileDlg.Filter = "Project files (*.ndoc.xml)|*.ndoc.xml|All files (*.*)|*.*" ;
+			saveFileDlg.Filter = "Project files (*.ndoc)|*.ndoc|All files (*.*)|*.*" ;
 			saveFileDlg.RestoreDirectory = true ;
 
 			if(saveFileDlg.ShowDialog() == DialogResult.OK)
