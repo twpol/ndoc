@@ -198,6 +198,22 @@ namespace NDoc.Documenter.Msdn
 				string defaultNamespaceName = (string)defaultNamespace.Attributes["name"].Value;
 				string defaultTopic = defaultNamespaceName + ".html";
 
+				// setup for root page
+				string rootPageFileName = null;
+				string rootPageTOCName = "Overview";
+
+				if ((MyConfig.RootPageFileName != null) && (MyConfig.RootPageFileName != string.Empty))
+				{
+					rootPageFileName = MyConfig.RootPageFileName;
+					defaultTopic = Path.GetFileName(rootPageFileName);
+
+					// what to call the top page in the table of contents?
+					if ((MyConfig.RootPageTOCName != null) && (MyConfig.RootPageTOCName != string.Empty))
+					{
+						rootPageTOCName = MyConfig.RootPageTOCName;
+					}
+				}
+
 				string compiler = Environment.ExpandEnvironmentVariables(
 						MyConfig.HtmlHelpCompilerFilename);
 
@@ -217,6 +233,11 @@ namespace NDoc.Documenter.Msdn
 
 				htmlHelp.OpenProjectFile();
 
+				if (!MyConfig.SplitTOCs)
+				{
+					htmlHelp.OpenContentsFile(string.Empty, true);
+				}
+
 				if (MyConfig.CopyrightHref != null && MyConfig.CopyrightHref != String.Empty)
 				{
 					if (!MyConfig.CopyrightHref.StartsWith("http:"))
@@ -226,9 +247,14 @@ namespace NDoc.Documenter.Msdn
 					}
 				}
 
-				if (!MyConfig.SplitTOCs)
+				// add root page if requested
+				if (rootPageFileName != null)
 				{
-					htmlHelp.OpenContentsFile(string.Empty, true);
+					// add the file
+					File.Copy(rootPageFileName, Path.Combine(MyConfig.OutputDirectory, 
+						Path.GetFileName(rootPageFileName)), true);
+					htmlHelp.AddFileToProject(Path.GetFileName(rootPageFileName));
+					htmlHelp.AddFileToContents(rootPageTOCName, Path.GetFileName(rootPageFileName));
 				}
 
 				try
@@ -238,6 +264,15 @@ namespace NDoc.Documenter.Msdn
 				}
 				finally
 				{
+					// add copyright to TOC last
+					if (MyConfig.CopyrightHref != null && MyConfig.CopyrightHref != String.Empty)
+					{
+						if (!MyConfig.CopyrightHref.StartsWith("http:"))
+						{
+							htmlHelp.AddFileToContents("Copyright", Path.GetFileName(MyConfig.CopyrightHref));
+						}
+					}
+
 					if (!MyConfig.SplitTOCs)
 					{
 						htmlHelp.CloseContentsFile();
@@ -403,7 +438,8 @@ namespace NDoc.Documenter.Msdn
 						if (isDefault)
 						{
 							XmlNode defaultNamespace =
-								xmlDocumentation.SelectSingleNode("/ndoc/assembly[@name='" + assemblyName + "']/module/namespace");
+								xmlDocumentation.SelectSingleNode("/ndoc/assembly[@name='" 
+								+ assemblyName + "']/module/namespace");
 
 							if (defaultNamespace != null)
 							{
