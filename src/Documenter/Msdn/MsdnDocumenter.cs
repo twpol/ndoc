@@ -385,11 +385,11 @@ namespace NDoc.Documenter.Msdn
 								File.Open(Path.Combine(workspace.WorkingDirectory, "contents.html"), FileMode.CreateNew, FileAccess.Write, FileShare.None ), Encoding.Default ) )
 					{
 #if(NET_1_0)
-					//Use overload that is obsolete in v1.1
-					xsltContents.Transform(xpathDocument,null,streamWriter);
+						//Use overload that is obsolete in v1.1
+						stylesheets["htmlcontents"].Transform(xpathDocument, null, streamWriter);
 #else
 						//Use new overload so we don't get obsolete warnings - clean compile :)
-						stylesheets["htmlcontents"].Transform(xpathDocument,null,streamWriter, null);
+						stylesheets["htmlcontents"].Transform(xpathDocument, null, streamWriter, null);
 #endif
 					}
 #if DEBUG
