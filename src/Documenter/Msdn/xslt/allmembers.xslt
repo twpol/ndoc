@@ -241,10 +241,10 @@
 						<td width="50%">
 						  <xsl:choose>
 						    <xsl:when test="@access='Public'">
-						      <img src="method.gif" />
+						      <img src="pubmethod.gif" />
 						    </xsl:when>
 						    <xsl:otherwise>
-						      <img src="protectedmethod.gif" />
+						      <img src="protmethod.gif" />
 						    </xsl:otherwise>
 						  </xsl:choose>
 							<a>
@@ -274,10 +274,10 @@
 						<td width="50%">
 						  <xsl:choose>
 						    <xsl:when test="@access='Public'">
-						      <img src="method.gif" />
+						      <img src="pubmethod.gif" />
 						    </xsl:when>
 						    <xsl:otherwise>
-						      <img src="protectedmethod.gif" />
+						      <img src="protmethod.gif" />
 						    </xsl:otherwise>
 						  </xsl:choose>
 							<a>

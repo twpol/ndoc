@@ -279,10 +279,10 @@
 					<td width="50%">
 						<xsl:choose>
 							<xsl:when test="@access='Public'">
-								<img src="property.gif" />
+								<img src="pubproperty.gif" />
 							</xsl:when>
 							<xsl:otherwise>
-								<img src="protectedproperty.gif" />
+								<img src="protproperty.gif" />
 							</xsl:otherwise>
 						</xsl:choose>
 						<xsl:if test="@contract='Static'">
@@ -314,10 +314,10 @@
 					<td width="50%">
 						<xsl:choose>
 							<xsl:when test="@access='Public'">
-								<img src="property.gif" />
+								<img src="pubproperty.gif" />
 							</xsl:when>
 							<xsl:otherwise>
-								<img src="protectedproperty.gif" />
+								<img src="protproperty.gif" />
 							</xsl:otherwise>
 						</xsl:choose>
 						<xsl:if test="@contract='Static'">
@@ -349,10 +349,10 @@
 					<td width="50%">
 						<xsl:choose>
 							<xsl:when test="@access='Public'">
-								<img src="field.gif" />
+								<img src="pubfield.gif" />
 							</xsl:when>
 							<xsl:otherwise>
-								<img src="protectedfield.gif" />
+								<img src="protfield.gif" />
 							</xsl:otherwise>
 						</xsl:choose>
 						<xsl:if test="@contract='Static'">
@@ -384,10 +384,10 @@
 					<td width="50%">
 						<xsl:choose>
 							<xsl:when test="@access='Public'">
-								<img src="field.gif" />
+								<img src="pubfield.gif" />
 							</xsl:when>
 							<xsl:otherwise>
-								<img src="protectedfield.gif" />
+								<img src="protfield.gif" />
 							</xsl:otherwise>
 						</xsl:choose>
 						<xsl:if test="@contract='Static'">
@@ -414,10 +414,10 @@
 			<td width="50%">
 				<xsl:choose>
 					<xsl:when test="@access='Public'">
-						<img src="property.gif" />
+						<img src="pubproperty.gif" />
 					</xsl:when>
 					<xsl:otherwise>
-						<img src="protectedproperty.gif" />
+						<img src="protproperty.gif" />
 					</xsl:otherwise>
 				</xsl:choose>
 				<xsl:if test="@contract='Static'">
@@ -457,10 +457,10 @@
 								<td width="50%">
 								  <xsl:choose>
 								    <xsl:when test="@access='Public'">
-								      <img src="method.gif" />
+								      <img src="pubmethod.gif" />
 								    </xsl:when>
 								    <xsl:otherwise>
-								      <img src="protectedmethod.gif" />
+								      <img src="protmethod.gif" />
 								    </xsl:otherwise>
 								  </xsl:choose>
 								  <xsl:if test="@contract='Static'">
@@ -494,10 +494,10 @@
 								<td width="50%">
 								  <xsl:choose>
 								    <xsl:when test="@access='Public'">
-								      <img src="method.gif" />
+								      <img src="pubmethod.gif" />
 								    </xsl:when>
 								    <xsl:otherwise>
-								      <img src="protectedmethod.gif" />
+								      <img src="protmethod.gif" />
 								    </xsl:otherwise>
 								  </xsl:choose>
 								  <xsl:if test="@contract='Static'">
@@ -531,10 +531,10 @@
 						<td width="50%">
 							<xsl:choose>
 								<xsl:when test="@access='Public'">
-								  <img src="method.gif" />
+								  <img src="pubmethod.gif" />
 								</xsl:when>
 								<xsl:otherwise>
-								  <img src="protectedmethod.gif" />
+								  <img src="protmethod.gif" />
 								</xsl:otherwise>
 							</xsl:choose>
 							<xsl:if test="@contract='Static'">
@@ -562,10 +562,10 @@
 			<td width="50%">
 				<xsl:choose>
 					<xsl:when test="@access='Public'">
-						<img src="method.gif" />
+						<img src="pubmethod.gif" />
 					</xsl:when>
 					<xsl:otherwise>
-						<img src="protectedmethod.gif" />
+						<img src="protmethod.gif" />
 					</xsl:otherwise>
 				</xsl:choose>
 				<xsl:if test="@contract='Static'">
@@ -602,10 +602,10 @@
 					<td width="50%">
 						<xsl:choose>
 							<xsl:when test="@access='Public'">
-								<img src="event.gif" />
+								<img src="pubevent.gif" />
 							</xsl:when>
 							<xsl:otherwise>
-								<img src="protectedevent.gif" />
+								<img src="protevent.gif" />
 							</xsl:otherwise>
 						</xsl:choose>
 						<xsl:if test="@contract='Static'">
@@ -637,10 +637,10 @@
 					<td width="50%">
 						<xsl:choose>
 							<xsl:when test="@access='Public'">
-								<img src="event.gif" />
+								<img src="pubevent.gif" />
 							</xsl:when>
 							<xsl:otherwise>
-								<img src="protectedevent.gif" />
+								<img src="protevent.gif" />
 							</xsl:otherwise>
 						</xsl:choose>
 						<xsl:if test="@contract='Static'">
@@ -667,10 +667,10 @@
 			<td width="50%">
 				<xsl:choose>
 					<xsl:when test="@access='Public'">
-						<img src="event.gif" />
+						<img src="pubevent.gif" />
 					</xsl:when>
 					<xsl:otherwise>
-						<img src="protectedevent.gif" />
+						<img src="protevent.gif" />
 					</xsl:otherwise>
 				</xsl:choose>
 				<xsl:if test="@contract='Static'">
@@ -710,14 +710,16 @@
 								<xsl:when test="@access='Public'">
 								  <img>
 								    <xsl:attribute name="src">
-								      <xsl:value-of select="local-name()"/><xsl:text>.gif</xsl:text>
+								      <xsl:text>pub</xsl:text>
+								      <xsl:value-of select="local-name()"/>
+								      <xsl:text>.gif</xsl:text>
 								    </xsl:attribute>
 								  </img>
 								</xsl:when>
 								<xsl:otherwise>
 								  <img>
 								    <xsl:attribute name="src">
-								      <xsl:text>protected</xsl:text>
+								      <xsl:text>prot</xsl:text>
 								      <xsl:value-of select="local-name()"/>
 								      <xsl:text>.gif</xsl:text>
 								    </xsl:attribute>
@@ -760,14 +762,16 @@
 								<xsl:when test="@access='Public'">
 								  <img>
 								    <xsl:attribute name="src">
-								      <xsl:value-of select="local-name()"/><xsl:text>.gif</xsl:text>
+									  <xsl:text>pub</xsl:text>
+								      <xsl:value-of select="local-name()"/>
+								      <xsl:text>.gif</xsl:text>
 								    </xsl:attribute>
 								  </img>
 								</xsl:when>
 								<xsl:otherwise>
 								  <img>
 								    <xsl:attribute name="src">
-								      <xsl:text>protected</xsl:text>
+								      <xsl:text>prot</xsl:text>
 								      <xsl:value-of select="local-name()"/>
 								      <xsl:text>.gif</xsl:text>
 								    </xsl:attribute>

@@ -115,39 +115,39 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "images\event.gif"
+                    RelPath = "images\protevent.gif"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "images\field.gif"
+                    RelPath = "images\protfield.gif"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "images\method.gif"
+                    RelPath = "images\protmethod.gif"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "images\operator.gif"
+                    RelPath = "images\protproperty.gif"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "images\property.gif"
+                    RelPath = "images\pubevent.gif"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "images\protectedevent.gif"
+                    RelPath = "images\pubfield.gif"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "images\protectedfield.gif"
+                    RelPath = "images\pubmethod.gif"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "images\protectedmethod.gif"
+                    RelPath = "images\puboperator.gif"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "images\protectedproperty.gif"
+                    RelPath = "images\pubproperty.gif"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
