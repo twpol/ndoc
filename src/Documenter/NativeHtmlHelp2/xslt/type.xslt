@@ -47,7 +47,7 @@
 	<!-- -->
 	<xsl:template match="class">
 		<xsl:call-template name="type">
-			<xsl:with-param name="type">ClassXXX</xsl:with-param>
+			<xsl:with-param name="type">Class</xsl:with-param>
 		</xsl:call-template>
 	</xsl:template>
 	<!-- -->
