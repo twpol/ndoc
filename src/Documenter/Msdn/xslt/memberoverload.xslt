@@ -64,6 +64,7 @@
 					<xsl:call-template name="overloads-summary-section" />
 					<h4 class="dtH4">Overload List</h4>
 					<xsl:for-each select="parent::node()/*[@name=$memberName]">
+						<xsl:sort order="ascending" select="@id"/>
 						<xsl:choose>
 							<xsl:when test="@declaringType and starts-with(@declaringType, 'System.')">
 								<p>
