@@ -26,7 +26,9 @@ using System.Reflection;
 using System.Windows.Forms.Design;
 using System.Xml;
 
-namespace NDoc.Core
+using NDoc.Core.PropertyGridUI;
+
+namespace NDoc.Core.Reflection
 {
 
 	/// <summary>The base config class for documenters which use the <see cref="ReflectionEngine"/> to extract 
@@ -82,9 +84,30 @@ namespace NDoc.Core
 			_DocumentInheritedAttributes = true;
 			_ShowTypeIdInAttributes = false;
 			_DocumentedAttributes = string.Empty;
-
-			_ReferencesPath = string.Empty;
 		}
+
+		
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		[NonPersisted]
+		[Category("(Global)")]
+		[Description("A collection of additional paths to search for reference assemblies.\nNote: This is a PROJECT level property that is shared by all documenters...")]
+		public ReferencePathCollection ReferencePaths
+		{
+			get 
+			{ 
+				return Project._referencePaths;
+			}
+			set
+			{
+				Project._referencePaths = value;
+				SetDirty();
+			}
+		}
+		bool ShouldSerializeReferencePaths() { return (Project._referencePaths.Count > 0); }
+		void ResetReferencePaths() { Project._referencePaths = new ReferencePathCollection(); }
 
 		#region Show Missing Documentation Options
 
@@ -201,7 +224,7 @@ namespace NDoc.Core
 		[Category("Visibility")]
 		[Description("Which inherited members to document.")]
 		[DefaultValue(DocumentedInheritedMembers.Instance)]
-		[System.ComponentModel.TypeConverter(typeof(NDoc.Core.EnumDescriptionConverter))]
+		[System.ComponentModel.TypeConverter(typeof(EnumDescriptionConverter))]
 		public DocumentedInheritedMembers DocumentInheritedMembers
 		{
 			get { return _DocumentInheritedMembers; }
@@ -485,27 +508,6 @@ namespace NDoc.Core
 			}
 		}
 
-
-		private string _ReferencesPath;
-
-		/// <summary>Gets or sets the base directory used to resolve directory and assembly references.</summary>
-		/// <remarks>The directory used to resolve path specifications and assembly references. 
-		/// The search for assemblies includes this directory and all subdirectories.</remarks>
-		[Category("Documentation Main Settings")]
-		[Description("The directory used to resolve path specifications and assembly references. The search for assemblies includes this directory and all subdirectories.")]
-		[Editor(typeof(FolderNameEditor), typeof(UITypeEditor))]
-		[DefaultValue("")]
-		public string ReferencesPath
-		{
-			get { return _ReferencesPath; }
-
-			set
-			{
-				_ReferencesPath = value;
-				SetDirty();
-			}
-		}
-
 		private string _FeedbackEmailAddress = string.Empty;
 
 		/// <summary>Gets or sets the FeedbackEmailAddress property.</summary>
@@ -631,7 +633,7 @@ namespace NDoc.Core
 		[Category("Documentation Main Settings")]
 		[Description("Specifies to which version of the .NET Framework SDK documentation the links to system types will be pointing.")]
 		[DefaultValue(SdkVersion.SDK_v1_1)]
-		[System.ComponentModel.TypeConverter(typeof(NDoc.Core.EnumDescriptionConverter))]
+		[System.ComponentModel.TypeConverter(typeof(EnumDescriptionConverter))]
 		public SdkVersion SdkDocVersion
 		{
 			get { return _SdkDocVersion; }
@@ -649,7 +651,7 @@ namespace NDoc.Core
 		[Category("Documentation Main Settings")]
 		[Description("Specifies to which Language version of the .NET Framework SDK documentation the links to system types will be pointing.")]
 		[DefaultValue(SdkLanguage.en)]
-		[System.ComponentModel.TypeConverter(typeof(NDoc.Core.EnumDescriptionConverter))]
+		[System.ComponentModel.TypeConverter(typeof(EnumDescriptionConverter))]
 		public SdkLanguage SdkDocLanguage
 		{
 			get { return _SdkDocLanguage; }
@@ -816,7 +818,17 @@ namespace NDoc.Core
 		{
 			string FailureMessages = "";
 
-			if (String.Compare(name, "IncludeAssemblyVersion", true) == 0) 
+			if (String.Compare(name, "ReferencesPath", true) == 0) 
+			{
+				if (value.Length>0)
+				{
+					Trace.WriteLine("WARNING: " + base.Name + " Configuration - property 'ReferencesPath' is OBSOLETE. Please use the project level property 'ReferencePath'\n");
+					Project.SuspendDirtyCheck=false;
+					Project.AddReferencePath(value);
+					Project.SuspendDirtyCheck=true;
+				}
+			}
+			else if (String.Compare(name, "IncludeAssemblyVersion", true) == 0) 
 			{
 				if (value.Length>0)
 				{
@@ -953,6 +965,6 @@ namespace NDoc.Core
 		/// <para>This type of version information is useful if an Assembly is to installed in the GAC, and the developer need to avoid side-by-side versioning issues, but wishes to provide build version information...
 		/// </para>
 		/// </summary>
-		[Description("File Version")] AssemblyFileVersion
+		[Description("File Version.")] AssemblyFileVersion
 	}
 }
