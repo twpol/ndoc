@@ -1099,6 +1099,7 @@ namespace NDoc.Documenter.Msdn
 					new UTF8Encoding(true));
 
 				arguments.AddParam("ndoc-title", String.Empty, MyConfig.Title);
+				arguments.AddParam("ndoc-vb-syntax", String.Empty, MyConfig.ShowVisualBasic);
 
 				transform.Transform(xmlDocumentation, arguments, streamWriter);
 			}
