@@ -21,6 +21,9 @@ using System.ComponentModel;
 using System.Reflection;
 using System.Xml;
 using System.Drawing.Design;
+#if !MONO 
+using System.Windows.Forms.Design;
+#endif
 
 namespace NDoc.Core
 {
@@ -587,6 +590,26 @@ namespace NDoc.Core
 				SetDirty();
 			}
 		}
+
+#if DEBUG
+		string _UseNDocXmlFile = string.Empty;
+
+		/// <summary>Gets or sets the UseNDocXmlFile property.</summary>
+		[Category("Documentation Main Settings")]
+		[Description("When set, NDoc will use the specified XML file as input instead of reflecting the list of assemblies specified on the project.  Very useful for debugging documenters.  Leave empty for normal usage.")]
+#if (!MONO)
+		[Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
+#endif
+		public string UseNDocXmlFile
+		{
+			get { return _UseNDocXmlFile; }
+			set
+			{
+				_UseNDocXmlFile = value;
+				SetDirty();
+			}
+		}
+#endif
 	}
 
 	/// <summary>

@@ -271,6 +271,21 @@ namespace NDoc.Core
 		/// <summary>Builds an XmlDocument combining the reflected metadata with the /doc comments.</summary>
 		protected void MakeXml(Project project)
 		{
+#if DEBUG
+			//if MyConfig.UseNDocXmlFile is set, skip this stage 
+			//and load the XmlBuffer from the file.
+			string xmlFile = MyConfig.UseNDocXmlFile;
+			if (xmlFile.Length > 0)
+			{
+				Trace.WriteLine("Loading pre-compiled XML information from:\n" + xmlFile);
+				using (TextReader reader = new StreamReader(xmlFile))
+				{
+					this.xmlBuffer = reader.ReadToEnd();
+				}
+				return;
+			}
+#endif
+
 			_Project = project;
 			AssemblyResolver assemblyResolver = SetupAssemblyResolver(project);
 
