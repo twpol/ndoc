@@ -2,8 +2,6 @@ using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-[assembly: CLSCompliant(true)]
-
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("ndoc.sourceforge.net")]
 [assembly: AssemblyProduct("NDoc")]
