@@ -12,8 +12,17 @@ namespace NDoc.Test
 		/// <summary>Holds an <c>int</c> value.</summary>
 		public int Field;
 
+		/// <summary>Holds a static <c>int</c> value.</summary>
+		public static int StaticField;
+
 		/// <summary>Gets a value.</summary>
 		public int Property
+		{
+			get { return 0; }
+		}
+
+		/// <summary>Gets a static value.</summary>
+		public static int StaticProperty
 		{
 			get { return 0; }
 		}
@@ -32,6 +41,9 @@ namespace NDoc.Test
 
 		/// <summary>Executes some code.</summary>
 		public void Method() { }
+
+		/// <summary>Executes some static code.</summary>
+		public static void StaticMethod() { }
 
 		/// <summary>This is a simple event that uses the Handler delegate.</summary>
 		public event Handler Event;
