@@ -611,6 +611,31 @@ namespace NDoc.Test
 		public void TableWithHeaderMethod()
 		{
 		}
+
+		/// <summary>TwoColumnTableMethodSummary</summary>
+		/// <remarks>
+		///		<list type="table">
+		///			<listheader>
+		///				<term>Something</term>
+		///				<description>Details</description>
+		///			</listheader>
+		///			<item>
+		///				<term>Item 1</term>
+		///				<description>This is the first item</description>
+		///			</item>
+		///			<item>
+		///				<term>Item 2</term>
+		///				<description>This is the second item</description>
+		///			</item>
+		///			<item>
+		///				<term>Item 3</term>
+		///				<description>This is the third item</description>
+		///			</item>
+		///		</list>
+		/// </remarks>
+		public void TwoColumnTableMethod()
+		{
+		}
 	}
 
 	/// <summary>This class has para elements in its remarks.</summary>
