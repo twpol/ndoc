@@ -41,7 +41,7 @@ namespace NDoc.Test
 	public class Class
 	{
 		/// <overloads>Initializes a new instance of the Class class.</overloads>
-		/// <summary>Initializes a new instance of the Class class with no param.</summary>
+		/// <summary>Initializes a new instance of the <see cref="Class"/> class with no param.</summary>
 		public Class() { }
 
 		/// <summary>Initializes a new instance of the Class class with an integer.</summary>
@@ -78,7 +78,8 @@ namespace NDoc.Test
 		/// <summary>Holds a static <c>int</c> value.</summary>
 		public static int StaticField;
 
-		/// <summary>Gets a value.</summary>
+		/// <summary>Gets a value of <see cref="Property"/>.</summary>
+		/// <remarks>Gets a value of <see cref="this"/>.</remarks>
 		public int Property
 		{
 			get { return 0; }
@@ -509,12 +510,26 @@ namespace NDoc.Test
 	/// This is an enum that is not the default <see cref="System.Int32"/> type.
 	/// It is an <see cref="System.Int16"/> type
 	/// </summary>
-	public enum NonIntEnum : short
+	public enum EnumNonInt : short
 	{
 		/// <summary>
 		/// The only entry in the short enum
 		/// </summary>
 		entry,
+	}
+
+	/// <summary>This is an enumeration with the FlagsAttribute.</summary>
+	[Flags]
+	public enum EnumFlags
+	{
+		/// <summary>Represents Foo.</summary>
+		Foo=1,
+		/// <summary>Represents Bar.</summary>
+		Bar=2,
+		/// <summary>Represents Baz.</summary>
+		Baz=4,
+		/// <summary>Represents Quux.</summary>
+		Quux=8
 	}
 
 	/// <summary>This class has lots of &lt;see&gt; elements in the remarks.</summary>
@@ -1551,6 +1566,20 @@ namespace NDoc.Test
 	{
 		/// <summary>This is a constant string.</summary>
 		public const string ConstString = "ConstString";
+		/// <summary>This is a constant int.</summary>
+		public const int    ConstInt = 5;
+		/// <summary>This is a constant int.</summary>
+		public const double ConstDouble1 = 3.14159265358979323846d;
+		/// <summary>This is a constant int.</summary>
+		public const double ConstDouble2 = 314159265358979323846d;
+		/// <summary>This is a constant enum.</summary>
+		public const EnumFlags ConstEnum =  EnumFlags.Foo;
+		/// <summary>This is a constant with 2 enum flags.</summary>
+		public const EnumFlags ConstEnum2 =  EnumFlags.Foo|EnumFlags.Bar;
+		/// <summary>This is a constant decimal.</summary>
+		public const decimal ConstDecimal = 3.14159265358979323846m;
+		/// <summary>This is a constant decimal.</summary>
+		public const decimal ConstDecimal2 = 314159265358979323846m;
 	}
 
 	/// <summary>
@@ -1682,6 +1711,20 @@ namespace NDoc.Test
 		/// </summary>
 		public int VisibleField;
 
+	}
+
+	/// <summary>
+	/// This class has html tags in the remarks
+	/// </summary>
+	/// <remarks>
+	/// <para><b>This text is surrounded by &lt;b&gt;</b></para>
+	/// <para><i>This text is surrounded by &lt;i&gt;</i></para>
+	/// <para><em>This text is surrounded by &lt;em&gt;</em></para>
+	/// <para><strong>This text is surrounded by &lt;strong&gt;</strong></para>
+	/// <para>this line has a break<br/>here</para>
+	/// </remarks>
+	public class HtmlTags
+	{
 	}
 }
 
