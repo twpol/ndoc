@@ -175,7 +175,7 @@
 	<!-- -->
 	<xsl:template name="get-href-to-constructor">
 		<xsl:param name="constructor-node" />
-		<xsl:value-of select="concat('#ctor', $constructor-node/@overload)" />
+		<xsl:value-of select="concat('#.ctor', $constructor-node/@overload)" />
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="get-href-to-field">

@@ -164,6 +164,101 @@
 						<xsl:with-param name="member-element" select="'event'" />
 					</xsl:call-template>
 				</xsl:for-each>
+				<br />
+				<a name="field-detail" />
+				<xsl:if test="$fields">
+					<!-- IE doesn't support the border-spacing CSS property so we have to set the cellspacing attribute here. -->
+					<table class="table" cellspacing="0">
+						<thead>
+							<tr>
+								<th>Field Detail</th>
+							</tr>
+						</thead>
+					</table>
+					<xsl:variable name="last" select="count($fields)" />
+					<xsl:for-each select="$fields">
+						<xsl:sort select="@name" />
+						<xsl:apply-templates select="." mode="detail" />
+						<xsl:if test="position()!=$last">
+							<hr />
+						</xsl:if>
+					</xsl:for-each>
+				</xsl:if>
+				<a name="constructor-detail" />
+				<xsl:if test="$constructors">
+					<!-- IE doesn't support the border-spacing CSS property so we have to set the cellspacing attribute here. -->
+					<table class="table" cellspacing="0">
+						<thead>
+							<tr>
+								<th>Constructor Detail</th>
+							</tr>
+						</thead>
+					</table>
+					<xsl:variable name="last" select="count($constructors)" />
+					<xsl:for-each select="$constructors">
+						<xsl:apply-templates select="." mode="detail" />
+						<xsl:if test="position()!=$last">
+							<hr />
+						</xsl:if>
+					</xsl:for-each>
+				</xsl:if>
+				<a name="property-detail" />
+				<xsl:if test="$properties">
+					<!-- IE doesn't support the border-spacing CSS property so we have to set the cellspacing attribute here. -->
+					<table class="table" cellspacing="0">
+						<thead>
+							<tr>
+								<th>Property Detail</th>
+							</tr>
+						</thead>
+					</table>
+					<xsl:variable name="last" select="count($properties)" />
+					<xsl:for-each select="$properties">
+						<xsl:sort select="@name" />
+						<xsl:apply-templates select="." mode="detail" />
+						<xsl:if test="position()!=$last">
+							<hr />
+						</xsl:if>
+					</xsl:for-each>
+				</xsl:if>
+				<a name="method-detail" />
+				<xsl:if test="$methods">
+					<!-- IE doesn't support the border-spacing CSS property so we have to set the cellspacing attribute here. -->
+					<table class="table" cellspacing="0">
+						<thead>
+							<tr>
+								<th>Method Detail</th>
+							</tr>
+						</thead>
+					</table>
+					<xsl:variable name="last" select="count($methods)" />
+					<xsl:for-each select="$methods">
+						<xsl:sort select="@name" />
+						<xsl:apply-templates select="." mode="detail" />
+						<xsl:if test="position()!=$last">
+							<hr />
+						</xsl:if>
+					</xsl:for-each>
+				</xsl:if>
+				<a name="event-detail" />
+				<xsl:if test="$events">
+					<!-- IE doesn't support the border-spacing CSS property so we have to set the cellspacing attribute here. -->
+					<table class="table" cellspacing="0">
+						<thead>
+							<tr>
+								<th colspan="2">Event Detail</th>
+							</tr>
+						</thead>
+					</table>
+					<xsl:variable name="last" select="count($events)" />
+					<xsl:for-each select="$events">
+						<xsl:sort select="@name" />
+						<xsl:apply-templates select="." mode="detail" />
+						<xsl:if test="position()!=$last">
+							<hr />
+						</xsl:if>
+					</xsl:for-each>
+				</xsl:if>
 				<hr />
 				<xsl:call-template name="output-navigation-bar">
 					<xsl:with-param name="select" select="'Type'" />
@@ -173,6 +268,30 @@
 				</xsl:call-template>
 			</body>
 		</html>
+	</xsl:template>
+	<!-- -->
+	<xsl:template match="field">
+		<tr>
+			<!-- Is there a CSS property that can emulate the valign attribute? -->
+			<td class="fieldType" valign="top">
+				<xsl:value-of select="@type" />
+			</td>
+			<td class="field">
+				<a>
+					<xsl:attribute name="href">
+						<xsl:call-template name="get-href-to-field">
+							<xsl:with-param name="field-node" select="." />
+						</xsl:call-template>
+					</xsl:attribute>
+					<xsl:value-of select="@name" />
+				</a>
+				<xsl:if test="documentation/summary">
+					<br />
+					<xsl:text>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</xsl:text>
+					<xsl:apply-templates select="documentation/summary" mode="doc" />
+				</xsl:if>
+			</td>
+		</tr>
 	</xsl:template>
 	<!-- -->
 	<xsl:template match="constructor">
@@ -197,30 +316,6 @@
 					</xsl:if>
 				</xsl:for-each>
 				<xsl:text>)</xsl:text>
-				<xsl:if test="documentation/summary">
-					<br />
-					<xsl:text>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</xsl:text>
-					<xsl:apply-templates select="documentation/summary" mode="doc" />
-				</xsl:if>
-			</td>
-		</tr>
-	</xsl:template>
-	<!-- -->
-	<xsl:template match="field">
-		<tr>
-			<!-- Is there a CSS property that can emulate the valign attribute? -->
-			<td class="fieldType" valign="top">
-				<xsl:value-of select="@type" />
-			</td>
-			<td class="field">
-				<a>
-					<xsl:attribute name="href">
-						<xsl:call-template name="get-href-to-field">
-							<xsl:with-param name="field-node" select="." />
-						</xsl:call-template>
-					</xsl:attribute>
-					<xsl:value-of select="@name" />
-				</a>
 				<xsl:if test="documentation/summary">
 					<br />
 					<xsl:text>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</xsl:text>
@@ -362,6 +457,132 @@
 			</table>
 			<br />
 		</xsl:if>
+	</xsl:template>
+	<!-- -->
+	<xsl:template match="field" mode="detail">
+		<a name="{@name}" />
+		<h3>
+			<xsl:value-of select="@name" />
+		</h3>
+		<pre>
+			<xsl:value-of select="@access" />
+			<xsl:text>&#32;</xsl:text>
+			<xsl:value-of select="@type" />
+			<xsl:text>&#32;</xsl:text>
+			<b>
+				<xsl:value-of select="@name" />
+			</b>
+		</pre>
+		<dl>
+			<dd>
+				<xsl:apply-templates select="documentation/summary" mode="doc" />
+				<xsl:apply-templates select="documentation/remarks" mode="doc" />
+			</dd>
+		</dl>
+	</xsl:template>
+	<!-- -->
+	<xsl:template match="constructor" mode="detail">
+		<a name="{@name}{@overload}" />
+		<h3>
+			<xsl:value-of select="../@name" />
+		</h3>
+		<pre>
+			<xsl:value-of select="@access" />
+			<xsl:text>&#32;</xsl:text>
+			<b>
+				<xsl:value-of select="../@name" />
+			</b>
+			<xsl:text>(</xsl:text>
+			<xsl:for-each select="parameter">
+				<xsl:value-of select="@type" />
+				<xsl:text>&#32;</xsl:text>
+				<xsl:value-of select="@name" />
+				<xsl:if test="position()!=last()">
+					<xsl:text>,&#32;</xsl:text>
+				</xsl:if>
+			</xsl:for-each>
+			<xsl:text>)</xsl:text>
+		</pre>
+		<dl>
+			<dd>
+				<xsl:apply-templates select="documentation/summary" mode="doc" />
+				<xsl:apply-templates select="documentation/remarks" mode="doc" />
+			</dd>
+		</dl>
+	</xsl:template>
+	<!-- -->
+	<xsl:template match="property" mode="detail">
+		<a name="{@name}{@overload}" />
+		<h3>
+			<xsl:value-of select="@name" />
+		</h3>
+		<pre>
+			<xsl:value-of select="@access" />
+			<xsl:text>&#32;</xsl:text>
+			<xsl:value-of select="@type" />
+			<xsl:text>&#32;</xsl:text>
+			<b>
+				<xsl:value-of select="@name" />
+			</b>
+		</pre>
+		<dl>
+			<dd>
+				<xsl:apply-templates select="documentation/summary" mode="doc" />
+				<xsl:apply-templates select="documentation/remarks" mode="doc" />
+			</dd>
+		</dl>
+	</xsl:template>
+	<!-- -->
+	<xsl:template match="method" mode="detail">
+		<a name="{@name}{@overload}" />
+		<h3>
+			<xsl:value-of select="@name" />
+		</h3>
+		<pre>
+			<xsl:value-of select="@access" />
+			<xsl:text>&#32;</xsl:text>
+			<b>
+				<xsl:value-of select="@name" />
+			</b>
+			<xsl:text>(</xsl:text>
+			<xsl:for-each select="parameter">
+				<xsl:value-of select="@type" />
+				<xsl:text>&#32;</xsl:text>
+				<xsl:value-of select="@name" />
+				<xsl:if test="position()!=last()">
+					<xsl:text>,&#32;</xsl:text>
+				</xsl:if>
+			</xsl:for-each>
+			<xsl:text>)</xsl:text>
+		</pre>
+		<dl>
+			<dd>
+				<xsl:apply-templates select="documentation/summary" mode="doc" />
+				<xsl:apply-templates select="documentation/remarks" mode="doc" />
+			</dd>
+		</dl>
+	</xsl:template>
+	<!-- -->
+	<xsl:template match="event" mode="detail">
+		<a name="{@name}" />
+		<h3>
+			<xsl:value-of select="@name" />
+		</h3>
+		<pre>
+			<xsl:value-of select="@access" />
+			<xsl:text>&#32;</xsl:text>
+			<xsl:value-of select="@type" />
+			<xsl:text>&#32;</xsl:text>
+			<b>
+				<xsl:value-of select="@name" />
+			</b>
+		</pre>
+		<dl>
+			<dd>
+				<xsl:apply-templates select="documentation/summary" mode="doc" />
+				<xsl:apply-templates select="documentation/remarks" mode="doc" />
+			</dd>
+		</dl>
 	</xsl:template>
 	<!-- -->
 </xsl:transform>
