@@ -41,6 +41,8 @@ namespace NDoc.Gui
 		private System.Windows.Forms.LinkLabel projectHomePageLinkLabel;
 		private System.Windows.Forms.LinkLabel adminsLinkLabel;
 		private System.Windows.Forms.Label developersLabel;
+		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.Label label2;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -66,10 +68,16 @@ namespace NDoc.Gui
 
 			// Set up web links
 			projectHomePageLinkLabel.Links.Add(19, 28, "http://ndoc.sourceforge.net");
-			adminsLinkLabel.Links.Add(24, 13, "http://sourceforge.net/sendmessage.php?touser=87620");
-			adminsLinkLabel.Links.Add(39, 18, "http://sourceforge.net/sendmessage.php?touser=235364");
-			adminsLinkLabel.Links.Add(59, 10, "http://sourceforge.net/sendmessage.php?touser=97544");
-			adminsLinkLabel.Links.Add(71, 11, "http://sourceforge.net/sendmessage.php?touser=4516");
+
+			AddLink(adminsLinkLabel,"Kevin Downs","http://sourceforge.net/sendmessage.php?touser=919791");
+			adminsLinkLabel.Text += ", ";
+			AddLink(adminsLinkLabel,"Don Kackman","http://sourceforge.net/sendmessage.php?touser=4516");
+			adminsLinkLabel.Text += ", ";
+			AddLink(adminsLinkLabel,"Jason Diamond","http://sourceforge.net/sendmessage.php?touser=87620");
+			adminsLinkLabel.Text += ", ";
+			AddLink(adminsLinkLabel,"Jean-Claude Manoli","http://sourceforge.net/sendmessage.php?touser=235364");
+			adminsLinkLabel.Text += ", ";
+			AddLink(adminsLinkLabel,"Kral Ferch","http://sourceforge.net/sendmessage.php?touser=97544");
 
 			
 			// Fill in loaded modules / version number info list view.
@@ -119,6 +127,12 @@ namespace NDoc.Gui
 			}
 		}
 
+		private void AddLink(LinkLabel ll, string text, string link)
+		{
+			ll.Links.Add(ll.Text.Length , text.Length, link);
+			ll.Text += text;
+		}
+
 		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>
@@ -152,6 +166,8 @@ namespace NDoc.Gui
 			this.projectHomePageLinkLabel = new System.Windows.Forms.LinkLabel();
 			this.adminsLinkLabel = new System.Windows.Forms.LinkLabel();
 			this.developersLabel = new System.Windows.Forms.Label();
+			this.label1 = new System.Windows.Forms.Label();
+			this.label2 = new System.Windows.Forms.Label();
 			this.versionHeaderGroupBox.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -191,7 +207,7 @@ namespace NDoc.Gui
 			this.closeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.closeButton.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.closeButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.closeButton.Location = new System.Drawing.Point(456, 432);
+			this.closeButton.Location = new System.Drawing.Point(456, 444);
 			this.closeButton.Name = "closeButton";
 			this.closeButton.TabIndex = 0;
 			this.closeButton.Text = "&Close";
@@ -202,10 +218,10 @@ namespace NDoc.Gui
 				| System.Windows.Forms.AnchorStyles.Right)));
 			this.richTextBox.BackColor = System.Drawing.SystemColors.Control;
 			this.richTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.richTextBox.Location = new System.Drawing.Point(16, 8);
+			this.richTextBox.Location = new System.Drawing.Point(16, 0);
 			this.richTextBox.Name = "richTextBox";
 			this.richTextBox.ReadOnly = true;
-			this.richTextBox.Size = new System.Drawing.Size(518, 136);
+			this.richTextBox.Size = new System.Drawing.Size(518, 144);
 			this.richTextBox.TabIndex = 4;
 			this.richTextBox.Text = "";
 			// 
@@ -217,7 +233,7 @@ namespace NDoc.Gui
 			this.versionHeaderGroupBox.Controls.Add(this.assembliesListView);
 			this.versionHeaderGroupBox.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.versionHeaderGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-			this.versionHeaderGroupBox.Location = new System.Drawing.Point(8, 256);
+			this.versionHeaderGroupBox.Location = new System.Drawing.Point(8, 264);
 			this.versionHeaderGroupBox.Name = "versionHeaderGroupBox";
 			this.versionHeaderGroupBox.Padding = 0;
 			this.versionHeaderGroupBox.Size = new System.Drawing.Size(526, 168);
@@ -243,13 +259,11 @@ namespace NDoc.Gui
 			this.adminsLinkLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
 				| System.Windows.Forms.AnchorStyles.Right)));
 			this.adminsLinkLabel.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
-			this.adminsLinkLabel.Location = new System.Drawing.Point(16, 176);
+			this.adminsLinkLabel.Location = new System.Drawing.Point(128, 176);
 			this.adminsLinkLabel.Name = "adminsLinkLabel";
-			this.adminsLinkLabel.Size = new System.Drawing.Size(520, 16);
+			this.adminsLinkLabel.Size = new System.Drawing.Size(408, 32);
 			this.adminsLinkLabel.TabIndex = 6;
 			this.adminsLinkLabel.TabStop = true;
-			this.adminsLinkLabel.Text = "Project administrators: Jason Diamond, Jean-Claude Manoli, Kral Ferch, Don Kackma" +
-				"n";
 			this.adminsLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.adminsLinkLabel_LinkClicked);
 			// 
 			// developersLabel
@@ -257,22 +271,40 @@ namespace NDoc.Gui
 			this.developersLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
 				| System.Windows.Forms.AnchorStyles.Right)));
 			this.developersLabel.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
-			this.developersLabel.Location = new System.Drawing.Point(16, 200);
+			this.developersLabel.Location = new System.Drawing.Point(88, 208);
 			this.developersLabel.Name = "developersLabel";
-			this.developersLabel.Size = new System.Drawing.Size(512, 48);
+			this.developersLabel.Size = new System.Drawing.Size(440, 48);
 			this.developersLabel.TabIndex = 7;
-			this.developersLabel.Text = "Contributors: Carlos Guzmán Álvarez, Gert Driesen, Heath Stewart, Kevin Downs, La" +
-				"urent Domenech, Jerome Mathieu, Keith Hill, Michael Poettgen, Pascal Bourque, Ry" +
-				"an Seghers, Steve Van Esch, Thong (Tum) Nguyen, Wolfgang Bauer";
+			this.developersLabel.Text = "Carlos Guzmán Álvarez, Gert Driesen, Heath Stewart, Laurent Domenech, Jerome Math" +
+				"ieu, Keith Hill, Michael Poettgen, Pascal Bourque, Ryan Seghers, Steve Van Esch," +
+				" Thong (Tum) Nguyen, Wolfgang Bauer";
+			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(16, 176);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(128, 32);
+			this.label1.TabIndex = 8;
+			this.label1.Text = "Project administrators : ";
+			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(16, 208);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(72, 40);
+			this.label2.TabIndex = 9;
+			this.label2.Text = "Contributors : ";
 			// 
 			// AboutForm
 			// 
 			this.AcceptButton = this.closeButton;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.CancelButton = this.closeButton;
-			this.ClientSize = new System.Drawing.Size(546, 468);
-			this.Controls.Add(this.developersLabel);
+			this.ClientSize = new System.Drawing.Size(546, 480);
+			this.Controls.Add(this.label2);
 			this.Controls.Add(this.adminsLinkLabel);
+			this.Controls.Add(this.label1);
+			this.Controls.Add(this.developersLabel);
 			this.Controls.Add(this.projectHomePageLinkLabel);
 			this.Controls.Add(this.richTextBox);
 			this.Controls.Add(this.versionHeaderGroupBox);
