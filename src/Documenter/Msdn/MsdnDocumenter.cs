@@ -216,7 +216,8 @@ namespace NDoc.Documenter.Msdn
 				// Will hold the name of the file name containing the XML doc
 				string tempFileName = null;
 
-				try {
+				try 
+				{
 					// determine temp file name
 					tempFileName = Path.GetTempFileName();
 					// Let the Documenter base class do it's thing.
@@ -292,7 +293,7 @@ namespace NDoc.Documenter.Msdn
 	
 				// make relative paths absolute
 				if (extensibilityStylesheet.Length>0 &&
-				    !Path.IsPathRooted( extensibilityStylesheet ) )
+					!Path.IsPathRooted( extensibilityStylesheet ) )
 					extensibilityStylesheet = Path.GetFullPath( extensibilityStylesheet );
 				
 				stylesheets = StyleSheetCollection.LoadStyleSheets(extensibilityStylesheet);
@@ -301,7 +302,7 @@ namespace NDoc.Documenter.Msdn
 
 				htmlHelp.OpenProjectFile();
 
-					htmlHelp.OpenContentsFile(string.Empty, true);
+				htmlHelp.OpenContentsFile(string.Empty, true);
 
 				try
 				{
@@ -351,7 +352,7 @@ namespace NDoc.Documenter.Msdn
 				}
 				finally
 				{
-						htmlHelp.CloseContentsFile();
+					htmlHelp.CloseContentsFile();
 					htmlHelp.CloseProjectFile();
 				}
 
@@ -419,9 +420,12 @@ namespace NDoc.Documenter.Msdn
 				}
 
 				// if we're only building a CHM, copy that to the Outpur dir
-				if ((MyConfig.OutputTarget & OutputType.HtmlHelp) > 0 && (MyConfig.OutputTarget & OutputType.Web) == 0) {
+				if ((MyConfig.OutputTarget & OutputType.HtmlHelp) > 0 && (MyConfig.OutputTarget & OutputType.Web) == 0) 
+				{
 					workspace.SaveOutputs( "*.chm" );
-				} else {
+				} 
+				else 
+				{
 					// otherwise copy everything to the output dir (cause the help file is all the html, not just one chm)
 					workspace.SaveOutputs( "*.*" );
 				}
@@ -1388,35 +1392,42 @@ namespace NDoc.Documenter.Msdn
 			ExternalHtmlProvider htmlProvider = new ExternalHtmlProvider(MyConfig, filename);
 			StreamWriter streamWriter = null;
 
-			using (streamWriter =  new StreamWriter(
+			try
+			{
+				using (streamWriter =  new StreamWriter(
 					File.Open(Path.Combine(workspace.WorkingDirectory, filename), FileMode.Create),
 					currentFileEncoding))
-			{
-				arguments.AddParam("ndoc-title", String.Empty, MyConfig.Title);
-				arguments.AddParam("ndoc-vb-syntax", String.Empty, MyConfig.ShowVisualBasic);
-				arguments.AddParam("ndoc-omit-object-tags", String.Empty, ((MyConfig.OutputTarget & OutputType.HtmlHelp) == 0));
-				arguments.AddParam("ndoc-document-attributes", String.Empty, MyConfig.DocumentAttributes);
-				arguments.AddParam("ndoc-documented-attributes", String.Empty, MyConfig.DocumentedAttributes);
+				{
+					arguments.AddParam("ndoc-title", String.Empty, MyConfig.Title);
+					arguments.AddParam("ndoc-vb-syntax", String.Empty, MyConfig.ShowVisualBasic);
+					arguments.AddParam("ndoc-omit-object-tags", String.Empty, ((MyConfig.OutputTarget & OutputType.HtmlHelp) == 0));
+					arguments.AddParam("ndoc-document-attributes", String.Empty, MyConfig.DocumentAttributes);
+					arguments.AddParam("ndoc-documented-attributes", String.Empty, MyConfig.DocumentedAttributes);
 
-				arguments.AddParam("ndoc-sdk-doc-base-url", String.Empty, utilities.SdkDocBaseUrl);
-				arguments.AddParam("ndoc-sdk-doc-file-ext", String.Empty, utilities.SdkDocExt);
+					arguments.AddParam("ndoc-sdk-doc-base-url", String.Empty, utilities.SdkDocBaseUrl);
+					arguments.AddParam("ndoc-sdk-doc-file-ext", String.Empty, utilities.SdkDocExt);
 
-				arguments.AddExtensionObject("urn:NDocUtil", utilities);
-				arguments.AddExtensionObject("urn:NDocExternalHtml", htmlProvider);
+					arguments.AddExtensionObject("urn:NDocUtil", utilities);
+					arguments.AddExtensionObject("urn:NDocExternalHtml", htmlProvider);
 
-				//reset overloads testing
-				utilities.Reset();
+					//reset overloads testing
+					utilities.Reset();
 
-				XslTransform transform = stylesheets[transformName];
+					XslTransform transform = stylesheets[transformName];
 
 #if (NET_1_0)
 				//Use overload that is now obsolete
 				transform.Transform(xpathDocument, arguments, streamWriter);
 #else           
-				//Use new overload so we don't get obsolete warnings - clean compile :)
-				transform.Transform(xpathDocument, arguments, streamWriter, null);
+					//Use new overload so we don't get obsolete warnings - clean compile :)
+					transform.Transform(xpathDocument, arguments, streamWriter, null);
 #endif
 				}
+			}
+			catch(PathTooLongException e)
+			{
+				throw new PathTooLongException(e.Message + "\nThe file that NDoc was trying to create had the following name:\n" + Path.Combine(workspace.WorkingDirectory, filename));
+			}
 
 #if DEBUG
 			Trace.WriteLine((Environment.TickCount - start).ToString() + " msec.");

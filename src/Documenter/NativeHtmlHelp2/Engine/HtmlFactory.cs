@@ -260,17 +260,25 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			_htmlProvider.SetFilename( fileName );
 			_utilities.ResetDescriptions();
 
-			using ( StreamWriter streamWriter = new StreamWriter(
-				File.Open( Path.Combine( _outputDirectory, fileName ), FileMode.CreateNew, FileAccess.Write, FileShare.None ), encoding ) )
+			try
 			{
+				using ( StreamWriter streamWriter = new StreamWriter(
+							File.Open( Path.Combine( _outputDirectory, fileName ), FileMode.CreateNew, FileAccess.Write, FileShare.None ), encoding ) )
+				{
 #if(NET_1_0)
 				//Use overload that is obsolete in v1.1
 				_stylesheets[transformName].Transform( xPathDocumentation, this.Arguments, streamWriter );
 #else
-				//Use new overload so we don't get obsolete warnings - clean compile :)
-				_stylesheets[transformName].Transform( xPathDocumentation, this.Arguments, streamWriter, null );
+					//Use new overload so we don't get obsolete warnings - clean compile :)
+					_stylesheets[transformName].Transform( xPathDocumentation, this.Arguments, streamWriter, null );
 #endif
+				}
+			}				      
+			catch(PathTooLongException e)
+			{
+				throw new PathTooLongException(e.Message + "\nThe file that NDoc was trying to create had the following name:\n" + Path.Combine( _outputDirectory, fileName ));
 			}
+
 #if DEBUG
 			Trace.WriteLine( ( Environment.TickCount - start ).ToString() + " msec." );
 #endif
