@@ -2,7 +2,7 @@
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:doc="http://ndoc.sf.net/doc"
-	xmlns:NUtil="urn:ndoc-sourceforge-net:documenters.MSDN.xsltUtilities"
+	xmlns:NUtil="urn:NDocUtil"
 	exclude-result-prefixes="doc NUtil"
 >
   <!--
