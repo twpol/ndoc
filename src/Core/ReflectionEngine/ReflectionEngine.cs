@@ -85,22 +85,15 @@ namespace NDoc.Core
 		/// <summary>Builds an Xml file combining the reflected metadata with the /doc comments.</summary>
 		/// <returns>full pathname of XML file</returns>
 		/// <remarks>The caller is responsible for deleting the xml file after use...</remarks>
-		internal string MakeXmlFile(ReflectionEngineParameters rep)
+		internal void MakeXmlFile(ReflectionEngineParameters rep, string xmlFile)
 		{
 			this.rep = rep;
-
-			string tempfilename = Path.GetTempFileName();
 
 			XmlTextWriter writer = null;
 			try
 			{
-				writer = new XmlTextWriter(tempfilename, Encoding.UTF8);
-				//writer.Formatting=Formatting.Indented;
-				//writer.Indentation=2;
-
+				writer = new XmlTextWriter(xmlFile, Encoding.UTF8);
 				BuildXml(writer);
-			
-				return tempfilename;
 			}
 			finally
 			{
@@ -121,8 +114,6 @@ namespace NDoc.Core
 
 			StringWriter swriter = new StringWriter();
 			XmlWriter writer = new XmlTextWriter(swriter);
-			//writer.Formatting=Formatting.Indented;
-			//writer.Indentation=2;
 
 			try
 			{
@@ -143,7 +134,6 @@ namespace NDoc.Core
 			int start = Environment.TickCount;
 
 			Debug.WriteLine("Memory making xml: " + GC.GetTotalMemory(false).ToString());
-
 
 			assemblyLoader = SetupAssemblyLoader();
 
