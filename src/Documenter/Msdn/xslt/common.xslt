@@ -4,6 +4,7 @@
 	<xsl:include href="filenames.xslt" />
 	<xsl:include href="syntax.xslt" />
 	<xsl:include href="vb-syntax.xslt" />
+	<xsl:include href="tags.xslt" />
 	<!-- -->
 	<xsl:param name="ndoc-title" />
 	<!-- -->
@@ -313,120 +314,6 @@
 		</p>
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="see[@langword]" mode="slashdoc">
-		<xsl:choose>
-			<xsl:when test="@langword='null'">
-				<xsl:text>a null reference (</xsl:text>
-				<b>Nothing</b>
-				<xsl:text> in Visual Basic)</xsl:text>
-			</xsl:when>
-			<xsl:when test="@langword='sealed'">
-				<xsl:text>sealed (</xsl:text>
-				<b>NotInheritable</b>
-				<xsl:text> in Visual Basic)</xsl:text>
-			</xsl:when>
-			<xsl:when test="@langword='static'">
-				<xsl:text>static (</xsl:text>
-				<b>Shared</b>
-				<xsl:text> in Visual Basic)</xsl:text>
-			</xsl:when>
-			<xsl:when test="@langword='abstract'">
-				<xsl:text>abstract (</xsl:text>
-				<b>MustInherit</b>
-				<xsl:text> in Visual Basic)</xsl:text>
-			</xsl:when>
-			<xsl:when test="@langword='virtual'">
-				<xsl:text>virtual (</xsl:text>
-				<b>CanOverride</b>
-				<xsl:text> in Visual Basic)</xsl:text>
-			</xsl:when>
-			<xsl:otherwise>
-				<b>
-					<xsl:value-of select="@langword" />
-				</b>
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:template>
-	<!-- -->
-	<xsl:template match="see[@cref]" mode="slashdoc">
-		<xsl:variable name="cref" select="@cref" />
-		<xsl:choose>
-			<xsl:when test="starts-with(substring-after($cref, ':'), 'System.')">
-				<a>
-					<xsl:attribute name="href">
-						<xsl:call-template name="get-filename-for-system-cref">
-							<xsl:with-param name="cref" select="@cref" />
-						</xsl:call-template>
-					</xsl:attribute>
-					<xsl:choose>
-						<xsl:when test="contains($cref, '(')">
-							<xsl:value-of select="substring-after(substring-before($cref, '('), ':')" />
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:value-of select="substring-after($cref, ':')" />
-						</xsl:otherwise>
-					</xsl:choose>
-				</a>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:variable name="seethis" select="//*[@id=$cref]" />
-				<xsl:choose>
-					<xsl:when test="$seethis">
-						<xsl:variable name="href">
-							<xsl:call-template name="get-filename-for-cref">
-								<xsl:with-param name="cref" select="@cref" />
-							</xsl:call-template>
-						</xsl:variable>
-						<a href="{$href}">
-							<xsl:value-of select="$seethis/@name" />
-						</a>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:choose>
-							<!-- this is an incredibly lame hack. -->
-							<!-- it can go away once microsoft stops prefix event crefs with 'F:'. -->
-							<xsl:when test="starts-with($cref, 'F:')">
-								<xsl:variable name="event-cref" select="concat('E:', substring-after($cref, 'F:'))" />
-								<xsl:variable name="event-seethis" select="//*[@id=$event-cref]" />
-								<xsl:choose>
-									<xsl:when test="$event-seethis">
-										<xsl:variable name="href">
-											<xsl:call-template name="get-filename-for-cref">
-												<xsl:with-param name="cref" select="$event-cref" />
-											</xsl:call-template>
-										</xsl:variable>
-										<a href="{$href}">
-											<xsl:value-of select="$event-seethis/@name" />
-										</a>
-									</xsl:when>
-									<xsl:otherwise>
-										<xsl:value-of select="substring($cref, 3)" />
-									</xsl:otherwise>
-								</xsl:choose>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:value-of select="substring($cref, 3)" />
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:otherwise>
-				</xsl:choose>
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:template>
-	<!-- -->
-	<xsl:template match="see[@href]" mode="slashdoc">
-		<a href="{@href}">
-			<xsl:choose>
-				<xsl:when test="node()">
-					<xsl:value-of select="." />
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:value-of select="@href" />
-				</xsl:otherwise>
-			</xsl:choose>
-		</a>
-	</xsl:template>
-	<!-- -->
 	<xsl:template name="output-paragraph">
 		<xsl:param name="nodes" />
 		<xsl:choose>
@@ -645,24 +532,6 @@
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="node()|@*" mode="slashdoc">
-		<xsl:copy>
-			<xsl:apply-templates select="node()|@*" mode="slashdoc" />
-		</xsl:copy>
-	</xsl:template>
-	<!-- -->
-	<xsl:template match="c" mode="slashdoc">
-		<code class="ce">
-			<xsl:apply-templates mode="slashdoc" />
-		</code>
-	</xsl:template>
-	<!-- -->
-	<xsl:template match="paramref[@name]" mode="slashdoc">
-		<i>
-			<xsl:value-of select="@name" />
-		</i>
-	</xsl:template>
-	<!-- -->
 	<xsl:template name="get-lang">
 		<xsl:param name="lang" />
 		<xsl:choose>
@@ -673,132 +542,6 @@
 				<xsl:value-of select="$lang" />
 			</xsl:otherwise>
 		</xsl:choose>
-	</xsl:template>
-	<!-- -->
-	<xsl:template match="code" mode="slashdoc">
-		<pre class="code">
-			<xsl:if test="@lang">
-				<span class="lang">
-					<xsl:text>[</xsl:text>
-					<xsl:call-template name="get-lang">
-						<xsl:with-param name="lang" select="@lang" />
-					</xsl:call-template>
-					<xsl:text>]</xsl:text>
-				</span>
-			</xsl:if>
-			<xsl:apply-templates mode="slashdoc" />
-		</pre>
-	</xsl:template>
-	<!-- -->
-	<xsl:template match="note" mode="slashdoc">
-		<p class="i2">
-			<xsl:choose>
-				<xsl:when test="@type='caution'">
-					<b>CAUTION</b>
-				</xsl:when>
-				<xsl:when test="@type='inheritinfo'">
-					<b>Notes to Inheritors: </b>
-				</xsl:when>
-				<xsl:when test="@type='inotes'">
-					<b>Notes to Implementers: </b>
-				</xsl:when>
-				<xsl:otherwise>
-					<b>Note</b>
-				</xsl:otherwise>
-			</xsl:choose>
-			<xsl:text>&#160;&#160;&#160;</xsl:text>
-			<xsl:apply-templates mode="slashdoc" />
-		</p>
-	</xsl:template>
-	<!-- -->
-	<xsl:template match="list" mode="slashdoc">
-		<xsl:choose>
-			<xsl:when test="@type='bullet'">
-				<ul type="disc">
-					<xsl:apply-templates select="item" mode="slashdoc" />
-				</ul>
-			</xsl:when>
-			<xsl:when test="@type='number'">
-				<ol>
-					<xsl:apply-templates select="item" mode="slashdoc" />
-				</ol>
-			</xsl:when>
-			<xsl:when test="@type='table'">
-				<div class="table">
-					<table cellspacing="0">
-						<xsl:apply-templates select="listheader" mode="slashdoc" />
-						<xsl:apply-templates select="item" mode="slashdoc" />
-					</table>
-				</div>
-			</xsl:when>
-			<xsl:otherwise> <!-- do nothing? --></xsl:otherwise>
-		</xsl:choose>
-	</xsl:template>
-	<!-- -->
-	<xsl:template match="item" mode="slashdoc">
-		<li>
-			<xsl:apply-templates select="./node()" mode="slashdoc" />
-		</li>
-	</xsl:template>
-	<!-- -->
-	<xsl:template match="list[@type='table']/listheader" mode="slashdoc">
-		<tr valign="top">
-			<xsl:apply-templates mode="slashdoc" />
-		</tr>
-	</xsl:template>
-	<!-- -->
-	<xsl:template match="list[@type='table']/listheader/term" mode="slashdoc">
-		<th width="50%">
-			<xsl:apply-templates select="./node()" mode="slashdoc" />
-		</th>
-	</xsl:template>
-	<!-- -->
-	<xsl:template match="list[@type='table']/listheader/description" mode="slashdoc">
-		<th width="50%">
-			<xsl:apply-templates select="./node()" mode="slashdoc" />
-		</th>
-	</xsl:template>
-	<!-- -->
-	<xsl:template match="list[@type='table']/item" mode="slashdoc">
-		<tr valign="top">
-			<xsl:apply-templates mode="slashdoc" />
-		</tr>
-	</xsl:template>
-	<!-- -->
-	<xsl:template match="list[@type='table']/item/term" mode="slashdoc">
-		<td>
-			<xsl:apply-templates select="./node()" mode="slashdoc" />
-		</td>
-	</xsl:template>
-	<!-- -->
-	<xsl:template match="list[@type='table']/item/description" mode="slashdoc">
-		<td>
-			<xsl:apply-templates select="./node()" mode="slashdoc" />
-		</td>
-	</xsl:template>
-	<!-- -->
-	<xsl:template match="term" mode="slashdoc">
-		<b><xsl:apply-templates select="./node()" mode="slashdoc" /> - </b>
-	</xsl:template>
-	<!-- -->
-	<xsl:template match="description" mode="slashdoc">
-		<xsl:apply-templates select="./node()" mode="slashdoc" />
-	</xsl:template>
-	<!-- -->
-	<xsl:template match="para" mode="slashdoc">
-		<p class="i1">
-			<xsl:if test="@lang">
-				<span class="lang">
-					<xsl:text>[</xsl:text>
-					<xsl:call-template name="get-lang">
-						<xsl:with-param name="lang" select="@lang" />
-					</xsl:call-template>
-					<xsl:text>]</xsl:text>
-				</span>
-				<xsl:text>&#160;</xsl:text>
-			</xsl:if>
-			<xsl:apply-templates select="./node()" mode="slashdoc" />
-		</p>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="value">

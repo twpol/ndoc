@@ -17,3 +17,6 @@ PROJECTS = \
 
 NDoc.mak: NDoc.sln $(PROJECTS)
 	.\SLiNgshoT.exe nmake NDoc.sln > NDoc.mak
+
+tags.html: Documenter\Msdn\xslt\tags.xslt Documenter\Msdn\xslt\doc.xslt
+	saxon Documenter\Msdn\xslt\tags.xslt Documenter\Msdn\xslt\doc.xslt > tags.html

@@ -158,6 +158,10 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "xslt\tags.xslt"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "xslt\type.xslt"
                     BuildAction = "EmbeddedResource"
                 />
