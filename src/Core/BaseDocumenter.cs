@@ -3730,14 +3730,14 @@ namespace NDoc.Core
 			}
 			catch(Exception e)
 			{
+				throw new DocumenterException(string.Format(CultureInfo.InvariantCulture, 
+					"Unable to load assembly '{0}' in directory '{1}'.", baseName, 
+					dirName), e);
+			} finally
+			{
 				Directory.SetCurrentDirectory(oldDir);
-				Console.WriteLine("Error: LoadAssembly: Unable to load assembly {0} in dir {1}",
-					baseName, dirName);
-				Console.WriteLine("Error: LoadAssembly: Exception is {0}", e.ToString());
-				throw e;
 			}
 
-			Directory.SetCurrentDirectory(oldDir);
 			return(assy);
 		}
 	}
