@@ -257,7 +257,7 @@
 		</xsl:choose>
 		<xsl:text>&#160;</xsl:text>
 		<xsl:choose>
-			<xsl:when test="@name='Item'">
+			<xsl:when test="parameter">
 				<xsl:text>this[</xsl:text>
 				<xsl:if test="$indent">&#10;</xsl:if>
 				<xsl:for-each select="parameter">

@@ -952,7 +952,7 @@ namespace NDoc.Test
 		public int SomeMethod( int a, int b ) { return 0; }
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="a"></param>
 		/// <param name="b"></param>
@@ -1216,6 +1216,17 @@ namespace NDoc.Test
 		/// </remarks>
 		public void CautionNote()
 		{
+		}
+	}
+
+	/// <summary>This class has an indexer with a name other than Item.</summary>
+	public class IndexerNotNamedItem
+	{
+		/// <summary>This indexer is not named Item.</summary>
+		[System.Runtime.CompilerServices.IndexerName("MyItem")]
+		public int this[int i]
+		{
+			get { return 0; }
 		}
 	}
 }

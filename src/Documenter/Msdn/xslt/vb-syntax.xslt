@@ -318,7 +318,7 @@
 				<xsl:if test="@contract='Static'">
 					<xsl:text>Shared&#160;</xsl:text>
 				</xsl:if>
-				<xsl:if test="@name = 'Item'">
+				<xsl:if test="parameter">
 					<xsl:text>Default&#160;</xsl:text>
 				</xsl:if>
 				<xsl:if test="@set != 'true'">
@@ -327,7 +327,7 @@
 			</xsl:if>
 			<xsl:text>Property&#160;</xsl:text>
 			<xsl:value-of select="@name" />
-			<xsl:if test="@name='Item'">
+			<xsl:if test="parameter">
 				<xsl:call-template name="vb-parameters" />
 			</xsl:if>
 			<xsl:text>&#160;As&#160;</xsl:text>
