@@ -367,14 +367,19 @@ namespace NDoc.Core
 			// workspace root and delete them
 			foreach ( string ext in extenstions )
 			{
-				foreach ( string f in Directory.GetFiles( this.RootDirectory, ext ) )
+				try
 				{
-					FileAttributes attr = File.GetAttributes(f);
-					if((attr & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
-						File.SetAttributes(f,FileAttributes.Normal);
+					string[] files = Directory.GetFiles( this.RootDirectory, ext );
+					foreach ( string f in files)
+					{
+						FileAttributes attr = File.GetAttributes(f);
+						if((attr & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
+							File.SetAttributes(f,FileAttributes.Normal);
 
-					File.Delete( f );
+						File.Delete( f );
+					}
 				}
+				catch (System.IO.IOException) {}
 			}
 
 			// then get rid of the working directory
