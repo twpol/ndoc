@@ -65,7 +65,8 @@
           </OBJECT>
       <UL>
          <LI><OBJECT type="text/sitemap">
-               <param name="Name" value="Using NDoc in a Build Process">
+               <param name="Name" value="Build Process">
+               <param name="Local" value="Content\build_process.htm">
              </OBJECT>
       </UL>
       <LI><OBJECT type="text/sitemap">

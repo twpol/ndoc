@@ -76,11 +76,12 @@ Content\vsnet-linking.htm
 Content\vsnet.htm
 Content\xml.htm
 Content\css\ndoc.css
+Content\examples\NamespaceMap.xml
+Content\examples\NamespaceMap.xsd
 Content\images\logo.PNG
 Content\images\sf.GIF
 Content\script\ndoc.js
-Content\examples\NamespaceMap.xml
-Content\examples\NamespaceMap.xsd
+Content\build_process.htm
 
 [MERGE FILES]
 NDocReference.chm

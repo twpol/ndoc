@@ -15,6 +15,11 @@
             <param name="Local" value="Content\attributes.htm">
          </OBJECT>
     <LI><OBJECT type="text/sitemap">
+            <param name="Name" value="Build Process">
+            <param name="Name" value="Build Process">
+            <param name="Local" value="Content\build_process.htm">
+         </OBJECT>
+    <LI><OBJECT type="text/sitemap">
             <param name="Name" value="c">
             <param name="Name" value="c">
             <param name="Local" value="Content\tag_c.htm">

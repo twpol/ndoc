@@ -307,21 +307,22 @@ color:blue">&gt;</span></p>
 	process.</p>
 	<ul>
 		<li>
-		<p>First, make sure that <b>GenerateCollectionFiles</b> is set to true. 
+		<p>First, make sure that <a href="vsnet.htm#GenerateCollectionFiles">GenerateCollectionFiles</a> is set to true. 
 		This will generate the necessary Html Help 2 collection meta data files 
 		that will allow you to plug into VS.NET.</p>
 		</li>
 		<li>
-		<p>Second, supply a value for <b>CollectionNamespace</b>. Don&#39;t use spaces 
+		<p>Second, supply a value for <a href="vsnet.htm#CollectionNamespace">CollectionNamespace</a>. Don&#39;t use spaces 
 		or any URI special characters. It is also a good idea to make an effort 
 		to assure that this namespace will be globally unique. The same rules you 
 		use to generate unique managed namespaces also work well here.</p>
 		</li>
 		<li>
-		<p>Third, make sure you supply the correct value for <b>PlugInNamespace</b>. 
+		<p>Third, make sure you supply the correct value for 
+		<a href="vsnet.htm#PlugInNamespace">PlugInNamespace</a>. 
 		This makes sure that when you <a href="vsnet-deploying.htm">deploy your 
-		help files with h2reg.exe</a> that they will be plugged into VS.NET. (The 
-		default value of ms.vscc allows h2reg to decide at install time whether 
+		help files with h2reg.exe</a>, they will be plugged into VS.NET. (The 
+		default value of <b>ms.vscc</b> allows h2reg to decide at install time whether 
 		VS.NET 2002 or 2003 should be used.)</p>
 		</li>
 	</ul>
@@ -350,17 +351,17 @@ Visual J#,                 	Query: &quot;DocSet&quot; = &quot;VJ#&quot; OR &quot
 .NET Compact Framework,    	Query: &quot;DocSet&quot;=&quot;Smart Devices&quot; OR &quot;DocSet&quot;=&quot;NetCompactFramework&quot;</pre>
 	</div>
 	<p>Adding your collection to any of the above sets is as easy as supplying a 
-	comma separated list via the <b>DocSetList</b> property. An entry will be made 
+	comma separated list via the <a href="vsnet.htm#DocSetList">DocSetList</a> property. An entry will be made 
 	in each topic&#39;s data island for each item in this list. When you deploy your 
 	help, your topics will show up when the user is filtering by sets which you 
 	have defined.</p>
 	<p>NDoc will however create and register a single DocSet filter corresponding 
-	to the value of <b>HtmlHelpName</b>, and each topic will be included in that 
+	to the value of <a href="vsnet.htm#HtmlHelpName">HtmlHelpName</a>, and each topic will be included in that 
 	set. Defining additional custom filters is possible, but is outside of the scope 
 	of NDoc. To do so you will need to delve more deeply into the deployment and 
 	registration process as described in VSHIK.</p>
 	<h4 class="dtH4">See Also</h4>
-	<p><a href="ms-help://ms.vshik.2003/dv_vshik_2/html/vsoriVSHIK2.htm">VSHIK 
+	<p><a href="vsnet.htm">The VS.NET Documenter</a>, <a href="ms-help://ms.vshik.2003/dv_vshik_2/html/vsoriVSHIK2.htm">VSHIK 
 	documentation</a>, <a href="vsnet-deploying.htm">Deploying Html Help 2</a></p>
 </div>
 
