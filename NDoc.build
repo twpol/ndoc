@@ -1,0 +1,258 @@
+<?xml version="1.0" ?>
+<project name="ndoc" default="compile-all" xmlnds="http://tempuri.org/nant-vs.xsd">
+    <!-- Global project settings -->
+    <property name="project.name" value="ndoc" />
+    <property name="project.version" value="1.2.0" />
+    <property name="project.build.config" value="debug" readonly="false" />
+    <property name="project.build.package" value="false" readonly="false" />
+    <property name="build.dir" value="${nant.project.basedir}/build/${nant.project.name}-${project.version}" readonly="false" />
+    <!-- Include NDoc helpers -->
+    <include buildfile="NDoc.build.include" />
+    <!-- Targets that should always be executed -->
+    <call target="set-build-configuration" force="true" />
+    <call target="set-runtime-configuration" force="true" />
+    <!-- Targets that check settings -->
+    <target name="check-current-package-zipfile">
+        <ifnot propertyexists="current.package.zipfile">
+            <fail message="The current package zipfile has not been specified." />
+        </ifnot>
+    </target>
+    <target name="check-htmlhelp-compiler">
+        <ifnot propertyexists="htmlhelp.compiler">
+            <readregistry property="htmlhelp.workshop.installroot" key="SOFTWARE\Microsoft\HTML Help Workshop\InstallDir"
+                hive="CurrentUser" failonerror="false" />
+            <if propertyexists="htmlhelp.workshop.installroot">
+                <property name="htmlhelp.compiler" value="${htmlhelp.workshop.installroot}/hhc.exe" readonly="false" />
+            </if>
+        </ifnot>
+        <ifnot propertyexists="htmlhelp.compiler">
+            <sysinfo />
+            <property name="htmlhelp.compiler" value="${sys.os.folder.programfiles}/HTML Help Worshop/hhc.exe"
+                readonly="false" />
+        </ifnot>
+    </target>
+    <!-- Displays configuration info, usefull for working out why NDoc doesn't build -->
+    <target name="display-setup" depends="check-htmlhelp-compiler">
+        <!-- .NET Framework 1.0 -->
+        <available type="Framework" resource="net-1.0" property="temp.framework.available" />
+        <ifnot propertytrue="temp.framework.available">
+            <echo message=".NET Framework 1.0 runtime is not available." />
+        </ifnot>
+        <if propertytrue="temp.framework.available">
+            <property name="nant.settings.currentframework" value="net-1.0" />
+            <call target="display-current-runtime" force="true" />
+        </if>
+        <!-- .NET Framework 1.1 -->
+        <available type="Framework" resource="net-1.1" property="temp.framework.available" />
+        <ifnot propertytrue="temp.framework.available">
+            <echo message=".NET Framework 1.1 runtime is not available." />
+        </ifnot>
+        <if propertytrue="temp.framework.available">
+            <property name="nant.settings.currentframework" value="net-1.1" />
+            <call target="display-current-runtime" force="true" />
+        </if>
+        <!-- Mono 1.0 -->
+        <available type="Framework" resource="mono-1.0" property="temp.framework.available" />
+        <ifnot propertytrue="temp.framework.available">
+            <echo message="Mono 1.0 runtime is not available." />
+        </ifnot>
+        <if propertytrue="temp.framework.available">
+            <property name="nant.settings.currentframework" value="mono-1.0" />
+            <call target="display-current-runtime" force="true" />
+        </if>
+        <!-- HTML Help Compiler -->
+        <echo message="htmlhelp.compiler: ${htmlhelp.compiler}" />
+    </target>
+    <target name="display-current-runtime">
+        <echo message="" />
+        <echo message="----------------------------------------------------------" />
+        <echo message=" ${nant.settings.currentframework.description}" />
+        <echo message="----------------------------------------------------------" />
+        <echo message="" />
+        <echo message="framework : ${nant.settings.currentframework}" />
+        <echo message="description : ${nant.settings.currentframework.description}" />
+        <if propertyexists="nant.settings.currentframework.sdkdirectory">
+            <echo message="sdk directory : ${nant.settings.currentframework.sdkdirectory}" />
+        </if>
+        <ifnot propertyexists="nant.settings.currentframework.sdkdirectory">
+            <echo message="sdk directory : &lt;not configured/available&gt;" />
+        </ifnot>
+        <echo message="framework directory : ${nant.settings.currentframework.frameworkdirectory}" />
+        <echo message="assembly directory : ${nant.settings.currentframework.frameworkassemblydirectory}" />
+        <if propertyexists="nant.settings.currentframework.runtimeengine">
+            <echo message="runtime engine : ${nant.settings.currentframework.runtimeengine}" />
+        </if>
+        <echo message="" />
+    </target>
+    <!-- Target for compiling all build configurations for all runtime configurations -->
+    <target name="compile-all" description="Compile all build configurations for all runtime configurations">
+        <echo message="Compiling all build configurations for all runtime configurations." />
+        <call target="set-debug-build-configuration" force="true" />
+        <call target="compile-build" force="true" />
+        <call target="set-release-build-configuration" force="true" />
+        <call target="compile-build" force="true" />
+    </target>
+    <!-- Target for compiling all build configurations for the current runtime configurations -->
+    <target name="compile-runtime" description="Compile all build configurations for the current runtime configuration"
+        depends="check-current-runtime-config, check-current-runtime-version">
+        <echo message="Compiling all build configurations for the ${current.runtime.config}-${current.runtime.version} runtime configuration." />
+        <call target="set-debug-build-configuration" force="true" />
+        <!-- make sure that the runtime properties that rely on build configuration information are refreshed -->
+        <call target="set-runtime-configuration" force="true" />
+        <call target="compile" force="true" />
+        <call target="set-release-build-configuration" force="true" />
+        <!-- make sure that the runtime properties that rely on build configuration information are refreshed -->
+        <call target="set-runtime-configuration" force="true" />
+        <call target="compile" force="true" />
+    </target>
+    <!-- Target for compiling all runtime configurations in the current build configuration -->
+    <target name="compile-build" description="Compile current build configurations for all runtime configurations">
+        <echo message="Compiling all runtime configurations for the ${current.build.config} build configuration." />
+        <available type="Framework" resource="net-1.0" property="temp.framework.available" />
+        <if propertytrue="temp.framework.available">
+            <call target="set-net-1.0-runtime-configuration" force="true" />
+            <call target="compile" force="true" />
+        </if>
+        <ifnot propertytrue="temp.framework.available">
+            <if propertyexists="project.build.package" propertytrue="project.build.package">
+                <fail message="The .NET Framework 1.0 is not available." />
+            </if>
+            <ifnot propertyexists="project.build.package" propertytrue="project.build.package">
+                <echo message="The .NET Framework 1.0 is not available. Build skipped." />
+            </ifnot>
+        </ifnot>
+        <available type="Framework" resource="net-1.1" property="temp.framework.available" />
+        <if propertytrue="temp.framework.available">
+            <call target="set-net-1.1-runtime-configuration" force="true" />
+            <call target="compile" force="true" />
+        </if>
+        <ifnot propertytrue="temp.framework.available">
+            <if propertyexists="project.build.package" propertytrue="project.build.package">
+                <fail message="The .NET Framework 1.1 is not available." />
+            </if>
+            <ifnot propertyexists="project.build.package" propertytrue="project.build.package">
+                <echo message="The .NET Framework 1.1 is not available. Build skipped." />
+            </ifnot>
+        </ifnot>
+        <available type="Framework" resource="mono-1.0" property="temp.framework.available" />
+        <if propertytrue="temp.framework.available">
+            <call target="set-mono-1.0-runtime-configuration" force="true" />
+            <call target="compile" force="true" />
+        </if>
+        <ifnot propertytrue="temp.framework.available">
+            <if propertyexists="project.build.package" propertytrue="project.build.package">
+                <fail message="Mono 1.0 is not available." />
+            </if>
+            <ifnot propertyexists="project.build.package" propertytrue="project.build.package">
+                <echo message="Mono 1.0 is not available. Build skipped." />
+            </ifnot>
+        </ifnot>
+    </target>
+    <target name="compile" description="Builds the current build configuration for the current runtime configuration.">
+        <!-- make sure the bin directory the current framework and build configuration exists -->
+        <call target="check-current-bin-dir" force="true" />
+        <!-- build NDoc.Core -->
+        <nant buildfile="src/Core/Core.build" target="compile" inheritall="true" />
+        <!-- build NDocConsole -->
+        <nant buildfile="src/Console/Console.build" target="compile" inheritall="true" />
+        <!-- build NDoc.VisualStudio -->
+        <nant buildfile="src/VisualStudio/VisualStudio.build" target="compile" inheritall="true" />
+        <!-- build NDocGui -->
+        <nant buildfile="src/Gui/Gui.build" target="compile" inheritall="true" />
+        <!-- build Documenters -->
+        <foreach item="File" property="filename">
+            <in>
+                <items basedir="src/Documenter">
+                    <includes name="**/*.build"/>
+                </items>
+            </in>
+            <do>
+                <nant buildfile="${filename}" target="compile" inheritall="true" />
+            </do>
+        </foreach>
+    </target>
+    <target name="package" depends="set-package-configuration" description="Build and Package distribution">
+        <property name="current.package.zipfile" value="${nant.project.name}-${project.version}.zip" />
+        <!-- set flag to indicating that this is a package build -->
+        <property name="project.build.package" value="true" readonly="false" />
+        <!-- clean the current package directory -->
+        <!-- TO-DO -->
+        <!-- copies the libraries for building log4net to the current package directory -->
+        <call target="package-build-libraries" force="true" />
+        <!-- copies the examples to the current package directory -->
+        <call target="package-examples" force="true" />
+        <!-- copies the sources to the current package directory -->
+        <call target="package-src" force="true" />
+        <!-- copies the extenstions to the current package directory -->
+        <call target="package-extensions" force="true" />
+        <!-- copies the documentation to the current package directory -->
+        <call target="package-doc" force="true" />
+        <!-- copies the release files to the current package directory -->
+        <call target="package-release-files" force="true" />
+        <!-- compile all build configurations for all runtime configurations  -->
+        <call target="compile-all" force="true" />
+        <!-- compile all examples -->
+        <call target="compile-examples" force="true" />
+        <!-- compile all extensions -->
+        <call target="compile-extensions" force="true" />
+        <!-- generate the sdk docs using the release build configuration for all runtime configuration -->
+        <call target="set-release-build-configuration" force="true" />
+        <call target="generate-sdkdoc-all" force="true" />
+        <!-- create the package distribution zipfile -->
+        <call target="create-package-zipfile" force="true" />
+    </target>
+    <target name="package-examples">
+        <mkdir dir="${build.dir}/examples" />
+        <copy todir="${build.dir}/examples">
+            <fileset basedir="examples">
+                <includes name="**/*" />
+            </fileset>
+        </copy>
+    </target>
+    <target name="package-src">
+        <mkdir dir="${build.dir}/src" />
+        <copy todir="${build.dir}/src">
+            <fileset basedir="src">
+                <includes name="**/*" />
+                <excludes name="**/obj/**" />
+                <excludes name="**/*.csproj.user" />
+                <excludes name="NDoc.suo" />
+                <excludes name="**/*.sln.old" />
+            </fileset>
+        </copy>
+    </target>
+    <target name="package-doc">
+        <mkdir dir="${build.dir}/doc" />
+        <copy todir="${build.dir}/doc">
+            <fileset basedir="doc">
+                <includes name="**/*.*" />
+            </fileset>
+        </copy>
+    </target>
+    <target name="package-release-files">
+        <copy todir="${build.dir}">
+            <fileset basedir=".">
+                <includes name="COPYING.txt" />
+                <includes name="NDoc.build" />
+                <includes name="NDoc.build.include" />
+                <includes name="README.txt" />
+                <includes name="ndoc.snk" />
+            </fileset>
+        </copy>
+    </target>
+    <target name="create-package-zipfile" depends="check-current-package-dir, check-current-package-zipfile, check-log4net-basedir">
+        <!-- delete the specified zipfile if it already exists -->
+        <delete>
+            <fileset basedir=".">
+                <includes name="${current.package.zipfile}" />
+            </fileset>
+        </delete>
+        <zip zipfile="${current.package.zipfile}" ziplevel="9">
+            <fileset basedir="${build.dir}">
+                <includes name="**/*" />
+                <!-- file created by mono compiler -->
+                <excludes name="**/gc.log" />
+            </fileset>
+        </zip>
+    </target>
+</project>

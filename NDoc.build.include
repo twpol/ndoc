@@ -1,0 +1,232 @@
+<?xml version="1.0" ?>
+<project name="NDoc-helpers" xmlnds="http://tempuri.org/nant-vs.xsd">
+    <target name="check-bin-dir">
+        <ifnot propertyexists="bin.dir">
+            <property name="bin.dir" value="bin" readonly="false" />
+        </ifnot>
+        <mkdir dir="${bin.dir}" />
+    </target>
+    <target name="check-build-debug">
+        <ifnot propertyexists="build.debug">
+            <fail message="The build debug setting has not been specified." />
+        </ifnot>
+    </target>
+    <target name="check-build-defines">
+        <ifnot propertyexists="build.defines">
+            <fail message="The build defines have not been specified." />
+        </ifnot>
+    </target>
+    <target name="check-doc-dir">
+        <ifnot propertyexists="doc.dir">
+            <property name="doc.dir" value="doc" readonly="false" />
+        </ifnot>
+        <mkdir dir="${doc.dir}" />
+    </target>
+    <target name="check-sdkdoc-dir" depends="check-doc-dir">
+        <ifnot propertyexists="sdkdoc.dir">
+            <property name="sdkdoc.dir" value="${doc.dir}/sdk" readonly="false" />
+        </ifnot>
+        <mkdir dir="${sdkdoc.dir}" />
+    </target>
+    <target name="check-sdkdoc-debug">
+        <ifnot propertyexists="sdkdoc.debug">
+            <fail message="The sdk documentation debug setting has not been specified." />
+        </ifnot>
+    </target>
+    <target name="check-current-bin-dir">
+        <ifnot propertyexists="current.bin.dir">
+            <fail message="The current binaries directory has not been specified." />
+        </ifnot>
+        <mkdir dir="${current.bin.dir}" />
+    </target>
+    <target name="check-current-build-debug">
+        <ifnot propertyexists="current.build.debug">
+            <fail message="The current build debug setting has not been specified." />
+        </ifnot>
+    </target>
+    <target name="check-current-build-defines">
+        <ifnot propertyexists="current.build.defines">
+            <fail message="The current build defines for have not been specified." />
+        </ifnot>
+    </target>
+    <target name="check-current-sdkdoc-dir">
+        <ifnot propertyexists="current.sdkdoc.dir">
+            <fail message="The current sdk document directory has not been specified." />
+        </ifnot>
+        <mkdir dir="${sdkdoc.dir}" />
+    </target>
+    <target name="check-current-sdkdoc-debug">
+        <ifnot propertyexists="current.sdkdoc.debug">
+            <fail message="The curernt sdk documentation debug setting has not been specified." />
+        </ifnot>
+    </target>
+    <target name="check-current-runtime-config">
+        <ifnot propertyexists="current.runtime.config">
+            <fail message="The current runtime configuration has not been specified." />
+        </ifnot>
+    </target>
+    <target name="check-current-runtime-version">
+        <ifnot propertyexists="current.runtime.config">
+            <fail message="The current runtime version has not been specified." />
+        </ifnot>
+    </target>
+    <target name="check-current-runtime-description">
+        <ifnot propertyexists="current.runtime.description">
+            <ifnot propertyexists="project.runtime.description">
+                <fail message="The runtime description has not been specified and no default runtime description is available." />
+            </ifnot>
+            <if propertyexists="project.runtime.description">
+                <property name="current.runtime.description" value="${project.runtime.description}" readonly="false" />
+            </if>
+        </ifnot>
+    </target>
+    <target name="check-current-build-config">
+        <ifnot propertyexists="current.build.config">
+            <ifnot propertyexists="project.build.config">
+                <fail message="The build configuration has not been specified and no default build configuration is available." />
+            </ifnot>
+            <if propertyexists="project.build.config">
+                <property name="current.build.config" value="${project.build.config}" readonly="false" />
+            </if>
+        </ifnot>
+    </target>
+    <target name="check-current-runtime-available" depends="check-current-runtime-config, check-current-runtime-version">
+        <available type="Framework" resource="${current.runtime.config}-${current.runtime.version}"
+            property="current.runtime.available" />
+    </target>
+    <!-- Targets for setting up the environment -->
+    <target name="set-build-configuration" depends="check-current-build-config">
+        <ifnot targetexists="set-${current.build.config}-build-configuration">
+            <fail message="The ${current.build.config} build configuration is not supported by log4net." />
+        </ifnot>
+        <call target="set-${current.build.config}-build-configuration" force="true" />
+    </target>
+    <target name="set-debug-build-configuration">
+        <property name="build.debug" value="true" readonly="false" />
+        <property name="build.defines" value="DEBUG,TRACE,NO_RESOURCES" readonly="false" />
+        <property name="sdkdoc.debug" value="false" readonly="false" />
+        <property name="current.build.config" value="debug" readonly="false" />
+        <call target="set-build-configuration-flags" force="true" />
+    </target>
+    <target name="set-release-build-configuration">
+        <property name="build.debug" value="false" readonly="false" />
+        <property name="build.defines" value="TRACE" readonly="false" />
+        <property name="sdkdoc.debug" value="false" readonly="false" />
+        <property name="current.build.config" value="release" readonly="false" />
+        <call target="set-build-configuration-flags" force="true" />
+    </target>
+    <target name="set-build-configuration-flags" depends="check-current-build-config">
+        <property name="current.build.config.debug" value="false" readonly="false" />
+        <property name="current.build.config.release" value="false" readonly="false" />
+        <property name="current.build.config.${current.build.config}" value="true" readonly="false" />
+    </target>
+    <target name="set-runtime-configuration-flags" depends="check-current-runtime-config, check-current-runtime-version">
+        <property name="current.runtime.config.net" value="false" readonly="false" />
+        <property name="current.runtime.config.netcf" value="false" readonly="false" />
+        <property name="current.runtime.config.mono" value="false" readonly="false" />
+        <property name="current.runtime.config.sscli" value="false" readonly="false" />
+        <property name="current.runtime.config.${current.runtime.config}" value="true" readonly="false" />
+        <property name="current.runtime.net-1.0" value="false" readonly="false" />
+        <property name="current.runtime.net-1.1" value="false" readonly="false" />
+        <property name="current.runtime.netcf-1.0" value="false" readonly="false" />
+        <property name="current.runtime.mono-1.0" value="false" readonly="false" />
+        <property name="current.runtime.sscli-1.0" value="false" readonly="false" />
+        <property name="current.runtime.config.${current.runtime.config}-${current.runtime.version}" value="true" readonly="false" />
+    </target>
+    <target name="set-runtime-configuration" depends="check-current-build-config">
+        <ifnot propertyexists="current.runtime.config">
+            <ifnot propertyexists="nant.settings.currentframework">
+                <fail message="No runtime configuration was specified and the default NAnt runtime is not available." />
+            </ifnot>
+            <ifnot targetexists="set-${nant.settings.currentframework}-runtime-configuration">
+                <fail message="No runtime configuration was specified and the current runtime (${nant.settings.currentframework}) is not supported by NDoc." />
+            </ifnot>
+            <call target="set-${nant.settings.currentframework}-runtime-configuration" force="true" />
+        </ifnot>
+        <ifnot propertyexists="current.runtime.version">
+            <ifnot propertyexists="nant.settings.currentframework">
+                <fail message="No runtime configuration was specified and the default NAnt runtime is not available." />
+            </ifnot>
+            <ifnot targetexists="set-${nant.settings.currentframework}-runtime-configuration">
+                <fail message="No runtime configuration was specified and the current runtime (${nant.settings.currentframework}) is not supported by NDoc." />
+            </ifnot>
+            <call target="set-${nant.settings.currentframework}-runtime-configuration" force="true" />
+        </ifnot>
+        <ifnot targetexists="set-${current.runtime.config}-${current.runtime.version}-runtime-configuration">
+            <fail message="The ${current.runtime.config}-${current.runtime.version} runtime is not supported by NDoc." />
+        </ifnot>
+        <call target="set-${current.runtime.config}-${current.runtime.version}-runtime-configuration"
+            force="true" />
+    </target>
+    <target name="set-net-1.0-runtime-configuration" depends="check-bin-dir, check-sdkdoc-dir, check-sdkdoc-debug, check-current-build-config, check-build-debug, check-build-defines">
+        <property name="current.runtime.config" value="net" readonly="false" />
+        <property name="current.runtime.version" value="1.0" readonly="false" />
+        <property name="current.runtime.description" value="Microsoft .NET Framework 1.0" readonly="false" />
+        <property name="current.build.debug" value="${build.debug}" readonly="false" />
+        <property name="current.build.defines" value="${build.defines},NET,NET_1_0" readonly="false" />
+        <property name="current.bin.dir" value="${build.dir}/bin/${current.runtime.config}/${current.runtime.version}/${current.build.config}"
+            readonly="false" />
+        <property name="current.sdkdoc.dir" value="${build.dir}/doc/sdk/${current.runtime.config}/${current.runtime.version}"
+            readonly="false" />
+        <property name="current.sdkdoc.debug" value="${sdkdoc.debug}" readonly="false" />
+        <property name="nant.settings.currentframework" value="${current.runtime.config}-${current.runtime.version}" />
+        <call target="set-runtime-configuration-flags" force="true" />
+    </target>
+    <target name="set-net-1.1-runtime-configuration" depends="check-bin-dir, check-sdkdoc-dir, check-sdkdoc-debug, check-current-build-config, check-build-debug, check-build-defines">
+        <property name="current.runtime.config" value="net" readonly="false" />
+        <property name="current.runtime.version" value="1.1" readonly="false" />
+        <property name="current.runtime.description" value="Microsoft .NET Framework 1.1" readonly="false" />
+        <property name="current.build.debug" value="${build.debug}" readonly="false" />
+        <property name="current.build.defines" value="${build.defines},NET,NET_1_1" readonly="false" />
+        <property name="current.bin.dir" value="${build.dir}/bin/${current.runtime.config}/${current.runtime.version}/${current.build.config}"
+            readonly="false" />
+        <property name="current.sdkdoc.dir" value="${build.dir}/doc/sdk/${current.runtime.config}/${current.runtime.version}"
+            readonly="false" />
+        <property name="current.sdkdoc.debug" value="${sdkdoc.debug}" readonly="false" />
+        <property name="nant.settings.currentframework" value="${current.runtime.config}-${current.runtime.version}" />
+        <call target="set-runtime-configuration-flags" force="true" />
+    </target>
+    <target name="set-netcf-1.0-runtime-configuration" depends="check-bin-dir, check-sdkdoc-dir, check-sdkdoc-debug, check-current-build-config, check-build-debug, check-build-defines">
+        <property name="current.runtime.config" value="netcf" readonly="false" />
+        <property name="current.runtime.version" value="1.0" readonly="false" />
+        <property name="current.runtime.description" value="Microsoft .NET Compact Framework 1.0"
+            readonly="false" />
+        <property name="current.build.debug" value="${build.debug}" readonly="false" />
+        <property name="current.build.defines" value="${build.defines},NETCF,NETCF_1_0" readonly="false" />
+        <property name="current.bin.dir" value="${build.dir}/bin/${current.runtime.config}/${current.runtime.version}/${current.build.config}"
+            readonly="false" />
+        <property name="current.sdkdoc.dir" value="${build.dir}/doc/sdk/${current.runtime.config}/${current.runtime.version}"
+            readonly="false" />
+        <property name="current.sdkdoc.debug" value="${sdkdoc.debug}" readonly="false" />
+        <property name="nant.settings.currentframework" value="${current.runtime.config}-${current.runtime.version}" />
+        <call target="set-runtime-configuration-flags" force="true" />
+    </target>
+    <target name="set-mono-1.0-runtime-configuration" depends="check-bin-dir, check-sdkdoc-dir, check-sdkdoc-debug, check-current-build-config, check-build-debug, check-build-defines">
+        <property name="current.runtime.config" value="mono" readonly="false" />
+        <property name="current.runtime.version" value="1.0" readonly="false" />
+        <property name="current.runtime.description" value="Mono 1.0" readonly="false" />
+        <property name="current.build.debug" value="${build.debug}" readonly="false" />
+        <property name="current.build.defines" value="${build.defines},MONO,MONO_1_0" readonly="false" />
+        <property name="current.bin.dir" value="${build.dir}/bin/${current.runtime.config}/${current.runtime.version}/${current.build.config}"
+            readonly="false" />
+        <property name="current.sdkdoc.dir" value="${build.dir}/doc/sdk/${current.runtime.config}/${current.runtime.version}"
+            readonly="false" />
+        <property name="current.sdkdoc.debug" value="${sdkdoc.debug}" readonly="false" />
+        <property name="nant.settings.currentframework" value="${current.runtime.config}-${current.runtime.version}" />
+        <call target="set-runtime-configuration-flags" force="true" />
+    </target>
+    <target name="set-sscli-1.0-runtime-configuration" depends="check-bin-dir, check-sdkdoc-dir, check-sdkdoc-debug, check-current-build-config, check-build-debug, check-build-defines">
+        <property name="current.runtime.config" value="sscli" readonly="false" />
+        <property name="current.runtime.version" value="1.0" readonly="false" />
+        <property name="current.runtime.description" value="Microsoft Shared Source CLI 1.0" readonly="false" />
+        <property name="current.build.debug" value="${build.debug}" readonly="false" />
+        <property name="current.build.defines" value="${build.defines},SSCLI,SSCLI_1_0" readonly="false" />
+        <property name="current.bin.dir" value="${build.dir}/bin/${current.runtime.config}/${current.runtime.version}/${current.build.config}"
+            readonly="false" />
+        <property name="current.sdkdoc.dir" value="${build.dir}/doc/sdk/${current.runtime.config}/${current.runtime.version}"
+            readonly="false" />
+        <property name="current.sdkdoc.debug" value="${sdkdoc.debug}" readonly="false" />
+        <property name="nant.settings.currentframework" value="${current.runtime.config}-${current.runtime.version}" />
+        <call target="set-runtime-configuration-flags" force="true" />
+    </target>
+</project>
