@@ -18,13 +18,22 @@ namespace NDoc.Documenter.Intellisense
 		/// <summary>
 		/// Creates a new <see cref="IntellisenseDocumenterConfig"/> instance.
 		/// </summary>
-		public IntellisenseDocumenterConfig() : base("Intellisense")
+		public IntellisenseDocumenterConfig( IntellisenseDocumenterInfo info ) : base( info )
 		{
 			base.AutoDocumentConstructors = true;
 			base.DocumentAttributes = false;
-			base.DocumentInheritedMembers = DocumentedInheritedMembers.None;
+			base.DocumentInheritedMembers = false;
 			base.DocumentInheritedFrameworkMembers = false;
 			base.UseNamespaceDocSummaries = false;
+		}
+		
+		/// <summary>
+		/// Creates an instance of a documenter <see cref="IDocumenterConfig.CreateDocumenter"/>
+		/// </summary>
+		/// <returns>IDocumenter instance</returns>		
+		public override IDocumenter CreateDocumenter()
+		{
+			return new IntellisenseDocumenter( this );
 		}
 
 
@@ -133,7 +142,7 @@ namespace NDoc.Documenter.Intellisense
 		/// 
 		/// </summary>
 		[Browsable(false)]
-		public new DocumentedInheritedMembers DocumentInheritedMembers { get { return base.DocumentInheritedMembers; } }
+		public new bool DocumentInheritedMembers { get { return base.DocumentInheritedMembers; } }
 		/// <summary>
 		/// 
 		/// </summary>

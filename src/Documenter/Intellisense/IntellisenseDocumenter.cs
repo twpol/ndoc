@@ -23,28 +23,10 @@ namespace NDoc.Documenter.Intellisense
 		/// <summary>
 		/// Creates a new <see cref="IntellisenseDocumenter"/> instance.
 		/// </summary>
-		public IntellisenseDocumenter() : base("Intellisense")
+		public IntellisenseDocumenter( IntellisenseDocumenterConfig config ) : base(config)
 		{
-			Clear();
 		}
 
-		/// <summary>
-		/// The development status (alpha, beta, stable) of this documenter.
-		/// See <see cref="BaseDocumenter"/>
-		/// </summary>
-		public override DocumenterDevelopmentStatus DevelopmentStatus
-		{
-			get { return DocumenterDevelopmentStatus.Alpha; }
-		}
-	
-		/// <summary>
-		/// Clears this instance.
-		/// </summary>
-		public override void Clear()
-		{
-			Config = new IntellisenseDocumenterConfig();
-		}
-	
 		/// <summary>
 		/// Views this instance.
 		/// </summary>
