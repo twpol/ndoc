@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Library"
                 PreBuildEvent = ""
-                PostBuildEvent = "if exist $(SolutionDir)\bin\.net-1.1 copy $(TargetDir)\$(TargetName).* $(SolutionDir)\bin\.net-1.1\"
+                PostBuildEvent = 'if exist "$(SolutionDir)\bin\.net-1.1" copy "$(TargetDir)\$(TargetName).*" "$(SolutionDir)\bin\.net-1.1\"'
                 RootNamespace = "NDoc.Test"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""

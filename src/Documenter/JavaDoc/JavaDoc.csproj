@@ -16,8 +16,8 @@
                 DefaultTargetSchema = "IE50"
                 DelaySign = "false"
                 OutputType = "Library"
-                PreBuildEvent = "if $(ConfigurationName)==Release copy $(SolutionDir)src\ndoc.snk $(ProjectDir)obj\$(ConfigurationName)"
-                PostBuildEvent = "copy $(TargetName).* $(SolutionDir)src\Gui\bin\$(ConfigurationName)\&#xd;&#xa;copy $(TargetName).* $(SolutionDir)src\Console\bin\$(ConfigurationName)\&#xd;&#xa;"
+                PreBuildEvent = 'if $(ConfigurationName)==Release copy "$(SolutionDir)src\ndoc.snk" "$(ProjectDir)obj\$(ConfigurationName)"'
+                PostBuildEvent = 'copy $(TargetName).* "$(SolutionDir)src\Gui\bin\$(ConfigurationName)\"&#xd;&#xa;copy $(TargetName).* "$(SolutionDir)src\Console\bin\$(ConfigurationName)\"&#xd;&#xa;'
                 RootNamespace = "NDoc.Documenter.JavaDoc"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""

@@ -16,7 +16,7 @@
                 DefaultTargetSchema = "IE50"
                 DelaySign = "false"
                 OutputType = "Exe"
-                PreBuildEvent = "if $(ConfigurationName)==Release copy $(SolutionDir)src\ndoc.snk $(ProjectDir)obj\$(ConfigurationName)"
+                PreBuildEvent = 'if $(ConfigurationName)==Release copy "$(SolutionDir)src\ndoc.snk" "$(ProjectDir)obj\$(ConfigurationName)"'
                 PostBuildEvent = ""
                 RootNamespace = "NDoc.Console"
                 RunPostBuildEvent = "OnBuildSuccess"
