@@ -57,6 +57,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Msdn2", "src\Documenter\Msd
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intellisense", "src\Documenter\Intellisense\Intellisense.csproj", "{B09E5CDA-AA48-48A0-BC4F-100243D71922}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -118,6 +122,10 @@ Global
 		{8282F072-D966-4075-A8DA-8911E36F4980}.Debug.Build.0 = Debug|.NET
 		{8282F072-D966-4075-A8DA-8911E36F4980}.Release.ActiveCfg = Release|.NET
 		{8282F072-D966-4075-A8DA-8911E36F4980}.Release.Build.0 = Release|.NET
+		{B09E5CDA-AA48-48A0-BC4F-100243D71922}.Debug.ActiveCfg = Debug|.NET
+		{B09E5CDA-AA48-48A0-BC4F-100243D71922}.Debug.Build.0 = Debug|.NET
+		{B09E5CDA-AA48-48A0-BC4F-100243D71922}.Release.ActiveCfg = Release|.NET
+		{B09E5CDA-AA48-48A0-BC4F-100243D71922}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 		src\CommonAssemblyInfo.cs = src\CommonAssemblyInfo.cs
