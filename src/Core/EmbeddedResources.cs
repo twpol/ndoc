@@ -25,7 +25,9 @@ namespace NDoc.Core
 	/// <remarks>This is used to access the stylesheets.</remarks>
 	public sealed class EmbeddedResources
 	{
+		// no public constructor - only static methods...
 		private EmbeddedResources(){}
+
 		/// <summary>Writes all the embedded resources with the specified prefix to disk.</summary>
 		/// <param name="assembly">The assembly containing the embedded resources.</param>
 		/// <param name="prefix">The prefix to search for.</param>
