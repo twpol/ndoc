@@ -62,8 +62,10 @@
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
-	<xsl:template name="member-syntax">
+	<xsl:template name="cs-member-syntax">
 		<pre class="syntax">
+			<span class="lang">[C#]</span>
+			<br />
 			<xsl:if test="not(parent::interface)">
 				<xsl:call-template name="method-access">
 					<xsl:with-param name="access" select="@access" />

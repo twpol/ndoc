@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<!-- -->
-	<xsl:output method="html" indent="yes" />
+	<xsl:output method="html" indent="no" />
 	<!-- -->
 	<xsl:include href="common.xslt" />
 	<!-- -->
@@ -59,7 +59,8 @@
 				</xsl:call-template>
 				<div id="content">
 					<xsl:call-template name="summary-section" />
-					<xsl:call-template name="member-syntax" />
+					<xsl:call-template name="vb-member-syntax" />
+					<xsl:call-template name="cs-member-syntax" />
 					<xsl:call-template name="parameter-section" />
 					<xsl:call-template name="returnvalue-section" />
 					<xsl:call-template name="remarks-section" />
