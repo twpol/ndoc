@@ -33,7 +33,7 @@ namespace NDoc.Gui
 		#region Fields
 		private System.Windows.Forms.Button closeButton;
 		private System.Windows.Forms.RichTextBox richTextBox;
-		private NDoc.Gui.HeaderGroupBox versionHeaderGroupBox;
+		private GroupBox versionHeaderGroupBox;
 		private System.Windows.Forms.ColumnHeader assemblyColumnHeader;
 		private System.Windows.Forms.ListView assembliesListView;
 		private System.Windows.Forms.ColumnHeader versionColumnHeader;
@@ -162,7 +162,7 @@ namespace NDoc.Gui
 			this.dateColumnHeader = new System.Windows.Forms.ColumnHeader();
 			this.closeButton = new System.Windows.Forms.Button();
 			this.richTextBox = new System.Windows.Forms.RichTextBox();
-			this.versionHeaderGroupBox = new NDoc.Gui.HeaderGroupBox();
+			this.versionHeaderGroupBox = new GroupBox();
 			this.projectHomePageLinkLabel = new System.Windows.Forms.LinkLabel();
 			this.adminsLinkLabel = new System.Windows.Forms.LinkLabel();
 			this.developersLabel = new System.Windows.Forms.Label();
@@ -236,7 +236,6 @@ namespace NDoc.Gui
 			this.versionHeaderGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
 			this.versionHeaderGroupBox.Location = new System.Drawing.Point(8, 264);
 			this.versionHeaderGroupBox.Name = "versionHeaderGroupBox";
-			this.versionHeaderGroupBox.Padding = 0;
 			this.versionHeaderGroupBox.Size = new System.Drawing.Size(526, 168);
 			this.versionHeaderGroupBox.TabIndex = 1;
 			this.versionHeaderGroupBox.TabStop = false;

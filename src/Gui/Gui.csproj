@@ -123,9 +123,24 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "App.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AssemblyListControl.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AssemblyListControl.resx"
+                    DependentUpon = "AssemblyListControl.cs"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "AssemblySlashDocForm.cs"
@@ -166,16 +181,6 @@
                 <File
                     RelPath = "Gui.build"
                     BuildAction = "None"
-                />
-                <File
-                    RelPath = "HeaderGroupBox.cs"
-                    SubType = "Component"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "HeaderGroupBox.resx"
-                    DependentUpon = "HeaderGroupBox.cs"
-                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "MainForm.cs"
@@ -240,6 +245,11 @@
                     RelPath = "TraceWindowControl.resx"
                     DependentUpon = "TraceWindowControl.cs"
                     BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "WaitCursor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "WarningForm.cs"

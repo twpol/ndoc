@@ -232,11 +232,10 @@ namespace NDoc.Gui
 
 					_Project.Namespaces.LoadNamespacesFromAssemblies(_Project);
 					foreach (string namespaceName in _Project.Namespaces.NamespaceNames)
-					{
 						namespaceComboBox.Items.Add(namespaceName);
-					}
 
-					if (namespaceComboBox.Items.Count>0) namespaceComboBox.SelectedIndex = 0;
+					if ( namespaceComboBox.Items.Count > 0 ) 
+						namespaceComboBox.SelectedIndex = 0;
 
 					namespaceComboBox.Enabled=true;
 					summaryTextBox.Enabled=true;
@@ -244,8 +243,7 @@ namespace NDoc.Gui
 				}
 				catch(Exception docEx)
 				{
-					ErrorForm errorForm = new ErrorForm("Unable to complete namspace scan...", docEx);
-					errorForm.ShowDialog(this);
+					ErrorForm.ShowError( "Unable to complete namspace scan...", docEx, this );
 				}
 				finally
 				{

@@ -7,7 +7,7 @@ using System.Windows.Forms;
 namespace NDoc.Gui
 {
 	/// <summary>
-	/// Summary description for WarningForm.
+	/// Form used to diaply warning messages to the user
 	/// </summary>
 	public class WarningForm : System.Windows.Forms.Form
 	{
@@ -23,7 +23,22 @@ namespace NDoc.Gui
 		/// </summary>
 		private System.ComponentModel.Container components = null;
 
-		internal WarningForm(string title, string message)
+		/// <summary>
+		/// Shows the warning form
+		/// </summary>
+		/// <param name="title">The Form's title</param>
+		/// <param name="message">The warning</param>
+		/// <param name="parent">The Form's parent</param>
+		public static void ShowWarning( string title, string message, Control parent )
+		{
+			using ( WarningForm warningForm = new WarningForm( title, message ) )
+			{
+				warningForm.StartPosition = FormStartPosition.CenterParent;
+				warningForm.ShowDialog( parent );
+			}
+		}
+
+		private WarningForm(string title, string message)
 		{
 			//
 			// Required for Windows Form Designer support

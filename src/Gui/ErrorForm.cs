@@ -10,7 +10,7 @@ using System.Reflection;
 namespace NDoc.Gui
 {
 	/// <summary>
-	/// Summary description for ErrorForm.
+	/// Form used to display errors to the user
 	/// </summary>
 	public class ErrorForm : System.Windows.Forms.Form
 	{
@@ -26,7 +26,32 @@ namespace NDoc.Gui
 
 		private string ClipboardMsg;
 
-		internal ErrorForm(string message, Exception ex)
+		/// <summary>
+		/// Show the ErrorForm
+		/// </summary>
+		/// <param name="message">A message to display</param>
+		/// <param name="ex">The exception to display</param>
+		/// <param name="parent">The parent control</param>
+		public static void ShowError( string message, Exception ex, Control parent )
+		{
+			using ( ErrorForm errorForm = new ErrorForm( message, ex ) )
+			{
+				errorForm.StartPosition = FormStartPosition.CenterParent;
+				errorForm.ShowDialog(parent);
+			}
+		}
+
+		/// <summary>
+		/// Show the ErrorForm
+		/// </summary>
+		/// <param name="ex">The exception to display</param>
+		/// <param name="parent">The parent control</param>
+		public static void ShowError( Exception ex, Control parent )
+		{
+			ShowError( ex.Message, ex, parent );
+		}
+
+		private ErrorForm(string message, Exception ex)
 		{
 			//
 			// Required for Windows Form Designer support
@@ -37,45 +62,10 @@ namespace NDoc.Gui
 
 			StringBuilder strBld = new StringBuilder();
 			if ((message != null) && (message.Length > 0))
-			{
 				strBld.Append(message);
-			}
 
-			if (ex != null)
-			{
-				strBld.Append("\n\n");
-				Exception tmpEx = ex;
-				while (tmpEx != null)
-				{
-					strBld.AppendFormat("Exception: {0}\n", tmpEx.GetType().ToString());
-					strBld.Append(tmpEx.Message);
-					strBld.Append("\n\n");
-					tmpEx = tmpEx.InnerException;
-				}
-				strBld.Append("\n");
-			}
-			ReflectionTypeLoadException rtle = ex as ReflectionTypeLoadException;
-			if (rtle != null)
-			{
-				Hashtable fileLoadExceptions = new Hashtable();
-				foreach(Exception loaderEx in rtle.LoaderExceptions)
-				{
-					System.IO.FileLoadException fileLoadEx = loaderEx as System.IO.FileLoadException;
-					if (fileLoadEx !=null)
-					{
-						if (!fileLoadExceptions.ContainsKey(fileLoadEx.FileName))
-						{
-							fileLoadExceptions.Add(fileLoadEx.FileName,null);
-						strBld.Append("Unable to load: " + fileLoadEx.FileName + "\n");
-						}
-					}
-//					else
-//					{
-						strBld.Append(loaderEx.Message + "\n");
-						strBld.Append(loaderEx.StackTrace + Environment.NewLine);
-//					}
-				}
-			}
+			App.DumpException( strBld, ex );
+
 			string[] lines = strBld.ToString().Split('\n');
 			m_messageTextBox.Lines = lines;
 
@@ -94,7 +84,7 @@ namespace NDoc.Gui
 				m_stackTraceTextBox.Lines = lines;
 			}
 
-			ClipboardMsg= m_messageTextBox.Text + m_stackTraceTextBox.Text;
+			ClipboardMsg = m_messageTextBox.Text + m_stackTraceTextBox.Text;
 		}
 
 		/// <summary>
