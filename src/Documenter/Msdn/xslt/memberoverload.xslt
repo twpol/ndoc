@@ -152,7 +152,17 @@
 							</object>
 						</xsl:if>
 					</xsl:if>
-					<xsl:call-template name="footer-row" />
+					<xsl:call-template name="footer-row">
+						<xsl:with-param name="type-name">
+							<xsl:value-of select="../@name" />
+							<xsl:if test="local-name()='method' or local-name()='property' ">
+								<xsl:text>.</xsl:text>
+								<xsl:value-of select="@name" />
+							</xsl:if>
+							<xsl:text>&#160;</xsl:text>
+							<xsl:value-of select="$childType" />
+						</xsl:with-param>
+					</xsl:call-template>
 				</div>
 			</body>
 		</html>

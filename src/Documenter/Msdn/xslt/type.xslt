@@ -265,7 +265,9 @@
 							</object>
 						</xsl:if>
 					</xsl:if>
-					<xsl:call-template name="footer-row" />
+					<xsl:call-template name="footer-row">
+						<xsl:with-param name="type-name" select="concat(@name, ' ', $type)" />
+					</xsl:call-template>
 				</div>
 			</body>
 		</html>

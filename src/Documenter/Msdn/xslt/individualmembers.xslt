@@ -99,7 +99,11 @@
 							<xsl:value-of select="$members" />
 						</xsl:with-param>
 					</xsl:call-template>
-					<xsl:call-template name="footer-row" />
+					<xsl:call-template name="footer-row">
+						<xsl:with-param name="type-name">
+							<xsl:value-of select="@name" />&#160;<xsl:value-of select="$Members" />
+						</xsl:with-param>
+					</xsl:call-template>
 				</div>
 			</body>
 		</html>

@@ -96,7 +96,11 @@
 							</xsl:element>
 						</object>
 					</xsl:if>
-					<xsl:call-template name="footer-row" />
+					<xsl:call-template name="footer-row">
+						<xsl:with-param name="type-name">
+							<xsl:value-of select="../@name" />.<xsl:value-of select="@name" /> Event
+						</xsl:with-param>
+					</xsl:call-template>
 				</div>
 			</body>
 		</html>

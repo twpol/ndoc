@@ -121,7 +121,23 @@
 							</object>
 						</xsl:if>
 					</xsl:if>
-					<xsl:call-template name="footer-row" />
+					<xsl:call-template name="footer-row">
+						<xsl:with-param name="type-name">
+							<xsl:value-of select="../@name" />
+							<xsl:if test="local-name()='method'">
+								<xsl:text>.</xsl:text>
+								<xsl:value-of select="@name" />
+							</xsl:if>
+							<xsl:text>&#160;</xsl:text>
+							<xsl:value-of select="$childType" />
+							<xsl:text>&#160;</xsl:text>
+							<xsl:if test="local-name()!='operator'">
+								<xsl:if test="count(parent::node()/*[@name=$memberName]) &gt; 1">
+									<xsl:call-template name="get-param-list" />
+								</xsl:if>
+							</xsl:if>
+						</xsl:with-param>
+					</xsl:call-template>
 				</div>
 			</body>
 		</html>

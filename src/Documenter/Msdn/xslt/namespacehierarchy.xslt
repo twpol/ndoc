@@ -41,7 +41,9 @@
 							</xsl:apply-templates>
 						</p>
 					</xsl:if>
-					<xsl:call-template name="footer-row" />
+					<xsl:call-template name="footer-row">
+						<xsl:with-param name="type-name" select="concat($ns/@name, ' Hierarchy')" />
+					</xsl:call-template>
 				</div>
 			</body>
 		</html>
