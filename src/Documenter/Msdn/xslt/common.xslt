@@ -802,6 +802,7 @@
 			</title>
 			<xml></xml>
 			<link rel="stylesheet" type="text/css" href="MSDN.css" />
+			<xsl:apply-templates select="/ndoc" mode="header-section"/>			
 		</head>
 	</xsl:template>
 	<!-- -->

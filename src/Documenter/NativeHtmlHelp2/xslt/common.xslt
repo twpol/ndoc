@@ -668,6 +668,7 @@
 				<MSHelp:Attr Name="HelpPriority" Value="3"/>	
 			</xml>
 			<SCRIPT SRC="dtuelink.js"></SCRIPT>
+			<xsl:apply-templates select="/ndoc" mode="header-section"/>			
 		</head>
 	</xsl:template>
 	
