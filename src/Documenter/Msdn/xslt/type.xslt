@@ -372,7 +372,6 @@
 					</tr>
 					<xsl:for-each select="implementedBy">
 						<xsl:variable name="typeID" select="@id" />
-						<xsl:message>for each <xsl:value-of select="$typeID" /></xsl:message>
 						<xsl:apply-templates select="ancestor::ndoc/assembly/module/namespace/*[@id=$typeID]" mode="implementingType" />
 					</xsl:for-each>
 				</table>
