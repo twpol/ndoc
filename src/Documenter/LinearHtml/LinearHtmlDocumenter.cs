@@ -40,7 +40,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.Xml.XPath;
 using System.Xml.Xsl;
-
+using System.Reflection;
 using NDoc.Core;
 
 
@@ -255,7 +255,7 @@ namespace NDoc.Documenter.LinearHtml
 				// Define this when you want to edit the stylesheets
 				// without having to shutdown the application to rebuild.
 				#if NO_RESOURCES
-					string mainModuleDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+					string mainModuleDirectory = Path.GetDirectoryName(Assembly.GetCallingAssembly().Location);
 					resourceDirectory = Path.GetFullPath(Path.Combine(mainModuleDirectory, @"..\..\..\Documenter\Msdn\"));
 				#else
 
