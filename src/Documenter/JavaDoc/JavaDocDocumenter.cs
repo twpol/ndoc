@@ -75,10 +75,13 @@ namespace NDoc.Documenter.JavaDoc
 					_ResourceDirectory + "xslt\\");
 			#endif
 
-			File.Copy(
-				Path.Combine(_ResourceDirectory, @"css\JavaDoc.css"),
-				Path.Combine(MyConfig.OutputDirectory, "JavaDoc.css"),
-				true);
+			string outcss = Path.Combine(MyConfig.OutputDirectory, "JavaDoc.css");
+			if (File.Exists(outcss))
+			{
+				//make sure it is not read only
+				File.SetAttributes(outcss, FileAttributes.Normal);
+			}
+			File.Copy(Path.Combine(_ResourceDirectory, @"css\JavaDoc.css"), outcss, true);
 
 			MakeXml(project);
 
