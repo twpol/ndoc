@@ -3,7 +3,8 @@
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:doc="http://ndoc.sf.net/doc"
 	xmlns:MSHelp="http://msdn.microsoft.com/mshelp"
-	exclude-result-prefixes="doc"
+	xmlns:NUtil="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities"
+	exclude-result-prefixes="doc NUtil"
 >
 
 	<!--
@@ -259,9 +260,25 @@
 	</xsl:template>
 
 	<xsl:template match="see[@cref]" mode="slashdoc" doc:group="inline" doc:msdn="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrfsee.htm">
-		<xsl:call-template name="get-a-href">
-			<xsl:with-param name="cref" select="@cref" />
-		</xsl:call-template>
+		<xsl:choose>
+			<xsl:when test="@nolink='true'">
+				<b>
+				<xsl:choose>
+					<xsl:when test="node()">
+						<xsl:value-of select="." />
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="NUtil:GetName(@cref)" />
+					</xsl:otherwise>
+				</xsl:choose>
+				</b>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:call-template name="get-a-href">
+					<xsl:with-param name="cref" select="@cref" />
+				</xsl:call-template>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 
 	<xsl:template match="see[@href]" mode="slashdoc" doc:group="inline">
