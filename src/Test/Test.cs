@@ -1020,6 +1020,17 @@ namespace NDoc.Test
 		{
 		}
 	}
+
+	/// <summary>This class has an event that throws an exception.</summary>
+	public class EventWithException
+	{
+		/// <exception cref="System.Exception">Thrown when... .</exception>
+		public event EventHandler ServiceRequest
+		{
+			add {}
+			remove {}
+		}
+	}
 }
 
 namespace NDoc.Test.InternalStuff
