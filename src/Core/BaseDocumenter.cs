@@ -273,8 +273,8 @@ namespace NDoc.Core
 					Type interfaceType = method.ReflectedType.GetInterface(interfaceName);
 
 					// Document method if interface is (public) or (isInternal and documentInternal).
-					if(  interfaceType.IsPublic || 
-						(interfaceType.IsNotPublic && MyConfig.DocumentInternals))
+					if(  interfaceType != null && (interfaceType.IsPublic || 
+						(interfaceType.IsNotPublic && MyConfig.DocumentInternals)))
 					{
 						return true;
 					}
