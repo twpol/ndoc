@@ -20,14 +20,15 @@ using System.Diagnostics;
 namespace NDoc.Core {
 
 	/// <summary> 
-	/// Class AssemblyResolver resolves assemblies not found by the system.
+	/// Resolves assemblies located in a specified directory and its sub-directories.
+	/// </summary>
+	/// <remarks>
+	/// <para>Class AssemblyResolver resolves assemblies not found by the system.
 	/// An instance of this class is configured with a base directory and hooks
 	/// up to the AppDomain.AssemblyResolve event. Whenever called, the instance
 	/// checks the associated directory with all subdirectories for the assembly
-	/// requested.
-	/// </summary>
-	/// <remarks>
-	/// The class implements two features to speed up the search:
+	/// requested.</para>
+	/// <para>The class implements two features to speed up the search:</para>
 	/// <list type="bullet">
 	/// <item><description>
 	/// AssemblyList: Before searching the file system, the assembly list is searched.
@@ -39,7 +40,8 @@ namespace NDoc.Core {
 	/// </description></item>
 	/// </list>
 	/// </remarks>
-	public class AssemblyResolver {
+	public class AssemblyResolver 
+	{
 
 		#region Initialization & Termination
 
