@@ -1190,11 +1190,35 @@ namespace NDoc.Test
 		}
 	}
 
+	/// <summary>This class has two methods with the same name but one is an instance method
+	/// and the other is static.</summary>
+	public class BothInstanceAndStaticOverloads2
+	{
+		/// <summary>This is the instance method.</summary>
+		public void Foo()
+		{
+		}
+		/// <summary>This is another instance method.</summary>
+		public void Foo(string name)
+		{
+		}
+
+		/// <summary>This is the static method.</summary>
+		public static void Foo(int i)
+		{
+		}
+		/// <summary>This is another static method.</summary>
+		public static void Foo(object o)
+		{
+		}
+	}
+
 	// The following two examples were submitted by Ross.Nelson@devnet.ato.gov.au
 	// in order to demonstrate two bugs.
 
 	/// <summary> this is fred </summary>
-	public enum fred {
+	public enum fred 
+	{
 		/// <summary>aaaa</summary>
 		valuea,
 		/// <summary>bbbb</summary>
@@ -1529,6 +1553,17 @@ namespace NDoc.Test
 	{
 		/// <summary>This is a constant string.</summary>
 		public const string ConstString = "ConstString";
+	}
+
+	/// <summary>
+	/// A class that inherits fields from a System class.
+	/// </summary>
+	public class InheritedFields : System.Resources.ResourceManager
+	{
+		/// <summary>
+		/// This field is added for comparison.
+		/// </summary>
+		public static readonly int MyField = 5;
 	}
 }
 
