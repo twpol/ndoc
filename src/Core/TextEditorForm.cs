@@ -5,13 +5,13 @@ using System.ComponentModel;
 using System.IO;
 using System.Windows.Forms;
 
-namespace NDoc.Core
+namespace NDoc.Core.PropertyGridUI
 {
 	/// <summary>
 	/// Used in the conjunction with the <see cref="TextEditor"/>, this form
 	/// provides the user a larger interface with which to edit text.
 	/// </summary>
-	public class TextEditorForm : System.Windows.Forms.Form
+	internal class TextEditorForm : System.Windows.Forms.Form
 	{
 		private System.Windows.Forms.Button buttonCancel;
 		private System.Windows.Forms.Button buttonOK;
@@ -67,35 +67,37 @@ namespace NDoc.Core
 			// 
 			// buttonCancel
 			// 
-			this.buttonCancel.Anchor = (System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right);
+			this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.buttonCancel.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.buttonCancel.Location = new System.Drawing.Point(304, 256);
+			this.buttonCancel.Location = new System.Drawing.Point(288, 248);
 			this.buttonCancel.Name = "buttonCancel";
+			this.buttonCancel.Size = new System.Drawing.Size(88, 24);
 			this.buttonCancel.TabIndex = 0;
 			this.buttonCancel.Text = "Cancel";
 			// 
 			// buttonOK
 			// 
-			this.buttonOK.Anchor = (System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right);
+			this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonOK.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.buttonOK.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.buttonOK.Location = new System.Drawing.Point(224, 256);
+			this.buttonOK.Location = new System.Drawing.Point(192, 248);
 			this.buttonOK.Name = "buttonOK";
+			this.buttonOK.Size = new System.Drawing.Size(88, 24);
 			this.buttonOK.TabIndex = 1;
 			this.buttonOK.Text = "OK";
 			// 
 			// textBoxEntry
 			// 
 			this.textBoxEntry.AllowDrop = true;
-			this.textBoxEntry.Anchor = (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.textBoxEntry.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
 				| System.Windows.Forms.AnchorStyles.Left) 
-				| System.Windows.Forms.AnchorStyles.Right);
+				| System.Windows.Forms.AnchorStyles.Right)));
 			this.textBoxEntry.Location = new System.Drawing.Point(8, 32);
 			this.textBoxEntry.Multiline = true;
 			this.textBoxEntry.Name = "textBoxEntry";
 			this.textBoxEntry.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.textBoxEntry.Size = new System.Drawing.Size(368, 216);
+			this.textBoxEntry.Size = new System.Drawing.Size(368, 208);
 			this.textBoxEntry.TabIndex = 2;
 			this.textBoxEntry.Text = "";
 			this.textBoxEntry.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxEntry_KeyDown);
@@ -104,8 +106,8 @@ namespace NDoc.Core
 			// 
 			// DescriptionLabel
 			// 
-			this.DescriptionLabel.Anchor = ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-				| System.Windows.Forms.AnchorStyles.Right);
+			this.DescriptionLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+				| System.Windows.Forms.AnchorStyles.Right)));
 			this.DescriptionLabel.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.DescriptionLabel.Location = new System.Drawing.Point(8, 8);
 			this.DescriptionLabel.Name = "DescriptionLabel";
@@ -120,14 +122,14 @@ namespace NDoc.Core
 			this.CancelButton = this.buttonCancel;
 			this.ClientSize = new System.Drawing.Size(384, 286);
 			this.ControlBox = false;
-			this.Controls.AddRange(new System.Windows.Forms.Control[] {
-																		  this.DescriptionLabel,
-																		  this.textBoxEntry,
-																		  this.buttonOK,
-																		  this.buttonCancel});
+			this.Controls.Add(this.DescriptionLabel);
+			this.Controls.Add(this.textBoxEntry);
+			this.Controls.Add(this.buttonOK);
+			this.Controls.Add(this.buttonCancel);
 			this.MaximizeBox = false;
 			this.Name = "TextEditorForm";
 			this.ShowInTaskbar = false;
+			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Text Editor";
 			this.TopMost = true;
