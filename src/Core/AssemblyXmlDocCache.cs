@@ -68,7 +68,15 @@ namespace NDoc.Core
 						string ID = reader.GetAttribute("name");
 						string doc = reader.ReadInnerXml().Trim();
 						doc = TidyDoc(ID, doc);
-						docs.Add(ID, doc);
+						if (docs.ContainsKey(ID))
+						{
+							Trace.WriteLine("Warning: Multiple <member> tags found with id=\"" + ID + "\"");
+							docs[ID] += doc;
+						}
+						else
+						{
+							docs.Add(ID, doc);
+						}
 					}      
 				}
 			}
@@ -120,7 +128,7 @@ namespace NDoc.Core
 		private void FixupCodeTag(XmlNode node)
 		{
 			string codeText = (string)node.InnerText;
-			if (codeText.TrimStart(new Char[] {' '} ).StartsWith("\r\n"))
+			if (codeText.TrimStart(new Char[] {' '}).StartsWith("\r\n"))
 			{
 				codeText = codeText.TrimStart(new Char[] {' '}).Substring(2);
 			}
