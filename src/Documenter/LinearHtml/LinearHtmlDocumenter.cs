@@ -274,9 +274,16 @@ namespace NDoc.Documenter.LinearHtml
 				// copy all of the xslt source files into the workspace
 				DirectoryInfo xsltSource = new DirectoryInfo( Path.GetFullPath(Path.Combine(
 					System.Windows.Forms.Application.StartupPath, @"..\..\..\Documenter\LinearHtml\xslt") ) );
-                				
+
 				foreach ( FileInfo f in xsltSource.GetFiles( "*.xslt" ) )
-					f.CopyTo( Path.Combine( Path.Combine( workspace.ResourceDirectory, "xslt" ), f.Name ), true );
+				{
+					string destPath = Path.Combine( Path.Combine( workspace.ResourceDirectory, "xslt" ), f.Name );
+					// change to allow overwrite if clean-up failed last time
+					if (File.Exists(destPath)) File.SetAttributes( destPath, FileAttributes.Normal );
+					f.CopyTo( destPath, true );
+					// set attributes to allow delete later
+					File.SetAttributes( destPath, FileAttributes.Normal );
+				}
 
 #else
 				EmbeddedResources.WriteEmbeddedResources(this.GetType().Module.Assembly,
@@ -306,13 +313,13 @@ namespace NDoc.Documenter.LinearHtml
 				}
 
 				OnDocBuildingStep(10, "Merging XML documentation...");
-				// Let the Documenter base class do it's thing.
-				string xmlBuffer = MakeXml(project);
 
-				// Load the XML documentation
+				// Let the Documenter base class do it's thing.
+				string xmlFileName = MakeXmlFile(project);
+				//File.Copy(xmlFileName, "ndoc-tmp.xml", true); // just for debugging
 				XmlDocument xmlDocumentation = new XmlDocument();
-				xmlDocumentation.LoadXml(xmlBuffer);
-				xmlBuffer = null;
+				xmlDocumentation.Load(xmlFileName);
+				File.Delete(xmlFileName);
 
 #if USE_XML_DOCUMENT
 				xPathNavigator = xmlDocumentation.CreateNavigator();
@@ -336,7 +343,7 @@ namespace NDoc.Documenter.LinearHtml
 				OnDocBuildingStep(50, "Generating HTML page...");
 				MakeHtml(this.MainOutputFile);
 				OnDocBuildingStep(100, "Done.");
-				workspace.RemoveResourceDirectory();
+				workspace.Clean();
 			}
 			catch(Exception ex)
 			{
@@ -918,15 +925,21 @@ namespace NDoc.Documenter.LinearHtml
 		private bool MakeHtml(string outputFileName)
 		{
 			StartWriters();
-			xPathNavigator.MoveToRoot();
-			xPathNavigator.MoveToFirstChild(); // moves to doc
-			xPathNavigator.MoveToFirstChild(); // moves to assemblies
+			XPathNavigator assyNav = GetDescendantNodeWithName(xPathNavigator, "assembly");
 
 			// for each assembly...
 			do 
 			{
-				MakeHtmlForAssembly(xPathNavigator);
-			} while(xPathNavigator.MoveToNext());
+				if (assyNav.Name == "assembly")
+				{
+					MakeHtmlForAssembly(assyNav);
+				}
+				else
+				{
+					Trace.WriteLine(String.Format("Skipping non-assembly node name {0}", 
+						assyNav.Name));
+				}
+			} while(assyNav.MoveToNext());
 
 			EndWriters(); // prep for emit
 			EmitHtml(outputFileName);
@@ -951,6 +964,7 @@ namespace NDoc.Documenter.LinearHtml
 			// foreach module...
 			do 
 			{
+				Trace.WriteLine(String.Format("Making HTML for assembly {0}", assemblyName));
 				MakeHtmlForModule(nav, assemblyName, assemblyVersion);
 			} while(nav.MoveToNext());
 
