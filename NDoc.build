@@ -3,8 +3,8 @@
     <!-- Global project settings -->
     <property name="project.name" value="ndoc" />
     <property name="project.version" value="1.3" />
-    <property name="project.release.type" value="beta2" /> <!-- dev / alpha / beta# / rc# / release -->
-    <property name="project.build.config" value="debug" readonly="false" />
+    <property name="project.release.type" value="rc1" /> <!-- dev / alpha / beta# / rc# / release -->
+    <property name="project.build.config" value="release" readonly="false" />
     <property name="project.build.package" value="false" readonly="false" />
     <property name="build.number" value="${math::abs(math::floor(timespan::get-total-days(datetime::now() - datetime::parse('01/01/2000'))))}" />
     <property name="build.dir" value="${nant.project.basedir}/bin" readonly="false" />
