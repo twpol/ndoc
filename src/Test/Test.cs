@@ -32,6 +32,11 @@ namespace NDoc.Test
 		/// </remarks>
 		public Class(int i1, int i2, int i3) { }
 
+		/// <summary>
+		/// This is the static constructor.
+		/// </summary>
+		static Class() { }
+
 		/// <summary>Holds an <c>int</c> value.</summary>
 		public int Field;
 
