@@ -66,6 +66,9 @@ Global
 		{2929DFA6-FFCF-4110-B8B5-3005A087B58A}.Release.ActiveCfg = Release|.NET
 		{2929DFA6-FFCF-4110-B8B5-3005A087B58A}.Release.Build.0 = Release|.NET
 	EndGlobalSection
+	GlobalSection(SolutionItems) = postSolution
+		Item:1 = Help\tags.html
+	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
 	GlobalSection(ExtensibilityAddIns) = postSolution
