@@ -33,23 +33,24 @@ namespace NDoc.Core
 		{
 			_Name = name;
 
-			ShowMissingSummaries = false;
-			ShowMissingRemarks = false;
-			ShowMissingParams = false;
-			ShowMissingReturns = false;
-			ShowMissingValues = false;
+			_ShowMissingSummaries = false;
+			_ShowMissingRemarks = false;
+			_ShowMissingParams = false;
+			_ShowMissingReturns = false;
+			_ShowMissingValues = false;
 
-			DocumentInternals = false;
-			DocumentProtected = true;
-			DocumentPrivates = false;
-			DocumentEmptyNamespaces = false;
+			_DocumentInternals = false;
+			_DocumentProtected = true;
+			_DocumentPrivates = false;
+			_DocumentEmptyNamespaces = false;
 
-			IncludeAssemblyVersion = false;
-			CopyrightText = string.Empty;
-			CopyrightHref = string.Empty;
+			_IncludeAssemblyVersion = false;
+			_CopyrightText = string.Empty;
+			_CopyrightHref = string.Empty;
 
-			SkipNamespacesWithoutSummaries = false;
-			AddPropertyBackerSummaries = false;
+			_SkipNamespacesWithoutSummaries = false;
+			_AutoPropertyBackerSummaries = false;
+			_AutoDocumentConstructors = true;
 		}
 
 		private Project _Project;
@@ -431,9 +432,9 @@ namespace NDoc.Core
 			}
 		}
 
-		bool _AddPropertyBackerSummaries;
+		bool _AutoPropertyBackerSummaries;
 
-		/// <summary>Gets or sets the AddPropertyBackerSummaries property.</summary>
+		/// <summary>Gets or sets the AutoPropertyBackerSummaries property.</summary>
 		[
 		Category("Documentation Main Settings"),
 		Description("If true, the documenter will automatically add a summary "
@@ -443,15 +444,36 @@ namespace NDoc.Core
 			+ "Currently the naming conventions supported are such that "
 			+ "fields '_Length' and 'length' will be inferred to back property 'Length'."),
 		]
-		public bool AddPropertyBackerSummaries
+		public bool AutoPropertyBackerSummaries
 		{
-			get { return _AddPropertyBackerSummaries; }
+			get { return _AutoPropertyBackerSummaries; }
 
 			set
 			{
-				_AddPropertyBackerSummaries = value;
+				_AutoPropertyBackerSummaries = value;
 				SetDirty();
 			}
 		}
+
+		bool _AutoDocumentConstructors;
+
+		/// <summary>Gets or sets the AutoDocumentConstructors property.</summary>
+		/// <remarks>If this is true, default constructors without /doc summary
+		/// comments will be automatically documented.</remarks>
+		[
+		Category("Documentation Main Settings"),
+		Description("Turning this flag on will enable automatic summary documentation for default constructors.")
+		]
+		public bool AutoDocumentConstructors
+		{
+			get { return _AutoDocumentConstructors; }
+
+			set
+			{
+				_AutoDocumentConstructors = value;
+				SetDirty();
+			}
+		}
+
 	}
 }

@@ -1843,13 +1843,46 @@ namespace NDoc.Core
 			WriteEndDocumentation(writer);
 		}
 
+		//if the constructor has no parameters and no summary,
+		//add a default summary text.
+		private bool DoAutoDocumentConstructor(
+			XmlWriter writer,
+			string memberName,
+			ConstructorInfo constructor)
+		{
+			BaseDocumenterConfig conf = (BaseDocumenterConfig)config;
+			if (conf.AutoDocumentConstructors)
+			{		
+				if (constructor.GetParameters().Length == 0)
+				{
+					string xPathExpr = "/doc/members/member[@name=\"" + memberName + "\"]";
+					XmlNode xmlNode = currentSlashDoc.SelectSingleNode(xPathExpr);
+
+					XmlNode summary;
+					if (xmlNode == null
+						|| (summary = xmlNode.SelectSingleNode("summary")) == null
+						|| summary.InnerText.Length == 0)
+					{
+						WriteStartDocumentation(writer);
+						writer.WriteElementString("summary", "Initializes a new instance of the " 
+							+ constructor.DeclaringType.Name + " class.");
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+
 		private void WriteConstructorDocumentation(
 			XmlWriter writer,
 			string memberName,
 			ConstructorInfo constructor)
 		{
-			CheckForMissingSummaryAndRemarks(writer, memberName);
-			CheckForMissingParams(writer, memberName, constructor.GetParameters());
+			if (!DoAutoDocumentConstructor(writer, memberName, constructor))
+			{
+				CheckForMissingSummaryAndRemarks(writer, memberName);
+				CheckForMissingParams(writer, memberName, constructor.GetParameters());
+			}
 			WriteSlashDocElements(writer, memberName);
 			WriteEndDocumentation(writer);
 		}
@@ -1940,7 +1973,7 @@ namespace NDoc.Core
 			string memberName,
 			Type type)
 		{
-			if (!MyConfig.AddPropertyBackerSummaries) return;
+			if (!MyConfig.AutoPropertyBackerSummaries) return;
 
 			string xPathExpr = "/doc/members/member[@name=\"" + memberName + "\"]";
 			XmlNode xmlNode = currentSlashDoc.SelectSingleNode(xPathExpr);
