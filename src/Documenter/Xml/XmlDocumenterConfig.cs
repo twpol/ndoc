@@ -30,7 +30,7 @@ namespace NDoc.Documenter.Xml
 		/// <summary>Initializes a new instance of the XmlDocumenterConfig class.</summary>
 		public XmlDocumenterConfig() : base("XML")
 		{
-			OutputFile = @".\docs\doc.xml";
+			OutputFile = @".\doc\doc.xml";
 		}
 
 		string _OutputFile;

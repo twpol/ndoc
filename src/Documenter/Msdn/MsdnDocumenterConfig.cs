@@ -36,7 +36,7 @@ namespace NDoc.Documenter.Msdn
 		/// <summary>Initializes a new instance of the MsdnHelpConfig class.</summary>
 		public MsdnDocumenterConfig() : base("MSDN")
 		{
-			OutputDirectory = @".\docs\Msdn\";
+			OutputDirectory = @".\doc\";
 
 			HtmlHelpName = "Documentation";
 
@@ -45,7 +45,7 @@ namespace NDoc.Documenter.Msdn
 			SplitTOCs = false;
 			DefaulTOC = string.Empty;
 
-			ShowVisualBasic = true;
+			ShowVisualBasic = false;
 			OmitObjectTags = false;
 		}
 
