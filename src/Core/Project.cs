@@ -38,7 +38,6 @@ namespace NDoc.Core
 			_namespaces.ContentsChanged += new EventHandler(ContentsChanged);
 		}
 
-		private bool _IsDirty;
 		private string _projectFile;
 
 		/// <summary>
@@ -758,9 +757,6 @@ namespace NDoc.Core
 			IsDirty = false;
 			_projectFile = "";
 		}
-
-		/// <summary>Raised by projects when they're dirty state changes from false to true.</summary>
-		public event ProjectModifiedEventHandler Modified;
 
 	}
 
