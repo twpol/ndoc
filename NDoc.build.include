@@ -310,8 +310,20 @@
 		<property name="current.sdkdoc.dir" value="${nant.project.basedir}/doc/sdk/${current.runtime.config}/${current.runtime.version}"
 			readonly="false" />
 		<property name="current.sdkdoc.debug" value="${sdkdoc.debug}" readonly="false" />
-		<property name="nant.settings.currentframework" value="${current.runtime.config}-${current.runtime.version}" />
+		<available type="Framework" resource="${current.runtime.config}-${current.runtime.version}-linux" property="current.runtime.available" />
+		<if propertyexists="current.runtime.available" propertytrue="current.runtime.available">
+			<property name="nant.settings.currentframework" value="${current.runtime.config}-${current.runtime.version}-linux" />
+		</if>
+		<ifnot propertyexists="current.runtime.available" propertytrue="current.runtime.available">
+			<property name="nant.settings.currentframework" value="${current.runtime.config}-${current.runtime.version}" />
+		</ifnot>
 		<call target="set-runtime-configuration-flags" force="true" />
+	</target>
+	<!--
+
+	-->
+	<target name="set-mono-1.0-linux-runtime-configuration" depends="check-build-dir, check-current-build-config, check-build-debug, check-build-defines, check-build-optimize">
+		<call target="set-mono-1.0-runtime-configuration" force="true" />	
 	</target>
 	<!--
 

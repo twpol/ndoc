@@ -35,8 +35,7 @@
 	<target name="compile-build" description="Compile current build configuration for all runtime configurations">
 		<echo message="Compiling all runtime configurations for the ${current.build.config} build configuration." />
 		<!-- 
-		
-		build .NET Framework 1.0 version if both the Framework and SDK are available 
+			build .NET Framework 1.0 version if both the Framework and SDK are available 
 		-->
 		<available type="Framework" resource="net-1.0" property="temp.framework.available" />
 		<if propertytrue="temp.framework.available">
@@ -63,8 +62,7 @@
 			</ifnot>
 		</ifnot>
 		<!-- 
-		
-		build .NET Framework 1.0 version if both Framework and SDK are available 
+			build .NET Framework 1.1 version if both Framework and SDK are available 
 		-->
 		<available type="Framework" resource="net-1.1" property="temp.framework.available" />
 		<if propertytrue="temp.framework.available">
@@ -91,8 +89,7 @@
 			</ifnot>
 		</ifnot>
 		<!-- 
-		
-		build Mono 1.0 version if both Framework and SDK are available 
+			build Mono 1.0 version if both Framework and SDK are available 
 		-->
 		<available type="Framework" resource="mono-1.0" property="temp.framework.available" />
 		<if propertytrue="temp.framework.available">
@@ -111,11 +108,29 @@
 			</ifnot>
 		</if>
 		<ifnot propertytrue="temp.framework.available">
-			<if propertyexists="project.build.package" propertytrue="project.build.package">
-				<fail message="Mono 1.0 is not available." />
+			<available type="Framework" resource="mono-1.0-linux" property="temp.framework.available" />
+			<if propertytrue="temp.framework.available">
+				<available type="FrameworkSDK" resource="mono-1.0-linux" property="temp.frameworksdk.available" />
+				<if propertytrue="temp.frameworksdk.available">
+					<call target="set-mono-1.0-linux-runtime-configuration" force="true" />
+					<call target="compile" force="true" />
+				</if>
+				<ifnot propertytrue="temp.frameworksdk.available">
+					<if propertyexists="project.build.package" propertytrue="project.build.package">
+						<fail message="The Mono SDK 1.0 is not available." />
+					</if>
+					<ifnot propertyexists="project.build.package" propertytrue="project.build.package">
+						<echo message="The Mono SDK 1.0 is not available. Build skipped." />
+					</ifnot>
+				</ifnot>
 			</if>
-			<ifnot propertyexists="project.build.package" propertytrue="project.build.package">
-				<echo message="Mono 1.0 is not available. Build skipped." />
+			<ifnot propertytrue="temp.framework.available">
+				<if propertyexists="project.build.package" propertytrue="project.build.package">
+					<fail message="Mono 1.0 is not available." />
+				</if>
+				<ifnot propertyexists="project.build.package" propertytrue="project.build.package">
+					<echo message="Mono 1.0 is not available. Build skipped." />
+				</ifnot>
 			</ifnot>
 		</ifnot>
 	</target>
@@ -143,11 +158,7 @@
 		<delete file="${current.bin.dir}/ndoc.snk" />
 	</target>
 	<!--
-
-
-
-	those targets are to help debugging ndoc on mono::
-
+		Targets to help debugging ndoc on mono
 	-->
 	<target name="mono" description="Builds on mono::">
 		<call target="set-mono-1.0-runtime-configuration" force="true" />
