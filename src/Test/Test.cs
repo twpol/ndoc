@@ -1429,6 +1429,7 @@ namespace NDoc.Test.Attributes
 	/// </summary>
 	[Author("Jane Programmer", Version = 2), IsTested()]
 	[XmlType(Namespace="NDoc/Test/Order")]
+	[Serializable]
 	public class Order
 	{
 		/// <summary>
@@ -1442,6 +1443,9 @@ namespace NDoc.Test.Attributes
 		/// </summary>
 		[XmlElement]
 		public string What = "";
+
+		[NonSerialized]
+		public bool dummy = true;
 	}
 
 }
