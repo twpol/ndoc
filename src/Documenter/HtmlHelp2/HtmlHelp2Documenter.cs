@@ -46,7 +46,7 @@ namespace NDoc.Documenter.HtmlHelp2
 			{
 				if ((MyConfig.OutputTarget & OutputType.HtmlHelp) > 0)
 				{
-					return Path.Combine( MyConfig.OutputDirectory, MyConfig.HtmlHelpName + ".Hxs");
+					return Path.Combine( MyConfig.OutputDirectory, MyConfig.HtmlHelpName + ".HxC");
 				}
 				else
 				{
