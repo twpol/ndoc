@@ -296,44 +296,75 @@
 		</tr>
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="method[@declaringType and not(@overload)]">
+	<xsl:template match="method[@declaringType]">
 		<xsl:variable name="name" select="@name" />
 		<xsl:variable name="declaring-type-id" select="concat('T:', @declaringType)" />
-		<tr VALIGN="top">
-			<xsl:variable name="declaring-class" select="//class[@id=$declaring-type-id]" />
-			<xsl:choose>
-				<xsl:when test="$declaring-class">
-					<td width="50%">
-						<a>
-							<xsl:attribute name="href">
-								<xsl:call-template name="get-filename-for-method">
-									<xsl:with-param name="method" select="$declaring-class/method[@name=$name]" />
-								</xsl:call-template>
-							</xsl:attribute>
+		<xsl:if test="not(preceding-sibling::method[@name=$name])">
+			<tr VALIGN="top">
+				<xsl:variable name="declaring-class" select="//class[@id=$declaring-type-id]" />
+				<xsl:choose>
+					<xsl:when test="$declaring-class">
+						<xsl:choose>
+							<xsl:when test="following-sibling::method[@name=$name]">
+								<td width="50%">
+									<a>
+										<xsl:attribute name="href">
+											<xsl:call-template name="get-filename-for-individual-member-overloads">
+												<xsl:with-param name="member">
+													<xsl:value-of select="'method'" />
+												</xsl:with-param>
+											</xsl:call-template>
+										</xsl:attribute>
+										<xsl:value-of select="@name" />
+									</a>
+									<xsl:text> (inherited from </xsl:text>
+									<b>
+										<xsl:call-template name="get-datatype">
+											<xsl:with-param name="datatype" select="@declaringType" />
+										</xsl:call-template>
+									</b>
+									<xsl:text>)</xsl:text>
+								</td>
+								<td width="50%">
+									<xsl:text>Overloaded. </xsl:text>
+									<xsl:apply-templates select="documentation/summary/node()" mode="slashdoc" />
+								</td>
+							</xsl:when>
+							<xsl:otherwise>
+								<td width="50%">
+									<a>
+										<xsl:attribute name="href">
+											<xsl:call-template name="get-filename-for-method">
+												<xsl:with-param name="method" select="$declaring-class/method[@name=$name]" />
+											</xsl:call-template>
+										</xsl:attribute>
+										<xsl:value-of select="@name" />
+									</a>
+									<xsl:text> (inherited from </xsl:text>
+									<b>
+										<xsl:call-template name="get-datatype">
+											<xsl:with-param name="datatype" select="@declaringType" />
+										</xsl:call-template>
+									</b>
+									<xsl:text>)</xsl:text>
+								</td>
+								<td width="50%">
+									<xsl:apply-templates select="//class[@id=$declaring-type-id]/method[@name=$name]/documentation/summary/node()" mode="slashdoc" />
+								</td>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:when>
+					<xsl:otherwise>
+						<td width="50%">
 							<xsl:value-of select="@name" />
-						</a>
-						<xsl:text> (inherited from </xsl:text>
-						<b>
-							<xsl:call-template name="get-datatype">
-								<xsl:with-param name="datatype" select="@declaringType" />
-							</xsl:call-template>
-						</b>
-						<xsl:text>)</xsl:text>
-					</td>
-					<td width="50%">
-						<xsl:apply-templates select="//class[@id=$declaring-type-id]/method[@name=$name]/documentation/summary/node()" mode="slashdoc" />
-					</td>
-				</xsl:when>
-				<xsl:otherwise>
-					<td width="50%">
-						<xsl:value-of select="@name" />
-					</td>
-					<td width="50%">
-						<xsl:text>See the third party documentation for more information.</xsl:text>
-					</td>
-				</xsl:otherwise>
-			</xsl:choose>
-		</tr>
+						</td>
+						<td width="50%">
+							<xsl:text>See the third party documentation for more information.</xsl:text>
+						</td>
+					</xsl:otherwise>
+				</xsl:choose>
+			</tr>
+		</xsl:if>
 	</xsl:template>
 	<!-- -->
 	<xsl:template match="method[@declaringType and starts-with(@declaringType, 'System.')]">
