@@ -172,7 +172,10 @@ namespace NDoc.Core
 							value2 = Convert.ChangeType(value, property.PropertyType);
 						}
 
-						property.SetValue(this, value2, null);
+						if (property.CanWrite)
+						{
+							property.SetValue(this, value2, null);
+						}
 					}
 				}
 				reader.Read(); // Advance.
