@@ -24,6 +24,7 @@
 				<includes name="ndoc\**" />
 				<excludes name="ndoc\build\**" />
 				<excludes name="ndoc\docs\**" />
+				<excludes name="ndoc\examples\docs\**" />
 				<excludes name="ndoc\web\**" />
 				<excludes name="**\bin\**" />
 				<excludes name="**\obj\**" />
