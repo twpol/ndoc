@@ -105,6 +105,15 @@ namespace NDoc.Core
 			IsDirty = true;
 
 			_AssemblySlashDocs.Add(assemblySlashDoc);
+
+			//add any new namespaces if namespace already created...
+			if (_namespaces!=null)
+			{
+				AssemblyResolver assemblyResolver = SetupAssemblyResolver();
+				AddNamespacesFromAssembly(GetFullPath(assemblySlashDoc.AssemblyFilename));
+				assemblyResolver.Deinstall();
+			}
+
 		}
 
 		private bool FindAssemblySlashDoc(AssemblySlashDoc assemblySlashDoc)
@@ -778,7 +787,7 @@ namespace NDoc.Core
 		public void Clear()
 		{
 			_AssemblySlashDocs.Clear();
-			if (_namespaces!=null) _namespaces.Clear();
+			if (_namespaces!=null) _namespaces=null;
 
 			foreach (IDocumenter documenter in Documenters)
 			{
