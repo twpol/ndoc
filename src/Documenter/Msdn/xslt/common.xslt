@@ -588,10 +588,12 @@
 				</ol>
 			</xsl:when>
 			<xsl:when test="@type='table'">
-				<table border="1">
-					<xsl:apply-templates select="listheader" mode="slashdoc" />
-					<xsl:apply-templates select="item" mode="slashdoc" />
-				</table>
+				<div class="table">
+					<table cellspacing="0">
+						<xsl:apply-templates select="listheader" mode="slashdoc" />
+						<xsl:apply-templates select="item" mode="slashdoc" />
+					</table>
+				</div>
 			</xsl:when>
 			<xsl:otherwise> <!-- do nothing? --></xsl:otherwise>
 		</xsl:choose>
@@ -604,25 +606,25 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template match="list[@type='table']/listheader" mode="slashdoc">
-		<tr>
+		<tr valign="top">
 			<xsl:apply-templates mode="slashdoc" />
 		</tr>
 	</xsl:template>
 	<!-- -->
 	<xsl:template match="list[@type='table']/listheader/term" mode="slashdoc">
-		<th>
+		<th width="50%">
 			<xsl:apply-templates select="./node()" mode="slashdoc" />
 		</th>
 	</xsl:template>
 	<!-- -->
 	<xsl:template match="list[@type='table']/listheader/description" mode="slashdoc">
-		<th>
+		<th width="50%">
 			<xsl:apply-templates select="./node()" mode="slashdoc" />
 		</th>
 	</xsl:template>
 	<!-- -->
 	<xsl:template match="list[@type='table']/item" mode="slashdoc">
-		<tr>
+		<tr valign="top">
 			<xsl:apply-templates mode="slashdoc" />
 		</tr>
 	</xsl:template>
