@@ -6,7 +6,7 @@
     <property name="project.release.type" value="beta2" /> <!-- dev / alpha / beta# / rc# / release -->
     <property name="project.build.config" value="debug" readonly="false" />
     <property name="project.build.package" value="false" readonly="false" />
-    <property name="build.number" value="${math::abs(math::floor(timespan::get-total-days(datetime::now() - convert::to-datetime('01/01/2000'))))}" />
+    <property name="build.number" value="${math::abs(math::floor(timespan::get-total-days(datetime::now() - datetime::parse('01/01/2000'))))}" />
     <property name="build.dir" value="${nant.project.basedir}/bin" readonly="false" />
     <!-- Include helpers -->
     <include buildfile="NDoc.build.include" />
