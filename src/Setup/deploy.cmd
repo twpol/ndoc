@@ -7,7 +7,7 @@ scp NDocSetup.msi %1@ndoc.sourceforge.net:/home/groups/n/nd/ndoc/htdocs/setup
 goto end
 
 :deployall
-scp InstMsiA.Exe InstMsiW.Exe NDocSetup.msi Setup.Exe %1@ndoc.sourceforge.net:/home/groups/n/nd/ndoc/htdocs/setup
+scp InstMsiA.Exe InstMsiW.Exe NDocSetup.msi %1@ndoc.sourceforge.net:/home/groups/n/nd/ndoc/htdocs/setup
 goto end
 
 :usage
