@@ -18,11 +18,7 @@
 using System;
 using System.ComponentModel;
 using System.Drawing.Design;
-// In mono 0.25, most classes that should actually be in the System.Design assembly
-// are in the System.Windows.Forms assembly.
-#if !MONO 
 using System.Windows.Forms.Design;
-#endif
 
 using NDoc.Core;
 
@@ -61,7 +57,7 @@ namespace NDoc.Documenter.JavaDoc
 		/// <summary>Gets or sets the OutputDirectory property.</summary>
 		[Category("Documentation Main Settings")]
 		[Description("The output folder.")]
-#if !MONO //System.Windows.Forms.Design.FolderNameEditor is not implemented in mono 0.25
+#if !MONO //System.Windows.Forms.Design.FolderNameEditor is not implemented in mono 0.28
 		[Editor(typeof(FolderNameEditor), typeof(UITypeEditor))]
 #endif
 		public string OutputDirectory

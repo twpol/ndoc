@@ -20,11 +20,7 @@ using System;
 using System.IO;
 using System.ComponentModel;
 using System.Drawing.Design;
-// In mono 0.25, most classes that should actually be in the System.Design assembly
-// are in the System.Windows.Forms assembly.
-#if !MONO 
 using System.Windows.Forms.Design;
-#endif
 
 using NDoc.Core;
 
@@ -47,7 +43,7 @@ namespace NDoc.Documenter.Latex
 		/// <summary>Gets or sets the output directory.</summary>
 		[Category("LaTeX")]
 		[Description("The directory to output the files to.")]
-#if !MONO //System.Windows.Forms.Design.FolderNameEditor is not implemented in mono 0.25
+#if !MONO //System.Windows.Forms.Design.FolderNameEditor is not implemented in mono 0.28
 		[Editor(typeof(FolderNameEditor), typeof(UITypeEditor))]
 #endif
 		public string OutputDirectory
@@ -95,9 +91,7 @@ namespace NDoc.Documenter.Latex
 		/// <summary>Gets or sets the LaTeX compiler path.</summary>
 		[Category("LaTeX")]
 		[Description("Path to the LaTeX executable (Set to empty if you do not have LaTeX installed).")]
-#if !MONO //System.Windows.Forms.Design.FolderNameEditor is not implemented in mono 0.25
 		[Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
-#endif
 		public string LatexCompiler
 		{
 			get

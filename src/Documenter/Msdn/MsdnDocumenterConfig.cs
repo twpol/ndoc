@@ -19,11 +19,7 @@ using System;
 using System.ComponentModel;
 using System.Drawing.Design;
 using System.IO;
-// In mono 0.25, most classes that should actually be in the System.Design assembly
-// are in the System.Windows.Forms assembly.  This has been fixed in Mono post 0.25.
-#if !MONO 
 using System.Windows.Forms.Design;
-#endif
 
 using Microsoft.Win32;
 
@@ -77,7 +73,7 @@ namespace NDoc.Documenter.Msdn
 		/// <summary>Gets or sets the OutputDirectory property.</summary>
 		[Category("Documentation Main Settings")]
 		[Description("The directory in which .html files and the .chm file will be generated.")]
-#if !MONO //System.Windows.Forms.Design.FolderNameEditor is not implemented in mono 0.25
+#if !MONO //System.Windows.Forms.Design.FolderNameEditor is not implemented in mono 0.28
 		[Editor(typeof(FolderNameEditor), typeof(UITypeEditor))]
 #endif
 		public string OutputDirectory
@@ -302,12 +298,7 @@ namespace NDoc.Documenter.Msdn
 		[Category("HTML Help Options")]
 		[Description("The name of an html file to be included as the root home page. "
 			+ "SplitTOCs is disabled when this property is set.")]
-#if (!MONO)
-		// In mono 0.25 most classes in the System.Windows.Forms.Design assembly 
-		// are located in the System.Windows.Forms assembly while they should 
-		// actually be in the System.Design assembly.
 		[Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
-#endif
 		public string RootPageFileName
 		{
 			get { return _RootPageFileName; }

@@ -293,16 +293,8 @@ namespace NDoc.Core
 					Assembly assembly = LoadAssembly(path);
 
 					currentSlashDoc = new XmlDocument();
-
-#if MONO //mono v0.25 does not support XmlDocument.Load()
-					using (TextReader reader = new StreamReader(assemblySlashDoc.SlashDocFilename))
-					{
-						string xml = reader.ReadToEnd();
-						currentSlashDoc.LoadXml(xml);
-					}
-#else
 					currentSlashDoc.Load(assemblySlashDoc.SlashDocFilename);
-#endif
+
 					WriteAssembly(writer, assembly);
 
 					currentSlashDoc = null;
@@ -626,7 +618,7 @@ namespace NDoc.Core
 
 		private void WriteNamespaces(XmlWriter writer, Module module)
 		{
-#if MONO    //Module.GetTypes() is not implemented in mono v0.25
+#if MONO    //Module.GetTypes() is not implemented in mono v0.28
 			//HACK: so we cheat and load assembly types
 			Type[] types = module.Assembly.GetTypes();
 #else

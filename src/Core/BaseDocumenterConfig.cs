@@ -18,12 +18,10 @@
 using System;
 using System.Collections;
 using System.ComponentModel;
-using System.Reflection;
-using System.Xml;
 using System.Drawing.Design;
-#if !MONO 
+using System.Reflection;
 using System.Windows.Forms.Design;
-#endif
+using System.Xml;
 
 namespace NDoc.Core
 {
@@ -421,8 +419,8 @@ namespace NDoc.Core
 		/// <summary>Gets or sets the base directory used to resolve directory and assembly references.</summary>
 		[Category("Documentation Main Settings")]
 		[Description("The directory used to resolve path specifications and assembly references. The search for assemblies includes this directory and all subdirectories.")]
-#if !MONO //System.Windows.Forms.Design.FolderNameEditor is not implemented in mono 0.25
-		[Editor(typeof(System.Windows.Forms.Design.FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+#if !MONO //System.Windows.Forms.Design.FolderNameEditor is not implemented in mono 0.28
+		[Editor(typeof(FolderNameEditor), typeof(UITypeEditor))]
 #endif
 		public string ReferencesPath
 		{
@@ -596,9 +594,7 @@ namespace NDoc.Core
 		/// <summary>Gets or sets the UseNDocXmlFile property.</summary>
 		[Category("Documentation Main Settings")]
 		[Description("When set, NDoc will use the specified XML file as input instead of reflecting the list of assemblies specified on the project.  Very useful for debugging documenters.  Leave empty for normal usage.")]
-#if (!MONO)
 		[Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
-#endif
 		public string UseNDocXmlFile
 		{
 			get { return _UseNDocXmlFile; }

@@ -18,11 +18,7 @@
 using System;
 using System.ComponentModel;
 using System.Drawing.Design;
-// In mono 0.25, most classes that should actually be in the System.Design assembly
-// are in the System.Windows.Forms assembly.
-#if !MONO 
 using System.Windows.Forms.Design;
-#endif
 
 using NDoc.Core;
 
@@ -42,12 +38,7 @@ namespace NDoc.Documenter.Xml
 		/// <summary>Gets or sets the OutputFile property.</summary>
 		[Category("Documentation Main Settings")]
 		[Description("The path to the XML file to create which will be the combined /doc output and reflection information.")]
-#if (!MONO)
-		// In mono 0.25 most classes in the System.Windows.Forms.Design assembly 
-		// are located in the System.Windows.Forms assembly while they should 
-		// actually be in the System.Design assembly.
 		[Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
-#endif
 		public string OutputFile
 		{
 			get { return _OutputFile; }

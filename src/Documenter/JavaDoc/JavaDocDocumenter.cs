@@ -22,6 +22,7 @@ using System.Xml;
 using System.Xml.Xsl;
 using System.Xml.XPath;
 using System.Reflection;
+
 using NDoc.Core;
 
 namespace NDoc.Documenter.JavaDoc
