@@ -1433,12 +1433,10 @@ namespace NDoc.Documenter.Msdn
 			ExternalHtmlProvider htmlProvider = new ExternalHtmlProvider(MyConfig, filename);
 			StreamWriter streamWriter = null;
 
-			try
-			{
-				streamWriter =  new StreamWriter(
+			using (streamWriter =  new StreamWriter(
 					File.Open(Path.Combine(MyConfig.OutputDirectory, filename), FileMode.Create),
-					new UTF8Encoding(true));
-
+					new UTF8Encoding(true)))
+			{
 				arguments.AddParam("ndoc-title", String.Empty, MyConfig.Title);
 				arguments.AddParam("ndoc-vb-syntax", String.Empty, MyConfig.ShowVisualBasic);
 				arguments.AddParam("ndoc-omit-object-tags", String.Empty, ((MyConfig.OutputTarget & OutputType.HtmlHelp) == 0));
@@ -1454,13 +1452,6 @@ namespace NDoc.Documenter.Msdn
 				arguments.AddExtensionObject("urn:NDocExternalHtml", htmlProvider);
 
 				transform.Transform(xmlDocumentation, arguments, streamWriter);
-			}
-			finally
-			{
-				if (streamWriter != null)
-				{
-					streamWriter.Close();
-				}
 			}
 
 #if DEBUG
