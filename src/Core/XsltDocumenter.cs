@@ -248,6 +248,18 @@ namespace NDoc.Core
 			return classID.Substring(2) + "Constructors.html";
 		}
 
+		private string GetFileNameForConstructor(string classID, XmlNode node)
+		{
+			string overload = "";
+
+			if (node.Attributes["overload"] != null)
+			{
+				overload = node.Attributes["overload"].Value;
+			}
+
+			return classID.Substring(2) + "Constructor" + overload + ".html";
+		}
+
 		private void TransformClass(string classID)
 		{
 			Transform(
@@ -290,6 +302,15 @@ namespace NDoc.Core
 					"constructors", 
 					GetFileNameForConstructors(classID), 
 					"class-id", classID);
+			}
+
+			foreach (XmlNode node in nodes)
+			{
+				Transform(
+					"constructor",
+					GetFileNameForConstructor(classID, node),
+					"class-id", classID,
+					"constructor-id", node.Attributes["id"].Value);
 			}
 		}
 
