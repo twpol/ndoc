@@ -123,23 +123,6 @@ namespace NDoc.Documenter.HtmlHelp2
 		}
 
 		
-		short _LangID = 1033;
-
-		/// <summary>The language ID of the locale used by the compiled helpfile</summary>
-		[Category(HTMLHELP2_CONFIG_CATEGORY)]
-		[Description("The ID of the language the help file is in.")]
-		[DefaultValue(1033)]
-		public short LangID
-		{
-			get { return _LangID; }
-
-			set
-			{
-				_LangID = value;
-				SetDirty();
-			}
-		}	
-
 		bool _DeleteCHM = false;
 
 		/// <summary>Flag that indicates whether to keep the CHM file after successful conversion</summary>
