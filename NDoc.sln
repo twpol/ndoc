@@ -94,9 +94,11 @@ Global
 		{2929DFA6-FFCF-4110-B8B5-3005A087B58A}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
+		COPYING.txt = COPYING.txt
 		NDoc.build = NDoc.build
 		NDoc.build.include = NDoc.build.include
 		NDoc.build.package = NDoc.build.package
+		README.txt = README.txt
 		doc\tags.html = doc\tags.html
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
