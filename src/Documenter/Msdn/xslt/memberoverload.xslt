@@ -56,7 +56,7 @@
 				<div id="content">
 					<xsl:call-template name="overloads-summary-section" />
 					<xsl:call-template name="overloads-note-section" />
-					<h3>Overload List</h3>
+					<h4>Overload List</h4>
 					<xsl:for-each select="parent::node()/*[@name=$memberName]">
 						<p class="i1">
 							<xsl:choose>
