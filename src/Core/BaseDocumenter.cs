@@ -2103,7 +2103,7 @@ namespace NDoc.Core
 			}
 			else
 			{
-				returnType = ((ParameterInfo)parameters.GetValue(0)).ParameterType;
+				returnType = ((ParameterInfo)parameters.GetValue(parmCount-1)).ParameterType;
 				parmCount--;
 				types = new Type[parmCount];
 				for(int i=0; i<parmCount;i++)
