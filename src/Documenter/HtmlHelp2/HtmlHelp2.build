@@ -12,8 +12,8 @@
 						<includes name="../../CommonAssemblyInfo.cs" />
 					</sources>
 					<references>
-						<includes name="${nant.settings.currentframework.frameworkassemblydirectory}/System.dll" />
-						<includes name="${nant.settings.currentframework.frameworkassemblydirectory}/System.Xml.dll" />
+						<includes name="System.dll" />
+						<includes name="System.Xml.dll" />
 						<includes name="${current.bin.dir}/Interop.MSHelpCompiler.dll" />
 						<includes name="${mshtml.primary.interop.assembly}" />
 						<includes name="${current.bin.dir}/NDoc.Core.dll" />

@@ -6,7 +6,7 @@
 				<includes name="**/*.cs" />
 				<includes name="../CommonAssemblyInfo.cs" />
 			</sources>
-			<references basedir="${nant.settings.currentframework.frameworkassemblydirectory}">
+			<references>
 				<includes name="System.dll" />
 				<includes name="System.Xml.dll" />
 			</references>

@@ -8,13 +8,13 @@
 				<includes name="../CommonAssemblyInfo.cs" />
 			</sources>
 			<references>
-				<includes name="${nant.settings.currentframework.frameworkassemblydirectory}/System.dll" />
-				<includes name="${nant.settings.currentframework.frameworkassemblydirectory}/System.Drawing.dll" />
-				<includes name="${nant.settings.currentframework.frameworkassemblydirectory}/System.Windows.Forms.dll" />
-				<includes name="${nant.settings.currentframework.frameworkassemblydirectory}/System.Xml.dll" />
-				<includes name="${nant.settings.currentframework.frameworkassemblydirectory}/System.Data.dll" />
-				<includes name="${current.bin.dir}\NDoc.Core.dll" />
-				<includes name="${current.bin.dir}\NDoc.VisualStudio.dll" />
+				<includes name="System.dll" />
+				<includes name="System.Drawing.dll" />
+				<includes name="System.Windows.Forms.dll" />
+				<includes name="System.Xml.dll" />
+				<includes name="System.Data.dll" />
+				<includes name="${current.bin.dir}/NDoc.Core.dll" />
+				<includes name="${current.bin.dir}/NDoc.VisualStudio.dll" />
 			</references>
 			<resources>
 				<includes name="**/*.resx" />
