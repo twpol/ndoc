@@ -125,12 +125,9 @@ namespace NDoc.Test
 		/// </para><para>
 		/// The above paragraph is only intended to test crefs on different member types...
 		/// </para></remarks>
-		/// <event cref="Event">
-		/// Raised when something occurs.
-		/// </event>
-		/// <event cref="ProtectedEvent">
-		/// Raised when something else occurs.
-		/// </event>
+		/// <event cref="Event">Raised when something occurs.</event>
+		/// <event cref="AccessorsEvent">Raised when it occurs...</event>
+		/// <event cref="ProtectedEvent">Raised when something else occurs.</event>
 		/// <event cref="EventWithArgs">Raised when it feels like it.</event>
 		/// <event cref="EventWithMoreArgs">Never raised?</event>
 		/// <event cref="MultiEvent">Raised many times?</event>
@@ -148,6 +145,16 @@ namespace NDoc.Test
 			EventWithArgs(this, new EventArgsTest());
 			EventWithMoreArgs(this, new EventArgsDerived());
 			MultiEvent(this, new EventArgsOne());
+		}
+
+		/// <summary>A private event.</summary>
+		private event Handler _event;
+
+		/// <summary>This event uses the <b>add</b> and <b>remove</b> accessors.</summary>
+		public event Handler AccessorsEvent
+		{
+			add { _event += value; }
+			remove { _event -= value; }
 		}
 
 		/// <summary>This event has arguments.</summary>
