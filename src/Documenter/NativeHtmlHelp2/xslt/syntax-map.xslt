@@ -859,9 +859,11 @@
 				<xsl:choose>
 					<xsl:when test="contains($runtime-type, '[')">
 						<xsl:value-of select="concat($new-type, '[', substring-after($runtime-type, '['))" />
+						<xsl:if test="$new-type = $old-type"><xsl:text>*</xsl:text></xsl:if>
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:value-of select="$new-type" />
+						<xsl:if test="$new-type = $old-type"><xsl:text>*</xsl:text></xsl:if>
 					</xsl:otherwise>
 				</xsl:choose>			
 			</xsl:when>
