@@ -12,31 +12,61 @@ namespace NDoc.Core
 	/// <summary>
 	/// This class manages read write access to application settings
 	/// </summary>
+	/// 
 	public class Settings : IDisposable
 	{
 
 		/// <summary>
-		/// The full path the the default settings file
+		/// The full path the the default user settings file
 		/// </summary>
-		public static string ApplicationSettingsFile
+		public static string UserSettingsFile
 		{
 			get
 			{
-				return Path.Combine( SettingsLocation, "settings.xml" );
+				return Path.Combine( UserSettingsLocation, "settings.xml" );
+			}
+		}
+		
+		/// <summary>
+		/// The full path the the default machine settings file
+		/// </summary>
+		public static string MachineSettingsFile
+		{
+			get
+			{
+				return Path.Combine( MachineSettingsLocation, "settings.xml" );
 			}
 		}
 
 		/// <summary>
-		/// The path to the folder where the settings file is stored
+		/// The path to the folder where the user specific settings file is stored
 		/// </summary>
-		public static string SettingsLocation
+		private static string UserSettingsLocation
+		{
+			get
+			{
+				return Path.Combine( Environment.GetFolderPath( Environment.SpecialFolder.LocalApplicationData ), SettingsFolderName );
+			}
+		}
+
+		/// <summary>
+		/// The path to the folder where the machine wide settings file is stored
+		/// </summary>
+		private static string MachineSettingsLocation
+		{
+			get
+			{
+				return Path.Combine( Environment.GetFolderPath( Environment.SpecialFolder.CommonApplicationData ), SettingsFolderName );
+			}
+		}
+
+		private static string SettingsFolderName
 		{
 			get
 			{
 				// create a path for this major.minor version of the app
 				Version version = Assembly.GetExecutingAssembly().GetName().Version;
-				string folder = string.Format( "NDoc.{0}.{1}", version.Major, version.Minor );
-				return Path.Combine( Environment.GetFolderPath( Environment.SpecialFolder.LocalApplicationData ), folder );
+				return string.Format( "NDoc.{0}.{1}", version.Major, version.Minor );
 			}
 		}
 
@@ -49,6 +79,7 @@ namespace NDoc.Core
 		/// <param name="filePath">Path to serialized settings</param>
 		public Settings( string filePath )
 		{
+			// if the file exists, try and open it
 			if ( File.Exists( filePath ) )
 			{
 				XmlTextReader reader = null;
@@ -63,6 +94,8 @@ namespace NDoc.Core
 				}
 				catch ( Exception )
 				{
+					// if for any reason we couldn't parse the settings
+					// document, we're gonna delete it and create a new one
 					data = null;
 				}
 				finally
@@ -72,6 +105,8 @@ namespace NDoc.Core
 				}
 			}
 
+			// if we weren't able to open the file for any reason
+			// create a new one
 			if ( data == null )			
 				data = CreateNew( filePath );
 			
