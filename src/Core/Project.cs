@@ -189,11 +189,7 @@ namespace NDoc.Core
 			foreach (Type t in a.GetTypes())
 			{
 				string ns = t.Namespace;
-				if (ns == null)
-				{
-					ns = "(global)";
-				}
-				if (!_namespaces.ContainsKey(ns))
+				if ((ns != null) && (!_namespaces.ContainsKey(ns)))
 				{
 					_namespaces.Add(ns, null);
 				}
