@@ -18,8 +18,14 @@
 				<xsl:when test="local-name() = 'class'">Class</xsl:when>
 				<xsl:when test="local-name() = 'interface'">Interface</xsl:when>
 				<xsl:when test="local-name() = 'structure'">Structure</xsl:when>
-				<xsl:when test="local-name() = 'delegate'">Delegate Sub</xsl:when>
 				<xsl:when test="local-name() = 'enumeration'">Enum</xsl:when>
+				<xsl:when test="local-name() = 'delegate'">
+					<xsl:text>Delegate&#32;</xsl:text>
+					<xsl:choose>
+						<xsl:when test="@returnType = 'System.Void'">Sub</xsl:when>
+						<xsl:otherwise>Function</xsl:otherwise>
+					</xsl:choose>
+				</xsl:when>
 				<xsl:otherwise>ERROR</xsl:otherwise>
 			</xsl:choose>
 			<xsl:text>&#160;</xsl:text>
@@ -47,6 +53,12 @@
 					<br />
 					<xsl:apply-templates select="parameter" mode="vb" />
 					<xsl:text>)</xsl:text>
+					<xsl:if test="@returnType != 'System.Void'">
+						<xsl:text>&#32;As&#32;</xsl:text>
+						<xsl:call-template name="strip-namespace">
+							<xsl:with-param name="name" select="@returnType" />
+						</xsl:call-template>
+					</xsl:if>
 				</xsl:otherwise>
 			</xsl:choose>
 		</pre>

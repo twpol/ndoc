@@ -102,6 +102,9 @@ namespace NDoc.Test
 	/// <summary>This is a simple delegate used by Class.</summary>
 	public delegate void Handler(object sender, EventArgs e);
 
+	/// <summary>This is a multicast delegate.</summary>
+	public delegate int MulticastHandler(object sender, EventArgs e);
+
 	/// <summary>This is an interface.</summary>
 	public interface Interface
 	{
