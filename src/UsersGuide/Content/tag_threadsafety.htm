@@ -13,14 +13,31 @@
 			<dl>
 				<dt><I>static="true|false"</I>&nbsp;
 					<dd>
-						??????????????????????????. <dt><I>instance="true|false"</I>
+						indicates whether static member of this class are 
+						safe for multi-threaded operations. <dt><I>instance="true|false"</I>
 							<dd>
-								??????????????????????????.</dd>
+								indicates whether members of instances 
+								of this type are safe for multi-threaded 
+								operations.</dd>
 			</dl>
 			<h4 class="dtH4">Applies To</h4>
 			<p>Class, Structure.</p>
 			<h4 class="dtH4">Remarks</h4>
 			<h4 class="dtH4">Examples</h4>
+			<pre class="code"><SPAN class="lang">[C#]</SPAN>
+/// &lt;threadsafety static="true" instance="false"/&gt;
+public class MyClass
+{
+   /// not safe across threads
+   public void InstanceMethod()
+   {
+   }
+   
+   /// safe across threads
+   public static void StaticMethod()
+   {
+   }
+}</pre>
 			<h4 class="dtH4">See Also</h4>
 			<p><a HREF="tags.htm"> NDoc&nbsp;Tags</a></p>
 		</div>
