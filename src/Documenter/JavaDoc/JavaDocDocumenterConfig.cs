@@ -27,7 +27,7 @@ namespace NDoc.Documenter.JavaDoc
 {
 	/// <summary>The JavaDoc documenter config class.</summary>
 	[DefaultProperty("OutputDirectory")]
-	public class JavaDocDocumenterConfig : BaseDocumenterConfig
+	public class JavaDocDocumenterConfig : BaseReflectionDocumenterConfig
 	{
 		/// <summary>Initializes a new instance of the JavaDocDocumenterConfig class.</summary>
 		/// <remarks>

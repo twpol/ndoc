@@ -31,7 +31,7 @@ namespace NDoc.Documenter.Msdn
 	/// <para>The MSDN documenter creates a compiled HTML help version 1 help file (CHM).</para>
 	/// </remarks>
 	[DefaultProperty("OutputDirectory")]
-	public class MsdnDocumenterConfig : BaseDocumenterConfig
+	public class MsdnDocumenterConfig : BaseReflectionDocumenterConfig
 	{
 		string outputDirectory;
 		string htmlHelpName;

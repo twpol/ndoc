@@ -14,7 +14,7 @@ namespace NDoc.Documenter.HtmlHelp2
 {
 	/// <summary>CHM to HxS converter/compiler</summary>
 	[Obsolete( "This documenter is now obsolete, you should use the VS.NET (NativeHtmlHelp2) documenter instead" ) ]
-	public class HtmlHelp2Documenter : BaseDocumenter
+	public class HtmlHelp2Documenter : BaseReflectionDocumenter
 	{
 
 		private MsdnDocumenter _HtmlHelp1Documenter = null;

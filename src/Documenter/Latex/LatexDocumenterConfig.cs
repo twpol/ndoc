@@ -35,8 +35,7 @@ namespace NDoc.Documenter.Latex
 	/// You can download a free one from <a href="http://www.miktex.org">www.MiKTeX.org</a>.</para>
 	/// </remarks>
 	[DefaultProperty("OutputDirectory")]
-	public class LatexDocumenterConfig
-		: BaseDocumenterConfig
+	public class LatexDocumenterConfig : BaseReflectionDocumenterConfig
 	{
 		/// <summary/>
 		public LatexDocumenterConfig() : base("LaTeX")

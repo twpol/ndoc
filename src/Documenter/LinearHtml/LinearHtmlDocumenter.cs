@@ -81,7 +81,7 @@ namespace NDoc.Documenter.LinearHtml
 	///	</para> 
 	///	<para>This has a Main for easier and faster test runs outside of NDoc.</para>
 	/// </remarks>
-	public class LinearHtmlDocumenter : BaseDocumenter
+	public class LinearHtmlDocumenter : BaseReflectionDocumenter
 	{
 		#region Fields
 

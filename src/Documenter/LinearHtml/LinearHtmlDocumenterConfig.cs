@@ -27,7 +27,7 @@ namespace NDoc.Documenter.LinearHtml
 {
 	/// <summary>The LinearHtmlDocumenterConfig class.</summary>
 	[DefaultProperty("OutputDirectory")]
-	public class LinearHtmlDocumenterConfig : BaseDocumenterConfig
+	public class LinearHtmlDocumenterConfig : BaseReflectionDocumenterConfig
 	{
 		/// <summary>Initializes a new instance of the MsdnHelpConfig class.</summary>
 		/// <remarks>

@@ -38,7 +38,7 @@ namespace NDoc.Documenter.Latex
 	/// <summary>
 	/// LaTeX generating documenter class.
 	/// </summary>
-	public class LatexDocumenter: BaseDocumenter
+	public class LatexDocumenter: BaseReflectionDocumenter
 	{
 		//private string m_ResourceDirectory;
 

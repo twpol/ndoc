@@ -33,7 +33,7 @@ using NDoc.Core;
 namespace NDoc.Documenter.Msdn
 {
 	/// <summary>The MsdnDocumenter class.</summary>
-	public class MsdnDocumenter : BaseDocumenter
+	public class MsdnDocumenter : BaseReflectionDocumenter
 	{
 		enum WhichType
 		{

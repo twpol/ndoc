@@ -29,7 +29,7 @@ using NDoc.Core;
 namespace NDoc.Documenter.JavaDoc
 {
 	/// <summary>The JavaDoc documenter.</summary>
-	public class JavaDocDocumenter : BaseDocumenter
+	public class JavaDocDocumenter : BaseReflectionDocumenter
 	{
 		/// <summary>Initializes a new instance of the JavaDocDocumenter class.</summary>
 		public JavaDocDocumenter() : base("JavaDoc")

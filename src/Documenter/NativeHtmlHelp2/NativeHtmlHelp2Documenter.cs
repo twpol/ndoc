@@ -33,7 +33,7 @@ using NDoc.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping;
 namespace NDoc.Documenter.NativeHtmlHelp2
 {
 	/// <summary>Native Html Help 2 MSDN.Net documenter</summary>
-	public class NativeHtmlHelp2Documenter : BaseDocumenter
+	public class NativeHtmlHelp2Documenter : BaseReflectionDocumenter
 	{
 
 		/// <summary>Initializes a new instance of the NativeHtmlHelp2Documenter class.</summary>

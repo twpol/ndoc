@@ -51,7 +51,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 	/// <para></para>
 	/// </remarks>
 	[DefaultProperty("OutputDirectory")]
-	public class NativeHtmlHelp2Config : BaseDocumenterConfig
+	public class NativeHtmlHelp2Config : BaseReflectionDocumenterConfig
 	{
 		private const string HTMLHELP2_CONFIG_CATEGORY = "Html Help 2 Settings";
 		private const string DEPLOYMENT_CATEGORY = "Html Help 2 Deployment";
