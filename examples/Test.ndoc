@@ -18,29 +18,31 @@
     </namespaces>
     <documenters>
         <documenter name="JavaDoc">
-            <property name="OutputDirectory" value=".\doc\" />
+            <property name="OutputDirectory" value=".\Test\" />
             <property name="Name" value="JavaDoc" />
             <property name="UseNamespaceDocSummaries" value="True" />
             <property name="CleanIntermediates" value="True" />
             <property name="DocumentAttributes" value="True" />
         </documenter>
         <documenter name="LaTeX">
-            <property name="OutputDirectory" value=".\doc\" />
-            <property name="TextFileFullName" value="Documentation.tex" />
-            <property name="TexFileBaseName" value="Documentation" />
+            <property name="OutputDirectory" value=".\Test\" />
+            <property name="TextFileFullName" value="NDocTest.tex" />
+            <property name="TexFileBaseName" value="NDocTest" />
             <property name="LatexCompiler" value="latex" />
-            <property name="TexFileFullPath" value=".\doc\Documentation.tex" />
+            <property name="TexFileFullPath" value=".\Test\NDocTest.tex" />
             <property name="Name" value="LaTeX" />
+            <property name="UseNamespaceDocSummaries" value="True" />
+            <property name="CleanIntermediates" value="True" />
         </documenter>
         <documenter name="LinearHtml">
-            <property name="OutputDirectory" value=".\doc\" />
+            <property name="OutputDirectory" value=".\Test\" />
             <property name="Title" value="NDoc Test Documentation" />
             <property name="Name" value="LinearHtml" />
             <property name="UseNamespaceDocSummaries" value="True" />
             <property name="CleanIntermediates" value="True" />
         </documenter>
         <documenter name="MSDN">
-            <property name="OutputDirectory" value=".\doc\" />
+            <property name="OutputDirectory" value=".\Test\" />
             <property name="HtmlHelpName" value="NDocTest" />
             <property name="Title" value="NDoc Test Documentation" />
             <property name="IncludeHierarchy" value="True" />
@@ -51,7 +53,7 @@
             <property name="DocumentAttributes" value="True" />
         </documenter>
         <documenter name="VS.NET 2003">
-            <property name="OutputDirectory" value=".\doc\" />
+            <property name="OutputDirectory" value=".\Test\" />
             <property name="HtmlHelpName" value="NDocTest" />
             <property name="Title" value="NDoc Test Documentation" />
             <property name="IncludeHierarchy" value="True" />
@@ -65,7 +67,7 @@
             <property name="DocumentAttributes" value="True" />
         </documenter>
         <documenter name="XML">
-            <property name="OutputFile" value=".\doc\doc.xml" />
+            <property name="OutputFile" value=".\Test\doc.xml" />
             <property name="Name" value="XML" />
         </documenter>
     </documenters>
