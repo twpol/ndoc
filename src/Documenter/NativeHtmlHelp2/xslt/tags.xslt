@@ -116,7 +116,14 @@
 	</xsl:template>
 
 	<xsl:template match="list[@type='bullet']/item/term" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrflist.htm">
-		<b><xsl:apply-templates select="./node()" mode="slashdoc" /> - </b>
+		<xsl:choose>
+			<xsl:when test="../description">
+				<b><xsl:apply-templates select="./node()" mode="slashdoc" /> - </b>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:apply-templates select="./node()" mode="slashdoc" />
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 
 	<xsl:template match="list[@type='bullet']/item/description" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrflist.htm">
@@ -136,7 +143,14 @@
 	</xsl:template>
 
 	<xsl:template match="list[@type='number']/item/term" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrflist.htm">
-		<b><xsl:apply-templates select="./node()" mode="slashdoc" /> - </b>
+		<xsl:choose>
+			<xsl:when test="../description">
+				<b><xsl:apply-templates select="./node()" mode="slashdoc" /> - </b>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:apply-templates select="./node()" mode="slashdoc" />
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 
 	<xsl:template match="list[@type='number']/item/description" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrflist.htm">
@@ -204,6 +218,28 @@
 		<dd>
 			<xsl:apply-templates select="./node()" mode="slashdoc" />
 		</dd>
+	</xsl:template>
+
+	<!--
+	 | MonoDoc/ECMA Tags
+	 +-->
+	<xsl:template match="block[@type='note']" mode="slashdoc">
+		<p><b>Note: </b><xsl:apply-templates mode="slashdoc"/></p>
+	</xsl:template>
+	<xsl:template match="block[@type='behaviors']" mode="slashdoc">
+		<p><h4 class=".dtH4">Operation</h4><xsl:apply-templates select="./node()" mode="slashdoc"/></p>
+	</xsl:template>
+	<xsl:template match="block[@type='overrides']" mode="slashdoc">
+		<p><h4 class=".dtH4">Note to Inheritors</h4><xsl:apply-templates select="./node()" mode="slashdoc"/></p>
+	</xsl:template>
+	<xsl:template match="block[@type='usage']" mode="slashdoc">
+		<p><h4 class=".dtH4">Usage</h4><xsl:apply-templates select="./node()" mode="slashdoc"/></p>
+	</xsl:template>
+	<xsl:template match="block[@type='default']" mode="slashdoc">
+		<p><h4 class=".dtH4">Default</h4><xsl:apply-templates select="./node()" mode="slashdoc"/></p>
+	</xsl:template>
+	<xsl:template match="block[@type='example']" mode="slashdoc">
+		<p><b>For example: </b><xsl:apply-templates mode="slashdoc"/></p>
 	</xsl:template>
 
 	<!--
