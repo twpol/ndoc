@@ -32,6 +32,8 @@ Content\decorating.htm
 Content\Default.htm
 Content\desgineroptions.htm
 Content\documenters.htm
+Content\extensibility-sections.htm
+Content\extensibility.htm
 Content\gettinginvolved.htm
 Content\gettingstarted.htm
 Content\javadoc.htm
@@ -68,17 +70,17 @@ Content\tag_seealso.htm
 Content\tag_summary.htm
 Content\tag_threadsafety.htm
 Content\tag_value.htm
+Content\vsnet-deploying.htm
+Content\vsnet-integrating.htm
+Content\vsnet-linking.htm
 Content\vsnet.htm
 Content\xml.htm
 Content\css\ndoc.css
 Content\images\logo.PNG
 Content\images\sf.GIF
 Content\script\ndoc.js
-Content\extensibility.htm
-Content\extensibility-sections.htm
-Content\vsnet-deploying.htm
-Content\vsnet-integrating.htm
-Content\vsnet-linking.htm
+Content\examples\NamespaceMap.xml
+Content\examples\NamespaceMap.xsd
 
 [MERGE FILES]
 NDocReference.chm
