@@ -129,7 +129,7 @@ namespace NDoc.Documenter.LinearHtml
 		/// <summary>Cast to my type.</summary>
 		private LinearHtmlDocumenterConfig MyConfig
 		{
-			get { return (LinearHtmlDocumenterConfig)Config; }
+			get { return (LinearHtmlDocumenterConfig) Config; }
 		}
 
 		/// <summary>
@@ -604,7 +604,6 @@ namespace NDoc.Documenter.LinearHtml
 		/// <summary>
 		/// Fix code node such that it will be rendered correctly (using pre).
 		/// </summary>
-		/// <param name="topNode"></param>
 		private void FixCodeNodes(XPathNavigator nav)
 		{
 			XmlNode n = null;
@@ -938,12 +937,14 @@ namespace NDoc.Documenter.LinearHtml
 		}
 
 		/// <summary>
-		/// Do the build operations given that the specified XPathNavigator is pointing to
-		/// an module node.
+		/// Do the build operations given that the specified <see cref="XPathNavigator" /> 
+		/// is pointing to a module node.
 		/// </summary>
-		/// <param name="nav">The XPathNavigator pointing to a node of type
-		/// appropriate for this method.</param>
-		void MakeHtmlForModule(XPathNavigator nav, string assemblyName, string assemblyVersion)
+		/// <param name="nav">The <see cref="XPathNavigator" /> pointing to a 
+		/// node of a type that's appropriate for this method.</param>
+        /// <param name="assemblyName">The name of the assembly containing the module.</param>
+        /// <param name="assemblyVersion">The version of the assembly containing the module.</param>
+        void MakeHtmlForModule(XPathNavigator nav, string assemblyName, string assemblyVersion)
 		{
 			string moduleName = nav.GetAttribute("name", "");
 			Console.WriteLine("Module: {0}", nav.GetAttribute("name", ""));
@@ -959,11 +960,11 @@ namespace NDoc.Documenter.LinearHtml
 		}
 
 		/// <summary>
-		/// Do the build operations given that the specified XPathNavigator is pointing to
-		/// a namespace node.
+		/// Do the build operations given that the specified <see cref="XPathNavigator" /> 
+		/// is pointing to a namespace node.
 		/// </summary>
-		/// <param name="nav">The XPathNavigator pointing to a node of type
-		/// appropriate for this method.</param>
+		/// <param name="nav">The <see cref="XPathNavigator" /> pointing to a 
+		/// node of a type that's appropriate for this method.</param>
 		/// <param name="assemblyName">The name of the assembly containing this namespace.</param>
 		/// <param name="assemblyVersion">The version of the assembly containing this namespace.</param>
 		void MakeHtmlForNamespace(XPathNavigator nav, string assemblyName, string assemblyVersion)
@@ -1372,7 +1373,7 @@ namespace NDoc.Documenter.LinearHtml
 		/// Make (and write) html for a Type (class, interface, ...) member, such
 		/// as a property, field, etc.
 		/// </summary>
-		/// <param name="typeName">The Type's name.</param>
+		/// <param name="parentTypeName">The Type's name.</param>
 		/// <param name="memberType">The type of the member (property, field, 
 		/// method, etc)</param>
 		/// <param name="nav">Pointing to the member's node.</param>
@@ -1484,11 +1485,11 @@ namespace NDoc.Documenter.LinearHtml
 		}
 
 		/// <summary>
-		/// Write a parameter list to the specified text writer.
+		/// Write a parameter list to the specified writer.
 		/// </summary>
-		/// <param name="nav">Navigator to the Method's node.</param>
-		/// <returns>The param list string.</returns>
-		void MakeHtmlForMethodParameterDetails(XPathNavigator nav, XmlTextWriter xtw)
+		/// <param name="nav"><see cref="XPathNavigator" /> to the method's node.</param>
+		/// <param name="xtw">The <see cref="XmlTextWriter" /> to write the parameter list to.</param>
+		private void MakeHtmlForMethodParameterDetails(XPathNavigator nav, XmlTextWriter xtw)
 		{
 			// add params
 			ArrayList parameterList = GetChildren(nav, "parameter");
