@@ -411,6 +411,10 @@ namespace NDoc.Core
 				processStartInfo.ErrorDialog = false;
 				processStartInfo.WorkingDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 				processStartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+				processStartInfo.UseShellExecute = false;
+				processStartInfo.CreateNoWindow = true;
+				processStartInfo.RedirectStandardError = true;
+				processStartInfo.RedirectStandardOutput = true;
 
 				helpCompileProcess.StartInfo = processStartInfo;
 
@@ -419,6 +423,11 @@ namespace NDoc.Core
 				try
 				{
 					helpCompileProcess.Start();
+
+					// Read the standard output of the spawned process.
+					Trace.WriteLine( helpCompileProcess.StandardOutput.ReadToEnd() );
+					Trace.WriteLine( helpCompileProcess.StandardError.ReadToEnd() );
+					
 				}
 				catch (Exception e)
 				{
