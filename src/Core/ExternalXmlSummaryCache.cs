@@ -34,14 +34,16 @@ namespace NDoc.Core
 	{
 		private Hashtable cachedDocs;
 		private Hashtable summaries;
+		private string localizationLanguage;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ExternalXmlSummaryCache" />
 		/// class.
 		/// </summary>
-		public ExternalXmlSummaryCache()
+		public ExternalXmlSummaryCache(string localizationLanguage)
 		{
 			Flush();
+			this.localizationLanguage = localizationLanguage;
 		}
 
 		/// <summary>
@@ -134,7 +136,7 @@ namespace NDoc.Core
 
 							if (frameworkPath != null)
 							{
-								string localizedFrameworkPath = Path.Combine(frameworkPath, CultureInfo.CurrentCulture.TwoLetterISOLanguageName);
+								string localizedFrameworkPath = Path.Combine(frameworkPath, localizationLanguage);
 								if (Directory.Exists(localizedFrameworkPath))
 								{
 									docPath = Path.Combine(localizedFrameworkPath, a.GetName().Name + ".xml");

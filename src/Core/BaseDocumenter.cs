@@ -326,7 +326,8 @@ namespace NDoc.Core
 
 			if (MyConfig.GetExternalSummaries)
 			{
-				externalSummaryCache = new ExternalXmlSummaryCache();
+				string DocLangCode = Enum.GetName(typeof(SdkLanguage),MyConfig.SdkDocLanguage).Replace("_","-");
+				externalSummaryCache = new ExternalXmlSummaryCache(DocLangCode);
 				foreach (AssemblySlashDoc assemblySlashDoc in project.GetAssemblySlashDocs())
 				{
 					string assemblypath = Path.GetFullPath(assemblySlashDoc.AssemblyFilename);
@@ -1181,7 +1182,7 @@ namespace NDoc.Core
 					{
 						writer.WriteAttributeString("inherited", "true");
 					}
-					writer.WriteString(interfaceType.Name);
+					writer.WriteString(interfaceType.FullName);
 					writer.WriteEndElement();
  
 					InterfaceMapping interfaceMap = type.GetInterfaceMap(interfaceType);

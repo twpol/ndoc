@@ -152,9 +152,30 @@ namespace NDoc.Core
 
 				if (value != null)
 				{
+					bool writeProperty = true;
 					string value2 = Convert.ToString(value);
 
 					if (value2 != null)
+					{
+						//see if the property has a default value
+						object[] defaultValues=property.GetCustomAttributes(typeof(DefaultValueAttribute),true);
+						if (defaultValues.Length > 0)
+						{
+							if(Convert.ToString(((DefaultValueAttribute)defaultValues[0]).Value)==value2)
+								writeProperty=false;
+						}
+						else
+						{
+							if(value2=="")
+								writeProperty=false;
+						}
+					}
+					else
+					{
+						writeProperty=false;
+					}
+
+					if (writeProperty)
 					{
 						writer.WriteStartElement("property");
 						writer.WriteAttributeString("name", property.Name);
@@ -801,6 +822,42 @@ namespace NDoc.Core
 		}
 		
 
+		SdkVersion _SdkDocVersion = SdkVersion.SDK_v1_1;
+
+		/// <summary>Gets or sets the LinkToSdkDocVersion property.</summary>
+		/// <remarks>Specifies to which version of the .NET Framework SDK documentation the links to system types will be pointing.</remarks>
+		[Category("Documentation Main Settings")]
+		[Description("Specifies to which version of the .NET Framework SDK documentation the links to system types will be pointing.")]
+		[DefaultValue(SdkVersion.SDK_v1_1)]
+		[System.ComponentModel.TypeConverter(typeof(NDoc.Core.EnumDescriptionConverter))]
+		public SdkVersion SdkDocVersion
+		{
+			get { return _SdkDocVersion; }
+			set
+			{
+				_SdkDocVersion = value;
+				SetDirty();
+			}
+		}
+
+		SdkLanguage _SdkDocLanguage = SdkLanguage.en;
+
+		/// <summary>Gets or sets the SdkDocLanguage property.</summary>
+		/// <remarks>Specifies to which Language of the .NET Framework SDK documentation the links to system types will be pointing.</remarks>
+		[Category("Documentation Main Settings")]
+		[Description("Specifies to which Language version of the .NET Framework SDK documentation the links to system types will be pointing.")]
+		[DefaultValue(SdkLanguage.en)]
+		[System.ComponentModel.TypeConverter(typeof(NDoc.Core.EnumDescriptionConverter))]
+		public SdkLanguage SdkDocLanguage
+		{
+			get { return _SdkDocLanguage; }
+			set
+			{
+				_SdkDocLanguage = value;
+				SetDirty();
+			}
+		}
+
 		#endregion
 		
 		#region Show Attributes Options
@@ -1041,4 +1098,52 @@ namespace NDoc.Core
 		/// </summary>
 		none
 	}
+
+	/// <summary>
+	/// Specifies a version of the .NET Framework documentation.
+	/// </summary>
+	public enum SdkVersion
+	{
+		/// <summary>The SDK version 1.0.</summary>
+		[Description(".Net Version 1.0")]SDK_v1_0,
+
+		/// <summary>The SDK version 1.1.</summary>
+		[Description(".Net Version 1.1")]SDK_v1_1,
+	}
+
+	/// <summary>
+	/// Specifies a language version of the .NET Framework documentation.
+	/// </summary>
+	public enum SdkLanguage
+	{
+		/// <summary>
+		/// English
+		/// </summary>
+		[Description("English")] en,
+		/// <summary>
+		/// French
+		/// </summary>
+		[Description("French")] fr,
+		/// <summary>
+		/// German
+		/// </summary>
+		[Description("German")] de,
+		/// <summary>
+		/// Italian
+		/// </summary>
+		[Description("Italian")] it,
+		/// <summary>
+		/// Japanese
+		/// </summary>
+		[Description("Japanese")] ja,
+		/// <summary>
+		/// Korean
+		/// </summary>
+		[Description("Korean")] ko,
+		/// <summary>
+		/// Spanish
+		/// </summary>
+		[Description("Spanish")] es, 
+	}
+
 }
