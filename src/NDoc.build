@@ -1,6 +1,6 @@
-<project name="NDoc" default="build">
+<project name="NDoc" default="Debug">
 	
-	<include href="NDoc.build.include" />
+	<include buildfile="NDoc.build.include" />
 	
 	<target name="cleanbuild" depends="build">
 		<delete verbose="true">
