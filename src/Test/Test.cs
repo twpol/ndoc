@@ -507,4 +507,11 @@ namespace NDoc.Test
 		{
 		}
 	}
+
+	/// <summary>This class has para elements in its remarks.</summary>
+	/// <remarks><para>This is the first paragraph.</para>
+	/// <para>This is the second paragraph.</para></remarks>
+	public class Paragraphs
+	{
+	}
 }
