@@ -170,7 +170,7 @@ namespace NDoc.Core
 				//if the doc was still not found, create an empty document filename
 				if (searchedDoc == null)
 				{
-					Trace.WriteLine("XML Doc not found for " + type.Name);
+					Trace.WriteLine("XML Doc not found for " + type.Assembly.FullName);
 					searchedDoc = "";
 				}
 				//cache the document path
