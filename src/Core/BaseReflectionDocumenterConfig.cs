@@ -48,7 +48,7 @@ namespace NDoc.Core.Reflection
 	{
 		
 		/// <summary>
-		/// Creates a new <see cref="BaseReflectionDocumenterConfig"/> instance.
+		/// Initializes a new instance of the <see cref="BaseReflectionDocumenterConfig"/> class.
 		/// </summary>
 		/// <param name="name">Documenter Name</param>
 		protected BaseReflectionDocumenterConfig(string name) : base(name)
@@ -89,7 +89,7 @@ namespace NDoc.Core.Reflection
 		
 		
 		/// <summary>
-		/// 
+		/// Gets or sets a collection of additional paths to search for reference assemblies.
 		/// </summary>
 		[NonPersisted]
 		[Category("(Global)")]
@@ -824,7 +824,7 @@ namespace NDoc.Core.Reflection
 				{
 					Trace.WriteLine("WARNING: " + base.Name + " Configuration - property 'ReferencesPath' is OBSOLETE. Please use the project level property 'ReferencePath'\n");
 					Project.SuspendDirtyCheck=false;
-					Project.AddReferencePath(value);
+					Project.ReferencePaths.Add(new ReferencePath(value));
 					Project.SuspendDirtyCheck=true;
 				}
 			}
@@ -859,7 +859,7 @@ namespace NDoc.Core.Reflection
 	}
 
 	/// <summary>
-	/// Define the levels of filtering on the EditorBrowsable attribute.
+	/// Defines the levels of filtering on the EditorBrowsable attribute.
 	/// </summary>
 	public enum EditorBrowsableFilterLevel
 	{
@@ -874,7 +874,7 @@ namespace NDoc.Core.Reflection
 	}
 
 	/// <summary>
-	/// Specifies a version of the .NET Framework documentation.
+	/// Defines a version of the .NET Framework documentation.
 	/// </summary>
 	public enum SdkVersion
 	{
@@ -888,7 +888,7 @@ namespace NDoc.Core.Reflection
 	}
 
 	/// <summary>
-	/// Specifies a language version of the .NET Framework documentation.
+	/// Defines a language version of the .NET Framework documentation.
 	/// </summary>
 	public enum SdkLanguage
 	{
@@ -923,7 +923,7 @@ namespace NDoc.Core.Reflection
 	}
 
 	/// <summary>
-	/// Specifies type of inherited members to document.
+	/// Defines the type of inherited members to document.
 	/// </summary>
 	public enum DocumentedInheritedMembers
 	{
@@ -942,7 +942,7 @@ namespace NDoc.Core.Reflection
 	}
 
 	/// <summary>
-	/// The type of version information to document.
+	/// Defines the type of version information to document.
 	/// </summary>
 	public enum AssemblyVersionInformationType
 	{
