@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.0.9372"
+        ProductVersion = "7.0.9466"
         SchemaVersion = "1.0"
         ProjectGuid = "{8282F072-D966-4075-A8DA-8911E36F4980}"
     >
@@ -25,7 +25,7 @@
                     BaseAddress = "285212672"
                     CheckForOverflowUnderflow = "false"
                     ConfigurationOverrideFile = ""
-                    DefineConstants = "DEBUG;TRACE;NO_RESOURCES"
+                    DefineConstants = "DEBUG;TRACE"
                     DocumentationFile = "NDoc.Documenter.Msdn.xml"
                     DebugSymbols = "true"
                     FileAlignment = "4096"
