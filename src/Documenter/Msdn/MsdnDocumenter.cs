@@ -1406,7 +1406,7 @@ namespace NDoc.Documenter.Msdn
 #endif
 
 			MsdnXsltUtilities utilities = new MsdnXsltUtilities(fileNames, elemNames);
-			ExternalHtmlProvider htmlProvider = new ExternalHtmlProvider( MyConfig );
+			ExternalHtmlProvider htmlProvider = new ExternalHtmlProvider(MyConfig, filename);
 			StreamWriter streamWriter = null;
 
 			try
