@@ -449,6 +449,27 @@ namespace NDoc.Core
 			return (count > 1) ? overload : 0;
 		}
 
+		private int GetPropertyOverload(PropertyInfo property, PropertyInfo[] properties)
+		{
+			int count = 0;
+			int overload = 0;
+
+			foreach (PropertyInfo p in properties)
+			{
+				if (p.Name == property.Name)
+				{
+					++count;
+				}
+
+				if (p == property)
+				{
+					overload = count;
+				}
+			}
+
+			return (count > 1) ? overload : 0;
+		}
+
 		private BaseDocumenterConfig MyConfig
 		{
 			get
@@ -617,7 +638,9 @@ namespace NDoc.Core
 				BindingFlags.Public |
 				BindingFlags.NonPublic;
 
-			foreach (PropertyInfo property in type.GetProperties(bindingFlags))
+			PropertyInfo[] properties = type.GetProperties(bindingFlags);
+
+			foreach (PropertyInfo property in properties)
 			{
 				MethodInfo getMethod = property.GetGetMethod(true);
 				MethodInfo setMethod = property.GetSetMethod(true);
@@ -630,7 +653,8 @@ namespace NDoc.Core
 					WriteProperty(
 						writer, 
 						property, 
-						property.DeclaringType.FullName != type.FullName);
+						property.DeclaringType.FullName != type.FullName,
+						GetPropertyOverload(property, properties));
 				}
 			}
 		}
@@ -953,7 +977,8 @@ namespace NDoc.Core
 		/// <param name="writer">XmlWriter to write on.</param>
 		/// <param name="property">Property to document.</param>
 		/// <param name="inherited">true if a declaringType attribute should be included.</param>
-		private void WriteProperty(XmlWriter writer, PropertyInfo property, bool inherited)
+		/// <param name="overload">If &gt; 0, indicates this it the nth overloaded method with the same name.</param>
+		private void WriteProperty(XmlWriter writer, PropertyInfo property, bool inherited, int overload)
 		{
 			string memberName = GetMemberName(property);
 
@@ -971,6 +996,11 @@ namespace NDoc.Core
 			writer.WriteAttributeString("contract", GetPropertyContractValue(property));
 			writer.WriteAttributeString("get", property.GetGetMethod(true) != null ? "true" : "false");
 			writer.WriteAttributeString("set", property.GetSetMethod(true) != null ? "true" : "false");
+
+			if (overload > 0)
+			{
+				writer.WriteAttributeString("overload", overload.ToString());
+			}
 
 			WritePropertyDocumentation(writer, memberName, property);
 			WriteCustomAttributes(writer, property);
