@@ -65,47 +65,47 @@ namespace NDoc.Core
 						Assembly a = t.Assembly;
 						string assemblyPath = a.Location;
 						
-            if (assemblyPath.Length > 0)
-            {
-              string docPath = Path.ChangeExtension(assemblyPath, ".xml");
+						if (assemblyPath.Length > 0)
+						{
+							string docPath = Path.ChangeExtension(assemblyPath, ".xml");
 
-              //if not found, try loading __AssemblyInfo__.ini
-              if (!File.Exists(docPath))
-              {
-                string infoPath = Path.Combine(
-                  Path.GetDirectoryName(docPath), "__AssemblyInfo__.ini");
-                docPath = null;
+							//if not found, try loading __AssemblyInfo__.ini
+							if (!File.Exists(docPath))
+							{
+								string infoPath = Path.Combine(
+									Path.GetDirectoryName(docPath), "__AssemblyInfo__.ini");
+								docPath = null;
 
-                if (File.Exists(infoPath))
-                {
-                  System.Diagnostics.Debug.WriteLine("Loading __AssemblyInfo__.ini.");
-                  TextReader reader = new StreamReader(infoPath);
-                  string line;
-                  try
-                  {
-                    while ((line = reader.ReadLine()) != null)
-                    {
-                      if (line.StartsWith("URL=file:///"))
-                      {
-                        docPath = Path.ChangeExtension(line.Substring(12), ".xml");
-                        break;
-                      }
-                    }
-                  }
-                  finally
-                  {
-                    reader.Close();
-                  }
-                }
-              }
+								if (File.Exists(infoPath))
+								{
+									System.Diagnostics.Debug.WriteLine("Loading __AssemblyInfo__.ini.");
+									TextReader reader = new StreamReader(infoPath);
+									string line;
+									try
+									{
+										while ((line = reader.ReadLine()) != null)
+										{
+											if (line.StartsWith("URL=file:///"))
+											{
+												docPath = Path.ChangeExtension(line.Substring(12), ".xml");
+												break;
+											}
+										}
+									}
+									finally
+									{
+										reader.Close();
+									}
+								}
+							}
 
-              if ((docPath != null) && (File.Exists(docPath)))
-              {
-                System.Diagnostics.Debug.WriteLine("Loading XML Doc for " + type.Assembly.FullName);
-                doc = new XmlDocument();
-                doc.Load(docPath);
-              }
-            }
+							if ((docPath != null) && (File.Exists(docPath)))
+							{
+								System.Diagnostics.Debug.WriteLine("Loading XML Doc for " + type.Assembly.FullName);
+								doc = new XmlDocument();
+								doc.Load(docPath);
+							}
+						}
 					}
 
 					//if the doc was still not found, create an empty document
