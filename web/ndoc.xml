@@ -2,12 +2,34 @@
 
 <ndoc>
 
-	<description>
+	<description page="index">
 		<html xmlns="http://www.w3.org/1999/xhtml">
 			<p>NDoc merges the assemblies and XML documentation files produced by csc.exe and creates a compiled HTML Help file enabling you to browse your own libraries just like the the <a href="http://msdn.microsoft.com/library/en-us/cpref/html/cpref_start.asp">.NET Framework Class Library</a>.</p>
 			<p>The documentation generator uses <a href="http://www.w3.org/Style/XSL">XSLT</a> to produce the HTML. Future versions will make it possible to customize the XSLT to produce documentation with any desired look and feel.</p>			<p>Download the latest release and see the output for yourself.</p>
-			<p>Our SourceForge project page can be found <a href="http://sourceforge.net/projects/xmarks/" title="Break Down the Barriers to Open Source Development">here</a>.</p>
+			<p>Our SourceForge project page can be found <a href="http://sourceforge.net/projects/ndoc/" title="Break Down the Barriers to Open Source Development">here</a>. Some screenshots of the GUI (running on Windows XP) can be found <a href="screenshots.html">here</a>. Instructions on checking out the latest code form CVS can be found <a href="cvs.html">here</a>.</p>
 			<p>The NDoc source code is freely available under a certified <a href="http://www.opensource.org/" title="Learn more about the Open Source Initiative">Open Source</a> license. We welcome everyone to use our software in the hopes that they can provide feedback, submit bug reports and fixes, or even join us as a developer!</p>
+		</html>
+	</description>
+
+	<description page="screenshots">
+		<html xmlns="http://www.w3.org/1999/xhtml">
+			<p><img border="0" src="NDocGui.png"/></p>
+			<p><img border="0" src="NDocGuiSlashDoc.png"/></p>
+			<p><img border="0" src="NDocGuiNsSummary.png"/></p>
+			<p><img border="0" src="NDocGuiAbout.png"/></p>
+		</html>
+	</description>
+
+	<description page="cvs">
+		<html xmlns="http://www.w3.org/1999/xhtml">
+			<p>If you like living on the bleeding edge, feel free to check out the latest code as often as you like.</p>
+			<ol>
+				<li>Create a directory to hold the project. (I use <i>C:\SourceForge\</i> but you can use whatever you want.)</li>
+				<li>Download <a href="http://www.cvshome.org/dev/codewindow.html">CVS for Windows</a> and place <i>cvs.exe</i> in your new directory. (Be careful that you don't extract it to the cvsM-NN sub-directory or the batch file won't work.)</li>
+				<li>Download the <a href="anonymous-checkout.bat">anonymous-checkout</a> batch file and place it in the same directory.</li>
+				<li>Double-click the <i>anonymous-checkout.bat</i> file and hit ENTER when prompted for your CVS password.</li>
+			</ol>
+			<p>That's it!</p>
 		</html>
 	</description>
 

@@ -8,13 +8,13 @@
   method="xml"
   encoding="utf-8"
   doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN"
-  doctype-system="DTD/xhtml1-strict.dtd"
+  doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
 />
 
+<xsl:param name="page" select="'index'"/>
+<xsl:param name="title" select="'NDoc (formerly DOC.NET)'"/>
 
 <xsl:template match="/">
-
-<xsl:variable name="title" select="'NDoc'"/>
 
 <html>
 
@@ -30,7 +30,7 @@
 <div id="Content">
   <h1><xsl:value-of select="$title"/></h1>
 
-  <xsl:copy-of select="/ndoc/description/*/*"/>
+  <xsl:copy-of select="/ndoc/description[@page=$page]/*/*"/>
 
   <p class="images">
     <a href="http://sourceforge.net/"><img src="http://sourceforge.net/sflogo.php?group_id=13899&amp;type=1" alt="SourceForge Logo" width="88" height="31"/></a>
