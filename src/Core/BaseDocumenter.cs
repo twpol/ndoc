@@ -32,17 +32,10 @@ namespace NDoc.Core
 	/// <summary>Provides the base class for documenters.</summary>
 	abstract public class BaseDocumenter : IDocumenter, IComparable
 	{
-		IDocumenterConfig config;
-
-		Project _Project;
-
-		Assembly currentAssembly;
-		XmlDocument currentSlashDoc;
-
-		string xmlBuffer;
-		XmlDocument xmlDocument;
-
-		XmlDocumentationCache docCache;
+		IDocumenterConfig		config;
+		Project					_Project;
+		XmlDocument				currentSlashDoc;
+		XmlDocumentationCache	docCache;
 
 		private class ImplementsInfo
 		{
@@ -70,7 +63,6 @@ namespace NDoc.Core
 		protected BaseDocumenter(string name)
 		{
 			_Name = name;
-			//xmlDocument = new XmlDocument();
 			docCache = new XmlDocumentationCache();
 		}
 
@@ -94,42 +86,6 @@ namespace NDoc.Core
 		{
 			get { return config; }
 			set { config = value; }
-		}
-
-		//TODO: change this into a method or completely remove it.
-		/// <summary>Gets the XmlDocument containing the combined relected metadata and /doc comments.</summary>
-		[Obsolete("This property is obsolete.  Use the string XmlBuffer property instead.", false)]
-		protected XmlDocument Document
-		{
-			get 
-			{ 
-				xmlDocument = new XmlDocument();
-				xmlDocument.LoadXml(XmlBuffer);
-				return xmlDocument;
-			}
-		}
-
-		/// <summary>
-		/// The XML string containing the combined relected metadata and /doc comments.
-		/// </summary>
-		protected string XmlBuffer
-		{
-			get 
-			{ 
-				if (xmlBuffer == null)
-				{
-					throw new InvalidOperationException("MakeXml() has not been called yet.");
-				}
-				return xmlBuffer; 
-			}
-		}
-
-		/// <summary>
-		/// Returns the XPathDocument to access the combined relected metadata and /doc comments.
-		/// </summary>
-		protected XPathDocument GetXPathDocument()
-		{
-			return new XPathDocument(new StringReader(XmlBuffer));
 		}
 
 		private string _Name;
@@ -269,8 +225,10 @@ namespace NDoc.Core
 		}
 
 		/// <summary>Builds an XmlDocument combining the reflected metadata with the /doc comments.</summary>
-		protected void MakeXml(Project project)
+		protected string MakeXml(Project project)
 		{
+			Debug.WriteLine("Memory making xml: " + GC.GetTotalMemory(false).ToString());
+
 			//if MyConfig.UseNDocXmlFile is set, skip this stage 
 			//and load the XmlBuffer from the file.
 			string xmlFile = MyConfig.UseNDocXmlFile;
@@ -279,9 +237,8 @@ namespace NDoc.Core
 				Trace.WriteLine("Loading pre-compiled XML information from:\n" + xmlFile);
 				using (TextReader reader = new StreamReader(xmlFile))
 				{
-					this.xmlBuffer = reader.ReadToEnd();
+					return reader.ReadToEnd();
 				}
-				return;
 			}
 
 			_Project = project;
@@ -333,18 +290,22 @@ namespace NDoc.Core
 
 					currentAssemblyFilename = assemblySlashDoc.AssemblyFilename;
 					string path = Path.GetFullPath(currentAssemblyFilename);
-					currentAssembly = LoadAssembly(path);
+					Assembly assembly = LoadAssembly(path);
 
 					currentSlashDoc = new XmlDocument();
 
 #if MONO //mono v0.25 does not support XmlDocument.Load()
-					TextReader reader = new StreamReader(assemblySlashDoc.SlashDocFilename);
-					string xml = reader.ReadToEnd();
-					currentSlashDoc.LoadXml(xml);
+					using (TextReader reader = new StreamReader(assemblySlashDoc.SlashDocFilename))
+					{
+						string xml = reader.ReadToEnd();
+						currentSlashDoc.LoadXml(xml);
+					}
 #else
 					currentSlashDoc.Load(assemblySlashDoc.SlashDocFilename);
 #endif
-					WriteAssembly(writer);
+					WriteAssembly(writer, assembly);
+
+					currentSlashDoc = null;
 
 					i++;
 				}
@@ -355,7 +316,7 @@ namespace NDoc.Core
 				writer.WriteEndDocument();
 				writer.Flush();
 
-				xmlBuffer = swriter.ToString();
+				return swriter.ToString();
 
 				// if you want to see NDoc's intermediate XML file, use the XML documenter.
 			}
@@ -368,6 +329,10 @@ namespace NDoc.Core
 			}
 			finally
 			{
+				Debug.WriteLine("Memory before cleanup: " + GC.GetTotalMemory(false).ToString());
+
+				_Project = null;
+
 				writer.Close();
 				swriter.Close();
 
@@ -375,6 +340,11 @@ namespace NDoc.Core
 				{
 					assemblyResolver.Deinstall();
 				}
+
+				docCache.Flush();
+
+				GC.Collect();
+				Debug.WriteLine("Memory after cleanup: " + GC.GetTotalMemory(false).ToString());
 			}
 		}
 
@@ -619,9 +589,9 @@ namespace NDoc.Core
 				IsEditorBrowsable(field);
 		}
 
-		private void WriteAssembly(XmlWriter writer)
+		private void WriteAssembly(XmlWriter writer, Assembly assembly)
 		{
-			AssemblyName assemblyName = currentAssembly.GetName();
+			AssemblyName assemblyName = assembly.GetName();
 
 			writer.WriteStartElement("assembly");
 			writer.WriteAttributeString("name", assemblyName.Name);
@@ -631,9 +601,13 @@ namespace NDoc.Core
 				writer.WriteAttributeString("version", assemblyName.Version.ToString());
 			}
 
-			foreach(Module module in currentAssembly.GetModules())
+			foreach (Module module in assembly.GetModules())
 			{
 				WriteModule(writer, module);
+
+				Debug.WriteLine("Memory before module cleanup: " + GC.GetTotalMemory(false).ToString());
+				GC.Collect();
+				Debug.WriteLine("Memory after module cleanup: " + GC.GetTotalMemory(false).ToString());
 			}
 
 			writer.WriteEndElement(); // assembly
@@ -702,66 +676,86 @@ namespace NDoc.Core
 					Trace.WriteLine(string.Format("Writing namespace {0}...", namespaceName));
 
 					StringWriter swriter = null;
-					XmlWriter tempWriter = writer;
-
-					// If we don't want empty namespaces, we need to write the XML to a temporary
-					// writer, because we'll only know if its empty once the WriteXxx methods
-					// have been called.
-
-					if (!MyConfig.DocumentEmptyNamespaces)
+					XmlWriter tempWriter = null;
+					try
 					{
-						swriter = new StringWriter();
-						tempWriter = new XmlTextWriter(swriter);
-					}
+						// If we don't want empty namespaces, we need to write the XML to a temporary
+						// writer, because we'll only know if its empty once the WriteXxx methods
+						// have been called.
 
-					tempWriter.WriteStartElement("namespace");
-					tempWriter.WriteAttributeString("name", ourNamespaceName);
-
-					if (namespaceSummary != null && namespaceSummary.Length > 0)
-					{
-						WriteStartDocumentation(tempWriter);
-						tempWriter.WriteStartElement("summary");
-						tempWriter.WriteRaw(namespaceSummary);
-						tempWriter.WriteEndElement();
-						WriteEndDocumentation(tempWriter);
-					}
-					else if (MyConfig.ShowMissingSummaries)
-					{
-						WriteStartDocumentation(tempWriter);
-						WriteMissingDocumentation(tempWriter, "summary", null, "Missing <summary> Documentation for " + namespaceName);
-						WriteEndDocumentation(tempWriter);
-					}
-
-					int nbClasses = WriteClasses(tempWriter, types, namespaceName);
-					Trace.WriteLine(string.Format("Wrote {0} classes.", nbClasses));
-
-					int nbInterfaces = WriteInterfaces(tempWriter, types, namespaceName);
-					Trace.WriteLine(string.Format("Wrote {0} interfaces.", nbInterfaces));
-
-					int nbStructures = WriteStructures(tempWriter, types, namespaceName);
-					Trace.WriteLine(string.Format("Wrote {0} structures.", nbStructures));
-
-					int nbDelegates = WriteDelegates(tempWriter, types, namespaceName);
-					Trace.WriteLine(string.Format("Wrote {0} delegates.", nbDelegates));
-
-					int nbEnums = WriteEnumerations(tempWriter, types, namespaceName);
-					Trace.WriteLine(string.Format("Wrote {0} enumerations.", nbEnums));
-
-					tempWriter.WriteEndElement();
-
-					if (!MyConfig.DocumentEmptyNamespaces)
-					{
-						tempWriter.Close();
-						if (nbClasses == 0 && nbInterfaces == 0 && nbStructures == 0 &&
-							nbDelegates == 0 && nbEnums == 0)
+						XmlWriter myWriter;
+						if (!MyConfig.DocumentEmptyNamespaces)
 						{
-							Trace.WriteLine(string.Format("Discarding namespace {0} because it does not contain any documented types.", namespaceName));
+							swriter = new StringWriter();
+							tempWriter = new XmlTextWriter(swriter);
+							myWriter = tempWriter;
 						}
 						else
 						{
-							writer.WriteRaw(swriter.ToString());
+							myWriter = writer;
 						}
-						swriter.Close();
+
+						myWriter.WriteStartElement("namespace");
+						myWriter.WriteAttributeString("name", ourNamespaceName);
+
+						if (namespaceSummary != null && namespaceSummary.Length > 0)
+						{
+							WriteStartDocumentation(myWriter);
+							myWriter.WriteStartElement("summary");
+							myWriter.WriteRaw(namespaceSummary);
+							myWriter.WriteEndElement();
+							WriteEndDocumentation(myWriter);
+						}
+						else if (MyConfig.ShowMissingSummaries)
+						{
+							WriteStartDocumentation(myWriter);
+							WriteMissingDocumentation(myWriter, "summary", null, "Missing <summary> Documentation for " + namespaceName);
+							WriteEndDocumentation(myWriter);
+						}
+
+						int classCount = WriteClasses(myWriter, types, namespaceName);
+						Trace.WriteLine(string.Format("Wrote {0} classes.", classCount));
+
+						int interfaceCount = WriteInterfaces(myWriter, types, namespaceName);
+						Trace.WriteLine(string.Format("Wrote {0} interfaces.", interfaceCount));
+
+						int structureCount = WriteStructures(myWriter, types, namespaceName);
+						Trace.WriteLine(string.Format("Wrote {0} structures.", structureCount));
+
+						int delegateCount = WriteDelegates(myWriter, types, namespaceName);
+						Trace.WriteLine(string.Format("Wrote {0} delegates.", delegateCount));
+
+						int enumCount = WriteEnumerations(myWriter, types, namespaceName);
+						Trace.WriteLine(string.Format("Wrote {0} enumerations.", enumCount));
+
+						myWriter.WriteEndElement();
+
+						if (!MyConfig.DocumentEmptyNamespaces)
+						{
+							tempWriter.Flush();
+							if (classCount == 0 && interfaceCount == 0 && structureCount == 0 &&
+								delegateCount == 0 && enumCount == 0)
+							{
+								Trace.WriteLine(string.Format("Discarding namespace {0} because it does not contain any documented types.", namespaceName));
+							}
+							else
+							{
+								writer.WriteRaw(swriter.ToString());
+							}
+						}
+					}
+					finally
+					{
+						if (tempWriter != null)
+						{
+							tempWriter.Close();
+							tempWriter = null;
+						}
+						if (swriter != null)
+						{
+							swriter.Close();
+							swriter = null;
+						}
 					}
 				}
 			}
