@@ -59,12 +59,12 @@
 		
 	<xsl:template match="ndoc" mode="AIndex">
 		<xsl:call-template name="add-a-index">
-			<xsl:with-param name="filename" select="NUtil:GetHRefForNamespace( string( $namespace ) )"/>
+			<xsl:with-param name="filename" select="NUtil:GetNamespaceHRef( string( $namespace ) )"/>
 		</xsl:call-template>		
 	</xsl:template>
 	<xsl:template match="ndoc" mode="AIndex-hierarchy">
 		<xsl:call-template name="add-a-index">
-			<xsl:with-param name="filename" select="NUtil:GetHRefForNamespaceHierarchy( string( $namespace ) )"/>
+			<xsl:with-param name="filename" select="NUtil:GetNamespaceHierarchyHRef( string( $namespace ) )"/>
 		</xsl:call-template>		
 	</xsl:template>
 	<xsl:template match="enumeration | delegate" mode="AIndex">

@@ -144,7 +144,7 @@
 	<xsl:template name="get-xlink">
 		<xsl:param name="a-index"/>
 		<xsl:param name="link-text"/>
-		<MSHelp:link keywords="{$a-index}" indexMoniker="!DefaultAssociativeIndex" namespace="ms-help://MS.VSCC.2003" tabindex="0">
+		<MSHelp:link keywords="{$a-index}" indexMoniker="!DefaultAssociativeIndex" namespace="{$ndoc-sdk-doc-base-url}" tabindex="0">
 			<xsl:value-of select="$link-text"/>				
 		</MSHelp:link>		
 	</xsl:template>
@@ -153,9 +153,13 @@
 	<xsl:template name="get-xlink-for-system-member">
 		<xsl:param name="text"/>
 		<xsl:param name="member"/>
-				
+		
+		<!-- this is the last place where links are being resolved in xslt -->
+		<xsl:variable name="a-index">
+			<xsl:value-of select="concat('frlrf', translate($member/@declaringType, '.[,]', ''), 'Class', translate($member/@name, '.[,]', ''), 'Topic' )" />				
+		</xsl:variable>
 		<xsl:call-template name="get-xlink">
-			<xsl:with-param name="a-index" select="NUtil:GetHRef( concat( $member/@declaringType, '.', $member/@name ) )"/>
+			<xsl:with-param name="a-index" select="$a-index"/>
 			<xsl:with-param name="link-text" select="$text"/>
 		</xsl:call-template>				
 	</xsl:template>

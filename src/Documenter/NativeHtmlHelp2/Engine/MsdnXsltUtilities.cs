@@ -29,15 +29,13 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 	/// </summary>
 	public class MsdnXsltUtilities
 	{
-		private const string sdkDoc10BaseUrl = "ms-help://MS.NETFrameworkSDK/cpref/html/frlrf";
-		private const string sdkDoc11BaseUrl = "ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrf";
-		private const string sdkDocPageExt = ".htm";
+		private const string sdkDoc10BaseUrl = "ms-help://MS.NETFrameworkSDK";
+		private const string sdkDoc11BaseUrl = "ms-help://MS.NETFrameworkSDKv1.1";
+
 		private const string systemPrefix = "System.";
 
 		private string sdkDocBaseUrl; 
-		private string sdkDocExt; 
 
-		private StringDictionary fileNames;
 		private StringDictionary elemNames;
 
 		private StringCollection descriptions;
@@ -45,25 +43,21 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <summary>
 		/// Initializes a new instance of class MsdnXsltUtilities
 		/// </summary>
-		/// <param name="fileNames">A StringDictionary holding id to file name mappings.</param>
 		/// <param name="elemNames">A StringDictionary holding id to element name mappings</param>
-		/// <param name="linkToSdkDocVersion">Specifies the version of the SDK documentation.</param>
-		public MsdnXsltUtilities( StringDictionary fileNames, StringDictionary elemNames, SdkDocVersion linkToSdkDocVersion )
+		/// <param name="linkToSdkDocVersion">Specifies the version of the SDK documentation.</param>	
+		public MsdnXsltUtilities( StringDictionary elemNames, SdkDocVersion linkToSdkDocVersion )
 		{
 			descriptions = new StringCollection();
 
-			this.fileNames = fileNames;
 			this.elemNames = elemNames;
 			
 			switch (linkToSdkDocVersion)
 			{
 				case SdkDocVersion.SDK_v1_0:
 					sdkDocBaseUrl = sdkDoc10BaseUrl;
-					sdkDocExt = sdkDocPageExt;
 					break;
 				case SdkDocVersion.SDK_v1_1:
 					sdkDocBaseUrl = sdkDoc11BaseUrl;
-					sdkDocExt = sdkDocPageExt;
 					break;
 			}
 
@@ -77,13 +71,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			get { return sdkDocBaseUrl; }
 		}
 
-		/// <summary>
-		/// Gets the page file extension for system types links.
-		/// </summary>
-		public string SdkDocExt
-		{
-			get { return sdkDocExt; }
-		}
 
 #if MONO
 		/// <summary>
@@ -104,19 +91,21 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// </summary>
 		/// <param name="namespaceName">The namespace name</param>
 		/// <returns>Relative HRef to the Topic</returns>
-		public string GetHRefForNamespace( string namespaceName )
+		public string GetNamespaceHRef( string namespaceName )
 		{
 			return NameMapper.GetFilenameForNamespace( namespaceName );
 		}
+
 		/// <summary>
 		/// Gets the Href for the namespace hierarchy topic
 		/// </summary>
 		/// <param name="namespaceName">The namespace name</param>
 		/// <returns>Relative HRef to the Topic</returns>
-		public string GetHRefForNamespaceHierarchy( string namespaceName )
+		public string GetNamespaceHierarchyHRef( string namespaceName )
 		{
 			return NameMapper.GetFileNameForNamespaceHierarchy( namespaceName );
 		}
+
 		/// <summary>
 		/// Gets the href for the all members topic of a type
 		/// </summary>
@@ -126,6 +115,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		{
 			return NameMapper.GetFilenameForTypeMembers( typeID );
 		}
+
 		/// <summary>
 		/// Gets the href for the fields topic for a type
 		/// </summary>
@@ -135,6 +125,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		{
 			return NameMapper.GetFilenameForTypeProperties( typeID );
 		}
+
 		/// <summary>
 		/// Gets the href for the hethods topic of a type
 		/// </summary>
@@ -144,6 +135,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		{
 			return NameMapper.GetFilenameForTypeMethods( typeID );
 		}
+
 		/// <summary>
 		/// Gets the href for the operators topic of a type
 		/// </summary>
@@ -153,6 +145,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		{
 			return NameMapper.GetFilenameForTypeOperators( typeID );
 		}
+
 		/// <summary>
 		/// Gets the href for the events topic of a type
 		/// </summary>
@@ -162,6 +155,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		{
 			return NameMapper.GetFilenameForTypeEvents( typeID );
 		}
+
 		/// <summary>
 		/// Gets the href for the properties topic of a type
 		/// </summary>
@@ -171,6 +165,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		{
 			return NameMapper.GetFilenameForTypeProperties( typeID );
 		}
+
 		/// <summary>
 		/// Gets the href for the constructor overloads topic of a type
 		/// </summary>
@@ -180,6 +175,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		{
 			return NameMapper.GetFilenameForConstructors( typeID );
 		}
+
 		/// <summary>
 		/// Gets the href for a constructor
 		/// </summary>
@@ -191,6 +187,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 				return NameMapper.GetFilenameForConstructor( ((IHasXmlNode)node.Current).GetNode() );
 			return "";
 		}
+
 		/// <summary>
 		/// Get the href for a member overload topic
 		/// </summary>
@@ -201,6 +198,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		{
 			return NameMapper.GetFilenameForMethodOverloads( typeID, methodName );
 		}
+
 		/// <summary>
 		/// Get the href for a type member topic
 		/// </summary>
@@ -225,6 +223,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 
 			return "";
 		}
+
 		/// <summary>
 		/// Get the HRef for a local method topic
 		/// </summary>
@@ -288,7 +287,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 				return string.Empty;
 
 			// look up the local filename for non system types
-			if ( ( cref.Length < 9 ) || ( cref.Substring( 2, 7 ) != systemPrefix ) )
+			if ( IsLocalCRef( cref ) )
 			{
 				int lastDot = cref.LastIndexOf( '.' );
 				string memberName = cref.Substring( lastDot + 1 );
@@ -296,7 +295,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 
 				switch (cref.Substring(0, 2))
 				{
-					case "N:":	return GetHRefForNamespace( cref.Substring( 2 ) );
+					case "N:":	return GetNamespaceHRef( cref.Substring( 2 ) );
 					case "T:":	return GetTypeHRef( cref );
 					case "F:":	return GetFieldHRef( cref );
 					case "E:":	return GetEventHRef( cref );
@@ -339,20 +338,28 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			return GetName(cref);
 		}
 #endif
+		/// <summary>
+		/// Determines if a cref is for a local or a system type
+		/// </summary>
+		/// <param name="cref">The cref to evaluate</param>
+		/// <returns>True if the cref namespace starts with 'System.'</returns>
+		private static bool IsLocalCRef( string cref )
+		{
+			return ( cref.Length < 9 ) || ( cref.Substring( 2, 7 ) != systemPrefix );
+		}
 
 		/// <summary>
 		/// Returns a name for a CRef.
 		/// </summary>
 		/// <param name="cref">CRef for which the name will be looked up.</param>
-		public string GetName(string cref)
+		public string GetName( string cref )
 		{
 			if (cref.Length < 2)
 				return cref;
 
 			if (cref[1] == ':')
 			{
-				if ((cref.Length < 9)
-					|| (cref.Substring(2, 7) != systemPrefix))
+				if ( IsLocalCRef( cref ) )
 				{
 					string name = elemNames[cref];
 					if (name != null)

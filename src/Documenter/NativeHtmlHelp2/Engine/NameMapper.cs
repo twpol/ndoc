@@ -26,15 +26,33 @@ using System.Collections.Specialized;
 namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 {
 	/// <summary>
-	/// 
+	/// The types of code elemements that topics are generated for
 	/// </summary>
 	public enum WhichType
 	{
+		/// <summary>
+		/// classes
+		/// </summary>
 		Class,
+		/// <summary>
+		/// interfaces
+		/// </summary>
 		Interface,
+		/// <summary>
+		/// structs
+		/// </summary>
 		Structure,
+		/// <summary>
+		/// enumberations
+		/// </summary>
 		Enumeration,
+		/// <summary>
+		/// delegates
+		/// </summary>
 		Delegate,
+		/// <summary>
+		/// error case
+		/// </summary>
 		Unknown
 	};
 
@@ -66,24 +84,18 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		}		
 
 
-		private StringDictionary fileNames;
-		private StringDictionary elemNames;
-
+		/// <summary>
+		/// Creates a new isntance of a NameMapper
+		/// </summary>
 		public NameMapper()
 		{
 		}
 
-		private void Reset()
-		{
-			fileNames = new StringDictionary();
-			elemNames = new StringDictionary();
-		}
+		private StringDictionary elemNames;
 
-		public StringDictionary FileNames
-		{
-			get{ return fileNames; }
-		}
-
+		/// <summary>
+		/// A collection of element names generated for the documentation xml
+		/// </summary>
 		public StringDictionary ElemNames
 		{
 			get{ return elemNames; }
@@ -95,21 +107,20 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <param name="documentation">The NDoc XML documentation summary</param>
 		public void MakeFilenames( XmlNode documentation )
 		{
-			Reset();
+			elemNames = new StringDictionary();
 
 			XmlNodeList namespaces = documentation.SelectNodes("/ndoc/assembly/module/namespace");
 			foreach (XmlElement namespaceNode in namespaces)
 			{
 				string namespaceName = namespaceNode.Attributes["name"].Value;
 				string namespaceId = "N:" + namespaceName;
-				fileNames[namespaceId] = NameMapper.GetFilenameForNamespace( namespaceName );
+
 				elemNames[namespaceId] = namespaceName;
 
 				XmlNodeList types = namespaceNode.SelectNodes("*[@id]");
 				foreach (XmlElement typeNode in types)
 				{
 					string typeId = typeNode.Attributes["id"].Value;
-					fileNames[typeId] = NameMapper.GetFilenameForType(typeNode);
 					elemNames[typeId] = typeNode.Attributes["name"].Value;
 
 					XmlNodeList members = typeNode.SelectNodes("*[@id]");
@@ -119,30 +130,21 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 						switch (memberNode.Name)
 						{
 							case "constructor":
-								fileNames[id] = NameMapper.GetFilenameForConstructor(memberNode);
 								elemNames[id] = elemNames[typeId];
 								break;
 							case "field":
-								if (typeNode.Name == "enumeration")
-									fileNames[id] = NameMapper.GetFilenameForType(typeNode);
-								else
-									fileNames[id] = NameMapper.GetFilenameForField(memberNode);
 								elemNames[id] = memberNode.Attributes["name"].Value;
 								break;
 							case "property":
-								fileNames[id] = NameMapper.GetFilenameForProperty(memberNode);
 								elemNames[id] = memberNode.Attributes["name"].Value;
 								break;
 							case "method":
-								fileNames[id] = NameMapper.GetFilenameForMethod(memberNode);
 								elemNames[id] = memberNode.Attributes["name"].Value;
 								break;
 							case "operator":
-								fileNames[id] = NameMapper.GetFilenameForOperator(memberNode);
 								elemNames[id] = memberNode.Attributes["name"].Value;
 								break;
 							case "event":
-								fileNames[id] = NameMapper.GetFilenameForEvent(memberNode);
 								elemNames[id] = memberNode.Attributes["name"].Value;
 								break;
 						}
@@ -151,7 +153,11 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			}
 		}
 
-
+		/// <summary>
+		/// Determines what type of item a node described
+		/// </summary>
+		/// <param name="typeNode">The documantaion node</param>
+		/// <returns>An enumeration for the item type</returns>
 		public static WhichType GetWhichType( XmlNode typeNode )
 		{
 			WhichType whichType;
@@ -181,44 +187,89 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			return whichType;
 		}
 
+		/// <summary>
+		/// Determines the filename for the namespace hierarchy topic
+		/// </summary>
+		/// <param name="namespaceName">The namespace</param>
+		/// <returns>Topic Filename</returns>
 		public static string GetFileNameForNamespaceHierarchy( string namespaceName )
 		{
 			return namespaceName + "Hierarchy.html";
 		}
 
+		/// <summary>
+		/// Determines the filename for a namespace topic
+		/// </summary>
+		/// <param name="namespaceName">The namespace</param>
+		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForNamespace( string namespaceName )
 		{
 			return namespaceName + ".html";
 		}
 
+		/// <summary>
+		/// Determines the filename for a type overview topic
+		/// </summary>
+		/// <param name="typeID">The id of the type</param>
+		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForType( string typeID )
 		{
 			return typeID.Substring(2) + "Topic.html";
 		}
-
+		/// <summary>
+		/// Determines the filename for a type overview topic
+		/// </summary>
+		/// <param name="typeNode">XmlNode representing the type</param>
+		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForType( XmlNode typeNode )
 		{
 			return GetFilenameForType( typeNode.Attributes["id"].Value );
 		}
 
+		/// <summary>
+		/// Determines the filename for a type member list topic
+		/// </summary>
+		/// <param name="typeID">The id of the type</param>
+		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForTypeMembers( string typeID )
 		{
 			return typeID.Substring(2) + "MembersTopic.html";
 		}
+		/// <summary>
+		/// Determines the filename for a type member list topic
+		/// </summary>
+		/// <param name="typeNode">XmlNode representing the type</param>
+		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForTypeMembers( XmlNode typeNode )
 		{
 			return GetFilenameForTypeMembers( typeNode.Attributes["id"].Value );
 		}
 
+		/// <summary>
+		/// Determines the filename for a constructor list topic
+		/// </summary>
+		/// <param name="typeID">The id of the type</param>
+		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForConstructors( string typeID )
 		{
 			return typeID.Substring(2) + "ConstructorTopic.html";
 		}
+		/// <summary>
+		/// Determines the filename for a constructor list topic
+		/// </summary>
+		/// <param name="typeNode">XmlNode representing the type</param>
+		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForConstructors( XmlNode typeNode )
 		{
 			return GetFilenameForConstructors( typeNode.Attributes["id"].Value );
 		}
 
+		/// <summary>
+		/// Determines the filename for a constructor topic
+		/// </summary>
+		/// <param name="constructorID">The id of the constructor</param>
+		/// <param name="isStatic">Is it a static constructor</param>
+		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForConstructor( string constructorID, bool isStatic  )
 		{
 			int dotHash = constructorID.IndexOf(".#"); // constructors could be #ctor or #cctor
@@ -231,6 +282,13 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 
 			return fileName += "Topic.html";
 		}
+		/// <summary>
+		/// Determines the filename for a constructor topic
+		/// </summary>
+		/// <param name="constructorID">The id of the constructor</param>
+		/// <param name="isStatic">Is it a static constructor</param>
+		/// <param name="overLoad">The oerload of the constructor</param>
+		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForConstructor( string constructorID, bool isStatic, string overLoad  )
 		{
 			int dotHash = constructorID.IndexOf(".#"); // constructors could be #ctor or #cctor
@@ -245,6 +303,11 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 
 			return fileName += "Topic.html";
 		}
+		/// <summary>
+		/// Determines the filename for a constructor topic
+		/// </summary>
+		/// <param name="constructorNode">The XmlNode representing the constructor</param>
+		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForConstructor( XmlNode constructorNode )
 		{
 			if ( constructorNode.Attributes["overload"] != null )	
@@ -256,46 +319,89 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 					constructorNode.Attributes["contract"].Value == "Static" );
 		}
 
+		/// <summary>
+		/// Determines the filename for a type field list topic
+		/// </summary>
+		/// <param name="typeID">The id of the type</param>
+		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForTypeFields( string typeID )
 		{
 			return typeID.Substring(2) + "FieldsTopic.html";
 		}
+		/// <summary>
+		/// Determines the filename for a type field list topic
+		/// </summary>
+		/// <param name="typeNode">XmlNode representing the type</param>
+		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForTypeFields( XmlNode typeNode )
 		{
 			return GetFilenameForTypeFields( typeNode.Attributes["id"].Value );
 		}
 
-
+		/// <summary>
+		/// Gets the filename for a particular field topic
+		/// </summary>
+		/// <param name="fieldID"></param>
+		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForField( string fieldID )
 		{
 			return fieldID.Substring(2) + "Topic.html";
 		}
+		/// <summary>
+		/// Gets the filename for a particular field topic
+		/// </summary>
+		/// <param name="fieldNode"></param>
+		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForField( XmlNode fieldNode )
 		{
 			return GetFilenameForField( fieldNode.Attributes["id"].Value );
 		}
 
-
+		/// <summary>
+		/// Determines the filename for a type operator list topic
+		/// </summary>
+		/// <param name="typeID">The id of the type</param>
+		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForTypeOperators( string typeID )
 		{
 			return typeID.Substring(2) + "OperatorsTopic.html";
 		}
+		/// <summary>
+		/// Determines the filename for a type operator list topic
+		/// </summary>
+		/// <param name="typeNode">XmlNode representing the type</param>
+		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForTypeOperators( XmlNode typeNode )
 		{
 			return GetFilenameForTypeOperators( typeNode.Attributes["id"].Value );
 		}
 
-
+		/// <summary>
+		/// Determines the filename for an operator overloads list topic
+		/// </summary>
+		/// <param name="typeID">The id of the type</param>
+		/// <param name="opName">The name of the operator</param>
+		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForOperatorsOverloads( string typeID, string opName )
 		{
 			return typeID.Substring(2) + "." + opName + "Topic.html";
 		}
+		/// <summary>
+		/// Determines the filename for an operator overloads list topic
+		/// </summary>
+		/// <param name="typeNode">XmlNode representing the type</param>
+		/// <param name="opNode">The XmlNode repsenting the operator</param>
+		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForOperatorsOverloads( XmlNode typeNode, XmlNode opNode )
 		{
 			return GetFilenameForOperatorsOverloads( typeNode.Attributes["id"].Value, opNode.Attributes["name"].Value );
 		}
 
-
+		/// <summary>
+		/// Gets the filename for a particular operator topic
+		/// </summary>
+		/// <param name="operatorNode">The XmlNode repsenting the operator</param>
+		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForOperator( XmlNode operatorNode )
 		{
 			string operatorID = operatorNode.Attributes["id"].Value;
@@ -313,43 +419,90 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 
 			return fileName;
 		}
-
+		
+		/// <summary>
+		/// Determines the filename for a type event list topic
+		/// </summary>
+		/// <param name="typeID">The id of the type</param>
+		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForTypeEvents( string typeID )
 		{
 			return typeID.Substring(2) + "EventsTopic.html";
 		}
+		/// <summary>
+		/// Determines the filename for a type event list topic
+		/// </summary>
+		/// <param name="typeNode">XmlNode representing the type</param>
+		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForTypeEvents( XmlNode typeNode )
 		{
 			return GetFilenameForTypeEvents( typeNode.Attributes["id"].Value );
 		}
 
+		/// <summary>
+		/// Gets the filename for a particular event topic
+		/// </summary>
+		/// <param name="eventID"></param>
+		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForEvent( string eventID )
 		{
 			return eventID.Substring(2) + "Topic.html";
 		}
+		/// <summary>
+		/// Gets the filename for a particular event topic
+		/// </summary>
+		/// <param name="eventNode"></param>
+		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForEvent( XmlNode eventNode )
 		{
 			return GetFilenameForEvent( eventNode.Attributes["id"].Value );
 		}
-
+		
+		/// <summary>
+		/// Determines the filename for a type property list topic
+		/// </summary>
+		/// <param name="typeID">The id of the type</param>
+		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForTypeProperties( string typeID )
 		{
 			return typeID.Substring(2) + "PropertiesTopic.html";
 		}
+		/// <summary>
+		/// Determines the filename for a type property list topic
+		/// </summary>
+		/// <param name="typeNode">XmlNode representing the type</param>
+		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForTypeProperties( XmlNode typeNode )
 		{
 			return GetFilenameForTypeProperties( typeNode.Attributes["id"].Value );
 		}
 
+		/// <summary>
+		/// Determines the filename for an property overloads list topic
+		/// </summary>
+		/// <param name="typeID">The id of the type</param>
+		/// <param name="propertyName">The property name</param>
+		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForPropertyOverloads( string typeID, string propertyName )
 		{
 			return typeID.Substring(2) + propertyName + "Topic.html";
 		}
+		/// <summary>
+		/// Determines the filename for an property overloads list topic
+		/// </summary>
+		/// <param name="typeNode">XmlNode representing the type</param>
+		/// <param name="propertyNode"></param>
+		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForPropertyOverloads( XmlNode typeNode, XmlNode propertyNode )
 		{
 			 return GetFilenameForPropertyOverloads( typeNode.Attributes["id"].Value, propertyNode.Attributes["name"].Value );
 		}
 
+		/// <summary>
+		/// Gets the filename for a particular property topic
+		/// </summary>
+		/// <param name="propertyNode">XmlNode representing the property</param>
+		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForProperty( XmlNode propertyNode )
 		{
 			string propertyID = propertyNode.Attributes["id"].Value;
@@ -368,24 +521,51 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			return fileName;
 		}
 
+		/// <summary>
+		/// Determines the filename for a type method list topic
+		/// </summary>
+		/// <param name="typeID">The id of the type</param>
+		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForTypeMethods( string typeID )
 		{
 			return typeID.Substring(2) + "MethodsTopic.html";
 		}
+		/// <summary>
+		/// Determines the filename for a type method list topic
+		/// </summary>
+		/// <param name="typeNode">XmlNode representing the type</param>
+		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForTypeMethods( XmlNode typeNode )
 		{
 			 return GetFilenameForTypeMethods( typeNode.Attributes["id"].Value );
 		}
 
+		/// <summary>
+		/// Determines the filename for a method voerload list topic
+		/// </summary>
+		/// <param name="typeID">The id of the type</param>
+		/// <param name="methodName">The name of the method</param>
+		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForMethodOverloads( string typeID, string methodName )
 		{
 			return typeID.Substring(2) + "." + methodName + "Topic.html";
 		}
+		/// <summary>
+		/// Determines the filename for a method voerload list topic
+		/// </summary>
+		/// <param name="typeNode">XmlNode representing the type</param>
+		/// <param name="methodNode">XmlNode representing the method</param>
+		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForMethodOverloads( XmlNode typeNode, XmlNode methodNode )
 		{
 			return GetFilenameForMethodOverloads( typeNode.Attributes["id"].Value, methodNode.Attributes["name"].Value );
 		}
 
+		/// <summary>
+		/// Gets the filename for a particular method topic
+		/// </summary>
+		/// <param name="methodNode">XmlNode representing the method</param>
+		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForMethod( XmlNode methodNode )
 		{
 			string methodID = methodNode.Attributes["id"].Value;

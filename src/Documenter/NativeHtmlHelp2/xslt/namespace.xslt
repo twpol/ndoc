@@ -36,7 +36,7 @@
 					<xsl:apply-templates select="(assembly/module/namespace[(@name=$namespace) and documentation])[1]" />
 					<xsl:if test="$includeHierarchy">
 					  <p>
-						  <a href="{NUtil:GetHRefForNamespaceHierarchy( string( $namespace ) )}">
+						  <a href="{NUtil:GetNamespaceHierarchyHRef( string( $namespace ) )}">
 							  <xsl:text>Namespace hierarchy</xsl:text>
 						  </a>
 					  </p>

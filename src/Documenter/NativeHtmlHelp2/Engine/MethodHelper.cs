@@ -30,8 +30,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// Determines if an overload exists
 		/// </summary>
 		/// <param name="methodNodes">The list of methods</param>
-		/// <param name="indexes"></param>
-		/// <param name="index"></param>
+		/// <param name="indexes">an array of indices</param>
+		/// <param name="index">The current index</param>
 		/// <returns>True if no overload exists</returns>
 		public static bool IsMethodAlone(XmlNodeList methodNodes, int[] indexes, int index)
 		{
@@ -49,10 +49,10 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <summary>
 		/// Determines if a method is the first overload
 		/// </summary>
-		/// <param name="methodNodes"></param>
-		/// <param name="indexes"></param>
-		/// <param name="index"></param>
-		/// <returns></returns>
+		/// <param name="methodNodes">Collection of method node</param>
+		/// <param name="indexes">an array of indices</param>
+		/// <param name="index">The current index</param>
+		/// <returns>True if the method is the first overload</returns>
 		public static bool IsMethodFirstOverload(XmlNodeList methodNodes, int[] indexes, int index)
 		{
 			if ((methodNodes[indexes[index]].Attributes["declaringType"] != null)
@@ -68,9 +68,9 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// Determines if a method is the alst overload
 		/// </summary>
 		/// <param name="methodNodes"></param>
-		/// <param name="indexes"></param>
-		/// <param name="index"></param>
-		/// <returns></returns>
+		/// <param name="indexes">an array of indices</param>
+		/// <param name="index">The current index</param>
+		/// <returns>True if the method is the last overload</returns>
 		public static bool IsMethodLastOverload(XmlNodeList methodNodes, int[] indexes, int index)
 		{
 			if ((methodNodes[indexes[index]].Attributes["declaringType"] != null)
@@ -82,14 +82,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			return nextName != name;
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="methodNodes"></param>
-		/// <param name="indexes"></param>
-		/// <param name="index"></param>
-		/// <returns></returns>
-		public static string GetPreviousMethodName(XmlNodeList methodNodes, int[] indexes, int index)
+		private static string GetPreviousMethodName(XmlNodeList methodNodes, int[] indexes, int index)
 		{
 			while ( --index >= 0 )
 			{
@@ -99,14 +92,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			return null;
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="methodNodes"></param>
-		/// <param name="indexes"></param>
-		/// <param name="index"></param>
-		/// <returns></returns>
-		public static string GetNextMethodName(XmlNodeList methodNodes, int[] indexes, int index)
+		private static string GetNextMethodName(XmlNodeList methodNodes, int[] indexes, int index)
 		{
 			while (++index < methodNodes.Count)
 			{
@@ -114,32 +100,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 					return methodNodes[indexes[index]].Attributes["name"].Value;
 			}
 			return null;
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="parameterNodes"></param>
-		/// <returns></returns>
-		public static string GetParamList(XmlNodeList parameterNodes)
-		{
-			int numberOfNodes = parameterNodes.Count;
-			int nodeIndex = 1;
-			string paramList = "(";
-
-			foreach (XmlNode parameterNode in parameterNodes)
-			{
-				paramList += StripNamespace(parameterNode.Attributes["type"].Value);
-
-				if (nodeIndex < numberOfNodes)				
-					paramList += ", ";				
-
-				nodeIndex++;
-			}
-
-			paramList += ")";
-
-			return paramList;
 		}
 
 		/// <summary>

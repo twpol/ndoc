@@ -43,7 +43,7 @@
 					
 					<h4 class="dtH4">See Also</h4>
 					<p>
-						<a href="{NUtil:GetHRefForNamespace( string( $namespace ) )}">
+						<a href="{NUtil:GetNamespaceHRef( string( $namespace ) )}">
 							<xsl:value-of select="$namespace" /> Namespace
 						</a>
 					</p>

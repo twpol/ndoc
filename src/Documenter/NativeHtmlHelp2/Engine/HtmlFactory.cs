@@ -71,12 +71,14 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 
 		#region events
 		/// <summary>
-		/// 
+		/// Event raised when a topic is started
 		/// </summary>
 		public event TopicEventHandler TopicStart;
+
 		/// <summary>
-		/// 
+		/// Raises the <see cref="TopicStart"/> event
 		/// </summary>
+		/// <param name="fileName">File name of the topic being started</param>
 		protected virtual void OnTopicStart( string fileName )
 		{
 			if ( TopicStart != null )
@@ -84,11 +86,11 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		}
 	
 		/// <summary>
-		/// 
+		/// Event raises when a topic is closed
 		/// </summary>
 		public event EventHandler TopicEnd;
 		/// <summary>
-		/// 
+		/// Raises the <see cref="TopicEnd"/> event
 		/// </summary>
 		protected virtual void OnTopicEnd()
 		{
@@ -98,14 +100,13 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 	
 
 		/// <summary>
-		/// 
+		/// Event raised when a file is being added to a topic
 		/// </summary>
 		public event TopicEventHandler AddFileToTopic;
 		/// <summary>
-		/// 
+		/// Raises the <see cref="AddFileToTopic"/> event
 		/// </summary>
-		/// <param name="title"></param>
-		/// <param name="fileName"></param>
+		/// <param name="fileName">The file being added</param>
 		protected virtual void OnAddFileToTopic( string fileName )
 		{
 			if ( AddFileToTopic != null )
@@ -192,10 +193,9 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 				foreach ( DictionaryEntry entry in Properties )				
 					arguments.AddParam( entry.Key.ToString(), "", entry.Value );
 				
-				MsdnXsltUtilities utilities = new MsdnXsltUtilities( mapper.FileNames, mapper.ElemNames, linkToSdkDocVersion );
+				MsdnXsltUtilities utilities = new MsdnXsltUtilities( mapper.ElemNames, linkToSdkDocVersion );
 
 				arguments.AddParam( "ndoc-sdk-doc-base-url", String.Empty, utilities.SdkDocBaseUrl );
-				arguments.AddParam( "ndoc-sdk-doc-file-ext", String.Empty, utilities.SdkDocExt );
 
 				arguments.AddExtensionObject( "urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities", utilities );
 				arguments.AddExtensionObject( "urn:NDocExternalHtml", _htmlProvider );

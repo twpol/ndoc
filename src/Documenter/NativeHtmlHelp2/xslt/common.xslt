@@ -13,7 +13,6 @@
 	<!-- -->
 	<xsl:param name="ndoc-title" />
 	<xsl:param name="ndoc-sdk-doc-base-url" />
-	<xsl:param name="ndoc-sdk-doc-file-ext" />
 	<!-- -->
 	<xsl:template name="csharp-type">
 		<xsl:param name="runtime-type" />
@@ -230,7 +229,7 @@
 				</a>
 				<xsl:text> | </xsl:text>
 			</xsl:if>
-			<a href="{NUtil:GetHRefForNamespace( string( $namespaceName ) )}">
+			<a href="{NUtil:GetNamespaceHRef( string( $namespaceName ) )}">
 				<xsl:value-of select="$namespaceName" />
 				<xsl:text> Namespace</xsl:text>
 			</a>
@@ -453,7 +452,7 @@
 	<!-- -->
 	<xsl:template name="syntax-section">
 		<PRE class="syntax">
-		<xsl:call-template name="vb-type-syntax" />
+		<!--xsl:call-template name="vb-type-syntax" /-->
 		<xsl:apply-templates select="." mode="cs-syntax">
 			<xsl:with-param name="include-type-links" select="true()"/>
 			<xsl:with-param name="version" select="'long'"/>

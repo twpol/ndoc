@@ -135,7 +135,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Compiler
 		/// <summary>
 		/// Create a new instance of the HxObject class
 		/// </summary>
-		/// <param name="compilerPath">See <see cref="CompilerPath"/></param>
 		/// <param name="appName">The name of the executable that implements 
 		/// the functionality wrapped by an HxObject derived class</param>
 		public HxObject( string appName )
