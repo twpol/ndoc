@@ -119,8 +119,6 @@ namespace NDoc.Core
 		private void FixupCodeTag(XmlNode node)
 		{
 			string codeText = (string)node.InnerText;
-			string x = codeText.TrimStart(new Char[] {' '});
-			bool y = x.StartsWith("\r\n");
 			if (codeText.TrimStart(new Char[] {' '} ).StartsWith("\r\n"))
 			{
 				codeText = codeText.TrimStart(new Char[] {' '}).Substring(2);
