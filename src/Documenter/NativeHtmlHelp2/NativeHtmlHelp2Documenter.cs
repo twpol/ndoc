@@ -288,7 +288,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			project.Title = MyConfig.Title;
 
 			if ( MyConfig.IncludeDefaultStopWordList )
-				project.StopWordFile = string.Format( "FTSstop_{0}.stp", MyConfig.CharacterSet.ToString() );
+				project.StopWordFile = "FTSstop_UTF8.stp";
 
 			return project;
 		}
