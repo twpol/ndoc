@@ -906,7 +906,7 @@ namespace NDoc.Gui
 		/// </summary>
 		private void EnableAssemblyItems()
 		{
-			bool  bEnable = (assembliesListView.Items.Count > 0) ? true : false;
+			bool  bEnable = (assembliesListView.Items.Count > 0);
 
 			menuDocBuildItem.Enabled = bEnable;
 			menuDocViewItem.Enabled = bEnable;
@@ -2054,6 +2054,7 @@ namespace NDoc.Gui
 					project.AddAssemblySlashDoc(assemblySlashDoc);
 					AddRowToListView(assemblySlashDoc);
 					EnableMenuItems(true);
+					EnableAssemblyItems();
 				}
 				catch(Project.AssemblyAlreadyExistsException)
 				{
