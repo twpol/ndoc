@@ -14,9 +14,13 @@
 				<include name="System.Drawing.Design.dll" />
 				<include name="System.Design.dll" />
 				<include name="System.Data.dll" />
+				<include name="${current.bin.dir}/NDoc.ExtendedUI.dll" />
 			</references>
 			<resources>
 				<include name="**/*.resx" />
+			</resources>
+			<resources prefix="NDoc.Core" dynamicprefix="true">
+				<include name="graphics/*.bmp" />
 			</resources>
 		</csc>
 	</target>
