@@ -634,6 +634,7 @@ namespace NDoc.Gui
 																		  this.statusBar,
 																		  this.toolBar,
 																		  this.documenterHeaderGroupBox});
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Menu = this.mainMenu1;
 			this.MinimumSize = new System.Drawing.Size(504, 460);
 			this.Name = "MainForm";

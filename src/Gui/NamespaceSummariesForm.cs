@@ -163,12 +163,13 @@ namespace NDoc.Gui
 																		  this.label2,
 																		  this.label1,
 																		  this.namespaceComboBox});
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.MinimumSize = new System.Drawing.Size(416, 200);
 			this.Name = "NamespaceSummariesForm";
 			this.ShowInTaskbar = false;
-			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
+			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.Text = "Edit Namespace Summaries";
 			this.ResumeLayout(false);
 

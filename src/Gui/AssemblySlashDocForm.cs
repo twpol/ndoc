@@ -203,12 +203,13 @@ namespace NDoc.Gui
 																		  this.assemblyTextBox,
 																		  this.label2,
 																		  this.label1});
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.MinimumSize = new System.Drawing.Size(432, 182);
 			this.Name = "AssemblySlashDocForm";
 			this.ShowInTaskbar = false;
-			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
+			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.Text = "Edit Assembly Filename and XML Documentation Filename";
 			this.ResumeLayout(false);
 

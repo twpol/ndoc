@@ -17,7 +17,6 @@ namespace NDoc.Gui
 		private System.Windows.Forms.Button m_closeButton;
 		private System.Windows.Forms.Label m_stackTraceLabel;
 		private System.Windows.Forms.TextBox m_stackTraceTextBox;
-		private System.Windows.Forms.PictureBox pictureBox1;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -89,11 +88,11 @@ namespace NDoc.Gui
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(ErrorForm));
 			this.m_messageTextBox = new System.Windows.Forms.TextBox();
 			this.m_closeButton = new System.Windows.Forms.Button();
 			this.m_stackTraceLabel = new System.Windows.Forms.Label();
 			this.m_stackTraceTextBox = new System.Windows.Forms.TextBox();
-			this.pictureBox1 = new System.Windows.Forms.PictureBox();
 			this.SuspendLayout();
 			// 
 			// m_messageTextBox
@@ -101,12 +100,12 @@ namespace NDoc.Gui
 			this.m_messageTextBox.Anchor = ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
 				| System.Windows.Forms.AnchorStyles.Right);
 			this.m_messageTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.m_messageTextBox.Location = new System.Drawing.Point(62, 12);
+			this.m_messageTextBox.Location = new System.Drawing.Point(16, 12);
 			this.m_messageTextBox.Multiline = true;
 			this.m_messageTextBox.Name = "m_messageTextBox";
 			this.m_messageTextBox.ReadOnly = true;
 			this.m_messageTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.m_messageTextBox.Size = new System.Drawing.Size(336, 104);
+			this.m_messageTextBox.Size = new System.Drawing.Size(432, 116);
 			this.m_messageTextBox.TabIndex = 6;
 			this.m_messageTextBox.Text = "";
 			// 
@@ -114,7 +113,7 @@ namespace NDoc.Gui
 			// 
 			this.m_closeButton.Anchor = (System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right);
 			this.m_closeButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.m_closeButton.Location = new System.Drawing.Point(312, 284);
+			this.m_closeButton.Location = new System.Drawing.Point(360, 316);
 			this.m_closeButton.Name = "m_closeButton";
 			this.m_closeButton.TabIndex = 4;
 			this.m_closeButton.Text = "&Close";
@@ -137,35 +136,28 @@ namespace NDoc.Gui
 			this.m_stackTraceTextBox.Name = "m_stackTraceTextBox";
 			this.m_stackTraceTextBox.ReadOnly = true;
 			this.m_stackTraceTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.m_stackTraceTextBox.Size = new System.Drawing.Size(392, 128);
+			this.m_stackTraceTextBox.Size = new System.Drawing.Size(440, 160);
 			this.m_stackTraceTextBox.TabIndex = 7;
 			this.m_stackTraceTextBox.Text = "";
 			this.m_stackTraceTextBox.WordWrap = false;
 			// 
-			// pictureBox1
-			// 
-			this.pictureBox1.Location = new System.Drawing.Point(16, 12);
-			this.pictureBox1.Name = "pictureBox1";
-			this.pictureBox1.Size = new System.Drawing.Size(32, 40);
-			this.pictureBox1.TabIndex = 5;
-			this.pictureBox1.TabStop = false;
-			// 
 			// ErrorForm
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.ClientSize = new System.Drawing.Size(408, 318);
+			this.ClientSize = new System.Drawing.Size(456, 350);
 			this.Controls.AddRange(new System.Windows.Forms.Control[] {
 																		  this.m_messageTextBox,
 																		  this.m_closeButton,
 																		  this.m_stackTraceLabel,
-																		  this.m_stackTraceTextBox,
-																		  this.pictureBox1});
+																		  this.m_stackTraceTextBox});
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.MinimumSize = new System.Drawing.Size(400, 300);
 			this.Name = "ErrorForm";
 			this.ShowInTaskbar = false;
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "NDoc Error";
 			this.Load += new System.EventHandler(this.ErrorForm_Load);
 			this.ResumeLayout(false);
