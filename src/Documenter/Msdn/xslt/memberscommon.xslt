@@ -392,10 +392,11 @@
 	<xsl:template match="field|property[not(@declaringType)]|event|method[not(@declaringType)]|operator">
 		<xsl:variable name="member" select="local-name()" />
 		<xsl:variable name="name" select="@name" />
-		<xsl:if test="not(preceding-sibling::*[local-name()=$member and @name=$name])">
+		<xsl:variable name="contract" select="@contract" />
+		<xsl:if test="not(preceding-sibling::*[local-name()=$member and @name=$name and (($contract='Static' and @contract='Static') or ($contract!='Static' and @contract!='Static'))])">
 			<tr VALIGN="top">
 				<xsl:choose>
-					<xsl:when test="following-sibling::*[local-name()=$member and @name=$name]">
+					<xsl:when test="following-sibling::*[local-name()=$member and @name=$name and (($contract='Static' and @contract='Static') or ($contract!='Static' and @contract!='Static'))]">
 						<td width="50%">
 							<a>
 								<xsl:attribute name="href">
