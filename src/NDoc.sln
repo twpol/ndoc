@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Latex", "Documenter\Latex\L
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Msdn7", "Documenter\Msdn7\Msdn7.csproj", "{032D6069-AB8F-4F6E-9C14-5149C2F7D50D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinearHtml", "Documenter\LinearHtml\LinearHtml.csproj", "{8844E0D9-FCA0-419D-9168-BCD420B38378}"
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		ConfigName.0 = Debug
@@ -71,6 +73,10 @@ Global
 		{032D6069-AB8F-4F6E-9C14-5149C2F7D50D}.Debug.Build.0 = Debug|.NET
 		{032D6069-AB8F-4F6E-9C14-5149C2F7D50D}.Release.ActiveCfg = Release|.NET
 		{032D6069-AB8F-4F6E-9C14-5149C2F7D50D}.Release.Build.0 = Release|.NET
+		{8844E0D9-FCA0-419D-9168-BCD420B38378}.Debug.ActiveCfg = Debug|.NET
+		{8844E0D9-FCA0-419D-9168-BCD420B38378}.Debug.Build.0 = Debug|.NET
+		{8844E0D9-FCA0-419D-9168-BCD420B38378}.Release.ActiveCfg = Release|.NET
+		{8844E0D9-FCA0-419D-9168-BCD420B38378}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 		Item:1 = Help\tags.html
