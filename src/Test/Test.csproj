@@ -83,6 +83,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "extend-ndoc.xslt"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "include.xml"
                     BuildAction = "Content"
                 />
