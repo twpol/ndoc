@@ -88,7 +88,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		}
 
 		#region Main Settings properties
-		string _outputDirectory = @".\doc\";
+		string _outputDirectory = string.Format( ".{0}doc{0}", Path.DirectorySeparatorChar );
 		
 		/// <summary>Gets or sets the OutputDirectory property.</summary>
 		[Category("Documentation Main Settings")]
@@ -104,9 +104,9 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			{
 				_outputDirectory = value;
 
-				if (!_outputDirectory.EndsWith("\\"))
+				if (!_outputDirectory.EndsWith( Path.DirectorySeparatorChar.ToString() ))
 				{
-					_outputDirectory += "\\";
+					_outputDirectory += Path.DirectorySeparatorChar;
 				}
 
 				SetDirty();

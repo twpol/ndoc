@@ -63,6 +63,22 @@
 				</td>
 			</tr>
 		</xsl:if>
-	</xsl:template>
+	</xsl:template>	
 	<!-- -->
+	<xsl:template match="feedbackEmail">
+		<xsl:param name="page"/>
+		<p>
+			<a>
+				<xsl:attribute name="href">
+					<xsl:text>mailto:</xsl:text>
+					<xsl:value-of select="."/>
+					<xsl:text>?subject=</xsl:text>
+					<xsl:value-of select="$global-title" />
+					<xsl:text> Documentation Feedback: </xsl:text>
+					<xsl:value-of select="$page"/>
+				</xsl:attribute>
+				<xsl:text>Send comments on this topic.</xsl:text>
+			</a>
+		</p>
+	</xsl:template>		
 </xsl:transform>

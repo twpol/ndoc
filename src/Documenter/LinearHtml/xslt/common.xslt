@@ -722,9 +722,12 @@
 		<xsl:variable name="version-rtf">
 			<xsl:call-template name="generated-from-assembly-version" />
 		</xsl:variable>
-		<xsl:if test="string($copyright-rtf) or string($version-rtf) or string($footerHtml)">
+		<xsl:if test="string($copyright-rtf) or string($version-rtf) or string($footerHtml) or /ndoc/feedbackEmail">
 			<hr />
 			<div id="footer">
+				<xsl:apply-templates select="/ndoc/feedbackEmail">
+					<xsl:with-param name="page" select="$type-name"/>
+				</xsl:apply-templates>
 				<xsl:choose>
 					<xsl:when test="$footerHtml=''">
 						<p>
@@ -910,4 +913,20 @@
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
+	<xsl:template match="feedbackEmail">
+		<xsl:param name="page"/>
+		<p>
+			<a>
+				<xsl:attribute name="href">
+					<xsl:text>mailto:</xsl:text>
+					<xsl:value-of select="."/>
+					<xsl:text>?subject=</xsl:text>
+					<xsl:value-of select="$ndoc-title" />
+					<xsl:text> Documentation Feedback: </xsl:text>
+					<xsl:value-of select="$page"/>
+				</xsl:attribute>
+				<xsl:text>Send comments on this topic.</xsl:text>
+			</a>
+		</p>
+	</xsl:template>	
 </xsl:stylesheet>

@@ -46,7 +46,8 @@ namespace NDoc.Documenter.Msdn
 		/// <param name="name">The name of the derived class config</param>
 		protected MsdnDocumenterConfig( string name ) : base( name )
 		{
-			outputDirectory = @".\doc\";
+			// fix for bug 884121 - OutputDirectory on Linux
+			outputDirectory = string.Format(".{0}doc{0}",Path.DirectorySeparatorChar );
 
 			htmlHelpName = "Documentation";
 
@@ -84,9 +85,9 @@ namespace NDoc.Documenter.Msdn
 			{
 				outputDirectory = value;
 
-				if (!outputDirectory.EndsWith("\\"))
+				if (!outputDirectory.EndsWith( Path.DirectorySeparatorChar.ToString() ))
 				{
-					outputDirectory += "\\";
+					outputDirectory += Path.DirectorySeparatorChar;
 				}
 
 				SetDirty();

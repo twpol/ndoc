@@ -16,6 +16,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 using System;
+using System.IO;
 using System.ComponentModel;
 using System.Drawing.Design;
 using System.Windows.Forms.Design;
@@ -30,7 +31,8 @@ namespace NDoc.Documenter.JavaDoc
 		/// <summary>Initializes a new instance of the JavaDocDocumenterConfig class.</summary>
 		public JavaDocDocumenterConfig() : base("JavaDoc")
 		{
-			OutputDirectory = @".\doc\";
+			// fix for bug 884121 - OutputDirectory on Linux
+			OutputDirectory = string.Format(".{0}doc{0}",Path.DirectorySeparatorChar );
 		}
 
 		private string _Title;
@@ -71,9 +73,9 @@ namespace NDoc.Documenter.JavaDoc
 			{
 				_OutputDirectory = value;
 
-				if (!_OutputDirectory.EndsWith("\\"))
+				if (!_OutputDirectory.EndsWith( Path.DirectorySeparatorChar.ToString() ))
 				{
-					_OutputDirectory += "\\";
+					_OutputDirectory += Path.DirectorySeparatorChar;
 				}
 
 				SetDirty();

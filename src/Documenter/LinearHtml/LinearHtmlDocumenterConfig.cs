@@ -31,7 +31,8 @@ namespace NDoc.Documenter.LinearHtml
 		/// <summary>Initializes a new instance of the MsdnHelpConfig class.</summary>
 		public LinearHtmlDocumenterConfig() : base("LinearHtml")
 		{
-			_OutputDirectory = @".\doc\";
+			// fix for bug 884121 - OutputDirectory on Linux
+			_OutputDirectory = string.Format(".{0}doc{0}",Path.DirectorySeparatorChar );
 			_Title = "An NDoc Documented Class Library";
 			_HeaderHtml = string.Empty;
 			_FooterHtml = string.Empty;
@@ -81,9 +82,9 @@ namespace NDoc.Documenter.LinearHtml
 			{
 				_OutputDirectory = value;
 
-				if (!_OutputDirectory.EndsWith("\\"))
+				if (!_OutputDirectory.EndsWith( Path.DirectorySeparatorChar.ToString() ))
 				{
-					_OutputDirectory += "\\";
+					_OutputDirectory += Path.DirectorySeparatorChar;
 				}
 
 				SetDirty();

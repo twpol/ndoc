@@ -16,6 +16,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 using System;
+using System.IO;
 using System.ComponentModel;
 using System.Drawing.Design;
 using System.Windows.Forms.Design;
@@ -30,7 +31,7 @@ namespace NDoc.Documenter.Xml
 		/// <summary>Initializes a new instance of the XmlDocumenterConfig class.</summary>
 		public XmlDocumenterConfig() : base("XML")
 		{
-			OutputFile = @".\doc\doc.xml";
+			OutputFile = string.Format( ".{0}doc{0}doc.xml", Path.DirectorySeparatorChar );
 		}
 
 		string _OutputFile;
