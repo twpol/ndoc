@@ -41,7 +41,7 @@
 					<xsl:value-of select="$childType" />
 				</xsl:with-param>
 			</xsl:call-template>
-			<body>
+			<body id="bodyID" class="dtBODY">
 				<xsl:call-template name="title-row">
 					<xsl:with-param name="type-name">
 						<xsl:value-of select="../@name" />
@@ -53,11 +53,11 @@
 						<xsl:value-of select="childType" />
 					</xsl:with-param>
 				</xsl:call-template>
-				<div id="content">
+				<div id="nstext">
 					<xsl:call-template name="overloads-summary-section" />
-					<h4>Overload List</h4>
+					<h4 class="dtH4">Overload List</h4>
 					<xsl:for-each select="parent::node()/*[@name=$memberName]">
-						<p class="i1">
+						<p>
 							<xsl:choose>
 								<xsl:when test="@declaringType">
 									<xsl:call-template name="summary-with-no-paragraph">
@@ -71,7 +71,7 @@
 								</xsl:otherwise>
 							</xsl:choose>
 						</p>
-						<p class="i2">
+						<blockquote class="dtBlock">
 							<a>
 								<xsl:attribute name="href">
 									<xsl:choose>
@@ -88,7 +88,7 @@
 								</xsl:attribute>
 								<xsl:apply-templates select="self::node()" mode="syntax" />
 							</a>
-						</p>
+						</blockquote>
 					</xsl:for-each>
 					<xsl:call-template name="overloads-example-section" />
 					<xsl:call-template name="seealso-section">

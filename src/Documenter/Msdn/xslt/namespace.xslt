@@ -16,15 +16,15 @@
 			<xsl:call-template name="html-head">
 				<xsl:with-param name="title" select="$namespace" />
 			</xsl:call-template>
-			<body>
+			<body id="bodyID" class="dtBODY">
 				<xsl:call-template name="title-row">
 					<xsl:with-param name="type-name">
 						<xsl:value-of select="$namespace" />
 						<xsl:text> Namespace</xsl:text>
 					</xsl:with-param>
 				</xsl:call-template>
-				<div id="content">
-					<p class="i1">
+				<div id="nstext">
+					<p>
 						<a>
 							<xsl:attribute name="href">
 								<xsl:call-template name="get-filename-for-current-namespace-hierarchy" />
@@ -36,9 +36,9 @@
 					<!-- the namespace template just gets the summary. -->
 					<xsl:apply-templates select="assembly/module/namespace[@name=$namespace][1]" />
 					<xsl:if test="assembly/module/namespace[@name=$namespace]/class">
-						<h3>Classes</h3>
-						<div class="table">
-							<table cellspacing="0">
+						<h3 class="dtH3">Classes</h3>
+						<div class="tablediv">
+							<table class="dtTABLE" cellspacing="0">
 								<tr valign="top">
 									<th width="50%">Class</th>
 									<th width="50%">Description</th>
@@ -50,9 +50,9 @@
 						</div>
 					</xsl:if>
 					<xsl:if test="assembly/module/namespace[@name=$namespace]/interface">
-						<h3>Interfaces</h3>
-						<div class="table">
-							<table cellspacing="0">
+						<h3 class="dtH3">Interfaces</h3>
+						<div class="tablediv">
+							<table class="dtTABLE" cellspacing="0">
 								<tr valign="top">
 									<th width="50%">Interface</th>
 									<th width="50%">Description</th>
@@ -64,9 +64,9 @@
 						</div>
 					</xsl:if>
 					<xsl:if test="assembly/module/namespace[@name=$namespace]/structure">
-						<h3>Structures</h3>
-						<div class="table">
-							<table cellspacing="0">
+						<h3 class="dtH3">Structures</h3>
+						<div class="tablediv">
+							<table class="dtTABLE" cellspacing="0">
 								<tr valign="top">
 									<th width="50%">Structure</th>
 									<th width="50%">Description</th>
@@ -78,9 +78,9 @@
 						</div>
 					</xsl:if>
 					<xsl:if test="assembly/module/namespace[@name=$namespace]/delegate">
-						<h3>Delegates</h3>
-						<div class="table">
-							<table cellspacing="0">
+						<h3 class="dtH3">Delegates</h3>
+						<div class="tablediv">
+							<table class="dtTABLE" cellspacing="0">
 								<tr valign="top">
 									<th width="50%">Delegate</th>
 									<th width="50%">Description</th>
@@ -92,9 +92,9 @@
 						</div>
 					</xsl:if>
 					<xsl:if test="assembly/module/namespace[@name=$namespace]/enumeration">
-						<h3>Enumerations</h3>
-						<div class="table">
-							<table cellspacing="0">
+						<h3 class="dtH3">Enumerations</h3>
+						<div class="tablediv">
+							<table class="dtTABLE" cellspacing="0">
 								<tr valign="top">
 									<th width="50%">Enumeration</th>
 									<th width="50%">Description</th>

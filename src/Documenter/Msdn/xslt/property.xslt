@@ -23,13 +23,13 @@
 			<xsl:call-template name="html-head">
 				<xsl:with-param name="title" select="concat(../@name, '.', @name, ' Property')" />
 			</xsl:call-template>
-			<body>
+			<body id="bodyID" class="dtBODY">
 				<xsl:call-template name="title-row">
 					<xsl:with-param name="type-name">
 						<xsl:value-of select="../@name" />.<xsl:value-of select="@name" /> Property
 					</xsl:with-param>
 				</xsl:call-template>
-				<div id="content">
+				<div id="nstext">
 					<xsl:call-template name="summary-section" />
 					<xsl:if test="$ndoc-vb-syntax">
 						<pre class="syntax">

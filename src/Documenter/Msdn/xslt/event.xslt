@@ -16,13 +16,13 @@
       <xsl:call-template name="html-head">
         <xsl:with-param name="title" select="concat(../@name, '.', @name, ' Event')" />
       </xsl:call-template>
-      <body>
+      <body id="bodyID" class="dtBODY">
         <xsl:call-template name="title-row">
           <xsl:with-param name="type-name">
             <xsl:value-of select="../@name" />.<xsl:value-of select="@name" /> Event
           </xsl:with-param>
         </xsl:call-template>
-        <div id="content">
+        <div id="nstext">
           <xsl:call-template name="summary-section" />
           <xsl:call-template name="vb-field-or-event-syntax" />
           <xsl:call-template name="cs-field-or-event-syntax" />
@@ -31,8 +31,8 @@
           <xsl:variable name="eventargs-id" select="concat('T:', //delegate[@id=concat('T:', $type)]/parameter[contains(@type, 'EventArgs')][1]/@type)" />
           <xsl:variable name="thisevent" select="//class[@id=$eventargs-id]" />
           <xsl:if test="$thisevent/property[@access='Public' and not(@static)]">
-            <h4>Event Data</h4>
-            <p class="i1">
+            <h4 class="dtH4">Event Data</h4>
+            <p>
               <xsl:text>The event handler receives a </xsl:text>
               <a>
                 <xsl:attribute name="href">
@@ -52,8 +52,8 @@
               </B>
               <xsl:text> properties provide information specific to this event.</xsl:text>
             </p>
-            <div class="table">
-              <table cellspacing="0">
+            <div class="tablediv">
+              <table class="dtTABLE" cellspacing="0">
                 <tr valign="top">
                   <th width="50%">Property</th>
                   <th width="50%">Description</th>

@@ -16,13 +16,13 @@
 			<xsl:call-template name="html-head">
 				<xsl:with-param name="title" select="concat(../@name, '.', @name, ' Field')" />
 			</xsl:call-template>
-			<body>
+			<body id="bodyID" class="dtBODY">
 				<xsl:call-template name="title-row">
 					<xsl:with-param name="type-name">
 						<xsl:value-of select="../@name" />.<xsl:value-of select="@name" /> Field
 					</xsl:with-param>
 				</xsl:call-template>
-				<div id="content">
+				<div id="nstext">
 					<xsl:call-template name="summary-section" />
 					<xsl:call-template name="vb-field-or-event-syntax" />
 					<xsl:call-template name="cs-field-or-event-syntax" />

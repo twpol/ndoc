@@ -25,14 +25,14 @@
 			<xsl:call-template name="html-head">
 				<xsl:with-param name="title" select="concat(@name, ' ', $Members)" />
 			</xsl:call-template>
-			<body>
+			<body id="bodyID" class="dtBODY">
 				<xsl:call-template name="title-row">
 					<xsl:with-param name="type-name">
 						<xsl:value-of select="@name" />&#160;<xsl:value-of select="$Members" />
 					</xsl:with-param>
 				</xsl:call-template>
-				<div id="content">
-					<p class="i1">
+				<div id="nstext">
+					<p>
 						<xsl:text>The </xsl:text>
 						<xsl:value-of select="$members" />
 						<xsl:text> of the </xsl:text>

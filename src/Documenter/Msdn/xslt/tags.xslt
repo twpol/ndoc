@@ -24,7 +24,7 @@
 	</doc:template>
 
 	<xsl:template match="para" mode="slashdoc" doc:group="block" doc:msdn="ms-help://MS.NETFrameworkSDK/csref/html/vclrfpara.htm">
-		<p class="i1">
+		<p>
 			<xsl:apply-templates select="./node()" mode="slashdoc" />
 		</p>
 	</xsl:template>
@@ -35,7 +35,7 @@
 	</doc:template>
 
 	<xsl:template match="para[@lang]" mode="slashdoc" doc:group="block">
-		<p class="i1">
+		<p>
 			<span class="lang">
 				<xsl:text>[</xsl:text>
 				<xsl:call-template name="get-lang">
@@ -82,7 +82,7 @@
 	</doc:template>
 
 	<xsl:template match="note" mode="slashdoc" doc:group="block">
-		<p class="i2">
+		<blockquote class="dtBlock">
 			<xsl:choose>
 				<xsl:when test="@type='caution'">
 					<b>CAUTION</b>
@@ -99,7 +99,7 @@
 			</xsl:choose>
 			<xsl:text>&#160;&#160;&#160;</xsl:text>
 			<xsl:apply-templates mode="slashdoc" />
-		</p>
+		</blockquote>
 	</xsl:template>
 
 	<xsl:template match="list[@type='bullet']" mode="slashdoc" doc:group="block" doc:msdn="ms-help://MS.NETFrameworkSDK/csref/html/vclrflist.htm">
@@ -143,8 +143,8 @@
 	</xsl:template>
 
 	<xsl:template match="list[@type='table']" mode="slashdoc" doc:group="block" doc:msdn="ms-help://MS.NETFrameworkSDK/csref/html/vclrflist.htm">
-		<div class="table">
-			<table cellspacing="0">
+		<div class="tablediv">
+			<table class="dtTABLE" cellspacing="0">
 				<xsl:apply-templates select="listheader" mode="slashdoc" />
 				<xsl:apply-templates select="item" mode="slashdoc" />
 			</table>
@@ -192,7 +192,7 @@
 	 +-->
 
 	<xsl:template match="c" mode="slashdoc" doc:group="inline" doc:msdn="ms-help://MS.NETFrameworkSDK/csref/html/vclrfc.htm">
-		<code class="ce">
+		<code>
 			<xsl:apply-templates mode="slashdoc" />
 		</code>
 	</xsl:template>

@@ -112,17 +112,19 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="parameter-topic">
+		<dl>
 		<xsl:for-each select="parameter">
 			<xsl:variable name="name" select="@name" />
-			<p class="i1">
+			<dt>
 				<i>
 					<xsl:value-of select="@name" />
 				</i>
-			</p>
-			<p class="i2">
+			</dt>
+			<dd>
 				<xsl:apply-templates select="parent::node()/documentation/param[@name=$name]/node()" mode="slashdoc" />
-			</p>
+			</dd>
 		</xsl:for-each>
+		</dl>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="type-mixed">
@@ -203,8 +205,8 @@
 		<xsl:variable name="namespaceName">
 			<xsl:call-template name="namespace-name" />
 		</xsl:variable>
-		<h4>See Also</h4>
-		<p class="i1">
+		<h4 class="dtH4">See Also</h4>
+		<p>
 			<xsl:if test="$page!='type' and $page!='enumeration' and $page!='delegate'">
 				<xsl:variable name="type-filename">
 					<xsl:call-template name="get-filename-for-type">
@@ -318,7 +320,7 @@
 		<xsl:param name="nodes" />
 		<xsl:choose>
 			<xsl:when test="not($nodes/self::para | $nodes/self::p)">
-				<p class="i1">
+				<p>
 					<xsl:apply-templates select="$nodes" mode="slashdoc" />
 				</p>
 			</xsl:when>
@@ -384,8 +386,8 @@
 	<!-- -->
 	<xsl:template name="overloads-example-section">
 		<xsl:if test="documentation/overloads/example">
-			<h4>Example</h4>
-			<p class="i1">
+			<h4 class="dtH4">Example</h4>
+			<p>
 				<xsl:apply-templates select="(documentation/overloads/example)[1]/node()" mode="slashdoc" />
 			</p>
 		</xsl:if>
@@ -393,15 +395,15 @@
 	<!-- -->
 	<xsl:template name="parameter-section">
 		<xsl:if test="documentation/param">
-			<h4>Parameters</h4>
+			<h4 class="dtH4">Parameters</h4>
 			<xsl:call-template name="parameter-topic" />
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="returnvalue-section">
 		<xsl:if test="documentation/returns">
-			<h4>Return Value</h4>
-			<p class="i1">
+			<h4 class="dtH4">Return Value</h4>
+			<p>
 				<xsl:apply-templates select="documentation/returns/node()" mode="slashdoc" />
 			</p>
 		</xsl:if>
@@ -409,11 +411,11 @@
 	<!-- -->
 	<xsl:template name="remarks-section">
 		<xsl:if test="documentation/remarks">
-			<h4>Remarks</h4>
+			<h4 class="dtH4">Remarks</h4>
 			<xsl:variable name="first-element" select="local-name(documentation/remarks/*[1])" />
 			<xsl:choose>
 				<xsl:when test="$first-element!='para' and $first-element!='p'">
-					<p class="i1">
+					<p>
 						<xsl:apply-templates select="documentation/remarks/node()" mode="slashdoc" />
 					</p>
 				</xsl:when>
@@ -426,8 +428,8 @@
 	<!-- -->
 	<xsl:template name="value-section">
 		<xsl:if test="documentation/value">
-			<h4>Property Value</h4>
-			<p class="i1">
+			<h4 class="dtH4">Property Value</h4>
+			<p>
 				<xsl:apply-templates select="documentation/value/node()" mode="slashdoc" />
 			</p>
 		</xsl:if>
@@ -435,9 +437,9 @@
 	<!-- -->
 	<xsl:template name="events-section">
 		<xsl:if test="documentation/event">
-			<h4>Events</h4>
-			<div class="table">
-				<table cellspacing="0">
+			<h4 class="dtH4">Events</h4>
+			<div class="tablediv">
+				<table class="dtTABLE" cellspacing="0">
 					<tr valign="top">
 						<th width="50%">Event Type</th>
 						<th width="50%">Reason</th>
@@ -467,9 +469,9 @@
 	<!-- -->
 	<xsl:template name="exceptions-section">
 		<xsl:if test="documentation/exception">
-			<h4>Exceptions</h4>
-			<div class="table">
-				<table cellspacing="0">
+			<h4 class="dtH4">Exceptions</h4>
+			<div class="tablediv">
+				<table class="dtTABLE" cellspacing="0">
 					<tr valign="top">
 						<th width="50%">Exception Type</th>
 						<th width="50%">Condition</th>
@@ -499,8 +501,8 @@
 	<!-- -->
 	<xsl:template name="example-section">
 		<xsl:if test="documentation/example">
-			<h4>Example</h4>
-			<p class="i1">
+			<h4 class="dtH4">Example</h4>
+			<p>
 				<xsl:apply-templates select="documentation/example/node()" mode="slashdoc" />
 			</p>
 		</xsl:if>
@@ -508,14 +510,15 @@
 	<!-- -->
 	<xsl:template name="members-section">
 		<xsl:if test="field">
-			<h4>Members</h4>
-			<div class="table">
-				<table cellspacing="0">
+			<h4 class="dtH4">Members</h4>
+			<div class="tablediv">
+				<table class="dtTABLE" cellspacing="0">
 					<tr valign="top">
 						<th width="50%">Member Name</th>
 						<th width="50%">Description</th>
 					</tr>
 					<xsl:for-each select="field">
+						<xsl:text>&#10;</xsl:text>
 						<tr valign="top">
 							<td width="50%">
 								<b>
@@ -634,19 +637,28 @@
 			<title>
 				<xsl:value-of select="$title" />
 			</title>
+			<xml></xml>
 			<link rel="stylesheet" type="text/css" href="MSDN.css" />
 		</head>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="title-row">
 		<xsl:param name="type-name" />
-		<div id="banner">
-			<div id="header">
-				<xsl:value-of select="$ndoc-title" />
+		<div id="nsbanner">
+			<div id="bannerrow1">
+				<table class="bannerparthead" cellspacing="0"><tr id="hdr">
+					<td class="runninghead">
+					<xsl:value-of select="$ndoc-title" />
+					</td>
+					<td class="product">
+					</td>
+				</tr></table>
 			</div>
-			<h1>
-				<xsl:value-of select="$type-name" />
-			</h1>
+			<div id="TitleRow">
+				<h1 class="dtH1">
+					<xsl:value-of select="$type-name" />
+				</h1>
+			</div>
 		</div>
 	</xsl:template>
 	<!-- -->
@@ -806,8 +818,8 @@
 	<!-- -->
 	<xsl:template name="requirements-section">
 		<xsl:if test="documentation/permission">
-			<h4>Requirements</h4>
-			<p class="i1">
+			<h4 class="dtH4">Requirements</h4>
+			<p>
 				<b>.NET Framework Security: </b>
 				<ul class="permissions">
 					<xsl:for-each select="documentation/permission">

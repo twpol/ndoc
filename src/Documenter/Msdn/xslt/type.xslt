@@ -94,11 +94,11 @@
 			<xsl:call-template name="html-head">
 				<xsl:with-param name="title" select="concat(@name, ' ', $type)" />
 			</xsl:call-template>
-			<body>
+			<body id="bodyID" class="dtBODY">
 				<xsl:call-template name="title-row">
 					<xsl:with-param name="type-name" select="concat(@name, ' ', $type)" />
 				</xsl:call-template>
-				<div id="content">
+				<div id="nstext">
 					<xsl:call-template name="summary-section" />
 					<xsl:if test="local-name()!='delegate' and local-name()!='enumeration'">
 						<xsl:variable name="members-href">
@@ -107,11 +107,11 @@
 							</xsl:call-template>
 						</xsl:variable>
 						<xsl:if test="constructor|field|property|method|operator|event">
-							<p class="i1">For a list of all members of this type, see <a href="{$members-href}"><xsl:value-of select="@name" /> Members</a>.</p>
+							<p>For a list of all members of this type, see <a href="{$members-href}"><xsl:value-of select="@name" /> Members</a>.</p>
 						</xsl:if>
 					</xsl:if>
 					<xsl:if test="local-name() != 'delegate' and local-name() != 'enumeration'">
-						<p class="i1">
+						<p>
 							<xsl:choose>
 								<xsl:when test="self::interface">
 									<xsl:if test="base">
@@ -159,8 +159,8 @@
 					<xsl:if test="local-name() = 'enumeration'">
 						<xsl:call-template name="members-section" />
 					</xsl:if>
-					<h4>Requirements</h4>
-					<p class="i1">
+					<h4 class="dtH4">Requirements</h4>
+					<p>
 						<b>Namespace: </b>
 						<a>
 							<xsl:attribute name="href">
@@ -172,7 +172,7 @@
 							<xsl:text> Namespace</xsl:text>
 						</a>
 					</p>
-					<p class="i1">
+					<p>
 						<b>Assembly: </b>
 						<xsl:value-of select="../../@name" />
 					</p>

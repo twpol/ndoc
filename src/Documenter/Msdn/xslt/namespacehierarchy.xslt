@@ -13,11 +13,11 @@
 			<xsl:call-template name="html-head">
 				<xsl:with-param name="title" select="concat($ns/@name, 'Hierarchy')" />
 			</xsl:call-template>
-			<body>
+			<body id="bodyID" class="dtBODY">
 				<xsl:call-template name="title-row">
 					<xsl:with-param name="type-name" select="concat($ns/@name, ' Hierarchy')" />
 				</xsl:call-template>
-				<div id="content">
+				<div id="nstext">
 					<a>
 						<xsl:attribute name="href">
 							<xsl:call-template name="get-filename-for-system-type">
@@ -34,7 +34,7 @@
 					</xsl:call-template>
 					<br />
 					<xsl:if test="$ns/interface">
-						<h3>Interfaces</h3>
+						<h3 class="dtH3">Interfaces</h3>
 						<p>
 							<xsl:apply-templates select="$ns/interface">
 								<xsl:sort select="@name" />

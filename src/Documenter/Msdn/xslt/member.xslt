@@ -41,7 +41,7 @@
 					</xsl:if>
 				</xsl:with-param>
 			</xsl:call-template>
-			<body>
+			<body id="bodyID" class="dtBODY">
 				<xsl:call-template name="title-row">
 					<xsl:with-param name="type-name">
 						<xsl:value-of select="../@name" />
@@ -57,7 +57,7 @@
 						</xsl:if>
 					</xsl:with-param>
 				</xsl:call-template>
-				<div id="content">
+				<div id="nstext">
 					<xsl:call-template name="summary-section" />
 					<xsl:call-template name="vb-member-syntax" />
 					<xsl:call-template name="cs-member-syntax" />
