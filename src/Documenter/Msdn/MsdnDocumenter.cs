@@ -205,7 +205,7 @@ namespace NDoc.Documenter.Msdn
 				if ((MyConfig.RootPageFileName != null) && (MyConfig.RootPageFileName != string.Empty))
 				{
 					rootPageFileName = MyConfig.RootPageFileName;
-					defaultTopic = Path.GetFileName(rootPageFileName);
+					defaultTopic = "index.html";
 
 					// what to call the top page in the table of contents?
 					if ((MyConfig.RootPageTOCName != null) && (MyConfig.RootPageTOCName != string.Empty))
@@ -253,16 +253,15 @@ namespace NDoc.Documenter.Msdn
 					if (rootPageFileName != null)
 					{
 						// add the file
-						string rootPageOutputName = Path.Combine(MyConfig.OutputDirectory, 
-							Path.GetFileName(rootPageFileName));
+						string rootPageOutputName = Path.Combine(MyConfig.OutputDirectory, "index.html");
 						if (File.Exists(rootPageOutputName))
 						{
 							File.SetAttributes(rootPageOutputName, FileAttributes.Normal);
 						}
 						File.Copy(rootPageFileName, rootPageOutputName, true);
-						htmlHelp.AddFileToProject(Path.GetFileName(rootPageFileName));
+						htmlHelp.AddFileToProject(Path.GetFileName(rootPageOutputName));
 						htmlHelp.AddFileToContents(rootPageTOCName, 
-							Path.GetFileName(rootPageFileName));
+							Path.GetFileName(rootPageOutputName));
 						htmlHelp.OpenBookInContents();
 					}
 

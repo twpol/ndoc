@@ -169,11 +169,20 @@ namespace NDoc.Core
 
 			if (_includeFavorites)
 			{
-				options = "0x63520,220,0x383e,[86,51,872,558],,,,,,,0";
+				options = "0x63520,220";
 			}
 			else
 			{
-				options = "0x62520,220,0x383e,[86,51,872,558],,,,,,,0";
+				options = "0x62520,220";						  
+			}
+
+			if (_defaultTopic == "index.html")
+			{
+				options += ",0x387e,[86,51,872,558],,,,,,,0";
+			}
+			else
+			{
+				options += ",0x383e,[86,51,872,558],,,,,,,0";
 			}
 
 			streamHtmlHelp.Write(
