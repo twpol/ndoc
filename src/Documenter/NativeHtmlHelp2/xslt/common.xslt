@@ -879,30 +879,51 @@
 		<xsl:param name="from" />
 		<xsl:param name="to" />
 		<xsl:choose>
-			<xsl:when test="$name='op_UnaryPlus'">Unary Plus Operator</xsl:when>
-			<xsl:when test="$name='op_UnaryNegation'">Unary Negation Operator</xsl:when>
-			<xsl:when test="$name='op_LogicalNot'">Logical Not Operator</xsl:when>
-			<xsl:when test="$name='op_OnesComplement'">Ones Complement Operator</xsl:when>
-			<xsl:when test="$name='op_Increment'">Increment Operator</xsl:when>
 			<xsl:when test="$name='op_Decrement'">Decrement Operator</xsl:when>
+			<xsl:when test="$name='op_Increment'">Increment Operator</xsl:when>
+			<xsl:when test="$name='op_UnaryNegation'">Unary Negation Operator</xsl:when>
+			<xsl:when test="$name='op_UnaryPlus'">Unary Plus Operator</xsl:when>
+			<xsl:when test="$name='op_LogicalNot'">Logical Not Operator</xsl:when>
 			<xsl:when test="$name='op_True'">True Operator</xsl:when>
 			<xsl:when test="$name='op_False'">False Operator</xsl:when>
+			<xsl:when test="$name='op_AddressOf'">Address Of Operator</xsl:when>
+			<xsl:when test="$name='op_OnesComplement'">Ones Complement Operator</xsl:when>
+			<xsl:when test="$name='op_PointerDereference'">Pointer Dereference Operator</xsl:when>
 			<xsl:when test="$name='op_Addition'">Addition Operator</xsl:when>
 			<xsl:when test="$name='op_Subtraction'">Subtraction Operator</xsl:when>
 			<xsl:when test="$name='op_Multiply'">Multiplication Operator</xsl:when>
 			<xsl:when test="$name='op_Division'">Division Operator</xsl:when>
 			<xsl:when test="$name='op_Modulus'">Modulus Operator</xsl:when>
+			<xsl:when test="$name='op_ExclusiveOr'">Exclusive Or Operator</xsl:when>
 			<xsl:when test="$name='op_BitwiseAnd'">Bitwise And Operator</xsl:when>
 			<xsl:when test="$name='op_BitwiseOr'">Bitwise Or Operator</xsl:when>
-			<xsl:when test="$name='op_ExclusiveOr'">Exclusive Or Operator</xsl:when>
+			<xsl:when test="$name='op_LogicalAnd'">LogicalAnd Operator</xsl:when>
+			<xsl:when test="$name='op_LogicalOr'">Logical Or Operator</xsl:when>
+			<xsl:when test="$name='op_Assign'">Assignment Operator</xsl:when>
 			<xsl:when test="$name='op_LeftShift'">Left Shift Operator</xsl:when>
 			<xsl:when test="$name='op_RightShift'">Right Shift Operator</xsl:when>
+			<xsl:when test="$name='op_SignedRightShift'">Signed Right Shift Operator</xsl:when>
+			<xsl:when test="$name='op_UnsignedRightShift'">Unsigned Right Shift Operator</xsl:when>
 			<xsl:when test="$name='op_Equality'">Equality Operator</xsl:when>
-			<xsl:when test="$name='op_Inequality'">Inequality Operator</xsl:when>
-			<xsl:when test="$name='op_LessThan'">Less Than Operator</xsl:when>
 			<xsl:when test="$name='op_GreaterThan'">Greater Than Operator</xsl:when>
-			<xsl:when test="$name='op_LessThanOrEqual'">Less Than Or Equal Operator</xsl:when>
+			<xsl:when test="$name='op_LessThan'">Less Than Operator</xsl:when>
+			<xsl:when test="$name='op_Inequality'">Inequality Operator</xsl:when>
 			<xsl:when test="$name='op_GreaterThanOrEqual'">Greater Than Or Equal Operator</xsl:when>
+			<xsl:when test="$name='op_LessThanOrEqual'">Less Than Or Equal Operator</xsl:when>
+			<xsl:when test="$name='op_UnsignedRightShiftAssignment'">Unsigned Right Shift Assignment Operator</xsl:when>
+			<xsl:when test="$name='op_MemberSelection'">Member Selection Operator</xsl:when>
+			<xsl:when test="$name='op_RightShiftAssignment'">Right Shift Assignment Operator</xsl:when>
+			<xsl:when test="$name='op_MultiplicationAssignment'">Multiplication Assignment Operator</xsl:when>
+			<xsl:when test="$name='op_PointerToMemberSelection'">Pointer To Member Selection Operator</xsl:when>
+			<xsl:when test="$name='op_SubtractionAssignment'">Subtraction Assignment Operator</xsl:when>
+			<xsl:when test="$name='op_ExclusiveOrAssignment'">Exclusive Or Assignment Operator</xsl:when>
+			<xsl:when test="$name='op_LeftShiftAssignment'">Left Shift Assignment Operator</xsl:when>
+			<xsl:when test="$name='op_ModulusAssignment'">Modulus Assignment Operator</xsl:when>
+			<xsl:when test="$name='op_AdditionAssignment'">Addition Assignment Operator</xsl:when>
+			<xsl:when test="$name='op_BitwiseAndAssignment'">Bitwise And Assignment Operator</xsl:when>
+			<xsl:when test="$name='op_BitwiseOrAssignment'">Bitwise Or Assignment Operator</xsl:when>
+			<xsl:when test="$name='op_Comma'">Comma Operator</xsl:when>
+			<xsl:when test="$name='op_DivisionAssignment'">Division Assignment Operator</xsl:when>
 			<xsl:when test="$name='op_Implicit' or $name='op_Explicit'">
 				<xsl:call-template name="strip-namespace">
 					<xsl:with-param name="name" select="$from" />

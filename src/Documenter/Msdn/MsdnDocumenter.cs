@@ -1224,54 +1224,51 @@ namespace NDoc.Documenter.Msdn
 
 			switch (name)
 			{
-				case "op_UnaryPlus":
-					return "Unary Plus Operator";
-				case "op_UnaryNegation":
-					return "Unary Negation Operator";
-				case "op_LogicalNot":
-					return "Logical Not Operator";
-				case "op_OnesComplement":
-					return "Ones Complement Operator";
-				case "op_Increment":
-					return "Increment Operator";
-				case "op_Decrement":
-					return "Decrement Operator";
-				case "op_True":
-					return "True Operator";
-				case "op_False":
-					return "False Operator";
-				case "op_Addition":
-					return "Addition Operator";
-				case "op_Subtraction":
-					return "Subtraction Operator";
-				case "op_Multiply":
-					return "Multiplication Operator";
-				case "op_Division":
-					return "Division Operator";
-				case "op_Modulus":
-					return "Modulus Operator";
-				case "op_BitwiseAnd":
-					return "Bitwise And Operator";
-				case "op_BitwiseOr":
-					return "Bitwise Or Operator";
-				case "op_ExclusiveOr":
-					return "Exclusive Or Operator";
-				case "op_LeftShift":
-					return "Left Shift Operator";
-				case "op_RightShift":
-					return "Right Shift Operator";
-				case "op_Equality":
-					return "Equality Operator";
-				case "op_Inequality":
-					return "Inequality Operator";
-				case "op_LessThan":
-					return "Less Than Operator";
-				case "op_GreaterThan":
-					return "Greater Than Operator";
-				case "op_LessThanOrEqual":
-					return "Less Than Or Equal Operator";
-				case "op_GreaterThanOrEqual":
-					return "Greater Than Or Equal Operator";
+				case "op_Decrement": return "Decrement Operator";
+				case "op_Increment": return "Increment Operator";
+				case "op_UnaryNegation": return "Unary Negation Operator";
+				case "op_UnaryPlus": return "Unary Plus Operator";
+				case "op_LogicalNot": return "Logical Not Operator";
+				case "op_True": return "True Operator";
+				case "op_False": return "False Operator";
+				case "op_AddressOf": return "Address Of Operator";
+				case "op_OnesComplement": return "Ones Complement Operator";
+				case "op_PointerDereference": return "Pointer Dereference Operator";
+				case "op_Addition": return "Addition Operator";
+				case "op_Subtraction": return "Subtraction Operator";
+				case "op_Multiply": return "Multiplication Operator";
+				case "op_Division": return "Division Operator";
+				case "op_Modulus": return "Modulus Operator";
+				case "op_ExclusiveOr": return "Exclusive Or Operator";
+				case "op_BitwiseAnd": return "Bitwise And Operator";
+				case "op_BitwiseOr": return "Bitwise Or Operator";
+				case "op_LogicalAnd": return "LogicalAnd Operator";
+				case "op_LogicalOr": return "Logical Or Operator";
+				case "op_Assign": return "Assignment Operator";
+				case "op_LeftShift": return "Left Shift Operator";
+				case "op_RightShift": return "Right Shift Operator";
+				case "op_SignedRightShift": return "Signed Right Shift Operator";
+				case "op_UnsignedRightShift": return "Unsigned Right Shift Operator";
+				case "op_Equality": return "Equality Operator";
+				case "op_GreaterThan": return "Greater Than Operator";
+				case "op_LessThan": return "Less Than Operator";
+				case "op_Inequality": return "Inequality Operator";
+				case "op_GreaterThanOrEqual": return "Greater Than Or Equal Operator";
+				case "op_LessThanOrEqual": return "Less Than Or Equal Operator";
+				case "op_UnsignedRightShiftAssignment": return "Unsigned Right Shift Assignment Operator";
+				case "op_MemberSelection": return "Member Selection Operator";
+				case "op_RightShiftAssignment": return "Right Shift Assignment Operator";
+				case "op_MultiplicationAssignment": return "Multiplication Assignment Operator";
+				case "op_PointerToMemberSelection": return "Pointer To Member Selection Operator";
+				case "op_SubtractionAssignment": return "Subtraction Assignment Operator";
+				case "op_ExclusiveOrAssignment": return "Exclusive Or Assignment Operator";
+				case "op_LeftShiftAssignment": return "Left Shift Assignment Operator";
+				case "op_ModulusAssignment": return "Modulus Assignment Operator";
+				case "op_AdditionAssignment": return "Addition Assignment Operator";
+				case "op_BitwiseAndAssignment": return "Bitwise And Assignment Operator";
+				case "op_BitwiseOrAssignment": return "Bitwise Or Assignment Operator";
+				case "op_Comma": return "Comma Operator";
+				case "op_DivisionAssignment": return "Division Assignment Operator";
 				case "op_Explicit":
 					XmlNode parameterNode = operatorNode.SelectSingleNode("parameter");
 					string from = parameterNode.Attributes["type"].Value;
