@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<!-- -->
 	<xsl:template name="get-filename-for-current-namespace-hierarchy">
@@ -31,11 +31,11 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="get-filename-for-current-field">
-		<xsl:value-of select="concat(translate(substring-after(@id, 'F:'), '.[]', ''), 'Field.html')" />
+		<xsl:value-of select="concat(translate(substring-after(@id, 'F:'), '.[]', ''), 'FieldOrEvent.html')" />
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="get-filename-for-current-event">
-		<xsl:value-of select="concat(translate(substring-after(@id, 'E:'), '.[]', ''), 'Event.html')" />
+		<xsl:value-of select="concat(translate(substring-after(@id, 'E:'), '.[]', ''), 'FieldOrEvent.html')" />
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="get-filename-for-current-property-overloads">
@@ -152,6 +152,12 @@
 						<xsl:value-of select="concat(translate(substring-after($cref, 'M:'), '.[]', ''), 'Method.html')" />
 					</xsl:otherwise>
 				</xsl:choose>
+			</xsl:when>
+			<xsl:when test="starts-with($cref, 'E:')">
+				<xsl:value-of select="concat(translate(substring-after($cref, 'E:'), '.[]', ''), 'FieldOrEvent.html')" />
+			</xsl:when>
+			<xsl:when test="starts-with($cref, 'F:')">
+				<xsl:value-of select="concat(translate(substring-after($cref, 'F:'), '.[]', ''), 'FieldOrEvent.html')" />
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:value-of select="$cref" />

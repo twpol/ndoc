@@ -1121,14 +1121,14 @@ namespace NDoc.Documenter.Msdn
 		private string GetFilenameForFields(WhichType whichType, XmlNode typeNode)
 		{
 			string typeID = (string)typeNode.Attributes["id"].Value;
-			string fileName = RemoveChar(typeID.Substring(2), '.') + "Fields.html";
+			string fileName = RemoveChar(typeID.Substring(2), '.') + "FieldOrEvent.html";
 			return fileName;
 		}
 
 		private string GetFilenameForField(XmlNode fieldNode)
 		{
 			string fieldID = (string)fieldNode.Attributes["id"].Value;
-			string fileName = RemoveChar(fieldID.Substring(2), '.') + "Field.html";
+			string fileName = RemoveChar(fieldID.Substring(2), '.') + "FieldOrEvent.html";
 			return fileName;
 		}
 
@@ -1181,7 +1181,7 @@ namespace NDoc.Documenter.Msdn
 		private string GetFilenameForEvent(XmlNode eventNode)
 		{
 			string eventID = (string)eventNode.Attributes["id"].Value;
-			string fileName = RemoveChar(eventID.Substring(2), '.') + "Event.html";
+			string fileName = RemoveChar(eventID.Substring(2), '.') + "FieldOrEvent.html";
 			return fileName;
 		}
 
