@@ -159,13 +159,27 @@ namespace NDoc.Core
 
 			foreach (string fileName in Directory.GetFiles(mainModuleDirectory, "*.dll"))
 			{
-				Assembly assembly = Assembly.LoadFrom(fileName);
+				Assembly assembly = null;
 
-				foreach (Type type in assembly.GetTypes())
+				try
 				{
-					if (type.IsClass && !type.IsAbstract && (type.GetInterface("NDoc.Core.IDocumenter") != null))
+					assembly = Assembly.LoadFrom(fileName);
+				}
+				catch (BadImageFormatException)
+				{
+					// The DLL must not be a .NET assembly.
+					// Don't need to do anything since the 
+					// assembly reference should still be null.
+				}
+
+				if (assembly != null)
+				{
+					foreach (Type type in assembly.GetTypes())
 					{
-						documenters.Add(Activator.CreateInstance(type));
+						if (type.IsClass && !type.IsAbstract && (type.GetInterface("NDoc.Core.IDocumenter") != null))
+						{
+							documenters.Add(Activator.CreateInstance(type));
+						}
 					}
 				}
 			}
