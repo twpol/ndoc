@@ -18,26 +18,37 @@
 				<xsl:when test="local-name() = 'class'">Class</xsl:when>
 				<xsl:when test="local-name() = 'interface'">Interface</xsl:when>
 				<xsl:when test="local-name() = 'structure'">Structure</xsl:when>
+				<xsl:when test="local-name() = 'delegate'">Delegate Sub</xsl:when>
 				<xsl:when test="local-name() = 'enumeration'">Enum</xsl:when>
 				<xsl:otherwise>ERROR</xsl:otherwise>
 			</xsl:choose>
 			<xsl:text>&#160;</xsl:text>
 			<xsl:value-of select="@name" />
-			<xsl:if test="@baseType">
-				<br />
-				<xsl:text>&#160;&#160;&#160;Inherits&#160;</xsl:text>
-				<xsl:value-of select="@baseType" />
-			</xsl:if>
-			<xsl:if test="implements">
-				<br />
-				<xsl:text>&#160;&#160;&#160;Implements&#160;</xsl:text>
-				<xsl:for-each select="implements">
-					<xsl:value-of select="." />
-					<xsl:if test="position()!=last()">
-						<xsl:text>, </xsl:text>
+			<xsl:choose>
+				<xsl:when test="local-name() != 'delegate'">
+					<xsl:if test="@baseType">
+						<br />
+						<xsl:text>&#160;&#160;&#160;Inherits&#160;</xsl:text>
+						<xsl:value-of select="@baseType" />
 					</xsl:if>
-				</xsl:for-each>
-			</xsl:if>
+					<xsl:if test="implements">
+						<br />
+						<xsl:text>&#160;&#160;&#160;Implements&#160;</xsl:text>
+						<xsl:for-each select="implements">
+							<xsl:value-of select="." />
+							<xsl:if test="position()!=last()">
+								<xsl:text>, </xsl:text>
+							</xsl:if>
+						</xsl:for-each>
+					</xsl:if>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:text>( _</xsl:text>
+					<br />
+					<xsl:apply-templates select="parameter" mode="vb" />
+					<xsl:text>)</xsl:text>
+				</xsl:otherwise>
+			</xsl:choose>
 		</pre>
 	</xsl:template>
 	<xsl:template name="vb-type-access">
@@ -52,5 +63,17 @@
 			<xsl:when test="$access='NestedPrivate'">Private</xsl:when>
 			<xsl:otherwise>ERROR</xsl:otherwise>
 		</xsl:choose>
+	</xsl:template>
+	<xsl:template match="parameter" mode="vb">
+		<xsl:text>&#160;&#160;&#160;</xsl:text>
+		<xsl:text>ByVal </xsl:text>
+		<xsl:value-of select="@name" />
+		<xsl:text>&#32;As&#32;</xsl:text>
+		<xsl:call-template name="strip-namespace">
+			<xsl:with-param name="name" select="@type" />
+		</xsl:call-template>
+		<xsl:if test="position() != last()">,</xsl:if>
+		<xsl:text> _</xsl:text>
+		<br />
 	</xsl:template>
 </xsl:transform>
