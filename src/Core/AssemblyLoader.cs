@@ -225,7 +225,7 @@ namespace NDoc.Core.Reflection
 			//for StrongNameIdentityPermission demands
 			AssemblyName assemblyName = AssemblyName.GetAssemblyName(fileName);
 			byte[] pk = assemblyName.GetPublicKey();
-			if (pk.Length != 0)
+			if (pk!=null && pk.Length != 0)
 			{
 				StrongNamePublicKeyBlob blob = new StrongNamePublicKeyBlob(pk);
 				StrongName strongName = new StrongName(blob, assemblyName.Name, assemblyName.Version);
