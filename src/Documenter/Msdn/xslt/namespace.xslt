@@ -6,7 +6,6 @@
 	<xsl:include href="common.xslt" />
 	<!-- -->
 	<xsl:param name='namespace' />
-	<xsl:param name='includeHierarchy' />
 	<!-- -->
 	<xsl:template match="/">
 		<xsl:apply-templates select="ndoc" />
@@ -27,7 +26,6 @@
 				<div id="nstext">
 					<!-- the namespace template just gets the summary. -->
 					<xsl:apply-templates select="(assembly/module/namespace[(@name=$namespace) and documentation])[1]" />
-					<xsl:if test="$includeHierarchy">
 					  <p>
 						  <a>
 							  <xsl:attribute name="href">
@@ -36,7 +34,6 @@
 							  <xsl:text>Namespace hierarchy</xsl:text>
 						  </a>
 					  </p>
-					</xsl:if>
 					<xsl:if test="assembly/module/namespace[@name=$namespace]/class">
 						<h3 class="dtH3">Classes</h3>
 						<div class="tablediv">
