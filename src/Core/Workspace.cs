@@ -354,7 +354,13 @@ namespace NDoc.Core
 			foreach ( string ext in extenstions )
 			{
 				foreach ( string f in Directory.GetFiles( this.RootDirectory, ext ) )
+				{
+					FileAttributes attr = File.GetAttributes(f);
+					if((attr & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
+						File.SetAttributes(f,FileAttributes.Normal);
+
 					File.Delete( f );
+				}
 			}
 
 			// then get rid of the working directory
