@@ -19,7 +19,7 @@
 							Description</th></tr>
 				</thead>
 				<tr vAlign="top">
-					<td>Very long type names
+					<td><p>Very long type names</p>
 					</td>
 					<td>
 						<p>NDoc creates an HTML file on your hard drive for each topic it generates. 
@@ -32,26 +32,14 @@
 							characters).</p>
 						<p>For fully qualified names under about 200 characters, the work around for this 
 							issue is to set the <STRONG>OutputDirectory</STRONG> setting to a location as 
-							close to the root of a volume as possible. This will reduce the likely hood the 
-							full path to the html files will exceed 260 characters.</p>
+							close to the root of a volume as possible. This will reduce the likelyhood of the 
+							full path to the html files exceeding 260 characters.</p>
 						<P>There is no work around for names that exceed these lengths.</P>
 						<p>We will address this issue in a future version of NDoc.</p>
 					</td>
 				</tr>
 				<TR>
-					<TD>NDoc must be restarted if Types or Members are added or deleted.</TD>
-					<TD>
-						<P>NDoc uses reflection to obtain much of the information it requires to build 
-							complete documentation. There is a limitation within the .Net CLR that once an 
-							assembly is loaded, it cannot be unloaded.&nbsp; Therefore, if changes are made 
-							to the assembly, NDoc must be closed and restarted in order to pick-up the 
-							changes.</P>
-						<P>There is no work-around for this issue.</P>
-						<P>We will address this issue in a future version of NDoc.</P>
-					</TD>
-				</TR>
-				<TR>
-					<TD>Case-sensitivity</TD>
+					<TD><p>Case-sensitivity</p></TD>
 					<TD>
 						<P>When the MSDN and JavaDoc documenters create files, problems can arise when 
 							there are Types or Members that differ only by case.</P>
@@ -62,19 +50,8 @@
 						<P>We will address this issue in a future version of NDoc.</P>
 					</TD>
 				</TR>
-				<TR vAlign="top">
-					<TD>Assemblies to be documented must reside on a local drive</TD>
-					<TD>
-						<P>Assemblies to be documented must reside on the machine on which NDoc executes. 
-							If they do not, <b>SecurityExceptions</b> will be raised.</P>
-						<P>This is due to the strict security the CLR places on reflection.</P>
-						<P>There is no work-around for this issue (<i>without severely compromising the 
-								security of your machine!</i>)</P>
-						<P>We will address this issue in a future version of NDoc.</P>
-					</TD>
-				</TR>
 				<TR>
-					<TD>StrongNameIdentityPermissionAttribute</TD>
+					<TD><p>StrongNameIdentityPermissionAttribute</p></TD>
 					<TD>
 						Assemblies decorated with the <b>StrongNameIdentityPermission</b> attribute can 
 						only be called by other assemblies that are marked with the specified key. NDoc 
@@ -84,7 +61,7 @@
 					</TD>
 				</TR>
 				<TR>
-					<TD>Compact Framework incompatibilities</TD>
+					<TD><p>Compact Framework incompatibilities</p></TD>
 					<TD>
 						<P>When an assembly compiled to run on the .NET Compact Framework is added to an 
 							NDoc project, the GUI may throw an exception, especially if the assembly 
@@ -95,7 +72,7 @@
 					</TD>
 				</TR>
 				<TR>
-					<TD>Localisation</TD>
+					<TD><p>Localisation</p></TD>
 					<TD>
 						<p>NDoc does not currently support Localisation of headings and predefined text.</p>
 						<p>We *may* address this issue in a future version of NDoc.</p>
