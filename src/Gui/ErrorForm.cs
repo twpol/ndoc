@@ -13,14 +13,14 @@ namespace NDoc.Gui
 	/// </summary>
 	public class ErrorForm : System.Windows.Forms.Form
 	{
-		private System.Windows.Forms.TextBox m_messageTextBox;
-		private System.Windows.Forms.Button m_closeButton;
-		private System.Windows.Forms.Label m_stackTraceLabel;
-		private System.Windows.Forms.TextBox m_stackTraceTextBox;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
 		private System.ComponentModel.Container components = null;
+		private System.Windows.Forms.TextBox m_messageTextBox;
+		private System.Windows.Forms.Button m_closeButton;
+		private System.Windows.Forms.Label m_stackTraceLabel;
+		private System.Windows.Forms.TextBox m_stackTraceTextBox;
 
 		internal ErrorForm(string message, Exception ex)
 		{
@@ -28,6 +28,8 @@ namespace NDoc.Gui
 			// Required for Windows Form Designer support
 			//
 			InitializeComponent();
+
+			this.Icon = SystemIcons.Exclamation;
 
 			StringBuilder strBld = new StringBuilder();
 			if ((message != null) && (message.Length > 0))
@@ -150,7 +152,6 @@ namespace NDoc.Gui
 																		  this.m_closeButton,
 																		  this.m_stackTraceLabel,
 																		  this.m_stackTraceTextBox});
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.MinimumSize = new System.Drawing.Size(400, 300);
