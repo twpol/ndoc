@@ -1003,6 +1003,7 @@
 			<xsl:apply-templates select="." mode="attribute-open">
 				<xsl:with-param name="lang" select="$lang"/>
 			</xsl:apply-templates>
+			<xsl:if test="@target"><xsl:value-of select="@target" /> : </xsl:if>
 			<xsl:call-template name="strip-namespace-and-attribute">
 				<xsl:with-param name="name" select="@name" />
 			</xsl:call-template>

@@ -405,6 +405,7 @@
 		<xsl:param name="attname" />
 		<xsl:if test="user:isAttributeWanted($ndoc-documented-attributes, @name)">			
 			<xsl:text>&lt;</xsl:text>
+			<xsl:if test="@target"><xsl:value-of select="@target" /> : </xsl:if>
 			<xsl:call-template name="strip-namespace-and-attribute">
 				<xsl:with-param name="name" select="@name" />
 			</xsl:call-template>
