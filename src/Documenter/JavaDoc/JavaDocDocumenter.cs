@@ -141,7 +141,7 @@ namespace NDoc.Documenter.JavaDoc
 			TextWriter writer = new StreamWriter(resultPath);
 
 			XPathDocument doc = GetXPathDocument();
-			transform.Transform(doc, args, writer, new XmlUrlResolver());
+			transform.Transform(doc, args, writer);
 
 			writer.Close();
 		}
