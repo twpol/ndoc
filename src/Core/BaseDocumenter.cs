@@ -916,7 +916,9 @@ namespace NDoc.Core
 							}
 							else
 							{
-								myWriter.WriteElementString("summary",namespaceSummary);
+								myWriter.WriteStartElement("summary");
+								myWriter.WriteRaw( namespaceSummary );
+								myWriter.WriteEndElement();
 							}
 							WriteEndDocumentation(myWriter);
 						}
