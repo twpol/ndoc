@@ -817,23 +817,25 @@ namespace NDoc.Core
 			foreach (Type type in types)
 			{
 				string typeID = GetMemberName(type);
-				if (!documentedTypes.ContainsKey(typeID))
+				if (type.IsClass && 
+					!IsDelegate(type) && 
+					type.Namespace == namespaceName) 
 				{
-					documentedTypes.Add(typeID,null);
-					if (type.IsClass && 
-						!IsDelegate(type) && 
-						type.Namespace == namespaceName && 
-						MustDocumentType(type))
+					if(!documentedTypes.ContainsKey(typeID))
 					{
-						bool hiding = ((type.MemberType & MemberTypes.NestedType) != 0)
-							&& IsHiding(type, type.DeclaringType);
-						WriteClass(writer, type, hiding);
-						nbWritten++;
+						documentedTypes.Add(typeID,null);
+						if (MustDocumentType(type))
+						{
+							bool hiding = ((type.MemberType & MemberTypes.NestedType) != 0)
+								&& IsHiding(type, type.DeclaringType);
+							WriteClass(writer, type, hiding);
+							nbWritten++;
+						}
 					}
-				}
-				else
-				{
-					Debug.WriteLine(typeID + " already documented - skipped...");
+					else
+					{
+						Debug.WriteLine(typeID + " already documented - skipped...");
+					}
 				}
 			}
 
