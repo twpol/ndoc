@@ -191,7 +191,7 @@ namespace NDoc.Core
 
 			string mainModuleDirectory = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
 
-			foreach (string fileName in Directory.GetFiles(mainModuleDirectory, "*.dll"))
+			foreach (string fileName in Directory.GetFiles(mainModuleDirectory, "NDoc.Documenter.*.dll"))
 			{
 				Assembly assembly = null;
 
@@ -204,6 +204,7 @@ namespace NDoc.Core
 					// The DLL must not be a .NET assembly.
 					// Don't need to do anything since the
 					// assembly reference should still be null.
+					Debug.WriteLine("BadImageFormatException loading " + fileName);
 				}
 
 				if (assembly != null)
@@ -221,6 +222,7 @@ namespace NDoc.Core
 					catch (ReflectionTypeLoadException)
 					{
 						// eat this exception and just ignore this assembly
+						Debug.WriteLine("ReflectionTypeLoadException reflecting " + fileName);
 					}
 				}
 			}
