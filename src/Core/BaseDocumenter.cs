@@ -479,9 +479,7 @@ namespace NDoc.Core
 			}
 
 			WriteTypeDocumentation(writer, memberName, type);
-
-			WriteCustomAttributes(writer, type.GetCustomAttributes(true));
-
+			WriteCustomAttributes(writer, type);
 			WriteBaseType(writer, type.BaseType);
 
 			foreach(Type interfaceType in type.GetInterfaces())
@@ -499,6 +497,16 @@ namespace NDoc.Core
 			writer.WriteEndElement();
 		}
 
+		private void WriteCustomAttributes(XmlWriter writer, MemberInfo memberInfo)
+		{
+			WriteCustomAttributes(writer, memberInfo.GetCustomAttributes(true));
+		}
+
+		private void WriteCustomAttributes(XmlWriter writer, ParameterInfo parameterInfo)
+		{
+			WriteCustomAttributes(writer, parameterInfo.GetCustomAttributes(true));
+		}
+
 		private void WriteCustomAttributes(XmlWriter writer, object[] attributes)
 		{
 			if (attributes.Length > 0)
@@ -507,28 +515,33 @@ namespace NDoc.Core
 
 				foreach (Attribute attribute in attributes)
 				{
-					writer.WriteStartElement("attribute");
-					writer.WriteAttributeString("name", attribute.GetType().FullName);
-
-					BindingFlags bindingFlags =
-						BindingFlags.Instance |
-						BindingFlags.Public |
-						BindingFlags.DeclaredOnly;
-
-					foreach (PropertyInfo property in attribute.GetType().GetProperties(bindingFlags))
-					{
-						writer.WriteStartElement("parameter");
-						writer.WriteAttributeString("name", property.Name);
-						object value = property.GetValue(attribute, null);
-						writer.WriteAttributeString("value", value != null ? value.ToString() : "");
-						writer.WriteEndElement(); // parameter
-					}
-
-					writer.WriteEndElement(); // attribute
+					WriteCustomAttribute(writer, attribute);
 				}
 
 				writer.WriteEndElement(); // attributes
 			}
+		}
+
+		private void WriteCustomAttribute(XmlWriter writer, Attribute attribute)
+		{
+			writer.WriteStartElement("attribute");
+			writer.WriteAttributeString("name", attribute.GetType().FullName);
+
+			BindingFlags bindingFlags =
+				BindingFlags.Instance |
+				BindingFlags.Public |
+				BindingFlags.DeclaredOnly;
+
+			foreach (PropertyInfo property in attribute.GetType().GetProperties(bindingFlags))
+			{
+				writer.WriteStartElement("parameter");
+				writer.WriteAttributeString("name", property.Name);
+				object value = property.GetValue(attribute, null);
+				writer.WriteAttributeString("value", value != null ? value.ToString() : "");
+				writer.WriteEndElement(); // parameter
+			}
+
+			writer.WriteEndElement(); // attribute
 		}
 
 		private void WriteConstructors(XmlWriter writer, Type type)
@@ -717,6 +730,7 @@ namespace NDoc.Core
 			writer.WriteAttributeString("access", GetTypeAccessValue(type));
 
 			WriteTypeDocumentation(writer, memberName, type);
+			WriteCustomAttributes(writer, type);
 
 			foreach(Type interfaceType in type.GetInterfaces())
 			{
@@ -758,6 +772,7 @@ namespace NDoc.Core
 					writer.WriteAttributeString("returnType", method.ReturnType.FullName);
 
 					WriteDelegateDocumentation(writer, memberName, type, method);
+					WriteCustomAttributes(writer, type);
 
 					foreach (ParameterInfo parameter in method.GetParameters())
 					{
@@ -782,6 +797,7 @@ namespace NDoc.Core
 			writer.WriteAttributeString("access", GetTypeAccessValue(type));
 
 			WriteEnumerationDocumentation(writer, memberName);
+			WriteCustomAttributes(writer, type);
 
 			BindingFlags bindingFlags =  
 				BindingFlags.Instance |
@@ -846,6 +862,7 @@ namespace NDoc.Core
 			}
 
 			WriteFieldDocumentation(writer, memberName);
+			WriteCustomAttributes(writer, field);
 
 			writer.WriteEndElement();
 		}
@@ -875,6 +892,7 @@ namespace NDoc.Core
 			}
 
 			WriteEventDocumentation(writer, memberName);
+			WriteCustomAttributes(writer, eventInfo);
 
 			writer.WriteEndElement();
 		}
@@ -898,6 +916,7 @@ namespace NDoc.Core
 			}
 
 			WriteConstructorDocumentation(writer, memberName, constructor);
+			WriteCustomAttributes(writer, constructor);
 
 			foreach (ParameterInfo parameter in constructor.GetParameters())
 			{
@@ -931,6 +950,7 @@ namespace NDoc.Core
 			writer.WriteAttributeString("set", property.GetSetMethod(true) != null ? "true" : "false");
 
 			WritePropertyDocumentation(writer, memberName, property);
+			WriteCustomAttributes(writer, property);
 
 			foreach(ParameterInfo parameter in GetIndexParameters(property))
 			{
@@ -1026,6 +1046,7 @@ namespace NDoc.Core
 				writer.WriteAttributeString("returnType", method.ReturnType.FullName);
 
 				WriteMethodDocumentation(writer, memberName, method);
+				WriteCustomAttributes(writer, method);
 
 				foreach (ParameterInfo parameter in method.GetParameters())
 				{
@@ -1065,6 +1086,8 @@ namespace NDoc.Core
 			{
 				writer.WriteAttributeString("isParamArray", "true");
 			}
+
+			WriteCustomAttributes(writer, parameter);
 
 			writer.WriteEndElement();
 		}
