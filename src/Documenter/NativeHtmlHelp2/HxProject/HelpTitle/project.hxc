@@ -14,10 +14,12 @@
    <KeywordIndexDef File = "KLinks.HxK"/>
    <KeywordIndexDef File = "ALinks.HxK"/>
    <KeywordIndexDef File = "FLinks.HxK"/>
+   <KeywordIndexDef File = "NamedURL.HxK"/>
+   
    <ItemMoniker Name="!DefaultTOC" ProgId = "HxDs.HxHierarchy" InitData = "AnyString"/>
    <ItemMoniker Name="!DefaultFullTextSearch" ProgId="HxDs.HxFullTextSearch" InitData="AnyString"/>
    <ItemMoniker Name="!DefaultAssociativeIndex" ProgId = "HxDs.HxIndex" InitData = "A"/>
    <ItemMoniker Name="!DefaultKeywordIndex" ProgId = "HxDs.HxIndex" InitData = "K"/>
    <ItemMoniker Name="!DefaultContextWindowIndex" ProgId="HxDs.HxIndex" InitData="F"/>
-   <ItemMoniker Name="!DefaultNamedUrlIndex" ProgId="HxDs.HxIndex" InitData="NamedUrl"/>
+   <ItemMoniker Name="!DefaultNamedUrlIndex" ProgId="HxDs.HxIndex" InitData="NamedURLIndex"/>
 </HelpCollection>

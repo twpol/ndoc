@@ -25,11 +25,25 @@ using System.Collections.Specialized;
 
 namespace NDoc.Documenter.NativeHtmlHelp2
 {
+		/// <summary>
+		/// Handler for content directory events
+		/// </summary>
+		public delegate void ContentDirectoryEventHandler( string path );
+
 	/// <summary>
 	/// Summary description for Workspace.
 	/// </summary>
 	public class Workspace
 	{
+		/// <summary>
+		/// Event raised when a content directory is added
+		/// </summary>
+		public event ContentDirectoryEventHandler ContentDirectoryAdded;
+
+		/// <summary>
+		/// The name of the directory where the html file are created
+		/// </summary>
+		public static string ContentDirectoryName = "html";
 
 		/// <summary>
 		/// The location of the workspace and files
@@ -63,7 +77,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		{
 			get 
 			{
-				return Path.Combine( WorkingDirectory, "html" );
+				return Path.Combine( WorkingDirectory, ContentDirectoryName );
 			}
 		}
 
@@ -106,7 +120,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		public void ImportProjectFiles( string sourceDirectory, string filter )
 		{
 			if ( !Directory.Exists( sourceDirectory ) )
-				throw new ArgumentException( "The source location does not exist" );
+				throw new ArgumentException( string.Format( "The source location {0} does not exist", sourceDirectory ) );
 
 			DirectoryInfo dir = new DirectoryInfo( sourceDirectory );
 			foreach( FileInfo file in dir.GetFiles( filter ) )
@@ -114,16 +128,79 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		}
 
 		/// <summary>
+		/// Recursively copies the contents of sourceDirectory into the workspace,
+		/// maintainng the same directory structure
+		/// </summary>
+		/// <param name="sourceDirectory">The directory to import</param>
+		public void ImportContentDirectory( string sourceDirectory )
+		{
+			if ( !Directory.Exists( sourceDirectory ) )
+				throw new ArgumentException( string.Format( "The source location {0} does not exist", sourceDirectory ) );
+
+			ImportDirectory( new DirectoryInfo( sourceDirectory ), new DirectoryInfo( this.ContentDirectory ) );
+		}
+
+		/// <summary>
+		/// Raises the <see cref="Workspace.ContentDirectoryAdded"/> event
+		/// </summary>
+		/// <param name="relativePath">Path relative to the workspace root</param>
+		protected void OnContentDirectoryAdded( string relativePath )
+		{
+			if ( ContentDirectoryAdded != null )
+				ContentDirectoryAdded( relativePath );
+		}
+
+		private void ImportDirectory( DirectoryInfo sourceDir, DirectoryInfo targetParent )
+		{
+			DirectoryInfo targetDir = new DirectoryInfo( Path.Combine( targetParent.FullName, sourceDir.Name ) );;
+
+			if ( !targetDir.Exists )
+				targetDir.Create();
+
+			OnContentDirectoryAdded( GetRelativePath( new DirectoryInfo( this.WorkingDirectory ), targetDir ) );
+
+			foreach( FileInfo f in sourceDir.GetFiles() )
+				f.CopyTo( Path.Combine( targetDir.FullName, f.Name ) );
+
+			foreach( DirectoryInfo childDir in sourceDir.GetDirectories() )
+				ImportDirectory( childDir, targetDir );
+		}
+
+		private static string GetRelativePath( DirectoryInfo ancestor, DirectoryInfo child )
+		{	
+			if ( ancestor.Root.FullName != child.Root.FullName )
+				return "";
+
+			string tmp = child.FullName.Replace( ancestor.FullName, "" );
+
+			// strip off the leading backslash if present
+			if ( tmp.IndexOf( @"\", 0 ) == 0 )
+				tmp = tmp.Substring( 1 );
+
+			return tmp;
+		}
+
+		/// <summary>
+		/// Copies content into the workspace ContentDirectory
+		/// </summary>
+		/// <param name="sourceDirectory">The path to the content files</param>
+		public void ImportContent( string sourceDirectory )
+		{
+			ImportContent( sourceDirectory, "*.*" );
+		}
+
+		/// <summary>
 		/// Copies content into the workspace ContentDirectory
 		/// </summary>
 		/// <param name="sourceDirectory">The path to the xontent files</param>
-		public void ImportContent( string sourceDirectory )
+		/// <param name="filter">File filter to use when selecting files to import</param>
+		public void ImportContent( string sourceDirectory, string filter )
 		{
 			if ( !Directory.Exists( sourceDirectory ) )
-				throw new ArgumentException( "The source location does not exist" );
+				throw new ArgumentException( string.Format( "The source location {0} does not exist", sourceDirectory ) );
 
 			DirectoryInfo dir = new DirectoryInfo( sourceDirectory );
-			foreach( FileInfo file in dir.GetFiles( "*.*" ) )
+			foreach( FileInfo file in dir.GetFiles( filter ) )
 				file.CopyTo( Path.Combine( ContentDirectory, file.Name ), true );
 		}
 

@@ -37,7 +37,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.HxProject
 		public static XmlNode CreateFrom( string templateFile )
 		{
 			if ( !File.Exists( templateFile ) )
-				throw new ArgumentException( "The source file does not exist", "templateFile" );
+				throw new ArgumentException( string.Format( "The source file {0} does not exist", templateFile ), "templateFile" );
 			
 			// we are not going to validate or resolve externals from this document
 			XmlDocument doc = new XmlDocument();

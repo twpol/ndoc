@@ -63,7 +63,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		{
 			// this assumes that all content files are going in a directory named
 			// "html" (relative to the location of the HxT
-			toc.InsertNode( "/html/" + args.File );
+			toc.InsertNode( string.Format( "/{0}/{1}", Workspace.ContentDirectoryName, args.File ) );
 		}
 
 		/// <summary>

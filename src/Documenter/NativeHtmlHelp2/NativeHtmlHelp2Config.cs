@@ -99,6 +99,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 	{
 		private const string HTMLHELP2_CONFIG_CATEGORY = "Html Help 2 Settings";
 		private const string DEPLOYMENT_CATEGORY = "Html Help 2 Deployment";
+		private const string ADDITIONAL_CONTENT_CATEGORY = "Html Help 2 Additional Content";
 
 		/// <summary>Initializes a new instance of the NativeHtmlHelp2Config class.</summary>
 		public NativeHtmlHelp2Config() : base( "VS.NET 2003" )
@@ -444,6 +445,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			 "The schema for the mapping file can be found in the location you installed NDoc in a file named " +
 			 "'NamespaceMap.xsd'")]
 		[DefaultValue("")]
+		[Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
 		public string UseHelpNamespaceMappingFile
 		{
 			get { return _UseHelpNamespaceMappingFile; }
@@ -495,6 +497,119 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 				SetDirty();
 			}
 		}
+		#endregion
+
+		#region Additonal content properties
+		
+		string _IntroductionPage = string.Empty;
+
+		/// <summary>An HTML page that will be dispayed when the root TOC node is selected</summary>
+		[Category(ADDITIONAL_CONTENT_CATEGORY)]
+		[Description("An HTML page that will be dispayed when the root TOC node is selected")]
+		[DefaultValue("")]
+		[Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
+		public string IntroductionPage
+		{
+			get { return _IntroductionPage; }
+
+			set
+			{
+				_IntroductionPage = value;
+				SetDirty();
+			}
+		}
+		
+		string _AboutPageInfo = string.Empty;
+
+		/// <summary>Displays product information in Help About.</summary>
+		[Category(ADDITIONAL_CONTENT_CATEGORY)]
+		[Description("Displays product information in Help About.")]
+		[DefaultValue("")]
+		[Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
+		public string AboutPageInfo
+		{
+			get { return _AboutPageInfo; }
+
+			set
+			{
+				_AboutPageInfo = value;
+				SetDirty();
+			}
+		}
+
+		string _EmptyIndexTermPage = string.Empty;
+
+		/// <summary>Displays when a user chooses a keyword index term that has subkeywords but is not directly associated with a topic itself.</summary>
+		[Category(ADDITIONAL_CONTENT_CATEGORY)]
+		[Description("Displays when a user chooses a keyword index term that has subkeywords but is not directly associated with a topic itself.")]
+		[DefaultValue("")]
+		[Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
+		public string EmptyIndexTermPage
+		{
+			get { return _EmptyIndexTermPage; }
+
+			set
+			{
+				_EmptyIndexTermPage = value;
+				SetDirty();
+			}
+		}		
+
+		string _NavFailPage = string.Empty;
+
+		/// <summary>Opens if a link to a topic or URL is broken.</summary>
+		[Category(ADDITIONAL_CONTENT_CATEGORY)]
+		[Description("Opens if a link to a topic or URL is broken.")]
+		[DefaultValue("")]
+		[Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
+		public string NavFailPage
+		{
+			get { return _NavFailPage; }
+
+			set
+			{
+				_NavFailPage = value;
+				SetDirty();
+			}
+		}	
+	
+		string _AboutPageIconPage = string.Empty;
+
+		/// <summary>HTML file that displays the Help About image.</summary>
+		[Category(ADDITIONAL_CONTENT_CATEGORY)]
+		[Description("HTML file that displays the Help About image.")]
+		[DefaultValue("")]
+		[Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
+		public string AboutPageIconPage
+		{
+			get { return _AboutPageIconPage; }
+
+			set
+			{
+				_AboutPageIconPage = value;
+				SetDirty();
+			}
+		}		
+
+		string _AdditionalContentResourceDirectory = string.Empty;
+
+		/// <summary>Directory that contains resources (images etc.) used by the additional content pages. This directory will be recursively compiled into the help file.</summary>
+		[Category(ADDITIONAL_CONTENT_CATEGORY)]
+		[Description("Directory that contains resources (images etc.) used by the additional content pages. This directory will be recursively compiled into the help file.")]
+		[DefaultValue("")]
+#if !MONO //System.Windows.Forms.Design.FolderNameEditor is not implemented in mono 0.28
+		[Editor(typeof(FolderNameEditor), typeof(UITypeEditor))]
+#endif
+		public string AdditionalContentResourceDirectory
+		{
+			get { return _AdditionalContentResourceDirectory; }
+
+			set
+			{
+				_AdditionalContentResourceDirectory = value;
+				SetDirty();
+			}
+		}	
 		#endregion
 
 		#region Platform properties

@@ -81,6 +81,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			if ( MyConfig.OutputDirectory == null )
 				return "The output directory must be set";
 
+			// validate the namespace map
 			if ( MyConfig.UseHelpNamespaceMappingFile.Length != 0 )
 			{
 				if ( !File.Exists( MyConfig.UseHelpNamespaceMappingFile ) )
@@ -100,9 +101,30 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 				}
 			}
 
+			// validate that all of the additional content resources are present
+			if ( MyConfig.IntroductionPage.Length != 0 && !File.Exists( MyConfig.IntroductionPage ) )
+				return string.Format( "The file {0} could not be found", MyConfig.IntroductionPage );
+
+			if ( MyConfig.AboutPageIconPage.Length != 0 && !File.Exists( MyConfig.AboutPageIconPage ) )
+				return string.Format( "The file {0} could not be found", MyConfig.AboutPageIconPage );
+
+			if ( MyConfig.AboutPageInfo.Length != 0 && !File.Exists( MyConfig.AboutPageInfo ) )
+				return string.Format( "The file {0} could not be found", MyConfig.AboutPageInfo );
+
+			if ( MyConfig.NavFailPage.Length != 0 && !File.Exists( MyConfig.NavFailPage ) )
+				return string.Format( "The file {0} could not be found", MyConfig.NavFailPage );
+
+			if ( MyConfig.EmptyIndexTermPage.Length != 0 && !File.Exists( MyConfig.EmptyIndexTermPage ) )
+				return string.Format( "The file {0} could not be found", MyConfig.EmptyIndexTermPage );
+
+			if ( MyConfig.AdditionalContentResourceDirectory.Length != 0 && !Directory.Exists( MyConfig.AdditionalContentResourceDirectory ) )
+				return string.Format( "The directory {0} could not be found", MyConfig.AdditionalContentResourceDirectory );
+
+			// make sure we have a collection namespace
 			if ( ( MyConfig.GenerateCollectionFiles || MyConfig.RegisterTitleWithNamespace ) && MyConfig.CollectionNamespace.Length == 0 )
 				return "If GenerateCollectionFiles or RegisterTitleWithNamespace is true, a valid CollectionNamespace is required";
 
+			// test if we can write to the output file
 			if ( !checkInputOnly ) 
 			{
 				string temp = Path.Combine( MyConfig.OutputDirectory, "~HxS.tmp" );
@@ -140,14 +162,27 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 				Workspace w = new Workspace( WorkingPath );
 				PrepareWorkspace( w );
 
-				ProjectFile HxProject = CreateProjectFile();
+				// set up the includes file
+				IncludeFile includes = IncludeFile.CreateFrom( Path.Combine( ResourceDirectory, @"HxProject\HelpTitle\includes.hxf" ), "includes" );
+				// attach to this event so resource directories get included in the include file
+				w.ContentDirectoryAdded += new ContentDirectoryEventHandler( includes.AddDirectory ); 
 
-				OnDocBuildingStep( 10, "Merging XML documentation..." );
-				XmlDocument xmlDocumentation = MergeXml( project );
+				// create and save the named url index
+				CreateNamedUrlIndex( w );
 
+				// save the includes file
+				includes.Save( w.WorkingDirectory );
+
+				// set up the table of contents
 				TOCFile toc = TOCFile.CreateFrom( Path.Combine( ResourceDirectory, @"HxProject\HelpTitle\project.HxT" ), MyConfig.HtmlHelpName );
 				toc.LangId = MyConfig.LangID;
 
+				// set up the project file
+				ProjectFile HxProject = CreateProjectFile();
+
+				// get the ndoc xml
+				OnDocBuildingStep( 10, "Merging XML documentation..." );
+				XmlDocument xmlDocumentation = MergeXml( project );
 				HxProject.TOCFile = toc.FileName;
 				HxProject.Save( w.WorkingDirectory );
 
@@ -155,12 +190,13 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 				ExternalHtmlProvider htmlProvider = new ExternalHtmlProvider( MyConfig.HeaderHtml, MyConfig.FooterHtml );
 				HtmlFactory factory = new HtmlFactory( xmlDocumentation, w.ContentDirectory, htmlProvider, MyConfig.LinkToSdkDocVersion );
 
+				// generate all the html content - builds the toc along the way
 				using( new TOCBuilder( toc, factory ) )
 					MakeHtml( factory );
 
 				toc.Save( w.WorkingDirectory );
 
-				//then compile the HxC into and HxS
+				//then compile the HxC into an HxS
 				OnDocBuildingStep( 65, "Compiling Html Help 2 Files..." );
 				CompileHxCFile( w );
 
@@ -170,11 +206,13 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 
 				// do clean up and final registration steps
 				OnDocBuildingStep( 95, "Finishing up..." );
+
 				if ( MyConfig.RegisterTitleWithNamespace )
 					RegisterTitle( w );
 				else if ( MyConfig.RegisterTitleAsCollection )
 					RegisterCollection( w );
 
+				// create collection level files
 				if( MyConfig.GenerateCollectionFiles )
 					CreateCollectionFiles( w );
 			}
@@ -183,6 +221,40 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 				throw new DocumenterException( "An error occured while creating the documentation", e );
 			}
 		}
+
+		private void CreateNamedUrlIndex( Workspace w )
+		{
+			NamedUrlFile namedUrlIndex = NamedUrlFile.CreateFrom( Path.Combine( ResourceDirectory, @"HxProject\HelpTitle\NamedURL.HxK" ), "NamedURL" );
+			namedUrlIndex.LangId = MyConfig.LangID;
+
+			if ( MyConfig.IntroductionPage.Length > 0 )			
+				namedUrlIndex.IntroductionPage = ImportContentFileToWorkspace( MyConfig.IntroductionPage, w );
+
+			if ( MyConfig.AboutPageIconPage.Length > 0 )			
+				namedUrlIndex.AboutPageIcon = ImportContentFileToWorkspace( MyConfig.AboutPageIconPage, w );
+
+			if ( MyConfig.AboutPageInfo.Length > 0 )			
+				namedUrlIndex.AboutPageInfo = ImportContentFileToWorkspace( MyConfig.AboutPageInfo, w );
+
+			if ( MyConfig.EmptyIndexTermPage.Length > 0 )			
+				namedUrlIndex.EmptyIndexTerm = ImportContentFileToWorkspace( MyConfig.EmptyIndexTermPage, w );
+
+			if ( MyConfig.NavFailPage.Length > 0 )			
+				namedUrlIndex.NavFailPage = ImportContentFileToWorkspace( MyConfig.NavFailPage, w );
+			
+			if ( MyConfig.AdditionalContentResourceDirectory.Length > 0 )			
+				w.ImportContentDirectory( MyConfig.AdditionalContentResourceDirectory );
+
+			namedUrlIndex.Save( w.WorkingDirectory );
+		}
+
+		private static string ImportContentFileToWorkspace( string path, Workspace w )
+		{
+			string fileName = Path.GetFileName( path );
+			w.ImportContent( Path.GetDirectoryName( path ), fileName );
+			return Path.Combine( Workspace.ContentDirectoryName, fileName );
+		}
+
 
 		private ProjectFile CreateProjectFile()
 		{
@@ -262,7 +334,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			// Load the XML documentation into a DOM.
 			XmlDocument xmlDocumentation = new XmlDocument();
 			xmlDocumentation.LoadXml( MakeXml( project ) );
-//xmlDocumentation.Save( @"C:\NDocTests.xml" );
+//xmlDocumentation.Save( @"C:\Tests.xml" );
 			XmlNodeList typeNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace/*[name()!='documentation']");
 			
 			if ( typeNodes.Count == 0 )			
@@ -432,6 +504,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		}
 
 		private NativeHtmlHelp2Config MyConfig{ get{ return (NativeHtmlHelp2Config)Config; } }
+
 	}
 }
 

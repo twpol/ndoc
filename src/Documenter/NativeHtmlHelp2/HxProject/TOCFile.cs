@@ -26,7 +26,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.HxProject
 {
 
 	/// <summary>
-	/// Summary description for HxTOC.
+	/// Calls used for accessing a table of contents file
 	/// </summary>
 	public class TOCFile : HxFile
 	{

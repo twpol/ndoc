@@ -413,7 +413,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "HxProject\IncludeFile.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "HxProject\IndexFile.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "HxProject\NamedUrlFile.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -452,6 +462,14 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "HxProject\HelpTitle\includes.hxf"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "HxProject\HelpTitle\NamedURL.HxK"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "HxProject\HelpTitle\project.hxc"
                     BuildAction = "EmbeddedResource"
                 />
@@ -477,10 +495,6 @@
                 />
                 <File
                     RelPath = "includes\FTSstop_UTF8.stp"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "includes\includes.hxf"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
