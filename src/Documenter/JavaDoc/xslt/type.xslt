@@ -6,6 +6,8 @@
 	<xsl:param name="global-path-to-root" />
 	<xsl:param name="global-type-id" />
 	<!-- -->
+	<xsl:variable name="spaces" select="'                                                                '" />
+	<!-- -->
 	<xsl:template match="/">
 		<xsl:variable name="type" select="ndoc/assembly/module/namespace/*[@id=$global-type-id]" />
 		<html>
@@ -277,12 +279,7 @@
 				<xsl:value-of select="@type" />
 			</td>
 			<td class="field">
-				<a>
-					<xsl:attribute name="href">
-						<xsl:call-template name="get-href-to-field">
-							<xsl:with-param name="field-node" select="." />
-						</xsl:call-template>
-					</xsl:attribute>
+				<a href="#{substring-after(@id, 'F:')}">
 					<xsl:value-of select="@name" />
 				</a>
 				<xsl:if test="documentation/summary">
@@ -298,12 +295,7 @@
 		<tr>
 			<!-- Is there a CSS property that can emulate the valign attribute? -->
 			<td class="constructor" valign="top">
-				<a>
-					<xsl:attribute name="href">
-						<xsl:call-template name="get-href-to-constructor">
-							<xsl:with-param name="constructor-node" select="." />
-						</xsl:call-template>
-					</xsl:attribute>
+				<a href="#{substring-after(@id, 'M:')}">
 					<xsl:value-of select="../@name" />
 				</a>
 				<xsl:text>(</xsl:text>
@@ -332,12 +324,7 @@
 				<xsl:value-of select="@type" />
 			</td>
 			<td class="property">
-				<a>
-					<xsl:attribute name="href">
-						<xsl:call-template name="get-href-to-property">
-							<xsl:with-param name="property-node" select="." />
-						</xsl:call-template>
-					</xsl:attribute>
+				<a href="#{substring-after(@id, 'P:')}">
 					<xsl:value-of select="@name" />
 				</a>
 				<xsl:if test="parameter">
@@ -368,12 +355,7 @@
 				<xsl:value-of select="@returnType" />
 			</td>
 			<td class="method">
-				<a>
-					<xsl:attribute name="href">
-						<xsl:call-template name="get-href-to-method">
-							<xsl:with-param name="method-node" select="." />
-						</xsl:call-template>
-					</xsl:attribute>
+				<a href="#{substring-after(@id, 'M:')}">
 					<xsl:value-of select="@name" />
 				</a>
 				<xsl:text>(</xsl:text>
@@ -402,12 +384,7 @@
 				<xsl:value-of select="@type" />
 			</td>
 			<td class="event">
-				<a>
-					<xsl:attribute name="href">
-						<xsl:call-template name="get-href-to-event">
-							<xsl:with-param name="event-node" select="." />
-						</xsl:call-template>
-					</xsl:attribute>
+				<a href="#{substring-after(@id, 'E:')}">
 					<xsl:value-of select="@name" />
 				</a>
 				<xsl:if test="documentation/summary">
@@ -460,7 +437,7 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template match="field" mode="detail">
-		<a name="{@name}" />
+		<a name="{substring-after(@id, 'F:')}" />
 		<h3>
 			<xsl:value-of select="@name" />
 		</h3>
@@ -482,23 +459,27 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template match="constructor" mode="detail">
-		<a name="{@name}{@overload}" />
+		<a name="{substring-after(@id, 'M:')}" />
 		<h3>
 			<xsl:value-of select="../@name" />
 		</h3>
 		<pre>
-			<xsl:value-of select="@access" />
-			<xsl:text>&#32;</xsl:text>
-			<b>
-				<xsl:value-of select="../@name" />
-			</b>
+			<xsl:variable name="constructor">
+				<xsl:value-of select="@access" />
+				<xsl:text>&#32;</xsl:text>
+				<b>
+					<xsl:value-of select="../@name" />
+				</b>
+			</xsl:variable>
+			<xsl:value-of select="$constructor" />
 			<xsl:text>(</xsl:text>
 			<xsl:for-each select="parameter">
 				<xsl:value-of select="@type" />
 				<xsl:text>&#32;</xsl:text>
 				<xsl:value-of select="@name" />
 				<xsl:if test="position()!=last()">
-					<xsl:text>,&#32;</xsl:text>
+					<xsl:text>,&#10;&#32;</xsl:text>
+					<xsl:value-of select="substring($spaces, 1, string-length($constructor))" />
 				</xsl:if>
 			</xsl:for-each>
 			<xsl:text>)</xsl:text>
@@ -512,18 +493,34 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template match="property" mode="detail">
-		<a name="{@name}{@overload}" />
+		<a name="{substring-after(@id, 'P:')}" />
 		<h3>
 			<xsl:value-of select="@name" />
 		</h3>
 		<pre>
-			<xsl:value-of select="@access" />
-			<xsl:text>&#32;</xsl:text>
-			<xsl:value-of select="@type" />
-			<xsl:text>&#32;</xsl:text>
-			<b>
-				<xsl:value-of select="@name" />
-			</b>
+			<xsl:variable name="property">
+				<xsl:value-of select="@access" />
+				<xsl:text>&#32;</xsl:text>
+				<xsl:value-of select="@type" />
+				<xsl:text>&#32;</xsl:text>
+				<b>
+					<xsl:value-of select="@name" />
+				</b>
+			</xsl:variable>
+			<xsl:value-of select="$property" />
+			<xsl:if test="parameter">
+				<xsl:text>[</xsl:text>
+				<xsl:for-each select="parameter">
+					<xsl:value-of select="@type" />
+					<xsl:text>&#32;</xsl:text>
+					<xsl:value-of select="@name" />
+					<xsl:if test="position()!=last()">
+						<xsl:text>,&#10;&#32;</xsl:text>
+						<xsl:value-of select="substring($spaces, 1, string-length($property))" />
+					</xsl:if>
+				</xsl:for-each>
+				<xsl:text>]</xsl:text>
+			</xsl:if>
 		</pre>
 		<dl>
 			<dd>
@@ -534,23 +531,27 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template match="method" mode="detail">
-		<a name="{@name}{@overload}" />
+		<a name="{substring-after(@id, 'M:')}" />
 		<h3>
 			<xsl:value-of select="@name" />
 		</h3>
 		<pre>
-			<xsl:value-of select="@access" />
-			<xsl:text>&#32;</xsl:text>
-			<b>
-				<xsl:value-of select="@name" />
-			</b>
+			<xsl:variable name="method">
+				<xsl:value-of select="@access" />
+				<xsl:text>&#32;</xsl:text>
+				<b>
+					<xsl:value-of select="@name" />
+				</b>
+			</xsl:variable>
+			<xsl:value-of select="$method" />
 			<xsl:text>(</xsl:text>
 			<xsl:for-each select="parameter">
 				<xsl:value-of select="@type" />
 				<xsl:text>&#32;</xsl:text>
 				<xsl:value-of select="@name" />
 				<xsl:if test="position()!=last()">
-					<xsl:text>,&#32;</xsl:text>
+					<xsl:text>,&#10;&#32;</xsl:text>
+					<xsl:value-of select="substring($spaces, 1, string-length($method))" />
 				</xsl:if>
 			</xsl:for-each>
 			<xsl:text>)</xsl:text>
@@ -564,7 +565,7 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template match="event" mode="detail">
-		<a name="{@name}" />
+		<a name="{substring-after(@id, 'E:')}" />
 		<h3>
 			<xsl:value-of select="@name" />
 		</h3>

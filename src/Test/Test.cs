@@ -21,6 +21,9 @@ namespace NDoc.Test
 		/// <summary>Initializes a new instance of the Class class.</summary>
 		protected Class(double d) { }
 
+		/// <summary>Initializes a new instance of the Class class.</summary>
+		public Class(int i1, int i2, int i3) { }
+
 		/// <summary>Holds an <c>int</c> value.</summary>
 		public int Field;
 
@@ -51,8 +54,17 @@ namespace NDoc.Test
 			get { return 0; }
 		}
 
+		/// <summary>This overloaded indexer accepts three ints.</summary>
+		public int this[int i1, int i2, int i3]
+		{
+			get { return 0; }
+		}
+
 		/// <summary>Executes some code.</summary>
 		public void Method() { }
+
+		/// <summary>Executes some code.</summary>
+		public void Method(int i1, int i2, int i3) { }
 
 		/// <summary>Executes some static code.</summary>
 		public static void StaticMethod() { }
