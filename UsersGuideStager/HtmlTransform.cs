@@ -19,6 +19,8 @@ namespace NDoc.UsersGuideStager
 
 			IHTMLDocument2 htmlDoc = OpenHtml( "file:///" + htmlFile.FullName );
 
+			// make all filenames lower case. In the transform call all links are made lower case as well
+			// this accounts for mixed case situation on Windows authoring boxes and the sf.net Unix machine
 			StreamWriter writer = File.CreateText( Path.Combine( targetDir.FullName, htmlFile.Name.ToLower() ) );
 			
 			writer.Write( Transform( htmlDoc ).documentElement.outerHTML );
@@ -37,7 +39,7 @@ namespace NDoc.UsersGuideStager
 			
 			// because the scripts that insert the header and footer get
 			// run when we load the source html, we remove them here
-			// This allows removes the dependency on having scripting enabled 
+			// This also removes the dependency on having scripting enabled 
 			// on client browsers for the online version
 			foreach ( IHTMLDOMNode script in htmlDoc.scripts )
 				script.parentNode.removeChild( script );
