@@ -385,9 +385,14 @@ a:hover
 
 img
 	{
-	border: none; 
+	border: none;
 	}
-
+table.dtTABLE td img
+	{
+	border: none;
+	vertical-align: top;
+	margin-right: 2px;
+	}
 /* Not in dtue.css. Used by NDoc's "ShowMissing..." options. */
 .missing
 	{
