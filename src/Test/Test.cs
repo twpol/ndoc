@@ -161,6 +161,13 @@ namespace NDoc.Test
 		event Handler InterfaceEvent;
 	}
 
+	/// <summary>This interface inherits from another interface.</summary>
+	public interface InterfaceInherited : Interface
+	{
+		/// <summary>This is another method declared in an inteface.</summary>
+		void OtherMethod();
+	}
+
 	/// <summary>This is an empty interface.</summary>
 	public interface Interface1
 	{
