@@ -19,6 +19,7 @@
 using System;
 using System.IO;
 using System.Collections;
+using System.Xml;
 using System.Xml.Xsl;
 using System.Diagnostics;
 
@@ -29,6 +30,27 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 	/// </summary>
 	public class StyleSheetCollection : DictionaryBase
 	{
+		/// <summary>
+		/// Load the predefined set of xslt stylesheets into a dictionary
+		/// </summary>
+		/// <param name="extensibilityStylesheet">Path to an xslt stylesheet used for displaying custom tags</param>
+		/// <param name="resourceDirectory">The location of the xsl files</param>
+		/// <returns>The populated collection</returns>
+		public static StyleSheetCollection LoadStyleSheets( string extensibilityStylesheet, string resourceDirectory )
+		{
+			XmlDocument common = new XmlDocument();
+			common.Load( Path.Combine( Path.Combine( resourceDirectory, "xslt" ), "tags.xslt" ) );
+			
+			XmlElement include = common.CreateElement( "xsl", "include", "http://www.w3.org/1999/XSL/Transform" );
+			include.SetAttribute( "href", extensibilityStylesheet );
+
+			common.DocumentElement.PrependChild( include );
+
+			common.Save( Path.Combine( Path.Combine( resourceDirectory, "xslt" ), "tags.xslt" ) );
+
+			return LoadStyleSheets( resourceDirectory );
+		}
+
 		/// <summary>
 		/// Load the predefined set of xslt stylesheets into a dictionary
 		/// </summary>

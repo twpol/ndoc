@@ -13,8 +13,32 @@
 	<xsl:param name="ndoc-title" />
 	<xsl:param name="ndoc-net-framework-version"/>
 	<xsl:param name="ndoc-version"/>
+	<xsl:param name="ndoc-omit-syntax"/>
 	<!-- -->
-
+	<!--
+	 | no-op extensibility templates
+	 +-->
+	<xsl:template match="node()|@*" mode="summary-section" />
+	<xsl:template match="node()|@*" mode="syntax-section"/>
+	<xsl:template match="node()|@*" mode="value-section"/>
+	<xsl:template match="node()|@*" mode="version-section"/>
+	<xsl:template match="node()|@*" mode="parameter-section" />
+	<xsl:template match="node()|@*" mode="returnvalue-section" />
+	<xsl:template match="node()|@*" mode="implements-section" />
+	<xsl:template match="node()|@*" mode="remarks-section" />
+	<xsl:template match="node()|@*" mode="obsolete-section" />
+	<xsl:template match="node()|@*" mode="events-section" />
+	<xsl:template match="node()|@*" mode="exceptions-section" />
+	<xsl:template match="node()|@*" mode="example-section" />
+	<xsl:template match="node()|@*" mode="member-requirements-section" />
+	<xsl:template match="node()|@*" mode="type-requirements-section" />
+	<xsl:template match="node()|@*" mode="seealso-section"/>
+	<xsl:template match="node()|@*" mode="enumeration-members-section"/>
+	<xsl:template match="node()|@*" mode="footer-row"/>
+	<xsl:template match="node()|@*" mode="title-row"/>
+	<xsl:template match="node()|@*" mode="overloads-remarks-section"/>
+	<xsl:template match="node()|@*" mode="overloads-example-section"/>
+	<xsl:template match="node()|@*" mode="overloads-summary-section"/>
 	<!-- -->
 	<xsl:template name="parameter-topic">
 		<dl>
@@ -381,25 +405,25 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="syntax-section">
-	
-		<xsl:apply-templates select="." mode="pre-syntax"/>
-		<xsl:text>&#10;</xsl:text>
-		<PRE class="syntax">
-		<xsl:apply-templates select="." mode="syntax">
-			<xsl:with-param name="lang" select="'Visual Basic'"/>
-		</xsl:apply-templates>
-		<xsl:apply-templates select="." mode="syntax">
-			<xsl:with-param name="lang" select="'C#'"/>
-		</xsl:apply-templates>
-		<xsl:apply-templates select="." mode="syntax">
-			<xsl:with-param name="lang" select="'C++'"/>
-		</xsl:apply-templates>	
-		<xsl:apply-templates select="." mode="syntax">
-			<xsl:with-param name="lang" select="'JScript'"/>
-		</xsl:apply-templates>
-		</PRE>	
-		<xsl:apply-templates select="." mode="post-syntax"/>
-		
+		<xsl:if test="$ndoc-omit-syntax = false()">
+			<xsl:apply-templates select="." mode="pre-syntax"/>
+			<xsl:text>&#10;</xsl:text>
+			<PRE class="syntax">
+			<xsl:apply-templates select="." mode="syntax">
+				<xsl:with-param name="lang" select="'Visual Basic'"/>
+			</xsl:apply-templates>
+			<xsl:apply-templates select="." mode="syntax">
+				<xsl:with-param name="lang" select="'C#'"/>
+			</xsl:apply-templates>
+			<xsl:apply-templates select="." mode="syntax">
+				<xsl:with-param name="lang" select="'C++'"/>
+			</xsl:apply-templates>	
+			<xsl:apply-templates select="." mode="syntax">
+				<xsl:with-param name="lang" select="'JScript'"/>
+			</xsl:apply-templates>
+			</PRE>	
+			<xsl:apply-templates select="." mode="post-syntax"/>
+		</xsl:if>
 	</xsl:template>
 	<xsl:template name="remarks-section">
 		<xsl:if test="documentation/remarks">
@@ -490,7 +514,7 @@
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
-	<xsl:template name="members-section">
+	<xsl:template name="enumeration-members-section">
 		<xsl:if test="field">
 			<h4 class="dtH4">Members</h4>
 			<div class="tablediv">
@@ -618,14 +642,14 @@
 	<!-- -->
 	<xsl:template name="title-row">
 		<xsl:param name="type-name" />
-		<div id="nsbanner">
+		<div id="nsbanner">		
 			<xsl:variable name="headerHtml" select="NHtmlProvider:GetHeaderHtml(string($type-name))" />
 			<xsl:choose>
 				<xsl:when test="$headerHtml=''">
 					<div id="bannerrow1">
 						<table class="bannerparthead" cellspacing="0"><tr id="hdr">
 							<td class="runninghead" nowrap="true">
-							<xsl:value-of select="$ndoc-title" />
+								<xsl:value-of select="$ndoc-title" />
 							</td>
 							<td class="product" nowrap="true">
 							</td>

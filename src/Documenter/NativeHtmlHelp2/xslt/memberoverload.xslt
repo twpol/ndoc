@@ -147,15 +147,4 @@
 		</xsl:apply-templates>		
 		</blockquote>
 	</xsl:template>
-	
-<!--	<xsl:template match="operator" mode="syntax">
-		<xsl:apply-templates select="." mode="inline-syntax">
-			<xsl:with-param name="lang" select="'C#'"/>
-		</xsl:apply-templates>
-		<br/>
-		<xsl:apply-templates select="." mode="inline-syntax">
-			<xsl:with-param name="lang" select="'C++'"/>
-		</xsl:apply-templates>					
-	</xsl:template>-->
-	<!-- -->
 </xsl:stylesheet>

@@ -5,12 +5,6 @@
     xmlns:MSHelp="http://msdn.microsoft.com/mshelp"
     exclude-result-prefixes="msxsl user"
 >
-<!--
-	DO NOT pretty-indent the tags in this file
-	Because most of these templates will be wrapped in html PRE tags
-	the white space, as included, is necessary to get the correct
-	formatting of the code syntax content
--->
 	<xsl:include href="syntax-map.xslt" />
 	<!-- -->
 	<xsl:param name="ndoc-document-attributes" />

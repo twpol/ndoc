@@ -5,10 +5,10 @@
 	xmlns:MSHelp="http://msdn.microsoft.com/mshelp"
 	exclude-result-prefixes="doc"
 >
+
 	<!--
 	 | Identity Template
 	 +-->
-
 	<xsl:template match="node()|@*" mode="slashdoc">
 		<xsl:copy>
 			<xsl:apply-templates select="@*|node()" mode="slashdoc" />

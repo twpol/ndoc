@@ -53,11 +53,10 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns></returns>
 		public string GetHeaderHtml(string topicTitle)
 		{
-			string headerHtml = _headerHtml;
-
-			if (headerHtml == null)
+			if ( _headerHtml == null )
 				return string.Empty;
 
+			string headerHtml = _headerHtml;
 			headerHtml = headerHtml.Replace("%TOPIC_TITLE%", topicTitle);
 			headerHtml = headerHtml.Replace("%FILE_NAME%", _fileName);
 
@@ -73,11 +72,10 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns></returns>
 		public string GetFooterHtml(string assemblyName, string assemblyVersion, string topicTitle)
 		{
-			string footerHtml = _footerHtml;
-
-			if (footerHtml == null)
+			if ( _footerHtml == null )
 				return string.Empty;
 
+			string footerHtml = _footerHtml;
 			footerHtml = footerHtml.Replace("%ASSEMBLY_NAME%", assemblyName);
 			footerHtml = footerHtml.Replace("%ASSEMBLY_VERSION%", assemblyVersion);
 			footerHtml = footerHtml.Replace("%TOPIC_TITLE%", topicTitle);
