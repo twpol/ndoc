@@ -1119,6 +1119,11 @@ namespace NDoc.Gui
 
 		private void menuFileSaveItem_Click (object sender, System.EventArgs e)
 		{
+			SaveOrSaveAs();
+		}
+
+		private void SaveOrSaveAs()
+		{
 			if (projectFilename == untitledProjectName)
 			{
 				FileSaveAs();
@@ -1534,5 +1539,33 @@ namespace NDoc.Gui
 			propertyGrid.SelectedObject = documenterConfig;
 		}
 		#endregion // Event Handlers
+
+		/// <summary>Prompts the user to save the project if it's dirty.</summary>
+		protected override void OnClosing(CancelEventArgs e)
+		{
+			base.OnClosing(e);
+
+			if (project.IsDirty)
+			{
+				DialogResult result = MessageBox.Show(
+					"Save changes to " + projectFilename + "?", 
+					"NDoc", 
+					MessageBoxButtons.YesNoCancel,
+					MessageBoxIcon.Exclamation,
+					MessageBoxDefaultButton.Button1);
+
+				switch (result)
+				{
+					case DialogResult.Yes:
+						SaveOrSaveAs();
+						break;
+					case DialogResult.No:
+						break;
+					case DialogResult.Cancel:
+						e.Cancel = true;
+						break;
+				}
+			}
+		}
 	}
 }
