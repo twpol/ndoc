@@ -17,15 +17,13 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 using System;
-using System.IO;
-using System.Diagnostics;
 
 using NDoc.Core;
 
 namespace NDoc.Documenter.NativeHtmlHelp2
 {
 	/// <summary>
-	/// Summary description for Workspace.
+	/// Manages the location of the documentation build process
 	/// </summary>
 	public class NativeHtmlHelp2Workspace : Workspace
 	{
