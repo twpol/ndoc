@@ -68,14 +68,14 @@
   <!-- -->
   <xsl:template name="get-filename-for-current-method-overloads">
     <xsl:variable name="type-part" select="translate(substring-after(../@id, 'T:'), '[,]', '')" />
-    <xsl:value-of select="concat($type-part, @name, '.html')" />
+    <xsl:value-of select="concat($type-part, '.', @name, '.html')" />
   </xsl:template>
   <!-- -->
   <xsl:template name="get-filename-for-inherited-method-overloads">
     <xsl:param name="declaring-type" />
     <xsl:param name="method-name" />
     <xsl:variable name="type-part" select="translate($declaring-type, '[,]', '')" />
-    <xsl:value-of select="concat($type-part, $method-name, '.html')" />
+    <xsl:value-of select="concat($type-part, '.', $method-name, '.html')" />
   </xsl:template>
   <!-- -->
   <xsl:template name="get-filename-for-method">
