@@ -60,6 +60,10 @@ namespace NDoc.Core
 			}
 		}
 
+		/// <summary>
+		/// Gets the name of the settings folder.
+		/// </summary>
+		/// <value></value>
 		private static string SettingsFolderName
 		{
 			get
