@@ -1387,26 +1387,28 @@ namespace NDoc.Gui
 
 			//check if thread has been aborted
 			Exception iex = ex;
+			Exception innermostException;
 			do
 			{
 				if (iex is ThreadAbortException)
 				{
 					return;
 				}
+				innermostException = iex;
 				iex = iex.InnerException;
 			} while (iex != null);
 
 			// Process exception
 			string msg = "An error occured while trying to build the documentation.";
-			if (ex is DocumenterException)
+			if (innermostException is DocumenterException)
 			{
-				ErrorForm errorForm = new ErrorForm(msg, ex.InnerException);
+				ErrorForm errorForm = new ErrorForm(msg, innermostException);
 				errorForm.Text = "NDoc Documenter Error";
 				errorForm.ShowDialog(this);
 			}
 			else
 			{
-				ErrorForm errorForm = new ErrorForm(msg, ex.InnerException);
+				ErrorForm errorForm = new ErrorForm(msg, innermostException);
 				errorForm.ShowDialog();
 			}
 		}
