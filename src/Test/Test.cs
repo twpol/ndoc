@@ -505,6 +505,18 @@ namespace NDoc.Test
 		Quux
 	}
 
+	/// <summary>
+	/// This is an enum that is not the default <see cref="System.Int32"/> type.
+	/// It is an <see cref="System.Int16"/> type
+	/// </summary>
+	public enum NonIntEnum : short
+	{
+		/// <summary>
+		/// The only entry in the short enum
+		/// </summary>
+		entry,
+	}
+
 	/// <summary>This class has lots of &lt;see&gt; elements in the remarks.</summary>
 	/// <remarks>See <see cref="Class"/>.
 	/// See <see cref="Interface"/>.
