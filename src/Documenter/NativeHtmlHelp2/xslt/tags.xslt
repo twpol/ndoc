@@ -72,7 +72,7 @@
 					<xsl:with-param name="lang" select="@lang" />
 				</xsl:call-template>
 				<xsl:text>]</xsl:text>
-			</span>
+			</span><xsl:text>&#10;</xsl:text>
 			<xsl:apply-templates mode="slashdoc" />
 		</pre>
 	</xsl:template>
