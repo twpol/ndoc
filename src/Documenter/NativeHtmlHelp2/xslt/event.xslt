@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+	xmlns:MSHelp="http://msdn.microsoft.com/mshelp"
+	xmlns:NUtil="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities"
+	exclude-result-prefixes="NUtil" >
 	<!-- -->
-	<xsl:output method="html" indent="no" encoding="Windows-1252" version="3.2" doctype-public="-//W3C//DTD HTML 3.2 Final//EN" />
+	<xsl:output method="html" indent="no" encoding="utf-8" version="3.2" doctype-public="-//W3C//DTD HTML 3.2 Final//EN" />
 	<!-- -->
 	<xsl:include href="common.xslt" />
 	<!-- -->
@@ -39,12 +41,7 @@
 						<h4 class="dtH4">Event Data</h4>
 						<p>
 							<xsl:text>The event handler receives an argument of type </xsl:text>
-							<a>
-								<xsl:attribute name="href">
-									<xsl:call-template name="get-filename-for-type">
-										<xsl:with-param name="id" select="$eventargs-id" />
-									</xsl:call-template>
-								</xsl:attribute>
+							<a href="{NUtil:GetTypeHRef( string( $eventargs-id ) ) }">
 								<xsl:value-of select="$thisevent/@name" />
 							</a>
 							<xsl:text> containing data related to this event. The following </xsl:text>
@@ -101,10 +98,7 @@
 				<xsl:choose>
 					<xsl:when test="following-sibling::property[@name=$name]">
 						<td width="50%">
-							<a>
-								<xsl:attribute name="href">
-									<xsl:call-template name="get-filename-for-current-property-overloads" />
-								</xsl:attribute>
+							<a href="{NUtil:GetMemberHRef( . )}">
 								<xsl:value-of select="@name" />
 							</a>
 						</td>
@@ -118,22 +112,15 @@
 									<xsl:variable name="declaring-class" select="//class[@id=$declaring-type-id]" />
 									<xsl:choose>
 										<xsl:when test="$declaring-class">
-											<a>
-												<xsl:attribute name="href">
-													<xsl:call-template name="get-filename-for-property" >
-														<xsl:with-param name="property" select="$declaring-class/property[@name=$name]" />
-													</xsl:call-template>
-												</xsl:attribute>
+											<a href="{NUtil:GetMemberHRef( $declaring-class/property[@name=$name] )}">
 												<xsl:value-of select="@name" />
 											</a>
 										</xsl:when>
 										<xsl:when test="starts-with(@declaringType, 'System.')">
-											<a>
-												<xsl:attribute name="href">
-													<xsl:call-template name="get-filename-for-system-property" />
-												</xsl:attribute>
-												<xsl:value-of select="@name" />
-											</a>
+											<xsl:call-template name="get-xlink-for-system-member">
+												<xsl:with-param name="text" select="@name"/>
+												<xsl:with-param name="member" select="."/>
+											</xsl:call-template>											
 										</xsl:when>
 										<xsl:otherwise>
 											<xsl:value-of select="@name" />
@@ -141,10 +128,7 @@
 									</xsl:choose>
 								</xsl:when>
 								<xsl:otherwise>
-									<a>
-										<xsl:attribute name="href">
-											<xsl:call-template name="get-filename-for-current-property" />
-										</xsl:attribute>
+									<a href="{NUtil:GetMemberHRef( . )}">
 										<xsl:value-of select="@name" />
 									</a>
 								</xsl:otherwise>

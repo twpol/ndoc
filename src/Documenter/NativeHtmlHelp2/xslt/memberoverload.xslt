@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+	xmlns:NUtil="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities"
+	xmlns:MSHelp="http://msdn.microsoft.com/mshelp"
+	exclude-result-prefixes="NUtil" >
 	<!-- -->
-	<xsl:output method="html" indent="yes" encoding="Windows-1252" version="3.2" doctype-public="-//W3C//DTD HTML 3.2 Final//EN" />
+	<xsl:output method="html" indent="yes" encoding="utf-8" version="3.2" doctype-public="-//W3C//DTD HTML 3.2 Final//EN" />
 	<!-- -->
 	<xsl:include href="common.xslt" />
 	<!-- -->
@@ -74,50 +76,43 @@
 							<xsl:when test="@declaringType and starts-with(@declaringType, 'System.')">
 								<p>
 									<xsl:text>Inherited from </xsl:text>
-									<a>
-										<xsl:attribute name="href">
-											<xsl:call-template name="get-filename-for-type-name">
-												<xsl:with-param name="type-name" select="@declaringType" />
-											</xsl:call-template>
-										</xsl:attribute>
+									<xsl:variable name="link-text">
 										<xsl:call-template name="strip-namespace">
 											<xsl:with-param name="name" select="@declaringType" />
 										</xsl:call-template>
-									</a>
+									</xsl:variable>
+									<xsl:call-template name="get-link-for-type-name">
+										<xsl:with-param name="type-name" select="@declaringType" />
+										<xsl:with-param name="link-text" select="$link-text" />
+									</xsl:call-template>									
 									<xsl:text>.</xsl:text>
 								</p>
 								<blockquote class="dtBlock">
-									<a>
-										<xsl:attribute name="href">
-											<xsl:call-template name="get-filename-for-system-method" />
-										</xsl:attribute>
+									<xsl:variable name="text">
 										<xsl:apply-templates select="self::node()" mode="syntax" />
-									</a>
+									</xsl:variable>
+									<xsl:call-template name="get-xlink-for-system-member">
+										<xsl:with-param name="text" select="@name"/>
+										<xsl:with-param name="member" select="."/>
+									</xsl:call-template>
 								</blockquote>
 							</xsl:when>
 							<xsl:when test="@declaringType">
 								<p>
 									<xsl:text>Inherited from </xsl:text>
-									<a>
-										<xsl:attribute name="href">
-											<xsl:call-template name="get-filename-for-type-name">
-												<xsl:with-param name="type-name" select="@declaringType" />
-											</xsl:call-template>
-										</xsl:attribute>
+									<xsl:variable name="link-text">
 										<xsl:call-template name="strip-namespace">
 											<xsl:with-param name="name" select="@declaringType" />
 										</xsl:call-template>
-									</a>
+									</xsl:variable>
+									<xsl:call-template name="get-link-for-type-name">
+										<xsl:with-param name="type-name" select="@declaringType" />
+										<xsl:with-param name="link-text" select="$link-text" />
+									</xsl:call-template>										
 									<xsl:text>.</xsl:text>
 								</p>
 								<blockquote class="dtBlock">
-									<a>
-										<xsl:attribute name="href">
-											<xsl:call-template name="get-filename-for-inherited-method-overloads">
-												<xsl:with-param name="declaring-type" select="@declaringType" />
-												<xsl:with-param name="method-name" select="@name" />
-											</xsl:call-template>
-										</xsl:attribute>
+									<a href="{NUtil:GetMemberOverloadHRef( string( @declaringType ), string( @name ) )}">
 										<xsl:apply-templates select="self::node()" mode="syntax" />
 									</a>
 								</blockquote>
@@ -129,13 +124,7 @@
 									</xsl:call-template>
 								</p>
 								<blockquote class="dtBlock">
-									<a>
-										<xsl:attribute name="href">
-											<xsl:call-template name="get-filename-for-cref-overload">
-												<xsl:with-param name="cref" select="@id" />
-												<xsl:with-param name="overload" select="@overload" />
-											</xsl:call-template>
-										</xsl:attribute>
+									<a href="{NUtil:GetMemberHRef( . )}">
 										<xsl:apply-templates select="self::node()" mode="syntax" />
 									</a>
 								</blockquote>
@@ -165,7 +154,10 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template match="constructor | method | operator" mode="syntax">
-		<xsl:call-template name="member-syntax2" />
+		<xsl:apply-templates select="." mode="cs-syntax">
+			<xsl:with-param name="include-type-links" select="false()"/>
+			<xsl:with-param name="version" select="'short'"/>
+		</xsl:apply-templates>
 	</xsl:template>
 	<!-- -->
 	<xsl:template match="property" mode="syntax">

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+	xmlns:MSHelp="http://msdn.microsoft.com/mshelp"	
+	xmlns:NUtil="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities"
+	exclude-result-prefixes="NUtil">
 	<!-- -->
-	<xsl:output method="html" indent="no" encoding="Windows-1252" version="3.2" doctype-public="-//W3C//DTD HTML 3.2 Final//EN" />
+	<xsl:output method="html" indent="no" encoding="utf-8" version="3.2" doctype-public="-//W3C//DTD HTML 3.2 Final//EN" />
 	<!-- -->
 	<xsl:include href="common.xslt" />
 	<!-- -->
@@ -35,28 +37,16 @@
 			
 			<xsl:choose>
 				<xsl:when test="starts-with($list[$last]/@type, 'System.')">
-					<a>
-						<xsl:attribute name="href">
-							<xsl:call-template name="get-filename-for-system-type">
-								<xsl:with-param name="type-name" select="$list[$last]/@type" />
-							</xsl:call-template>
-						</xsl:attribute>
-						<xsl:call-template name="get-datatype">
-							<xsl:with-param name="datatype" select="$list[$last]/@type" />
-						</xsl:call-template>
-					</a>
+					<xsl:call-template name="get-xlink-for-system-type">
+						<xsl:with-param name="type-name" select="$list[$last]/@type" />									
+					</xsl:call-template>					
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:variable name="base-class-id" select="string($list[$last]/@id)" />
 					<xsl:variable name="base-class" select="//class[@id=$base-class-id]" />
 					<xsl:choose>
 						<xsl:when test="$base-class">
-							<a>
-								<xsl:attribute name="href">
-									<xsl:call-template name="get-filename-for-type">
-										<xsl:with-param name="id" select="$list[$last]/@id" />
-									</xsl:call-template>
-								</xsl:attribute>
+							<a href="{NUtil:GetTypeHRef( string( $list[$last]/@id ) ) }">
 								<xsl:call-template name="get-datatype">
 									<xsl:with-param name="datatype" select="$list[$last]/@type" />
 								</xsl:call-template>
@@ -123,27 +113,12 @@
 				<div id="nstext" valign="bottom">
 					<xsl:call-template name="summary-section" />
 					<xsl:if test="local-name()!='delegate' and local-name()!='enumeration'">
-						<xsl:variable name="members-href">
-							<xsl:call-template name="get-filename-for-type-members">
-								<xsl:with-param name="id" select="@id" />
-							</xsl:call-template>
-						</xsl:variable>
+						<xsl:variable name="members-href" select="NUtil:GetTypeMembersHRef( string( @id ) )"/>
 						<xsl:if test="constructor|field|property|method|operator|event">
 							<p>For a list of all members of this type, see <a href="{$members-href}"><xsl:value-of select="@name" /> Members</a>.</p>
 						</xsl:if>
 					</xsl:if>
-<!--
-					<MSHelp:link
-   keywords = "frlrfSystemObjectClassTopic"
-   indexMoniker = "!DefaultAssociativeIndex"
-   namespace = "ms-help://MS.VSCC.2003"
-   tabindex = "0">with namesapce</MSHelp:link>
-					<MSHelp:link
-   keywords = "frlrfSystemObjectClassTopic"
-   indexMoniker = "!DefaultAssociativeIndex"
-   tabindex = "0">relative</MSHelp:link>
--->   
-					<p>frlrfSystemObjectClassTopic</p>
+
 					<xsl:if test="local-name() != 'delegate' and local-name() != 'enumeration'">
 						<p>
 							<xsl:choose>
@@ -162,12 +137,9 @@
 									</xsl:if>
 								</xsl:when>
 								<xsl:otherwise>
-									<xsl:variable name="href">
-										<xsl:call-template name="get-filename-for-system-type">
-											<xsl:with-param name="type-name" select="'System.Object'" />
-										</xsl:call-template>
-									</xsl:variable>
-									<a href="{$href}">System.Object</a>
+									<xsl:call-template name="get-xlink-for-system-type">
+										<xsl:with-param name="type-name" select="'System.Object'" />									
+									</xsl:call-template>
 									<br />
 									<xsl:call-template name="draw-hierarchy">
 										<xsl:with-param name="list" select="descendant::base" />
@@ -196,12 +168,7 @@
 					<h4 class="dtH4">Requirements</h4>
 					<p>
 						<b>Namespace: </b>
-						<a>
-							<xsl:attribute name="href">
-								<xsl:call-template name="get-filename-for-namespace">
-									<xsl:with-param name="name" select="../@name" />
-								</xsl:call-template>
-							</xsl:attribute>
+						<a href="{NUtil:GetHRefForNamespaceHierarchy( string( ../@name ) )}">
 							<xsl:value-of select="../@name" />
 						</a>
 					</p>
@@ -219,14 +186,10 @@
 							<ul class="permissions">
 								<xsl:for-each select="documentation/permission">
 									<li>
-										<a>
-											<xsl:attribute name="href">
-												<xsl:call-template name="get-filename-for-type-name">
-													<xsl:with-param name="type-name" select="substring-after(@cref, 'T:')" />
-												</xsl:call-template>
-											</xsl:attribute>
-											<xsl:value-of select="substring-after(@cref, 'T:')" />
-										</a>
+										<xsl:call-template name="get-link-for-type">
+											<xsl:with-param name="type-id" select="@cref" />
+											<xsl:with-param name="link-text" select="substring-after(@cref, 'T:')"/>
+										</xsl:call-template>
 										<xsl:text>&#160;</xsl:text>
 										<xsl:apply-templates mode="slashdoc" />
 									</li>

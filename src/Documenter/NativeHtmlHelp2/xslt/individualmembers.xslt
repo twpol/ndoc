@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+	xmlns:MSHelp="http://msdn.microsoft.com/mshelp"
+	xmlns:NUtil="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities"
+	exclude-result-prefixes="NUtil" >
+	
 	<!-- -->
-	<xsl:output method="html" indent="yes" encoding="Windows-1252" version="3.2" doctype-public="-//W3C//DTD HTML 3.2 Final//EN" />
+	<xsl:output method="html" indent="yes" encoding="utf-8" version="3.2" doctype-public="-//W3C//DTD HTML 3.2 Final//EN" />
 	<!-- -->
 	<xsl:include href="common.xslt" />
 	<xsl:include href="memberscommon.xslt" />
@@ -53,12 +56,7 @@
 						<xsl:text> </xsl:text>
 						<xsl:value-of select="local-name()" />
 						<xsl:text> members, see the </xsl:text>
-						<a>
-							<xsl:attribute name="href">
-								<xsl:call-template name="get-filename-for-type-members">
-									<xsl:with-param name="id" select="@id" />
-								</xsl:call-template>
-							</xsl:attribute>
+						<a href="{NUtil:GetTypeMembersHRef( string( @id ) )}">
 							<xsl:value-of select="@name" />
 							<xsl:text> Members</xsl:text>
 						</a>

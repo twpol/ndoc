@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	xmlns:NUtil="urn:NDocUtil"
+	xmlns:NUtil="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities"
 	xmlns:NHtmlProvider="urn:NDocExternalHtml"
 	xmlns:MSHelp="http://msdn.microsoft.com/mshelp"
 	exclude-result-prefixes="NUtil NHtmlProvider" >
 	<!-- -->
-	<xsl:include href="filenames.xslt" />
 	<xsl:include href="syntax.xslt" />
 	<xsl:include href="vb-syntax.xslt" />
 	<xsl:include href="tags.xslt" />
 	<xsl:include href="indices.xslt" />
+	<xsl:include href="XLinks.xslt" />
 	<!-- -->
 	<xsl:param name="ndoc-title" />
 	<xsl:param name="ndoc-sdk-doc-base-url" />
@@ -218,34 +218,19 @@
 		<h4 class="dtH4">See Also</h4>
 		<p>
 			<xsl:if test="$page!='type' and $page!='enumeration' and $page!='delegate'">
-				<xsl:variable name="type-filename">
-					<xsl:call-template name="get-filename-for-type">
-						<xsl:with-param name="id" select="$typeID" />
-					</xsl:call-template>
-				</xsl:variable>
-				<a href="{$type-filename}">
+				<a href="{NUtil:GetTypeHRef( string( $typeID ) ) }">
 					<xsl:value-of select="concat($typeName, ' ', $typeMixed)" />
 				</a>
 				<xsl:text> | </xsl:text>
 			</xsl:if>
 			<xsl:if test="(constructor|field|property|method|operator|event) and $page!='members' and $page!='enumeration' and $page!='delegate' and $page!='methods' and $page!='properties' and $page!='fields' and $page!='events'">
-				<a>
-					<xsl:attribute name="href">
-						<xsl:call-template name="get-filename-for-type-members">
-							<xsl:with-param name="id" select="$typeID" />
-						</xsl:call-template>
-					</xsl:attribute>
+				<a href="{NUtil:GetTypeMembersHRef( string( $typeID ) )}">
 					<xsl:value-of select="$typeName" />
 					<xsl:text> Members</xsl:text>
 				</a>
 				<xsl:text> | </xsl:text>
 			</xsl:if>
-			<a>
-				<xsl:attribute name="href">
-					<xsl:call-template name="get-filename-for-namespace">
-						<xsl:with-param name="name" select="$namespaceName" />
-					</xsl:call-template>
-				</xsl:attribute>
+			<a href="{NUtil:GetHRefForNamespace( string( $namespaceName ) )}">
 				<xsl:value-of select="$namespaceName" />
 				<xsl:text> Namespace</xsl:text>
 			</a>
@@ -255,46 +240,35 @@
 					<xsl:choose>
 						<xsl:when test="local-name()='constructor'">
  				      <xsl:text> | </xsl:text>
-							<a>
-								<xsl:attribute name="href">
-									<xsl:call-template name="get-filename-for-current-constructor-overloads" />
-								</xsl:attribute>
+							<a href="{NUtil:GetCustructorOverloadHRef( string( ../@id ) )}">
 								<xsl:value-of select="$typeName" />
 								<xsl:text> Constructor Overload List</xsl:text>
 							</a>
 						</xsl:when>
 						<xsl:when test="local-name()='operator'">
-						  <xsl:if test="@name!='op_Implicit' and @name!='op_Explicit'">
-   				      <xsl:text> | </xsl:text>
-							  <a>
-								  <xsl:attribute name="href">
-									  <xsl:call-template name="get-filename-for-current-method-overloads" />
-								  </xsl:attribute>
-								  <xsl:value-of select="$typeName" />
-								  <xsl:text> </xsl:text>
-								  <xsl:call-template name="operator-name">
-								    <xsl:with-param name="name"><xsl:value-of select="@name" /></xsl:with-param>
-								  </xsl:call-template>
-								  <xsl:text> Overload List</xsl:text>
-							  </a>
+							<xsl:if test="@name!='op_Implicit' and @name!='op_Explicit'">
+   							<xsl:text> | </xsl:text>
+							<a href="{NUtil:GetMemberOverloadHRef( string( ../@id ), string( @name ) )}">
+									<xsl:value-of select="$typeName" />
+									<xsl:text> </xsl:text>
+									<xsl:call-template name="operator-name">
+										<xsl:with-param name="name"><xsl:value-of select="@name" /></xsl:with-param>
+									</xsl:call-template>
+									<xsl:text> Overload List</xsl:text>
+								</a>
 						  </xsl:if>
 						</xsl:when>
-	          <xsl:when test="local-name()='property'">
-	 			      <xsl:text> | </xsl:text>
-              <a>
-                <xsl:attribute name="href">
-                  <xsl:call-template name="get-filename-for-current-property-overloads" />
-                </xsl:attribute>
-                <xsl:value-of select="concat($typeName, '.', @name)" />
-                <xsl:text> Overload List</xsl:text>
-              </a>
-            </xsl:when>
+						<!-- not sure what an overloaded property is but I'm gonna leave it for now -->
+						<xsl:when test="local-name()='property'">
+	 						<xsl:text> | </xsl:text>
+							<a href="{NUtil:GetMemberOverloadHRef( string( ../@id ), string( @name ) )}">
+								<xsl:value-of select="concat($typeName, '.', @name)" />
+								<xsl:text> Overload List</xsl:text>
+							</a>
+						</xsl:when>
 						<xsl:when test="local-name()='method'">
-	 			      <xsl:text> | </xsl:text>
-   						<a>
-								<xsl:attribute name="href">
-									<xsl:call-template name="get-filename-for-current-method-overloads" />
-								</xsl:attribute>
+	 						<xsl:text> | </xsl:text>
+							<a href="{NUtil:GetMemberOverloadHRef( string( ../@id ), string( @name ) )}">
 								<xsl:value-of select="concat($typeName, '.', @name)" />
 								<xsl:text> Overload List</xsl:text>
 							</a>
@@ -445,56 +419,46 @@
 				<xsl:variable name="name" select="@name" />
 				<xsl:variable name="declaring-interface" select="//interface[@id=$declaring-type-id]" />
 				<p>
-					<a>
-						<xsl:attribute name="href">
-							<xsl:choose>
-								<xsl:when test="$member='property'">
-									<xsl:choose>
-										<xsl:when test="starts-with(@declaringType, 'System.')" >
-											<xsl:call-template name="get-filename-for-system-property" />
-										</xsl:when>
-										<xsl:otherwise>
-											<xsl:call-template name="get-filename-for-property">
-												<xsl:with-param name="property" select="$declaring-interface/property[@name=$name]" />
-											</xsl:call-template>
-										</xsl:otherwise>
-									</xsl:choose>
-								</xsl:when>
-								<xsl:when test="$member='event'">
-									<xsl:choose>
-										<xsl:when test="starts-with(@declaringType, 'System.')" >
-											<xsl:call-template name="get-filename-for-system-event" />
-										</xsl:when>
-										<xsl:otherwise>
-											<xsl:call-template name="get-filename-for-event">
-												<xsl:with-param name="event" select="$declaring-interface/event[@name=$name]" />
-											</xsl:call-template>
-										</xsl:otherwise>
-									</xsl:choose>
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:choose>
-										<xsl:when test="starts-with(@declaringType, 'System.')" >
-											<xsl:call-template name="get-filename-for-system-method" />
-										</xsl:when>
-										<xsl:otherwise>
-											<xsl:call-template name="get-filename-for-method">
-												<xsl:with-param name="method" select="$declaring-interface/method[@name=$name]" />
-											</xsl:call-template>
-										</xsl:otherwise>
-									</xsl:choose>
-								</xsl:otherwise>
-							</xsl:choose>
-						</xsl:attribute>
-						<xsl:value-of select="@interface" /><xsl:text>.</xsl:text><xsl:value-of select="@name" />
-					</a>
+					<xsl:choose>
+						<xsl:when test="$member='property'">
+							<xsl:call-template name="get-link-for-interface-property">
+								<xsl:with-param name="declaring-type-name" select="@declaringType"/>
+								<xsl:with-param name="interface-property" select="$declaring-interface/property[@name=$name]"/>
+								<xsl:with-param name="property" select="."/>
+								<xsl:with-param name="link-text" select="concat( @interface, '.', @name )"/>
+							</xsl:call-template>
+						</xsl:when>
+						<xsl:when test="$member='event'">
+							<xsl:call-template name="get-link-for-interface-event">
+								<xsl:with-param name="declaring-type-name" select="@declaringType"/>
+								<xsl:with-param name="interface-event" select="$declaring-interface/event[@name=$name]"/>
+								<xsl:with-param name="event" select="."/>
+								<xsl:with-param name="link-text" select="concat( @interface, '.', @name )"/>
+							</xsl:call-template>
+
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:call-template name="get-link-for-interface-method">
+								<xsl:with-param name="declaring-type-name" select="@declaringType"/>
+								<xsl:with-param name="interface-method" select="$declaring-interface/method[@name=$name]"/>
+								<xsl:with-param name="method" select="."/>
+								<xsl:with-param name="link-text" select="concat( @interface, '.', @name )"/>
+							</xsl:call-template>
+						</xsl:otherwise>
+					</xsl:choose>
 				</p>
 			</xsl:for-each>
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="syntax-section">
-		<PRE class="syntax"><xsl:call-template name="vb-type-syntax" /><xsl:call-template name="cs-type-syntax" /></PRE>	
+		<PRE class="syntax">
+		<xsl:call-template name="vb-type-syntax" />
+		<xsl:apply-templates select="." mode="cs-syntax">
+			<xsl:with-param name="include-type-links" select="true()"/>
+			<xsl:with-param name="version" select="'long'"/>
+		</xsl:apply-templates>
+		</PRE>	
 	</xsl:template>
 	<xsl:template name="remarks-section">
 		<xsl:if test="documentation/remarks">
@@ -632,19 +596,30 @@
 				<b><xsl:value-of select="string(NUtil:GetName($cref))" /></b>
 			</xsl:when>
 			<xsl:otherwise>
-				<a>
-					<xsl:attribute name="href">
-						<xsl:value-of select="$href" />
-					</xsl:attribute>
-					<xsl:choose>
-						<xsl:when test="node()">
-							<xsl:value-of select="." />
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:value-of select="string(NUtil:GetName($cref))" />
-						</xsl:otherwise>
-					</xsl:choose>
-				</a>
+				<xsl:choose>
+					<xsl:when test="contains($cref, '.htm')">
+						<a>
+							<xsl:attribute name="href">
+								<xsl:value-of select="$href" />
+							</xsl:attribute>
+							<xsl:choose>
+								<xsl:when test="node()">
+									<xsl:value-of select="." />
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:value-of select="string(NUtil:GetName($cref))" />
+								</xsl:otherwise>
+							</xsl:choose>
+						</a>					
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:call-template name="get-xlink">
+							<xsl:with-param name="a-index" select="$href"/>
+							<xsl:with-param name="link-text" select="string(NUtil:GetName($cref))"/>						
+						</xsl:call-template>
+					</xsl:otherwise>
+				</xsl:choose>
+
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
@@ -959,14 +934,10 @@
 				<ul class="permissions">
 					<xsl:for-each select="documentation/permission">
 						<li>
-							<a>
-								<xsl:attribute name="href">
-									<xsl:call-template name="get-filename-for-type-name">
-										<xsl:with-param name="type-name" select="substring-after(@cref, 'T:')" />
-									</xsl:call-template>
-								</xsl:attribute>
-								<xsl:value-of select="substring-after(@cref, 'T:')" />
-							</a>
+							<xsl:call-template name="get-link-for-type">
+								<xsl:with-param name="type-id" select="@cref" />
+								<xsl:with-param name="link-text" select="substring-after(@cref, 'T:')"/>
+							</xsl:call-template>	
 							<xsl:text>&#160;</xsl:text>
 							<xsl:apply-templates mode="slashdoc" />
 						</li>

@@ -128,16 +128,15 @@
 		</xsl:choose>
 		<xsl:if test="@returnType != 'System.Void'">
 			<xsl:text>&#160;As&#160;</xsl:text>
-			<a>
-				<xsl:attribute name="href">
-					<xsl:call-template name="get-filename-for-type-name">
-						<xsl:with-param name="type-name" select="@returnType" />
-					</xsl:call-template>
-				</xsl:attribute>
+			<xsl:variable name="vb-type">
 				<xsl:call-template name="vb-type">
 					<xsl:with-param name="runtime-type" select="@returnType" />
-				</xsl:call-template>
-			</a>
+				</xsl:call-template>			
+			</xsl:variable>
+			<xsl:call-template name="get-link-for-type-name">
+				<xsl:with-param name="type-name" select="@returnType" />
+				<xsl:with-param name="link-text" select="$vb-type" />
+			</xsl:call-template>	
 		</xsl:if>
 		<xsl:if test="implements">
 			<xsl:text> Implements _</xsl:text>
@@ -191,16 +190,15 @@
 		</xsl:choose>
 		<i><xsl:value-of select="@name" /></i>
 		<xsl:text>&#160;As&#160;</xsl:text>
-		<a>
-			<xsl:attribute name="href">
-				<xsl:call-template name="get-filename-for-type-name">
-					<xsl:with-param name="type-name" select="@type" />
-				</xsl:call-template>
-			</xsl:attribute>
+		<xsl:variable name="vb-type">
 			<xsl:call-template name="vb-type">
 				<xsl:with-param name="runtime-type" select="@type" />
-			</xsl:call-template>
-		</a>
+			</xsl:call-template>			
+		</xsl:variable>
+		<xsl:call-template name="get-link-for-type-name">
+			<xsl:with-param name="type-name" select="@type" />
+			<xsl:with-param name="link-text" select="$vb-type" />
+		</xsl:call-template>
 		<xsl:if test="@optional = 'true'">
 		  <xsl:text> = </xsl:text><xsl:value-of select="@defaultValue" />
 		</xsl:if>
@@ -310,16 +308,15 @@
 		</xsl:if>
 		<xsl:value-of select="@name" />
 		<xsl:text>&#160;As&#160;</xsl:text>
-		<a>
-			<xsl:attribute name="href">
-				<xsl:call-template name="get-filename-for-type-name">
-					<xsl:with-param name="type-name" select="@type" />
-				</xsl:call-template>
-			</xsl:attribute>
+		<xsl:variable name="vb-type">
 			<xsl:call-template name="vb-type">
 				<xsl:with-param name="runtime-type" select="@type" />
-			</xsl:call-template>
-		</a>
+			</xsl:call-template>			
+		</xsl:variable>
+		<xsl:call-template name="get-link-for-type-name">
+			<xsl:with-param name="type-name" select="@type" />
+			<xsl:with-param name="link-text" select="$vb-type" />
+		</xsl:call-template>
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
@@ -365,16 +362,15 @@
 			<xsl:call-template name="vb-parameters" />
 		</xsl:if>
 		<xsl:text>&#160;As&#160;</xsl:text>
-		<a>
-			<xsl:attribute name="href">
-				<xsl:call-template name="get-filename-for-type-name">
-					<xsl:with-param name="type-name" select="@type" />
-				</xsl:call-template>
-			</xsl:attribute>
+		<xsl:variable name="vb-type">
 			<xsl:call-template name="vb-type">
 				<xsl:with-param name="runtime-type" select="@type" />
-			</xsl:call-template>
-		</a>
+			</xsl:call-template>			
+		</xsl:variable>
+		<xsl:call-template name="get-link-for-type-name">
+			<xsl:with-param name="type-name" select="@type" />
+			<xsl:with-param name="link-text" select="$vb-type" />
+		</xsl:call-template>
 		<xsl:if test="implements">
 			<xsl:text> Implements _</xsl:text>
 			<br /><xsl:text>&#160;&#160;&#160;</xsl:text>

@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+	xmlns:MSHelp="http://msdn.microsoft.com/mshelp"
+	xmlns:NUtil="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities"
+	exclude-result-prefixes="NUtil" >
+	
 	<!-- -->
-	<xsl:output method="html" indent="yes" encoding="Windows-1252" version="3.2" doctype-public="-//W3C//DTD HTML 3.2 Final//EN" />
+	<xsl:output method="html" indent="yes" encoding="utf-8" version="3.2" doctype-public="-//W3C//DTD HTML 3.2 Final//EN" />
 	<!-- -->
 	<xsl:include href="common.xslt" />
 	<xsl:include href="memberscommon.xslt" />
@@ -25,12 +28,7 @@
 				<div id="nstext" valign="bottom">
 					<div id="allHistory" class="saveHistory" onsave="saveAll()" onload="loadAll()"></div>
 					<p>
-						<a>
-							<xsl:attribute name="href">
-								<xsl:call-template name="get-filename-for-type">
-									<xsl:with-param name="id" select="@id" />
-								</xsl:call-template>
-							</xsl:attribute>
+						<a href="{NUtil:GetTypeHRef( string( @id ) ) }">
 							<xsl:value-of select="@name" />
 							<xsl:text> overview</xsl:text>
 						</a>
@@ -221,9 +219,7 @@
 					</xsl:call-template>
 					<xsl:call-template name="seealso-section">
 						<xsl:with-param name="page">members</xsl:with-param>
-					</xsl:call-template>
-					
-										
+					</xsl:call-template>														
 					<xsl:call-template name="footer-row">
 						<xsl:with-param name="type-name">
 							<xsl:value-of select="@name" /> Members
@@ -256,10 +252,7 @@
 								<img src="intmethod.gif" />
 							</xsl:when>
 						  </xsl:choose>
-							<a>
-								<xsl:attribute name="href">
-									<xsl:call-template name="get-filename-for-current-constructor-overloads" />
-								</xsl:attribute>
+							<a href="{NUtil:GetCustructorOverloadHRef( string( ../@id ) )}">
 								<xsl:value-of select="../@name" />
 							</a>
 						</td>
@@ -298,10 +291,7 @@
 						  <xsl:if test="$contract='Static'">
 							 <img src="static.gif" />
 						  </xsl:if>
-							<a>
-								<xsl:attribute name="href">
-									<xsl:call-template name="get-filename-for-current-constructor" />
-								</xsl:attribute>
+							<a href="{NUtil:GetCustructorHRef( . )}">
 								<xsl:value-of select="../@name" />
 								<xsl:text> Constructor</xsl:text>
 							</a>

@@ -152,7 +152,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		}
 
 
-		public static WhichType GetWhichType(XmlNode typeNode)
+		public static WhichType GetWhichType( XmlNode typeNode )
 		{
 			WhichType whichType;
 
@@ -181,197 +181,225 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			return whichType;
 		}
 
-		public static string GetFilenameForNamespace(string namespaceName)
+		public static string GetFileNameForNamespaceHierarchy( string namespaceName )
 		{
-			string fileName = namespaceName + ".html";
-			return fileName;
+			return namespaceName + "Hierarchy.html";
 		}
 
-		public static string GetFilenameForType(XmlNode typeNode)
+		public static string GetFilenameForNamespace( string namespaceName )
 		{
-			string typeID = (string)typeNode.Attributes["id"].Value;
-			string fileName = typeID.Substring(2) + "Topic.html";
-			return fileName;
+			return namespaceName + ".html";
 		}
 
-		public static string GetFilenameForTypeMembers(XmlNode typeNode)
+		public static string GetFilenameForType( string typeID )
 		{
-			string typeID = (string)typeNode.Attributes["id"].Value;
-			string fileName = typeID.Substring(2) + "MembersTopic.html";
-			return fileName;
+			return typeID.Substring(2) + "Topic.html";
 		}
 
-		public static string GetFilenameForConstructors(XmlNode typeNode)
+		public static string GetFilenameForType( XmlNode typeNode )
 		{
-			string typeID = (string)typeNode.Attributes["id"].Value;
-			string fileName = typeID.Substring(2) + "ConstructorTopic.html";
-			return fileName;
+			return GetFilenameForType( typeNode.Attributes["id"].Value );
 		}
 
-		public static string GetFilenameForConstructor(XmlNode constructorNode)
+		public static string GetFilenameForTypeMembers( string typeID )
 		{
-			string constructorID = (string)constructorNode.Attributes["id"].Value;
+			return typeID.Substring(2) + "MembersTopic.html";
+		}
+		public static string GetFilenameForTypeMembers( XmlNode typeNode )
+		{
+			return GetFilenameForTypeMembers( typeNode.Attributes["id"].Value );
+		}
+
+		public static string GetFilenameForConstructors( string typeID )
+		{
+			return typeID.Substring(2) + "ConstructorTopic.html";
+		}
+		public static string GetFilenameForConstructors( XmlNode typeNode )
+		{
+			return GetFilenameForConstructors( typeNode.Attributes["id"].Value );
+		}
+
+		public static string GetFilenameForConstructor( string constructorID, bool isStatic  )
+		{
 			int dotHash = constructorID.IndexOf(".#"); // constructors could be #ctor or #cctor
 
 			string fileName = constructorID.Substring(2, dotHash - 2);
-			if (constructorNode.Attributes["contract"].Value == "Static")
+			if ( isStatic )
 				fileName += "Static";
 
 			fileName += "Constructor";
 
-			if (constructorNode.Attributes["overload"] != null)
-			{
-				fileName += (string)constructorNode.Attributes["overload"].Value;
-			}
-
-			fileName += "Topic.html";
-
-			return fileName;
+			return fileName += "Topic.html";
 		}
-
-		public static string GetFilenameForFields(WhichType whichType, XmlNode typeNode)
+		public static string GetFilenameForConstructor( string constructorID, bool isStatic, string overLoad  )
 		{
-			string typeID = (string)typeNode.Attributes["id"].Value;
-			string fileName = typeID.Substring(2) + "FieldsTopic.html";
-			return fileName;
-		}
+			int dotHash = constructorID.IndexOf(".#"); // constructors could be #ctor or #cctor
 
-		public static string GetFilenameForField(XmlNode fieldNode)
+			string fileName = constructorID.Substring(2, dotHash - 2);
+			if ( isStatic )
+				fileName += "Static";
+
+			fileName += "Constructor";
+
+			fileName += overLoad;
+
+			return fileName += "Topic.html";
+		}
+		public static string GetFilenameForConstructor( XmlNode constructorNode )
 		{
-			string fieldID = (string)fieldNode.Attributes["id"].Value;
-			string fileName = fieldID.Substring(2) + "Topic.html";
-			return fileName;
+			if ( constructorNode.Attributes["overload"] != null )	
+				return GetFilenameForConstructor( constructorNode.Attributes["id"].Value, 
+					constructorNode.Attributes["contract"].Value == "Static",
+					constructorNode.Attributes["overload"].Value );
+			else
+				return GetFilenameForConstructor( constructorNode.Attributes["id"].Value, 
+					constructorNode.Attributes["contract"].Value == "Static" );
 		}
 
-		public static string GetFilenameForOperators(WhichType whichType, XmlNode typeNode)
+		public static string GetFilenameForTypeFields( string typeID )
 		{
-			string typeID = typeNode.Attributes["id"].Value;
-			string fileName = typeID.Substring(2) + "OperatorsTopic.html";
-			return fileName;
+			return typeID.Substring(2) + "FieldsTopic.html";
 		}
-
-		public static string GetFilenameForOperatorsOverloads(XmlNode typeNode, XmlNode opNode)
+		public static string GetFilenameForTypeFields( XmlNode typeNode )
 		{
-			string typeID = (string)typeNode.Attributes["id"].Value;
-			string opName = (string)opNode.Attributes["name"].Value;
-			string fileName = typeID.Substring(2) + "." + opName + "Topic.html";
-			return fileName;
+			return GetFilenameForTypeFields( typeNode.Attributes["id"].Value );
 		}
 
-		public static string GetFilenameForOperator(XmlNode operatorNode)
+
+		public static string GetFilenameForField( string fieldID )
+		{
+			return fieldID.Substring(2) + "Topic.html";
+		}
+		public static string GetFilenameForField( XmlNode fieldNode )
+		{
+			return GetFilenameForField( fieldNode.Attributes["id"].Value );
+		}
+
+
+		public static string GetFilenameForTypeOperators( string typeID )
+		{
+			return typeID.Substring(2) + "OperatorsTopic.html";
+		}
+		public static string GetFilenameForTypeOperators( XmlNode typeNode )
+		{
+			return GetFilenameForTypeOperators( typeNode.Attributes["id"].Value );
+		}
+
+
+		public static string GetFilenameForOperatorsOverloads( string typeID, string opName )
+		{
+			return typeID.Substring(2) + "." + opName + "Topic.html";
+		}
+		public static string GetFilenameForOperatorsOverloads( XmlNode typeNode, XmlNode opNode )
+		{
+			return GetFilenameForOperatorsOverloads( typeNode.Attributes["id"].Value, opNode.Attributes["name"].Value );
+		}
+
+
+		public static string GetFilenameForOperator( XmlNode operatorNode )
 		{
 			string operatorID = operatorNode.Attributes["id"].Value;
 			string fileName = operatorID.Substring(2);
 
-			//			int opIndex = fileName.IndexOf("op_");
-			//
-			//			if (opIndex != -1)
-			//			{
-			//				fileName = fileName.Remove(opIndex, 3);
-			//			}
-
 			int leftParenIndex = fileName.IndexOf('(');
 
 			if (leftParenIndex != -1)
-			{
 				fileName = fileName.Substring(0, leftParenIndex);
-			}
-
+			
 			if (operatorNode.Attributes["overload"] != null)
-			{
-				//fileName += "_overload_" + operatorNode.Attributes["overload"].Value;
 				fileName += operatorNode.Attributes["overload"].Value;
-			}
 
 			fileName += "Topic.html";
 
 			return fileName;
 		}
 
-		public static string GetFilenameForEvents(WhichType whichType, XmlNode typeNode)
+		public static string GetFilenameForTypeEvents( string typeID )
 		{
-			string typeID = (string)typeNode.Attributes["id"].Value;
-			string fileName = typeID.Substring(2) + "EventsTopic.html";
-			return fileName;
+			return typeID.Substring(2) + "EventsTopic.html";
+		}
+		public static string GetFilenameForTypeEvents( XmlNode typeNode )
+		{
+			return GetFilenameForTypeEvents( typeNode.Attributes["id"].Value );
 		}
 
-		public static string GetFilenameForEvent(XmlNode eventNode)
+		public static string GetFilenameForEvent( string eventID )
 		{
-			string eventID = (string)eventNode.Attributes["id"].Value;
-			string fileName = eventID.Substring(2) + "Topic.html";
-			return fileName;
+			return eventID.Substring(2) + "Topic.html";
+		}
+		public static string GetFilenameForEvent( XmlNode eventNode )
+		{
+			return GetFilenameForEvent( eventNode.Attributes["id"].Value );
 		}
 
-		public static string GetFilenameForProperties(WhichType whichType, XmlNode typeNode)
+		public static string GetFilenameForTypeProperties( string typeID )
 		{
-			string typeID = (string)typeNode.Attributes["id"].Value;
-			string fileName = typeID.Substring(2) + "PropertiesTopic.html";
-			return fileName;
+			return typeID.Substring(2) + "PropertiesTopic.html";
+		}
+		public static string GetFilenameForTypeProperties( XmlNode typeNode )
+		{
+			return GetFilenameForTypeProperties( typeNode.Attributes["id"].Value );
 		}
 
-		public static string GetFilenameForPropertyOverloads(XmlNode typeNode, XmlNode propertyNode)
+		public static string GetFilenameForPropertyOverloads( string typeID, string propertyName )
 		{
-			string typeID = (string)typeNode.Attributes["id"].Value;
-			string propertyName = (string)propertyNode.Attributes["name"].Value;
-			string fileName = typeID.Substring(2) + propertyName + "Topic.html";
-			return fileName;
+			return typeID.Substring(2) + propertyName + "Topic.html";
+		}
+		public static string GetFilenameForPropertyOverloads( XmlNode typeNode, XmlNode propertyNode )
+		{
+			 return GetFilenameForPropertyOverloads( typeNode.Attributes["id"].Value, propertyNode.Attributes["name"].Value );
 		}
 
-		public static string GetFilenameForProperty(XmlNode propertyNode)
+		public static string GetFilenameForProperty( XmlNode propertyNode )
 		{
-			string propertyID = (string)propertyNode.Attributes["id"].Value;
+			string propertyID = propertyNode.Attributes["id"].Value;
 			string fileName = propertyID.Substring(2);
 
 			int leftParenIndex = fileName.IndexOf('(');
 
 			if (leftParenIndex != -1)
-			{
 				fileName = fileName.Substring(0, leftParenIndex);
-			}
 
 			if (propertyNode.Attributes["overload"] != null)
-			{
-				fileName += (string)propertyNode.Attributes["overload"].Value;
-			}
+				fileName += propertyNode.Attributes["overload"].Value;
 
 			fileName += "Topic.html";
 
 			return fileName;
 		}
 
-		public static string GetFilenameForMethods(WhichType whichType, XmlNode typeNode)
+		public static string GetFilenameForTypeMethods( string typeID )
 		{
-			string typeID = (string)typeNode.Attributes["id"].Value;
-			string fileName = typeID.Substring(2) + "MethodsTopic.html";
-			return fileName;
+			return typeID.Substring(2) + "MethodsTopic.html";
+		}
+		public static string GetFilenameForTypeMethods( XmlNode typeNode )
+		{
+			 return GetFilenameForTypeMethods( typeNode.Attributes["id"].Value );
 		}
 
-		public static string GetFilenameForMethodOverloads(XmlNode typeNode, XmlNode methodNode)
+		public static string GetFilenameForMethodOverloads( string typeID, string methodName )
 		{
-			string typeID = (string)typeNode.Attributes["id"].Value;
-			string methodName = (string)methodNode.Attributes["name"].Value;
-			string fileName = typeID.Substring(2) + "." + methodName + "Topic.html";
-			return fileName;
+			return typeID.Substring(2) + "." + methodName + "Topic.html";
+		}
+		public static string GetFilenameForMethodOverloads( XmlNode typeNode, XmlNode methodNode )
+		{
+			return GetFilenameForMethodOverloads( typeNode.Attributes["id"].Value, methodNode.Attributes["name"].Value );
 		}
 
-		public static string GetFilenameForMethod(XmlNode methodNode)
+		public static string GetFilenameForMethod( XmlNode methodNode )
 		{
-			string methodID = (string)methodNode.Attributes["id"].Value;
+			string methodID = methodNode.Attributes["id"].Value;
 			string fileName = methodID.Substring(2);
 
 			int leftParenIndex = fileName.IndexOf('(');
 
 			if (leftParenIndex != -1)
-			{
 				fileName = fileName.Substring(0, leftParenIndex);
-			}
 
-			fileName = RemoveChar(fileName, '#');
+			fileName = RemoveChar( fileName, '#' );
 
-			if (methodNode.Attributes["overload"] != null)
-			{
-				fileName += "_overload_" + (string)methodNode.Attributes["overload"].Value;
-			}
+			if ( methodNode.Attributes["overload"] != null )
+				fileName += methodNode.Attributes["overload"].Value;
 
 			fileName += "Topic.html";
 
@@ -382,16 +410,13 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		{
 			StringBuilder builder = new StringBuilder();
 
-			foreach (char ch in s.ToCharArray())
+			foreach ( char ch in s.ToCharArray() )
 			{
-				if (ch != c)
-				{
-					builder.Append(ch);
-				}
+				if ( ch != c )				
+					builder.Append(ch);				
 			}
 
 			return builder.ToString();
 		}
-
 	}
 }

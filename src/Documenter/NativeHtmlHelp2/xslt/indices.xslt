@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
-<!-- good for debugging -->
-<xsl:output indent="yes"/>
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+	xmlns:MSHelp="http://msdn.microsoft.com/mshelp"	
+	xmlns:NUtil="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities"
+	exclude-result-prefixes="NUtil" >
+<!-- good for debugging 
+<xsl:output indent="yes"/>-->
 	<!-- provide no-op override for all non-specified types -->
-	<xsl:template match="* | node() | text()" mode="FIndex"/>
-	<xsl:template match="* | node() | text()" mode="KIndex"/>
-	<xsl:template match="* | node() | text()" mode="AIndex"/>
-	<xsl:template match="* | node() | text()" mode="AIndex-hierarchy"/>
+	<xsl:template match="@* | node() | text()" mode="FIndex"/>
+	<xsl:template match="@* | node() | text()" mode="KIndex"/>
+	<xsl:template match="@* | node() | text()" mode="AIndex"/>
+	<xsl:template match="@* | node() | text()" mode="AIndex-hierarchy"/>
 	
 	<!-- this is just here until each type has it's own title logic -->
 	<xsl:template match="* | node() | text()" mode="MSHelpTitle">
@@ -55,57 +58,23 @@
 		
 		
 	<xsl:template match="ndoc" mode="AIndex">
-		<xsl:variable name="filename">
-			<xsl:call-template name="get-filename-for-namespace">
-				<xsl:with-param name="name" select="$namespace"/>
-			</xsl:call-template>
-		</xsl:variable>	
 		<xsl:call-template name="add-a-index">
-			<xsl:with-param name="filename" select="$filename"/>
+			<xsl:with-param name="filename" select="NUtil:GetHRefForNamespace( string( $namespace ) )"/>
 		</xsl:call-template>		
 	</xsl:template>
 	<xsl:template match="ndoc" mode="AIndex-hierarchy">
-		<xsl:variable name="filename">
-			<xsl:call-template name="get-filename-for-current-namespace-hierarchy">
-				<xsl:with-param name="id" select="@id"/>
-			</xsl:call-template>
-		</xsl:variable>	
 		<xsl:call-template name="add-a-index">
-			<xsl:with-param name="filename" select="$filename"/>
+			<xsl:with-param name="filename" select="NUtil:GetHRefForNamespaceHierarchy( string( $namespace ) )"/>
 		</xsl:call-template>		
 	</xsl:template>
 	<xsl:template match="enumeration | delegate" mode="AIndex">
-		<xsl:variable name="filename">
-			<xsl:call-template name="get-filename-for-type">
-				<xsl:with-param name="id" select="@id"/>
-			</xsl:call-template>
-		</xsl:variable>
-		<xsl:call-template name="add-a-index">
-			<xsl:with-param name="filename" select="$filename"/>
+		<xsl:call-template name="add-a-index">	
+			<xsl:with-param name="filename" select="NUtil:GetTypeHRef( string( @id ) )"/>
 		</xsl:call-template>
 	</xsl:template>
-	<xsl:template match="property" mode="AIndex">
-		<xsl:variable name="filename">
-			<xsl:call-template name="get-filename-for-property"/>
-		</xsl:variable>
+	<xsl:template match="field | event | property" mode="AIndex">
 		<xsl:call-template name="add-a-index">
-			<xsl:with-param name="filename" select="$filename"/>
-		</xsl:call-template>
-	</xsl:template>
-	<xsl:template match="event" mode="AIndex">
-		<xsl:variable name="filename">
-			<xsl:call-template name="get-filename-for-event"/>
-		</xsl:variable>
-		<xsl:call-template name="add-a-index">
-			<xsl:with-param name="filename" select="$filename"/>
-		</xsl:call-template>
-	</xsl:template>
-	<xsl:template match="field" mode="AIndex">
-		<xsl:variable name="filename">
-			<xsl:call-template name="get-filename-for-field"/>
-		</xsl:variable>
-		<xsl:call-template name="add-a-index">
-			<xsl:with-param name="filename" select="$filename"/>
+			<xsl:with-param name="filename" select="NUtil:GetMemberHRef( . )"/>
 		</xsl:call-template>
 	</xsl:template>
 	<xsl:template match="method" mode="AIndex">
@@ -114,10 +83,10 @@
 			<xsl:choose>
 				<xsl:when test="$overload-page=true()">
 					<!-- need to deal with inherited overloads -->
-					<xsl:call-template name="get-filename-for-current-method-overloads"/>								
+					<xsl:value-of select="NUtil:GetMemberOverloadHRef( string( ../@id ), string( @name ) )"/>								
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:call-template name="get-filename-for-method"/>				
+					<xsl:value-of select="NUtil:GetMemberHRef( . )"/>								
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
@@ -130,10 +99,10 @@
 		<xsl:variable name="filename">
 			<xsl:choose>
 				<xsl:when test="$overload-page=true()">
-					<xsl:call-template name="get-filename-for-current-method-overloads"/>								
+					<xsl:value-of select="NUtil:GetMemberOverloadHRef( string( ../@id ), string( @name ) )"/>								
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:call-template name="get-filename-for-operator"/>								
+					<xsl:value-of select="NUtil:GetMemberHRef( . )"/>								
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
@@ -146,10 +115,10 @@
 		<xsl:variable name="filename">
 			<xsl:choose>
 				<xsl:when test="$overload-page=true()">
-					<xsl:call-template name="get-filename-for-current-constructor-overloads"/>								
+					<xsl:value-of select="NUtil:GetCustructorOverloadHRef( string( ../@id ) )"/>								
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:call-template name="get-filename-for-current-constructor"/>				
+					<xsl:value-of select="NUtil:GetCustructorHRef( . )"/>				
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
@@ -163,27 +132,25 @@
 		<xsl:variable name="filename">
 			<xsl:choose>
 				<xsl:when test="$page-type='Members'">
-					<xsl:call-template name="get-filename-for-type-members"/>				
+					<xsl:value-of select="NUtil:GetTypeMembersHRef( string( @id ) )"/>				
 				</xsl:when>
 				<xsl:when test="$page-type='Properties'">
-					<xsl:call-template name="get-filename-for-type-properties"/>				
+					<xsl:value-of select="NUtil:GetTypePropertiesHRef( string( @id ) )"/>				
 				</xsl:when>
 				<xsl:when test="$page-type='Events'">
-					<xsl:call-template name="get-filename-for-type-events"/>				
+					<xsl:value-of select="NUtil:GetTypeEventsHRef( string( @id ) )"/>				
 				</xsl:when>
 				<xsl:when test="$page-type='Operators'">
-					<xsl:call-template name="get-filename-for-type-operators"/>				
+					<xsl:value-of select="NUtil:GetTypeOperatorsHRef( string( @id ) )"/>				
 				</xsl:when>
 				<xsl:when test="$page-type='Methods'">
-					<xsl:call-template name="get-filename-for-type-methods"/>				
+					<xsl:value-of select="NUtil:GetTypeMethodsHRef( string( @id ) )"/>				
 				</xsl:when>
 				<xsl:when test="$page-type='Fields'">
-					<xsl:call-template name="get-filename-for-type-fields"/>				
+					<xsl:value-of select="NUtil:GetTypeFieldsHRef( string( @id ) )"/>				
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:call-template name="get-filename-for-type">
-						<xsl:with-param name="id" select="@id"/>
-					</xsl:call-template>					
+					<xsl:value-of select="NUtil:GetTypeHRef( string( @id ) )"/>
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>

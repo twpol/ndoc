@@ -135,7 +135,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 				toc.Save( w.RootDirectory );
 
 				//then compile the HxC into and HxS
-				OnDocBuildingStep( 75, "Compiling Html Help 2 Files..." );
+				OnDocBuildingStep( 65, "Compiling Html Help 2 Files..." );
 				CompileHxCFile();
 
 				// do clean up and final registration steps
@@ -175,10 +175,10 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		private void MakeHtml( XmlNode xmlDocumentation, HtmlFactory factory )
 		{
 			// load the stylesheets
-			OnDocBuildingStep( 15, "Loading StyleSheets..." );
+			OnDocBuildingStep( 20, "Loading StyleSheets..." );
 			factory.LoadStylesheets( ResourceDirectory );
 
-			OnDocBuildingStep( 20, "Generating HTML..." );
+			OnDocBuildingStep( 30, "Generating HTML..." );
 
 			// add properties to the factory
 			// these get passed to the stylesheets

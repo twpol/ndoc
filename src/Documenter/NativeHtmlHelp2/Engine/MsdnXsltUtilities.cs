@@ -17,6 +17,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 using System;
+using System.Xml;
+using System.Xml.XPath;
+using System.Diagnostics;
 using System.Collections.Specialized;
 
 namespace NDoc.Documenter.NativeHtmlHelp2.Engine
@@ -96,36 +99,173 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			return GetHRef(cref);
 		}
 #endif
+		/// <summary>
+		/// Gets the href for a namespace topic
+		/// </summary>
+		/// <param name="namespaceName">The namespace name</param>
+		/// <returns>Relative HRef to the Topic</returns>
+		public string GetHRefForNamespace( string namespaceName )
+		{
+			return NameMapper.GetFilenameForNamespace( namespaceName );
+		}
+		/// <summary>
+		/// Gets the Href for the namespace hierarchy topic
+		/// </summary>
+		/// <param name="namespaceName">The namespace name</param>
+		/// <returns>Relative HRef to the Topic</returns>
+		public string GetHRefForNamespaceHierarchy( string namespaceName )
+		{
+			return NameMapper.GetFileNameForNamespaceHierarchy( namespaceName );
+		}
+		/// <summary>
+		/// Gets the href for the all members topic of a type
+		/// </summary>
+		/// <param name="typeID">The id of the type</param>
+		/// <returns>Relative HRef to the Topic</returns>
+		public string GetTypeMembersHRef( string typeID )
+		{
+			return NameMapper.GetFilenameForTypeMembers( typeID );
+		}
+		/// <summary>
+		/// Gets the href for the fields topic for a type
+		/// </summary>
+		/// <param name="typeID">The id of the type</param>
+		/// <returns>Relative HRef to the Topic</returns>
+		public string GetTypeFieldsHRef( string typeID )
+		{
+			return NameMapper.GetFilenameForTypeProperties( typeID );
+		}
+		/// <summary>
+		/// Gets the href for the hethods topic of a type
+		/// </summary>
+		/// <param name="typeID">The id of the type</param>
+		/// <returns>Relative HRef to the Topic</returns>
+		public string GetTypeMethodsHRef( string typeID )
+		{
+			return NameMapper.GetFilenameForTypeMethods( typeID );
+		}
+		/// <summary>
+		/// Gets the href for the operators topic of a type
+		/// </summary>
+		/// <param name="typeID">The id of the type</param>
+		/// <returns>Relative HRef to the Topic</returns>
+		public string GetTypeOperatorsHRef( string typeID )
+		{
+			return NameMapper.GetFilenameForTypeOperators( typeID );
+		}
+		/// <summary>
+		/// Gets the href for the events topic of a type
+		/// </summary>
+		/// <param name="typeID">The id of the type</param>
+		/// <returns>Relative HRef to the Topic</returns>
+		public string GetTypeEventsHRef( string typeID )
+		{
+			return NameMapper.GetFilenameForTypeEvents( typeID );
+		}
+		/// <summary>
+		/// Gets the href for the properties topic of a type
+		/// </summary>
+		/// <param name="typeID">The id of the type</param>
+		/// <returns>Relative HRef to the Topic</returns>
+		public string GetTypePropertiesHRef( string typeID )
+		{
+			return NameMapper.GetFilenameForTypeProperties( typeID );
+		}
+		/// <summary>
+		/// Gets the href for the constructor overloads topic of a type
+		/// </summary>
+		/// <param name="typeID">The id of the type</param>
+		/// <returns>Relative HRef to the Topic</returns>
+		public string GetCustructorOverloadHRef( string typeID )
+		{
+			return NameMapper.GetFilenameForConstructors( typeID );
+		}
+		/// <summary>
+		/// Gets the href for a constructor
+		/// </summary>
+		/// <param name="node">The node selection for the contsructor</param>
+		/// <returns>Relative HRef to the Topic</returns>
+		public string GetCustructorHRef( XPathNodeIterator node )
+		{
+			if ( node.Current != null && node.Current is IHasXmlNode )
+				return NameMapper.GetFilenameForConstructor( ((IHasXmlNode)node.Current).GetNode() );
+			return "";
+		}
+		/// <summary>
+		/// Get the href for a member overload topic
+		/// </summary>
+		/// <param name="typeID">The id of the type</param>
+		/// <param name="methodName">The name of the method</param>
+		/// <returns>Relative HRef to the Topic</returns>
+		public string GetMemberOverloadHRef( string typeID, string methodName )
+		{
+			return NameMapper.GetFilenameForMethodOverloads( typeID, methodName );
+		}
+		/// <summary>
+		/// Get the href for a type member topic
+		/// </summary>
+		/// <param name="xPathNode">The member selection</param>
+		/// <returns>Relative HRef to the Topic</returns>			
+		public string GetMemberHRef( XPathNodeIterator xPathNode )
+		{
+			if ( xPathNode.Current != null && xPathNode.Current is IHasXmlNode )
+			{
+				XmlNode node = ((IHasXmlNode)xPathNode.Current).GetNode();
+
+				switch ( node.Name )
+				{
+					case "field":		return NameMapper.GetFilenameForField( node );
+					case "event":		return NameMapper.GetFilenameForEvent( node );
+					case "method":		return NameMapper.GetFilenameForMethod( node );
+					case "property":	return NameMapper.GetFilenameForProperty( node );
+					case "operator":	return NameMapper.GetFilenameForOperator( node );
+					default:			return "";
+				}
+			}
+
+			return "";
+		}
+		/// <summary>
+		/// Gets the href for a type topic
+		/// </summary>
+		/// <param name="typeID">The id of the type</param>
+		/// <returns>Relative HRef to the Topic</returns>
+		public string GetTypeHRef( string typeID )
+		{
+			return NameMapper.GetFilenameForType( typeID );
+		}
 
 		/// <summary>
 		/// Returns an HRef for a CRef.
 		/// </summary>
 		/// <param name="cref">CRef for which the HRef will be looked up.</param>
-		public string GetHRef(string cref)
+		public string GetHRef( string cref )
 		{
-			if ((cref.Length < 2) || (cref[1] != ':'))
+
+			if ( ( cref.Length <= 2 ) || ( cref[1] != ':' ) )
 				return string.Empty;
 
-			if ((cref.Length < 9)
-				|| (cref.Substring(2, 7) != systemPrefix))
+			// non system types
+			if ( ( cref.Length < 9 ) || ( cref.Substring( 2, 7 ) != systemPrefix ) )
 			{
-				string fileName = fileNames[cref];
-				if ((fileName == null) && cref.StartsWith("F:"))
-					fileName = fileNames["E:" + cref.Substring(2)];
-
-				if (fileName == null)
-					return "";
-				else
-					return fileName;
+				return GetTypeHRef( cref.Substring(2) );
+//				string fileName = fileNames[cref];
+//				if ((fileName == null) && cref.StartsWith("F:"))
+//					fileName = fileNames["E:" + cref.Substring(2)];
+//
+//				if (fileName == null)
+//					return "";
+//				else
+//					return fileName;
 			}
 			else
 			{
 				switch (cref.Substring(0, 2))
 				{
 					case "N:":	// Namespace
-						return sdkDocBaseUrl + cref.Substring(2).Replace(".", "") + sdkDocExt;
+						return "frlrf" + cref.Substring(2).Replace(".", "");
 					case "T:":	// Type: class, interface, struct, enum, delegate
-						return sdkDocBaseUrl + cref.Substring(2).Replace(".", "") + "ClassTopic" + sdkDocExt;
+						return "frlrf" + cref.Substring(2).Replace(".", "") + "ClassTopic";
 					case "F:":	// Field
 					case "P:":	// Property
 					case "M:":	// Method
@@ -197,7 +337,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			index = crefName.LastIndexOf(".");
 			string crefType = crefName.Substring(0, index);
 			string crefMember = crefName.Substring(index + 1);
-			return sdkDocBaseUrl + crefType.Replace(".", "") + "Class" + crefMember + "Topic" + sdkDocExt;
+			return "frlrf" + crefType.Replace(".", "") + "Class" + crefMember + "Topic";
 		}
 
 		/// <summary>

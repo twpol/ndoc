@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+	xmlns:MSHelp="http://msdn.microsoft.com/mshelp"
+	xmlns:NUtil="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities"
+	exclude-result-prefixes="NUtil">	
 	<!-- -->
-	<xsl:output method="html" indent="yes" encoding="Windows-1252" version="3.2" doctype-public="-//W3C//DTD HTML 3.2 Final//EN" />
+	<xsl:output method="html" indent="yes" encoding="utf-8" version="3.2" doctype-public="-//W3C//DTD HTML 3.2 Final//EN" />
 	<!-- -->
 	<xsl:include href="common.xslt" />
 	<!-- -->
@@ -22,14 +24,9 @@
 				</xsl:call-template>
 				<div id="nstext" valign="bottom">
 					<p>
-						<a>
-							<xsl:attribute name="href">
-								<xsl:call-template name="get-filename-for-system-type">
-									<xsl:with-param name="type-name" select="'System.Object'" />
-								</xsl:call-template>
-							</xsl:attribute>
-							<xsl:text>System.Object</xsl:text>
-						</a>
+						<xsl:call-template name="get-xlink-for-system-type">
+							<xsl:with-param name="type-name" select="'System.Object'" />									
+						</xsl:call-template>
 					</p>
 					<xsl:variable name="roots" select="$ns//*[(local-name()='class' and not(base)) or (local-name()='base' and not(base))]" />
 					<xsl:call-template name="call-draw">
@@ -46,12 +43,7 @@
 					
 					<h4 class="dtH4">See Also</h4>
 					<p>
-						<a>
-							<xsl:attribute name="href">
-								<xsl:call-template name="get-filename-for-namespace">
-									<xsl:with-param name="name" select="$namespace" />
-								</xsl:call-template>
-							</xsl:attribute>
+						<a href="{NUtil:GetHRefForNamespace( string( $namespace ) )}">
 							<xsl:value-of select="$namespace" /> Namespace
 						</a>
 					</p>
@@ -91,26 +83,16 @@
 			</xsl:call-template>
 			<xsl:choose>
 				<xsl:when test="starts-with($head/@id, 'T:System.')">
-					<a>
-						<xsl:attribute name="href">
-							<xsl:call-template name="get-filename-for-system-type">
-								<xsl:with-param name="type-name" select="substring-after($head/@id, 'T:')" />
-							</xsl:call-template>
-						</xsl:attribute>
-						<xsl:value-of select="substring-after($head/@id, 'T:')"/>
-					</a>
+					<xsl:call-template name="get-xlink-for-system-type">
+						<xsl:with-param name="type-name" select="substring-after($head/@id, 'T:')" />									
+					</xsl:call-template>
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:variable name="base-class-id" select="$head/@id" />
 					<xsl:variable name="base-class" select="//class[@id=$base-class-id]" />
 					<xsl:choose>
 						<xsl:when test="$base-class">
-							<a>
-								<xsl:attribute name="href">
-									<xsl:call-template name="get-filename-for-type">
-										<xsl:with-param name="id" select="$base-class-id" />
-									</xsl:call-template>
-								</xsl:attribute>
+						<a href="{NUtil:GetTypeHRef( string( $base-class-id ) ) }">
 								<xsl:call-template name="get-datatype">
 									<xsl:with-param name="datatype" select="$head/@type" />
 								</xsl:call-template>
@@ -154,12 +136,7 @@
 	<!-- -->
 	<xsl:template match="interface">
 		<p>
-			<a>
-				<xsl:attribute name="href">
-					<xsl:call-template name="get-filename-for-type">
-						<xsl:with-param name="id" select="@id" />
-					</xsl:call-template>
-				</xsl:attribute>
+			<a href="{NUtil:GetTypeHRef( string( @id ) ) }">
 				<xsl:value-of select="@name" />
 			</a>
 		</p>

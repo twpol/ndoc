@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+	xmlns:MSHelp="http://msdn.microsoft.com/mshelp"
+	xmlns:NUtil="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities"
+	exclude-result-prefixes="NUtil" >
+
 	<!-- -->
-	<xsl:output method="html" indent="yes" encoding="Windows-1252" version="3.2" doctype-public="-//W3C//DTD HTML 3.2 Final//EN" />
+	<xsl:output method="html" indent="yes" encoding="utf-8" version="3.2" doctype-public="-//W3C//DTD HTML 3.2 Final//EN" />
 	<!-- -->
 	<xsl:include href="common.xslt" />
 	<!-- -->
@@ -33,10 +36,7 @@
 					<xsl:apply-templates select="(assembly/module/namespace[(@name=$namespace) and documentation])[1]" />
 					<xsl:if test="$includeHierarchy">
 					  <p>
-						  <a>
-							  <xsl:attribute name="href">
-								  <xsl:call-template name="get-filename-for-current-namespace-hierarchy" />
-							  </xsl:attribute>
+						  <a href="{NUtil:GetHRefForNamespaceHierarchy( string( $namespace ) )}">
 							  <xsl:text>Namespace hierarchy</xsl:text>
 						  </a>
 					  </p>
@@ -126,87 +126,10 @@
 		<xsl:call-template name="summary-section" />
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="class">
+	<xsl:template match="enumeration | delegate | structure | interface | class">
 		<tr valign="top">
 			<td width="50%">
-				<a>
-					<xsl:attribute name="href">
-						<xsl:call-template name="get-filename-for-type">
-							<xsl:with-param name="id" select="@id" />
-						</xsl:call-template>
-					</xsl:attribute>
-					<xsl:value-of select="@name" />
-				</a>
-			</td>
-			<td width="50%">
-				<xsl:apply-templates select="(documentation/summary)[1]/node()" mode="slashdoc" />
-			</td>
-		</tr>
-	</xsl:template>
-	<!-- -->
-	<xsl:template match="interface">
-		<tr valign="top">
-			<td width="50%">
-				<a>
-					<xsl:attribute name="href">
-						<xsl:call-template name="get-filename-for-type">
-							<xsl:with-param name="id" select="@id" />
-						</xsl:call-template>
-					</xsl:attribute>
-					<xsl:value-of select="@name" />
-				</a>
-			</td>
-			<td width="50%">
-				<xsl:apply-templates select="(documentation/summary)[1]/node()" mode="slashdoc" />
-			</td>
-		</tr>
-	</xsl:template>
-	<!-- -->
-	<xsl:template match="structure">
-		<tr valign="top">
-			<td width="50%">
-				<a>
-					<xsl:attribute name="href">
-						<xsl:call-template name="get-filename-for-type">
-							<xsl:with-param name="id" select="@id" />
-						</xsl:call-template>
-					</xsl:attribute>
-					<xsl:value-of select="@name" />
-				</a>
-			</td>
-			<td width="50%">
-				<xsl:apply-templates select="(documentation/summary)[1]/node()" mode="slashdoc" />
-			</td>
-		</tr>
-	</xsl:template>
-	<!-- -->
-	<xsl:template match="delegate">
-		<tr valign="top">
-			<td width="50%">
-				<a>
-					<xsl:attribute name="href">
-						<xsl:call-template name="get-filename-for-type">
-							<xsl:with-param name="id" select="@id" />
-						</xsl:call-template>
-					</xsl:attribute>
-					<xsl:value-of select="@name" />
-				</a>
-			</td>
-			<td width="50%">
-				<xsl:apply-templates select="(documentation/summary)[1]/node()" mode="slashdoc" />
-			</td>
-		</tr>
-	</xsl:template>
-	<!-- -->
-	<xsl:template match="enumeration">
-		<tr valign="top">
-			<td width="50%">
-				<a>
-					<xsl:attribute name="href">
-						<xsl:call-template name="get-filename-for-type">
-							<xsl:with-param name="id" select="@id" />
-						</xsl:call-template>
-					</xsl:attribute>
+				<a href="{NUtil:GetTypeHRef( string( @id ) ) }">
 					<xsl:value-of select="@name" />
 				</a>
 			</td>

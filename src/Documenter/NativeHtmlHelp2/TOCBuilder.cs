@@ -25,7 +25,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 				throw new NullReferenceException( "The TOCFile cannot be null" );
 
 			if ( _factory == null )
-				throw new NullReferenceException( "The HtmlFactory annot be null" );
+				throw new NullReferenceException( "The HtmlFactory cannot be null" );
 
 			toc = _toc;
 			factory = _factory;
@@ -34,9 +34,9 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 
 			// connect to factory events
 			// this is so we can build the TOC as we go
-			factory.TopicStart += new FileEventHandler(factory_TopicStart);
+			factory.TopicStart += new TopicEventHandler(factory_TopicStart);
 			factory.TopicEnd += new EventHandler(factory_TopicEnd);
-			factory.AddFileToTopic += new FileEventHandler(factory_AddFileToTopic);
+			factory.AddFileToTopic += new TopicEventHandler(factory_AddFileToTopic);
 		}
 
 		/// <summary>
@@ -85,9 +85,9 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			{
 				if ( factory != null )
 				{
-					factory.TopicStart -= new FileEventHandler(factory_TopicStart);
+					factory.TopicStart -= new TopicEventHandler(factory_TopicStart);
 					factory.TopicEnd -= new EventHandler(factory_TopicEnd);
-					factory.AddFileToTopic -= new FileEventHandler(factory_AddFileToTopic);
+					factory.AddFileToTopic -= new TopicEventHandler(factory_AddFileToTopic);
 				}
 
 				if ( toc != null )

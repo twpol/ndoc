@@ -437,14 +437,6 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "xslt\filenames.xslt"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "xslt\htmlcontents.xslt"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
                     RelPath = "xslt\indices.xslt"
                     BuildAction = "EmbeddedResource"
                 />
@@ -490,6 +482,10 @@
                 />
                 <File
                     RelPath = "xslt\vb-syntax.xslt"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "xslt\XLinks.xslt"
                     BuildAction = "EmbeddedResource"
                 />
             </Include>

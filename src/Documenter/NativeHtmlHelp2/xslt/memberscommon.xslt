@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	xmlns:NUtil="urn:NDocUtil"
 	xmlns:MSHelp="http://msdn.microsoft.com/mshelp"
+	xmlns:NUtil="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities"
 	exclude-result-prefixes="NUtil" >
 	<!-- -->
 	<xsl:template match="/">
@@ -330,12 +330,7 @@
 							<xsl:with-param name="contract" select="@contract" />
 							<xsl:with-param name="local-name" select="local-name()" />
 						</xsl:call-template>
-						<a>
-							<xsl:attribute name="href">
-								<xsl:call-template name="get-filename-for-property">
-									<xsl:with-param name="property" select="$declaring-class/property[@name=$name]" />
-								</xsl:call-template>
-							</xsl:attribute>
+						<a href="{NUtil:GetMemberHRef( $declaring-class/property[@name=$name] )}">
 							<xsl:value-of select="@name" />
 						</a>
 						<xsl:text> (inherited from </xsl:text>
@@ -383,12 +378,10 @@
 					<xsl:with-param name="contract" select="@contract" />
 					<xsl:with-param name="local-name" select="local-name()" />
 				</xsl:call-template>
-				<a>
-					<xsl:attribute name="href">
-						<xsl:call-template name="get-filename-for-system-property" />
-					</xsl:attribute>
-					<xsl:value-of select="@name" />
-				</a>
+				<xsl:call-template name="get-xlink-for-system-member">
+					<xsl:with-param name="text" select="@name"/>
+					<xsl:with-param name="member" select="."/>				
+				</xsl:call-template>
 				<xsl:text> (inherited from </xsl:text>
 				<b>
 					<xsl:call-template name="strip-namespace">
@@ -417,12 +410,7 @@
 							<xsl:with-param name="contract" select="@contract" />
 							<xsl:with-param name="local-name" select="local-name()" />
 						</xsl:call-template>
-						<a>
-							<xsl:attribute name="href">
-								<xsl:call-template name="get-filename-for-field">
-									<xsl:with-param name="field" select="$declaring-class/field[@name=$name]" />
-								</xsl:call-template>
-							</xsl:attribute>
+						<a href="{NUtil:GetMemberHRef( $declaring-class/field[@name=$name] )}">
 							<xsl:value-of select="@name" />
 						</a>
 						<xsl:text> (inherited from </xsl:text>
@@ -470,12 +458,10 @@
 					<xsl:with-param name="contract" select="@contract" />
 					<xsl:with-param name="local-name" select="local-name()" />
 				</xsl:call-template>
-				<a>
-					<xsl:attribute name="href">
-						<xsl:call-template name="get-filename-for-system-field" />
-					</xsl:attribute>
-					<xsl:value-of select="@name" />
-				</a>
+				<xsl:call-template name="get-xlink-for-system-member">
+					<xsl:with-param name="text" select="@name"/>
+					<xsl:with-param name="member" select="."/>
+				</xsl:call-template>
 				<xsl:text> (inherited from </xsl:text>
 				<b>
 					<xsl:call-template name="strip-namespace">
@@ -510,13 +496,7 @@
 										<xsl:with-param name="contract" select="$contract" />
 										<xsl:with-param name="local-name" select="local-name()" />
 									</xsl:call-template>
-									<a>
-										<xsl:attribute name="href">
-											<xsl:call-template name="get-filename-for-inherited-method-overloads">
-												<xsl:with-param name="declaring-type" select="@declaringType" />
-												<xsl:with-param name="method-name" select="@name" />
-											</xsl:call-template>
-										</xsl:attribute>
+									<a href="{NUtil:GetMemberOverloadHRef( string( @declaringType ), string( @name ) )}">
 										<xsl:value-of select="@name" />
 									</a>
 									<xsl:text> (inherited from </xsl:text>
@@ -541,12 +521,7 @@
 										<xsl:with-param name="contract" select="$contract" />
 										<xsl:with-param name="local-name" select="local-name()" />
 									</xsl:call-template>
-									<a>
-										<xsl:attribute name="href">
-											<xsl:call-template name="get-filename-for-method">
-												<xsl:with-param name="method" select="$declaring-class/method[@name=$name]" />
-											</xsl:call-template>
-										</xsl:attribute>
+									<a href="{NUtil:GetMemberHRef( $declaring-class/method[@name=$name] )}">
 										<xsl:value-of select="@name" />
 									</a>
 									<xsl:text> (inherited from </xsl:text>
@@ -608,12 +583,10 @@
 						<xsl:with-param name="contract" select="$contract" />
 						<xsl:with-param name="local-name" select="local-name()" />
 					</xsl:call-template>
-					<a>
-						<xsl:attribute name="href">
-							<xsl:call-template name="get-filename-for-system-method" />
-						</xsl:attribute>
-						<xsl:value-of select="@name" />
-					</a>
+					<xsl:call-template name="get-xlink-for-system-member">
+						<xsl:with-param name="text" select="@name"/>
+						<xsl:with-param name="member" select="."/>				
+					</xsl:call-template>
 					<xsl:text> (inherited from </xsl:text>
 					<b>
 						<xsl:call-template name="strip-namespace">
@@ -646,12 +619,7 @@
 							<xsl:with-param name="contract" select="@contract" />
 							<xsl:with-param name="local-name" select="local-name()" />
 						</xsl:call-template>
-						<a>
-							<xsl:attribute name="href">
-								<xsl:call-template name="get-filename-for-event">
-									<xsl:with-param name="event" select="$declaring-class/event[@name=$name]" />
-								</xsl:call-template>
-							</xsl:attribute>
+						<a href="{NUtil:GetMemberHRef( $declaring-class/event[@name=$name] )}">
 							<xsl:value-of select="@name" />
 						</a>
 						<xsl:text> (inherited from </xsl:text>
@@ -699,12 +667,10 @@
 					<xsl:with-param name="contract" select="@contract" />
 					<xsl:with-param name="local-name" select="local-name()" />
 				</xsl:call-template>
-				<a>
-					<xsl:attribute name="href">
-						<xsl:call-template name="get-filename-for-system-event" />
-					</xsl:attribute>
-					<xsl:value-of select="@name" />
-				</a>
+				<xsl:call-template name="get-xlink-for-system-member">
+					<xsl:with-param name="text" select="@name"/>
+					<xsl:with-param name="member" select="."/>
+				</xsl:call-template>				
 				<xsl:text> (inherited from </xsl:text>
 				<b>
 					<xsl:call-template name="strip-namespace">
@@ -735,14 +701,7 @@
 								<xsl:with-param name="contract" select="@contract" />
 								<xsl:with-param name="local-name" select="local-name()" />
 							</xsl:call-template>
-							<a>
-								<xsl:attribute name="href">
-									<xsl:call-template name="get-filename-for-individual-member-overloads">
-										<xsl:with-param name="member">
-											<xsl:value-of select="$member" />
-										</xsl:with-param>
-									</xsl:call-template>
-								</xsl:attribute>
+							<a href="{NUtil:GetMemberOverloadHRef( string( ../@id ), string( @name ) )}">
 								<xsl:choose>
 									<xsl:when test="local-name()='operator'">
 										<xsl:call-template name="operator-name">
@@ -769,14 +728,7 @@
 								<xsl:with-param name="contract" select="@contract" />
 								<xsl:with-param name="local-name" select="local-name()" />
 							</xsl:call-template>
-							<a>
-								<xsl:attribute name="href">
-									<xsl:call-template name="get-filename-for-individual-member">
-										<xsl:with-param name="member">
-											<xsl:value-of select="$member" />
-										</xsl:with-param>
-									</xsl:call-template>
-								</xsl:attribute>
+							<a href="{NUtil:GetMemberHRef( . )}">
 								<xsl:choose>
 									<xsl:when test="local-name()='operator'">
 										<xsl:call-template name="operator-name">
