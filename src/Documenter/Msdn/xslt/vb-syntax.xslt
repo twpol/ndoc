@@ -210,7 +210,7 @@
 	<!-- -->
 	<xsl:template name="vb-member-syntax">
 		<xsl:if test="$ndoc-vb-syntax">
-			<pre class="syntax">
+			<div class="syntax">
 				<span class="lang">[Visual&#160;Basic]</span>
 				<br />
 				<xsl:choose>
@@ -277,13 +277,13 @@
 						<xsl:text>)</xsl:text>
 					</xsl:otherwise>
 				</xsl:choose>
-			</pre>
+			</div>
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="vb-field-or-event-syntax">
 		<xsl:if test="$ndoc-vb-syntax">
-			<pre class="syntax">
+			<div class="syntax">
 				<span class="lang">[Visual&#160;Basic]</span>
 				<br />
 				<xsl:if test="not(parent::interface)">
@@ -313,7 +313,7 @@
 						<xsl:with-param name="runtime-type" select="@type" />
 					</xsl:call-template>
 				</a>
-			</pre>
+			</div>
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
