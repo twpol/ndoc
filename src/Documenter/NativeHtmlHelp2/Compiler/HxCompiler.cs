@@ -83,20 +83,26 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Compiler
 			/// <summary>
 			/// Creates a new instance of CompilerStatus
 			/// </summary>
-			public CompilerStatus( string logName ) 
+			public CompilerStatus( string logFilePath ) 
 			{
-				_logFile = new StreamWriter( File.Create( logName ) );
+				_logFile = new StreamWriter( File.Create( logFilePath ) );
 			}
 
 			~CompilerStatus()
 			{
-				Dispose();
+				Dispose( false );
 			}
 
 			public void Dispose()
 			{
-				_logFile.Close();
+				Dispose( true );
 				GC.SuppressFinalize(this);
+			}
+
+			private void Dispose( bool disposing )
+			{
+				if ( disposing )
+					_logFile.Close();
 			}
 
 			/// <summary>
