@@ -690,11 +690,17 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="generated-from-assembly-version">
-		<xsl:if test="/ndoc/assembly/@version">
+		<xsl:variable name="assembly-name">
+			<xsl:value-of select="ancestor-or-self::assembly/./@name" />
+		</xsl:variable>
+		<xsl:variable name="assembly-version">
+			<xsl:value-of select="ancestor-or-self::assembly/./@version" />
+		</xsl:variable>
+		<xsl:if test="$assembly-version != ''">
 			<xsl:text>Generated from assembly </xsl:text>
-			<xsl:value-of select="/ndoc/assembly/@name" />
+			<xsl:value-of select="$assembly-name" />
 			<xsl:text> [</xsl:text>
-			<xsl:value-of select="/ndoc/assembly/@version" />
+			<xsl:value-of select="$assembly-version" />
 			<xsl:text>]</xsl:text>
 		</xsl:if>
 	</xsl:template>
