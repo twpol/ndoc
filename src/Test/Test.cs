@@ -3,9 +3,9 @@ namespace NDoc.Test
 	using System;
 
 	/// <summary>Represents a normal class.</summary>
-	/// <remarks>Conceptualizing random endpoints in a access matrix 
-	/// provides reach extentions enterprise wide. Respective divisions 
-	/// historically insignificant, upscale trendlines in a management 
+	/// <remarks>Conceptualizing random endpoints in a access matrix
+	/// provides reach extentions enterprise wide. Respective divisions
+	/// historically insignificant, upscale trendlines in a management
 	/// inventory analysis survivabilty format.</remarks>
 	public class Class
 	{
@@ -14,16 +14,16 @@ namespace NDoc.Test
 
 		/// <summary>Initializes a new instance of the Class class.</summary>
 		public Class(int i) { }
-  
+
 		/// <summary>Initializes a new instance of the Class class.</summary>
 		public Class(string s) { }
-  
+
 		/// <summary>Initializes a new instance of the Class class.</summary>
 		protected Class(double d) { }
 
 		/// <summary>Initializes a new instance of the Class class.</summary>
-		/// <param name="i1">This is the first integer parameter. 
-		/// This is the first integer parameter. This is the first integer 
+		/// <param name="i1">This is the first integer parameter.
+		/// This is the first integer parameter. This is the first integer
 		/// parameter. This is the first integer parameter.</param>
 		/// <param name="i2">This is the second integer parameter.</param>
 		/// <param name="i3">This is the third integer parameter.</param>
@@ -75,14 +75,14 @@ namespace NDoc.Test
 		public static void StaticMethod() { }
 
 		/// <summary>Uses some parameter modifyers.</summary>
-		public void ParameterModifyers( ref int refParam, out int outParam, params object[] paramArray ) 
-		{ 
+		public void ParameterModifyers( ref int refParam, out int outParam, params object[] paramArray )
+		{
 			outParam = 0;
 		}
 
 		/// <summary>An overload.</summary>
-		public void ParameterModifyers( int a, ref int refParam, out int outParam, params object[] paramArray ) 
-		{ 
+		public void ParameterModifyers( int a, ref int refParam, out int outParam, params object[] paramArray )
+		{
 			outParam = 0;
 		}
 
@@ -295,8 +295,8 @@ namespace NDoc.Test
 	}
 
 	/// <summary>This class has lots of &lt;see&gt; elements in the remarks.</summary>
-	/// <remarks>See <see cref="Class"/>. 
-	/// See <see cref="Interface"/>. 
+	/// <remarks>See <see cref="Class"/>.
+	/// See <see cref="Interface"/>.
 	/// See <see cref="Struct1"/>.
 	/// See <see cref="Base.BaseMethod"/>.
 	/// See <see cref="Derived.DerivedMethod"/>.
@@ -315,7 +315,7 @@ namespace NDoc.Test
 		/// <summary>
 		/// This properties' documentation references <see cref="System.IO.TextWriter"/>.
 		/// </summary>
-		public string Prop1 
+		public string Prop1
 		{
 			get { return "Prop1"; }
 		}
@@ -477,7 +477,7 @@ namespace NDoc.Test
 		}
 	}
 
-	/// <summary>Represents a class that has lots of links 
+	/// <summary>Represents a class that has lots of links
 	/// in its documentation.</summary>
 	public class Links
 	{
@@ -498,7 +498,7 @@ namespace NDoc.Test
 
 		/// <summary>Returns an int.</summary>
 		public int IntMethod() { return 0; }
-  
+
 		/// <summary>Returns a string.</summary>
 		public string StringMethod() { return null; }
 
@@ -538,9 +538,9 @@ namespace NDoc.Test
 	}
 
 	/// <summary>This class contains &lt;see langword=""&gt; elements in the remarks.</summary>
-	/// <remarks>The default style is <see langword="bold"/>. 
+	/// <remarks>The default style is <see langword="bold"/>.
 	/// But <see langword="null"/>, <see langword="sealed"/>,
-	/// <see langword="static"/>, <see langword="abstract"/>, 
+	/// <see langword="static"/>, <see langword="abstract"/>,
 	/// and <see langword="virtual"/> do more.</remarks>
 	public class Langword
 	{
@@ -849,12 +849,12 @@ namespace NDoc.Test
 		internal VisibilityTester(long a) {}
 
 		/// <summary>Internal method</summary>
-		internal bool InternalMethod() 
+		internal bool InternalMethod()
 		{
-			return (PublicEvent != null || 
-				ProtectedEvent != null || 
-				PrivateEvent != null || 
-				ProtectedInternalEvent != null || 
+			return (PublicEvent != null ||
+				ProtectedEvent != null ||
+				PrivateEvent != null ||
+				ProtectedInternalEvent != null ||
 				InternalEvent != null ||
 				publicField ||
 				protectedField ||
@@ -980,6 +980,36 @@ namespace NDoc.Test
 
 		/// <summary>This is the static method.</summary>
 		public static void Foo(int i)
+		{
+		}
+	}
+
+	// The following two examples were submitted by Ross.Nelson@devnet.ato.gov.au
+	// in order to demonstrate two bugs.
+
+	/// <summary> this is fred </summary>
+	public enum fred {
+		/// <summary>aaaa</summary>
+		valuea,
+		/// <summary>bbbb</summary>
+		valueb
+	}
+
+	/// <summary>this is jjj</summary>
+	public class jjj
+	{
+		/// <summary> this is fred </summary>
+		public enum fred {
+			/// <summary>aaaa</summary>
+			valuea,
+			/// <summary>bbbb</summary>
+			valueb
+		}
+
+		/// <summary>jjj constructor</summary>
+		/// <remarks>jjj blah</remarks>
+		/// <param name="f">f blah</param>
+		public jjj(fred f)
 		{
 		}
 	}
