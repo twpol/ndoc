@@ -262,24 +262,10 @@ namespace NDoc.Core
 				writer.WriteStartElement("ndoc");
 
 				if (MyConfig.CopyrightText != string.Empty)
-				{
-					writer.WriteStartElement("copyright");
-					writer.WriteAttributeString("text", MyConfig.CopyrightText);
+					WriteCopyright( writer );
 
-					if (MyConfig.CopyrightHref != string.Empty)
-					{
-						if (!MyConfig.CopyrightHref.StartsWith("http:"))
-						{
-							writer.WriteAttributeString("href", Path.GetFileName(MyConfig.CopyrightHref));
-						}
-						else
-						{
-							writer.WriteAttributeString("href", MyConfig.CopyrightHref);
-						}
-					}
-
-					writer.WriteEndElement();
-				}
+				if ( MyConfig.InheritPlatformSupport )
+					WriteDefaultPlatform( writer );
 
 				int step = 100 / project.AssemblySlashDocCount;
 				int i = 0;
@@ -338,6 +324,80 @@ namespace NDoc.Core
 				GC.Collect();
 				Debug.WriteLine("Memory after cleanup: " + GC.GetTotalMemory(false).ToString());
 			}
+		}
+
+		// writes out the list of default supported operating systems and frameworks 
+		private void WriteDefaultPlatform( XmlWriter writer )
+		{			
+			writer.WriteStartElement( "platform" );
+
+			//write out the supported operating systems
+			if ( MyConfig.DefaultOSSupport != OSSupport.None )
+			{
+				writer.WriteStartElement( "os" );
+
+				switch ( MyConfig.DefaultOSSupport )
+				{
+					case OSSupport.NoRestrictions:
+						writer.WriteAttributeString( "ndocBuiltIn", "no-restriction" );
+						break;
+					case OSSupport.NT5Plus:
+						writer.WriteAttributeString( "ndocBuiltIn", "nt5+" );
+						break;
+					case OSSupport.Server:
+						writer.WriteAttributeString( "ndocBuiltIn", "server" );
+						break;
+					default:
+						Debug.Assert( false );	//remind ourselves to update this switch if new items are added
+						break;
+				}	
+			
+				if ( MyConfig.AdditionalOSList.Length > 0 )
+					writer.WriteString( MyConfig.AdditionalOSList );
+
+				writer.WriteEndElement();
+			}
+			
+			//write out the supported frameworks
+			if ( MyConfig.AdditionalFrameworkList.Length > 0 || MyConfig.SupportCompactFrameworkByDefault || MyConfig.SupportMONOFrameworkByDefault )
+			{
+				writer.WriteStartElement( "frameworks" );
+
+				if ( MyConfig.AdditionalFrameworkList.Length > 0 )
+					writer.WriteElementString( "custom", MyConfig.AdditionalFrameworkList );
+
+				if ( MyConfig.SupportCompactFrameworkByDefault )			
+					writer.WriteElementString( "compact", "true" );
+			
+
+				if ( MyConfig.SupportMONOFrameworkByDefault )
+					writer.WriteElementString( "mono", "true" );			
+
+				writer.WriteEndElement();
+			}
+
+			writer.WriteEndElement();			
+		}
+
+		// writes the copyright node to the documentation
+		private void WriteCopyright( XmlWriter writer )
+		{
+			writer.WriteStartElement("copyright");
+			writer.WriteAttributeString("text", MyConfig.CopyrightText);
+
+			if (MyConfig.CopyrightHref != string.Empty)
+			{
+				if (!MyConfig.CopyrightHref.StartsWith("http:"))
+				{
+					writer.WriteAttributeString("href", Path.GetFileName(MyConfig.CopyrightHref));
+				}
+				else
+				{
+					writer.WriteAttributeString("href", MyConfig.CopyrightHref);
+				}
+			}
+
+			writer.WriteEndElement();
 		}
 
 		//checks if the member has been flagged with the 
@@ -854,6 +914,7 @@ namespace NDoc.Core
 
 		private bool IsDelegate(Type type)
 		{
+			if (type.BaseType==null) return false;
 			return type.BaseType.FullName == "System.Delegate" ||
 				type.BaseType.FullName == "System.MulticastDelegate";
 		}
@@ -963,9 +1024,11 @@ namespace NDoc.Core
 				writer.WriteAttributeString("hiding", "true");
 			}
 
+
 			WriteTypeDocumentation(writer, memberName, type);
 			WriteCustomAttributes(writer, type);
-			WriteBaseType(writer, type.BaseType);
+			if (type.BaseType!=null)
+				WriteBaseType(writer, type.BaseType);
 
 			//Debug.Assert(implementations == null);
 			implementations = new ImplementsCollection();
@@ -973,9 +1036,12 @@ namespace NDoc.Core
 			//build a collection of the base type's interfaces
 			//to determine which have been inherited
 			StringCollection baseInterfaces = new StringCollection();
-			foreach(Type baseInterfaceType in type.BaseType.GetInterfaces())
+			if (type.BaseType!=null)
 			{
-				baseInterfaces.Add(baseInterfaceType.FullName);
+				foreach(Type baseInterfaceType in type.BaseType.GetInterfaces())
+				{
+					baseInterfaces.Add(baseInterfaceType.FullName);
+				}
 			}
  
 			foreach(Type interfaceType in type.GetInterfaces())
@@ -1068,6 +1134,7 @@ namespace NDoc.Core
 			{
 				if (this.MyConfig.DocumentAttributes)
 				{
+					if (attribute.GetType().FullName!="System.ObsoleteAttribute") 
 					WriteCustomAttribute(writer, attribute);
 				}
 

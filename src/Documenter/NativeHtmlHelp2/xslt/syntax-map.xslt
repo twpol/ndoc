@@ -161,7 +161,7 @@
 	<xsl:template name="constructor-keyword">
 		<xsl:param name="lang"/>
 		<xsl:choose>
-			<xsl:when test="$lang='Visual Basic'">Sub&#160;New&#160;</xsl:when>
+			<xsl:when test="$lang='Visual Basic'">Sub&#160;New</xsl:when>
 			<xsl:when test="$lang='JScript'">function&#160;</xsl:when>
 		</xsl:choose>		
 	</xsl:template>

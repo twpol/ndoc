@@ -59,14 +59,11 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 	/// <summary>
 	/// Provides methods for mapping type name to file names
 	/// </summary>
-	public class FileNameMapper
+	public sealed class FileNameMapper
 	{
-		/// <summary>
-		/// Creates a new isntance of a FileNameMapper
-		/// </summary>
-		public FileNameMapper()
-		{
-		}
+		/// <summary>No public constructor since this type only defines static methods...</summary>
+		/// <remarks>Empty private constructor stops C# creating a public default constructor.</remarks>
+		private FileNameMapper(){}
 
 		/// <summary>
 		/// Determines what type of item a node described
@@ -474,12 +471,10 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 				sb = new StringBuilder( BaseNameFromMemberId( methodID.Substring( 0, leftParenIndex ) ) );
 			else
 				sb = new StringBuilder( BaseNameFromMemberId( methodID ) );
-
-			sb.Append( overload );
 			
 			sb.Replace( "#", "" );
 
-			return sb.Append( "Topic.html" ).ToString();
+			return sb.AppendFormat( "Topic{0}.html", overload ).ToString();
 		}
 
 		/// <summary>

@@ -46,25 +46,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 	}
 
 	/// <summary>
-	/// The platforms an assembly is supported on
-	/// </summary>
-	public enum PCPlatforms
-	{
-		/// <summary>
-		/// Any .NET desktop platform
-		/// </summary>
-		DesktopAndServer,
-		/// <summary>
-		/// A platform with Server capabilities
-		/// </summary>
-		ServerOnly,
-		/// <summary>
-		/// Compact Framework only
-		/// </summary>
-		None
-	}
-
-	/// <summary>
 	/// Specifies a version of the .NET Framework documentation.
 	/// </summary>
 	public enum SdkDocVersion
@@ -89,7 +70,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		/// <summary>
 		/// Creates a root node in the browser at the plug in point
 		/// </summary>
-		Hieararchical
+		Hierarchical
 	}
 
 	/// <summary>
@@ -289,14 +270,14 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		}
 
 		
-		TOCStyle _CollectionTOCStyle = TOCStyle.Hieararchical;
+		TOCStyle _CollectionTOCStyle = TOCStyle.Hierarchical;
 
 		/// <summary>
 		/// Determines how the collection table of contents will appear in the help browser
 		/// </summary>
 		[Category(DEPLOYMENT_CATEGORY)]
 		[Description("Determines how the collection table of contents will appear in the help browser")]
-		[DefaultValue(TOCStyle.Hieararchical)]
+		[DefaultValue(TOCStyle.Hierarchical)]
 		public TOCStyle CollectionTOCStyle
 		{
 			get { return _CollectionTOCStyle; }
@@ -362,19 +343,19 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			}
 		}	
 
-		bool _BuildSeperateIndexFile = false;
+		bool _BuildSeparateIndexFile = false;
 
 		/// <summary>If true a seperate index file is generated, otherwise it is compiled into the HxS (recommended)</summary>
 		[Category(HTMLHELP2_CONFIG_CATEGORY)]
-		[Description("If true, create a seperate index file (HxI), otherwise the index is compiled into the HxS file.")]
+		[Description("If true, create a separate index file (HxI), otherwise the index is compiled into the HxS file.")]
 		[DefaultValue(false)]
-		public bool BuildSeperateIndexFile
+		public bool BuildSeparateIndexFile
 		{
-			get { return _BuildSeperateIndexFile; }
+			get { return _BuildSeparateIndexFile; }
 
 			set
 			{
-				_BuildSeperateIndexFile = value;
+				_BuildSeparateIndexFile = value;
 				SetDirty();
 			}
 		}
@@ -607,63 +588,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			set
 			{
 				_AdditionalContentResourceDirectory = value;
-				SetDirty();
-			}
-		}	
-		#endregion
-
-		#region Platform properties
-		bool _SupportsMono = false;
-		/// <summary>
-		/// Indicates whether the assembly supports MONO
-		/// </summary>
-		[Category("Supported Platforms")]
-		[Description("Does the assembly support the MONO platform")]
-		[DefaultValue(false)]
-		public bool MONO
-		{
-			get { return _SupportsMono; }
-
-			set
-			{
-				_SupportsMono = value;
-				SetDirty();
-			}
-		}
-
-		bool _CompactFramework = false;
-		/// <summary>
-		/// Indicates whether the assembly supports the Compact Framework
-		/// </summary>
-		[Category("Supported Platforms")]
-		[Description("Does the assembly support the .NET Compact Framework")]
-		[DefaultValue(false)]
-		public bool CompactFramework
-		{
-			get { return _CompactFramework; }
-
-			set
-			{
-				_CompactFramework = value;
-				SetDirty();
-			}
-		}	
-
-
-		PCPlatforms _pcPlatforms = PCPlatforms.DesktopAndServer;
-		/// <summary>
-		/// Indicates the supported PC platforms
-		/// </summary>
-		[Category("Supported Platforms")]
-		[Description("Denotes the PC platforms that the assembly supports")]
-		[DefaultValue(PCPlatforms.DesktopAndServer)]
-		public PCPlatforms PCPlatform
-		{
-			get { return _pcPlatforms; }
-
-			set
-			{
-				_pcPlatforms = value;
 				SetDirty();
 			}
 		}	

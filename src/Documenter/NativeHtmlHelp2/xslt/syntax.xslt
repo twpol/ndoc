@@ -177,12 +177,16 @@
 		<xsl:call-template name="syntax-header">
 			<xsl:with-param name="lang" select="$lang"/>		
 		</xsl:call-template>
-		<a href="{$href}">		
+		<xsl:variable name="link-text">
 			<xsl:call-template name="constructor-syntax">
 				<xsl:with-param name="lang" select="$lang"/>		
 				<xsl:with-param name="include-type-links" select="false()"/>		
 			</xsl:call-template>
-		</a>
+		</xsl:variable>
+		<xsl:call-template name="get-link-for-member-overload">
+			<xsl:with-param name="link-text" select="$link-text"/>
+			<xsl:with-param name="member" select="."/>
+		</xsl:call-template>			
 	</xsl:template>
 	
 	<xsl:template match="constructor" mode="syntax">		
@@ -209,12 +213,17 @@
 		<xsl:call-template name="constructor-keyword">
 			<xsl:with-param name="lang" select="$lang"/>		
 		</xsl:call-template>
+		<xsl:if test="$lang!='Visual Basic'">
 		<xsl:value-of select="../@name" />
+		</xsl:if>
 		<xsl:call-template name="parameters">
 			<xsl:with-param name="include-type-links" select="$include-type-links"/>		
 			<xsl:with-param name="lang" select="$lang"/>
 			<xsl:with-param name="namespace-name" select="../../@name" />
 		</xsl:call-template>		
+		<xsl:call-template name="statement-end">
+			<xsl:with-param name="lang" select="$lang"/>			
+		</xsl:call-template>			
 	</xsl:template>
 
 

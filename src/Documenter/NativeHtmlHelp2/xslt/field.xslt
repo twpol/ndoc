@@ -30,7 +30,7 @@
 					<xsl:call-template name="syntax-section"/>
 					<xsl:call-template name="remarks-section" />
 					<xsl:call-template name="example-section" />
-					<xsl:call-template name="requirements-section" />
+					<xsl:call-template name="member-requirements-section" />
 					<xsl:call-template name="seealso-section">
 						<xsl:with-param name="page">field</xsl:with-param>
 					</xsl:call-template>

@@ -45,7 +45,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		private ExternalHtmlProvider _htmlProvider;
 		private StyleSheetCollection _stylesheets;
 
-		private FileNameMapper fileNameMapper;
+		//private FileNameMapper fileNameMapper;
 		private NamespaceMapper nsMapper;
 
 		/// <summary>
@@ -84,7 +84,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			else
 				Debug.Assert( false );		// remind ourselves to update this list when new framework versions are supported
 
-			fileNameMapper = new FileNameMapper();
+		//	fileNameMapper = new FileNameMapper();
 
 			xPathDocumentation = new XPathDocument( new StringReader( xmlDocumentation.OuterXml ) );
 		}

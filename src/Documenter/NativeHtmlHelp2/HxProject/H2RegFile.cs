@@ -116,29 +116,29 @@ namespace NDoc.Documenter.NativeHtmlHelp2.HxProject
 		/// <summary>
 		/// Adds a title to the collection
 		/// </summary>
-		/// <param name="TitleId">The id of the title</param>
-		/// <param name="TitleLangId">The language id of the title</param>
-		/// <param name="TitleFileName">The name of the HxS file containing the title</param>
-		public void AddTitle( string TitleId, int TitleLangId, string TitleFileName )
+		/// <param name="titleId">The id of the title</param>
+		/// <param name="titleLangId">The language id of the title</param>
+		/// <param name="titleFileName">The name of the HxS file containing the title</param>
+		public void AddTitle( string titleId, int titleLangId, string titleFileName )
 		{
-			AddTitle( TitleId, TitleLangId, TitleFileName, TitleFileName );
+			AddTitle( titleId, titleLangId, titleFileName, titleFileName );
 		}
 
 		/// <summary>
 		/// Adds a title to the collection
 		/// </summary>
-		/// <param name="TitleId">The id of the title</param>
-		/// <param name="TitleLangId">The language id of the title</param>
-		/// <param name="TitleFileName">The name of the HxS file containing the title</param>
-		/// <param name="IndexFileName">The name of the HxI file containing the title's index</param>
-		public void AddTitle( string TitleId, int TitleLangId, string TitleFileName, string IndexFileName )
+		/// <param name="titleId">The id of the title</param>
+		/// <param name="titleLangId">The language id of the title</param>
+		/// <param name="titleFileName">The name of the HxS file containing the title</param>
+		/// <param name="indexFileName">The name of the HxI file containing the title's index</param>
+		public void AddTitle( string titleId, int titleLangId, string titleFileName, string indexFileName )
 		{
 			HelpTitle title = new HelpTitle();
 
-			title.TitleId = TitleId;
-			title.LangId = TitleLangId;
-			title.FileName = TitleFileName;
-			title.IndexFileName = IndexFileName;
+			title.TitleId = titleId;
+			title.LangId = titleLangId;
+			title.FileName = titleFileName;
+			title.IndexFileName = indexFileName;
 
 			titles.Add( title );
 		}

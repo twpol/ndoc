@@ -109,10 +109,10 @@
 		<xsl:variable name="filename">
 			<xsl:choose>
 				<xsl:when test="$overload-page=true()">
-					<xsl:value-of select="NUtil:GetCustructorOverloadHRef( string( ../@id ) )"/>								
+					<xsl:value-of select="NUtil:GetConstructorOverloadHRef( string( ../@id ) )"/>								
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:value-of select="NUtil:GetCustructorHRef( . )"/>				
+					<xsl:value-of select="NUtil:GetConstructorHRef( . )"/>				
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>

@@ -365,9 +365,11 @@
 						<xsl:with-param name="name" select="@declaringType" />
 					</xsl:call-template>
 				</b>
-				<xsl:text>)</xsl:text>
+				<xsl:text>)</xsl:text>				
+				<xsl:call-template name="member-list-platform"/>
 			</td>
 			<td width="50%">
+				<xsl:call-template name="obsolete-inline"/>
 				<xsl:call-template name="summary-with-no-paragraph" />
 			</td>
 		</tr>
@@ -395,8 +397,10 @@
 					</xsl:call-template>
 				</b>
 				<xsl:text>)</xsl:text>
+				<xsl:call-template name="member-list-platform"/>
 			</td>
 			<td width="50%">
+				<xsl:call-template name="obsolete-inline"/>
 				<xsl:call-template name="summary-with-no-paragraph" />
 			</td>
 		</tr>
@@ -426,6 +430,7 @@
 						</xsl:call-template>
 					</b>
 					<xsl:text>)</xsl:text>
+					<xsl:call-template name="member-list-platform"/>
 				</td>
 				<td width="50%">
 					<xsl:if test="@contract='Override'">
@@ -433,6 +438,9 @@
 					</xsl:if>
 					<xsl:if test="@overload">
 						<xsl:text>Overloaded. </xsl:text>
+					</xsl:if>
+					<xsl:if test="(not(@overload) and @contract!='Override')">
+						<xsl:call-template name="obsolete-inline"/>
 					</xsl:if>
 					<xsl:call-template name="summary-with-no-paragraph" />
 				</td>
@@ -463,14 +471,95 @@
 					</xsl:call-template>
 				</b>
 				<xsl:text>)</xsl:text>
+				<xsl:call-template name="member-list-platform"/>
 			</td>
 			<td width="50%">
+				<xsl:call-template name="obsolete-inline"/>
 				<xsl:call-template name="summary-with-no-paragraph" />
 			</td>
 		</tr>
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="field[not(@declaringType)]|property[not(@declaringType)]|event[not(@declaringType)]|method[not(@declaringType)]|operator">
+	<!-- -->
+	<xsl:template match="constructor">
+		<xsl:variable name="access" select="@access" />
+		<xsl:if test="not(preceding-sibling::constructor[@access=$access])">
+			<xsl:variable name="contract" select="@contract" />
+			<tr VALIGN="top">
+				<xsl:choose>
+					<xsl:when test="(count(../constructor[@contract!='Static']) &gt; 1) and ($contract!='Static')">
+						<td width="50%">
+						  <xsl:choose>
+							<xsl:when test="@access='Public'">
+								<img src="pubmethod.gif" />
+							</xsl:when>
+							<xsl:when test="@access='Family'">
+								<img src="protmethod.gif" />
+							</xsl:when>
+							<xsl:when test="@access='Private'">
+								<img src="privmethod.gif" />
+							</xsl:when>
+							<xsl:when test="@access='Assembly' or @access='FamilyOrAssembly'">
+								<img src="intmethod.gif" />
+							</xsl:when>
+						  </xsl:choose>
+							<a href="{NUtil:GetConstructorOverloadHRef( string( ../@id ) )}">
+								<xsl:value-of select="../@name" />
+							</a>
+							<xsl:call-template name="member-list-platform"/>							
+						</td>
+						<td width="50%">
+							<xsl:text>Overloaded. </xsl:text>
+							<xsl:choose>
+								<xsl:when test="../constructor/documentation/overloads">
+									<xsl:call-template name="overloads-summary-with-no-paragraph">
+										<xsl:with-param name="overloads" select="../constructor" />
+									</xsl:call-template>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:text>Initializes a new instance of the </xsl:text>
+									<xsl:value-of select="../@name" />
+									<xsl:text> class.</xsl:text>
+								</xsl:otherwise>
+							</xsl:choose>
+						</td>
+					</xsl:when>
+					<xsl:otherwise>
+						<td width="50%">
+						  <xsl:choose>
+							<xsl:when test="@access='Public'">
+								<img src="pubmethod.gif" />
+							</xsl:when>
+							<xsl:when test="@access='Family'">
+								<img src="protmethod.gif" />
+							</xsl:when>
+							<xsl:when test="@access='Private'">
+								<img src="privmethod.gif" />
+							</xsl:when>
+							<xsl:when test="@access='Assembly' or @access='FamilyOrAssembly'">
+								<img src="intmethod.gif" />
+							</xsl:when>
+						  </xsl:choose>
+						  <xsl:if test="$contract='Static'">
+							 <img src="static.gif" />
+						  </xsl:if>
+							<a href="{NUtil:GetConstructorHRef( . )}">
+								<xsl:value-of select="../@name" />
+								<xsl:text> Constructor</xsl:text>
+							</a>
+							<xsl:call-template name="member-list-platform"/>							
+						</td>
+						<td width="50%">
+							<xsl:call-template name="obsolete-inline"/>
+							<xsl:apply-templates select="documentation/summary/node()" mode="slashdoc" />
+						</td>
+					</xsl:otherwise>
+				</xsl:choose>
+			</tr>
+		</xsl:if>
+	</xsl:template>	
+<!--	<xsl:template match="field[not(@declaringType)]|property[not(@declaringType)]|event[not(@declaringType)]|method[not(@declaringType)]|operator"> -->
+	<xsl:template match="field | property | event | method | operator">
 		<xsl:variable name="member" select="local-name()" />
 		<xsl:variable name="name" select="@name" />
 		<xsl:variable name="contract" select="@contract" />
@@ -500,6 +589,7 @@
 									</xsl:otherwise>
 								</xsl:choose>
 							</a>
+							<xsl:call-template name="member-list-platform"/>
 						</td>
 						<td width="50%">
 							<xsl:text>Overloaded. </xsl:text>
@@ -527,6 +617,7 @@
 									</xsl:otherwise>
 								</xsl:choose>
 							</a>
+							<xsl:call-template name="member-list-platform"/>							
 						</td>
 						<td width="50%">
 							<xsl:if test="@contract='Override'">
@@ -534,6 +625,9 @@
 							</xsl:if>
 							<xsl:if test="@overload and @name!='op_Implicit' and @name!='op_Explicit'">
 								<xsl:text>Overloaded. </xsl:text>
+							</xsl:if>
+							<xsl:if test="((not(@contract) or @contract!='Override') and (not(@overload) or @name='op_Implicit' or @name='op_Explicit'))">
+								<xsl:call-template name="obsolete-inline"/>
 							</xsl:if>
 							<xsl:call-template name="summary-with-no-paragraph" />
 						</td>
@@ -543,4 +637,51 @@
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
+	<xsl:template name="member-list-platform">
+		<xsl:choose>
+			<!-- first see if the member has a platform specified -->
+			<xsl:when test="documentation/platform/frameworks">
+				<xsl:apply-templates select="documentation/platform/frameworks" mode="member-list"/>
+			</xsl:when>
+			<!-- then look in the containing type -->
+			<xsl:when test="parent::node()/documentation/platform/frameworks">
+				<xsl:apply-templates select="parent::node()/documentation/platform/frameworks" mode="member-list"/>			
+			</xsl:when>			
+			<!-- otherwise use the project defaults -->
+			<xsl:otherwise>
+				<xsl:apply-templates select="/ndoc/platform/frameworks" mode="member-list"/>
+			</xsl:otherwise>		
+		</xsl:choose>
+	</xsl:template>
+	
+	<xsl:template match="frameworks" mode="member-list">
+		<xsl:if test="count( node()[text()='true'] | custom ) != 0">
+			<p>
+				<xsl:text>Supported by </xsl:text>
+				<xsl:apply-templates select="compact | mono | custom" mode="member-list"/>
+				<xsl:text>.</xsl:text>
+			</p>
+		</xsl:if>		
+	</xsl:template>
+	
+	<xsl:template match="mono" mode="member-list"/>
+	<xsl:template match="mono[text() = 'true']" mode="member-list">
+		<xsl:if test="position()=last() and count( preceding-sibling::node()[text() = 'true'] ) != 0">and </xsl:if>
+		<xsl:text>the MONO Open Source Framework</xsl:text>
+		<xsl:if test="position()!=last()">, </xsl:if>
+	</xsl:template>		
+	
+	<xsl:template match="compact" mode="member-list"/>
+	<xsl:template match="compact[text() = 'true']" mode="member-list">
+		<xsl:if test="position()=last() and count( preceding-sibling::node()[text() = 'true'] ) != 0">and </xsl:if>
+		<xsl:text>the .NET Compact Framework</xsl:text>
+		<xsl:if test="position()!=last()">, </xsl:if>
+	</xsl:template>		
+	
+	<xsl:template match="frameworks/custom" mode="member-list">
+		<xsl:if test="position()=last() and count( preceding-sibling::node()[text() = 'true'] ) != 0">and </xsl:if>
+		<xsl:text>the </xsl:text>
+		<xsl:value-of select="."/>
+		<xsl:if test="position()!=last()">, </xsl:if>
+	</xsl:template>		
 </xsl:stylesheet>

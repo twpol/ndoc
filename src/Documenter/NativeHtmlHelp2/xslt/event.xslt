@@ -74,7 +74,7 @@
 					<xsl:call-template name="remarks-section" />
 					<xsl:call-template name="exceptions-section" />
 					<xsl:call-template name="example-section" />
-					<xsl:call-template name="requirements-section" />
+					<xsl:call-template name="member-requirements-section" />
 					<xsl:call-template name="seealso-section">
 						<xsl:with-param name="page">event</xsl:with-param>
 					</xsl:call-template>
@@ -112,6 +112,7 @@
 							</xsl:call-template>
 						</td>
 						<td width="50%">
+							<xsl:call-template name="obsolete-inline"/>
 							<xsl:apply-templates select="documentation/summary/node()" mode="nopara" />
 						</td>
 					</xsl:otherwise>

@@ -146,7 +146,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// </summary>
 		/// <param name="typeID">The id of the type</param>
 		/// <returns>Relative HRef to the Topic</returns>
-		public string GetCustructorOverloadHRef( string typeID )
+		public string GetConstructorOverloadHRef( string typeID )
 		{
 			return FileNameMapper.GetFilenameForConstructors( typeID );
 		}
@@ -156,7 +156,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// </summary>
 		/// <param name="xPathNode">The node selection for the contsructor</param>
 		/// <returns>Relative HRef to the Topic</returns>
-		public string GetCustructorHRef( XPathNodeIterator xPathNode )
+		public string GetConstructorHRef( XPathNodeIterator xPathNode )
 		{
 			string href = "";
 			xPathNode.MoveNext();

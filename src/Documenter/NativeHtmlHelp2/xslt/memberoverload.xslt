@@ -94,13 +94,12 @@
 							</xsl:when>
 							<xsl:otherwise>
 								<p>
+								    <xsl:call-template name="obsolete-inline"/>
 									<xsl:call-template name="summary-with-no-paragraph">
 										<xsl:with-param name="member" select="." />
 									</xsl:call-template>
 								</p>
-								<blockquote class="dtBlock">
-										<xsl:apply-templates select="self::node()" mode="syntax" />					
-								</blockquote>
+								<xsl:apply-templates select="self::node()" mode="syntax" />					
 							</xsl:otherwise>
 						</xsl:choose>
 					</xsl:for-each>
@@ -127,21 +126,26 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template match="constructor | method | property" mode="syntax">
+		<blockquote class="dtBlock">
 		<xsl:apply-templates select="." mode="inline-syntax">
 			<xsl:with-param name="lang" select="'Visual Basic'"/>
 		</xsl:apply-templates>
-		<br/>
+		</blockquote>
+		<blockquote class="dtBlock">
 		<xsl:apply-templates select="." mode="inline-syntax">
 			<xsl:with-param name="lang" select="'C#'"/>
 		</xsl:apply-templates>
-		<br/>
+		</blockquote>
+		<blockquote class="dtBlock">
 		<xsl:apply-templates select="." mode="inline-syntax">
 			<xsl:with-param name="lang" select="'C++'"/>
 		</xsl:apply-templates>				
-		<br/>
+		</blockquote>
+		<blockquote class="dtBlock">
 		<xsl:apply-templates select="." mode="inline-syntax">
 			<xsl:with-param name="lang" select="'JScript'"/>
 		</xsl:apply-templates>		
+		</blockquote>
 	</xsl:template>
 	
 	<xsl:template match="operator" mode="syntax">

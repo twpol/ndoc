@@ -262,7 +262,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			ProjectFile project = ProjectFile.CreateFrom( Path.Combine( ResourceDirectory, @"HxProject\HelpTitle\project.HxC" ), MyConfig.HtmlHelpName );
 			
 			// set it up
-			project.BuildSeperateIndexFile = MyConfig.BuildSeperateIndexFile;
+			project.BuildSeparateIndexFile = MyConfig.BuildSeparateIndexFile;
 			project.Copyright = MyConfig.CopyrightText;
 			project.CreateFullTextIndex = MyConfig.CreateFullTextIndex;
 			project.FileVersion = MyConfig.Version;
@@ -291,7 +291,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			factory.Properties.Add( "ndoc-title", MyConfig.Title );
 			factory.Properties.Add( "ndoc-document-attributes", MyConfig.DocumentAttributes );
 			factory.Properties.Add( "ndoc-documented-attributes", MyConfig.DocumentedAttributes );
-			factory.Properties.Add( "ndoc-platforms", GetPlatformString() );
+			//factory.Properties.Add( "ndoc-platforms", GetPlatformString() );
 			factory.Properties.Add( "ndoc-net-framework-version", GetNETVersionString() );
 			factory.Properties.Add( "ndoc-version", MyConfig.Version );
 			factory.Properties.Add( "ndoc-includeHierarchy", MyConfig.IncludeHierarchy );
@@ -310,42 +310,13 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			}
 		}
 
-		private string GetPlatformString()
-		{
-			StringBuilder sb = new StringBuilder();
-
-			if ( MyConfig.PCPlatform == PCPlatforms.DesktopAndServer )
-				sb.Append( "Windows 98, Windows NT 4.0, Windows Millennium Edition, Windows 2000, Windows XP Home Edition, Windows XP Professional, Windows Server 2003 family" );
-			
-			else if ( MyConfig.PCPlatform == PCPlatforms.ServerOnly )
-				sb.Append( "Windows 2000, Windows XP Professional, Windows Server 2003 family" );
-
-			if ( MyConfig.MONO )
-			{
-				if ( sb.Length > 0 )
-					sb.Append( ", " );
-
-				sb.Append( "MONO Open Source Framework" );
-			}
-
-			if ( MyConfig.CompactFramework )
-			{
-				if ( sb.Length > 0 )
-					sb.Append( ", " );
-
-				sb.Append( ".NET Compact Framework - Windows CE .NET" );
-			}
-
-			return sb.ToString();
-		}
-
 		private XmlDocument MergeXml( Project project )
 		{
 			// Let the Documenter base class do it's thing.
 			// Load the XML documentation into a DOM.
 			XmlDocument xmlDocumentation = new XmlDocument();
 			xmlDocumentation.LoadXml( MakeXml( project ) );
-//xmlDocumentation.Save( @"C:\Tests.xml" );
+xmlDocumentation.Save( @"C:\Tests.xml" );
 			XmlNodeList typeNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace/*[name()!='documentation']");
 			
 			if ( typeNodes.Count == 0 )			
@@ -452,7 +423,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			h2reg.Description = MyConfig.Title;
 			h2reg.PluginNamespace = MyConfig.PlugInNamespace;
 			
-			if ( MyConfig.BuildSeperateIndexFile )
+			if ( MyConfig.BuildSeparateIndexFile )
 				h2reg.AddTitle( MyConfig.HtmlHelpName, MyConfig.LangID, MyConfig.HtmlHelpName + ".HxS", MyConfig.HtmlHelpName + ".HxI" );
 			else
 				h2reg.AddTitle( MyConfig.HtmlHelpName, MyConfig.LangID, MyConfig.HtmlHelpName + ".HxS" );

@@ -24,8 +24,12 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 	/// <summary>
 	/// Helper functions to get information about a method
 	/// </summary>
-	public class MethodHelper
+	public sealed class MethodHelper
 	{
+		/// <summary>No public constructor since this type only defines static methods...</summary>
+		/// <remarks>Empty private constructor stops C# creating a public default constructor.</remarks>
+		private MethodHelper(){}
+
 		/// <summary>
 		/// Determines if an overload exists
 		/// </summary>

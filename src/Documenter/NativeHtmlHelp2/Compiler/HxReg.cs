@@ -63,50 +63,50 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Compiler
 		/// <summary>
 		/// Registers the a help namespace
 		/// </summary>
-		/// <param name="Namespace">The ID of the namespace to register</param>
-		/// <param name="CollectionFile">The collection (HxS or HxC) file</param>
-		/// <param name="Description">Namespace description</param>
-		public void RegisterNamespace( string Namespace, FileInfo CollectionFile, string Description )
+		/// <param name="helpNamespace">The ID of the namespace to register</param>
+		/// <param name="collectionFile">The collection (HxS or HxC) file</param>
+		/// <param name="description">Namespace description</param>
+		public void RegisterNamespace( string helpNamespace, FileInfo collectionFile, string description )
 		{
-			Debug.Assert( CollectionFile != null );
-			Debug.Assert( CollectionFile.Exists );
+			Debug.Assert( collectionFile != null );
+			Debug.Assert( collectionFile.Exists );
 
 			StringBuilder sb = new StringBuilder();
-			sb.AppendFormat( " -n {0} ", Namespace );
+			sb.AppendFormat( " -n {0} ", helpNamespace );
 			
 			sb.Append( " -c " );
 			sb.Append( '"' );
-			sb.Append( CollectionFile.FullName );
+			sb.Append( collectionFile.FullName );
 			sb.Append( '"' );
 
 			sb.AppendFormat( " -d " );
 			sb.Append( '"' );
-			sb.AppendFormat( Description );
+			sb.AppendFormat( description );
 			sb.Append( '"' );
 
-			Execute( sb.ToString(), CollectionFile.Directory.FullName );
+			Execute( sb.ToString(), collectionFile.Directory.FullName );
 		}
 
 		/// <summary>
 		/// Register an HxS title with a help namespace
 		/// </summary>
-		/// <param name="Namespace">The namespace to register with</param>
-		/// <param name="TitleID">The id of the new title</param>
-		/// <param name="HxsFile">The location of the HxS file</param>
-		public void RegisterTitle( string Namespace, string TitleID, FileInfo HxsFile )
+		/// <param name="helpNamespace">The namespace to register with</param>
+		/// <param name="titleID">The id of the new title</param>
+		/// <param name="hxsFile">The location of the HxS file</param>
+		public void RegisterTitle( string helpNamespace, string titleID, FileInfo hxsFile )
 		{
-			Debug.Assert( HxsFile != null );
-			Debug.Assert( HxsFile.Exists );
+			Debug.Assert( hxsFile != null );
+			Debug.Assert( hxsFile.Exists );
  
 			StringBuilder sb = new StringBuilder();
-			sb.AppendFormat( " -n {0} ", Namespace );
-			sb.AppendFormat( " -i {0} ", TitleID );
+			sb.AppendFormat( " -n {0} ", helpNamespace );
+			sb.AppendFormat( " -i {0} ", titleID );
 
 			sb.Append( '"' );
-			sb.Append( HxsFile.FullName );
+			sb.Append( hxsFile.FullName );
 			sb.Append( '"' );
 
-			Execute( sb.ToString(), HxsFile.Directory.FullName );
+			Execute( sb.ToString(), hxsFile.Directory.FullName );
 		}
 	}
 }

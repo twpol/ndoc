@@ -10,33 +10,33 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 	/// </summary>
 	public class TOCBuilder : IDisposable
 	{
-		private TOCFile toc = null;
+		private TOCFile _toc = null;
 
-		private HtmlFactory factory = null;
+		private HtmlFactory _factory = null;
 
 		/// <summary>
 		/// Contruct a enw instance of the TOCBuilder class
 		/// </summary>
-		/// <param name="_toc">The table of contents file to write to</param>
-		/// <param name="_factory">The HTMLFactory creating each file to be added</param>
-		public TOCBuilder( TOCFile _toc, HtmlFactory _factory )
+		/// <param name="toc">The table of contents file to write to</param>
+		/// <param name="factory">The HTMLFactory creating each file to be added</param>
+		public TOCBuilder( TOCFile toc, HtmlFactory factory )
 		{
-			if ( _toc == null )
+			if ( toc == null )
 				throw new NullReferenceException( "The TOCFile cannot be null" );
 
-			if ( _factory == null )
+			if ( factory == null )
 				throw new NullReferenceException( "The HtmlFactory cannot be null" );
 
-			toc = _toc;
-			factory = _factory;
+			_toc = toc;
+			_factory = factory;
 
-			toc.Open();
+			_toc.Open();
 
 			// connect to factory events
 			// this is so we can build the TOC as we go
-			factory.TopicStart += new TopicEventHandler(factory_TopicStart);
-			factory.TopicEnd += new EventHandler(factory_TopicEnd);
-			factory.AddFileToTopic += new TopicEventHandler(factory_AddFileToTopic);
+			_factory.TopicStart += new TopicEventHandler(factory_TopicStart);
+			_factory.TopicEnd += new EventHandler(factory_TopicEnd);
+			_factory.AddFileToTopic += new TopicEventHandler(factory_AddFileToTopic);
 		}
 
 		/// <summary>
@@ -51,19 +51,19 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		{
 			// this assumes that all content files are going in a directory named
 			// "html" (relative to the location of the HxT
-			toc.OpenNode( string.Format( "/{0}/{1}", Workspace.ContentDirectoryName, args.File ) );
+			_toc.OpenNode( string.Format( "/{0}/{1}", Workspace.ContentDirectoryName, args.File ) );
 		}
 
 		private void factory_TopicEnd(object sender, EventArgs e)
 		{
-			toc.CloseNode();
+			_toc.CloseNode();
 		}
 
 		private void factory_AddFileToTopic(object sender, FileEventArgs args)
 		{
 			// this assumes that all content files are going in a directory named
 			// "html" (relative to the location of the HxT
-			toc.InsertNode( string.Format( "/{0}/{1}", Workspace.ContentDirectoryName, args.File ) );
+			_toc.InsertNode( string.Format( "/{0}/{1}", Workspace.ContentDirectoryName, args.File ) );
 		}
 
 		/// <summary>
@@ -83,15 +83,15 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		{
 			if ( disposing )
 			{
-				if ( factory != null )
+				if ( _factory != null )
 				{
-					factory.TopicStart -= new TopicEventHandler(factory_TopicStart);
-					factory.TopicEnd -= new EventHandler(factory_TopicEnd);
-					factory.AddFileToTopic -= new TopicEventHandler(factory_AddFileToTopic);
+					_factory.TopicStart -= new TopicEventHandler(factory_TopicStart);
+					_factory.TopicEnd -= new EventHandler(factory_TopicEnd);
+					_factory.AddFileToTopic -= new TopicEventHandler(factory_AddFileToTopic);
 				}
 
-				if ( toc != null )
-					toc.Close();
+				if ( _toc != null )
+					_toc.Close();
 			}
 		}
 	}

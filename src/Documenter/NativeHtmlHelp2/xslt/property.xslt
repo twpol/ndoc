@@ -43,7 +43,7 @@
 					<xsl:call-template name="events-section" />
 					<xsl:call-template name="exceptions-section" />
 					<xsl:call-template name="example-section" />
-					<xsl:call-template name="requirements-section" />
+					<xsl:call-template name="member-requirements-section" />
 					<xsl:call-template name="seealso-section">
 						<xsl:with-param name="page">property</xsl:with-param>
 					</xsl:call-template>

@@ -143,35 +143,8 @@
 					<xsl:if test="local-name() = 'enumeration'">
 						<xsl:call-template name="members-section" />
 					</xsl:if>
-					<h4 class="dtH4">Requirements</h4>
-					<p>
-						<b>Namespace: </b>
-						<a href="{NUtil:GetNamespaceHierarchyHRef( string( ../@name ) )}">
-							<xsl:value-of select="../@name" />
-						</a>
-					</p>
-					<xsl:call-template name="platforms-section"/>
-					<p>
-						<b>Assembly: </b>
-						<xsl:value-of select="../../../@name" /> (in <xsl:value-of select="../../@name" />)
-					</p>
-					<xsl:if test="documentation/permission">
-						<p>
-							<b>.NET Framework Security: </b>
-							<ul class="permissions">
-								<xsl:for-each select="documentation/permission">
-									<li>
-										<xsl:call-template name="get-link-for-type">
-											<xsl:with-param name="type" select="@cref" />
-											<xsl:with-param name="link-text" select="substring-after(@cref, 'T:')"/>
-										</xsl:call-template>
-										<xsl:text>&#160;</xsl:text>
-										<xsl:apply-templates mode="slashdoc" />
-									</li>
-								</xsl:for-each>
-							</ul>
-						</p>
-					</xsl:if>
+					<xsl:call-template name="type-requirements-section"/>
+					
 					<xsl:variable name="page">
 						<xsl:choose>
 							<xsl:when test="local-name() = 'enumeration'">enumeration</xsl:when>

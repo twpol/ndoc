@@ -134,6 +134,7 @@
 				</a>
 			</td>
 			<td width="50%">
+				<xsl:call-template name="obsolete-inline"/>
 				<xsl:apply-templates select="(documentation/summary)[1]/node()" mode="slashdoc" />
 			</td>
 		</tr>

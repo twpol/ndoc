@@ -80,7 +80,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.HxProject
 		/// <summary>
 		/// When true builds both an HxI and an HxS file. Otherwise the index is compiled into the HxS
 		/// </summary>
-		public bool BuildSeperateIndexFile
+		public bool BuildSeparateIndexFile
 		{
 			get{ return GetProperty( "CompilerOptions/@CompileResult" ) == "HxiHxs"; }
 			set{ SetProperty( "CompilerOptions/@CompileResult", value ? "HxiHxs" : "Hxs" ); }

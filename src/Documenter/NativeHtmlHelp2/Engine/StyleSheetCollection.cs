@@ -79,7 +79,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			base.InnerHashtable.Add( name, MakeTransform( resourceDirectory, name ) );
 		}
 
-		private static XslTransform MakeTransform(	string resourceDirectory, string name )
+		private static XslTransform MakeTransform( string resourceDirectory, string name )
 		{
 			try
 			{
