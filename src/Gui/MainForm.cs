@@ -1421,6 +1421,9 @@ namespace NDoc.Gui
 			menuDocViewItem.Enabled = !starting;
 			menuCancelBuildItem.Enabled = starting;
 			menuAboutItem.Enabled = !starting;
+
+			assembliesHeaderGroupBox.Enabled = !starting;
+			documenterHeaderGroupBox.Enabled = !starting;
             
 			progressBar.Visible = starting;
 		}
