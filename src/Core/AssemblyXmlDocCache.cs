@@ -134,9 +134,7 @@ namespace NDoc.Core
 					
 					if (node.Name == "code")
 					{
-						// 09/17/04 GERT: comment this out, until this has been 
-						// discussed with Kevin
-						//FixupCodeTag(node);
+						FixupCodeTag(node);
 					}
 					else
 					{
@@ -172,18 +170,31 @@ namespace NDoc.Core
 			string[] codeLines = codeText.Split(new Char[] {'\r', '\n'});
 			if (codeLines.Length > 0)
 			{
-				string firstLine = codeLines[0];
-				int leadingChars = 0; //number of chars at start of firstline
-
-				while (leadingChars < firstLine.Length && firstLine.Substring(leadingChars, 1) == " ")
-					leadingChars++;
-
+				int numberOfCharsToRemove = int.MaxValue;
 				for (int index = 0; index < codeLines.Length; index++)
 				{
-					if (leadingChars < codeLines[index].Length)
-						codeLines[index] = codeLines[index].Substring(leadingChars);
-					else
-						codeLines[index] = codeLines[index].TrimStart();
+					string testLine = codeLines[index];
+					int leadingWhitespaceChars = 0; //number of chars at start of line
+					while (leadingWhitespaceChars < testLine.Length && testLine.Substring(leadingWhitespaceChars, 1) == " ")
+					{
+						leadingWhitespaceChars++;
+					}
+					if (numberOfCharsToRemove > leadingWhitespaceChars)
+					{
+						numberOfCharsToRemove = leadingWhitespaceChars;
+					}
+				}
+
+				if (numberOfCharsToRemove < int.MaxValue && numberOfCharsToRemove > 0)
+				{
+
+					for (int index = 0; index < codeLines.Length; index++)
+					{
+						if (numberOfCharsToRemove < codeLines[index].Length)
+							codeLines[index] = codeLines[index].Substring(numberOfCharsToRemove);
+						else
+							codeLines[index] = codeLines[index].TrimStart();
+					}
 				}
 
 				string newtext = String.Join(System.Environment.NewLine, codeLines);
