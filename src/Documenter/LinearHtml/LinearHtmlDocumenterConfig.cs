@@ -41,8 +41,31 @@ namespace NDoc.Documenter.LinearHtml
 			_FilesToInclude = string.Empty;
 			_IncludeHierarchy = false;
 			_SortTOCByNamespace = true;
+
 			_NamespaceExcludeRegexp = string.Empty;
 			_MethodParametersInTable = false;
+			_IncludeTypeMemberDetails = false;
+		}
+
+		bool _IncludeTypeMemberDetails;
+
+		/// <summary>Gets or sets the IncludeTypeMemberDetails property.</summary>
+		[
+		Category("LinearHtml Style Settings"),
+		Description("Whether or not to put type member (methods, fields, properties, ...) details into the "
+			+ "document.  For fields and properties this means whether or not to include "
+			+ "remarks in the table.  For methods this means whether or not to break out "
+			+ "method details (such as parameters) into separate sub-sections."),
+		]
+		public bool IncludeTypeMemberDetails
+		{
+			get { return _IncludeTypeMemberDetails; }
+
+			set
+			{
+				_IncludeTypeMemberDetails = value;
+				SetDirty();
+			}
 		}
 
 
