@@ -533,7 +533,7 @@
 								</xsl:variable>
 								<a href="{$type-filename}">
 									<xsl:call-template name="strip-namespace">
-										<xsl:with-param name="name" select="substring-after(@cref, 'F:')" />
+										<xsl:with-param name="name" select="substring-after(@cref, ':')" />
 									</xsl:call-template>
 								</a>
 							</td>
