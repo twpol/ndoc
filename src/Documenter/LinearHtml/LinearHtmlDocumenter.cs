@@ -41,8 +41,8 @@ using System.Xml.Serialization;
 using System.Xml.XPath;
 using System.Xml.Xsl;
 using System.Reflection;
-using NDoc.Core;
 
+using NDoc.Core;
 
 namespace NDoc.Documenter.LinearHtml
 {

@@ -20,11 +20,8 @@ using System.ComponentModel;
 using System.Drawing.Design;
 using System.IO;
 using System.Windows.Forms.Design;
-using Microsoft.Win32;
+
 using NDoc.Core;
-
-using NDoc.Documenter.Msdn;
-
 
 namespace NDoc.Documenter.LinearHtml
 {
