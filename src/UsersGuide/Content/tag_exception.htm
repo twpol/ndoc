@@ -1,0 +1,57 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<head>
+		<title>exception</title>
+		<meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5">
+		<link href="css/ndoc.css" rel="stylesheet" name="ndocstyle" type="text/css">
+		<script src="script/ndoc.js"></script>
+	</head>
+	<body class="dtBODY" id="bodyID" onload="InitTitle()">
+		<div id="nstext">
+			<p>The &lt;exception&gt; tag lets you specify which exceptions can be thrown.</p>
+			<pre class="syntax">&lt;exception cref="<I>member</I>"&gt;<I>description</I>&lt;/exception&gt;</pre>
+			<p>where:</p>
+			<dl>
+				<dt>cref = "<I>member</I>"</dt>
+				<dd>
+					A reference to an exception that is available from the current compilation 
+					environment. The compiler checks that the given exception exists and translates <I>member</I>
+					to the canonical element name in the output XML. <I>member</I> must appear 
+					within double quotation marks (" ").</dd>
+				<dt><I>description</I></dt>
+				<dd>
+					A description.</dd>
+			</dl>
+			<h4 class="dtH4">Applies To</h4>
+			<p>Property, Method, Event, Operator, Type Conversion</p>
+			<h4 class="dtH4">Remarks</h4>
+			<p>
+				This tag is applied to a method definition.</p>
+			<h4 class="dtH4">Example</h4>
+			<pre class="code"><SPAN class="lang">[C#]</SPAN>
+using System;
+
+/// comment for class
+public class EClass : Exception 
+{
+   // class definition ...
+}
+
+/// &lt;exception cref="System.Exception"&gt;Thrown when... .&lt;/exception&gt;
+class TestClass 
+{
+   public static void Main() 
+   {
+      try 
+      {
+      }
+      catch(EClass) 
+      {
+      }
+   }
+}</pre>
+			<h4 class="dtH4">See Also</h4>
+			<p><a href="tags.htm"> NDoc&nbsp;Tags</a></p>
+		</div>
+	</body>
+</html>

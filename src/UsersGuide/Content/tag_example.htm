@@ -1,0 +1,59 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<head>
+		<title>example</title>
+		<meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5">
+		<link href="css/ndoc.css" rel="stylesheet" name="ndocstyle" type="text/css">
+		<script src="script/ndoc.js"></script>
+	</head>
+	<body class="dtBODY" id="bodyID" onload="InitTitle()">
+		<div id="nstext">
+			<p>The &lt;example&gt; tag lets you specify an example of how to use a method or 
+				other library member.
+			</p>
+			<pre class="syntax">&lt;example&gt;<I>description</I>&lt;/example&gt;</pre>
+			<p>where:</p>
+			<dl>
+				<dt><I>description</I></dt>
+				<dd>
+					A description of the code sample.
+				</dd>
+			</dl>
+			<h4 class="dtH4">Applies To</h4>
+			<p>All types and members.</p>
+			<h4 class="dtH4">Remarks</h4>
+			<p>
+				Commonly, this tag is used with the <a href="tag_code.htm">&lt;code&gt;</a> tag.</p>
+			<h4 class="dtH4">Example</h4>
+			<pre class="code"><SPAN class="lang">[C#]</SPAN>
+/// text for class MyClass
+public class MyClass 
+{
+   /// &lt;summary&gt;
+   /// The GetZero method.
+   /// &lt;/summary&gt;
+   /// &lt;example&gt; This sample shows how to call the GetZero method.
+   /// &lt;code&gt;
+   ///   class MyClass 
+   ///   {
+   ///      public static int Main() 
+   ///      {
+   ///         return GetZero();
+   ///      }
+   ///   }
+   /// &lt;/code&gt;
+   /// &lt;/example&gt;
+   public static int GetZero() 
+   {
+      return 0;
+   }
+   /// text for Main
+   public static void Main () 
+   {
+   }
+}</pre>
+			<h4 class="dtH4">See Also</h4>
+			<p><a HREF="tags.htm"> NDoc&nbsp;Tags</a></p>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<head>
+		<title>summary</title>
+		<meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5">
+		<link href="css/ndoc.css" rel="stylesheet" name="ndocstyle" type="text/css">
+		<script src="script/ndoc.js"></script>
+	</head>
+	<body class="dtBODY" id="bodyID" onload="InitTitle()">
+		<div id="nstext">
+			<p>The &lt;summary&gt; tag is used to provide a short description of a type or 
+				member.
+			</p>
+			<pre class="syntax">&lt;summary&gt;<I>description</I>&lt;/summary&gt;</pre>
+			<p>where:</p>
+			<dl>
+				<dt><I>description</I></dt>
+				<dd>
+					A summary of the object.</dd>
+			</dl>
+			<h4 class="dtH4">Applies To</h4>
+			<p>All Types and Members.</p>
+			<h4 class="dtH4">Remarks</h4>
+			<p>Use <a HREF="vclrfremarks.htm">&lt;remarks&gt;</a> to add supplemental 
+				information to a type description.</p>
+			<p>The text for the &lt;summary&gt; tag is the only source of information about the 
+				type in IntelliSense, and is also displayed in the Object Browser and in the 
+				Code Comment Web Report</p>
+			<h4 class="dtH4">Example</h4>
+			<pre class="code"><SPAN class="lang">[C#]</SPAN>
+/// text for class MyClass
+public class MyClass
+{
+   /// &lt;summary&gt;MyMethod is a method in the MyClass class.
+   /// &lt;para&gt;Here's how you could make a second paragraph in a description. &lt;see cref="System.Console.WriteLine"/&gt; for information about output statements.&lt;/para&gt;
+   /// &lt;seealso cref="MyClass.Main"/&gt;
+   /// &lt;/summary&gt;
+   public static void MyMethod(int Int1)
+   {
+   }
+
+   /// text for Main
+   public static void Main ()
+   {
+   }
+}</pre>
+			<h4 class="dtH4">See Also</h4>
+			<p><a HREF="tags.htm"> NDoc&nbsp;Tags</a></p>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<head>
+		<title>permission</title>
+		<meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5">
+		<link href="css/ndoc.css" rel="stylesheet" name="ndocstyle" type="text/css" />
+		<script src="script/ndoc.js"></script>
+	</head>
+	<body class="dtBODY" id="bodyID" onload="InitTitle()">
+		<div id="nstext">
+			<pre class="syntax">&lt;permission cref="<I>member</I>"&gt;<I>description</I>&lt;/permission&gt;</pre>
+			<p>where:</p>
+			<dl>
+				<dt>cref = "<I>member</I>"</dt>
+				<dd>
+					A reference to a member or field that is available to be called from the 
+					current compilation environment. The compiler checks that the given code 
+					element exists and translates <I>member</I> to the canonical element name in 
+					the output XML.<I> member</I> must appear within double quotation marks (" ").</dd>
+				<dt><I>description</I></dt>
+				<dd>
+					A description of the access to the member.</dd>
+			</dl>
+			<h4 class="dtH4">Applies To</h4>
+			<p>All Members.</p>
+			<h4 class="dtH4">Remarks</h4>
+			<p>The &lt;permission&gt; tag lets you document the access of a member. The <B>System.Security.PermissionSet</B>
+				lets you specify access to a member.</p>
+			<h4 class="dtH4">Example</h4>
+			<pre class="code"><SPAN class="lang">[C#]</SPAN>
+using System;
+class TestClass
+{
+   /// &lt;permission cref="System.Security.PermissionSet"&gt;Everyone can access this method.&lt;/permission&gt;
+   public static void Test()
+   {
+   }
+   public static void Main()
+   {
+   }
+}</pre>
+			<h4 class="dtH4">See Also</h4>
+			<p><a href="tags.htm"> NDoc&nbsp;Tags</a></p>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<head>
+		<title>paramref</title>
+		<meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5">
+		<link href="css/ndoc.css" rel="stylesheet" name="ndocstyle" type="text/css">
+		<script src="script/ndoc.js"></script>
+	</head>
+	<body class="dtBODY" id="bodyID" onload="InitTitle()">
+		<div id="nstext">
+			<p>The &lt;paramref&gt; tag is used to indicate that a word is a parameter.</p>
+			<pre class="syntax">&lt;paramref name="<I>name</I>"/&gt;</pre>
+			<p>where:</p>
+			<dl>
+				<dt><I>name</I></dt>
+				<dd>
+					The name of the parameter to refer to. Enclose the name in double quotation 
+					marks (" ").</dd>
+			</dl>
+			<h4 class="dtH4">Applies To</h4>
+			<p>Can be used inline within any other markup.</p>
+			<h4 class="dtH4">Remarks</h4>
+			<h4 class="dtH4">Example</h4>
+			<pre class="code"><SPAN class="lang">[C#]</SPAN>
+/// text for class MyClass
+public class MyClass
+{
+   /// &lt;remarks&gt;MyMethod is a method in the MyClass class.  
+   /// The &lt;paramref name="Int1"/&gt; parameter takes a number.
+   /// &lt;/remarks&gt;
+   public static void MyMethod(int Int1)
+   {
+   }
+
+   /// text for Main
+   public static void Main ()
+   {
+   }
+}</pre>
+			<h4 class="dtH4">See Also</h4>
+			<p><a href="tags.htm"> NDoc&nbsp;Tags</a></p>
+		</div>
+	</body>
+</html>
