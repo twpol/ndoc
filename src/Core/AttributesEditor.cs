@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Drawing.Design;
 using System.Windows.Forms;
 
-namespace NDoc.Core
+namespace NDoc.Core.PropertyGridUI
 {
 	/// <summary>
 	/// Class which implements a custom UITypeEditor for attributes.
