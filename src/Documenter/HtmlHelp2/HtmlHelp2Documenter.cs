@@ -96,7 +96,7 @@ namespace NDoc.Documenter.HtmlHelp2
 			string outputDir = MyConfig.OutputDirectory;
 
 			//then get rid of all help 1 inputs
-			OnDocBuildingStep( 50, "Cleaning Html 1 intermediate files..." );
+			OnDocBuildingStep( 50, "Cleaning Html Help 1 intermediate files..." );
 			CleanCHMIntermediates();
 
 			//then convert the CHM to an HxC project
