@@ -12,9 +12,9 @@
 	</description>
 
 <!--
-	<release 
-		name="DOC.NET 2001-09-20" 
-		date="2001-09-20" 
+	<release
+		name="DOC.NET 2001-09-20"
+		date="2001-09-20"
 		link="http://sourceforge.net/project/showfiles.php?group_id=13899&amp;release_id=53788"
 		direct="http://prdownloads.sourceforge.net/xmarks/doc.2001-09-20.zip"
 	/>
@@ -45,13 +45,13 @@
 		web="http://manoli.net/"
 		email="jc@manoli.net"
 	/>
-    
+
 	<developer
 		id="keith"
 		sourceforge-id="r_keith_hill"
 		full-name="Keith Hill"
 		short-name="Keith"
-		email="keith_hill@agilent.com"
+		email="r_keith_hill@hotmail.com"
 	/>
 
 </ndoc>
