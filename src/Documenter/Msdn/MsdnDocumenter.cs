@@ -993,7 +993,7 @@ namespace NDoc.Documenter.Msdn
 
 			foreach (XmlNode parameterNode in parameterNodes)
 			{
-				paramList += (string)parameterNode.Attributes["type"].Value;
+				paramList += StripNamespace(parameterNode.Attributes["type"].Value);
 
 				if (nodeIndex < numberOfNodes)
 				{

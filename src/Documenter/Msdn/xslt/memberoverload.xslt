@@ -44,7 +44,13 @@
 			<body>
 				<xsl:call-template name="title-row">
 					<xsl:with-param name="type-name">
-						<xsl:value-of select="../@name" /><xsl:if test="local-name()!='constructor'">.<xsl:value-of select="@name" /></xsl:if>&#160;<xsl:value-of select="childType" />
+						<xsl:value-of select="../@name" />
+						<xsl:if test="local-name()!='constructor'">
+							<xsl:text>.</xsl:text>
+							<xsl:value-of select="@name" />
+						</xsl:if>
+						<xsl:text>&#160;</xsl:text>
+						<xsl:value-of select="childType" />
 					</xsl:with-param>
 				</xsl:call-template>
 				<div id="content">

@@ -362,15 +362,12 @@
 	<xsl:template name="get-param-list">
 		<xsl:text>(</xsl:text>
 		<xsl:for-each select="parameter">
-			<xsl:choose>
-				<xsl:when test="contains(@type, ../../@name)">
-					<xsl:value-of select="substring-after(@type, concat(../../@name, '.'))" />
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:value-of select="@type" />
-				</xsl:otherwise>
-			</xsl:choose>
-			<xsl:if test="position()!=last()">,</xsl:if>
+			<xsl:call-template name="strip-namespace">
+				<xsl:with-param name="name" select="@type" />
+			</xsl:call-template>
+			<xsl:if test="position()!=last()">
+				<xsl:text>, </xsl:text>
+			</xsl:if>
 		</xsl:for-each>
 		<xsl:text>)</xsl:text>
 	</xsl:template>
