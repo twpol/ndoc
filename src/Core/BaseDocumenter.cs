@@ -199,8 +199,15 @@ namespace NDoc.Core
 
 		private void Write(XmlWriter writer)
 		{
+			AssemblyName assemblyName = currentAssembly.GetName();
+
 			writer.WriteStartElement("assembly");
-			writer.WriteAttributeString("name", currentAssembly.GetName().Name);
+			writer.WriteAttributeString("name", assemblyName.Name);
+
+			if (MyConfig.IncludeAssemblyVersion)
+			{
+				writer.WriteAttributeString("version", assemblyName.Version.ToString());
+			}
 
 			foreach(Module module in currentAssembly.GetModules())
 			{

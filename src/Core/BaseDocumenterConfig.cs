@@ -23,12 +23,12 @@ using	System.Xml;
 
 namespace	NDoc.Core
 {
-	///	<summary>The base	documenter config	class.</summary>
+	///	<summary>The base documenter config class.</summary>
 	abstract public	class	BaseDocumenterConfig : IDocumenterConfig
 	{
 		private	string _Name;
 
-		///	<summary>Initializes a new instance	of the DocumenterConfig	class.</summary>
+		///	<summary>Initializes a new instance of the DocumenterConfig class.</summary>
 		public BaseDocumenterConfig(string name)
 		{
 			_Name	=	name;
@@ -43,6 +43,8 @@ namespace	NDoc.Core
 			DocumentProtected	=	true;
 			DocumentPrivates = false;
 			DocumentEmptyNamespaces	=	false;
+
+			IncludeAssemblyVersion = false;
 		}
 
 		private	Project	_Project;
@@ -163,7 +165,7 @@ namespace	NDoc.Core
 		///	generated	documentation.</remarks>
 		[
 			Category("Missing"),
-			Description("Turning this	flag on	will show	you	where	you	are	missing	summaries.")
+			Description("Turning this flag on will show you where you are missing summaries.")
 		]
 		public bool	ShowMissingSummaries
 		{
@@ -184,7 +186,7 @@ namespace	NDoc.Core
 		///	generated	documentation.</remarks>
 		[
 			Category("Missing"),
-			Description("Turning this	flag on	will show	you	where	you	are	missing	Remarks.")
+			Description("Turning this flag on will show you where you are missing Remarks.")
 		]
 		public bool	ShowMissingRemarks
 		{
@@ -205,7 +207,7 @@ namespace	NDoc.Core
 		///	generated	documentation.</remarks>
 		[
 			Category("Missing"),
-			Description("Turning this	flag on	will show	you	where	you	are	missing	Params.")
+			Description("Turning this flag on will show you where you are missing Params.")
 		]
 		public bool	ShowMissingParams
 		{
@@ -226,7 +228,7 @@ namespace	NDoc.Core
 		///	generated	documentation.</remarks>
 		[
 			Category("Missing"),
-			Description("Turning this	flag on	will show	you	where	you	are	missing	Returns.")
+			Description("Turning this flag on will show you where you are missing Returns.")
 		]
 		public bool	ShowMissingReturns
 		{
@@ -247,7 +249,7 @@ namespace	NDoc.Core
 		///	generated	documentation.</remarks>
 		[
 			Category("Missing"),
-			Description("Turning this	flag on	will show	you	where	you	are	missing	Values.")
+			Description("Turning this flag on will show you where you are missing Values.")
 		]
 		public bool	ShowMissingValues
 		{
@@ -265,7 +267,7 @@ namespace	NDoc.Core
 		///	<summary>Gets	or sets	the	DocumentInternals	property.</summary>
 		[
 			Category("Visibility"),
-			Description("Turn	this flag	on to	document internal	code.")
+			Description("Turn this flag on to document internal code.")
 		]
 		public bool	DocumentInternals
 		{
@@ -283,7 +285,7 @@ namespace	NDoc.Core
 		///	<summary>Gets	or sets	the	DocumentProtected	property.</summary>
 		[
 			Category("Visibility"),
-			Description("Turn	this flag	on to	document protected code.")
+			Description("Turn this flag on to document protected code.")
 		]
 		public bool	DocumentProtected
 		{
@@ -301,7 +303,7 @@ namespace	NDoc.Core
 		///	<summary>Gets	or sets	the	DocumentPrivates property.</summary>
 		[
 			Category("Visibility"),
-			Description("Turn	this flag	on to	document private code.")
+			Description("Turn this flag on to document private code.")
 		]
 		public bool	DocumentPrivates
 		{
@@ -319,7 +321,7 @@ namespace	NDoc.Core
 		///	<summary>Gets	or sets	the	DocumentPrivates property.</summary>
 		[
 			Category("Visibility"),
-			Description("Turn	this flag	on to	document empty namespaces.")
+			Description("Turn this flag on to document empty namespaces.")
 		]
 		public bool	DocumentEmptyNamespaces
 		{
@@ -328,6 +330,24 @@ namespace	NDoc.Core
 			set	
 			{	
 				_DocumentEmptyNamespaces = value;	
+				SetDirty();
+			}
+		}
+
+		bool _IncludeAssemblyVersion;
+
+		///	<summary>Gets	or sets	the	IncludeAssemblyVersion property.</summary>
+		[
+			Category("Extra Information"),
+			Description("Turn this flag on to include the assembly version number in the documentation.")
+		]
+		public bool	IncludeAssemblyVersion
+		{
+			get	{	return _IncludeAssemblyVersion; }
+
+			set	
+			{	
+				_IncludeAssemblyVersion = value;	
 				SetDirty();
 			}
 		}
