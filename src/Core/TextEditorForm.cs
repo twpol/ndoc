@@ -143,7 +143,9 @@ namespace NDoc.Core.PropertyGridUI
 			this.MaximizeBox = false;
 			this.Name = "TextEditorForm";
 			this.ShowInTaskbar = false;
+#if (!MONO) // not yet available in MWF
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
+#endif
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Text Editor";
 			this.TopMost = true;
@@ -154,16 +156,21 @@ namespace NDoc.Core.PropertyGridUI
 
 		private void textBoxEntry_DragOver(object sender, System.Windows.Forms.DragEventArgs e)
 		{
+#if (!MONO)
 			if (e.Data.GetDataPresent(DataFormats.Text) ||
 				e.Data.GetDataPresent(DataFormats.UnicodeText))
 				e.Effect = DragDropEffects.Copy | DragDropEffects.Move;
 
 			else if (e.Data.GetDataPresent(DataFormats.FileDrop))
 				e.Effect = DragDropEffects.Copy;
+#else
+            throw new NotImplementedException("System.Windows.Forms.DataFormats class is not implemented.");
+#endif
 		}
 
 		private void textBoxEntry_DragDrop(object sender, System.Windows.Forms.DragEventArgs e)
 		{
+#if (!MONO)
 			string text = String.Empty;
 
 			if (e.Data.GetDataPresent(DataFormats.Text))
@@ -196,6 +203,9 @@ namespace NDoc.Core.PropertyGridUI
 			}
 
 			this.Value = text;
+#else
+            throw new NotImplementedException("System.Windows.Forms.DataFormats class is not implemented.");
+#endif
 		}
 
 		private void textBoxEntry_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e)

@@ -103,7 +103,9 @@ namespace NDoc.Core.PropertyGridUI
 					}
 					AttributesToShow.Add(attributeToShow);
 					this.listAttributes.DataSource = AttributesToShow;
+#if (!MONO) // not yet available in MWF
 					this.listAttributes.DisplayMember = "Name";
+#endif
 				}
 			}
 			UpdateAttributes();
@@ -331,7 +333,9 @@ namespace NDoc.Core.PropertyGridUI
 		{
 			this.listAttributes.DataSource = null;
 			this.listAttributes.DataSource = AttributesToShow;
+#if (!MONO) // not yet available in MWF
 			this.listAttributes.DisplayMember = "Name";
+#endif
 			if (this.listAttributes.SelectedIndex >= 0)
 			{
 				this.Edit.Enabled = true;
