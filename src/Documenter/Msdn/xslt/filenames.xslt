@@ -151,41 +151,41 @@
             <xsl:with-param name="name" select="$cref-name" />
           </xsl:call-template>
         </xsl:variable>
-        <xsl:value-of select="concat('ms-help://MS.NETFrameworkSDK/cpref/html/frlrf', translate($cref-type, '.', ''), 'Class', $cref-member, 'Topic.htm')" />
+        <xsl:value-of select="concat('ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrf', translate($cref-type, '.', ''), 'Class', $cref-member, 'Topic.htm')" />
       </xsl:when>
     </xsl:choose>
   </xsl:template>
   <!-- -->
   <xsl:template name="get-filename-for-system-namespace">
     <xsl:param name="namespace-name" />
-    <!-- RTM Example: ms-help://MS.NETFrameworkSDK/cpref/html/frlrfSystemIO.htm -->
-    <xsl:value-of select="concat('ms-help://MS.NETFrameworkSDK/cpref/html/frlrf', translate($namespace-name, '.', ''), '.htm')" />
+    <!-- RTM Example: ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemIO.htm -->
+    <xsl:value-of select="concat('ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrf', translate($namespace-name, '.', ''), '.htm')" />
   </xsl:template>
   <!-- -->
   <xsl:template name="get-filename-for-system-type">
     <xsl:param name="type-name" />
-    <!-- RTM Example: ms-help://MS.NETFrameworkSDK/cpref/html/frlrfsystemobjectclasstopic.htm -->
-    <xsl:value-of select="concat('ms-help://MS.NETFrameworkSDK/cpref/html/frlrf', translate($type-name, '.[,]', ''), 'ClassTopic.htm')" />
+    <!-- RTM Example: ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfsystemobjectclasstopic.htm -->
+    <xsl:value-of select="concat('ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrf', translate($type-name, '.[,]', ''), 'ClassTopic.htm')" />
   </xsl:template>
   <!-- -->
   <xsl:template name="get-filename-for-system-property">
-    <!-- RTM Example: ms-help://MS.NETFrameworkSDK/cpref/html/frlrfsystemexceptionclassinnerexceptiontopic.htm -->
-    <xsl:value-of select="concat('ms-help://MS.NETFrameworkSDK/cpref/html/frlrf', translate(@declaringType, '.[,]', ''), 'Class', translate(@name, '.[,]', ''), 'Topic.htm')" />
+    <!-- RTM Example: ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfsystemexceptionclassinnerexceptiontopic.htm -->
+    <xsl:value-of select="concat('ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrf', translate(@declaringType, '.[,]', ''), 'Class', translate(@name, '.[,]', ''), 'Topic.htm')" />
   </xsl:template>
   <!-- -->
   <xsl:template name="get-filename-for-system-field">
-    <!-- RTM Example: ms-help://MS.NETFrameworkSDK/cpref/html/frlrfsystemresourcesresourcemanagerclassheaderversionnumbertopic.htm -->
-    <xsl:value-of select="concat('ms-help://MS.NETFrameworkSDK/cpref/html/frlrf', translate(@declaringType, '.[,]', ''), 'Class', translate(@name, '.[,]', ''), 'Topic.htm')" />
+    <!-- RTM Example: ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfsystemresourcesresourcemanagerclassheaderversionnumbertopic.htm -->
+    <xsl:value-of select="concat('ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrf', translate(@declaringType, '.[,]', ''), 'Class', translate(@name, '.[,]', ''), 'Topic.htm')" />
   </xsl:template>
   <!-- -->
   <xsl:template name="get-filename-for-system-method">
-    <!-- RTM Example: ms-help://MS.NETFrameworkSDK/cpref/html/frlrfsystemobjectclassequalstopic.htm -->
-    <xsl:value-of select="concat('ms-help://MS.NETFrameworkSDK/cpref/html/frlrf', translate(@declaringType, '.[,]', ''), 'Class', translate(@name, '.[,]', ''), 'Topic.htm')" />
+    <!-- RTM Example: ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfsystemobjectclassequalstopic.htm -->
+    <xsl:value-of select="concat('ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrf', translate(@declaringType, '.[,]', ''), 'Class', translate(@name, '.[,]', ''), 'Topic.htm')" />
   </xsl:template>
   <!-- -->
   <xsl:template name="get-filename-for-system-event">
-    <!-- RTM Example: ms-help://MS.NETFrameworkSDK/cpref/html/frlrfSystemWebUIDesignIWebFormsDocumentServiceClassLoadCompleteTopic.htm -->
-    <xsl:value-of select="concat('ms-help://MS.NETFrameworkSDK/cpref/html/frlrf', translate(@declaringType, '.[,]', ''), 'Class', translate(@name, '.[,]', ''), 'Topic.htm')" />
+    <!-- RTM Example: ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemWebUIDesignIWebFormsDocumentServiceClassLoadCompleteTopic.htm -->
+    <xsl:value-of select="concat('ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrf', translate(@declaringType, '.[,]', ''), 'Class', translate(@name, '.[,]', ''), 'Topic.htm')" />
   </xsl:template>
   <!-- -->
   <xsl:template name="get-filename-for-individual-member">

@@ -8,7 +8,7 @@ namespace NDoc.Documenter.Msdn
 	/// </summary>
 	public class MsdnXsltUtilities
 	{
-		const string baseURL = "ms-help://MS.NETFrameworkSDK/cpref/html/frlrf";
+		const string baseURL = "ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrf";
 		const string systemPrefix = "System.";
 
 		/// <summary>

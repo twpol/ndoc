@@ -23,7 +23,7 @@
 		(Did we really need the extra three letters?)</summary>
 	</doc:template>
 
-	<xsl:template match="para" mode="slashdoc" doc:group="block" doc:msdn="ms-help://MS.NETFrameworkSDK/csref/html/vclrfpara.htm">
+	<xsl:template match="para" mode="slashdoc" doc:group="block" doc:msdn="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrfpara.htm">
 		<p>
 			<xsl:apply-templates select="./node()" mode="slashdoc" />
 		</p>
@@ -52,7 +52,7 @@
 		<summary>Multiple lines of code.</summary>
 	</doc:template>
 
-	<xsl:template match="code" mode="slashdoc" doc:group="block" doc:msdn="ms-help://MS.NETFrameworkSDK/csref/html/vclrfcode.htm">
+	<xsl:template match="code" mode="slashdoc" doc:group="block" doc:msdn="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrfcode.htm">
 		<pre class="code">
 			<xsl:apply-templates mode="slashdoc" />
 		</pre>
@@ -77,7 +77,7 @@
 	</xsl:template>
 
 	<doc:template>
-		<summary>See <a href="ms-help://MS.NETFrameworkSDK/cpref/html/frlrfSystemXmlXmlDocumentClassLoadTopic.htm">XmlDocument.Load</a>
+		<summary>See <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemXmlXmlDocumentClassLoadTopic.htm">XmlDocument.Load</a>
 		for an example of a note.</summary>
 	</doc:template>
 
@@ -102,47 +102,47 @@
 		</blockquote>
 	</xsl:template>
 
-	<xsl:template match="list[@type='bullet']" mode="slashdoc" doc:group="block" doc:msdn="ms-help://MS.NETFrameworkSDK/csref/html/vclrflist.htm">
+	<xsl:template match="list[@type='bullet']" mode="slashdoc" doc:group="block" doc:msdn="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrflist.htm">
 		<ul type="disc">
 			<xsl:apply-templates select="item" mode="slashdoc" />
 		</ul>
 	</xsl:template>
 
-	<xsl:template match="list[@type='bullet']/item" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDK/csref/html/vclrflist.htm">
+	<xsl:template match="list[@type='bullet']/item" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrflist.htm">
 		<li>
 			<xsl:apply-templates select="./node()" mode="slashdoc" />
 		</li>
 	</xsl:template>
 
-	<xsl:template match="list[@type='bullet']/item/term" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDK/csref/html/vclrflist.htm">
+	<xsl:template match="list[@type='bullet']/item/term" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrflist.htm">
 		<b><xsl:apply-templates select="./node()" mode="slashdoc" /> - </b>
 	</xsl:template>
 
-	<xsl:template match="list[@type='bullet']/item/description" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDK/csref/html/vclrflist.htm">
+	<xsl:template match="list[@type='bullet']/item/description" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrflist.htm">
 		<xsl:apply-templates select="./node()" mode="slashdoc" />
 	</xsl:template>
 
-	<xsl:template match="list[@type='number']" mode="slashdoc" doc:group="block" doc:msdn="ms-help://MS.NETFrameworkSDK/csref/html/vclrflist.htm">
+	<xsl:template match="list[@type='number']" mode="slashdoc" doc:group="block" doc:msdn="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrflist.htm">
 		<ol>
 			<xsl:apply-templates select="item" mode="slashdoc" />
 		</ol>
 	</xsl:template>
 
-	<xsl:template match="list[@type='number']/item" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDK/csref/html/vclrflist.htm">
+	<xsl:template match="list[@type='number']/item" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrflist.htm">
 		<li>
 			<xsl:apply-templates select="./node()" mode="slashdoc" />
 		</li>
 	</xsl:template>
 
-	<xsl:template match="list[@type='number']/item/term" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDK/csref/html/vclrflist.htm">
+	<xsl:template match="list[@type='number']/item/term" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrflist.htm">
 		<b><xsl:apply-templates select="./node()" mode="slashdoc" /> - </b>
 	</xsl:template>
 
-	<xsl:template match="list[@type='number']/item/description" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDK/csref/html/vclrflist.htm">
+	<xsl:template match="list[@type='number']/item/description" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrflist.htm">
 		<xsl:apply-templates select="./node()" mode="slashdoc" />
 	</xsl:template>
 
-	<xsl:template match="list[@type='table']" mode="slashdoc" doc:group="block" doc:msdn="ms-help://MS.NETFrameworkSDK/csref/html/vclrflist.htm">
+	<xsl:template match="list[@type='table']" mode="slashdoc" doc:group="block" doc:msdn="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrflist.htm">
 		<div class="tablediv">
 			<table class="dtTABLE" cellspacing="0">
 				<xsl:apply-templates select="listheader" mode="slashdoc" />
@@ -151,37 +151,37 @@
 		</div>
 	</xsl:template>
 
-	<xsl:template match="list[@type='table']/listheader" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDK/csref/html/vclrflist.htm">
+	<xsl:template match="list[@type='table']/listheader" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrflist.htm">
 		<tr valign="top">
 			<xsl:apply-templates mode="slashdoc" />
 		</tr>
 	</xsl:template>
 
-	<xsl:template match="list[@type='table']/listheader/term" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDK/csref/html/vclrflist.htm">
+	<xsl:template match="list[@type='table']/listheader/term" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrflist.htm">
 		<th width="50%">
 			<xsl:apply-templates select="./node()" mode="slashdoc" />
 		</th>
 	</xsl:template>
 
-	<xsl:template match="list[@type='table']/listheader/description" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDK/csref/html/vclrflist.htm">
+	<xsl:template match="list[@type='table']/listheader/description" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrflist.htm">
 		<th width="50%">
 			<xsl:apply-templates select="./node()" mode="slashdoc" />
 		</th>
 	</xsl:template>
 
-	<xsl:template match="list[@type='table']/item" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDK/csref/html/vclrflist.htm">
+	<xsl:template match="list[@type='table']/item" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrflist.htm">
 		<tr valign="top">
 			<xsl:apply-templates mode="slashdoc" />
 		</tr>
 	</xsl:template>
 
-	<xsl:template match="list[@type='table']/item/term" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDK/csref/html/vclrflist.htm">
+	<xsl:template match="list[@type='table']/item/term" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrflist.htm">
 		<td>
 			<xsl:apply-templates select="./node()" mode="slashdoc" />
 		</td>
 	</xsl:template>
 
-	<xsl:template match="list[@type='table']/item/description" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDK/csref/html/vclrflist.htm">
+	<xsl:template match="list[@type='table']/item/description" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrflist.htm">
 		<td>
 			<xsl:apply-templates select="./node()" mode="slashdoc" />
 		</td>
@@ -191,19 +191,19 @@
 	 | Inline Tags
 	 +-->
 
-	<xsl:template match="c" mode="slashdoc" doc:group="inline" doc:msdn="ms-help://MS.NETFrameworkSDK/csref/html/vclrfc.htm">
+	<xsl:template match="c" mode="slashdoc" doc:group="inline" doc:msdn="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrfc.htm">
 		<code>
 			<xsl:apply-templates mode="slashdoc" />
 		</code>
 	</xsl:template>
 
-	<xsl:template match="paramref[@name]" mode="slashdoc" doc:group="inline" doc:msdn="ms-help://MS.NETFrameworkSDK/csref/html/vclrfparamref.htm">
+	<xsl:template match="paramref[@name]" mode="slashdoc" doc:group="inline" doc:msdn="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrfparamref.htm">
 		<i>
 			<xsl:value-of select="@name" />
 		</i>
 	</xsl:template>
 
-	<xsl:template match="see[@cref]" mode="slashdoc" doc:group="inline" doc:msdn="ms-help://MS.NETFrameworkSDK/csref/html/vclrfsee.htm">
+	<xsl:template match="see[@cref]" mode="slashdoc" doc:group="inline" doc:msdn="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrfsee.htm">
 		<xsl:call-template name="get-a-href">
 			<xsl:with-param name="cref" select="@cref" />
 		</xsl:call-template>
