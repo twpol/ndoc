@@ -210,6 +210,26 @@ namespace NDoc.Core
 				// Start the root element
 				writer.WriteStartElement("ndoc");
 
+				if (MyConfig.CopyrightText != string.Empty)
+				{
+					writer.WriteStartElement("copyright");
+					writer.WriteAttributeString("text", MyConfig.CopyrightText);
+
+					if (MyConfig.CopyrightHref != string.Empty)
+					{
+						if (!MyConfig.CopyrightHref.StartsWith("http:"))
+						{
+							writer.WriteAttributeString("href", Path.GetFileName(MyConfig.CopyrightHref));
+						}
+						else
+						{
+							writer.WriteAttributeString("href", MyConfig.CopyrightHref);
+						}
+					}
+
+					writer.WriteEndElement();
+				}
+
 				int step = 100 / project.AssemblySlashDocCount;
 				int i = 0;
 
@@ -224,7 +244,7 @@ namespace NDoc.Core
 					currentSlashDoc = new XmlDocument();
 					currentSlashDoc.Load(assemblySlashDoc.SlashDocFilename);
 
-					Write(writer);
+					WriteAssembly(writer);
 
 					i++;
 				}
@@ -479,29 +499,9 @@ namespace NDoc.Core
 				(field.IsPrivate && MyConfig.DocumentPrivates));
 		}
 
-		private void Write(XmlWriter writer)
+		private void WriteAssembly(XmlWriter writer)
 		{
 			AssemblyName assemblyName = currentAssembly.GetName();
-
-			if (MyConfig.CopyrightText != string.Empty)
-			{
-				writer.WriteStartElement("copyright");
-				writer.WriteAttributeString("text", MyConfig.CopyrightText);
-
-				if (MyConfig.CopyrightHref != string.Empty)
-				{
-					if (!MyConfig.CopyrightHref.StartsWith("http:"))
-					{
-						writer.WriteAttributeString("href", Path.GetFileName(MyConfig.CopyrightHref));
-					}
-					else
-					{
-						writer.WriteAttributeString("href", MyConfig.CopyrightHref);
-					}
-				}
-
-				writer.WriteEndElement();
-			}
 
 			writer.WriteStartElement("assembly");
 			writer.WriteAttributeString("name", assemblyName.Name);
