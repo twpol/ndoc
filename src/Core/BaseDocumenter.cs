@@ -863,9 +863,7 @@ namespace NDoc.Core
 						if (namespaceSummary != null && namespaceSummary.Length > 0)
 						{
 							WriteStartDocumentation(myWriter);
-							myWriter.WriteStartElement("summary");
-							myWriter.WriteRaw(namespaceSummary);
-							myWriter.WriteEndElement();
+							myWriter.WriteElementString("summary",namespaceSummary);
 							WriteEndDocumentation(myWriter);
 						}
 						else if (MyConfig.ShowMissingSummaries)
@@ -1247,9 +1245,7 @@ namespace NDoc.Core
 
 				if (attribute.GetType().FullName=="System.ObsoleteAttribute") 
 				{
-					writer.WriteStartElement("obsolete");
-					writer.WriteRaw( ((ObsoleteAttribute)attribute).Message );
-					writer.WriteEndElement();
+					writer.WriteElementString("obsolete",((ObsoleteAttribute)attribute).Message);
 				}
 			}
 		}
