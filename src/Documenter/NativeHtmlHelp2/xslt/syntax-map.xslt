@@ -682,6 +682,29 @@ by a type, but you cannot define your own.</xsl:when>
 	</xsl:template>
 
 
+	<xsl:template match="@* | node() | text()" mode="attribute-open"/>
+	<xsl:template match="@* | node() | text()" mode="attribute-open">
+		<xsl:param name="lang"/>
+		
+		<xsl:choose>
+			<xsl:when test="$lang='Visual Basic'">&lt;</xsl:when>
+			<xsl:when test="$lang='C#'">[</xsl:when>
+			<xsl:when test="$lang='C++'">[</xsl:when>
+			<xsl:when test="$lang='JScript'">&#160;&#160;&#160;</xsl:when>
+		</xsl:choose>	
+	</xsl:template>
+
+	<xsl:template match="@* | node() | text()" mode="attribute-close"/>
+	<xsl:template match="@* | node() | text()" mode="attribute-close">
+		<xsl:param name="lang"/>
+		
+		<xsl:choose>
+			<xsl:when test="$lang='Visual Basic'">&gt;</xsl:when>
+			<xsl:when test="$lang='C#'">]</xsl:when>
+			<xsl:when test="$lang='C++'">]</xsl:when>
+		</xsl:choose>	
+	</xsl:template>
+	
 	<xsl:template name="lang-type">
 		<xsl:param name="runtime-type" />
 		<xsl:param name="lang"/>

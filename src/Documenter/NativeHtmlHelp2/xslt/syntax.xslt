@@ -21,7 +21,12 @@
 		
 		<SPAN class="lang">[<xsl:value-of select="$lang"/>]<xsl:text>
 </xsl:text></SPAN>
-		<xsl:call-template name="attributes"/>	
+		<!-- JScript declares attributes after the visibility -->
+		<xsl:if test="$lang != 'JScript'">
+			<xsl:call-template name="attributes">
+				<xsl:with-param name="lang" select="$lang"/>
+			</xsl:call-template>
+		</xsl:if>
 	</xsl:template>	
 	<!-- -->
 
@@ -70,6 +75,11 @@
 					<xsl:apply-templates select="." mode="access">
 						<xsl:with-param name="lang" select="$lang"/>
 					</xsl:apply-templates>
+					<xsl:if test="$lang = 'JScript'">
+						<xsl:call-template name="attributes">
+							<xsl:with-param name="lang" select="$lang"/>
+						</xsl:call-template>
+					</xsl:if>					
 					<xsl:apply-templates select="." mode="gc-type">
 						<xsl:with-param name="lang" select="$lang"/>
 					</xsl:apply-templates>
@@ -263,7 +273,7 @@
 					<xsl:if test="(local-name()!='constructor') or (@contract!='Static')">
 						<xsl:apply-templates select="." mode="access">
 							<xsl:with-param name="lang" select="$lang"/>
-						</xsl:apply-templates>
+						</xsl:apply-templates>						
 					</xsl:if>
 				</xsl:when>
 				<xsl:otherwise>
@@ -271,6 +281,11 @@
 						<xsl:apply-templates select="." mode="access">
 							<xsl:with-param name="lang" select="$lang"/>
 						</xsl:apply-templates>
+						<xsl:if test="$lang = 'JScript'">
+							<xsl:call-template name="attributes">
+								<xsl:with-param name="lang" select="$lang"/>
+							</xsl:call-template>
+						</xsl:if>							
 					</xsl:if>
 					<xsl:if test="@contract and @contract!='Normal' and @contract!='Final'">
 						<xsl:apply-templates select="." mode="contract">
@@ -411,6 +426,11 @@
 			<xsl:apply-templates select="." mode="access">
 				<xsl:with-param name="lang" select="$lang"/>
 			</xsl:apply-templates>
+			<xsl:if test="$lang = 'JScript'">
+				<xsl:call-template name="attributes">
+					<xsl:with-param name="lang" select="$lang"/>
+				</xsl:call-template>
+			</xsl:if>				
 		</xsl:if>
 		
 		<xsl:if test="@contract='Static'">
@@ -476,7 +496,11 @@
 					<xsl:with-param name="lang" select="$lang"/>
 				</xsl:apply-templates>
 			</xsl:if>
-			
+			<xsl:if test="$lang = 'JScript'">
+				<xsl:call-template name="attributes">
+					<xsl:with-param name="lang" select="$lang"/>
+				</xsl:call-template>
+			</xsl:if>				
 			<xsl:apply-templates select="." mode="contract">
 				<xsl:with-param name="lang" select="$lang"/>
 			</xsl:apply-templates>
@@ -806,11 +830,13 @@
 	<!-- -->
 	<!-- ATTRIBUTES -->
 	<xsl:template name="attributes">
+		<xsl:param name="lang"/>
 		<xsl:if test="$ndoc-document-attributes">
 			<xsl:if test="attribute">
 				<xsl:for-each select="attribute">
 					<div class="attribute"><xsl:call-template name="attribute">
 						<xsl:with-param name="attname" select="@name" />
+						<xsl:with-param name="lang" select="$lang"/>
 					</xsl:call-template></div>
 				</xsl:for-each>
 			</xsl:if>
@@ -819,8 +845,11 @@
 	<!-- -->
 	<xsl:template name="attribute">
 		<xsl:param name="attname" />
+		<xsl:param name="lang"/>
 		<xsl:if test="user:isAttributeWanted($ndoc-documented-attributes, @name)">			
-			<xsl:text>[</xsl:text>
+			<xsl:apply-templates select="." mode="attribute-open">
+				<xsl:with-param name="lang" select="$lang"/>
+			</xsl:apply-templates>
 			<xsl:call-template name="strip-namespace-and-attribute">
 				<xsl:with-param name="name" select="@name" />
 			</xsl:call-template>
@@ -837,7 +866,9 @@
 				</xsl:for-each>
 				<xsl:text>)</xsl:text>
 			</xsl:if>
-			<xsl:text>]</xsl:text>
+			<xsl:apply-templates select="." mode="attribute-close">
+				<xsl:with-param name="lang" select="$lang"/>
+			</xsl:apply-templates>
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
