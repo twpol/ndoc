@@ -319,85 +319,93 @@ namespace NDoc.Core
 		{
 			Type[] types = module.GetTypes();
 			StringCollection namespaceNames = GetNamespaceNames(types);
-			string ourNamespaceName;
 
 			foreach (string namespaceName in namespaceNames)
 			{
-				Trace.WriteLine(string.Format("Writing namespace {0}...", namespaceName));
-
-				MemoryStream xmlMemoryStream = null;
-				XmlWriter tempWriter = writer;
-
-				// If we don't want empty namespaces, we need to write the XML to a temporary
-				// writer, because we'll only know if its empty once the WriteXxx methods
-				// have been called.
-
-				if (!MyConfig.DocumentEmptyNamespaces)
-				{
-					xmlMemoryStream = new MemoryStream();
-					tempWriter = new XmlTextWriter(xmlMemoryStream, System.Text.Encoding.UTF8);
-				}
-
-				tempWriter.WriteStartElement("namespace");
+				string ourNamespaceName;
 
 				if (namespaceName == null)
 				{
-					tempWriter.WriteAttributeString("name", "(global)");
 					ourNamespaceName = "(global)";
 				}
 				else
 				{
-					tempWriter.WriteAttributeString("name", namespaceName);
 					ourNamespaceName = namespaceName;
 				}
 
 				string namespaceSummary = _Project.GetNamespaceSummary(ourNamespaceName);
 
-				if (namespaceSummary != null && namespaceSummary.Length > 0)
+				if (MyConfig.SkipNamespacesWithoutSummaries && 
+					(namespaceSummary == null || namespaceSummary.Length == 0))
 				{
-					WriteStartDocumentation(tempWriter);
-					tempWriter.WriteStartElement("summary");
-					tempWriter.WriteRaw(namespaceSummary);
-					tempWriter.WriteEndElement();
-					WriteEndDocumentation(tempWriter);
+					Trace.WriteLine(string.Format("Skipping namespace {0}...", namespaceName));
 				}
-				else if (MyConfig.ShowMissingSummaries)
-				{
-					WriteStartDocumentation(tempWriter);
-					WriteMissingDocumentation(tempWriter, "summary", null, "Missing <summary> Documentation for " + namespaceName);
-					WriteEndDocumentation(tempWriter);
-				}
+				else
+				{					
+					Trace.WriteLine(string.Format("Writing namespace {0}...", namespaceName));
 
-				int nbClasses = WriteClasses(tempWriter, types, namespaceName);
-				Trace.WriteLine(string.Format("Wrote {0} classes.", nbClasses));
+					MemoryStream xmlMemoryStream = null;
+					XmlWriter tempWriter = writer;
 
-				int nbInterfaces = WriteInterfaces(tempWriter, types, namespaceName);
-				Trace.WriteLine(string.Format("Wrote {0} interfaces.", nbInterfaces));
+					// If we don't want empty namespaces, we need to write the XML to a temporary
+					// writer, because we'll only know if its empty once the WriteXxx methods
+					// have been called.
 
-				int nbStructures = WriteStructures(tempWriter, types, namespaceName);
-				Trace.WriteLine(string.Format("Wrote {0} structures.", nbStructures));
-
-				int nbDelegates = WriteDelegates(tempWriter, types, namespaceName);
-				Trace.WriteLine(string.Format("Wrote {0} delegates.", nbDelegates));
-
-				int nbEnums = WriteEnumerations(tempWriter, types, namespaceName);
-				Trace.WriteLine(string.Format("Wrote {0} enumerations.", nbEnums));
-
-				tempWriter.WriteEndElement();
-
-				if (!MyConfig.DocumentEmptyNamespaces)
-				{
-					tempWriter.Close();
-
-					if (nbClasses == 0 && nbInterfaces == 0 && nbStructures == 0 &&
-						nbDelegates == 0 && nbEnums == 0)
+					if (!MyConfig.DocumentEmptyNamespaces)
 					{
-						Trace.WriteLine(string.Format("Discarding namespace {0} because it does not contain any documented types.", namespaceName));
+						xmlMemoryStream = new MemoryStream();
+						tempWriter = new XmlTextWriter(xmlMemoryStream, System.Text.Encoding.UTF8);
 					}
-					else
+
+					tempWriter.WriteStartElement("namespace");
+					tempWriter.WriteAttributeString("name", ourNamespaceName);
+
+					if (namespaceSummary != null && namespaceSummary.Length > 0)
 					{
-						string rawXml = System.Text.Encoding.UTF8.GetString( xmlMemoryStream.ToArray() );
-						writer.WriteRaw( rawXml.Substring(1) );
+						WriteStartDocumentation(tempWriter);
+						tempWriter.WriteStartElement("summary");
+						tempWriter.WriteRaw(namespaceSummary);
+						tempWriter.WriteEndElement();
+						WriteEndDocumentation(tempWriter);
+					}
+					else if (MyConfig.ShowMissingSummaries)
+					{
+						WriteStartDocumentation(tempWriter);
+						WriteMissingDocumentation(tempWriter, "summary", null, "Missing <summary> Documentation for " + namespaceName);
+						WriteEndDocumentation(tempWriter);
+					}
+
+					int nbClasses = WriteClasses(tempWriter, types, namespaceName);
+					Trace.WriteLine(string.Format("Wrote {0} classes.", nbClasses));
+
+					int nbInterfaces = WriteInterfaces(tempWriter, types, namespaceName);
+					Trace.WriteLine(string.Format("Wrote {0} interfaces.", nbInterfaces));
+
+					int nbStructures = WriteStructures(tempWriter, types, namespaceName);
+					Trace.WriteLine(string.Format("Wrote {0} structures.", nbStructures));
+
+					int nbDelegates = WriteDelegates(tempWriter, types, namespaceName);
+					Trace.WriteLine(string.Format("Wrote {0} delegates.", nbDelegates));
+
+					int nbEnums = WriteEnumerations(tempWriter, types, namespaceName);
+					Trace.WriteLine(string.Format("Wrote {0} enumerations.", nbEnums));
+
+					tempWriter.WriteEndElement();
+
+					if (!MyConfig.DocumentEmptyNamespaces)
+					{
+						tempWriter.Close();
+
+						if (nbClasses == 0 && nbInterfaces == 0 && nbStructures == 0 &&
+							nbDelegates == 0 && nbEnums == 0)
+						{
+							Trace.WriteLine(string.Format("Discarding namespace {0} because it does not contain any documented types.", namespaceName));
+						}
+						else
+						{
+							string rawXml = System.Text.Encoding.UTF8.GetString( xmlMemoryStream.ToArray() );
+							writer.WriteRaw( rawXml.Substring(1) );
+						}
 					}
 				}
 			}
