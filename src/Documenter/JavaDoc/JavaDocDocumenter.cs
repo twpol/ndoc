@@ -20,7 +20,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Xml;
 using System.Xml.Xsl;
-
+using System.Reflection;
 using NDoc.Core;
 
 namespace NDoc.Documenter.JavaDoc

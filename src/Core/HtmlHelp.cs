@@ -20,6 +20,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Xml;
 using System.Collections;
+using System.Reflection;
 
 namespace NDoc.Core
 {
