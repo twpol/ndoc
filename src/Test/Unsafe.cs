@@ -13,11 +13,14 @@ namespace NDoc.Test.Unsafe
 	/// </summary>
 	public interface IUnsafe
 	{
+// Bug filed #55318
+#if (!MONO) 
 		/// <summary>
 		/// Return a pointer to an Int32
 		/// </summary>
 		/// <returns>The pointer</returns>
 		Int32* GetIntPointer();
+#endif
 	}
 
 	/// <summary>

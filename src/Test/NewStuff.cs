@@ -184,12 +184,11 @@ namespace NDoc.Test.NewStuff
 	/// </summary>
 	public class NewDerived : NewBase, IInterfaceC, IInterfaceD
 	{
-#if !MONO //mono does not like this:
 		/// <summary>no comment</summary>
 		new public class NewClass
 		{
 		}
-#endif
+
 		/// <summary>This indexer is new</summary>
 		new public int this[int n]
 		{
