@@ -69,7 +69,7 @@ namespace NDoc.Core
 			if (false == FindAssemblySlashDoc(assemblySlashDoc))
 			{
 				_AssemblySlashDocs.Add(assemblySlashDoc);
-                IsDirty = true;
+				IsDirty = true;
 			}
 		}
 
@@ -230,7 +230,7 @@ namespace NDoc.Core
 			return documenters;
 		}
 
-		/// <summary>Reads an XDP file.</summary>
+		/// <summary>Reads an NDoc project file.</summary>
 		public void Read(string filename)
 		{
 			Clear();
@@ -245,7 +245,7 @@ namespace NDoc.Core
 				reader.MoveToContent();
 				reader.ReadStartElement("project");
 
-				while (reader.Read())
+				while (!reader.EOF)
 				{
 					if (reader.NodeType == XmlNodeType.Element)
 					{
@@ -260,13 +260,20 @@ namespace NDoc.Core
 							case "documenters":
 								ReadDocumenters(reader);
 								break;
+							default:
+								reader.Read();
+								break;
 						}
+					}
+					else
+					{
+						reader.Read();
 					}
 				}
 			}
 			catch (Exception ex)
 			{
-				throw new DocumenterException("Error reading in project file "
+				throw new DocumenterException("Error reading in project file " 
 					+ filename  + ".\n" + ex.Message, ex);
 
 				// Set all the documenters to a default state since unable to load them.
@@ -284,7 +291,7 @@ namespace NDoc.Core
 
 		private void ReadAssemblySlashDocs(XmlReader reader)
 		{
-			while (reader.Read() && !(reader.NodeType == XmlNodeType.EndElement && reader.Name == "assemblies"))
+			while (!reader.EOF && !(reader.NodeType == XmlNodeType.EndElement && reader.Name == "assemblies"))
 			{
 				if (reader.NodeType == XmlNodeType.Element && reader.Name == "assembly")
 				{
@@ -293,25 +300,32 @@ namespace NDoc.Core
 					assemblySlashDoc.SlashDocFilename = reader["documentation"];
 					AssemblySlashDocs.Add(assemblySlashDoc);
 				}
+				reader.Read();
 			}
 		}
 
 		private void ReadNamespaceSummaries(XmlReader reader)
 		{
-			while (reader.Read() && !(reader.NodeType == XmlNodeType.EndElement && reader.Name == "namespaces"))
+			while (!reader.EOF && !(reader.NodeType == XmlNodeType.EndElement && reader.Name == "namespaces"))
 			{
 				if (reader.NodeType == XmlNodeType.Element && reader.Name == "namespace")
 				{
 					string name = reader["name"];
 					string summary = reader.ReadInnerXml();
 					NamespaceSummaries[name] = summary;
+
+					// Reader cursor already moved to next node.
+				}
+				else
+				{
+					reader.Read();
 				}
 			}
 		}
 
 		private void ReadDocumenters(XmlReader reader)
 		{
-			while (reader.Read() && !(reader.NodeType == XmlNodeType.EndElement && reader.Name == "documenters"))
+			while (!reader.EOF && !(reader.NodeType == XmlNodeType.EndElement && reader.Name == "documenters"))
 			{
 				if (reader.NodeType == XmlNodeType.Element && reader.Name == "documenter")
 				{
@@ -320,9 +334,11 @@ namespace NDoc.Core
 
 					if (documenter != null)
 					{
+						reader.Read(); // Advance to next node.
 						documenter.Config.Read(reader);
 					}
 				}
+				reader.Read();
 			}
 		}
 

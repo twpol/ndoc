@@ -1,5 +1,5 @@
 // BaseDocumenterConfig.cs - base XML documenter config class
-// Copyright (C) 2001  Kral Ferch, Jason Diamond
+// Copyright (C) 2001 Kral Ferch, Jason Diamond
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -8,12 +8,12 @@
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
 using System;
 using System.Collections;
@@ -139,7 +139,7 @@ namespace NDoc.Core
 			Project project = _Project;
 			_Project = null;
 
-			while (reader.Read() && !(reader.NodeType == XmlNodeType.EndElement && reader.Name == "documenter"))
+			while(!reader.EOF && !(reader.NodeType == XmlNodeType.EndElement && reader.Name == "documenter"))
 			{
 				if (reader.NodeType == XmlNodeType.Element && reader.Name == "property")
 				{
@@ -155,6 +155,7 @@ namespace NDoc.Core
 						property.SetValue(this, value2, null);
 					}
 				}
+				reader.Read(); // Advance.
 			}
 
 			// Restore the saved project.
@@ -164,7 +165,7 @@ namespace NDoc.Core
 		bool _ShowMissingSummaries;
 
 		/// <summary>Gets or sets the ShowMissingSummaries property.</summary>
-		/// <remarks>If this is true, all members without /doc summary 
+		/// <remarks>If this is true, all members without /doc summary
 		/// comments will contain the phrase "Missing Documentation" in the
 		/// generated documentation.</remarks>
 		[
@@ -175,9 +176,9 @@ namespace NDoc.Core
 		{
 			get { return _ShowMissingSummaries; }
 
-			set 
+			set
 			{
-				_ShowMissingSummaries = value; 
+				_ShowMissingSummaries = value;
 				SetDirty();
 			}
 		}
@@ -185,7 +186,7 @@ namespace NDoc.Core
 		bool _ShowMissingRemarks;
 
 		/// <summary>Gets or sets the ShowMissingRemarks property.</summary>
-		/// <remarks>If this is true, all members without /doc summary 
+		/// <remarks>If this is true, all members without /doc summary
 		/// comments will contain the phrase "Missing Documentation" in the
 		/// generated documentation.</remarks>
 		[
@@ -198,7 +199,7 @@ namespace NDoc.Core
 
 			set
 			{
-				_ShowMissingRemarks = value; 
+				_ShowMissingRemarks = value;
 				SetDirty();
 			}
 		}
@@ -206,8 +207,8 @@ namespace NDoc.Core
 		bool _ShowMissingParams;
 
 		/// <summary>Gets or sets the ShowMissingParams property.</summary>
-		/// <remarks>If this is true, all members without /doc summary 
-		/// comments will contain the phrase "Missing Documentation" in the 
+		/// <remarks>If this is true, all members without /doc summary
+		/// comments will contain the phrase "Missing Documentation" in the
 		/// generated documentation.</remarks>
 		[
 		Category("Show Missing Documentation"),
@@ -248,7 +249,7 @@ namespace NDoc.Core
 		bool _ShowMissingValues;
 
 		/// <summary>Gets or sets the ShowMissingValues property.</summary>
-		/// <remarks>If this is true, all members without /doc summary 
+		/// <remarks>If this is true, all members without /doc summary
 		/// comments will contain the phrase "Missing Documentation" in the
 		/// generated documentation.</remarks>
 		[
@@ -369,7 +370,7 @@ namespace NDoc.Core
 
 			set
 			{
-				_CopyrightText = value; 
+				_CopyrightText = value;
 				SetDirty();
 			}
 		}
@@ -392,6 +393,7 @@ namespace NDoc.Core
 			}
 		}
 
+
 		string _ReferencesPath;
 
 		/// <summary>Gets or sets the base directory used to resolve directory and assembly references.</summary>
@@ -410,7 +412,6 @@ namespace NDoc.Core
 				SetDirty();
 			}
 		}
-
 		bool _SkipNamespacesWithoutSummaries;
 
 		/// <summary>Gets or sets the SkipNamespacesWithoutSummaries property.</summary>
