@@ -128,6 +128,10 @@
 					<param name="Name" value="threadsafety">
 					<param name="Local" value="Content\tag_threadsafety.htm">
 					</OBJECT>
+				<LI> <OBJECT type="text/sitemap">
+					<param name="Name" value="value">
+					<param name="Local" value="Content\tag_value.htm">
+					</OBJECT>
 			</UL>
 			<LI> <OBJECT type="text/sitemap">
 				<param name="Name" value="Tag Usage">
