@@ -357,15 +357,16 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="overloads-summary-section">
+		<xsl:variable name="memberName" select="@name" />
 		<xsl:choose>
-			<xsl:when test="documentation/overloads/summary">
+			<xsl:when test="parent::node()/*[@name=$memberName]/documentation/overloads/summary">
 				<xsl:call-template name="output-paragraph">
-					<xsl:with-param name="nodes" select="(documentation/overloads/summary)[1]/node()" />
+					<xsl:with-param name="nodes" select="(parent::node()/*[@name=$memberName]/documentation/overloads/summary)[1]/node()" />
 				</xsl:call-template>
 			</xsl:when>
-			<xsl:when test="documentation/overloads">
+			<xsl:when test="parent::node()/*[@name=$memberName]/documentation/overloads">
 				<xsl:call-template name="output-paragraph">
-					<xsl:with-param name="nodes" select="(documentation/overloads)[1]/node()" />
+					<xsl:with-param name="nodes" select="(parent::node()/*[@name=$memberName]/documentation/overloads)[1]/node()" />
 				</xsl:call-template>
 			</xsl:when>
 			<xsl:otherwise>
@@ -376,12 +377,13 @@
 	<!-- -->
 	<xsl:template name="overloads-summary-with-no-paragraph">
 		<xsl:param name="overloads" select="." />
+		<xsl:variable name="memberName" select="@name" />
 		<xsl:choose>
-			<xsl:when test="$overloads/documentation/overloads/summary">
-				<xsl:apply-templates select="($overloads/documentation/overloads/summary)[1]/node()" mode="no-para" />
+			<xsl:when test="$overloads/../*[@name=$memberName]/documentation/overloads/summary">
+				<xsl:apply-templates select="($overloads/../*[@name=$memberName]/documentation/overloads/summary)[1]/node()" mode="no-para" />
 			</xsl:when>
-			<xsl:when test="$overloads/documentation/overloads">
-				<xsl:apply-templates select="($overloads/documentation/overloads)[1]/node()" mode="no-para" />
+			<xsl:when test="$overloads/../*[@name=$memberName]/documentation/overloads">
+				<xsl:apply-templates select="($overloads/../*[@name=$memberName]/documentation/overloads)[1]/node()" mode="no-para" />
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:call-template name="summary-with-no-paragraph">
