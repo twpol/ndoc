@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	xmlns:NUtil="urn:NDocUtil" exclude-result-prefixes="NUtil">
+	xmlns:NUtil="urn:NDocUtil"
+	xmlns:NHtmlProvider="urn:NDocExternalHtml"
+	exclude-result-prefixes="NUtil NHtmlProvider" >
 	<!-- -->
 	<xsl:include href="filenames.xslt" />
 	<xsl:include href="syntax.xslt" />
@@ -684,39 +686,62 @@
 	<xsl:template name="title-row">
 		<xsl:param name="type-name" />
 		<div id="nsbanner">
-			<div id="bannerrow1">
-				<table class="bannerparthead" cellspacing="0"><tr id="hdr">
-					<td class="runninghead">
-					<xsl:value-of select="$ndoc-title" />
-					</td>
-					<td class="product">
-					</td>
-				</tr></table>
-			</div>
-			<div id="TitleRow">
-				<h1 class="dtH1">
-					<xsl:value-of select="$type-name" />
-				</h1>
-			</div>
+			<xsl:variable name="headerHtml" select="NHtmlProvider:GetHeaderHtml(string($type-name))" />
+			<xsl:choose>
+				<xsl:when test="$headerHtml=''">
+					<div id="bannerrow1">
+						<table class="bannerparthead" cellspacing="0"><tr id="hdr">
+							<td class="runninghead">
+							<xsl:value-of select="$ndoc-title" />
+							</td>
+							<td class="product">
+							</td>
+						</tr></table>
+					</div>
+					<div id="TitleRow">
+						<h1 class="dtH1">
+							<xsl:value-of select="$type-name" />
+						</h1>
+					</div>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="$headerHtml" disable-output-escaping="yes" />
+				</xsl:otherwise>
+			</xsl:choose>
 		</div>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="footer-row">
+		<xsl:param name="type-name" />
+		<xsl:variable name="assembly-name">
+			<xsl:value-of select="ancestor-or-self::assembly/./@name" />
+		</xsl:variable>
+		<xsl:variable name="assembly-version">
+			<xsl:value-of select="ancestor-or-self::assembly/./@version" />
+		</xsl:variable>
+		<xsl:variable name="footerHtml" select="NHtmlProvider:GetFooterHtml(string($assembly-name), string($assembly-version), string($type-name))" />
 		<xsl:variable name="copyright-rtf">
 			<xsl:call-template name="copyright-notice" />
 		</xsl:variable>
 		<xsl:variable name="version-rtf">
 			<xsl:call-template name="generated-from-assembly-version" />
 		</xsl:variable>
-		<xsl:if test="string($copyright-rtf) or string($version-rtf)">
+		<xsl:if test="string($copyright-rtf) or string($version-rtf) or string($footerHtml)">
 			<hr />
 			<div id="footer">
-				<p>
-					<xsl:copy-of select="$copyright-rtf" />
-				</p>
-				<p>
-					<xsl:copy-of select="$version-rtf" />
-				</p>
+				<xsl:choose>
+					<xsl:when test="$footerHtml=''">
+						<p>
+							<xsl:copy-of select="$copyright-rtf" />
+						</p>
+						<p>
+							<xsl:copy-of select="$version-rtf" />
+						</p>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="$footerHtml" disable-output-escaping="yes" />
+					</xsl:otherwise>
+				</xsl:choose>
 			</div>
 		</xsl:if>
 	</xsl:template>
