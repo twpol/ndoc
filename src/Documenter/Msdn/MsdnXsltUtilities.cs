@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Specialized;
+using System.Globalization;
+using MSHelpServices;
 
 namespace NDoc.Documenter.Msdn
 {
@@ -8,8 +10,10 @@ namespace NDoc.Documenter.Msdn
 	/// </summary>
 	public class MsdnXsltUtilities
 	{
-		private const string sdkDoc10BaseUrl = "ms-help://MS.NETFrameworkSDK/cpref/html/frlrf";
-		private const string sdkDoc11BaseUrl = "ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrf";
+		private const string sdkDoc10BaseNamespace = "MS.NETFrameworkSDK";
+		private const string sdkDoc11BaseNamespace = "MS.NETFrameworkSDKv1.1";
+		private const string helpURL = "ms-help://";
+		private const string sdkRoot = "/cpref/html/frlrf";
 		private const string sdkDocPageExt = ".htm";
 		private const string msdnOnlineSdkBaseUrl = "http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrf";
 		private const string msdnOnlineSdkPageExt = ".asp";
@@ -39,11 +43,11 @@ namespace NDoc.Documenter.Msdn
 			switch (linkToSdkDocVersion)
 			{
 				case SdkDocVersion.SDK_v1_0:
-					sdkDocBaseUrl = sdkDoc10BaseUrl;
+					sdkDocBaseUrl = GetLocalizedFrameworkURL(sdkDoc10BaseNamespace);
 					sdkDocExt = sdkDocPageExt;
 					break;
 				case SdkDocVersion.SDK_v1_1:
-					sdkDocBaseUrl = sdkDoc11BaseUrl;
+					sdkDocBaseUrl = GetLocalizedFrameworkURL(sdkDoc11BaseNamespace);
 					sdkDocExt = sdkDocPageExt;
 					break;
 				case SdkDocVersion.MsdnOnline:
@@ -185,6 +189,30 @@ namespace NDoc.Documenter.Msdn
 				return true;
 			descriptions.Add(description);
 			return false;
+		}
+
+		/// <summary>
+		/// returns a localized sdk url if one exists for the <see cref="CultureInfo.CurrentCulture"/>.
+		/// </summary>
+		/// <param name="searchNamespace">base namespace to search for</param></param>
+		/// <returns>ms-help url for sdk</returns>
+		private string GetLocalizedFrameworkURL(string searchNamespace)
+		{
+			string localizedNamespace = searchNamespace + "." + CultureInfo.CurrentCulture.TwoLetterISOLanguageName.ToUpper();
+
+			HxRegistryWalkerClass hrw = new HxRegistryWalkerClass();
+
+			IHxRegNamespaceList HRNList = hrw.get_RegisteredNamespaceList("");
+			foreach(MSHelpServices.IHxRegNamespace HRN in HRNList)
+			{
+				if (HRN.Name == localizedNamespace)
+				{
+					return helpURL + localizedNamespace + sdkRoot;
+				}
+			}
+
+			//default to non-localized namespace
+			return helpURL + searchNamespace + sdkRoot;
 		}
 	}
 }
