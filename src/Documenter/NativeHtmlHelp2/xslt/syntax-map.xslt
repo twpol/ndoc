@@ -464,7 +464,8 @@
 			<xsl:when test="$lang='Visual Basic'">Structure</xsl:when>
 			<xsl:when test="$lang='C#'">struct</xsl:when>
 			<xsl:when test="$lang='C++'">struct</xsl:when>
-			<xsl:when test="$lang='JScript'">In JScript, you can use the structures in the .NET Framework, but you cannot define your own.</xsl:when>
+			<xsl:when test="$lang='JScript'">In JScript, you can use the structures in the .NET Framework,
+but you cannot define your own.</xsl:when>
 		</xsl:choose>	
 		<xsl:text>&#160;</xsl:text>
 	</xsl:template>
@@ -491,14 +492,42 @@
 	<xsl:template match="delegate" mode="keyword">
 		<xsl:param name="lang"/>
 		<xsl:choose>
-			<xsl:when test="$lang='Visual Basic'">Delegate</xsl:when>
+			<xsl:when test="$lang='Visual Basic'">Delegate Function Sub</xsl:when>
 			<xsl:when test="$lang='C#'">delegate</xsl:when>
 			<xsl:when test="$lang='C++'">__delegate</xsl:when>
-			<xsl:when test="$lang='JScript'">In JScript, you can use the delegates in the .NET Framework, but you cannot define your own.</xsl:when>
+			<xsl:when test="$lang='JScript'">In JScript, you can use the delegates in the .NET Framework, 
+but you cannot define your own.</xsl:when>
 		</xsl:choose>	
 		<xsl:text>&#160;</xsl:text>
 	</xsl:template>	
-	
+	<xsl:template match="event" mode="keyword">
+		<xsl:param name="lang"/>
+		<xsl:choose>
+			<xsl:when test="$lang='Visual Basic'">Event</xsl:when>
+			<xsl:when test="$lang='C#'">event</xsl:when>
+			<xsl:when test="$lang='C++'">__event</xsl:when>
+			<xsl:when test="$lang='JScript'">In JScript, you can handle the events defined by a class,
+but you cannot define your own.</xsl:when>
+		</xsl:choose>	
+		<xsl:text>&#160;</xsl:text>
+	</xsl:template>	
+	<xsl:template match="field[@initOnly='true']" mode="keyword">
+		<xsl:param name="lang"/>
+		<xsl:choose>
+			<xsl:when test="$lang='Visual Basic'">ReadOnly</xsl:when>
+			<xsl:when test="$lang='C#'">readonly</xsl:when>
+			<xsl:when test="$lang='C++'">const</xsl:when>
+			<xsl:when test="$lang='JScript'">const&#160;var</xsl:when>		
+		</xsl:choose>			
+		<xsl:text>&#160;</xsl:text>
+	</xsl:template>	
+	<xsl:template match="field" mode="keyword">
+		<xsl:param name="lang"/>
+		<xsl:choose>
+			<xsl:when test="$lang='JScript'">var&#160;</xsl:when>
+		</xsl:choose>			
+	</xsl:template>	
+				
 	<xsl:template match="@* | node() | text()" mode="gc-type"/>
 	<xsl:template match="class | interface | delegate" mode="gc-type">
 		<xsl:param name="lang"/>
@@ -533,6 +562,7 @@
 			<xsl:when test="$lang = 'JScript'">:<xsl:text>&#160;</xsl:text></xsl:when>
 		</xsl:choose>
 	</xsl:template>
+	
 	
 	<xsl:template match="@* | node() | text()" mode="method-open"/>
 	<xsl:template match="method" mode="method-open">
