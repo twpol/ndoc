@@ -85,6 +85,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Compiler
 			sb.Append( '"' );
 
 			Execute( sb.ToString(), collectionFile.Directory.FullName );
+
+			Trace.WriteLine( "Namespace registered successfully" );
 		}
 
 		/// <summary>
@@ -107,6 +109,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Compiler
 			sb.Append( '"' );
 
 			Execute( sb.ToString(), hxsFile.Directory.FullName );
+			Trace.WriteLine( "Title registered successfully" );
 		}
 	}
 }

@@ -197,8 +197,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Compiler
 				{
 					throw new Exception( string.Format( "{0} did not complete after {1} seconds and was aborted", _AppName, ProcessTimeout / 1000)  );
 				}
-
-				Trace.WriteLine( String.Format( "{0} returned an exit code of {1}", _AppName, HxProcess.ExitCode ) );
 				
 				// 0 means a successful exit
 				if ( HxProcess.ExitCode != 0 )

@@ -523,6 +523,57 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 
 		private NativeHtmlHelp2Config MyConfig{ get{ return (NativeHtmlHelp2Config)Config; } }
 
+		/// <summary>See <see cref="IDocumenter"/>.</summary>
+		public override void View()
+		{
+			if (File.Exists(this.MainOutputFile))
+			{
+				try
+				{
+					// let's first try to start the Hxs using the shell.
+					// If the user has FAR (or a tool like it) installed this will
+					// open the title in their default HXs viewer even if it's not registered
+					Process.Start(this.MainOutputFile);
+				}
+				catch ( System.ComponentModel.Win32Exception )
+				{
+					// well that didn't work, meaning the user doesn't have a default hxs viewer
+					// let's try and open it in dexexplore
+
+					// if the title is registers as a collection then use HtmlHelpName as the namesapce
+					if ( MyConfig.RegisterTitleAsCollection )
+					{
+						StartDexplore( MyConfig.HtmlHelpName  );
+					}
+					// otherwise if we're registered in an external namespace open that one
+					else if ( MyConfig.RegisterTitleWithNamespace )
+					{
+						StartDexplore( MyConfig.CollectionNamespace  );
+					}
+					else
+					{
+						string msg = "In order to view an Html Help 2 file it must " +
+							"be registered. Set RegisterTitleAsCollection to true, rebuild " +
+							"the project, and try again.";
+						throw new DocumenterException( msg );
+					}
+				}
+			}
+			else
+			{
+				throw new FileNotFoundException("Documentation not built.",	this.MainOutputFile);
+			}
+		}
+
+		private void StartDexplore( string ns )
+		{
+			// dexplore requires a namespace in order to view a help file
+			string dexplore = Environment.GetFolderPath( Environment.SpecialFolder.CommonProgramFiles );
+			dexplore = Path.Combine( dexplore, @"Microsoft Shared\Help\dexplore.exe" );
+			string s = string.Format( "/helpcol \"ms-help://{0}\"", ns );
+
+			Process.Start( dexplore, s );
+		}
 	}
 }
 

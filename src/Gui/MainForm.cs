@@ -1589,6 +1589,10 @@ namespace NDoc.Gui
 					menuDocViewItem_Click(sender, e);
 				}
 			}
+			catch (DocumenterException ex)
+			{
+				MessageBox.Show( this, ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error );
+			}
 		}
 
 		private void menuTagReferenceItem_Click(object sender, System.EventArgs e)

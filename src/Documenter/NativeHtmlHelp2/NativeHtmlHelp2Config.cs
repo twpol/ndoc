@@ -222,10 +222,10 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		bool _RegisterTitleAsCollection = false;
 
 		/// <summary>
-		/// If true the HxS title will be registered as a collection (ignored if RegisterTitleWithNamespace is ture)
+		/// If true the HxS title will be registered as a collection (ignored if RegisterTitleWithNamespace is true)
 		/// </summary>
 		[Category(DEPLOYMENT_CATEGORY)]
-		[Description("If true the HxS title will be registered as a collection on this machine. Good for testing. (ignored if RegisterTitleWithNamespace is true)")]
+		[Description("If true the HxS title will be registered as a collection on this machine (uses HtmlHelpName as the namespace name).  Good for testing. (ignored if RegisterTitleWithNamespace is true)")]
 		[DefaultValue(false)]
 		public bool RegisterTitleAsCollection
 		{
