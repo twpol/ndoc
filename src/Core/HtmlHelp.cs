@@ -36,6 +36,7 @@ namespace NDoc.Core
 		string _htmlHelpCompiler = null;
 
 		bool _includeFavorites = false;
+		bool _binaryTOC = false;
 
 		bool _generateTocOnly;
 
@@ -91,6 +92,15 @@ namespace NDoc.Core
 		{
 			get { return _includeFavorites; }
 			set { _includeFavorites = value; }
+		}
+
+		/// <summary>Gets or sets the BinaryTOC property.</summary>
+		/// <remarks>Setting this to true will force the compiler 
+		/// to create a binary TOC in the chm file.</remarks>
+		public bool BinaryTOC
+		{
+			get { return _binaryTOC; }
+			set { _binaryTOC = value; }
 		}
 
 		/// <summary>Gets or sets the DefaultTopic property.</summary>
@@ -206,6 +216,9 @@ namespace NDoc.Core
 			streamHtmlHelp.WriteLine("[OPTIONS]");
 			streamHtmlHelp.WriteLine("Title=" + _projectName);
 			streamHtmlHelp.WriteLine("Auto Index=Yes");
+
+			if (_binaryTOC)
+				streamHtmlHelp.WriteLine("Binary TOC=Yes");
 			streamHtmlHelp.WriteLine("Compatibility=1.1 or later");
 			streamHtmlHelp.WriteLine("Compiled file=" + GetCompiledHtmlFilename());
 			streamHtmlHelp.WriteLine("Default Window=MsdnHelp");

@@ -272,6 +272,7 @@ namespace NDoc.Documenter.Msdn
 					((MyConfig.OutputTarget & OutputType.HtmlHelp) == 0));
 
 				htmlHelp.IncludeFavorites = MyConfig.IncludeFavorites;
+				htmlHelp.BinaryTOC = MyConfig.BinaryTOC;
 
 				OnDocBuildingStep(25, "Building file mapping...");
 

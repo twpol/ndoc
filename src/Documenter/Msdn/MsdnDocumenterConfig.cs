@@ -55,6 +55,7 @@ namespace NDoc.Documenter.Msdn
 
 			_SortTOCByNamespace = true;
 			_SplitTOCs = false;
+			_BinaryTOC = true;
 			_DefaultTOC = string.Empty;
 
 			_IncludeHierarchy = false;
@@ -215,7 +216,7 @@ namespace NDoc.Documenter.Msdn
 
 		/// <summary>Gets or sets the SplitTOCs property.</summary>
 		[Category("HTML Help Options")]
-		[Description("Turning this flag on will generate a separate TOC for each assembly. "
+		[Description("Turning this flag on will generate a separate table-of-contents for each assembly. "
 			+ "It cannot be set if SortTOCByNamespace is set or RootPageFileName is specified.")]
 		public bool SplitTOCs
 		{
@@ -235,7 +236,7 @@ namespace NDoc.Documenter.Msdn
 
 		/// <summary>Gets or sets the DefaultTOC property.</summary>
 		[Category("HTML Help Options")]
-		[Description("When SplitTOCs is true, this represents the default TOC to use.")]
+		[Description("When SplitTOCs is true, this represents the default table-of-contents to use.")]
 		public string DefaultTOC
 		{
 			get { return _DefaultTOC; }
@@ -285,7 +286,7 @@ namespace NDoc.Documenter.Msdn
 
 		/// <summary>Gets or sets the RootPageTOCName property.</summary>
 		[Category("HTML Help Options")]
-		[Description("The name for the Table of Contents entry corresponding "
+		[Description("The name for the table-of-contents entry corresponding "
 			+ " to the root page."
 			+ " If this is not specified and RootPageFileName is, then"
 			+ " the TOC entry will be 'Overview'.")]
@@ -324,9 +325,9 @@ namespace NDoc.Documenter.Msdn
 		/// <summary>Gets or sets the RootPageContainsNamespaces property.</summary>
 		[Category("HTML Help Options")]
 		[Description("If true, the Root Page will be made the container"
-			+ " of the namespaces in the TOC."
+			+ " of the namespaces in the table-of-contents."
 			+ " If false, the Root Page will be made a peer of"
-			+ " the namespaces in the TOC.")]
+			+ " the namespaces in the table-of-contents.")]
 		public bool RootPageContainsNamespaces
 		{
 			get { return _RootPageContainsNamespaces; }
@@ -342,7 +343,7 @@ namespace NDoc.Documenter.Msdn
 
 		/// <summary>Gets or sets the SortTOCByNamespace property.</summary>
 		[Category("HTML Help Options")]
-		[Description("Sorts the TOC by namespace name. "
+		[Description("Sorts the table-of-contents by namespace name. "
 			+ "SplitTOCs is disabled when this option is selected.")]
 		public bool SortTOCByNamespace
 		{
@@ -356,6 +357,23 @@ namespace NDoc.Documenter.Msdn
 			}
 		}
 
+		bool _BinaryTOC;
+
+		/// <summary>Gets or sets the BinaryToc property.</summary>
+		[Category("HTML Help Options")]
+		[Description("Create a binary table-of-contents file. \r"
+			 + "This can significantly reduce the amount of time required to load a very large help document.")]
+		[DefaultValue(true)]
+		public bool BinaryTOC
+		{
+			get { return _BinaryTOC; }
+
+			set
+			{
+				_BinaryTOC = value;
+				SetDirty();
+			}
+		}
 		private OutputType _OutputTarget;
 
 		/// <summary>Gets or sets the OutputTarget property.</summary>
