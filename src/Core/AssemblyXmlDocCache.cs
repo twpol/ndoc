@@ -19,6 +19,7 @@ using System.Collections;
 using System.Diagnostics;
 using System.Xml;
 using System.Text;
+using System.IO;
 
 namespace NDoc.Core
 {
@@ -82,7 +83,7 @@ namespace NDoc.Core
 		private string TidyDoc(string id, string doc)
 		{
 			XmlDocument xmldoc = new XmlDocument();
-			xmldoc.LoadXml(String.Format("<root>{0}</root>", doc));
+			xmldoc.Load(new XmlTextReader(new StringReader("<root>" + doc + "</root>")));
 			FixupNodes(id, xmldoc.ChildNodes);
 			return xmldoc.DocumentElement.InnerXml;
 		}

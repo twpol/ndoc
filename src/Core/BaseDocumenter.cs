@@ -23,7 +23,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.XPath;
 using System.ComponentModel;
@@ -2483,8 +2482,8 @@ namespace NDoc.Core
 
 				string parameterName = parameter.ParameterType.FullName;
 
-				parameterName = Regex.Replace(parameterName, ",", ",0:");
-				parameterName = Regex.Replace(parameterName, @"\[,", "[0:,");
+				parameterName = parameterName.Replace(",", ",0:");
+				parameterName = parameterName.Replace(@"\[,", "[0:,");
 
 				// XML Documentation file appends a "@" to reference and out types, not a "&"
 				memberName += parameterName.Replace('&', '@').Replace('+', '.');
@@ -2618,7 +2617,7 @@ namespace NDoc.Core
 
 		private string GetMethodAccessValue(MethodBase method)
 		{
-			string result = "Unknown";
+			string result;
 
 			switch (method.Attributes & MethodAttributes.MemberAccessMask)
 			{
@@ -2649,6 +2648,9 @@ namespace NDoc.Core
 					break;
 				case MethodAttributes.PrivateScope:
 					result = "PrivateScope";
+					break;
+				default:
+					result = "Unknown";
 					break;
 			}
 
