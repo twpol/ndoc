@@ -1,2 +1,4 @@
 build
 NDoc.suo
+*.dln
+*.duo
