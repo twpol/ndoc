@@ -146,6 +146,22 @@ namespace NDoc.Core
 					// If the assembly loaded OK, cache the Assembly ref using the fileName as key.
 					assemblysLoadedFileName.Add(fileName, assy);
 				}
+				catch(System.IO.FileLoadException e)
+				{
+					if (e.Message == "Exception from HRESULT: 0x80131019.")
+					{
+						try
+						{
+							assy = Assembly.LoadFile(fileName);
+						}
+						catch (Exception e2)
+						{
+							throw new DocumenterException(string.Format(CultureInfo.InvariantCulture, "Unable to load assembly '{0}'", fileName), e2);
+						}
+					}
+					else
+						throw new DocumenterException(string.Format(CultureInfo.InvariantCulture, "Unable to load assembly '{0}'", fileName), e);
+				}
 				catch (Exception e)
 				{
 					throw new DocumenterException(string.Format(CultureInfo.InvariantCulture, "Unable to load assembly '{0}'", fileName), e);
