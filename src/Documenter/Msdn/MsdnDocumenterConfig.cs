@@ -212,7 +212,7 @@ namespace NDoc.Documenter.Msdn
 			}
 		}
 
-		private bool _SplitTOCs;
+		private bool _SplitTOCs ;
 
 		/// <summary>Gets or sets the SplitTOCs property.</summary>
 		[Category("HTML Help Options")]
@@ -301,7 +301,7 @@ namespace NDoc.Documenter.Msdn
 			}
 		}
 
-		string _RootPageFileName;
+		string _RootPageFileName = string.Empty;
 
 		/// <summary>Gets or sets the RootPageFileName property.</summary>
 		[Category("HTML Help Options")]
