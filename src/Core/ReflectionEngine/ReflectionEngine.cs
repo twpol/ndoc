@@ -199,17 +199,6 @@ namespace NDoc.Core
 
 					// if you want to see NDoc's intermediate XML file, use the XML documenter.
 				}
-				catch(ReflectionTypeLoadException)
-				{
-					throw;
-				}
-				catch (Exception e)
-				{
-					throw new DocumenterException(
-						"Error reflecting against the " + 
-						Path.GetFileName(currentAssemblyFilename) + 
-						" assembly: \n" + e.Message, e);
-				}
 				finally
 				{
 					if (assemblyLoader != null)
@@ -218,7 +207,7 @@ namespace NDoc.Core
 					}
 				}
 			}
-			catch(ReflectionTypeLoadException e)
+			catch(ReflectionTypeLoadException)
 			{
 				Hashtable unfoundFiles = new Hashtable();
 				StringBuilder sb = new StringBuilder();
@@ -1233,8 +1222,26 @@ namespace NDoc.Core
 					writer.WriteStartElement("field");
 					writer.WriteAttributeString("name", field.Name);
 					writer.WriteAttributeString("type", field.FieldType.FullName);
-					object value = field.GetValue(attribute);
-					writer.WriteAttributeString("value", value != null ? value.ToString() : "");
+					string fieldValue=null;
+					try
+					{
+						fieldValue=GetDisplayValue(field.DeclaringType, field.GetValue(attribute));
+					}
+					catch(Exception e)
+					{
+						Trace.WriteLine("");
+						Trace.WriteLine("### value for attribute field " + GetMemberName(field).Substring(2) + " cannot be determined");
+						Exception ex = e;
+						do
+						{
+							Trace.WriteLine("-> " + ex.Message);
+							ex=ex.InnerException;
+						} while(ex!=null);
+						Trace.WriteLine("");
+
+						fieldValue="***UNKNOWN***";
+					}
+					writer.WriteAttributeString("value", fieldValue);
 					writer.WriteEndElement(); // field
 				}
 			}
@@ -1256,18 +1263,26 @@ namespace NDoc.Core
 
 					if (property.CanRead)
 					{
-						object value = null;
-						/* WV030802: if an exception occurs while trying to read the value of the Attribute,
-						 * write out the Exception as "value" */
+						string propertyValue=null;
 						try
 						{
-							value = property.GetValue(attribute, null);
+							propertyValue=GetDisplayValue(property.DeclaringType, property.GetValue(attribute, null));
 						}
-						catch (Exception e)
+						catch(Exception e)
 						{
-							value = e;
+							Trace.WriteLine("");
+							Trace.WriteLine("### value for attribute property " + GetMemberName(property).Substring(2) + " cannot be determined");
+							Exception ex = e;
+							do
+							{
+								Trace.WriteLine("-> " + ex.Message);
+								ex=ex.InnerException;
+							} while(ex!=null);
+							Trace.WriteLine("");
+
+							propertyValue="***UNKNOWN***";
 						}
-						writer.WriteAttributeString("value", value != null ? value.ToString() : "");
+						writer.WriteAttributeString("value", propertyValue);
 					}
 
 					writer.WriteEndElement(); // property
@@ -1802,7 +1817,26 @@ namespace NDoc.Core
 			if (field.IsLiteral)
 			{
 				writer.WriteAttributeString("literal", "true");
-				writer.WriteAttributeString("value", GetDisplayValue(field.DeclaringType, field.GetValue(null)));
+				string fieldValue=null;
+				try
+				{
+					fieldValue=GetDisplayValue(field.DeclaringType, field.GetValue(null));
+				}
+				catch(Exception e)
+				{
+					Trace.WriteLine("");
+					Trace.WriteLine("### Literal value for " + memberName.Substring(2) + " cannot be determined");
+					Exception ex = e;
+					do
+					{
+						Trace.WriteLine("-> " + ex.Message);
+						ex=ex.InnerException;
+					} while(ex!=null);
+					Trace.WriteLine("");
+
+					fieldValue="***UNKNOWN***";
+				}
+				writer.WriteAttributeString("value", fieldValue);
 			}
 
 			if (inherited)
