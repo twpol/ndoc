@@ -50,7 +50,8 @@ namespace NDoc.Gui
 			// Set up email links
 			mailLinkLabel.Links.Add(13, 13, "mailto:jason@injektilo.org");
 			mailLinkLabel.Links.Add(28, 10, "mailto:kral_ferch@hotmail.com");
-			mailLinkLabel.Links.Add(43, 18, "mailto:jc@manoli.net");
+			mailLinkLabel.Links.Add(40, 18, "mailto:jc@manoli.net");
+			mailLinkLabel.Links.Add(63, 10, "mailto:keith_hill@agilent.com");
 
 			// Set up web links
 			webLinkLabel.Links.Add(12, 12, "http://sourceforge.net/projects/ndoc");
@@ -135,7 +136,7 @@ namespace NDoc.Gui
 			this.mailLinkLabel.Name = "mailLinkLabel";
 			this.mailLinkLabel.Size = new System.Drawing.Size(504, 16);
 			this.mailLinkLabel.TabIndex = 0;
-			this.mailLinkLabel.Text = "Developers:  Jason Diamond, Kral Ferch and Jean-Claude Manoli";
+			this.mailLinkLabel.Text = "Developers:  Jason Diamond, Kral Ferch, Jean-Claude Manoli and Keith Hill";
 			this.mailLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.mailLinkLabel_LinkClicked);
 			// 
 			// assembliesListView
@@ -149,7 +150,7 @@ namespace NDoc.Gui
 			this.assembliesListView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
 			this.assembliesListView.Location = new System.Drawing.Point(8, 16);
 			this.assembliesListView.Name = "assembliesListView";
-			this.assembliesListView.Size = new System.Drawing.Size(504, 132);
+			this.assembliesListView.Size = new System.Drawing.Size(504, 152);
 			this.assembliesListView.TabIndex = 0;
 			this.assembliesListView.View = System.Windows.Forms.View.Details;
 			// 
@@ -168,7 +169,7 @@ namespace NDoc.Gui
 			this.closeButton.Anchor = (System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right);
 			this.closeButton.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.closeButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.closeButton.Location = new System.Drawing.Point(448, 396);
+			this.closeButton.Location = new System.Drawing.Point(448, 408);
 			this.closeButton.Name = "closeButton";
 			this.closeButton.TabIndex = 0;
 			this.closeButton.Text = "&Close";
@@ -226,7 +227,7 @@ namespace NDoc.Gui
 			this.versionHeaderGroupBox.Location = new System.Drawing.Point(8, 218);
 			this.versionHeaderGroupBox.Name = "versionHeaderGroupBox";
 			this.versionHeaderGroupBox.Padding = 0;
-			this.versionHeaderGroupBox.Size = new System.Drawing.Size(520, 162);
+			this.versionHeaderGroupBox.Size = new System.Drawing.Size(520, 182);
 			this.versionHeaderGroupBox.TabIndex = 1;
 			this.versionHeaderGroupBox.TabStop = false;
 			this.versionHeaderGroupBox.Text = "Version Information";
@@ -236,7 +237,7 @@ namespace NDoc.Gui
 			this.AcceptButton = this.closeButton;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.CancelButton = this.closeButton;
-			this.ClientSize = new System.Drawing.Size(542, 440);
+			this.ClientSize = new System.Drawing.Size(544, 442);
 			this.Controls.AddRange(new System.Windows.Forms.Control[] {
 																		  this.urlHeaderGroupBox,
 																		  this.richTextBox,

@@ -210,11 +210,11 @@ namespace NDoc.Gui
 		{
 			this.components = new System.ComponentModel.Container();
 			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(MainForm));
-			this.menuDocBuildItem = new System.Windows.Forms.MenuItem();
 			this.progressBar = new System.Windows.Forms.ProgressBar();
 			this.menuFileExitItem = new System.Windows.Forms.MenuItem();
 			this.newToolBarButton = new System.Windows.Forms.ToolBarButton();
 			this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+			this.menuSpacerItem3 = new System.Windows.Forms.MenuItem();
 			this.menuFileSaveItem = new System.Windows.Forms.MenuItem();
 			this.mainMenu1 = new System.Windows.Forms.MainMenu();
 			this.menuFileItem = new System.Windows.Forms.MenuItem();
@@ -225,8 +225,8 @@ namespace NDoc.Gui
 			this.menuFileSaveAsItem = new System.Windows.Forms.MenuItem();
 			this.menuSpacerItem2 = new System.Windows.Forms.MenuItem();
 			this.menuFileRecentProjectsItem = new System.Windows.Forms.MenuItem();
-			this.menuSpacerItem3 = new System.Windows.Forms.MenuItem();
 			this.menuDocItem = new System.Windows.Forms.MenuItem();
+			this.menuDocBuildItem = new System.Windows.Forms.MenuItem();
 			this.menuDocViewItem = new System.Windows.Forms.MenuItem();
 			this.menuAboutItem = new System.Windows.Forms.MenuItem();
 			this.comboBoxDocumenters = new System.Windows.Forms.ComboBox();
@@ -255,12 +255,6 @@ namespace NDoc.Gui
 			this.assembliesHeaderGroupBox.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// menuDocBuildItem
-			// 
-			this.menuDocBuildItem.Index = 0;
-			this.menuDocBuildItem.Text = "&Build";
-			this.menuDocBuildItem.Click += new System.EventHandler(this.menuDocBuildItem_Click);
-			// 
 			// progressBar
 			// 
 			this.progressBar.Anchor = (System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right);
@@ -287,6 +281,11 @@ namespace NDoc.Gui
 			this.imageList1.ImageSize = new System.Drawing.Size(16, 16);
 			this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
 			this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
+			// 
+			// menuSpacerItem3
+			// 
+			this.menuSpacerItem3.Index = 8;
+			this.menuSpacerItem3.Text = "-";
 			// 
 			// menuFileSaveItem
 			// 
@@ -356,11 +355,6 @@ namespace NDoc.Gui
 			this.menuFileRecentProjectsItem.Index = 7;
 			this.menuFileRecentProjectsItem.Text = "&Recent Projects";
 			// 
-			// menuSpacerItem3
-			// 
-			this.menuSpacerItem3.Index = 8;
-			this.menuSpacerItem3.Text = "-";
-			// 
 			// menuDocItem
 			// 
 			this.menuDocItem.Index = 1;
@@ -368,6 +362,12 @@ namespace NDoc.Gui
 																						this.menuDocBuildItem,
 																						this.menuDocViewItem});
 			this.menuDocItem.Text = "&Documentation";
+			// 
+			// menuDocBuildItem
+			// 
+			this.menuDocBuildItem.Index = 0;
+			this.menuDocBuildItem.Text = "&Build";
+			this.menuDocBuildItem.Click += new System.EventHandler(this.menuDocBuildItem_Click);
 			// 
 			// menuDocViewItem
 			// 
@@ -602,6 +602,7 @@ namespace NDoc.Gui
 			this.MinimumSize = new System.Drawing.Size(504, 460);
 			this.Name = "MainForm";
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = "NDoc";
 			this.documenterHeaderGroupBox.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.statusBarTextPanel)).EndInit();
@@ -770,6 +771,17 @@ namespace NDoc.Gui
 								case "documenter":
 									documenterName = reader.ReadString();
 									break;
+								case "window":
+									reader.MoveToNextAttribute();
+									this.Left = int.Parse(reader.Value);
+									reader.MoveToNextAttribute();
+									this.Top = int.Parse(reader.Value);
+									reader.MoveToNextAttribute();
+									this.Width = int.Parse(reader.Value);
+									reader.MoveToNextAttribute();
+									//HACK: subtract 20 to last height to keep it constant 
+									this.Height = int.Parse(reader.Value) - 20;
+									break;
 							}
 						}
 					}
@@ -823,11 +835,17 @@ namespace NDoc.Gui
 
 			XmlTextWriter writer = new XmlTextWriter(streamWriter);
 			writer.Formatting = Formatting.Indented;
-			writer.Indentation = 4;
+			writer.Indentation = 2;
 
 			writer.WriteStartElement("ndoc.gui");
 			WriteRecentProjects(writer);
 			writer.WriteElementString("documenter", ((IDocumenter)project.Documenters[comboBoxDocumenters.SelectedIndex]).Name);
+			writer.WriteStartElement("window");
+			writer.WriteAttributeString("", "left", "", this.Location.X.ToString());
+			writer.WriteAttributeString("", "top", "", this.Location.Y.ToString());
+			writer.WriteAttributeString("", "width", "", this.Width.ToString());
+			writer.WriteAttributeString("", "height", "", this.Height.ToString());
+			writer.WriteEndElement();
 			writer.WriteEndElement();
 
 			writer.Close();
