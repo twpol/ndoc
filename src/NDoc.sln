@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Console", "Console\Console.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisualStudio", "VisualStudio\VisualStudio.csproj", "{ED78444A-4734-41F7-8688-4BA9994BEBF5}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{0CC76B02-6822-47F2-9C7A-2C63B3B813A7}"
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		ConfigName.0 = Debug
@@ -55,6 +57,8 @@ Global
 		{ED78444A-4734-41F7-8688-4BA9994BEBF5}.Debug.Build.0 = Debug|.NET
 		{ED78444A-4734-41F7-8688-4BA9994BEBF5}.Release.ActiveCfg = Release|.NET
 		{ED78444A-4734-41F7-8688-4BA9994BEBF5}.Release.Build.0 = Release|.NET
+		{0CC76B02-6822-47F2-9C7A-2C63B3B813A7}.Debug.ActiveCfg = Debug
+		{0CC76B02-6822-47F2-9C7A-2C63B3B813A7}.Release.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
