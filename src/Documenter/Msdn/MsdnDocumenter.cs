@@ -198,11 +198,14 @@ namespace NDoc.Documenter.Msdn
 				string defaultNamespaceName = (string)defaultNamespace.Attributes["name"].Value;
 				string defaultTopic = defaultNamespaceName + ".html";
 
+				string compiler = Environment.ExpandEnvironmentVariables(
+						MyConfig.HtmlHelpCompilerFilename);
+
 				htmlHelp = new HtmlHelp(
 					MyConfig.OutputDirectory,
 					MyConfig.HtmlHelpName,
 					defaultTopic,
-					MyConfig.HtmlHelpCompilerFilename);
+					compiler);
 
 				htmlHelp.IncludeFavorites = MyConfig.IncludeFavorites;
 

@@ -40,11 +40,11 @@ namespace NDoc.Documenter.Msdn
 
 			HtmlHelpName = "Documentation";
 
-			HtmlHelpCompilerFilename = 
-				Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)
-				+ @"\HTML Help Workshop\hhc.exe";
+			HtmlHelpCompilerFilename = @"%ProgramFiles%\HTML Help Workshop\hhc.exe";
 
-			if (!File.Exists(htmlHelpCompilerFilename))
+			if (!File.Exists(
+				Environment.ExpandEnvironmentVariables(
+					htmlHelpCompilerFilename)))
 			{
 				HtmlHelpCompilerFilename = "hhc.exe";
 			}
