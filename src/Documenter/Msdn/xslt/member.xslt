@@ -8,7 +8,7 @@
 	<xsl:param name='member-id' />
 	<!-- -->
 	<xsl:template match="/">
-		<xsl:apply-templates select="ndoc/assembly/module/namespace/*/*[@id=$member-id]" />
+		<xsl:apply-templates select="ndoc/assembly/module/namespace/*/*[@id=$member-id][1]" />
 	</xsl:template>
 	<!-- -->
 	<xsl:template match="method | constructor | operator">
