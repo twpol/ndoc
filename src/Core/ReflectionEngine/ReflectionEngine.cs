@@ -12,7 +12,7 @@ using System.Xml;
 using System.Xml.XPath;
 using System.ComponentModel;
 
-namespace NDoc.Core
+namespace NDoc.Core.Reflection
 {
 	/// <summary>
 	/// Summary description for ReflectionEngine.
@@ -76,6 +76,44 @@ namespace NDoc.Core
 				}
 
 				return namespaces;
+			}
+			catch(ReflectionTypeLoadException rtle)
+			{
+				StringBuilder sb = new StringBuilder();
+				if (assemblyLoader.UnresolvedAssemblies.Count>0)
+				{
+					Hashtable unfoundFiles = new Hashtable();
+					sb.Append("One or more required assemblies could not be located : \n");
+					foreach(string ass in assemblyLoader.UnresolvedAssemblies)
+					{
+						sb.AppendFormat("   {0}\n",ass);
+					}
+					sb.Append("\nThe following directories were searched, \n");
+					foreach(string dir in assemblyLoader.SearchedDirectories)
+					{
+						sb.AppendFormat("   {0}\n",dir);
+					}
+				}
+				else
+				{
+					Hashtable fileLoadExceptions = new Hashtable();
+					foreach(Exception loaderEx in rtle.LoaderExceptions)
+					{
+						System.IO.FileLoadException fileLoadEx = loaderEx as System.IO.FileLoadException;
+						if (fileLoadEx !=null)
+						{
+							if (!fileLoadExceptions.ContainsKey(fileLoadEx.FileName))
+							{
+								fileLoadExceptions.Add(fileLoadEx.FileName,null);
+								sb.Append("Unable to load: " + fileLoadEx.FileName + "\r\n");
+							}
+						}
+						sb.Append(loaderEx.Message + Environment.NewLine);
+						sb.Append(loaderEx.StackTrace + Environment.NewLine);
+						sb.Append("--------------------" + Environment.NewLine + Environment.NewLine);
+					}
+				}
+				throw new DocumenterException(sb.ToString());
 			}
 			finally
 			{
@@ -209,19 +247,41 @@ namespace NDoc.Core
 					}
 				}
 			}
-			catch(ReflectionTypeLoadException)
+			catch(ReflectionTypeLoadException rtle)
 			{
-				Hashtable unfoundFiles = new Hashtable();
 				StringBuilder sb = new StringBuilder();
-				sb.Append("One or more required assemblies could not be located : \n");
-				foreach(string ass in assemblyLoader.UnresolvedAssemblies)
+				if (assemblyLoader.UnresolvedAssemblies.Count>0)
 				{
-					sb.AppendFormat("   {0}\n",ass);
+					Hashtable unfoundFiles = new Hashtable();
+					sb.Append("One or more required assemblies could not be located : \n");
+					foreach(string ass in assemblyLoader.UnresolvedAssemblies)
+					{
+						sb.AppendFormat("   {0}\n",ass);
+					}
+					sb.Append("\nThe following directories were searched, \n");
+					foreach(string dir in assemblyLoader.SearchedDirectories)
+					{
+						sb.AppendFormat("   {0}\n",dir);
+					}
 				}
-				sb.Append("\nThe following directories were searched, \n");
-				foreach(string dir in assemblyLoader.SearchedDirectories)
+				else
 				{
-					sb.AppendFormat("   {0}\n",dir);
+					Hashtable fileLoadExceptions = new Hashtable();
+					foreach(Exception loaderEx in rtle.LoaderExceptions)
+					{
+						System.IO.FileLoadException fileLoadEx = loaderEx as System.IO.FileLoadException;
+						if (fileLoadEx !=null)
+						{
+							if (!fileLoadExceptions.ContainsKey(fileLoadEx.FileName))
+							{
+								fileLoadExceptions.Add(fileLoadEx.FileName,null);
+								sb.Append("Unable to load: " + fileLoadEx.FileName + "\r\n");
+							}
+						}
+						sb.Append(loaderEx.Message + Environment.NewLine);
+						sb.Append(loaderEx.StackTrace + Environment.NewLine);
+						sb.Append("--------------------" + Environment.NewLine + Environment.NewLine);
+					}
 				}
 				throw new DocumenterException(sb.ToString());
 			}
@@ -1167,8 +1227,15 @@ namespace NDoc.Core
 
 		private void WriteCustomAttributes(XmlWriter writer, Type type)
 		{
-			WriteSpecialAttributes(writer, type);
-			WriteCustomAttributes(writer, type.GetCustomAttributes(this.rep.DocumentInheritedAttributes), "");
+			try
+			{
+				WriteSpecialAttributes(writer, type);
+				WriteCustomAttributes(writer, type.GetCustomAttributes(this.rep.DocumentInheritedAttributes), "");
+			}
+			catch(Exception e)
+			{
+				throw new DocumenterException("Error retrieving custom attributes for " + GetMemberName(type),e);
+			}
 		}
 
 		private void WriteCustomAttributes(XmlWriter writer, FieldInfo field)
@@ -3676,31 +3743,8 @@ namespace NDoc.Core
 
 		private AssemblyLoader SetupAssemblyLoader()
 		{
-			ArrayList ProjectDirs = new ArrayList();
-			ArrayList ReferenceDirs = new ArrayList();
+			AssemblyLoader assemblyLoader = new AssemblyLoader(rep.ReferencePaths);
 
-			// put dirs containing assemblies
-			foreach (string assemblyFileName in rep.AssemblyFileNames)
-			{
-				string dir = Path.GetDirectoryName(assemblyFileName);
-				if (!ProjectDirs.Contains(dir)) ProjectDirs.Add(dir);
-			}
-
-			// add references path
-			foreach (string dir in rep.ReferencePaths)
-			{
-				if (!ProjectDirs.Contains(dir)) // don't bother if the ref path duplicates a project path
-				{
-					if (!ReferenceDirs.Contains(dir))
-						ReferenceDirs.Add(dir);
-				}
-			}
-
-			AssemblyLoader assemblyLoader = new AssemblyLoader(ProjectDirs, ReferenceDirs);
-
-			// For performance, don't have resolver search all subdirs.  Also, it's not
-			// clear that's a reasonable behavior.
-			assemblyLoader.IncludeSubdirs = false;
 			assemblyLoader.Install();
 
 			return (assemblyLoader);
