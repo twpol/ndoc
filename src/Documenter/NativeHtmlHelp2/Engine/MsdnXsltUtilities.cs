@@ -31,8 +31,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 	/// </summary>
 	public class MsdnXsltUtilities
 	{
-		private const string systemPrefix = "System.";
-
 		private StringCollection descriptions;
 
 		private NamespaceMapper nsMapper;

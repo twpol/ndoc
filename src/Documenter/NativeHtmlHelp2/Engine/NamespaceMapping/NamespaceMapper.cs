@@ -187,23 +187,53 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping
 
 			// since in most cases all managed names in a hierarchy will be in the
 			// same help collection, let's fisrt try to short circuit the search by seeing
-			// if there is a single managedNamespace entry for the root of the name we are looking for
-			XmlNodeList firstTry = SelectManagedNamespaces( name.RootNamespace );
+			// if there is a single managedNamespace entry that start with the root of the name we are looking for
+			string xpath = string.Format( "//map:managedNamespace[ starts-with( @ns,'{0}' ) ]", name.RootNamespace );
+			XmlNodeList firstTry = map.SelectNodes( xpath, nsmgr );
+
+			// if only one managedNamespace start with the root we can just return its help namespace
 			if ( firstTry.Count == 1 )
 			{
-				XmlNode node = firstTry.Item( 0 );
-				XmlNode helpNSNode = node.SelectSingleNode( "parent::node()/@ns", nsmgr );
-				helpNamespace = helpNSNode.Value;
+				helpNamespace = GetNSFromManagedNameNode( firstTry.Item( 0 ) );
+			}
+			else
+			{
+				// Since more than managed name the starts with the root of the name 
+				// being searched, we have to search for a more specific match.
+				// We do this by starting with the most specified name and working backwards to the root
+				// e.g. if we are looking for NS1.NS2.N3.NS4 we would start
+				// with NS1.NS2.N3.NS4, then NS1.NS2.N3, then NS1.NS2
+				string[] s = name.Parts;
+				for ( int i = s.Length - 1; i >= 0; i-- )
+				{
+					string ns = FindMatch( s[i] );
+					if ( ns.Length > 0 )
+					{
+						helpNamespace = ns;
+						break;
+					}
+				}
 			}
 
 			return helpNamespace;
 		}
 
-		private XmlNodeList SelectManagedNamespaces( string match )
+		private string GetNSFromManagedNameNode( XmlNode node )
 		{
-			string xpath = string.Format( "//map:managedNamespace[ @ns='{0}' ]", match );
-
-			return map.SelectNodes( xpath, nsmgr );
+			Debug.Assert( node.Name == "managedNamespace" );
+			XmlNode helpNSNode = node.SelectSingleNode( "parent::node()/@ns", nsmgr );
+			return helpNSNode.Value;
 		}
+
+		private string FindMatch( string match )
+		{
+			XmlNode matchNode = map.SelectSingleNode( string.Format( "//map:managedNamespace[ @ns='{0}' ]", match ), nsmgr );
+
+			if ( matchNode != null )
+				return GetNSFromManagedNameNode( matchNode );
+
+			return string.Empty;
+		}
+
 	}
 }
