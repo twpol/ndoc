@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <project name="NDoc.Documenter.NativeHtmlHelp2" default="compile">
-	<target name="compile" unless="${current.runtime.config.mono}" depends="locate-help-compilerservices-typelib">
+	<target name="compile" depends="locate-help-compilerservices-typelib" unless="${framework::get-family(framework::get-target-framework())='mono'}">
 		<if propertyexists="help.compilerservices.typelib">
 			<!-- generate COM interop assembly for Microsoft Help Compiler Services 1.0 -->
 			<tlbimp typelib="${help.compilerservices.typelib}" output="${current.bin.dir}/Interop.MSHelpCompiler.dll" namespace="MSHelpCompiler" asmversion="1.0.0.0" keyfile="../../ndoc.snk" />

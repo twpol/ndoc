@@ -12,7 +12,7 @@
 	<include buildfile="NDoc.build.package" />
 	<!-- Targets that should always be executed -->
 	<call target="set-build-configuration" />
-	<call target="set-runtime-configuration" />
+	<call target="set-framework-configuration" />
 	<!--
 
 	-->
@@ -37,84 +37,78 @@
 		<!-- 
 			build .NET Framework 1.0 version if both the Framework and SDK are available 
 		-->
-		<available type="Framework" resource="net-1.0" property="temp.framework.available" />
-		<if propertytrue="temp.framework.available">
-			<available type="FrameworkSDK" resource="net-1.0" property="temp.frameworksdk.available" />
-			<if propertytrue="temp.frameworksdk.available">
-				<call target="set-net-1.0-runtime-configuration" />
+		<if test="${framework::exists('net-1.0')}">
+			<if test="${framework::sdk-exists('net-1.0')}">
+				<call target="set-net-1.0-framework-configuration" />
 				<call target="compile" />
 			</if>
-			<ifnot propertytrue="temp.frameworksdk.available">
-				<if propertyexists="project.build.package" propertytrue="project.build.package">
+			<if test="${not framework::sdk-exists('net-1.0')}">
+				<if test="${property::exists('project.build.package') and project.build.package}">
 					<fail message="The .NET Framework SDK 1.0 is not available." />
 				</if>
-				<ifnot propertyexists="project.build.package" propertytrue="project.build.package">
+				<if test="${not property::exists('project.build.package') or not project.build.package}">
 					<echo message="The .NET Framework SDK 1.0 is not available. Build skipped." />
-				</ifnot>
-			</ifnot>
+				</if>
+			</if>
 		</if>
-		<ifnot propertytrue="temp.framework.available">
-			<if propertyexists="project.build.package" propertytrue="project.build.package">
+		<if test="${not framework::exists('net-1.0')}">
+			<if test="${property::exists('project.build.package') and project.build.package}">
 				<fail message="The .NET Framework 1.0 is not available." />
 			</if>
-			<ifnot propertyexists="project.build.package" propertytrue="project.build.package">
+			<if test="${not property::exists('project.build.package') or not project.build.package}">
 				<echo message="The .NET Framework 1.0 is not available. Build skipped." />
-			</ifnot>
-		</ifnot>
+			</if>
+		</if>
 		<!-- 
 			build .NET Framework 1.1 version if both Framework and SDK are available 
 		-->
-		<available type="Framework" resource="net-1.1" property="temp.framework.available" />
-		<if propertytrue="temp.framework.available">
-			<available type="FrameworkSDK" resource="net-1.1" property="temp.frameworksdk.available" />
-			<if propertytrue="temp.frameworksdk.available">
-				<call target="set-net-1.1-runtime-configuration" />
+		<if test="${framework::exists('net-1.1')}">
+			<if test="${framework::sdk-exists('net-1.1')}">
+				<call target="set-net-1.1-framework-configuration" />
 				<call target="compile" />
 			</if>
-			<ifnot propertytrue="temp.frameworksdk.available">
-				<if propertyexists="project.build.package" propertytrue="project.build.package">
+			<if test="${not framework::sdk-exists('net-1.1')}">
+				<if test="${property::exists('project.build.package') and project.build.package}">
 					<fail message="The .NET Framework SDK 1.1 is not available." />
 				</if>
-				<ifnot propertyexists="project.build.package" propertytrue="project.build.package">
+				<if test="${not property::exists('project.build.package') or not project.build.package}">
 					<echo message="The .NET Framework SDK 1.1 is not available. Build skipped." />
-				</ifnot>
-			</ifnot>
+				</if>
+			</if>
 		</if>
-		<ifnot propertytrue="temp.framework.available">
-			<if propertyexists="project.build.package" propertytrue="project.build.package">
+		<if test="${not framework::exists('net-1.1')}">
+			<if test="${property::exists('project.build.package') and project.build.package}">
 				<fail message="The .NET Framework 1.1 is not available." />
 			</if>
-			<ifnot propertyexists="project.build.package" propertytrue="project.build.package">
+			<if test="${not property::exists('project.build.package') or not project.build.package}">
 				<echo message="The .NET Framework 1.1 is not available. Build skipped." />
-			</ifnot>
-		</ifnot>
+			</if>
+		</if>
 		<!-- 
 			build Mono 1.0 version if both Framework and SDK are available 
 		-->
-		<available type="Framework" resource="mono-1.0" property="temp.framework.available" />
-		<if propertytrue="temp.framework.available">
-			<available type="FrameworkSDK" resource="mono-1.0" property="temp.frameworksdk.available" />
-			<if propertytrue="temp.frameworksdk.available">
-				<call target="set-mono-1.0-runtime-configuration" />
+		<if test="${framework::exists('mono-1.0')}">
+			<if test="${framework::sdk-exists('mono-1.0')}">
+				<call target="set-mono-1.0-framework-configuration" />
 				<call target="compile" />
 			</if>
-			<ifnot propertytrue="temp.frameworksdk.available">
-				<if propertyexists="project.build.package" propertytrue="project.build.package">
-					<fail message="The Mono 1.0 SDK is not available." />
+			<if test="${not framework::sdk-exists('mono-1.0')}">
+				<if test="${property::exists('project.build.package') and project.build.package}">
+					<fail message="The Mono SDK 1.0 is not available." />
 				</if>
-				<ifnot propertyexists="project.build.package" propertytrue="project.build.package">
-					<echo message="The Mono 1.0 SDK is not available. Build skipped." />
-				</ifnot>
-			</ifnot>
+				<if test="${not property::exists('project.build.package') or not project.build.package}">
+					<echo message="The Mono SDK 1.0 is not available. Build skipped." />
+				</if>
+			</if>
 		</if>
-		<ifnot propertytrue="temp.framework.available">
-			<if propertyexists="project.build.package" propertytrue="project.build.package">
+		<if test="${not framework::exists('mono-1.0')}">
+			<if test="${property::exists('project.build.package') and project.build.package}">
 				<fail message="Mono 1.0 is not available." />
 			</if>
-			<ifnot propertyexists="project.build.package" propertytrue="project.build.package">
+			<if test="${not property::exists('project.build.package') or not project.build.package}">
 				<echo message="Mono 1.0 is not available. Build skipped." />
-			</ifnot>
-		</ifnot>
+			</if>
+		</if>
 	</target>
 	<!--
 
@@ -136,24 +130,8 @@
 		<nant buildfile="src/Documenter/LinearHtml/LinearHtml.build" target="compile" inheritall="true" />
 		<nant buildfile="src/Documenter/NativeHtmlHelp2/NativeHtmlHelp2.build" target="compile" inheritall="true" />
 		<nant buildfile="src/Documenter/Xml/Xml.build" target="compile" inheritall="true" />
-		<nant buildfile="src/Test/Test.build" target="compile" inheritall="true" if="${current.runtime.net-1.1}" />
+		<nant buildfile="src/Test/Test.build" target="compile" inheritall="true" />
 		<!-- remove the ndoc signing key file -->
 		<delete file="${current.bin.dir}/ndoc.snk" />
-	</target>
-	<!--
-		Targets to help debugging ndoc on mono
-	-->
-	<target name="mono" description="Builds on mono::" depends="set-mono-1.0-runtime-configuration, compile" />
-	<!--
-
-	-->
-	<target name="mono-core" description="Builds Core on mono::" depends="set-mono-1.0-runtime-configuration, clean-current-bin-dir">
-		<nant buildfile="src/Core/Core.build" target="compile" inheritall="true" />
-	</target>
-	<!--
-
-	-->
-	<target name="mono-msdn" description="Builds the msdn documenter on mono::" depends="set-mono-1.0-runtime-configuration, clean-current-bin-dir">
-		<nant buildfile="src/Documenter/Msdn/Msdn.build" target="compile" inheritall="true" />
 	</target>
 </project>

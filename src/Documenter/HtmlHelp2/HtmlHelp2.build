@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <project name="NDoc.Documenter.HtmlHelp2" default="compile">
-	<target name="compile" unless="${current.runtime.config.mono}" depends="locate-help-compilerservices-typelib, locate-mshtml-interop-assembly">
+	<target name="compile" depends="locate-help-compilerservices-typelib, locate-mshtml-interop-assembly" unless="${framework::get-family(framework::get-target-framework())='mono'}">
 		<if propertyexists="help.compilerservices.typelib">
 			<if propertyexists="mshtml.primary.interop.assembly">
 				<!-- generate COM interop assembly for Microsoft Help Compiler Services 1.0 -->

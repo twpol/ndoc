@@ -1,8 +1,7 @@
 <?xml version="1.0"?>
 <project name="NDocGui" default="compile">
-	<target name="compile" unless="${current.runtime.config.mono}">
-		<csc target="winexe" output="${current.bin.dir}/${nant.project.name}.exe" debug="${current.build.debug}" optimize="${current.build.optimize}" unsafe="false" checked="false" define="${current.build.defines}">
-			<arg value="/win32icon:ndoc.ico" unless="${current.runtime.config.mono}" />
+	<target name="compile" unless="${framework::get-family(framework::get-target-framework())='mono'}">
+		<csc target="winexe" output="${current.bin.dir}/${nant.project.name}.exe" debug="${current.build.debug}" optimize="${current.build.optimize}" unsafe="false" win32icon="ndoc.ico" checked="false" define="${current.build.defines}">
 			<sources>
 				<includes name="**/*.cs" />
 				<includes name="../CommonAssemblyInfo.cs" />
