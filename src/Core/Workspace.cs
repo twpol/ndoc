@@ -178,9 +178,18 @@ namespace NDoc.Core
 
 			DirectoryInfo dir = new DirectoryInfo( sourceDirectory );
 			foreach( FileInfo file in dir.GetFiles( filter ) )
-				file.CopyTo( Path.Combine( WorkingDirectory, file.Name ), true );
+				Workspace.ImportFile( file, WorkingDirectory );
 		}
 
+		private static void ImportFile( FileInfo file, string targetDir )
+		{
+			Debug.Assert( file != null );
+
+			string targetName = Path.Combine( targetDir, file.Name );
+			file.CopyTo( targetName, true );
+			// clear any possible readonly flag so we can delete this file later during clean-up
+			File.SetAttributes( targetName, FileAttributes.Normal );
+		}
 
 		/// <summary>
 		/// Recursively copies the contents of sourceDirectory into the workspace content,
@@ -214,8 +223,8 @@ namespace NDoc.Core
 
 			OnContentDirectoryAdded( GetRelativePath( new DirectoryInfo( this.WorkingDirectory ), targetDir ) );
 
-			foreach( FileInfo f in sourceDir.GetFiles() )
-				f.CopyTo( Path.Combine( targetDir.FullName, f.Name ) );
+			foreach( FileInfo file in sourceDir.GetFiles() )
+				Workspace.ImportFile( file, targetDir.FullName );
 
 			foreach( DirectoryInfo childDir in sourceDir.GetDirectories() )
 				ImportDirectory( childDir, targetDir );
@@ -263,10 +272,7 @@ namespace NDoc.Core
 
 			DirectoryInfo dir = new DirectoryInfo( sourceDirectory );
 			foreach( FileInfo file in dir.GetFiles( filter ) )
-			{
-				file.CopyTo( Path.Combine( ContentDirectory, file.Name ), true );
-				OnContentFileAdded( file.Name );
-			}
+				Workspace.ImportFile( file, ContentDirectory );
 		}
 
 		/// <summary>
