@@ -260,7 +260,7 @@ namespace NDoc.Gui
 			this.developersLabel.TabIndex = 7;
 			this.developersLabel.Text = "Contributors: Carlos Guzmán Álvarez, Don Kackman, Gert Driesen, Heath Stewart, La" +
 				"urent Domenech, Jerome Mathieu, Keith Hill, Michael Poettgen, Pascal Bourque, Ry" +
-				"an Seghers, Steve Van Esch, Thong (Tum) Nguyen";
+				"an Seghers, Steve Van Esch, Thong (Tum) Nguyen, Wolfgang Bauer";
 			// 
 			// AboutForm
 			// 
