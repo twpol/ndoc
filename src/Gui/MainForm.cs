@@ -1033,13 +1033,13 @@ namespace NDoc.Gui
 			catch (DocumenterException docEx)
 			{
 				ErrorForm errorForm = new ErrorForm("Unable to read in project file", docEx);
-				errorForm.ShowDialog();
+				errorForm.ShowDialog(this);
 			}
 			catch (Exception ex)
 			{
 				string msg = "An error occured while trying to read in project file:\n" + fileName + ".";
 				ErrorForm errorForm = new ErrorForm(msg, ex);
-				errorForm.ShowDialog();
+				errorForm.ShowDialog(this);
 			}
 
 			if (bFailed)
@@ -1453,7 +1453,7 @@ namespace NDoc.Gui
 			else
 			{
 				ErrorForm errorForm = new ErrorForm(msg, innermostException);
-				errorForm.ShowDialog();
+				errorForm.ShowDialog(this);
 			}
 		}
 
@@ -1684,7 +1684,7 @@ namespace NDoc.Gui
 						"Unable to load types from {0}.\nIs {1} missing a dependency?", 
 						form.AssemblyFilename, Path.GetFileName(form.AssemblyFilename));
 					ErrorForm errorForm = new ErrorForm(msg, ex);
-					errorForm.ShowDialog();
+					errorForm.ShowDialog(this);
 				}
 			}
 
