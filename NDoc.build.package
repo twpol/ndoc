@@ -29,6 +29,7 @@
 				<includes name="NDoc.build*" />
 				<includes name="README.txt" />
 				<includes name="NDoc.sln" />
+				<includes name="NDoc.snk" />
 
 				<includes name="bin/**" />
 				<includes name="doc/**" />
