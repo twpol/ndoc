@@ -18,6 +18,7 @@ function InsertHeader()
 	html += "<div id=TitleRow><h1 class=dtH1>";
 	html += document.title;
 	html += "</h1></div></div>";
+	html += "<div><font color='Red'>[This is preliminary documentation and subject to change]</font></div>";
 	
 	document.body.insertAdjacentHTML( "afterBegin", html );
 }
@@ -32,7 +33,7 @@ function InsertFooter()
 	html += "<img src=images/sf.gif alt=SourceForge align=absMiddle border=0></a>";
 	html += "<br/><a href=\"mailto:ndoc-helpfeedback@lists.sourceforge.net";
 	html += "?subject=NDoc User's Guide feedback about page '" + document.title + "'\">Send feedback on this topic</A></p></td>";
-	html += "<td><A href=http://ndoc.sourceforge.net/ target=_blank><img alt='Visit hte NDoc WIKI' align=right src=images/logo.png></a></td></tr></table>";	
+	html += "<td><A href=http://ndoc.sourceforge.net/ target=_blank><img alt='Visit the NDoc WIKI' align=right src=images/logo.png></a></td></tr></table>";	
 
 	lastChild.insertAdjacentHTML( "beforeEnd", html );
 }

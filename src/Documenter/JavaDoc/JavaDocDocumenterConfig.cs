@@ -29,6 +29,15 @@ namespace NDoc.Documenter.JavaDoc
 	public class JavaDocDocumenterConfig : BaseDocumenterConfig
 	{
 		/// <summary>Initializes a new instance of the JavaDocDocumenterConfig class.</summary>
+		/// <remarks>
+		/// <para>The JavaDoc documenter is used to make a set of HTML documentation
+		/// similar in format and layout to the documentation created by Java's JavaDoc
+		/// technology.</para>
+		/// <para><i>Due to lack of interest this documenter is not under active development.</i>
+		/// If you are interested in updating this documenter please 
+		/// <a href="http://sourceforge.net/projects/ndoc/">contact one of NDoc's Admins</a>.
+		/// </para>
+		/// </remarks>
 		public JavaDocDocumenterConfig() : base("JavaDoc")
 		{
 			// fix for bug 884121 - OutputDirectory on Linux
@@ -38,6 +47,7 @@ namespace NDoc.Documenter.JavaDoc
 		private string _Title;
 
 		/// <summary>Gets or sets the Title property.</summary>
+		/// <remarks>The name of the JavaDoc project.</remarks>
 		[Category("Documentation Main Settings")]
 		[Description("The name of the JavaDoc project.")]
 		public string Title
@@ -57,6 +67,8 @@ namespace NDoc.Documenter.JavaDoc
 		private string _OutputDirectory;
 
 		/// <summary>Gets or sets the OutputDirectory property.</summary>
+		/// <remarks>The folder where the root of the HTML set will be located.
+		/// This can be absolute or relative from the .ndoc project file.</remarks>
 		[Category("Documentation Main Settings")]
 		[Description("The output folder.")]
 #if !MONO //System.Windows.Forms.Design.FolderNameEditor is not implemented in mono 0.28

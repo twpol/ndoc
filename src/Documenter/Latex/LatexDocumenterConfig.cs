@@ -29,6 +29,11 @@ namespace NDoc.Documenter.Latex
 	/// <summary>
 	/// Summary description for LatexDocumenterConfig.
 	/// </summary>
+	/// <remarks>
+	/// <para>The LaTeX documenter can be used to create dvi or postscript documents.</para>
+	/// <para>This documenter requires that a LaTeX compiler be installed.
+	/// You can download a free one from <a href="http://www.miktex.org">www.MiKTeX.org</a>.</para>
+	/// </remarks>
 	public class LatexDocumenterConfig
 		: BaseDocumenterConfig
 	{
@@ -42,6 +47,8 @@ namespace NDoc.Documenter.Latex
 		}
 
 		/// <summary>Gets or sets the output directory.</summary>
+		/// <remarks>The folder documentation will be created. This can be 
+		/// absolute or relative from the .ndoc project file.</remarks>
 		[Category("LaTeX")]
 		[Description("The directory to output the files to.")]
 #if !MONO //System.Windows.Forms.Design.FolderNameEditor is not implemented in mono 0.28
@@ -73,8 +80,9 @@ namespace NDoc.Documenter.Latex
 		}
 		
 		/// <summary>Gets or sets the name of the LaTeX document excluding the file extension.</summary>
+		/// <remarks>Name of the LaTeX document, excluding the file extension.</remarks>
 		[Category("LaTeX")]
-		[Description("Name of the LaTeX document excluding the file extension.")]
+		[Description("Name of the LaTeX document, excluding the file extension.")]
 		public string TexFileBaseName
 		{
 			get
@@ -90,6 +98,7 @@ namespace NDoc.Documenter.Latex
 		private string m_TexFileBaseName;
 
 		/// <summary>Gets or sets the LaTeX compiler path.</summary>
+		/// <remarks>Path to the LaTeX compiler executable (Set to empty if you do not have LaTeX installed).</remarks>
 		[Category("LaTeX")]
 		[Description("Path to the LaTeX executable (Set to empty if you do not have LaTeX installed).")]
 		[Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
