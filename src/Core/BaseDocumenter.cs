@@ -1312,42 +1312,58 @@ namespace NDoc.Core
 		}
 
         private void WriteCustomAttributes(XmlWriter writer, Assembly assembly) {
-            WriteCustomAttributes(writer, assembly.GetCustomAttributes(true));
+            WriteCustomAttributes(writer, assembly.GetCustomAttributes(true),"assembly");
         }
 
         private void WriteCustomAttributes(XmlWriter writer, Module module) {
-            WriteCustomAttributes(writer, module.GetCustomAttributes(true));
+            WriteCustomAttributes(writer, module.GetCustomAttributes(true),"module");
         }
 
 		private void WriteCustomAttributes(XmlWriter writer, Type type)
 		{
 			WriteSpecialAttributes(writer, type);
-			WriteCustomAttributes(writer, type.GetCustomAttributes(true));
+			WriteCustomAttributes(writer, type.GetCustomAttributes(true), "");
 		}
 
 		private void WriteCustomAttributes(XmlWriter writer, FieldInfo field)
 		{
 			WriteSpecialAttributes(writer, field);
-			WriteCustomAttributes(writer, field.GetCustomAttributes(true));
+			WriteCustomAttributes(writer, field.GetCustomAttributes(true), "");
 		}
 
-		private void WriteCustomAttributes(XmlWriter writer, MemberInfo memberInfo)
+		private void WriteCustomAttributes(XmlWriter writer, ConstructorInfo constructorInfo)
 		{
-			WriteCustomAttributes(writer, memberInfo.GetCustomAttributes(true));
+			WriteCustomAttributes(writer, constructorInfo.GetCustomAttributes(true),"");
+		}
+
+		private void WriteCustomAttributes(XmlWriter writer, MethodInfo methodInfo)
+		{
+			WriteCustomAttributes(writer, methodInfo.GetCustomAttributes(true),"");
+			WriteCustomAttributes(writer, methodInfo.ReturnTypeCustomAttributes.GetCustomAttributes(true),"return");
+		}
+
+		private void WriteCustomAttributes(XmlWriter writer, PropertyInfo propertyInfo)
+		{
+			WriteCustomAttributes(writer, propertyInfo.GetCustomAttributes(true),"");
 		}
 
 		private void WriteCustomAttributes(XmlWriter writer, ParameterInfo parameterInfo)
 		{
-			WriteCustomAttributes(writer, parameterInfo.GetCustomAttributes(true));
+			WriteCustomAttributes(writer, parameterInfo.GetCustomAttributes(true),"");
 		}
 
-		private void WriteCustomAttributes(XmlWriter writer, object[] attributes)
+		private void WriteCustomAttributes(XmlWriter writer, EventInfo eventInfo)
+		{
+			WriteCustomAttributes(writer, eventInfo.GetCustomAttributes(true),"");
+		}
+
+		private void WriteCustomAttributes(XmlWriter writer, object[] attributes, string target)
 		{
 			foreach (Attribute attribute in attributes)
 			{
 				if (this.MyConfig.DocumentAttributes)
 				{
-					WriteCustomAttribute(writer, attribute);
+					WriteCustomAttribute(writer, attribute, target);
 				}
 
 				if (attribute.GetType().FullName == "System.ObsoleteAttribute") 
@@ -1357,10 +1373,14 @@ namespace NDoc.Core
 			}
 		}
 
-		private void WriteCustomAttribute(XmlWriter writer, Attribute attribute)
+		private void WriteCustomAttribute(XmlWriter writer, Attribute attribute, string target)
 		{
 			writer.WriteStartElement("attribute");
 			writer.WriteAttributeString("name", attribute.GetType().FullName);
+			if (target.Length > 0)
+			{
+				writer.WriteAttributeString("target", target);
+			}
 
 			const BindingFlags bindingFlags =
 					  BindingFlags.Instance |
@@ -2063,6 +2083,9 @@ namespace NDoc.Core
 				string name = property.Name;
 				string interfaceName = null;
 
+				MethodInfo getter = property.GetGetMethod(true);
+				MethodInfo setter = property.GetSetMethod(true);
+
 				int lastIndexOfDot = name.LastIndexOf('.');
 				if (lastIndexOfDot != -1)
 				{
@@ -2077,14 +2100,12 @@ namespace NDoc.Core
 
 					//check if we want to document this interface.
 					ImplementsInfo implements = null;
-					MethodInfo getter = property.GetGetMethod(true);
 					if (getter != null)
 					{
 						implements = implementations[getter.ToString()];
 					}
 					if (implements == null)
 					{
-						MethodInfo setter = property.GetSetMethod(true);
 						if (setter != null)
 						{
 							implements = implementations[setter.ToString()];
@@ -2125,8 +2146,8 @@ namespace NDoc.Core
 					writer.WriteAttributeString("interface", interfaceName);
 				}
 
-				writer.WriteAttributeString("get", property.GetGetMethod(true) != null ? "true" : "false");
-				writer.WriteAttributeString("set", property.GetSetMethod(true) != null ? "true" : "false");
+				writer.WriteAttributeString("get", getter != null ? "true" : "false");
+				writer.WriteAttributeString("set", setter != null ? "true" : "false");
 
 				if (inherited)
 				{
@@ -2137,6 +2158,10 @@ namespace NDoc.Core
 					WritePropertyDocumentation(writer, memberName, property, true);
 				}
 				WriteCustomAttributes(writer, property);
+				if (getter!=null)
+				{
+					WriteCustomAttributes(writer,getter.ReturnTypeCustomAttributes.GetCustomAttributes(true),"return");
+				}
 
 				foreach (ParameterInfo parameter in GetIndexParameters(property))
 				{
@@ -2146,14 +2171,12 @@ namespace NDoc.Core
 				if (implementations != null)
 				{
 					ImplementsInfo implements = null;
-					MethodInfo getter = property.GetGetMethod(true);
 					if (getter != null)
 					{
 						implements = implementations[getter.ToString()];
 					}
 					if (implements == null)
 					{
-						MethodInfo setter = property.GetSetMethod(true);
 						if (setter != null)
 						{
 							implements = implementations[setter.ToString()];
