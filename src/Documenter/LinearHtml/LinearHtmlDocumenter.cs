@@ -113,8 +113,7 @@ namespace NDoc.Documenter.LinearHtml
 		/// </summary>
 		string[] orderedMemberTypes = { "constructor", "field", "property", "method" };
 
-		/// <summary>Tmp location for embedded resource files.</summary>
-		string resourceDirectory;
+		private Workspace workspace = null;
 
 		// the Xslt is nowhere near good yet
 		bool useXslt = false;
@@ -245,6 +244,17 @@ namespace NDoc.Documenter.LinearHtml
 			return result;
 		}
 
+		private string WorkingPath
+		{ 
+			get
+			{ 
+				if ( Path.IsPathRooted( MyConfig.OutputDirectory ) )
+					return MyConfig.OutputDirectory; 
+
+				return Path.GetFullPath( MyConfig.OutputDirectory );
+			} 
+		}
+
 		/// <summary>See <see cref="IDocumenter"/>.</summary>
 		public override void Build(Project project)
 		{
@@ -252,20 +262,26 @@ namespace NDoc.Documenter.LinearHtml
 			{
 				OnDocBuildingStep(0, "Initializing...");
 
+				this.workspace = new LinearHtmlWorkspace( this.WorkingPath );
+				workspace.Clean();
+				workspace.Prepare();
+
+				workspace.AddResourceDirectory( "xslt" );
+
 // Define this when you want to edit the stylesheets
 // without having to shutdown the application to rebuild.
 #if NO_RESOURCES
-				resourceDirectory = Path.GetFullPath(Path.Combine(
-					System.Windows.Forms.Application.StartupPath, @"..\..\..\Documenter\Msdn\"));
+				// copy all of the xslt source files into the workspace
+				DirectoryInfo xsltSource = new DirectoryInfo( Path.GetFullPath(Path.Combine(
+					System.Windows.Forms.Application.StartupPath, @"..\..\..\Documenter\LinearHtml\xslt") ) );
+                				
+				foreach ( FileInfo f in xsltSource.GetFiles( "*.xslt" ) )
+					f.CopyTo( Path.Combine( Path.Combine( workspace.ResourceDirectory, "xslt" ), f.Name ), true );
+
 #else
-
-				resourceDirectory = Path.Combine(Path.Combine(
-					Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-					"NDoc"), "LinearHtml");
-
 				EmbeddedResources.WriteEmbeddedResources(this.GetType().Module.Assembly,
 					"NDoc.Documenter.LinearHtml.xslt",
-					Path.Combine(resourceDirectory, "xslt"));
+					Path.Combine(workspace.ResourceDirectory, "xslt"));
 #endif
 
 				// Create the html output directory if it doesn't exist.

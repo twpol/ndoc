@@ -127,6 +127,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "LinearHtmlWorkspace.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "css\LinearHtml.css"
                     BuildAction = "EmbeddedResource"
                 />
