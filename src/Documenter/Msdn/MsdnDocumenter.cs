@@ -642,88 +642,93 @@ namespace NDoc.Documenter.Msdn
 
 		private void MakeHtmlForProperties(WhichType whichType, XmlNode typeNode)
 		{
-			XmlNodeList   propertyNodes;
-			XmlNode     propertyNode;
-			string        propertyName;
-			string        propertyID;
-			string        previousPropertyName;
-			string        nextPropertyName;
-			bool        bOverloaded = false;
-			string        typeName;
-			string        typeID;
-			string        fileName;
-			int         nNodes;
-			int[]       indexes;
-			int         i;
+			XmlNodeList declaredPropertyNodes = typeNode.SelectNodes("property[not(@declaringType)]");
 
-			typeName = typeNode.Attributes["name"].Value;
-			typeID = typeNode.Attributes["id"].Value;
-			propertyNodes = typeNode.SelectNodes("property[not(@declaringType)]");
-			nNodes = propertyNodes.Count;
-
-			indexes = SortNodesByAttribute(propertyNodes, "id");
-
-			fileName = GetFilenameForProperties(whichType, typeNode);
-			htmlHelp.AddFileToContents("Properties", fileName);
-
-			XsltArgumentList arguments = new XsltArgumentList();
-			arguments.AddParam("id", String.Empty, typeID);
-			arguments.AddParam("member", String.Empty, "property");
-			TransformAndWriteResult(xsltIndividualMembers, arguments, fileName);
-
-			htmlHelp.OpenBookInContents();
-
-			for (i = 0; i < nNodes; i++)
+			if (declaredPropertyNodes.Count > 0)
 			{
-				propertyNode = propertyNodes[indexes[i]];
+				XmlNodeList   propertyNodes;
+				XmlNode     propertyNode;
+				string        propertyName;
+				string        propertyID;
+				string        previousPropertyName;
+				string        nextPropertyName;
+				bool        bOverloaded = false;
+				string        typeName;
+				string        typeID;
+				string        fileName;
+				int         nNodes;
+				int[]       indexes;
+				int         i;
 
-				propertyName = (string)propertyNode.Attributes["name"].Value;
-				propertyID = (string)propertyNode.Attributes["id"].Value;
+				typeName = typeNode.Attributes["name"].Value;
+				typeID = typeNode.Attributes["id"].Value;
+				propertyNodes = typeNode.SelectNodes("property[not(@declaringType)]");
+				nNodes = propertyNodes.Count;
 
-				// If the method is overloaded then make an overload page.
-				previousPropertyName = ((i - 1 < 0) || (propertyNodes[indexes[i - 1]].Attributes.Count == 0))
-					? "" : propertyNodes[indexes[i - 1]].Attributes[0].Value;
-				nextPropertyName = ((i + 1 == nNodes) || (propertyNodes[indexes[i + 1]].Attributes.Count == 0))
-					? "" : propertyNodes[indexes[i + 1]].Attributes[0].Value;
+				indexes = SortNodesByAttribute(propertyNodes, "id");
 
-				if ((previousPropertyName != propertyName) && (nextPropertyName == propertyName))
+				fileName = GetFilenameForProperties(whichType, typeNode);
+				htmlHelp.AddFileToContents("Properties", fileName);
+
+				XsltArgumentList arguments = new XsltArgumentList();
+				arguments.AddParam("id", String.Empty, typeID);
+				arguments.AddParam("member", String.Empty, "property");
+				TransformAndWriteResult(xsltIndividualMembers, arguments, fileName);
+
+				htmlHelp.OpenBookInContents();
+
+				for (i = 0; i < nNodes; i++)
 				{
-					fileName = GetFilenameForPropertyOverloads(typeNode, propertyNode);
-					htmlHelp.AddFileToContents(propertyName + " Property", fileName);
+					propertyNode = propertyNodes[indexes[i]];
 
-					arguments = new XsltArgumentList();
-					arguments.AddParam("member-id", String.Empty, propertyID);
-					TransformAndWriteResult(xsltMemberOverload, arguments, fileName);
+					propertyName = (string)propertyNode.Attributes["name"].Value;
+					propertyID = (string)propertyNode.Attributes["id"].Value;
 
-					htmlHelp.OpenBookInContents();
+					// If the method is overloaded then make an overload page.
+					previousPropertyName = ((i - 1 < 0) || (propertyNodes[indexes[i - 1]].Attributes.Count == 0))
+						? "" : propertyNodes[indexes[i - 1]].Attributes[0].Value;
+					nextPropertyName = ((i + 1 == nNodes) || (propertyNodes[indexes[i + 1]].Attributes.Count == 0))
+						? "" : propertyNodes[indexes[i + 1]].Attributes[0].Value;
 
-					bOverloaded = true;
+					if ((previousPropertyName != propertyName) && (nextPropertyName == propertyName))
+					{
+						fileName = GetFilenameForPropertyOverloads(typeNode, propertyNode);
+						htmlHelp.AddFileToContents(propertyName + " Property", fileName);
+
+						arguments = new XsltArgumentList();
+						arguments.AddParam("member-id", String.Empty, propertyID);
+						TransformAndWriteResult(xsltMemberOverload, arguments, fileName);
+
+						htmlHelp.OpenBookInContents();
+
+						bOverloaded = true;
+					}
+
+					fileName = GetFilenameForProperty(propertyNode);
+
+					if (bOverloaded)
+					{
+						XmlNodeList parameterNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace/" + lowerCaseTypeNames[whichType] + "[@name=\"" + typeName + "\"]/property[@id=\"" + propertyID + "\"]/parameter");
+						htmlHelp.AddFileToContents(propertyName + " Property " + GetParamList(parameterNodes), fileName);
+					}
+					else
+					{
+						htmlHelp.AddFileToContents(propertyName + " Property", fileName);
+					}
+
+					XsltArgumentList arguments2 = new XsltArgumentList();
+					arguments2.AddParam("property-id", String.Empty, propertyID);
+					TransformAndWriteResult(xsltProperty, arguments2, fileName);
+
+					if ((previousPropertyName == propertyName) && (nextPropertyName != propertyName))
+					{
+						htmlHelp.CloseBookInContents();
+						bOverloaded = false;
+					}
 				}
 
-				fileName = GetFilenameForProperty(propertyNode);
-
-				if (bOverloaded)
-				{
-					XmlNodeList parameterNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace/" + lowerCaseTypeNames[whichType] + "[@name=\"" + typeName + "\"]/property[@id=\"" + propertyID + "\"]/parameter");
-					htmlHelp.AddFileToContents(propertyName + " Property " + GetParamList(parameterNodes), fileName);
-				}
-				else
-				{
-					htmlHelp.AddFileToContents(propertyName + " Property", fileName);
-				}
-
-				XsltArgumentList arguments2 = new XsltArgumentList();
-				arguments2.AddParam("property-id", String.Empty, propertyID);
-				TransformAndWriteResult(xsltProperty, arguments2, fileName);
-
-				if ((previousPropertyName == propertyName) && (nextPropertyName != propertyName))
-				{
-					htmlHelp.CloseBookInContents();
-					bOverloaded = false;
-				}
+				htmlHelp.CloseBookInContents();
 			}
-
-			htmlHelp.CloseBookInContents();
 		}
 
 		private string GetPreviousMethodName(
@@ -795,74 +800,78 @@ namespace NDoc.Documenter.Msdn
 
 		private void MakeHtmlForMethods(WhichType whichType, XmlNode typeNode)
 		{
-			bool bOverloaded = false;
-			string fileName;
+			XmlNodeList declaredMethodNodes = typeNode.SelectNodes("method[not(@declaringType)]");
 
-			string typeName = typeNode.Attributes["name"].Value;
-			string typeID = typeNode.Attributes["id"].Value;
-			XmlNodeList methodNodes = typeNode.SelectNodes("method");
-			int nNodes = methodNodes.Count;
-
-			int[] indexes = SortNodesByAttribute(methodNodes, "id");
-
-			fileName = GetFilenameForMethods(whichType, typeNode);
-			htmlHelp.AddFileToContents("Methods", fileName);
-
-			XsltArgumentList arguments = new XsltArgumentList();
-			arguments.AddParam("id", String.Empty, typeID);
-			arguments.AddParam("member", String.Empty, "method");
-			TransformAndWriteResult(xsltIndividualMembers, arguments, fileName);
-
-			htmlHelp.OpenBookInContents();
-
-			for (int i = 0; i < nNodes; i++)
+			if (declaredMethodNodes.Count > 0)
 			{
-				XmlNode methodNode = methodNodes[indexes[i]];
-				string methodName = (string)methodNode.Attributes["name"].Value;
-				string methodID = (string)methodNode.Attributes["id"].Value;
+				bool bOverloaded = false;
+				string fileName;
 
-				if (IsMethodFirstOverload(methodNodes, indexes, i))
+				string typeName = typeNode.Attributes["name"].Value;
+				string typeID = typeNode.Attributes["id"].Value;
+				XmlNodeList methodNodes = typeNode.SelectNodes("method");
+				int nNodes = methodNodes.Count;
+
+				int[] indexes = SortNodesByAttribute(methodNodes, "id");
+
+				fileName = GetFilenameForMethods(whichType, typeNode);
+				htmlHelp.AddFileToContents("Methods", fileName);
+
+				XsltArgumentList arguments = new XsltArgumentList();
+				arguments.AddParam("id", String.Empty, typeID);
+				arguments.AddParam("member", String.Empty, "method");
+				TransformAndWriteResult(xsltIndividualMembers, arguments, fileName);
+
+				htmlHelp.OpenBookInContents();
+
+				for (int i = 0; i < nNodes; i++)
 				{
-					bOverloaded = true;
+					XmlNode methodNode = methodNodes[indexes[i]];
+					string methodName = (string)methodNode.Attributes["name"].Value;
+					string methodID = (string)methodNode.Attributes["id"].Value;
 
-					fileName = GetFilenameForMethodOverloads(typeNode, methodNode);
-					htmlHelp.AddFileToContents(methodName + " Method", fileName);
-
-					arguments = new XsltArgumentList();
-					arguments.AddParam("member-id", String.Empty, methodID);
-					TransformAndWriteResult(xsltMemberOverload, arguments, fileName);
-
-					htmlHelp.OpenBookInContents();
-				}
-
-				if (methodNode.Attributes["declaringType"] == null)
-				{
-					fileName = GetFilenameForMethod(methodNode);
-
-					if (bOverloaded)
+					if (IsMethodFirstOverload(methodNodes, indexes, i))
 					{
-						XmlNodeList parameterNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace/" + lowerCaseTypeNames[whichType] + "[@name=\"" + typeName + "\"]/method[@id=\"" + methodID + "\"]/parameter");
-						htmlHelp.AddFileToContents(methodName + " Method " + GetParamList(parameterNodes), fileName);
-					}
-					else
-					{
+						bOverloaded = true;
+
+						fileName = GetFilenameForMethodOverloads(typeNode, methodNode);
 						htmlHelp.AddFileToContents(methodName + " Method", fileName);
+
+						arguments = new XsltArgumentList();
+						arguments.AddParam("member-id", String.Empty, methodID);
+						TransformAndWriteResult(xsltMemberOverload, arguments, fileName);
+
+						htmlHelp.OpenBookInContents();
 					}
 
-					XsltArgumentList arguments2 = new XsltArgumentList();
-					arguments2.AddParam("member-id", String.Empty, methodID);
-					TransformAndWriteResult(xsltMember, arguments2, fileName);
+					if (methodNode.Attributes["declaringType"] == null)
+					{
+						fileName = GetFilenameForMethod(methodNode);
 
+						if (bOverloaded)
+						{
+							XmlNodeList parameterNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace/" + lowerCaseTypeNames[whichType] + "[@name=\"" + typeName + "\"]/method[@id=\"" + methodID + "\"]/parameter");
+							htmlHelp.AddFileToContents(methodName + " Method " + GetParamList(parameterNodes), fileName);
+						}
+						else
+						{
+							htmlHelp.AddFileToContents(methodName + " Method", fileName);
+						}
+
+						XsltArgumentList arguments2 = new XsltArgumentList();
+						arguments2.AddParam("member-id", String.Empty, methodID);
+						TransformAndWriteResult(xsltMember, arguments2, fileName);
+					}
+
+					if (IsMethodLastOverload(methodNodes, indexes, i))
+					{
+						bOverloaded = false;
+						htmlHelp.CloseBookInContents();
+					}
 				}
 
-				if (IsMethodLastOverload(methodNodes, indexes, i))
-				{
-					bOverloaded = false;
-					htmlHelp.CloseBookInContents();
-				}
+				htmlHelp.CloseBookInContents();
 			}
-
-			htmlHelp.CloseBookInContents();
 		}
 
 		private void MakeHtmlForOperators(WhichType whichType, XmlNode typeNode)
