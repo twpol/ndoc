@@ -110,6 +110,16 @@
 					</table>
 					<br />
 				</xsl:if>
+				<xsl:for-each select="$type/descendant::base">
+					<xsl:call-template name="inherited-members">
+						<xsl:with-param name="type" select="$type" />
+						<xsl:with-param name="base-id" select="substring-after(@id, 'T:')" />
+					</xsl:call-template>
+				</xsl:for-each>
+				<xsl:call-template name="inherited-members">
+					<xsl:with-param name="type" select="$type" />
+					<xsl:with-param name="base-id" select="'System.Object'" />
+				</xsl:call-template>
 				<xsl:variable name="events" select="$type/event[not(@declaringType)]" />
 				<xsl:if test="$events">
 					<a name="event-summary" />
@@ -284,6 +294,43 @@
 				</xsl:if>
 			</td>
 		</tr>
+	</xsl:template>
+	<!-- -->
+	<xsl:template name="inherited-members">
+		<xsl:param name="type" />
+		<xsl:param name="base-id" />
+		<xsl:variable name="inherited-methods" select="$type/method[@declaringType=$base-id]" />
+		<xsl:if test="$inherited-methods">
+			<!-- IE doesn't support the border-spacing CSS property so we have to set the cellspacing attribute here. -->
+			<table class="subtable" cellspacing="0">
+				<thead>
+					<tr>
+						<th>
+							<xsl:text>Methods inherited from class </xsl:text>
+							<xsl:value-of select="$base-id" />
+						</th>
+					</tr>
+				</thead>
+				<tr>
+					<td>
+						<xsl:variable name="methods-count" select="count($inherited-methods)" />
+						<xsl:for-each select="$inherited-methods">
+							<xsl:sort select="@name" />
+							<a>
+								<xsl:attribute name="href">
+									<xsl:call-template name="get-href-to-cref">
+										<xsl:with-param name="cref" select="@id" />
+									</xsl:call-template>
+								</xsl:attribute>
+								<xsl:value-of select="@name" />
+							</a>
+							<xsl:if test="position() &lt; $methods-count">, </xsl:if>
+						</xsl:for-each>
+					</td>
+				</tr>
+			</table>
+			<br />
+		</xsl:if>
 	</xsl:template>
 	<!-- -->
 </xsl:transform>
