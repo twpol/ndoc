@@ -338,7 +338,7 @@ namespace NDoc.Core
 			return null;
 		}
 
-		/// <summary>Writes an XDP file.</summary>
+		/// <summary>Writes an NDoc project file.</summary>
 		public void Write(string filename)
 		{
 			XmlTextWriter writer = null;
@@ -361,7 +361,7 @@ namespace NDoc.Core
 			catch (Exception ex)
 			{
 				throw new DocumenterException("Error saving project file " 
-					+ "xxxx.wdp" + ".\n" + ex.Message, ex);
+					+ ".\n" + ex.Message, ex);
 			}
 			finally
 			{
