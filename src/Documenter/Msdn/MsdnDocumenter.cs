@@ -182,8 +182,8 @@ namespace NDoc.Documenter.Msdn
 				MakeXml(project);
 
 				// Load the XML documentation into a DOM.
-				xmlDocumentation = new XmlDocument();
-				xmlDocumentation.LoadXml(Document.OuterXml);
+				xmlDocumentation = Document;
+				//xmlDocumentation.LoadXml(Document.OuterXml);				
 
 				XmlNodeList typeNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace/*[name()!='documentation']");
 

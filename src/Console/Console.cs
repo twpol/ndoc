@@ -146,12 +146,16 @@ namespace NDoc.Console
 		{
 			if (0 == maxDepth) return;
 			string docFile;
-			foreach (string file in System.IO.Directory.GetFiles(dirName, "*.dll"))
+			string[] extensions = {"*.dll", "*.exe"};
+			foreach (string extension in extensions)
 			{
-				docFile = System.IO.Path.GetDirectoryName(file) + "\\" + System.IO.Path.GetFileNameWithoutExtension(file) + ".xml";
-				if (System.IO.File.Exists(docFile))
+				foreach (string file in System.IO.Directory.GetFiles(dirName, extension))
 				{
-					project.AddAssemblySlashDoc(new AssemblySlashDoc(file, docFile));
+					docFile = System.IO.Path.GetDirectoryName(file) + "\\" + System.IO.Path.GetFileNameWithoutExtension(file) + ".xml";
+					if (System.IO.File.Exists(docFile))
+					{
+						project.AddAssemblySlashDoc(new AssemblySlashDoc(file, docFile));
+					}
 				}
 			}
 			foreach (string subDir in System.IO.Directory.GetDirectories(dirName))

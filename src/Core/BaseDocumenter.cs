@@ -213,13 +213,17 @@ namespace NDoc.Core
 
 				writer.WriteEndDocument();
 
-				writer.Close();
+				//writer.Close();
+				writer.Flush();
 
 				//FileStream fs = new FileStream(@"C:\test.xml", FileMode.Create);
 				//fs.Write(memoryStream.GetBuffer(), 0, memoryStream.GetBuffer().Length);
 				//fs.Close();
 
-				xmlDocument.Load(new MemoryStream(memoryStream.GetBuffer()));
+				// xmlDocument.Load(new MemoryStream(memoryStream.GetBuffer()));
+				memoryStream.Position = 0;
+				xmlDocument.Load(memoryStream);
+				writer.Close();
 			}
 			catch (Exception e)
 			{
@@ -676,7 +680,17 @@ namespace NDoc.Core
 
 				if (property.CanRead)
 				{
-					object value = property.GetValue(attribute, null);
+					object value = null;
+/* WV030802: if an exception occurs while trying to read the value of the Attribute,
+ * write out the Exception as "value" */
+					try
+					{
+						value = property.GetValue(attribute, null);
+					}
+					catch (Exception e)
+					{
+						value = e; 
+					}
 					writer.WriteAttributeString("value", value != null ? value.ToString() : "");
 				}
 
