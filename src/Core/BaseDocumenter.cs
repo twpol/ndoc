@@ -1691,6 +1691,7 @@ namespace NDoc.Core
 				{
 					writer.WriteStartElement("implements");
 					writer.WriteAttributeString("name", eventInfo.Name);
+					writer.WriteAttributeString("id",GetMemberName((EventInfo)implements.InterfaceMethod));
 					writer.WriteAttributeString("interface", implements.InterfaceType.Name);
 					writer.WriteAttributeString("interfaceId", GetMemberName(implements.InterfaceType));
 					writer.WriteAttributeString("declaringType", implements.InterfaceType.FullName);
@@ -1801,6 +1802,10 @@ namespace NDoc.Core
 				{
 					writer.WriteStartElement("implements");
 					writer.WriteAttributeString("name", property.Name);
+					MemberInfo InterfaceMethod = (MemberInfo)implements.InterfaceMethod;
+					PropertyInfo InterfaceProperty = 
+						InterfaceMethod.DeclaringType.GetProperty(InterfaceMethod.Name.Substring(4));
+					writer.WriteAttributeString("id",GetMemberName(InterfaceProperty));
 					writer.WriteAttributeString("interface", implements.InterfaceType.Name);
 					writer.WriteAttributeString("interfaceId", GetMemberName(implements.InterfaceType));
 					writer.WriteAttributeString("declaringType", implements.InterfaceType.FullName);
@@ -1942,6 +1947,7 @@ namespace NDoc.Core
 					{
 						writer.WriteStartElement("implements");
 						writer.WriteAttributeString("name", implements.InterfaceMethod.Name);
+						writer.WriteAttributeString("id",GetMemberName((MethodBase)implements.InterfaceMethod));
 						writer.WriteAttributeString("interface", implements.InterfaceType.Name);
 						writer.WriteAttributeString("interfaceId", GetMemberName(implements.InterfaceType));
 						writer.WriteAttributeString("declaringType", implements.InterfaceType.FullName);

@@ -4,65 +4,29 @@
 	xmlns:NUtil="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities"
 	exclude-result-prefixes="NUtil" >
 	
-	<xsl:template name="get-link-for-interface-method">	
-		<xsl:param name="method"/>
-		<xsl:param name="interface-method"/>
+	<xsl:template name="get-link-for-implements-member">	
+		<xsl:param name="id"/>
 		<xsl:param name="link-text"/>
-		<xsl:choose>
-			<xsl:when test="$interface-method">
-				<xsl:call-template name="get-link-for-member">
-					<xsl:with-param name="member" select="$interface-method"/>
-					<xsl:with-param name="link-text" select="$link-text"/>		
-				</xsl:call-template>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:call-template name="get-link-for-member">
-					<xsl:with-param name="member" select="$method"/>
-					<xsl:with-param name="link-text" select="$link-text"/>		
-				</xsl:call-template>
-			</xsl:otherwise>
-		</xsl:choose>	
+				<xsl:variable name="filename">
+					<xsl:value-of select="NUtil:GetLocalCRef( $id )"/>
+				</xsl:variable>
+				<xsl:choose>
+					<xsl:when test="$filename=''">
+						<xsl:call-template name="get-xlink">
+							<xsl:with-param name="a-index" select="NUtil:GetAIndex( $id )"/>
+							<xsl:with-param name="link-text" select="$link-text"/>	
+							<xsl:with-param name="ns-key" select="substring-after( $id, ':' )"/>										
+						</xsl:call-template>	
+					</xsl:when>
+					<xsl:otherwise>
+						<a>
+							<xsl:attribute name="href"><xsl:value-of select="$filename"/></xsl:attribute> 			
+							<xsl:value-of select="$link-text" />
+						</a>				
+					</xsl:otherwise>
+				</xsl:choose>
 	</xsl:template>
 		
-	<xsl:template name="get-link-for-interface-event">		
-		<xsl:param name="event"/>
-		<xsl:param name="interface-event"/>
-		<xsl:param name="link-text"/>
-		<xsl:choose>
-			<xsl:when test="$interface-event">
-				<xsl:call-template name="get-link-for-member">
-					<xsl:with-param name="member" select="$interface-event"/>
-					<xsl:with-param name="link-text" select="$link-text"/>		
-				</xsl:call-template>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:call-template name="get-link-for-member">
-					<xsl:with-param name="member" select="$event"/>
-					<xsl:with-param name="link-text" select="$link-text"/>		
-				</xsl:call-template>
-			</xsl:otherwise>
-		</xsl:choose>	
-	</xsl:template>
-   
-	<xsl:template name="get-link-for-interface-property">	
-		<xsl:param name="property"/>
-		<xsl:param name="interface-property"/>
-		<xsl:param name="link-text"/>
-		<xsl:choose>
-			<xsl:when test="$interface-property">
-				<xsl:call-template name="get-link-for-member">
-					<xsl:with-param name="member" select="$interface-property"/>
-					<xsl:with-param name="link-text" select="$link-text"/>		
-				</xsl:call-template>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:call-template name="get-link-for-member">
-					<xsl:with-param name="member" select="$property"/>
-					<xsl:with-param name="link-text" select="$link-text"/>		
-				</xsl:call-template>
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:template>   
    
 	<xsl:template name="get-link-for-member">		
 		<xsl:param name="member"/>
@@ -80,7 +44,7 @@
 		</xsl:variable> 
 
 		<xsl:variable name="cref">
-			<xsl:value-of select="NUtil:GetLocalCRef( $member/@id )"/>
+			<xsl:value-of select="NUtil:GetLocalCRef( $mid )"/>
 		</xsl:variable>
 		
 		<xsl:choose>

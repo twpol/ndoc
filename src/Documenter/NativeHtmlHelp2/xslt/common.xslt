@@ -375,35 +375,10 @@
 			<xsl:variable name="member" select="local-name()" />
 			<h4 class="dtH4">Implements</h4>
 			<xsl:for-each select="implements">
-				<xsl:variable name="declaring-type-id" select="@interfaceId" />
-				<xsl:variable name="name" select="@name" />
-				<xsl:variable name="declaring-interface" select="//interface[@id=$declaring-type-id]" />
-				<p>
-					<xsl:choose>
-						<xsl:when test="$member='property'">
-							<xsl:call-template name="get-link-for-interface-property">
-								<xsl:with-param name="interface-property" select="$declaring-interface/property[@name=$name]"/>
-								<xsl:with-param name="property" select="."/>
-								<xsl:with-param name="link-text" select="concat( @interface, '.', @name )"/>
-							</xsl:call-template>
-						</xsl:when>
-						<xsl:when test="$member='event'">
-							<xsl:call-template name="get-link-for-interface-event">
-								<xsl:with-param name="interface-event" select="$declaring-interface/event[@name=$name]"/>
-								<xsl:with-param name="event" select="."/>
-								<xsl:with-param name="link-text" select="concat( @interface, '.', @name )"/>
-							</xsl:call-template>
-
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:call-template name="get-link-for-interface-method">
-								<xsl:with-param name="interface-method" select="$declaring-interface/method[@name=$name]"/>
-								<xsl:with-param name="method" select="."/>
-								<xsl:with-param name="link-text" select="concat( @interface, '.', @name )"/>
-							</xsl:call-template>
-						</xsl:otherwise>
-					</xsl:choose>
-				</p>
+				<xsl:call-template name="get-link-for-implements-member">
+					<xsl:with-param name="id" select="@id" />
+					<xsl:with-param name="link-text" select="concat( @interface, '.', @name )"/>	
+				</xsl:call-template>
 			</xsl:for-each>
 			<xsl:apply-templates select="documentation/node()" mode="implements-section"/>			
 		</xsl:if>
