@@ -44,4 +44,12 @@
 		email="jc@manoli.net"
 	/>
     
+	<developer
+		id="keith"
+		sourceforge-id="r_keith_hill"
+		full-name="Keith Hill"
+		short-name="Keith"
+		email="keith_hill@agilent.com"
+	/>
+
 </ndoc>
