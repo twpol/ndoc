@@ -568,7 +568,14 @@
 	<!-- -->
 	<xsl:template match="code" mode="slashdoc">
 		<pre class="code">
-			<xsl:apply-templates />
+			<xsl:if test="@lang">
+				<span class="lang">
+					<xsl:text>[</xsl:text>
+					<xsl:value-of select="@lang" />
+					<xsl:text>]</xsl:text>
+				</span>
+			</xsl:if>
+			<xsl:apply-templates mode="slashdoc" />
 		</pre>
 	</xsl:template>
 	<!-- -->
@@ -668,6 +675,13 @@
 	<!-- -->
 	<xsl:template match="para" mode="slashdoc">
 		<p class="i1">
+			<xsl:if test="@lang">
+				<span class="lang">
+					<xsl:text>[</xsl:text>
+					<xsl:value-of select="@lang" />
+					<xsl:text>]</xsl:text>
+				</span>
+			</xsl:if>
 			<xsl:apply-templates select="./node()" mode="slashdoc" />
 		</p>
 	</xsl:template>

@@ -923,6 +923,26 @@ namespace NDoc.Test
 			get { return 0; }
 		}
 	}
+
+	/// <summary>The remarks contain some &lt;para> and &lt;code> elements with lang attributes.</summary>
+	/// <remarks>
+	///		<para>This paragraph has no lang attribute.</para>
+	///		<para lang="Visual Basic">This paragraph has a Visual Basic lang attribute.</para>
+	///		<para lang="C#">This paragraph has a C# lang attribute.</para>
+	///		<para lang="C++, JScript">This paragraph has a C++, JScript lang attribute.</para>
+	///		<code lang="Visual Basic">
+	///			' This is some VB code.
+	///		</code>
+	///		<code lang="C#">
+	///			// This is some C# code.
+	///		</code>
+	///		<code lang="C++, JScript">
+	///			/* This is either C++ or JScript code. */
+	///		</code>
+	/// </remarks>
+	public class LangAttributes
+	{
+	}
 }
 
 namespace NDoc.Test.InternalStuff
