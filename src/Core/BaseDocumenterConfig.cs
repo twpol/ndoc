@@ -43,6 +43,7 @@ namespace NDoc.Core
 
 			_DocumentInternals = false;
 			_DocumentProtected = true;
+			_DocumentSealedProtected = false;
 			_DocumentPrivates = false;
 			_DocumentProtectedInternalAsProtected = false;
 			_DocumentEmptyNamespaces = false;
@@ -312,6 +313,36 @@ namespace NDoc.Core
 			set
 			{
 				_DocumentProtected = value;
+
+				// If DocumentProtected is turned off, then we automatically turn off
+				// DocumentSealedProtected, too.
+				if (!value)
+				{
+					_DocumentSealedProtected = false;
+				}
+				SetDirty();
+			}
+		}
+
+		bool _DocumentSealedProtected;
+
+		/// <summary>Gets or sets the DocumentSealedProtected property.</summary>
+		[Category("Visibility")]
+		[Description("Turn this flag on to document protected members of sealed classes. DocumentProtected must be turned on, too.")]
+		public bool DocumentSealedProtected
+		{
+			get { return _DocumentSealedProtected; }
+
+			set
+			{
+				_DocumentSealedProtected = value;
+
+				// If DocumentSealedProtected is turned on, then we automatically turn on
+				// DocumentProtected, too.
+				if (value)
+				{
+					_DocumentProtected = true;
+				}
 				SetDirty();
 			}
 		}

@@ -409,7 +409,8 @@ namespace NDoc.Core
 
 			// All other methods
 			return (method.IsPublic ||
-				(method.IsFamily && MyConfig.DocumentProtected) ||
+				(method.IsFamily && MyConfig.DocumentProtected &&
+					(MyConfig.DocumentSealedProtected || !method.ReflectedType.IsSealed)) ||
 				(method.IsFamilyOrAssembly && MyConfig.DocumentProtected) ||
 				(method.IsAssembly && MyConfig.DocumentInternals) ||
 				(method.IsFamilyAndAssembly && MyConfig.DocumentInternals) ||
@@ -573,7 +574,8 @@ namespace NDoc.Core
 		private bool MustDocumentField(FieldInfo field)
 		{
 			return (field.IsPublic ||
-				(field.IsFamily && MyConfig.DocumentProtected) ||
+				(field.IsFamily && MyConfig.DocumentProtected &&
+					(MyConfig.DocumentSealedProtected || !field.ReflectedType.IsSealed)) ||
 				(field.IsFamilyOrAssembly && MyConfig.DocumentProtected) ||
 				(field.IsAssembly && MyConfig.DocumentInternals) ||
 				(field.IsFamilyAndAssembly && MyConfig.DocumentInternals) ||
