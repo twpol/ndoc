@@ -173,6 +173,9 @@
 	<!-- -->
 	<xsl:template match="parameter" mode="vb">
 		<xsl:text>&#160;&#160;&#160;</xsl:text>
+		<xsl:if test="@optional = 'true'">
+			<xsl:text>Optional </xsl:text>
+		</xsl:if>
 		<xsl:choose>
 			<xsl:when test="@isParamArray = 'true'">
 				<xsl:text>ParamArray </xsl:text>
