@@ -577,10 +577,18 @@ namespace NDoc.Documenter.Msdn
 
 		private void MakeHtmlForAssemblies()
 		{
+#if DEBUG
+			int start = Environment.TickCount;
+#endif
+
 			if (MyConfig.SortTOCByNamespace)
 				MakeHtmlForAssembliesSorted();
 			else
 				MakeHtmlForAssembliesUnsorted();
+
+#if DEBUG
+			Trace.WriteLine("Making Html: " + ((Environment.TickCount - start)/1000.0).ToString() + " sec.");
+#endif
 		}
 
 		private void MakeHtmlForAssembliesUnsorted()

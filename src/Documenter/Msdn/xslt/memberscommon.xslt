@@ -265,9 +265,54 @@
 			</div>
 		</xsl:if>
 	</xsl:template>
-	
 	<!-- -->
-	
+	<xsl:template name="images">
+		<xsl:param name="access" />
+		<xsl:param name="local-name" />
+		<xsl:param name="contract" />
+		<xsl:choose>
+			<xsl:when test="$access='Public'">
+				<img>
+					<xsl:attribute name="src">
+						<xsl:text>pub</xsl:text>
+						<xsl:value-of select="$local-name"/>
+						<xsl:text>.gif</xsl:text>
+					</xsl:attribute>
+				</img>
+			</xsl:when>
+			<xsl:when test="$access='Family'">
+				<img>
+					<xsl:attribute name="src">
+						<xsl:text>prot</xsl:text>
+						<xsl:value-of select="$local-name"/>
+						<xsl:text>.gif</xsl:text>
+					</xsl:attribute>
+				</img>
+			</xsl:when>
+			<xsl:when test="$access='Private'">
+				<img>
+					<xsl:attribute name="src">
+						<xsl:text>priv</xsl:text>
+						<xsl:value-of select="$local-name"/>
+						<xsl:text>.gif</xsl:text>
+					</xsl:attribute>
+				</img>
+			</xsl:when>
+			<xsl:when test="$access='Assembly' or $access='FamilyOrAssembly'">
+				<img>
+					<xsl:attribute name="src">
+						<xsl:text>int</xsl:text>
+						<xsl:value-of select="$local-name"/>
+						<xsl:text>.gif</xsl:text>
+					</xsl:attribute>
+				</img>
+			</xsl:when>
+		</xsl:choose>
+		<xsl:if test="$contract='Static'">
+			<img src="static.gif" />
+		</xsl:if>
+	</xsl:template>
+	<!-- -->
 	<xsl:template match="property[@declaringType]">
 		<xsl:variable name="name" select="@name" />
 		<xsl:variable name="declaring-type-id" select="concat('T:', @declaringType)" />
@@ -277,23 +322,11 @@
 			<xsl:choose>
 				<xsl:when test="$declaring-class">
 					<td width="50%">
-						<xsl:choose>
-							<xsl:when test="@access='Public'">
-								<img src="pubproperty.gif" />
-							</xsl:when>
-							<xsl:when test="@access='Family'">
-								<img src="protproperty.gif" />
-							</xsl:when>
-							<xsl:when test="@access='Private'">
-								<img src="privproperty.gif" />
-							</xsl:when>
-							<xsl:when test="@access='Assembly' or @access='FamilyOrAssembly'">
-								<img src="intproperty.gif" />
-							</xsl:when>
-						</xsl:choose>
-						<xsl:if test="@contract='Static'">
-							<img src="static.gif" />
-						</xsl:if>
+						<xsl:call-template name="images">
+							<xsl:with-param name="access" select="@access" />
+							<xsl:with-param name="contract" select="@contract" />
+							<xsl:with-param name="local-name" select="local-name()" />
+						</xsl:call-template>
 						<a>
 							<xsl:attribute name="href">
 								<xsl:call-template name="get-filename-for-property">
@@ -318,23 +351,11 @@
 				</xsl:when>
 				<xsl:otherwise>
 					<td width="50%">
-						<xsl:choose>
-							<xsl:when test="@access='Public'">
-								<img src="pubproperty.gif" />
-							</xsl:when>
-							<xsl:when test="@access='Family'">
-								<img src="protproperty.gif" />
-							</xsl:when>
-							<xsl:when test="@access='Private'">
-								<img src="privproperty.gif" />
-							</xsl:when>
-							<xsl:when test="@access='Assembly' or @access='FamilyOrAssembly'">
-								<img src="intproperty.gif" />
-							</xsl:when>
-						</xsl:choose>
-						<xsl:if test="@contract='Static'">
-							<img src="static.gif" />
-						</xsl:if>
+						<xsl:call-template name="images">
+							<xsl:with-param name="access" select="@access" />
+							<xsl:with-param name="contract" select="@contract" />
+							<xsl:with-param name="local-name" select="local-name()" />
+						</xsl:call-template>
 						<xsl:value-of select="@name" />
 						<xsl:text> (inherited from </xsl:text>
 						<b>
@@ -350,6 +371,35 @@
 		</tr>
 	</xsl:template>
 	<!-- -->
+	<xsl:template match="property[@declaringType and starts-with(@declaringType, 'System.')]">
+		<xsl:text>&#10;</xsl:text>
+		<tr VALIGN="top">
+			<td width="50%">
+				<xsl:call-template name="images">
+					<xsl:with-param name="access" select="@access" />
+					<xsl:with-param name="contract" select="@contract" />
+					<xsl:with-param name="local-name" select="local-name()" />
+				</xsl:call-template>
+				<a>
+					<xsl:attribute name="href">
+						<xsl:call-template name="get-filename-for-system-property" />
+					</xsl:attribute>
+					<xsl:value-of select="@name" />
+				</a>
+				<xsl:text> (inherited from </xsl:text>
+				<b>
+					<xsl:call-template name="strip-namespace">
+						<xsl:with-param name="name" select="@declaringType" />
+					</xsl:call-template>
+				</b>
+				<xsl:text>)</xsl:text>
+			</td>
+			<td width="50%">
+				<xsl:call-template name="summary-with-no-paragraph" />
+			</td>
+		</tr>
+	</xsl:template>
+	<!-- -->
 	<xsl:template match="field[@declaringType]">
 		<xsl:variable name="name" select="@name" />
 		<xsl:variable name="declaring-type-id" select="concat('T:', @declaringType)" />
@@ -359,23 +409,11 @@
 			<xsl:choose>
 				<xsl:when test="$declaring-class">
 					<td width="50%">
-						<xsl:choose>
-							<xsl:when test="@access='Public'">
-								<img src="pubfield.gif" />
-							</xsl:when>
-							<xsl:when test="@access='Family'">
-								<img src="protfield.gif" />
-							</xsl:when>
-							<xsl:when test="@access='Private'">
-								<img src="privfield.gif" />
-							</xsl:when>
-							<xsl:when test="@access='Assembly' or @access='FamilyOrAssembly'">
-								<img src="intfield.gif" />
-							</xsl:when>
-						</xsl:choose>
-						<xsl:if test="@contract='Static'">
-							<img src="static.gif" />
-						</xsl:if>
+						<xsl:call-template name="images">
+							<xsl:with-param name="access" select="@access" />
+							<xsl:with-param name="contract" select="@contract" />
+							<xsl:with-param name="local-name" select="local-name()" />
+						</xsl:call-template>
 						<a>
 							<xsl:attribute name="href">
 								<xsl:call-template name="get-filename-for-field">
@@ -400,23 +438,11 @@
 				</xsl:when>
 				<xsl:otherwise>
 					<td width="50%">
-						<xsl:choose>
-							<xsl:when test="@access='Public'">
-								<img src="pubfield.gif" />
-							</xsl:when>
-							<xsl:when test="@access='Family'">
-								<img src="protfield.gif" />
-							</xsl:when>
-							<xsl:when test="@access='Private'">
-								<img src="privfield.gif" />
-							</xsl:when>
-							<xsl:when test="@access='Assembly' or @access='FamilyOrAssembly'">
-								<img src="intfield.gif" />
-							</xsl:when>
-						</xsl:choose>
-						<xsl:if test="@contract='Static'">
-							<img src="static.gif" />
-						</xsl:if>
+						<xsl:call-template name="images">
+							<xsl:with-param name="access" select="@access" />
+							<xsl:with-param name="contract" select="@contract" />
+							<xsl:with-param name="local-name" select="local-name()" />
+						</xsl:call-template>
 						<xsl:value-of select="@name" />
 						<xsl:text> (inherited from </xsl:text>
 						<b>
@@ -432,68 +458,15 @@
 		</tr>
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="property[@declaringType and starts-with(@declaringType, 'System.')]">
-		<xsl:text>&#10;</xsl:text>
-		<tr VALIGN="top">
-			<td width="50%">
-				<xsl:choose>
-					<xsl:when test="@access='Public'">
-						<img src="pubproperty.gif" />
-					</xsl:when>
-					<xsl:when test="@access='Family'">
-						<img src="protproperty.gif" />
-					</xsl:when>
-					<xsl:when test="@access='Private'">
-						<img src="privproperty.gif" />
-					</xsl:when>
-					<xsl:when test="@access='Assembly' or @access='FamilyOrAssembly'">
-						<img src="intproperty.gif" />
-					</xsl:when>
-				</xsl:choose>
-				<xsl:if test="@contract='Static'">
-					<img src="static.gif" />
-				</xsl:if>
-				<a>
-					<xsl:attribute name="href">
-						<xsl:call-template name="get-filename-for-system-property" />
-					</xsl:attribute>
-					<xsl:value-of select="@name" />
-				</a>
-				<xsl:text> (inherited from </xsl:text>
-				<b>
-					<xsl:call-template name="strip-namespace">
-						<xsl:with-param name="name" select="@declaringType" />
-					</xsl:call-template>
-				</b>
-				<xsl:text>)</xsl:text>
-			</td>
-			<td width="50%">
-				<xsl:call-template name="summary-with-no-paragraph" />
-			</td>
-		</tr>
-	</xsl:template>
-	<!-- -->
 	<xsl:template match="field[@declaringType and starts-with(@declaringType, 'System.')]">
 		<xsl:text>&#10;</xsl:text>
 		<tr VALIGN="top">
 			<td width="50%">
-				<xsl:choose>
-					<xsl:when test="@access='Public'">
-						<img src="pubfield.gif" />
-					</xsl:when>
-					<xsl:when test="@access='Family'">
-						<img src="protfield.gif" />
-					</xsl:when>
-					<xsl:when test="@access='Private'">
-						<img src="privfield.gif" />
-					</xsl:when>
-					<xsl:when test="@access='Assembly' or @access='FamilyOrAssembly'">
-						<img src="intfield.gif" />
-					</xsl:when>
-				</xsl:choose>
-				<xsl:if test="@contract='Static'">
-					<img src="static.gif" />
-				</xsl:if>
+				<xsl:call-template name="images">
+					<xsl:with-param name="access" select="@access" />
+					<xsl:with-param name="contract" select="@contract" />
+					<xsl:with-param name="local-name" select="local-name()" />
+				</xsl:call-template>
 				<a>
 					<xsl:attribute name="href">
 						<xsl:call-template name="get-filename-for-system-field" />
@@ -516,33 +489,24 @@
 	<!-- -->
 	<xsl:template match="method[@declaringType]">
 		<xsl:variable name="name" select="@name" />
+		<xsl:variable name="contract" select="@contract" />
+		<xsl:variable name="access" select="@access" />
+		<xsl:variable name="declaringType" select="@declaringType" />
 		<xsl:variable name="declaring-type-id" select="concat('T:', @declaringType)" />
-		<xsl:if test="not(preceding-sibling::method[@name=$name])">
+		<xsl:if test="not(preceding-sibling::method[(@name=$name) and (@declaringType=$declaringType) and (@access=$access) and (($contract='Static' and @contract='Static') or ($contract!='Static' and @contract!='Static'))])">
 			<xsl:text>&#10;</xsl:text>
 			<tr VALIGN="top">
 				<xsl:variable name="declaring-class" select="//class[@id=$declaring-type-id]" />
 				<xsl:choose>
 					<xsl:when test="$declaring-class">
 						<xsl:choose>
-							<xsl:when test="following-sibling::method[@name=$name]">
+							<xsl:when test="following-sibling::method[(@name=$name) and (@declaringType=$declaringType) and (@access=$access) and (($contract='Static' and @contract='Static') or ($contract!='Static' and @contract!='Static'))]">
 								<td width="50%">
-								  <xsl:choose>
-									<xsl:when test="@access='Public'">
-										<img src="pubmethod.gif" />
-									</xsl:when>
-									<xsl:when test="@access='Family'">
-										<img src="protmethod.gif" />
-									</xsl:when>
-									<xsl:when test="@access='Private'">
-										<img src="privmethod.gif" />
-									</xsl:when>
-									<xsl:when test="@access='Assembly' or @access='FamilyOrAssembly'">
-										<img src="intmethod.gif" />
-									</xsl:when>
-								  </xsl:choose>
-								  <xsl:if test="@contract='Static'">
-								    <img src="static.gif" />
-								  </xsl:if>
+									<xsl:call-template name="images">
+										<xsl:with-param name="access" select="$access" />
+										<xsl:with-param name="contract" select="$contract" />
+										<xsl:with-param name="local-name" select="local-name()" />
+									</xsl:call-template>
 									<a>
 										<xsl:attribute name="href">
 											<xsl:call-template name="get-filename-for-inherited-method-overloads">
@@ -569,23 +533,11 @@
 							</xsl:when>
 							<xsl:otherwise>
 								<td width="50%">
-								  <xsl:choose>
-									<xsl:when test="@access='Public'">
-										<img src="pubmethod.gif" />
-									</xsl:when>
-									<xsl:when test="@access='Family'">
-										<img src="protmethod.gif" />
-									</xsl:when>
-									<xsl:when test="@access='Private'">
-										<img src="privmethod.gif" />
-									</xsl:when>
-									<xsl:when test="@access='Assembly' or @access='FamilyOrAssembly'">
-										<img src="intmethod.gif" />
-									</xsl:when>
-								  </xsl:choose>
-								  <xsl:if test="@contract='Static'">
-								    <img src="static.gif" />
-								  </xsl:if>
+									<xsl:call-template name="images">
+										<xsl:with-param name="access" select="$access" />
+										<xsl:with-param name="contract" select="$contract" />
+										<xsl:with-param name="local-name" select="local-name()" />
+									</xsl:call-template>
 									<a>
 										<xsl:attribute name="href">
 											<xsl:call-template name="get-filename-for-method">
@@ -603,6 +555,9 @@
 									<xsl:text>)</xsl:text>
 								</td>
 								<td width="50%">
+									<xsl:if test="@overload">
+										<xsl:text>Overloaded. </xsl:text>
+									</xsl:if>
 									<xsl:call-template name="summary-with-no-paragraph">
 										<xsl:with-param name="member" select="$declaring-class/method[@name=$name]" />
 									</xsl:call-template>
@@ -610,25 +565,41 @@
 							</xsl:otherwise>
 						</xsl:choose>
 					</xsl:when>
+					<xsl:when test="starts-with(@declaringType, 'System.')">
+						<td width="50%">
+							<xsl:call-template name="images">
+								<xsl:with-param name="access" select="$access" />
+								<xsl:with-param name="contract" select="$contract" />
+								<xsl:with-param name="local-name" select="local-name()" />
+							</xsl:call-template>
+							<a>
+								<xsl:attribute name="href">
+									<xsl:call-template name="get-filename-for-system-method" />
+								</xsl:attribute>
+								<xsl:value-of select="@name" />
+							</a>
+							<xsl:text> (inherited from </xsl:text>
+							<b>
+								<xsl:call-template name="strip-namespace">
+									<xsl:with-param name="name" select="@declaringType" />
+								</xsl:call-template>
+							</b>
+							<xsl:text>)</xsl:text>
+						</td>
+						<td width="50%">
+							<xsl:if test="@overload">
+								<xsl:text>Overloaded. </xsl:text>
+							</xsl:if>
+							<xsl:call-template name="summary-with-no-paragraph" />
+						</td>
+					</xsl:when>
 					<xsl:otherwise>
 						<td width="50%">
-							<xsl:choose>
-								<xsl:when test="@access='Public'">
-									<img src="pubmethod.gif" />
-								</xsl:when>
-								<xsl:when test="@access='Family'">
-									<img src="protmethod.gif" />
-								</xsl:when>
-								<xsl:when test="@access='Private'">
-									<img src="privmethod.gif" />
-								</xsl:when>
-								<xsl:when test="@access='Assembly' or @access='FamilyOrAssembly'">
-									<img src="intmethod.gif" />
-								</xsl:when>
-							</xsl:choose>
-							<xsl:if test="@contract='Static'">
-								<img src="static.gif" />
-							</xsl:if>
+							<xsl:call-template name="images">
+								<xsl:with-param name="access" select="$access" />
+								<xsl:with-param name="contract" select="$contract" />
+								<xsl:with-param name="local-name" select="local-name()" />
+							</xsl:call-template>
 							<xsl:value-of select="@name" />
 							<xsl:text> (inherited from </xsl:text>
 							<b>
@@ -637,53 +608,15 @@
 							<xsl:text>)</xsl:text>
 						</td>
 						<td width="50%">
+							<xsl:if test="@overload">
+								<xsl:text>Overloaded. </xsl:text>
+							</xsl:if>
 							<xsl:call-template name="summary-with-no-paragraph" />
 						</td>
 					</xsl:otherwise>
 				</xsl:choose>
 			</tr>
 		</xsl:if>
-	</xsl:template>
-	<!-- -->
-	<xsl:template match="method[@declaringType and starts-with(@declaringType, 'System.')]">
-		<xsl:text>&#10;</xsl:text>
-		<tr VALIGN="top">
-			<td width="50%">
-				<xsl:choose>
-					<xsl:when test="@access='Public'">
-						<img src="pubmethod.gif" />
-					</xsl:when>
-					<xsl:when test="@access='Family'">
-						<img src="protmethod.gif" />
-					</xsl:when>
-					<xsl:when test="@access='Private'">
-						<img src="privmethod.gif" />
-					</xsl:when>
-					<xsl:when test="@access='Assembly' or @access='FamilyOrAssembly'">
-						<img src="intmethod.gif" />
-					</xsl:when>
-				</xsl:choose>
-				<xsl:if test="@contract='Static'">
-					<img src="static.gif" />
-				</xsl:if>
-				<a>
-					<xsl:attribute name="href">
-						<xsl:call-template name="get-filename-for-system-method" />
-					</xsl:attribute>
-					<xsl:value-of select="@name" />
-				</a>
-				<xsl:text> (inherited from </xsl:text>
-				<b>
-					<xsl:call-template name="strip-namespace">
-						<xsl:with-param name="name" select="@declaringType" />
-					</xsl:call-template>
-				</b>
-				<xsl:text>)</xsl:text>
-			</td>
-			<td width="50%">
-				<xsl:call-template name="summary-with-no-paragraph" />
-			</td>
-		</tr>
 	</xsl:template>
 	<!-- -->
 	<xsl:template match="event[@declaringType]">
@@ -695,23 +628,11 @@
 			<xsl:choose>
 				<xsl:when test="$declaring-class">
 					<td width="50%">
-						<xsl:choose>
-							<xsl:when test="@access='Public'">
-								<img src="pubevent.gif" />
-							</xsl:when>
-							<xsl:when test="@access='Family'">
-								<img src="protevent.gif" />
-							</xsl:when>
-							<xsl:when test="@access='Private'">
-								<img src="privevent.gif" />
-							</xsl:when>
-							<xsl:when test="@access='Assembly' or @access='FamilyOrAssembly'">
-								<img src="intevent.gif" />
-							</xsl:when>
-						</xsl:choose>
-						<xsl:if test="@contract='Static'">
-							<img src="static.gif" />
-						</xsl:if>
+						<xsl:call-template name="images">
+							<xsl:with-param name="access" select="@access" />
+							<xsl:with-param name="contract" select="@contract" />
+							<xsl:with-param name="local-name" select="local-name()" />
+						</xsl:call-template>
 						<a>
 							<xsl:attribute name="href">
 								<xsl:call-template name="get-filename-for-event">
@@ -736,23 +657,11 @@
 				</xsl:when>
 				<xsl:otherwise>
 					<td width="50%">
-						<xsl:choose>
-							<xsl:when test="@access='Public'">
-								<img src="pubevent.gif" />
-							</xsl:when>
-							<xsl:when test="@access='Family'">
-								<img src="protevent.gif" />
-							</xsl:when>
-							<xsl:when test="@access='Private'">
-								<img src="privevent.gif" />
-							</xsl:when>
-							<xsl:when test="@access='Assembly' or @access='FamilyOrAssembly'">
-								<img src="intevent.gif" />
-							</xsl:when>
-						</xsl:choose>
-						<xsl:if test="@contract='Static'">
-							<img src="static.gif" />
-						</xsl:if>
+						<xsl:call-template name="images">
+							<xsl:with-param name="access" select="@access" />
+							<xsl:with-param name="contract" select="@contract" />
+							<xsl:with-param name="local-name" select="local-name()" />
+						</xsl:call-template>
 						<xsl:value-of select="@name" />
 						<xsl:text> (inherited from </xsl:text>
 						<b>
@@ -772,23 +681,11 @@
 		<xsl:text>&#10;</xsl:text>
 		<tr VALIGN="top">
 			<td width="50%">
-				<xsl:choose>
-					<xsl:when test="@access='Public'">
-						<img src="pubevent.gif" />
-					</xsl:when>
-					<xsl:when test="@access='Family'">
-						<img src="protevent.gif" />
-					</xsl:when>
-					<xsl:when test="@access='Private'">
-						<img src="privevent.gif" />
-					</xsl:when>
-					<xsl:when test="@access='Assembly' or @access='FamilyOrAssembly'">
-						<img src="intevent.gif" />
-					</xsl:when>
-				</xsl:choose>
-				<xsl:if test="@contract='Static'">
-					<img src="static.gif" />
-				</xsl:if>
+				<xsl:call-template name="images">
+					<xsl:with-param name="access" select="@access" />
+					<xsl:with-param name="contract" select="@contract" />
+					<xsl:with-param name="local-name" select="local-name()" />
+				</xsl:call-template>
 				<a>
 					<xsl:attribute name="href">
 						<xsl:call-template name="get-filename-for-system-event" />
@@ -813,53 +710,18 @@
 		<xsl:variable name="member" select="local-name()" />
 		<xsl:variable name="name" select="@name" />
 		<xsl:variable name="contract" select="@contract" />
-		<xsl:if test="@name='op_Implicit' or @name='op_Explicit' or not(preceding-sibling::*[local-name()=$member and @name=$name and (($contract='Static' and @contract='Static') or ($contract!='Static' and @contract!='Static'))])">
+		<xsl:variable name="access" select="@access" />
+		<xsl:if test="@name='op_Implicit' or @name='op_Explicit' or not(preceding-sibling::*[(local-name()=$member) and (@name=$name) and (@access=$access) and (not(@declaringType)) and (($contract='Static' and @contract='Static') or ($contract!='Static' and @contract!='Static'))])">
 			<xsl:text>&#10;</xsl:text>
 			<tr VALIGN="top">
 				<xsl:choose>
-					<xsl:when test="@name!='op_Implicit' and @name!='op_Explicit' and following-sibling::*[local-name()=$member and @name=$name and (($contract='Static' and @contract='Static') or ($contract!='Static' and @contract!='Static'))]">
+					<xsl:when test="@name!='op_Implicit' and @name!='op_Explicit' and following-sibling::*[(local-name()=$member) and (@name=$name) and (@access=$access) and (not(@declaringType)) and (($contract='Static' and @contract='Static') or ($contract!='Static' and @contract!='Static'))]">
 						<td width="50%">
-							<xsl:choose>
-								<xsl:when test="@access='Public'">
-								  <img>
-								    <xsl:attribute name="src">
-								      <xsl:text>pub</xsl:text>
-								      <xsl:value-of select="local-name()"/>
-								      <xsl:text>.gif</xsl:text>
-								    </xsl:attribute>
-								  </img>
-								</xsl:when>
-								<xsl:when test="@access='Family'">
-								  <img>
-								    <xsl:attribute name="src">
-								      <xsl:text>prot</xsl:text>
-								      <xsl:value-of select="local-name()"/>
-								      <xsl:text>.gif</xsl:text>
-								    </xsl:attribute>
-								  </img>
-								</xsl:when>
-								<xsl:when test="@access='Private'">
-								  <img>
-								    <xsl:attribute name="src">
-								      <xsl:text>priv</xsl:text>
-								      <xsl:value-of select="local-name()"/>
-								      <xsl:text>.gif</xsl:text>
-								    </xsl:attribute>
-								  </img>
-								</xsl:when>
-								<xsl:when test="@access='Assembly' or @access='FamilyOrAssembly'">
-								  <img>
-								    <xsl:attribute name="src">
-								      <xsl:text>int</xsl:text>
-								      <xsl:value-of select="local-name()"/>
-								      <xsl:text>.gif</xsl:text>
-								    </xsl:attribute>
-								  </img>
-								</xsl:when>
-							</xsl:choose>
-							<xsl:if test="@contract='Static'">
-								<img src="static.gif" />
-							</xsl:if>
+							<xsl:call-template name="images">
+								<xsl:with-param name="access" select="@access" />
+								<xsl:with-param name="contract" select="@contract" />
+								<xsl:with-param name="local-name" select="local-name()" />
+							</xsl:call-template>
 							<a>
 								<xsl:attribute name="href">
 									<xsl:call-template name="get-filename-for-individual-member-overloads">
@@ -889,47 +751,11 @@
 					</xsl:when>
 					<xsl:otherwise>
 						<td width="50%">
-							<xsl:choose>
-								<xsl:when test="@access='Public'">
-								  <img>
-								    <xsl:attribute name="src">
-								      <xsl:text>pub</xsl:text>
-								      <xsl:value-of select="local-name()"/>
-								      <xsl:text>.gif</xsl:text>
-								    </xsl:attribute>
-								  </img>
-								</xsl:when>
-								<xsl:when test="@access='Family'">
-								  <img>
-								    <xsl:attribute name="src">
-								      <xsl:text>prot</xsl:text>
-								      <xsl:value-of select="local-name()"/>
-								      <xsl:text>.gif</xsl:text>
-								    </xsl:attribute>
-								  </img>
-								</xsl:when>
-								<xsl:when test="@access='Private'">
-								  <img>
-								    <xsl:attribute name="src">
-								      <xsl:text>priv</xsl:text>
-								      <xsl:value-of select="local-name()"/>
-								      <xsl:text>.gif</xsl:text>
-								    </xsl:attribute>
-								  </img>
-								</xsl:when>
-								<xsl:when test="@access='Assembly' or @access='FamilyOrAssembly'">
-								  <img>
-								    <xsl:attribute name="src">
-								      <xsl:text>int</xsl:text>
-								      <xsl:value-of select="local-name()"/>
-								      <xsl:text>.gif</xsl:text>
-								    </xsl:attribute>
-								  </img>
-								</xsl:when>
-							</xsl:choose>
-							<xsl:if test="@contract='Static'">
-								<img src="static.gif" />
-							</xsl:if>
+							<xsl:call-template name="images">
+								<xsl:with-param name="access" select="@access" />
+								<xsl:with-param name="contract" select="@contract" />
+								<xsl:with-param name="local-name" select="local-name()" />
+							</xsl:call-template>
 							<a>
 								<xsl:attribute name="href">
 									<xsl:call-template name="get-filename-for-individual-member">
@@ -953,6 +779,9 @@
 							</a>
 						</td>
 						<td width="50%">
+							<xsl:if test="@overload">
+								<xsl:text>Overloaded. </xsl:text>
+							</xsl:if>
 							<xsl:call-template name="summary-with-no-paragraph" />
 						</td>
 					</xsl:otherwise>
