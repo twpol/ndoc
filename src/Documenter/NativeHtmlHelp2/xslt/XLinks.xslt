@@ -103,18 +103,9 @@
 				</xsl:call-template>					
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:choose>
-					<xsl:when test="$member[@declaringType]">
-						<a href="{NUtil:GetInheritedMemberOverloadHRef( string( $mid ), $member )}">			
-							<xsl:value-of select="$link-text"/> 
-						</a>					
-					</xsl:when>
-					<xsl:otherwise>
-						<a href="{NUtil:GetMemberOverloadHRef( $member )}">			
-							<xsl:value-of select="$link-text"/> 
-						</a>					
-					</xsl:otherwise>
-				</xsl:choose>
+				<a href="{$cref}">			
+					<xsl:value-of select="$link-text"/> 
+				</a>					
 			</xsl:otherwise>
 		</xsl:choose>		
 	</xsl:template>
