@@ -228,14 +228,6 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "graphics\cpguide_conditional.ini"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "graphics\cpguidenf_conditional.ini"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
                     RelPath = "graphics\dtue.css"
                     BuildAction = "EmbeddedResource"
                 />
@@ -261,14 +253,6 @@
                 />
                 <File
                     RelPath = "graphics\dtuelink.js"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "graphics\DTUEStopList.csl"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "graphics\ExcludeVS.ini"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
@@ -304,23 +288,11 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "graphics\js7.ini"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "graphics\js7net.ini"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
                     RelPath = "graphics\msdn_ie3.css"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "graphics\msdn_ie4.css"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "graphics\ndp.ini"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
@@ -409,26 +381,6 @@
                 />
                 <File
                     RelPath = "graphics\static.gif"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "graphics\vbcond.ini"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "graphics\vblr7.ini"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "graphics\vblr7net.ini"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "graphics\VS.ini"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "graphics\vs70.csm"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
