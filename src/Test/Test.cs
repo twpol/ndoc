@@ -788,6 +788,23 @@ namespace NDoc.Test
 		/// <param name="message">Message for this exception.</param>
 		public MyException( string message ) : base( message ) {}
 	}
+
+	/// <summary>This class has custom attributes on it.</summary>
+	[CLSCompliant(false)]
+	public class CustomAttributes
+	{
+	}
+
+	/// <summary>This class contains just an indexer so that we can see
+	/// if that's what causes the DefaultMemberAttribute attribute to appear.</summary>
+	public class JustIndexer
+	{
+		/// <summary>Am I the default member?</summary>
+		public int this[int i]
+		{
+			get { return 0; }
+		}
+	}
 }
 
 namespace NDoc.Test.InternalStuff

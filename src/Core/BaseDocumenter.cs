@@ -480,6 +480,8 @@ namespace NDoc.Core
 
 			WriteTypeDocumentation(writer, memberName, type);
 
+			WriteCustomAttributes(writer, type.GetCustomAttributes(true));
+
 			WriteBaseType(writer, type.BaseType);
 
 			foreach(Type interfaceType in type.GetInterfaces())
@@ -495,6 +497,38 @@ namespace NDoc.Core
 			WriteEvents(writer, type);
 
 			writer.WriteEndElement();
+		}
+
+		private void WriteCustomAttributes(XmlWriter writer, object[] attributes)
+		{
+			if (attributes.Length > 0)
+			{
+				writer.WriteStartElement("attributes");
+
+				foreach (Attribute attribute in attributes)
+				{
+					writer.WriteStartElement("attribute");
+					writer.WriteAttributeString("name", attribute.GetType().FullName);
+
+					BindingFlags bindingFlags =
+						BindingFlags.Instance |
+						BindingFlags.Public |
+						BindingFlags.DeclaredOnly;
+
+					foreach (PropertyInfo property in attribute.GetType().GetProperties(bindingFlags))
+					{
+						writer.WriteStartElement("parameter");
+						writer.WriteAttributeString("name", property.Name);
+						object value = property.GetValue(attribute, null);
+						writer.WriteAttributeString("value", value != null ? value.ToString() : "");
+						writer.WriteEndElement(); // parameter
+					}
+
+					writer.WriteEndElement(); // attribute
+				}
+
+				writer.WriteEndElement(); // attributes
+			}
 		}
 
 		private void WriteConstructors(XmlWriter writer, Type type)
