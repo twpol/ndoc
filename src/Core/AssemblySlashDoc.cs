@@ -1,5 +1,5 @@
 // AssemblySlashDoc.cs - represents an assembly and /doc pair
-// Copyright (C) 2001  Kral Ferch, Jason Diamond
+// Copyright (C) 2004  Kevin Downs
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 using System;
+using System.ComponentModel;
 
 namespace NDoc.Core
 {
@@ -23,48 +24,57 @@ namespace NDoc.Core
 	[Serializable]
 	public class AssemblySlashDoc
 	{
-		string  assemblyFilename;
-		string  slashDocFilename;
+		private FilePath assembly;
+		private FilePath slashDoc;
 
-		/// <summary>Initializes a new instance of the AssemblySlashDoc class.</summary>
+		/// <overrides>Initializes a new instance of the <see cref="AssemblySlashDoc"/> class.</overrides>
+		/// <summary>Initializes a blank instance of the <see cref="AssemblySlashDoc"/> class.</summary>
 		public AssemblySlashDoc()
 		{
+			this.assembly = new FilePath();
+			this.slashDoc = new FilePath();
 		}
 
-		/// <summary>Initializes a new instance of the AssemblySlashDoc class
-		/// to the values indicated.</summary>
+		/// <summary>Initializes a new instance of the <see cref="AssemblySlashDoc"/> class
+		/// with the specified Assembly and SlashDoc paths.</summary>
 		/// <param name="assemblyFilename">An assembly filename.</param>
 		/// <param name="slashDocFilename">A /doc filename.</param>
 		public AssemblySlashDoc(string assemblyFilename, string slashDocFilename)
 		{
-			this.assemblyFilename = assemblyFilename;
-			this.slashDocFilename = slashDocFilename;
+			this.assembly = new FilePath(assemblyFilename);
+			
+			if(slashDocFilename.Length>0)
+				this.slashDoc = new FilePath(slashDocFilename);
+			else
+				this.slashDoc = new FilePath();
 		}
 
 		/// <summary>
-		/// Gets or sets the assembly filename in this pair.
+		/// Gets or sets the assembly.
 		/// </summary>
-		/// <remarks>
-		/// If the path is not rooted, it should be considered as a path relative
-		/// to the project file.
-		/// </remarks>
-		public string AssemblyFilename
+		/// <value></value>
+		[NDoc.Core.PropertyGridUI.FilenameEditor.FileDialogFilter
+			 ("Select Assembly", 
+			 "Library and Executable files (*.dll, *.exe)|*.dll;*.exe|Library files (*.dll)|*.dll|Executable files (*.exe)|*.exe|All files (*.*)|*.*")]
+		public FilePath Assembly 
 		{
-			get { return assemblyFilename; }
-			set { assemblyFilename = value; }
-		}
+			get { return assembly; }
+			set { assembly = value; }
+		} 
+		void ResetAssembly() { assembly = new FilePath(); }
 
 		/// <summary>
-		/// Gets or sets the /doc filename in this pair.
+		/// Gets or sets the slash doc.
 		/// </summary>
-		/// <remarks>
-		/// If the path is not rooted, it should be considered as a path relative
-		/// to the project file.
-		/// </remarks>
-		public string SlashDocFilename
+		/// <value></value>
+		[NDoc.Core.PropertyGridUI.FilenameEditor.FileDialogFilter
+			 ("Select Assembly", 
+			 "/doc Output files (*.xml)|*.xml|All files (*.*)|*.*")]
+		public FilePath SlashDoc 
 		{
-			get { return slashDocFilename; }
-			set { slashDocFilename = value; }
-		}
+			get { return slashDoc; }
+			set { slashDoc = value; }
+		} 
+		void ResetSlashDoc() { slashDoc = new FilePath(); }
 	}
 }
