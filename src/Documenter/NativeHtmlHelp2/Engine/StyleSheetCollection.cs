@@ -50,7 +50,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 #endif
 
 			XsltResourceResolver resolver = new XsltResourceResolver(resourceBase);
-			resolver.ExtensibiltyStylesheet=extensibiltyStylesheet;
+			resolver.ExtensibilityStylesheet=extensibiltyStylesheet;
 			Trace.Indent();
 
 			stylesheets.AddFrom( "namespace", resolver );
