@@ -182,6 +182,85 @@ namespace NDoc.Core
 			return path;
 		}
 
+		/// <summary>
+		/// Gets the relative path of the passed path with respect to the <see cref="BaseDirectory"/> of 
+		/// the <see cref="Project" />.
+		/// </summary>
+		/// <param name="path">The relative or absolute path.</param>
+		/// <returns>
+		/// A relative path.
+		/// </returns>
+		public string GetRelativePath(string path) 
+		{
+
+			if (path != null && path.Length > 0)
+			{
+				if (Path.IsPathRooted(path)) 
+				{
+					path = AbsoluteToRelativePath(BaseDirectory, path);
+				}
+			}
+
+			return path;
+		}
+
+		/// <summary>
+		/// Converts an absolute path to one relative to the given base directory path
+		/// </summary>
+		/// <param name="basePath">The base directory path</param>
+		/// <param name="absolutePath">An absolute path</param>
+		/// <returns>A path to the given absolute path, relative to the base path</returns>
+		public string AbsoluteToRelativePath(string basePath, string absolutePath)
+		{
+			char[] separators = {
+									Path.DirectorySeparatorChar, 
+									Path.AltDirectorySeparatorChar, 
+									Path.VolumeSeparatorChar 
+								};
+
+			//split the paths into their component parts
+			string[] basePathParts = basePath.Split(separators);
+			string[] absPathParts = absolutePath.Split(separators);
+			int indx = 0;
+
+			//work out how much they have in common
+			int minLength=Math.Min(basePathParts.Length, absPathParts.Length);
+			for(; indx < minLength; ++indx)
+			{
+				if(!basePathParts[indx].Equals(absPathParts[indx]))
+					break;
+			}
+			
+			//if they have nothing in common, just return the absolute path
+			if (indx == 0) 
+			{
+				return absolutePath;
+			}
+			
+			
+			//start constructing the relative path
+			string relPath = "";
+			
+			if(indx == basePathParts.Length)
+			{
+				// the entire base path is in the abs path
+				// so the rel path starts with "./"
+				relPath += "." + Path.DirectorySeparatorChar;
+			} 
+			else 
+			{
+				//step up from the base to the common root 
+				for (int i = indx; i < basePathParts.Length; ++i) 
+				{
+					relPath += ".." + Path.DirectorySeparatorChar;
+				}
+			}
+			//add the path from the common root to the absPath
+			relPath += String.Join(Path.DirectorySeparatorChar.ToString(), absPathParts, indx, absPathParts.Length-indx);
+			
+			return relPath;
+		}
+
 		private Namespaces _namespaces;
 
 		/// <summary>
@@ -588,8 +667,8 @@ namespace NDoc.Core
 				foreach (AssemblySlashDoc assemblySlashDoc in _AssemblySlashDocs)
 				{
 					writer.WriteStartElement("assembly");
-					writer.WriteAttributeString("location", assemblySlashDoc.AssemblyFilename);
-					writer.WriteAttributeString("documentation", assemblySlashDoc.SlashDocFilename);
+					writer.WriteAttributeString("location", GetRelativePath(assemblySlashDoc.AssemblyFilename));
+					writer.WriteAttributeString("documentation", GetRelativePath(assemblySlashDoc.SlashDocFilename));
 					writer.WriteEndElement();
 				}
 
