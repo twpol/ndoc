@@ -285,6 +285,26 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "graphics\intevent.gif"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "graphics\intfield.gif"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "graphics\intmethod.gif"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "graphics\intoperator.gif"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "graphics\intproperty.gif"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "graphics\js7.ini"
                     BuildAction = "EmbeddedResource"
                 />
@@ -302,6 +322,26 @@
                 />
                 <File
                     RelPath = "graphics\ndp.ini"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "graphics\privevent.gif"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "graphics\privfield.gif"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "graphics\privmethod.gif"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "graphics\privoperator.gif"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "graphics\privproperty.gif"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
