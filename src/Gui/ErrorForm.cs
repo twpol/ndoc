@@ -20,7 +20,10 @@ namespace NDoc.Gui
 		private System.Windows.Forms.TextBox m_messageTextBox;
 		private System.Windows.Forms.Button m_closeButton;
 		private System.Windows.Forms.Label m_stackTraceLabel;
+		private System.Windows.Forms.Button btnCopy;
 		private System.Windows.Forms.TextBox m_stackTraceTextBox;
+
+		private string ClipboardMsg;
 
 		internal ErrorForm(string message, Exception ex)
 		{
@@ -29,7 +32,7 @@ namespace NDoc.Gui
 			//
 			InitializeComponent();
 
-			this.Icon = SystemIcons.Exclamation;
+			this.Icon = SystemIcons.Error;
 
 			StringBuilder strBld = new StringBuilder();
 			if ((message != null) && (message.Length > 0))
@@ -66,6 +69,8 @@ namespace NDoc.Gui
 				lines = strBld.ToString().Split('\n');
 				m_stackTraceTextBox.Lines = lines;
 			}
+
+			ClipboardMsg= m_messageTextBox.Text + m_stackTraceTextBox.Text;
 		}
 
 		/// <summary>
@@ -94,12 +99,13 @@ namespace NDoc.Gui
 			this.m_closeButton = new System.Windows.Forms.Button();
 			this.m_stackTraceLabel = new System.Windows.Forms.Label();
 			this.m_stackTraceTextBox = new System.Windows.Forms.TextBox();
+			this.btnCopy = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// m_messageTextBox
 			// 
-			this.m_messageTextBox.Anchor = ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-				| System.Windows.Forms.AnchorStyles.Right);
+			this.m_messageTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+				| System.Windows.Forms.AnchorStyles.Right)));
 			this.m_messageTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.m_messageTextBox.Location = new System.Drawing.Point(16, 12);
 			this.m_messageTextBox.Multiline = true;
@@ -112,10 +118,10 @@ namespace NDoc.Gui
 			// 
 			// m_closeButton
 			// 
-			this.m_closeButton.Anchor = (System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right);
+			this.m_closeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.m_closeButton.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.m_closeButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.m_closeButton.Location = new System.Drawing.Point(360, 316);
+			this.m_closeButton.Location = new System.Drawing.Point(368, 328);
 			this.m_closeButton.Name = "m_closeButton";
 			this.m_closeButton.TabIndex = 4;
 			this.m_closeButton.Text = "&Close";
@@ -131,28 +137,38 @@ namespace NDoc.Gui
 			// 
 			// m_stackTraceTextBox
 			// 
-			this.m_stackTraceTextBox.Anchor = (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.m_stackTraceTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
 				| System.Windows.Forms.AnchorStyles.Left) 
-				| System.Windows.Forms.AnchorStyles.Right);
+				| System.Windows.Forms.AnchorStyles.Right)));
 			this.m_stackTraceTextBox.Location = new System.Drawing.Point(8, 148);
 			this.m_stackTraceTextBox.Multiline = true;
 			this.m_stackTraceTextBox.Name = "m_stackTraceTextBox";
 			this.m_stackTraceTextBox.ReadOnly = true;
 			this.m_stackTraceTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.m_stackTraceTextBox.Size = new System.Drawing.Size(440, 160);
+			this.m_stackTraceTextBox.Size = new System.Drawing.Size(440, 172);
 			this.m_stackTraceTextBox.TabIndex = 7;
 			this.m_stackTraceTextBox.Text = "";
 			this.m_stackTraceTextBox.WordWrap = false;
 			// 
+			// btnCopy
+			// 
+			this.btnCopy.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.btnCopy.Location = new System.Drawing.Point(8, 328);
+			this.btnCopy.Name = "btnCopy";
+			this.btnCopy.Size = new System.Drawing.Size(120, 24);
+			this.btnCopy.TabIndex = 9;
+			this.btnCopy.Text = "Copy to clipboard";
+			this.btnCopy.Click += new System.EventHandler(this.btnCopy_Click);
+			// 
 			// ErrorForm
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.ClientSize = new System.Drawing.Size(456, 350);
-			this.Controls.AddRange(new System.Windows.Forms.Control[] {
-																		  this.m_messageTextBox,
-																		  this.m_closeButton,
-																		  this.m_stackTraceLabel,
-																		  this.m_stackTraceTextBox});
+			this.ClientSize = new System.Drawing.Size(456, 358);
+			this.Controls.Add(this.btnCopy);
+			this.Controls.Add(this.m_messageTextBox);
+			this.Controls.Add(this.m_closeButton);
+			this.Controls.Add(this.m_stackTraceLabel);
+			this.Controls.Add(this.m_stackTraceTextBox);
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.MinimumSize = new System.Drawing.Size(400, 300);
@@ -171,5 +187,11 @@ namespace NDoc.Gui
 		{
 			m_closeButton.Focus();
 		}
+
+		private void btnCopy_Click(object sender, System.EventArgs e)
+		{
+			Clipboard.SetDataObject(ClipboardMsg,true);
+		}
+
 	}
 }

@@ -1008,8 +1008,15 @@ namespace NDoc.Gui
 				}
 				catch (CouldNotLoadAllAssembliesException e)
 				{
-					MessageBox.Show(this, e.Message, 
-						"Open", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+					WarningForm warningForm = new WarningForm("Could not load assembly.",
+						e.Message);
+					warningForm.ShowDialog(this);
+				}
+				catch (DocumenterPropertyFormatException e)
+				{
+					WarningForm warningForm = new WarningForm("Invalid Properties in Project File.",
+						e.Message  + "Documenter defaults will be used....");
+					warningForm.ShowDialog(this);
 				}
 
 				projectFilename = fileName;

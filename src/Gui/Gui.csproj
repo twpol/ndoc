@@ -200,6 +200,16 @@
                     DependentUpon = "SolutionForm.cs"
                     BuildAction = "EmbeddedResource"
                 />
+                <File
+                    RelPath = "WarningForm.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WarningForm.resx"
+                    DependentUpon = "WarningForm.cs"
+                    BuildAction = "EmbeddedResource"
+                />
             </Include>
         </Files>
     </CSHARP>
