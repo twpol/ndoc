@@ -1121,7 +1121,7 @@ namespace NDoc.Test
 	{
 	}
 
-	/// <summary>Explicit interface test</summary>
+	/// <summary>Explicit interface test (public)</summary>
 	public interface ExplicitInterface
 	{
 		/// <summary>Explicit method test</summary>
@@ -1131,8 +1131,15 @@ namespace NDoc.Test
 		void ExplicitMethod();
 	}
 
+	/// <summary>Explicit interface test (internal)</summary>
+	internal interface ExplicitInternalInterface
+	{
+		/// <summary>Explicit method test</summary>
+		void ExplicitMethodOfInternalInterface();
+	}
+
 	/// <summary>Testing explicit interface implementations</summary>
-	public class ExplicitImplementation : ExplicitInterface
+	public class ExplicitImplementation : ExplicitInterface, ExplicitInternalInterface
 	{
 		/// <summary>an explicitly implemented property</summary>
 		int ExplicitInterface.ExplicitProperty
@@ -1142,6 +1149,11 @@ namespace NDoc.Test
 
 		/// <summary>an explicitly implemented method</summary>
 		void ExplicitInterface.ExplicitMethod()
+		{
+		}
+
+		/// <summary>an explicitly implemented method of an internal interface</summary>
+		void ExplicitInternalInterface.ExplicitMethodOfInternalInterface()
 		{
 		}
 	}

@@ -9,6 +9,7 @@
 			<div>
 			  <xsl:call-template name="type-access">
 				  <xsl:with-param name="access" select="@access" />
+				  <xsl:with-param name="type" select="local-name()" />
 			  </xsl:call-template>
 			  <xsl:text>&#160;</xsl:text>
 			  <xsl:if test="local-name() != 'interface' and @abstract = 'true'">abstract&#160;</xsl:if>

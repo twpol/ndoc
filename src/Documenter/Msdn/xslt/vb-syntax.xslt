@@ -60,6 +60,7 @@
 				  </xsl:if>
 				  <xsl:call-template name="vb-type-access">
 					  <xsl:with-param name="access" select="@access" />
+					  <xsl:with-param name="type" select="local-name()" />
 				  </xsl:call-template>
 				  <xsl:text>&#160;</xsl:text>
 				  <xsl:choose>
@@ -144,9 +145,11 @@
 	<!-- -->
 	<xsl:template name="vb-type-access">
 		<xsl:param name="access" />
+		<xsl:param name="type" />
 		<xsl:choose>
 			<xsl:when test="$access='Public'">Public</xsl:when>
-			<xsl:when test="$access='NotPublic'">Private</xsl:when>
+			<xsl:when test="$access='NotPublic' and $type='interface'">Friend</xsl:when>
+			<xsl:when test="$access='NotPublic' and $type!='interface'">Private</xsl:when>
 			<xsl:when test="$access='NestedPublic'">Public</xsl:when>
 			<xsl:when test="$access='NestedFamily'">Protected</xsl:when>
 			<xsl:when test="$access='NestedFamilyOrAssembly'">Protected Friend</xsl:when>

@@ -259,10 +259,30 @@ namespace NDoc.Core
 
 		private bool MustDocumentMethod( MethodBase method )
 		{
+
 			// Methods containing '.' in their name that aren't constructors are probably
-			// explicit interface implementations and we always want to document those.
-			return ((method.Name.IndexOf('.') != -1 && method.Name != ".ctor") ||
-				method.IsPublic ||
+			// explicit interface implementations, we check whether we document those or not.
+			if((method.Name.IndexOf('.') != -1 && method.Name != ".ctor"))
+			{
+				string interfaceName = null;
+				int lastIndexOfDot = method.Name.LastIndexOf('.');
+				if (lastIndexOfDot != -1)
+				{
+					interfaceName = method.Name.Substring(0, lastIndexOfDot);
+
+					Type interfaceType = method.ReflectedType.GetInterface(interfaceName);
+
+					// Document method if interface is (public) or (isInternal and documentInternal).
+					if(  interfaceType.IsPublic || 
+						(interfaceType.IsNotPublic && MyConfig.DocumentInternals))
+					{
+						return true;
+					}
+				}
+			}
+
+			// All other methods
+			return (method.IsPublic ||
 				(method.IsFamily && MyConfig.DocumentProtected) ||
 				(method.IsFamilyOrAssembly && MyConfig.DocumentProtected) ||
 				(method.IsAssembly && MyConfig.DocumentInternals) ||
@@ -623,7 +643,10 @@ namespace NDoc.Core
 
 			foreach(Type interfaceType in type.GetInterfaces())
 			{
-				writer.WriteElementString("implements", interfaceType.Name);
+				if(MustDocumentType(interfaceType))
+				{
+					writer.WriteElementString("implements", interfaceType.Name);
+				}
 			}
 
 			WriteConstructors(writer, type);
@@ -911,7 +934,10 @@ namespace NDoc.Core
 
 			foreach(Type interfaceType in type.GetInterfaces())
 			{
-				writer.WriteElementString("implements", interfaceType.Name);
+				if(MustDocumentType(interfaceType))
+				{
+					writer.WriteElementString("implements", interfaceType.Name);
+				}
 			}
 
 			WriteFields(writer, type);
