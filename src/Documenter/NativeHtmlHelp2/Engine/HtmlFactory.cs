@@ -139,7 +139,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			this.Arguments.AddParam( "ndoc-documented-attributes", "", config.DocumentedAttributes );
 			this.Arguments.AddParam( "ndoc-net-framework-version", "", FrameworkVersion );
 			this.Arguments.AddParam( "ndoc-version", "", config.Version );
-			this.Arguments.AddParam( "ndoc-includeHierarchy", "", config.IncludeHierarchy );
 			this.Arguments.AddParam( "ndoc-omit-syntax", "", config.OmitSyntaxSection );
 			
 		}
@@ -290,7 +289,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 				TransformAndWriteResult( "namespace", fileName );
 				OnTopicStart( fileName );
 
-				if ( this.Arguments.GetParam( "ndoc-includeHierarchy", "" ) != null && (bool)(this.Arguments.GetParam( "ndoc-includeHierarchy", "" ) ) )
 					TransformAndWriteResult( "namespacehierarchy", FileNameMapper.GetFileNameForNamespaceHierarchy( namespaceName ) );
 
 				MakeHtmlForTypes( namespaceName );
@@ -303,7 +301,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		private void MakeHtmlForTypes( string namespaceName )
 		{
 			XmlNodeList typeNodes =
-				xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace[@name=\"" + namespaceName + "\"]/*[local-name()!='documentation']");
+				xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace[@name=\"" + namespaceName + "\"]/*[local-name()!='documentation' and local-name()!='typeHierarchy']");
 
 			int[] indexes = SortNodesByAttribute( typeNodes, "id" );
 
