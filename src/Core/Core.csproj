@@ -371,12 +371,37 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "ReflectionEngine\AttributeUsageDisplayFilter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ReflectionEngine\MemberDisplayName.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ReflectionEngine\MemberID.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ReflectionEngine\NamespaceHierarchyCollection.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ReflectionEngine\ReflectionEngine.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "ReflectionEngine\ReflectionEngineParameters.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ReflectionEngine\TypeHierachy.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
