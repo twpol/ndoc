@@ -841,11 +841,26 @@ namespace NDoc.Core
 			Debug.Assert(implementations == null);
 			implementations = new ImplementsCollection();
 
+			//build a collection of the base type's interfaces
+ 			//to determine which have been inherited
+ 			StringCollection baseInterfaces = new StringCollection();
+ 			foreach(Type baseInterfaceType in type.BaseType.GetInterfaces())
+ 			{
+ 				baseInterfaces.Add(baseInterfaceType.FullName);
+ 			}
+ 
 			foreach(Type interfaceType in type.GetInterfaces())
 			{
 				if(MustDocumentType(interfaceType))
 				{
-					writer.WriteElementString("implements", interfaceType.Name);
+ 					writer.WriteStartElement("implements");
+ 					if (baseInterfaces.Contains(interfaceType.FullName))
+ 					{
+ 						writer.WriteAttributeString("inherited", "true");
+ 					}
+ 					writer.WriteString(interfaceType.Name);
+ 					writer.WriteEndElement();
+ 
 					InterfaceMapping interfaceMap = type.GetInterfaceMap(interfaceType);
 					int numberOfMethods = interfaceMap.InterfaceMethods.Length;
 					for (int i = 0; i < numberOfMethods; i++)
