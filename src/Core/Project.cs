@@ -38,6 +38,7 @@ namespace NDoc.Core
 
 		private bool _IsDirty;
 		private SortedList _namespaces;
+		private string _projectFile;
 
 		/// <summary>Gets the IsDirty property.</summary>
 		public bool IsDirty
@@ -144,6 +145,39 @@ namespace NDoc.Core
 		{
 			_AssemblySlashDocs.RemoveAt(index);
 			IsDirty = true;
+		}
+
+		/// <summary>
+		/// Gets the base directory used for relative references.
+		/// </summary>
+		/// <value>
+		/// The directory of the project file, or the current working directory 
+		/// if the project was not loaded from a project file.
+		/// </value>
+		public string BaseDirectory {
+			get 
+			{ 
+				if (_projectFile == null) {
+					_projectFile = Directory.GetCurrentDirectory();
+				}
+				return Path.GetDirectoryName(_projectFile);
+			}
+		}
+
+		/// <summary>
+		/// Combines the specified path with the <see cref="BaseDirectory"/> of 
+		/// the <see cref="Project" /> to form a full path to file or directory.
+		/// </summary>
+		/// <param name="path">The relative or absolute path.</param>
+		/// <returns>
+		/// A rooted path.
+		/// </returns>
+		public string GetFullPath(string path) {
+			if (!Path.IsPathRooted(path)) {
+				path = Path.GetFullPath(Path.Combine(BaseDirectory, path));
+			}
+
+			return path;
 		}
 
 		/// <summary>Sets a namespace summary.</summary>
@@ -262,6 +296,8 @@ namespace NDoc.Core
 		/// <summary>Reads an NDoc project file.</summary>
 		public void Read(string filename)
 		{
+			_projectFile = Path.GetFullPath(filename);
+
 			Clear();
 
 			XmlTextReader reader = null;
@@ -364,8 +400,27 @@ namespace NDoc.Core
 				if (reader.NodeType == XmlNodeType.Element && reader.Name == "assembly")
 				{
 					AssemblySlashDoc assemblySlashDoc = new AssemblySlashDoc();
-					assemblySlashDoc.AssemblyFilename = reader["location"];
-					assemblySlashDoc.SlashDocFilename = reader["documentation"];
+
+					if (reader.GetAttribute("location") == null) 
+					{
+						throw new DocumenterException("\"location\" attribute is"
+							+ " required for <assembly> element in project file.");
+					}
+					if (reader.GetAttribute("location").Trim().Length == 0) {
+						throw new DocumenterException("\"location\" attribute of"
+							+ " <assembly> element cannot be empty in project file.");
+					}
+					assemblySlashDoc.AssemblyFilename = GetFullPath(reader["location"]);
+
+					if (reader.GetAttribute("documentation") == null) {
+						throw new DocumenterException("\"documentation\" attribute is"
+							+ " required for <assembly> element in project file.");
+					}
+					if (reader.GetAttribute("documentation").Trim().Length == 0) {
+						throw new DocumenterException("\"documentation\" attribute of"
+							+ " <assembly> element cannot be empty in project file.");
+					}
+					assemblySlashDoc.SlashDocFilename = GetFullPath(reader["documentation"]);
 					count++;
 					try
 					{
