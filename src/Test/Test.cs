@@ -1179,6 +1179,36 @@ namespace NDoc.Test
 		{
 		}
 	}
+
+	/// <summary>This class uses note elements on its members.</summary>
+	public class NotesTest
+	{
+		/// <summary>
+		///   <para>This summary has a note.</para>
+		///   <note>This is a note.</note>
+		/// </summary>
+		public void NoteInSummary()
+		{
+		}
+
+		/// <summary>This method has a note in its remarks.</summary>
+		/// <remarks>
+		///   <para>These remarks have a note.</para>
+		///   <note>This is a note.</note>
+		/// </remarks>
+		public void NoteInRemarks()
+		{
+		}
+
+		/// <summary>This method has cautionary note in its remarks.</summary>
+		/// <remarks>
+		///   <para>These remarks have a cautionary note.</para>
+		///   <note type="caution">Watch out!</note>
+		/// </remarks>
+		public void CautionNote()
+		{
+		}
+	}
 }
 
 namespace NDoc.Test.InternalStuff

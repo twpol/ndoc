@@ -625,7 +625,7 @@ namespace NDoc.Documenter.Msdn
 
 				XsltArgumentList arguments = new XsltArgumentList();
 				arguments.AddParam("id", String.Empty, typeID);
-				arguments.AddParam("member", String.Empty, "field");
+				arguments.AddParam("member-type", String.Empty, "field");
 				TransformAndWriteResult(xsltIndividualMembers, arguments, fileName);
 
 				htmlHelp.OpenBookInContents();
@@ -682,7 +682,7 @@ namespace NDoc.Documenter.Msdn
 
 				XsltArgumentList arguments = new XsltArgumentList();
 				arguments.AddParam("id", String.Empty, typeID);
-				arguments.AddParam("member", String.Empty, "property");
+				arguments.AddParam("member-type", String.Empty, "property");
 				TransformAndWriteResult(xsltIndividualMembers, arguments, fileName);
 
 				htmlHelp.OpenBookInContents();
@@ -829,7 +829,7 @@ namespace NDoc.Documenter.Msdn
 
 				XsltArgumentList arguments = new XsltArgumentList();
 				arguments.AddParam("id", String.Empty, typeID);
-				arguments.AddParam("member", String.Empty, "method");
+				arguments.AddParam("member-type", String.Empty, "method");
 				TransformAndWriteResult(xsltIndividualMembers, arguments, fileName);
 
 				htmlHelp.OpenBookInContents();
@@ -905,7 +905,7 @@ namespace NDoc.Documenter.Msdn
 
 				XsltArgumentList arguments = new XsltArgumentList();
 				arguments.AddParam("id", String.Empty, typeID);
-				arguments.AddParam("member", String.Empty, "operator");
+				arguments.AddParam("member-type", String.Empty, "operator");
 				TransformAndWriteResult(xsltIndividualMembers, arguments, fileName);
 
 				htmlHelp.OpenBookInContents();
@@ -1025,7 +1025,7 @@ namespace NDoc.Documenter.Msdn
 
 				XsltArgumentList arguments = new XsltArgumentList();
 				arguments.AddParam("id", String.Empty, typeID);
-				arguments.AddParam("member", String.Empty, "event");
+				arguments.AddParam("member-type", String.Empty, "event");
 				TransformAndWriteResult(xsltIndividualMembers, arguments, fileName);
 
 				htmlHelp.OpenBookInContents();

@@ -453,7 +453,7 @@
 		</blockquote>
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="node()">
+	<xsl:template match="node()" mode="no-para">
 		<xsl:apply-templates select="." mode="slashdoc" />
 	</xsl:template>
 	<!-- -->
@@ -691,23 +691,24 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template match="note" mode="slashdoc">
-		<xsl:choose>
-			<xsl:when test="@type='inheritinfo'">
-				<b>Notes to Inheritors: </b>
-				<xsl:apply-templates select="./node()" mode="slashdoc" />
-			</xsl:when>
-			<xsl:when test="@type='inotes'">
-				<b>Notes to Implementers: </b>
-				<xsl:apply-templates select="./node()" mode="slashdoc" />
-			</xsl:when>
-			<xsl:otherwise>
-				<p class="i2">
+		<p class="i2">
+			<xsl:choose>
+				<xsl:when test="@type='caution'">
+					<b>CAUTION</b>
+				</xsl:when>
+				<xsl:when test="@type='inheritinfo'">
+					<b>Notes to Inheritors: </b>
+				</xsl:when>
+				<xsl:when test="@type='inotes'">
+					<b>Notes to Implementers: </b>
+				</xsl:when>
+				<xsl:otherwise>
 					<b>Note</b>
-					<xsl:text>&#160;&#160;&#160;</xsl:text>
-					<xsl:apply-templates select="./node()" mode="slashdoc" />
-				</p>
-			</xsl:otherwise>
-		</xsl:choose>
+				</xsl:otherwise>
+			</xsl:choose>
+			<xsl:text>&#160;&#160;&#160;</xsl:text>
+			<xsl:apply-templates mode="slashdoc" />
+		</p>
 	</xsl:template>
 	<!-- -->
 	<xsl:template match="list" mode="slashdoc">

@@ -7,18 +7,18 @@
 	<xsl:include href="memberscommon.xslt" />
 	<!-- -->
 	<xsl:param name='id' />
-	<xsl:param name='member' />
+	<xsl:param name='member-type' />
 	<!-- -->
 	<xsl:template name="type-members">
 		<xsl:param name="type" />
 		<xsl:variable name="Members">
 			<xsl:call-template name="get-big-member-plural">
-				<xsl:with-param name="member" select="$member" />
+				<xsl:with-param name="member" select="$member-type" />
 			</xsl:call-template>
 		</xsl:variable>
 		<xsl:variable name="members">
 			<xsl:call-template name="get-small-member-plural">
-				<xsl:with-param name="member" select="$member" />
+				<xsl:with-param name="member" select="$member-type" />
 			</xsl:call-template>
 		</xsl:variable>
 		<html dir="LTR">
@@ -57,38 +57,38 @@
 					</p>
 					<!-- static members -->
 					<xsl:call-template name="public-static-section">
-						<xsl:with-param name="member" select="$member" />
+						<xsl:with-param name="member" select="$member-type" />
 					</xsl:call-template>
 					<xsl:call-template name="protected-static-section">
-						<xsl:with-param name="member" select="$member" />
+						<xsl:with-param name="member" select="$member-type" />
 					</xsl:call-template>
 					<xsl:call-template name="protected-internal-static-section">
-						<xsl:with-param name="member" select="$member" />
+						<xsl:with-param name="member" select="$member-type" />
 					</xsl:call-template>
 					<xsl:call-template name="internal-static-section">
-						<xsl:with-param name="member" select="$member" />
+						<xsl:with-param name="member" select="$member-type" />
 					</xsl:call-template>
 					<xsl:call-template name="private-static-section">
-						<xsl:with-param name="member" select="$member" />
+						<xsl:with-param name="member" select="$member-type" />
 					</xsl:call-template>
 					<!-- instance members -->
 					<xsl:call-template name="public-instance-section">
-						<xsl:with-param name="member" select="$member" />
+						<xsl:with-param name="member" select="$member-type" />
 					</xsl:call-template>
 					<xsl:call-template name="protected-instance-section">
-						<xsl:with-param name="member" select="$member" />
+						<xsl:with-param name="member" select="$member-type" />
 					</xsl:call-template>
 					<xsl:call-template name="protected-internal-instance-section">
-						<xsl:with-param name="member" select="$member" />
+						<xsl:with-param name="member" select="$member-type" />
 					</xsl:call-template>
 					<xsl:call-template name="internal-instance-section">
-						<xsl:with-param name="member" select="$member" />
+						<xsl:with-param name="member" select="$member-type" />
 					</xsl:call-template>
 					<xsl:call-template name="private-instance-section">
-						<xsl:with-param name="member" select="$member" />
+						<xsl:with-param name="member" select="$member-type" />
 					</xsl:call-template>
 					<xsl:call-template name="explicit-interface-implementations">
-						<xsl:with-param name="member" select="$member" />
+						<xsl:with-param name="member" select="$member-type" />
 					</xsl:call-template>
 					<xsl:call-template name="seealso-section">
 						<xsl:with-param name="page">

@@ -276,7 +276,9 @@
 						<xsl:text>)</xsl:text>
 					</td>
 					<td width="50%">
-						<xsl:apply-templates select="//class[@id=$declaring-type-id]/property[@name=$name]/documentation/summary/node()" mode="slashdoc" />
+						<xsl:call-template name="summary-with-no-paragraph">
+							<xsl:with-param name="member" select="//class[@id=$declaring-type-id]/property[@name=$name]" />
+						</xsl:call-template>
 					</td>
 				</xsl:when>
 				<xsl:otherwise>
@@ -378,7 +380,9 @@
 									<xsl:text>)</xsl:text>
 								</td>
 								<td width="50%">
-									<xsl:apply-templates select="//class[@id=$declaring-type-id]/method[@name=$name]/documentation/summary/node()" mode="slashdoc" />
+									<xsl:call-template name="summary-with-no-paragraph">
+										<xsl:with-param name="member" select="//class[@id=$declaring-type-id]/method[@name=$name]" />
+									</xsl:call-template>
 								</td>
 							</xsl:otherwise>
 						</xsl:choose>
@@ -504,7 +508,7 @@
 							</a>
 						</td>
 						<td width="50%">
-							<xsl:apply-templates select="documentation/summary/node()" mode="slashdoc" />
+							<xsl:call-template name="summary-with-no-paragraph" />
 						</td>
 					</xsl:otherwise>
 				</xsl:choose>
