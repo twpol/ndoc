@@ -1785,6 +1785,7 @@ namespace NDoc.Gui
 
 		private void AssemblySlashDocs_ItemRemovedAdded(object sender, AssemblySlashDocEventArgs args)
 		{
+			EnableMenuItems( this.project.AssemblySlashDocs.Count > 0 );
 			EnableAssemblyItems();
 		}
 
