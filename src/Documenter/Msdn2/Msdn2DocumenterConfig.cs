@@ -197,6 +197,24 @@ namespace NDoc.Documenter.Msdn2
 		}
 
 
+		string _Version = "1.0.0.0";
+
+		/// <summary>Get's or sets the version property</summary>
+		/// <remarks>The version number for the help file (#.#.#.#)</remarks>
+		[Category("Documentation Main Settings")]
+		[Description("The version number for the help file (#.#.#.#)")]
+		[DefaultValue("1.0.0.0")]
+		public string Version
+		{
+			get { return _Version; }
+
+			set
+			{
+				_Version = value;
+				SetDirty();
+			}
+		}
+	
 		#endregion
 
 		/// <summary>Gets or sets the IncludeFavorites property.</summary>

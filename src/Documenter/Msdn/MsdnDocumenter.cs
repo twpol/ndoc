@@ -1725,19 +1725,19 @@ namespace NDoc.Documenter.Msdn
 				if (!notEndOfDoc) return false;
 				while (notEndOfDoc && (base.NodeType == XmlNodeType.Element) && ShouldSkipElement() )
 				{
-					notEndOfDoc=SkipElement();
+					notEndOfDoc=SkipElement(this.Depth);
 				}
 				return notEndOfDoc;
 			}
 
-			private bool SkipElement()
+			private bool SkipElement(int startDepth)
 			{
 				if (base.IsEmptyElement) return base.Read();
 				bool notEndOfDoc=true;
 				while (notEndOfDoc)
 				{
 					notEndOfDoc=base.Read();
-					if ((base.NodeType == XmlNodeType.EndElement) && ShouldSkipElement() ) 
+					if ((base.NodeType == XmlNodeType.EndElement) && (this.Depth==startDepth) ) 
 						break;
 				}
 				if (notEndOfDoc) notEndOfDoc=base.Read();

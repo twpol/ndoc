@@ -57,7 +57,7 @@ namespace NDoc.Core.Reflection
 			_ShowMissingReturns = false;
 			_ShowMissingValues = false;
 
-			_DocumentInheritedMembers = DocumentedInheritedMembers.Instance;
+			_DocumentInheritedMembers = true;
 			_DocumentInheritedFrameworkMembers = true;
 			_DocumentExplicitInterfaceImplementations = false;
 
@@ -211,17 +211,15 @@ namespace NDoc.Core.Reflection
 
 		#region Visibility Options
 		
-		private DocumentedInheritedMembers _DocumentInheritedMembers;
+		private bool _DocumentInheritedMembers;
 
 		/// <summary>Gets or sets the DocumentInheritedMembers property.</summary>
-		/// <remarks>Determines what types of inherited members are documented. 
-		/// Normally, only inherited instance members are documented.
+		/// <remarks>Determines whether inherited members are documented. 
 		/// </remarks>
 		[Category("Visibility")]
-		[Description("Which inherited members to document.")]
-		[DefaultValue(DocumentedInheritedMembers.Instance)]
-		[System.ComponentModel.TypeConverter(typeof(EnumDescriptionConverter))]
-		public DocumentedInheritedMembers DocumentInheritedMembers
+		[Description("Turn this flag on to document inherited members.")]
+		[DefaultValue(true)]
+		public bool DocumentInheritedMembers
 		{
 			get { return _DocumentInheritedMembers; }
 
@@ -238,7 +236,7 @@ namespace NDoc.Core.Reflection
 		/// <remarks>If true, members inherited from .Net framework classes will be documented. 
 		/// </remarks>
 		[Category("Visibility")]
-		[Description("Which inherited members to document.")]
+		[Description("Turn this flag on to document members inherited from framework classes.\nNote: DocumentInheritedMembers must be true if any inherited mebers are to be documented.")]
 		[DefaultValue(true)]
 		public bool DocumentInheritedFrameworkMembers
 		{
@@ -812,11 +810,11 @@ namespace NDoc.Core.Reflection
 		/// <returns></returns>
 		protected override string HandleUnknownPropertyType(string name, string value)
 		{
-			string FailureMessages = "";
+			string FailureMessages = String.Empty;
 
 			if (String.Compare(name, "ReferencesPath", true) == 0) 
 			{
-				if (value.Length>0)
+				if (value.Length > 0)
 				{
 					Trace.WriteLine("WARNING: " + base.DocumenterInfo.Name + " Configuration - property 'ReferencesPath' is OBSOLETE. Please use the project level property 'ReferencePath'\n");
 					Project.ReferencePaths.Add(new ReferencePath(value));
@@ -824,18 +822,18 @@ namespace NDoc.Core.Reflection
 			}
 			else if (String.Compare(name, "IncludeAssemblyVersion", true) == 0) 
 			{
-				if (value.Length>0)
+				if (value.Length > 0)
 				{
 					Trace.WriteLine("WARNING: " + base.DocumenterInfo.Name + " Configuration - property 'IncludeAssemblyVersion' is OBSOLETE. Please use new property 'AssemblyVersionInfo'\n");
 
-					string newValue=String.Empty;
+					string newValue = String.Empty;
 					if (String.Compare(value, "true", true) == 0)
 					{
-						newValue="AssemblyVersion";
+						newValue = "AssemblyVersion";
 					}
 					else
 					{
-						newValue="None";
+						newValue = "None";
 					}
 
 					FailureMessages += base.ReadProperty("AssemblyVersionInfo", newValue);
@@ -845,6 +843,37 @@ namespace NDoc.Core.Reflection
 			{
 				// if we don't know how to handle this, let the base class have a go
 				FailureMessages = base.HandleUnknownPropertyType(name, value);
+			}
+			return FailureMessages;
+		}
+	
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="property"></param>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		protected override string HandleUnknownPropertyValue(PropertyInfo property, string value)
+		{
+			string FailureMessages = String.Empty;
+
+			// DocumentInheritedMembers has changed from an enumerated value to a simple boolean,
+			// since static members cannot actually be inherited; The extra complexity was 
+			// pointless and caused awkward edge conditions when a static member had the 
+			// same name as an instance member....
+			if (property.Name == "DocumentInheritedMembers")
+			{
+				bool newValue = true;
+				if (String.Compare(value, "none", true)==0)
+				{
+					newValue = true;
+				}
+				FailureMessages += base.ReadProperty("DocumentInheritedMembers", newValue.ToString());
+			}
+			else
+			{
+				// if we don't know how to handle this, let the base class have a go
+				FailureMessages = base.HandleUnknownPropertyValue(property, value);
 			}
 			return FailureMessages;
 		}
@@ -915,25 +944,6 @@ namespace NDoc.Core.Reflection
 	}
 
 	/// <summary>
-	/// Defines the type of inherited members to document.
-	/// </summary>
-	public enum DocumentedInheritedMembers
-	{
-		/// <summary>
-		/// None
-		/// </summary>
-		[Description("None")] None, 
-		/// <summary>
-		/// Instance Members
-		/// </summary>
-		[Description("Instance Members")] Instance, 
-		/// <summary>
-		/// Instance and Static Members
-		/// </summary>
-		[Description("Instance and Static Members")] InstanceAndStatic
-	}
-
-	/// <summary>
 	/// Defines the type of version information to document.
 	/// </summary>
 	public enum AssemblyVersionInformationType
@@ -948,7 +958,7 @@ namespace NDoc.Core.Reflection
 		/// This is the standard /.Net version information specified in the AssemblyVersionAttribute.
 		/// </para>
 		/// </summary>
-		[Description("Assembly Version")] AssemblyVersion,
+		[Description("Assembly Version")] AssemblyVersion, 
 		/// <summary>
 		/// AssemblyFileVersion Attribute
 		/// <para>

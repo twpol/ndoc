@@ -242,6 +242,7 @@ namespace NDoc.Documenter.Msdn2
 					using (FileStream tempFile = File.Open(tempFileName, FileMode.Open, FileAccess.Read)) 
 					{
 						FilteringXmlTextReader fxtr = new FilteringXmlTextReader(tempFile);
+
 						xmlDocumentation = new XmlDocument();
 						xmlDocumentation.Load(fxtr);
 
@@ -1472,7 +1473,7 @@ namespace NDoc.Documenter.Msdn2
 					arguments.AddParam("ndoc-document-attributes", String.Empty, MyConfig.DocumentAttributes);
 					arguments.AddParam("ndoc-documented-attributes", String.Empty, MyConfig.DocumentedAttributes);
 					arguments.AddParam( "ndoc-net-framework-version", "", utilities.FrameworkVersion );
-					//arguments.AddParam( "ndoc-version", "", MyConfig.Version );
+					arguments.AddParam( "ndoc-version", "", MyConfig.Version );
 
 					arguments.AddParam("ndoc-sdk-doc-base-url", String.Empty, utilities.SdkDocBaseUrl);
 					arguments.AddParam("ndoc-sdk-doc-file-ext", String.Empty, utilities.SdkDocExt);
@@ -1742,19 +1743,19 @@ namespace NDoc.Documenter.Msdn2
 				if (!notEndOfDoc) return false;
 				while (notEndOfDoc && (base.NodeType == XmlNodeType.Element) && ShouldSkipElement() )
 				{
-					notEndOfDoc=SkipElement();
+					notEndOfDoc=SkipElement(this.Depth);
 				}
 				return notEndOfDoc;
 			}
 
-			private bool SkipElement()
+			private bool SkipElement(int startDepth)
 			{
 				if (base.IsEmptyElement) return base.Read();
 				bool notEndOfDoc=true;
 				while (notEndOfDoc)
 				{
 					notEndOfDoc=base.Read();
-					if ((base.NodeType == XmlNodeType.EndElement) && ShouldSkipElement() ) 
+					if ((base.NodeType == XmlNodeType.EndElement) && (this.Depth==startDepth) ) 
 						break;
 				}
 				if (notEndOfDoc) notEndOfDoc=base.Read();

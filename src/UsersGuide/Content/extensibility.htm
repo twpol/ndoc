@@ -38,7 +38,7 @@
 					<p class="MsoNormal">
 						<span style="FONT-SIZE:8pt;COLOR:blue;FONT-FAMILY:'Lucida Console'">&lt;</span><span style="FONT-SIZE:8pt;COLOR:maroon;FONT-FAMILY:'Lucida Console'">xsl:stylesheet</span><span style="FONT-SIZE:8pt;COLOR:fuchsia;FONT-FAMILY:'Lucida Console'">
 						</span><span style="FONT-SIZE:8pt;COLOR:red;FONT-FAMILY:'Lucida Console'">version</span><span style="FONT-SIZE:8pt;COLOR:blue;FONT-FAMILY:'Lucida Console'">="1.0"</span><span style="FONT-SIZE:8pt;COLOR:fuchsia;FONT-FAMILY:'Lucida Console'">
-						</span><span style="FONT-SIZE:8pt;COLOR:maroon;FONT-FAMILY:'Lucida Console'">xmlns</span><span style="FONT-SIZE:8pt;COLOR:fuchsia;FONT-FAMILY:'Lucida Console'">:</span><span style="FONT-SIZE:8pt;COLOR:red;FONT-FAMILY:'Lucida Console'">xsl</span><span style="FONT-SIZE:8pt;COLOR:blue;FONT-FAMILY:'Lucida Console'">="<A href="http://www.w3.org/1999/XSL/Transform">http://www.w3.org/1999/XSL/Transform</A>"
+						</span><span style="FONT-SIZE:8pt;COLOR:maroon;FONT-FAMILY:'Lucida Console'">xmlns</span><span style="FONT-SIZE:8pt;COLOR:fuchsia;FONT-FAMILY:'Lucida Console'">:</span><span style="FONT-SIZE:8pt;COLOR:red;FONT-FAMILY:'Lucida Console'">xsl</span><span style="FONT-SIZE:8pt;COLOR:blue;FONT-FAMILY:'Lucida Console'">=&quot;<A href="http://www.w3.org/1999/XSL/Transform">http://www.w3.org/1999/XSL/Transform</A>&quot;
 							<FONT color="#800000">xmlns</FONT><FONT color="#ff0000">:MSHelp</FONT>="http://msdn.microsoft.com/mshelp"&gt;
 					</p>
 					<P class="MsoNormal" style="mso-layout-grid-align: none"><SPAN style="FONT-SIZE: 8pt; FONT-FAMILY: 'Lucida Console'"><SPAN style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -113,11 +113,10 @@
 							</span><span style="COLOR:red">class</span><span style="COLOR:blue">="green"&gt;</span></span></p>
 					<p class="MsoNormal">
 						<span style="FONT-SIZE:8pt;FONT-FAMILY:'Lucida Console'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							<span style="COLOR:blue">&lt;</span><span style="COLOR:maroon">xsl:value-of</span></span><span style="FONT-SIZE:8pt; COLOR:blue; FONT-FAMILY:Lucida Console">
-						</span><span style="FONT-SIZE:8pt;FONT-FAMILY:'Lucida Console'"><span style="COLOR:red">
-								select</span><span style="COLOR:blue">="."</span></span><span style="FONT-SIZE:8pt; COLOR:fuchsia; FONT-FAMILY:Lucida Console">
-						</span><span style="FONT-SIZE:8pt;FONT-FAMILY:'Lucida Console'"><span style="COLOR:red">
-								mode</span><span style="COLOR:blue">="slashdoc"</span></span><span style="FONT-SIZE:8pt; COLOR:blue; FONT-FAMILY:Lucida Console">/&gt;</span></p>
+							<span style="COLOR:blue">&lt;</span><span style="COLOR:maroon">xsl:</span></span><span style="COLOR:#800000; font-size:8pt; font-family:Lucida Console">apply-templates</span><span style="COLOR:blue; font-size:8pt; font-family:Lucida Console"> </span>
+						<span style="FONT-SIZE:8pt;FONT-FAMILY:'Lucida Console'"><span style="COLOR:red">select</span><span style="COLOR:blue">="./node()&quot;</span></span><span style="COLOR:fuchsia; font-size:8pt; font-family:Lucida Console">
+							</span>
+						<span style="FONT-SIZE:8pt;FONT-FAMILY:'Lucida Console'"><span style="COLOR:red">mode</span><span style="COLOR:blue">="slashdoc&quot;</span></span><span style="COLOR:blue; font-size:8pt; font-family:Lucida Console">/&gt;</span></p>
 					<p class="MsoNormal">
 						<span style="FONT-SIZE:8pt;FONT-FAMILY:'Lucida Console'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 							<span style="COLOR:blue">&lt;/</span><span style="COLOR:maroon">h1</span><span style="COLOR:blue">&gt;</span></span></p>

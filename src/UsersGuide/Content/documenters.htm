@@ -83,8 +83,9 @@
 		<tr valign="top">
 			<td><b>AutoPropertyBackerSummaries</b></td>
 			<td>If <b>true</b>, the documenter will automatically add a summary for fields which look like they back (hold the value 
-			for) a property. The summary is only added if there is no existing summary, which gives you a way to opt out of this behavior 
-			in particular cases. Currently the naming conventions supported are such that fields <b>_Length</b> and <b>length</b> 
+			for) a property.  The summary is only added if there is no existing summary, which gives you a way to opt out of this 
+			behaviour 
+			in particular cases.&nbsp; Currently the naming conventions supported are such that fields <b>_Length</b> and <b>length</b> 
 			will be inferred to property <b>Length</b>.</td>
 		</tr>
 		<tr valign="top">
@@ -202,20 +203,14 @@
 		<tr>
 			<td><b>DocumentInheritedFrameworkMembers</b></td>
 			<td>If <b>true</b>, members inherited from .Net framework classes will be included in the documentation. By convention, 
-			this members are normally documented.
-			<p>Note: if <b>DocumentInheritedMembers</b> is <b>None</b>, this setting will be ignored.</p>
+			these members are normally documented.
+			<p>Note: if <b>DocumentInheritedMembers</b> is <b>False</b>, this setting will be ignored.</p>
 			</td>
 		</tr>
 		<tr>
 			<td><b>DocumentInheritedMembers</b></td>
-			<td>This setting determines what types of inherited members are included in the documentation.
-			<p>It has the following three options;</p>
-			<table class="dtTable" cellspacing="0">
-				<col width="5%"/>
-				<tr><td><nobr><b>None</b></nobr></td><td>no inherited members will be documented.</td></tr>
-				<tr><td><nobr><b>Instance Members</b></nobr></td><td>only instance members will be documented. (This is the default).</td></tr>
-				<tr><td><nobr><b>Instance and Static Members</b></nobr></td><td>both instance and static members will be documented.</td></tr>
-			</table>
+			<td>If <b>true</b>, inherited members will be included in the documentation. By convention, 
+			these members are normally documented.
 			</td>
 		</tr>
 		<tr valign="top">
@@ -227,7 +222,7 @@
 		<tr valign="top">
 			<td><b>DocumentPrivates</b></td>
 			<td>If <b>true</b>, types and members marked as private will be included in the documentation.&nbsp; This is useful when 
-			using NDoc to create documentation intended for internal use.<p>Normally private items are not documented. </p>
+			using NDoc to create documentation intended for internal use.<p>Normally, private items are not documented. </p>
 			</td>
 		</tr>
 		<tr valign="top">

@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	xmlns:NUtil="urn:NDocUtil"
-	xmlns:NHtmlProvider="urn:NDocExternalHtml"
-	exclude-result-prefixes="NUtil NHtmlProvider" >
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:NUtil="urn:NDocUtil"
+	xmlns:NHtmlProvider="urn:NDocExternalHtml" exclude-result-prefixes="NUtil NHtmlProvider">
 	<!-- -->
 	<xsl:include href="filenames.xslt" />
 	<xsl:include href="links.xslt" />
@@ -11,7 +9,7 @@
 	<xsl:param name="ndoc-title" />
 	<xsl:param name="ndoc-omit-object-tags" select="true" />
 	<xsl:param name="ndoc-net-framework-version" />
-	<!--<xsl:param name="ndoc-version" />-->
+	<xsl:param name="ndoc-version" />
 	<xsl:param name="ndoc-sdk-doc-base-url" />
 	<xsl:param name="ndoc-sdk-doc-file-ext" />
 	<!--
@@ -38,7 +36,7 @@
 	<xsl:template match="node()|@*|text()" mode="footer-row" />
 	<xsl:template match="node()|@*|text()" mode="title-row" />
 	<xsl:template match="node()|@*|text()" mode="header-section" />
-	<xsl:template match="node()|@*|text()" mode="after-remarks-section"/>
+	<xsl:template match="node()|@*|text()" mode="after-remarks-section" />
 	<!-- -->
 	<xsl:template name="csharp-type">
 		<xsl:param name="runtime-type" />
@@ -250,7 +248,7 @@
 				</xsl:variable>
 				<a>
 					<xsl:attribute name="href">
-						<xsl:value-of select="$type-filename"/>
+						<xsl:value-of select="$type-filename" />
 					</xsl:attribute>
 					<xsl:value-of select="concat($typeName, ' ', $typeMixed)" />
 				</a>
@@ -535,7 +533,7 @@
 			<h4 class="dtH4">Implements</h4>
 			<xsl:for-each select="implements">
 				<p>
-					<xsl:call-template name="implements-member"/>
+					<xsl:call-template name="implements-member" />
 				</p>
 			</xsl:for-each>
 			<xsl:apply-templates select="documentation/node()" mode="implements-section" />
@@ -824,10 +822,12 @@
 		<xsl:param name="title" />
 		<head>
 			<meta http-equiv="Content-Type">
-				<xsl:attribute name="content"><xsl:value-of select="NUtil:GetContentType()"/></xsl:attribute>
+				<xsl:attribute name="content">
+					<xsl:value-of select="NUtil:GetContentType()" />
+				</xsl:attribute>
 			</meta>
 			<meta name="generator" content="NDoc 1.3" />
-<!--
+			<!--
 			<xsl:if test="$page-type!='hierarchy' and $page-type!='TypeHierarchy'">
 				<xsl:apply-templates select="." mode="KIndex">
 					<xsl:with-param name="title" select="$title" />
@@ -839,9 +839,9 @@
 			<title>
 				<xsl:value-of select="$title" />
 			</title>
-  			<link rel="stylesheet" type="text/css" href="ndoc.css"></link>
-			<script src="ndoc.js"  type="text/javascript"></script>
-			<xsl:apply-templates select="/ndoc" mode="header-section"/>			
+			<link rel="stylesheet" type="text/css" href="ndoc.css"></link>
+			<script src="ndoc.js" type="text/javascript"></script>
+			<xsl:apply-templates select="/ndoc" mode="header-section" />
 		</head>
 	</xsl:template>
 	<!-- -->
@@ -852,13 +852,14 @@
 			<xsl:choose>
 				<xsl:when test="$headerHtml=''">
 					<div id="bannerrow1">
-						<table class="bannerparthead" cellspacing="0"><tr id="hdr">
-							<td class="runninghead" nowrap="true">
-							<xsl:value-of select="$ndoc-title" />
-							</td>
-							<td class="product" nowrap="true">
-							</td>
-						</tr></table>
+						<table class="bannerparthead" cellspacing="0">
+							<tr id="hdr">
+								<td class="runninghead" nowrap="true">
+									<xsl:value-of select="$ndoc-title" />
+								</td>
+								<td class="product" nowrap="true"></td>
+							</tr>
+						</table>
 					</div>
 					<div id="TitleRow">
 						<h1 class="dtH1">
@@ -1149,9 +1150,9 @@
 							<xsl:if test="string-length( $ndoc-net-framework-version ) != 0">
 								Syntax based on .NET Framework version <xsl:value-of select="$ndoc-net-framework-version" />.<br />
 							</xsl:if>
-							<!--<xsl:if test="string-length( $ndoc-version ) != 0">
+							<xsl:if test="string-length( $ndoc-version ) != 0">
 								Documentation version <xsl:value-of select="$ndoc-version" />.
-							</xsl:if>-->
+							</xsl:if>
 						</i>
 					</font>
 				</center>
@@ -1166,8 +1167,11 @@
 			<xsl:value-of select="." />
 			<xsl:text>?subject=</xsl:text>
 			<xsl:value-of select="$ndoc-title" />
-			<!--<xsl:text></xsl:text>
-			<xsl:value-of select="$ndoc-version" />-->
+			<xsl:if test="string-length( $ndoc-version ) != 0">
+				<xsl:text>(</xsl:text>
+				<xsl:value-of select="$ndoc-version" />
+				<xsl:text>)</xsl:text>
+			</xsl:if>
 			<xsl:text> Documentation Feedback: </xsl:text>
 			<xsl:value-of select="$page" />
 		</xsl:variable>

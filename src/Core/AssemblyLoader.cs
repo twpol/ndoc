@@ -48,9 +48,9 @@ namespace NDoc.Core.Reflection
 		/// <remarks>Maps Assembly FullName to Filename for assemblies scanned, 
 		/// but not loaded because they were not a match to the required FullName.
 		/// <p>This list is scanned twice,</p>
-		/// <list type="unordered">
-		/// <term>If the requested assembly has not been loaded, but is in this list, then the file is loaded.</term>
-		/// <term>Once all search paths have been exhausted in an exact name match, this list is checked for a 'partial' match.</term>
+		/// <list type="bullet">
+		/// <item><term>If the requested assembly has not been loaded, but is in this list, then the file is loaded.</term></item>
+		/// <item><term>Once all search paths have been exhausted in an exact name match, this list is checked for a 'partial' match.</term></item>
 		/// </list></remarks>
 		private Hashtable AssemblyNameFileNameMap;
 

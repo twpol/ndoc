@@ -449,8 +449,9 @@ namespace NDoc.Core.Reflection
 				(method.IsFamily && this.rep.DocumentProtected && 
 				(this.rep.DocumentSealedProtected || !method.ReflectedType.IsSealed)) || 
 				(method.IsFamilyOrAssembly && this.rep.DocumentProtected) || 
-				(method.IsAssembly && this.rep.DocumentInternals) || 
-				(method.IsFamilyAndAssembly && this.rep.DocumentInternals) || 
+                (method.ReflectedType.Assembly == method.DeclaringType.Assembly &&
+                    ((method.IsAssembly && this.rep.DocumentInternals) || 
+				    (method.IsFamilyAndAssembly && this.rep.DocumentInternals))) || 
 				(method.IsPrivate)
 				)
 				)
@@ -570,8 +571,9 @@ namespace NDoc.Core.Reflection
 				(field.IsFamily && this.rep.DocumentProtected && 
 				(this.rep.DocumentSealedProtected || !field.ReflectedType.IsSealed)) || 
 				(field.IsFamilyOrAssembly && this.rep.DocumentProtected) || 
-				(field.IsAssembly && this.rep.DocumentInternals) || 
-				(field.IsFamilyAndAssembly && this.rep.DocumentInternals) || 
+                (field.ReflectedType.Assembly == field.DeclaringType.Assembly &&
+				    ((field.IsAssembly && this.rep.DocumentInternals) || 
+				    (field.IsFamilyAndAssembly && this.rep.DocumentInternals))) || 
 				(field.IsPrivate && this.rep.DocumentPrivates))
 				)
 			{
