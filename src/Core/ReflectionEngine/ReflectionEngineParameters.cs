@@ -32,10 +32,16 @@ namespace NDoc.Core
 			XmlDocFileNames = new ArrayList();
 			foreach(AssemblySlashDoc assemblySlashDoc in project.GetAssemblySlashDocs())
 			{
-				string assemblyFileName = project.GetFullPath(assemblySlashDoc.AssemblyFilename);
-				AssemblyFileNames.Add(assemblyFileName);
-				string xmlDocFileName = project.GetFullPath(assemblySlashDoc.SlashDocFilename);
-				XmlDocFileNames.Add(xmlDocFileName);
+				if (assemblySlashDoc.AssemblyFilename!=null & assemblySlashDoc.AssemblyFilename.Length>0)
+				{
+					string assemblyFileName = project.GetFullPath(assemblySlashDoc.AssemblyFilename);
+					AssemblyFileNames.Add(assemblyFileName);
+				}
+				if (assemblySlashDoc.SlashDocFilename!=null & assemblySlashDoc.SlashDocFilename.Length>0)
+				{
+					string xmlDocFileName = project.GetFullPath(assemblySlashDoc.SlashDocFilename);
+					XmlDocFileNames.Add(xmlDocFileName);
+				}
 			}
 			ReferencePaths  = new ArrayList();
 			foreach(string dir in project.GetReferencePaths())
