@@ -526,9 +526,7 @@
 			
 	<xsl:template match="operator" mode="cs-syntax">
 		<xsl:param name="lang"/>
-		<xsl:if test="@name != 'op_Explicit' and @name != 'op_Implicit'">
 
-		</xsl:if>	
 		<xsl:call-template name="cs-syntax-header">
 			<xsl:with-param name="lang" select="$lang"/>		
 		</xsl:call-template>
@@ -594,9 +592,16 @@
 						</xsl:choose>									
 					</xsl:when>
 					<xsl:otherwise>
-						<xsl:call-template name="csharp-operator-name">
-							<xsl:with-param name="name" select="@name" />
-						</xsl:call-template>
+						<xsl:choose>
+							<xsl:when test="$lang = 'C#'">
+								<xsl:call-template name="csharp-operator-name">
+									<xsl:with-param name="name" select="@name" />
+								</xsl:call-template>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="@name"/>
+							</xsl:otherwise>
+						</xsl:choose>
 					</xsl:otherwise>
 				</xsl:choose>
 				<xsl:call-template name="parameters">

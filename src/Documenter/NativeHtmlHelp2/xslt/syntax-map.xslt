@@ -530,12 +530,12 @@ by a class, but you cannot define your own.</xsl:when>
 	<xsl:template match="operator" mode="keyword">
 		<xsl:param name="lang"/>
 		<xsl:choose>
-			<xsl:when test="$lang='Visual Basic'">In Visual Basic, you cannot define
-or use custom operators.</xsl:when>
+			<xsl:when test="$lang='Visual Basic'">In Visual Basic, you can use the operators
+defined by a type, but you cannot define your own.</xsl:when>
 			<xsl:when test="$lang='C#'">operator&#160;</xsl:when>
-			<xsl:when test="$lang='C++'">operator&#160;</xsl:when>
-			<xsl:when test="$lang='JScript'">In JScript, you cannot define or 
-use custom operators.</xsl:when>
+			<xsl:when test="$lang='C++'"></xsl:when>
+			<xsl:when test="$lang='JScript'">In JScript, you can use the operators defined 
+by a type, but you cannot define your own.</xsl:when>
 		</xsl:choose>			
 	</xsl:template>	
 				
