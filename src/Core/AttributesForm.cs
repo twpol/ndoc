@@ -219,16 +219,17 @@ namespace NDoc.Core
 																					this.AddProp,
 																					this.listProperties,
 																					this.label2});
-			this.groupBox1.Location = new System.Drawing.Point(320, 48);
+			this.groupBox1.Location = new System.Drawing.Point(320, 40);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(304, 248);
+			this.groupBox1.Size = new System.Drawing.Size(304, 304);
 			this.groupBox1.TabIndex = 5;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Properties";
 			// 
 			// DeleteProp
 			// 
-			this.DeleteProp.Location = new System.Drawing.Point(192, 216);
+			this.DeleteProp.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.DeleteProp.Location = new System.Drawing.Point(192, 272);
 			this.DeleteProp.Name = "DeleteProp";
 			this.DeleteProp.TabIndex = 4;
 			this.DeleteProp.Text = "Delete";
@@ -236,7 +237,7 @@ namespace NDoc.Core
 			// 
 			// EditProp
 			// 
-			this.EditProp.Location = new System.Drawing.Point(112, 216);
+			this.EditProp.Location = new System.Drawing.Point(112, 272);
 			this.EditProp.Name = "EditProp";
 			this.EditProp.TabIndex = 3;
 			this.EditProp.Text = "Edit";
@@ -244,7 +245,7 @@ namespace NDoc.Core
 			// 
 			// AddProp
 			// 
-			this.AddProp.Location = new System.Drawing.Point(32, 216);
+			this.AddProp.Location = new System.Drawing.Point(32, 272);
 			this.AddProp.Name = "AddProp";
 			this.AddProp.TabIndex = 2;
 			this.AddProp.Text = "Add";
@@ -254,7 +255,7 @@ namespace NDoc.Core
 			// 
 			this.listProperties.Location = new System.Drawing.Point(8, 48);
 			this.listProperties.Name = "listProperties";
-			this.listProperties.Size = new System.Drawing.Size(288, 160);
+			this.listProperties.Size = new System.Drawing.Size(288, 212);
 			this.listProperties.TabIndex = 1;
 			this.listProperties.SelectedIndexChanged += new System.EventHandler(this.listProperties_SelectedIndexChanged);
 			// 
@@ -269,6 +270,8 @@ namespace NDoc.Core
 			// 
 			// buttonOK
 			// 
+			this.buttonOK.DialogResult = System.Windows.Forms.DialogResult.OK;
+			this.buttonOK.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.buttonOK.Location = new System.Drawing.Point(240, 368);
 			this.buttonOK.Name = "buttonOK";
 			this.buttonOK.TabIndex = 6;
@@ -278,6 +281,7 @@ namespace NDoc.Core
 			// buttonCancel
 			// 
 			this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.buttonCancel.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.buttonCancel.Location = new System.Drawing.Point(328, 368);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.TabIndex = 7;
@@ -302,6 +306,7 @@ namespace NDoc.Core
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.CancelButton = this.buttonCancel;
 			this.ClientSize = new System.Drawing.Size(642, 408);
+			this.ControlBox = false;
 			this.Controls.AddRange(new System.Windows.Forms.Control[] {
 																		  this.buttonCancel,
 																		  this.buttonOK,
@@ -309,12 +314,12 @@ namespace NDoc.Core
 																		  this.label1,
 																		  this.listAttributes,
 																		  this.groupBox2});
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
 			this.Name = "AttributesForm";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "AttributesForm";
+			this.Text = "Attributes";
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox2.ResumeLayout(false);
 			this.ResumeLayout(false);

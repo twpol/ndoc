@@ -71,6 +71,8 @@ namespace NDoc.Core
 			// 
 			// buttonOK
 			// 
+			this.buttonOK.DialogResult = System.Windows.Forms.DialogResult.OK;
+			this.buttonOK.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.buttonOK.Location = new System.Drawing.Point(120, 72);
 			this.buttonOK.Name = "buttonOK";
 			this.buttonOK.TabIndex = 1;
@@ -80,6 +82,7 @@ namespace NDoc.Core
 			// buttonCancel
 			// 
 			this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.buttonCancel.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.buttonCancel.Location = new System.Drawing.Point(200, 72);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.TabIndex = 2;
@@ -90,12 +93,13 @@ namespace NDoc.Core
 			this.AcceptButton = this.buttonOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.CancelButton = this.buttonCancel;
-			this.ClientSize = new System.Drawing.Size(384, 110);
+			this.ClientSize = new System.Drawing.Size(386, 138);
+			this.ControlBox = false;
 			this.Controls.AddRange(new System.Windows.Forms.Control[] {
 																		  this.buttonCancel,
 																		  this.buttonOK,
 																		  this.textBox1});
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
 			this.MaximumSize = new System.Drawing.Size(392, 144);
 			this.MinimizeBox = false;
