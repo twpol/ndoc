@@ -1,0 +1,4 @@
+bin
+obj
+*.csproj.user
+NDoc.Documenter.NAtiveHtmlHelp2.xml
