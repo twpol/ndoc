@@ -96,7 +96,7 @@ namespace NDoc.Test
 		/// Raises some events.
 		/// </summary>
 		/// <remarks><para>
-		/// Raises the <see cref="Event"/> event when <see cref="OnEvent"/> is called,
+		/// Raises the <see cref="Event"/> event when <see cref="Method"/> is called,
 		/// if <see cref="Field"/> is greater than 0.
 		/// </para><para>
 		/// The above paragraph is only intended to test crefs on different member types...
@@ -109,6 +109,7 @@ namespace NDoc.Test
 		/// </event>
 		/// <event cref="EventWithArgs">Raised when it feels like it.</event>
 		/// <event cref="EventWithMoreArgs">Never raised?</event>
+		/// <event cref="MultiEvent">Raised many times?</event>
 		/// <exception cref="Exception">
 		/// Some exception is thrown.
 		/// </exception>
@@ -122,6 +123,7 @@ namespace NDoc.Test
 			StaticEvent(this, new EventArgs());
 			EventWithArgs(this, new EventArgsTest());
 			EventWithMoreArgs(this, new EventArgsDerived());
+			MultiEvent(this, new EventArgsOne());
 		}
 
 		/// <summary>This event has arguments.</summary>
@@ -137,6 +139,9 @@ namespace NDoc.Test
 		/// <summary>Can you do this?</summary>
 		public static event Handler StaticEvent;
 
+		/// <summary>An event with one property.</summary>
+		public event MulticastHandler MultiEvent;
+
 		/// <summary>This is my first overloaded operator.</summary>
 		/// <remarks>Why do we have to declare them as static?</remarks>
 		public static bool operator !(Class x)
@@ -145,8 +150,19 @@ namespace NDoc.Test
 		}
 	}
 
+	/// <summary>This event has one property.</summary>
+	public class EventArgsOne
+	{
+		/// <summary>This is a unique event argument property.</summary>
+		public bool OneProperty
+		{
+			get { return true; }
+			set { }
+		}
+	}
+
 	/// <summary>This is an event arguments class.</summary>
-	public class EventArgsTest : EventArgs
+	public class EventArgsTest : System.ComponentModel.CancelEventArgs
 	{
 		/// <summary>This is an event arguments property.</summary>
 		public string EventArgsTestProperty
@@ -177,7 +193,7 @@ namespace NDoc.Test
 	public delegate void Handler(object sender, EventArgs e);
 
 	/// <summary>This is a multicast delegate.</summary>
-	public delegate int MulticastHandler(object sender, EventArgs e);
+	public delegate int MulticastHandler(object sender, EventArgsOne e);
 
 	/// <summary>This is an interface.</summary>
 	public interface Interface
