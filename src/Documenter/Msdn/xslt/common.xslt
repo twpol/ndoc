@@ -224,7 +224,7 @@
 				</a>
 				<xsl:text> | </xsl:text>
 			</xsl:if>
-			<xsl:if test="$page!='members' and $page!='enumeration' and $page!='delegate' and $page!='methods' and $page!='properties' and $page!='fields' and $page!='events'">
+			<xsl:if test="(constructor|field|property|method|operator|event) and $page!='members' and $page!='enumeration' and $page!='delegate' and $page!='methods' and $page!='properties' and $page!='fields' and $page!='events'">
 				<a>
 					<xsl:attribute name="href">
 						<xsl:call-template name="get-filename-for-type-members">
