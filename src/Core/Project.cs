@@ -158,7 +158,7 @@ namespace NDoc.Core
 			{ 
 				if (_projectFile == null) 
 				{
-					ProjectFile = Directory.GetCurrentDirectory();
+					ProjectFile = Path.Combine(Directory.GetCurrentDirectory(),"Untitled.ndoc");
 				}
 				return Path.GetDirectoryName(ProjectFile);
 			}
