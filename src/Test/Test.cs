@@ -274,6 +274,66 @@ namespace NDoc.Test
 		void OtherMethod();
 	}
 
+	/// <summary>This class implements <see cref="Interface"/>.</summary>
+	public class ImplementsInterface : Interface
+	{
+		/// <summary>
+		/// Gets the InterfaceProperty.
+		/// </summary>
+		/// <value></value>
+		public int InterfaceProperty
+		{
+			get
+			{
+				return 0;
+			}
+		}
+
+		/// <summary>
+		/// InterfaceMethod.
+		/// </summary>
+		public void InterfaceMethod()
+		{
+			InterfaceEvent(this, new EventArgs());
+		}
+
+		/// <summary>
+		/// InterfaceEvent
+		/// </summary>
+		public event Handler InterfaceEvent;
+
+	}
+
+	/// <summary>This class is derived from <see cref="Base"/> and implements <see cref="Interface"/>.</summary>
+	public class ImplementsInterfaceDerivedBase : Base, Interface
+	{
+		/// <summary>
+		/// Gets the InterfaceProperty.
+		/// </summary>
+		/// <value></value>
+		public int InterfaceProperty
+		{
+			get
+			{
+				return 0;
+			}
+		}
+
+		/// <summary>
+		/// InterfaceMethod.
+		/// </summary>
+		public void InterfaceMethod()
+		{
+			InterfaceEvent(this, new EventArgs());
+		}
+
+		/// <summary>
+		/// InterfaceEvent
+		/// </summary>
+		public event Handler InterfaceEvent;
+
+	}
+
 	/// <summary>This is an empty interface.</summary>
 	public interface Interface1
 	{
@@ -1576,10 +1636,14 @@ namespace NDoc.Test
 		public const EnumFlags ConstEnum =  EnumFlags.Foo;
 		/// <summary>This is a constant with 2 enum flags.</summary>
 		public const EnumFlags ConstEnum2 =  EnumFlags.Foo|EnumFlags.Bar;
+
+#if( !MONO ) //This causes the MONO compiler to abend! :-(
 		/// <summary>This is a constant decimal.</summary>
 		public const decimal ConstDecimal = 3.14159265358979323846m;
 		/// <summary>This is a constant decimal.</summary>
 		public const decimal ConstDecimal2 = 314159265358979323846m;
+#endif
+
 	}
 
 	/// <summary>
@@ -1726,6 +1790,13 @@ namespace NDoc.Test
 	public class HtmlTags
 	{
 	}
+}
+
+/// <summary>
+/// This class is in the global (unqualified) namespace.
+/// </summary>
+public class GlobalNamespaceClass
+{
 }
 
 
