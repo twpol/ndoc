@@ -9,6 +9,7 @@ bin\.net\1.1\
 bin\mono\
 doc\
 examples\
+src\
 src\Addins\NDocBuild\
 src\Addins\NDocBuild\NDocBuildSetup\
 src\Console\
