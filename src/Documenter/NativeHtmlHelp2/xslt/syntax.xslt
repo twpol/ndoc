@@ -864,33 +864,7 @@
 	</xsl:template>
 		
 	<!-- -->
-	<xsl:template name="cpp-indexer-params">
-		<xsl:param name="lang"/>
-		<xsl:param name="namespace-name" />
-		<xsl:param name="include-type-links"/>
-		
-		<xsl:call-template name="parameters-list">
-			<xsl:with-param name="lang" select="$lang"/>
-			<xsl:with-param name="namespace-name" select="$namespace-name"/>
-			<xsl:with-param name="include-type-links" select="$include-type-links"/>
-			<xsl:with-param name="open-paren" select="''"/>
-			<xsl:with-param name="close-paren" select="''"/>
-		</xsl:call-template>	
-	</xsl:template>
 
-	<xsl:template name="indexer-params">
-		<xsl:param name="lang"/>
-		<xsl:param name="namespace-name" />
-		<xsl:param name="include-type-links"/>
-		
-		<xsl:call-template name="parameters-list">
-			<xsl:with-param name="lang" select="$lang"/>
-			<xsl:with-param name="namespace-name" select="$namespace-name"/>
-			<xsl:with-param name="include-type-links" select="$include-type-links"/>
-			<xsl:with-param name="open-paren" select="'['"/>
-			<xsl:with-param name="close-paren" select="']'"/>
-		</xsl:call-template>	
-	</xsl:template>
 	
 	<xsl:template name="parameters">
 		<xsl:param name="lang"/>

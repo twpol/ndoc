@@ -103,12 +103,14 @@ namespace NDoc.Test
 		public int this[string s]
 		{
 			get { return 0; }
+			set {}
 		}
 
 		/// <summary>This overloaded indexer accepts three ints.</summary>
 		public int this[int i1, int i2, int i3]
 		{
 			get { return 0; }
+			set {}
 		}
 
 		/// <summary>Executes some code.</summary>

@@ -255,6 +255,21 @@
 		<xsl:text>&#10;</xsl:text></b>	
 	</xsl:template>
 
+
+	<xsl:template name="indexer-params">
+		<xsl:param name="lang"/>
+		<xsl:param name="namespace-name" />
+		<xsl:param name="include-type-links"/>
+		
+		<xsl:call-template name="parameters-list">
+			<xsl:with-param name="lang" select="$lang"/>
+			<xsl:with-param name="namespace-name" select="$namespace-name"/>
+			<xsl:with-param name="include-type-links" select="$include-type-links"/>
+			<xsl:with-param name="open-paren" select="'['"/>
+			<xsl:with-param name="close-paren" select="']'"/>
+		</xsl:call-template>	
+	</xsl:template>
+
 	<xsl:template match="property[@get='true' and @set='true']" mode="csharp-property-dir">
 		<xsl:text>get;&#160;set;</xsl:text>	
 	</xsl:template>
@@ -317,7 +332,22 @@
 		</xsl:call-template>	
 		<xsl:text>get_</xsl:text>
 		<xsl:value-of select="@name"/>
-		<xsl:text>()</xsl:text>
+		
+		<xsl:choose>
+			<xsl:when test="parameter">
+				<xsl:text>(</xsl:text>			
+				<xsl:call-template name="cpp-indexer-params">
+					<xsl:with-param name="include-type-links" select="$include-type-links"/>		
+					<xsl:with-param name="lang" select="'C++'"/>
+					<xsl:with-param name="namespace-name" select="../../@name" />
+				</xsl:call-template>
+				<xsl:text>)</xsl:text>			
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:text>()</xsl:text>
+			</xsl:otherwise>
+		</xsl:choose>
+						
 		<xsl:if test="contains(@type, '[')">
 			<xsl:text>&#160;__gc[]</xsl:text>
 		</xsl:if>
@@ -356,10 +386,25 @@
 			<xsl:text>&#160;__gc[]</xsl:text>
 		</xsl:if>
 		<xsl:if test="parameter">
-			<xsl:text>&#10;</xsl:text>
+			<xsl:text>newValue&#10;</xsl:text>
 		</xsl:if>
 		<xsl:text>);</xsl:text>
 	</xsl:template>
+		
+	<xsl:template name="cpp-indexer-params">
+		<xsl:param name="lang"/>
+		<xsl:param name="namespace-name" />
+		<xsl:param name="include-type-links"/>
+		
+		<xsl:call-template name="parameters-list">
+			<xsl:with-param name="lang" select="$lang"/>
+			<xsl:with-param name="namespace-name" select="$namespace-name"/>
+			<xsl:with-param name="include-type-links" select="$include-type-links"/>
+			<xsl:with-param name="open-paren" select="''"/>
+			<xsl:with-param name="close-paren" select="''"/>
+		</xsl:call-template>	
+	</xsl:template>
+		
 		
 	<xsl:template match="property" mode="js-property-syntax">
 		<xsl:param name="include-type-links"/>
