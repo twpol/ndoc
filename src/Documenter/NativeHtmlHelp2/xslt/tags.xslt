@@ -43,9 +43,8 @@
 				<xsl:call-template name="get-lang">
 					<xsl:with-param name="lang" select="@lang" />
 				</xsl:call-template>
-				<xsl:text>]</xsl:text>
+				<xsl:text>]&#160;</xsl:text>
 			</span>
-			<xsl:text>&#160;</xsl:text>
 			<xsl:apply-templates select="./node()" mode="slashdoc" />
 		</p>
 	</xsl:template>
