@@ -199,7 +199,7 @@ namespace NDoc.Core.Reflection
 		/// <summary>
 		/// 
 		/// </summary>
-		public DocumentedInheritedMembers DocumentInheritedMembers ;
+		public bool DocumentInheritedMembers ;
 		/// <summary>
 		/// 
 		/// </summary>
