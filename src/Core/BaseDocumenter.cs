@@ -1133,6 +1133,11 @@ namespace NDoc.Core
 			writer.WriteAttributeString("id", memberName);
 			writer.WriteAttributeString("access", GetTypeAccessValue(type));
 
+			if (hiding)
+			{
+				writer.WriteAttributeString("hiding", "true");
+			}
+
 			// structs can't be abstract and always derive from System.ValueType
 			// so don't bother including those attributes.
 			if (!isStruct)
@@ -1151,11 +1156,6 @@ namespace NDoc.Core
 				{
 					writer.WriteAttributeString("baseType", type.BaseType.Name);
 				}
-			}
-
-			if (hiding)
-			{
-				writer.WriteAttributeString("hiding", "true");
 			}
 
 			WriteTypeDocumentation(writer, memberName, type);
@@ -1588,9 +1588,6 @@ namespace NDoc.Core
 				}
 			}
 
-			//Debug.Assert(implementations == null);
-
-			WriteFields(writer, type);
 			WriteProperties(writer, type);
 			WriteMethods(writer, type);
 			WriteEvents(writer, type);
@@ -1735,36 +1732,40 @@ namespace NDoc.Core
 			writer.WriteAttributeString("name", field.Name);
 			writer.WriteAttributeString("id", memberName);
 			writer.WriteAttributeString("access", GetFieldAccessValue(field));
+			
+			if (field.IsStatic)
+			{
+				writer.WriteAttributeString("contract", "Static");
+			}
+			else
+			{
+				writer.WriteAttributeString("contract", "Normal");
+			}
+
 			writer.WriteAttributeString("type", field.FieldType.FullName.Replace('+', '.'));
 
-			bool inherited = field.DeclaringType != field.ReflectedType;
-
-			if ( !IsMemberSafe( field ) )
-				writer.WriteAttributeString( "unsafe", "true" );
-
+			bool inherited = (field.DeclaringType != field.ReflectedType);
 			if (inherited)
 			{
 				writer.WriteAttributeString("declaringType", field.DeclaringType.FullName);
 			}
+
+			if ( !IsMemberSafe( field ) )
+				writer.WriteAttributeString( "unsafe", "true" );
 
 			if (hiding)
 			{
 				writer.WriteAttributeString("hiding", "true");
 			}
 
-			if (field.IsStatic)
+			if (field.IsInitOnly)
 			{
-				writer.WriteAttributeString("contract", "Static");
+				writer.WriteAttributeString("initOnly", "true");
 			}
 
 			if (field.IsLiteral)
 			{
 				writer.WriteAttributeString("literal", "true");
-			}
-
-			if (field.IsInitOnly)
-			{
-				writer.WriteAttributeString("initOnly", "true");
 			}
 
 			if (inherited)
@@ -1834,10 +1835,25 @@ namespace NDoc.Core
 				writer.WriteAttributeString("declaringType", eventInfo.DeclaringType.FullName);
 			}
 
+			if (interfaceName != null)
+			{
+				writer.WriteAttributeString("interface", interfaceName);
+			}
+
 			if (eventInfo.IsMulticast)
 			{
 				writer.WriteAttributeString("multicast", "true");
 			}
+
+			if (inherited)
+			{
+				WriteInheritedDocumentation(writer, memberName, eventInfo.DeclaringType);
+			}
+			else
+			{
+				WriteEventDocumentation(writer, memberName, true);
+			}
+			WriteCustomAttributes(writer, eventInfo);
 
 			if (implementations != null)
 			{
@@ -1869,16 +1885,6 @@ namespace NDoc.Core
 					writer.WriteEndElement();
 				}
 			}
-
-			if (inherited)
-			{
-				WriteInheritedDocumentation(writer, memberName, eventInfo.DeclaringType);
-			}
-			else
-			{
-				WriteEventDocumentation(writer, memberName, true);
-			}
-			WriteCustomAttributes(writer, eventInfo);
 
 			writer.WriteEndElement();
 		}
@@ -1926,13 +1932,13 @@ namespace NDoc.Core
 			writer.WriteAttributeString("access", GetMethodAccessValue(constructor));
 			writer.WriteAttributeString("contract", GetMethodContractValue(constructor));
 			
-			if ( !IsMemberSafe( constructor ) )
-				writer.WriteAttributeString( "unsafe", "true" );
-
 			if (overload > 0)
 			{
 				writer.WriteAttributeString("overload", overload.ToString());
 			}
+
+			if ( !IsMemberSafe( constructor ) )
+				writer.WriteAttributeString( "unsafe", "true" );
 
 			WriteConstructorDocumentation(writer, memberName, constructor);
 			WriteCustomAttributes(writer, constructor);
@@ -1999,33 +2005,48 @@ namespace NDoc.Core
 				writer.WriteAttributeString("name", name);
 				writer.WriteAttributeString("id", memberName);
 				writer.WriteAttributeString("access", GetPropertyAccessValue(property));
-
-				if ( !IsMemberSafe( property ) )
-					writer.WriteAttributeString( "unsafe", "true" );
-
-				if (interfaceName != null)
-				{
-					writer.WriteAttributeString("interface", interfaceName);
-				}
+				writer.WriteAttributeString("contract", GetPropertyContractValue(property));
+				writer.WriteAttributeString("type", property.PropertyType.FullName.Replace('+', '.'));
 
 				if (inherited)
 				{
 					writer.WriteAttributeString("declaringType", property.DeclaringType.FullName);
 				}
 
+				if (overload > 0)
+				{
+					writer.WriteAttributeString("overload", overload.ToString());
+				}
+
+				if ( !IsMemberSafe( property ) )
+					writer.WriteAttributeString( "unsafe", "true" );
+
 				if (hiding)
 				{
 					writer.WriteAttributeString("hiding", "true");
 				}
 
-				writer.WriteAttributeString("type", property.PropertyType.FullName.Replace('+', '.'));
-				writer.WriteAttributeString("contract", GetPropertyContractValue(property));
+				if (interfaceName != null)
+				{
+					writer.WriteAttributeString("interface", interfaceName);
+				}
+
 				writer.WriteAttributeString("get", property.GetGetMethod(true) != null ? "true" : "false");
 				writer.WriteAttributeString("set", property.GetSetMethod(true) != null ? "true" : "false");
 
-				if (overload > 0)
+				if (inherited)
 				{
-					writer.WriteAttributeString("overload", overload.ToString());
+					WriteInheritedDocumentation(writer, memberName, property.DeclaringType);
+				}
+				else
+				{
+					WritePropertyDocumentation(writer, memberName, property, true);
+				}
+				WriteCustomAttributes(writer, property);
+
+				foreach (ParameterInfo parameter in GetIndexParameters(property))
+				{
+					WriteParameter(writer, memberName, parameter);
 				}
 
 				if (implementations != null)
@@ -2057,21 +2078,6 @@ namespace NDoc.Core
 						writer.WriteAttributeString("declaringType", implements.InterfaceType.FullName);
 						writer.WriteEndElement();
 					}
-				}
-
-				if (inherited)
-				{
-					WriteInheritedDocumentation(writer, memberName, property.DeclaringType);
-				}
-				else
-				{
-					WritePropertyDocumentation(writer, memberName, property, true);
-				}
-				WriteCustomAttributes(writer, property);
-
-				foreach (ParameterInfo parameter in GetIndexParameters(property))
-				{
-					WriteParameter(writer, memberName, parameter);
 				}
 
 				writer.WriteEndElement();
@@ -2208,47 +2214,30 @@ namespace NDoc.Core
 				writer.WriteAttributeString("name", name);
 				writer.WriteAttributeString("id", memberName);
 				writer.WriteAttributeString("access", GetMethodAccessValue(method));
-
-				if ( !IsMemberSafe( method ) )
-					writer.WriteAttributeString( "unsafe", "true" );
-
-				if (interfaceName != null)
-				{
-					writer.WriteAttributeString("interface", interfaceName);
-				}
+				writer.WriteAttributeString("contract", GetMethodContractValue(method));
+				writer.WriteAttributeString("returnType", GetTypeName(method.ReturnType));
 
 				if (inherited)
 				{
 					writer.WriteAttributeString("declaringType", method.DeclaringType.FullName);
 				}
 
-				if (hiding)
-				{
-					writer.WriteAttributeString("hiding", "true");
-				}
-
-				writer.WriteAttributeString("contract", GetMethodContractValue(method));
-
 				if (overload > 0)
 				{
 					writer.WriteAttributeString("overload", overload.ToString());
 				}
 
-				writer.WriteAttributeString("returnType", GetTypeName(method.ReturnType));
+				if ( !IsMemberSafe( method ) )
+					writer.WriteAttributeString( "unsafe", "true" );
 
-				if (implementations != null)
+				if (hiding)
 				{
-					ImplementsInfo implements = implementations[method.ToString()];
-					if (implements != null)
-					{
-						writer.WriteStartElement("implements");
-						writer.WriteAttributeString("name", implements.InterfaceMethod.Name);
-						writer.WriteAttributeString("id",GetMemberName((MethodBase)implements.InterfaceMethod));
-						writer.WriteAttributeString("interface", implements.InterfaceType.Name);
-						writer.WriteAttributeString("interfaceId", GetMemberName(implements.InterfaceType));
-						writer.WriteAttributeString("declaringType", implements.InterfaceType.FullName);
-						writer.WriteEndElement();
-					}
+					writer.WriteAttributeString("hiding", "true");
+				}
+
+				if (interfaceName != null)
+				{
+					writer.WriteAttributeString("interface", interfaceName);
 				}
 
 				if (inherited)
@@ -2265,6 +2254,21 @@ namespace NDoc.Core
 				foreach (ParameterInfo parameter in method.GetParameters())
 				{
 					WriteParameter(writer, GetMemberName(method), parameter);
+				}
+
+				if (implementations != null)
+				{
+					ImplementsInfo implements = implementations[method.ToString()];
+					if (implements != null)
+					{
+						writer.WriteStartElement("implements");
+						writer.WriteAttributeString("name", implements.InterfaceMethod.Name);
+						writer.WriteAttributeString("id",GetMemberName((MethodBase)implements.InterfaceMethod));
+						writer.WriteAttributeString("interface", implements.InterfaceType.Name);
+						writer.WriteAttributeString("interfaceId", GetMemberName(implements.InterfaceType));
+						writer.WriteAttributeString("declaringType", implements.InterfaceType.FullName);
+						writer.WriteEndElement();
+					}
 				}
 
 				writer.WriteEndElement();
@@ -2335,9 +2339,8 @@ namespace NDoc.Core
 				writer.WriteAttributeString("name", method.Name);
 				writer.WriteAttributeString("id", memberName);
 				writer.WriteAttributeString("access", GetMethodAccessValue(method));
-
-				if ( !IsMemberSafe( method ) )
-					writer.WriteAttributeString( "unsafe", "true" );
+				writer.WriteAttributeString("contract", GetMethodContractValue(method));
+				writer.WriteAttributeString("returnType", method.ReturnType.FullName);
 
 				bool inherited = method.DeclaringType != method.ReflectedType;
 
@@ -2346,14 +2349,13 @@ namespace NDoc.Core
 					writer.WriteAttributeString("declaringType", method.DeclaringType.FullName);
 				}
 
-				writer.WriteAttributeString("contract", GetMethodContractValue(method));
-
 				if (overload > 0)
 				{
 					writer.WriteAttributeString("overload", overload.ToString());
 				}
 
-				writer.WriteAttributeString("returnType", method.ReturnType.FullName);
+				if ( !IsMemberSafe( method ) )
+					writer.WriteAttributeString( "unsafe", "true" );
 
 				if (inherited)
 				{
