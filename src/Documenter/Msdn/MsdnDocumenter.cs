@@ -1300,7 +1300,7 @@ namespace NDoc.Documenter.Msdn
 		{
 			string typeID = (string)typeNode.Attributes["id"].Value;
 			string methodName = (string)methodNode.Attributes["name"].Value;
-			string fileName = typeID.Substring(2) + methodName + ".html";
+			string fileName = typeID.Substring(2) + "." + methodName + ".html";
 			return fileName;
 		}
 

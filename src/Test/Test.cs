@@ -1291,6 +1291,26 @@ namespace NDoc.Test
 	{
 		static byte[] bar = new byte[] {1,2,3};
 	}
+
+#warning This link points to a page that will never exist.
+	/// <summary>See <see cref="Enum.Foo" />.</summary>
+	public class LinkToEnumMember
+	{
+	}
+
+	/// <summary>See <see cref="SeeOverloadedStatic.StaticOverload" />.</summary>
+	public class SeeOverloadedStatic
+	{
+		/// <summary>Overload one.</summary>
+		public static void StaticOverload(int i)
+		{
+		}
+
+		/// <summary>Overload two.</summary>
+		public static void StaticOverload(string s)
+		{
+		}
+	}
 }
 
 namespace NDoc.Test.InternalStuff
