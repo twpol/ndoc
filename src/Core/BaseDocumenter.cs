@@ -549,7 +549,7 @@ namespace NDoc.Core
 				return false;
 
 			//exclude types that are internal to the .Net framework.
-			if (type.FullName.StartsWith("System") || type.FullName.StartsWith("Microsoft"))
+			if (type.FullName.StartsWith("System.") || type.FullName.StartsWith("Microsoft."))
 			{
 				if(type.IsNotPublic) return false;
 				if(type.DeclaringType !=null &&
@@ -596,6 +596,14 @@ namespace NDoc.Core
 						return IsEditorBrowsable(method);
 					}
 				}
+			}
+
+			if ((!MyConfig.DocumentInheritedFrameworkMembers) &&
+				(method.ReflectedType != method.DeclaringType) &&
+				(method.DeclaringType.FullName.StartsWith("System.") || 
+				method.DeclaringType.FullName.StartsWith("Microsoft.")))
+			{
+				return false;
 			}
 
 			// All other methods
@@ -769,6 +777,14 @@ namespace NDoc.Core
 
 		private bool MustDocumentField(FieldInfo field)
 		{
+			if ((!MyConfig.DocumentInheritedFrameworkMembers) &&
+				(field.ReflectedType != field.DeclaringType) &&
+				(field.DeclaringType.FullName.StartsWith("System.") || 
+				 field.DeclaringType.FullName.StartsWith("Microsoft.")))
+			{
+				return false;
+			}
+
 			return (field.IsPublic ||
 				(field.IsFamily && MyConfig.DocumentProtected &&
 				(MyConfig.DocumentSealedProtected || !field.ReflectedType.IsSealed)) ||
@@ -1436,12 +1452,12 @@ namespace NDoc.Core
 					  BindingFlags.Public |
 					  BindingFlags.NonPublic;
 
-			if (!MyConfig.DocumentInheritedMembers)
+			if (MyConfig.DocumentInheritedMembers==DocumentedInheritedMembers.None)
 			{
 				bindingFlags = bindingFlags | BindingFlags.DeclaredOnly;
 			}
 
-			if (MyConfig.DocumentInheritedStaticMembers)
+			if (MyConfig.DocumentInheritedMembers==DocumentedInheritedMembers.InstanceAndStatic)
 			{
 				bindingFlags = bindingFlags | BindingFlags.FlattenHierarchy;
 			}
@@ -1469,9 +1485,14 @@ namespace NDoc.Core
 					  BindingFlags.Public |
 					  BindingFlags.NonPublic;
 
-			if (!MyConfig.DocumentInheritedMembers)
+			if (MyConfig.DocumentInheritedMembers==DocumentedInheritedMembers.None)
 			{
 				bindingFlags = bindingFlags | BindingFlags.DeclaredOnly;
+			}
+
+			if (MyConfig.DocumentInheritedMembers==DocumentedInheritedMembers.InstanceAndStatic)
+			{
+				bindingFlags = bindingFlags | BindingFlags.FlattenHierarchy;
 			}
 
 			ConstructorInfo[] constructors = type.GetConstructors(bindingFlags);
@@ -1493,12 +1514,12 @@ namespace NDoc.Core
 					  BindingFlags.Public |
 					  BindingFlags.NonPublic;
 
-			if (!MyConfig.DocumentInheritedMembers)
+			if (MyConfig.DocumentInheritedMembers==DocumentedInheritedMembers.None)
 			{
 				bindingFlags = bindingFlags | BindingFlags.DeclaredOnly;
 			}
 
-			if (MyConfig.DocumentInheritedStaticMembers)
+			if (MyConfig.DocumentInheritedMembers==DocumentedInheritedMembers.InstanceAndStatic)
 			{
 				bindingFlags = bindingFlags | BindingFlags.FlattenHierarchy;
 			}
@@ -1527,12 +1548,12 @@ namespace NDoc.Core
 					  BindingFlags.Public |
 					  BindingFlags.NonPublic;
 
-			if (!MyConfig.DocumentInheritedMembers)
+			if (MyConfig.DocumentInheritedMembers==DocumentedInheritedMembers.None)
 			{
 				bindingFlags = bindingFlags | BindingFlags.DeclaredOnly;
 			}
 
-			if (MyConfig.DocumentInheritedStaticMembers)
+			if (MyConfig.DocumentInheritedMembers==DocumentedInheritedMembers.InstanceAndStatic)
 			{
 				bindingFlags = bindingFlags | BindingFlags.FlattenHierarchy;
 			}
@@ -1583,12 +1604,12 @@ namespace NDoc.Core
 					  BindingFlags.Public |
 					  BindingFlags.NonPublic;
 
-			if (!MyConfig.DocumentInheritedMembers)
+			if (MyConfig.DocumentInheritedMembers==DocumentedInheritedMembers.None)
 			{
 				bindingFlags = bindingFlags | BindingFlags.DeclaredOnly;
 			}
 
-			if (MyConfig.DocumentInheritedStaticMembers)
+			if (MyConfig.DocumentInheritedMembers==DocumentedInheritedMembers.InstanceAndStatic)
 			{
 				bindingFlags = bindingFlags | BindingFlags.FlattenHierarchy;
 			}
@@ -1639,12 +1660,12 @@ namespace NDoc.Core
 					  BindingFlags.Public |
 					  BindingFlags.NonPublic;
 
-			if (!MyConfig.DocumentInheritedMembers)
+			if (MyConfig.DocumentInheritedMembers==DocumentedInheritedMembers.None)
 			{
 				bindingFlags = bindingFlags | BindingFlags.DeclaredOnly;
 			}
 
-			if (MyConfig.DocumentInheritedStaticMembers)
+			if (MyConfig.DocumentInheritedMembers==DocumentedInheritedMembers.InstanceAndStatic)
 			{
 				bindingFlags = bindingFlags | BindingFlags.FlattenHierarchy;
 			}
@@ -1671,12 +1692,12 @@ namespace NDoc.Core
 					  BindingFlags.Public |
 					  BindingFlags.NonPublic;
 
-			if (!MyConfig.DocumentInheritedMembers)
+			if (MyConfig.DocumentInheritedMembers==DocumentedInheritedMembers.None)
 			{
 				bindingFlags = bindingFlags | BindingFlags.DeclaredOnly;
 			}
 
-			if (MyConfig.DocumentInheritedStaticMembers)
+			if (MyConfig.DocumentInheritedMembers==DocumentedInheritedMembers.InstanceAndStatic)
 			{
 				bindingFlags = bindingFlags | BindingFlags.FlattenHierarchy;
 			}

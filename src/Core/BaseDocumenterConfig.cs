@@ -54,9 +54,8 @@ namespace NDoc.Core
 			_ShowMissingReturns = false;
 			_ShowMissingValues = false;
 
-			_DocumentInheritedMembers = true;
-			_DocumentInheritedStaticMembers = false;
-			_DocumentExplicitInterfaceImplementations = false;
+			_DocumentInheritedMembers = DocumentedInheritedMembers.Instance;
+			_DocumentExplicitInterfaceImplementations = true;
 
 			_DocumentInternals = false;
 			_DocumentProtected = true;
@@ -415,15 +414,17 @@ namespace NDoc.Core
 
 		#region Visibility Options
 		
-		private bool _DocumentInheritedMembers;
+		private DocumentedInheritedMembers _DocumentInheritedMembers;
 
 		/// <summary>Gets or sets the DocumentInheritedMembers property.</summary>
-		/// <remarks>If this is true, members inherited from base classes will
-		/// be included in the documentation.</remarks>
+		/// <remarks>Determines what types of inherited members are documented. 
+		/// Normally, only inherited instance members are documented.
+		/// </remarks>
 		[Category("Visibility")]
-		[Description("Turn this flag on to document inherited members.")]
-		[DefaultValue(true)]
-		public bool DocumentInheritedMembers
+		[Description("Which inherited members to document.")]
+		[DefaultValue(DocumentedInheritedMembers.Instance)]
+		[System.ComponentModel.TypeConverter(typeof(NDoc.Core.EnumDescriptionConverter))]
+		public DocumentedInheritedMembers DocumentInheritedMembers
 		{
 			get { return _DocumentInheritedMembers; }
 
@@ -434,21 +435,21 @@ namespace NDoc.Core
 			}
 		}
 
-		private bool _DocumentInheritedStaticMembers;
+		private bool _DocumentInheritedFrameworkMembers;
 
-		/// <summary>Gets or sets the DocumentInheritedStaticMembers property.</summary>
-		/// <remarks>If this is true, static members inherited from base classes will
-		/// be included in the documentation.</remarks>
+		/// <summary>Gets or sets the DocumentInheritedFrameworkMembers property.</summary>
+		/// <remarks>If true, members inherited from .Net framework classes will be documented. 
+		/// </remarks>
 		[Category("Visibility")]
-		[Description("Turn this flag on to document inherited members.")]
-		[DefaultValue(false)]
-		public bool DocumentInheritedStaticMembers
+		[Description("Which inherited members to document.")]
+		[DefaultValue(true)]
+		public bool DocumentInheritedFrameworkMembers
 		{
-			get { return _DocumentInheritedStaticMembers; }
+			get { return _DocumentInheritedFrameworkMembers; }
 
 			set
 			{
-				_DocumentInheritedStaticMembers = value;
+				_DocumentInheritedFrameworkMembers = value;
 				SetDirty();
 			}
 		}
@@ -1234,7 +1235,25 @@ namespace NDoc.Core
 		/// <summary>
 		/// Spanish
 		/// </summary>
-		[Description("Spanish")] es, 
+		[Description("Spanish")] es 
 	}
 
+	/// <summary>
+	/// Specifies type of inherited members to document.
+	/// </summary>
+	public enum DocumentedInheritedMembers
+	{
+		/// <summary>
+		/// None
+		/// </summary>
+		[Description("None")] None,
+		/// <summary>
+		/// French
+		/// </summary>
+		[Description("Instance Members")] Instance,
+		/// <summary>
+		/// German
+		/// </summary>
+		[Description("Instance and Static Members")] InstanceAndStatic
+	}
 }
