@@ -172,6 +172,7 @@
 					<xsl:call-template name="cs-type-syntax" />
 					<xsl:if test="local-name() = 'delegate'">
 						<xsl:call-template name="parameter-section" />
+						<xsl:call-template name="returnvalue-section" />
 					</xsl:if>
 					<xsl:call-template name="remarks-section" />
 					<xsl:call-template name="example-section" />
