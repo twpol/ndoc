@@ -93,6 +93,7 @@
 						</xsl:with-param>
 					</xsl:call-template>
 				</div>
+				<xsl:call-template name="footer-row" />
 			</body>
 		</html>
 	</xsl:template>

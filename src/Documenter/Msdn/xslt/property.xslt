@@ -59,6 +59,7 @@
 						</xsl:element>
 					</object>
 				</div>
+				<xsl:call-template name="footer-row" />
 			</body>
 		</html>
 	</xsl:template>

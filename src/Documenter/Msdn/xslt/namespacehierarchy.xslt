@@ -36,14 +36,7 @@
 						</p>
 					</xsl:if>
 				</div>
-				<xsl:variable name="generated-from">
-					<xsl:call-template name="generated-from-assembly-version" />
-				</xsl:variable>
-				<xsl:if test="$generated-from != ''">
-					<div id="footer">
-						<p><xsl:value-of select="$generated-from" /></p>
-					</div>
-				</xsl:if>
+				<xsl:call-template name="footer-row" />
 			</body>
 		</html>
 	</xsl:template>

@@ -626,6 +626,32 @@
 		</div>
 	</xsl:template>
 	<!-- -->
+	<xsl:template name="footer-row">
+		<div id="footer">
+			<p><xsl:call-template name="copyright-notice" /></p>
+			<p><xsl:call-template name="generated-from-assembly-version" /></p>
+		</div>
+	</xsl:template>
+	<!-- -->
+	<xsl:template name="copyright-notice">
+		<xsl:variable name="copyright-text">
+			<xsl:value-of select="/ndoc/copyright/@text" />
+		</xsl:variable>
+		<xsl:variable name="copyright-href">
+			<xsl:value-of select="/ndoc/copyright/@href" />
+		</xsl:variable>
+		<xsl:if test="$copyright-text != ''">
+			<a>
+				<xsl:if test="$copyright-href != ''">
+					<xsl:attribute name="href">
+						<xsl:value-of select="$copyright-href" />
+					</xsl:attribute>
+				</xsl:if>
+				<xsl:value-of select="/ndoc/copyright/@text" />
+			</a>
+		</xsl:if>
+	</xsl:template>
+	<!-- -->
 	<xsl:template name="generated-from-assembly-version">
 		<xsl:if test="/ndoc/assembly/@version">
 			<xsl:text>Generated from assembly </xsl:text>

@@ -201,6 +201,19 @@ namespace NDoc.Core
 		{
 			AssemblyName assemblyName = currentAssembly.GetName();
 
+			if (MyConfig.CopyrightText != string.Empty)
+			{
+				writer.WriteStartElement("copyright");
+				writer.WriteAttributeString("text", MyConfig.CopyrightText);
+
+				if (MyConfig.CopyrightHref != string.Empty)
+				{
+					writer.WriteAttributeString("href", MyConfig.CopyrightHref);
+				}
+
+				writer.WriteEndElement();
+			}
+
 			writer.WriteStartElement("assembly");
 			writer.WriteAttributeString("name", assemblyName.Name);
 

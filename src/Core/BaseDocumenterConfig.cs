@@ -45,6 +45,8 @@ namespace	NDoc.Core
 			DocumentEmptyNamespaces	=	false;
 
 			IncludeAssemblyVersion = false;
+			CopyrightText = string.Empty;
+			CopyrightHref = string.Empty;
 		}
 
 		private	Project	_Project;
@@ -348,6 +350,42 @@ namespace	NDoc.Core
 			set	
 			{	
 				_IncludeAssemblyVersion = value;	
+				SetDirty();
+			}
+		}
+
+		string _CopyrightText;
+
+		///	<summary>Gets	or sets	the	CopyrightText property.</summary>
+		[
+			Category("Extra Information"),
+			Description("A copyright notice text that will be included in the generated docs.")
+		]
+		public string	CopyrightText
+		{
+			get	{	return _CopyrightText; }
+
+			set	
+			{	
+				_CopyrightText = value;	
+				SetDirty();
+			}
+		}
+
+		string _CopyrightHref;
+
+		///	<summary>Gets	or sets	the	CopyrightHref property.</summary>
+		[
+			Category("Extra Information"),
+			Description("An URL referenced by the copyright notice.")
+		]
+		public string	CopyrightHref
+		{
+			get	{	return _CopyrightHref; }
+
+			set	
+			{	
+				_CopyrightHref = value;	
 				SetDirty();
 			}
 		}
