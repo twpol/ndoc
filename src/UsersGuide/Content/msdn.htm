@@ -3,7 +3,7 @@
 	<head>
 		<title>The MSDN Documenter</title>
 		<meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5">
-		<link href="css/ndoc.css" rel="stylesheet" name="ndocstyle" type="text/css" />
+		<link href="css/ndoc.css" rel="stylesheet" name="ndocstyle" type="text/css">
 		<script src="script/ndoc.js"></script>
 	</head>
 	<body class="dtBODY" id="bodyID" onload="InitTitle()">
@@ -24,7 +24,7 @@
 					<td>Create a binary table-of-contents file. This can significantly reduce the 
 						amount of time required to load a very large help document.</td>
 				</tr>
-<!--
+				<!--
 				<tr valign="top">
 					<td>
 						<b>DefaultTOC</b></td>
@@ -43,26 +43,25 @@
 					<td>
 						<b>FilesToInclude</b></td>
 					<td>Specifies external files that must be included in the compiled CHM file. 
-						Multiple files must be separated by a pipe (&#39;|&#39;).</td>
+						Multiple files must be separated by a pipe ('|').</td>
 				</tr>
 				<tr valign="top">
 					<td>
 						<b>FooterHtml</b></td>
 					<td>Raw HTML that is used as a page footer instead of the default footer. 
-						&quot;%FILE_NAME%\&quot; is dynamically replaced by the name of the file for 
-						the current html page. &quot;%ASSEMBLY_NAME%\&quot; is dynamically replaced by 
-						the name of the assembly for the current page. &quot;%ASSEMBLY_VERSION%\&quot; 
-						is dynamically replaced by the version of the assembly for the current page. 
-						&quot;%TOPIC_TITLE%\&quot; is dynamically replaced by the title of the current 
-						page.</td>
+						"%FILE_NAME%\" is dynamically replaced by the name of the file for the current 
+						html page. "%ASSEMBLY_NAME%\" is dynamically replaced by the name of the 
+						assembly for the current page. "%ASSEMBLY_VERSION%\" is dynamically replaced by 
+						the version of the assembly for the current page. "%TOPIC_TITLE%\" is 
+						dynamically replaced by the title of the current page.</td>
 				</tr>
 				<tr valign="top">
 					<td>
 						<b>HeaderHtml</b></td>
 					<td>Raw HTML that is used as a page header instead of the default blue banner. 
-						&quot;%FILE_NAME%\&quot; is dynamically replaced by the name of the file for 
-						the current html page. &quot;%TOPIC_TITLE%\&quot; is dynamically replaced by 
-						the title of the current page.</td>
+						"%FILE_NAME%\" is dynamically replaced by the name of the file for the current 
+						html page. "%TOPIC_TITLE%\" is dynamically replaced by the title of the current 
+						page.</td>
 				</tr>
 				<tr valign="top">
 					<td>
@@ -78,15 +77,9 @@
 				<tr valign="top">
 					<td>
 						<b>IncludeHierarchy</b></td>
-					<td>To include a class hierarchy page for each namespace. do not turn it on if 
-						your project has a namespace with many types, as NDoc will become very slow and 
+					<td>To include a class hierarchy page for each namespace. do not turn it on if your 
+						project has a namespace with many types, as NDoc will become very slow and 
 						might crash.</td>
-				</tr>
-				<tr valign="top">
-					<td>
-						<b>LinkToSdkDocVersion</b></td>
-					<td>Specifies to which version of the .NET Framework SDK documentation the links to 
-						system types will be pointing.</td>
 				</tr>
 				<tr valign="top">
 					<td>
@@ -116,7 +109,12 @@
 						<b>RootPageTOCName</b></td>
 					<td>The name for the table-of-contents entry corresponding to the root page. If 
 						this is not specified and <b>RootPageFileName</b> is, then the TOC entry will 
-						be &#39;Overview&#39;.</td>
+						be 'Overview'.</td>
+				</tr>
+				<tr>
+					<td><b>SdkLinksOnWeb</b></td>
+					<td>If <STRONG>true</STRONG>,&nbsp;links to system types and members will point to 
+						the online MSDN library.</td>
 				</tr>
 				<tr valign="top">
 					<td>
@@ -124,7 +122,7 @@
 					<td>This is a temporary property until we get a working language filter in the 
 						output like MSDN.</td>
 				</tr>
-<!--
+				<!--
 				<tr valign="top">
 					<td>
 						<b>SortTOCByNamespace</b></td>
