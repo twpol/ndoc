@@ -12,6 +12,7 @@
 	<xsl:param name="ndoc-title" />
 	<xsl:param name="ndoc-net-framework-version" />
 	<xsl:param name="ndoc-version" />
+	<xsl:param name="documenter-specific-xml" />
 	<!-- -->
 	<!--
 	 | no-op extensibility templates
@@ -721,8 +722,7 @@
 						</xsl:apply-templates>
 					</xsl:otherwise>
 				</xsl:choose>
-				<!--MSHelp:Attr Name="DocSet" Value="NETFramework"/-->
-				<xsl:for-each select="/ndoc/docSet">
+				<xsl:for-each select="$documenter-specific-xml/docSet">
 					<MSHelp:Attr Name="DocSet">
 						<xsl:attribute name="Value">
 							<xsl:value-of select="text()" />
