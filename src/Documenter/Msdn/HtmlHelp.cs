@@ -483,7 +483,7 @@ namespace NDoc.Documenter.Msdn
 				processStartInfo.WindowStyle = ProcessWindowStyle.Hidden;
 				processStartInfo.UseShellExecute = false;
 				processStartInfo.CreateNoWindow = true;
-				processStartInfo.RedirectStandardError = true;
+				processStartInfo.RedirectStandardError = false; //no point redirecting as HHC does not use stdErr
 				processStartInfo.RedirectStandardOutput = true;
 
 				helpCompileProcess.StartInfo = processStartInfo;
@@ -491,19 +491,18 @@ namespace NDoc.Documenter.Msdn
 				// Start the help compile and bail if it takes longer than 10 minutes.
 				Trace.WriteLine( "Compiling Html Help file" );
 
+				string stdOut = "";
+
 				try
 				{
 					helpCompileProcess.Start();
 
 					// Read the standard output of the spawned process.
-					string stdOut = helpCompileProcess.StandardOutput.ReadToEnd();
-
-					// compiler std out includes a bunch of unnenessary line feeds + new lines
+					stdOut = helpCompileProcess.StandardOutput.ReadToEnd();
+					// compiler std out includes a bunch of unneccessary line feeds + new lines
 					// remplace all the line feed and keep the new lines
-					Trace.WriteLine( stdOut.Replace( "\r", "" ) );
-					Trace.WriteLine( helpCompileProcess.StandardError.ReadToEnd() );
-					
-				}
+					stdOut = stdOut.Replace( "\r", "" );
+ 				}
 				catch (Exception e)
 				{
 					string msg = String.Format("The HTML Help compiler '{0}' was not found.", HtmlHelpCompiler);
@@ -516,10 +515,19 @@ namespace NDoc.Documenter.Msdn
 				//					throw new DocumenterException("Compile did not complete after 10 minutes and was aborted");
 				//				}
 
-				// Errors return 0 (warnings returns 1 - don't know about complete success)
+				// Errors return 0 (success or warnings returns 1)
 				if (helpCompileProcess.ExitCode == 0)
 				{
-					throw new DocumenterException("Help compiler returned an error code of " + helpCompileProcess.ExitCode.ToString());
+					string ErrMsg = "The Help compiler reported errors";
+						if (!File.Exists(GetPathToCompiledHtmlFile()))
+						{
+							ErrMsg += " - The CHM file was not been created.";
+						}
+					throw new DocumenterException(ErrMsg + "\n\n" + stdOut);
+				}
+				else
+				{
+					Trace.WriteLine(stdOut);
 				}
 
 				Trace.WriteLine( "Html Help compile complete" );
