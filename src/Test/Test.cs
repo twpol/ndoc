@@ -220,7 +220,8 @@ namespace NDoc.Test
 		}
 
 		/// <summary>This method is declared in the Derived class.</summary>
-		public void DerivedMethod() { }
+    /// <remarks>This is a reference to a parent member: <see cref="Base.BaseProperty"/></remarks>
+    public void DerivedMethod() { }
 
 		/// <summary>This method is declared in the Derived class with the "new" keyword.</summary>
 		public new void NewMethod() { }
