@@ -241,8 +241,10 @@ namespace NDoc.Documenter.Msdn
 					// Load the XML documentation into DOM and XPATH doc.
 					using (FileStream tempFile = File.Open(tempFileName, FileMode.Open, FileAccess.Read)) 
 					{
+						FilteringXmlTextReader fxtr = new FilteringXmlTextReader(tempFile);
 						xmlDocumentation = new XmlDocument();
-						xmlDocumentation.Load(tempFile);
+						xmlDocumentation.Load(fxtr);
+
 						tempFile.Seek(0,SeekOrigin.Begin);
 						xpathDocument = new XPathDocument(tempFile);
 					}
@@ -1648,6 +1650,67 @@ namespace NDoc.Documenter.Msdn
 			fileName += ".html";
 
 			return fileName;
+		}
+
+		/// <summary>
+		/// This custom reader is used to load the XmlDocument. It removes elements that are not required *before* 
+		/// they are loaded into memory, and hence lowers memory requirements significantly.
+		/// </summary>
+		private class FilteringXmlTextReader:XmlTextReader
+		{
+			object oNamespaceHierarchy;
+			object oDocumentation;
+			object oImplements;
+			object oParameter;
+			object oAttribute;
+
+			public FilteringXmlTextReader(System.IO.Stream file):base(file)
+			{
+				base.WhitespaceHandling=WhitespaceHandling.None;
+				oNamespaceHierarchy = base.NameTable.Add("namespaceHierarchy");
+				oDocumentation = base.NameTable.Add("documentation");
+				oImplements = base.NameTable.Add("implements");
+				oParameter = base.NameTable.Add("parameter");
+				oAttribute = base.NameTable.Add("attribute");
+			}
+		
+			private bool ShouldSkipElement()
+			{
+				return
+					(
+					base.Name.Equals(oNamespaceHierarchy)||
+					base.Name.Equals(oDocumentation)||
+					base.Name.Equals(oImplements)||
+					base.Name.Equals(oParameter)||
+					base.Name.Equals(oAttribute)
+					);
+			}
+
+			public override bool Read()
+			{
+				bool notEndOfDoc=base.Read();
+				if (!notEndOfDoc) return false;
+				while (notEndOfDoc && (base.NodeType == XmlNodeType.Element) && ShouldSkipElement() )
+				{
+					notEndOfDoc=SkipElement();
+				}
+				return notEndOfDoc;
+			}
+
+			private bool SkipElement()
+			{
+				if (base.IsEmptyElement) return base.Read();
+				bool notEndOfDoc=true;
+				while (notEndOfDoc)
+				{
+					notEndOfDoc=base.Read();
+					if ((base.NodeType == XmlNodeType.EndElement) && ShouldSkipElement() ) 
+						break;
+				}
+				if (notEndOfDoc) notEndOfDoc=base.Read();
+				return notEndOfDoc;
+			}
+
 		}
 	}
 }
