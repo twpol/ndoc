@@ -13,6 +13,7 @@ namespace NDoc.Test.Extensibility
 	/// as the ExtensibilityStylesheet property will result in end-user defined tags
 	/// being displayed in the final help output topics
 	/// </summary>
+	/// <remarks>This is a test of an inline <null/> tag</remarks>
 	/// <custom>This is a custom tag</custom>
 	/// <mySeeAlso>This should appear in the "See Also" section</mySeeAlso>
 	public class ABunchOfCustomTags
