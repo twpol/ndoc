@@ -122,9 +122,21 @@
 	<xsl:template name="get-link-for-type-name">
 		<xsl:param name="type-name"/>
 		<xsl:param name="link-text"/>
+		
+		<xsl:variable name="basic-type-name">
+			<xsl:choose>
+				<xsl:when test="contains($type-name, '[')">
+					<xsl:value-of select="substring-before($type-name, '[')" />
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="$type-name" />
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+
 
 		<xsl:call-template name="get-link-for-type">
-			<xsl:with-param name="type" select="concat( 'T:', $type-name )"/>
+			<xsl:with-param name="type" select="concat( 'T:', $basic-type-name )"/>
 			<xsl:with-param name="link-text" select="$link-text"/>
 		</xsl:call-template>
 	</xsl:template>  
