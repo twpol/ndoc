@@ -1841,10 +1841,11 @@ namespace NDoc.Core
 						ex=ex.InnerException;
 					} while(ex!=null);
 					Trace.WriteLine("");
-
-					fieldValue="***UNKNOWN***";
 				}
-				writer.WriteAttributeString("value", fieldValue);
+				if (fieldValue!=null)
+				{
+					writer.WriteAttributeString("value", fieldValue);
+				}
 			}
 
 			if (inherited)
@@ -1872,7 +1873,7 @@ namespace NDoc.Core
 
 			if (value is string)
 			{
-				return ("\"" + value.ToString() + "\"");
+				return (value.ToString());
 			}
 
 			if (value is Enum)
@@ -1886,7 +1887,7 @@ namespace NDoc.Core
 					string enumTypeName = value.GetType().Name;
 					string enumValue = value.ToString();
 					string[] enumValues = enumValue.Split(new char[] {','});
-					if (enumValues.Length > 0)
+					if (enumValues.Length > 1)
 					{
 						for (int i = 0; i < enumValues.Length; i++)
 						{
