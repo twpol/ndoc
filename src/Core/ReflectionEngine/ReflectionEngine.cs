@@ -157,6 +157,8 @@ namespace NDoc.Core
 			derivedTypes = new DerivedTypesCollection();
 			interfaceImplementingTypes = new InterfaceImplementingTypesCollection();
 			
+			documentedTypes = new Hashtable();
+			
 			PreReflectionProcess();
 
 			string currentAssemblyFilename = "";
@@ -783,8 +785,6 @@ namespace NDoc.Core
 
 						WriteNamespaceTypeHierarchy(writer, namespaceName);
 						
-						documentedTypes = new Hashtable();
-
 						int classCount = WriteClasses(writer, types, namespaceName);
 						Trace.WriteLine(string.Format("Wrote {0} classes.", classCount));
 
@@ -801,8 +801,6 @@ namespace NDoc.Core
 						Trace.WriteLine(string.Format("Wrote {0} enumerations.", enumCount));
 
 						writer.WriteEndElement();
-
-						documentedTypes = null;
 					}
 				}
 				else
@@ -835,7 +833,7 @@ namespace NDoc.Core
 				}
 				else
 				{
-					Debug.WriteLine(typeID + " skipped...");
+					Debug.WriteLine(typeID + " already documented - skipped...");
 				}
 			}
 
