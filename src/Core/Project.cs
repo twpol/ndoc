@@ -28,7 +28,7 @@ namespace NDoc.Core
 	/// <summary>Represents an NDoc project.</summary>
 	public class Project
 	{
-		/// <summary>Initializes a new instance of the Project class.</summary>
+		/// <summary>Initializes a new instance of the <see cref="Project"/> class.</summary>
 		public Project()
 		{
 			_IsDirty = false;
@@ -63,7 +63,7 @@ namespace NDoc.Core
 
 		private bool _IsDirty;
 
-		/// <summary>Raised by projects when they're dirty state changes from false to true.</summary>
+		/// <summary>Raised when the project <see cref="IsDirty"/> state changes from <see langword="false"/> to <see langword="true"/>.</summary>
 		public event ProjectModifiedEventHandler Modified;
 
 		private void ContentsChanged(object sender, EventArgs e)
@@ -71,7 +71,8 @@ namespace NDoc.Core
 			IsDirty = true;
 		}
 
-		/// <summary>Gets the IsDirty property.</summary>
+		/// <summary>Gets or sets a value indicating whether the contents of this project have been modified.</summary>
+		/// <remarks>If a project is marked as 'dirty' then the GUI will ask to user if they wish to save the project before loading another, or exiting.</remarks>
 		public bool IsDirty
 		{
 			get { return _IsDirty; }
@@ -96,11 +97,12 @@ namespace NDoc.Core
 		private bool _suspendDirtyCheck=false;
 
 		/// <summary>
-		/// Gets or sets a value indicating whether [suspend dirty check].
+		/// Gets or sets a value indicating whether <see cref="IsDirty"/> is updated when a project property is modifed.
 		/// </summary>
 		/// <value>
-		/// 	<c>true</c> if [suspend dirty check]; otherwise, <c>false</c>.
+		/// 	<see langword="true"/>, if changes to project properties should <b>not</b> update the value of <see cref="IsDirty"/>; otherwise, <see langword="false"/>.
 		/// </value>
+		/// <remarks>The default value of this property is <see langword="false"/>, however it is set to <see langword="true"/> during <see cref="Read"/> so a newly loaded project is not flagged as 'dirty'</remarks>
 		public bool SuspendDirtyCheck 
 		{
 			get { return _suspendDirtyCheck; }
@@ -114,49 +116,29 @@ namespace NDoc.Core
 		private AssemblySlashDocCollection _AssemblySlashDocs = new AssemblySlashDocCollection();
 
 		/// <summary>
-		/// Gets the AssemblySlashDocCollection.
+		/// Gets the collection of assemblies and documentation comment XML files in the project.
 		/// </summary>
-		/// <value></value>
+		/// <value>An <see cref="AssemblySlashDocCollection"/>.</value>
 		public AssemblySlashDocCollection AssemblySlashDocs 
 		{
 			get { return _AssemblySlashDocs; }
 		} 
-
-		/// <summary>
-		/// A custom exception to detect if a duplicate assembly is beeing added.
-		/// </summary>
-		public class AssemblyAlreadyExistsException : ApplicationException
-		{
-			/// <summary>Initializes a new instance of the AssemblyAlreadyExistsException 
-			/// class with a specified error message.</summary>
-			public AssemblyAlreadyExistsException(string message) : base(message)
-			{}
-		}
 
 		#endregion
 
 		#region ReferencePaths
 
 		/// <summary>
-		/// Holds the list of additional directories that will be probed when loading assemblies.
+		/// A collection of directories that will be probed when attempting to load assemblies.
 		/// </summary>
 		internal ReferencePathCollection _referencePaths;
-		/// <summary>Gets an enumerable list of ReferencePaths.</summary>
+		/// <summary>Gets a collection of directories that will be probed when attempting to load assemblies.</summary>
 		public ReferencePathCollection ReferencePaths
 		{
 			get
 			{
 				return _referencePaths;
 			}
-		}
-
-		/// <summary>
-		/// Adds a reference path.
-		/// </summary>
-		/// <param name="path">Path.</param>
-		public void AddReferencePath(string path)
-		{
-			_referencePaths.Add(new ReferencePath(path));
 		}
 
 		#endregion
@@ -269,7 +251,7 @@ namespace NDoc.Core
 		private ArrayList _probePath;
 
 		/// <summary>
-		/// Appends the specified directory to the probe path.
+		/// Appends the specified directory to the documenter probe path.
 		/// </summary>
 		/// <param name="path">The directory to add to the probe path.</param>
 		/// <exception cref="ArgumentNullException"><paramref name="path" /> is <see langword="null" />.</exception>
@@ -543,10 +525,10 @@ namespace NDoc.Core
 		#region Write to Disk
 
 		/// <summary>Writes an NDoc project to a disk file.</summary>
-		/// <remarks>A project is written to file in a 2 stage process.
+		/// <remarks>A project is written to file in a 2 stage process;
 		/// <list type="number">
-		/// <description>The project data is serialised to an in-memory store.</description>
-		/// <description>If no errors occured during serialization, the data is written to disk.</description>
+		/// <item>The project data is serialised to an in-memory store.</item>
+		/// <item>If no errors occured during serialization, the data is written to disk.</item>
 		/// </list>
 		/// <p>This technique ensures that any fatal error during serialization will not cause a
 		/// a corrupt or incomplete project file to be written to disk.</p>
@@ -653,7 +635,7 @@ namespace NDoc.Core
 
 	}
 
-	/// <summary>Handles ProjectModified events.</summary>
+	/// <summary>Handles Project <see cref="Project.Modified"/> events.</summary>
 	public delegate void ProjectModifiedEventHandler(object sender, EventArgs e);
 
 	/// <summary>
