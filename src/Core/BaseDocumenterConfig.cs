@@ -638,6 +638,13 @@ namespace NDoc.Core
 	/// </summary>
 	public enum EditorBrowsableFilterLevel
 	{
-		Off, HideNever, HideAdvanced
+		/// <summary>No filtering.</summary>
+		Off, 
+
+		/// <summary>Hide members flagged with EditorBrowsableState.Never.</summary>
+		HideNever, 
+
+		/// <summary>Hide members flagged with EditorBrowsableState.Never or EditorBrowsableState.Advanced.</summary>
+		HideAdvanced
 	}
 }
