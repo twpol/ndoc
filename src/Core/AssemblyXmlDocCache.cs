@@ -59,25 +59,26 @@ namespace NDoc.Core
 			object oMember = reader.NameTable.Add("member");
 			reader.MoveToContent();
 
-			while (reader.Read()) 
+			while (!reader.EOF) 
 			{
-				if (reader.NodeType == XmlNodeType.Element) 
+				if ((reader.NodeType == XmlNodeType.Element) && (reader.Name.Equals(oMember)))
 				{
-					if (reader.Name.Equals(oMember)) 
+					string ID = reader.GetAttribute("name");
+					string doc = reader.ReadInnerXml().Trim();
+					doc = TidyDoc(ID, doc);
+					if (docs.ContainsKey(ID))
 					{
-						string ID = reader.GetAttribute("name");
-						string doc = reader.ReadInnerXml().Trim();
-						doc = TidyDoc(ID, doc);
-						if (docs.ContainsKey(ID))
-						{
-							Trace.WriteLine("Warning: Multiple <member> tags found with id=\"" + ID + "\"");
-							docs[ID] += doc;
-						}
-						else
-						{
-							docs.Add(ID, doc);
-						}
-					}      
+						Trace.WriteLine("Warning: Multiple <member> tags found with id=\"" + ID + "\"");
+						docs[ID] += doc;
+					}
+					else
+					{
+						docs.Add(ID, doc);
+					}
+				}
+				else
+				{
+					reader.Read();
 				}
 			}
 		}
