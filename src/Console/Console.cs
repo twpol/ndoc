@@ -17,116 +17,149 @@
 
 using System;
 using System.Diagnostics;
+using System.Collections;
 
 using NDoc.Core;
 using NDoc.Documenter.Msdn;
 using NDoc.Documenter.Xml;
 
-namespace NDoc.Console
+namespace NDoc.ConsoleApplication
 {
 	class EntryPoint
 	{
-		static void Main(string[] args)
+		private static Project project;
+		private static IDocumenter documenter;
+
+		public static void Main(string[] args)
 		{
 			try
 			{
-				MsdnDocumenter documenter = new MsdnDocumenter();
+				project = new Project();
+				documenter = project.GetDocumenter("MSDN");
+				int maxDepth = 20; //to limit recursion depth
+				bool propertiesSet = false;
+				bool projectSet = false;
 
-				if (args.Length < 1)
+				foreach (string arg in args)
 				{
-					WriteUsage(documenter);
-				}
-				else
-				{
-					Project project = new Project();
-					int maxDepth = 20; //to limit recursion depth
-
-					foreach (string arg in args)
+					if (arg.StartsWith("-"))
 					{
-						if (arg.StartsWith("-"))
+						if (string.Compare(arg, "-verbose", true) == 0)
 						{
-							if (string.Compare(arg, "-verbose", true) == 0)
-							{
-								Trace.Listeners.Add(new TextWriterTraceListener(System.Console.Out));
-							}
-							else
-							{
-								string[] pair = arg.Split('=');
-
-								if (pair.Length == 2)
-								{
-									string name = pair[0].Substring(1);
-									string value = pair[1];
-
-									switch (name.ToLower())
-									{
-										case "project":
-											project = new Project();
-											project.Read(value);
-											documenter = (MsdnDocumenter)project.GetDocumenter(documenter.Name);
-											break;
-										case "recurse":
-											string[] recPair = value.Split(',');
-											if (2 == recPair.Length)
-											{
-												maxDepth = Convert.ToInt32(recPair[1]);
-											}
-											RecurseDir(ref project, recPair[0], maxDepth);
-											break;
-										default:
-											documenter.Config.SetValue(name, value);
-											break;
-									}
-								}
-							}
+							Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
 						}
-						else if (arg.IndexOf(',') != -1)
+						else
 						{
-							string[] pair = arg.Split(',');
+							string[] pair = arg.Split('=');
 
 							if (pair.Length == 2)
 							{
-								project.AddAssemblySlashDoc(
-								new AssemblySlashDoc(pair[0], pair[1]));
+								string name = pair[0].Substring(1);
+								string val = pair[1];
+
+								switch (name.ToLower())
+								{
+									case "documenter":
+										if (propertiesSet)
+										{
+											throw new ApplicationException("The documenter name must be specified before any documenter specific options.");
+										}
+										if (projectSet)
+										{
+											throw new ApplicationException("The documenter name must be specified before the project file.");
+										}
+										documenter = project.GetDocumenter(val);
+										if (documenter == null)
+										{
+											throw new ApplicationException("The specified documenter name is invalid.");
+										}
+										break;
+									case "project":
+										if (propertiesSet)
+										{
+											throw new ApplicationException("The project file must be specified before any documenter specific options.");
+										}
+										project = new Project();
+										project.Read(val);
+										documenter = project.GetDocumenter(documenter.Name);
+										projectSet = true;
+										break;
+									case "recurse":
+										string[] recPair = val.Split(',');
+										if (2 == recPair.Length)
+										{
+											maxDepth = Convert.ToInt32(recPair[1]);
+										}
+										RecurseDir(recPair[0], maxDepth);
+										break;
+									default:
+										documenter.Config.SetValue(name, val);
+										propertiesSet = true;
+										break;
+								}
 							}
 						}
 					}
+					else if (arg.IndexOf(',') != -1)
+					{
+						string[] pair = arg.Split(',');
 
-					if (project.AssemblySlashDocCount == 0)
-					{
-						WriteUsage(documenter);
-					}
-					else
-					{
-						documenter.DocBuildingStep += new DocBuildingEventHandler(DocBuildingStepHandler);
-						documenter.Build(project);
+						if (pair.Length == 2)
+						{
+							project.AddAssemblySlashDoc(
+								new AssemblySlashDoc(pair[0], pair[1]));
+						}
 					}
 				}
+
+				if (project.AssemblySlashDocCount == 0)
+				{
+					WriteUsage();
+				}
+				else
+				{
+					documenter.DocBuildingStep += new DocBuildingEventHandler(DocBuildingStepHandler);
+					documenter.Build(project);
+				}
+				
 			}
 			catch( Exception except )
 			{
-				System.Console.WriteLine( "Error: " + except.Message );
+				Console.WriteLine( "Error: " + except.Message );
 				System.Diagnostics.Trace.WriteLine( "Exception: " + Environment.NewLine + except.ToString() );
 			}
 		}
 
-		private static void WriteUsage(IDocumenter documenter)
+		private static void WriteUsage()
 		{
-			System.Console.WriteLine("usage: NDoc.Console [-verbose] [-project=file] [-recurse=dir[,maxDepth]] [-property=value...] assembly,xml [assembly,xml...]");
-			System.Console.WriteLine("  available properties:");
+			Console.WriteLine("usage: NDoc.Console [-verbose] [-documenter=docname] [-project=file]");
+			Console.WriteLine("                    [-recurse=dir[,maxDepth]] [-property=val...]");
+			Console.WriteLine("                    assembly,xml [assembly,xml...]");
+			Console.WriteLine();
 
+			Console.Write("available documenters: ");
+			ArrayList docs = project.Documenters;
+			for (int i = 0; i < docs.Count; i++)
+			{
+				if (i > 0) Console.Write(", ");
+				Console.Write(((IDocumenter)docs[i]).Name);
+			}
+			Console.WriteLine();
+			Console.WriteLine();
+
+			Console.WriteLine("available properties with the {0} documenter:", documenter.Name);
 			foreach (string property in documenter.Config.GetProperties())
 			{
-				System.Console.WriteLine("    " + property);
+				Console.WriteLine("    " + property);
 			}
 		}
 
 		private static void DocBuildingStepHandler(object sender, ProgressArgs e)
 		{
-			System.Console.WriteLine( e.Status );
+			Console.WriteLine( e.Status );
 		}
 
-		private static void RecurseDir(ref Project project, string dirName, int maxDepth)
+		private static void RecurseDir(string dirName, int maxDepth)
 		{
 			if (0 == maxDepth) return;
 			string docFile;
@@ -144,7 +177,7 @@ namespace NDoc.Console
 			}
 			foreach (string subDir in System.IO.Directory.GetDirectories(dirName))
 			{
-				RecurseDir(ref project, subDir, maxDepth - 1);
+				RecurseDir(subDir, maxDepth - 1);
 			}
 		}
 	}
