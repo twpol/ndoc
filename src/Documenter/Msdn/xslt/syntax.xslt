@@ -155,6 +155,7 @@
 	<xsl:template name="property-syntax">
 		<xsl:param name="indent" select="true()" />
 		<xsl:param name="display-names" select="true()" />
+		<xsl:param name="link-types" select="true()" />
 		<xsl:if test="not(parent::interface)">
 			<xsl:call-template name="method-access">
 				<xsl:with-param name="access" select="@access" />
@@ -164,16 +165,25 @@
 		<xsl:if test="@static">
 			<xsl:text>static&#160;</xsl:text>
 		</xsl:if>
-		<a>
-			<xsl:attribute name="href">
-				<xsl:call-template name="get-filename-for-type-name">
-					<xsl:with-param name="type-name" select="@type" />
+		<xsl:choose>
+			<xsl:when test="$link-types">
+				<a>
+					<xsl:attribute name="href">
+						<xsl:call-template name="get-filename-for-type-name">
+							<xsl:with-param name="type-name" select="@type" />
+						</xsl:call-template>
+					</xsl:attribute>
+					<xsl:call-template name="value">
+						<xsl:with-param name="type" select="@type" />
+					</xsl:call-template>
+				</a>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:call-template name="value">
+					<xsl:with-param name="type" select="@type" />
 				</xsl:call-template>
-			</xsl:attribute>
-			<xsl:call-template name="value">
-				<xsl:with-param name="type" select="@type" />
-			</xsl:call-template>
-		</a>
+			</xsl:otherwise>
+		</xsl:choose>
 		<xsl:text>&#160;</xsl:text>
 		<xsl:choose>
 			<xsl:when test="@name='Item'">
@@ -183,16 +193,25 @@
 					<xsl:if test="$indent">
 						<xsl:text>&#160;&#160;&#160;</xsl:text>
 					</xsl:if>
-					<a>
-						<xsl:attribute name="href">
-							<xsl:call-template name="get-filename-for-type-name">
-								<xsl:with-param name="type-name" select="@type" />
+					<xsl:choose>
+						<xsl:when test="$link-types">
+							<a>
+								<xsl:attribute name="href">
+									<xsl:call-template name="get-filename-for-type-name">
+										<xsl:with-param name="type-name" select="@type" />
+									</xsl:call-template>
+								</xsl:attribute>
+								<xsl:call-template name="csharp-type">
+									<xsl:with-param name="runtime-type" select="@type" />
+								</xsl:call-template>
+							</a>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:call-template name="csharp-type">
+								<xsl:with-param name="runtime-type" select="@type" />
 							</xsl:call-template>
-						</xsl:attribute>
-						<xsl:call-template name="csharp-type">
-							<xsl:with-param name="runtime-type" select="@type" />
-						</xsl:call-template>
-					</a>
+						</xsl:otherwise>
+					</xsl:choose>
 					<xsl:if test="$display-names">
 						<xsl:text>&#160;</xsl:text>
 						<xsl:value-of select="@name" />

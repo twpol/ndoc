@@ -96,6 +96,7 @@
 		<xsl:call-template name="property-syntax">
 			<xsl:with-param name="indent" select="false()" />
 			<xsl:with-param name="display-names" select="false()" />
+			<xsl:with-param name="link-types" select="false()" />
 		</xsl:call-template>
 	</xsl:template>
 	<!-- -->
