@@ -52,90 +52,87 @@ namespace NDoc.Core
 		/// <summary>
 		/// Gets the xml documentation for the assembly of the specified type.
 		/// </summary>
-		/// <value>The xml document.  If the xml file was not found, returns an empty document.</value>
-		public XmlDocument this[Type type]
+		/// <returns>The xml document.  If the xml file was not found, returns an empty document.</returns>
+		public XmlDocument GetXmlFor(Type type)
 		{
-			get
+			XmlDocument doc = (XmlDocument)docs[type.Assembly];
+
+			if (doc == null)
 			{
-				XmlDocument doc = (XmlDocument)docs[type.Assembly];
-
-				if (doc == null)
+				Type t = Type.GetType(type.AssemblyQualifiedName);
+				if (t != null)
 				{
-					Type t = Type.GetType(type.AssemblyQualifiedName);
-					if (t != null)
-					{
-						Assembly a = t.Assembly;
-						string assemblyPath = a.Location;
+					Assembly a = t.Assembly;
+					string assemblyPath = a.Location;
 						
-						if (assemblyPath.Length > 0)
+					if (assemblyPath.Length > 0)
+					{
+						string docPath = Path.ChangeExtension(assemblyPath, ".xml");
+
+						//if not found, try loading __AssemblyInfo__.ini
+						if (!File.Exists(docPath))
 						{
-							string docPath = Path.ChangeExtension(assemblyPath, ".xml");
+							string infoPath = Path.Combine(
+								Path.GetDirectoryName(docPath), "__AssemblyInfo__.ini");
+							docPath = null;
 
-							//if not found, try loading __AssemblyInfo__.ini
-							if (!File.Exists(docPath))
+							if (File.Exists(infoPath))
 							{
-								string infoPath = Path.Combine(
-									Path.GetDirectoryName(docPath), "__AssemblyInfo__.ini");
-								docPath = null;
-
-								if (File.Exists(infoPath))
+								Debug.WriteLine("Loading __AssemblyInfo__.ini.");
+								TextReader reader = new StreamReader(infoPath);
+								string line;
+								try
 								{
-									Debug.WriteLine("Loading __AssemblyInfo__.ini.");
-									TextReader reader = new StreamReader(infoPath);
-									string line;
-									try
+									while ((line = reader.ReadLine()) != null)
 									{
-										while ((line = reader.ReadLine()) != null)
+										if (line.StartsWith("URL=file:///"))
 										{
-											if (line.StartsWith("URL=file:///"))
-											{
-												docPath = Path.ChangeExtension(line.Substring(12), ".xml");
-												break;
-											}
+											docPath = Path.ChangeExtension(line.Substring(12), ".xml");
+											break;
 										}
 									}
-									finally
-									{
-										reader.Close();
-									}
 								}
-							}
-
-#if !MONO //TODO: search in the mono lib folder, if they ever give us the xml documentation
-							// If still not found, try locating the assembly in the Framework folder
-							if (docPath == null )
-							{
-								string frameworkPath = this.GetDotnetFrameworkPath(FileVersionInfo.GetVersionInfo(assemblyPath));
-
-								if (frameworkPath != null)
+								finally
 								{
-									docPath = Path.Combine(frameworkPath, a.GetName().Name + ".xml");
+									reader.Close();
 								}
-							}
-#endif
-
-							if ((docPath != null) && (File.Exists(docPath)))
-							{
-								Debug.WriteLine("Loading XML Doc for " + type.Assembly.FullName);
-								doc = new XmlDocument();
-								doc.Load(docPath);
 							}
 						}
-					}
 
-					//if the doc was still not found, create an empty document
-					if (doc == null)
-					{
-						Debug.WriteLine("XML Doc not found for " + type.Name);
-						doc = new XmlDocument();
-					}
+#if !MONO //TODO: search in the mono lib folder, if they ever give us the xml documentation
+						// If still not found, try locating the assembly in the Framework folder
+						if (docPath == null )
+						{
+							string frameworkPath = this.GetDotnetFrameworkPath(FileVersionInfo.GetVersionInfo(assemblyPath));
 
-					//cache the document
-					docs.Add(type.Assembly, doc);
+							if (frameworkPath != null)
+							{
+								docPath = Path.Combine(frameworkPath, a.GetName().Name + ".xml");
+							}
+						}
+#endif
+
+						if ((docPath != null) && (File.Exists(docPath)))
+						{
+							Debug.WriteLine("Loading XML Doc for " + type.Assembly.FullName);
+							doc = new XmlDocument();
+							doc.Load(docPath);
+						}
+					}
 				}
 
-				return doc;
+				//if the doc was still not found, create an empty document
+				if (doc == null)
+				{
+					Debug.WriteLine("XML Doc not found for " + type.Name);
+					doc = new XmlDocument();
+				}
+
+				//cache the document
+				docs.Add(type.Assembly, doc);
 			}
+
+			return doc;			
 		}
 
 		/// <summary>
@@ -170,7 +167,7 @@ namespace NDoc.Core
 			if (summary == null)
 			{
 				//lookup the xml document
-				XmlDocument doc = this[declaringType];
+				XmlDocument doc = GetXmlFor(declaringType);
 				if (doc.HasChildNodes)
 				{
 					string xPathExpr = "/doc/members/member[@name=\"" + key + "\"]/summary";
