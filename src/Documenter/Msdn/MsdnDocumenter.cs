@@ -1198,11 +1198,27 @@ namespace NDoc.Documenter.Msdn
 				string fileName = GetFilenameForOperators(whichType, typeNode);
 				bool bOverloaded = false;
 
-				string title = "Operators";
+				bool bHasOperators =  (typeNode.SelectSingleNode("operator[@name != 'op_Explicit' and @name != 'op_Implicit']") != null);;
+				bool bHasConverters = (typeNode.SelectSingleNode("operator[@name  = 'op_Explicit' or  @name  = 'op_Implicit']") != null);
+				string title="";
 
-				if (typeNode.SelectSingleNode("operator[@name = 'op_Explicit' or @name = 'op_Implicit']") != null)
+				if (bHasOperators)
 				{
-					title += " and Type Conversions";
+					if (bHasConverters)
+					{
+						title = "Operators and Type Conversions";
+					}
+					else
+					{
+						title = "Operators";
+					}
+				}
+				else
+				{
+					if (bHasConverters)
+					{
+						title = "Type Conversions";
+					}
 				}
 
 				htmlHelp.AddFileToContents(title, fileName);
@@ -1217,16 +1233,16 @@ namespace NDoc.Documenter.Msdn
 				int[] indexes = SortNodesByAttribute(operators, "id");
 				int nNodes = opNodes.Count;
 
+				//operators first
 				for (int i = 0; i < nNodes; i++)
 				{
 					XmlNode operatorNode = operators[indexes[i]];
 					string operatorID = operatorNode.Attributes["id"].Value;
 
-					if (IsMethodFirstOverload(opNodes, indexes, i))
+					string opName = (string)operatorNode.Attributes["name"].Value;
+					if ((opName != "op_Implicit") && (opName != "op_Explicit"))
 					{
-						string opName = (string)operatorNode.Attributes["name"].Value;
-						if ((opName != "op_Implicit") 
-							&& (opName != "op_Implicit"))
+						if (IsMethodFirstOverload(opNodes, indexes, i))
 						{
 							bOverloaded = true;
 
@@ -1239,28 +1255,47 @@ namespace NDoc.Documenter.Msdn
 
 							htmlHelp.OpenBookInContents();
 						}
-					}
 
 
-					fileName = GetFilenameForOperator(operatorNode);
-					if (bOverloaded)
-					{
-						XmlNodeList parameterNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace/" + lowerCaseTypeNames[whichType] + "[@name=\"" + typeName + "\"]/operator[@id=\"" + operatorID + "\"]/parameter");
-						htmlHelp.AddFileToContents(GetOperatorName(operatorNode) + GetParamList(parameterNodes), fileName);
+						fileName = GetFilenameForOperator(operatorNode);
+						if (bOverloaded)
+						{
+							XmlNodeList parameterNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace/" + lowerCaseTypeNames[whichType] + "[@name=\"" + typeName + "\"]/operator[@id=\"" + operatorID + "\"]/parameter");
+							htmlHelp.AddFileToContents(GetOperatorName(operatorNode) + GetParamList(parameterNodes), fileName);
+						}
+						else
+						{
+							htmlHelp.AddFileToContents(GetOperatorName(operatorNode), fileName);
+						}
+
+						arguments = new XsltArgumentList();
+						arguments.AddParam("member-id", String.Empty, operatorID);
+						TransformAndWriteResult(xsltMember, arguments, fileName);
+
+						if (bOverloaded && IsMethodLastOverload(opNodes, indexes, i))
+						{
+							bOverloaded = false;
+							htmlHelp.CloseBookInContents();
+						}
 					}
-					else
+				}
+
+				//type converters
+				for (int i = 0; i < nNodes; i++)
+				{
+					XmlNode operatorNode = operators[indexes[i]];
+					string operatorID = operatorNode.Attributes["id"].Value;
+
+					string opName = (string)operatorNode.Attributes["name"].Value;
+					if ((opName == "op_Implicit") || (opName == "op_Explicit"))
 					{
+						fileName = GetFilenameForOperator(operatorNode);
 						htmlHelp.AddFileToContents(GetOperatorName(operatorNode), fileName);
-					}
 
-					arguments = new XsltArgumentList();
-					arguments.AddParam("member-id", String.Empty, operatorID);
-					TransformAndWriteResult(xsltMember, arguments, fileName);
+						arguments = new XsltArgumentList();
+						arguments.AddParam("member-id", String.Empty, operatorID);
+						TransformAndWriteResult(xsltMember, arguments, fileName);
 
-					if (bOverloaded && IsMethodLastOverload(opNodes, indexes, i))
-					{
-						bOverloaded = false;
-						htmlHelp.CloseBookInContents();
 					}
 				}
 
@@ -1568,7 +1603,7 @@ namespace NDoc.Documenter.Msdn
 		{
 			string typeID = (string)typeNode.Attributes["id"].Value;
 			string opName = (string)opNode.Attributes["name"].Value;
-			string fileName = typeID.Substring(2) + "." + opName + ".html";
+			string fileName = typeID.Substring(2) + "." + opName + "_overloads.html";
 			return fileName;
 		}
 
@@ -1576,13 +1611,6 @@ namespace NDoc.Documenter.Msdn
 		{
 			string operatorID = operatorNode.Attributes["id"].Value;
 			string fileName = operatorID.Substring(2);
-
-//			int opIndex = fileName.IndexOf("op_");
-//
-//			if (opIndex != -1)
-//			{
-//				fileName = fileName.Remove(opIndex, 3);
-//			}
 
 			int leftParenIndex = fileName.IndexOf('(');
 
@@ -1593,7 +1621,7 @@ namespace NDoc.Documenter.Msdn
 
 			if (operatorNode.Attributes["overload"] != null)
 			{
-				fileName += operatorNode.Attributes["overload"].Value;
+				fileName += "_overload_" + operatorNode.Attributes["overload"].Value;
 			}
 
 			fileName += ".html";
