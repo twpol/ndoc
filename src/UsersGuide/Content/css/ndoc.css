@@ -296,7 +296,7 @@ pre.syntax, div.syntax
 	border-color: #999999;
 /* ------------------------------------- */
 /* BEGIN changes to dtue.css conventions */
-	font-weight: bolder;
+	font-weight: normal;
 	letter-spacing: .1em;
 	}
 .syntax span.lang
@@ -400,7 +400,6 @@ img
 		color: black; 
 		font-family: Courier New , Courier, Monospace; 
 		background-color: #ffffff; /*white-space: pre;*/ 
-		margin-left:2em;
 		}
 	.csharpcode pre { margin: 0px; }
 	.rem { color: #008000; }
@@ -421,3 +420,16 @@ img
 	{
 		margin-left : 3em;
 	}
+.lang, .ilang /* controls the multilang tag styles */
+	{
+	color: #333333;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 80%;
+	font-weight: normal;
+	font-style: normal;
+	}
+	
+div.tagtype
+{
+	text-align:right;
+	color:Green;
