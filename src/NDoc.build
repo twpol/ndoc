@@ -22,16 +22,18 @@
 		<zip zipfile="..\..\${devel.name}">
 			<fileset basedir="..\..">
 				<includes name="ndoc\**" />
-				<excludes name="ndoc\build\**" />
-				<excludes name="ndoc\docs\**" />
-				<excludes name="ndoc\examples\docs\**" />
 				<excludes name="ndoc\web\**" />
-				<excludes name="**\bin\**" />
-				<excludes name="**\obj\**" />
-				<excludes name="**\*.suo" />
-				<excludes name="**\*.user" />
+				<excludes name="ndoc\**\bin\**" />
+				<excludes name="ndoc\**\obj\**" />
+				<excludes name="ndoc\**\*.suo" />
+				<excludes name="ndoc\**\*.user" />
 			</fileset>
 		</zip>
+	</target>
+	
+	<target name="clean">
+		<delete dir="build" failonerror="false" />
+		<delete dir="..\examples\docs" failonerror="false" />
 	</target>
 
 </project>
