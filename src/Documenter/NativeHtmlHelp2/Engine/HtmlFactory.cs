@@ -197,7 +197,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 				arguments.AddExtensionObject( "urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities", utilities );
 				arguments.AddExtensionObject( "urn:NDocExternalHtml", _htmlProvider );
 
-				transform.Transform( xmlDocumentation, arguments, streamWriter, null );
+				transform.Transform(xmlDocumentation, arguments, streamWriter);
 			}
 #if DEBUG
 			Trace.WriteLine( ( Environment.TickCount - start ).ToString() + " msec.");
