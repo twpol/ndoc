@@ -1546,6 +1546,15 @@ namespace NDoc.Core
 				memberName += ")";
 			}
 
+			if (method is MethodInfo)
+			{
+				MethodInfo mi = (MethodInfo)method;
+				if (mi.Name == "op_Implicit" || mi.Name == "op_Explicit")
+				{
+					memberName += "~" + mi.ReturnType;
+				}
+			}
+			
 			return memberName;
 		}
 
