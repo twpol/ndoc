@@ -49,6 +49,8 @@ namespace NDoc.Documenter.Msdn
 			_IncludeHierarchy = false;
 			_ShowVisualBasic = false;
 			_OmitObjectTags = false;
+
+			_RootPageContainsNamespaces = false;
 		}
 
 
@@ -322,6 +324,27 @@ namespace NDoc.Documenter.Msdn
 			{
 				_RootPageFileName = value;
 				_SplitTOCs = _SplitTOCs && (value.Length == 0);
+				SetDirty();
+			}
+		}
+
+		bool _RootPageContainsNamespaces;
+
+		/// <summary>Gets or sets the RootPageContainsNamespaces property.</summary>
+		[
+		Category("HTML Help Options"),
+		Description("If true, the Root Page will be made the container"
+			+ " of the namespaces in the TOC."
+			+ " If false, the Root Page will be made a peer of"
+			+ " the namespaces in the TOC.")
+		]
+		public bool RootPageContainsNamespaces
+		{
+			get { return _RootPageContainsNamespaces; }
+
+			set
+			{
+				_RootPageContainsNamespaces = value;
 				SetDirty();
 			}
 		}
