@@ -187,7 +187,7 @@
 				<xsl:text>ByVal </xsl:text>
 			</xsl:otherwise>
 		</xsl:choose>
-		<xsl:value-of select="@name" />
+		<i><xsl:value-of select="@name" /></i>
 		<xsl:text>&#160;As&#160;</xsl:text>
 		<a>
 			<xsl:attribute name="href">
@@ -199,6 +199,9 @@
 				<xsl:with-param name="runtime-type" select="@type" />
 			</xsl:call-template>
 		</a>
+		<xsl:if test="@optional = 'true'">
+		  <xsl:text> = </xsl:text><xsl:value-of select="@defaultValue" />
+		</xsl:if>
 		<xsl:if test="position() != last()">
 			<xsl:text>,</xsl:text>
 		</xsl:if>

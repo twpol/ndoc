@@ -1360,7 +1360,20 @@ namespace NDoc.Core
 			writer.WriteStartElement("parameter");
 			writer.WriteAttributeString("name", parameter.Name);
 			writer.WriteAttributeString("type", GetTypeName(parameter.ParameterType));
-			writer.WriteAttributeString("optional", parameter.IsOptional ? "true" : "false");
+
+			if (parameter.IsOptional)
+			{
+				writer.WriteAttributeString("optional", "true");
+				if (parameter.DefaultValue != null)
+				{
+					writer.WriteAttributeString("defaultValue", parameter.DefaultValue.ToString());
+				}
+				else
+				{
+					//HACK: assuming this is only for VB syntax
+					writer.WriteAttributeString("defaultValue", "Nothing");
+				}
+			}
 
 			if (direction != "in")
 			{
