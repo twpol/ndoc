@@ -29,12 +29,12 @@ namespace NDoc.Core
 		/// <summary>
 		/// The name of the directory where the html file are created
 		/// </summary>
-		public string contentDir = "content";
+		private string contentDir = "content";
 
 		/// <summary>
 		/// The location of the workspace and files
 		/// </summary>
-		public string rootDir = string.Empty;
+		private string rootDir = string.Empty;
 
 		/// <summary>
 		/// These are the output file type extensions that will be cleaned
