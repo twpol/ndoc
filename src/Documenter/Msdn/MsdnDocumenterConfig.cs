@@ -126,6 +126,9 @@ namespace NDoc.Documenter.Msdn
 		{
 			get
 			{
+#if MONO
+				throw new NotSupportedException("HtmlHelpCompilerFilename property is not supported on MONO");
+#else
 				if ((htmlHelpCompilerFilename != null) 
 					&&(File.Exists(htmlHelpCompilerFilename)))
 				{
@@ -170,6 +173,7 @@ namespace NDoc.Documenter.Msdn
 				//still not finding the compiler, give up
 				throw new DocumenterException(
 					"Unable to find the HTML Help Compiler. Please verify that the HTML Help Workshop has been installed.");
+#endif
 			}
 		}
 
@@ -439,7 +443,6 @@ namespace NDoc.Documenter.Msdn
 				SetDirty();
 			}
 		}
-
 	}
 
 	/// <summary>

@@ -234,7 +234,6 @@ namespace NDoc.Documenter.Msdn
 				xmlDocumentation.LoadXml(XmlBuffer);
 
 				XmlNodeList typeNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace/*[name()!='documentation']");
-
 				if (typeNodes.Count == 0)
 				{
 					throw new DocumenterException("There are no documentable types in this project.");
@@ -261,9 +260,9 @@ namespace NDoc.Documenter.Msdn
 						rootPageTOCName = MyConfig.RootPageTOCName;
 					}
 				}
-
-#if MONO //Environment.ExpandEnvironmentVariables is not implemented in mono v0.25
-				string compiler = MyConfig.HtmlHelpCompilerFilename;
+#if MONO 
+				//html help  compiler cannot be detected with mono
+				string compiler = string.Empty;
 #else
 				string compiler = Environment.ExpandEnvironmentVariables(
 						MyConfig.HtmlHelpCompilerFilename);
