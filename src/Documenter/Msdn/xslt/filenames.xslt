@@ -15,6 +15,11 @@
     <xsl:value-of select="concat(translate(substring-after($id, 'T:'), '[,]', ''), '.html')" />
   </xsl:template>
   <!-- -->
+  <xsl:template name="get-filename-for-type-hierarchy">
+    <xsl:param name="id" />
+    <xsl:value-of select="concat(translate(substring-after($id, 'T:'), '[,]', ''), 'Hierarchy.html')" />
+  </xsl:template>
+  <!-- -->
   <xsl:template name="get-filename-for-current-constructor-overloads">
     <xsl:variable name="type-part" select="translate(substring-after(../@id, 'T:'), '[,]', '')" />
     <xsl:value-of select="concat($type-part, 'Constructor.html')" />

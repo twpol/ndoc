@@ -143,17 +143,44 @@
 						<p>
 							<xsl:choose>
 								<xsl:when test="self::interface">
-									<xsl:if test="base">
-										<xsl:call-template name="draw-hierarchy">
-											<xsl:with-param name="list" select="descendant::base" />
-											<xsl:with-param name="level" select="0" />
-										</xsl:call-template>
-										<xsl:call-template name="indent">
-											<xsl:with-param name="count" select="count(descendant::base)" />
-										</xsl:call-template>
+									<xsl:if test="derivedBy">
 										<b>
-											<xsl:value-of select="@name" />
+											<xsl:value-of select="substring-after( @id, ':' )" />
 										</b>
+										<xsl:choose>
+											<xsl:when test="count(derivedBy) &lt; 6">
+												<xsl:for-each select="derivedBy">
+													<br />
+													<xsl:call-template name="indent">
+														<xsl:with-param name="count" select="1" />
+													</xsl:call-template>
+							<a>
+								<xsl:attribute name="href">
+									<xsl:call-template name="get-filename-for-type">
+										<xsl:with-param name="id" select="@id" />
+									</xsl:call-template>
+								</xsl:attribute>
+								<xsl:call-template name="get-datatype">
+									<xsl:with-param name="datatype" select="substring-after(@id, ':' )" />
+								</xsl:call-template>
+							</a>
+												</xsl:for-each>
+											</xsl:when>
+											<xsl:otherwise>
+												<br />
+												<xsl:call-template name="indent">
+													<xsl:with-param name="count" select="1" />
+												</xsl:call-template>
+												<xsl:variable name="HierarchyFilename">
+												  <xsl:call-template name="get-filename-for-type-hierarchy">
+												    <xsl:with-param name="id" select="@id"/>
+												    </xsl:call-template>
+												</xsl:variable>
+												<a href="{$HierarchyFilename}">
+													<xsl:text>Derived interfaces</xsl:text>
+												</a>
+											</xsl:otherwise>
+										</xsl:choose>
 									</xsl:if>
 								</xsl:when>
 								<xsl:otherwise>
@@ -168,18 +195,59 @@
 										<xsl:with-param name="list" select="descendant::base" />
 										<xsl:with-param name="level" select="1" />
 									</xsl:call-template>
+									<xsl:variable name="typeIndent" select="count(descendant::base)" />
 									<xsl:call-template name="indent">
-										<xsl:with-param name="count" select="count(descendant::base) + 1" />
+										<xsl:with-param name="count" select="$typeIndent+1" />
 									</xsl:call-template>
 									<b>
 										<xsl:value-of select="@name" />
 									</b>
+									<xsl:if test="derivedBy">
+												<xsl:variable name="derivedTypeIndent" select="$typeIndent+2" />
+										<xsl:choose>
+											<xsl:when test="count(derivedBy) &lt; 6">
+												<xsl:for-each select="derivedBy">
+													<br />
+													<xsl:call-template name="indent">
+														<xsl:with-param name="count" select="$derivedTypeIndent" />
+													</xsl:call-template>
+							<a>
+								<xsl:attribute name="href">
+									<xsl:call-template name="get-filename-for-type">
+										<xsl:with-param name="id" select="@id" />
+									</xsl:call-template>
+								</xsl:attribute>
+								<xsl:call-template name="get-datatype">
+									<xsl:with-param name="datatype" select="substring-after(@id, ':' )" />
+								</xsl:call-template>
+							</a>
+												</xsl:for-each>
+											</xsl:when>
+											<xsl:otherwise>
+												<br />
+												<xsl:call-template name="indent">
+													<xsl:with-param name="count" select="$derivedTypeIndent" />
+												</xsl:call-template>
+												<xsl:variable name="HierarchyFilename">
+												  <xsl:call-template name="get-filename-for-type-hierarchy">
+												    <xsl:with-param name="id" select="@id"/>
+												    </xsl:call-template>
+												</xsl:variable>
+												<a href="{$HierarchyFilename}">
+													<xsl:text>Derived types</xsl:text>
+												</a>
+											</xsl:otherwise>
+										</xsl:choose>
+									</xsl:if>
 								</xsl:otherwise>
 							</xsl:choose>
 						</p>
 					</xsl:if>
 					<xsl:call-template name="vb-type-syntax" />
 					<xsl:call-template name="cs-type-syntax" />
+					<xsl:if test="local-name() = 'interface'">
+						<xsl:call-template name="interface-implementing-types-section" />
+					</xsl:if>
 					<xsl:if test="local-name() = 'delegate'">
 						<xsl:call-template name="parameter-section" />
 						<xsl:call-template name="returnvalue-section" />
@@ -292,4 +360,42 @@
 		</html>
 	</xsl:template>
 	<!-- -->
+	<xsl:template name="interface-implementing-types-section">
+		<xsl:if test="implementedBy">
+			<h4 class="dtH4">Types that implement <xsl:value-of select="@name" /></h4>
+			<div class="tablediv">
+				<table class="dtTABLE" cellspacing="0">
+					<tr valign="top">
+						<th width="50%">Type</th>
+						<th width="50%">Description</th>
+					</tr>
+					<xsl:for-each select="implementedBy">
+						<xsl:variable name="typeID" select="@id" />
+						<xsl:message>for each <xsl:value-of select="$typeID" /></xsl:message>
+						<xsl:apply-templates select="ancestor::ndoc/assembly/module/namespace/*[@id=$typeID]" mode="implementingType" />
+					</xsl:for-each>
+				</table>
+			</div>
+		</xsl:if>
+	</xsl:template>
+	<!-- -->
+	<xsl:template match="structure | class" mode="implementingType">
+		<tr valign="top">
+			<td width="50%">
+				<a>
+					<xsl:attribute name="href">
+						<xsl:call-template name="get-filename-for-type">
+							<xsl:with-param name="id" select="@id" />
+						</xsl:call-template>
+					</xsl:attribute>
+					<xsl:value-of select="@name" />
+				</a>
+			</td>
+			<td width="50%">
+				<xsl:call-template name="obsolete-inline" />
+				<xsl:apply-templates select="(documentation/summary)[1]/node()" mode="slashdoc" />
+				<xsl:if test="not((documentation/summary)[1]/node())">&#160;</xsl:if>
+			</td>
+		</tr>
+	</xsl:template>
 </xsl:stylesheet>
