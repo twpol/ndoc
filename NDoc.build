@@ -115,6 +115,18 @@
         <call target="clean-current-bin-dir" />
         <!-- copy the ndoc signing key file to the bin dir -->
         <copy file="${nant.project.basedir}/NDoc.snk" todir="${current.bin.dir}" />
+	    <!-- temporary workaround for Mono bug #55320 (which is fixed in cvs) -->
+	    <copy file="NDoc.snk" todir="src/Core" />
+	    <copy file="NDoc.snk" todir="src/Console" />
+	    <copy file="NDoc.snk" todir="src/VisualStudio" />
+	    <copy file="NDoc.snk" todir="src/Gui" />
+	    <copy file="NDoc.snk" todir="src/Documenter/Msdn" />
+	    <copy file="NDoc.snk" todir="src/Documenter/JavaDoc" />
+	    <copy file="NDoc.snk" todir="src/Documenter/Latex" />
+	    <copy file="NDoc.snk" todir="src/Documenter/LinearHtml" />
+	    <copy file="NDoc.snk" todir="src/Documenter/NativeHtmlHelp2" />
+	    <copy file="NDoc.snk" todir="src/Documenter/Xml" />
+	    <copy file="NDoc.snk" todir="src/Test" />
         <!-- build all projects -->
         <nant buildfile="src/Core/Core.build" target="compile" inheritall="true" />
         <nant buildfile="src/Console/Console.build" target="compile" inheritall="true" />
@@ -127,6 +139,12 @@
         <nant buildfile="src/Documenter/NativeHtmlHelp2/NativeHtmlHelp2.build" target="compile" inheritall="true" />
         <nant buildfile="src/Documenter/Xml/Xml.build" target="compile" inheritall="true" />
         <nant buildfile="src/Test/Test.build" target="compile" inheritall="true"  />
+	    <!-- temporary workaround for Mono bug #55320 (which is fixed in cvs) -->
+	    <delete>
+	        <fileset>
+	            <includes name="src/**/NDoc.snk" />
+	        </fileset>
+        </delete>	        
         <!-- remove the ndoc signing key file -->
         <delete file="${current.bin.dir}/NDoc.snk" />
     </target>
