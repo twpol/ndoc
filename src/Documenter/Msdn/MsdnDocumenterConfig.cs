@@ -377,6 +377,7 @@ namespace NDoc.Documenter.Msdn
 		/// <summary>Gets or sets the HeaderHtml property.</summary>
 		[
 		Category("HTML Help Options"),
+		Editor(typeof(TextEditor), typeof(UITypeEditor)),
 		Description("Raw HTML that is used as a page header instead of the default blue banner. " +
 			"\"%TOPIC_TITLE%\" is dynamically replaced by the title of the current page.")
 		]
@@ -396,6 +397,7 @@ namespace NDoc.Documenter.Msdn
 		/// <summary>Gets or sets the FooterHtml property.</summary>
 		[
 		Category("HTML Help Options"),
+		Editor(typeof(TextEditor), typeof(UITypeEditor)),
 		Description("Raw HTML that is used as a page footer instead of the default footer." +
 			"\"%ASSEMBLY_NAME%\" is dynamically replaced by the name of the assembly for the current page. " +
 			"\"%ASSEMBLY_VERSION%\" is dynamically replaced by the version of the assembly for the current page. " +
