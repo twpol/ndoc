@@ -83,15 +83,7 @@ namespace NDoc.Core
 
 		/// <summary>Checks to make sure the documenter can perform a
 		/// build.</summary>
-		/// <param name="project">The project the would be built.</param>
-		/// <remarks>This is for people who like to leave their CHMs open.</remarks>
-		/// <returns>null if the documenter can build; otherwise a message
-		/// describing why it can't build</returns>
-		string CanBuild(Project project);
-
-		/// <summary>Checks to make sure the documenter can perform a
-		/// build.</summary>
-		/// <param name="project">The project the would be built.</param>
+		/// <param name="project">The project that would be built.</param>
 		/// <param name="checkInputOnly">When true, don't check for output 
 		/// file locking.</param>
 		/// <remarks>This is for people who like to leave their CHMs open.</remarks>
@@ -99,11 +91,25 @@ namespace NDoc.Core
 		/// describing why it can't build</returns>
 		string CanBuild(Project project, bool checkInputOnly);
 
+		/// <summary>
+		/// Checks if the documentation output file(s) exist.
+		/// </summary>
+		/// <param name="project">The project that generated the documentation.</param>
+		/// <returns>True if the documentation can be viewed.</returns>
+		string CanBuild(Project project);
+
 		/// <summary>Builds the documentation.</summary>
 		/// <remarks>The compiler does not currently allow namespaces to documented.</remarks>
 		void Build(Project project);
 
+		/// <summary>
+		/// Returns the documenter's main output file path.
+		/// </summary>
+		string MainOutputFile { get; }
+
 		/// <summary>Spawns a new process to view the generated documentation.</summary>
+		/// <exception cref="FileNotFoundException">
+		/// Thrown if the main output file does not exist.</exception>
 		void View();
 
 		/// <summary>Gets or sets the documenter's config object.</summary>

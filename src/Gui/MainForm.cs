@@ -1451,22 +1451,27 @@ namespace NDoc.Gui
 
 		private void menuDocViewItem_Click(object sender, System.EventArgs e)
 		{
+			IDocumenter documenter = 
+				(IDocumenter)project.Documenters[comboBoxDocumenters.SelectedIndex];
 			try
 			{
-				((IDocumenter)project.Documenters[comboBoxDocumenters.SelectedIndex]).View();
+				documenter.View();
 			}
-			catch (DocumenterException ex)
+			catch (FileNotFoundException ex)
 			{
-				string msg = "An error occured while trying to view the documentation.";
-				ErrorForm errorForm = new ErrorForm(msg, ex);
-				errorForm.Text = "NDoc Documenter Error";
-				errorForm.ShowDialog();
-			}
-			catch (Exception ex)
-			{
-				string msg = "An error occured while trying to view the documentation.";
-				ErrorForm errorForm = new ErrorForm(msg, ex);
-				errorForm.ShowDialog();
+				DialogResult result = MessageBox.Show(
+					this,
+					"The documentation has not been built yet.\n"
+					+ "Would you like to build it now?",
+					"NDoc",
+					MessageBoxButtons.YesNoCancel,
+					MessageBoxIcon.Question);
+
+				if (result == DialogResult.Yes)
+				{
+					menuDocBuildItem_Click(sender, e);
+					menuDocViewItem_Click(sender, e);
+				}
 			}
 		}
 

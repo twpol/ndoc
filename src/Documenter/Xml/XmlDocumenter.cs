@@ -35,18 +35,13 @@ namespace NDoc.Documenter.Xml
 			Clear();
 		}
 
-		/// <summary>See IDocumenter.</summary>
-		public override void View()
-		{
-			if (File.Exists(((XmlDocumenterConfig)Config).OutputFile))
+		/// <summary>See <see cref="IDocumenter"/>.</summary>
+		public override string MainOutputFile 
+		{ 
+			get 
 			{
-				Process.Start(((XmlDocumenterConfig)Config).OutputFile);
-			}
-			else
-			{
-				// maybe throw a custom exception here so documenter DLLs don't have to reference WinForms.
-				//        MessageBox("Filename {0} doesn't exist.  Maybe try selecting the Build button first then try the View button again.", xmlFilename);
-			}
+				return ((XmlDocumenterConfig)Config).OutputFile;
+			} 
 		}
 
 		/// <summary>See IDocumenter.</summary>

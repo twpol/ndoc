@@ -73,6 +73,23 @@ namespace NDoc.Core
 		}
 
 		/// <summary>See <see cref="IDocumenter"/>.</summary>
+		public abstract string MainOutputFile { get; }
+
+		/// <summary>See <see cref="IDocumenter"/>.</summary>
+		public virtual void View()
+		{
+			if (File.Exists(this.MainOutputFile))
+			{
+				Process.Start(this.MainOutputFile);
+			}
+			else
+			{
+				throw new FileNotFoundException("Documentation not built.", 
+					this.MainOutputFile);
+			}
+		}
+
+		/// <summary>See <see cref="IDocumenter"/>.</summary>
 		public event DocBuildingEventHandler DocBuildingStep;
 		/// <summary>See <see cref="IDocumenter"/>.</summary>
 		public event DocBuildingEventHandler DocBuildingProgress;
@@ -133,9 +150,6 @@ namespace NDoc.Core
 
 		/// <summary>See <see cref="IDocumenter"/>.</summary>
 		abstract public void Build(Project project);
-
-		/// <summary>See <see cref="IDocumenter"/>.</summary>
-		abstract public void View();
 
 		/// <summary>Builds an XmlDocument combining the reflected metadata with the /doc comments.</summary>
 		protected void MakeXml(Project project)

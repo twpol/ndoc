@@ -90,18 +90,14 @@ namespace NDoc.Documenter.Msdn
 			Config = new MsdnDocumenterConfig();
 		}
 
-		/// <summary>See IDocumenter.</summary>
-		public override void View()
-		{
-			htmlHelp = new HtmlHelp(
-				MyConfig.OutputDirectory,
-				MyConfig.HtmlHelpName,
-				null,
-				MyConfig.HtmlHelpCompilerFilename);
-
-			string path = Path.GetFullPath(htmlHelp.GetPathToCompiledHtmlFile());
-
-			Process.Start(path);
+		/// <summary>See <see cref="IDocumenter"/>.</summary>
+		public override string MainOutputFile 
+		{ 
+			get 
+			{
+				return Path.Combine(MyConfig.OutputDirectory, 
+					MyConfig.HtmlHelpName) + ".chm";
+			} 
 		}
 
 		/// <summary>See <see cref="IDocumenter"/>.</summary>
@@ -141,7 +137,7 @@ namespace NDoc.Documenter.Msdn
 			return result;
 		}
 
-		/// <summary>See IDocumenter.</summary>
+		/// <summary>See <see cref="IDocumenter"/>.</summary>
 		public override void Build(Project project)
 		{
 			try

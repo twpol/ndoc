@@ -37,6 +37,16 @@ namespace NDoc.Documenter.JavaDoc
 		string _ResourceDirectory;
 
 		/// <summary>See <see cref="IDocumenter"/>.</summary>
+		public override string MainOutputFile 
+		{ 
+			get 
+			{
+				return Path.Combine(MyConfig.OutputDirectory, 
+					"overview-summary.html");
+			} 
+		}
+
+		/// <summary>See <see cref="IDocumenter"/>.</summary>
 		public override void Build(Project project)
 		{
 			if (!Directory.Exists(MyConfig.OutputDirectory))
@@ -74,12 +84,6 @@ namespace NDoc.Documenter.JavaDoc
 
 			WriteOverviewSummary();
 			WriteNamespaceSummaries();
-		}
-
-		/// <summary>See <see cref="IDocumenter"/>.</summary>
-		public override void View()
-		{
-			Process.Start(Path.Combine(MyConfig.OutputDirectory, "overview-summary.html"));
 		}
 
 		/// <summary>See <see cref="IDocumenter"/>.</summary>
