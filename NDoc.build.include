@@ -103,7 +103,7 @@
     </target>
     <target name="set-debug-build-configuration">
         <property name="build.debug" value="true" readonly="false" />
-        <property name="build.defines" value="DEBUG,TRACE,NO_RESOURCES" readonly="false" />
+        <property name="build.defines" value="DEBUG,TRACE" readonly="false" />
         <property name="sdkdoc.debug" value="false" readonly="false" />
         <property name="current.build.config" value="debug" readonly="false" />
         <call target="set-build-configuration-flags" force="true" />
