@@ -21,19 +21,16 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-using System;
-using System.Drawing;
-using System.Collections;
-using System.ComponentModel;
-using System.IO;
-using System.Windows.Forms;
-using System.Xml;
-using System.Xml.Serialization;
-using NDoc.Core;
-using NDoc.Documenter.Xml;
-
 namespace NDoc.Addins.NDocBuild
 {
+	using System;
+	using System.Drawing;
+	using System.Collections.Specialized;
+	using System.ComponentModel;
+	using System.Windows.Forms;
+
+	using NDoc.Core;
+
 	/// <summary>
 	///    Summary description for NamespaceSummariesForm.
 	/// </summary>
@@ -50,7 +47,6 @@ namespace NDoc.Addins.NDocBuild
 		private System.Windows.Forms.ComboBox namespaceComboBox;
 		private string selectedText;
 
-		private ArrayList _Namespaces;
 		private Project _Project;
 
 		/// <summary>Allows the user to associate a summaries with the
@@ -58,52 +54,19 @@ namespace NDoc.Addins.NDocBuild
 		/// documented.</summary>
 		public NamespaceSummariesForm(Project project)
 		{
+			_Project = project;
+
 			//
 			// Required for Windows Form Designer support
 			//
 			InitializeComponent();
 
-			_Project = project;
-			_Namespaces = GetNamespaces();
-
-			foreach (string namespaceName in _Namespaces)
+			foreach (string namespaceName in _Project.GetNamespaces())
 			{
 				namespaceComboBox.Items.Add(namespaceName);
 			}
 
 			namespaceComboBox.SelectedIndex = 0;
-		}
-
-		private ArrayList GetNamespaces()
-		{
-			ArrayList namespaces = null;
-
-			try
-			{
-				XmlDocumenter xmlDocumenter = new XmlDocumenter();
-				XmlDocument xmlDocumentation = new XmlDocument();
-
-				// Check for any new namespaces and add them to the Hashtable
-				((XmlDocumenterConfig)xmlDocumenter.Config).OutputFile = @"./namespaceSummaries.xml";
-				xmlDocumenter.Build(_Project);
-				xmlDocumentation.Load(@"./namespaceSummaries.xml");
-				File.Delete(@"./namespaceSummaries.xml");
-
-				XmlNodeList namespaceNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace");
-
-				namespaces = new ArrayList();
-
-				foreach (XmlNode namespaceNode in namespaceNodes)
-				{
-					string namespaceName = (string)namespaceNode.Attributes["name"].Value;
-					namespaces.Add(namespaceName);
-				}
-			}
-			catch(Exception)
-			{
-			}
-
-			return namespaces;
 		}
 
 		/// <summary>
@@ -125,7 +88,7 @@ namespace NDoc.Addins.NDocBuild
 			this.okButton.Anchor = (System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right);
 			this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.okButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.okButton.Location = new System.Drawing.Point(320, 16);
+			this.okButton.Location = new System.Drawing.Point(320, 32);
 			this.okButton.Name = "okButton";
 			this.okButton.TabIndex = 4;
 			this.okButton.Text = "OK";
@@ -136,7 +99,7 @@ namespace NDoc.Addins.NDocBuild
 			this.cancelButton.Anchor = (System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right);
 			this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.cancelButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.cancelButton.Location = new System.Drawing.Point(320, 48);
+			this.cancelButton.Location = new System.Drawing.Point(320, 64);
 			this.cancelButton.Name = "cancelButton";
 			this.cancelButton.TabIndex = 5;
 			this.cancelButton.Text = "Cancel";
@@ -146,10 +109,10 @@ namespace NDoc.Addins.NDocBuild
 			this.summaryTextBox.Anchor = (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
 				| System.Windows.Forms.AnchorStyles.Left) 
 				| System.Windows.Forms.AnchorStyles.Right);
-			this.summaryTextBox.Location = new System.Drawing.Point(8, 64);
+			this.summaryTextBox.Location = new System.Drawing.Point(8, 80);
 			this.summaryTextBox.Multiline = true;
 			this.summaryTextBox.Name = "summaryTextBox";
-			this.summaryTextBox.Size = new System.Drawing.Size(296, 93);
+			this.summaryTextBox.Size = new System.Drawing.Size(296, 104);
 			this.summaryTextBox.TabIndex = 3;
 			this.summaryTextBox.Text = "";
 			// 
@@ -157,10 +120,11 @@ namespace NDoc.Addins.NDocBuild
 			// 
 			this.namespaceComboBox.Anchor = ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
 				| System.Windows.Forms.AnchorStyles.Right);
+			this.namespaceComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.namespaceComboBox.DropDownWidth = 192;
-			this.namespaceComboBox.Location = new System.Drawing.Point(112, 16);
+			this.namespaceComboBox.Location = new System.Drawing.Point(8, 32);
 			this.namespaceComboBox.Name = "namespaceComboBox";
-			this.namespaceComboBox.Size = new System.Drawing.Size(192, 21);
+			this.namespaceComboBox.Size = new System.Drawing.Size(296, 21);
 			this.namespaceComboBox.Sorted = true;
 			this.namespaceComboBox.TabIndex = 0;
 			this.namespaceComboBox.SelectedIndexChanged += new System.EventHandler(this.namespaceComboBox_SelectedIndexChanged);
@@ -168,7 +132,7 @@ namespace NDoc.Addins.NDocBuild
 			// label1
 			// 
 			this.label1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.label1.Location = new System.Drawing.Point(8, 18);
+			this.label1.Location = new System.Drawing.Point(8, 16);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(104, 16);
 			this.label1.TabIndex = 1;
@@ -178,9 +142,9 @@ namespace NDoc.Addins.NDocBuild
 			// label2
 			// 
 			this.label2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.label2.Location = new System.Drawing.Point(8, 48);
+			this.label2.Location = new System.Drawing.Point(8, 64);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(56, 16);
+			this.label2.Size = new System.Drawing.Size(64, 16);
 			this.label2.TabIndex = 2;
 			this.label2.Text = "Summary:";
 			// 
@@ -190,7 +154,7 @@ namespace NDoc.Addins.NDocBuild
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.AutoScroll = true;
 			this.CancelButton = this.cancelButton;
-			this.ClientSize = new System.Drawing.Size(408, 166);
+			this.ClientSize = new System.Drawing.Size(410, 200);
 			this.Controls.AddRange(new System.Windows.Forms.Control[] {
 																		  this.cancelButton,
 																		  this.okButton,
