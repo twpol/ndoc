@@ -534,25 +534,18 @@ namespace NDoc.Core
 			}
 		}
 
-		//checks if the type is a java inner class
-		private bool IsJavaInnerClass(Type type)
-		{
-			com.ms.vjsharp.cor.InnerAttribute[] attrs = 
-				Attribute.GetCustomAttributes(type, typeof(com.ms.vjsharp.cor.InnerAttribute), false)
-				as com.ms.vjsharp.cor.InnerAttribute[];
-			
-			if (attrs.Length > 0)
-				return true;
-			else
-				return false;
-		}
-		
-
 		private bool MustDocumentType(Type type)
 		{
 			Type declaringType = type.DeclaringType;
 
-			//exclude type internal to .net framework classes 
+			//If type name starts with a digit it is not a valid identifier
+			//in any of the MS .Net languages.
+			//It's probably a J# anonomous inner class...
+			//Whatever, do not document it.
+			if (Char.IsDigit(type.Name,0))
+				return false;
+
+			//exclude types that are internal to the .Net framework.
 			if (type.FullName.StartsWith("System") || type.FullName.StartsWith("Microsoft"))
 			{
 				if(type.IsNotPublic) return false;
@@ -576,8 +569,7 @@ namespace NDoc.Core
 				) &&
 				IsEditorBrowsable(type) &&
 				(!MyConfig.UseNamespaceDocSummaries || (type.Name != "NamespaceDoc")) &&
-				!assemblyDocCache.HasExcludeTag(GetMemberName(type)) &&
-				!IsJavaInnerClass(type);
+				!assemblyDocCache.HasExcludeTag(GetMemberName(type));
 		}
 
 		private bool MustDocumentMethod(MethodBase method)

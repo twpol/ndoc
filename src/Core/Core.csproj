@@ -92,11 +92,6 @@
                     Name = "System.Data"
                     AssemblyName = "System.Data"
                 />
-                <Reference
-                    Name = "vjscor"
-                    AssemblyName = "vjscor"
-                    HintPath = "F:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\vjscor.dll"
-                />
             </References>
         </Build>
         <Files>
