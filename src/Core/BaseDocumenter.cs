@@ -55,11 +55,6 @@ namespace NDoc.Core
 			{
 				data = new Hashtable(15);  // give it an initial capacity...
 			}
-			public ImplementsInfo this [int index]
-			{
-				get { return (ImplementsInfo)data[index]; }
-				set { data[index]=value; }
-			}
 			public ImplementsInfo this [string name]
 			{
 				get { return (ImplementsInfo)data[name]; }
