@@ -71,8 +71,8 @@ namespace NDoc.Documenter.Xml
 				}
 			}
 
-			if(File.Exists(xmlFileName))
-				File.Delete(xmlFileName);
+			if(File.Exists(config.OutputFile))
+				File.Delete(config.OutputFile);
 			File.Move(xmlFileName,config.OutputFile);
 
 			OnDocBuildingStep(100, "Done.");
