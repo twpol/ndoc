@@ -594,3 +594,9 @@ div#popUpWindow a /* Controls the style of the Links in Glossary Popups */
 
 /* END STYLES REQUIRED BY THE SCRIPT 
 ================================================== */
+/* Not in dtue.css. Used by NDoc's "ShowMissing..." options. */
+.missing
+	{
+	color: Red;
+	font-weight: bold;
+	}
