@@ -163,7 +163,7 @@
 		<ifnot targetexists="set-${current.build.config}-build-configuration">
 			<fail message="The ${current.build.config} build configuration is not supported by log4net." />
 		</ifnot>
-		<call target="set-${current.build.config}-build-configuration" force="true" />
+		<call target="set-${current.build.config}-build-configuration" />
 	</target>
 	<!--
 	
@@ -174,7 +174,7 @@
 		<property name="build.optimize" value="false" readonly="false" />
 		<property name="sdkdoc.debug" value="false" readonly="false" />
 		<property name="current.build.config" value="debug" readonly="false" />
-		<call target="set-build-configuration-flags" force="true" />
+		<call target="set-build-configuration-flags" />
 	</target>
 	<!--
 	
@@ -185,7 +185,7 @@
 		<property name="build.optimize" value="true" readonly="false" />
 		<property name="sdkdoc.debug" value="false" readonly="false" />
 		<property name="current.build.config" value="release" readonly="false" />
-		<call target="set-build-configuration-flags" force="true" />
+		<call target="set-build-configuration-flags" />
 	</target>
 	<!--
 	
@@ -223,7 +223,7 @@
 			<ifnot targetexists="set-${nant.settings.currentframework}-runtime-configuration">
 				<fail message="No runtime configuration was specified and the current runtime (${nant.settings.currentframework}) is not supported by NDoc." />
 			</ifnot>
-			<call target="set-${nant.settings.currentframework}-runtime-configuration" force="true" />
+			<call target="set-${nant.settings.currentframework}-runtime-configuration" />
 		</ifnot>
 		<ifnot propertyexists="current.runtime.version">
 			<ifnot propertyexists="nant.settings.currentframework">
@@ -232,13 +232,12 @@
 			<ifnot targetexists="set-${nant.settings.currentframework}-runtime-configuration">
 				<fail message="No runtime configuration was specified and the current runtime (${nant.settings.currentframework}) is not supported by NDoc." />
 			</ifnot>
-			<call target="set-${nant.settings.currentframework}-runtime-configuration" force="true" />
+			<call target="set-${nant.settings.currentframework}-runtime-configuration" />
 		</ifnot>
 		<ifnot targetexists="set-${current.runtime.config}-${current.runtime.version}-runtime-configuration">
 			<fail message="The ${current.runtime.config}-${current.runtime.version} runtime is not supported by NDoc." />
 		</ifnot>
-		<call target="set-${current.runtime.config}-${current.runtime.version}-runtime-configuration"
-			force="true" />
+		<call target="set-${current.runtime.config}-${current.runtime.version}-runtime-configuration" />
 	</target>
 	<!--
 
@@ -256,7 +255,7 @@
 			readonly="false" />
 		<property name="current.sdkdoc.debug" value="${sdkdoc.debug}" readonly="false" />
 		<property name="nant.settings.currentframework" value="${current.runtime.config}-${current.runtime.version}" />
-		<call target="set-runtime-configuration-flags" force="true" />
+		<call target="set-runtime-configuration-flags" />
 	</target>
 	<!--
 
@@ -274,7 +273,7 @@
 			readonly="false" />
 		<property name="current.sdkdoc.debug" value="${sdkdoc.debug}" readonly="false" />
 		<property name="nant.settings.currentframework" value="${current.runtime.config}-${current.runtime.version}" />
-		<call target="set-runtime-configuration-flags" force="true" />
+		<call target="set-runtime-configuration-flags" />
 	</target>
 	<!--
 
@@ -293,7 +292,7 @@
 			readonly="false" />
 		<property name="current.sdkdoc.debug" value="${sdkdoc.debug}" readonly="false" />
 		<property name="nant.settings.currentframework" value="${current.runtime.config}-${current.runtime.version}" />
-		<call target="set-runtime-configuration-flags" force="true" />
+		<call target="set-runtime-configuration-flags" />
 	</target>
 	<!--
 
@@ -311,19 +310,8 @@
 			readonly="false" />
 		<property name="current.sdkdoc.debug" value="${sdkdoc.debug}" readonly="false" />
 		<available type="Framework" resource="${current.runtime.config}-${current.runtime.version}-linux" property="current.runtime.available" />
-		<if propertyexists="current.runtime.available" propertytrue="current.runtime.available">
-			<property name="nant.settings.currentframework" value="${current.runtime.config}-${current.runtime.version}-linux" />
-		</if>
-		<ifnot propertyexists="current.runtime.available" propertytrue="current.runtime.available">
-			<property name="nant.settings.currentframework" value="${current.runtime.config}-${current.runtime.version}" />
-		</ifnot>
-		<call target="set-runtime-configuration-flags" force="true" />
-	</target>
-	<!--
-
-	-->
-	<target name="set-mono-1.0-linux-runtime-configuration" depends="check-build-dir, check-current-build-config, check-build-debug, check-build-defines, check-build-optimize">
-		<call target="set-mono-1.0-runtime-configuration" force="true" />	
+	    <property name="nant.settings.currentframework" value="${current.runtime.config}-${current.runtime.version}" />
+		<call target="set-runtime-configuration-flags" />
 	</target>
 	<!--
 
@@ -341,7 +329,7 @@
 			readonly="false" />
 		<property name="current.sdkdoc.debug" value="${sdkdoc.debug}" readonly="false" />
 		<property name="nant.settings.currentframework" value="${current.runtime.config}-${current.runtime.version}" />
-		<call target="set-runtime-configuration-flags" force="true" />
+		<call target="set-runtime-configuration-flags" />
 	</target>
 	<!--
 
@@ -378,7 +366,7 @@
 		</ifnot>
 		<if propertytrue="temp.framework.available">
 			<property name="nant.settings.currentframework" value="net-1.0" />
-			<call target="display-current-runtime" force="true" />
+			<call target="display-current-runtime" />
 		</if>
 		<!-- .NET Framework 1.1 -->
 		<available type="Framework" resource="net-1.1" property="temp.framework.available" />
@@ -387,7 +375,7 @@
 		</ifnot>
 		<if propertytrue="temp.framework.available">
 			<property name="nant.settings.currentframework" value="net-1.1" />
-			<call target="display-current-runtime" force="true" />
+			<call target="display-current-runtime" />
 		</if>
 		<!-- Mono 1.0 -->
 		<available type="Framework" resource="mono-1.0" property="temp.framework.available" />
@@ -396,7 +384,7 @@
 		</ifnot>
 		<if propertytrue="temp.framework.available">
 			<property name="nant.settings.currentframework" value="mono-1.0" />
-			<call target="display-current-runtime" force="true" />
+			<call target="display-current-runtime" />
 		</if>
 		<!-- SSCLI 1.0 -->
 		<available type="Framework" resource="sscli-1.0" property="temp.framework.available" />
@@ -405,7 +393,7 @@
 		</ifnot>
 		<if propertytrue="temp.framework.available">
 			<property name="nant.settings.currentframework" value="sscli-1.0" />
-			<call target="display-current-runtime" force="true" />
+			<call target="display-current-runtime" />
 		</if>
 		<!-- HTML Help Compiler -->
 		<echo message="" />
@@ -446,11 +434,10 @@
 		</ifnot>
 	</target>
 	<!-- 
-
 	clean-up targets	
 	-->
 	<target name="clean-current-bin-dir" description="Checks the current bin directory and cleans it up.">
-		<call target="check-current-bin-dir" force="true" />
+		<call target="check-current-bin-dir" />
 		<delete>
 			<fileset basedir="${current.bin.dir}">
 				<includes name="**/*" />
@@ -463,7 +450,4 @@
 	<target name="clean-build-dir" depends="check-build-dir" description="Deletes current build configuration.">
 		<delete dir="${build.dir}" />
 	</target>
-	<!--
-	
-	-->
 </project>
