@@ -356,6 +356,28 @@ namespace NDoc.Documenter.Msdn
 			}
 		}
 
+		TOCStyle _NamespaceTOCStyle;
+
+		/// <summary>Get or set the style of the namespace structure in the table of contents</summary>
+		/// <remarks>Allows the user to choose whether the table of contents should list namespaces 
+		/// as individual topics or have the namespaces nested</remarks>
+		[Category("HTML Help Options")]
+		[Description("Choose whether the table of contents should list namespaces " +
+			"as individual topics or have the namespaces nested.")]
+		[DefaultValue(TOCStyle.Flat)]
+		public TOCStyle NamespaceTOCStyle
+		{
+			get { return _NamespaceTOCStyle; }
+			
+			set
+			{
+				if (value == _NamespaceTOCStyle) return;
+
+				_NamespaceTOCStyle = value;
+				SetDirty();
+			}
+		}
+
 		string _FilesToInclude;
 
 		/// <summary>Gets or sets the FilesToInclude property.</summary>
@@ -498,4 +520,20 @@ namespace NDoc.Documenter.Msdn
 		[Description("HTML Help and Web")]
 		HtmlHelpAndWeb = HtmlHelp | Web
 	}
+
+	
+	/// <summary>
+	/// Style for elements that are added to the table of contents
+	/// </summary>
+	public enum TOCStyle
+	{
+		/// <summary>Elements are shown in the contents in list format</summary>
+		[Description("Flat")]
+		Flat,
+
+		/// <summary>Elements are nested in the table of contents</summary>
+		[Description("Hierarchical")]
+		Hierarchical
+	}
+
 }
