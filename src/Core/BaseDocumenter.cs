@@ -344,7 +344,8 @@ namespace NDoc.Core
 
 			foreach (Type type in types)
 			{
-				if (type.IsClass &&
+				if (type.Name != "<PrivateImplementationDetails>" &&
+					type.IsClass &&
 					!IsDelegate(type) &&
 					type.Namespace == namespaceName &&
 					MustDocumentType(type))
@@ -1566,12 +1567,12 @@ namespace NDoc.Core
 				if (MyConfig.ShowMissingSummaries)
 				{
 					XmlNode summary;
-					if (xmlNode == null 
+					if (xmlNode == null
 						|| (summary = xmlNode.SelectSingleNode("summary")) == null
 						|| summary.InnerText.Length == 0
 						|| summary.InnerText.Trim().StartsWith("Summary description for"))
 					{
-						WriteMissingDocumentation(writer, "summary", null, 
+						WriteMissingDocumentation(writer, "summary", null,
 							"Missing <summary> documentation for " + memberName);
 					}
 				}
@@ -1579,11 +1580,11 @@ namespace NDoc.Core
 				if (MyConfig.ShowMissingRemarks)
 				{
 					XmlNode remarks;
-					if (xmlNode == null 
+					if (xmlNode == null
 						|| (remarks = xmlNode.SelectSingleNode("remarks")) == null
 						|| remarks.InnerText.Length == 0)
 					{
-						WriteMissingDocumentation(writer, "remarks", null, 
+						WriteMissingDocumentation(writer, "remarks", null,
 							"Missing <remarks> documentation for " + memberName);
 					}
 				}
@@ -1608,7 +1609,7 @@ namespace NDoc.Core
 					if ((param = currentSlashDoc.SelectSingleNode(xpath)) == null
 						|| param.InnerText.Length == 0)
 					{
-						WriteMissingDocumentation(writer, "param", parameter.Name, 
+						WriteMissingDocumentation(writer, "param", parameter.Name,
 							"Missing <param> documentation for " + parameter.Name);
 					}
 				}
@@ -1631,7 +1632,7 @@ namespace NDoc.Core
 				if ((returns = currentSlashDoc.SelectSingleNode(xpath)) == null
 					|| returns.InnerText.Length == 0)
 				{
-					WriteMissingDocumentation(writer, "returns", null, 
+					WriteMissingDocumentation(writer, "returns", null,
 						"Missing <returns> documentation for " + memberName);
 				}
 			}
@@ -1651,7 +1652,7 @@ namespace NDoc.Core
 				if ((valuenode = currentSlashDoc.SelectSingleNode(xpath)) == null
 					|| valuenode.InnerText.Length == 0)
 				{
-					WriteMissingDocumentation(writer, "value", null, 
+					WriteMissingDocumentation(writer, "value", null,
 						"Missing <value> documentation for " + memberName);
 				}
 			}
