@@ -268,7 +268,9 @@ namespace NDoc.Documenter.Msdn
 					{
 						if (!MyConfig.CopyrightHref.StartsWith("http:"))
 						{
-							File.Copy(MyConfig.CopyrightHref, Path.Combine(MyConfig.OutputDirectory, Path.GetFileName(MyConfig.CopyrightHref)), true);
+							string copyrightFile = Path.Combine(MyConfig.OutputDirectory, Path.GetFileName(MyConfig.CopyrightHref));
+							File.Copy(MyConfig.CopyrightHref, copyrightFile, true);
+							File.SetAttributes(copyrightFile, FileAttributes.Archive);
 							htmlHelp.AddFileToProject(Path.GetFileName(MyConfig.CopyrightHref));
 						}
 					}
@@ -286,11 +288,8 @@ namespace NDoc.Documenter.Msdn
 						string rootPageOutputName = Path.Combine(MyConfig.OutputDirectory, "default.html");
 						if (Path.GetFullPath(rootPageFileName) != Path.GetFullPath(rootPageOutputName))
 						{
-							if (File.Exists(rootPageOutputName))
-							{
-								File.SetAttributes(rootPageOutputName, FileAttributes.Normal);
-							}
 							File.Copy(rootPageFileName, rootPageOutputName, true);
+							File.SetAttributes(rootPageOutputName, FileAttributes.Archive);
 						}
 						htmlHelp.AddFileToProject(Path.GetFileName(rootPageOutputName));
 						htmlHelp.AddFileToContents(rootPageTOCName, 

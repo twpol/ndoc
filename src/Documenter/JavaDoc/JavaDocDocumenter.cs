@@ -76,12 +76,8 @@ namespace NDoc.Documenter.JavaDoc
 			#endif
 
 			string outcss = Path.Combine(MyConfig.OutputDirectory, "JavaDoc.css");
-			if (File.Exists(outcss))
-			{
-				//make sure it is not read only
-				File.SetAttributes(outcss, FileAttributes.Normal);
-			}
 			File.Copy(Path.Combine(_ResourceDirectory, @"css\JavaDoc.css"), outcss, true);
+			File.SetAttributes(outcss, FileAttributes.Archive);
 
 			MakeXml(project);
 
