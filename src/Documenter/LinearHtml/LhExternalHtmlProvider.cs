@@ -1,7 +1,5 @@
 using System;
 
-using NDoc.Documenter.Msdn;
-
 namespace NDoc.Documenter.LinearHtml
 {
 	/// <summary>
