@@ -64,16 +64,13 @@ namespace NDoc.Documenter.Msdn
 
 			_RootPageContainsNamespaces = false;
 
-			includeFavorites=false;
-
 			_HeaderHtml = string.Empty;
 			_FooterHtml = string.Empty;
 			_FilesToInclude = string.Empty;
 
-			_LinkToSdkDocVersion = SdkDocVersion.SDK_v1_1;
-
 		}
 
+		#region Main Settings
 		/// <summary>Gets or sets the OutputDirectory property.</summary>
 		/// <remarks>The directory in which .html files and the .chm file will be generated.</remarks>
 		[Category("Documentation Main Settings")]
@@ -129,22 +126,6 @@ namespace NDoc.Documenter.Msdn
 			}
 		}
 
-		/// <summary>Gets or sets the IncludeFavorites property.</summary>
-		/// <remarks>Turning this flag on will include a Favorites tab in the HTML Help file.</remarks>
-		[Category("HTML Help Options")]
-		[Description("Turning this flag on will include a Favorites tab in the HTML Help file.")]
-		[DefaultValue(false)]
-		public bool IncludeFavorites
-		{
-			get { return includeFavorites; }
-
-			set 
-			{ 
-				includeFavorites = value; 
-				SetDirty();
-			}
-		}
-
 		private string _Title;
 
 		/// <summary>Gets or sets the Title property.</summary>
@@ -158,6 +139,101 @@ namespace NDoc.Documenter.Msdn
 			set 
 			{ 
 				_Title = value; 
+				SetDirty();
+			}
+		}
+
+		private bool _IncludeHierarchy;
+
+		/// <summary>Gets or sets the IncludeHierarchy property.</summary>
+		/// <remarks>To include a class hiararchy page for each 
+		/// namespace. Don't turn it on if your project has a namespace 
+		/// with many types, as NDoc will become very slow and might crash.</remarks>
+		[Category("Documentation Main Settings")]
+		[Description("To include a class hiararchy page for each namespace. Don't turn it on if your project has a namespace with many types, as NDoc will become very slow and might crash.")]
+		[DefaultValue(false)]
+		public bool IncludeHierarchy
+		{
+			get { return _IncludeHierarchy; }
+
+			set 
+			{ 
+				_IncludeHierarchy = value; 
+				SetDirty();
+			}
+		}
+
+		private bool _ShowVisualBasic;
+
+		/// <summary>Gets or sets the ShowVisualBasic property.</summary>
+		/// <remarks>This is a temporary property until we get a working
+		/// language filter in the output like MSDN.</remarks>
+		[Category("Documentation Main Settings")]
+		[Description("Show Visual Basic syntax for types and members.")]
+		[DefaultValue(false)]
+		public bool ShowVisualBasic
+		{
+			get { return _ShowVisualBasic; }
+
+			set 
+			{ 
+				_ShowVisualBasic = value; 
+				SetDirty();
+			}
+		}
+
+		private OutputType _OutputTarget;
+
+		/// <summary>Gets or sets the OutputTarget property.</summary>
+		/// <remarks>Sets the output type to HTML Help (.chm) or Web or both.</remarks>
+		[Category("Documentation Main Settings")]
+		[Description("Sets the output type to HTML Help (.chm) or Web or both.")]
+		[DefaultValue(OutputType.HtmlHelpAndWeb)]
+		[System.ComponentModel.TypeConverter(typeof(NDoc.Core.EnumDescriptionConverter))]
+		public OutputType OutputTarget
+		{
+			get { return _OutputTarget; }
+
+			set 
+			{ 
+				_OutputTarget = value; 
+				SetDirty();
+			}
+		}
+
+		bool _SdkLinksOnWeb = false;
+
+		/// <summary>Gets or sets the SdkLinksOnWeb property.</summary>
+		/// <remarks>
+		/// </remarks>
+		[Category("Documentation Main Settings")]
+		[Description("Turning this flag on will point all SDK links to the online MSDN library")]
+		[DefaultValue(false)]
+		public bool SdkLinksOnWeb
+		{
+			get { return _SdkLinksOnWeb; }
+
+			set
+			{
+				_SdkLinksOnWeb = value;
+				SetDirty();
+			}
+		}
+
+		#endregion
+
+		/// <summary>Gets or sets the IncludeFavorites property.</summary>
+		/// <remarks>Turning this flag on will include a Favorites tab in the HTML Help file.</remarks>
+		[Category("HTML Help Options")]
+		[Description("Turning this flag on will include a Favorites tab in the HTML Help file.")]
+		[DefaultValue(false)]
+		public bool IncludeFavorites
+		{
+			get { return includeFavorites; }
+
+			set 
+			{ 
+				includeFavorites = value; 
 				SetDirty();
 			}
 		}
@@ -203,45 +279,6 @@ namespace NDoc.Documenter.Msdn
 			}
 		}
 
-		private bool _IncludeHierarchy;
-
-		/// <summary>Gets or sets the IncludeHierarchy property.</summary>
-		/// <remarks>To include a class hiararchy page for each 
-		/// namespace. Don't turn it on if your project has a namespace 
-		/// with many types, as NDoc will become very slow and might crash.</remarks>
-		[Category("Documentation Main Settings")]
-		[Description("To include a class hiararchy page for each namespace. Don't turn it on if your project has a namespace with many types, as NDoc will become very slow and might crash.")]
-		[DefaultValue(false)]
-		public bool IncludeHierarchy
-		{
-			get { return _IncludeHierarchy; }
-
-			set 
-			{ 
-				_IncludeHierarchy = value; 
-				SetDirty();
-			}
-		}
-
-		private bool _ShowVisualBasic;
-
-		/// <summary>Gets or sets the ShowVisualBasic property.</summary>
-		/// <remarks>This is a temporary property until we get a working
-		/// language filter in the output like MSDN.</remarks>
-		[Category("Documentation Main Settings")]
-		[Description("Show Visual Basic syntax for types and members.")]
-		[DefaultValue(false)]
-		public bool ShowVisualBasic
-		{
-			get { return _ShowVisualBasic; }
-
-			set 
-			{ 
-				_ShowVisualBasic = value; 
-				SetDirty();
-			}
-		}
-
 		string _RootPageTOCName;
 
 		/// <summary>Gets or sets the RootPageTOCName property.</summary>
@@ -254,6 +291,7 @@ namespace NDoc.Documenter.Msdn
 			+ " to the root page."
 			+ " If this is not specified and RootPageFileName is, then"
 			+ " the TOC entry will be 'Overview'.")]
+		[DefaultValue("")]
 		public string RootPageTOCName
 		{
 			get { return _RootPageTOCName; }
@@ -273,6 +311,7 @@ namespace NDoc.Documenter.Msdn
 		[Category("HTML Help Options")]
 		[Description("The name of an html file to be included as the root home page. "
 			+ "SplitTOCs is disabled when this property is set.")]
+		[DefaultValue("")]
 		[Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
 		public string RootPageFileName
 		{
@@ -350,23 +389,6 @@ namespace NDoc.Documenter.Msdn
 				SetDirty();
 			}
 		}
-		private OutputType _OutputTarget;
-
-		/// <summary>Gets or sets the OutputTarget property.</summary>
-		/// <remarks>Sets the output type to HTML Help (.chm) or Web or both.</remarks>
-		[Category("Documentation Main Settings")]
-		[Description("Sets the output type to HTML Help (.chm) or Web or both.")]
-		[DefaultValue(OutputType.HtmlHelpAndWeb)]
-		public OutputType OutputTarget
-		{
-			get { return _OutputTarget; }
-
-			set 
-			{ 
-				_OutputTarget = value; 
-				SetDirty();
-			}
-		}
 
 		string _HeaderHtml;
 
@@ -437,24 +459,6 @@ namespace NDoc.Documenter.Msdn
 			}
  		}
 
-		SdkDocVersion _LinkToSdkDocVersion;
-
-		/// <summary>Gets or sets the LinkToSdkDocVersion property.</summary>
-		/// <remarks>Specifies to which version of the .NET 
-		/// Framework SDK documentation the links to system types will be pointing.</remarks>
-		[Category("HTML Help Options")]
-		[Description("Specifies to which version of the .NET Framework SDK documentation the links to system types will be pointing.")]
-		[DefaultValue(SdkDocVersion.SDK_v1_1)]
-		public SdkDocVersion LinkToSdkDocVersion
-		{
-			get { return _LinkToSdkDocVersion; }
-			set
-			{
-				_LinkToSdkDocVersion = value;
-				SetDirty();
-			}
-		}
-
 		string _ExtensibilityStylesheet = string.Empty;
 
 		/// <summary>Path to an xslt stylesheet that contains templates for documenting extensibility tags</summary>
@@ -477,33 +481,18 @@ namespace NDoc.Documenter.Msdn
 	}
 
 	/// <summary>
-	/// Specifies a version of the .NET Framework documentation.
-	/// </summary>
-	public enum SdkDocVersion
-	{
-		/// <summary>The SDK version 1.0.</summary>
-		SDK_v1_0,
-
-		/// <summary>The SDK version 1.1.</summary>
-		SDK_v1_1,
-		
-		/// <summary>The online version of the SDK documentation.</summary>
-		MsdnOnline
-	}
-
-	/// <summary>
 	/// Defines the output types for this documenter.
 	/// </summary>
 	[Flags]
 	public enum OutputType
 	{
 		/// <summary>Output only an HTML Help file (.chm).</summary>
-		HtmlHelp = 1,
+		[Description("HTML Help")] HtmlHelp = 1,
 
 		/// <summary>Output only Web pages.</summary>
-		Web = 2,
+		[Description("Web")] Web = 2,
 
 		/// <summary>Output both HTML Help and Web.</summary>
-		HtmlHelpAndWeb = HtmlHelp | Web
+		[Description("HTML Help and Web")] HtmlHelpAndWeb = HtmlHelp | Web
 	}
 }
