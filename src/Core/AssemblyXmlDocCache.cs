@@ -118,8 +118,13 @@ namespace NDoc.Core
 		/// <param name="node">a code tag node</param>
 		private void FixupCodeTag(XmlNode node)
 		{
-			String codeText = (string)node.InnerText;
-			if (codeText.StartsWith("\r\n")) codeText = codeText.Substring(2);
+			string codeText = (string)node.InnerText;
+			string x = codeText.TrimStart(new Char[] {' '});
+			bool y = x.StartsWith("\r\n");
+			if (codeText.TrimStart(new Char[] {' '} ).StartsWith("\r\n"))
+			{
+				codeText = codeText.TrimStart(new Char[] {' '}).Substring(2);
+			}
 			codeText = codeText.Replace("\r\n", "\n");
 			codeText = codeText.Replace("\t", "    ");
 			string[] codeLines = codeText.Split(new Char[] {'\r', '\n'});
@@ -136,7 +141,7 @@ namespace NDoc.Core
 					if (leadingChars < codeLines[index].Length)
 						codeLines[index] = codeLines[index].Substring(leadingChars);
 					else
-						codeLines[index] = String.Empty;
+						codeLines[index] = codeLines[index].TrimStart();
 				}
 
 				string newtext = String.Join(System.Environment.NewLine, codeLines);
