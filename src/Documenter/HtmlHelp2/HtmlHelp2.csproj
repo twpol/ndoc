@@ -69,48 +69,12 @@
                     AssemblyName = "System"
                 />
                 <Reference
-                    Name = "System.Data"
-                    AssemblyName = "System.Data"
-                />
-                <Reference
                     Name = "System.XML"
                     AssemblyName = "System.Xml"
                 />
                 <Reference
-                    Name = "System.Windows.Forms"
-                    AssemblyName = "System.Windows.Forms"
-                />
-                <Reference
-                    Name = "System.Drawing"
-                    AssemblyName = "System.Drawing"
-                />
-                <Reference
-                    Name = "System.Drawing.Design"
-                    AssemblyName = "System.Drawing.Design"
-                />
-                <Reference
-                    Name = "System.Design"
-                    AssemblyName = "System.Design"
-                />
-                <Reference
                     Name = "MSHelpCompiler"
                     Guid = "{314111EE-A502-11D2-BBCA-00C04F8EC294}"
-                    VersionMajor = "1"
-                    VersionMinor = "0"
-                    Lcid = "0"
-                    WrapperTool = "tlbimp"
-                />
-                <Reference
-                    Name = "stdole"
-                    Guid = "{00020430-0000-0000-C000-000000000046}"
-                    VersionMajor = "2"
-                    VersionMinor = "0"
-                    Lcid = "0"
-                    WrapperTool = "primary"
-                />
-                <Reference
-                    Name = "MsVHWExtLib"
-                    Guid = "{D4BFA430-BA2E-11D2-8EE0-00C04F5E0C38}"
                     VersionMajor = "1"
                     VersionMinor = "0"
                     Lcid = "0"
@@ -129,14 +93,6 @@
                 <Reference
                     Name = "Microsoft.mshtml"
                     AssemblyName = "Microsoft.mshtml"
-                />
-                <Reference
-                    Name = "EnvDTE"
-                    Guid = "{80CC9F66-E7D8-4DDD-85B6-D9E6CD0E93E2}"
-                    VersionMajor = "7"
-                    VersionMinor = "0"
-                    Lcid = "0"
-                    WrapperTool = "primary"
                 />
             </References>
         </Build>

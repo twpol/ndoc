@@ -1,8 +1,5 @@
 using System;
 using System.IO;
-using System.ComponentModel;
-using System.Drawing.Design;
-using System.Windows.Forms.Design;
 
 using Microsoft.Win32;
 
