@@ -131,6 +131,10 @@ namespace NDoc.Test
 
 		/// <summary>This method is also overloaded in the Derived class.</summary>
 		public void Overloaded(char c) { }
+
+		/// <summary>This method is also overloaded in the Derived class.</summary>
+		/// <remarks>This method accepts a type declared in the same namespace.</remarks>
+		public void Overloaded(Interface i) { }
 	}
 
 	/// <summary>Represents another derived class.</summary>
