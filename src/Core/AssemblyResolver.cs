@@ -46,20 +46,32 @@ namespace NDoc.Core {
 		/// <summary> 
 		/// Constructs an instance of this type.
 		/// </summary>
-		/// <param name="baseDirectory">The base directory for assembly searching.</param>
-		public AssemblyResolver(string baseDirectory) {
-			this.baseDirectory = baseDirectory;
+		/// <param name="directories">A list of directories to search for assemblies in.</param>
+		public AssemblyResolver(ArrayList directories) 
+		{
+			this.directories = directories;
 			this.directoryLists = new Hashtable();
 		}
 
 		#endregion
 
-		#region Public Operations
+		#region Public Methods and Properties
+
+		/// <summary>
+		/// Whether or not to include sub-directories in the searches which
+		/// are in response to the AssemblyResolve event.
+		/// </summary>
+		public bool IncludeSubdirs
+		{
+			get { return(includeSubdirs); }
+			set { includeSubdirs = value; }
+		}
 
 		/// <summary> 
 		/// Installs the assembly resolver by hooking up to the AppDomain's AssemblyResolve event.
 		/// </summary>
-		public void Install() {
+		public void Install() 
+		{
 			AppDomain.CurrentDomain.AssemblyResolve +=
 				new ResolveEventHandler(this.ResolveAssembly);
 		}
@@ -120,58 +132,72 @@ namespace NDoc.Core {
 			}
 
 			// base directory
-			return LoadAssemblyFrom(this.baseDirectory, fullName, fileName, true);
+			return LoadAssemblyFrom(this.directories, fullName, fileName, this.includeSubdirs);
 		}
 
 		/// <summary> 
-		/// Loads the assembly with the specified filename from the specified directory.
-		/// If the assembly is not found in the directory, all subdirectories of the
-		/// directory are searched for the assembly.
+		/// Search for and load the specified assembly in a set of directories.
+		/// This will optionally search recursively.
 		/// </summary>
-		/// <param name="path">The base directory to look in.</param>
+		/// <param name="dirs">The list of directories to look in.</param>
 		/// <param name="fullName">
 		/// Fully qualified assembly name. If not empty, the full name of each assembly found is
 		/// compared to this name and the assembly is accepted only, if the names match.
 		/// </param>
 		/// <param name="fileName">The name of the assembly.</param>
 		/// <param name="includeSubDirs">true, to include subdirectories.</param>
-		/// <returns>The assembly, null, if not found.</returns>
-		private Assembly LoadAssemblyFrom(string path, string fullName, string fileName, bool includeSubDirs) {
-
+		/// <returns>The assembly, or null if not found.</returns>
+		private Assembly LoadAssemblyFrom(ArrayList dirs, string fullName, 
+			string fileName, bool includeSubDirs) 
+		{
 			Assembly assembly = null;
-			string fn = Path.Combine(path, fileName);
-			try {
-				if (true == File.Exists(fn)) {
-					assembly = BaseDocumenter.LoadAssembly(fn);
-					if ("" != fullName && fullName != assembly.FullName) {
-//						assembly = null;
-						Debug.WriteLine(
-							"Assembly: " + fullName + ", Wrong Assembly Version. Loaded anyway!",
-							"AssemblyResolver");
-					} else {
-						Debug.WriteLine(
-							"Assembly Loaded: " + fn,
-							"AssemblyResolver");
-					}
-				}
-			} catch (Exception e) {
-				Debug.WriteLine(
-					"Error: " + e.Message,
-					"AssemblyResolver");
-			}
+			if ((dirs == null) || (dirs.Count == 0)) return(null);
 
-			// scan subdirectories
-			if (null == assembly && true == includeSubDirs) {
-				string[] subdirs = GetSubDirectories(path);
-				foreach (string subdir in subdirs) {
-					string p = Path.Combine(path, subdir);
-					assembly = LoadAssemblyFrom(p, fullName, fileName, true);
-					if (null != assembly) {
-						break;
+			foreach(string path in dirs)
+			{
+				if (Directory.Exists(path))
+				{
+					string fn = Path.Combine(path, fileName);
+					if (File.Exists(fn)) 
+					{
+						// got it, try load
+						try
+						{
+							assembly = BaseDocumenter.LoadAssembly(fn);
+							if ("" != fullName && fullName != assembly.FullName) 
+							{
+								//						assembly = null;
+								Debug.WriteLine("Assembly: " + fullName 
+									+ ", Wrong Assembly Version. Loaded anyway!",
+									"AssemblyResolver");
+							} 
+							else 
+							{
+								Debug.WriteLine("Assembly Loaded: " + fn, "AssemblyResolver");
+							}
+							return(assembly);
+						}
+						catch(Exception e)
+						{
+							Debug.WriteLine("Error: " + e.Message, "AssemblyResolver");
+						}
+					}
+					else
+					{
+						Debug.WriteLine("AssemblyResolver: File " + fileName + " not in " + path);
+					}
+
+					// not in this dir (or load failed), scan subdirectories
+					if (includeSubDirs) 
+					{
+						string[] subdirs = GetSubDirectories(path);
+						ArrayList subDirList = new ArrayList();
+						foreach (string subdir in subdirs) subDirList.Add(subdir);
+						return(LoadAssemblyFrom(subDirList, fullName, fileName, true));
 					}
 				}
 			}
-			return assembly;
+			return(null);
 		}
 
 		#endregion
@@ -192,10 +218,13 @@ namespace NDoc.Core {
 		#region Data
 
 		/// <summary>The base directory used to search for assemblies.</summary>
-		private string baseDirectory;
+		private ArrayList directories;
 
 		/// <summary>List of subdirectory lists already scanned.</summary>
 		private Hashtable directoryLists;
+
+		/// <summary>Whether or not to include subdirectories in searches.</summary>
+		private bool includeSubdirs = false;
 
 		#endregion
 	}
