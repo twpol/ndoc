@@ -19,9 +19,6 @@
 					<xsl:with-param name="type-name" select="concat($ns/@name, ' Hierarchy')" />
 				</xsl:call-template>
 				<div id="nstext" valign="bottom">
-					<xsl:if test="ancestor-or-self::node()/documentation/preliminary | /ndoc/preliminary">
-						<xsl:call-template name="preliminary-section" />
-					</xsl:if>
 					<xsl:apply-templates select="$ns" />
 					<h4 class="dtH4">See Also</h4>
 					<p>
