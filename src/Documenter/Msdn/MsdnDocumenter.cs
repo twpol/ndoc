@@ -1530,21 +1530,6 @@ namespace NDoc.Documenter.Msdn
 			htmlHelp.AddFileToProject(filename);
 		}
 
-		private string RemoveChar(string s, char c)
-		{
-			StringBuilder builder = new StringBuilder();
-
-			foreach (char ch in s.ToCharArray())
-			{
-				if (ch != c)
-				{
-					builder.Append(ch);
-				}
-			}
-
-			return builder.ToString();
-		}
-
 		private string GetFilenameForNamespace(string namespaceName)
 		{
 			string fileName = namespaceName + ".html";
@@ -1604,6 +1589,7 @@ namespace NDoc.Documenter.Msdn
 		{
 			string fieldID = (string)fieldNode.Attributes["id"].Value;
 			string fileName = fieldID.Substring(2) + ".html";
+			fileName = fileName.Replace("#",".");
 			return fileName;
 		}
 
@@ -1640,6 +1626,7 @@ namespace NDoc.Documenter.Msdn
 			}
 
 			fileName += ".html";
+			fileName = fileName.Replace("#",".");
 
 			return fileName;
 		}
@@ -1655,6 +1642,7 @@ namespace NDoc.Documenter.Msdn
 		{
 			string eventID = (string)eventNode.Attributes["id"].Value;
 			string fileName = eventID.Substring(2) + ".html";
+			fileName = fileName.Replace("#",".");
 			return fileName;
 		}
 
@@ -1670,6 +1658,7 @@ namespace NDoc.Documenter.Msdn
 			string typeID = (string)typeNode.Attributes["id"].Value;
 			string propertyName = (string)propertyNode.Attributes["name"].Value;
 			string fileName = typeID.Substring(2) + propertyName + ".html";
+			fileName = fileName.Replace("#",".");
 			return fileName;
 		}
 
@@ -1691,6 +1680,7 @@ namespace NDoc.Documenter.Msdn
 			}
 
 			fileName += ".html";
+			fileName = fileName.Replace("#",".");
 
 			return fileName;
 		}
@@ -1722,7 +1712,7 @@ namespace NDoc.Documenter.Msdn
 				fileName = fileName.Substring(0, leftParenIndex);
 			}
 
-			fileName = RemoveChar(fileName, '#');
+			fileName = fileName.Replace("#",".");
 
 			if (methodNode.Attributes["overload"] != null)
 			{
