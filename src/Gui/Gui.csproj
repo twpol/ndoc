@@ -191,6 +191,21 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "NDocOptions.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "OptionsForm.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "OptionsForm.resx"
+                    DependentUpon = "OptionsForm.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "SolutionForm.cs"
                     SubType = "Form"
                     BuildAction = "Compile"
@@ -198,6 +213,21 @@
                 <File
                     RelPath = "SolutionForm.resx"
                     DependentUpon = "SolutionForm.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "TextBoxWriter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "TraceWindowControl.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "TraceWindowControl.resx"
+                    DependentUpon = "TraceWindowControl.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File

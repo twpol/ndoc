@@ -106,10 +106,6 @@ namespace NDoc.Gui
 		private System.Windows.Forms.Button addButton;
 		private System.Windows.Forms.ProgressBar progressBar;
 		private System.Windows.Forms.ToolBarButton cancelToolBarButton;
-		private System.Windows.Forms.ComboBox comboBoxDocumenters;
-		private System.Windows.Forms.PropertyGrid propertyGrid;
-		private NDoc.Gui.HeaderGroupBox documenterHeaderGroupBox;
-		private System.Windows.Forms.Label labelDocumenters;
 		#endregion // Required Designer Fields
 
 		private Project project;
@@ -127,6 +123,19 @@ namespace NDoc.Gui
 		private System.Windows.Forms.MenuItem menuSpacerItem6;
 		private System.Windows.Forms.MenuItem menuCancelBuildItem;
 		private System.Windows.Forms.MenuItem menuViewLicense;
+		private System.Windows.Forms.Splitter splitter1;
+		private NDoc.Gui.HeaderGroupBox documenterHeaderGroupBox;
+		private System.Windows.Forms.Label labelDocumenters;
+		private System.Windows.Forms.ComboBox comboBoxDocumenters;
+		private System.Windows.Forms.PropertyGrid propertyGrid;
+		private NDoc.Gui.TraceWindowControl traceWindow1;
+		private System.Windows.Forms.MenuItem menuView;
+		private System.Windows.Forms.MenuItem menuViewBuildProgress;
+		private System.Windows.Forms.MenuItem menuItem1;
+		private System.Windows.Forms.MenuItem menuViewOptions;
+		private System.Windows.Forms.MenuItem menuViewStatusBar;
+		private NDocOptions options;
+
 		private StringCollection recentProjectFilenames = new StringCollection();
 		#endregion // Fields
 
@@ -147,15 +156,17 @@ namespace NDoc.Gui
 		/// in as an argument to the NDoc application.</param>
 		public MainForm(string startingProjectFilename)
 		{
+			this.SetStyle(ControlStyles.DoubleBuffer | ControlStyles.UserPaint, true);
 			//
 			// Required for Windows Form Designer support
 			//
 			InitializeComponent();
 
+			if ( DesignMode )
+				return;
+
 			// Allow developers to continue to compile their assemblies while NDoc is running.
 			AppDomain.CurrentDomain.SetShadowCopyFiles();
-
-			this.SetStyle(ControlStyles.DoubleBuffer, true);
 
 			Thread.CurrentThread.Name = "GUI";
 
@@ -177,6 +188,7 @@ namespace NDoc.Gui
 				comboBoxDocumenters.Items.Add(documenter.Name + devStatus);
 			}
 
+			options = new NDocOptions();
 			ReadConfig();
 
 			processDirectory = Directory.GetCurrentDirectory();
@@ -185,20 +197,23 @@ namespace NDoc.Gui
 			// then try loading up the most recently used project file.
 			if (startingProjectFilename == null)
 			{
-				while (recentProjectFilenames.Count > 0)
+				if ( this.options.LoadLastProjectOnStart )
 				{
-					if (File.Exists(recentProjectFilenames[0]))
+					while (recentProjectFilenames.Count > 0)
 					{
-						FileOpen(recentProjectFilenames[0]);
-						break;
-					}
-					else
-					{
-						//the project file was not found, remove it from the MRU
-						recentProjectFilenames.RemoveAt(0);
+						if ( File.Exists(recentProjectFilenames[0]) )
+						{
+							FileOpen(recentProjectFilenames[0]);
+							break;
+						}
+						else
+						{
+							//the project file was not found, remove it from the MRU
+							recentProjectFilenames.RemoveAt(0);
+						}
 					}
 				}
-				if (recentProjectFilenames.Count == 0)
+				if ( this.options.LoadLastProjectOnStart || recentProjectFilenames.Count == 0 )
 				{
 					//there was no project to load
 					projectFilename = untitledProjectName;
@@ -231,14 +246,10 @@ namespace NDoc.Gui
 			menuFileCloseItem.Visible = false;
 
 			SetWindowTitle();
+		
+			this.traceWindow1.TraceText = string.Format( "[NDoc version {0}]\n", Assembly.GetExecutingAssembly().GetName().Version );
 		}
 
-		/// <summary>Calls <see cref="WriteConfig"/> to write out the config
-		/// file and calls Dispose() on base and components.</summary>
-		protected override void Dispose(bool disposing)
-		{
-			base.Dispose(disposing);
-		}
 		#endregion // Constructors / Dispose
 
 		#region InitializeComponent
@@ -271,17 +282,19 @@ namespace NDoc.Gui
 			this.menuDocViewItem = new System.Windows.Forms.MenuItem();
 			this.menuSpacerItem6 = new System.Windows.Forms.MenuItem();
 			this.menuCancelBuildItem = new System.Windows.Forms.MenuItem();
+			this.menuView = new System.Windows.Forms.MenuItem();
+			this.menuViewBuildProgress = new System.Windows.Forms.MenuItem();
+			this.menuViewStatusBar = new System.Windows.Forms.MenuItem();
+			this.menuItem1 = new System.Windows.Forms.MenuItem();
+			this.menuViewOptions = new System.Windows.Forms.MenuItem();
 			this.menuHelpItem = new System.Windows.Forms.MenuItem();
 			this.menuTagReferenceItem = new System.Windows.Forms.MenuItem();
 			this.menuSpacerItem4 = new System.Windows.Forms.MenuItem();
+			this.menuViewLicense = new System.Windows.Forms.MenuItem();
 			this.menuAboutItem = new System.Windows.Forms.MenuItem();
-			this.comboBoxDocumenters = new System.Windows.Forms.ComboBox();
 			this.addButton = new System.Windows.Forms.Button();
 			this.slashDocHeader = new System.Windows.Forms.ColumnHeader();
 			this.cancelToolBarButton = new System.Windows.Forms.ToolBarButton();
-			this.documenterHeaderGroupBox = new NDoc.Gui.HeaderGroupBox();
-			this.labelDocumenters = new System.Windows.Forms.Label();
-			this.propertyGrid = new System.Windows.Forms.PropertyGrid();
 			this.viewToolBarButton = new System.Windows.Forms.ToolBarButton();
 			this.statusBar = new System.Windows.Forms.StatusBar();
 			this.statusBarTextPanel = new System.Windows.Forms.StatusBarPanel();
@@ -297,10 +310,15 @@ namespace NDoc.Gui
 			this.deleteButton = new System.Windows.Forms.Button();
 			this.toolBar = new System.Windows.Forms.ToolBar();
 			this.buildToolBarButton = new System.Windows.Forms.ToolBarButton();
-			this.menuViewLicense = new System.Windows.Forms.MenuItem();
-			this.documenterHeaderGroupBox.SuspendLayout();
+			this.traceWindow1 = new NDoc.Gui.TraceWindowControl();
+			this.splitter1 = new System.Windows.Forms.Splitter();
+			this.documenterHeaderGroupBox = new NDoc.Gui.HeaderGroupBox();
+			this.labelDocumenters = new System.Windows.Forms.Label();
+			this.comboBoxDocumenters = new System.Windows.Forms.ComboBox();
+			this.propertyGrid = new System.Windows.Forms.PropertyGrid();
 			((System.ComponentModel.ISupportInitialize)(this.statusBarTextPanel)).BeginInit();
 			this.assembliesHeaderGroupBox.SuspendLayout();
+			this.documenterHeaderGroupBox.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// menuDocBuildItem
@@ -348,6 +366,7 @@ namespace NDoc.Gui
 			this.mainMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
 																					  this.menuFileItem,
 																					  this.menuDocItem,
+																					  this.menuView,
 																					  this.menuHelpItem});
 			// 
 			// menuFileItem
@@ -450,9 +469,44 @@ namespace NDoc.Gui
 			this.menuCancelBuildItem.Text = "&Cancel Build";
 			this.menuCancelBuildItem.Click += new System.EventHandler(this.menuCancelBuildItem_Click);
 			// 
+			// menuView
+			// 
+			this.menuView.Index = 2;
+			this.menuView.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+																					 this.menuViewBuildProgress,
+																					 this.menuViewStatusBar,
+																					 this.menuItem1,
+																					 this.menuViewOptions});
+			this.menuView.Text = "View";
+			// 
+			// menuViewBuildProgress
+			// 
+			this.menuViewBuildProgress.Checked = true;
+			this.menuViewBuildProgress.Index = 0;
+			this.menuViewBuildProgress.Text = "Build Window";
+			this.menuViewBuildProgress.Click += new System.EventHandler(this.menuViewBuildProgress_Click);
+			// 
+			// menuViewStatusBar
+			// 
+			this.menuViewStatusBar.Checked = true;
+			this.menuViewStatusBar.Index = 1;
+			this.menuViewStatusBar.Text = "Status Bar";
+			this.menuViewStatusBar.Click += new System.EventHandler(this.menuViewStatusBar_Click);
+			// 
+			// menuItem1
+			// 
+			this.menuItem1.Index = 2;
+			this.menuItem1.Text = "-";
+			// 
+			// menuViewOptions
+			// 
+			this.menuViewOptions.Index = 3;
+			this.menuViewOptions.Text = "Options...";
+			this.menuViewOptions.Click += new System.EventHandler(this.menuViewOptions_Click);
+			// 
 			// menuHelpItem
 			// 
-			this.menuHelpItem.Index = 2;
+			this.menuHelpItem.Index = 3;
 			this.menuHelpItem.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
 																						 this.menuTagReferenceItem,
 																						 this.menuSpacerItem4,
@@ -472,27 +526,23 @@ namespace NDoc.Gui
 			this.menuSpacerItem4.Index = 1;
 			this.menuSpacerItem4.Text = "-";
 			// 
+			// menuViewLicense
+			// 
+			this.menuViewLicense.Index = 2;
+			this.menuViewLicense.Text = "View License";
+			this.menuViewLicense.Click += new System.EventHandler(this.menuViewLicense_Click);
+			// 
 			// menuAboutItem
 			// 
 			this.menuAboutItem.Index = 3;
 			this.menuAboutItem.Text = "&About NDoc";
 			this.menuAboutItem.Click += new System.EventHandler(this.menuAboutItem_Click);
 			// 
-			// comboBoxDocumenters
-			// 
-			this.comboBoxDocumenters.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBoxDocumenters.DropDownWidth = 160;
-			this.comboBoxDocumenters.Location = new System.Drawing.Point(128, 24);
-			this.comboBoxDocumenters.Name = "comboBoxDocumenters";
-			this.comboBoxDocumenters.Size = new System.Drawing.Size(160, 21);
-			this.comboBoxDocumenters.TabIndex = 9;
-			this.comboBoxDocumenters.SelectedIndexChanged += new System.EventHandler(this.comboBoxDocumenters_SelectedIndexChanged);
-			// 
 			// addButton
 			// 
 			this.addButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.addButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.addButton.Location = new System.Drawing.Point(397, 24);
+			this.addButton.Location = new System.Drawing.Point(413, 24);
 			this.addButton.Name = "addButton";
 			this.addButton.TabIndex = 14;
 			this.addButton.Text = "Add";
@@ -509,50 +559,6 @@ namespace NDoc.Gui
 			this.cancelToolBarButton.ImageIndex = 5;
 			this.cancelToolBarButton.ToolTipText = "Cancel";
 			// 
-			// documenterHeaderGroupBox
-			// 
-			this.documenterHeaderGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-				| System.Windows.Forms.AnchorStyles.Left) 
-				| System.Windows.Forms.AnchorStyles.Right)));
-			this.documenterHeaderGroupBox.BackColor = System.Drawing.SystemColors.Control;
-			this.documenterHeaderGroupBox.Controls.Add(this.labelDocumenters);
-			this.documenterHeaderGroupBox.Controls.Add(this.comboBoxDocumenters);
-			this.documenterHeaderGroupBox.Controls.Add(this.propertyGrid);
-			this.documenterHeaderGroupBox.Location = new System.Drawing.Point(8, 192);
-			this.documenterHeaderGroupBox.Name = "documenterHeaderGroupBox";
-			this.documenterHeaderGroupBox.Padding = 0;
-			this.documenterHeaderGroupBox.Size = new System.Drawing.Size(480, 397);
-			this.documenterHeaderGroupBox.TabIndex = 23;
-			this.documenterHeaderGroupBox.TabStop = false;
-			this.documenterHeaderGroupBox.Text = "Select and Configure Documenter";
-			// 
-			// labelDocumenters
-			// 
-			this.labelDocumenters.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.labelDocumenters.Location = new System.Drawing.Point(16, 26);
-			this.labelDocumenters.Name = "labelDocumenters";
-			this.labelDocumenters.Size = new System.Drawing.Size(112, 21);
-			this.labelDocumenters.TabIndex = 10;
-			this.labelDocumenters.Text = "Documentation Type:";
-			this.labelDocumenters.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// propertyGrid
-			// 
-			this.propertyGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-				| System.Windows.Forms.AnchorStyles.Left) 
-				| System.Windows.Forms.AnchorStyles.Right)));
-			this.propertyGrid.CommandsVisibleIfAvailable = true;
-			this.propertyGrid.LargeButtons = false;
-			this.propertyGrid.LineColor = System.Drawing.SystemColors.ScrollBar;
-			this.propertyGrid.Location = new System.Drawing.Point(16, 56);
-			this.propertyGrid.Name = "propertyGrid";
-			this.propertyGrid.Size = new System.Drawing.Size(456, 333);
-			this.propertyGrid.TabIndex = 0;
-			this.propertyGrid.Text = "PropertyGrid";
-			this.propertyGrid.ViewBackColor = System.Drawing.SystemColors.Window;
-			this.propertyGrid.ViewForeColor = System.Drawing.SystemColors.WindowText;
-			this.propertyGrid.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propertyGrid_PropertyValueChanged);
-			// 
 			// viewToolBarButton
 			// 
 			this.viewToolBarButton.ImageIndex = 6;
@@ -567,6 +573,7 @@ namespace NDoc.Gui
 			this.statusBar.ShowPanels = true;
 			this.statusBar.Size = new System.Drawing.Size(496, 20);
 			this.statusBar.TabIndex = 21;
+			this.statusBar.VisibleChanged += new System.EventHandler(this.statusBar_VisibleChanged);
 			// 
 			// statusBarTextPanel
 			// 
@@ -604,7 +611,7 @@ namespace NDoc.Gui
 			this.editButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.editButton.Enabled = false;
 			this.editButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.editButton.Location = new System.Drawing.Point(397, 56);
+			this.editButton.Location = new System.Drawing.Point(413, 56);
 			this.editButton.Name = "editButton";
 			this.editButton.TabIndex = 15;
 			this.editButton.Text = "Edit";
@@ -614,7 +621,7 @@ namespace NDoc.Gui
 			// 
 			this.namespaceSummariesButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.namespaceSummariesButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.namespaceSummariesButton.Location = new System.Drawing.Point(397, 120);
+			this.namespaceSummariesButton.Location = new System.Drawing.Point(413, 120);
 			this.namespaceSummariesButton.Name = "namespaceSummariesButton";
 			this.namespaceSummariesButton.Size = new System.Drawing.Size(75, 32);
 			this.namespaceSummariesButton.TabIndex = 17;
@@ -623,22 +630,20 @@ namespace NDoc.Gui
 			// 
 			// assembliesHeaderGroupBox
 			// 
-			this.assembliesHeaderGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-				| System.Windows.Forms.AnchorStyles.Right)));
 			this.assembliesHeaderGroupBox.BackColor = System.Drawing.SystemColors.Control;
 			this.assembliesHeaderGroupBox.Controls.Add(this.assembliesListView);
 			this.assembliesHeaderGroupBox.Controls.Add(this.editButton);
 			this.assembliesHeaderGroupBox.Controls.Add(this.namespaceSummariesButton);
 			this.assembliesHeaderGroupBox.Controls.Add(this.deleteButton);
 			this.assembliesHeaderGroupBox.Controls.Add(this.addButton);
-			this.assembliesHeaderGroupBox.Location = new System.Drawing.Point(8, 32);
+			this.assembliesHeaderGroupBox.Dock = System.Windows.Forms.DockStyle.Top;
+			this.assembliesHeaderGroupBox.Location = new System.Drawing.Point(0, 28);
 			this.assembliesHeaderGroupBox.Name = "assembliesHeaderGroupBox";
 			this.assembliesHeaderGroupBox.Padding = 0;
-			this.assembliesHeaderGroupBox.Size = new System.Drawing.Size(480, 152);
+			this.assembliesHeaderGroupBox.Size = new System.Drawing.Size(496, 152);
 			this.assembliesHeaderGroupBox.TabIndex = 22;
 			this.assembliesHeaderGroupBox.TabStop = false;
 			this.assembliesHeaderGroupBox.Text = "Select Assemblies to Document";
-			this.assembliesHeaderGroupBox.Enter += new System.EventHandler(this.assembliesHeaderGroupBox_Enter);
 			// 
 			// assembliesListView
 			// 
@@ -648,7 +653,7 @@ namespace NDoc.Gui
 			this.assembliesListView.ForeColor = System.Drawing.SystemColors.WindowText;
 			this.assembliesListView.Location = new System.Drawing.Point(16, 24);
 			this.assembliesListView.Name = "assembliesListView";
-			this.assembliesListView.Size = new System.Drawing.Size(368, 120);
+			this.assembliesListView.Size = new System.Drawing.Size(384, 120);
 			this.assembliesListView.TabIndex = 13;
 			this.assembliesListView.View = System.Windows.Forms.View.List;
 			this.assembliesListView.DoubleClick += new System.EventHandler(this.assembliesListView_DoubleClick);
@@ -659,7 +664,7 @@ namespace NDoc.Gui
 			this.deleteButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.deleteButton.Enabled = false;
 			this.deleteButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.deleteButton.Location = new System.Drawing.Point(397, 88);
+			this.deleteButton.Location = new System.Drawing.Point(413, 88);
 			this.deleteButton.Name = "deleteButton";
 			this.deleteButton.TabIndex = 16;
 			this.deleteButton.Text = "Remove";
@@ -693,21 +698,88 @@ namespace NDoc.Gui
 			this.buildToolBarButton.ImageIndex = 4;
 			this.buildToolBarButton.ToolTipText = "Build Documentation (Ctrl+Shift+B)";
 			// 
-			// menuViewLicense
+			// traceWindow1
 			// 
-			this.menuViewLicense.Index = 2;
-			this.menuViewLicense.Text = "View License";
-			this.menuViewLicense.Click += new System.EventHandler(this.menuViewLicense_Click);
+			this.traceWindow1.BackColor = System.Drawing.SystemColors.ActiveCaption;
+			this.traceWindow1.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.traceWindow1.Location = new System.Drawing.Point(0, 462);
+			this.traceWindow1.Name = "traceWindow1";
+			this.traceWindow1.Size = new System.Drawing.Size(496, 128);
+			this.traceWindow1.TabIndex = 25;
+			this.traceWindow1.TabStop = false;
+			this.traceWindow1.TraceText = "";
+			this.traceWindow1.VisibleChanged += new System.EventHandler(this.traceWindow1_VisibleChanged);
+			// 
+			// splitter1
+			// 
+			this.splitter1.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.splitter1.Location = new System.Drawing.Point(0, 459);
+			this.splitter1.Name = "splitter1";
+			this.splitter1.Size = new System.Drawing.Size(496, 3);
+			this.splitter1.TabIndex = 26;
+			this.splitter1.TabStop = false;
+			// 
+			// documenterHeaderGroupBox
+			// 
+			this.documenterHeaderGroupBox.BackColor = System.Drawing.SystemColors.Control;
+			this.documenterHeaderGroupBox.Controls.Add(this.labelDocumenters);
+			this.documenterHeaderGroupBox.Controls.Add(this.comboBoxDocumenters);
+			this.documenterHeaderGroupBox.Controls.Add(this.propertyGrid);
+			this.documenterHeaderGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.documenterHeaderGroupBox.Location = new System.Drawing.Point(0, 180);
+			this.documenterHeaderGroupBox.Name = "documenterHeaderGroupBox";
+			this.documenterHeaderGroupBox.Padding = 0;
+			this.documenterHeaderGroupBox.Size = new System.Drawing.Size(496, 279);
+			this.documenterHeaderGroupBox.TabIndex = 27;
+			this.documenterHeaderGroupBox.TabStop = false;
+			this.documenterHeaderGroupBox.Text = "Select and Configure Documenter";
+			// 
+			// labelDocumenters
+			// 
+			this.labelDocumenters.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.labelDocumenters.Location = new System.Drawing.Point(16, 26);
+			this.labelDocumenters.Name = "labelDocumenters";
+			this.labelDocumenters.Size = new System.Drawing.Size(112, 21);
+			this.labelDocumenters.TabIndex = 10;
+			this.labelDocumenters.Text = "Documentation Type:";
+			this.labelDocumenters.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// comboBoxDocumenters
+			// 
+			this.comboBoxDocumenters.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBoxDocumenters.DropDownWidth = 160;
+			this.comboBoxDocumenters.Location = new System.Drawing.Point(128, 24);
+			this.comboBoxDocumenters.Name = "comboBoxDocumenters";
+			this.comboBoxDocumenters.Size = new System.Drawing.Size(160, 21);
+			this.comboBoxDocumenters.TabIndex = 9;
+			// 
+			// propertyGrid
+			// 
+			this.propertyGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+				| System.Windows.Forms.AnchorStyles.Left) 
+				| System.Windows.Forms.AnchorStyles.Right)));
+			this.propertyGrid.CommandsVisibleIfAvailable = true;
+			this.propertyGrid.LargeButtons = false;
+			this.propertyGrid.LineColor = System.Drawing.SystemColors.ScrollBar;
+			this.propertyGrid.Location = new System.Drawing.Point(8, 56);
+			this.propertyGrid.Name = "propertyGrid";
+			this.propertyGrid.Size = new System.Drawing.Size(480, 216);
+			this.propertyGrid.TabIndex = 0;
+			this.propertyGrid.Text = "PropertyGrid";
+			this.propertyGrid.ViewBackColor = System.Drawing.SystemColors.Window;
+			this.propertyGrid.ViewForeColor = System.Drawing.SystemColors.WindowText;
 			// 
 			// MainForm
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.ClientSize = new System.Drawing.Size(496, 610);
+			this.Controls.Add(this.documenterHeaderGroupBox);
+			this.Controls.Add(this.splitter1);
+			this.Controls.Add(this.traceWindow1);
 			this.Controls.Add(this.progressBar);
 			this.Controls.Add(this.assembliesHeaderGroupBox);
 			this.Controls.Add(this.statusBar);
 			this.Controls.Add(this.toolBar);
-			this.Controls.Add(this.documenterHeaderGroupBox);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Menu = this.mainMenu1;
 			this.MinimumSize = new System.Drawing.Size(504, 460);
@@ -715,9 +787,9 @@ namespace NDoc.Gui
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = "NDoc";
-			this.documenterHeaderGroupBox.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.statusBarTextPanel)).EndInit();
 			this.assembliesHeaderGroupBox.ResumeLayout(false);
+			this.documenterHeaderGroupBox.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -839,15 +911,18 @@ namespace NDoc.Gui
 			EnableAssemblyItems();
 		}
 
-		/// <summary>
-		/// Get the application data directory.
-		/// </summary>
-		/// <returns>
-		/// The application data folder appended with a NDoc folder.
-		/// </returns>
-		private string GetApplicationDataDirectory()
+		private Point GetOnScreenLocation( Point pt )
 		{
-			return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + string.Format( "{0}NDoc{0}", Path.DirectorySeparatorChar );
+			// look for a screen that contains this point
+			// if one is found the point is ok so return it
+			foreach ( Screen screen in Screen.AllScreens )
+			{
+				if ( screen.Bounds.Contains( pt ) )
+					return pt;
+			}
+
+			// otherwise return the upper left point of the primary screen
+			return new Point( Screen.PrimaryScreen.WorkingArea.X, Screen.PrimaryScreen.WorkingArea.Y );
 		}
 
 		/// <summary>Reads in the NDoc configuration file from the
@@ -857,75 +932,31 @@ namespace NDoc.Gui
 		/// being used last.</remarks>
 		private void ReadConfig()
 		{
-			string directory = GetApplicationDataDirectory();
+			Settings settings = new Settings( Settings.ApplicationSettingsFile );
 
-			string guiConfigFilename = directory + "NDoc.Gui.xml";
+			this.Location = GetOnScreenLocation( (Point)settings.GetSetting( "gui", "location", new Point( Screen.PrimaryScreen.WorkingArea.Top, Screen.PrimaryScreen.WorkingArea.Left ) ) );
 
-			string documenterName = "MSDN";
+			Screen screen = Screen.FromControl( this );
+			this.Size = (Size)settings.GetSetting( "gui", "size", new Size( screen.WorkingArea.Width / 3, screen.WorkingArea.Height - 20 ) );
+			
+			if ( this.Height > screen.WorkingArea.Height )
+				this.Height = screen.WorkingArea.Height;
 
-			if (File.Exists(guiConfigFilename))
-			{
-				XmlTextReader reader = null;
+			if ( settings.GetSetting( "gui", "maximized", false ) )
+				this.WindowState = FormWindowState.Maximized;			
 
-				try
-				{
-					StreamReader streamReader = new StreamReader(File.OpenRead(guiConfigFilename));
+			this.traceWindow1.Visible = settings.GetSetting( "gui", "viewTrace", true );
+			this.traceWindow1.Height = settings.GetSetting( "gui", "traceWindowHeight", this.traceWindow1.Height );
 
-					reader = new XmlTextReader(streamReader);
-					reader.MoveToContent();
+			this.statusBar.Visible = settings.GetSetting( "gui", "statusBar", true );
 
-					reader.ReadStartElement("ndoc.gui");
+			IList list = recentProjectFilenames;
+			settings.GetSettingList( "gui", "mru", typeof( string ), ref list );		
+	
+			string documenterName = settings.GetSetting( "gui", "documenter", "MSDN" );
 
-					while (reader.Read() && reader.NodeType != XmlNodeType.EndElement)
-					{
-						if (reader.NodeType == XmlNodeType.Element)
-						{
-							switch (reader.Name)
-							{
-								case "project":
-									recentProjectFilenames.Add(reader.ReadString());
-									break;
-								case "documenter":
-									documenterName = reader.ReadString();
-									break;
-								case "window":
-									if (!reader.MoveToNextAttribute()) break;
-									this.Left = int.Parse(reader.Value);
-
-									if (!reader.MoveToNextAttribute()) break;
-									this.Top = int.Parse(reader.Value);
-
-									if (!reader.MoveToNextAttribute()) break;
-									this.Width = int.Parse(reader.Value);
-
-									if (!reader.MoveToNextAttribute()) break;
-									//HACK: subtract 20 to last height to keep it constant
-									this.Height = int.Parse(reader.Value) - 20;
-									
-									if (!reader.MoveToNextAttribute()) break;
-									if (bool.Parse(reader.Value))
-									{
-										this.WindowState = FormWindowState.Maximized;
-									}
-									break;
-							}
-						}
-					}
-				}
-				catch (XmlException)
-				{
-					//config file is corrupted, delete it
-					reader.Close();
-					File.Delete(guiConfigFilename);
-				}
-				finally
-				{
-					if (reader != null)
-					{
-						reader.Close();
-					}
-				}
-			}
+			this.options.LoadLastProjectOnStart = settings.GetSetting( "gui", "loadLastProjectOnStart", true );
+			this.options.ShowProgressOnBuild = settings.GetSetting( "gui", "showProgressOnBuild", false );
 
 			int index = 0;
 
@@ -947,55 +978,31 @@ namespace NDoc.Gui
 		/// list of project files.  It also stores which documenter was
 		/// being used last.</remarks>
 		private void WriteConfig()
-		{
-			string directory = GetApplicationDataDirectory();
-
-			if (!Directory.Exists(directory))
+		{			
+			using( Settings settings = new Settings( Settings.ApplicationSettingsFile ) )
 			{
-				Directory.CreateDirectory(directory);
-			}
+				if ( this.WindowState == FormWindowState.Maximized )
+				{
+					settings.SetSetting( "gui", "maximized", true );
+				}
+				else if ( this.WindowState == FormWindowState.Normal )
+				{
+					settings.SetSetting( "gui", "maximized", false );
+					settings.SetSetting( "gui", "location", this.Location );
+					settings.SetSetting( "gui", "size", this.Size );
+				}
+				settings.SetSetting( "gui", "viewTrace", this.traceWindow1.Visible );
+				settings.SetSetting( "gui", "traceWindowHeight", this.traceWindow1.Height );
+				settings.SetSetting( "gui", "statusBar", this.statusBar.Visible );
+				
+				if ( comboBoxDocumenters.SelectedIndex >= 0 )
+					settings.SetSetting( "gui", "documenter", ((IDocumenter)project.Documenters[comboBoxDocumenters.SelectedIndex]).Name );
 
-			// Trim our MRU list down to max amount before writing the config.
-			while (recentProjectFilenames.Count > maxMRU)
-			{
-				recentProjectFilenames.RemoveAt(maxMRU);
-			}
+				// Trim our MRU list down to max amount before writing the config.
+				while (recentProjectFilenames.Count > maxMRU)
+					recentProjectFilenames.RemoveAt(maxMRU);
 
-			// Write our NDoc config file.
-			string guiConfigFilename = directory + "NDoc.Gui.xml";
-			StreamWriter streamWriter = new StreamWriter(guiConfigFilename);
-
-			XmlTextWriter writer = new XmlTextWriter(streamWriter);
-			writer.Formatting = Formatting.Indented;
-			writer.Indentation = 2;
-			
-			bool max = (this.WindowState == FormWindowState.Maximized);
-			//restore the window state before saving it's location
-			//this might be an annoyance if the config is not saved 
-			//during application exit
-			this.WindowState = FormWindowState.Normal;
-			
-			writer.WriteStartElement("ndoc.gui");
-			WriteRecentProjects(writer);
-			if (comboBoxDocumenters.SelectedIndex != -1)
-				writer.WriteElementString("documenter", ((IDocumenter)project.Documenters[comboBoxDocumenters.SelectedIndex]).Name);
-			writer.WriteStartElement("window");
-			writer.WriteAttributeString("left", this.Location.X.ToString());
-			writer.WriteAttributeString("top", this.Location.Y.ToString());
-			writer.WriteAttributeString("width", this.Width.ToString());
-			writer.WriteAttributeString("height", this.Height.ToString());
-			writer.WriteAttributeString("maximized", max.ToString()); 
-			writer.WriteEndElement();
-			writer.WriteEndElement();
-
-			writer.Close();
-		}
-
-		private void WriteRecentProjects(XmlWriter writer)
-		{
-			foreach (string project in recentProjectFilenames)
-			{
-				writer.WriteElementString("project", project);
+				settings.SetSettingList( "gui", "mru", "project", recentProjectFilenames );			
 			}
 		}
 
@@ -1391,7 +1398,6 @@ namespace NDoc.Gui
 				return;
 			}
 
-			documenter.DocBuildingProgress += new DocBuildingEventHandler(OnProgressUpdate);
 			documenter.DocBuildingStep += new DocBuildingEventHandler(OnStepUpdate);
 
 			BuildWorker buildWorker = new BuildWorker(documenter, project);
@@ -1428,11 +1434,18 @@ namespace NDoc.Gui
 			}
 			finally
 			{
-				// Just in case some weird exception happens, we don't get stuck
-				// with a busy cursor.
-				this.Cursor = Cursors.Default;
-				ConfigureUIForBuild(false);
-				statusBarTextPanel.Text = "Ready";
+				// keep us from accessing parts of the window when it is closed while a build is in progress
+				if ( !this.IsDisposed )
+				{
+					// Just in case some weird exception happens, we don't get stuck
+					// with a busy cursor.
+					this.Cursor = Cursors.Default;
+
+					ConfigureUIForBuild(false);
+					statusBarTextPanel.Text = "Ready";
+					if ( !this.traceWindow1.IsDisposed && this.traceWindow1.Visible )
+						this.traceWindow1.Disconnect();
+				}
 			}
 
 			// If no exception occurred during the build, then blow outta here
@@ -1457,13 +1470,15 @@ namespace NDoc.Gui
 
 			// Process exception
 			string msg = "An error occured while trying to build the documentation.";
-			if (innermostException is DocumenterException)
+
+			// we do not want to show any dialogs if the app is shutting down
+			if ( !this.IsDisposed && innermostException is DocumenterException )
 			{
 				ErrorForm errorForm = new ErrorForm(msg, innermostException);
 				errorForm.Text = "NDoc Documenter Error";
 				errorForm.ShowDialog(this);
 			}
-			else
+			else if ( !this.IsDisposed )
 			{
 				ErrorForm errorForm = new ErrorForm(msg, innermostException);
 				errorForm.ShowDialog(this);
@@ -1474,6 +1489,7 @@ namespace NDoc.Gui
 		{
 			statusBarTextPanel.Text = "Cancelling build ...";
 			buildThread.Abort();
+			Trace.WriteLine( "Build cancelled" );
 		}
 
 		private void ConfigureUIForBuild(bool starting)
@@ -1498,22 +1514,23 @@ namespace NDoc.Gui
 			menuDocViewItem.Enabled = !starting;
 			menuCancelBuildItem.Enabled = starting;
 			menuAboutItem.Enabled = !starting;
+			menuViewBuildProgress.Enabled = !starting;
+			menuViewOptions.Enabled = !starting;
 
 			assembliesHeaderGroupBox.Enabled = !starting;
 			documenterHeaderGroupBox.Enabled = !starting;
             
-			progressBar.Visible = starting;
-		}
+			if ( starting )
+			{
+				if ( this.options.ShowProgressOnBuild && !this.traceWindow1.Visible )
+					this.traceWindow1.Visible = true;
 
-		private void OnProgressUpdate(object sender, ProgressArgs e)
-		{
-			// This gets called from another thread so we must thread
-			// marhal back to the GUI thread.
-			//string text = e.Status;
-			//int percent = e.Progress;
-			//object[] args = new Object[] { null, percent };
-			//Delegate d = new UpdateProgressDelegate(UpdateProgress);
-			//this.Invoke(d, args);
+				this.traceWindow1.Clear();
+				if ( this.traceWindow1.Visible )
+					this.traceWindow1.Connect();
+			}
+			
+			progressBar.Visible = starting;
 		}
 
 		private void OnStepUpdate(object sender, ProgressArgs e)
@@ -1573,11 +1590,6 @@ namespace NDoc.Gui
 			}
 		}
 
-		private void menuHelpIndexItem_Click(object sender, System.EventArgs e)
-		{
-			//TODO: open help here
-		}
-
 		private void menuTagReferenceItem_Click(object sender, System.EventArgs e)
 		{
 			//try to find the documentation in several possible locations
@@ -1608,13 +1620,6 @@ namespace NDoc.Gui
 					MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 			}
 		}
-
-		private void menuReleaseNotes_Click(object sender, System.EventArgs e)
-		{
-			System.Diagnostics.Process.Start("notepad",
-				Path.Combine(Application.StartupPath, "README.txt"));
-		}
-
 
 		private void menuAboutItem_Click(object sender, System.EventArgs e)
 		{
@@ -1838,7 +1843,8 @@ namespace NDoc.Gui
 		/// <summary>Prompts the user to save the project if it's dirty.</summary>
 		protected override void OnClosing(CancelEventArgs e)
 		{
-			base.OnClosing(e);
+			if ( buildThread != null && buildThread.IsAlive )
+				buildThread.Abort();
 
 			WriteConfig();
 
@@ -1857,6 +1863,7 @@ namespace NDoc.Gui
 						break;
 				}
 			}
+			base.OnClosing(e);
 		}
 
 		private void propertyGrid_PropertyValueChanged(object s, System.Windows.Forms.PropertyValueChangedEventArgs e)
@@ -1866,11 +1873,6 @@ namespace NDoc.Gui
 
 		#endregion // Event Handlers
 
-		private void assembliesHeaderGroupBox_Enter(object sender, System.EventArgs e)
-		{
-		
-		}
-
 		private void menuViewLicense_Click(object sender, System.EventArgs e)
 		{
 			Uri uri = new Uri( Assembly.GetExecutingAssembly().CodeBase );
@@ -1879,6 +1881,50 @@ namespace NDoc.Gui
 				MessageBox.Show( this, "Could not find the license file", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error );
 			else
 				Process.Start( path );
+		}
+
+		private void traceWindow1_VisibleChanged(object sender, System.EventArgs e)
+		{
+			splitter1.Visible = traceWindow1.Visible;
+
+			// make sure the splitter splits the trace window, not some other docked control
+			splitter1.Top = traceWindow1.Top - splitter1.Height;
+			menuViewBuildProgress.Checked = traceWindow1.Visible;
+			
+			// disconnect from trace events when the trace window is being hidden
+			if ( !traceWindow1.Visible )
+				this.traceWindow1.Disconnect();
+		}
+
+		private void menuViewBuildProgress_Click(object sender, System.EventArgs e)
+		{
+			traceWindow1.Visible = !traceWindow1.Visible;
+		}
+
+		private void menuViewOptions_Click(object sender, System.EventArgs e)
+		{
+			using( OptionsForm optionsForm = new OptionsForm( this.options.Clone() ) )
+			{
+				if ( optionsForm.ShowDialog() == DialogResult.OK )
+				{
+					this.options = optionsForm.Options;
+					using( Settings settings = new Settings( Settings.ApplicationSettingsFile ) )
+					{
+						settings.SetSetting( "gui", "loadLastProjectOnStart", this.options.LoadLastProjectOnStart );
+						settings.SetSetting( "gui", "showProgressOnBuild", this.options.ShowProgressOnBuild );
+					}
+				}
+			}
+		}
+
+		private void menuViewStatusBar_Click(object sender, System.EventArgs e)
+		{
+			this.statusBar.Visible = !this.statusBar.Visible;
+		}
+
+		private void statusBar_VisibleChanged(object sender, System.EventArgs e)
+		{
+			this.menuViewStatusBar.Checked = this.statusBar.Visible;		
 		}
 
 	}
