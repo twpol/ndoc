@@ -59,6 +59,7 @@ namespace NDoc.Core
 
 			DocumentAttributes = false;
 			DocumentedAttributes = "";
+			_ReferencesPath = string.Empty;
 		}
 
 		private Project _Project;
