@@ -28,7 +28,7 @@ namespace NDoc.Gui
 	/// <summary>
 	/// Handles drap and drop operations
 	/// </summary>
-	public class DragDropHandler
+	public sealed class DragDropHandler
 	{
 		private DragDropHandler()
 		{
