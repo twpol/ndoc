@@ -23,8 +23,8 @@
 		<xsl:variable name="propertyName" select="@name" />
 		<html dir="LTR">
 			<xsl:call-template name="html-head">
-				<xsl:with-param name="title" select="concat(../@name, '.', @name, ' Property')" />
-				<xsl:with-param name="page-type" select="'property'"/>
+				<xsl:with-param name="title" select="concat( @name, ' Property' )" />
+				<xsl:with-param name="page-type" select="'Property'"/>
 			</xsl:call-template>
 			<body topmargin="0" id="bodyID" class="dtBODY">
 				<object id="obj_cook" classid="clsid:59CC0C20-679B-11D2-88BD-0800361A1803" style="display:none;"></object>

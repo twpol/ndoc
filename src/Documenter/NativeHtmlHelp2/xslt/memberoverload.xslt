@@ -49,7 +49,8 @@
 					<xsl:text>&#32;</xsl:text>
 					<xsl:value-of select="$childType" />
 				</xsl:with-param>
-				<xsl:with-param name="page-type" select="'member-overload'"/>				
+				<xsl:with-param name="page-type" select="$childType"/>	
+				<xsl:with-param name="overload-page" select="true()"/>			
 			</xsl:call-template>
 			<body topmargin="0" id="bodyID" class="dtBODY">
 				<object id="obj_cook" classid="clsid:59CC0C20-679B-11D2-88BD-0800361A1803" style="display:none;"></object>

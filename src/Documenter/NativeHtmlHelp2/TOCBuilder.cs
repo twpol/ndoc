@@ -41,6 +41,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 
 		private void factory_TopicStart(object sender, FileEventArgs e)
 		{
+			// this assumes that all content files are going in a directory named
+			// "html" (relative to the location of the HxT
 			toc.OpenNode( "/html/" + e.File );
 		}
 
@@ -51,6 +53,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 
 		private void factory_AddFileToTopic(object sender, FileEventArgs args)
 		{
+			// this assumes that all content files are going in a directory named
+			// "html" (relative to the location of the HxT
 			toc.InsertNode( "/html/" + args.File );
 		}
 

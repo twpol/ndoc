@@ -44,9 +44,10 @@
 		<html dir="LTR">
 			<xsl:call-template name="html-head">
 				<xsl:with-param name="title">
-					<xsl:value-of select="../@name" />
+					<xsl:if test="local-name()='constructor'">
+						<xsl:value-of select="../@name" />
+					</xsl:if>
 					<xsl:if test="local-name()='method'">
-						<xsl:text>.</xsl:text>
 						<xsl:value-of select="@name" />
 					</xsl:if>
 					<xsl:text>&#32;</xsl:text>

@@ -184,7 +184,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			// these get passed to the stylesheets
 			factory.Properties.Add( "ndoc-title", MyConfig.Title );
 			factory.Properties.Add( "ndoc-vb-syntax", true );
-			factory.Properties.Add( "ndoc-omit-object-tags", true );
 			factory.Properties.Add( "ndoc-document-attributes", MyConfig.DocumentAttributes );
 			factory.Properties.Add( "ndoc-documented-attributes", MyConfig.DocumentedAttributes );
 
@@ -198,8 +197,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			// Load the XML documentation into a DOM.
 			XmlDocument xmlDocumentation = new XmlDocument();
 			xmlDocumentation.LoadXml( MakeXml( project ) );
-
-xmlDocumentation.Save( @"C:\ndoctest.xml" );
 
 			XmlNodeList typeNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace/*[name()!='documentation']");
 			if ( typeNodes.Count == 0 )			

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
 <!-- good for debugging -->
-<!--<xsl:output indent="yes"/>-->
+<xsl:output indent="yes"/>
 	<!-- provide no-op override for all non-specified types -->
 	<xsl:template match="* | node() | text()" mode="FIndex"/>
 	<xsl:template match="* | node() | text()" mode="KIndex"/>
@@ -25,6 +25,11 @@
 		<MSHelp:RLTitle Title="{$title}"/>	
 	</xsl:template>
 	
+	<xsl:template match="field | property | method | event" mode="MSHelpTitle">
+		<xsl:param name="title" />
+		<MSHelp:TOCTitle Title="{$title}"/>
+		<MSHelp:RLTitle Title="{concat( parent::node()/@name, '.', $title )}"/>	
+	</xsl:template>	
 	
 	<xsl:template match="class | interface | structure" mode="MSHelpTitle">
 		<xsl:param name="title" />
@@ -34,18 +39,21 @@
 				<MSHelp:TOCTitle Title="{$title}"/>
 			</xsl:when>
 			<xsl:otherwise>
-				<MSHelp:TOCTitle Title="{concat( @name, ' ', $page-type )}"/>
+				<MSHelp:TOCTitle Title="{$page-type}"/>
 			</xsl:otherwise>
 		</xsl:choose>
 		<MSHelp:RLTitle Title="{$title}"/>
 	</xsl:template>
 		
-	<xsl:template match="method" mode="MSHelpTitle">
+	<!--
+	<xsl:template match="field | property | method | event" mode="MSHelpTitle">
 		<xsl:param name="title" />
 		<xsl:param name="page-type"/>	
+
 		<MSHelp:TOCTitle Title="{concat( @name, ' ', $page-type )}"/>	
-		<MSHelp:RLTitle Title="{$title}"/>
+		<MSHelp:RLTitle Title="{$title}"/>			
 	</xsl:template>
+	-->
 	
 	<xsl:template match="operator" mode="MSHelpTitle">
 		<xsl:param name="title" />
@@ -53,6 +61,7 @@
 		<MSHelp:TOCTitle Title="{$page-type}"/>	
 		<MSHelp:RLTitle Title="{$title}"/>
 	</xsl:template>
+		
 		
 	<xsl:template match="ndoc" mode="FIndex">
 		<xsl:param name="title"/>
@@ -100,6 +109,43 @@
 		</xsl:call-template>		
 	</xsl:template>	
 	
+	<xsl:template match="constructor" mode="FIndex">
+		<xsl:param name="overload-page"/>
+		
+		<xsl:if test="$overload-page=true() or not(@overload)">
+			<xsl:call-template name="add-index-term">
+				<xsl:with-param name="index">F</xsl:with-param>
+				<xsl:with-param name="term" select="concat( substring-after( parent::node()/@id, ':' ), '.', parent::node()/@name )"/>
+			</xsl:call-template>
+			<xsl:call-template name="add-index-term">
+				<xsl:with-param name="index">F</xsl:with-param>
+				<xsl:with-param name="term" select="concat( parent::node()/@name, '.', parent::node()/@name )"/>
+			</xsl:call-template>
+			<xsl:call-template name="add-index-term">
+				<xsl:with-param name="index">F</xsl:with-param>
+				<xsl:with-param name="term" select="concat( substring-after( parent::node()/@id, ':' ), '.New' )"/>
+			</xsl:call-template>
+			<xsl:call-template name="add-index-term">
+				<xsl:with-param name="index">F</xsl:with-param>
+				<xsl:with-param name="term" select="concat( parent::node()/@name, '.New' )"/>
+			</xsl:call-template>
+		</xsl:if>
+	</xsl:template>	
+	
+	<xsl:template match="field | property | method | event" mode="FIndex">
+		<xsl:param name="overload-page"/>
+
+		<xsl:if test="$overload-page=true() or not(@overload)">
+			<xsl:call-template name="add-index-term">
+				<xsl:with-param name="index">F</xsl:with-param>
+				<xsl:with-param name="term" select="concat( substring-after( parent::node()/@id, ':' ), '.', @name )"/>
+			</xsl:call-template>
+			<xsl:call-template name="add-index-term">
+				<xsl:with-param name="index">F</xsl:with-param>
+				<xsl:with-param name="term" select="concat( parent::node()/@name, '.', @name )"/>
+			</xsl:call-template>
+		</xsl:if>
+	</xsl:template>		
 	
 	<xsl:template match="ndoc" mode="KIndex">
 		<xsl:param name="title" />
@@ -173,6 +219,36 @@
 		</xsl:choose>
 	</xsl:template>	
 	
+	<xsl:template match="constructor" mode="KIndex">
+		<xsl:param name="overload-page"/>
+
+		<xsl:if test="$overload-page=true() or not(@overload)">
+			<xsl:call-template name="add-index-term">
+				<xsl:with-param name="index">K</xsl:with-param>
+				<xsl:with-param name="term" select="concat( parent::node()/@name, ' ', local-name( parent::node() ), ', ', local-name() )"/>
+			</xsl:call-template>				
+			<xsl:call-template name="add-index-term">
+				<xsl:with-param name="index">K</xsl:with-param>
+				<xsl:with-param name="term" select="concat( substring-after( parent::node()/@id, ':' ), ' ', local-name() )"/>
+			</xsl:call-template>	
+		</xsl:if>			
+	</xsl:template>	
+	
+	<xsl:template match="field | property | method | event" mode="KIndex">
+		<xsl:param name="overload-page" />
+
+		<xsl:if test="$overload-page=true() or not(@overload)">
+			<xsl:call-template name="add-index-term">
+				<xsl:with-param name="index">K</xsl:with-param>
+				<xsl:with-param name="term" select="concat( parent::node()/@name, '.', @name, ' ', local-name() )"/>
+			</xsl:call-template>				
+			<xsl:call-template name="add-index-term">
+				<xsl:with-param name="index">K</xsl:with-param>
+				<xsl:with-param name="term" select="concat( @name, ' ', local-name() )"/>
+			</xsl:call-template>	
+		</xsl:if>			
+	</xsl:template>	
+			
 	<xsl:template match="enumeration" mode="KIndex">
 		<xsl:apply-templates select="field" mode="KIndex"/>
 		<xsl:call-template name="add-index-term">

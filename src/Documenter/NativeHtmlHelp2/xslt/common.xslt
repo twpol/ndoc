@@ -12,7 +12,6 @@
 	<xsl:include href="indices.xslt" />
 	<!-- -->
 	<xsl:param name="ndoc-title" />
-	<xsl:param name="ndoc-omit-object-tags" select="false" />
 	<xsl:param name="ndoc-sdk-doc-base-url" />
 	<xsl:param name="ndoc-sdk-doc-file-ext" />
 	<!-- -->
@@ -138,7 +137,7 @@
 	<!-- -->
 	<xsl:template name="type-mixed">
 		<xsl:choose>
-			<xsl:when test="local-name()='constructor' or local-name()='property' or local-name()='method' or local-name()='event' or local-name()='operator'">
+			<xsl:when test="local-name()='constructor' or local-name()='property' or local-name()='field' or local-name()='method' or local-name()='event' or local-name()='operator'">
 				<xsl:choose>
 					<xsl:when test="local-name(..)='interface'">Interface</xsl:when>
 					<xsl:when test="local-name(..)='structure'">Structure</xsl:when>
@@ -148,7 +147,7 @@
 			<xsl:otherwise>
 				<xsl:choose>
 					<xsl:when test="local-name()='interface'">Interface</xsl:when>
-					<xsl:when test="local-name(..)='structure'">Structure</xsl:when>
+					<xsl:when test="local-name()='structure'">Structure</xsl:when>
 					<xsl:otherwise>Class</xsl:otherwise>
 				</xsl:choose>
 			</xsl:otherwise>
@@ -686,9 +685,11 @@
 	</xsl:template>
 
 	<!-- -->
+
 	<xsl:template name="html-head">
 		<xsl:param name="title" />
 		<xsl:param name="page-type"/>
+		<xsl:param name="overload-page"/>
 		<head>
 			<title>
 				<xsl:value-of select="$title" />
@@ -697,21 +698,23 @@
 				<xsl:apply-templates select="." mode="MSHelpTitle">
 					<xsl:with-param name="title" select="$title"/>
 					<xsl:with-param name="page-type" select="$page-type"/>						
+					<xsl:with-param name="overload-page" select="$overload-page"/>
 				</xsl:apply-templates>
 				
 				<xsl:if test="$page-type!='hierarchy'">
 					<xsl:apply-templates select="." mode="KIndex">
 						<xsl:with-param name="title" select="$title"/>
-						<xsl:with-param name="page-type" select="$page-type"/>						
+						<xsl:with-param name="page-type" select="$page-type"/>		
+						<xsl:with-param name="overload-page" select="$overload-page"/>				
 					</xsl:apply-templates>
 					
 					<xsl:apply-templates select="." mode="FIndex">
 						<xsl:with-param name="title" select="$title"/>
 						<xsl:with-param name="page-type" select="$page-type"/>
+						<xsl:with-param name="overload-page" select="$overload-page"/>
 					</xsl:apply-templates>
 				</xsl:if>
 				<!--<xsl:apply-templates select="." mode="AIndex"/>-->
-
 				<MSHelp:Attr Name="DocSet" Value="NETFramework"/>
 				<MSHelp:Attr Name="TopicType" Value="kbSyntax"/>
 				<MSHelp:Attr Name="DevLang" Value="CSharp"/>
@@ -724,11 +727,12 @@
 				<MSHelp:Attr Name="TechnologyVers" Value="kbWFC"/>
 				<MSHelp:Attr Name="TechnologyVers" Value="kbManagedC"/>
 				<MSHelp:Attr Name="Locale" Value="kbEnglish"/>
-				<MSHelp:Attr Name="HelpPriority" Value="3"/>
+				<MSHelp:Attr Name="HelpPriority" Value="3"/>	
 			</xml>
 			<SCRIPT SRC="dtuelink.js"></SCRIPT>
 		</head>
 	</xsl:template>
+	
 	<!-- -->
 	<xsl:template name="title-row">
 		<xsl:param name="type-name" />
