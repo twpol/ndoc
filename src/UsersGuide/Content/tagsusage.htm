@@ -1,290 +1,486 @@
 <!doctype HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
 <html>
-
-<head>
-<title>Tags Supported by NDoc</title>
-<meta http-equiv="Content-Type" content="telt/html; charset=Windows-1252">
-<meta content="http://schemas.microsoft.com/intellisense/ie5" name="vs_targetSchema">
-<link href="css/ndoc.css" type="text/css" rel="stylesheet" name="ndocstyle">
-<script src="script/ndoc.js"></script>
-</head>
-
-<body class="dtBODY" id="bodyID" onload="InitTitle()">
-
-<div id="nstext">
-	<p>The following table indicates where tags can be used.</p>
-	<table class="dtTABLE" id="Table2" style="WIDTH: 95%" cellspacing="0">
-		<tr valign="top">
-			<th width="23%">Tag </th>
-			<th width="7%">Class </th>
-			<th width="7%">Structure </th>
-			<th width="7%">Interface </th>
-			<th width="7%">Enum </th>
-			<th width="7%">Delegate </th>
-			<th width="7%">Field </th>
-			<th width="7%">Constant </th>
-			<th width="7%">Property </th>
-			<th width="7%">Method </th>
-			<th width="7%">Event </th>
-			<th width="7%">Operator </th>
-		</tr>
-		<tr valign="top">
-			<td class="tag"><b>&lt;event&gt;</b> </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>X </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-		</tr>
-		<tr valign="top">
-			<td>
-			<p align="left"><b><font face="Verdana">&lt;example&gt;</font></b></p>
-			</td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-		</tr>
-		<tr valign="top">
-			<td>
-			<p align="left"><b><font face="Verdana">&lt;exception&gt;</font></b></p>
-			</td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-		</tr>
-		<tr valign="top">
-			<td>
-			<p align="left"><b><font face="Verdana">&lt;include&gt;</font></b></p>
-			</td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-		</tr>
-		<tr valign="top">
-			<td>
-			<p align="left"><b><font face="Verdana">&lt;nodoc/&gt;</font></b></p>
-			</td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-		</tr>
-		<tr valign="top">
-			<td>
-			<p align="left"><b><font face="Verdana">&lt;overloads&gt;</font></b></p>
-			</td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-		</tr>
-		<tr valign="top">
-			<td>
-			<p align="left"><b><font face="Verdana">&lt;param&gt;</font></b></p>
-			</td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-		</tr>
-		<tr valign="top">
-			<td>
-			<p align="left"><b><font face="Verdana">&lt;permission&gt;</font></b></p>
-			</td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-		</tr>
-		<tr>
-			<td>
-			<p align="left"><b><font face="Verdana">&lt;platform&gt;</font></b></p>
-			</td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-		</tr>
-		<tr>
-			<td>
-			<p align="left"><b><font face="Verdana">&lt;preliminary&gt;</font></b></p>
-			</td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-		</tr>
-		<tr valign="top">
-			<td>
-			<p align="left"><b><font face="Verdana">&lt;remarks&gt;</font></b></p>
-			</td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-		</tr>
-		<tr valign="top">
-			<td>
-			<p align="left"><b><font face="Verdana">&lt;returns&gt;</font></b></p>
-			</td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>X </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-		</tr>
-		<tr valign="top">
-			<td>
-			<p align="left"><b><font face="Verdana">&lt;seealso&gt;</font></b></p>
-			</td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-		</tr>
-		<tr valign="top">
-			<td>
-			<p align="left"><a name="summary"><b><font face="Verdana">&lt;summary&gt;</font></b></a></p>
-			</td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-			<td>X </td>
-		</tr>
-		<tr>
-			<td>
-			<p align="left"><a name="threadSafety"><b><font face="Verdana">&lt;threadSafety&gt;</font></b></a></p>
-			</td>
-			<td>X </td>
-			<td>X </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-		</tr>
-		<tr valign="top">
-			<td>
-			<p align="left"><a name="value"><b><font face="Verdana">&lt;value&gt;</font></b></a></p>
-			</td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>X </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-			<td>&nbsp; </td>
-		</tr>
-	</table>
-</div>
-
-</body>
-
+	<head>
+		<title>Tags Supported by NDoc</title>
+		<meta http-equiv="Content-Type" content="telt/html; charset=Windows-1252">
+		<meta content="http://schemas.microsoft.com/intellisense/ie5" name="vs_targetSchema">
+		<link href="css/ndoc.css" type="text/css" rel="stylesheet" name="ndocstyle">
+		<script src="script/ndoc.js"></script>
+	</head>
+	<body class="dtBODY" id="bodyID" onload="InitTitle()">
+		<div id="nstext">
+			<p>The following table indicates where tags can be used.</p>
+			<table class="dtTABLE" id="Table2" style="WIDTH: 95%" cellspacing="0">
+				<tr valign="top">
+					<th width="23%">
+						Tag
+					</th>
+					<th width="7%">
+						Class
+					</th>
+					<th width="7%">
+						Structure
+					</th>
+					<th width="7%">
+						Interface
+					</th>
+					<th width="7%">
+						Enum
+					</th>
+					<th width="7%">
+						Delegate
+					</th>
+					<th width="7%">
+						Field
+					</th>
+					<th width="7%">
+						Constant
+					</th>
+					<th width="7%">
+						Property
+					</th>
+					<th width="7%">
+						Method
+					</th>
+					<th width="7%">
+						Event
+					</th>
+					<th width="7%">
+						Operator
+					</th>
+				</tr>
+				<tr valign="top">
+					<td class="tag"><b>&lt;event&gt;</b>
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>X
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+				</tr>
+				<tr valign="top">
+					<td>
+						<p align="left"><b><font face="Verdana">&lt;example&gt;</font></b></p>
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+				</tr>
+				<tr valign="top">
+					<td>
+						<p align="left"><b><font face="Verdana">&lt;exception&gt;</font></b></p>
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+				</tr>
+				<tr valign="top">
+					<td>
+						<p align="left"><b><font face="Verdana">&lt;exclude/&gt;</font></b></p>
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+				</tr>
+				<tr valign="top">
+					<td>
+						<p align="left"><b><font face="Verdana">&lt;include&gt;</font></b></p>
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+				</tr>
+				<tr valign="top">
+					<td>
+						<p align="left"><b><font face="Verdana">&lt;overloads&gt;</font></b></p>
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+				</tr>
+				<tr valign="top">
+					<td>
+						<p align="left"><b><font face="Verdana">&lt;param&gt;</font></b></p>
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+				</tr>
+				<tr valign="top">
+					<td>
+						<p align="left"><b><font face="Verdana">&lt;permission&gt;</font></b></p>
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<p align="left"><b><font face="Verdana">&lt;platform&gt;</font></b></p>
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<p align="left"><b><font face="Verdana">&lt;preliminary&gt;</font></b></p>
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+				</tr>
+				<tr valign="top">
+					<td>
+						<p align="left"><b><font face="Verdana">&lt;remarks&gt;</font></b></p>
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+				</tr>
+				<tr valign="top">
+					<td>
+						<p align="left"><b><font face="Verdana">&lt;returns&gt;</font></b></p>
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>X
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+				</tr>
+				<tr valign="top">
+					<td>
+						<p align="left"><b><font face="Verdana">&lt;seealso&gt;</font></b></p>
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+				</tr>
+				<tr valign="top">
+					<td>
+						<p align="left"><a name="summary"><b><font face="Verdana">&lt;summary&gt;</font></b></a></p>
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<p align="left"><a name="threadSafety"><b><font face="Verdana">&lt;threadSafety&gt;</font></b></a></p>
+					</td>
+					<td>X
+					</td>
+					<td>X
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+				</tr>
+				<tr valign="top">
+					<td>
+						<p align="left"><a name="value"><b><font face="Verdana">&lt;value&gt;</font></b></a></p>
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>X
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+					<td>&nbsp;
+					</td>
+				</tr>
+			</table>
+		</div>
+	</body>
 </html>
