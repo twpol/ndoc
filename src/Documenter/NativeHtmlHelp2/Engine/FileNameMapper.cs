@@ -102,7 +102,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>Topic Filename</returns>
 		public static string GetFileNameForNamespaceHierarchy(string namespaceName)
 		{
-			return namespaceName.Replace(".", "") + "Hierarchy.html";
+			return namespaceName.Replace(".", "") + "~Hierarchy.html";
 		}
 
 		/// <summary>
@@ -139,7 +139,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 				(pageType == "Fields") || (pageType == "Operators") || (pageType == "Events")), 
 				"Unknown Overview Page Type '" + pageType + "' requested");
 
-			return BaseNameFromTypeId(typeID) + pageType + "Topic.html";
+			return BaseNameFromTypeId(typeID) + "~" + pageType + "Topic.html";
 		}
 
 		/// <summary>
