@@ -1480,7 +1480,7 @@ namespace NDoc.Gui
 			{
 				documenter.View();
 			}
-			catch (FileNotFoundException ex)
+			catch (FileNotFoundException)
 			{
 				DialogResult result = MessageBox.Show(
 					this,

@@ -108,7 +108,7 @@ namespace NDoc.Core
 		string MainOutputFile { get; }
 
 		/// <summary>Spawns a new process to view the generated documentation.</summary>
-		/// <exception cref="FileNotFoundException">
+		/// <exception cref="System.IO.FileNotFoundException">
 		/// Thrown if the main output file does not exist.</exception>
 		void View();
 
