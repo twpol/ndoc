@@ -39,14 +39,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			_factory.AddFileToTopic += new TopicEventHandler(factory_AddFileToTopic);
 		}
 
-		/// <summary>
-		/// Finalizer
-		/// </summary>
-		~TOCBuilder()
-		{
-			Dispose( false );
-		}
-
 		private void factory_TopicStart(object sender, FileEventArgs args)
 		{
 			// this assumes that all content files are going in a directory named
@@ -71,28 +63,15 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		/// </summary>
 		public void Dispose()
 		{
-			Dispose( true );
-			GC.SuppressFinalize( this );
-		}
-
-		/// <summary>
-		/// Disposes the TOCBuilder instance
-		/// </summary>
-		/// <param name="disposing">Was this method called from the Dispsose() method</param>
-		protected virtual void Dispose( bool disposing )
-		{
-			if ( disposing )
+			if ( _factory != null )
 			{
-				if ( _factory != null )
-				{
-					_factory.TopicStart -= new TopicEventHandler(factory_TopicStart);
-					_factory.TopicEnd -= new EventHandler(factory_TopicEnd);
-					_factory.AddFileToTopic -= new TopicEventHandler(factory_AddFileToTopic);
-				}
-
-				if ( _toc != null )
-					_toc.Close();
+				_factory.TopicStart -= new TopicEventHandler(factory_TopicStart);
+				_factory.TopicEnd -= new EventHandler(factory_TopicEnd);
+				_factory.AddFileToTopic -= new TopicEventHandler(factory_AddFileToTopic);
 			}
+
+			if ( _toc != null )
+				_toc.Close();
 		}
 	}
 }

@@ -90,21 +90,9 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Compiler
 				_logFile = new StreamWriter( File.Create( logFilePath ) );
 			}
 
-			~CompilerStatus()
-			{
-				Dispose( false );
-			}
-
 			public void Dispose()
 			{
-				Dispose( true );
-				GC.SuppressFinalize(this);
-			}
-
-			private void Dispose( bool disposing )
-			{
-				if ( disposing )
-					_logFile.Close();
+				_logFile.Close();
 			}
 
 			/// <summary>
