@@ -359,7 +359,13 @@ namespace NDoc.Gui
 			// imageList1
 			// 
 			this.imageList1.ImageSize = new System.Drawing.Size(16, 16);
-			this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
+            this.imageList1.Images.Add((System.Drawing.Icon) resources.GetObject("imageList1.Images.New"));
+            this.imageList1.Images.Add((System.Drawing.Icon) resources.GetObject("imageList1.Images.Solution"));
+            this.imageList1.Images.Add((System.Drawing.Icon) resources.GetObject("imageList1.Images.Open"));
+            this.imageList1.Images.Add((System.Drawing.Icon) resources.GetObject("imageList1.Images.Save"));
+            this.imageList1.Images.Add((System.Drawing.Icon) resources.GetObject("imageList1.Images.Build"));
+            this.imageList1.Images.Add((System.Drawing.Icon) resources.GetObject("imageList1.Images.Cancel"));
+            this.imageList1.Images.Add((System.Drawing.Icon) resources.GetObject("imageList1.Images.View"));
 			this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
 			// 
 			// menuFileSaveItem
