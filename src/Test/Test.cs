@@ -133,6 +133,8 @@ namespace NDoc.Test
 		/// <event cref="AccessorsEvent">Raised when it occurs...</event>
 		/// <event cref="ProtectedEvent">Raised when something else occurs.</event>
 		/// <event cref="EventWithArgs">Raised when it feels like it.</event>
+		/// <event cref="System.Diagnostics.EventLog.EntryWritten">Raised when an entry was written to the event log.</event>
+		/// <event cref="SomeUnknownEvent">Unknown.</event>
 		/// <event cref="EventWithMoreArgs">Never raised?</event>
 		/// <event cref="MultiEvent">Raised many times?</event>
 		/// <exception cref="Exception">
@@ -141,6 +143,7 @@ namespace NDoc.Test
 		/// <exception cref="MyException">
 		/// Some other exception may also be thrown.
 		/// </exception>
+		/// <exception cref="SomeUnknownException">Unknown.</exception>
 		public void RaisesSomeEvents()
 		{
 			Event(this, new EventArgs());
