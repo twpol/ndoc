@@ -8,6 +8,8 @@ using NDoc.Core;
 
 namespace NDoc.Documenter.HtmlHelp2.Compiler
 {
+
+
 	/// <summary>
 	/// Augments the Xml dat islands that HxConv creates by default
 	/// in the html help files with additional index and MSHelp tags
@@ -49,13 +51,13 @@ namespace NDoc.Documenter.HtmlHelp2.Compiler
 
 			// now add the ItemMoniker for the Associative Index
 			// ( HxConv creates an ItemMoniker for the F index even though it doesn't create the FIndex file )
-//			XmlElement ItemMonikerElement = ProjectDoc.CreateElement( "ItemMoniker" );
-//			ItemMonikerElement.SetAttribute( "Name", "!DefaultAssociativeIndex" );
-//			ItemMonikerElement.SetAttribute( "ProgId", "HxDs.HxIndex" );
-//			ItemMonikerElement.SetAttribute( "InitData", "A" );
-//
-//			XmlNode sibling = ProjectDoc.DocumentElement.SelectSingleNode( "ItemMoniker" );
-//			ProjectDoc.DocumentElement.InsertAfter( ItemMonikerElement, sibling );
+			//			XmlElement ItemMonikerElement = ProjectDoc.CreateElement( "ItemMoniker" );
+			//			ItemMonikerElement.SetAttribute( "Name", "!DefaultAssociativeIndex" );
+			//			ItemMonikerElement.SetAttribute( "ProgId", "HxDs.HxIndex" );
+			//			ItemMonikerElement.SetAttribute( "InitData", "A" );
+			//
+			//			XmlNode sibling = ProjectDoc.DocumentElement.SelectSingleNode( "ItemMoniker" );
+			//			ProjectDoc.DocumentElement.InsertAfter( ItemMonikerElement, sibling );
 
 			// save the project file
 			ProjectDoc.Save( ProjectFilePath );
@@ -194,6 +196,13 @@ namespace NDoc.Documenter.HtmlHelp2.Compiler
 					sb.AppendFormat( "<MSHelp:Keyword Index='F' Term='{0}.{1}'/>", helpFile.ParentNamespace, helpFile.TypeName );
 					break;
 				case HelpTopicType.Property :
+					sb.AppendFormat( "<MSHelp:Keyword Index='F' Term='{0}.{1}'/>", helpFile.ParentNamespace, helpFile.TypeName );
+					break;
+				case HelpTopicType.Enumeration :
+					sb.AppendFormat( "<MSHelp:Keyword Index='F' Term='{0}.{1}'/>", helpFile.ParentNamespace, helpFile.TypeName );
+					break;
+				case HelpTopicType.Field :
+					sb.AppendFormat( "<MSHelp:Keyword Index='F' Term='{0}'/>", helpFile.TypeName );
 					sb.AppendFormat( "<MSHelp:Keyword Index='F' Term='{0}.{1}'/>", helpFile.ParentNamespace, helpFile.TypeName );
 					break;
 				case HelpTopicType.MemberList :

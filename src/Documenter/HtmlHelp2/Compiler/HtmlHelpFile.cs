@@ -18,6 +18,7 @@ namespace NDoc.Documenter.HtmlHelp2.Compiler
 		Class,
 		Interface,
 		Structure,
+		Field,
 		Enumeration,
 		Delegate,
 		MemberList,
@@ -37,6 +38,7 @@ namespace NDoc.Documenter.HtmlHelp2.Compiler
 		IHTMLElement m_dataIsland = null;
 		private FileInfo m_file = null;
 		private bool m_dirty = false;
+		private HelpTopicType m_TopicType = HelpTopicType.Unknown;
 
 		/// <summary>
 		/// Creates a new instance of the HtmlHelpFile class
@@ -52,6 +54,7 @@ namespace NDoc.Documenter.HtmlHelp2.Compiler
 				m_file = f;
 				m_doc = GetHtmlDocument( f );
 				m_dataIsland = GetXmlDataIsland();
+				m_TopicType = GetTopicType();
 			}
 			catch ( Exception e )
 			{
@@ -66,13 +69,22 @@ namespace NDoc.Documenter.HtmlHelp2.Compiler
 		{
 			get
 			{
-				if ( TopicType == HelpTopicType.Property || TopicType == HelpTopicType.Method )
+				HelpTopicType type = TopicType;
+
+				if ( type == HelpTopicType.Property || type == HelpTopicType.Method )
 				{
 					// for properties and methods the type is the last word (before the extension)
 					string fileName = m_file.Name;
+
 					int lastDot = fileName.LastIndexOf( '.' );
 					int penultimateDot = fileName.LastIndexOf( '.', lastDot - 1 );
+
 					return fileName.Substring( penultimateDot + 1, lastDot - penultimateDot - 1 );
+				}
+				else if ( type == HelpTopicType.Namespace )
+				{
+					// for namespaces it's just the html title
+					return Title;
 				}
 				else
 				{
@@ -90,8 +102,10 @@ namespace NDoc.Documenter.HtmlHelp2.Compiler
 			get
 			{
 				string fileName = m_file.Name;
+
 				int lastDot = fileName.LastIndexOf( '.' );
 				int penultimateDot = fileName.LastIndexOf( '.', lastDot - 1 );
+
 				return fileName.Substring( 0, penultimateDot );
 			}
 		}
@@ -103,36 +117,7 @@ namespace NDoc.Documenter.HtmlHelp2.Compiler
 		{
 			get
 			{
-				HelpTopicType ret = HelpTopicType.Unknown;
-
-				string title = Title.ToLower();
-
-				// here we are using the title of the html file to try an intuit what
-				// type of topic it is about
-				// because by this point we have lost all of the contextual information about the real type we are
-				// documenting 
-				if ( title.EndsWith( " constructor" ) )
-					ret = HelpTopicType.Constructor;
-				else if ( title.EndsWith( " method" ) )
-					ret = HelpTopicType.Method;
-				else if ( title.EndsWith( " property" ) )
-					ret = HelpTopicType.Property;
-				else if ( title.EndsWith( " delegate" ) )
-					ret = HelpTopicType.Delegate;
-				else if ( title.EndsWith( " structure" ) )
-					ret = HelpTopicType.Structure;
-				else if ( title.EndsWith( " class" ) )
-					ret = HelpTopicType.Class;
-				else if ( title.EndsWith( " interface" ) )
-					ret = HelpTopicType.Interface;
-				else if ( title.EndsWith( " enumeration member" ) )
-					ret = HelpTopicType.Enumeration;
-				else if ( title.EndsWith( " namespace" ) )
-					ret = HelpTopicType.Namespace;
-				else if ( title.EndsWith( " members" ) )
-					ret = HelpTopicType.MemberList;
-
-				return ret;
+				return m_TopicType;
 			}
 		}
 
@@ -170,6 +155,33 @@ namespace NDoc.Documenter.HtmlHelp2.Compiler
 		}
 
 		/// <summary>
+		/// Return the title used in the First H1 tag
+		/// </summary>
+		public string HeadingTitle
+		{
+			get
+			{
+				string ret = string.Empty;
+
+				IEnumerator headings = m_doc.getElementsByTagName( "H1" ).GetEnumerator();
+				
+				if ( headings.MoveNext() )
+				{
+					try
+					{
+						ret = ((IHTMLElement)headings.Current).innerText;
+					}
+					catch(InvalidCastException)
+					{
+						ret = string.Empty;
+					}
+				}
+
+				return ret;
+			}
+		}
+
+		/// <summary>
 		/// The Xml data island in this html help file
 		/// (if there is more than one returns the last one , in document order
 		/// </summary>
@@ -202,7 +214,7 @@ namespace NDoc.Documenter.HtmlHelp2.Compiler
 				html.Append( m_dataIsland.innerHTML );
 				
 				m_dataIsland.innerHTML = html.ToString();
-				///m_dataIsland.insertAdjacentHTML( "AfterBegin", html );
+				//m_dataIsland.insertAdjacentHTML( "AfterBegin", html );
 				m_dirty = true;
 			}
 		}
@@ -245,5 +257,44 @@ namespace NDoc.Documenter.HtmlHelp2.Compiler
 
 			return doc;
 		}
+
+		private HelpTopicType GetTopicType()
+		{
+			HelpTopicType ret = HelpTopicType.Unknown;
+
+			string title = Title.ToLower();
+
+			// here we are using the title of the html file to try an intuit what
+			// type of topic it is about
+			// because by this point we have lost all of the contextual information about the real type we are
+			// documenting 
+			if ( title.EndsWith( " constructor" ) )
+				ret = HelpTopicType.Constructor;
+			else if ( title.EndsWith( " method" ) )
+				ret = HelpTopicType.Method;
+			else if ( title.EndsWith( " property" ) )
+				ret = HelpTopicType.Property;
+			else if ( title.EndsWith( " delegate" ) )
+				ret = HelpTopicType.Delegate;
+			else if ( title.EndsWith( " structure" ) )
+				ret = HelpTopicType.Structure;
+			else if ( title.EndsWith( " class" ) )
+				ret = HelpTopicType.Class;
+			else if ( title.EndsWith( " interface" ) )
+				ret = HelpTopicType.Interface;
+			else if ( title.EndsWith( " enumeration" ) )
+				ret = HelpTopicType.Enumeration;
+			else if ( title.EndsWith( " members" ) )
+				ret = HelpTopicType.MemberList;
+			else if ( title.EndsWith( " field" ) )
+				ret = HelpTopicType.Field;
+			//namesapce files don't have any indication in the title
+			//so we're gonna peek inside the document a bit more
+			else if ( HeadingTitle.ToLower().EndsWith( " namespace" ) )
+				ret = HelpTopicType.Namespace;
+
+			return ret;
+		}
+
 	}
 }
