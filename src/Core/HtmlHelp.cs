@@ -163,7 +163,7 @@ namespace NDoc.Core
 				return;
 
 			streamHtmlHelp = new StreamWriter(File.Open(GetPathToProjectFile(), FileMode.Create));
-			streamHtmlHelp.Write("[FILES]\n");
+			streamHtmlHelp.WriteLine("[FILES]");
 		}
 
 		/// <summary>Adds a file to the HTML Help project file.</summary>
@@ -173,7 +173,7 @@ namespace NDoc.Core
 			if (_generateTocOnly) 
 				return;
 
-			streamHtmlHelp.Write(filename + "\n");
+			streamHtmlHelp.WriteLine(filename);
 		}
 
 		/// <summary>Closes the HTML Help project file.</summary>
@@ -202,32 +202,34 @@ namespace NDoc.Core
 				options += ",0x383e,[86,51,872,558],,,,,,,0";
 			}
 
-			streamHtmlHelp.Write(
-				"\n[OPTIONS]\n" +
-				"Auto Index=Yes\n" +
-				"Compatibility=1.1 or later\n" +
-				"Compiled file=" + GetCompiledHtmlFilename() + "\n" +
-				"Default Window=MsdnHelp\n" +
-				"Default topic=" + _defaultTopic + "\n" +
-				"Display compile progress=No\n" +
-				"Error log file=" + GetLogFilename() + "\n" +
-				"Full-text search=Yes\n" +
-				"Index file=" + GetIndexFilename() + "\n" +
-				"Language=0x409 English (United States)\n");
+			streamHtmlHelp.WriteLine();
+			streamHtmlHelp.WriteLine("[OPTIONS]");
+			streamHtmlHelp.WriteLine("Auto Index=Yes");
+			streamHtmlHelp.WriteLine("Compatibility=1.1 or later");
+			streamHtmlHelp.WriteLine("Compiled file=" + GetCompiledHtmlFilename());
+			streamHtmlHelp.WriteLine("Default Window=MsdnHelp");
+			streamHtmlHelp.WriteLine("Default topic=" + _defaultTopic);
+			streamHtmlHelp.WriteLine("Display compile progress=No");
+			streamHtmlHelp.WriteLine("Error log file=" + GetLogFilename());
+			streamHtmlHelp.WriteLine("Full-text search=Yes");
+			streamHtmlHelp.WriteLine("Index file=" + GetIndexFilename());
+			streamHtmlHelp.WriteLine("Language=0x409 English (United States)");
 
 			foreach( string tocFile in _tocFiles )
 			{
-				streamHtmlHelp.Write("Contents file=" + tocFile + "\n");
+				streamHtmlHelp.WriteLine("Contents file=" + tocFile);
 			}
 
-			streamHtmlHelp.Write(
-				"\n[WINDOWS]\n" +
-				"MsdnHelp=\"" +
+			streamHtmlHelp.WriteLine();
+			streamHtmlHelp.WriteLine("[WINDOWS]");
+			streamHtmlHelp.WriteLine("MsdnHelp=\"" +
 				_projectName + " Help\",\"" +
 				GetContentsFilename() + "\",\"" +
 				GetIndexFilename() + "\",,,,,,," +
-				options + "\n" +
-				"\n[INFOTYPES]\n");
+				options);
+
+			streamHtmlHelp.WriteLine();
+			streamHtmlHelp.WriteLine("[INFOTYPES]");
 
 			streamHtmlHelp.Close();
 		}
