@@ -1,3 +1,19 @@
+// Copyright (C) 2004  Kevin Downs
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
 using System;
 using System.Runtime.InteropServices;
 using System.Xml;
@@ -11,10 +27,8 @@ using System.IO;
 namespace NDoc.Core
 {
 	/// <summary>
-	/// Type safe collection class for <see cref="AssemblySlashDoc"/> objects. 
+	/// Represents a collection of assemblies and their associated documentation comment XML files. 
 	/// </summary>
-	/// <remarks>Extends the base class CollectionBase to inherit base collection functionality.
-	/// </remarks>
 	[Serializable]
 	public class AssemblySlashDocCollection : CollectionBase
 	{
@@ -91,7 +105,7 @@ namespace NDoc.Core
 			}
 		}
 
-		/// <overrides>Determines whether the collection contains a specified element.</overrides>
+		/// <overloads>Determines whether the collection contains a specified element.</overloads>
 		/// <summary>
 		/// Determines whether the collection contains the specified <see cref="AssemblySlashDoc"/>.
 		/// </summary>
@@ -131,10 +145,22 @@ namespace NDoc.Core
 		#endregion
 
 		/// <summary>
-		/// Loads AssemblySlashDoc details from an XMLReader.
+		/// Loads <see cref="AssemblySlashDoc"/> details from an <see cref="XmlReader"/>.
 		/// </summary>
 		/// <param name="reader">
-		/// An open XmlReader positioned before or on the &lt;assemblies&gt; element.</param>
+		/// <exception cref="DocumenterException">The <i>location</i> attribute is missing or is an empty string</exception>
+		/// An open <see cref="XmlReader"/> positioned before, or on, the <b>&lt;assemblies&gt;</b> element.</param>
+		/// <remarks>
+		/// The expected format is is follows
+		/// <code escaped="true">
+		/// <assemblies>
+		///		<assembly location="relative or fixed path" documentation="relative or fixed path"/>
+		///		...
+		/// </assemblies>
+		/// </code>
+		/// <para>If the <i>location</i> attribute is missing or an empty string an exception will be thrown.</para>
+		/// <para>If the <i>documentation</i> attribute is missing or an empty string it will be silently ignored.</para>
+		/// </remarks>
 		public void ReadXml(XmlReader reader)
 		{
 			while (!reader.EOF && !(reader.NodeType == XmlNodeType.EndElement && reader.Name == "assemblies"))
@@ -146,12 +172,15 @@ namespace NDoc.Core
 						throw new DocumenterException("\"location\" attribute is"
 							+ " required for <assembly> element in project file.");
 					}
-					if (reader.GetAttribute("location").Trim().Length == 0) 
+					string location = reader.GetAttribute("location").Trim();
+					if (location.Length == 0) 
 					{
 						throw new DocumenterException("\"location\" attribute of"
 							+ " <assembly> element cannot be empty in project file.");
 					}
-					AssemblySlashDoc assemblySlashDoc = new AssemblySlashDoc(reader["location"], reader["documentation"]);
+					string documentation = reader.GetAttribute("documentation");
+					if (documentation==null) documentation=String.Empty;
+					AssemblySlashDoc assemblySlashDoc = new AssemblySlashDoc(location, documentation);
 					Add(assemblySlashDoc);
 				}
 				reader.Read();
@@ -160,9 +189,18 @@ namespace NDoc.Core
 
 
 		/// <summary>
-		/// Saves AssemblySlashDoc details to an XmlWriter.
+		/// Saves <see cref="AssemblySlashDoc"/> details to an <see cref="XmlWriter"/>.
 		/// </summary>
-		/// <param name="writer">An open XmlWriter.</param>
+		/// <param name="writer">An open <see cref="XmlWriter"/>.</param>
+		/// <remarks>
+		/// The persisted format is is follows
+		/// <code escaped="true">
+		/// <assemblies>
+		///		<assembly location="relative or fixed path" documentation="relative or fixed path"/>
+		///		...
+		/// </assemblies>
+		/// </code>
+		/// </remarks>
 		public void WriteXml(XmlWriter writer)
 		{
 			if (Count > 0)
