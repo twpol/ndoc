@@ -2602,7 +2602,7 @@ namespace NDoc.Core
 							memberName += ",";
 						}
 
-						memberName += parameter.ParameterType.FullName;
+						memberName += GetTypeNamespaceName(parameter.ParameterType);
 
 						++i;
 					}
@@ -2638,7 +2638,7 @@ namespace NDoc.Core
 			}
 
 			//the member id in the declaring type
-			string key = memberType + declaringType.FullName.Replace("+", ".") + "." + memberName;
+			string key = memberType + GetTypeNamespaceName(declaringType) + "." + memberName;
 			return key;
 		}
 
@@ -2667,13 +2667,13 @@ namespace NDoc.Core
 					memberName += ",";
 				}
 
-				string parameterName = parameter.ParameterType.FullName;
+				string parameterName = GetTypeNamespaceName(parameter.ParameterType);
 
 				parameterName = parameterName.Replace(",", ",0:");
 				parameterName = parameterName.Replace("[,", "[0:,");
 
 				// XML Documentation file appends a "@" to reference and out types, not a "&"
-				memberName += parameterName.Replace('&', '@').Replace('+', '.');
+				memberName += parameterName.Replace('&', '@');
 
 				++i;
 			}
@@ -2718,7 +2718,7 @@ namespace NDoc.Core
 			}
 
 			//the member id in the declaring type
-			string key = memberType + declaringType.FullName.Replace("+", ".") + "." + memberName;
+			string key = memberType + GetTypeNamespaceName(declaringType) + "." + memberName;
 			return key;
 		}
 
