@@ -224,10 +224,27 @@
 						<xsl:when test="@direction = 'out'">out&#160;</xsl:when>
 					</xsl:choose>
 				</xsl:if>
-				<xsl:call-template name="get-datatype">
-					<xsl:with-param name="datatype" select="@type" />
-					<xsl:with-param name="namespace-name" select="$namespace-name" />
-				</xsl:call-template>
+				<xsl:choose>
+					<xsl:when test="$version='long'">
+						<a>
+							<xsl:attribute name="href">
+								<xsl:call-template name="get-filename-for-parameter-type">
+									<xsl:with-param name="parameter-type" select="@type" />
+								</xsl:call-template>
+							</xsl:attribute>
+							<xsl:call-template name="get-datatype">
+								<xsl:with-param name="datatype" select="@type" />
+								<xsl:with-param name="namespace-name" select="$namespace-name" />
+							</xsl:call-template>
+						</a>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:call-template name="get-datatype">
+							<xsl:with-param name="datatype" select="@type" />
+							<xsl:with-param name="namespace-name" select="$namespace-name" />
+						</xsl:call-template>
+					</xsl:otherwise>
+				</xsl:choose>
 				<xsl:if test="$version='long'">
 					<xsl:text>&#160;</xsl:text>
 					<i>
