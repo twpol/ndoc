@@ -1,15 +1,9 @@
 #change the value of this macro to where you keep the html help compiler
 HHC= "C:\Program Files\HTML Help Workshop\hhc.exe"
 
-
 !IF !EXIST ($(HHC))
 !ERROR Could not find the html help compiler
 !ENDIF
-
-!IF !EXIST("..\..\doc\help\")
-	mkdir "..\..\doc\help\"
-!ENDIF
-
 
 .SUFFIXES :
 .SUFFIXES : .chm .hhp .htm .html .css .jpg .png .gif .js
@@ -22,7 +16,8 @@ NDocUsersGuide.chm: UsersGuide.hhp
 	$(HHC) UsersGuide.hhp
 # copy user guide to doc/help directory where setup generation will
 # pick it up
-	copy NDocUsersGuide.chm ..\..\doc\help\ /y
+    mkdir..\..\doc\help
+	copy NDocUsersGuide.chm ..\..\doc\help /y
 # copy user guide to gui bin directory
 	copy NDocUsersGuide.chm ..\Gui\bin\$(CONFIG) /y	
 
