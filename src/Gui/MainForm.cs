@@ -1252,13 +1252,13 @@ namespace NDoc.Gui
 			string msg = "An error occured while trying to build the documentation.";
 			if (ex is DocumenterException)
 			{
-				ErrorForm errorForm = new ErrorForm(msg, ex);
+				ErrorForm errorForm = new ErrorForm(msg, ex.InnerException);
 				errorForm.Text = "NDoc Documenter Error";
 				errorForm.ShowDialog(this);
 			}
 			else 
 			{
-				ErrorForm errorForm = new ErrorForm(msg, ex);
+				ErrorForm errorForm = new ErrorForm(msg, ex.InnerException);
 				errorForm.ShowDialog();
 			}
 		}
