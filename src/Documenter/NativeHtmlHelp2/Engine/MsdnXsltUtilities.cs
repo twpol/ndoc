@@ -248,7 +248,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			// non system types
 			if ( ( cref.Length < 9 ) || ( cref.Substring( 2, 7 ) != systemPrefix ) )
 			{
-				return GetTypeHRef( cref.Substring(2) );
+				return GetTypeHRef( cref );
 //				string fileName = fileNames[cref];
 //				if ((fileName == null) && cref.StartsWith("F:"))
 //					fileName = fileNames["E:" + cref.Substring(2)];

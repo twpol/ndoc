@@ -37,25 +37,42 @@
 				</xsl:otherwise>
 			</xsl:choose>
 			<xsl:text>&#160;</xsl:text>
-			<xsl:if test="local-name()='delegate'">
-				<xsl:call-template name="get-datatype">
-					<xsl:with-param name="datatype" select="@returnType" />
-				</xsl:call-template>
-				<xsl:text>&#160;</xsl:text>
-			</xsl:if>
 			<xsl:value-of select="@name" />
-			<xsl:if test="local-name() != 'enumeration' and local-name() != 'delegate'">
+			<xsl:if test="local-name() != 'enumeration'">
 				<xsl:call-template name="derivation" />
-			</xsl:if>
-			<xsl:if test="local-name() = 'delegate'">
-				<xsl:call-template name="parameters">
-					<xsl:with-param name="version">long</xsl:with-param>
-					<xsl:with-param name="namespace-name" select="../@name" />
-				</xsl:call-template>
 			</xsl:if>
 		</B>
 	</xsl:template>
 
+	<xsl:template match="structure | interface | class | enumeration" mode="cs-syntax">
+		<xsl:call-template name="cs-type-syntax"/>
+	</xsl:template>
+	
+	<xsl:template match="delegate" mode="cs-syntax">
+		<SPAN class="lang">[C#]</SPAN><br/>
+		<xsl:call-template name="attributes"/>
+		<B>
+			<xsl:if test="@hiding">
+			    <xsl:text>new&#160;</xsl:text>
+			</xsl:if>
+			<xsl:call-template name="type-access">
+				<xsl:with-param name="access" select="@access" />
+				<xsl:with-param name="type" select="local-name()" />
+			</xsl:call-template>
+			<xsl:text>&#160;</xsl:text>
+			<xsl:call-template name="get-datatype">
+				<xsl:with-param name="datatype" select="@returnType" />
+			</xsl:call-template>
+			<xsl:text>&#160;</xsl:text>
+			<xsl:value-of select="@name" />
+			<xsl:call-template name="parameters">
+				<xsl:with-param name="include-type-links" select="true()"/>		
+				<xsl:with-param name="version">long</xsl:with-param>
+				<xsl:with-param name="namespace-name" select="../@name" />
+			</xsl:call-template>
+		</B>
+	</xsl:template>
+	
 	<xsl:template name="cs-member-syntax-prolog">
 		<xsl:param name="include-type-links"/>
 
@@ -93,7 +110,7 @@
 					</xsl:call-template>					
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:value-of select="cs-type"/>
+					<xsl:value-of select="$cs-type"/>
 				</xsl:otherwise>
 			</xsl:choose>
 					
@@ -118,7 +135,7 @@
 		</xsl:call-template>		
 	</xsl:template>
 
-	<xsl:template match="method | field | property | event" mode="cs-syntax">
+	<xsl:template match="method" mode="cs-syntax">
 		<xsl:param name="include-type-links"/>
 		<xsl:param name="version"/>
 
@@ -132,7 +149,19 @@
 			<xsl:with-param name="namespace-name" select="../../@name" />
 		</xsl:call-template>		
 	</xsl:template>
-	
+
+	<xsl:template match="property" mode="cs-syntax">
+		<xsl:param name="version"/>
+
+		<xsl:call-template name="cs-property-syntax"/>
+	</xsl:template>
+		
+	<xsl:template match="field | event" mode="cs-syntax">
+		<xsl:param name="version"/>
+
+		<xsl:call-template name="cs-field-or-event-syntax"/>
+	</xsl:template>
+		
 	<xsl:template match="operator" mode="cs-syntax">
 		<xsl:param name="include-type-links"/>
 		<xsl:param name="version"/>

@@ -38,7 +38,7 @@
 			<xsl:choose>
 				<xsl:when test="starts-with($list[$last]/@type, 'System.')">
 					<xsl:call-template name="get-xlink-for-system-type">
-						<xsl:with-param name="type-name" select="$list[$last]/@type" />									
+						<xsl:with-param name="type-id" select="concat( 'T:', $list[$last]/@type )" />									
 					</xsl:call-template>					
 				</xsl:when>
 				<xsl:otherwise>
@@ -138,7 +138,7 @@
 								</xsl:when>
 								<xsl:otherwise>
 									<xsl:call-template name="get-xlink-for-system-type">
-										<xsl:with-param name="type-name" select="'System.Object'" />									
+										<xsl:with-param name="type-id" select="'T:System.Object'" />									
 									</xsl:call-template>
 									<br />
 									<xsl:call-template name="draw-hierarchy">

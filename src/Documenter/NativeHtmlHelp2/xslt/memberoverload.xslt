@@ -112,9 +112,18 @@
 									<xsl:text>.</xsl:text>
 								</p>
 								<blockquote class="dtBlock">
-									<a href="{NUtil:GetMemberOverloadHRef( string( @declaringType ), string( @name ) )}">
-										<xsl:apply-templates select="self::node()" mode="syntax" />
-									</a>
+									<xsl:choose>
+										<xsl:when test="local-name()='constructor'">
+											<a href="{NUtil:GetCustructorOverloadHRef( string( @declaringType ) )}">
+												<xsl:apply-templates select="self::node()" mode="syntax" />
+											</a>										
+										</xsl:when>
+										<xsl:otherwise>
+											<a href="{NUtil:GetMemberOverloadHRef( string( @declaringType ), string( @name ) )}">
+												<xsl:apply-templates select="self::node()" mode="syntax" />
+											</a>										
+										</xsl:otherwise>
+									</xsl:choose>
 								</blockquote>
 							</xsl:when>
 							<xsl:otherwise>
@@ -124,9 +133,18 @@
 									</xsl:call-template>
 								</p>
 								<blockquote class="dtBlock">
-									<a href="{NUtil:GetMemberHRef( . )}">
-										<xsl:apply-templates select="self::node()" mode="syntax" />
-									</a>
+									<xsl:choose>
+										<xsl:when test="local-name()='constructor'">
+											<a href="{NUtil:GetCustructorHRef( . )}">
+												<xsl:apply-templates select="self::node()" mode="syntax" />
+											</a>										
+										</xsl:when>
+										<xsl:otherwise>
+											<a href="{NUtil:GetMemberHRef( . )}">
+												<xsl:apply-templates select="self::node()" mode="syntax" />
+											</a>									
+										</xsl:otherwise>
+									</xsl:choose>
 								</blockquote>
 							</xsl:otherwise>
 						</xsl:choose>

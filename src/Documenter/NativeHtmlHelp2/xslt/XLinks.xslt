@@ -95,7 +95,7 @@
 	<xsl:template name="get-link-for-type-name">
 		<xsl:param name="type-name"/>
 		<xsl:param name="link-text"/>
-		
+
 		<xsl:call-template name="get-link-for-type">
 			<xsl:with-param name="type-id" select="concat( 'T:', $type-name )"/>
 			<xsl:with-param name="link-text" select="$link-text"/>
@@ -105,10 +105,11 @@
 	<xsl:template name="get-link-for-type">
 		<xsl:param name="type-id"/>
 		<xsl:param name="link-text"/>
+
 		<xsl:choose>
 			<xsl:when test="contains( $type-id, ':System.' )">
 				<xsl:call-template name="get-xlink-for-system-type">
-					<xsl:with-param name="type-name" select="substring-after( ':', $type-id )"/>
+					<xsl:with-param name="type-id" select="$type-id"/>
 					<xsl:with-param name="link-text" select="$link-text"/>
 				</xsl:call-template>
 			</xsl:when>
@@ -121,26 +122,21 @@
 	</xsl:template>   
 	
 	<xsl:template name="get-xlink-for-system-type">
-		<xsl:param name="type-name"/>
+		<xsl:param name="type-id"/>
 		<xsl:param name="link-text"/>
 
-		<xsl:variable name="a-index">
-			<xsl:call-template name="get-a-index-for-system-type">
-			    <xsl:with-param name="type-name" select="$type-name"/>
-			</xsl:call-template>
-		</xsl:variable>
 		<xsl:variable name="text">
 			<xsl:choose>
 				<xsl:when test="string-length($link-text) != 0">
 					<xsl:value-of select="$link-text"/>								
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:value-of select="$type-name"/>				
+					<xsl:value-of select="substring-after( $type-id, ':' )"/>				
 				</xsl:otherwise>
 			</xsl:choose>	
 		</xsl:variable>
 		<xsl:call-template name="get-xlink">
-			<xsl:with-param name="a-index" select="$a-index"/>
+			<xsl:with-param name="a-index" select="NUtil:GetHRef( $type-id )"/>
 			<xsl:with-param name="link-text" select="$text"/>
 		</xsl:call-template>		
 	</xsl:template>
@@ -152,38 +148,16 @@
 			<xsl:value-of select="$link-text"/>				
 		</MSHelp:link>		
 	</xsl:template>
-	
-
-	<xsl:template name="get-a-index-for-system-type">
-		<xsl:param name="type-name" />
-		<xsl:value-of select="concat( 'frlrf', translate($type-name, '.[,]', ''), 'ClassTopic' )" />
-	</xsl:template>	
 
 
 	<xsl:template name="get-xlink-for-system-member">
 		<xsl:param name="text"/>
 		<xsl:param name="member"/>
 				
-		<xsl:variable name="a-index">
-			<xsl:call-template name="get-a-index-for-system-member">
-				<xsl:with-param name="member" select="$member"/>
-			</xsl:call-template>
-		</xsl:variable>
 		<xsl:call-template name="get-xlink">
-			<xsl:with-param name="a-index" select="$a-index"/>
+			<xsl:with-param name="a-index" select="NUtil:GetHRef( concat( $member/@declaringType, '.', $member/@name ) )"/>
 			<xsl:with-param name="link-text" select="$text"/>
 		</xsl:call-template>				
-	</xsl:template>
-	
-	<xsl:template name="get-a-index-for-system-member">
-		<xsl:param name="member"/>
-		<xsl:value-of select="concat('frlrf', translate($member/@declaringType, '.[,]', ''), 'Class', translate($member/@name, '.[,]', ''), 'Topic' )" />
-	</xsl:template>
-
-	
-	<xsl:template name="get-a-index-for-system-namespace">
-		<xsl:param name="namespace-name" />
-		<xsl:value-of select="concat( 'frlrf', translate($namespace-name, '.', '') )" />
 	</xsl:template>
 	
 </xsl:stylesheet>

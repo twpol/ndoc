@@ -25,7 +25,7 @@
 				<div id="nstext" valign="bottom">
 					<p>
 						<xsl:call-template name="get-xlink-for-system-type">
-							<xsl:with-param name="type-name" select="'System.Object'" />									
+							<xsl:with-param name="type-id" select="'T:System.Object'" />									
 						</xsl:call-template>
 					</p>
 					<xsl:variable name="roots" select="$ns//*[(local-name()='class' and not(base)) or (local-name()='base' and not(base))]" />
@@ -84,7 +84,7 @@
 			<xsl:choose>
 				<xsl:when test="starts-with($head/@id, 'T:System.')">
 					<xsl:call-template name="get-xlink-for-system-type">
-						<xsl:with-param name="type-name" select="substring-after($head/@id, 'T:')" />									
+						<xsl:with-param name="type-id" select="$head/@id" />									
 					</xsl:call-template>
 				</xsl:when>
 				<xsl:otherwise>
