@@ -32,6 +32,9 @@
 						<xsl:with-param name="member" select="'method'" />
 					</xsl:call-template>
 					<xsl:call-template name="public-static-section">
+						<xsl:with-param name="member" select="'operator'" />
+					</xsl:call-template>
+					<xsl:call-template name="public-static-section">
 						<xsl:with-param name="member" select="'event'" />
 					</xsl:call-template>
 					<!-- protected static members -->

@@ -460,9 +460,4 @@ namespace NDoc.Test
 		/// <summary>Greater-than-or-equal operator.</summary>
 		public static bool operator >=(Operators x, Operators y) { return false; }
 	}
-
-	/// <summary>This class inherits all the operators.</summary>
-	public class DerivedOperators : Operators
-	{
-	}
 }

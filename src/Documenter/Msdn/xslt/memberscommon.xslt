@@ -29,6 +29,7 @@
 			<xsl:when test="$member='field'">Fields</xsl:when>
 			<xsl:when test="$member='property'">Properties</xsl:when>
 			<xsl:when test="$member='event'">Events</xsl:when>
+			<xsl:when test="$member='operator'">Operators</xsl:when>
 			<xsl:otherwise>Methods</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
@@ -39,6 +40,7 @@
 			<xsl:when test="$member='field'">fields</xsl:when>
 			<xsl:when test="$member='property'">properties</xsl:when>
 			<xsl:when test="$member='event'">events</xsl:when>
+			<xsl:when test="$member='operator'">operators</xsl:when>
 			<xsl:otherwise>methods</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
@@ -357,7 +359,7 @@
 		</tr>
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="field|property[not(@declaringType)]|event|method[not(@declaringType)]">
+	<xsl:template match="field|property[not(@declaringType)]|event|method[not(@declaringType)]|operator">
 		<xsl:variable name="member" select="local-name()" />
 		<xsl:variable name="name" select="@name" />
 		<xsl:if test="not(preceding-sibling::*[local-name()=$member and @name=$name])">
@@ -373,7 +375,16 @@
 										</xsl:with-param>
 									</xsl:call-template>
 								</xsl:attribute>
-								<xsl:value-of select="@name" />
+								<xsl:choose>
+									<xsl:when test="local-name()='operator'">
+										<xsl:call-template name="operator-name">
+											<xsl:with-param name="name" select="@name" />
+										</xsl:call-template>
+									</xsl:when>
+									<xsl:otherwise>
+										<xsl:value-of select="@name" />
+									</xsl:otherwise>
+								</xsl:choose>
 							</a>
 						</td>
 						<td width="50%">Overloaded. <xsl:apply-templates select="documentation/summary/node()" mode="slashdoc" /></td>
@@ -388,7 +399,16 @@
 										</xsl:with-param>
 									</xsl:call-template>
 								</xsl:attribute>
-								<xsl:value-of select="@name" />
+								<xsl:choose>
+									<xsl:when test="local-name()='operator'">
+										<xsl:call-template name="operator-name">
+											<xsl:with-param name="name" select="@name" />
+										</xsl:call-template>
+									</xsl:when>
+									<xsl:otherwise>
+										<xsl:value-of select="@name" />
+									</xsl:otherwise>
+								</xsl:choose>
 							</a>
 						</td>
 						<td width="50%">
