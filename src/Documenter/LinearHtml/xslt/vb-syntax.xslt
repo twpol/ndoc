@@ -147,8 +147,7 @@
 		<xsl:param name="type" />
 		<xsl:choose>
 			<xsl:when test="$access='Public'">Public</xsl:when>
-			<xsl:when test="$access='NotPublic' and $type='interface'">Friend</xsl:when>
-			<xsl:when test="$access='NotPublic' and $type!='interface'">Private</xsl:when>
+			<xsl:when test="$access='NotPublic'">Friend</xsl:when>
 			<xsl:when test="$access='NestedPublic'">Public</xsl:when>
 			<xsl:when test="$access='NestedFamily'">Protected</xsl:when>
 			<xsl:when test="$access='NestedFamilyOrAssembly'">Protected Friend</xsl:when>
