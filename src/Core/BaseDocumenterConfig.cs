@@ -27,6 +27,18 @@ namespace NDoc.Core
 {
 
 	/// <summary>The base documenter config class.</summary>
+	/// <remarks>
+	/// <para>Generating the documentation consists of two high level steps:
+	/// <list type="number">
+	/// <item><description>Merging the /doc XML summary with reflected meta-data from the assemblies.</description></item>
+	/// <item><description>Transforming that merged XML into the documentation (HTML for the MSDN and VS.NET documenters).</description></item>
+	/// </list></para>
+	/// <para>The settings below govern how exactly the XML summary data is merged
+	/// with the reflected meta-data and therefore govern what items will and will not 
+	/// appear in the final documentation.
+	/// </para>
+	/// <para>These settings are shared by all of the NDoc documenters.</para>
+	/// </remarks>
 	abstract public class BaseDocumenterConfig : IDocumenterConfig
 	{
 		private string _Name;
@@ -228,8 +240,8 @@ namespace NDoc.Core
 		private bool _ShowMissingSummaries;
 
 		/// <summary>Gets or sets the ShowMissingSummaries property.</summary>
-		/// <remarks>If this is true, all members without /doc &lt;summary&gt;
-		/// comments will contain the phrase "Missing Documentation" in the
+		/// <remarks>If this is true, all members without /doc <b>&lt;summary&gt;</b>
+		/// comments will contain the phrase <font color="red">Missing Documentation</font> in the
 		/// generated documentation.</remarks>
 		[Category("Show Missing Documentation")]
 		[Description("Turning this flag on will show you where you are missing summaries.")]
@@ -248,8 +260,8 @@ namespace NDoc.Core
 		private bool _ShowMissingRemarks;
 
 		/// <summary>Gets or sets the ShowMissingRemarks property.</summary>
-		/// <remarks>If this is true, all members without /doc &lt;remarks&gt;
-		/// comments will contain the phrase "Missing Documentation" in the
+		/// <remarks>If this is true, all members without /doc <b>&lt;remarks&gt;</b>
+		/// comments will contain the phrase <font color="red">Missing Documentation</font> in the
 		/// generated documentation.</remarks>
 		[Category("Show Missing Documentation")]
 		[Description("Turning this flag on will show you where you are missing Remarks.")]
@@ -268,8 +280,8 @@ namespace NDoc.Core
 		private bool _ShowMissingParams;
 
 		/// <summary>Gets or sets the ShowMissingParams property.</summary>
-		/// <remarks>If this is true, all parameters without /doc &lt;param&gt;
-		/// comments will contain the phrase "Missing Documentation" in the
+		/// <remarks>If this is true, all parameters without /doc <b>&lt;param&gt;</b>
+		/// comments will contain the phrase <font color="red">Missing Documentation</font> in the
 		/// generated documentation.</remarks>
 		[Category("Show Missing Documentation")]
 		[Description("Turning this flag on will show you where you are missing Params.")]
@@ -288,8 +300,8 @@ namespace NDoc.Core
 		private bool _ShowMissingReturns;
 
 		/// <summary>Gets or sets the ShowMissingReturns property.</summary>
-		/// <remarks>If this is true, all members without /doc &lt;returns&gt;
-		/// comments will contain the phrase "Missing Documentation" in the
+		/// <remarks>If this is true, all members without /doc <b>&lt;returns&gt;</b>
+		/// comments will contain the phrase <font color="red">Missing Documentation</font> in the
 		/// generated documentation.</remarks>
 		[Category("Show Missing Documentation")]
 		[Description("Turning this flag on will show you where you are missing Returns.")]
@@ -308,8 +320,8 @@ namespace NDoc.Core
 		private bool _ShowMissingValues;
 
 		/// <summary>Gets or sets the ShowMissingValues property.</summary>
-		/// <remarks>If this is true, all properties without /doc &lt;value&gt;
-		/// comments will contain the phrase "Missing Documentation" in the
+		/// <remarks>If this is true, all properties without /doc <b>&lt;value&gt;</b>
+		/// comments will contain the phrase <font color="red">Missing Documentation</font> in the
 		/// generated documentation.</remarks>
 		[Category("Show Missing Documentation")]
 		[Description("Turning this flag on will show you where you are missing Values.")]
@@ -329,7 +341,7 @@ namespace NDoc.Core
 
 		/// <summary>Gets or sets the DocumentInternals property.</summary>
 		/// <remarks>If this is true, types and members marked as internal will
-		/// be included in the documentation. Normally internal items are not documented.</remarks>
+		/// be included in the documentation. Normally, internal items are not documented.</remarks>
 		[Category("Visibility")]
 		[Description("Turn this flag on to document internal code.")]
 		[DefaultValue(false)]
@@ -375,7 +387,7 @@ namespace NDoc.Core
 
 		/// <summary>Gets or sets the DocumentSealedProtected property.</summary>
 		/// <remarks>Turn this flag on to document protected members of sealed classes. 
-		/// DocumentProtected must be turned on, too.</remarks>
+		/// <b>DocumentProtected</b> must be turned on, too.</remarks>
 		[Category("Visibility")]
 		[Description("Turn this flag on to document protected members of sealed classes. DocumentProtected must be turned on, too.")]
 		[DefaultValue(false)]
@@ -400,8 +412,11 @@ namespace NDoc.Core
 		private bool _DocumentPrivates;
 
 		/// <summary>Gets or sets the DocumentPrivates property.</summary>
-		/// <remarks>If this is true, types and members marked as private will
-		/// be included in the documentation. Normally private items are not documented.</remarks>
+		/// <remarks>
+		/// <para>If this is true, types and members marked as private will
+		/// be included in the documentation.</para>
+		/// <para>Normally private items are not documented. This is useful
+		/// when use NDoc to create documentation intended for internal use.</para></remarks>
 		[Category("Visibility")]
 		[Description("Turn this flag on to document private code.")]
 		[DefaultValue(false)]
@@ -419,7 +434,7 @@ namespace NDoc.Core
 		private bool _DocumentProtectedInternalAsProtected;
 
 		/// <summary>Gets or sets the DocumentProtectedInternalAsProtected property.</summary>
-		/// <remarks>If this istrue, NDoc will treat "protected internal" members as "protected" only.</remarks>
+		/// <remarks>If this is true, NDoc will treat "protected internal" members as "protected" only.</remarks>
 		[Category("Visibility")]
 		[Description("If true, NDoc will treat \"protected internal\" members as \"protected\" only.")]
 		[DefaultValue(false)]
@@ -537,7 +552,7 @@ namespace NDoc.Core
 
 		/// <summary>Gets or sets the FeedbackEmailAddress property.</summary>
 		/// <remarks>If an email address is supplied, a <b>mailto</b> link 
-		/// will be placed at the bottom of each page using this address.</remarks>
+		/// will be placed at the bottom of each page, pointing to this address.</remarks>
 		[Category("Documentation Main Settings")]
 		[Description("If an email address is supplied, a mailto link will be placed at the bottom of each page using this address.")]
 		[DefaultValue("")]
@@ -554,7 +569,7 @@ namespace NDoc.Core
 		private bool _SkipNamespacesWithoutSummaries;
 
 		/// <summary>Gets or sets the SkipNamespacesWithoutSummaries property.</summary>
-		/// <remarks>Setting this property to true will not document namespaces 
+		/// <remarks>Setting this property to true , NDoc will not document namespaces 
 		/// that don't have an associated namespace summary.</remarks>
 		[Category("Visibility")]
 		[Description("Setting this property to true will not document namespaces that don't have an associated namespace summary.")]
@@ -631,7 +646,7 @@ namespace NDoc.Core
 
 		/// <summary>Gets or sets the AutoDocumentConstructors property.</summary>
 		/// <remarks>Turning this flag on will enable automatic summary 
-		/// documentation for default constructors. If not summary for a paramaterless
+		/// documentation for default constructors. If no summary for a parameter-less
 		/// constructor is present, the default constructor summary of
 		/// <b>Initializes a new instance of the CLASSNAME class</b> is inserted.</remarks>
 		[Category("Documentation Main Settings")]
@@ -651,8 +666,8 @@ namespace NDoc.Core
 		private bool _DocumentAttributes;
 
 		/// <summary>Gets or sets whether or not to document the attributes.</summary>
-		/// <remarks>Set this to true to output the attributes of the types/members in the syntax portion
-		/// of type and member topics.</remarks>
+		/// <remarks>Set this to true to output the attributes of the types/members 
+		/// in the syntax portion of topics.</remarks>
 		[Category("Show Attributes")]
 		[Description("Set this to true to output the attributes of the types/members in the syntax portion.")]
 		[DefaultValue(false)]
@@ -688,12 +703,12 @@ namespace NDoc.Core
 		private string _DocumentedAttributes;
 
 		/// <summary>Gets or sets which attributes should be documented.</summary>
-		/// <remarks><para>When DocumentAttributes is set to true, this specifies 
-		/// which attributes/property are visisble.  Empty to show all.  </para>
+		/// <remarks><para>When <b>DocumentAttributes</b> is set to true, this specifies 
+		/// which attributes/property are visible.  Empty to show all.  </para>
 		/// <para>Format: '&lt;attribute-name-starts-with&gt;,&lt;property-to-show&gt;,&lt;property-to-show&gt;|
 		/// &lt;attribute-name-starts-with&gt;,&lt;property-to-show&gt;,&lt;property-to-show&gt;|(etc...)'.</para></remarks>
 		[Category("Show Attributes")]
-		[Description("When DocumentAttributes is set to true, this specifies which attributes/property are visisble.  Empty to show all.  Format: '<attribute-name-starts-with>,<property-to-show>,<property-to-show>|<attribute-name-starts-with>,<property-to-show>,<property-to-show>|(etc...)'.")]
+		[Description("When DocumentAttributes is set to true, this specifies which attributes/property are visible.  Empty to show all.  Format: '<attribute-name-starts-with>,<property-to-show>,<property-to-show>|<attribute-name-starts-with>,<property-to-show>,<property-to-show>|(etc...)'.")]
 		[Editor(typeof(AttributesEditor), typeof(UITypeEditor))]
 		[DefaultValue("")]
 		public string DocumentedAttributes
@@ -713,7 +728,7 @@ namespace NDoc.Core
 		/// <remarks>If true, NDoc will try loading external xml files to 
 		/// retreive the summaries of inherited members. Setting this to true results 
 		/// in more complete documentation as NDoc will attempt to retrieve summaries
-		/// for any inherited members from types expeternal to the project, including CLR types.</remarks>
+		/// for any inherited members from types external to the project, including CLR types.</remarks>
 		[Category("Documentation Main Settings")]
 		[Description("If true, NDoc will try loading external xml files to retreive the summaries of inherited members.")]
 		[DefaultValue(true)]
@@ -732,9 +747,11 @@ namespace NDoc.Core
 		private bool _Preliminary = false;
 
 		/// <summary>Get/set the Preliminary preoperty</summary>
-		/// <remarks>If true, NDoc will mark every topic as being preliminary documentation.
-		/// Each topic will include a notice that the documentation is preliminary, and subject 
-		/// to change.</remarks>
+		/// <remarks>
+		/// <para>If true, NDoc will mark every topic as being preliminary documentation.
+		/// Each topic will include a notice that the documentation is preliminary</para>
+		/// <para>The default notice is <font color="red">[This is preliminary documentation 
+		/// and subject to change.]</font></para></remarks>
 		[Category("Documentation Main Settings")]
 		[Description("If true, NDoc will mark every topic as being preliminary documentation.")]
 		[DefaultValue(false)]
@@ -753,9 +770,9 @@ namespace NDoc.Core
 		private EditorBrowsableFilterLevel _EditorBrowsableFilter;
 
 		/// <summary>Specifies the level of filtering on the EditorBrowsable attribute.</summary>
-		/// <remarks><para>Sets the level of filtering to apply on types/members marked with the EditorBrowsable attribute.  
+		/// <remarks><para>Sets the level of filtering to apply on types/members marked with the <b>EditorBrowsable</b> attribute.  
 		/// <b>Warning: enabling this filter might result in invalid links in the documentation.</b></para>
-		/// <para>As of version 1.3 of NDoc, the &lt;nodoc/&gt; tag is the preferred mechanism for
+		/// <para>As of version 1.3 of NDoc, the <b>&lt;nodoc/&gt;</b> tag is the preferred mechanism for
 		/// suppressing the documentation of types or members.</para></remarks>
 		[Category("Visibility")]
 		[Description("Sets the level of filtering to apply on types/members marked with the EditorBrowsable attribute.  Warning: enabling this filter might result in invalid links in the documentation.")]
@@ -777,7 +794,7 @@ namespace NDoc.Core
 		/// <remarks><para>When set, NDoc will use the specified XML file as 
 		/// input instead of reflecting the list of assemblies specified 
 		/// on the project.</para>
-		/// <para>Very useful for debugging documenters. Leave empty for normal usage.</para>
+		/// <para>Very useful for debugging documenters. <i>Leave empty for normal usage.</i></para>
 		/// </remarks>
 		[Category("Documentation Main Settings")]
 		[Description("When set, NDoc will use the specified XML file as input instead of reflecting the list of assemblies specified on the project.  Very useful for debugging documenters.  Leave empty for normal usage.")]
@@ -838,7 +855,7 @@ namespace NDoc.Core
 		/// <summary>Gets or sets the DefaultOSSupport property.</summary>
 		/// <remarks>Defines the default set of operating systems 
 		/// supported by classes that don't have OS support specified 
-		/// in their comments (ignored if InheritPlatformSupport is false).
+		/// in their comments (ignored if <b>InheritPlatformSupport</b> is false).
 		/// The valid values are:
 		/// <list type="bullet">
 		/// <item>
@@ -846,7 +863,7 @@ namespace NDoc.Core
 		/// (Windows 98/98SE, Windows ME, Windows NT4, Windows XP Pro and Home, Windows Server 2003)</description>
 		/// </item>
 		/// <item>
-		/// <description><b>NT5Plus</b> - The default operating system includes any NT5 deriviative 
+		/// <description><b>NT5Plus</b> - The default operating system includes any NT5 derivative 
 		/// (Windows 2000, Windows XP Pro and Home, Windows Server 2003)</description>
 		/// </item>
 		/// <item>
@@ -875,7 +892,7 @@ namespace NDoc.Core
 
 		/// <summary>Gets or sets the DefaultSupportCompactFramework property.</summary>
 		/// <remarks>If true, the .NET compact framework will 
-		/// be included in the default set of platforms (ignored if InheritPlatformSupport is false).</remarks>
+		/// be included in the default set of platforms (ignored if <b>InheritPlatformSupport</b> is false).</remarks>
 		[Category("Supported Platforms")]
 		[Description("If true, the .NET compact framework will be included in the default set of platforms (ignored if InheritPlatformSupport is false).")]
 		[DefaultValue(false)]
@@ -893,7 +910,7 @@ namespace NDoc.Core
 
 		/// <summary>Gets or sets the DefaultSupportMONOFramework property.</summary>
 		/// <remarks>If true, the MONO open source framework will be included 
-		/// in the default set of platforms (ignored if InheritPlatformSupport is false).</remarks>
+		/// in the default set of platforms (ignored if <b>InheritPlatformSupport</b> is false).</remarks>
 		[Category("Supported Platforms")]
 		[Description("If true, the MONO open source framework will be included in the default set of platforms (ignored if InheritPlatformSupport is false).")]
 		[DefaultValue(false)]
@@ -911,7 +928,7 @@ namespace NDoc.Core
 
 		/// <summary>Gets or sets the AdditionalFrameworkList property.</summary>
 		/// <remarks>User defined list of additional framework implementations to 
-		/// be displayed for default platform support (ignored if InheritPlatformSupport is false).</remarks>
+		/// be displayed for default platform support (ignored if <b>InheritPlatformSupport</b> is false).</remarks>
 		[Category("Supported Platforms")]
 		[Description("User defined list of additional framework implementations to be displayed for default platform support (ignored if InheritPlatformSupport is false).")]
 		[DefaultValue("")]
@@ -929,7 +946,7 @@ namespace NDoc.Core
 
 		/// <summary>Gets or sets the AdditionalOSList property.</summary>
 		/// <remarks>User defined list of additional operating systems to 
-		/// be displayed for default platform support (ignored if InheritPlatformSupport is false).</remarks>
+		/// be displayed for default platform support (ignored if <b>InheritPlatformSupport</b> is false).</remarks>
 		[Category("Supported Platforms")]
 		[Description("User defined list of additional operating systems to be displayed for default platform support (ignored if InheritPlatformSupport is false).")]
 		[DefaultValue("")]
