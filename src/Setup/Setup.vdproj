@@ -75,51 +75,15 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_75E428F0CBF54557A9E41269F5F633FE"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:C:\\CVSROOT\\NDOC\\README.TXT"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_91C62F0459D84191AA7D9005E4ED5B06"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:C:\\CVSROOT\\NDOC\\SRC\\GUI\\NDOCGUI.EXE.MANIFEST"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_96FAD232CC234A0D849B64E192A52EF7"
-        "OwnerKey" = "8:_1078131070D531CAC479AF20F413D606"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_96FAD232CC234A0D849B64E192A52EF7"
-        "OwnerKey" = "8:_CFED1F927ADE40DFBBEC61462A291094"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_96FAD232CC234A0D849B64E192A52EF7"
-        "OwnerKey" = "8:_D09501A9F4629E2BC5D086518C05693F"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_96FAD232CC234A0D849B64E192A52EF7"
-        "OwnerKey" = "8:_29CCA2F98046461E97D0CF4B8D2D7FDF"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_96FAD232CC234A0D849B64E192A52EF7"
-        "OwnerKey" = "8:_1BE3C34A870339F98529356AEB634C02"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_96FAD232CC234A0D849B64E192A52EF7"
-        "OwnerKey" = "8:_087824DA6AA79D8D69D4C73FD8A96ED2"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_96FAD232CC234A0D849B64E192A52EF7"
-        "OwnerKey" = "8:_FBB6212730F68A9B6C98FB65C6D5A888"
-        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
         }
         "Entry"
         {
@@ -132,6 +96,48 @@
         "MsmKey" = "8:_D09501A9F4629E2BC5D086518C05693F"
         "OwnerKey" = "8:_CFED1F927ADE40DFBBEC61462A291094"
         "MsmSig" = "8:ndoc.visualstudioc:\\cvsroot\\ndoc\\src\\visualstudio\\obj\\release\\ndoc.visualstudio.dll"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F388C809244045E1B7FDD695BB0C92E7"
+        "OwnerKey" = "8:_1078131070D531CAC479AF20F413D606"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F388C809244045E1B7FDD695BB0C92E7"
+        "OwnerKey" = "8:_CFED1F927ADE40DFBBEC61462A291094"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F388C809244045E1B7FDD695BB0C92E7"
+        "OwnerKey" = "8:_D09501A9F4629E2BC5D086518C05693F"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F388C809244045E1B7FDD695BB0C92E7"
+        "OwnerKey" = "8:_29CCA2F98046461E97D0CF4B8D2D7FDF"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F388C809244045E1B7FDD695BB0C92E7"
+        "OwnerKey" = "8:_1BE3C34A870339F98529356AEB634C02"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F388C809244045E1B7FDD695BB0C92E7"
+        "OwnerKey" = "8:_087824DA6AA79D8D69D4C73FD8A96ED2"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F388C809244045E1B7FDD695BB0C92E7"
+        "OwnerKey" = "8:_FBB6212730F68A9B6C98FB65C6D5A888"
+        "MsmSig" = "8:mondo.E4183BB4_18A8_11D5_A549_0090278A1BB8"
         }
         "Entry"
         {
@@ -295,6 +301,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{54DA9790-1474-11D3-8E00-00C04F6837D0}:_75E428F0CBF54557A9E41269F5F633FE"
+            {
+            "SourcePath" = "8:..\\..\\README.txt"
+            "TargetName" = "8:README.txt"
+            "Tag" = "8:"
+            "Folder" = "8:_5AEF2DA019D34ADBB7904E937B93D5D5"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{54DA9790-1474-11D3-8E00-00C04F6837D0}:_91C62F0459D84191AA7D9005E4ED5B06"
@@ -656,7 +682,7 @@
         }
         "MergeModule"
         {
-            "{AC8774A4-3E09-11D3-8E14-00C04F6837D0}:_96FAD232CC234A0D849B64E192A52EF7"
+            "{AC8774A4-3E09-11D3-8E14-00C04F6837D0}:_F388C809244045E1B7FDD695BB0C92E7"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
