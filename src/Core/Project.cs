@@ -57,6 +57,13 @@ namespace NDoc.Core
 		}
 
 
+		#region 'Dirty' flag handling
+
+		private bool _IsDirty;
+
+		/// <summary>Raised by projects when they're dirty state changes from false to true.</summary>
+		public event ProjectModifiedEventHandler Modified;
+
 		private void ContentsChanged(object sender, EventArgs e)
 		{
 			IsDirty = true;
@@ -69,17 +76,36 @@ namespace NDoc.Core
 
 			set
 			{
-				if (!_IsDirty && value)
+				if (!_suspendDirtyCheck)
 				{
-					_IsDirty = true;
-					if (Modified != null) Modified(this, EventArgs.Empty);
-				}
-				else
-				{
-					_IsDirty = value;
+					if (!_IsDirty && value)
+					{
+						_IsDirty = true;
+						if (Modified != null) Modified(this, EventArgs.Empty);
+					}
+					else
+					{
+						_IsDirty = value;
+					}
 				}
 			}
 		}
+
+		private bool _suspendDirtyCheck = false;
+
+		/// <summary>
+		/// Gets or sets a value indicating whether [suspend dirty check].
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if [suspend dirty check]; otherwise, <c>false</c>.
+		/// </value>
+		public bool SuspendDirtyCheck 
+		{
+			get { return _suspendDirtyCheck; }
+			set { _suspendDirtyCheck = value; }
+		} 
+
+		#endregion
 
 		private ArrayList _AssemblySlashDocs = new ArrayList();
 
