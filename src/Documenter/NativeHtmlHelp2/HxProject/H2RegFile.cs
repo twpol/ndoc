@@ -15,7 +15,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2.HxProject
 		private string description;
 		private int langId;
 		private string collectionFileName;
-		private string fileName;
 
 		private ArrayList titles;
 
@@ -36,6 +35,11 @@ namespace NDoc.Documenter.NativeHtmlHelp2.HxProject
 		public void Save( string path )
 		{
 			StringBuilder sb = new StringBuilder();
+
+			sb.Append( "; This file is intended for input into the H2Reg.exe help registration utility.\r\n" );
+			sb.Append( "; H2Reg.exe is a shareware product from The Helpware Group that can be integrated into\r\n" );
+			sb.Append( "; installers used for deploying html help 2 titles and collections.\r\n" );
+			sb.Append( "; H2Reg.exe can be downloaded and licensed from http://www.helpware.net\r\n\r\n" );
 
 			sb.Append( "[Reg_Namespace]\r\n" );
 			sb.AppendFormat( "{0}|{1}|{2}\r\n\r\n", CollectionNamespace, CollectionFileName, Description );
