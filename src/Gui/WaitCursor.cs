@@ -10,6 +10,7 @@ namespace NDoc.Gui
 	public class WaitCursor : IDisposable
 	{		
 		private Control m_parent;
+		private Cursor m_startCursor;
 
 		/// <summary>
 		/// Constructing this class casues the cursor to be set to the wait cursor
@@ -30,6 +31,7 @@ namespace NDoc.Gui
 		{
 			Debug.Assert( parent != null );
 			m_parent = parent;
+			m_startCursor = m_parent.Cursor;
 			m_parent.Cursor = cursor;
 		}
 
@@ -39,7 +41,7 @@ namespace NDoc.Gui
 		public void Dispose()
 		{
 			if ( m_parent.IsDisposed == false )
-				m_parent.Cursor = Cursors.Default;
+				m_parent.Cursor = m_startCursor;
 		}
 	}
 }
