@@ -33,7 +33,6 @@ namespace NDoc.Documenter.Msdn
 	{
 		string outputDirectory;
 		string htmlHelpName;
-		string htmlHelpCompilerFilename;
 		bool includeFavorites;
 
 		/// <summary>Initializes a new instance of the MsdnHelpConfig class.</summary>
