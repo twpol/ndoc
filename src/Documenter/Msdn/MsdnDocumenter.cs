@@ -324,7 +324,7 @@ namespace NDoc.Documenter.Msdn
 					{
 						if (!MyConfig.CopyrightHref.StartsWith("http:"))
 						{
-							string copyrightFile = Path.Combine(workspace.WorkingDirectoryName, Path.GetFileName(MyConfig.CopyrightHref));
+							string copyrightFile = Path.Combine(workspace.WorkingDirectory, Path.GetFileName(MyConfig.CopyrightHref));
 							File.Copy(MyConfig.CopyrightHref, copyrightFile, true);
 							File.SetAttributes(copyrightFile, FileAttributes.Archive);
 							htmlHelp.AddFileToProject(Path.GetFileName(MyConfig.CopyrightHref));
