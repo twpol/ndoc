@@ -26,7 +26,7 @@
 				</xsl:call-template>
 				<div id="nstext">
 					<!-- the namespace template just gets the summary. -->
-					<xsl:apply-templates select="(assembly/module/namespace[@name=$namespace])[1]" />
+					<xsl:apply-templates select="(assembly/module/namespace[(@name=$namespace) and documentation])[1]" />
 					<xsl:if test="$includeHierarchy">
 					  <p>
 						  <a>

@@ -708,14 +708,14 @@ namespace NDoc.Documenter.Msdn
 				}
 			}
 
-			nNodes = namespaceAssemblies.Count;
 			string [] namespaces = namespaceAssemblies.AllKeys;
 			Array.Sort(namespaces);
+			nNodes = namespaces.Length;
 			for (int i = 0; i < nNodes; i++)
 			{
 				OnDocBuildingProgress(i*100/nNodes);
 				string namespaceName = namespaces[i];
-				foreach (string assemblyName in namespaceAssemblies.GetValues(i))
+				foreach (string assemblyName in namespaceAssemblies.GetValues(namespaceName))
 					MakeHtmlForNamespace(assemblyName, namespaceName);
 			}
 
