@@ -154,6 +154,7 @@ namespace NDoc.ConsoleApplication
 
 		private static void WriteUsage()
 		{
+			Console.WriteLine("NDoc - Code Documentation Generator for .NET");
 			Console.WriteLine();
 			Console.WriteLine("usage: NDocConsole  assembly[,xmldoc] [assembly[,xmldoc]]...");
 			Console.WriteLine("                    [-namespacesummaries=filename]");
