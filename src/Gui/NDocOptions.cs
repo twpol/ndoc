@@ -59,9 +59,7 @@ namespace NDoc.Gui
 		[DefaultValue("")]
 		[Description("The path to the html help workshop, where the HHC.EXE compiler is located. Only set this value if the MSDN documenter cannot find the html help compiler.")]
 		[Category("Machine Specific Settings")]
-#if !MONO //System.Windows.Forms.Design.FolderNameEditor is not implemented in mono 0.28
 		[Editor(typeof(FolderNameEditor), typeof(UITypeEditor))]
-#endif
 		public string HtmlHelpWorkshopLocation
 		{
 			get{ return _HtmlHelpWorkshopLocation; }

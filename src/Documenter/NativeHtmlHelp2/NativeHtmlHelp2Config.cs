@@ -86,9 +86,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		/// <remarks>The directory in which .html files and the .Hx* files will be generated.</remarks>
 		[Category("Documentation Main Settings")]
 		[Description("The directory in which .html files and the .Hx* files will be generated.")]
-#if !MONO //System.Windows.Forms.Design.FolderNameEditor is not implemented in mono 0.28
 		[Editor(typeof(FolderNameEditor), typeof(UITypeEditor))]
-#endif
 		public string OutputDirectory
 		{
 			get { return _outputDirectory; }
@@ -634,9 +632,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		[Category(ADDITIONAL_CONTENT_CATEGORY)]
 		[Description("Directory that contains resources (images etc.) used by the additional content pages. This directory will be recursively compiled into the help file.")]
 		[DefaultValue("")]
-#if !MONO //System.Windows.Forms.Design.FolderNameEditor is not implemented in mono 0.28
 		[Editor(typeof(FolderNameEditor), typeof(UITypeEditor))]
-#endif
 		public string AdditionalContentResourceDirectory
 		{
 			get { return _AdditionalContentResourceDirectory; }

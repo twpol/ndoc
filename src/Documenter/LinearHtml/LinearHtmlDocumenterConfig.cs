@@ -81,9 +81,7 @@ namespace NDoc.Documenter.LinearHtml
 		/// <remarks>The directory in which .html file will be generated.</remarks>
 		[Category("Documentation Main Settings")]
 		[Description("The directory in which .html file will be generated.")]
-#if !MONO //System.Windows.Forms.Design.FolderNameEditor is not implemented in mono 0.28
 		[Editor(typeof(FolderNameEditor), typeof(UITypeEditor))]
-#endif
 		public string OutputDirectory
 		{
 			get { return _OutputDirectory; }

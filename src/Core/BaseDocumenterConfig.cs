@@ -715,9 +715,7 @@ namespace NDoc.Core
 		/// The search for assemblies includes this directory and all subdirectories.</remarks>
 		[Category("Documentation Main Settings")]
 		[Description("The directory used to resolve path specifications and assembly references. The search for assemblies includes this directory and all subdirectories.")]
-#if !MONO //System.Windows.Forms.Design.FolderNameEditor is not implemented in mono 0.28
 		[Editor(typeof(FolderNameEditor), typeof(UITypeEditor))]
-#endif
 		[DefaultValue("")]
 		public string ReferencesPath
 		{

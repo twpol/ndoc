@@ -51,9 +51,7 @@ namespace NDoc.Documenter.Latex
 		/// absolute or relative from the .ndoc project file.</remarks>
 		[Category("LaTeX")]
 		[Description("The directory to output the files to.")]
-#if !MONO //System.Windows.Forms.Design.FolderNameEditor is not implemented in mono 0.28
 		[Editor(typeof(FolderNameEditor), typeof(UITypeEditor))]
-#endif
 		public string OutputDirectory
 		{
 			get

@@ -73,9 +73,7 @@ namespace NDoc.Documenter.Msdn
 		/// <remarks>The directory in which .html files and the .chm file will be generated.</remarks>
 		[Category("Documentation Main Settings")]
 		[Description("The directory in which .html files and the .chm file will be generated.")]
-#if !MONO //System.Windows.Forms.Design.FolderNameEditor is not implemented in mono 0.28
 		[Editor(typeof(FolderNameEditor), typeof(UITypeEditor))]
-#endif
 		public string OutputDirectory
 		{
 			get { return outputDirectory; }
