@@ -533,4 +533,13 @@ namespace NDoc.Test
 	public class Paragraphs
 	{
 	}
+
+	/// <summary>This class shows how permission elements are used.</summary>
+	public class Permissions
+	{
+		/// <permission cref="System.Security.PermissionSet">Everyone can access this method.</permission>
+		public void PermissionsRequired()
+		{
+		}
+	}
 }
