@@ -162,6 +162,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "EnumDescriptionConverter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ExternalXmlSummaryCache.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
