@@ -1,3 +1,5 @@
 *.chm
 _errorlog.txt
 index.HHK~
+debug
+release
