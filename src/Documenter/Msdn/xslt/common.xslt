@@ -295,7 +295,7 @@
 												<xsl:value-of select="substring-after($cref, ':')" />
 											</xsl:otherwise>
 										</xsl:choose>
-									</a>									
+									</a>
 								</xsl:when>
 								<xsl:otherwise>
 									<xsl:value-of select="substring(@cref, 3)" />
@@ -366,7 +366,7 @@
 							<xsl:value-of select="substring-after($cref, ':')" />
 						</xsl:otherwise>
 					</xsl:choose>
-				</a>									
+				</a>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:variable name="seethis" select="//*[@id=$cref]" />
@@ -412,6 +412,19 @@
 				</xsl:choose>
 			</xsl:otherwise>
 		</xsl:choose>
+	</xsl:template>
+	<!-- -->
+	<xsl:template match="see[@href]" mode="slashdoc">
+		<a href="{@href}">
+			<xsl:choose>
+				<xsl:when test="node()">
+					<xsl:value-of select="." />
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="@href" />
+				</xsl:otherwise>
+			</xsl:choose>
+		</a>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="summary-section">

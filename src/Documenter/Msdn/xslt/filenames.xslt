@@ -93,8 +93,15 @@
 	<xsl:template name="get-filename-for-system-cref">
 		<xsl:param name="cref" />
 		<xsl:choose>
+			<xsl:when test="starts-with($cref, 'N:')">
+				<xsl:call-template name="get-filename-for-system-namespace">
+					<xsl:with-param name="namespace-name" select="substring-after($cref, 'N:')" />
+				</xsl:call-template>
+			</xsl:when>
 			<xsl:when test="starts-with($cref, 'T:')">
-				<xsl:value-of select="concat('ms-help://MS.VSCC/MS.MSDNVS/cpref/html/frlrf', translate(substring-after($cref, ':'), '.', ''), 'ClassTopic.htm')" />
+				<xsl:call-template name="get-filename-for-system-type">
+					<xsl:with-param name="type-name" select="translate(substring-after($cref, ':'), '.', '')" />
+				</xsl:call-template>
 			</xsl:when>
 			<xsl:when test="starts-with($cref, 'F:') or starts-with($cref, 'P:') or starts-with($cref, 'M:') or starts-with($cref, 'E:')">
 				<xsl:variable name="cref-name">
@@ -117,26 +124,31 @@
 						<xsl:with-param name="name" select="$cref-name" />
 					</xsl:call-template>
 				</xsl:variable>
-				<xsl:value-of select="concat('ms-help://MS.VSCC/MS.MSDNVS/cpref/html/frlrf', translate($cref-type, '.', ''), 'Class', $cref-member, 'Topic.htm')" />
+				<xsl:value-of select="concat('ms-help://MS.NETFrameworkSDK/cpref/html/frlrf', translate($cref-type, '.', ''), 'Class', $cref-member, 'Topic.htm')" />
 			</xsl:when>
 		</xsl:choose>
 	</xsl:template>
 	<!-- -->
+	<xsl:template name="get-filename-for-system-namespace">
+		<xsl:param name="namespace-name" />
+		<!-- RTM Example: ms-help://MS.NETFrameworkSDK/cpref/html/frlrfSystemIO.htm -->
+		<xsl:value-of select="concat('ms-help://MS.NETFrameworkSDK/cpref/html/frlrf', translate($namespace-name, '.', ''), '.htm')" />
+	</xsl:template>
+	<!-- -->
+	<xsl:template name="get-filename-for-system-type">
+		<xsl:param name="type-name" />
+		<!-- RTM Example: ms-help://MS.NETFrameworkSDK/cpref/html/frlrfsystemobjectclasstopic.htm -->
+		<xsl:value-of select="concat('ms-help://MS.NETFrameworkSDK/cpref/html/frlrf', translate($type-name, '.[]', ''), 'ClassTopic.htm')" />
+	</xsl:template>
+	<!-- -->
 	<xsl:template name="get-filename-for-system-property">
-		<!-- Beta 2 Example:  ms-help://MS.VSCC/MS.MSDNVS/cpref/html/frlrfSystemExceptionClassInnerExceptionTopic.htm -->
-		<xsl:value-of select="concat('ms-help://MS.VSCC/MS.MSDNVS/cpref/html/frlrf', translate(@declaringType, '.[]', ''), 'Class', @name, 'Topic.htm')" />
+		<!-- RTM Example: ms-help://MS.NETFrameworkSDK/cpref/html/frlrfsystemexceptionclassinnerexceptiontopic.htm -->
+		<xsl:value-of select="concat('ms-help://MS.NETFrameworkSDK/cpref/html/frlrf', translate(@declaringType, '.[]', ''), 'Class', @name, 'Topic.htm')" />
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="get-filename-for-system-method">
-		<!-- EXAMPLE:  ms-help://MSDNVS/cpref/html_hh2/frlrfSystemObjectClassEqualsTopic.htm -->
-		<!-- Beta 2 Example:  ms-help://MS.VSCC/MS.MSDNVS/cpref/html/frlrfSystemObjectClassEqualsTopic.htm -->
-		<xsl:value-of select="concat('ms-help://MS.VSCC/MS.MSDNVS/cpref/html/frlrf', translate(@declaringType, '.[]', ''), 'Class', @name, 'Topic.htm')" />
-	</xsl:template>
-	<!-- -->
-	<xsl:template name="get-filename-for-system-class">
-		<xsl:param name="class-name" />
-		<!-- Beta 2 Example:  ms-help://MS.VSCC/MS.MSDNVS/cpref/html/frlrfSystemObjectClassTopic.htm -->
-		<xsl:value-of select="concat('ms-help://MS.VSCC/MS.MSDNVS/cpref/html/frlrf', translate($class-name, '.[]', ''), 'ClassTopic.htm')" />
+		<!-- RTM Example: ms-help://MS.NETFrameworkSDK/cpref/html/frlrfsystemobjectclassequalstopic.htm -->
+		<xsl:value-of select="concat('ms-help://MS.NETFrameworkSDK/cpref/html/frlrf', translate(@declaringType, '.[]', ''), 'Class', @name, 'Topic.htm')" />
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="get-filename-for-individual-member">
@@ -218,8 +230,8 @@
 		<xsl:param name="type-name" />
 		<xsl:choose>
 			<xsl:when test="starts-with($type-name, 'System.')">
-				<xsl:call-template name="get-filename-for-system-class">
-					<xsl:with-param name="class-name" select="$type-name" />
+				<xsl:call-template name="get-filename-for-system-type">
+					<xsl:with-param name="type-name" select="$type-name" />
 				</xsl:call-template>
 			</xsl:when>
 			<xsl:otherwise>

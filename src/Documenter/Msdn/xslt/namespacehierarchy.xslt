@@ -92,8 +92,8 @@
 				<xsl:attribute name="href">
 					<xsl:choose>
 						<xsl:when test="starts-with($current/@id, 'T:System.')">
-							<xsl:call-template name="get-filename-for-system-class">
-								<xsl:with-param name="class-name" select="substring-after($current/@id, 'T:')" />
+							<xsl:call-template name="get-filename-for-system-type">
+								<xsl:with-param name="type-name" select="substring-after($current/@id, 'T:')" />
 							</xsl:call-template>
 						</xsl:when>
 						<xsl:otherwise>

@@ -249,6 +249,7 @@ namespace NDoc.Test
 	public class Outer
 	{
 		/// <summary>Represents an inner class.</summary>
+		/// <remarks>These are some remarks.</remarks>
 		public class Inner
 		{
 		}
@@ -304,6 +305,8 @@ namespace NDoc.Test
 	/// See <see cref="Outer.Inner"/>.
 	/// See <see cref="Handler"/>.
 	/// See <see cref="Enum"/>.
+	/// See <see href="http://ndoc.sf.net/" />.
+	/// See <see href="http://ndoc.sf.net/">NDOC</see>.
 	/// </remarks>
 	public class See
 	{
@@ -422,6 +425,12 @@ namespace NDoc.Test
 		/// <summary>&lt;seealso cref="System.DayOfWeek"/></summary>
 		/// <seealso cref="System.DayOfWeek"/>
 		public void SeeSystemEnumeration()
+		{
+		}
+
+		/// <summary>&lt;seealso cref="System.IO"/></summary>
+		/// <seealso cref="System.IO"/>
+		public void SeeSystemNamespace()
 		{
 		}
 	}

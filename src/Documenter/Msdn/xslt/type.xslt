@@ -35,8 +35,8 @@
 				<xsl:attribute name="href">
 					<xsl:choose>
 						<xsl:when test="starts-with($list[$last]/@type, 'System.')">
-							<xsl:call-template name="get-filename-for-system-class">
-								<xsl:with-param name="class-name" select="$list[$last]/@type" />
+							<xsl:call-template name="get-filename-for-system-type">
+								<xsl:with-param name="type-name" select="$list[$last]/@type" />
 							</xsl:call-template>
 						</xsl:when>
 						<xsl:otherwise>
@@ -127,8 +127,8 @@
 								</xsl:when>
 								<xsl:otherwise>
 									<xsl:variable name="href">
-										<xsl:call-template name="get-filename-for-system-class">
-											<xsl:with-param name="class-name" select="'System.Object'" />
+										<xsl:call-template name="get-filename-for-system-type">
+											<xsl:with-param name="type-name" select="'System.Object'" />
 										</xsl:call-template>
 									</xsl:variable>
 									<a href="{$href}">System.Object</a>
