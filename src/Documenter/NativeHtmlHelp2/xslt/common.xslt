@@ -639,6 +639,7 @@
 		<xsl:param name="page-type"/>
 		<xsl:param name="overload-page"/>
 		<head>
+			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 			<title>
 				<xsl:value-of select="$title" />
 			</title>

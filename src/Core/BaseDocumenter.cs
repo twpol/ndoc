@@ -262,6 +262,10 @@ namespace NDoc.Core
 
 
 		/// <summary>Builds an Xml string combining the reflected metadata with the /doc comments.</summary>
+		/// <remarks>This now evidently writes the string in utf-16 format (and 
+		/// says so, correctly I suppose, in the xml text) so if you write this string to a file with 
+		/// utf-8 encoding it will be unparseable because the file will claim to be utf-16
+		/// but will actually be utf-8.</remarks>
 		/// <returns>XML string</returns>
 		protected string MakeXml(Project project)
 		{
@@ -278,7 +282,7 @@ namespace NDoc.Core
 			}
 
 			StringWriter swriter = new StringWriter();
-			XmlWriter writer = new XmlTextWriter(swriter,Encoding.UTF8);
+			XmlWriter writer = new XmlTextWriter(swriter);
 
 			try
 			{
