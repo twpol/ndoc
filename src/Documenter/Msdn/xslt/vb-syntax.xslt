@@ -406,27 +406,23 @@
 	<!-- -->	
 	<xsl:template name="vb-attribute">
 		<xsl:param name="attname" />
-		<xsl:if test="user:isAttributeWanted($ndoc-documented-attributes, @name)">			
-			<xsl:text>&lt;</xsl:text>
-			<xsl:if test="@target"><xsl:value-of select="@target" /> : </xsl:if>
-			<xsl:call-template name="strip-namespace-and-attribute">
-				<xsl:with-param name="name" select="@name" />
-			</xsl:call-template>
-			<xsl:if test="count(property) > 0">
-				<xsl:text>(</xsl:text>
-				<xsl:for-each select="property">
-					<xsl:if test="user:isPropertyWanted($ndoc-documented-attributes, @name) and @value!=''">
-						<xsl:value-of select="@name" />
-						<xsl:text>="</xsl:text>
-						<xsl:value-of select="@value" />
-						<xsl:text>"</xsl:text>
-						<xsl:if test="position()!=last()"><xsl:text>, </xsl:text></xsl:if>
-					</xsl:if>
-				</xsl:for-each>
-				<xsl:text>)</xsl:text>
-			</xsl:if>
-			<xsl:text>&gt;</xsl:text>
+		<xsl:text>&lt;</xsl:text>
+		<xsl:if test="@target"><xsl:value-of select="@target" /> : </xsl:if>
+		<xsl:call-template name="strip-namespace-and-attribute">
+			<xsl:with-param name="name" select="@name" />
+		</xsl:call-template>
+		<xsl:if test="count(property) > 0">
+			<xsl:text>(</xsl:text>
+			<xsl:for-each select="property">
+				<xsl:value-of select="@name" />
+				<xsl:text>="</xsl:text>
+				<xsl:value-of select="@value" />
+				<xsl:text>"</xsl:text>
+				<xsl:if test="position()!=last()"><xsl:text>, </xsl:text></xsl:if>
+			</xsl:for-each>
+			<xsl:text>)</xsl:text>
 		</xsl:if>
+		<xsl:text>&gt;</xsl:text>
 	</xsl:template>
 	<!-- -->
 </xsl:transform>
