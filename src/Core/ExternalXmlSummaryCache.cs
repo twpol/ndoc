@@ -59,8 +59,7 @@ namespace NDoc.Core
 		/// Adds given XML document to the summary cache.
 		/// </summary>
 		/// <param name="xmlFileName">The filename of XML document to cache.</param>
-		/// <param name="assemblyName">The fullname of the assembly to which to XML document refers.</param>
-		public void AddXmlDoc(string xmlFileName, string assemblyName)
+		public void AddXmlDoc(string xmlFileName)
 		{
 			int start = Environment.TickCount;
 
@@ -74,17 +73,7 @@ namespace NDoc.Core
 			{
 				if (reader != null) reader.Close();
 			}
-			cachedDocs.Add(assemblyName, xmlFileName);
-			Trace.WriteLine("Cached doc : " + ((Environment.TickCount - start) / 1000.0).ToString() + " sec.");
-		}
-
-		/// <summary>
-		/// Adds given XML document to the summary cache.
-		/// </summary>
-		/// <param name="xmlFileName">The filename of XML document to cache.</param>
-		public void AddXmlDoc(string xmlFileName)
-		{
-			AddXmlDoc(xmlFileName, "");
+			Debug.WriteLine("Cached doc : " + Path.GetFileName(xmlFileName) + ((Environment.TickCount - start) / 1000.0).ToString() + " sec.");
 		}
 
 		/// <summary>
@@ -96,6 +85,7 @@ namespace NDoc.Core
 
 			if (searchedDoc == null)
 			{
+				//Debug.WriteLine("Attempting to locate XML docs for " + type.Assembly.FullName);
 				Type t = Type.GetType(type.AssemblyQualifiedName);
 				if (t != null)
 				{
@@ -115,7 +105,7 @@ namespace NDoc.Core
 
 							if (File.Exists(infoPath))
 							{
-								Debug.WriteLine("Loading __AssemblyInfo__.ini.");
+								//Debug.WriteLine("Loading __AssemblyInfo__.ini.");
 								TextReader reader = new StreamReader(infoPath);
 								string line;
 								try
@@ -169,9 +159,8 @@ namespace NDoc.Core
 
 						if ((docPath != null) && (File.Exists(docPath)))
 						{
-							Debug.WriteLine("Loading XML Doc for " + type.Assembly.FullName);
-							Debug.WriteLine("at " + docPath);
-							AddXmlDoc(docPath, type.Assembly.FullName);
+							Debug.WriteLine("Docs found : " + docPath);
+							AddXmlDoc(docPath);
 							searchedDoc = docPath;
 						}
 					}
@@ -183,10 +172,9 @@ namespace NDoc.Core
 				{
 					Trace.WriteLine("XML Doc not found for " + type.Name);
 					searchedDoc = "";
-					//cache the document path
-					cachedDocs.Add(type.Assembly.FullName, searchedDoc);
 				}
-
+				//cache the document path
+				cachedDocs.Add(type.Assembly.FullName, searchedDoc);
 			}
 		}
 
