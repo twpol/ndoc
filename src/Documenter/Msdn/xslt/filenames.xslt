@@ -172,7 +172,7 @@
             <xsl:with-param name="name" select="$cref-name" />
           </xsl:call-template>
         </xsl:variable>
-        <xsl:value-of select="concat($ndoc-sdk-doc-base-url, translate($cref-type, '.', ''), 'Class', $cref-member, 'Topic', $ndoc-sdk-doc-file-ext)" />
+        <xsl:value-of select="concat($ndoc-sdk-doc-base-url, translate($cref-type, '.*', ''), 'Class', $cref-member, 'Topic', $ndoc-sdk-doc-file-ext)" />
       </xsl:when>
     </xsl:choose>
   </xsl:template>
@@ -184,7 +184,7 @@
 
   <xsl:template name="get-filename-for-system-type">
     <xsl:param name="type-name" />
-    <xsl:value-of select="concat($ndoc-sdk-doc-base-url, translate($type-name, '.[,]', ''), 'ClassTopic', $ndoc-sdk-doc-file-ext)" />
+    <xsl:value-of select="concat($ndoc-sdk-doc-base-url, translate($type-name, '.[,]*', ''), 'ClassTopic', $ndoc-sdk-doc-file-ext)" />
   </xsl:template>
 
   <xsl:template name="get-filename-for-system-property">

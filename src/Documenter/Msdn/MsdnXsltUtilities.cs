@@ -113,7 +113,8 @@ namespace NDoc.Documenter.Msdn
 					case "N:":	// Namespace
 						return sdkDocBaseUrl + cref.Substring(2).Replace(".", "") + sdkDocExt;
 					case "T:":	// Type: class, interface, struct, enum, delegate
-						return sdkDocBaseUrl + cref.Substring(2).Replace(".", "") + "ClassTopic" + sdkDocExt;
+						// pointer types link to the type being pointed to
+						return sdkDocBaseUrl + cref.Substring(2).Replace(".", "").Replace( "*", "" ) + "ClassTopic" + sdkDocExt;
 					case "F:":	// Field
 					case "P:":	// Property
 					case "M:":	// Method

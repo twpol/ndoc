@@ -3022,4 +3022,34 @@ namespace NDoc.Test.Preliminary
 	}
 }
 
+namespace NDoc.Test.Unsafe
+{
+	/// <summary>
+	/// This class has various mebers that are marked as unsafe and that return
+	/// pointers
+	/// </summary>
+	public class ClassWithUnsafeMembers
+	{
+		/// <summary>
+		/// A public pointer field
+		/// </summary>
+		unsafe public Int32* pointerField;
 
+		/// <summary>
+		/// Pass an unsafe pointer as a paramater
+		/// </summary>
+		/// <param name="p">A pointer to an int32</param>
+		unsafe public void PassAPointer( Int32* p )
+		{
+
+		}
+		/// <summary>
+		/// unsafe method return
+		/// </summary>
+		/// <returns>The address of an int32</returns>
+		unsafe public Int32* GetIntPointer()
+		{
+			return pointerField;
+		}
+	}
+}

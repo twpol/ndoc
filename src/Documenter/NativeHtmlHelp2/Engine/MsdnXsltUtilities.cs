@@ -396,7 +396,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 				case "N:":	// Namespace
 					return "frlrf" + cref.Substring(2).Replace( ".", "" );
 				case "T:":	// Type: class, interface, struct, enum, delegate
-					return "frlrf" + cref.Substring(2).Replace( ".", "" ) + "ClassTopic";
+					return "frlrf" + cref.Substring(2).Replace( ".", "" ).Replace( "*", "" ) + "ClassTopic";
 				case "F:":	// Field
 				case "P:":	// Property
 				case "M:":	// Method

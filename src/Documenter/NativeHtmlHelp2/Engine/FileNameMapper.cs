@@ -256,7 +256,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>Topic's base name</returns>
 		private static string BaseNameFromTypeId(string typeID)
 		{
-			return FilenamePrefix + typeID.Substring(2).Replace(".", "") + "Class";
+			return FilenamePrefix + typeID.Substring(2).Replace(".", "").Replace( "*", "" ) + "Class";
 		}
 
 		/// <summary>
