@@ -75,6 +75,7 @@ namespace NDoc.Gui
 			// cancelButton
 			// 
 			this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.cancelButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.cancelButton.Location = new System.Drawing.Point(200, 64);
 			this.cancelButton.Name = "cancelButton";
 			this.cancelButton.Size = new System.Drawing.Size(80, 24);
@@ -84,6 +85,7 @@ namespace NDoc.Gui
 			// 
 			// label1
 			// 
+			this.label1.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.label1.Location = new System.Drawing.Point(16, 8);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(184, 16);
@@ -92,6 +94,7 @@ namespace NDoc.Gui
 			// 
 			// okButton
 			// 
+			this.okButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.okButton.Location = new System.Drawing.Point(200, 32);
 			this.okButton.Name = "okButton";
 			this.okButton.Size = new System.Drawing.Size(80, 24);

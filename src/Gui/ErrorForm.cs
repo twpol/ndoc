@@ -90,7 +90,6 @@ namespace NDoc.Gui
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(ErrorForm));
 			this.m_messageTextBox = new System.Windows.Forms.TextBox();
 			this.m_closeButton = new System.Windows.Forms.Button();
 			this.m_stackTraceLabel = new System.Windows.Forms.Label();
@@ -115,6 +114,7 @@ namespace NDoc.Gui
 			// 
 			this.m_closeButton.Anchor = (System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right);
 			this.m_closeButton.DialogResult = System.Windows.Forms.DialogResult.OK;
+			this.m_closeButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.m_closeButton.Location = new System.Drawing.Point(360, 316);
 			this.m_closeButton.Name = "m_closeButton";
 			this.m_closeButton.TabIndex = 4;
@@ -122,6 +122,7 @@ namespace NDoc.Gui
 			// 
 			// m_stackTraceLabel
 			// 
+			this.m_stackTraceLabel.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.m_stackTraceLabel.Location = new System.Drawing.Point(8, 132);
 			this.m_stackTraceLabel.Name = "m_stackTraceLabel";
 			this.m_stackTraceLabel.Size = new System.Drawing.Size(88, 16);
