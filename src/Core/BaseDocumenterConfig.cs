@@ -422,7 +422,7 @@ namespace NDoc.Core
 
 		/// <summary>Gets or sets the SkipNamespacesWithoutSummaries property.</summary>
 		[
-		Category("Documentation Main Settings"),
+		Category("Visibility"),
 		Description("Setting this property to true will not document namespaces that don't have an associated namespace summary."),
 		]
 		public bool SkipNamespacesWithoutSummaries
