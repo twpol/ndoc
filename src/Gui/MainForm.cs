@@ -1869,18 +1869,10 @@ namespace NDoc.Gui
 
 			if (form.ShowDialog(this) == System.Windows.Forms.DialogResult.OK)
 			{
-				AssemblySlashDoc assemblySlashDoc = null;
-				try
-				{
-					assemblySlashDoc=form.AssySlashDoc;
-					project.AssemblySlashDocs.Add(assemblySlashDoc);
-					AddRowToListView(assemblySlashDoc);
-					EnableMenuItems(true);
-				}
-				catch(Project.AssemblyAlreadyExistsException)
-				{
-					//ignore this exception
-				}
+				AssemblySlashDoc assemblySlashDoc = form.AssySlashDoc;
+				project.AssemblySlashDocs.Add(assemblySlashDoc);
+				AddRowToListView(assemblySlashDoc);
+				EnableMenuItems(true);
 			}
 
 			EnableAssemblyItems();
@@ -2144,18 +2136,6 @@ namespace NDoc.Gui
 					AddRowToListView(assemblySlashDoc);
 					EnableMenuItems(true);
 					EnableAssemblyItems();
-				}
-				catch(Project.AssemblyAlreadyExistsException)
-				{
-					//ignore this exception
-				}
-				catch(ReflectionTypeLoadException ex)
-				{
-					string msg = string.Format(
-						"Unable to load types from {0}.\nIs {1} missing a dependency?", 
-						assemblySlashDoc.Assembly.Path, Path.GetFileName(assemblySlashDoc.Assembly.Path));
-					ErrorForm errorForm = new ErrorForm(msg, ex);
-					errorForm.ShowDialog(this);
 				}
 				finally
 				{
