@@ -39,6 +39,9 @@ namespace NDoc.Console
 				else
 				{
 					Project project = new Project();
+// vvvv  WV022402: add Variable to limit recursion depth
+					int maxDepth = 20;
+// ^^^^  WV022402
 
 					foreach (string arg in args)
 					{
@@ -57,7 +60,8 @@ namespace NDoc.Console
 									string name = pair[0].Substring(1);
 									string value = pair[1];
 
-									if (name.ToLower() == "project")
+// vvvv WV022402: replace if statement by switch and add -recurse option
+/*									if (name.ToLower() == "project")
 									{
 										project = new Project();
 										project.Read(value);
@@ -66,7 +70,27 @@ namespace NDoc.Console
 									else
 									{
 										documenter.Config.SetValue(name, value);
+									}  */
+									switch (name.ToLower())
+									{
+										case "project":
+											project = new Project();
+											project.Read(value);
+											documenter = (MsdnDocumenter)project.GetDocumenter(documenter.Name);
+											break;
+										case "recurse":
+											string[] recPair = value.Split(',');
+											if (2 == recPair.Length)
+											{
+												maxDepth = Convert.ToInt32(recPair[1]);
+											}
+											RecurseDir(ref project, recPair[0], maxDepth);
+											break;
+										default:
+											documenter.Config.SetValue(name, value);
+											break;
 									}
+// ^^^^ WV022402
 								}
 							}
 						}
@@ -102,7 +126,8 @@ namespace NDoc.Console
 
 		private static void WriteUsage(IDocumenter documenter)
 		{
-			System.Console.WriteLine("usage: NDoc.Console [-verbose] [-project=file] [-property=value...] assembly,xml [assembly,xml...]");
+// WV022402: Document new option in usage
+			System.Console.WriteLine("usage: NDoc.Console [-verbose] [-project=file] [-recurse=dir[,maxDepth]] [-property=value...] assembly,xml [assembly,xml...]");
 			System.Console.WriteLine("  available properties:");
 
 			foreach (string property in documenter.Config.GetProperties())
@@ -115,5 +140,25 @@ namespace NDoc.Console
 		{
 			System.Console.WriteLine( e.Status );
 		}
+
+// vvvv WV022402: recurse SubDirs and collect Assemblies with matching .xml-File
+		private static void RecurseDir(ref Project project, string dirName, int maxDepth)
+		{
+			if (0 == maxDepth) return;
+			string docFile;
+			foreach (string file in System.IO.Directory.GetFiles(dirName, "*.dll"))
+			{
+				docFile = System.IO.Path.GetDirectoryName(file) + "\\" + System.IO.Path.GetFileNameWithoutExtension(file) + ".xml";
+				if (System.IO.File.Exists(docFile))
+				{
+					project.AddAssemblySlashDoc(new AssemblySlashDoc(file, docFile));
+				}
+			}
+			foreach (string subDir in System.IO.Directory.GetDirectories(dirName))
+			{
+				RecurseDir(ref project, subDir, maxDepth - 1);
+			}
+		}
+// ^^^^ WV022402
 	}
 }

@@ -24,6 +24,9 @@ using System.Reflection;
 using System.Xml;
 using System.Text;
 
+// WB020102
+using NDoc.Core.WB;
+
 namespace NDoc.Core
 {
 	/// <summary>Provides the base class for documenters.</summary>
@@ -156,9 +159,25 @@ namespace NDoc.Core
 		{
 			_Project = project;
 
+// vvvvv WB020102: add assembly resolver needed to resolve assembly dependencies.
+			AssemblyResolver assemblyResolver = null;
+			string baseDirectory = ((BaseDocumenterConfig)this.Config).BaseDirectory;
+			if (string.Empty != baseDirectory) 
+			{
+				assemblyResolver = new AssemblyResolver(baseDirectory);
+				assemblyResolver.Install();
+			}
+// ^^^^^ WB020102
+
+// vvvvv WB020102: performance helper: write to memory stream instead of file.
 			// Sucks that there's no XmlNodeWriter.  Instead we
 			// have to write out to a file then load back in.
-			XmlWriter writer = new XmlTextWriter(@".\temp.xml", System.Text.Encoding.UTF8);
+//			XmlWriter writer = new XmlTextWriter(@".\temp.xml", System.Text.Encoding.UTF8);
+// ----- WB020102: replaced by
+			MemoryStream memoryStream = new MemoryStream();
+			XmlWriter writer = new XmlTextWriter(memoryStream, System.Text.Encoding.UTF8);
+// ^^^^^ WB020102
+
 			string currentAssemblyFilename = "";
 
 			try
@@ -200,7 +219,11 @@ namespace NDoc.Core
 
 				writer.Close();
 
-				xmlDocument.Load(@".\temp.xml");
+// vvvvv WB020201: performance helper: load from memory stream instead of file.
+//				xmlDocument.Load(@".\temp.xml");
+// ----- WB020201: replaced by
+				xmlDocument.Load(new MemoryStream(memoryStream.GetBuffer()));
+// ^^^^^ WB020201
 			}
 			catch (Exception e)
 			{
@@ -212,7 +235,14 @@ namespace NDoc.Core
 			finally
 			{
 				writer.Close();
-				File.Delete(@".\temp.xml");
+// vvvvv WB020201: performance helper: no more temp. file; deinstall assembly resolver
+//				File.Delete(@".\temp.xml");
+// ----- WB020201: replaced by
+				if (null != assemblyResolver) 
+				{
+					assemblyResolver.Deinstall();
+				}
+// ^^^^^ WB020201
 			}
 		}
 

@@ -66,9 +66,48 @@ namespace NDoc.Core
 		/// <summary>Adds an assembly/doc pair to the project.</summary>
 		public void AddAssemblySlashDoc(AssemblySlashDoc assemblySlashDoc)
 		{
-			_AssemblySlashDocs.Add(assemblySlashDoc);
-			IsDirty = true;
+// vvvvv WB020201: Check for duplicates before inserting!!!
+//			_AssemblySlashDocs.Add(assemblySlashDoc);
+//			IsDirty = true;
+// ----- WB020201: replaced by
+			if (false == FindAssemblySlashDoc(assemblySlashDoc)) 
+			{
+				_AssemblySlashDocs.Add(assemblySlashDoc);
+                IsDirty = true;
+			}
+// ^^^^^ WB020201
 		}
+
+// vvvvv WB020201: Search for assemblySlashDoc by assembly and slashDoc filename
+		private bool FindAssemblySlashDoc(AssemblySlashDoc assemblySlashDoc) 
+		{
+			foreach (AssemblySlashDoc a in this._AssemblySlashDocs) 
+			{
+				if (a.AssemblyFilename == assemblySlashDoc.AssemblyFilename &&
+					a.SlashDocFilename == assemblySlashDoc.SlashDocFilename) 
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+// ^^^^^ WB020201
+
+// vvvvv WB020204: find assemblySlashDoc by assembly name
+		public int FindAssemblySlashDocByName(string assemblyName) 
+		{
+			int count = 0;
+			foreach (AssemblySlashDoc a in this._AssemblySlashDocs) 
+			{
+				if (a.AssemblyFilename == assemblyName) 
+				{
+					return count;
+				}
+				count++;
+			}
+			return -1;
+		}
+// ^^^^^ WB020204
 
 		/// <summary>Gets an assembly/doc pair.</summary>
 		public AssemblySlashDoc GetAssemblySlashDoc(int index)

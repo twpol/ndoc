@@ -1233,6 +1233,7 @@ namespace NDoc.Test
 	/// <summary>This is a private class.</summary>
 	class PrivateClass
 	{
+#warning This type should not appear when DocumentInternals is false.
 		/// <summary>This is a public enum nested in a private class.</summary>
 		public enum PublicEnumInPrivateClass
 		{
@@ -1240,6 +1241,19 @@ namespace NDoc.Test
 			Foo,
 			/// <summary>Bar</summary>
 			Bar
+		}
+	}
+
+	/// <summary>This class has a member that uses 2D rectangular arrays.</summary>
+	public class Matrix
+	{
+#warning The documentation for this member is missing.
+		/// <summary>Returns the inverse of a matrix.</summary>
+		/// <param name="matrix">A matrix.</param>
+		/// <returns>The inverted matrix.</returns>
+		public static double[,] Inverse(double[,] matrix)
+		{
+			return null;
 		}
 	}
 }
