@@ -235,7 +235,15 @@ namespace NDoc.Core
 			if ( !Directory.Exists( sourceDirectory ) )
 				throw new ArgumentException( string.Format( "The source location {0} does not exist", sourceDirectory ) );
 
-			ImportDirectory( new DirectoryInfo( sourceDirectory ), new DirectoryInfo( this.ContentDirectory ) );
+			DirectoryInfo sourceDir = new DirectoryInfo( sourceDirectory );
+
+			// first import all the files in the directory directly to content
+			foreach( FileInfo file in sourceDir.GetFiles() )
+				Workspace.ImportFile( file, this.ContentDirectory );
+
+			// then recursively import any foldes in sourceDirectory
+			foreach( DirectoryInfo dir in sourceDir.GetDirectories() )
+				ImportDirectory( dir, new DirectoryInfo( this.ContentDirectory ) );
 		}
 
 		/// <summary>
