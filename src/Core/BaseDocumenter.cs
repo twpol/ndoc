@@ -301,7 +301,8 @@ namespace NDoc.Core
 				(type.IsNestedFamORAssem && MyConfig.DocumentProtected) ||
 				(type.IsNestedAssembly && MyConfig.DocumentInternals) ||
 				(type.IsNestedFamANDAssem && MyConfig.DocumentInternals) ||
-				(type.IsNestedPrivate && MyConfig.DocumentPrivates));
+				(type.IsNestedPrivate && MyConfig.DocumentPrivates)) &&
+				(!MyConfig.UseNamespaceDocSummaries || (type.Name != "NamespaceDoc"));
 		}
 
 		private bool MustDocumentMethod(MethodBase method)
@@ -548,7 +549,23 @@ namespace NDoc.Core
 					ourNamespaceName = namespaceName;
 				}
 
-				string namespaceSummary = _Project.GetNamespaceSummary(ourNamespaceName);
+				string namespaceSummary = null;
+				if (MyConfig.UseNamespaceDocSummaries)
+				{
+					string xPathExpr;
+					if (namespaceName == null)
+						xPathExpr = "/doc/members/member[@name=\"T:NamespaceDoc\"]/summary";
+					else
+						xPathExpr = "/doc/members/member[@name=\"T:" + namespaceName + ".NamespaceDoc\"]/summary";
+
+					XmlNode xmlNode = currentSlashDoc.SelectSingleNode(xPathExpr);
+
+					if (xmlNode != null && xmlNode.HasChildNodes)
+						namespaceSummary = xmlNode.InnerXml;
+				}
+
+				if ((namespaceSummary == null) || (namespaceSummary.Length == 0))
+					namespaceSummary = _Project.GetNamespaceSummary(ourNamespaceName);
 
 				if (MyConfig.SkipNamespacesWithoutSummaries &&
 					(namespaceSummary == null || namespaceSummary.Length == 0))

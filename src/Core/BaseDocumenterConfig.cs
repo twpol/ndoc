@@ -50,6 +50,7 @@ namespace NDoc.Core
 			_CopyrightHref = string.Empty;
 
 			_SkipNamespacesWithoutSummaries = false;
+			_UseNamespaceDocSummaries = false;
 			_AutoPropertyBackerSummaries = false;
 			_AutoDocumentConstructors = true;
 
@@ -444,6 +445,29 @@ namespace NDoc.Core
 			set
 			{
 				_SkipNamespacesWithoutSummaries = value;
+				SetDirty();
+			}
+		}
+
+		bool _UseNamespaceDocSummaries;
+
+		/// <summary>Gets or sets the UseNamespaceDocSummaries property.</summary>
+		[
+		Category("Documentation Main Settings"),
+		Description("If true, the documenter will look for a class with the name "
+			+ "\"NamespaceDoc\" in each namespace. The summary from that class "
+			+ "will then be used as the namespace summary.  The class itself will not "
+			+ "show up in the resulting documentation output. You may want to use "
+			+ "#if ... #endif together with conditional compilation constants to "
+			+ "exclude the NamespaceDoc classes from release build assemblies."),
+		]
+		public bool UseNamespaceDocSummaries
+		{
+			get { return _UseNamespaceDocSummaries; }
+
+			set
+			{
+				_UseNamespaceDocSummaries = value;
 				SetDirty();
 			}
 		}
