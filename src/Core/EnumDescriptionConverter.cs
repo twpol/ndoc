@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.Reflection;
 
 namespace NDoc.Core
@@ -92,14 +93,14 @@ namespace NDoc.Core
 
 		/// <summary>
 		/// <para>Converts the given value object to the specified type, using the specified context and culture information.</para>
-		/// <para>This member overrides <see cref="TypeConverter.ConvertTo"/>.</para>
+		/// <para>This member overrides <see cref="TypeConverter.ConvertTo(ITypeDescriptorContext, CultureInfo, object, Type)"/>.</para>
 		/// </summary>
 		/// <param name="context">An <see cref="ITypeDescriptorContext"/> that provides a format context.</param>
-		/// <param name="culture">A <see cref="System.Globalization.CultureInfo"/> object. If a <see langword="null"/> is passed, the current culture is assumed.</param>
+		/// <param name="culture">A <see cref="CultureInfo"/> object. If a <see langword="null"/> is passed, the current culture is assumed.</param>
 		/// <param name="value">The <see cref="Object"/> to convert.</param>
 		/// <param name="destinationType">The <see cref="Type"/> to convert the <paramref name="value"/> parameter to.</param>
 		/// <returns>An <see cref="Object"/> that represents the converted value.</returns>
-		public override object ConvertTo(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, Type destinationType)
+		public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
 		{
 
 			if (destinationType == typeof(string)) 
@@ -123,13 +124,13 @@ namespace NDoc.Core
 
 		/// <summary>
 		/// <para>Converts the given object to the type of this converter, using the specified context and culture information.</para>
-		/// <para>This member overrides <see cref="TypeConverter.ConvertFrom"/>.</para>
+		/// <para>This member overrides <see cref="TypeConverter.ConvertFrom(ITypeDescriptorContext, CultureInfo, object)"/>.</para>
 		/// </summary>
 		/// <param name="context">An <see cref="ITypeDescriptorContext"/> that provides a format context.</param>
-		/// <param name="culture">A <see cref="System.Globalization.CultureInfo"/> object. If a <see langword="null"/> is passed, the current culture is assumed.</param>
+		/// <param name="culture">A <see cref="CultureInfo"/> object. If a <see langword="null"/> is passed, the current culture is assumed.</param>
 		/// <param name="value">The <see cref="Object"/> to convert.</param>
 		/// <returns>An <see cref="Object"/> that represents the converted value.</returns>
-		public override object ConvertFrom(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value)
+		public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
 		{
 			//Descripton or named-value => enum
 			if (value is string) 
