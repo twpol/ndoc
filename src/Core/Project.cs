@@ -32,9 +32,11 @@ namespace NDoc.Core
 		{
 			_Documenters = FindDocumenters();
 			_IsDirty = false;
+			_namespaces = new SortedList();
 		}
 
 		private bool _IsDirty;
+		private SortedList _namespaces;
 
 		/// <summary>Gets the IsDirty property.</summary>
 		public bool IsDirty
@@ -57,28 +59,39 @@ namespace NDoc.Core
 
 		private ArrayList _AssemblySlashDocs = new ArrayList();
 
-		/// <summary>Gets or sets the AssemblySlashDocs property.</summary>
-		private ArrayList AssemblySlashDocs
+//		/// <summary>Gets or sets the AssemblySlashDocs property.</summary>
+//		private ArrayList AssemblySlashDocs
+//		{
+//			get { return _AssemblySlashDocs; }
+//		}
+
+		/// <summary>
+		/// A custom exception to detect if a duplicate assembly is beeing added.
+		/// </summary>
+		public class AssemblyAlreadyExistsException : ApplicationException
 		{
-			get { return _AssemblySlashDocs; }
+			public AssemblyAlreadyExistsException(string message) : base(message)
+			{}
 		}
 
 		/// <summary>Adds an assembly/doc pair to the project.</summary>
 		public void AddAssemblySlashDoc(AssemblySlashDoc assemblySlashDoc)
 		{
-			if (false == FindAssemblySlashDoc(assemblySlashDoc))
+			if (FindAssemblySlashDoc(assemblySlashDoc))
 			{
-				_AssemblySlashDocs.Add(assemblySlashDoc);
-				IsDirty = true;
+				throw new AssemblyAlreadyExistsException("Assembly already exists.");
 			}
+
+			_AssemblySlashDocs.Add(assemblySlashDoc);
+			AddNamespacesFromAssembly(assemblySlashDoc.AssemblyFilename);
+			IsDirty = true;
 		}
 
 		private bool FindAssemblySlashDoc(AssemblySlashDoc assemblySlashDoc)
 		{
 			foreach (AssemblySlashDoc a in this._AssemblySlashDocs)
 			{
-				if (a.AssemblyFilename == assemblySlashDoc.AssemblyFilename &&
-					a.SlashDocFilename == assemblySlashDoc.SlashDocFilename)
+				if (Path.GetFullPath(a.AssemblyFilename) == Path.GetFullPath(assemblySlashDoc.AssemblyFilename))
 				{
 					return true;
 				}
@@ -125,54 +138,55 @@ namespace NDoc.Core
 		/// <summary>Removes an assembly/doc pair from the project.</summary>
 		public void RemoveAssemblySlashDoc(int index)
 		{
+			string assemblyFile = ((AssemblySlashDoc)_AssemblySlashDocs[index]).AssemblyFilename;
 			_AssemblySlashDocs.RemoveAt(index);
 			IsDirty = true;
 		}
 
-		private Hashtable _NamespaceSummaries = new Hashtable();
-
-		/// <summary>Gets or sets the NamespaceSummaries property.</summary>
-		private Hashtable NamespaceSummaries
-		{
-			get { return _NamespaceSummaries; }
-			set { _NamespaceSummaries = value; }
-		}
-
-		/// <summary>Adds a namespace summary to the project.</summary>
+		/// <summary>Sets a namespace summary.</summary>
 		public void SetNamespaceSummary(string namespaceName, string summary)
 		{
-			if (namespaceName != null)
+			//ignore a namespace that is not already in the collecton
+			if (_namespaces.ContainsKey(namespaceName))
 			{
-				if (summary != null && summary.Length > 0)
+				//set dirty only if the value changed
+				if (summary.Length == 0)
 				{
-					_NamespaceSummaries[namespaceName] = summary;
+					summary = null;
 				}
-				else
+				if ((string)_namespaces[namespaceName] != summary)
 				{
-					_NamespaceSummaries.Remove(namespaceName);
+					_namespaces[namespaceName] = summary;
+					IsDirty = true;
 				}
-
-				IsDirty = true;
 			}
 		}
 
 		/// <summary>Gets the summary for a namespace.</summary>
 		public string GetNamespaceSummary(string namespaceName)
 		{
-			string summary = null;
-
-			if (namespaceName != null)
-			{
-				summary = _NamespaceSummaries[namespaceName] as string;
-			}
-
-			return summary;
+			return (string)_namespaces[namespaceName];
 		}
 
-		/// <summary>Gets an enumerable list of namespace names with summaries.</summary>
-		public IEnumerable GetNamespaceSummaries()
+		/// <summary>Gets an enumerable list of namespace names.</summary>
+		public IEnumerable GetNamespaces()
 		{
-			return _NamespaceSummaries.Keys;
+			return _namespaces.Keys;
+		}
+
+		// enumerates the namespaces from an assembly 
+		// and add them to the project if new
+		private void AddNamespacesFromAssembly(string assemblyFile)
+		{
+			Assembly a = Assembly.LoadFrom(assemblyFile);
+			foreach (Type t in a.GetTypes())
+			{
+				string ns = t.Namespace;
+				if ((ns != null) && (!_namespaces.ContainsKey(ns)))
+				{
+					_namespaces.Add(ns, null);
+				}
+			}
 		}
 
 		private ArrayList _Documenters = new ArrayList();
@@ -300,7 +314,7 @@ namespace NDoc.Core
 					AssemblySlashDoc assemblySlashDoc = new AssemblySlashDoc();
 					assemblySlashDoc.AssemblyFilename = reader["location"];
 					assemblySlashDoc.SlashDocFilename = reader["documentation"];
-					AssemblySlashDocs.Add(assemblySlashDoc);
+					AddAssemblySlashDoc(assemblySlashDoc);
 				}
 				reader.Read();
 			}
@@ -314,7 +328,13 @@ namespace NDoc.Core
 				{
 					string name = reader["name"];
 					string summary = reader.ReadInnerXml();
-					NamespaceSummaries[name] = summary;
+
+					//assume that the assemblies are read first
+					//and ignore summaries from unknown namespaces
+					if (_namespaces.ContainsKey(name))
+					{
+						_namespaces[name] = summary;
+					}
 
 					// Reader cursor already moved to next node.
 				}
@@ -372,6 +392,7 @@ namespace NDoc.Core
 
 				writer.WriteStartElement("project");
 
+				//do not change the order of those lines
 				WriteAssemblySlashDocs(writer);
 				WriteNamespaceSummaries(writer);
 				WriteDocumenters(writer);
@@ -396,11 +417,11 @@ namespace NDoc.Core
 
 		private void WriteAssemblySlashDocs(XmlWriter writer)
 		{
-			if (AssemblySlashDocs.Count > 0)
+			if (_AssemblySlashDocs.Count > 0)
 			{
 				writer.WriteStartElement("assemblies");
 
-				foreach (AssemblySlashDoc assemblySlashDoc in AssemblySlashDocs)
+				foreach (AssemblySlashDoc assemblySlashDoc in _AssemblySlashDocs)
 				{
 					writer.WriteStartElement("assembly");
 					writer.WriteAttributeString("location", assemblySlashDoc.AssemblyFilename);
@@ -414,15 +435,15 @@ namespace NDoc.Core
 
 		private void WriteNamespaceSummaries(XmlWriter writer)
 		{
-			if (NamespaceSummaries.Count > 0)
+			if (_namespaces.Count > 0)
 			{
 				writer.WriteStartElement("namespaces");
 
-				foreach (string ns in NamespaceSummaries.Keys)
+				foreach (string ns in _namespaces.Keys)
 				{
 					writer.WriteStartElement("namespace");
 					writer.WriteAttributeString("name", ns);
-					writer.WriteRaw((string)NamespaceSummaries[ns]);
+					writer.WriteRaw((string)_namespaces[ns]);
 					writer.WriteEndElement();
 				}
 
@@ -448,8 +469,8 @@ namespace NDoc.Core
 		/// <summary>Clears the project.</summary>
 		public void Clear()
 		{
-			AssemblySlashDocs.Clear();
-			NamespaceSummaries.Clear();
+			_AssemblySlashDocs.Clear();
+			_namespaces.Clear();
 
 			foreach (IDocumenter documenter in Documenters)
 			{

@@ -47,15 +47,13 @@ namespace NDoc.Gui
 		private System.Windows.Forms.ComboBox namespaceComboBox;
 		private string selectedText;
 
-		private StringCollection _Namespaces;
 		private Project _Project;
 
 		/// <summary>Allows the user to associate a summaries with the
 		/// namespaces found in the assemblies that are being 
 		/// documented.</summary>
-		public NamespaceSummariesForm(StringCollection namespaces, Project project)
+		public NamespaceSummariesForm(Project project)
 		{
-			_Namespaces = namespaces;
 			_Project = project;
 
 			//
@@ -63,7 +61,7 @@ namespace NDoc.Gui
 			//
 			InitializeComponent();
 
-			foreach (string namespaceName in _Namespaces)
+			foreach (string namespaceName in _Project.GetNamespaces())
 			{
 				namespaceComboBox.Items.Add(namespaceName);
 			}

@@ -669,6 +669,7 @@ namespace NDoc.Gui
 			this.assembliesListView.Size = new System.Drawing.Size(368, 120);
 			this.assembliesListView.TabIndex = 13;
 			this.assembliesListView.View = System.Windows.Forms.View.List;
+			this.assembliesListView.DoubleClick += new System.EventHandler(this.assembliesListView_DoubleClick);
 			this.assembliesListView.SelectedIndexChanged += new System.EventHandler(this.assembliesListView_SelectedIndexChanged);
 			// 
 			// deleteButton
@@ -1597,15 +1598,26 @@ namespace NDoc.Gui
 			if (form.ShowDialog(this) == System.Windows.Forms.DialogResult.OK)
 			{
 				AssemblySlashDoc  assemblySlashDoc = new AssemblySlashDoc();
-
-				assemblySlashDoc.AssemblyFilename = form.AssemblyFilename;
-				assemblySlashDoc.SlashDocFilename = form.SlashDocFilename;
-				project.AddAssemblySlashDoc(assemblySlashDoc);
-				AddRowToListView(assemblySlashDoc);
-				EnableMenuItems(true);
+				try
+				{
+					assemblySlashDoc.AssemblyFilename = form.AssemblyFilename;
+					assemblySlashDoc.SlashDocFilename = form.SlashDocFilename;
+					project.AddAssemblySlashDoc(assemblySlashDoc);
+					AddRowToListView(assemblySlashDoc);
+					EnableMenuItems(true);
+				}
+				catch(Project.AssemblyAlreadyExistsException)
+				{
+					//ignore this exception
+				}
 			}
 
 			EnableAssemblyItems();
+		}
+
+		private void assembliesListView_DoubleClick(object sender, System.EventArgs e)
+		{
+			editButton_Click(sender, e);
 		}
 
 		private void editButton_Click (object sender, System.EventArgs e)
@@ -1694,30 +1706,7 @@ namespace NDoc.Gui
 					return;
 				}
 				
-				Hashtable editNamespaceSummaries = new Hashtable();
-				XmlDocumenter xmlDocumenter = new XmlDocumenter();
-				XmlDocument xmlDocumentation = new XmlDocument();
-
-				// Check for any new namespaces and add them to the Hashtable
-				((XmlDocumenterConfig)xmlDocumenter.Config).OutputFile = @"./namespaceSummaries.xml";
-				xmlDocumenter.Build(project);
-				xmlDocumentation.Load(@"./namespaceSummaries.xml");
-				File.Delete(@"./namespaceSummaries.xml");
-
-				XmlNodeList namespaceNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace");
-
-				StringCollection namespaces = new StringCollection();
-
-				foreach (XmlNode namespaceNode in namespaceNodes)
-				{
-					string namespaceName = (string)namespaceNode.Attributes["name"].Value;
-					if (!namespaces.Contains(namespaceName))
-					{
-						namespaces.Add(namespaceName);
-					}
-				}
-
-				form = new NamespaceSummariesForm(namespaces, project);
+				form = new NamespaceSummariesForm(project);
 				form.StartPosition = FormStartPosition.CenterParent;
 
 			}
@@ -1777,5 +1766,6 @@ namespace NDoc.Gui
 		}
 
 		#endregion // Event Handlers
+
 	}
 }
