@@ -80,8 +80,6 @@ namespace NDoc.Documenter.Msdn
 		/// call methods with an ArraList parameter.</remarks>
 		public string GetHRef(System.Collections.ArrayList list)
 		{
-			System.Diagnostics.Trace.WriteLine("Count:   " + list.Count);
-			System.Diagnostics.Trace.WriteLine("Type[0]: " + list[0].GetType().FullName);
 			string cref = (string)list[0];
 			return GetHRef(cref);
 		}
@@ -93,8 +91,6 @@ namespace NDoc.Documenter.Msdn
 		/// <param name="cref">CRef for which the HRef will be looked up.</param>
 		public string GetHRef(string cref)
 		{
-			System.Diagnostics.Trace.WriteLine("cref:    " + cref);
-
 			if ((cref.Length < 2) || (cref[1] != ':'))
 				return string.Empty;
 
@@ -140,8 +136,6 @@ namespace NDoc.Documenter.Msdn
 		/// call methods with an ArraList parameter.</remarks>
 		public string GetName(System.Collections.ArrayList list)
 		{
-			System.Diagnostics.Trace.WriteLine("Count:   " + list.Count);
-			System.Diagnostics.Trace.WriteLine("Type[0]: " + list[0].GetType().FullName);
 			string cref = (string)list[0];
 			return GetName(cref);
 		}
