@@ -25,7 +25,7 @@
 
 <body>
 
-<div id="Header"><a href="index.html" title="NDoc Home">NDoc</a> : an extensible documentation generation tool for .NET developers</div>
+<div id="Header"><a href="http://ndoc.sourceforge.net/" title="NDoc Home">NDoc</a> : an extensible documentation generation tool for .NET developers</div>
 
 <div id="Content">
   <h1><xsl:value-of select="$title"/></h1>
@@ -44,15 +44,22 @@
 
   <h4>releases</h4>
 
-  <xsl:for-each select="/ndoc/release">
-    <a
-      href="{@link}"
-      title="Download {@name}"
-    >
-      <xsl:value-of select="@date"/>
-    </a>
-    <br/>
-  </xsl:for-each>
+  <xsl:choose>
+    <xsl:when test="/ndoc/release">
+      <xsl:for-each select="/ndoc/release">
+        <a
+          href="{@link}"
+          title="Download {@name}"
+        >
+          <xsl:value-of select="@date"/>
+        </a>
+        <br/>
+      </xsl:for-each>
+    </xsl:when>
+    <xsl:otherwise>
+      <p>none yet</p>
+    </xsl:otherwise>
+  </xsl:choose>
 
   <h4>developers</h4>
 
