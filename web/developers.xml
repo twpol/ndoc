@@ -2,7 +2,8 @@
 
 	<developer
 		id="jason"
-		sourceforge-id="injektilo"
+		sourceforge-name="injektilo"
+		sourceforge-id="87620"
 		full-name="Jason Diamond"
 		short-name="Jason"
 		web="http://injektilo.org/"
@@ -11,7 +12,8 @@
 
 	<developer
 		id="kral"
-		sourceforge-id="kraldon"
+		sourceforge-name="kraldon"
+		sourceforge-id="97544"
 		full-name="Kral Ferch"
 		short-name="Kral"
 		email="kral_ferch@hotmail.com"
@@ -19,7 +21,8 @@
 
 	<developer
 		id="jc"
-		sourceforge-id="jcman"
+		sourceforge-name="jcman"
+		sourceforge-id="235364"
 		full-name="Jean-Claude Manoli"
 		short-name="Jean-Claude"
 		web="http://manoli.net/"
@@ -28,10 +31,20 @@
 
 	<developer
 		id="keith"
-		sourceforge-id="r_keith_hill"
+		sourceforge-name="r_keith_hill"
+		sourceforge-id="129858"
 		full-name="Keith Hill"
 		short-name="Keith"
 		email="r_keith_hill@hotmail.com"
+	/>
+
+	<developer
+		id="pascal"
+		sourceforge-name="bourquep"
+		sourceforge-id="399623"
+		full-name="Pascal Bourque"
+		short-name="Pascal"
+		email="pascal_bourque@hotmail.com"
 	/>
 
 </developers>
