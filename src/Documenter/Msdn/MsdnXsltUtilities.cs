@@ -70,21 +70,6 @@ namespace NDoc.Documenter.Msdn
 			get { return sdkDocExt; }
 		}
 
-#if MONO
-		/// <summary>
-		/// Returns an HRef for a CRef.
-		/// </summary>
-		/// <param name="list">The argument list containing the 
-		/// cRef for which the HRef will be looked up.</param>
-		/// <remarks>Mono needs this overload, as its XsltTransform can only
-		/// call methods with an ArraList parameter.</remarks>
-		public string GetHRef(System.Collections.ArrayList list)
-		{
-			string cref = (string)list[0];
-			return GetHRef(cref);
-		}
-#endif
-
 		/// <summary>
 		/// Returns an HRef for a CRef.
 		/// </summary>
@@ -125,22 +110,6 @@ namespace NDoc.Documenter.Msdn
 				}
 			}
 		}
-
-
-#if MONO
-		/// <summary>
-		/// Returns a name for a CRef.
-		/// </summary>
-		/// <param name="list">The argument list containing the 
-		/// cRef for which the HRef will be looked up.</param>
-		/// <remarks>Mono needs this overload, as its XsltTransform can only
-		/// call methods with an ArraList parameter.</remarks>
-		public string GetName(System.Collections.ArrayList list)
-		{
-			string cref = (string)list[0];
-			return GetName(cref);
-		}
-#endif
 
 		/// <summary>
 		/// Returns a name for a CRef.
