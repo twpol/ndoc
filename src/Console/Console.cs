@@ -162,8 +162,9 @@ namespace NDoc.ConsoleApplication
 			}
 			catch( Exception except )
 			{
-				Console.WriteLine( "Error: " + except.Message );
-				System.Diagnostics.Trace.WriteLine( "Exception: " + Environment.NewLine + except.ToString() );
+				string errorText= BuildExceptionText(except);
+				Console.WriteLine(errorText);
+				System.Diagnostics.Trace.WriteLine(errorText);
 				return 2;
 			}
 		}
@@ -330,6 +331,49 @@ namespace NDoc.ConsoleApplication
 			{
 				RecurseDir(subDir, maxDepth - 1);
 			}
+		}
+
+		private static string BuildExceptionText(Exception ex)
+		{
+			StringBuilder strBld = new StringBuilder();
+
+			Exception tmpEx;
+			tmpEx= ex;
+			while (tmpEx != null)
+			{
+				strBld.AppendFormat("Error: {0}", tmpEx.GetType().ToString());
+				strBld.Append(Environment.NewLine);
+				strBld.Append(tmpEx.Message);
+				strBld.Append(Environment.NewLine);
+				tmpEx = tmpEx.InnerException;
+			}
+			strBld.Append(Environment.NewLine);
+
+			ReflectionTypeLoadException rtle = ex as ReflectionTypeLoadException;
+			if (rtle != null)
+			{
+				Hashtable fileLoadExceptions = new Hashtable();
+				foreach(Exception loaderEx in rtle.LoaderExceptions)
+				{
+					System.IO.FileLoadException fileLoadEx = loaderEx as System.IO.FileLoadException;
+					if (fileLoadEx !=null)
+					{
+						if (!fileLoadExceptions.ContainsKey(fileLoadEx.FileName))
+						{
+							fileLoadExceptions.Add(fileLoadEx.FileName,null);
+							strBld.Append("Unable to load: " + fileLoadEx.FileName + Environment.NewLine);
+						}
+					}
+					else
+					{
+						strBld.Append(loaderEx.Message + Environment.NewLine);
+					}
+				}
+			}
+
+			strBld.Append(tmpEx.StackTrace);
+
+			return strBld.ToString();
 		}
 	}
 }
