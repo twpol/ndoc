@@ -1065,7 +1065,7 @@ namespace NDoc.Gui
 			BuildWorker buildWorker = new BuildWorker(documenter, project);
 			buildThread = new Thread(new ThreadStart(buildWorker.ThreadProc));
 			buildThread.Name = "Build";
-			buildThread.IsBackground = true;
+			buildThread.Priority = ThreadPriority.BelowNormal;
 
 			ConfigureUIForBuild(true);
 
@@ -1104,29 +1104,25 @@ namespace NDoc.Gui
 				return;
 			}
 
+			//check if thread has been aborted
+			Exception iex = ex;
+			do
+			{
+				if (iex is ThreadAbortException)
+				{
+					return;
+				}
+				iex = iex.InnerException;
+			} while (iex != null);
+
 			// Process exception
 			if (ex is DocumenterException)
 			{
-				//check if thread has been aborted
-				while (ex.InnerException != null)
-				{
-					if (ex.InnerException is ThreadAbortException)
-					{
-						return;
-					}
-					ex = ex.InnerException;
-				}
-
 				MessageBox.Show(this, ex.Message, "NDoc Failed to Build Documentation",
 						        MessageBoxButtons.OK, MessageBoxIcon.Information);
 			}
 			else 
 			{
-				//check if thread has been aborted
-				if (ex is ThreadAbortException)
-				{
-					return;
-				}
 				string msg = String.Format("An error occured while trying to build the " +
 						                    "documentation.\n\n{0}", ex.ToString());
 

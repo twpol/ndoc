@@ -16,14 +16,14 @@ namespace NDoc.Gui
 	{
 		#region Fields
 		private System.Windows.Forms.Button closeButton;
-		private System.Windows.Forms.ColumnHeader versionColumnHeader;
 		private System.Windows.Forms.RichTextBox richTextBox;
-		private System.Windows.Forms.ColumnHeader assemblyColumnHeader;
 		private NDoc.Gui.HeaderGroupBox urlHeaderGroupBox;
-		private NDoc.Gui.HeaderGroupBox versionHeaderGroupBox;
 		private System.Windows.Forms.LinkLabel mailLinkLabel;
 		private System.Windows.Forms.LinkLabel webLinkLabel;
+		private NDoc.Gui.HeaderGroupBox versionHeaderGroupBox;
+		private System.Windows.Forms.ColumnHeader assemblyColumnHeader;
 		private System.Windows.Forms.ListView assembliesListView;
+		private System.Windows.Forms.ColumnHeader versionColumnHeader;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -55,8 +55,8 @@ namespace NDoc.Gui
 			// Set up web links
 			webLinkLabel.Links.Add(12, 12, "http://sourceforge.net/projects/ndoc");
 			webLinkLabel.Links.Add(26, 13, "http://sourceforge.net/tracker/?func=add&group_id=36057&atid=416078");
-			webLinkLabel.Links.Add(41, 12, "http://sourceforge.net/mail/?group_id=36057");
-			webLinkLabel.Links.Add(55, 10, "http://www.opensource.org/");
+			webLinkLabel.Links.Add(41, 11, "http://sourceforge.net/mail/?group_id=36057");
+			webLinkLabel.Links.Add(54, 10, "http://www.opensource.org/");
 
 			try 
 			{
@@ -131,9 +131,9 @@ namespace NDoc.Gui
 				| System.Windows.Forms.AnchorStyles.Right);
 			this.mailLinkLabel.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.mailLinkLabel.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
-			this.mailLinkLabel.Location = new System.Drawing.Point(8, 24);
+			this.mailLinkLabel.Location = new System.Drawing.Point(8, 16);
 			this.mailLinkLabel.Name = "mailLinkLabel";
-			this.mailLinkLabel.Size = new System.Drawing.Size(472, 16);
+			this.mailLinkLabel.Size = new System.Drawing.Size(504, 16);
 			this.mailLinkLabel.TabIndex = 0;
 			this.mailLinkLabel.Text = "Developers:  Jason Diamond, Kral Ferch and Jean-Claude Manoli";
 			this.mailLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.mailLinkLabel_LinkClicked);
@@ -147,9 +147,9 @@ namespace NDoc.Gui
 																								 this.assemblyColumnHeader,
 																								 this.versionColumnHeader});
 			this.assembliesListView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-			this.assembliesListView.Location = new System.Drawing.Point(8, 24);
+			this.assembliesListView.Location = new System.Drawing.Point(8, 16);
 			this.assembliesListView.Name = "assembliesListView";
-			this.assembliesListView.Size = new System.Drawing.Size(480, 118);
+			this.assembliesListView.Size = new System.Drawing.Size(504, 132);
 			this.assembliesListView.TabIndex = 0;
 			this.assembliesListView.View = System.Windows.Forms.View.Details;
 			// 
@@ -161,14 +161,14 @@ namespace NDoc.Gui
 			// versionColumnHeader
 			// 
 			this.versionColumnHeader.Text = "Version";
-			this.versionColumnHeader.Width = 225;
+			this.versionColumnHeader.Width = 221;
 			// 
 			// closeButton
 			// 
 			this.closeButton.Anchor = (System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right);
 			this.closeButton.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.closeButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.closeButton.Location = new System.Drawing.Point(424, 368);
+			this.closeButton.Location = new System.Drawing.Point(448, 396);
 			this.closeButton.Name = "closeButton";
 			this.closeButton.TabIndex = 0;
 			this.closeButton.Text = "&Close";
@@ -179,10 +179,10 @@ namespace NDoc.Gui
 				| System.Windows.Forms.AnchorStyles.Right);
 			this.richTextBox.BackColor = System.Drawing.SystemColors.Control;
 			this.richTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.richTextBox.Location = new System.Drawing.Point(8, 8);
+			this.richTextBox.Location = new System.Drawing.Point(16, 8);
 			this.richTextBox.Name = "richTextBox";
 			this.richTextBox.ReadOnly = true;
-			this.richTextBox.Size = new System.Drawing.Size(504, 132);
+			this.richTextBox.Size = new System.Drawing.Size(512, 136);
 			this.richTextBox.TabIndex = 4;
 			this.richTextBox.Text = "";
 			// 
@@ -197,7 +197,7 @@ namespace NDoc.Gui
 			this.urlHeaderGroupBox.Location = new System.Drawing.Point(8, 152);
 			this.urlHeaderGroupBox.Name = "urlHeaderGroupBox";
 			this.urlHeaderGroupBox.Padding = 0;
-			this.urlHeaderGroupBox.Size = new System.Drawing.Size(488, 56);
+			this.urlHeaderGroupBox.Size = new System.Drawing.Size(520, 56);
 			this.urlHeaderGroupBox.TabIndex = 5;
 			this.urlHeaderGroupBox.TabStop = false;
 			this.urlHeaderGroupBox.Text = "Contact Information:";
@@ -208,11 +208,11 @@ namespace NDoc.Gui
 				| System.Windows.Forms.AnchorStyles.Right);
 			this.webLinkLabel.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.webLinkLabel.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
-			this.webLinkLabel.Location = new System.Drawing.Point(8, 40);
+			this.webLinkLabel.Location = new System.Drawing.Point(8, 32);
 			this.webLinkLabel.Name = "webLinkLabel";
-			this.webLinkLabel.Size = new System.Drawing.Size(480, 16);
+			this.webLinkLabel.Size = new System.Drawing.Size(504, 16);
 			this.webLinkLabel.TabIndex = 1;
-			this.webLinkLabel.Text = "Web Links:  NDoc Project, Submit Defect,  List Server, OpenSource";
+			this.webLinkLabel.Text = "Web Links:  NDoc Project, Submit Defect, List Server, OpenSource";
 			this.webLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.webLinkLabel_LinkClicked);
 			// 
 			// versionHeaderGroupBox
@@ -226,7 +226,7 @@ namespace NDoc.Gui
 			this.versionHeaderGroupBox.Location = new System.Drawing.Point(8, 218);
 			this.versionHeaderGroupBox.Name = "versionHeaderGroupBox";
 			this.versionHeaderGroupBox.Padding = 0;
-			this.versionHeaderGroupBox.Size = new System.Drawing.Size(488, 142);
+			this.versionHeaderGroupBox.Size = new System.Drawing.Size(520, 162);
 			this.versionHeaderGroupBox.TabIndex = 1;
 			this.versionHeaderGroupBox.TabStop = false;
 			this.versionHeaderGroupBox.Text = "Version Information";
@@ -236,7 +236,7 @@ namespace NDoc.Gui
 			this.AcceptButton = this.closeButton;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.CancelButton = this.closeButton;
-			this.ClientSize = new System.Drawing.Size(520, 406);
+			this.ClientSize = new System.Drawing.Size(542, 440);
 			this.Controls.AddRange(new System.Windows.Forms.Control[] {
 																		  this.urlHeaderGroupBox,
 																		  this.richTextBox,
@@ -248,6 +248,7 @@ namespace NDoc.Gui
 			this.MinimizeBox = false;
 			this.Name = "AboutForm";
 			this.Text = "About NDoc";
+			this.Load += new System.EventHandler(this.AboutForm_Load);
 			this.urlHeaderGroupBox.ResumeLayout(false);
 			this.versionHeaderGroupBox.ResumeLayout(false);
 			this.ResumeLayout(false);
@@ -270,5 +271,10 @@ namespace NDoc.Gui
 			Process.Start(url);
 		}
 		#endregion // Event Handlers
+
+		private void AboutForm_Load(object sender, System.EventArgs e)
+		{
+
+		}
 	}
 }

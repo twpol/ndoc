@@ -212,7 +212,7 @@ namespace NDoc.Core
 		/// <summary>Gets or sets the DocumentInternals property.</summary>
 		[
 		Category("Visibility"),
-		Description("Turn this flag on to document internal and private code.")
+		Description("Turn this flag on to document internal code.")
 		]
 		public bool DocumentInternals
 		{
@@ -225,7 +225,7 @@ namespace NDoc.Core
 		/// <summary>Gets or sets the DocumentPrivates property.</summary>
 		[
 		Category("Visibility"),
-		Description("Turn this flag on to document internal and private code.")
+		Description("Turn this flag on to document private code.")
 		]
 		public bool DocumentPrivates
 		{
