@@ -1858,6 +1858,7 @@ namespace NDoc.Gui
 			this.Cursor = Cursors.WaitCursor;
 			try
 			{
+				ConfigureUIForBuild(true);
 
 				IDocumenter documenter =
 					(IDocumenter)project.Documenters[comboBoxDocumenters.SelectedIndex];
@@ -1874,13 +1875,16 @@ namespace NDoc.Gui
 
 					return;
 				}
+				this.statusBarTextPanel.Text="refreshing namespace list from assemblies...";
 				
 				form = new NamespaceSummariesForm(project);
 				form.StartPosition = FormStartPosition.CenterParent;
 
+				this.statusBarTextPanel.Text="";
 			}
 			finally
 			{
+				ConfigureUIForBuild(false);
 				this.Cursor = Cursors.Arrow;
 			}
 

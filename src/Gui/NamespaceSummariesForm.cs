@@ -25,10 +25,12 @@ namespace NDoc.Gui
 {
 	using System;
 	using System.Drawing;
+	using System.Collections;
 	using System.Collections.Specialized;
 	using System.ComponentModel;
 	using System.Windows.Forms;
-
+	using System.IO;
+	using System.Reflection;
 	using NDoc.Core;
 
 	/// <summary>
@@ -61,12 +63,52 @@ namespace NDoc.Gui
 			//
 			InitializeComponent();
 
+			RefreshNamespaces();
+
+		}
+
+		public void RefreshNamespaces()
+		{
+			//let's try to create this in a new AppDomain
+			AppDomain appDomain=null;
+			try
+			{
+				appDomain = AppDomain.CreateDomain("NDocNamespaces");
+				ReflectionEngine re = (ReflectionEngine)
+					appDomain.CreateInstanceFromAndUnwrap(_Project.GetType().Assembly.CodeBase, 
+					"NDoc.Core.ReflectionEngine");
+				ReflectionEngineParameters rep = new ReflectionEngineParameters(_Project);
+				foreach (AssemblySlashDoc assemblySlashDoc in _Project.GetAssemblySlashDocs())
+				{
+					if(assemblySlashDoc.AssemblyFilename!=null && assemblySlashDoc.AssemblyFilename.Length>0)
+					{
+						string assemblyFullPath = _Project.GetFullPath(assemblySlashDoc.AssemblyFilename);
+						if(File.Exists(assemblyFullPath))
+						{
+							SortedList namespaces = re.GetNamespacesFromAssembly(rep,assemblyFullPath);
+							foreach(string ns in namespaces.GetKeyList())
+							{
+								if (_Project.Namespaces==null)
+									_Project.Namespaces = new SortedList();
+								if ((!_Project.Namespaces.ContainsKey(ns)))
+									_Project.Namespaces.Add(ns, null);
+							}
+						}
+					}
+				}
+			}
+			finally
+			{
+				if (appDomain!=null) AppDomain.Unload(appDomain);
+			}
+
+			namespaceComboBox.Items.Clear();
 			foreach (string namespaceName in _Project.GetNamespaces())
 			{
 				namespaceComboBox.Items.Add(namespaceName);
 			}
 
-			namespaceComboBox.SelectedIndex = 0;
+			if (namespaceComboBox.Items.Count>0) namespaceComboBox.SelectedIndex = 0;
 		}
 
 		/// <summary>
