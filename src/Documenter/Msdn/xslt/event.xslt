@@ -10,7 +10,9 @@
 	<xsl:template match="/">
 		<xsl:apply-templates select="ndoc/assembly/module/namespace/*/event[@id=$event-id]" />
 	</xsl:template>
+	
 	<!-- -->
+	
 	<xsl:template match="event">
 		<html dir="LTR">
 			<xsl:call-template name="html-head">
@@ -92,7 +94,9 @@
 			</body>
 		</html>
 	</xsl:template>
+	
 	<!-- -->
+	
 	<xsl:template match="property">
 		<xsl:variable name="name" select="@name" />
 		<xsl:if test="not(preceding-sibling::property[@name=$name])">
@@ -111,12 +115,35 @@
 					</xsl:when>
 					<xsl:otherwise>
 						<td width="50%">
-							<a>
-								<xsl:attribute name="href">
-									<xsl:call-template name="get-filename-for-current-property" />
-								</xsl:attribute>
-								<xsl:value-of select="@name" />
-							</a>
+							<xsl:choose>
+								<xsl:when test="@declaringType">
+									<xsl:variable name="declaring-type-id" select="concat('T:', @declaringType)" />
+									<xsl:variable name="declaring-class" select="//class[@id=$declaring-type-id]" />
+									<xsl:choose>
+										<xsl:when test="$declaring-class">
+											<a>
+												<xsl:attribute name="href">
+													<xsl:call-template name="get-filename-for-property" >
+														<xsl:with-param name="property" select="$declaring-class/property[@name=$name]" />
+													</xsl:call-template>
+												</xsl:attribute>
+												<xsl:value-of select="@name" />
+											</a>
+										</xsl:when>
+										<xsl:otherwise>
+											<xsl:value-of select="@name" />
+										</xsl:otherwise>
+									</xsl:choose>
+								</xsl:when>
+								<xsl:otherwise>
+									<a>
+										<xsl:attribute name="href">
+											<xsl:call-template name="get-filename-for-current-property" />
+										</xsl:attribute>
+										<xsl:value-of select="@name" />
+									</a>
+								</xsl:otherwise>
+							</xsl:choose>
 						</td>
 						<td width="50%">
 							<xsl:apply-templates select="documentation/summary/node()" mode="slashdoc" />
