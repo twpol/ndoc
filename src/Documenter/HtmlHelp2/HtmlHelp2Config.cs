@@ -28,11 +28,13 @@ namespace NDoc.Documenter.HtmlHelp2
 		/// </summary>
 		Unicode
 	}
+
 	/// <summary>
 	/// Config setting for the CHM to HxS converter/compiler
 	/// </summary>
 	public class HtmlHelp2Config : MsdnDocumenterConfig
 	{
+		private const string HTMLHELP2_CONFIG_CATEGORY = "Html Help v2.0 Settings";
 
 		/// <summary>Initializes a new instance of the MsdnHelpConfig class.</summary>
 		public HtmlHelp2Config() : base( "HtmlHelp2" )
@@ -45,7 +47,7 @@ namespace NDoc.Documenter.HtmlHelp2
 		/// Defaults to Ascii.
 		/// </summary>
 		[
-		Category("Html Help v2.0 Settings"),
+		Category(HTMLHELP2_CONFIG_CATEGORY),
 		Description("Gets or sets the character set that will be used when compiling the help file")
 		]
 		public CharacterSet CharacterSet
@@ -125,7 +127,7 @@ namespace NDoc.Documenter.HtmlHelp2
 
 		/// <summary>The language ID of the locale used by the compiled helpfile</summary>
 		[
-		Category("Html Help v2.0 Settings"),
+		Category(HTMLHELP2_CONFIG_CATEGORY),
 		Description("The ID of the language the help file is in.")
 		]
 		public short LangID
@@ -143,7 +145,7 @@ namespace NDoc.Documenter.HtmlHelp2
 
 		/// <summary>Flag that indicates whether to keep the CHM file after successful conversion</summary>
 		[
-		Category("Html Help v2.0 Settings"),
+		Category(HTMLHELP2_CONFIG_CATEGORY),
 		Description("If true the CHM file will be deleted after the HxS file is created")
 		]
 		public bool DeleteCHM
@@ -153,6 +155,24 @@ namespace NDoc.Documenter.HtmlHelp2
 			set
 			{
 				_DeleteCHM = value;
+				SetDirty();
+			}
+		}
+
+		bool _AugmentXmlDataIslands = true;
+
+		/// <summary>Flag that indicates whether to keep the CHM file after successful conversion</summary>
+		[
+		Category(HTMLHELP2_CONFIG_CATEGORY),
+		Description("Adds additional tags to the embedded Xml data islands (results in slower builds but tighter VS.NET integration)")
+		]
+		public bool AugmentXmlDataIslands
+		{
+			get { return _AugmentXmlDataIslands; }
+
+			set
+			{
+				_AugmentXmlDataIslands = value;
 				SetDirty();
 			}
 		}
