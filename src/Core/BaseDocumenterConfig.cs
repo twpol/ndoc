@@ -166,7 +166,7 @@ namespace	NDoc.Core
 		///	comments will	contain	the	phrase "Missing	Documentation" in	the	
 		///	generated	documentation.</remarks>
 		[
-			Category("Missing"),
+			Category("Show Missing Documentation"),
 			Description("Turning this flag on will show you where you are missing summaries.")
 		]
 		public bool	ShowMissingSummaries
@@ -187,7 +187,7 @@ namespace	NDoc.Core
 		///	comments will	contain	the	phrase "Missing	Documentation" in	the	
 		///	generated	documentation.</remarks>
 		[
-			Category("Missing"),
+			Category("Show Missing Documentation"),
 			Description("Turning this flag on will show you where you are missing Remarks.")
 		]
 		public bool	ShowMissingRemarks
@@ -208,7 +208,7 @@ namespace	NDoc.Core
 		///	comments will	contain	the	phrase "Missing	Documentation" in	the	
 		///	generated	documentation.</remarks>
 		[
-			Category("Missing"),
+			Category("Show Missing Documentation"),
 			Description("Turning this flag on will show you where you are missing Params.")
 		]
 		public bool	ShowMissingParams
@@ -229,7 +229,7 @@ namespace	NDoc.Core
 		///	comments will	contain	the	phrase "Missing	Documentation" in	the	
 		///	generated	documentation.</remarks>
 		[
-			Category("Missing"),
+			Category("Show Missing Documentation"),
 			Description("Turning this flag on will show you where you are missing Returns.")
 		]
 		public bool	ShowMissingReturns
@@ -250,7 +250,7 @@ namespace	NDoc.Core
 		///	comments will	contain	the	phrase "Missing	Documentation" in	the	
 		///	generated	documentation.</remarks>
 		[
-			Category("Missing"),
+			Category("Show Missing Documentation"),
 			Description("Turning this flag on will show you where you are missing Values.")
 		]
 		public bool	ShowMissingValues
@@ -340,7 +340,7 @@ namespace	NDoc.Core
 
 		///	<summary>Gets	or sets	the	IncludeAssemblyVersion property.</summary>
 		[
-			Category("Extra Information"),
+			Category("Documentation Main Settings"),
 			Description("Turn this flag on to include the assembly version number in the documentation.")
 		]
 		public bool	IncludeAssemblyVersion
@@ -358,7 +358,7 @@ namespace	NDoc.Core
 
 		///	<summary>Gets	or sets	the	CopyrightText property.</summary>
 		[
-			Category("Extra Information"),
+			Category("Documentation Main Settings"),
 			Description("A copyright notice text that will be included in the generated docs.")
 		]
 		public string	CopyrightText
@@ -376,7 +376,7 @@ namespace	NDoc.Core
 
 		///	<summary>Gets	or sets	the	CopyrightHref property.</summary>
 		[
-			Category("Extra Information"),
+			Category("Documentation Main Settings"),
 			Description("An URL referenced by the copyright notice.")
 		]
 		public string	CopyrightHref

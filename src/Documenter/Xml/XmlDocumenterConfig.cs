@@ -37,7 +37,7 @@ namespace NDoc.Documenter.Xml
 
 		/// <summary>Gets or sets the OutputFile property.</summary>
 		[
-			Category("Output"),
+			Category("Documentation Main Settings"),
 			Description("The path to the XML file to create which will be the combined /doc output and reflection information."),
 			Editor(typeof(FileNameEditor), typeof(UITypeEditor))
 		]

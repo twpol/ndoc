@@ -59,7 +59,7 @@ namespace NDoc.Documenter.Msdn
 
 		/// <summary>Gets or sets the OutputDirectory property.</summary>
 		[
-		Category("Output"),
+		Category("Documentation Main Settings"),
 		Editor(typeof(FolderNameEditor), typeof(UITypeEditor)),
 		Description("The directory in which .html files and the .chm file will be generated.")
 		]
@@ -84,7 +84,7 @@ namespace NDoc.Documenter.Msdn
 		/// <remarks>The HTML Help project file and the compiled HTML Help file
 		/// use this property plus the appropriate extension as names.</remarks>
 		[
-		Category("HTML Help"),
+		Category("Documentation Main Settings"),
 		Description("The name of the HTML Help project and the Compiled HTML Help file.")
 		]
 		public string HtmlHelpName
@@ -108,7 +108,7 @@ namespace NDoc.Documenter.Msdn
 
 		/// <summary>Gets or sets the HtmlHelpCompilerFilename property.</summary>
 		[
-		Category("HTML Help"),
+		Category("HTML Help Options"),
 		Editor(typeof(FileNameEditor), typeof(UITypeEditor)),
 		Description("The full path to the Html Help Compiler (installed with Microsoft Visual Studio .NET).")
 		]
@@ -125,7 +125,7 @@ namespace NDoc.Documenter.Msdn
 
 		/// <summary>Gets or sets the IncludeFavorites property.</summary>
 		[
-		Category("HTML Help"),
+		Category("HTML Help Options"),
 		Description("Turning this flag on will include a Favorites tab in the HTML Help file.")
 		]
 		public bool IncludeFavorites
@@ -143,7 +143,7 @@ namespace NDoc.Documenter.Msdn
 
 		/// <summary>Gets or sets the Title property.</summary>
 		[
-		Category("HTML Help"),
+		Category("Documentation Main Settings"),
 		Description("This is the title displayed at the top of every page.")
 		]
 		public string Title
@@ -161,7 +161,7 @@ namespace NDoc.Documenter.Msdn
 
 		/// <summary>Gets or sets the SplitTOCs property.</summary>
 		[
-		Category("HTML Help"),
+		Category("HTML Help Options"),
 		Description("Turning this flag on will generate a separate TOC for each assembly.")
 		]
 		public bool SplitTOCs
@@ -179,7 +179,7 @@ namespace NDoc.Documenter.Msdn
 
 		/// <summary>Gets or sets the DefaultTOC property.</summary>
 		[
-		Category("HTML Help"),
+		Category("HTML Help Options"),
 		Description("When SplitTOCs is true, this represents the default TOC to use.")
 		]
 		public string DefaulTOC
@@ -199,7 +199,7 @@ namespace NDoc.Documenter.Msdn
 		/// <remarks>This is a temporary property until we get a working
 		/// language filter in the output like MSDN.</remarks>
 		[
-		Category("Language Syntax"),
+		Category("Documentation Main Settings"),
 		Description("Show Visual Basic syntax for types and members.")
 		]
 		public bool ShowVisualBasic

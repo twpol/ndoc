@@ -37,7 +37,7 @@ namespace NDoc.Documenter.JavaDoc
 
 		/// <summary>Gets or sets the Title property.</summary>
 		[
-			Category("JavaDoc"),
+			Category("Documentation Main Settings"),
 			Description("The name of the JavaDoc project.")
 		]
 		public string Title
@@ -58,7 +58,7 @@ namespace NDoc.Documenter.JavaDoc
 
 		/// <summary>Gets or sets the OutputDirectory property.</summary>
 		[
-			Category("Output"),
+			Category("Documentation Main Settings"),
 			Description("The output folder."),
 			Editor(typeof(FolderNameEditor), typeof(UITypeEditor))
 		]
