@@ -1,6 +1,6 @@
 *.chm
 _errorlog.txt
 index.HHK~
-debug
-release
-desktop.ini
+Debug
+Release
+.#*
