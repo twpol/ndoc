@@ -106,10 +106,10 @@
             to sf.net
         -->
         <if test="${project.release.type='release'}">
-            <move file="src/Setup/Release/NDoc.msi" tofile="NDoc-${project.version}.msi" overwrite="true" />
+            <move file="src/Setup/Release/NDoc.msi" tofile="NDoc-v${project.version}.msi" overwrite="true" />
         </if>
         <if test="${not(project.release.type='release')}">
-            <move file="src/Setup/Release/NDoc.msi" tofile="NDoc-${project.version}-${project.release.type}.msi" overwrite="true" />
+            <move file="src/Setup/Release/NDoc.msi" tofile="NDoc-v${project.version}-${project.release.type}.msi" overwrite="true" />
         </if>
     </target>
     <!--
