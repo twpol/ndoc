@@ -403,6 +403,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "HxProject\H2RegFile.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "HxProject\HxFile.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

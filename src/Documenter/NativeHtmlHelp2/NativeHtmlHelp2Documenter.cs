@@ -356,10 +356,22 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			AddIndexToCollection( w, collection, "Collection_A.HxK", collectionName + "_A" );
 			AddIndexToCollection( w, collection, "Collection_F.HxK", collectionName + "_F" );
 			AddIndexToCollection( w, collection, "Collection_K.HxK", collectionName + "_K" );
-
 			
 			collection.Save( w.RootDirectory );
-			//TODO set up an H2Reg ini file and save it the workspace
+			
+			// create and save the H2reg ini file
+			H2RegFile h2reg = new H2RegFile( collectionName );
+			h2reg.LangId = MyConfig.LangID;
+			h2reg.CollectionFileName = collection.FileName;
+			h2reg.Description = MyConfig.Title;
+			h2reg.PluginNamespace = MyConfig.PlugInNamespace;
+			
+			if ( MyConfig.BuildSeperateIndexFile )
+				h2reg.AddTitle( MyConfig.HtmlHelpName, MyConfig.LangID, MyConfig.HtmlHelpName + ".HxS", MyConfig.HtmlHelpName + ".HxI" );
+			else
+				h2reg.AddTitle( MyConfig.HtmlHelpName, MyConfig.LangID, MyConfig.HtmlHelpName + ".HxS" );
+
+			h2reg.Save( w.RootDirectory );
 		}
 
 		private void AddIndexToCollection( Workspace w, CollectionFile collection, string templateName, string fileName )
