@@ -28,6 +28,7 @@
 					<xsl:call-template name="cs-field-or-event-syntax" />
 					<p></p>
 					<xsl:call-template name="remarks-section" />
+					<xsl:apply-templates select="documentation/node()" mode="after-remarks-section" />
 					<xsl:call-template name="example-section" />
 					<xsl:call-template name="requirements-section" />
 					<xsl:call-template name="seealso-section">

@@ -247,6 +247,7 @@
 						<xsl:call-template name="thread-safety-section" />
 					</xsl:if>
 					<xsl:call-template name="remarks-section" />
+					<xsl:apply-templates select="documentation/node()" mode="after-remarks-section" />
 					<xsl:call-template name="example-section" />
 					<xsl:if test="local-name() = 'enumeration'">
 						<xsl:call-template name="enumeration-members-section" />

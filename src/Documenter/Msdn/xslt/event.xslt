@@ -74,6 +74,7 @@
 					</xsl:if>
 					<xsl:call-template name="implements-section" />
 					<xsl:call-template name="remarks-section" />
+					<xsl:apply-templates select="documentation/node()" mode="after-remarks-section" />
 					<xsl:call-template name="exceptions-section" />
 					<xsl:call-template name="example-section" />
 					<xsl:call-template name="requirements-section" />

@@ -30,6 +30,7 @@
 					<xsl:call-template name="summary-section" />
 					<xsl:call-template name="syntax-section" />
 					<xsl:call-template name="remarks-section" />
+					<xsl:apply-templates select="documentation/node()" mode="after-remarks-section" />
 					<xsl:call-template name="example-section" />
 					<xsl:call-template name="member-requirements-section" />
 					<xsl:call-template name="seealso-section">

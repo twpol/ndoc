@@ -50,6 +50,7 @@
 					<xsl:call-template name="value-section" />
 					<xsl:call-template name="implements-section" />
 					<xsl:call-template name="remarks-section" />
+					<xsl:apply-templates select="documentation/node()" mode="after-remarks-section" />
 					<xsl:call-template name="events-section" />
 					<xsl:call-template name="exceptions-section" />
 					<xsl:call-template name="example-section" />

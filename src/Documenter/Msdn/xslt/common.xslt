@@ -35,11 +35,7 @@
 	<xsl:template match="node()|@*|text()" mode="footer-row" />
 	<xsl:template match="node()|@*|text()" mode="title-row" />
 	<xsl:template match="node()|@*|text()" mode="header-section" />
-	<!--	
-	<xsl:template match="node()|@*|text()" mode="syntax-section"/>
-	<xsl:template match="node()|@*|text()" mode="type-requirements-section" />
-	<xsl:template match="node()|@*|text()" mode="member-requirements-section" />
-	-->
+	<xsl:template match="node()|@*|text()" mode="after-remarks-section"/>
 	<!-- -->
 	<xsl:template name="csharp-type">
 		<xsl:param name="runtime-type" />

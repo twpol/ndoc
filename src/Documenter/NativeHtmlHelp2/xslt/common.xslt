@@ -41,6 +41,7 @@
 	<xsl:template match="node()|@*|text()" mode="overloads-summary-section" />
 	<xsl:template match="node()|@*|text()" mode="header-section" />
 	<xsl:template match="node()|@*|text()" mode="xml-data-island" />
+	<xsl:template match="node()|@*|text()" mode="after-remarks-section"/>
 	<!-- -->
 	<xsl:template name="parameter-topic">
 		<dl>
