@@ -208,14 +208,20 @@ namespace NDoc.Documenter.Msdn
 
 				// Write the external files (FilesToInclude) to the html output directory
 
-				foreach( string srcFile in MyConfig.FilesToInclude.Split( '|' ) )
+				foreach( string srcFilePattern in MyConfig.FilesToInclude.Split( '|' ) )
 				{
-					if ((srcFile == null) || (srcFile.Length == 0))
+					if ((srcFilePattern == null) || (srcFilePattern.Length == 0))
 						continue;
 
-					string dstFile = Path.Combine(workspace.WorkingDirectory, Path.GetFileName(srcFile));
-					File.Copy(srcFile, dstFile, true);
-					File.SetAttributes(dstFile, FileAttributes.Archive);
+					int i = srcFilePattern.LastIndexOfAny(new char[]{Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar}) ;
+					string path = srcFilePattern.Substring(0,i);
+					string pattern = srcFilePattern.Substring(i+1);
+					foreach(string srcFile in Directory.GetFiles(path, pattern))
+					{
+						string dstFile = Path.Combine(workspace.WorkingDirectory, Path.GetFileName(srcFile));
+						File.Copy(srcFile, dstFile, true);
+						File.SetAttributes(dstFile, FileAttributes.Archive);
+					}
 				}
 
 				OnDocBuildingStep(10, "Merging XML documentation...");
