@@ -28,20 +28,23 @@
 			</p>
 			<ul>
 				<li>
-				A complete re-implementation of the Html Help 2 documenter. The new VS.NET 
-				Documenter creates Html Help 2 topics, with fully populated XML data islands, 
-				resulting in much better integration with the Visual Studio help system.
+					A complete re-implementation of the Html Help 2 documenter. The new VS.NET 
+					Documenter creates Html Help 2 topics, with fully populated XML data islands, 
+					resulting in much better integration with the Visual Studio help system.</li>
 				<li>
-					An <A href="extensibility.htm">extensibility feature</A>
-				that allows you to define your own code comment tags and control their 
-				formatting.
+					An <A href="extensibility.htm">extensibility feature</A> that allows you to 
+					define your own code comment tags and control their formatting.</li>
 				<li>
-					Support for new code commenting tags like <a href="tags.htm#platform">platform</a>, <a href="tags.htm#preliminary">preliminary</a>, <a href="tags.htm#threadsafety">
-						threadsafety</a> and <a href="tags.htm#exclude">exclude</a><STRONG>.</STRONG>
+					Support for new code commenting tags like <a href="tags.htm#platform">platform</a>,
+					<a href="tags.htm#preliminary">preliminary</a>, <a href="tags.htm#threadsafety">threadsafety</a>
+					and <a href="tags.htm#exclude">exclude</a>.</li>
 				<li>
-					Support for the <strong>ObsoleteAttribute</strong>.
+					Support for the <strong>ObsoleteAttribute</strong> and <strong>FlagsAttribute</strong>
+					attributes.</li>
 				<li>
-				User interface and performance enhancements.
+					User interface enhancements.</li>
+				<li>
+					Major performance enhancements in both reflection and document production.</li>
 				<li>
 					Better consistency between NDoc generated topics and MSDN topics.</li>
 			</ul>
@@ -61,6 +64,12 @@
 						<a target="_blank" href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=511907&amp;group_id=36057&amp;atid=416081">
 							Thread Safety support</a></td>
 				</tr>
+				<TR>
+					<TD>542784</TD>
+					<TD>
+						<a target="_blank" href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=542784&amp;group_id=36057&amp;atid=416081">
+							Ignore Base Class methods etc</a></TD>
+				</TR>
 				<tr>
 					<td>556210</td>
 					<td>
@@ -85,6 +94,12 @@
 						<a target="_blank" href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=628277&amp;group_id=36057&amp;atid=416081">
 							Show HTML Help Compiler Errors</a></td>
 				</tr>
+				<TR>
+					<TD>629819</TD>
+					<TD>
+						<a target="_blank" href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=629819&amp;group_id=36057&amp;atid=416081">
+							Better hypertext linking logic</a></TD>
+				</TR>
 				<tr>
 					<td>645072</td>
 					<td>
@@ -121,6 +136,12 @@
 							to suppress documentation of inherited members</a></TD>
 				</TR>
 				<TR>
+					<TD>769187</TD>
+					<TD>
+						<a target="_blank" href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=769187&amp;group_id=36057&amp;atid=416081">
+							Inherited static members option</a></TD>
+				</TR>
+				<TR>
 					<TD>771883</TD>
 					<TD><a target="_blank" href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=771883&amp;group_id=36057&amp;atid=416081">Option 
 							Automatic Indentation of code block</a></TD>
@@ -131,6 +152,13 @@
 						<a target="_blank" href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=774621&amp;group_id=36057&amp;atid=416081">
 							Clean-up output folder</a></td>
 				</tr>
+				<TR>
+					<TD>775009</TD>
+					<TD>
+						<a target="_blank" href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=775009&amp;group_id=36057&amp;atid=416081">
+							Support wildcards in FilesToInclude </a>
+					</TD>
+				</TR>
 				<tr>
 					<td>779201</td>
 					<td>
@@ -155,6 +183,12 @@
 						<a target="_blank" href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=835771&amp;group_id=36057&amp;atid=416081">
 							Support for binary TOC</a></td>
 				</tr>
+				<TR>
+					<TD>845512</TD>
+					<TD>
+						<a target="_blank" href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=845512&amp;group_id=36057&amp;atid=416081">
+							Second reference to same class is linked</a></TD>
+				</TR>
 				<TR>
 					<TD>852125</TD>
 					<TD>
@@ -185,6 +219,25 @@
 						<a target="_blank" href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=900130&amp;group_id=36057&amp;atid=416081">
 							Inherited Explicit Interface Implementations</a></td>
 				</tr>
+				<TR>
+					<TD>931973</TD>
+					<TD>
+						<a target="_blank" href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=931973&amp;group_id=36057&amp;atid=416081">
+							External Images added</a></TD>
+				</TR>
+				<TR>
+					<TD>949407</TD>
+					<TD>
+						<a target="_blank" href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=949407&amp;group_id=36057&amp;atid=416081">
+							HtmlHelp property used for MsdnHelp</a></TD>
+				</TR>
+				<TR>
+					<TD>958310</TD>
+					<TD>
+						<a target="_blank" href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=958310&amp;group_id=36057&amp;atid=416081">
+							[FlagsAttribute] support</a></TD>
+					</TD>
+				</TR>
 			</table>
 			<h1 class="dth1">Bug Fixes</h1>
 			<table class="dtTABLE" cellspacing="0" style="WIDTH: 94%">
@@ -367,6 +420,11 @@
 					<TD>942120</TD>
 					<TD><a target="_blank" href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=942120&amp;group_id=36057&amp;atid=416078">Enum 
 							documentation has lost half of information</a></TD>
+				</TR>
+				<TR>
+					<TD>943777</TD>
+					<TD><a target="_blank" href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=943777&amp;group_id=36057&amp;atid=416078">Enum 
+							Reflected function contains only pieces of default values</a></TD>
 				</TR>
 			</table>
 		</div>
