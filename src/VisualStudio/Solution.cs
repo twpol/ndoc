@@ -81,9 +81,9 @@ namespace NDoc.VisualStudio
 				reader = new StreamReader(path);
 
 				string line = reader.ReadLine();
-				if (line != "Microsoft Visual Studio Solution File, Format Version 7.00")
+				if (!line.StartsWith("Microsoft Visual Studio Solution File"))
 				{
-					throw new ApplicationException("This is not a 'Microsoft Visual Studio Solution File, Format Version 7.00' file.");
+					throw new ApplicationException("This is not a Microsoft Visual Studio Solution file.");
 				}
 
 				while ((line = reader.ReadLine()) != null)
