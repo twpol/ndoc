@@ -307,6 +307,26 @@ namespace NDoc.Test
 	/// </remarks>
 	public class See
 	{
+		/// <summary>
+		/// This field's documentation references <see cref="RefProp1"/>.
+		/// </summary>
+		public int Field1 = 0;
+
+		/// <summary>
+		/// This properties' documentation references <see cref="System.IO.TextWriter"/>.
+		/// </summary>
+		public string Prop1 
+		{
+			get { return "Prop1"; }
+		}
+
+		/// <summary>
+		/// This method's documentation references <see cref="NDoc.Test.See.Prop1"/> and
+		/// <see cref="Field1"/>.
+		/// </summary>
+		public void RefProp1()
+		{
+		}
 	}
 
 	/// <summary>This class has lots of &lt;seealso&gt; elements.</summary>
