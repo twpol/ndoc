@@ -1031,6 +1031,30 @@ namespace NDoc.Test
 			remove {}
 		}
 	}
+
+	/// <summary>This class has a method that's overloaded where one of the
+	/// overloads doesn't have any parameters.</summary>
+	public class OverloadedWithNoParameters
+	{
+		/// <summary>This is an overloaded method.</summary>
+		/// <remarks>This overload has no parameters.</remarks>
+		public void Method() {}
+
+		/// <summary>This is an overloaded method.</summary>
+		/// <remarks>This overload has one parameter.</remarks>
+		public void Method(int i) {}
+	}
+
+	/// <summary>This class wants to ref the method with no parameters
+	/// in the OverloadedWithNoParameters class.
+	/// See <see cref="OverloadedWithNoParameters.Method" />
+	/// ("OverloadedWithNoParameters.Method").
+	/// See <see cref="OverloadedWithNoParameters.Method()" />
+	/// ("OverloadedWithNoParameters.Method()").
+	/// </summary>
+	public class CRefToOverloadWithNoParameters
+	{
+	}
 }
 
 namespace NDoc.Test.InternalStuff
