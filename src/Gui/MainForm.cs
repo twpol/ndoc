@@ -268,57 +268,57 @@ namespace NDoc.Gui
 			((System.ComponentModel.ISupportInitialize)(this.statusBarTextPanel)).BeginInit();
 			this.assembliesHeaderGroupBox.SuspendLayout();
 			this.SuspendLayout();
-			//
+			// 
 			// menuDocBuildItem
-			//
+			// 
 			this.menuDocBuildItem.Index = 0;
 			this.menuDocBuildItem.Shortcut = System.Windows.Forms.Shortcut.CtrlShiftB;
 			this.menuDocBuildItem.Text = "&Build";
 			this.menuDocBuildItem.Click += new System.EventHandler(this.menuDocBuildItem_Click);
-			//
+			// 
 			// progressBar
-			//
+			// 
 			this.progressBar.Anchor = (System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right);
 			this.progressBar.Location = new System.Drawing.Point(334, 593);
 			this.progressBar.Name = "progressBar";
 			this.progressBar.Size = new System.Drawing.Size(144, 15);
 			this.progressBar.TabIndex = 24;
 			this.progressBar.Visible = false;
-			//
+			// 
 			// menuFileExitItem
-			//
+			// 
 			this.menuFileExitItem.Index = 10;
 			this.menuFileExitItem.Text = "&Exit";
 			this.menuFileExitItem.Click += new System.EventHandler(this.menuFileExitItem_Click);
-			//
+			// 
 			// newToolBarButton
-			//
+			// 
 			this.newToolBarButton.ImageIndex = 0;
 			this.newToolBarButton.ToolTipText = "New";
-			//
+			// 
 			// imageList1
-			//
+			// 
 			this.imageList1.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
 			this.imageList1.ImageSize = new System.Drawing.Size(16, 16);
 			this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
 			this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
-			//
+			// 
 			// menuFileSaveItem
-			//
+			// 
 			this.menuFileSaveItem.Index = 5;
 			this.menuFileSaveItem.Shortcut = System.Windows.Forms.Shortcut.CtrlS;
 			this.menuFileSaveItem.Text = "&Save";
 			this.menuFileSaveItem.Click += new System.EventHandler(this.menuFileSaveItem_Click);
-			//
+			// 
 			// mainMenu1
-			//
+			// 
 			this.mainMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
 																					  this.menuFileItem,
 																					  this.menuDocItem,
 																					  this.menuAboutItem});
-			//
+			// 
 			// menuFileItem
-			//
+			// 
 			this.menuFileItem.Index = 0;
 			this.menuFileItem.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
 																						 this.menuFileNewItem,
@@ -333,83 +333,83 @@ namespace NDoc.Gui
 																						 this.menuSpacerItem3,
 																						 this.menuFileExitItem});
 			this.menuFileItem.Text = "&Project";
-			//
+			// 
 			// menuFileNewItem
-			//
+			// 
 			this.menuFileNewItem.Index = 0;
 			this.menuFileNewItem.Shortcut = System.Windows.Forms.Shortcut.CtrlN;
 			this.menuFileNewItem.Text = "&New";
 			this.menuFileNewItem.Click += new System.EventHandler(this.menuFileNewItem_Click);
-			//
+			// 
 			// menuFileOpenSolution
-			//
+			// 
 			this.menuFileOpenSolution.Index = 1;
 			this.menuFileOpenSolution.Shortcut = System.Windows.Forms.Shortcut.CtrlShiftN;
 			this.menuFileOpenSolution.Text = "New from &Visual Studio Solution...";
 			this.menuFileOpenSolution.Click += new System.EventHandler(this.menuFileOpenSolution_Click);
-			//
+			// 
 			// menuFileOpenItem
-			//
+			// 
 			this.menuFileOpenItem.Index = 2;
 			this.menuFileOpenItem.Shortcut = System.Windows.Forms.Shortcut.CtrlO;
 			this.menuFileOpenItem.Text = "&Open...";
 			this.menuFileOpenItem.Click += new System.EventHandler(this.menuFileOpenItem_Click);
-			//
+			// 
 			// menuFileCloseItem
-			//
+			// 
 			this.menuFileCloseItem.Index = 3;
 			this.menuFileCloseItem.Text = "&Close";
 			this.menuFileCloseItem.Click += new System.EventHandler(this.menuFileCloseItem_Click);
-			//
+			// 
 			// menuSpacerItem1
-			//
+			// 
 			this.menuSpacerItem1.Index = 4;
 			this.menuSpacerItem1.Text = "-";
-			//
+			// 
 			// menuFileSaveAsItem
-			//
+			// 
 			this.menuFileSaveAsItem.Index = 6;
 			this.menuFileSaveAsItem.Text = "Save &As...";
 			this.menuFileSaveAsItem.Click += new System.EventHandler(this.menuFileSaveAsItem_Click);
-			//
+			// 
 			// menuSpacerItem2
-			//
+			// 
 			this.menuSpacerItem2.Index = 7;
 			this.menuSpacerItem2.Text = "-";
-			//
+			// 
 			// menuFileRecentProjectsItem
-			//
+			// 
 			this.menuFileRecentProjectsItem.Index = 8;
 			this.menuFileRecentProjectsItem.Text = "&Recent Projects";
-			//
+			// 
 			// menuSpacerItem3
-			//
+			// 
 			this.menuSpacerItem3.Index = 9;
 			this.menuSpacerItem3.Text = "-";
-			//
+			// 
 			// menuDocItem
-			//
+			// 
 			this.menuDocItem.Index = 1;
 			this.menuDocItem.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
 																						this.menuDocBuildItem,
 																						this.menuDocViewItem});
 			this.menuDocItem.Text = "&Documentation";
-			//
+			// 
 			// menuDocViewItem
-			//
+			// 
 			this.menuDocViewItem.Index = 1;
 			this.menuDocViewItem.Shortcut = System.Windows.Forms.Shortcut.CtrlShiftV;
 			this.menuDocViewItem.Text = "&View";
 			this.menuDocViewItem.Click += new System.EventHandler(this.menuDocViewItem_Click);
-			//
+			// 
 			// menuAboutItem
-			//
+			// 
 			this.menuAboutItem.Index = 2;
 			this.menuAboutItem.Text = "&About";
 			this.menuAboutItem.Click += new System.EventHandler(this.menuAboutItem_Click);
-			//
+			// 
 			// comboBoxDocumenters
-			//
+			// 
 			this.comboBoxDocumenters.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxDocumenters.DropDownWidth = 160;
 			this.comboBoxDocumenters.Location = new System.Drawing.Point(128, 24);
@@ -417,9 +417,9 @@ namespace NDoc.Gui
 			this.comboBoxDocumenters.Size = new System.Drawing.Size(160, 21);
 			this.comboBoxDocumenters.TabIndex = 9;
 			this.comboBoxDocumenters.SelectedIndexChanged += new System.EventHandler(this.comboBoxDocumenters_SelectedIndexChanged);
-			//
+			// 
 			// addButton
-			//
+			// 
 			this.addButton.Anchor = (System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right);
 			this.addButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.addButton.Location = new System.Drawing.Point(397, 24);
@@ -427,22 +427,22 @@ namespace NDoc.Gui
 			this.addButton.TabIndex = 14;
 			this.addButton.Text = "Add";
 			this.addButton.Click += new System.EventHandler(this.addButton_Click);
-			//
+			// 
 			// slashDocHeader
-			//
+			// 
 			this.slashDocHeader.Text = "/doc Filename";
 			this.slashDocHeader.Width = 200;
-			//
+			// 
 			// cancelToolBarButton
-			//
+			// 
 			this.cancelToolBarButton.Enabled = false;
 			this.cancelToolBarButton.ImageIndex = 5;
 			this.cancelToolBarButton.ToolTipText = "Cancel";
-			//
+			// 
 			// documenterHeaderGroupBox
-			//
-			this.documenterHeaderGroupBox.Anchor = (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-				| System.Windows.Forms.AnchorStyles.Left)
+			// 
+			this.documenterHeaderGroupBox.Anchor = (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+				| System.Windows.Forms.AnchorStyles.Left) 
 				| System.Windows.Forms.AnchorStyles.Right);
 			this.documenterHeaderGroupBox.BackColor = System.Drawing.SystemColors.Control;
 			this.documenterHeaderGroupBox.Controls.AddRange(new System.Windows.Forms.Control[] {
@@ -456,9 +456,9 @@ namespace NDoc.Gui
 			this.documenterHeaderGroupBox.TabIndex = 23;
 			this.documenterHeaderGroupBox.TabStop = false;
 			this.documenterHeaderGroupBox.Text = "Select and Configure Documenter";
-			//
+			// 
 			// labelDocumenters
-			//
+			// 
 			this.labelDocumenters.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.labelDocumenters.Location = new System.Drawing.Point(16, 26);
 			this.labelDocumenters.Name = "labelDocumenters";
@@ -466,11 +466,11 @@ namespace NDoc.Gui
 			this.labelDocumenters.TabIndex = 10;
 			this.labelDocumenters.Text = "Documentation Type:";
 			this.labelDocumenters.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			//
+			// 
 			// propertyGrid
-			//
-			this.propertyGrid.Anchor = (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-				| System.Windows.Forms.AnchorStyles.Left)
+			// 
+			this.propertyGrid.Anchor = (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+				| System.Windows.Forms.AnchorStyles.Left) 
 				| System.Windows.Forms.AnchorStyles.Right);
 			this.propertyGrid.CommandsVisibleIfAvailable = true;
 			this.propertyGrid.LargeButtons = false;
@@ -482,14 +482,14 @@ namespace NDoc.Gui
 			this.propertyGrid.Text = "PropertyGrid";
 			this.propertyGrid.ViewBackColor = System.Drawing.SystemColors.Window;
 			this.propertyGrid.ViewForeColor = System.Drawing.SystemColors.WindowText;
-			//
+			// 
 			// viewToolBarButton
-			//
+			// 
 			this.viewToolBarButton.ImageIndex = 6;
 			this.viewToolBarButton.ToolTipText = "View Documentation (Ctrl+Shift+V)";
-			//
+			// 
 			// statusBar
-			//
+			// 
 			this.statusBar.Location = new System.Drawing.Point(0, 590);
 			this.statusBar.Name = "statusBar";
 			this.statusBar.Panels.AddRange(new System.Windows.Forms.StatusBarPanel[] {
@@ -497,40 +497,40 @@ namespace NDoc.Gui
 			this.statusBar.ShowPanels = true;
 			this.statusBar.Size = new System.Drawing.Size(496, 20);
 			this.statusBar.TabIndex = 21;
-			//
+			// 
 			// statusBarTextPanel
-			//
+			// 
 			this.statusBarTextPanel.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Spring;
 			this.statusBarTextPanel.BorderStyle = System.Windows.Forms.StatusBarPanelBorderStyle.None;
 			this.statusBarTextPanel.Text = "Ready";
 			this.statusBarTextPanel.Width = 480;
-			//
+			// 
 			// assemblyHeader
-			//
+			// 
 			this.assemblyHeader.Text = "Assembly Filename";
 			this.assemblyHeader.Width = 200;
-			//
+			// 
 			// openToolBarButton
-			//
+			// 
 			this.openToolBarButton.ImageIndex = 2;
 			this.openToolBarButton.ToolTipText = "Open ";
-			//
+			// 
 			// separatorToolBarButton
-			//
+			// 
 			this.separatorToolBarButton.Style = System.Windows.Forms.ToolBarButtonStyle.Separator;
-			//
+			// 
 			// solutionToolBarButton
-			//
+			// 
 			this.solutionToolBarButton.ImageIndex = 1;
 			this.solutionToolBarButton.ToolTipText = "New from Visual Studio Solution";
-			//
+			// 
 			// saveToolBarButton
-			//
+			// 
 			this.saveToolBarButton.ImageIndex = 3;
 			this.saveToolBarButton.ToolTipText = "Save";
-			//
+			// 
 			// editButton
-			//
+			// 
 			this.editButton.Anchor = (System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right);
 			this.editButton.Enabled = false;
 			this.editButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
@@ -539,21 +539,21 @@ namespace NDoc.Gui
 			this.editButton.TabIndex = 15;
 			this.editButton.Text = "Edit";
 			this.editButton.Click += new System.EventHandler(this.editButton_Click);
-			//
+			// 
 			// namespaceSummariesButton
-			//
+			// 
 			this.namespaceSummariesButton.Anchor = (System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right);
 			this.namespaceSummariesButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.namespaceSummariesButton.Location = new System.Drawing.Point(320, 120);
+			this.namespaceSummariesButton.Location = new System.Drawing.Point(397, 120);
 			this.namespaceSummariesButton.Name = "namespaceSummariesButton";
-			this.namespaceSummariesButton.Size = new System.Drawing.Size(152, 23);
+			this.namespaceSummariesButton.Size = new System.Drawing.Size(75, 32);
 			this.namespaceSummariesButton.TabIndex = 17;
-			this.namespaceSummariesButton.Text = "Edit Namespace Summary...";
+			this.namespaceSummariesButton.Text = "Namespace\nSummaries";
 			this.namespaceSummariesButton.Click += new System.EventHandler(this.namespaceSummariesButton_Click);
-			//
+			// 
 			// assembliesHeaderGroupBox
-			//
-			this.assembliesHeaderGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+			// 
+			this.assembliesHeaderGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
 				| System.Windows.Forms.AnchorStyles.Right);
 			this.assembliesHeaderGroupBox.BackColor = System.Drawing.SystemColors.Control;
 			this.assembliesHeaderGroupBox.Controls.AddRange(new System.Windows.Forms.Control[] {
@@ -569,22 +569,22 @@ namespace NDoc.Gui
 			this.assembliesHeaderGroupBox.TabIndex = 22;
 			this.assembliesHeaderGroupBox.TabStop = false;
 			this.assembliesHeaderGroupBox.Text = "Select Assemblies to Document";
-			//
+			// 
 			// assembliesListView
-			//
-			this.assembliesListView.Anchor = (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-				| System.Windows.Forms.AnchorStyles.Left)
+			// 
+			this.assembliesListView.Anchor = (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+				| System.Windows.Forms.AnchorStyles.Left) 
 				| System.Windows.Forms.AnchorStyles.Right);
 			this.assembliesListView.ForeColor = System.Drawing.SystemColors.WindowText;
 			this.assembliesListView.Location = new System.Drawing.Point(16, 24);
 			this.assembliesListView.Name = "assembliesListView";
-			this.assembliesListView.Size = new System.Drawing.Size(296, 120);
+			this.assembliesListView.Size = new System.Drawing.Size(368, 120);
 			this.assembliesListView.TabIndex = 13;
 			this.assembliesListView.View = System.Windows.Forms.View.List;
 			this.assembliesListView.SelectedIndexChanged += new System.EventHandler(this.assembliesListView_SelectedIndexChanged);
-			//
+			// 
 			// deleteButton
-			//
+			// 
 			this.deleteButton.Anchor = (System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right);
 			this.deleteButton.Enabled = false;
 			this.deleteButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
@@ -593,9 +593,9 @@ namespace NDoc.Gui
 			this.deleteButton.TabIndex = 16;
 			this.deleteButton.Text = "Remove";
 			this.deleteButton.Click += new System.EventHandler(this.deleteButton_Click);
-			//
+			// 
 			// toolBar
-			//
+			// 
 			this.toolBar.Appearance = System.Windows.Forms.ToolBarAppearance.Flat;
 			this.toolBar.Buttons.AddRange(new System.Windows.Forms.ToolBarButton[] {
 																					   this.newToolBarButton,
@@ -615,14 +615,14 @@ namespace NDoc.Gui
 			this.toolBar.TextAlign = System.Windows.Forms.ToolBarTextAlign.Right;
 			this.toolBar.Wrappable = false;
 			this.toolBar.ButtonClick += new System.Windows.Forms.ToolBarButtonClickEventHandler(this.toolBarButton_Click);
-			//
+			// 
 			// buildToolBarButton
-			//
+			// 
 			this.buildToolBarButton.ImageIndex = 4;
 			this.buildToolBarButton.ToolTipText = "Build Documentation (Ctrl+Shift+B)";
-			//
+			// 
 			// MainForm
-			//
+			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.ClientSize = new System.Drawing.Size(496, 610);
 			this.Controls.AddRange(new System.Windows.Forms.Control[] {
