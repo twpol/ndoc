@@ -342,17 +342,17 @@ namespace NDoc.Core
 				writer.WriteEndDocument();
 				writer.Flush();
 
-#if DEBUG
-				// write our intermediate xml to a file for debugging
-//				string testFile = Path.Combine(Path.GetPathRoot(Environment.SystemDirectory), "ndoc-test.xml");
-//				FileStream fs = new FileStream(testFile, FileMode.Create);
-//				fs.Write(memoryStream.GetBuffer(), 0, (int)memoryStream.Length);
-//				fs.Close();
-#endif
-
 				xmlBuffer = swriter.ToString();
 				//xmlDocument = new XmlDocument();
 				//xmlDocument.LoadXml(xmlBuffer);
+
+#if DEBUG
+				// write our intermediate xml to a file for debugging
+				string testFile = Path.Combine(Path.GetPathRoot(Environment.SystemDirectory), "ndoc-debug.xml");
+				StreamWriter strwriter = new StreamWriter(testFile, false, Encoding.Unicode);
+				strwriter.Write(xmlBuffer);
+				strwriter.Close();
+#endif
 			}
 			catch (Exception e)
 			{
