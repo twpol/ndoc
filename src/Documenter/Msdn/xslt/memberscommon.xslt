@@ -384,6 +384,7 @@
 						<xsl:text>)</xsl:text>
 					</td>
 					<td width="50%">
+						<xsl:call-template name="obsolete-inline"/>
 						<xsl:call-template name="summary-with-no-paragraph">
 							<xsl:with-param name="member" select="$declaring-class/property[@name=$name]" />
 						</xsl:call-template>
@@ -404,6 +405,7 @@
 						<xsl:text>)</xsl:text>
 					</td>
 					<td width="50%">
+						<xsl:call-template name="obsolete-inline"/>
 						<xsl:call-template name="summary-with-no-paragraph" />
 					</td>
 				</xsl:otherwise>
@@ -435,6 +437,7 @@
 				<xsl:text>)</xsl:text>
 			</td>
 			<td width="50%">
+				<xsl:call-template name="obsolete-inline"/>
 				<xsl:call-template name="summary-with-no-paragraph" />
 			</td>
 		</tr>
@@ -471,6 +474,7 @@
 						<xsl:text>)</xsl:text>
 					</td>
 					<td width="50%">
+						<xsl:call-template name="obsolete-inline"/>
 						<xsl:call-template name="summary-with-no-paragraph">
 							<xsl:with-param name="member" select="$declaring-class/field[@name=$name]" />
 						</xsl:call-template>
@@ -491,6 +495,7 @@
 						<xsl:text>)</xsl:text>
 					</td>
 					<td width="50%">
+						<xsl:call-template name="obsolete-inline"/>
 						<xsl:call-template name="summary-with-no-paragraph" />
 					</td>
 				</xsl:otherwise>
@@ -522,6 +527,7 @@
 				<xsl:text>)</xsl:text>
 			</td>
 			<td width="50%">
+				<xsl:call-template name="obsolete-inline"/>
 				<xsl:call-template name="summary-with-no-paragraph" />
 			</td>
 		</tr>
@@ -598,6 +604,9 @@
 									<xsl:if test="@overload">
 										<xsl:text>Overloaded. </xsl:text>
 									</xsl:if>
+									<xsl:if test="not(@overload)">
+										<xsl:call-template name="obsolete-inline"/>
+									</xsl:if>
 									<xsl:call-template name="summary-with-no-paragraph">
 										<xsl:with-param name="member" select="$declaring-class/method[@name=$name]" />
 									</xsl:call-template>
@@ -622,6 +631,9 @@
 						<td width="50%">
 							<xsl:if test="@overload">
 								<xsl:text>Overloaded. </xsl:text>
+							</xsl:if>
+							<xsl:if test="not(@overload)">
+								<xsl:call-template name="obsolete-inline"/>
 							</xsl:if>
 							<xsl:call-template name="summary-with-no-paragraph" />
 						</td>
@@ -663,6 +675,9 @@
 					<xsl:if test="@overload">
 						<xsl:text>Overloaded. </xsl:text>
 					</xsl:if>
+					<xsl:if test="not(@overload)">
+						<xsl:call-template name="obsolete-inline"/>
+					</xsl:if>
 					<xsl:call-template name="summary-with-no-paragraph" />
 				</td>
 			</tr>
@@ -700,6 +715,7 @@
 						<xsl:text>)</xsl:text>
 					</td>
 					<td width="50%">
+						<xsl:call-template name="obsolete-inline"/>
 						<xsl:call-template name="summary-with-no-paragraph">
 							<xsl:with-param name="member" select="$declaring-class/event[@name=$name]" />
 						</xsl:call-template>
@@ -720,6 +736,7 @@
 						<xsl:text>)</xsl:text>
 					</td>
 					<td width="50%">
+						<xsl:call-template name="obsolete-inline"/>
 						<xsl:call-template name="summary-with-no-paragraph" />
 					</td>
 				</xsl:otherwise>
@@ -751,6 +768,7 @@
 				<xsl:text>)</xsl:text>
 			</td>
 			<td width="50%">
+				<xsl:call-template name="obsolete-inline"/>
 				<xsl:call-template name="summary-with-no-paragraph" />
 			</td>
 		</tr>
@@ -831,6 +849,9 @@
 						<td width="50%">
 							<xsl:if test="@overload and @name!='op_Implicit' and @name!='op_Explicit'">
 								<xsl:text>Overloaded. </xsl:text>
+							</xsl:if>
+							<xsl:if test="not(@overload)">
+								<xsl:call-template name="obsolete-inline"/>
 							</xsl:if>
 							<xsl:call-template name="summary-with-no-paragraph" />
 						</td>

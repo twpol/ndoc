@@ -349,7 +349,29 @@
 		<xsl:apply-templates select="." mode="slashdoc" />
 	</xsl:template>
 	<!-- -->
+	<xsl:template name="obsolete-section">
+		<xsl:if test="./obsolete">
+			<P><FONT color="red"><B>NOTE: This <xsl:value-of select="name()"/> is now obsolete.</B></FONT></P>
+			<xsl:if test="./obsolete!=''">
+				<P><B><xsl:value-of select="obsolete"/></B></P>
+			</xsl:if>
+			<xsl:if test="./documentation/obsolete!=''">
+				<xsl:call-template name="output-paragraph">
+					<xsl:with-param name="nodes" select="(documentation/obsolete)[1]/node()" />
+				</xsl:call-template>
+			</xsl:if>
+			<HR/>
+		</xsl:if>
+	</xsl:template>
+	<!-- -->
+	<xsl:template name="obsolete-inline">
+		<xsl:if test="./obsolete">
+			<FONT color="red"><B>Obsolete. </B></FONT>
+		</xsl:if>
+	</xsl:template>
+	<!-- -->
 	<xsl:template name="summary-section">
+		<xsl:call-template name="obsolete-section"/>
 		<xsl:call-template name="output-paragraph">
 			<xsl:with-param name="nodes" select="(documentation/summary)[1]/node()" />
 		</xsl:call-template>
@@ -731,9 +753,12 @@
 		<xsl:variable name="version-rtf">
 			<xsl:call-template name="generated-from-assembly-version" />
 		</xsl:variable>
-		<xsl:if test="string($copyright-rtf) or string($version-rtf) or string($footerHtml)">
+		<xsl:if test="string($copyright-rtf) or string($version-rtf) or string($footerHtml) or /ndoc/feedbackEmail">
 			<hr />
 			<div id="footer">
+				<xsl:apply-templates select="/ndoc/feedbackEmail">
+					<xsl:with-param name="page" select="$type-name"/>
+				</xsl:apply-templates>
 				<xsl:choose>
 					<xsl:when test="$footerHtml=''">
 						<p>
@@ -935,4 +960,21 @@
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
+	
+	<xsl:template match="feedbackEmail">
+		<xsl:param name="page"/>
+		<p>
+			<a>
+				<xsl:attribute name="href">
+					<xsl:text>mailto:</xsl:text>
+					<xsl:value-of select="."/>
+					<xsl:text>?subject=</xsl:text>
+					<xsl:value-of select="$ndoc-title" />
+					<xsl:text> Documentation Feedback: </xsl:text>
+					<xsl:value-of select="$page"/>
+				</xsl:attribute>
+				<xsl:text>Send comments on this topic.</xsl:text>
+			</a>
+		</p>
+	</xsl:template>	
 </xsl:stylesheet>

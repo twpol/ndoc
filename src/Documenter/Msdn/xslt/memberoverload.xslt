@@ -119,6 +119,7 @@
 							</xsl:when>
 							<xsl:otherwise>
 								<p>
+									<xsl:call-template name="obsolete-inline"/>
 									<xsl:call-template name="summary-with-no-paragraph">
 										<xsl:with-param name="member" select="." />
 									</xsl:call-template>

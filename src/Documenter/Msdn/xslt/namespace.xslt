@@ -122,7 +122,7 @@
 		<xsl:call-template name="summary-section" />
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="class">
+	<xsl:template match="enumeration | delegate | structure | interface | class">
 		<tr valign="top">
 			<td width="50%">
 				<a>
@@ -135,78 +135,7 @@
 				</a>
 			</td>
 			<td width="50%">
-				<xsl:apply-templates select="(documentation/summary)[1]/node()" mode="slashdoc" />
-			</td>
-		</tr>
-	</xsl:template>
-	<!-- -->
-	<xsl:template match="interface">
-		<tr valign="top">
-			<td width="50%">
-				<a>
-					<xsl:attribute name="href">
-						<xsl:call-template name="get-filename-for-type">
-							<xsl:with-param name="id" select="@id" />
-						</xsl:call-template>
-					</xsl:attribute>
-					<xsl:value-of select="@name" />
-				</a>
-			</td>
-			<td width="50%">
-				<xsl:apply-templates select="(documentation/summary)[1]/node()" mode="slashdoc" />
-			</td>
-		</tr>
-	</xsl:template>
-	<!-- -->
-	<xsl:template match="structure">
-		<tr valign="top">
-			<td width="50%">
-				<a>
-					<xsl:attribute name="href">
-						<xsl:call-template name="get-filename-for-type">
-							<xsl:with-param name="id" select="@id" />
-						</xsl:call-template>
-					</xsl:attribute>
-					<xsl:value-of select="@name" />
-				</a>
-			</td>
-			<td width="50%">
-				<xsl:apply-templates select="(documentation/summary)[1]/node()" mode="slashdoc" />
-			</td>
-		</tr>
-	</xsl:template>
-	<!-- -->
-	<xsl:template match="delegate">
-		<tr valign="top">
-			<td width="50%">
-				<a>
-					<xsl:attribute name="href">
-						<xsl:call-template name="get-filename-for-type">
-							<xsl:with-param name="id" select="@id" />
-						</xsl:call-template>
-					</xsl:attribute>
-					<xsl:value-of select="@name" />
-				</a>
-			</td>
-			<td width="50%">
-				<xsl:apply-templates select="(documentation/summary)[1]/node()" mode="slashdoc" />
-			</td>
-		</tr>
-	</xsl:template>
-	<!-- -->
-	<xsl:template match="enumeration">
-		<tr valign="top">
-			<td width="50%">
-				<a>
-					<xsl:attribute name="href">
-						<xsl:call-template name="get-filename-for-type">
-							<xsl:with-param name="id" select="@id" />
-						</xsl:call-template>
-					</xsl:attribute>
-					<xsl:value-of select="@name" />
-				</a>
-			</td>
-			<td width="50%">
+				<xsl:call-template name="obsolete-inline"/>
 				<xsl:apply-templates select="(documentation/summary)[1]/node()" mode="slashdoc" />
 			</td>
 		</tr>
