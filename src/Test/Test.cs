@@ -718,4 +718,37 @@ namespace NDoc.Test
 		/// <summary>Internal event</summary>
 		internal event Handler InternalEvent;
 	}
+
+  /// <summary>
+  /// </summary>
+  public class MissingDocumentationBase
+  {
+    /// <summary>
+    /// This one's documented!
+    /// </summary>
+    /// <param name="a">A param</param>
+    /// <param name="b">Anotner param</param>
+    /// <returns>returns something</returns>
+    /// <remarks><para>
+    /// This is a remark.
+    /// </para></remarks>
+    public int SomeMethod( int a, bool b ) { return 0; }
+
+    /// <summary>
+    /// This one's overloaded and documented!
+    /// </summary>
+    /// <param name="a">A param</param>
+    /// <param name="b">Anotner param</param>
+    /// <returns>returns something</returns>
+    /// <remarks><para>
+    /// This is a remark.
+    /// </para></remarks>
+    public int SomeMethod( int a, int b ) { return 0; }
+  }
+
+  /// <summary>
+  /// </summary>
+  public class MissingDocumentationDerived : MissingDocumentationBase
+  {
+  }
 }
