@@ -284,15 +284,30 @@
 		</p>
 	</xsl:template>
 	<!-- -->
+	<xsl:template match="see[@langword]" mode="slashdoc">
+		<xsl:choose>
+			<xsl:when test="@langword='null'">
+				<xsl:text>a null reference (</xsl:text>
+				<b>Nothing</b>
+				<xsl:text> in Visual Basic)</xsl:text>
+			</xsl:when>
+			<xsl:when test="@langword='sealed'">
+				<xsl:text>sealed (</xsl:text>
+				<b>NotInheritable</b>
+				<xsl:text> in Visual Basic)</xsl:text>
+			</xsl:when>
+			<xsl:otherwise>
+				<b>
+					<xsl:value-of select="@langword" />
+				</b>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	<!-- -->
 	<xsl:template match="see[@cref]" mode="slashdoc">
 		<xsl:variable name="cref" select="@cref" />
 		<xsl:variable name="seethis" select="//*[@id=$cref]" />
 		<xsl:choose>
-			<xsl:when test="@langword">
-				<b>
-					<xsl:value-of select="@langword" />
-				</b>
-			</xsl:when>
 			<xsl:when test="$seethis">
 				<xsl:variable name="href">
 					<xsl:call-template name="get-filename-for-cref">

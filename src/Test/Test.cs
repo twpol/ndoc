@@ -341,4 +341,11 @@ namespace NDoc.Test
 		{
 		}
 	}
+
+	/// <summary>This class contains &lt;see langword=""&gt; elements in the remarks.</summary>
+	/// <remarks>The default style is <see langword="bold"/>. 
+	/// But <see langword="null"/> and <see langword="sealed"/> do more.</remarks>
+	public class Langword
+	{
+	}
 }
