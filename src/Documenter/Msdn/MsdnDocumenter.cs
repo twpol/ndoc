@@ -184,7 +184,15 @@ namespace NDoc.Documenter.Msdn
 					//clean-up output path
 					foreach (string file in Directory.GetFiles(MyConfig.OutputDirectory, "*.*"))
 					{
-						File.Delete(file);
+						try
+						{
+							File.Delete(file);
+						}
+						catch (IOException)
+						{
+							Trace.WriteLine("Could not delete " + file + " from the output directory because it is in use.");
+							// IOException means the file is in use. Swallow the exception and continue.
+						}
 					}
 				}
 
