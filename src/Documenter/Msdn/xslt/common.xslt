@@ -295,8 +295,8 @@
 					</xsl:choose>
 				</xsl:if>
 			</xsl:if>
-			<xsl:if test="documentation/seealso">
-				<xsl:for-each select="documentation/seealso">
+			<xsl:if test="documentation//seealso">
+				<xsl:for-each select="documentation//seealso">
 					<xsl:text> | </xsl:text>
 					<xsl:choose>
 						<xsl:when test="@cref">
