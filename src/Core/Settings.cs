@@ -35,7 +35,7 @@ namespace NDoc.Core
 			{
 				// create a path for this major.minor version of the app
 				Version version = Assembly.GetExecutingAssembly().GetName().Version;
-				string folder = string.Format( "NDoc{0}{1}", version.Major, version.Minor );
+				string folder = string.Format( "NDoc.{0}.{1}", version.Major, version.Minor );
 				return Path.Combine( Environment.GetFolderPath( Environment.SpecialFolder.LocalApplicationData ), folder );
 			}
 		}
@@ -51,16 +51,24 @@ namespace NDoc.Core
 		{
 			if ( File.Exists( filePath ) )
 			{
-				XmlDocument doc = new XmlDocument();
+				XmlTextReader reader = null;
 				try
 				{
-					doc.Load( filePath );
+					XmlDocument doc = new XmlDocument();
+					reader = new XmlTextReader( filePath );
+				
+					doc.Load( reader );
 					if ( doc.DocumentElement != null )
-						data = doc.DocumentElement;
+						data = doc.DocumentElement;				
 				}
 				catch ( Exception )
 				{
 					data = null;
+				}
+				finally
+				{
+					if ( reader != null )
+						reader.Close();
 				}
 			}
 
@@ -74,7 +82,7 @@ namespace NDoc.Core
 		/// <see cref="System.IDisposable.Dispose"/>
 		/// </summary>
 		public void Dispose()
-		{
+		{			
 			data.OwnerDocument.Save( path );
 		}
 		/// <summary>
