@@ -283,7 +283,9 @@ namespace NDoc.Documenter.Msdn
 						htmlHelp.AddFileToProject(Path.GetFileName(rootPageOutputName));
 						htmlHelp.AddFileToContents(rootPageTOCName, 
 							Path.GetFileName(rootPageOutputName));
-						htmlHelp.OpenBookInContents();
+
+						// depending on peer setting, make root page the container
+						if (MyConfig.RootPageContainsNamespaces) htmlHelp.OpenBookInContents();
 					}
 
 					documentedNamespaces = new ArrayList();
@@ -292,9 +294,8 @@ namespace NDoc.Documenter.Msdn
 					// close root book if applicable
 					if (rootPageFileName != null)
 					{
-						htmlHelp.CloseBookInContents();
+						if (MyConfig.RootPageContainsNamespaces) htmlHelp.CloseBookInContents();
 					}
-
 				}
 				finally
 				{
