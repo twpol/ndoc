@@ -106,6 +106,7 @@ namespace NDoc.Core
 			// 
 			this.DescriptionLabel.Anchor = ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
 				| System.Windows.Forms.AnchorStyles.Right);
+			this.DescriptionLabel.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.DescriptionLabel.Location = new System.Drawing.Point(8, 8);
 			this.DescriptionLabel.Name = "DescriptionLabel";
 			this.DescriptionLabel.Size = new System.Drawing.Size(368, 23);

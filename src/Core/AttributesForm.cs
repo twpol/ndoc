@@ -180,6 +180,7 @@ namespace NDoc.Core
 			// 
 			// label1
 			// 
+			this.label1.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.label1.Location = new System.Drawing.Point(16, 24);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(608, 23);
@@ -189,6 +190,7 @@ namespace NDoc.Core
 			// 
 			// Add
 			// 
+			this.Add.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.Add.Location = new System.Drawing.Point(32, 304);
 			this.Add.Name = "Add";
 			this.Add.TabIndex = 2;
@@ -197,6 +199,7 @@ namespace NDoc.Core
 			// 
 			// Delete
 			// 
+			this.Delete.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.Delete.Location = new System.Drawing.Point(192, 304);
 			this.Delete.Name = "Delete";
 			this.Delete.TabIndex = 3;
@@ -205,6 +208,7 @@ namespace NDoc.Core
 			// 
 			// Edit
 			// 
+			this.Edit.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.Edit.Location = new System.Drawing.Point(112, 304);
 			this.Edit.Name = "Edit";
 			this.Edit.TabIndex = 4;
@@ -219,6 +223,7 @@ namespace NDoc.Core
 																					this.AddProp,
 																					this.listProperties,
 																					this.label2});
+			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupBox1.Location = new System.Drawing.Point(320, 40);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(304, 304);
@@ -237,6 +242,7 @@ namespace NDoc.Core
 			// 
 			// EditProp
 			// 
+			this.EditProp.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.EditProp.Location = new System.Drawing.Point(112, 272);
 			this.EditProp.Name = "EditProp";
 			this.EditProp.TabIndex = 3;
@@ -245,6 +251,7 @@ namespace NDoc.Core
 			// 
 			// AddProp
 			// 
+			this.AddProp.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.AddProp.Location = new System.Drawing.Point(32, 272);
 			this.AddProp.Name = "AddProp";
 			this.AddProp.TabIndex = 2;
@@ -261,6 +268,7 @@ namespace NDoc.Core
 			// 
 			// label2
 			// 
+			this.label2.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.label2.Location = new System.Drawing.Point(8, 16);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(288, 32);
@@ -293,6 +301,7 @@ namespace NDoc.Core
 																					this.Delete,
 																					this.Add,
 																					this.Edit});
+			this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupBox2.Location = new System.Drawing.Point(8, 8);
 			this.groupBox2.Name = "groupBox2";
 			this.groupBox2.Size = new System.Drawing.Size(624, 344);
