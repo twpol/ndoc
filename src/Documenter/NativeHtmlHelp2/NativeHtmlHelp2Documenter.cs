@@ -345,7 +345,10 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 
 		private void PrepareWorkspace( Workspace w )
 		{
+			// delete any existing intermediates
 			w.Clean();
+			// preapre workspace
+			w.Prepare();
 
 			// import the base content files
 			w.ImportContent( Path.Combine( ResourceDirectory, "graphics" ) );

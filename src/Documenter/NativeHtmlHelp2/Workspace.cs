@@ -62,7 +62,13 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			RootDirectory = rootDir;
 			if ( !Directory.Exists( RootDirectory ) )
 				Directory.CreateDirectory( RootDirectory );
+		}
 
+		/// <summary>
+		/// Prepares the workspace, by creating working and content directories
+		/// </summary>
+		public void Prepare()
+		{
 			if ( !Directory.Exists( WorkingDirectory ) )
 				Directory.CreateDirectory( WorkingDirectory );
 
@@ -88,7 +94,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		{
 			get
 			{
-				return Path.Combine( RootDirectory, "temp" );
+				return Path.Combine( RootDirectory, "ndoc.build.temp" );
 			}
 		}
 
@@ -100,7 +106,12 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		{
 			DirectoryInfo dir = new DirectoryInfo( WorkingDirectory );
 			foreach ( FileInfo f in dir.GetFiles( filter ) )
-				f.MoveTo( Path.Combine( this.RootDirectory, f.Name ) );
+			{
+				string newFile = Path.Combine( this.RootDirectory, f.Name );
+				if ( File.Exists( newFile ) )
+					File.Delete( newFile );
+				f.MoveTo( newFile );
+			}
 		}
 
 		/// <summary>
@@ -205,35 +216,25 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		}
 
 		/// <summary>
+		/// These are the output file type extensions that will be cleaned
+		/// </summary>
+		private static readonly string CleanableFileTypes = "*.HxS;*.HxI;*.HxC;*.h2reg.ini;*.HxT;*.HxK";
+
+		/// <summary>
 		/// Delets all output and intermediate files from the project workspace
-		/// This will delte all files and folder in RootDirectory
+		/// This will delete all the cleanable files in the root and remove the working directory
 		/// </summary>
 		public void Clean()
 		{
-			CleanDirectory( new DirectoryInfo( RootDirectory ) );
-		}
+			string[] extenstions = CleanableFileTypes.Split( new char[] { ';' } );
 
-		private void CleanDirectory( DirectoryInfo dir )
-		{
-			//clean-up output path
-			foreach ( FileInfo file in dir.GetFiles( "*.*" ) )
+			foreach ( string ext in extenstions )
 			{
-				try
-				{
-					file.Delete();
-				}
-				catch ( UnauthorizedAccessException )
-				{
-					Trace.WriteLine("Could not delete " + file + " from the output directory.  It might be read-only.");
-				}
-				catch ( IOException )
-				{
-					Trace.WriteLine("Could not delete " + file + " from the output directory because it is in use.");
-				}
+				foreach ( string f in Directory.GetFiles( RootDirectory, ext ) )
+					File.Delete( f );
 			}
-
-			foreach ( DirectoryInfo child in dir.GetDirectories() )
-				CleanDirectory( child );
+			Directory.Delete( WorkingDirectory, true );
 		}
+
 	}
 }

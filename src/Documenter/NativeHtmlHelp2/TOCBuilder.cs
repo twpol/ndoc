@@ -47,11 +47,11 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			Dispose( false );
 		}
 
-		private void factory_TopicStart(object sender, FileEventArgs e)
+		private void factory_TopicStart(object sender, FileEventArgs args)
 		{
 			// this assumes that all content files are going in a directory named
 			// "html" (relative to the location of the HxT
-			toc.OpenNode( "/html/" + e.File );
+			toc.OpenNode( string.Format( "/{0}/{1}", Workspace.ContentDirectoryName, args.File ) );
 		}
 
 		private void factory_TopicEnd(object sender, EventArgs e)

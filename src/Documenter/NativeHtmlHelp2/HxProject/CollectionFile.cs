@@ -14,7 +14,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.HxProject
 		/// <param name="templateFile">The path to the template</param>
 		/// <param name="name">The name of the new file</param>
 		/// <returns>A new CollectionFile</returns>
-		public static CollectionFile CreateFrom( string templateFile, string name )
+		public static new CollectionFile CreateFrom( string templateFile, string name )
 		{
 			return new CollectionFile( name, HxFile.CreateFrom( templateFile ) );
 		}
