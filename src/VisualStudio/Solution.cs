@@ -95,12 +95,19 @@ namespace NDoc.VisualStudio
 		/// Returns the specified project's configuration name based for 
 		/// a specific solution configuration.
 		/// </summary>
-		/// <param name="solutionConfig">The solution configuration name.</param>
-		/// <param name="projectId">The project guid.</param>
-		/// <returns>The project configuration name.</returns>
+		/// <param name="solutionConfig">A valid configuration name for the solution.</param>
+		/// <param name="projectId">A valid project guid.</param>
+		/// <returns>The project configuration name or null.</returns>
+		/// <remarks>The null value is returned when the parameters are invalid,
+		/// or if the project is not marked to be built under the specified
+		/// solution configuration.</remarks>
 		public string GetProjectConfigName(string solutionConfig, string projectId)
 		{
-			return (string)((Hashtable)_configurations[solutionConfig])[projectId];
+			Hashtable pcfg = (Hashtable)_configurations[solutionConfig];
+			if (pcfg == null) 
+				return null;
+			else
+				return (string)pcfg[projectId];
 		}
 
 		/// <summary>
