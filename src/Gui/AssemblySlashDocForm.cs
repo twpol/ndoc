@@ -235,7 +235,7 @@ namespace NDoc.Gui
 		protected void slashDocButton_Click (object sender, System.EventArgs e)
 		{
 			OpenFileDialog  openFileDlg = new OpenFileDialog();
-
+			openFileDlg.RestoreDirectory = true ;
 			openFileDlg.Filter = "/doc Output files (*.xml)|*.xml|All files (*.*)|*.*" ;
 
 			if(openFileDlg.ShowDialog() == DialogResult.OK)
@@ -253,7 +253,7 @@ namespace NDoc.Gui
 		protected void assemblyButton_Click (object sender, System.EventArgs e)
 		{
 			OpenFileDialog openFileDlg = new OpenFileDialog();
-
+			openFileDlg.RestoreDirectory = true ;
 			openFileDlg.Filter = "Library and Executable files (*.dll, *.exe)|*.dll;*.exe|Library files (*.dll)|*.dll|Executable files (*.exe)|*.exe|All files (*.*)|*.*" ;
 
 			if(openFileDlg.ShowDialog() == DialogResult.OK)

@@ -1064,7 +1064,6 @@ namespace NDoc.Gui
 			}
 
 			saveFileDlg.Filter = "Project files (*.ndoc)|*.ndoc|All files (*.*)|*.*" ;
-			saveFileDlg.RestoreDirectory = true ;
 
 			if(saveFileDlg.ShowDialog() == DialogResult.OK)
 			{
@@ -1143,10 +1142,8 @@ namespace NDoc.Gui
 		private void menuFileOpenSolution_Click (object sender, System.EventArgs e)
 		{
 			OpenFileDialog openFileDlg = new OpenFileDialog();
-
-			//openFileDlg.InitialDirectory = processDirectory;
+			openFileDlg.InitialDirectory = Directory.GetCurrentDirectory();
 			openFileDlg.Filter = "Visual Studio Solution files (*.sln)|*.sln|All files (*.*)|*.*" ;
-			openFileDlg.RestoreDirectory = true ;
 
 			if(openFileDlg.ShowDialog() == DialogResult.OK)
 			{
@@ -1217,8 +1214,7 @@ namespace NDoc.Gui
 		private void menuFileOpenItem_Click (object sender, System.EventArgs e)
 		{
 			OpenFileDialog openFileDlg = new OpenFileDialog();
-			//TODO: set the initial directory to the last place where we opened/saved a project
-			//openFileDlg.InitialDirectory = processDirectory;
+			openFileDlg.InitialDirectory = Directory.GetCurrentDirectory();
 			openFileDlg.Filter = "Project files (*.ndoc)|*.ndoc|All files (*.*)|*.*" ;
 
 			if(openFileDlg.ShowDialog() == DialogResult.OK)
@@ -1302,6 +1298,12 @@ namespace NDoc.Gui
 			IDocumenter documenter =
 				(IDocumenter)project.Documenters[comboBoxDocumenters.SelectedIndex];
 
+			//make sure the current directory is the project directory
+			if (projectFilename != untitledProjectName)
+			{
+				Directory.SetCurrentDirectory(Path.GetDirectoryName(projectFilename));
+			}
+
 			string message = documenter.CanBuild(project);
 
 			if (message != null)
@@ -1349,7 +1351,7 @@ namespace NDoc.Gui
 				}
 
 				// Wait a little for the thread to die
-				buildThread.Join(2000);
+				buildThread.Join(200);
 			}
 			finally
 			{
@@ -1467,6 +1469,13 @@ namespace NDoc.Gui
 		{
 			IDocumenter documenter = 
 				(IDocumenter)project.Documenters[comboBoxDocumenters.SelectedIndex];
+
+			//make sure the current directory is the project directory
+			if (projectFilename != untitledProjectName)
+			{
+				Directory.SetCurrentDirectory(Path.GetDirectoryName(projectFilename));
+			}
+
 			try
 			{
 				documenter.View();
