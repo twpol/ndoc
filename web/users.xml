@@ -3,6 +3,7 @@
 	<body>
 		<p>The following companies use NDoc to document their .NET libraries:</p>
 		<ul>
+			<li><a href="http://www.richtextbox.com/">RichTextBox.com</a></li>
 			<li><a href="http://www.xceedsoft.com/">Xceed Software Inc.</a></li>
 		</ul>
 		<p>If you'd a link to your company added to this list, just let <a href="mailto:jason@injektilo.org">us</a> know!</p>
