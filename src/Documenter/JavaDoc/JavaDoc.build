@@ -1,27 +1,27 @@
 <?xml version="1.0" ?>
 <project name="NDoc.Documenter.JavaDoc" default="compile">
-    <target name="compile">
-        <!-- copy the ndoc key file to the location where the compiler expects it to be -->
-        <copy file="../../ndoc.snk" todir="${current.bin.dir}/../../../../" if="${current.build.config.release}" />
-        <!-- compile the assembly -->
-        <csc target="library" output="${current.bin.dir}/${nant.project.name}.dll" debug="${current.build.debug}" unsafe="false" checked="false" define="${current.build.defines}" doc="${current.bin.dir}/${nant.project.name}.xml">
-            <sources>
-                <includes name="**/*.cs" />
-                <includes name="../../CommonAssemblyInfo.cs" />
-            </sources>
-            <references>
-                <includes name="${nant.settings.currentframework.frameworkassemblydirectory}/System.dll" />
-                <includes name="${nant.settings.currentframework.frameworkassemblydirectory}/System.Xml.dll" />
-                <includes name="${nant.settings.currentframework.frameworkassemblydirectory}/System.Design.dll" />
-                <includes name="${nant.settings.currentframework.frameworkassemblydirectory}/System.Drawing.Design.dll" />
-                <includes name="${nant.settings.currentframework.frameworkassemblydirectory}/System.Drawing.dll" />
-                <includes name="${nant.settings.currentframework.frameworkassemblydirectory}/System.Windows.Forms.dll" />
-                <includes name="${current.bin.dir}/NDoc.Core.dll" />
-            </references>
-            <resources prefix="NDoc.Documenter.JavaDoc" dynamicprefix="true">
-                <includes name="**/*.css" />
-                <includes name="**/*.xslt" />
-            </resources>
-        </csc>
-    </target>
+	<target name="compile">
+		<!-- copy the ndoc key file to the location where the compiler expects it to be -->
+		<copy file="../../ndoc.snk" todir="${current.bin.dir}/../../../../" if="${current.build.config.release}" />
+		<!-- compile the assembly -->
+		<csc target="library" output="${current.bin.dir}/${nant.project.name}.dll" debug="${current.build.debug}" unsafe="false" checked="false" define="${current.build.defines}" doc="${current.bin.dir}/${nant.project.name}.xml">
+			<sources>
+				<includes name="**/*.cs" />
+				<includes name="../../CommonAssemblyInfo.cs" />
+			</sources>
+			<references>
+				<includes name="${nant.settings.currentframework.frameworkassemblydirectory}/System.dll" />
+				<includes name="${nant.settings.currentframework.frameworkassemblydirectory}/System.Xml.dll" />
+				<includes name="${nant.settings.currentframework.frameworkassemblydirectory}/System.Design.dll" />
+				<includes name="${nant.settings.currentframework.frameworkassemblydirectory}/System.Drawing.Design.dll" />
+				<includes name="${nant.settings.currentframework.frameworkassemblydirectory}/System.Drawing.dll" />
+				<includes name="${nant.settings.currentframework.frameworkassemblydirectory}/System.Windows.Forms.dll" />
+				<includes name="${current.bin.dir}/NDoc.Core.dll" />
+			</references>
+			<resources prefix="NDoc.Documenter.JavaDoc" dynamicprefix="true">
+				<includes name="**/*.css" />
+				<includes name="**/*.xslt" />
+			</resources>
+		</csc>
+	</target>
 </project>

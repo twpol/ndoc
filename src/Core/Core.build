@@ -1,26 +1,26 @@
 <?xml version="1.0" ?>
 <project name="NDoc.Core" default="compile">
-    <target name="compile">
-        <!-- copy the ndoc key file to the location where the compiler expects it to be -->
-        <copy file="../ndoc.snk" todir="${current.bin.dir}/../../../" if="${current.build.config.release}" />
-        <!-- compile the assembly -->
-        <csc target="library" output="${current.bin.dir}/${nant.project.name}.dll" debug="${current.build.debug}" unsafe="false" checked="false" define="${current.build.defines}" doc="${current.bin.dir}/${nant.project.name}.xml">
-            <sources>
-                <includes name="**/*.cs" />
-                <includes name="../CommonAssemblyInfo.cs" />
-            </sources>
-            <references basedir="${nant.settings.currentframework.frameworkassemblydirectory}">
-                <includes name="System.dll" />
-                <includes name="System.Xml.dll" />
-                <includes name="System.Drawing.dll" />
-                <includes name="System.Windows.Forms.dll" />
-                <includes name="System.Drawing.Design.dll" />
-                <includes name="System.Design.dll" />
-                <includes name="System.Data.dll" />
-            </references>
-            <resources>
-                <includes name="**/*.resx" />
-            </resources>
-        </csc>
-    </target>
+	<target name="compile">
+		<!-- copy the ndoc key file to the location where the compiler expects it to be -->
+		<copy file="../ndoc.snk" todir="${current.bin.dir}/../../../" if="${current.build.config.release}" />
+		<!-- compile the assembly -->
+		<csc target="library" output="${current.bin.dir}/${nant.project.name}.dll" debug="${current.build.debug}" unsafe="false" checked="false" define="${current.build.defines}" doc="${current.bin.dir}/${nant.project.name}.xml">
+			<sources>
+				<includes name="**/*.cs" />
+				<includes name="../CommonAssemblyInfo.cs" />
+			</sources>
+			<references basedir="${nant.settings.currentframework.frameworkassemblydirectory}">
+				<includes name="System.dll" />
+				<includes name="System.Xml.dll" />
+				<includes name="System.Drawing.dll" />
+				<includes name="System.Windows.Forms.dll" />
+				<includes name="System.Drawing.Design.dll" />
+				<includes name="System.Design.dll" />
+				<includes name="System.Data.dll" />
+			</references>
+			<resources>
+				<includes name="**/*.resx" />
+			</resources>
+		</csc>
+	</target>
 </project>
