@@ -1691,7 +1691,10 @@ namespace NDoc.Core
 				{
 					writer.WriteStartElement("implements");
 					writer.WriteAttributeString("name", eventInfo.Name);
-					writer.WriteAttributeString("id",GetMemberName((EventInfo)implements.InterfaceMethod));
+					MemberInfo InterfaceMethod = (MemberInfo)implements.InterfaceMethod;
+					EventInfo InterfaceEvent = 
+						InterfaceMethod.DeclaringType.GetEvent(InterfaceMethod.Name.Substring(4));
+					writer.WriteAttributeString("id",GetMemberName(InterfaceEvent));
 					writer.WriteAttributeString("interface", implements.InterfaceType.Name);
 					writer.WriteAttributeString("interfaceId", GetMemberName(implements.InterfaceType));
 					writer.WriteAttributeString("declaringType", implements.InterfaceType.FullName);
