@@ -21,6 +21,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Xml;
+using System.Globalization;
 
 using Microsoft.Win32;
 
@@ -41,6 +42,7 @@ namespace NDoc.Documenter.Msdn
 
 		private bool _includeFavorites = false;
 		private bool _binaryTOC = false;
+		private short _langID=1033;
 
 		private bool _generateTocOnly;
 
@@ -99,6 +101,15 @@ namespace NDoc.Documenter.Msdn
 		{
 			get { return _binaryTOC; }
 			set { _binaryTOC = value; }
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public short LangID
+		{
+			get { return _langID; }
+			set { _langID = value; }
 		}
 
 		/// <summary>Gets or sets the DefaultTopic property.</summary>
@@ -242,7 +253,7 @@ namespace NDoc.Documenter.Msdn
 			if (_generateTocOnly) 
 				return;
 
-			streamHtmlHelp = new StreamWriter(File.Open(GetPathToProjectFile(), FileMode.Create));
+			streamHtmlHelp = new StreamWriter(File.Open(GetPathToProjectFile(), FileMode.Create), System.Text.Encoding.Default);
 			streamHtmlHelp.WriteLine("[FILES]");
 		}
 
@@ -297,7 +308,9 @@ namespace NDoc.Documenter.Msdn
 			streamHtmlHelp.WriteLine("Error log file=" + GetLogFilename());
 			streamHtmlHelp.WriteLine("Full-text search=Yes");
 			streamHtmlHelp.WriteLine("Index file=" + GetIndexFilename());
-			streamHtmlHelp.WriteLine("Language=0x409 English (United States)");
+			CultureInfo ci = new CultureInfo(_langID);
+			string LangIDString = "Language=0x" + _langID.ToString("x") + " " + ci.DisplayName;
+			streamHtmlHelp.WriteLine(LangIDString);
 
 			foreach( string tocFile in _tocFiles )
 			{
@@ -348,7 +361,7 @@ namespace NDoc.Documenter.Msdn
 			// Create the table of contents writer. This can't use
 			// indenting because the HTML Help Compiler doesn't like
 			// newlines between the <LI> and <Object> tags.
-			tocWriter = new XmlTextWriter(Path.Combine(_directoryName, tocName), null);
+			tocWriter = new XmlTextWriter(Path.Combine(_directoryName, tocName), System.Text.Encoding.Default );
 
 			// these formatting options cannot be used, because they make the 
 			// Html Help Compiler hang.
@@ -442,7 +455,7 @@ namespace NDoc.Documenter.Msdn
 
 			indexWriter.WriteStartElement("HTML");
 			indexWriter.WriteStartElement("BODY");
-			indexWriter.WriteComment(" http://xmarks.sourceforge.net/ ");
+			indexWriter.WriteComment(" http://ndoc.sourceforge.net/ ");
 			indexWriter.WriteEndElement();
 			indexWriter.WriteEndElement();
 

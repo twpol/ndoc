@@ -248,7 +248,7 @@ namespace NDoc.Core
 			XmlWriter writer=null;
 			try
 			{
-				writer = new XmlTextWriter(tempfilename,Encoding.Default);
+				writer = new XmlTextWriter(tempfilename,Encoding.UTF8);
 			
 				BuildXml(project, writer);
 			
@@ -262,10 +262,6 @@ namespace NDoc.Core
 
 
 		/// <summary>Builds an Xml string combining the reflected metadata with the /doc comments.</summary>
-		/// <remarks>This now evidently writes the string in utf-16 format (and 
-		/// says so, correctly I suppose, in the xml text) so if you write this string to a file with 
-		/// utf-8 encoding it will be unparseable because the file will claim to be utf-16
-		/// but will actually be utf-8.</remarks>
 		/// <returns>XML string</returns>
 		protected string MakeXml(Project project)
 		{
@@ -275,14 +271,14 @@ namespace NDoc.Core
 			if (xmlFile.Length > 0)
 			{
 				Trace.WriteLine("Loading pre-compiled XML information from:\n" + xmlFile);
-				using (TextReader reader = new StreamReader(xmlFile))
+				using (TextReader reader = new StreamReader(xmlFile,Encoding.UTF8))
 				{
 					return reader.ReadToEnd();
 				}
 			}
 
 			StringWriter swriter = new StringWriter();
-			XmlWriter writer = new XmlTextWriter(swriter);
+			XmlWriter writer = new XmlTextWriter(swriter,Encoding.UTF8);
 
 			try
 			{

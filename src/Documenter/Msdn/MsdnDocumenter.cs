@@ -286,6 +286,7 @@ namespace NDoc.Documenter.Msdn
 
 				htmlHelp.IncludeFavorites = MyConfig.IncludeFavorites;
 				htmlHelp.BinaryTOC = MyConfig.BinaryTOC;
+				htmlHelp.LangID=MyConfig.LangID;
 
 				OnDocBuildingStep(25, "Building file mapping...");
 
@@ -384,16 +385,23 @@ namespace NDoc.Documenter.Msdn
 					//transform the HHC contents file into html
 					XslTransform xsltContents = new XslTransform();
 					MakeTransform(xsltContents, "htmlcontents.xslt");
+
+					using(StreamReader contentsFile = new StreamReader(htmlHelp.GetPathToContentsFile(),Encoding.Default))
+					{
+						xpathDocument=new XPathDocument(contentsFile);
+					}
+					using ( StreamWriter streamWriter = new StreamWriter(
+								File.Open(Path.Combine(workspace.WorkingDirectory, "contents.html"), FileMode.CreateNew, FileAccess.Write, FileShare.None ), Encoding.Default ) )
+					{
 #if(NET_1_0)
 					//Use overload that is obsolete in v1.1
-					xsltContents.Transform(htmlHelp.GetPathToContentsFile(), 
-						Path.Combine(workspace.WorkingDirectory, "contents.html"));
+					xsltContents.Transform(xpathDocument,null,streamWriter);
 #else
-					//Use new overload so we don't get obsolete warnings - clean compile :)
-					xsltContents.Transform(htmlHelp.GetPathToContentsFile(), 
-						Path.Combine(workspace.WorkingDirectory, "contents.html"), null);
+						//Use new overload so we don't get obsolete warnings - clean compile :)
+						xsltContents.Transform(xpathDocument,null,streamWriter, null);
 #endif
 					}
+				}
 
 				if ((MyConfig.OutputTarget & OutputType.HtmlHelp) > 0)
 				{
@@ -1498,7 +1506,7 @@ namespace NDoc.Documenter.Msdn
 
 			using (streamWriter =  new StreamWriter(
 					File.Open(Path.Combine(workspace.WorkingDirectory, filename), FileMode.Create),
-					new UTF8Encoding(true)))
+					Encoding.UTF8))
 			{
 				arguments.AddParam("ndoc-title", String.Empty, MyConfig.Title);
 				arguments.AddParam("ndoc-vb-syntax", String.Empty, MyConfig.ShowVisualBasic);

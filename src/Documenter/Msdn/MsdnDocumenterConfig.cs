@@ -412,6 +412,24 @@ namespace NDoc.Documenter.Msdn
 			}
 		}
 	
+		short _LangID = 1033;
+
+		/// <summary>Gets or sets the LangID property</summary>
+		/// <remarks>The language ID of the locale used by the compiled helpfile</remarks>
+		[Category("HTML Help Options")]
+		[Description("The ID of the language the help file is in.")]
+		[DefaultValue(1033)]
+		public short LangID
+		{
+			get { return _LangID; }
+
+			set
+			{
+				_LangID = value;
+				SetDirty();
+			}
+		}	
+
 		/// <summary>
 		/// 
 		/// </summary>
