@@ -5,7 +5,6 @@
 	<xsl:include href="syntax-map.xslt" />
 	<!-- -->
 	<xsl:param name="ndoc-document-attributes" />
-	<xsl:param name="ndoc-documented-attributes" />
 	<!-- -->
 	<xsl:template name="syntax-section">
 		<xsl:apply-templates select="." mode="pre-syntax" />
