@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
 
-namespace NDoc.Core
+namespace NDoc.Core.PropertyGridUI
 {
 	/// <summary>
 	/// EnumConverter supporting System.ComponentModel.DescriptionAttribute
