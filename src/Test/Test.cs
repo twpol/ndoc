@@ -392,6 +392,9 @@ namespace NDoc.Test
 
 		/// <summary>This is a nested structure.</summary>
 		public struct InnerStruct {}
+
+		/// <summary>This is a nested delegate.</summary>
+		public delegate void InnerDelegate(string myparam);
 	}
 
 	/// <summary>This is an internal class.</summary>
