@@ -311,7 +311,8 @@ namespace NDoc.Documenter.Msdn
 		[
 		Category("HTML Help Options"),
 		Description("The name of an html file to be included as the root home page. "
-			+ "SplitTOCs is disabled when this property is set.")
+			+ "SplitTOCs is disabled when this property is set."),
+		Editor(typeof(FileNameEditor), typeof(UITypeEditor))
 		]
 		public string RootPageFileName
 		{
