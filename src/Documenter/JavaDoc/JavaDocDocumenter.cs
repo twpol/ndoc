@@ -22,6 +22,7 @@ using System.Xml;
 using System.Xml.Xsl;
 using System.Xml.XPath;
 using System.Reflection;
+using System.Collections;
 
 using NDoc.Core;
 
@@ -48,7 +49,7 @@ namespace NDoc.Documenter.JavaDoc
 			} 
 		}
 
-		string xmlBuffer;
+		string tempFileName;
 		/// <summary>See <see cref="IDocumenter"/>.</summary>
 		public override void Build(Project project)
 		{
@@ -82,11 +83,17 @@ namespace NDoc.Documenter.JavaDoc
 			File.Copy(Path.Combine(_ResourceDirectory, @"css\JavaDoc.css"), outcss, true);
 			File.SetAttributes(outcss, FileAttributes.Archive);
 
-			xmlBuffer = MakeXml(project);
+			try
+			{
+				tempFileName = MakeXmlFile(project);
 
-			WriteOverviewSummary();
-			WriteNamespaceSummaries();
-			xmlBuffer = null;
+				WriteOverviewSummary();
+				WriteNamespaceSummaries();
+			}
+			finally
+			{
+				if (File.Exists(tempFileName)) File.Delete(tempFileName);
+			}
 		}
 
 		/// <summary>See <see cref="IDocumenter"/>.</summary>
@@ -99,12 +106,34 @@ namespace NDoc.Documenter.JavaDoc
 			get { return (JavaDocDocumenterConfig)Config; }
 		}
 
+		private Hashtable cachedTransforms = new Hashtable();
+		/// <summary>
+		/// Gets the cached transform file, based upon the specified name.  If the file does not 
+		/// exist, it is created and then cached.
+		/// </summary>
+		/// <param name="fileName"></param>
+		/// <returns></returns>
+		private XslTransform GetTransformFile(string fileName)
+		{
+			XslTransform transform = (XslTransform)cachedTransforms[fileName];
+			if(transform == null)
+			{
+				transform = new XslTransform();
+				transform.Load(Path.Combine(_ResourceDirectory, @"xslt\" + fileName));
+				cachedTransforms.Add(fileName, transform);
+			}
+			return transform;
+		}
+
 		private void TransformAndWriteResult(
 			string transformFilename,
 			XsltArgumentList args,
 			string resultDirectory,
 			string resultFilename)
 		{
+#if DEBUG
+			int start = Environment.TickCount;
+#endif
 			XslTransform transform = new XslTransform();
 			transform.Load(Path.Combine(_ResourceDirectory, @"xslt\" + transformFilename));
 
@@ -142,14 +171,44 @@ namespace NDoc.Documenter.JavaDoc
 			}
 
 			TextWriter writer = new StreamWriter(resultPath);
-			XPathDocument doc;
-			using (StringReader sreader = new StringReader(xmlBuffer))
-			{
-				doc = new XPathDocument(sreader);
-			}
+			XPathDocument doc = GetCachedXPathDocument();
 			transform.Transform(doc, args, writer);
 
 			writer.Close();
+
+#if DEBUG
+			Trace.WriteLine("Making " + transformFilename + " Html: " + ((Environment.TickCount - start)).ToString() + " ms.");
+#endif
+		}
+
+		private XPathDocument cachedXPathDocument = null;
+
+		/// <summary>
+		/// Gets the XPathDocument, but caches it and returns the cached value.
+		/// </summary>
+		/// <remarks>
+		/// <c>GetXPathDocument</c> can be very slow for large Assemblies, so this is 
+		/// designed to speed things up.  As long as the XPathDocument does not ever get 
+		/// changed internally by other transforms, this should just speed up the performance 
+		/// of the application.
+		/// </remarks>
+		/// <returns></returns>
+		protected XPathDocument GetCachedXPathDocument()
+		{
+			if(cachedXPathDocument == null)
+			{
+				Stream tempFile=null;
+				try
+				{
+					tempFile=File.Open(tempFileName,FileMode.Open,FileAccess.Read);
+					cachedXPathDocument = new XPathDocument(tempFile);
+				}
+				finally
+				{
+					if (tempFile!=null) tempFile.Close();
+				}
+			}
+			return cachedXPathDocument;
 		}
 
 		private void WriteOverviewSummary()
@@ -169,7 +228,16 @@ namespace NDoc.Documenter.JavaDoc
 		private void WriteNamespaceSummaries()
 		{
 			XmlDocument doc = new XmlDocument();
-			doc.LoadXml(xmlBuffer);
+			Stream tempFile=null;
+			try
+			{
+				tempFile=File.Open(tempFileName,FileMode.Open,FileAccess.Read);
+				doc.Load(tempFile);
+			}
+			finally
+			{
+				if (tempFile!=null) tempFile.Close();
+			}
 
 			XmlNodeList namespaceNodes = doc.SelectNodes("/ndoc/assembly/module/namespace");
 
