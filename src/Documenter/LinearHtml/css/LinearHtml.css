@@ -7,6 +7,16 @@ body /* This body tag requires the use of one of the sets of banner and/or text 
 	font-size: 100%;
 	width: 100%;
 	}
+span.keyword
+{
+	font-size: 100%;
+}
+span.typeRef
+{
+	color: Black;
+	font-style: italic;
+	font-size: 90%;
+}
 h1, h2, h3, h4
 	{
 	font-family: Arial; /*Verdana, Arial, Helvetica, sans-serif; */
