@@ -1,6 +1,0 @@
-.cvsignore
-*.suo
-*.user
-*.InstallLog
-*.InstallState
-.#*
