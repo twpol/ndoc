@@ -310,7 +310,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			if ( typeNode.SelectNodes( "constructor|field|property|method|operator|event" ).Count > 0 )
 			{
 				arguments = new XsltArgumentList();
-				arguments.AddParam("id", String.Empty, typeID);
+				arguments.AddParam( "id", String.Empty, typeID );
 
 				fileName = FileNameMapper.GetFilenameForTypeMembers(typeNode);
 				TransformAndWriteResult( "allmembers", arguments, fileName );
@@ -589,23 +589,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 				string typeID = typeNode.Attributes["id"].Value;
 				XmlNodeList opNodes = typeNode.SelectNodes( "operator" );
 				bool bOverloaded = false;
-
-				bool bHasOperators =  (typeNode.SelectSingleNode("operator[@name != 'op_Explicit' and @name != 'op_Implicit']") != null);;
-				bool bHasConverters = (typeNode.SelectSingleNode("operator[@name  = 'op_Explicit' or  @name  = 'op_Implicit']") != null);
-				string title="";
-
-				if (bHasOperators)
-				{
-					if (bHasConverters)
-						title = "Operators and Type Conversions";
-					else
-						title = "Operators";
-				}
-				else
-				{
-					if (bHasConverters)
-						title = "Type Conversions";
-				}
 				
 				XsltArgumentList arguments = new XsltArgumentList();
 				arguments.AddParam( "id", String.Empty, typeID );
