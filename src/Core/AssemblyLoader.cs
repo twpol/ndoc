@@ -180,7 +180,9 @@ namespace NDoc.Core.Reflection
 				}
 				catch (System.IO.FileLoadException e)
 				{
-					if (e.Message.IndexOf("0x80131019") != -1)
+					// HACK: replace the text comparison with non-localized test when further details are available
+					if ((e.Message.IndexOf("0x80131019") != -1) ||
+					    (e.Message.IndexOf("contains extra relocations") != -1)) 
 					{
 						try
 						{
