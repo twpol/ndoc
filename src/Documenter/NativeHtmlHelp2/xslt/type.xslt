@@ -34,32 +34,10 @@
 			<xsl:call-template name="indent">
 				<xsl:with-param name="count" select="$level" />
 			</xsl:call-template>
-			
-			<xsl:choose>
-				<xsl:when test="starts-with($list[$last]/@type, 'System.')">
-					<xsl:call-template name="get-xlink-for-system-type">
-						<xsl:with-param name="type-id" select="concat( 'T:', $list[$last]/@type )" />									
-					</xsl:call-template>					
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:variable name="base-class-id" select="string($list[$last]/@id)" />
-					<xsl:variable name="base-class" select="//class[@id=$base-class-id]" />
-					<xsl:choose>
-						<xsl:when test="$base-class">
-							<a href="{NUtil:GetTypeHRef( string( $list[$last]/@id ) ) }">
-								<xsl:call-template name="get-datatype">
-									<xsl:with-param name="datatype" select="$list[$last]/@type" />
-								</xsl:call-template>
-							</a>
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:call-template name="get-datatype">
-								<xsl:with-param name="datatype" select="$list[$last]/@type" />
-							</xsl:call-template>
-						</xsl:otherwise>
-					</xsl:choose>
-				</xsl:otherwise>
-			</xsl:choose>
+			<xsl:call-template name="get-link-for-type">
+				<xsl:with-param name="type" select="$list[$last]/@id"/>
+				<xsl:with-param name="link-text" select="substring-after( $list[$last]/@id, ':' )"/>	
+			</xsl:call-template>	
 			<br />
 			<xsl:call-template name="draw-hierarchy">
 				<xsl:with-param name="list" select="$list[position()!=$last]" />
@@ -138,7 +116,7 @@
 								</xsl:when>
 								<xsl:otherwise>
 									<xsl:call-template name="get-xlink-for-system-type">
-										<xsl:with-param name="type-id" select="'T:System.Object'" />									
+										<xsl:with-param name="type" select="'T:System.Object'" />									
 									</xsl:call-template>
 									<br />
 									<xsl:call-template name="draw-hierarchy">
@@ -149,8 +127,8 @@
 										<xsl:with-param name="count" select="count(descendant::base) + 1" />
 									</xsl:call-template>
 									<b>
-										<xsl:value-of select="@name" />
-									</b>
+										<xsl:value-of select="substring-after( @id, ':' )" />
+									</b>									
 								</xsl:otherwise>
 							</xsl:choose>
 						</p>
@@ -187,7 +165,7 @@
 								<xsl:for-each select="documentation/permission">
 									<li>
 										<xsl:call-template name="get-link-for-type">
-											<xsl:with-param name="type-id" select="@cref" />
+											<xsl:with-param name="type" select="@cref" />
 											<xsl:with-param name="link-text" select="substring-after(@cref, 'T:')"/>
 										</xsl:call-template>
 										<xsl:text>&#160;</xsl:text>
