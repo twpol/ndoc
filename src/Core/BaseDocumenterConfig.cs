@@ -55,6 +55,7 @@ namespace NDoc.Core
 			_ShowMissingValues = false;
 
 			_DocumentInheritedMembers = DocumentedInheritedMembers.Instance;
+			_DocumentInheritedFrameworkMembers = true; 
 			_DocumentExplicitInterfaceImplementations = true;
 
 			_DocumentInternals = false;
