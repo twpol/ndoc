@@ -133,7 +133,7 @@ namespace NDoc.ConsoleApplication
 										}
 										break;
 									case "referencepath":
-										project.AddReferencePath(val);
+										project.ReferencePaths.Add(new ReferencePath(val));
 										break;
 									default:
 										documenter.Config.SetValue(name, val);
