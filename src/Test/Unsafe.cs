@@ -13,15 +13,11 @@ namespace NDoc.Test.Unsafe
 	/// </summary>
 	public interface IUnsafe
 	{
-// Mono bug #55318, Mono does not support unsafe code in members of interface 
-// members
-#if (!MONO)
 		/// <summary>
 		/// Return a pointer to an Int32
 		/// </summary>
 		/// <returns>The pointer</returns>
 		unsafe Int32* GetIntPointer();
-#endif
 	}
 
 	/// <summary>
