@@ -1394,12 +1394,12 @@ namespace NDoc.Documenter.Msdn
 			string operatorID = operatorNode.Attributes["id"].Value;
 			string fileName = operatorID.Substring(2);
 
-			int opIndex = fileName.IndexOf("op_");
-
-			if (opIndex != -1)
-			{
-				fileName = fileName.Remove(opIndex, 3);
-			}
+//			int opIndex = fileName.IndexOf("op_");
+//
+//			if (opIndex != -1)
+//			{
+//				fileName = fileName.Remove(opIndex, 3);
+//			}
 
 			int leftParenIndex = fileName.IndexOf('(');
 

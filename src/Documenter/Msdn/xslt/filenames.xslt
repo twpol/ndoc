@@ -296,7 +296,7 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-    <xsl:value-of select="concat(substring-before($filename, 'op_'), substring-after($filename, 'op_'))" />
+    <xsl:value-of select="$filename" />
   </xsl:template>
   <!-- -->
 </xsl:stylesheet>
