@@ -3352,16 +3352,20 @@ namespace NDoc.Core.Reflection
 					if (bMissingSummary)
 					{
 						WriteStartDocumentation(writer);
+						writer.WriteStartElement("summary");
 						if (constructor.IsStatic)
 						{
-							writer.WriteElementString("summary", "Initializes the static fields of the " 
-								+ constructor.DeclaringType.Name + " class.");
+							writer.WriteString("Initializes the static fields of the ");
 						}
 						else
 						{
-							writer.WriteElementString("summary", "Initializes a new instance of the " 
-								+ constructor.DeclaringType.Name + " class.");
+							writer.WriteString("Initializes a new instance of the ");
 						}
+						writer.WriteStartElement("see");
+						writer.WriteAttributeString("cref", GetMemberName(constructor.DeclaringType)); 
+						writer.WriteEndElement();
+						writer.WriteString(" class.");
+						writer.WriteEndElement();
 						return true;
 					}
 				}
