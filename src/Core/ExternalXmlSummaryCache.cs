@@ -25,7 +25,7 @@ using Microsoft.Win32;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 
-namespace NDoc.Core
+namespace NDoc.Core.Reflection
 {
 	/// <summary>
 	/// Caches XML summaries.
@@ -206,7 +206,7 @@ namespace NDoc.Core
 						if (reader.Name.Equals(oSummary)) 
 						{
 							Summary = reader.ReadInnerXml();
-							Summary = Summary.Replace("\t", " ").Replace("\n", " ").Replace("\r", " ").Trim().Replace("        ", " ").Replace("    ", " ").Replace("   ", " ").Replace("  ", " ").Trim();
+							Summary = PreprocessDoc(MemberID, Summary);
 						}
 						break;
 
@@ -226,6 +226,126 @@ namespace NDoc.Core
 				}
 			}
 		}
+
+		/// <summary>
+		/// Preprocess documentation before placing it in the cache.
+		/// </summary>
+		/// <param name="id">Member name 'id' to which the docs belong</param>
+		/// <param name="doc">A string containing the members documentation</param>
+		/// <returns>processed doc string</returns>
+		private string PreprocessDoc(string id, string doc)
+		{
+			//create an XmlDocument containg the memeber's documentation
+			XmlTextReader reader=new XmlTextReader(new StringReader("<root>" + doc + "</root>"));
+			reader.WhitespaceHandling=WhitespaceHandling.All;
+			
+			XmlDocument xmldoc = new XmlDocument();
+			xmldoc.PreserveWhitespace=true;
+			xmldoc.Load(reader);
+ 
+			//
+			CleanupNodes(xmldoc.DocumentElement.ChildNodes);
+			//
+			ProcessSeeLinks(id, xmldoc.DocumentElement.ChildNodes);
+			return xmldoc.DocumentElement.InnerXml;
+		}
+
+		/// <summary>
+		/// strip out redundant newlines and spaces from documentation.
+		/// </summary>
+		/// <param name="nodes">list of nodes</param>
+		private void CleanupNodes(XmlNodeList nodes)
+		{
+			foreach (XmlNode node in nodes)
+			{
+				if (node.NodeType == XmlNodeType.Element) 
+				{
+					CleanupNodes(node.ChildNodes);
+
+					// Trim attribute values...
+					foreach(XmlNode attr in node.Attributes)
+					{
+						attr.Value=attr.Value.Trim();
+					}
+				}
+				if (node.NodeType == XmlNodeType.Text)
+				{
+					node.Value = ((string)node.Value).Replace("\t", "    ").Replace("\n", " ").Replace("\r", " ").Replace("        ", " ").Replace("    ", " ").Replace("   ", " ").Replace("  ", " ");
+				}
+			}
+		}
+
+		/// <summary>
+		/// Add 'nolink' attributes to self referencing or duplicate see tags.
+		/// </summary>
+		/// <param name="id">current member name 'id'</param>
+		/// <param name="nodes">list of top-level nodes</param>
+		/// <remarks>
+		/// </remarks>
+		private void ProcessSeeLinks(string id, XmlNodeList nodes)
+		{
+			foreach (XmlNode node in nodes)
+			{
+				if (node.NodeType == XmlNodeType.Element) 
+				{
+					Hashtable linkTable=null;
+					MarkupSeeLinks(ref linkTable, id, node);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Search tags for duplicate or self-referencing see links.
+		/// </summary>
+		/// <param name="linkTable">A table of previous links.</param>
+		/// <param name="id">current member name 'id'</param>
+		/// <param name="node">an Xml Node containing a doc tag</param>
+		private void MarkupSeeLinks(ref Hashtable linkTable, string id, XmlNode node)
+		{
+			if (node.LocalName=="see")
+			{
+				//we will only do this for crefs
+				XmlAttribute cref = node.Attributes["cref"];
+				if (cref !=null)
+				{
+					if (cref.Value==id) //self referencing tag
+					{
+						XmlAttribute dup = node.OwnerDocument.CreateAttribute("nolink");
+						dup.Value="true";
+						node.Attributes.Append(dup);
+					}
+					else
+					{
+						if (linkTable==null)
+						{
+							//assume an resonable initial table size,
+							//so we don't have to resize often.
+							linkTable = new Hashtable(16);
+						}
+						if (linkTable.ContainsKey(cref.Value))
+						{
+							XmlAttribute dup = node.OwnerDocument.CreateAttribute("nolink");
+							dup.Value="true";
+							node.Attributes.Append(dup);
+						}
+						else
+						{
+							linkTable.Add(cref.Value,null);
+						}
+					}
+				}
+			}
+				
+			//search this tags' children
+			foreach (XmlNode childnode in node.ChildNodes)
+			{
+				if (childnode.NodeType == XmlNodeType.Element) 
+				{
+					MarkupSeeLinks(ref linkTable, id, childnode);
+				}
+			}
+		}
+
 
 		/// <summary>
 		/// Returns the original summary for a member inherited from a specified type. 
