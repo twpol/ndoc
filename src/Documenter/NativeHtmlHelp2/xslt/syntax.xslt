@@ -51,10 +51,10 @@
 			<xsl:with-param name="lang" select="$lang" />
 		</xsl:call-template>
 		<b>
-			<xsl:apply-templates select="." mode="gc-type">
+			<xsl:apply-templates select="." mode="access">
 				<xsl:with-param name="lang" select="$lang" />
 			</xsl:apply-templates>
-			<xsl:apply-templates select="." mode="access">
+			<xsl:apply-templates select="." mode="gc-type">
 				<xsl:with-param name="lang" select="$lang" />
 			</xsl:apply-templates>
 			<xsl:apply-templates select="." mode="keyword">
