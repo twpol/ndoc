@@ -17,7 +17,7 @@
 using System;
 using System.Collections;
 
-namespace NDoc.Core
+namespace NDoc.Core.Reflection
 {
 	/// <summary>
 	/// Summary description for ReflectionEngineParameters.
@@ -46,24 +46,24 @@ namespace NDoc.Core
 		{
 			AssemblyFileNames = new ArrayList();
 			XmlDocFileNames = new ArrayList();
-			foreach(AssemblySlashDoc assemblySlashDoc in project.GetAssemblySlashDocs())
+			ReferencePaths  = new ReferencePathCollection();
+
+			foreach(AssemblySlashDoc assemblySlashDoc in project.AssemblySlashDocs)
 			{
-				if (assemblySlashDoc.AssemblyFilename!=null && assemblySlashDoc.AssemblyFilename.Length>0)
+				if (assemblySlashDoc.Assembly.Path.Length>0)
 				{
-					string assemblyFileName = project.GetFullPath(assemblySlashDoc.AssemblyFilename);
+					string assemblyFileName = assemblySlashDoc.Assembly.Path;
 					AssemblyFileNames.Add(assemblyFileName);
+					string assyDir = System.IO.Path.GetDirectoryName(assemblyFileName);
+					ReferencePaths.Add(new ReferencePath(assyDir));
 				}
-				if (assemblySlashDoc.SlashDocFilename!=null && assemblySlashDoc.SlashDocFilename.Length>0)
+				if (assemblySlashDoc.SlashDoc.Path.Length>0)
 				{
-					string xmlDocFileName = project.GetFullPath(assemblySlashDoc.SlashDocFilename);
-					XmlDocFileNames.Add(xmlDocFileName);
+					XmlDocFileNames.Add(assemblySlashDoc.SlashDoc.Path);
 				}
 			}
-			ReferencePaths  = new ArrayList();
-			foreach(string dir in project.GetReferencePaths())
-			{
-				ReferencePaths.Add(dir);
-			}
+
+			ReferencePaths.AddRange(project.ReferencePaths);
 
 			if (project.Namespaces==null)
 			{
@@ -142,7 +142,7 @@ namespace NDoc.Core
 		/// <summary>
 		/// 
 		/// </summary>
-		public ArrayList ReferencePaths;
+		public ReferencePathCollection ReferencePaths;
 		/// <summary>
 		/// 
 		/// </summary>
