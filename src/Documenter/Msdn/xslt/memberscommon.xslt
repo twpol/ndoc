@@ -49,7 +49,10 @@
 		<xsl:param name="member" />
 		<xsl:if test="*[local-name()=$member and @access='Public' and @contract='Static']">
 			<h4 class="dtH4">
-				<xsl:text>Public Static (Shared) </xsl:text>
+				<xsl:text>Public Static </xsl:text>
+				<xsl:if test="$ndoc-vb-syntax">
+  				<xsl:text>(Shared) </xsl:text>
+  			</xsl:if>
 				<xsl:call-template name="get-big-member-plural">
 					<xsl:with-param name="member" select="$member" />
 				</xsl:call-template>
@@ -68,7 +71,10 @@
 		<xsl:param name="member" />
 		<xsl:if test="*[local-name()=$member and @access='Family' and @contract='Static']">
 			<h4 class="dtH4">
-				<xsl:text>Protected Static (Shared) </xsl:text>
+				<xsl:text>Protected Static </xsl:text>
+				<xsl:if test="$ndoc-vb-syntax">
+  				<xsl:text>(Shared) </xsl:text>
+  			</xsl:if>
 				<xsl:call-template name="get-big-member-plural">
 					<xsl:with-param name="member" select="$member" />
 				</xsl:call-template>
@@ -87,7 +93,10 @@
 		<xsl:param name="member" />
 		<xsl:if test="*[local-name()=$member and @access='FamilyOrAssembly' and @contract='Static']">
 			<h4 class="dtH4">
-				<xsl:text>Protected Internal Static (Shared) </xsl:text>
+				<xsl:text>Protected Internal Static </xsl:text>
+				<xsl:if test="$ndoc-vb-syntax">
+  				<xsl:text>(Shared) </xsl:text>
+  			</xsl:if>
 				<xsl:call-template name="get-big-member-plural">
 					<xsl:with-param name="member" select="$member" />
 				</xsl:call-template>
@@ -106,7 +115,10 @@
 		<xsl:param name="member" />
 		<xsl:if test="*[local-name()=$member and @access='Assembly' and @contract='Static']">
 			<h4 class="dtH4">
-				<xsl:text>Internal Static (Shared) </xsl:text>
+				<xsl:text>Internal Static </xsl:text>
+				<xsl:if test="$ndoc-vb-syntax">
+  				<xsl:text>(Shared) </xsl:text>
+  			</xsl:if>
 				<xsl:call-template name="get-big-member-plural">
 					<xsl:with-param name="member" select="$member" />
 				</xsl:call-template>
@@ -125,7 +137,10 @@
 		<xsl:param name="member" />
 		<xsl:if test="*[local-name()=$member and @access='Private' and @contract='Static']">
 			<h4 class="dtH4">
-				<xsl:text>Private Static (Shared) </xsl:text>
+				<xsl:text>Private Static </xsl:text>
+				<xsl:if test="$ndoc-vb-syntax">
+  				<xsl:text>(Shared) </xsl:text>
+  			</xsl:if>
 				<xsl:call-template name="get-big-member-plural">
 					<xsl:with-param name="member" select="$member" />
 				</xsl:call-template>
