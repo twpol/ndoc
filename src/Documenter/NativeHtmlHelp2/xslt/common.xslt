@@ -38,6 +38,7 @@
 	<xsl:template match="node()|@*|text()" mode="overloads-remarks-section"/>
 	<xsl:template match="node()|@*|text()" mode="overloads-example-section"/>
 	<xsl:template match="node()|@*|text()" mode="overloads-summary-section"/>
+	<xsl:template match="node()|@*|text()" mode="header-section"/>
 	
 	<!-- -->
 	
