@@ -103,6 +103,7 @@ namespace NDoc.Core
 		/// <summary>
 		/// The display name of the documenter.
 		/// </summary>
+		[Browsable(false)]
 		public string Name
 		{
 			get { return _Name;}
