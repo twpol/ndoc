@@ -56,16 +56,7 @@ namespace NDoc.Documenter.Msdn
 		private StringDictionary elemNames;
 		private MsdnXsltUtilities utilities;
 
-		private XslTransform xsltNamespace;
-		private XslTransform xsltNamespaceHierarchy;
-		private XslTransform xsltType;
-		private XslTransform xsltAllMembers;
-		private XslTransform xsltIndividualMembers;
-		private XslTransform xsltEvent;
-		private XslTransform xsltMember;
-		private XslTransform xsltMemberOverload;
-		private XslTransform xsltProperty;
-		private XslTransform xsltField;
+		private StyleSheetCollection stylesheets;
 
 		private Encoding currentFileEncoding;
 
@@ -179,26 +170,6 @@ namespace NDoc.Documenter.Msdn
 				workspace.Clean();
 				workspace.Prepare();
 
-				// Define this when you want to edit the stylesheets
-				// without having to shutdown the application to rebuild.
-#if NO_RESOURCES
-				// copy all of the xslt source files into the workspace
-				DirectoryInfo xsltSource = new DirectoryInfo( Path.GetFullPath(Path.Combine(
-					System.Windows.Forms.Application.StartupPath, @"..\..\..\Documenter\Msdn\xslt") ) );
-
-				foreach ( FileInfo f in xsltSource.GetFiles( "*.xslt" ) )
-				{
-					string fname = Path.Combine( workspace.ResourceDirectory, f.Name );
-					f.CopyTo( fname, true );
-					File.SetAttributes( fname, FileAttributes.Normal );
-				}
-#else
-				EmbeddedResources.WriteEmbeddedResources(
-					this.GetType().Module.Assembly,
-					"NDoc.Documenter.Msdn.xslt",
-					workspace.ResourceDirectory);
-#endif
-
 				// Write the embedded css files to the html output directory
 				EmbeddedResources.WriteEmbeddedResources(
 					this.GetType().Module.Assembly,
@@ -304,7 +275,14 @@ namespace NDoc.Documenter.Msdn
 
 				OnDocBuildingStep(30, "Loading XSLT files...");
 
-				MakeTransforms();
+				string extensibilityStylesheet = MyConfig.ExtensibilityStylesheet;
+	
+				// make relative paths absolute
+				if (extensibilityStylesheet.Length>0 &&
+				    !Path.IsPathRooted( extensibilityStylesheet ) )
+					extensibilityStylesheet = Path.GetFullPath( extensibilityStylesheet );
+				
+				stylesheets = StyleSheetCollection.LoadStyleSheets(extensibilityStylesheet);
 
 				OnDocBuildingStep(40, "Generating HTML pages...");
 
@@ -390,9 +368,6 @@ namespace NDoc.Documenter.Msdn
 					}
 
 					//transform the HHC contents file into html
-					XslTransform xsltContents = new XslTransform();
-					MakeTransform(xsltContents, "htmlcontents.xslt");
-
 					using(StreamReader contentsFile = new StreamReader(htmlHelp.GetPathToContentsFile(),Encoding.Default))
 					{
 						xpathDocument=new XPathDocument(contentsFile);
@@ -405,7 +380,7 @@ namespace NDoc.Documenter.Msdn
 					xsltContents.Transform(xpathDocument,null,streamWriter);
 #else
 						//Use new overload so we don't get obsolete warnings - clean compile :)
-						xsltContents.Transform(xpathDocument,null,streamWriter, null);
+						stylesheets["htmlcontents"].Transform(xpathDocument,null,streamWriter, null);
 #endif
 					}
 				}
@@ -450,24 +425,6 @@ namespace NDoc.Documenter.Msdn
 			get
 			{
 				return (MsdnDocumenterConfig)Config;
-			}
-		}
-
-		private void MakeTransform(
-			XslTransform transform,
-			string filename)
-		{
-			try
-			{
-				transform.Load(Path.Combine( this.workspace.ResourceDirectory, filename));
-			}
-			catch (Exception e)
-			{
-				throw new DocumenterException(
-					"Error compiling the " +
-					filename +
-					" stylesheet: \n" + e.Message,
-					e);
 			}
 		}
 
@@ -527,112 +484,6 @@ namespace NDoc.Documenter.Msdn
 			}
 		}
 
-		/// <summary>
-		/// Addes the ExtensibilityStylesheet to the tags.xslt stylesheet
-		/// so that custom templates will get called during processing
-		/// </summary>
-		private void AddExtensibilityStylesheet()
-		{
-			XmlDocument tags = new XmlDocument();
-			tags.Load( Path.Combine( this.workspace.ResourceDirectory, "tags.xslt" ) );
-			
-			XmlElement include = tags.CreateElement( "xsl", "include", "http://www.w3.org/1999/XSL/Transform" );
-
-			string extensibilityStylesheet = MyConfig.ExtensibilityStylesheet;
-
-			// make relative paths absolute
-			if ( !Path.IsPathRooted( extensibilityStylesheet ) )
-				extensibilityStylesheet = Path.GetFullPath( extensibilityStylesheet );
-
-			include.SetAttribute( "href", extensibilityStylesheet );
-
-			tags.DocumentElement.PrependChild( include );
-
-			tags.Save( Path.Combine( this.workspace.ResourceDirectory, "tags.xslt" ) );
-		}
-
-		private void MakeTransforms()
-		{
-			OnDocBuildingProgress(0);
-			Trace.Indent();
-
-			xsltNamespace = new XslTransform();
-			xsltNamespaceHierarchy = new XslTransform();
-			xsltType = new XslTransform();
-			xsltAllMembers = new XslTransform();
-			xsltIndividualMembers = new XslTransform();
-			xsltEvent = new XslTransform();
-			xsltMember = new XslTransform();
-			xsltMemberOverload = new XslTransform();
-			xsltProperty = new XslTransform();
-			xsltField = new XslTransform();
-
-			// if we have an extensibility stylesheet, add it before compiling the transforms
-			if ( MyConfig.ExtensibilityStylesheet.Length > 0 )
-				AddExtensibilityStylesheet();
-
-			Trace.WriteLine("namespace.xslt");
-			OnDocBuildingProgress(10);
-			MakeTransform(
-				xsltNamespace,
-				"namespace.xslt");
-
-			Trace.WriteLine("namespacehierarchy.xslt");
-			OnDocBuildingProgress(20);
-			MakeTransform(
-				xsltNamespaceHierarchy,
-				"namespacehierarchy.xslt");
-
-			Trace.WriteLine("type.xslt");
-			OnDocBuildingProgress(30);
-			MakeTransform(
-				xsltType,
-				"type.xslt");
-
-			Trace.WriteLine("allmembers.xslt");
-			OnDocBuildingProgress(40);
-			MakeTransform(
-				xsltAllMembers,
-				"allmembers.xslt");
-
-			Trace.WriteLine("individualmembers.xslt");
-			OnDocBuildingProgress(50);
-			MakeTransform(
-				xsltIndividualMembers,
-				"individualmembers.xslt");
-
-			Trace.WriteLine("event.xslt");
-			OnDocBuildingProgress(60);
-			MakeTransform(
-				xsltEvent,
-				"event.xslt");
-
-			Trace.WriteLine("member.xslt");
-			OnDocBuildingProgress(70);
-			MakeTransform(
-				xsltMember,
-				"member.xslt");
-
-			Trace.WriteLine("memberoverload.xslt");
-			OnDocBuildingProgress(80);
-			MakeTransform(
-				xsltMemberOverload,
-				"memberoverload.xslt");
-
-			Trace.WriteLine("property.xslt");
-			OnDocBuildingProgress(90);
-			MakeTransform(
-				xsltProperty,
-				"property.xslt");
-
-			Trace.WriteLine("field.xslt");
-			OnDocBuildingProgress(100);
-			MakeTransform(
-				xsltField,
-				"field.xslt");
-
-			Trace.Unindent();
-		}
 
 		private WhichType GetWhichType(XmlNode typeNode)
 		{
@@ -757,7 +608,7 @@ namespace NDoc.Documenter.Msdn
 			arguments.AddParam("namespace", String.Empty, namespaceName);
 			arguments.AddParam("includeHierarchy", String.Empty, MyConfig.IncludeHierarchy);
 
-			TransformAndWriteResult(xsltNamespace, arguments, fileName);
+			TransformAndWriteResult("namespace", arguments, fileName);
 
 			arguments = new XsltArgumentList();
 			arguments.AddParam("namespace", String.Empty, namespaceName);
@@ -765,7 +616,7 @@ namespace NDoc.Documenter.Msdn
 			if (MyConfig.IncludeHierarchy)
 			{
 				TransformAndWriteResult(
-					xsltNamespaceHierarchy,
+					"namespacehierarchy",
 					arguments,
 					fileName.Insert(fileName.Length - 5, "Hierarchy"));
 			}
@@ -824,7 +675,7 @@ namespace NDoc.Documenter.Msdn
 
 			XsltArgumentList arguments = new XsltArgumentList();
 			arguments.AddParam("type-id", String.Empty, typeID);
-			TransformAndWriteResult(xsltType, arguments, fileName);
+			TransformAndWriteResult("type", arguments, fileName);
 		}
 
 		private void MakeHtmlForInterfaceOrClassOrStructure(
@@ -846,7 +697,7 @@ namespace NDoc.Documenter.Msdn
 
 			XsltArgumentList arguments = new XsltArgumentList();
 			arguments.AddParam("type-id", String.Empty, typeID);
-			TransformAndWriteResult(xsltType, arguments, fileName);
+			TransformAndWriteResult("type", arguments, fileName);
 
 			if (hasMembers)
 			{
@@ -857,7 +708,7 @@ namespace NDoc.Documenter.Msdn
 
 				arguments = new XsltArgumentList();
 				arguments.AddParam("id", String.Empty, typeID);
-				TransformAndWriteResult(xsltAllMembers, arguments, fileName);
+				TransformAndWriteResult("allmembers", arguments, fileName);
 
 				MakeHtmlForConstructors(whichType, typeNode);
 				MakeHtmlForFields(whichType, typeNode);
@@ -894,7 +745,7 @@ namespace NDoc.Documenter.Msdn
 
 				XsltArgumentList arguments = new XsltArgumentList();
 				arguments.AddParam("member-id", String.Empty, constructorID);
-				TransformAndWriteResult(xsltMemberOverload, arguments, fileName);
+				TransformAndWriteResult("memberoverload", arguments, fileName);
 			}
 
 			foreach (XmlNode constructorNode in constructorNodes)
@@ -915,7 +766,7 @@ namespace NDoc.Documenter.Msdn
 
 				XsltArgumentList arguments = new XsltArgumentList();
 				arguments.AddParam("member-id", String.Empty, constructorID);
-				TransformAndWriteResult(xsltMember, arguments, fileName);
+				TransformAndWriteResult("member", arguments, fileName);
 			}
 
 			if (constructorNodes.Count > 1)
@@ -933,7 +784,7 @@ namespace NDoc.Documenter.Msdn
 
 				XsltArgumentList arguments = new XsltArgumentList();
 				arguments.AddParam("member-id", String.Empty, constructorID);
-				TransformAndWriteResult(xsltMember, arguments, fileName);
+				TransformAndWriteResult("member", arguments, fileName);
 			}
 		}
 
@@ -952,7 +803,7 @@ namespace NDoc.Documenter.Msdn
 				XsltArgumentList arguments = new XsltArgumentList();
 				arguments.AddParam("id", String.Empty, typeID);
 				arguments.AddParam("member-type", String.Empty, "field");
-				TransformAndWriteResult(xsltIndividualMembers, arguments, fileName);
+				TransformAndWriteResult("individualmembers", arguments, fileName);
 
 				htmlHelp.OpenBookInContents();
 
@@ -969,7 +820,7 @@ namespace NDoc.Documenter.Msdn
 
 					arguments = new XsltArgumentList();
 					arguments.AddParam("field-id", String.Empty, fieldID);
-					TransformAndWriteResult(xsltField, arguments, fileName);
+					TransformAndWriteResult("field", arguments, fileName);
 				}
 
 				htmlHelp.CloseBookInContents();
@@ -1009,7 +860,7 @@ namespace NDoc.Documenter.Msdn
 				XsltArgumentList arguments = new XsltArgumentList();
 				arguments.AddParam("id", String.Empty, typeID);
 				arguments.AddParam("member-type", String.Empty, "property");
-				TransformAndWriteResult(xsltIndividualMembers, arguments, fileName);
+				TransformAndWriteResult("individualmembers", arguments, fileName);
 
 				htmlHelp.OpenBookInContents();
 
@@ -1033,7 +884,7 @@ namespace NDoc.Documenter.Msdn
 
 						arguments = new XsltArgumentList();
 						arguments.AddParam("member-id", String.Empty, propertyID);
-						TransformAndWriteResult(xsltMemberOverload, arguments, fileName);
+						TransformAndWriteResult("memberoverload", arguments, fileName);
 
 						htmlHelp.OpenBookInContents();
 
@@ -1056,7 +907,7 @@ namespace NDoc.Documenter.Msdn
 
 					XsltArgumentList arguments2 = new XsltArgumentList();
 					arguments2.AddParam("property-id", String.Empty, propertyID);
-					TransformAndWriteResult(xsltProperty, arguments2, fileName);
+					TransformAndWriteResult("property", arguments2, fileName);
 
 					if ((previousPropertyName == propertyName) && (nextPropertyName != propertyName))
 					{
@@ -1148,7 +999,7 @@ namespace NDoc.Documenter.Msdn
 				XsltArgumentList arguments = new XsltArgumentList();
 				arguments.AddParam("id", String.Empty, typeID);
 				arguments.AddParam("member-type", String.Empty, "method");
-				TransformAndWriteResult(xsltIndividualMembers, arguments, fileName);
+				TransformAndWriteResult("individualmembers", arguments, fileName);
 
 				htmlHelp.OpenBookInContents();
 
@@ -1167,7 +1018,7 @@ namespace NDoc.Documenter.Msdn
 
 						arguments = new XsltArgumentList();
 						arguments.AddParam("member-id", String.Empty, methodID);
-						TransformAndWriteResult(xsltMemberOverload, arguments, fileName);
+						TransformAndWriteResult("memberoverload", arguments, fileName);
 
 						htmlHelp.OpenBookInContents();
 					}
@@ -1190,7 +1041,7 @@ namespace NDoc.Documenter.Msdn
 
 						XsltArgumentList arguments2 = new XsltArgumentList();
 						arguments2.AddParam("member-id", String.Empty, methodID);
-						TransformAndWriteResult(xsltMember, arguments2, fileName);
+						TransformAndWriteResult("member", arguments2, fileName);
 					}
 
 					if (bOverloaded && IsMethodLastOverload(methodNodes, indexes, i))
@@ -1244,7 +1095,7 @@ namespace NDoc.Documenter.Msdn
 				XsltArgumentList arguments = new XsltArgumentList();
 				arguments.AddParam("id", String.Empty, typeID);
 				arguments.AddParam("member-type", String.Empty, "operator");
-				TransformAndWriteResult(xsltIndividualMembers, arguments, fileName);
+				TransformAndWriteResult("individualmembers", arguments, fileName);
 
 				htmlHelp.OpenBookInContents();
 
@@ -1269,7 +1120,7 @@ namespace NDoc.Documenter.Msdn
 
 							arguments = new XsltArgumentList();
 							arguments.AddParam("member-id", String.Empty, operatorID);
-							TransformAndWriteResult(xsltMemberOverload, arguments, fileName);
+							TransformAndWriteResult("memberoverload", arguments, fileName);
 
 							htmlHelp.OpenBookInContents();
 						}
@@ -1290,7 +1141,7 @@ namespace NDoc.Documenter.Msdn
 
 						arguments = new XsltArgumentList();
 						arguments.AddParam("member-id", String.Empty, operatorID);
-						TransformAndWriteResult(xsltMember, arguments, fileName);
+						TransformAndWriteResult("member", arguments, fileName);
 
 						if (bOverloaded && IsMethodLastOverload(opNodes, indexes, i))
 						{
@@ -1315,7 +1166,7 @@ namespace NDoc.Documenter.Msdn
 
 						arguments = new XsltArgumentList();
 						arguments.AddParam("member-id", String.Empty, operatorID);
-						TransformAndWriteResult(xsltMember, arguments, fileName);
+						TransformAndWriteResult("member", arguments, fileName);
 
 					}
 				}
@@ -1426,7 +1277,7 @@ namespace NDoc.Documenter.Msdn
 					XsltArgumentList arguments = new XsltArgumentList();
 					arguments.AddParam("id", String.Empty, typeID);
 					arguments.AddParam("member-type", String.Empty, "event");
-					TransformAndWriteResult(xsltIndividualMembers, arguments, fileName);
+					TransformAndWriteResult("individualmembers", arguments, fileName);
 
 					htmlHelp.OpenBookInContents();
 
@@ -1448,7 +1299,7 @@ namespace NDoc.Documenter.Msdn
 
 							arguments = new XsltArgumentList();
 							arguments.AddParam("event-id", String.Empty, eventID);
-							TransformAndWriteResult(xsltEvent, arguments, fileName);
+							TransformAndWriteResult("event", arguments, fileName);
 						}
 					}
 
@@ -1499,7 +1350,7 @@ namespace NDoc.Documenter.Msdn
 		}
 
 		private void TransformAndWriteResult(
-			XslTransform transform,
+			string transformName,
 			XsltArgumentList arguments,
 			string filename)
 		{
@@ -1529,6 +1380,8 @@ namespace NDoc.Documenter.Msdn
 
 				//reset overloads testing
 				utilities.Reset();
+
+				XslTransform transform = stylesheets[transformName];
 
 #if (NET_1_0)
 				//Use overload that is now obsolete

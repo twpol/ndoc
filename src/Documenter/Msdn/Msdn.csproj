@@ -147,6 +147,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "StyleSheetCollection.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "css\MSDN.css"
                     BuildAction = "EmbeddedResource"
                 />
