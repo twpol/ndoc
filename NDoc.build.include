@@ -145,7 +145,7 @@
 	-->
 	<target name="set-release-build-configuration">
 		<property name="build.debug" value="false" readonly="false" />
-		<property name="build.defines" value="TRACE" readonly="false" />
+		<property name="build.defines" value="TRACE,OFFICIAL_RELEASE" readonly="false" />
 		<property name="build.optimize" value="true" readonly="false" />
 		<property name="sdkdoc.debug" value="false" readonly="false" />
 		<property name="current.build.config" value="release" readonly="false" />
