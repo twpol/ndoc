@@ -235,7 +235,7 @@
                     <property name="AutoPropertyBackerSummaries" value="False" />
                     <property name="AutoDocumentConstructors" value="True" />
                     <property name="GetExternalSummaries" value="True" />
-                    <property name="Preliminary" value="${if(project.release.type = 'release','False','True')}" />
+                    <property name="Preliminary" value="${if(project.release.type == 'release','False','True')}" />
                     <property name="UseNDocXmlFile" value="" />
                     <property name="CleanIntermediates" value="True" />
                     <property name="DocumentAttributes" value="False" />
