@@ -90,7 +90,7 @@ namespace NDoc.Core.PropertyGridUI
 			this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonOK.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.buttonOK.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.buttonOK.Location = new System.Drawing.Point(192, 48);
+			this.buttonOK.Location = new System.Drawing.Point(192, 46);
 			this.buttonOK.Name = "buttonOK";
 			this.buttonOK.Size = new System.Drawing.Size(88, 24);
 			this.buttonOK.TabIndex = 1;
@@ -102,7 +102,7 @@ namespace NDoc.Core.PropertyGridUI
 			this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.buttonCancel.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.buttonCancel.Location = new System.Drawing.Point(288, 48);
+			this.buttonCancel.Location = new System.Drawing.Point(288, 46);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(88, 24);
 			this.buttonCancel.TabIndex = 2;
@@ -113,16 +113,15 @@ namespace NDoc.Core.PropertyGridUI
 			this.AcceptButton = this.buttonOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.CancelButton = this.buttonCancel;
-			this.ClientSize = new System.Drawing.Size(386, 80);
+			this.ClientSize = new System.Drawing.Size(386, 78);
 			this.ControlBox = false;
 			this.Controls.Add(this.buttonCancel);
 			this.Controls.Add(this.buttonOK);
 			this.Controls.Add(this.textBox1);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
 			this.MaximumSize = new System.Drawing.Size(2000, 112);
 			this.MinimizeBox = false;
-			this.MinimumSize = new System.Drawing.Size(392, 112);
+			this.MinimumSize = new System.Drawing.Size(394, 112);
 			this.Name = "SimpleEdit";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
