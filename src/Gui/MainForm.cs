@@ -2090,6 +2090,10 @@ namespace NDoc.Gui
 			ShowDescriptions = !ShowDescriptions;
 		}
 
+		/// <summary>
+		/// Handles drag enter and raises the DragEnter event
+		/// </summary>
+		/// <param name="drgevent">Drag arguments</param>
 		protected override void OnDragEnter(DragEventArgs drgevent)
 		{
 			if( drgevent.Data.GetDataPresent( DataFormats.FileDrop ) && DragDropHandler.CanDrop( (string[])drgevent.Data.GetData( DataFormats.FileDrop ) ) == DropFileType.Project )
@@ -2103,6 +2107,10 @@ namespace NDoc.Gui
 			base.OnDragEnter (drgevent);
 		}
 
+		/// <summary>
+		/// Handles drag drop and raises the DragDrop event
+		/// </summary>
+		/// <param name="drgevent">Drag arguments</param>
 		protected override void OnDragDrop(DragEventArgs drgevent)
 		{
 			// ask the user if they want to save if the current project if dirty
