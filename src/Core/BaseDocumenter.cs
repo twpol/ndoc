@@ -2707,7 +2707,7 @@ namespace NDoc.Core
 				string parameterName = parameter.ParameterType.FullName;
 
 				parameterName = parameterName.Replace(",", ",0:");
-				parameterName = parameterName.Replace(@"\[,", "[0:,");
+				parameterName = parameterName.Replace("[,", "[0:,");
 
 				// XML Documentation file appends a "@" to reference and out types, not a "&"
 				memberName += parameterName.Replace('&', '@').Replace('+', '.');
