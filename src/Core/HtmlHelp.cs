@@ -272,6 +272,20 @@ namespace NDoc.Core
 
 			try
 			{
+				try
+				{
+					string path = GetPathToCompiledHtmlFile();
+
+					if (File.Exists(path))
+					{
+						File.Delete(path);
+					}
+				}
+				catch (Exception e)
+				{
+					throw new DocumenterException("The compiled HTML Help file is probably open.", e);
+				}
+
 				ProcessStartInfo processStartInfo = new ProcessStartInfo();
 				processStartInfo.FileName = _htmlHelpCompiler;
 				processStartInfo.Arguments = "\"" + Path.GetFullPath(GetPathToProjectFile()) + "\"";
