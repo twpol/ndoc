@@ -21,6 +21,19 @@ namespace NDoc.Test.Attributes
 	/// <summary>
 	/// "Author" custom attribute class
 	/// </summary>
+	[AttributeUsage(AttributeTargets.Class)]
+	public class TestAttribute : Attribute
+	{
+		public TestAttribute(){}
+
+		public int field1;
+		public string field2;
+
+	}
+
+	/// <summary>
+	/// "Author" custom attribute class
+	/// </summary>
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
 	public class AuthorAttribute : Attribute
 	{
@@ -69,6 +82,7 @@ namespace NDoc.Test.Attributes
 	/// Class with the "Author" attribute
 	/// </summary>
 	[Author("Joe Programmer")]
+	[Test(field1=2, field2="SomeString")]
 	public class Account
 	{
 		/// <summary>
