@@ -24,6 +24,10 @@
 		<p>VB .NET programmers can also document their code with:</p>
 		<ul>
 			<li>
+				<a href="http://www.gotdotnet.com/Community/Workspaces/Workspace.aspx?id=112b5449-f702-46e2-87fa-86bdf39a17dd" target="_blank">
+				VBCommenter PowerToy</a>
+			</li>
+			<li>
 				<a href="http://vb-doc.sourceforge.net/" target="_blank">VB.DOC - generate xml comments from VB source files</a>
 			</li>
 			<li>
