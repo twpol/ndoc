@@ -165,6 +165,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Engine\FileNameMapper.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Engine\HtmlFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -180,14 +185,22 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Engine\NameMapper.cs"
+                    RelPath = "Engine\StyleSheetCollection.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Engine\StyleSheetCollection.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
+                    RelPath = "Engine\NamespaceMapping\NamespaceMap.xml"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Engine\NamespaceMapping\NamespaceMap.xsd"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Engine\NamespaceMapping\NamespaceMap.xsx"
+                    DependentUpon = "NamespaceMap.xsd"
+                    BuildAction = "None"
                 />
                 <File
                     RelPath = "graphics\AnimButton1.gif"

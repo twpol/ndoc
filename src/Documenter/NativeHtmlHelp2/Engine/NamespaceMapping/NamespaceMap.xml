@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+	This file specifies the managed namespace to help namespace mapping
+	that will be used when creating XLinks to managed types that are not
+	part of the documentation set being processed.
+	
+	Each helpNamespace entry can contain 1..n managedNamespace entries.
+	The * wildcard can be used to denote all child namespaces at a given level
+	
+	When resolving the help namespace of a managed type, the most specific
+	managedNamespace entry will be used to select the appropriate help namespace.
+	
+	For example, given the following map file:
+	
+	<namespaceMap>
+		<helpNamespace ns="ms-help://companyX.sharedhelpcollection">
+			<managedNamespace ns="CompanyX.*"/>
+		</helpNamespace>
+		<helpNamespace ns="ms-help://companyX.producthelpcollection">
+			<managedNamespace ns="CompanyX.Product1.*"/>
+			<managedNamespace ns="CompanyX.Product2.*"/>
+		</helpNamespace>	
+	</namespaceMap>
+	
+	The managed type CompanyX.Product2.Class1 would map to ms-help://companyX.producthelpcollection,
+	while CompanyX.Core.Class1 would map to ms-help://companyX.sharedhelpcollection
+-->
+<namespaceMap xmlns="urn:ndoc-sourceforge-net:documenters.nativehtmlhelp2.schemas.namespaceMap">
+    <helpNamespace ns="ms-help://MS.NETFrameworkSDKv1.1">
+        <managedNamespace ns="System.*" />
+    </helpNamespace>
+</namespaceMap>

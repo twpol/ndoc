@@ -201,7 +201,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			if ( MyConfig.PCPlatform == PCPlatforms.DesktopAndServer )
 				sb.Append( "Windows 98, Windows NT 4.0, Windows Millennium Edition, Windows 2000, Windows XP Home Edition, Windows XP Professional, Windows Server 2003 family" );
 			else if ( MyConfig.PCPlatform == PCPlatforms.ServerOnly )
-				sb.Append( "Windows NT 4.0, Windows 2000, Windows XP Professional, Windows Server 2003 family" );
+				sb.Append( "Windows 2000, Windows XP Professional, Windows Server 2003 family" );
 
 			if ( MyConfig.MONO )
 			{
@@ -270,6 +270,11 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 				this.GetType().Module.Assembly,
 				"NDoc.Documenter.NativeHtmlHelp2.HxProject",
 				Path.Combine( ResourceDirectory, "HxProject") );
+
+			EmbeddedResources.WriteEmbeddedResources(
+				this.GetType().Module.Assembly,
+				"NDoc.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping",
+				Path.Combine( ResourceDirectory, "NamespaceMapping") );		
 		}
 
 		private void RegisterCollection()

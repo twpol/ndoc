@@ -93,7 +93,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>Relative HRef to the Topic</returns>
 		public string GetNamespaceHRef( string namespaceName )
 		{
-			return NameMapper.GetFilenameForNamespace( namespaceName );
+			return FileNameMapper.GetFilenameForNamespace( namespaceName );
 		}
 
 		/// <summary>
@@ -103,7 +103,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>Relative HRef to the Topic</returns>
 		public string GetNamespaceHierarchyHRef( string namespaceName )
 		{
-			return NameMapper.GetFileNameForNamespaceHierarchy( namespaceName );
+			return FileNameMapper.GetFileNameForNamespaceHierarchy( namespaceName );
 		}
 
 		/// <summary>
@@ -113,7 +113,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>Relative HRef to the Topic</returns>
 		public string GetTypeMembersHRef( string typeID )
 		{
-			return NameMapper.GetFilenameForTypeMembers( typeID );
+			return FileNameMapper.GetFilenameForTypeMembers( typeID );
 		}
 
 		/// <summary>
@@ -123,7 +123,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>Relative HRef to the Topic</returns>
 		public string GetTypeFieldsHRef( string typeID )
 		{
-			return NameMapper.GetFilenameForTypeProperties( typeID );
+			return FileNameMapper.GetFilenameForTypeProperties( typeID );
 		}
 
 		/// <summary>
@@ -133,7 +133,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>Relative HRef to the Topic</returns>
 		public string GetTypeMethodsHRef( string typeID )
 		{
-			return NameMapper.GetFilenameForTypeMethods( typeID );
+			return FileNameMapper.GetFilenameForTypeMethods( typeID );
 		}
 
 		/// <summary>
@@ -143,7 +143,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>Relative HRef to the Topic</returns>
 		public string GetTypeOperatorsHRef( string typeID )
 		{
-			return NameMapper.GetFilenameForTypeOperators( typeID );
+			return FileNameMapper.GetFilenameForTypeOperators( typeID );
 		}
 
 		/// <summary>
@@ -153,7 +153,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>Relative HRef to the Topic</returns>
 		public string GetTypeEventsHRef( string typeID )
 		{
-			return NameMapper.GetFilenameForTypeEvents( typeID );
+			return FileNameMapper.GetFilenameForTypeEvents( typeID );
 		}
 
 		/// <summary>
@@ -163,7 +163,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>Relative HRef to the Topic</returns>
 		public string GetTypePropertiesHRef( string typeID )
 		{
-			return NameMapper.GetFilenameForTypeProperties( typeID );
+			return FileNameMapper.GetFilenameForTypeProperties( typeID );
 		}
 
 		/// <summary>
@@ -173,7 +173,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>Relative HRef to the Topic</returns>
 		public string GetCustructorOverloadHRef( string typeID )
 		{
-			return NameMapper.GetFilenameForConstructors( typeID );
+			return FileNameMapper.GetFilenameForConstructors( typeID );
 		}
 
 		/// <summary>
@@ -185,7 +185,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		{
 			xPathNode.MoveNext();
 			if ( xPathNode.Current != null && xPathNode.Current is IHasXmlNode )
-				return NameMapper.GetFilenameForConstructor( ((IHasXmlNode)xPathNode.Current).GetNode() );
+				return FileNameMapper.GetFilenameForConstructor( ((IHasXmlNode)xPathNode.Current).GetNode() );
 			return "";
 		}
 
@@ -197,7 +197,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>Relative HRef to the Topic</returns>
 		public string GetMemberOverloadHRef( string typeID, string methodName )
 		{
-			return NameMapper.GetFilenameForMethodOverloads( typeID, methodName );
+			return FileNameMapper.GetFilenameForMethodOverloads( typeID, methodName );
 		}
 
 		/// <summary>
@@ -214,12 +214,12 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 
 				switch ( node.Name )
 				{
-					case "field":		return NameMapper.GetFilenameForField( node );
-					case "event":		return NameMapper.GetFilenameForEvent( node );
-					case "method":		return NameMapper.GetFilenameForMethod( node );
-					case "property":	return NameMapper.GetFilenameForProperty( node );
-					case "operator":	return NameMapper.GetFilenameForOperator( node );
-					case "constructor":	return NameMapper.GetFilenameForConstructor( node );
+					case "field":		return FileNameMapper.GetFilenameForField( node );
+					case "event":		return FileNameMapper.GetFilenameForEvent( node );
+					case "method":		return FileNameMapper.GetFilenameForMethod( node );
+					case "property":	return FileNameMapper.GetFilenameForProperty( node );
+					case "operator":	return FileNameMapper.GetFilenameForOperator( node );
+					case "constructor":	return FileNameMapper.GetFilenameForConstructor( node );
 					default:			return "";
 				}
 			}
@@ -235,7 +235,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>Relative HRef to the Topic</returns>			
 		public string GetMethodHRef( string typeID, string memberName )
 		{
-			return NameMapper.GetFilenameForMethodOverloads( typeID, memberName );
+			return FileNameMapper.GetFilenameForMethodOverloads( typeID, memberName );
 		}
 
 		/// <summary>
@@ -246,7 +246,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>Relative HRef to the Topic</returns>			
 		public string GetPropertyHRef( string typeID, string propertyName )
 		{
-			return NameMapper.GetFilenameForPropertyOverloads( typeID, propertyName );
+			return FileNameMapper.GetFilenameForPropertyOverloads( typeID, propertyName );
 		}
 
 		/// <summary>
@@ -256,7 +256,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>Relative HRef to the Topic</returns>			
 		public string GetFieldHRef( string fieldID  )
 		{
-			return NameMapper.GetFilenameForField( fieldID );
+			return FileNameMapper.GetFilenameForField( fieldID );
 		}
 
 		/// <summary>
@@ -266,7 +266,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>Relative HRef to the Topic</returns>			
 		public string GetEventHRef( string eventID  )
 		{
-			return NameMapper.GetFilenameForEvent( eventID );
+			return FileNameMapper.GetFilenameForEvent( eventID );
 		}
 
 		/// <summary>
@@ -276,7 +276,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>Relative HRef to the Topic</returns>
 		public string GetTypeHRef( string typeID )
 		{
-			return NameMapper.GetFilenameForType( typeID );
+			return FileNameMapper.GetFilenameForType( typeID );
 		}
 
 		/// <summary>
@@ -296,7 +296,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 				string memberName = cref.Substring( lastDot + 1 );
 				string typeID = cref.Substring( 0, lastDot );
 
-				switch (cref.Substring(0, 2))
+				switch ( cref.Substring( 0, 2 ) )
 				{
 					case "N:":	return GetNamespaceHRef( cref.Substring( 2 ) );
 					case "T:":	return GetTypeHRef( cref );
@@ -309,17 +309,17 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			}
 			else
 			{
-				switch (cref.Substring(0, 2))
+				switch ( cref.Substring( 0, 2 ) )
 				{
 					case "N:":	// Namespace
-						return "frlrf" + cref.Substring(2).Replace(".", "");
+						return "frlrf" + cref.Substring(2).Replace( ".", "" );
 					case "T:":	// Type: class, interface, struct, enum, delegate
-						return "frlrf" + cref.Substring(2).Replace(".", "") + "ClassTopic";
+						return "frlrf" + cref.Substring(2).Replace( ".", "" ) + "ClassTopic";
 					case "F:":	// Field
 					case "P:":	// Property
 					case "M:":	// Method
 					case "E:":	// Event
-						return GetFilenameForSystemMember(cref);
+						return GetFilenameForSystemMember( cref );
 					default:
 						return string.Empty;
 				}

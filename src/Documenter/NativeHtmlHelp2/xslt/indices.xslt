@@ -164,7 +164,7 @@
 	<xsl:template name="filename-to-aindex">
 		<xsl:param name="filename"/>
 		<!-- there is a bug in this line in that if a type has ".html" in its full name this will fail to produce the correct result -->
-		<xsl:value-of select="concat( 'ndoc', translate( substring-before( $filename, '.html' ), '.', '' ) )"/>
+		<xsl:value-of select="substring-before( $filename, '.html' )"/>
 	</xsl:template>
 	
 	<xsl:template name="add-a-index">

@@ -59,35 +59,12 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 	/// <summary>
 	/// Provides methods for mapping type name to file names
 	/// </summary>
-	public class NameMapper
+	public class FileNameMapper
 	{
-
-		private static Hashtable lowerCaseTypeNames;
-
-		static NameMapper()
-		{
-			lowerCaseTypeNames = new Hashtable();
-
-			lowerCaseTypeNames.Add( WhichType.Class, "class" );
-			lowerCaseTypeNames.Add( WhichType.Interface, "interface" );
-			lowerCaseTypeNames.Add( WhichType.Structure, "structure" );
-			lowerCaseTypeNames.Add( WhichType.Enumeration, "enumeration" );
-			lowerCaseTypeNames.Add( WhichType.Delegate, "delegate" );
-		}
-
 		/// <summary>
-		/// The collection of lower class type names
+		/// Creates a new isntance of a FileNameMapper
 		/// </summary>
-		public static Hashtable LowerCaseTypeNames
-		{
-			get{ return lowerCaseTypeNames; }
-		}		
-
-
-		/// <summary>
-		/// Creates a new isntance of a NameMapper
-		/// </summary>
-		public NameMapper()
+		public FileNameMapper()
 		{
 		}
 
@@ -102,32 +79,32 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		}
 
 		/// <summary>
-		/// Creates the filename to type mapping
+		/// Creates the element name type mapping
 		/// </summary>
 		/// <param name="documentation">The NDoc XML documentation summary</param>
-		public void MakeFilenames( XmlNode documentation )
+		public void MakeElementNames( XmlNode documentation )
 		{
 			elemNames = new StringDictionary();
 
-			XmlNodeList namespaces = documentation.SelectNodes("/ndoc/assembly/module/namespace");
-			foreach (XmlElement namespaceNode in namespaces)
+			XmlNodeList namespaces = documentation.SelectNodes( "/ndoc/assembly/module/namespace" );
+			foreach ( XmlElement namespaceNode in namespaces )
 			{
 				string namespaceName = namespaceNode.Attributes["name"].Value;
 				string namespaceId = "N:" + namespaceName;
 
 				elemNames[namespaceId] = namespaceName;
 
-				XmlNodeList types = namespaceNode.SelectNodes("*[@id]");
+				XmlNodeList types = namespaceNode.SelectNodes( "*[@id]" );
 				foreach (XmlElement typeNode in types)
 				{
 					string typeId = typeNode.Attributes["id"].Value;
 					elemNames[typeId] = typeNode.Attributes["name"].Value;
 
-					XmlNodeList members = typeNode.SelectNodes("*[@id]");
-					foreach (XmlElement memberNode in members)
+					XmlNodeList members = typeNode.SelectNodes( "*[@id]" );
+					foreach ( XmlElement memberNode in members )
 					{
 						string id = memberNode.Attributes["id"].Value;
-						switch (memberNode.Name)
+						switch ( memberNode.Name )
 						{
 							case "constructor":
 								elemNames[id] = elemNames[typeId];
@@ -160,31 +137,15 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>An enumeration for the item type</returns>
 		public static WhichType GetWhichType( XmlNode typeNode )
 		{
-			WhichType whichType;
-
-			switch (typeNode.Name)
+			switch ( typeNode.Name )
 			{
-				case "class":
-					whichType = WhichType.Class;
-					break;
-				case "interface":
-					whichType = WhichType.Interface;
-					break;
-				case "structure":
-					whichType = WhichType.Structure;
-					break;
-				case "enumeration":
-					whichType = WhichType.Enumeration;
-					break;
-				case "delegate":
-					whichType = WhichType.Delegate;
-					break;
-				default:
-					whichType = WhichType.Unknown;
-					break;
+				case "class":		return WhichType.Class;
+				case "interface":	return WhichType.Interface;
+				case "structure":	return WhichType.Structure;
+				case "enumeration":	return WhichType.Enumeration;
+				case "delegate":	return WhichType.Delegate;
+				default:			return WhichType.Unknown;
 			}
-
-			return whichType;
 		}
 
 		/// <summary>
@@ -194,7 +155,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>Topic Filename</returns>
 		public static string GetFileNameForNamespaceHierarchy( string namespaceName )
 		{
-			return namespaceName + "Hierarchy.html";
+			return namespaceName.Replace( ".", "" ) + "Hierarchy.html";
 		}
 
 		/// <summary>
@@ -204,7 +165,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForNamespace( string namespaceName )
 		{
-			return namespaceName + ".html";
+			return namespaceName.Replace( ".", "" ) + ".html";
 		}
 
 		/// <summary>
@@ -214,7 +175,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForType( string typeID )
 		{
-			return typeID.Substring(2) + "Topic.html";
+			return BaseNameFromTypeId( typeID ) + "Topic.html";
 		}
 		/// <summary>
 		/// Determines the filename for a type overview topic
@@ -233,7 +194,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForTypeMembers( string typeID )
 		{
-			return typeID.Substring(2) + "MembersTopic.html";
+			return BaseNameFromTypeId( typeID ) + "MembersTopic.html";
 		}
 		/// <summary>
 		/// Determines the filename for a type member list topic
@@ -252,8 +213,9 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForConstructors( string typeID )
 		{
-			return typeID.Substring(2) + "ConstructorTopic.html";
+			return BaseNameFromTypeId( typeID ) + "ConstructorTopic.html";
 		}
+
 		/// <summary>
 		/// Determines the filename for a constructor list topic
 		/// </summary>
@@ -274,13 +236,12 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		{
 			int dotHash = constructorID.IndexOf(".#"); // constructors could be #ctor or #cctor
 
-			string fileName = constructorID.Substring(2, dotHash - 2);
+			StringBuilder sb = new StringBuilder( BaseNameFromTypeId( constructorID.Substring( 0, dotHash ) ) );
+		
 			if ( isStatic )
-				fileName += "Static";
+				sb.Append( "Static" );
 
-			fileName += "Constructor";
-
-			return fileName += "Topic.html";
+			return sb.Append( "ctorTopic.html" ).ToString();
 		}
 		/// <summary>
 		/// Determines the filename for a constructor topic
@@ -293,15 +254,12 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		{
 			int dotHash = constructorID.IndexOf(".#"); // constructors could be #ctor or #cctor
 
-			string fileName = constructorID.Substring(2, dotHash - 2);
+			StringBuilder sb = new StringBuilder( BaseNameFromTypeId( constructorID.Substring( 0, dotHash ) ) );
+		
 			if ( isStatic )
-				fileName += "Static";
+				sb.Append( "Static" );
 
-			fileName += "Constructor";
-
-			fileName += overLoad;
-
-			return fileName += "Topic.html";
+			return sb.AppendFormat( "ctorTopic{0}.html", overLoad ).ToString();
 		}
 		/// <summary>
 		/// Determines the filename for a constructor topic
@@ -326,7 +284,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForTypeFields( string typeID )
 		{
-			return typeID.Substring(2) + "FieldsTopic.html";
+			return BaseNameFromTypeId( typeID ) + "FieldsTopic.html";
 		}
 		/// <summary>
 		/// Determines the filename for a type field list topic
@@ -345,7 +303,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForField( string fieldID )
 		{
-			return fieldID.Substring(2) + "Topic.html";
+			return BaseNameFromMemberId( fieldID ) + "Topic.html";
 		}
 		/// <summary>
 		/// Gets the filename for a particular field topic
@@ -364,7 +322,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForTypeOperators( string typeID )
 		{
-			return typeID.Substring(2) + "OperatorsTopic.html";
+			return BaseNameFromTypeId( typeID ) + "OperatorsTopic.html";
 		}
 		/// <summary>
 		/// Determines the filename for a type operator list topic
@@ -384,7 +342,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForOperatorsOverloads( string typeID, string opName )
 		{
-			return typeID.Substring(2) + "." + opName + "Topic.html";
+			return BaseNameFromTypeId( typeID ) + opName + "Topic.html";
 		}
 		/// <summary>
 		/// Determines the filename for an operator overloads list topic
@@ -405,19 +363,20 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		public static string GetFilenameForOperator( XmlNode operatorNode )
 		{
 			string operatorID = operatorNode.Attributes["id"].Value;
-			string fileName = operatorID.Substring(2);
 
-			int leftParenIndex = fileName.IndexOf('(');
+			StringBuilder sb;
 
-			if (leftParenIndex != -1)
-				fileName = fileName.Substring(0, leftParenIndex);
-			
-			if (operatorNode.Attributes["overload"] != null)
-				fileName += operatorNode.Attributes["overload"].Value;
+			int leftParenIndex = operatorID.IndexOf( '(' );
 
-			fileName += "Topic.html";
+			if ( leftParenIndex != -1 )
+				sb = new StringBuilder( BaseNameFromMemberId( operatorID.Substring( 0, leftParenIndex ) ) );
+			else
+				sb = new StringBuilder( BaseNameFromMemberId( operatorID ) );
 
-			return fileName;
+			if ( operatorNode.Attributes["overload"] != null )
+				sb.Append( operatorNode.Attributes["overload"].Value );
+
+			return sb.Append( "Topic.html" ).ToString();
 		}
 		
 		/// <summary>
@@ -427,7 +386,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForTypeEvents( string typeID )
 		{
-			return typeID.Substring(2) + "EventsTopic.html";
+			return BaseNameFromTypeId( typeID ) + "EventsTopic.html";
 		}
 		/// <summary>
 		/// Determines the filename for a type event list topic
@@ -446,7 +405,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForEvent( string eventID )
 		{
-			return eventID.Substring(2) + "Topic.html";
+			return BaseNameFromMemberId( eventID ) + "Topic.html";
 		}
 		/// <summary>
 		/// Gets the filename for a particular event topic
@@ -465,7 +424,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForTypeProperties( string typeID )
 		{
-			return typeID.Substring(2) + "PropertiesTopic.html";
+			return BaseNameFromTypeId( typeID ) + "PropertiesTopic.html";
 		}
 		/// <summary>
 		/// Determines the filename for a type property list topic
@@ -485,7 +444,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForPropertyOverloads( string typeID, string propertyName )
 		{
-			return typeID.Substring(2) + "." + propertyName + "Topic.html";
+			return BaseNameFromTypeId( typeID ) + propertyName + "Topic.html";
 		}
 		/// <summary>
 		/// Determines the filename for an property overloads list topic
@@ -506,19 +465,20 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		public static string GetFilenameForProperty( XmlNode propertyNode )
 		{
 			string propertyID = propertyNode.Attributes["id"].Value;
-			string fileName = propertyID.Substring(2);
 
-			int leftParenIndex = fileName.IndexOf('(');
+			StringBuilder sb;
 
-			if (leftParenIndex != -1)
-				fileName = fileName.Substring(0, leftParenIndex);
+			int leftParenIndex = propertyID.IndexOf( '(' );
 
-			if (propertyNode.Attributes["overload"] != null)
-				fileName += propertyNode.Attributes["overload"].Value;
+			if ( leftParenIndex != -1 )
+				sb = new StringBuilder( BaseNameFromMemberId( propertyID.Substring( 0, leftParenIndex ) ) );
+			else
+				sb = new StringBuilder( BaseNameFromMemberId( propertyID ) );
 
-			fileName += "Topic.html";
+			if ( propertyNode.Attributes["overload"] != null )
+				sb.Append( propertyNode.Attributes["overload"].Value );
 
-			return fileName;
+			return sb.Append( "Topic.html" ).ToString();
 		}
 
 		/// <summary>
@@ -528,7 +488,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForTypeMethods( string typeID )
 		{
-			return typeID.Substring(2) + "MethodsTopic.html";
+			return BaseNameFromTypeId( typeID ) + "MethodsTopic.html";
 		}
 		/// <summary>
 		/// Determines the filename for a type method list topic
@@ -548,7 +508,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <returns>Topic Filename</returns>
 		public static string GetFilenameForMethodOverloads( string typeID, string methodName )
 		{
-			return typeID.Substring(2) + "." + methodName + "Topic.html";
+			return BaseNameFromTypeId( typeID ) + methodName + "Topic.html";
 		}
 		/// <summary>
 		/// Determines the filename for a method voerload list topic
@@ -569,34 +529,45 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		public static string GetFilenameForMethod( XmlNode methodNode )
 		{
 			string methodID = methodNode.Attributes["id"].Value;
-			string fileName = methodID.Substring(2);
 
-			int leftParenIndex = fileName.IndexOf('(');
+			StringBuilder sb;
 
-			if (leftParenIndex != -1)
-				fileName = fileName.Substring(0, leftParenIndex);
+			int leftParenIndex = methodID.IndexOf( '(' );
 
-			fileName = RemoveChar( fileName, '#' );
+			if ( leftParenIndex != -1 )
+				sb = new StringBuilder( BaseNameFromMemberId( methodID.Substring( 0, leftParenIndex ) ) );
+			else
+				sb = new StringBuilder( BaseNameFromMemberId( methodID ) );
 
 			if ( methodNode.Attributes["overload"] != null )
-				fileName += methodNode.Attributes["overload"].Value;
+				sb.Append( methodNode.Attributes["overload"].Value );
+			
+			sb.Replace( "#", "" );
 
-			fileName += "Topic.html";
-
-			return fileName;
+			return sb.Append( "Topic.html" ).ToString();
 		}
 
-		private static string RemoveChar(string s, char c)
+		/// <summary>
+		/// Given a type id (including the T: prefix)
+		/// determines the Base name for the topic file
+		/// </summary>
+		/// <param name="typeID">The ndoc generated id of a type</param>
+		/// <returns>Topic's base name</returns>
+		private static string BaseNameFromTypeId( string typeID )
 		{
-			StringBuilder builder = new StringBuilder();
+			return String.Format( "ndoc{0}Class", typeID.Substring(2).Replace( ".", "" ) );
+		}
 
-			foreach ( char ch in s.ToCharArray() )
-			{
-				if ( ch != c )				
-					builder.Append(ch);				
-			}
-
-			return builder.ToString();
+		/// <summary>
+		/// Given a fully qualified member id (including the prefix)
+		/// determines the Base name for the topic file
+		/// </summary>
+		/// <param name="memberID">The ndoc generated id of a type member</param>
+		/// <returns>Topic's base name</returns>
+		private static string BaseNameFromMemberId( string memberID )
+		{
+			int lastDot = memberID.LastIndexOf( '.' );
+			return BaseNameFromTypeId( memberID.Substring( 0, lastDot ) ) + memberID.Substring( lastDot + 1 );
 		}
 	}
 }

@@ -603,6 +603,7 @@
 				<MSHelp:Attr Name="TechnologyVers" Value="kbWFC"/>
 				<MSHelp:Attr Name="TechnologyVers" Value="kbManagedC"/>
 				<MSHelp:Attr Name="Locale" Value="kbEnglish"/>
+				<!-- Microsoft reserves priority of 1 and 2 for framework types -->
 				<MSHelp:Attr Name="HelpPriority" Value="3"/>	
 			</xml>
 			<SCRIPT SRC="dtuelink.js"></SCRIPT>
