@@ -44,24 +44,25 @@ namespace NDoc.Documenter.Msdn
 
 		HtmlHelp htmlHelp;
 
-		string              resourceDirectory;
+		string resourceDirectory;
 
-		XmlDocument         xmlDocumentation;
-		Hashtable           lowerCaseTypeNames;
-		Hashtable           mixedCaseTypeNames;
+		XmlDocument xmlDocumentation;
 
-		XslTransform   xsltNamespace;
-		XslTransform   xsltNamespaceHierarchy;
-		XslTransform   xsltType;
-		XslTransform   xsltAllMembers;
-		XslTransform   xsltIndividualMembers;
-		XslTransform   xsltEvent;
-		XslTransform   xsltMember;
-		XslTransform   xsltMemberOverload;
-		XslTransform   xsltProperty;
-		XslTransform   xsltField;
+		Hashtable lowerCaseTypeNames;
+		Hashtable mixedCaseTypeNames;
 
-		ArrayList           assemblySlashDocs;
+		XslTransform xsltNamespace;
+		XslTransform xsltNamespaceHierarchy;
+		XslTransform xsltType;
+		XslTransform xsltAllMembers;
+		XslTransform xsltIndividualMembers;
+		XslTransform xsltEvent;
+		XslTransform xsltMember;
+		XslTransform xsltMemberOverload;
+		XslTransform xsltProperty;
+		XslTransform xsltField;
+
+		ArrayList assemblySlashDocs;
 
 		/// <summary>Initializes a new instance of the MsdnHelp class.</summary>
 		public MsdnDocumenter() : base("MSDN")
@@ -289,16 +290,28 @@ namespace NDoc.Documenter.Msdn
 
 		private WhichType GetWhichType(XmlNode typeNode)
 		{
-			WhichType     whichType;
+			WhichType whichType;
 
 			switch (typeNode.Name)
 			{
-				case "class":     whichType = WhichType.Class; break;
-				case "interface":   whichType = WhichType.Interface; break;
-				case "structure":   whichType = WhichType.Structure; break;
-				case "enumeration":   whichType = WhichType.Enumeration; break;
-				case "delegate":    whichType = WhichType.Delegate; break;
-				default:        whichType = WhichType.Unknown; break;
+				case "class":
+					whichType = WhichType.Class; 
+					break;
+				case "interface":
+					whichType = WhichType.Interface; 
+					break;
+				case "structure":
+					whichType = WhichType.Structure; 
+					break;
+				case "enumeration":
+					whichType = WhichType.Enumeration; 
+					break;
+				case "delegate":
+					whichType = WhichType.Delegate; 
+					break;
+				default:
+					whichType = WhichType.Unknown; 
+					break;
 			}
 
 			return whichType;
@@ -354,31 +367,39 @@ namespace NDoc.Documenter.Msdn
 
 		private void MakeHtmlForTypes(string namespaceName)
 		{
-			XmlNodeList   typeNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace[@name=\"" + namespaceName + "\"]/*[local-name()!='summary']");
-			XmlNode     typeNode;
-			WhichType     whichType;
-			int         nNodes = typeNodes.Count;
-			int[]       indexes;
-			int         i;
+			XmlNodeList typeNodes = 
+				xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace[@name=\"" + namespaceName + "\"]/*[local-name()!='summary']");
 
-			indexes = SortNodesByAttribute(typeNodes, "id");
+			int[] indexes = SortNodesByAttribute(typeNodes, "id");
+			int nNodes = typeNodes.Count;
 
 			htmlHelp.OpenBookInContents();
 
-			for (i = 0; i < nNodes; i++)
+			for (int i = 0; i < nNodes; i++)
 			{
-				typeNode = typeNodes[indexes[i]];
+				XmlNode typeNode = typeNodes[indexes[i]];
 
-				whichType = GetWhichType(typeNode);
+				WhichType whichType = GetWhichType(typeNode);
 
 				switch(whichType)
 				{
-					case WhichType.Class:     MakeHtmlForInterfaceOrClassOrStructure(whichType, typeNode); break;
-					case WhichType.Interface:   MakeHtmlForInterfaceOrClassOrStructure(whichType, typeNode); break;
-					case WhichType.Structure:   MakeHtmlForInterfaceOrClassOrStructure(whichType, typeNode); break;
-					case WhichType.Enumeration:   MakeHtmlForEnumerationOrDelegate(whichType, typeNode); break;
-					case WhichType.Delegate:    MakeHtmlForEnumerationOrDelegate(whichType, typeNode); break;
-					default:            break;
+					case WhichType.Class:
+						MakeHtmlForInterfaceOrClassOrStructure(whichType, typeNode); 
+						break;
+					case WhichType.Interface:
+						MakeHtmlForInterfaceOrClassOrStructure(whichType, typeNode); 
+						break;
+					case WhichType.Structure:
+						MakeHtmlForInterfaceOrClassOrStructure(whichType, typeNode); 
+						break;
+					case WhichType.Enumeration:
+						MakeHtmlForEnumerationOrDelegate(whichType, typeNode); 
+						break;
+					case WhichType.Delegate:
+						MakeHtmlForEnumerationOrDelegate(whichType, typeNode); 
+						break;
+					default:
+						break;
 				}
 			}
 
@@ -387,13 +408,10 @@ namespace NDoc.Documenter.Msdn
 
 		private void MakeHtmlForEnumerationOrDelegate(WhichType whichType, XmlNode typeNode)
 		{
-			string        typeName;
-			string        typeID;
-			string        fileName;
+			string typeName = typeNode.Attributes["name"].Value;
+			string typeID = typeNode.Attributes["id"].Value;
+			string fileName = GetFilenameForType(typeNode);
 
-			typeName = (string)typeNode.Attributes["name"].Value;
-			typeID = (string)typeNode.Attributes["id"].Value;
-			fileName = GetFilenameForType(typeNode);
 			htmlHelp.AddFileToContents(typeName + " " + mixedCaseTypeNames[whichType], fileName);
 
 			XsltArgumentList arguments = new XsltArgumentList();
@@ -405,13 +423,10 @@ namespace NDoc.Documenter.Msdn
 			WhichType whichType,
 			XmlNode typeNode)
 		{
-			string typeName;
-			string typeID;
-			string fileName;
+			string typeName = typeNode.Attributes["name"].Value;
+			string typeID = typeNode.Attributes["id"].Value;
+			string fileName = GetFilenameForType(typeNode);
 
-			typeName = (string)typeNode.Attributes["name"].Value;
-			typeID = (string)typeNode.Attributes["id"].Value;
-			fileName = GetFilenameForType(typeNode);
 			htmlHelp.AddFileToContents(typeName + " " + mixedCaseTypeNames[whichType], fileName);
 
 			htmlHelp.OpenBookInContents();
@@ -431,6 +446,7 @@ namespace NDoc.Documenter.Msdn
 			MakeHtmlForFields(whichType, typeNode);
 			MakeHtmlForProperties(whichType, typeNode);
 			MakeHtmlForMethods(whichType, typeNode);
+			MakeHtmlForOperators(whichType, typeNode);
 			MakeHtmlForEvents(whichType, typeNode);
 
 			htmlHelp.CloseBookInContents();
@@ -456,7 +472,7 @@ namespace NDoc.Documenter.Msdn
 
 				htmlHelp.OpenBookInContents();
 
-				constructorID = (string)constructorNodes[0].Attributes["id"].Value;
+				constructorID = constructorNodes[0].Attributes["id"].Value;
 
 				XsltArgumentList arguments = new XsltArgumentList();
 				arguments.AddParam("member-id", String.Empty, constructorID);
@@ -465,7 +481,7 @@ namespace NDoc.Documenter.Msdn
 
 			foreach (XmlNode constructorNode in constructorNodes)
 			{
-				constructorID = (string)constructorNode.Attributes["id"].Value;
+				constructorID = constructorNode.Attributes["id"].Value;
 				fileName = GetFilenameForConstructor(constructorNode);
 
 				if (constructorNodes.Count > 1)
@@ -495,8 +511,8 @@ namespace NDoc.Documenter.Msdn
 
 			if (fields.Count > 0)
 			{
-				string typeName = (string)typeNode.Attributes["name"].Value;
-				string typeID = (string)typeNode.Attributes["id"].Value;
+				string typeName = typeNode.Attributes["name"].Value;
+				string typeID = typeNode.Attributes["id"].Value;
 				string fileName = GetFilenameForFields(whichType, typeNode);
 
 				htmlHelp.AddFileToContents("Fields", fileName);
@@ -514,8 +530,8 @@ namespace NDoc.Documenter.Msdn
 				{
 					XmlNode field = fields[index];
 
-					string fieldName = (string)field.Attributes["name"].Value;
-					string fieldID = (string)field.Attributes["id"].Value;
+					string fieldName = field.Attributes["name"].Value;
+					string fieldID = field.Attributes["id"].Value;
 					fileName = GetFilenameForField(field);
 					htmlHelp.AddFileToContents(fieldName + " Field", fileName);
 
@@ -793,6 +809,102 @@ namespace NDoc.Documenter.Msdn
 			}
 		}
 
+		private void MakeHtmlForOperators(WhichType whichType, XmlNode typeNode)
+		{
+			XmlNodeList operators = typeNode.SelectNodes("operator");
+
+			if (operators.Count > 0)
+			{
+				string typeName = (string)typeNode.Attributes["name"].Value;
+				string typeID = (string)typeNode.Attributes["id"].Value;
+				string fileName = GetFilenameForOperators(whichType, typeNode);
+
+				htmlHelp.AddFileToContents("Operators", fileName);
+
+				XsltArgumentList arguments = new XsltArgumentList();
+				arguments.AddParam("id", String.Empty, typeID);
+				arguments.AddParam("member", String.Empty, "operator");
+				TransformAndWriteResult(xsltIndividualMembers, arguments, fileName);
+
+				htmlHelp.OpenBookInContents();
+
+				int[] indexes = SortNodesByAttribute(operators, "id");
+
+				foreach (int index in indexes)
+				{
+					XmlNode operatorNode = operators[index];
+
+					string operatorName = operatorNode.Attributes["name"].Value;
+					string operatorID = operatorNode.Attributes["id"].Value;
+					fileName = GetFilenameForOperator(operatorNode);
+					htmlHelp.AddFileToContents(GetOperatorName(operatorName), fileName);
+
+					arguments = new XsltArgumentList();
+					arguments.AddParam("member-id", String.Empty, operatorID);
+					TransformAndWriteResult(xsltMember, arguments, fileName);
+				}
+
+				htmlHelp.CloseBookInContents();
+			}
+		}
+
+		private string GetOperatorName(string name)
+		{
+			switch (name)
+			{
+				case "op_UnaryPlus":
+					return "Unary Plus Operator";
+				case "op_UnaryNegation":
+					return "Unary Negation Operator";
+				case "op_LogicalNot":
+					return "Logical Not Operator";
+				case "op_OnesComplement":
+					return "Ones Complement Operator";
+				case "op_Increment":
+					return "Increment Operator";
+				case "op_Decrement":
+					return "Decrement Operator";
+				case "op_True":
+					return "True Operator";
+				case "op_False":
+					return "False Operator";
+				case "op_Addition":
+					return "Addition Operator";
+				case "op_Subtraction":
+					return "Subtraction Operator";
+				case "op_Multiply":
+					return "Multiplication Operator";
+				case "op_Division":
+					return "Division Operator";
+				case "op_Modulus":
+					return "Modulus Operator";
+				case "op_BitwiseAnd":
+					return "Bitwise And Operator";
+				case "op_BitwiseOr":
+					return "Bitwise Or Operator";
+				case "op_ExclusiveOr":
+					return "Exclusive Or Operator";
+				case "op_LeftShift":
+					return "Left Shift Operator";
+				case "op_RightShift":
+					return "Right Shift Operator";
+				case "op_Equality":
+					return "Equality Operator";
+				case "op_Inequality":
+					return "Inequality Operator";
+				case "op_LessThan":
+					return "Less Than Operator";
+				case "op_GreaterThan":
+					return "Greater Than Operator";
+				case "op_LessThanOrEqual":
+					return "Less Than Or Equal Operator";
+				case "op_GreaterThanOrEqual":
+					return "Greater Than Or Equal Operator";
+				default:
+					return "ERROR";
+			}
+		}
+
 		private void MakeHtmlForEvents(WhichType whichType, XmlNode typeNode)
 		{
 			XmlNodeList events = typeNode.SelectNodes("event");
@@ -974,6 +1086,45 @@ namespace NDoc.Documenter.Msdn
 		{
 			string fieldID = (string)fieldNode.Attributes["id"].Value;
 			string fileName = RemoveChar(fieldID.Substring(2), '.') + "Field.html";
+			return fileName;
+		}
+
+		private string GetFilenameForOperators(WhichType whichType, XmlNode typeNode)
+		{
+			string typeID = typeNode.Attributes["id"].Value;
+			string fileName = RemoveChar(typeID.Substring(2), '.') + "Operators.html";
+			return fileName;
+		}
+
+		private string GetFilenameForOperator(XmlNode operatorNode)
+		{
+			string operatorID = operatorNode.Attributes["id"].Value;
+			string fileName = operatorID.Substring(2);
+			
+			int opIndex = fileName.IndexOf("op_");
+
+			if (opIndex != -1)
+			{
+				fileName = fileName.Remove(opIndex, 3);
+			}
+
+			int leftParenIndex = fileName.IndexOf('(');
+
+			if (leftParenIndex != -1)
+			{
+				fileName = fileName.Substring(0, leftParenIndex);
+			}
+
+			fileName = RemoveChar(fileName, '.');
+			fileName += "Operator";
+
+			if (operatorNode.Attributes["overload"] != null)
+			{
+				fileName += operatorNode.Attributes["overload"].Value;
+			}
+
+			fileName += ".html";
+
 			return fileName;
 		}
 

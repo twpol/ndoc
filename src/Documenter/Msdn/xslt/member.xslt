@@ -11,7 +11,7 @@
 		<xsl:apply-templates select="ndoc/assembly/module/namespace/*/*[@id=$member-id]" />
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="method | constructor">
+	<xsl:template match="method | constructor | operator">
 		<xsl:variable name="type">
 			<xsl:choose>
 				<xsl:when test="local-name(..)='interface'">Interface</xsl:when>

@@ -89,7 +89,16 @@
 						</xsl:call-template>
 					</a>
 					<xsl:text>&#160;</xsl:text>
-					<xsl:value-of select="@name" />
+					<xsl:choose>
+						<xsl:when test="local-name()='operator'">
+							<xsl:call-template name="csharp-operator-name">
+								<xsl:with-param name="name" select="@name" />
+							</xsl:call-template>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="@name" />
+						</xsl:otherwise>
+					</xsl:choose>
 				</xsl:otherwise>
 			</xsl:choose>
 			<xsl:call-template name="parameters">

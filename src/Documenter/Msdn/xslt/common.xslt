@@ -595,4 +595,35 @@
 		</xsl:choose>
 	</xsl:template>
 	<!-- -->
+	<xsl:template name="csharp-operator-name">
+		<xsl:param name="name" />
+		<xsl:choose>
+			<xsl:when test="$name='op_UnaryPlus'">operator +</xsl:when>
+			<xsl:when test="$name='op_UnaryNegation'">operator -</xsl:when>
+			<xsl:when test="$name='op_LogicalNot'">operator !</xsl:when>
+			<xsl:when test="$name='op_OnesComplement'">operator ~</xsl:when>
+			<xsl:when test="$name='op_Increment'">operator ++</xsl:when>
+			<xsl:when test="$name='op_Decrement'">operator --</xsl:when>
+			<xsl:when test="$name='op_True'">operator true</xsl:when>
+			<xsl:when test="$name='op_False'">operator false</xsl:when>
+			<xsl:when test="$name='op_Addition'">operator +</xsl:when>
+			<xsl:when test="$name='op_Subtraction'">operator -</xsl:when>
+			<xsl:when test="$name='op_Multiply'">operator *</xsl:when>
+			<xsl:when test="$name='op_Division'">operator /</xsl:when>
+			<xsl:when test="$name='op_Modulus'">operator %</xsl:when>
+			<xsl:when test="$name='op_BitwiseAnd'">operator &amp;</xsl:when>
+			<xsl:when test="$name='op_BitwiseOr'">operator |</xsl:when>
+			<xsl:when test="$name='op_ExclusiveOr'">operator ^</xsl:when>
+			<xsl:when test="$name='op_LeftShift'">operator &lt;&lt;</xsl:when>
+			<xsl:when test="$name='op_RightShift'">operator >></xsl:when>
+			<xsl:when test="$name='op_Equality'">operator ==</xsl:when>
+			<xsl:when test="$name='op_Inequality'">operator !=</xsl:when>
+			<xsl:when test="$name='op_LessThan'">operator &lt;</xsl:when>
+			<xsl:when test="$name='op_GreaterThan'">operator ></xsl:when>
+			<xsl:when test="$name='op_LessThanOrEqual'">operator &lt;=</xsl:when>
+			<xsl:when test="$name='op_GreaterThanOrEqual'">operator >=</xsl:when>
+			<xsl:otherwise>ERROR</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	<!-- -->
 </xsl:stylesheet>

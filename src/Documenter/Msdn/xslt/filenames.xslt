@@ -112,6 +112,11 @@
 			<xsl:when test="$member = 'event'">
 				<xsl:call-template name="get-filename-for-current-event" />
 			</xsl:when>
+			<xsl:when test="$member = 'operator'">
+				<xsl:call-template name="get-filename-for-operator">
+					<xsl:with-param name="operator" select="." />
+				</xsl:call-template>
+			</xsl:when>
 			<xsl:otherwise>
 				<xsl:call-template name="get-filename-for-method" />
 			</xsl:otherwise>
@@ -166,6 +171,21 @@
 				<xsl:value-of select="concat(translate($type-name, '.', ''), '.html')" />
 			</xsl:otherwise>
 		</xsl:choose>
+	</xsl:template>
+	<!-- -->
+	<xsl:template name="get-filename-for-operator">
+		<xsl:param name="operator" select="." />
+		<xsl:variable name="filename">
+			<xsl:choose>
+				<xsl:when test="contains($operator/@id, '(')">
+					<xsl:value-of select="concat(translate(substring-after(substring-before($operator/@id, '('), 'M:'), '.', ''), 'Operator', $operator/@overload, '.html')" />
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="concat(translate(substring-after($operator/@id, 'M:'), '.', ''), 'Operator', $operator/@overload, '.html')" />
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:value-of select="concat(substring-before($filename, 'op_'), substring-after($filename, 'op_'))" />
 	</xsl:template>
 	<!-- -->
 </xsl:stylesheet>
