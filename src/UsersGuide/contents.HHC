@@ -12,10 +12,14 @@
    </OBJECT>
    <UL>
       <LI><OBJECT type="text/sitemap">
-            <param name="Name" value="What's New">
+            <param name="Name" value="Welcome">
             <param name="Local" value="Content\Default.htm">
           </OBJECT>
       <UL>
+         <LI><OBJECT type="text/sitemap">
+               <param name="Name" value="What's New">
+               <param name="Local" value="Content\whatsnew.htm">
+             </OBJECT>
          <LI><OBJECT type="text/sitemap">
                <param name="Name" value="Known Issues">
                <param name="Local" value="Content\knownissues.htm">
@@ -115,9 +119,13 @@
       </UL>
       <LI><OBJECT type="text/sitemap">
             <param name="Name" value="Tag Reference">
-            <param name="Local" value="Content\tagsusage.htm">
+            <param name="Local" value="Content\tags.htm">
           </OBJECT>
       <UL>
+         <LI><OBJECT type="text/sitemap">
+               <param name="Name" value="Tag Usage Matrix">
+               <param name="Local" value="Content\tagsusage.htm">
+             </OBJECT>
          <LI><OBJECT type="text/sitemap">
                <param name="Name" value="c">
                <param name="Local" value="Content\tag_c.htm">
@@ -173,10 +181,6 @@
          <LI><OBJECT type="text/sitemap">
                <param name="Name" value="permission">
                <param name="Local" value="Content\tag_permission.htm">
-             </OBJECT>
-         <LI><OBJECT type="text/sitemap">
-               <param name="Name" value="platform">
-               <param name="Local" value="Content\tag_platform.htm">
              </OBJECT>
          <LI><OBJECT type="text/sitemap">
                <param name="Name" value="preliminary">

@@ -191,10 +191,6 @@
 				DeploymentContent="TRUE">
 			</File>
 			<File
-				RelativePath=".\Content\tag_platform.htm"
-				DeploymentContent="TRUE">
-			</File>
-			<File
 				RelativePath=".\Content\tag_preliminary.htm"
 				DeploymentContent="TRUE">
 			</File>
@@ -236,6 +232,10 @@
 			</File>
 			<File
 				RelativePath=".\Content\vsnet.htm"
+				DeploymentContent="TRUE">
+			</File>
+			<File
+				RelativePath=".\Content\whatsnew.htm"
 				DeploymentContent="TRUE">
 			</File>
 			<File
