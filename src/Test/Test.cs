@@ -1284,6 +1284,13 @@ namespace NDoc.Test
 		{
 		}
 	}
+
+	/// <summary>This class causes the &lt;PrivateImplementationDetails> 
+	/// class to appear in the compiled assembly.</summary>
+	public class PrivateImplementationDetails
+	{
+		static byte[] bar = new byte[] {1,2,3};
+	}
 }
 
 namespace NDoc.Test.InternalStuff

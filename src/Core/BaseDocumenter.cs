@@ -237,14 +237,15 @@ namespace NDoc.Core
 
 		private bool MustDocumentType( Type type )
 		{
-			return (type.IsPublic ||
+			return (!type.FullName.StartsWith("<PrivateImplementationDetails>") &&
+				(type.IsPublic ||
 				(type.IsNotPublic && MyConfig.DocumentInternals) ||
 				type.IsNestedPublic ||
 				(type.IsNestedFamily && MyConfig.DocumentProtected) ||
 				(type.IsNestedFamORAssem && MyConfig.DocumentProtected) ||
 				(type.IsNestedAssembly && MyConfig.DocumentInternals) ||
 				(type.IsNestedFamANDAssem && MyConfig.DocumentInternals) ||
-				(type.IsNestedPrivate && MyConfig.DocumentPrivates));
+				(type.IsNestedPrivate && MyConfig.DocumentPrivates)));
 		}
 
 		private bool MustDocumentMethod( MethodBase method )
@@ -408,8 +409,7 @@ namespace NDoc.Core
 
 			foreach (Type type in types)
 			{
-				if (type.Name != "<PrivateImplementationDetails>" &&
-					type.IsClass &&
+				if (type.IsClass &&
 					!IsDelegate(type) &&
 					type.Namespace == namespaceName &&
 					MustDocumentType(type))
