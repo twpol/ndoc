@@ -567,17 +567,19 @@ namespace NDoc.Core
 			{
 				if (reader.NodeType == XmlNodeType.Element && reader.Name == "namespace")
 				{
+					if (_namespaces==null) 
+						_namespaces = new SortedList();
+
 					string name = reader["name"];
 					string summary = reader.ReadInnerXml();
 
-					//assume that the assemblies are read first
-					//and ignore summaries from unknown namespaces
+					//ignore duplicate summaries
 					if (_namespaces.ContainsKey(name))
 					{
 						_namespaces[name] = summary;
 					}
 
-					// Reader cursor already moved to next node.
+					// ReadInnerXml moved Reader cursor to next node.
 				}
 				else
 				{
