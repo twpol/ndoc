@@ -1,5 +1,7 @@
+using System;
 using System.Reflection;
 
+[assembly: CLSCompliantAttribute(false)]
 [assembly: AssemblyTitle("NDoc Test")]
 [assembly: AssemblyDescription("Test class library for the NDoc code documentation generator.")]
 

@@ -1,5 +1,7 @@
+using System;
 using System.Reflection;
 
+[assembly: CLSCompliantAttribute(true)]
 [assembly: AssemblyTitle("NDoc Documenter Core")]
 [assembly: AssemblyDescription("Core components for the NDoc code documentation generator.")]
 

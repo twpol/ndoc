@@ -1,5 +1,7 @@
+using System;
 using System.Reflection;
 
+[assembly: CLSCompliantAttribute(true)]
 [assembly: AssemblyTitle("NDoc Gui")]
 [assembly: AssemblyDescription("Winform user interface for the NDoc code documentation generator.")]
 

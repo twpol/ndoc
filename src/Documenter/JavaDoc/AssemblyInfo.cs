@@ -1,5 +1,7 @@
+using System;
 using System.Reflection;
 
+[assembly: CLSCompliantAttribute(true)]
 [assembly: AssemblyTitle("NDoc JavaDoc Documenter")]
 [assembly: AssemblyDescription("JavaDoc documenter for the NDoc code documentation generator.")]
 
