@@ -258,9 +258,9 @@ namespace NDoc.Gui
 			this.developersLabel.Name = "developersLabel";
 			this.developersLabel.Size = new System.Drawing.Size(512, 48);
 			this.developersLabel.TabIndex = 7;
-			this.developersLabel.Text = "Contributors: Carlos Guzmán Álvarez, Don Kackman, Heath Stewart, Laurent Domenech" +
-				", Jerome Mathieu, Keith Hill, Michael Poettgen, Pascal Bourque, Ryan Seghers, St" +
-				"eve Van Esch, Thong (Tum) Nguyen";
+			this.developersLabel.Text = "Contributors: Carlos Guzmán Álvarez, Don Kackman, Gert Driesen, Heath Stewart, La" +
+				"urent Domenech, Jerome Mathieu, Keith Hill, Michael Poettgen, Pascal Bourque, Ry" +
+				"an Seghers, Steve Van Esch, Thong (Tum) Nguyen";
 			// 
 			// AboutForm
 			// 
