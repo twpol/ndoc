@@ -21,6 +21,17 @@
 					</xsl:with-param>
 				</xsl:call-template>
 				<div id="nstext">
+					<p>
+						<a>
+							<xsl:attribute name="href">
+								<xsl:call-template name="get-filename-for-type">
+									<xsl:with-param name="id" select="@id" />
+								</xsl:call-template>
+							</xsl:attribute>
+							<xsl:value-of select="@name" />
+							<xsl:text> overview</xsl:text>
+						</a>
+					</p>
 					<!-- public static members -->
 					<xsl:call-template name="public-static-section">
 						<xsl:with-param name="member" select="'field'" />
