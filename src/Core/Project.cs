@@ -176,6 +176,7 @@ namespace NDoc.Core
 			return _namespaces.Keys;
 		}
 
+		/// <summary>The number of namespaces in the project.</summary>
 		public int NamespaceCount
 		{
 			get { return _namespaces.Count; }
