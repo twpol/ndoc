@@ -1116,7 +1116,7 @@ namespace	NDoc.Core
 		///	<param name="eventInfo">The	event	to derive	the	member name	ID from.</param>
 		private	string GetMemberName(EventInfo eventInfo)
 		{
-			return "E:"	+	GetFullNamespaceName(eventInfo)	+	"."	+	eventInfo.Name;
+			return "F:"	+	GetFullNamespaceName(eventInfo)	+	"."	+	eventInfo.Name;
 		}
 
 		///	<summary>Derives the member	name ID	for	a	property.	 Used	to match nodes in	the	/doc XML.</summary>
