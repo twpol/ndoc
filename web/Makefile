@@ -3,7 +3,7 @@
 .xml.html:
 	msxsl $< ndoc.xslt > $@
 
-FILES = index.html screenshots.html cvs.html download.html involved.html users.html
+FILES = index.html screenshots.html cvs.html download.html involved.html users.html resources.html
 
 all: $(FILES)
 

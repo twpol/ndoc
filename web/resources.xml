@@ -1,0 +1,11 @@
+<page>
+	<title>NDOC Resources</title>
+	<body>
+		<p>The following links might be useful to NDoc users:</p>
+		<ul>
+			<li><a href="http://nant.sf.net/">NAnt - includes an NDoc task for automating documentation builds</a></li>
+			<li><a href="http://sourceforge.net/projects/vbdoc">vbDoc - Visual Basic Doc Generator</a></li>
+		</ul>
+		<p>If you'd like a link added to this list, just let <a href="mailto:jason@injektilo.org">us</a> know!</p>
+	</body>
+</page>
