@@ -118,10 +118,12 @@
 						<xsl:with-param name="lang" select="$lang" />
 					</xsl:call-template>
 				</xsl:variable>
-				<xsl:call-template name="get-link-for-type-name">
-					<xsl:with-param name="type-name" select="@returnType" />
-					<xsl:with-param name="link-text" select="$cs-type" />
-				</xsl:call-template>								
+				<xsl:if test="$lang != 'Visual Basic'">
+					<xsl:call-template name="get-link-for-type-name">
+						<xsl:with-param name="type-name" select="@returnType" />
+						<xsl:with-param name="link-text" select="$cs-type" />
+					</xsl:call-template>
+				</xsl:if>								
 				<xsl:text>&#160;</xsl:text>
 				<xsl:value-of select="@name" />
 				<xsl:call-template name="parameters">
