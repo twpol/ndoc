@@ -2644,29 +2644,32 @@ namespace NDoc.Core
 
 
 		/// <summary>Loads an assembly.</summary>
-		/// <param name="filename">The assembly filename.</param>
+		/// <param name="fileName">The assembly filename.</param>
 		/// <returns>The assembly object.</returns>
 		/// <remarks>This method loads an assembly into memory. If you
 		/// use Assembly.Load or Assembly.LoadFrom the assembly file locks.
 		/// This method doesn't lock the assembly file.</remarks>
-		public static Assembly LoadAssembly(string filename)
+		public static Assembly LoadAssembly(string fileName)
 		{
 			// apparently need to cd there if it references native dlls
 			// (and those dlls are in that dir)
 			string oldDir = Directory.GetCurrentDirectory();
-			Directory.SetCurrentDirectory(Path.GetDirectoryName(filename));
+			string dirName = Path.GetDirectoryName(fileName);
+			Directory.SetCurrentDirectory(dirName);
+			string baseName = Path.GetFileName(fileName);
 
-			Trace.WriteLine(String.Format("LoadAssembly: Trying to load {0}", filename));
+			Trace.WriteLine(String.Format("LoadAssembly: Trying to load {0} from dir {1}", 
+				baseName, dirName));
 			Assembly assy = null;
 			try
 			{
-				assy = Assembly.LoadFrom(filename);
+				assy = Assembly.LoadFrom(baseName);
 			}
 			catch(Exception e)
 			{
 				Directory.SetCurrentDirectory(oldDir);
-				Console.WriteLine("Error: LoadAssembly: Unable to load assembly {0}",
-					filename);
+				Console.WriteLine("Error: LoadAssembly: Unable to load assembly {0} in dir {1}",
+					baseName, dirName);
 				Console.WriteLine("Error: LoadAssembly: Exception is {0}", e.ToString());
 				throw e;
 			}
