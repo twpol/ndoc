@@ -528,16 +528,9 @@
 						<xsl:sort select="@name" />
 						<tr valign="top">
 							<td width="50%">
-								<xsl:variable name="type-filename">
-									<xsl:call-template name="get-filename-for-cref">
-										<xsl:with-param name="cref" select="@cref" />
-									</xsl:call-template>
-								</xsl:variable>
-								<a href="{$type-filename}">
-									<xsl:call-template name="strip-namespace">
-										<xsl:with-param name="name" select="substring-after(@cref, ':')" />
-									</xsl:call-template>
-								</a>
+								<xsl:call-template name="get-a-href-with-name">
+									<xsl:with-param name="cref" select="@cref" />
+								</xsl:call-template>
 							</td>
 							<td width="50%">
 								<xsl:apply-templates select="./node()" mode="slashdoc" />
@@ -562,16 +555,9 @@
 						<xsl:sort select="@name" />
 						<tr valign="top">
 							<td width="50%">
-								<xsl:variable name="type-filename">
-									<xsl:call-template name="get-filename-for-cref">
-										<xsl:with-param name="cref" select="@cref" />
-									</xsl:call-template>
-								</xsl:variable>
-								<a href="{$type-filename}">
-									<xsl:call-template name="strip-namespace">
-										<xsl:with-param name="name" select="substring-after(@cref, 'T:')"/>
-									</xsl:call-template>
-								</a>
+								<xsl:call-template name="get-a-href-with-name">
+									<xsl:with-param name="cref" select="@cref" />
+								</xsl:call-template>
 							</td>
 							<td width="50%">
 								<xsl:apply-templates select="./node()" mode="slashdoc" />
@@ -651,6 +637,24 @@
 							<xsl:value-of select="string(NUtil:GetName($cref))" />
 						</xsl:otherwise>
 					</xsl:choose>
+				</a>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	<!-- get-a-href-with-name -->
+	<xsl:template name="get-a-href-with-name">
+		<xsl:param name="cref" />
+		<xsl:variable name="href" select="string(NUtil:GetHRef($cref))" />
+		<xsl:choose>
+			<xsl:when test="$href=''">
+				<b><xsl:value-of select="string(NUtil:GetName($cref))" /></b>
+			</xsl:when>
+			<xsl:otherwise>
+				<a>
+					<xsl:attribute name="href">
+						<xsl:value-of select="$href" />
+					</xsl:attribute>
+					<xsl:value-of select="string(NUtil:GetName($cref))" />
 				</a>
 			</xsl:otherwise>
 		</xsl:choose>
