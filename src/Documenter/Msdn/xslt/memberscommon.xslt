@@ -265,7 +265,9 @@
 			</div>
 		</xsl:if>
 	</xsl:template>
+	
 	<!-- -->
+	
 	<xsl:template match="property[@declaringType]">
 		<xsl:variable name="name" select="@name" />
 		<xsl:variable name="declaring-type-id" select="concat('T:', @declaringType)" />
@@ -275,6 +277,17 @@
 			<xsl:choose>
 				<xsl:when test="$declaring-class">
 					<td width="50%">
+						<xsl:choose>
+							<xsl:when test="@access='Public'">
+								<img src="property.bmp" />
+							</xsl:when>
+							<xsl:otherwise>
+								<img src="protectedproperty.bmp" />
+							</xsl:otherwise>
+						</xsl:choose>
+						<xsl:if test="@contract='Static'">
+							<img src="static.bmp" />
+						</xsl:if>
 						<a>
 							<xsl:attribute name="href">
 								<xsl:call-template name="get-filename-for-property">
@@ -299,6 +312,17 @@
 				</xsl:when>
 				<xsl:otherwise>
 					<td width="50%">
+						<xsl:choose>
+							<xsl:when test="@access='Public'">
+								<img src="property.bmp" />
+							</xsl:when>
+							<xsl:otherwise>
+								<img src="protectedproperty.bmp" />
+							</xsl:otherwise>
+						</xsl:choose>
+						<xsl:if test="@contract='Static'">
+							<img src="static.bmp" />
+						</xsl:if>
 						<xsl:value-of select="@name" />
 					</td>
 					<td width="50%">
@@ -318,6 +342,17 @@
 			<xsl:choose>
 				<xsl:when test="$declaring-class">
 					<td width="50%">
+						<xsl:choose>
+							<xsl:when test="@access='Public'">
+								<img src="field.bmp" />
+							</xsl:when>
+							<xsl:otherwise>
+								<img src="protectedfield.bmp" />
+							</xsl:otherwise>
+						</xsl:choose>
+						<xsl:if test="@contract='Static'">
+							<img src="static.bmp" />
+						</xsl:if>
 						<a>
 							<xsl:attribute name="href">
 								<xsl:call-template name="get-filename-for-field">
@@ -342,6 +377,17 @@
 				</xsl:when>
 				<xsl:otherwise>
 					<td width="50%">
+						<xsl:choose>
+							<xsl:when test="@access='Public'">
+								<img src="field.bmp" />
+							</xsl:when>
+							<xsl:otherwise>
+								<img src="protectedfield.bmp" />
+							</xsl:otherwise>
+						</xsl:choose>
+						<xsl:if test="@contract='Static'">
+							<img src="static.bmp" />
+						</xsl:if>
 						<xsl:value-of select="@name" />
 					</td>
 					<td width="50%">
@@ -356,6 +402,17 @@
 		<xsl:text>&#10;</xsl:text>
 		<tr VALIGN="top">
 			<td width="50%">
+				<xsl:choose>
+					<xsl:when test="@access='Public'">
+						<img src="property.bmp" />
+					</xsl:when>
+					<xsl:otherwise>
+						<img src="protectedproperty.bmp" />
+					</xsl:otherwise>
+				</xsl:choose>
+				<xsl:if test="@contract='Static'">
+					<img src="static.bmp" />
+				</xsl:if>
 				<a>
 					<xsl:attribute name="href">
 						<xsl:call-template name="get-filename-for-system-property" />
@@ -386,6 +443,17 @@
 						<xsl:choose>
 							<xsl:when test="following-sibling::method[@name=$name]">
 								<td width="50%">
+								  <xsl:choose>
+								    <xsl:when test="@access='Public'">
+								      <img src="method.bmp" />
+								    </xsl:when>
+								    <xsl:otherwise>
+								      <img src="protectedmethod.bmp" />
+								    </xsl:otherwise>
+								  </xsl:choose>
+								  <xsl:if test="@contract='Static'">
+								    <img src="static.bmp" />
+								  </xsl:if>
 									<a>
 										<xsl:attribute name="href">
 											<xsl:call-template name="get-filename-for-inherited-method-overloads">
@@ -418,6 +486,17 @@
 							</xsl:when>
 							<xsl:otherwise>
 								<td width="50%">
+								  <xsl:choose>
+								    <xsl:when test="@access='Public'">
+								      <img src="method.bmp" />
+								    </xsl:when>
+								    <xsl:otherwise>
+								      <img src="protectedmethod.bmp" />
+								    </xsl:otherwise>
+								  </xsl:choose>
+								  <xsl:if test="@contract='Static'">
+								    <img src="static.bmp" />
+								  </xsl:if>
 									<a>
 										<xsl:attribute name="href">
 											<xsl:call-template name="get-filename-for-method">
@@ -450,6 +529,17 @@
 					</xsl:when>
 					<xsl:otherwise>
 						<td width="50%">
+							<xsl:choose>
+								<xsl:when test="@access='Public'">
+								  <img src="method.bmp" />
+								</xsl:when>
+								<xsl:otherwise>
+								  <img src="protectedmethod.bmp" />
+								</xsl:otherwise>
+							</xsl:choose>
+							<xsl:if test="@contract='Static'">
+								<img src="static.bmp" />
+							</xsl:if>
 							<xsl:if test="@interface">
 								<xsl:call-template name="strip-namespace">
 									<xsl:with-param name="name" select="@interface" />
@@ -471,6 +561,17 @@
 		<xsl:text>&#10;</xsl:text>
 		<tr VALIGN="top">
 			<td width="50%">
+				<xsl:choose>
+					<xsl:when test="@access='Public'">
+						<img src="method.bmp" />
+					</xsl:when>
+					<xsl:otherwise>
+						<img src="protectedmethod.bmp" />
+					</xsl:otherwise>
+				</xsl:choose>
+				<xsl:if test="@contract='Static'">
+					<img src="static.bmp" />
+				</xsl:if>
 				<a>
 					<xsl:attribute name="href">
 						<xsl:call-template name="get-filename-for-system-method" />
@@ -507,6 +608,27 @@
 				<xsl:choose>
 					<xsl:when test="following-sibling::*[local-name()=$member and @name=$name and (($contract='Static' and @contract='Static') or ($contract!='Static' and @contract!='Static'))]">
 						<td width="50%">
+							<xsl:choose>
+								<xsl:when test="@access='Public'">
+								  <img>
+								    <xsl:attribute name="src">
+								      <xsl:value-of select="local-name()"/><xsl:text>.bmp</xsl:text>
+								    </xsl:attribute>
+								  </img>
+								</xsl:when>
+								<xsl:otherwise>
+								  <img>
+								    <xsl:attribute name="src">
+								      <xsl:text>protected</xsl:text>
+								      <xsl:value-of select="local-name()"/>
+								      <xsl:text>.bmp</xsl:text>
+								    </xsl:attribute>
+								  </img>
+								</xsl:otherwise>
+							</xsl:choose>
+							<xsl:if test="@contract='Static'">
+								<img src="static.bmp" />
+							</xsl:if>
 							<a>
 								<xsl:attribute name="href">
 									<xsl:call-template name="get-filename-for-individual-member-overloads">
@@ -542,6 +664,27 @@
 					</xsl:when>
 					<xsl:otherwise>
 						<td width="50%">
+							<xsl:choose>
+								<xsl:when test="@access='Public'">
+								  <img>
+								    <xsl:attribute name="src">
+								      <xsl:value-of select="local-name()"/><xsl:text>.bmp</xsl:text>
+								    </xsl:attribute>
+								  </img>
+								</xsl:when>
+								<xsl:otherwise>
+								  <img>
+								    <xsl:attribute name="src">
+								      <xsl:text>protected</xsl:text>
+								      <xsl:value-of select="local-name()"/>
+								      <xsl:text>.bmp</xsl:text>
+								    </xsl:attribute>
+								  </img>
+								</xsl:otherwise>
+							</xsl:choose>
+							<xsl:if test="@contract='Static'">
+								<img src="static.bmp" />
+							</xsl:if>
 							<a>
 								<xsl:attribute name="href">
 									<xsl:call-template name="get-filename-for-individual-member">

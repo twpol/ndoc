@@ -150,19 +150,19 @@ namespace NDoc.Documenter.Msdn
 					string mainModuleDirectory = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
 					resourceDirectory = Path.GetFullPath(Path.Combine(mainModuleDirectory, @"..\..\..\Documenter\Msdn\"));
 				#else
-					resourceDirectory = Environment.GetFolderPath(
-						Environment.SpecialFolder.ApplicationData) +
-						"\\NDoc\\MSDN\\";
+					resourceDirectory = Path.Combine(
+						Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+						@"\NDoc\MSDN\");
 
 					EmbeddedResources.WriteEmbeddedResources(
 						this.GetType().Module.Assembly,
 						"NDoc.Documenter.Msdn.css",
-						resourceDirectory + "css\\");
+						Path.Combine(resourceDirectory, @"css\"));
 
 					EmbeddedResources.WriteEmbeddedResources(
 						this.GetType().Module.Assembly,
 						"NDoc.Documenter.Msdn.xslt",
-						resourceDirectory + "xslt\\");
+						Path.Combine(resourceDirectory, @"xslt\"));
 				#endif
 
 				// Create the html output directory if it doesn't exist.
@@ -172,10 +172,15 @@ namespace NDoc.Documenter.Msdn
 				}
 
 				// Copy our cascading style sheet to the html output directory
-				File.Copy(
-					resourceDirectory + @"css\MSDN.css",
-					MyConfig.OutputDirectory + "MSDN.css",
-					true);
+				string cssfile = Path.Combine(MyConfig.OutputDirectory, "MSDN.css");
+				File.Copy(Path.Combine(resourceDirectory, @"css\MSDN.css"), cssfile, true);
+				File.SetAttributes(cssfile, FileAttributes.Normal); //ensure it's not read only
+
+				// Write the embedded icons to the html output directory
+				EmbeddedResources.WriteEmbeddedResources(
+					this.GetType().Module.Assembly,
+					"NDoc.Documenter.Msdn.icons",
+					MyConfig.OutputDirectory);
 
 				OnDocBuildingStep(10, "Merging XML documentation...");
 				// Let the Documenter base class do it's thing.

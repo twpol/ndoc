@@ -25,7 +25,7 @@
                     BaseAddress = "285212672"
                     CheckForOverflowUnderflow = "false"
                     ConfigurationOverrideFile = ""
-                    DefineConstants = "DEBUG;TRACE"
+                    DefineConstants = "DEBUG;TRACE;"
                     DocumentationFile = "NDoc.Documenter.Msdn.xml"
                     DebugSymbols = "true"
                     FileAlignment = "4096"
@@ -68,7 +68,7 @@
                 />
                 <Reference
                     Name = "System.XML"
-                    AssemblyName = "System.XML"
+                    AssemblyName = "System.Xml"
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.0.3705\System.XML.dll"
                 />
                 <Reference
@@ -112,6 +112,46 @@
                 />
                 <File
                     RelPath = "css\MSDN.css"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "icons\event.bmp"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "icons\field.bmp"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "icons\method.bmp"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "icons\operator.bmp"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "icons\property.bmp"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "icons\protectedevent.bmp"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "icons\protectedfield.bmp"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "icons\protectedmethod.bmp"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "icons\protectedproperty.bmp"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "icons\static.bmp"
                     BuildAction = "EmbeddedResource"
                 />
                 <File

@@ -213,6 +213,14 @@
 				<xsl:choose>
 					<xsl:when test="count(../constructor) &gt; 1">
 						<td width="50%">
+						  <xsl:choose>
+						    <xsl:when test="@access='Public'">
+						      <img src="method.bmp" />
+						    </xsl:when>
+						    <xsl:otherwise>
+						      <img src="protectedmethod.bmp" />
+						    </xsl:otherwise>
+						  </xsl:choose>
 							<a>
 								<xsl:attribute name="href">
 									<xsl:call-template name="get-filename-for-current-constructor-overloads" />
@@ -238,6 +246,14 @@
 					</xsl:when>
 					<xsl:otherwise>
 						<td width="50%">
+						  <xsl:choose>
+						    <xsl:when test="@access='Public'">
+						      <img src="method.bmp" />
+						    </xsl:when>
+						    <xsl:otherwise>
+						      <img src="protectedmethod.bmp" />
+						    </xsl:otherwise>
+						  </xsl:choose>
 							<a>
 								<xsl:attribute name="href">
 									<xsl:call-template name="get-filename-for-current-constructor" />
