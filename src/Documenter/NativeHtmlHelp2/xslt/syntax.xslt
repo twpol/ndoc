@@ -386,13 +386,17 @@
 			<xsl:call-template name="cs-syntax-header">
 				<xsl:with-param name="lang" select="$lang"/>		
 			</xsl:call-template>
-			<a href="{$href}">
+			<xsl:variable name="link-text">
 				<xsl:call-template name="cs-property-syntax">
-					<xsl:with-param name="lang" select="$lang"/>			
+					<xsl:with-param name="lang" select="$lang"/>
 					<xsl:with-param name="include-type-links" select="false()"/>
-				</xsl:call-template>
-			</a>
-		</xsl:if>
+				</xsl:call-template>		
+			</xsl:variable>
+			<xsl:call-template name="get-link-for-member-overload">
+				<xsl:with-param name="link-text" select="$link-text"/>
+				<xsl:with-param name="member" select="."/>
+			</xsl:call-template>	
+		</xsl:if>		
 	</xsl:template>	
 		
 	<xsl:template match="field" mode="cs-syntax">
