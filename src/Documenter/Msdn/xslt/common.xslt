@@ -272,7 +272,17 @@
 							  </a>
 						  </xsl:if>
 						</xsl:when>
-						<xsl:otherwise>
+	          <xsl:when test="local-name()='property'">
+	 			      <xsl:text> | </xsl:text>
+              <a>
+                <xsl:attribute name="href">
+                  <xsl:call-template name="get-filename-for-current-property-overloads" />
+                </xsl:attribute>
+                <xsl:value-of select="concat($typeName, '.', @name)" />
+                <xsl:text> Overload List</xsl:text>
+              </a>
+            </xsl:when>
+						<xsl:when test="local-name()='method'">
 	 			      <xsl:text> | </xsl:text>
    						<a>
 								<xsl:attribute name="href">
@@ -281,7 +291,7 @@
 								<xsl:value-of select="concat($typeName, '.', @name)" />
 								<xsl:text> Overload List</xsl:text>
 							</a>
-						</xsl:otherwise>
+						</xsl:when>
 					</xsl:choose>
 				</xsl:if>
 			</xsl:if>
