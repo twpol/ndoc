@@ -3,8 +3,6 @@
 	xmlns:MSHelp="http://msdn.microsoft.com/mshelp"	
 	xmlns:NUtil="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities"
 	exclude-result-prefixes="NUtil" >
-<!-- good for debugging 
-<xsl:output indent="yes"/>-->
 
 	<!-- provide no-op override for all non-specified types -->
 	<xsl:template match="@* | node() | text()" mode="FIndex"/>
@@ -55,70 +53,85 @@
 		<xsl:call-template name="add-a-index">
 			<xsl:with-param name="filename" select="NUtil:GetNamespaceHRef( string( $namespace ) )"/>
 		</xsl:call-template>		
+		<xsl:call-template name="add-index-term">
+			<xsl:with-param name="index">A</xsl:with-param>
+			<xsl:with-param name="term" select="concat('N:', $namespace)"/>
+		</xsl:call-template>		
 	</xsl:template>
 	<xsl:template match="ndoc" mode="AIndex-hierarchy">
 		<xsl:call-template name="add-a-index">
 			<xsl:with-param name="filename" select="NUtil:GetNamespaceHierarchyHRef( string( $namespace ) )"/>
+		</xsl:call-template>		
+		<xsl:call-template name="add-index-term">
+			<xsl:with-param name="index">A</xsl:with-param>
+			<xsl:with-param name="term" select="concat('Hierarchy.N:', $namespace)"/>
 		</xsl:call-template>		
 	</xsl:template>
 	<xsl:template match="enumeration | delegate" mode="AIndex">
 		<xsl:call-template name="add-a-index">	
 			<xsl:with-param name="filename" select="NUtil:GetTypeHRef( string( @id ) )"/>
 		</xsl:call-template>
+		<xsl:call-template name="add-index-term">
+			<xsl:with-param name="index">A</xsl:with-param>
+			<xsl:with-param name="term" select="string( @id )"/>
+		</xsl:call-template>		
 	</xsl:template>
 	<xsl:template match="field | event | property" mode="AIndex">
 		<xsl:call-template name="add-a-index">
 			<xsl:with-param name="filename" select="NUtil:GetMemberHRef( . )"/>
 		</xsl:call-template>
+		<xsl:call-template name="add-index-term">
+			<xsl:with-param name="index">A</xsl:with-param>
+			<xsl:with-param name="term" select="string( @id )"/>
+		</xsl:call-template>		
 	</xsl:template>
-	<xsl:template match="method" mode="AIndex">
+	<xsl:template match="method | operator" mode="AIndex">
 		<xsl:param name="overload-page"/>
-		<xsl:variable name="filename">
-			<xsl:choose>
-				<xsl:when test="$overload-page=true()">
-					<!-- need to deal with inherited overloads -->
-					<xsl:value-of select="NUtil:GetMemberOverloadsHRef( string( ../@id ), string( @name ) )"/>								
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:value-of select="NUtil:GetMemberHRef( . )"/>								
-				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:variable>
-		<xsl:call-template name="add-a-index">
-			<xsl:with-param name="filename" select="$filename"/>
-		</xsl:call-template>
+		<xsl:choose>
+			<xsl:when test="$overload-page=true()">
+				<!-- need to deal with inherited overloads -->
+				<xsl:call-template name="add-a-index">
+					<xsl:with-param name="filename" select="NUtil:GetMemberOverloadsHRef( string( ../@id ), string( @name ) )"/>
+				</xsl:call-template>
+				<xsl:call-template name="add-index-term">
+					<xsl:with-param name="index">A</xsl:with-param>
+					<xsl:with-param name="term" select="concat('Overload:', string( ../@id ), string( @name ))"/>
+				</xsl:call-template>		
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:call-template name="add-a-index">
+					<xsl:with-param name="filename" select="NUtil:GetMemberHRef( . )"/>
+				</xsl:call-template>
+				<xsl:call-template name="add-index-term">
+					<xsl:with-param name="index">A</xsl:with-param>
+					<xsl:with-param name="term" select="string( @id )"/>
+				</xsl:call-template>		
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>	
-	<xsl:template match="operator" mode="AIndex">
-		<xsl:param name="overload-page"/>
-		<xsl:variable name="filename">
-			<xsl:choose>
-				<xsl:when test="$overload-page=true()">
-					<xsl:value-of select="NUtil:GetMemberOverloadsHRef( string( ../@id ), string( @name ) )"/>								
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:value-of select="NUtil:GetMemberHRef( . )"/>								
-				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:variable>
-		<xsl:call-template name="add-a-index">
-			<xsl:with-param name="filename" select="$filename"/>
-		</xsl:call-template>
-	</xsl:template>
 	<xsl:template match="constructor" mode="AIndex">
 		<xsl:param name="overload-page"/>
-		<xsl:variable name="filename">
-			<xsl:choose>
-				<xsl:when test="$overload-page=true()">
-					<xsl:value-of select="NUtil:GetOverviewHRef( string( ../@id ), 'Constructor' )"/>								
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:value-of select="NUtil:GetConstructorHRef( . )"/>				
-				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:variable>
-		<xsl:call-template name="add-a-index">
-			<xsl:with-param name="filename" select="$filename"/>
-		</xsl:call-template>
+		<xsl:choose>
+			<xsl:when test="$overload-page=true()">
+				<!-- need to deal with inherited overloads -->
+				<xsl:call-template name="add-a-index">
+					<xsl:with-param name="filename" select="NUtil:GetMemberOverloadsHRef( string( ../@id ), 'Constructor' )"/>
+				</xsl:call-template>
+				<xsl:call-template name="add-index-term">
+					<xsl:with-param name="index">A</xsl:with-param>
+					<xsl:with-param name="term" select="concat('Overload:', string( ../@id ), string( @name ))"/>
+				</xsl:call-template>		
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:call-template name="add-a-index">
+					<xsl:with-param name="filename" select="NUtil:GetConstructorHRef( . )"/>
+				</xsl:call-template>
+				<xsl:call-template name="add-index-term">
+					<xsl:with-param name="index">A</xsl:with-param>
+					<xsl:with-param name="term" select="string( @id )"/>
+				</xsl:call-template>		
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>	
 	<xsl:template match="class | interface | structure" mode="AIndex">
 		<xsl:param name="page-type"/>		
@@ -158,9 +171,48 @@
 			</xsl:choose>
 		</xsl:variable>
 		
+		<xsl:variable name="idPrefix">
+			<xsl:choose>
+				<xsl:when test="$page-type='Members'">
+					<xsl:value-of select="'AllMembers.'"/>				
+				</xsl:when>
+				<xsl:when test="$page-type='Properties'">
+					<xsl:value-of select="'Properties.'"/>				
+				</xsl:when>
+				<xsl:when test="$page-type='Events'">
+					<xsl:value-of select="'Events.'"/>				
+				</xsl:when>
+				<xsl:when test="$page-type='Operators'">
+					<xsl:value-of select="'Operators.'"/>				
+				</xsl:when>
+				<xsl:when test="$page-type='Type Conversions'">
+					<xsl:value-of select="'Operators.'"/>				
+				</xsl:when>
+				<xsl:when test="$page-type='Operators and Type Conversions'">
+					<xsl:value-of select="'Operators.'"/>				
+				</xsl:when>
+				<xsl:when test="$page-type='Methods'">
+					<xsl:value-of select="'Methods.'"/>				
+				</xsl:when>
+				<xsl:when test="$page-type='Fields'">
+					<xsl:value-of select="'Fields.'"/>				
+				</xsl:when>
+				<xsl:when test="$page-type='TypeHierarchy'">
+					<xsl:value-of select="'DerivedTypeList.'"/>				
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="''"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+
 		<xsl:call-template name="add-a-index">
 			<xsl:with-param name="filename" select="$filename"/>
 		</xsl:call-template>
+		<xsl:call-template name="add-index-term">
+			<xsl:with-param name="index">A</xsl:with-param>
+			<xsl:with-param name="term" select="concat($idPrefix, string( @id ))"/>
+		</xsl:call-template>		
 	</xsl:template>
 					
 	<xsl:template name="filename-to-aindex">
@@ -171,7 +223,6 @@
 	
 	<xsl:template name="add-a-index">
 		<xsl:param name="filename"/>
-		
 		<xsl:variable name="aindex">
 			<xsl:call-template name="filename-to-aindex">
 				<xsl:with-param name="filename" select="$filename"/>
