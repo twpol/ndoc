@@ -20,6 +20,7 @@ using System;
 namespace NDoc.Core
 {
 	/// <summary>Represents an assembly and /doc pair.</summary>
+	[Serializable]
 	public class AssemblySlashDoc
 	{
 		string  assemblyFilename;
