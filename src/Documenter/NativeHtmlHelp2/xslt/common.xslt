@@ -889,7 +889,7 @@
 		<h4 class="dtH4">Requirements</h4>
 		<p>
 			<b>Namespace: </b>
-			<a href="{NUtil:GetNamespaceHierarchyHRef( string( ../@name ) )}">
+			<a href="{NUtil:GetNamespaceHRef( string( ../@name ) )}">
 				<xsl:value-of select="../@name" />
 			</a>
 		</p>
