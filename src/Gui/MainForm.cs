@@ -1311,6 +1311,18 @@ namespace NDoc.Gui
 				{
 					this.Cursor = Cursors.WaitCursor;
 
+					string warningMessages=String.Empty;
+
+					if (sol.ProjectCount==0)
+					{
+						warningMessages = "There are no projects in this solution that NDoc can import.\n\n";
+						warningMessages += "Either the solution is blank, or the projects contained within\n";
+						warningMessages += "the solution are not of a type NDoc can import.\n"; 
+						WarningForm warningForm = new WarningForm("VS Solution Import Warnings", warningMessages);
+						warningForm.ShowDialog(this);
+						return;
+					}
+
 					SolutionForm sf = new SolutionForm();
 					sf.Text = "Solution " + sol.Name;
 
@@ -1328,8 +1340,6 @@ namespace NDoc.Gui
 
 					//clear current ndoc project settings
 					Clear();
-
-					string warningMessages="";
 
 					foreach (VS.Project p in sol.GetProjects())
 					{

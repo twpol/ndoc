@@ -66,6 +66,7 @@ namespace NDoc.VisualStudio
 			get { return _name; }
 		}
 
+
 		/// <summary>Reads a .sln file.</summary>
 		/// <param name="path">The path to the .sln file.</param>
 		private void Read(string path)
@@ -197,17 +198,20 @@ namespace NDoc.VisualStudio
 				//which might have a completely differant structure that we could not handle!
 				if (projectTypeGUID=="{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") //C# project
 				{
-					Project project = new Project(this, new Guid(id), name);
-					string absoluteProjectPath = Path.Combine(_directory, path);
-
-					project.Read(absoluteProjectPath);
-
-					string relativeProjectPath = Path.GetDirectoryName(path);
-					project.RelativePath = relativeProjectPath;
-
-					if (project.ProjectType == "C# Local")
+					if (!path.StartsWith("http:"))
 					{
-						_projects.Add(project.ID, project);
+						Project project = new Project(this, new Guid(id), name);
+						string absoluteProjectPath = Path.Combine(_directory, path);
+
+						project.Read(absoluteProjectPath);
+
+						string relativeProjectPath = Path.GetDirectoryName(path);
+						project.RelativePath = relativeProjectPath;
+
+						if (project.ProjectType == "C# Local")
+						{
+							_projects.Add(project.ID, project);
+						}
 					}
 				}
 			}
@@ -244,6 +248,15 @@ namespace NDoc.VisualStudio
 		public IEnumerable GetProjects()
 		{
 			return _projects.Values;
+		}
+
+		/// <summary>Gets a count of the number of projects in the solution</summary>
+		public int ProjectCount
+		{
+			get
+			{
+				return _projects.Count;
+			}
 		}
 
 	}
