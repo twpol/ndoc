@@ -229,7 +229,7 @@ namespace NDoc.Core
 
 				try
 				{
-					assembly = BaseDocumenter.LoadAssembly(fileName);
+					assembly = Assembly.LoadFrom(fileName);
 				}
 				catch (BadImageFormatException)
 				{
