@@ -343,16 +343,8 @@ namespace NDoc.Core
 				writer.Flush();
 
 				xmlBuffer = swriter.ToString();
-				//xmlDocument = new XmlDocument();
-				//xmlDocument.LoadXml(xmlBuffer);
 
-#if DEBUG
-				// write our intermediate xml to a file for debugging
-				string testFile = Path.Combine(Path.GetPathRoot(Environment.SystemDirectory), "ndoc-debug.xml");
-				StreamWriter strwriter = new StreamWriter(testFile, false, Encoding.Unicode);
-				strwriter.Write(xmlBuffer);
-				strwriter.Close();
-#endif
+				// if you want to see NDoc's intermediate XML file, use the XML documenter.
 			}
 			catch (Exception e)
 			{
