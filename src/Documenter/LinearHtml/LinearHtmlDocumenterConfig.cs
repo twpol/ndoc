@@ -62,6 +62,7 @@ namespace NDoc.Documenter.LinearHtml
 			+ "document.  For fields and properties this means whether or not to include "
 			+ "remarks in the table.  For methods this means whether or not to break out "
 			+ "method details (such as parameters) into separate sub-sections.")]
+		[DefaultValue(false)]
 		public bool IncludeTypeMemberDetails
 		{
 			get { return _IncludeTypeMemberDetails; }
@@ -108,6 +109,7 @@ namespace NDoc.Documenter.LinearHtml
 		[Category("LinearHtml Style Settings")]
 		[Description("Whether or not to put method parameter lists into the "
 			+ "same table with the method name.")]
+		[DefaultValue(false)]
 		public bool MethodParametersInTable
 		{
 			get { return _MethodParametersInTable; }
@@ -128,6 +130,7 @@ namespace NDoc.Documenter.LinearHtml
 		[Category("Documentation Main Settings")]
 		[Description("A C# regular expression to include types.  If this is specified,"
 			+ " only types which match will be included in the output.")]
+		[DefaultValue("")]
 		public string TypeIncludeRegexp
 		{
 			get { return _TypeIncludeRegexp; }
@@ -145,6 +148,7 @@ namespace NDoc.Documenter.LinearHtml
 		/// <remarks>A C# regular expression to exclude namespaces.</remarks>
 		[Category("Documentation Main Settings")]
 		[Description("A C# regular expression to exclude namespaces.")]
+		[DefaultValue("")]
 		public string NamespaceExcludeRegexp
 		{
 			get { return _NamespaceExcludeRegexp; }
@@ -181,6 +185,7 @@ namespace NDoc.Documenter.LinearHtml
 		/// as NDoc will become very slow and might crash.</remarks>
 		[Category("Documentation Main Settings")]
 		[Description("To include a class hiararchy page for each namespace. Don't turn it on if your project has a namespace with many types, as NDoc will become very slow and might crash.")]
+		[DefaultValue(false)]
 		public bool IncludeHierarchy
 		{
 			get { return _IncludeHierarchy; }
@@ -200,6 +205,7 @@ namespace NDoc.Documenter.LinearHtml
 		[Category("Documentation Main Settings")]
 		[Description("Sorts the TOC by namespace name. "
 			+ "SplitTOCs is disabled when this option is selected.")]
+		[DefaultValue(true)]
 		public bool SortTOCByNamespace
 		{
 			get { return _SortTOCByNamespace; }
@@ -222,6 +228,7 @@ namespace NDoc.Documenter.LinearHtml
 			"\"%FILE_NAME%\" is dynamically replaced by the name of the file for the current html page. " +
 			"\"%TOPIC_TITLE%\" is dynamically replaced by the title of the current page.")]
 		[Editor(typeof(TextEditor), typeof(UITypeEditor))]
+		[DefaultValue("")]
 		public string HeaderHtml
 		{
 			get { return _HeaderHtml; }
@@ -248,6 +255,7 @@ namespace NDoc.Documenter.LinearHtml
 			"\"%ASSEMBLY_VERSION%\" is dynamically replaced by the version of the assembly for the current page. " +
 			"\"%TOPIC_TITLE%\" is dynamically replaced by the title of the current page.")]
 		[Editor(typeof(TextEditor), typeof(UITypeEditor))]
+		[DefaultValue("")]
 		public string FooterHtml
 		{
 			get { return _FooterHtml; }
@@ -266,6 +274,7 @@ namespace NDoc.Documenter.LinearHtml
 		/// in the compiled CHM file. Multiple files must be separated by a pipe ('|').</remarks>
 		[Category("Documentation Main Settings")]
 		[Description("Specifies external files that must be included in the compiled CHM file. Multiple files must be separated by a pipe ('|').")]
+		[DefaultValue("")]
 		public string FilesToInclude
 		{
 			get { return _FilesToInclude; }

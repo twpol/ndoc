@@ -49,6 +49,7 @@ namespace NDoc.Documenter.HtmlHelp2
 		/// </summary>
 		[Category(HTMLHELP2_CONFIG_CATEGORY)]
 		[Description("Gets or sets the character set that will be used when compiling the help file")]
+		[DefaultValue(CharacterSet.Ascii)]
 		public CharacterSet CharacterSet
 		{
 			get{ return _CharacterSet; }
@@ -127,6 +128,7 @@ namespace NDoc.Documenter.HtmlHelp2
 		/// <summary>The language ID of the locale used by the compiled helpfile</summary>
 		[Category(HTMLHELP2_CONFIG_CATEGORY)]
 		[Description("The ID of the language the help file is in.")]
+		[DefaultValue(1033)]
 		public short LangID
 		{
 			get { return _LangID; }
@@ -143,6 +145,7 @@ namespace NDoc.Documenter.HtmlHelp2
 		/// <summary>Flag that indicates whether to keep the CHM file after successful conversion</summary>
 		[Category(HTMLHELP2_CONFIG_CATEGORY)]
 		[Description("If true the CHM file will be deleted after the HxS file is created")]
+		[DefaultValue(false)]
 		public bool DeleteCHM
 		{
 			get { return _DeleteCHM; }
@@ -159,6 +162,7 @@ namespace NDoc.Documenter.HtmlHelp2
 		/// <summary>Adds additional tags to the embedded Xml data islands (results in slower builds but tighter VS.NET integration)</summary>
 		[Category(HTMLHELP2_CONFIG_CATEGORY)]
 		[Description("Adds additional tags to the embedded Xml data islands (results in slower builds but tighter VS.NET integration)")]
+		[DefaultValue(true)]
 		public bool AugmentXmlDataIslands
 		{
 			get { return _AugmentXmlDataIslands; }
@@ -177,6 +181,7 @@ namespace NDoc.Documenter.HtmlHelp2
 		/// </summary>
 		[Category(HTMLHELP2_CONFIG_CATEGORY)]
 		[Description("Should the compiled Html 2 title be registered after it is compiled. (If true ParentCollectionNamespace is required)")]
+		[DefaultValue(false)]
 		public bool RegisterTitleWithNamespace
 		{
 			get { return _RegisterTitleWithNamespace; }
@@ -195,6 +200,7 @@ namespace NDoc.Documenter.HtmlHelp2
 		/// </summary>
 		[Category(HTMLHELP2_CONFIG_CATEGORY)]
 		[Description("The Html Help 2 registry namespace (avoid spaces). Only used if RegisterTitleWithNamespace is True.")]
+		[DefaultValue("")]
 		public string ParentCollectionNamespace
 		{
 			get { return _ParentCollectionNamespace; }
@@ -213,6 +219,7 @@ namespace NDoc.Documenter.HtmlHelp2
 		/// </summary>
 		[Category(HTMLHELP2_CONFIG_CATEGORY)]
 		[Description("If true the HxS title will be registered as a collection (ignored if RegisterTitleWithNamespace is ture)")]
+		[DefaultValue(false)]
 		public bool RegisterTitleAsCollection
 		{
 			get { return _RegisterTitleAsCollection; }

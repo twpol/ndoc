@@ -64,6 +64,8 @@ namespace NDoc.Documenter.Msdn
 
 			_RootPageContainsNamespaces = false;
 
+			includeFavorites=false;
+
 			_HeaderHtml = string.Empty;
 			_FooterHtml = string.Empty;
 			_FilesToInclude = string.Empty;
@@ -131,6 +133,7 @@ namespace NDoc.Documenter.Msdn
 		/// <remarks>Turning this flag on will include a Favorites tab in the HTML Help file.</remarks>
 		[Category("HTML Help Options")]
 		[Description("Turning this flag on will include a Favorites tab in the HTML Help file.")]
+		[DefaultValue(false)]
 		public bool IncludeFavorites
 		{
 			get { return includeFavorites; }
@@ -167,6 +170,7 @@ namespace NDoc.Documenter.Msdn
 		[Category("HTML Help Options")]
 		[Description("Turning this flag on will generate a separate table-of-contents for each assembly. "
 			+ "It cannot be set if SortTOCByNamespace is set or RootPageFileName is specified.")]
+		[DefaultValue(false)]
 		private bool SplitTOCs
 		{
 			get { return _SplitTOCs; }
@@ -187,6 +191,7 @@ namespace NDoc.Documenter.Msdn
 		/// <remarks>When SplitTOCs is true, this represents the default table-of-contents to use.</remarks>
 		[Category("HTML Help Options")]
 		[Description("When SplitTOCs is true, this represents the default table-of-contents to use.")]
+		[DefaultValue("")]
 		private string DefaultTOC
 		{
 			get { return _DefaultTOC; }
@@ -206,6 +211,7 @@ namespace NDoc.Documenter.Msdn
 		/// with many types, as NDoc will become very slow and might crash.</remarks>
 		[Category("Documentation Main Settings")]
 		[Description("To include a class hiararchy page for each namespace. Don't turn it on if your project has a namespace with many types, as NDoc will become very slow and might crash.")]
+		[DefaultValue(false)]
 		public bool IncludeHierarchy
 		{
 			get { return _IncludeHierarchy; }
@@ -224,6 +230,7 @@ namespace NDoc.Documenter.Msdn
 		/// language filter in the output like MSDN.</remarks>
 		[Category("Documentation Main Settings")]
 		[Description("Show Visual Basic syntax for types and members.")]
+		[DefaultValue(false)]
 		public bool ShowVisualBasic
 		{
 			get { return _ShowVisualBasic; }
@@ -291,6 +298,7 @@ namespace NDoc.Documenter.Msdn
 			+ " of the namespaces in the table-of-contents."
 			+ " If false, the Root Page will be made a peer of"
 			+ " the namespaces in the table-of-contents.")]
+		[DefaultValue(false)]
 		public bool RootPageContainsNamespaces
 		{
 			get { return _RootPageContainsNamespaces; }
@@ -348,6 +356,7 @@ namespace NDoc.Documenter.Msdn
 		/// <remarks>Sets the output type to HTML Help (.chm) or Web or both.</remarks>
 		[Category("Documentation Main Settings")]
 		[Description("Sets the output type to HTML Help (.chm) or Web or both.")]
+		[DefaultValue(OutputType.HtmlHelpAndWeb)]
 		public OutputType OutputTarget
 		{
 			get { return _OutputTarget; }
@@ -369,6 +378,7 @@ namespace NDoc.Documenter.Msdn
 		[Description("Raw HTML that is used as a page header instead of the default blue banner. " +
 			"\"%FILE_NAME%\" is dynamically replaced by the name of the file for the current html page. " +
 			"\"%TOPIC_TITLE%\" is dynamically replaced by the title of the current page.")]
+		[DefaultValue("")]
 		[Editor(typeof(TextEditor), typeof(UITypeEditor))]
 		public string HeaderHtml
 		{
@@ -395,6 +405,7 @@ namespace NDoc.Documenter.Msdn
 			"\"%ASSEMBLY_NAME%\" is dynamically replaced by the name of the assembly for the current page. " +
 			"\"%ASSEMBLY_VERSION%\" is dynamically replaced by the version of the assembly for the current page. " +
 			"\"%TOPIC_TITLE%\" is dynamically replaced by the title of the current page.")]
+		[DefaultValue("")]
 		[Editor(typeof(TextEditor), typeof(UITypeEditor))]
 		public string FooterHtml
 		{
@@ -414,6 +425,7 @@ namespace NDoc.Documenter.Msdn
 		/// in the compiled CHM file. Multiple files must be separated by a pipe ('|').</remarks>
 		[Category("HTML Help Options")]
 		[Description("Specifies external files that must be included in the compiled CHM file. Multiple files must be separated by a pipe ('|').")]
+		[DefaultValue("")]
 		public string FilesToInclude
 		{
 			get { return _FilesToInclude; }
@@ -432,6 +444,7 @@ namespace NDoc.Documenter.Msdn
 		/// Framework SDK documentation the links to system types will be pointing.</remarks>
 		[Category("HTML Help Options")]
 		[Description("Specifies to which version of the .NET Framework SDK documentation the links to system types will be pointing.")]
+		[DefaultValue(SdkDocVersion.SDK_v1_1)]
 		public SdkDocVersion LinkToSdkDocVersion
 		{
 			get { return _LinkToSdkDocVersion; }
