@@ -2,6 +2,22 @@ namespace NDoc.Test
 {
 	using System;
 
+	/// <summary>
+	/// <p>This documentation will show up as the summary of a class
+	/// <see cref="NamespaceDoc"/>, when the UseNamespaceDocSummaries
+	/// configuration flag is set to <see langword="false"/>. When
+	/// UseNamespaceDocSummaries is set to <see langword="true"/>,
+	/// the summary will show up as the summary of the <see cref="NDoc.Test"/>
+	/// namespace.</p>
+	/// <p>This allows you to reference other types from within the
+	/// summary documentation for the namespace, without having to use
+	/// fully qualified ids. E.g. the reference to <see cref="Class"/> is
+	/// created by using "&lt;see cref="Class"/&gt;" instead of
+	/// "&lt;see cref="T:NDoc.Test.Class"/&gt;" as you have to say using
+	/// the namespace summaries dialog.</p>
+	/// </summary>
+	public class NamespaceDoc {}
+
 	/// <summary>Represents a normal class.</summary>
 	/// <remarks>Conceptualizing random endpoints in a access matrix
 	/// provides reach extentions enterprise wide. Respective divisions
@@ -1518,6 +1534,12 @@ namespace NDoc.Test
 
 namespace NDoc.Test.NewStuff
 {
+	/// <summary>
+	/// This is another example of namespace summary documentation,
+	/// when the UseNamespaceDocSummaries flag is set.
+	/// </summary>
+	public class NamespaceDoc {}
+
 	/// <summary>no comment</summary>
 	public interface IInterfaceA
 	{
