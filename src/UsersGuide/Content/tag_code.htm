@@ -30,10 +30,8 @@
 	Multiple languages can be specified as a comma separated list such as &quot;Visual 
 	Basic, C#, C++&quot;.</p>
 	<p>The <i>escaped</i> attribute can be used to escape all reserved 
-	characters within the text. This is especially useful for documenting XML 
-	(see the example below)</p>
-	<p>Use <a href="tag_c.htm">&lt;c&gt;</a> to indicate that text within a description 
-	should be marked as code.</p>
+	characters within the text.</p>
+	<blockquote><p><b>Note:</b>&nbsp;&nbsp;All content within xml comments must be well-formed!!!</p></blockquote>
 	<h4 class="dtH4">Example</h4>
 	<p>Note how, in the following comments, the xml text can entered verbatim because the 
 	<font face="Courier New">escaped="true"</font> attribute has been applied.</p>
@@ -46,7 +44,7 @@
    <span class="rem">/// &lt;code escaped="true"&gt;</span>
    <span class="rem">///   &lt;root&gt;</span>
    <span class="rem">///     &lt;member name=&quot;name&quot;/&gt;</span>
-   <span class="rem">///   &lt;root&gt;</span>
+   <span class="rem">///   &lt;/root&gt;</span>
    <span class="rem">/// &lt;/code&gt;</span>
    <span class="rem">/// &lt;/example&gt;</span>
    <span class="kwrd">public</span> <span class="kwrd">void</span> LoadXml(<span class="kwrd">string</span> xml) 
