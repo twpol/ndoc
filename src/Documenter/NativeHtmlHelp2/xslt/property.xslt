@@ -40,7 +40,7 @@
 				<object id="obj_cook" classid="clsid:59CC0C20-679B-11D2-88BD-0800361A1803" style="display:none;"></object>
 				<xsl:call-template name="title-row">
 					<xsl:with-param name="type-name">
-						<xsl:value-of select="../@name" />.<xsl:value-of select="$titlename" />
+						<xsl:value-of select="../@name" />.<xsl:value-of select="$title" />
 					</xsl:with-param>
 				</xsl:call-template>
 				<div id="nstext" valign="bottom">
