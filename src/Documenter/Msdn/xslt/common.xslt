@@ -412,6 +412,9 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="summary-section">
+		<xsl:if test="ancestor-or-self::node()/documentation/preliminary | /ndoc/preliminary">
+			<xsl:call-template name="preliminary-section" />
+		</xsl:if>
 		<xsl:call-template name="obsolete-section" />
 		<xsl:call-template name="output-paragraph">
 			<xsl:with-param name="nodes" select="(documentation/summary)[1]/node()" />
@@ -680,12 +683,12 @@
 				<P>This type is <b>not</b> safe for multithreaded operations.</P>
 			</xsl:when>
 			<xsl:when test="@static='true' and @instance='false'">
-				<P>Public static (Shared in Visual Basic) members of this type are 
+				<P>Public static (<b>Shared</b> in Visual Basic) members of this type are 
 				safe for multithreaded operations. Instance members are <b>not</b> guaranteed to be 
 				thread-safe.</P>
 			</xsl:when>
 			<xsl:when test="@static='false' and @instance='true'">
-				<P>Public static (Shared in Visual Basic) members of this type are <b>not</b> guaranteed 
+				<P>Public static (<b>Shared</b> in Visual Basic) members of this type are <b>not</b> guaranteed 
 				to be safe for multithreaded operations. Instance members are thread-safe.</P>
 			</xsl:when>
 		</xsl:choose>
@@ -879,9 +882,6 @@
 					<xsl:value-of select="$headerHtml" disable-output-escaping="yes" />
 				</xsl:otherwise>
 			</xsl:choose>
-			<xsl:if test="ancestor-or-self::node()/documentation/preliminary | /ndoc/preliminary">
-				<xsl:call-template name="preliminary-section" />
-			</xsl:if>
 			<xsl:apply-templates select="documentation/node()" mode="title-row" />
 		</div>
 	</xsl:template>
