@@ -543,6 +543,17 @@ namespace NDoc.Test
 		/// <summary>
 		/// This properties' documentation references <see cref="System.IO.TextWriter"/>.
 		/// </summary>
+		/// <remarks>
+		/// <para>This is a link to <see cref="Prop1"/>.</para>
+		/// <para>This is a labelled link to <see cref="Prop1">myself</see>.</para>
+		/// <para>This is a link to <see cref="See"/>.</para>
+		/// <para>This is a link to <see cref="SeeAlso"/>.</para>
+		/// <para>This is also a link to <see cref="See"/>. </para>
+		/// <para>This is also a link to <see cref="SeeAlso"/>. </para>
+		/// <para>This is an labelled link to <see cref="See">Test.See</see>.</para>
+		/// <para>This is an broken link to <see cref="something">something</see>.</para> 
+		/// <para>This is an broken labelled link to <see cref="something">something</see>.</para> 
+		/// </remarks>
 		public string Prop1
 		{
 			get { return "Prop1"; }
