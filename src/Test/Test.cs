@@ -968,6 +968,21 @@ namespace NDoc.Test
 	public class IncludeExample
 	{
 	}
+
+	/// <summary>This class has two methods with the same name but one is an instance method
+	/// and the other is static.</summary>
+	public class BothInstanceAndStaticOverloads
+	{
+		/// <summary>This is the instance method.</summary>
+		public void Foo()
+		{
+		}
+
+		/// <summary>This is the static method.</summary>
+		public static void Foo(int i)
+		{
+		}
+	}
 }
 
 namespace NDoc.Test.InternalStuff
