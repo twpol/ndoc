@@ -264,23 +264,32 @@
 			</xsl:if>
 			<xsl:if test="documentation/seealso">
 				<xsl:for-each select="documentation/seealso">
-					<xsl:variable name="cref" select="@cref" />
 					<xsl:text> | </xsl:text>
-					<xsl:variable name="seethis" select="//*[@id=$cref]" />
 					<xsl:choose>
-						<xsl:when test="$seethis">
-							<a>
-								<xsl:attribute name="href">
-									<xsl:call-template name="get-filename-for-cref">
-										<xsl:with-param name="cref" select="@cref" />
-									</xsl:call-template>
-								</xsl:attribute>
-								<xsl:value-of select="$seethis/@name" />
+						<xsl:when test="@cref">
+							<xsl:variable name="cref" select="@cref" />
+							<xsl:variable name="seethis" select="//*[@id=$cref]" />
+							<xsl:choose>
+								<xsl:when test="$seethis">
+									<a>
+										<xsl:attribute name="href">
+											<xsl:call-template name="get-filename-for-cref">
+												<xsl:with-param name="cref" select="@cref" />
+											</xsl:call-template>
+										</xsl:attribute>
+										<xsl:value-of select="$seethis/@name" />
+									</a>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:value-of select="substring(@cref, 3)" />
+								</xsl:otherwise>
+							</xsl:choose>
+						</xsl:when>
+						<xsl:when test="@href">
+							<a href="{@href}">
+								<xsl:value-of select="." />
 							</a>
 						</xsl:when>
-						<xsl:otherwise>
-							<xsl:value-of select="substring(@cref, 3)" />
-						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:for-each>
 			</xsl:if>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsl:transform version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+	<!-- -->
 	<xsl:template name="vb-type-syntax">
 		<pre class="syntax">
 			<span class="lang">[Visual Basic]</span>
@@ -20,7 +21,7 @@
 				<xsl:when test="local-name() = 'structure'">Structure</xsl:when>
 				<xsl:when test="local-name() = 'enumeration'">Enum</xsl:when>
 				<xsl:when test="local-name() = 'delegate'">
-					<xsl:text>Delegate&#32;</xsl:text>
+					<xsl:text>Delegate&#160;</xsl:text>
 					<xsl:choose>
 						<xsl:when test="@returnType = 'System.Void'">Sub</xsl:when>
 						<xsl:otherwise>Function</xsl:otherwise>
@@ -54,7 +55,7 @@
 					<xsl:apply-templates select="parameter" mode="vb" />
 					<xsl:text>)</xsl:text>
 					<xsl:if test="@returnType != 'System.Void'">
-						<xsl:text>&#32;As&#32;</xsl:text>
+						<xsl:text>&#160;As&#160;</xsl:text>
 						<xsl:call-template name="strip-namespace">
 							<xsl:with-param name="name" select="@returnType" />
 						</xsl:call-template>
@@ -63,6 +64,7 @@
 			</xsl:choose>
 		</pre>
 	</xsl:template>
+	<!-- -->
 	<xsl:template name="vb-type-access">
 		<xsl:param name="access" />
 		<xsl:choose>
@@ -76,16 +78,20 @@
 			<xsl:otherwise>ERROR</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
+	<!-- -->
 	<xsl:template match="parameter" mode="vb">
 		<xsl:text>&#160;&#160;&#160;</xsl:text>
 		<xsl:text>ByVal </xsl:text>
 		<xsl:value-of select="@name" />
-		<xsl:text>&#32;As&#32;</xsl:text>
+		<xsl:text>&#160;As&#160;</xsl:text>
 		<xsl:call-template name="strip-namespace">
 			<xsl:with-param name="name" select="@type" />
 		</xsl:call-template>
-		<xsl:if test="position() != last()">,</xsl:if>
-		<xsl:text> _</xsl:text>
+		<xsl:if test="position() != last()">
+			<xsl:text>,</xsl:text>
+		</xsl:if>
+		<xsl:text>&#160;_</xsl:text>
 		<br />
 	</xsl:template>
+	<!-- -->
 </xsl:transform>

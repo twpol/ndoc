@@ -272,6 +272,10 @@ namespace NDoc.Test
 	}
 
 	/// <summary>This class has lots of &lt;seealso&gt; elements.</summary>
+	/// <remarks>NDoc adds a special form of the &lt;seealso&gt; element.
+	/// Instead of a cref attribute, you can specify a href attribute some text
+	/// content just like a normal HTML &lt;a&gt; element.</remarks>
+	/// <seealso href="http://ndoc.sf.net/">the ndoc homepage</seealso>
 	/// <seealso cref="Class"/>
 	/// <seealso cref="Interface"/>
 	/// <seealso cref="Struct1"/>
@@ -281,6 +285,7 @@ namespace NDoc.Test
 	/// <seealso cref="Outer.Inner"/>
 	/// <seealso cref="Handler"/>
 	/// <seealso cref="Enum"/>
+	/// <seealso href="http://slashdot.org/">Slashdot</seealso>
 	public class SeeAlso
 	{
 		/// <summary>This method has lots of &lt;seealso&gt; elements.</summary>
