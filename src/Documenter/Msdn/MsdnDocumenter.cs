@@ -436,6 +436,14 @@ namespace NDoc.Documenter.Msdn
 
 		private void MakeHtmlForAssemblies()
 		{
+			if (MyConfig.SortTOCByNamespace)
+				MakeHtmlForAssembliesSorted();
+			else
+				MakeHtmlForAssembliesUnsorted();
+		}
+
+		private void MakeHtmlForAssembliesUnsorted()
+		{
 			XmlNodeList assemblyNodes = xmlDocumentation.SelectNodes("/ndoc/assembly");
 			int[] indexes = SortNodesByAttribute(assemblyNodes, "name");
 
@@ -502,35 +510,82 @@ namespace NDoc.Documenter.Msdn
 					string namespaceName = (string)namespaceNode.Attributes["name"].Value;
 
 					// Skip duplicate namespaces.
-
 					if (documentedNamespaces.Contains(namespaceName))
 					{
 						continue;
 					}
 
-					documentedNamespaces.Add(namespaceName);
-
-					string fileName = GetFilenameForNamespace(namespaceNode);
-					htmlHelp.AddFileToContents(namespaceName, fileName);
-
-					XsltArgumentList arguments = new XsltArgumentList();
-					arguments.AddParam("namespace", String.Empty, namespaceName);
-
-					TransformAndWriteResult(xsltNamespace, arguments, fileName);
-
-					arguments = new XsltArgumentList();
-					arguments.AddParam("namespace", String.Empty, namespaceName);
-
-					TransformAndWriteResult(
-						xsltNamespaceHierarchy,
-						arguments,
-						fileName.Insert(fileName.Length - 5, "Hierarchy"));
-
-					MakeHtmlForTypes(namespaceName);
+					MakeHtmlForNamespace(assemblyName, namespaceName);
 				}
 			}
 
 			OnDocBuildingProgress(100);
+		}
+
+		private void MakeHtmlForAssembliesSorted()
+		{
+			XmlNodeList assemblyNodes = xmlDocumentation.SelectNodes("/ndoc/assembly");
+			int[] indexes = SortNodesByAttribute(assemblyNodes, "name");
+
+			System.Collections.Specialized.NameValueCollection namespaceAssemblies
+				= new System.Collections.Specialized.NameValueCollection();
+
+			int nNodes = assemblyNodes.Count;
+			for (int i = 0; i < nNodes; i++)
+			{
+				XmlNode assemblyNode = assemblyNodes[indexes[i]];
+				if (assemblyNode.ChildNodes.Count > 0)
+				{
+					string assemblyName = (string)assemblyNode.Attributes["name"].Value;
+					GetNamespacesFromAssembly(assemblyName, namespaceAssemblies);
+				}
+			}
+
+			nNodes = namespaceAssemblies.Count;
+			string [] namespaces = namespaceAssemblies.AllKeys;
+			Array.Sort(namespaces);
+			for (int i = 0; i < nNodes; i++)
+			{
+				OnDocBuildingProgress(i*100/nNodes);
+				string namespaceName = namespaces[i];
+				foreach (string assemblyName in namespaceAssemblies.GetValues(i))
+					MakeHtmlForNamespace(assemblyName, namespaceName);
+			}
+
+			OnDocBuildingProgress(100);
+		}
+
+		private void GetNamespacesFromAssembly(string assemblyName, System.Collections.Specialized.NameValueCollection namespaceAssemblies)
+		{
+			XmlNodeList namespaceNodes = xmlDocumentation.SelectNodes("/ndoc/assembly[@name=\"" + assemblyName + "\"]/module/namespace");
+			foreach (XmlNode namespaceNode in namespaceNodes)
+			{
+				string namespaceName = (string)namespaceNode.Attributes["name"].Value;
+				namespaceAssemblies.Add(namespaceName, assemblyName);
+			}
+		}
+
+		private void MakeHtmlForNamespace(string assemblyName, string namespaceName)
+		{
+			documentedNamespaces.Add(namespaceName);
+
+			string fileName = GetFilenameForNamespace(namespaceName);
+			htmlHelp.AddFileToContents(namespaceName, fileName);
+
+			XsltArgumentList arguments = new XsltArgumentList();
+			arguments.AddParam("namespace", String.Empty, namespaceName);
+
+			TransformAndWriteResult(xsltNamespace, arguments, fileName);
+
+			arguments = new XsltArgumentList();
+			arguments.AddParam("namespace", String.Empty, namespaceName);
+
+			TransformAndWriteResult(
+				xsltNamespaceHierarchy,
+				arguments,
+				fileName.Insert(fileName.Length - 5, "Hierarchy"));
+
+			MakeHtmlForTypes(namespaceName);
 		}
 
 		private void MakeHtmlForTypes(string namespaceName)
@@ -1248,9 +1303,8 @@ namespace NDoc.Documenter.Msdn
 			return builder.ToString();
 		}
 
-		private string GetFilenameForNamespace(XmlNode namespaceNode)
+		private string GetFilenameForNamespace(string namespaceName)
 		{
-			string namespaceName = (string)namespaceNode.Attributes["name"].Value;
 			string fileName = namespaceName + ".html";
 			return fileName;
 		}

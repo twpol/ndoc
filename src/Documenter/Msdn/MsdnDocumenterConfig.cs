@@ -36,17 +36,18 @@ namespace NDoc.Documenter.Msdn
 		/// <summary>Initializes a new instance of the MsdnHelpConfig class.</summary>
 		public MsdnDocumenterConfig() : base("MSDN")
 		{
-			OutputDirectory = @".\doc\";
+			outputDirectory = @".\doc\";
 
-			HtmlHelpName = "Documentation";
+			htmlHelpName = "Documentation";
 
-			Title = "An NDoc Documented Class Library";
+			_Title = "An NDoc Documented Class Library";
 
-			SplitTOCs = false;
-			DefaulTOC = string.Empty;
+			_SortTOCByNamespace = true;
+			_SplitTOCs = false;
+			_DefaultTOC = string.Empty;
 
-			ShowVisualBasic = false;
-			OmitObjectTags = false;
+			_ShowVisualBasic = false;
+			_OmitObjectTags = false;
 		}
 
 
@@ -286,7 +287,7 @@ namespace NDoc.Documenter.Msdn
 		/// <summary>Gets or sets the RootPageFileName property.</summary>
 		[
 		Category("HTML Help Options"),
-		Description("The name of an html file to be included as the root page."
+		Description("The name of an html file to be included as the root page. "
 			+ "This root page also becomes the default page.")
 		]
 		public string RootPageFileName
@@ -296,6 +297,25 @@ namespace NDoc.Documenter.Msdn
 			set
 			{
 				_RootPageFileName = value;
+				SetDirty();
+			}
+		}
+
+		bool _SortTOCByNamespace;
+
+		/// <summary>Gets or sets the SortTOCByNamespace property.</summary>
+		[
+		Category("HTML Help Options"),
+		Description("Sorts the TOC by namespace name. "
+			+ "SplitTOCs is disabled, when this option is selected.")
+		]
+		public bool SortTOCByNamespace
+		{
+			get { return _SortTOCByNamespace; }
+
+			set
+			{
+				_SortTOCByNamespace = value;
 				SetDirty();
 			}
 		}
