@@ -26,7 +26,7 @@
 			</if>
 		</if>
 	</target>
-	<target name="locate-help-compilerservices-typelib">
+	<target name="locate-help-compilerservices-typelib" unless="${framework::get-family(framework::get-target-framework())='mono'}">
 		<readregistry property="help.compilerservices.typelib" key="TypeLib\{314111EE-A502-11D2-BBCA-00C04F8EC294}\1.0\0\win32\"
 			hive="ClassesRoot" failonerror="false" />
 			<ifnot propertyexists="help.compilerservices.typelib">
@@ -38,7 +38,7 @@
 			</ifnot>
 		</ifnot>
 	</target>
-	<target name="locate-mshtml-interop-assembly">
+	<target name="locate-mshtml-interop-assembly" unless="${framework::get-family(framework::get-target-framework())='mono'}">
 		<!-- get system information -->
 		<sysinfo prefix="sys." />
 		<!-- make sure the mshtml primary interop assembly actually exists -->
