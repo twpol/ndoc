@@ -264,7 +264,7 @@ namespace NDoc.Documenter.Msdn
 
 		/// <summary>Gets or sets the RootPageTOCName property.</summary>
 		[
-		Category("Documentation Main Settings"),
+		Category("HTML Help Options"),
 		Description("The name for the Table of Contents entry corresponding "
 			+ " to the root page."
 			+ " If this is not specified and RootPageFileName is, then"
@@ -285,7 +285,7 @@ namespace NDoc.Documenter.Msdn
 
 		/// <summary>Gets or sets the RootPageFileName property.</summary>
 		[
-		Category("Documentation Main Settings"),
+		Category("HTML Help Options"),
 		Description("The name of an html file to be included as the root page."
 			+ "This root page also becomes the default page.")
 		]
