@@ -171,7 +171,7 @@ namespace NDoc.Core
 			}
 
 			//the member id in the declaring assembly
-			string key = memberType + declaringType.FullName + "." + memberName;
+			string key = memberType + declaringType.FullName.Replace("+", ".") + "." + memberName;
 
 			//check the summaries cache first
 			XmlNode summary = (XmlNode)summaries[key];
