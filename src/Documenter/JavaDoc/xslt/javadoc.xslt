@@ -12,6 +12,12 @@
 		<xsl:param name="link-namespace" />
 		<xsl:param name="prev-next-what" />
 		<xsl:param name="type-node" />
+		<xsl:param name="fields" select="false()" />
+		<xsl:param name="constructors" select="false()" />
+		<xsl:param name="properties" select="false()" />
+		<xsl:param name="methods" select="false()" />
+		<xsl:param name="operators" select="false()" />
+		<xsl:param name="events" select="false()" />
 		<table class="nav">
 			<tr>
 				<td class="nav1" colspan="2">
@@ -116,48 +122,91 @@
 						<xsl:text>INNER</xsl:text>
 						<xsl:text> | </xsl:text>
 						<xsl:choose>
-							<xsl:when test="$type-node/field">
+							<xsl:when test="$fields">
 								<a href="#field-summary">FIELD</a>
 							</xsl:when>
 							<xsl:otherwise>FIELD</xsl:otherwise>
 						</xsl:choose>
 						<xsl:text> | </xsl:text>
 						<xsl:choose>
-							<xsl:when test="$type-node/constructor">
+							<xsl:when test="$constructors">
 								<a href="#constructor-summary">CONST</a>
 							</xsl:when>
 							<xsl:otherwise>CONST</xsl:otherwise>
 						</xsl:choose>
 						<xsl:text> | </xsl:text>
 						<xsl:choose>
-							<xsl:when test="$type-node/property">
+							<xsl:when test="$properties">
 								<a href="#property-summary">PROP</a>
 							</xsl:when>
 							<xsl:otherwise>PROP</xsl:otherwise>
 						</xsl:choose>
 						<xsl:text> | </xsl:text>
 						<xsl:choose>
-							<xsl:when test="$type-node/method">
+							<xsl:when test="$methods">
 								<a href="#method-summary">METHOD</a>
 							</xsl:when>
 							<xsl:otherwise>METHOD</xsl:otherwise>
 						</xsl:choose>
 						<xsl:text> | </xsl:text>
 						<xsl:choose>
-							<xsl:when test="$type-node/operator">
+							<xsl:when test="$operators">
 								<a href="#operator-summary">OP</a>
 							</xsl:when>
 							<xsl:otherwise>OP</xsl:otherwise>
 						</xsl:choose>
 						<xsl:text> | </xsl:text>
 						<xsl:choose>
-							<xsl:when test="$type-node/event">
+							<xsl:when test="$events">
 								<a href="#event-summary">EVENT</a>
 							</xsl:when>
 							<xsl:otherwise>EVENT</xsl:otherwise>
 						</xsl:choose>
 					</td>
-					<td>DETAIL: FIELD | CONST | PROP | METHOD | OP | EVENT</td>
+					<td>
+						<xsl:text>DETAIL: </xsl:text>
+						<xsl:choose>
+							<xsl:when test="$fields">
+								<a href="#field-detail">FIELD</a>
+							</xsl:when>
+							<xsl:otherwise>FIELD</xsl:otherwise>
+						</xsl:choose>
+						<xsl:text> | </xsl:text>
+						<xsl:choose>
+							<xsl:when test="$constructors">
+								<a href="#constructor-detail">CONST</a>
+							</xsl:when>
+							<xsl:otherwise>CONST</xsl:otherwise>
+						</xsl:choose>
+						<xsl:text> | </xsl:text>
+						<xsl:choose>
+							<xsl:when test="$properties">
+								<a href="#property-detail">PROP</a>
+							</xsl:when>
+							<xsl:otherwise>PROP</xsl:otherwise>
+						</xsl:choose>
+						<xsl:text> | </xsl:text>
+						<xsl:choose>
+							<xsl:when test="$methods">
+								<a href="#method-detail">METHOD</a>
+							</xsl:when>
+							<xsl:otherwise>METHOD</xsl:otherwise>
+						</xsl:choose>
+						<xsl:text> | </xsl:text>
+						<xsl:choose>
+							<xsl:when test="$operators">
+								<a href="#operator-detail">OP</a>
+							</xsl:when>
+							<xsl:otherwise>OP</xsl:otherwise>
+						</xsl:choose>
+						<xsl:text> | </xsl:text>
+						<xsl:choose>
+							<xsl:when test="$events">
+								<a href="#event-detail">EVENT</a>
+							</xsl:when>
+							<xsl:otherwise>EVENT</xsl:otherwise>
+						</xsl:choose>
+					</td>
 				</tr>
 			</xsl:if>
 		</table>

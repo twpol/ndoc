@@ -10,15 +10,30 @@
 	<!-- -->
 	<xsl:template match="/">
 		<xsl:variable name="type" select="ndoc/assembly/module/namespace/*[@id=$global-type-id]" />
+		<xsl:variable name="fields" select="$type/field[not(@declaringType)]" />
+		<xsl:variable name="constructors" select="$type/constructor" />
+		<xsl:variable name="properties" select="$type/property[not(@declaringType)]" />
+		<xsl:variable name="methods" select="$type/method[not(@declaringType)]" />
+		<xsl:variable name="operators" select="$type/operator" />
+		<xsl:variable name="events" select="$type/event[not(@declaringType)]" />
 		<html>
 			<xsl:call-template name="output-head" />
 			<body>
-				<xsl:call-template name="output-navigation-bar">
-					<xsl:with-param name="select" select="'Type'" />
-					<xsl:with-param name="link-namespace" select="true()" />
-					<xsl:with-param name="prev-next-what" select="'TYPE'" />
-					<xsl:with-param name="type-node" select="$type" />
-				</xsl:call-template>
+				<xsl:variable name="navigation-bar">
+					<xsl:call-template name="output-navigation-bar">
+						<xsl:with-param name="select" select="'Type'" />
+						<xsl:with-param name="link-namespace" select="true()" />
+						<xsl:with-param name="prev-next-what" select="'TYPE'" />
+						<xsl:with-param name="type-node" select="$type" />
+						<xsl:with-param name="fields" select="$fields" />
+						<xsl:with-param name="constructors" select="$constructors" />
+						<xsl:with-param name="properties" select="$properties" />
+						<xsl:with-param name="methods" select="$methods" />
+						<xsl:with-param name="operators" select="$operators" />
+						<xsl:with-param name="events" select="$events" />
+					</xsl:call-template>
+				</xsl:variable>
+				<xsl:copy-of select="$navigation-bar" />
 				<hr />
 				<h2>
 					<span class="namespaceName">
@@ -50,7 +65,6 @@
 						<xsl:apply-templates select="$type/documentation/remarks" mode="doc" />
 					</p>
 				</xsl:if>
-				<xsl:variable name="fields" select="$type/field[not(@declaringType)]" />
 				<a name="field-summary" />
 				<xsl:if test="$fields">
 					<!-- IE doesn't support the border-spacing CSS property so we have to set the cellspacing attribute here. -->
@@ -74,7 +88,6 @@
 						<xsl:with-param name="member-element" select="'field'" />
 					</xsl:call-template>
 				</xsl:for-each>
-				<xsl:variable name="constructors" select="$type/constructor" />
 				<a name="constructor-summary" />
 				<xsl:if test="$constructors">
 					<!-- IE doesn't support the border-spacing CSS property so we have to set the cellspacing attribute here. -->
@@ -88,7 +101,6 @@
 					</table>
 					<br />
 				</xsl:if>
-				<xsl:variable name="properties" select="$type/property[not(@declaringType)]" />
 				<a name="property-summary" />
 				<xsl:if test="$properties">
 					<!-- IE doesn't support the border-spacing CSS property so we have to set the cellspacing attribute here. -->
@@ -112,7 +124,6 @@
 						<xsl:with-param name="member-element" select="'property'" />
 					</xsl:call-template>
 				</xsl:for-each>
-				<xsl:variable name="methods" select="$type/method[not(@declaringType)]" />
 				<a name="method-summary" />
 				<xsl:if test="$methods">
 					<!-- IE doesn't support the border-spacing CSS property so we have to set the cellspacing attribute here. -->
@@ -142,7 +153,6 @@
 					<xsl:with-param name="type-of-members" select="'Methods'" />
 					<xsl:with-param name="member-element" select="'method'" />
 				</xsl:call-template>
-				<xsl:variable name="events" select="$type/event[not(@declaringType)]" />
 				<a name="event-summary" />
 				<xsl:if test="$events">
 					<!-- IE doesn't support the border-spacing CSS property so we have to set the cellspacing attribute here. -->
@@ -262,12 +272,7 @@
 					</xsl:for-each>
 				</xsl:if>
 				<hr />
-				<xsl:call-template name="output-navigation-bar">
-					<xsl:with-param name="select" select="'Type'" />
-					<xsl:with-param name="link-namespace" select="true()" />
-					<xsl:with-param name="prev-next-what" select="'TYPE'" />
-					<xsl:with-param name="type-node" select="$type" />
-				</xsl:call-template>
+				<xsl:copy-of select="$navigation-bar" />
 			</body>
 		</html>
 	</xsl:template>

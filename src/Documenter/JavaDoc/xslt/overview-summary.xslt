@@ -10,9 +10,12 @@
 		<html>
 			<xsl:call-template name="output-head" />
 			<body>
-				<xsl:call-template name="output-navigation-bar">
-					<xsl:with-param name="select" select="'Overview'" />
-				</xsl:call-template>
+				<xsl:variable name="navigation-bar">
+					<xsl:call-template name="output-navigation-bar">
+						<xsl:with-param name="select" select="'Overview'" />
+					</xsl:call-template>
+				</xsl:variable>
+				<xsl:copy-of select="$navigation-bar" />
 				<hr />
 				<h2 class="title">
 					<xsl:value-of select="$global-title" />
@@ -32,9 +35,7 @@
 				</table>
 				<br />
 				<hr />
-				<xsl:call-template name="output-navigation-bar">
-					<xsl:with-param name="select" select="'Overview'" />
-				</xsl:call-template>
+				<xsl:copy-of select="$navigation-bar" />
 			</body>
 		</html>
 	</xsl:template>
