@@ -255,12 +255,18 @@
 					<xsl:when test="count(../constructor) &gt; 1">
 						<td width="50%">
 						  <xsl:choose>
-						    <xsl:when test="@access='Public'">
-						      <img src="pubmethod.gif" />
-						    </xsl:when>
-						    <xsl:otherwise>
-						      <img src="protmethod.gif" />
-						    </xsl:otherwise>
+							<xsl:when test="@access='Public'">
+								<img src="pubmethod.gif" />
+							</xsl:when>
+							<xsl:when test="@access='Family'">
+								<img src="protmethod.gif" />
+							</xsl:when>
+							<xsl:when test="@access='Private'">
+								<img src="privmethod.gif" />
+							</xsl:when>
+							<xsl:when test="@access='Assembly' or @access='FamilyOrAssembly'">
+								<img src="intmethod.gif" />
+							</xsl:when>
 						  </xsl:choose>
 							<a>
 								<xsl:attribute name="href">
@@ -288,12 +294,18 @@
 					<xsl:otherwise>
 						<td width="50%">
 						  <xsl:choose>
-						    <xsl:when test="@access='Public'">
-						      <img src="pubmethod.gif" />
-						    </xsl:when>
-						    <xsl:otherwise>
-						      <img src="protmethod.gif" />
-						    </xsl:otherwise>
+							<xsl:when test="@access='Public'">
+								<img src="pubmethod.gif" />
+							</xsl:when>
+							<xsl:when test="@access='Family'">
+								<img src="protmethod.gif" />
+							</xsl:when>
+							<xsl:when test="@access='Private'">
+								<img src="privmethod.gif" />
+							</xsl:when>
+							<xsl:when test="@access='Assembly' or @access='FamilyOrAssembly'">
+								<img src="intmethod.gif" />
+							</xsl:when>
 						  </xsl:choose>
 							<a>
 								<xsl:attribute name="href">
