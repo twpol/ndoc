@@ -77,7 +77,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		protected virtual void OnTopicStart( string fileName )
 		{
 			if ( TopicStart != null )
-				TopicStart( this, new FileEventArgs( "", fileName ) );
+				TopicStart( this, new FileEventArgs( fileName ) );
 		}
 	
 		/// <summary>
@@ -93,19 +93,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 				TopicEnd( this, EventArgs.Empty );
 		}
 	
-		/// <summary>
-		/// 
-		/// </summary>
-		public event FileEventHandler AddFile;
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="fileName"></param>
-		protected virtual void OnAddFile( string fileName )
-		{
-			if ( AddFile != null )
-				AddFile( this, new FileEventArgs( "", fileName ) );
-		}
 
 		/// <summary>
 		/// 
@@ -116,10 +103,10 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// </summary>
 		/// <param name="title"></param>
 		/// <param name="fileName"></param>
-		protected virtual void OnAddFileToTopic( string title, string fileName )
+		protected virtual void OnAddFileToTopic( string fileName )
 		{
 			if ( AddFileToTopic != null )
-				AddFileToTopic( this, new FileEventArgs( title, fileName ) );
+				AddFileToTopic( this, new FileEventArgs( fileName ) );
 		}
 		#endregion
 
@@ -219,7 +206,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 #if DEBUG
 			Trace.WriteLine((Environment.TickCount - start).ToString() + " msec.");
 #endif
-			OnAddFile( fileName );
 		}
 
 
@@ -259,8 +245,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			int[] indexes = SortNodesByAttribute(typeNodes, "id");
 			int nNodes = typeNodes.Count;
 
-			//OnTopicStart();
-
 			for (int i = 0; i < nNodes; i++)
 			{
 				XmlNode typeNode = typeNodes[indexes[i]];
@@ -288,8 +272,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 						break;
 				}
 			}
-
-			//OnTopicEnd();
 		}
 
 		private void MakeHtmlForEnumerationOrDelegate( XmlNode xmlDocumentation, WhichType whichType, XmlNode typeNode )
@@ -298,7 +280,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			string typeID = typeNode.Attributes["id"].Value;
 			string fileName = NameMapper.GetFilenameForType(typeNode);
 
-			OnAddFileToTopic(typeName + " " + NameMapper.MixedCaseTypeNames[whichType], fileName);
+			OnAddFileToTopic( fileName );
 
 			XsltArgumentList arguments = new XsltArgumentList();
 			arguments.AddParam( "type-id", String.Empty, typeID );
@@ -315,9 +297,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 
 			bool hasMembers = typeNode.SelectNodes("constructor|field|property|method|operator|event").Count > 0;
 
-			//if (hasMembers)
-			//	OnTopicStart( fileName );
-
 			XsltArgumentList arguments = new XsltArgumentList();
 			arguments.AddParam( "type-id", String.Empty, typeID );
 			TransformAndWriteResult( xmlDocumentation, "type", arguments, fileName );
@@ -325,7 +304,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			if (hasMembers)
 			{
 				fileName = NameMapper.GetFilenameForTypeMembers(typeNode);
-				OnAddFileToTopic(typeName + " Members", fileName);
+				OnAddFileToTopic( fileName );
 
 				arguments = new XsltArgumentList();
 				arguments.AddParam("id", String.Empty, typeID);
@@ -378,11 +357,11 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 				if (constructorNodes.Count > 1)
 				{
 					XmlNodeList   parameterNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace/" + NameMapper.LowerCaseTypeNames[whichType] + "[@name=\"" + typeName + "\"]/constructor[@id=\"" + constructorID + "\"]/parameter");
-					OnAddFileToTopic( typeName + " Constructor " + MethodHelper.GetParamList(parameterNodes), fileName );
+					OnAddFileToTopic( fileName );
 				}
 				else
 				{
-					OnAddFileToTopic( typeName + " Constructor", fileName );
+					OnAddFileToTopic( fileName );
 				}
 
 				XsltArgumentList arguments = new XsltArgumentList();
@@ -401,7 +380,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 				constructorID = staticConstructorNode.Attributes["id"].Value;
 				fileName = NameMapper.GetFilenameForConstructor(staticConstructorNode);
 
-				OnAddFileToTopic(typeName + " Static Constructor", fileName);
+				OnAddFileToTopic( fileName );
 
 				XsltArgumentList arguments = new XsltArgumentList();
 				arguments.AddParam("member-id", String.Empty, constructorID);
@@ -419,8 +398,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 				string typeID = typeNode.Attributes["id"].Value;
 				string fileName = NameMapper.GetFilenameForFields( whichType, typeNode );
 
-				//OnAddFileToTopic("Fields", fileName);
-
 				XsltArgumentList arguments = new XsltArgumentList();
 				arguments.AddParam( "id", String.Empty, typeID );
 				arguments.AddParam( "member-type", String.Empty, "field" );
@@ -437,7 +414,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 					string fieldName = field.Attributes["name"].Value;
 					string fieldID = field.Attributes["id"].Value;
 					fileName = NameMapper.GetFilenameForField(field);
-					OnAddFileToTopic(fieldName + " Field", fileName);
+					OnAddFileToTopic( fileName );
 
 					arguments = new XsltArgumentList();
 					arguments.AddParam( "field-id", String.Empty, fieldID );
@@ -517,11 +494,11 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 					if (bOverloaded)
 					{
 						XmlNodeList parameterNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace/" + NameMapper.LowerCaseTypeNames[whichType] + "[@name=\"" + typeName + "\"]/property[@id=\"" + propertyID + "\"]/parameter");
-						OnAddFileToTopic(propertyName + " Property " + MethodHelper.GetParamList(parameterNodes), fileName);
+						OnAddFileToTopic( fileName );
 					}
 					else
 					{
-						OnAddFileToTopic(propertyName + " Property", fileName);
+						OnAddFileToTopic( fileName );
 					}
 
 					XsltArgumentList arguments2 = new XsltArgumentList();
@@ -555,7 +532,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 				int[] indexes = SortNodesByAttribute(methodNodes, "id");
 
 				fileName = NameMapper.GetFilenameForMethods(whichType, typeNode);
-				//OnAddFileToTopic("Methods", fileName);
 
 				XsltArgumentList arguments = new XsltArgumentList();
 				arguments.AddParam("id", String.Empty, typeID);
@@ -575,7 +551,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 						bOverloaded = true;
 
 						fileName = NameMapper.GetFilenameForMethodOverloads( typeNode, methodNode );
-						OnAddFileToTopic(methodName + " Method", fileName);
+						OnAddFileToTopic( fileName );
 
 						arguments = new XsltArgumentList();
 						arguments.AddParam("member-id", String.Empty, methodID);
@@ -591,11 +567,11 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 						if (bOverloaded)
 						{
 							XmlNodeList parameterNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace/" + NameMapper.LowerCaseTypeNames[whichType] + "[@name=\"" + typeName + "\"]/method[@id=\"" + methodID + "\"]/parameter");
-							OnAddFileToTopic(methodName + " Method " + MethodHelper.GetParamList(parameterNodes), fileName);
+							OnAddFileToTopic( fileName );
 						}
 						else
 						{
-							OnAddFileToTopic(methodName + " Method", fileName);
+							OnAddFileToTopic( fileName );
 						}
 
 						XsltArgumentList arguments2 = new XsltArgumentList();
@@ -628,7 +604,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 					string typeID = (string)typeNode.Attributes["id"].Value;
 					string fileName = NameMapper.GetFilenameForEvents(whichType, typeNode);
 
-					OnAddFileToTopic("Events", fileName);
+					OnAddFileToTopic( fileName );
 
 					XsltArgumentList arguments = new XsltArgumentList();
 					arguments.AddParam("id", String.Empty, typeID);
@@ -649,7 +625,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 							string eventID = (string)eventElement.Attributes["id"].Value;
 
 							fileName = NameMapper.GetFilenameForEvent(eventElement);
-							OnAddFileToTopic(eventName + " Event", fileName);
+							OnAddFileToTopic( fileName );
 
 							arguments = new XsltArgumentList();
 							arguments.AddParam("event-id", String.Empty, eventID);
@@ -680,7 +656,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 					title += " and Type Conversions";
 				
 
-				OnAddFileToTopic(title, fileName);
+				OnAddFileToTopic( fileName );
 
 				XsltArgumentList arguments = new XsltArgumentList();
 				arguments.AddParam("id", String.Empty, typeID);
@@ -705,7 +681,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 							bOverloaded = true;
 
 							fileName = NameMapper.GetFilenameForOperatorsOverloads(typeNode, operatorNode);
-							OnAddFileToTopic( MethodHelper.GetOperatorName(operatorNode), fileName);
+							OnAddFileToTopic( fileName );
 
 							arguments = new XsltArgumentList();
 							arguments.AddParam("member-id", String.Empty, operatorID);
@@ -720,11 +696,11 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 					if (bOverloaded)
 					{
 						XmlNodeList parameterNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace/" + NameMapper.LowerCaseTypeNames[whichType] + "[@name=\"" + typeName + "\"]/operator[@id=\"" + operatorID + "\"]/parameter");
-						OnAddFileToTopic(MethodHelper.GetOperatorName(operatorNode) + MethodHelper.GetParamList(parameterNodes), fileName);
+						OnAddFileToTopic( fileName );
 					}
 					else
 					{
-						OnAddFileToTopic(MethodHelper.GetOperatorName(operatorNode), fileName);
+						OnAddFileToTopic( fileName );
 					}
 
 					arguments = new XsltArgumentList();

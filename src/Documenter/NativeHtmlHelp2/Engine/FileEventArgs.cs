@@ -25,10 +25,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 	/// </summary>
 	public class FileEventArgs : EventArgs
 	{
-		/// <summary>
-		/// 
-		/// </summary>
-		public readonly string Title;
 
 		/// <summary>
 		/// 
@@ -40,9 +36,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// </summary>
 		/// <param name="title"></param>
 		/// <param name="file"></param>
-		public FileEventArgs( string title, string file )
+		public FileEventArgs( string file )
 		{
-			Title = title;
 			File = file;
 		}
 	}
