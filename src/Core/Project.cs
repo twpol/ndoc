@@ -93,7 +93,7 @@ namespace NDoc.Core
 
 			IsDirty = true;
 
-			AddNamespacesFromAssembly(assemblySlashDoc.AssemblyFilename);
+			AddNamespacesFromAssembly(GetFullPath(assemblySlashDoc.AssemblyFilename));
 			_AssemblySlashDocs.Add(assemblySlashDoc);
 		}
 
@@ -107,24 +107,6 @@ namespace NDoc.Core
 				}
 			}
 			return false;
-		}
-
-		/// <summary>Returns the index of the assembly/doc based on an
-		/// assembly name.</summary>
-		/// <param name="assemblyName">The assembly to search for.</param>
-		/// <returns></returns>
-		public int FindAssemblySlashDocByName(string assemblyName)
-		{
-			int count = 0;
-			foreach (AssemblySlashDoc a in this._AssemblySlashDocs)
-			{
-				if (a.AssemblyFilename == assemblyName)
-				{
-					return count;
-				}
-				count++;
-			}
-			return -1;
 		}
 
 		/// <summary>Gets an assembly/doc pair.</summary>
@@ -482,7 +464,7 @@ namespace NDoc.Core
 						throw new DocumenterException("\"location\" attribute of"
 							+ " <assembly> element cannot be empty in project file.");
 					}
-					assemblySlashDoc.AssemblyFilename = GetFullPath(reader["location"]);
+					assemblySlashDoc.AssemblyFilename = reader["location"];
 
 					if (reader.GetAttribute("documentation") == null) {
 						throw new DocumenterException("\"documentation\" attribute is"
@@ -492,7 +474,7 @@ namespace NDoc.Core
 						throw new DocumenterException("\"documentation\" attribute of"
 							+ " <assembly> element cannot be empty in project file.");
 					}
-					assemblySlashDoc.SlashDocFilename = GetFullPath(reader["documentation"]);
+					assemblySlashDoc.SlashDocFilename = reader["documentation"];
 					count++;
 					try
 					{

@@ -158,11 +158,11 @@ namespace NDoc.Core
 			StringBuilder xfiles = new StringBuilder();
 			foreach (AssemblySlashDoc asd in project.GetAssemblySlashDocs())
 			{
-				if (!File.Exists(asd.AssemblyFilename))
+				if (!File.Exists(Path.GetFullPath(asd.AssemblyFilename)))
 				{
 					xfiles.Append("\n" + asd.AssemblyFilename);
 				}
-				if (!File.Exists(asd.SlashDocFilename))
+				if (!File.Exists(Path.GetFullPath(asd.SlashDocFilename)))
 				{
 					xfiles.Append("\n" + asd.SlashDocFilename);
 				}
@@ -219,7 +219,8 @@ namespace NDoc.Core
 			// put dirs containing assemblies in also
 			foreach(AssemblySlashDoc assemblySlashDoc in project.GetAssemblySlashDocs())
 			{
-				string dir = Path.GetDirectoryName(assemblySlashDoc.AssemblyFilename);
+				string dir = Path.GetDirectoryName(Path.GetFullPath(
+					assemblySlashDoc.AssemblyFilename));
 				if (!assemblyResolveDirs.Contains(dir)) assemblyResolveDirs.Add(dir);
 			}
 			AssemblyResolver assemblyResolver = new AssemblyResolver(assemblyResolveDirs);
@@ -379,11 +380,12 @@ namespace NDoc.Core
 				{
 					OnDocBuildingProgress(i * step);
 
-					currentAssemblyFilename = assemblySlashDoc.AssemblyFilename;
-					string path = Path.GetFullPath(currentAssemblyFilename);
-					Assembly assembly = LoadAssembly(path);
+					currentAssemblyFilename = Path.GetFullPath(
+						assemblySlashDoc.AssemblyFilename);
+					Assembly assembly = LoadAssembly(currentAssemblyFilename);
 
-					assemblyDocCache = new AssemblyXmlDocCache(assemblySlashDoc.SlashDocFilename);
+					assemblyDocCache = new AssemblyXmlDocCache(project.GetFullPath(
+						assemblySlashDoc.SlashDocFilename));
 
 					int starta = Environment.TickCount;
 
