@@ -24,9 +24,8 @@ namespace NDoc.Core
 	/// </summary>
 	public sealed class PathUtilities
 	{
-		private PathUtilities()
-		{
-		}
+		// no public constructor - only static methods...
+		private PathUtilities(){}
 
 		/// <summary>
 		/// Converts an absolute path to one relative to the given base directory path
