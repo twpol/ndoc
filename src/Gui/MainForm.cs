@@ -327,7 +327,7 @@ namespace NDoc.Gui
 			this.documenterHeaderGroupBox = new NDoc.Gui.HeaderGroupBox();
 			this.labelDocumenters = new System.Windows.Forms.Label();
 			this.comboBoxDocumenters = new System.Windows.Forms.ComboBox();
-			this.propertyGrid = new RuntimePropertyGrid();
+			this.propertyGrid = new NDoc.Gui.RuntimePropertyGrid();
 			((System.ComponentModel.ISupportInitialize)(this.statusBarTextPanel)).BeginInit();
 			this.assembliesHeaderGroupBox.SuspendLayout();
 			this.documenterHeaderGroupBox.SuspendLayout();
@@ -1308,7 +1308,11 @@ namespace NDoc.Gui
 						if (xpath!=null && xpath.Length>0)
 						{
 							asd.SlashDocFilename=Path.Combine(spath, xpath);
+							if (!File.Exists(asd.SlashDocFilename))
+							{
 							warningMessages += String.Format("VS Project '{0}' has been imported, but the XML documentation file specified in the project cannot be found.\n- This can occur if the project is set to do 'incremental' compiles.\n- NDoc output will be very limited until the VS project is rebuilt with XML documntation...\n",p.Name);
+						
+							}
 						}
 						else
 						{
