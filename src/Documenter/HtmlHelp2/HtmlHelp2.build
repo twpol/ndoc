@@ -5,8 +5,6 @@
 			<if propertyexists="mshtml.primary.interop.assembly">
 				<!-- generate COM interop assembly for Microsoft Help Compiler Services 1.0 -->
 				<tlbimp typelib="${help.compilerservices.typelib}" output="${current.bin.dir}/Interop.MSHelpCompiler.dll" namespace="MSHelpCompiler" asmversion="1.0.0.0" keyfile="../../ndoc.snk" />
-				<!-- copy the ndoc key file to the location where the compiler expects it to be -->
-				<copy file="../../ndoc.snk" todir="${current.bin.dir}/../../../../" if="${current.build.config.release}" />
 				<!-- compile the assembly -->
 				<csc target="library" output="${current.bin.dir}/${nant.project.name}.dll" debug="${current.build.debug}" optimize="${current.build.optimize}" unsafe="false" checked="false" define="${current.build.defines}" doc="${current.bin.dir}/${nant.project.name}.xml">
 					<sources>
@@ -25,7 +23,6 @@
 						<includes name="xml/*.HxK" />
 					</resources>
 				</csc>
-				<delete file="${current.bin.dir}/../../../../ndoc.snk" if="${current.build.config.release}" />
 			</if>
 		</if>
 	</target>

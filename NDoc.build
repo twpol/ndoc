@@ -123,7 +123,10 @@
 
 	-->
 	<target name="compile" description="Builds the current build configuration for the current runtime configuration.">
+		<!-- ensure the bin dir has been created, and clean it up if needed -->
 		<call target="clean-current-bin-dir" force="true" />
+		<!-- copy the ndoc signing key file to the bin dir -->
+		<copy file="${nant.project.basedir}/src/ndoc.snk" todir="${current.bin.dir}" />
 		<!-- build all projects -->
 		<nant buildfile="src/Core/Core.build" target="compile" inheritall="true" />
 		<nant buildfile="src/Console/Console.build" target="compile" inheritall="true" />
@@ -135,6 +138,9 @@
 		<nant buildfile="src/Documenter/Latex/Latex.build" target="compile" inheritall="true" />
 		<nant buildfile="src/Documenter/LinearHtml/LinearHtml.build" target="compile" inheritall="true" />
 		<nant buildfile="src/Documenter/Xml/Xml.build" target="compile" inheritall="true" />
+		<!--nant buildfile="src/Test/Test.build" target="compile" inheritall="true" /-->
+		<!-- remove the ndoc signing key file -->
+		<delete file="${current.bin.dir}/ndoc.snk" />
 	</target>
 	<!--
 
