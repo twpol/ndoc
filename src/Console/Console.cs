@@ -50,7 +50,7 @@ namespace NDoc.ConsoleApplication
 					}
 					else
 					{
-						throw new ApplicationException("Could not find any documenterConfig assemblies.");
+						throw new ApplicationException("Could not find any documenter assemblies.");
 					}
 				}
 				documenterConfig = info.CreateConfig();
@@ -90,27 +90,27 @@ namespace NDoc.ConsoleApplication
 
 								switch (name.ToLower())
 								{
-									case "documenterConfig":
+									case "documenter":
 										if (propertiesSet)
 										{
-											throw new ApplicationException("The documenterConfig name must be specified before any documenterConfig specific options.");
+											throw new ApplicationException("The documenter name must be specified before any documenterConfig specific options.");
 										}
 										if (projectSet)
 										{
-											throw new ApplicationException("The documenterConfig name must be specified before the project file.");
+											throw new ApplicationException("The documenter name must be specified before the project file.");
 										}
 										info = InstalledDocumenters.GetDocumenter(val.Replace("_"," "));
 
 										if (info == null)
 										{
-											throw new ApplicationException("The specified documenterConfig name is invalid.");
+											throw new ApplicationException("The specified documenter name is invalid.");
 										}
 										documenterConfig = info.CreateConfig();
 										break;
 									case "project":
 										if (propertiesSet)
 										{
-											throw new ApplicationException("The project file must be specified before any documenterConfig specific options.");
+											throw new ApplicationException("The project file must be specified before any documenter specific options.");
 										}
 										project = new Project();
 										info = InstalledDocumenters.GetDocumenter(documenterConfig.DocumenterInfo.Name);
