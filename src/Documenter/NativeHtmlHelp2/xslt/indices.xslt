@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
 <!-- good for debugging -->
-<xsl:output indent="yes"/>
+<!--<xsl:output indent="yes"/>-->
 	<!-- provide no-op override for all non-specified types -->
 	<xsl:template match="* | node() | text()" mode="FIndex"/>
 	<xsl:template match="* | node() | text()" mode="KIndex"/>
