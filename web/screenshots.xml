@@ -1,9 +1,9 @@
 <page>
 	<title>NDOC Screenshots</title>
 	<body>
-		<p><img border="0" src="NDocGui.png"/></p>
-		<p><img border="0" src="NDocGuiSlashDoc.png"/></p>
-		<p><img border="0" src="NDocGuiNsSummary.png"/></p>
-		<p><img border="0" src="NDocGuiAbout.png"/></p>
+		<p><img src="NDocGui.png" alt="Main Form" /></p>
+		<p><img src="NDocGuiSlashDoc.png" alt="Add Assembly and /doc Filenames" /></p>
+		<p><img src="NDocGuiNsSummary.png" alt="Edit Namespace Summaries" /></p>
+		<p><img src="NDocGuiAbout.png" alt="About NDoc" /></p>
 	</body>
 </page>
