@@ -950,6 +950,15 @@ namespace NDoc.Test
 		/// This is a remark.
 		/// </para></remarks>
 		public int SomeMethod( int a, int b ) { return 0; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="a"></param>
+		/// <param name="b"></param>
+		/// <returns></returns>
+		/// <remarks> </remarks>
+		public int MethodWithEmptyDoc(int a, int b) { return 0; }
 	}
 
 	/// <summary>
