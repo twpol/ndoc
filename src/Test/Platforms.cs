@@ -12,7 +12,7 @@ namespace NDoc.Test.Platforms
 	/// This class can run safely on all .NET compatible operating systems and frameworks
 	/// </summary>
 	/// <platform>
-	///    <os ndocBuiltIn="all" />
+	///    <os predefined="all" />
 	///    <frameworks>
 	///			<mono>true</mono>
 	///			<compact>true</compact>
@@ -30,7 +30,7 @@ namespace NDoc.Test.Platforms
 	/// This class can doesn't support the compact framework or Mono
 	/// </summary>
 	/// <platform>
-	///    <os ndocBuiltIn="all" />
+	///    <os predefined="all" />
 	/// </platform>
 	public class ThisClassSupportsAllOSButNotCFOrMono
 	{
@@ -44,7 +44,7 @@ namespace NDoc.Test.Platforms
 	/// This class supports the CF and all OS's, but not Mono
 	/// </summary>
 	/// <platform>
-	///    <os ndocBuiltIn="all" />
+	///    <os predefined="all" />
 	///    <frameworks>
 	///			<compact>true</compact>
 	///    </frameworks>  
@@ -71,7 +71,7 @@ namespace NDoc.Test.Platforms
 	/// This class supports the Mono and all OS's, but not CF
 	/// </summary>
 	/// <platform>
-	///    <os ndocBuiltIn="all" />
+	///    <os predefined="all" />
 	///    <frameworks>
 	///			<mono>true</mono>
 	///    </frameworks>
@@ -88,7 +88,7 @@ namespace NDoc.Test.Platforms
 	/// This class can only run on an NT5 derived OS
 	/// </summary>
 	/// <platform>
-	///    <os ndocBuiltIn="nt5plus" />
+	///    <os predefined="nt5plus" />
 	/// </platform>
 	public class ThisClassNeedsNT5
 	{
@@ -102,7 +102,7 @@ namespace NDoc.Test.Platforms
 	/// This class needs an enterprise OS
 	/// </summary>
 	/// <platform>
-	///    <os ndocBuiltIn="enterprise" />
+	///    <os predefined="enterprise" />
 	/// </platform>
 	public class ThisClassNeedsAServerOS
 	{
@@ -116,7 +116,7 @@ namespace NDoc.Test.Platforms
 	/// This class supports a NT 5 and a custom list of platforms
 	/// </summary>
 	/// <platform>
-	///    <os ndocBuiltIn="nt5plus">MS-DOS 2.0</os>
+	///    <os predefined="nt5plus">MS-DOS 2.0</os>
 	///    <frameworks>
 	///		<custom>DOS.NET Framework</custom>
 	///    </frameworks>

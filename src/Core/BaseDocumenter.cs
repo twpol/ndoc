@@ -441,13 +441,13 @@ namespace NDoc.Core
 				switch ( MyConfig.DefaultOSSupport )
 				{
 					case OSSupport.all:
-						writer.WriteAttributeString( "ndocBuiltIn", "all" );
+						writer.WriteAttributeString( "predefined", "all" );
 						break;
 					case OSSupport.nt5plus:
-						writer.WriteAttributeString( "ndocBuiltIn", "nt5plus" );
+						writer.WriteAttributeString( "predefined", "nt5plus" );
 						break;
 					case OSSupport.enterprise:
-						writer.WriteAttributeString( "ndocBuiltIn", "enterprise" );
+						writer.WriteAttributeString( "predefined", "enterprise" );
 						break;
 					default:
 						Debug.Assert( false );	//remind ourselves to update this switch if new items are added
