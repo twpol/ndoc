@@ -898,6 +898,9 @@
 					<xsl:text>&#10;</xsl:text>
 					<xsl:text>&#160;&#160;&#160;</xsl:text>
 				</xsl:if>
+				<xsl:if test="$lang = 'Visual Basic' and @optional = 'true'">
+					<xsl:text>Optional </xsl:text>
+				</xsl:if>
 				<xsl:apply-templates select="." mode="dir">
 					<xsl:with-param name="lang" select="$lang"/>
 				</xsl:apply-templates>
@@ -939,6 +942,12 @@
 							<xsl:value-of select="@name" />
 						</i>
 					</xsl:if>
+				</xsl:if>
+				<xsl:if test="$lang = 'Visual Basic' and @optional = 'true'">
+					<xsl:text> = </xsl:text>
+					<xsl:if test="@type='System.String'">"</xsl:if>
+					<xsl:value-of select="@defaultValue" />
+					<xsl:if test="@type='System.String'">"</xsl:if>
 				</xsl:if>
 				<xsl:if test="$lang='C++' and contains(@type, '[')">
 					<xsl:text>&#160;__gc[]</xsl:text>
