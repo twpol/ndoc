@@ -1060,8 +1060,16 @@ namespace NDoc.Gui
 
 		private void FileSave(string fileName)
 		{
-			project.Write(fileName);
-			SetWindowTitle();
+			try
+			{
+				project.Write(fileName);
+				SetWindowTitle();
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(this, ex.InnerException.Message, "Project Save", 
+					MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+			}
 		}
 
 		private void FileSaveAs()
