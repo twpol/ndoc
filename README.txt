@@ -17,11 +17,8 @@ developer!
 Status
 ------
 
-As there's still quite a bit of work to be done, this is only a developer
-release. You'll have to build it yourself by following the directions
-below. It is, however, very usable as evidenced by the many developers
-using it every day. There's no documentation but the GUI is simple enough
-that you should have no trouble figuring it. You are a developer, right?
+NDoc's MSDN documenter is now relatively stable, but there is still quite 
+a bit of work to be done on the JavaDoc and the LaTeX documenters. 
 
 See http://ndoc.sf.net/ for the latest information on releases.
 
@@ -32,15 +29,18 @@ If you have Visual Studio .NET, you can build NDoc using the .sln file
 located in the src directory.
 
 If you don't have VS.NET but do have the .NET Framework SDK installed
-then you can build NDoc using the Makefile or the NAnt .build file both
-of which are also located in the src directory. Just type nmake or nant 
-from within that directory and you should be good to go.
+then you can build NDoc using the Makefile file located in the src 
+directory. Just type nmake from within that directory and you should 
+be good to go.
 
 If you don't have the .NET Framework SDK installed then why do you even
 want to use this?
 
 Using NDoc
 ----------
+
+A list of tags supported by the MSDN documenter can be found in the src\Help 
+folder.
 
 If you want to create a .CHM file and you don't have VS.NET installed then
 you're going to need to download and install Microsoft's HTML Help
