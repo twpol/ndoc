@@ -1,11 +1,12 @@
 using System;
+using System.IO;
 using System.ComponentModel;
 using System.Drawing.Design;
-using System.IO;
 using System.Windows.Forms.Design;
-using Microsoft.Win32;
-using NDoc.Core;
 
+using Microsoft.Win32;
+
+using NDoc.Core;
 using NDoc.Documenter.Msdn;
 
 namespace NDoc.Documenter.HtmlHelp2
@@ -161,7 +162,7 @@ namespace NDoc.Documenter.HtmlHelp2
 
 		bool _AugmentXmlDataIslands = true;
 
-		/// <summary>Flag that indicates whether to keep the CHM file after successful conversion</summary>
+		/// <summary>Adds additional tags to the embedded Xml data islands (results in slower builds but tighter VS.NET integration)</summary>
 		[
 		Category(HTMLHELP2_CONFIG_CATEGORY),
 		Description("Adds additional tags to the embedded Xml data islands (results in slower builds but tighter VS.NET integration)")
@@ -177,13 +178,73 @@ namespace NDoc.Documenter.HtmlHelp2
 			}
 		}
 
+		bool _RegisterTitleWithNamespace = false;
+
+		/// <summary>
+		/// Should the compiled Html 2 title be registered after it is compiled. (If true both a TitleID and Namespace are required)
+		/// </summary>
+		[
+		Category(HTMLHELP2_CONFIG_CATEGORY),
+		Description("Should the compiled Html 2 title be registered after it is compiled. (If true both a TitleID and Namespace are required)")
+		]
+		public bool RegisterTitleWithNamespace
+		{
+			get { return _RegisterTitleWithNamespace; }
+
+			set
+			{
+				_RegisterTitleWithNamespace = value;
+				SetDirty();
+			}
+		}
+
+		string _ParentCollectionNamespace = String.Empty;
+
+		/// <summary>
+		/// If RegisterTitle is true this is the namesapce it will be added to
+		/// </summary>
+		[
+		Category(HTMLHELP2_CONFIG_CATEGORY),
+		Description("The Html Help 2 registry namespace (avoid spaces). Only used if _RegisterTitleWithNamespace is True.")
+		]
+		public string ParentCollectionNamespace
+		{
+			get { return _ParentCollectionNamespace; }
+
+			set
+			{
+				_ParentCollectionNamespace = value;
+				SetDirty();
+			}
+		}		
+
+		bool _RegisterTitleAsCollection = false;
+
+		/// <summary>
+		/// If true the HxS title will be registered as a collection (ignored if RegisterTitleWithNamespace is ture)
+		/// </summary>
+		[
+		Category(HTMLHELP2_CONFIG_CATEGORY),
+		Description("If true the HxS title will be registered as a collection (ignored if RegisterTitleWithNamespace is ture)")
+		]
+		public bool RegisterTitleAsCollection
+		{
+			get { return _RegisterTitleAsCollection; }
+
+			set
+			{
+				_RegisterTitleAsCollection = value;
+				SetDirty();
+			}
+		}	
+
 		#region Not yet implemented features
 		
 //		bool _BuildSeperateIndexFile = true;
 //
 //		/// <summary>Gets or sets the property that causes a seperate index file to be generated.</summary>
 //		[
-//		Category("Html Help v2.0 Settings"),
+//		Category(HTMLHELP2_CONFIG_CATEGORY),
 //		Description("If true, create a seperate index file (HxI), otherwise the index is compiled into the HxS file.")
 //		]
 //		public bool BuildSeperateIndexFile
@@ -202,7 +263,7 @@ namespace NDoc.Documenter.HtmlHelp2
 //
 //		/// <summary>Gets or sets the base directory used to resolve directory and assembly references.</summary>
 //		[
-//		Category("Html Help v2.0 Settings"),
+//		Category(HTMLHELP2_CONFIG_CATEGORY),
 //		Description("The version number for the help file (#.#.#.#)")
 //		]
 //		public string Version
@@ -215,92 +276,8 @@ namespace NDoc.Documenter.HtmlHelp2
 //				SetDirty();
 //			}
 //		}
-//		bool _RegisterTitle = false;
-//
-//		[
-//		Category("Html Help v2.0 Settings"),
-//		Description("Should the compiled Html 2 title be registered after it is compiled. (If true both a TitleID and Namespace are required)")
-//		]
-//		public bool RegisterTitle
-//		{
-//			get { return _RegisterTitle; }
-//
-//			set
-//			{
-//				_RegisterTitle = value;
-//				SetDirty();
-//			}
-//		}
-//
-//		string _TitleID = String.Empty;
-//
-//		[
-//		Category("Html Help v2.0 Settings"),
-//		Description("The Html Help 2 registry title ID for this help file (avoid spaces). Only used if RegisterTutle is True.")
-//		]
-//		public string TitleID
-//		{
-//			get { return _TitleID; }
-//
-//			set
-//			{
-//				_TitleID = value;
-//				SetDirty();
-//			}
-//		}	
-//
-//		string _HtmlHelpNamespace = String.Empty;
-//
-//		[
-//		Category("Html Help v2.0 Settings"),
-//		Description("The Html Help 2 registry namespace (avoid spaces). Only used if RegisterTitle is True.")
-//		]
-//		public string HtmlHelpNamespace
-//		{
-//			get { return _HtmlHelpNamespace; }
-//
-//			set
-//			{
-//				_HtmlHelpNamespace = value;
-//				SetDirty();
-//			}
-//		}		
-//
-//
-//		string _CollectionHxCPath = String.Empty;
-//
-//		[
-//		Category("Html Help v2.0 Settings"),
-//		Description("The path to an HxC collection to which the help file will be added"),
-//		Editor(typeof(FileNameEditor), typeof(UITypeEditor))
-//		]
-//		public string CollectionHxCPath
-//		{
-//			get { return _CollectionHxCPath; }
-//
-//			set
-//			{
-//				_CollectionHxCPath = value;
-//				SetDirty();
-//			}
-//		}		
-//
-//		string _PluginNamespace = String.Empty;
-//
-//		[
-//		Category("Html Help v2.0 Settings"),
-//		Description("The namespace of a help collection that this collection will be referenced from (MS.VSCC is Msdn v7)")
-//		]
-//		public string PluginNamespace
-//		{
-//			get { return _PluginNamespace; }
-//
-//			set
-//			{
-//				_PluginNamespace = value;
-//				SetDirty();
-//			}
-//		}			
+	
+
 		#endregion
 	
 	}

@@ -111,13 +111,19 @@ namespace NDoc.Documenter.HtmlHelp2
 			}
 
 			//then compile the HxC into and HxS
-			OnDocBuildingStep( 75, "Compiling Html Help 2 Files..." );
-			CompileHxCFile();
-
-			//then compile the HxC into and HxS
 			OnDocBuildingStep( 99, "Finishing up..." );
 			if ( MyConfig.DeleteCHM )
 				File.Delete( InputCHMPath );
+
+			//then compile the HxC into and HxS
+			OnDocBuildingStep( 75, "Compiling Html Help 2 Files..." );
+			CompileHxCFile();
+
+			if ( MyConfig.RegisterTitleWithNamespace )
+				RegisterTitle();
+			else if ( MyConfig.RegisterTitleAsCollection )
+				RegisterCollection();
+
 		}
 
 		private void _HtmlHelp1Documenter_DocBuildingStep(object sender, ProgressArgs e)
@@ -127,6 +133,31 @@ namespace NDoc.Documenter.HtmlHelp2
 
 			// (since it takes 50% of our progress divide its progress by 2)
 			OnDocBuildingStep( e.Progress / 2, e.Status );
+		}
+
+		private void RegisterCollection()
+		{
+			HtmlHelp2Config config = MyConfig;
+			string ns = config.HtmlHelpName;
+
+			if ( ns.Length > 0 )
+			{
+				HxReg reg = new HxReg( config.HtmlHelp2CompilerPath );
+				reg.RegisterNamespace( ns, new FileInfo( Path.Combine( WorkingPath, config.HtmlHelpName + ".Hxs" ) ), config.Title );
+				reg.RegisterTitle( ns, ns, new FileInfo( Path.Combine( WorkingPath, config.HtmlHelpName + ".Hxs" ) ) );
+			}
+		}
+
+		private void RegisterTitle()
+		{
+			HtmlHelp2Config config = MyConfig;
+			string ns = config.ParentCollectionNamespace;
+
+			if ( ns.Length > 0 )
+			{
+				HxReg reg = new HxReg( config.HtmlHelp2CompilerPath );
+				reg.RegisterTitle( ns, config.HtmlHelpName, new FileInfo( Path.Combine( WorkingPath, config.HtmlHelpName + ".Hxs" ) ) );
+			}
 		}
 
 		private void CleanCHMIntermediates()

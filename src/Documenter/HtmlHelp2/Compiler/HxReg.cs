@@ -1,11 +1,12 @@
 using System;
+using System.IO;
+using System.Text;
+using System.Diagnostics;
 
 namespace NDoc.Documenter.HtmlHelp2.Compiler
 {
 	/// <summary>
 	/// Wraps the HxReg.exe registry component
-	/// not sure whether to use the command line interface 
-	/// or if the HxHelpServices API can be used to accomplish this
 	/// </summary>
 	public class HxReg : HxObject
 	{
@@ -40,6 +41,55 @@ namespace NDoc.Documenter.HtmlHelp2.Compiler
 		/// <param name="compilerPath"><see cref="HxObject.CompilerPath"/></param>
 		public HxReg( string compilerPath ) : base( compilerPath, "HxReg.exe" )
 		{
+		}
+
+		/// <summary>
+		/// Registers the a help namespace
+		/// </summary>
+		/// <param name="Namespace">The ID of the namespace to register</param>
+		/// <param name="CollectionFile">The collection (HxS or HxC) file</param>
+		/// <param name="Description">Namespace description</param>
+		public void RegisterNamespace( string Namespace, FileInfo CollectionFile, string Description )
+		{
+			Debug.Assert( CollectionFile != null );
+			Debug.Assert( CollectionFile.Exists );
+
+			StringBuilder sb = new StringBuilder();
+			sb.AppendFormat( " -n {0} ", Namespace );
+			
+			sb.Append( " -c " );
+			sb.Append( '"' );
+			sb.Append( CollectionFile.FullName );
+			sb.Append( '"' );
+
+			sb.AppendFormat( " -d " );
+			sb.Append( '"' );
+			sb.AppendFormat( Description );
+			sb.Append( '"' );
+
+			Execute( sb.ToString(), CollectionFile.Directory.FullName );
+		}
+
+		/// <summary>
+		/// Register an HxS title with a help namespace
+		/// </summary>
+		/// <param name="Namespace">The namespace to register with</param>
+		/// <param name="TitleID">The id of the new title</param>
+		/// <param name="HxsFile">The location of the HxS file</param>
+		public void RegisterTitle( string Namespace, string TitleID, FileInfo HxsFile )
+		{
+			Debug.Assert( HxsFile != null );
+			Debug.Assert( HxsFile.Exists );
+ 
+			StringBuilder sb = new StringBuilder();
+			sb.AppendFormat( " -n {0} ", Namespace );
+			sb.AppendFormat( " -i {0} ", TitleID );
+
+			sb.Append( '"' );
+			sb.Append( HxsFile.FullName );
+			sb.Append( '"' );
+
+			Execute( sb.ToString(), HxsFile.Directory.FullName );
 		}
 	}
 }
