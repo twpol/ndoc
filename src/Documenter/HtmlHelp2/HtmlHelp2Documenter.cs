@@ -111,14 +111,14 @@ namespace NDoc.Documenter.HtmlHelp2
 			}
 
 			//then compile the HxC into and HxS
-			OnDocBuildingStep( 99, "Finishing up..." );
-			if ( MyConfig.DeleteCHM )
-				File.Delete( InputCHMPath );
-
-			//then compile the HxC into and HxS
 			OnDocBuildingStep( 75, "Compiling Html Help 2 Files..." );
 			CompileHxCFile();
 
+			// do clean up and final registration steps
+			OnDocBuildingStep( 99, "Finishing up..." );
+			if ( MyConfig.DeleteCHM )
+				File.Delete( InputCHMPath );
+	
 			if ( MyConfig.RegisterTitleWithNamespace )
 				RegisterTitle();
 			else if ( MyConfig.RegisterTitleAsCollection )
