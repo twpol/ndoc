@@ -369,16 +369,25 @@ namespace NDoc.Core
 		{
 			get
 			{
-				return _currentConfig.DocumenterInfo;
+				if ( _currentConfig != null )
+					return _currentConfig.DocumenterInfo;
+
+				return null;
 			}
 			set
 			{
-				// add a new config for this type if not already present
-				if ( _configs.ContainsKey( value.Name ) == false )
-					_configs.Add( value.Name, value.CreateConfig( this ) );
+				_currentConfig = null;
 
-				// set the active config
-				_currentConfig = _configs[value.Name] as IDocumenterConfig;
+				if ( value != null )
+				{
+					// add a new config for this type if not already present
+					if ( _configs.ContainsKey( value.Name ) == false )
+						_configs.Add( value.Name, value.CreateConfig( this ) );
+
+					// set the active config
+					_currentConfig = _configs[value.Name] as IDocumenterConfig;
+				}
+
 				OnActiveConfigChanged();
 			}
 		}
@@ -473,7 +482,7 @@ namespace NDoc.Core
 			{
 				writer.WriteStartElement( "documenters" );
 
-				foreach ( IDocumenterConfig documenter in _configs )
+				foreach ( IDocumenterConfig documenter in _configs.Values )
 					documenter.Write(writer);
 
 				writer.WriteEndElement();
