@@ -1735,6 +1735,9 @@ namespace NDoc.Core
 
 			bool inherited = field.DeclaringType != field.ReflectedType;
 
+			if ( !IsMemberSafe( field ) )
+				writer.WriteAttributeString( "unsafe", "true" );
+
 			if (inherited)
 			{
 				writer.WriteAttributeString("declaringType", field.DeclaringType.FullName);
@@ -1876,6 +1879,35 @@ namespace NDoc.Core
 			writer.WriteEndElement();
 		}
 
+
+		private bool IsMemberSafe( FieldInfo field )
+		{
+			return !field.FieldType.IsPointer;
+		}
+
+		private bool IsMemberSafe( PropertyInfo property )
+		{
+			return !property.PropertyType.IsPointer;
+		}
+
+		private bool IsMemberSafe( MethodBase method )
+		{
+			foreach (ParameterInfo parameter in method.GetParameters())
+			{
+				if ( parameter.GetType().IsPointer )
+					return false;
+			}
+			return true;
+		}
+
+		private bool IsMemberSafe( MethodInfo method )
+		{
+			if ( method.ReturnType.IsPointer )
+				return false;
+
+			return IsMemberSafe( (MethodBase)method );
+		}
+
 		/// <summary>Writes XML documenting a constructor.</summary>
 		/// <param name="writer">XmlWriter to write on.</param>
 		/// <param name="constructor">Constructor to document.</param>
@@ -1889,6 +1921,9 @@ namespace NDoc.Core
 			writer.WriteAttributeString("id", memberName);
 			writer.WriteAttributeString("access", GetMethodAccessValue(constructor));
 			writer.WriteAttributeString("contract", GetMethodContractValue(constructor));
+			
+			if ( !IsMemberSafe( constructor ) )
+				writer.WriteAttributeString( "unsafe", "true" );
 
 			if (overload > 0)
 			{
@@ -1960,6 +1995,9 @@ namespace NDoc.Core
 				writer.WriteAttributeString("name", name);
 				writer.WriteAttributeString("id", memberName);
 				writer.WriteAttributeString("access", GetPropertyAccessValue(property));
+
+				if ( !IsMemberSafe( property ) )
+					writer.WriteAttributeString( "unsafe", "true" );
 
 				if (interfaceName != null)
 				{
@@ -2167,6 +2205,9 @@ namespace NDoc.Core
 				writer.WriteAttributeString("id", memberName);
 				writer.WriteAttributeString("access", GetMethodAccessValue(method));
 
+				if ( !IsMemberSafe( method ) )
+					writer.WriteAttributeString( "unsafe", "true" );
+
 				if (interfaceName != null)
 				{
 					writer.WriteAttributeString("interface", interfaceName);
@@ -2245,6 +2286,9 @@ namespace NDoc.Core
 			writer.WriteAttributeString("name", parameter.Name);
 			writer.WriteAttributeString("type", GetTypeName(parameter.ParameterType));
 
+			if ( parameter.ParameterType.IsPointer )
+				writer.WriteAttributeString( "unsafe", "true" );
+
 			if (parameter.IsOptional)
 			{
 				writer.WriteAttributeString("optional", "true");
@@ -2287,6 +2331,9 @@ namespace NDoc.Core
 				writer.WriteAttributeString("name", method.Name);
 				writer.WriteAttributeString("id", memberName);
 				writer.WriteAttributeString("access", GetMethodAccessValue(method));
+
+				if ( !IsMemberSafe( method ) )
+					writer.WriteAttributeString( "unsafe", "true" );
 
 				bool inherited = method.DeclaringType != method.ReflectedType;
 
