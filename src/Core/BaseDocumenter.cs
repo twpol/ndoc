@@ -935,7 +935,9 @@ namespace NDoc.Core
 			writer.WriteAttributeString("access", GetFieldAccessValue(field));
 			writer.WriteAttributeString("type", field.FieldType.FullName.Replace('+', '.'));
 
-			if (field.DeclaringType != field.ReflectedType)
+			bool inherited = field.DeclaringType != field.ReflectedType;
+
+			if (inherited)
 			{
 				writer.WriteAttributeString("declaringType", field.DeclaringType.FullName);
 			}
@@ -950,7 +952,7 @@ namespace NDoc.Core
 				writer.WriteAttributeString("initOnly", "true");
 			}
 
-			WriteFieldDocumentation(writer, memberName);
+			WriteFieldDocumentation(writer, memberName, !inherited);
 			WriteCustomAttributes(writer, field);
 
 			writer.WriteEndElement();
@@ -970,7 +972,9 @@ namespace NDoc.Core
 			writer.WriteAttributeString("contract", GetMethodContractValue(eventInfo.GetAddMethod(true)));
 			writer.WriteAttributeString("type", eventInfo.EventHandlerType.FullName.Replace('+', '.'));
 
-			if (eventInfo.DeclaringType != eventInfo.ReflectedType)
+			bool inherited = eventInfo.DeclaringType != eventInfo.ReflectedType;
+
+			if (inherited)
 			{
 				writer.WriteAttributeString("declaringType", eventInfo.DeclaringType.FullName);
 			}
@@ -980,7 +984,7 @@ namespace NDoc.Core
 				writer.WriteAttributeString("multicast", "true");
 			}
 
-			WriteEventDocumentation(writer, memberName);
+			WriteEventDocumentation(writer, memberName, !inherited);
 			WriteCustomAttributes(writer, eventInfo);
 
 			writer.WriteEndElement();
@@ -1044,10 +1048,10 @@ namespace NDoc.Core
 				writer.WriteAttributeString("overload", overload.ToString());
 			}
 
-			WritePropertyDocumentation(writer, memberName, property);
+			WritePropertyDocumentation(writer, memberName, property, !inherited);
 			WriteCustomAttributes(writer, property);
 
-			foreach(ParameterInfo parameter in GetIndexParameters(property))
+			foreach (ParameterInfo parameter in GetIndexParameters(property))
 			{
 				WriteParameter(writer, memberName, parameter);
 			}
@@ -1156,7 +1160,7 @@ namespace NDoc.Core
 
 				writer.WriteAttributeString("returnType", method.ReturnType.FullName);
 
-				WriteMethodDocumentation(writer, memberName, method);
+				WriteMethodDocumentation(writer, memberName, method, !inherited);
 				WriteCustomAttributes(writer, method);
 
 				foreach (ParameterInfo parameter in method.GetParameters())
@@ -1217,7 +1221,9 @@ namespace NDoc.Core
 				writer.WriteAttributeString("id", memberName);
 				writer.WriteAttributeString("access", GetMethodAccessValue(method));
 
-				if (method.DeclaringType != method.ReflectedType)
+				bool inherited = method.DeclaringType != method.ReflectedType;
+
+				if (inherited)
 				{
 					writer.WriteAttributeString("declaringType", method.DeclaringType.FullName);
 				}
@@ -1231,7 +1237,7 @@ namespace NDoc.Core
 
 				writer.WriteAttributeString("returnType", method.ReturnType.FullName);
 
-				WriteMethodDocumentation(writer, memberName, method);
+				WriteMethodDocumentation(writer, memberName, method, !inherited);
 
 				foreach (ParameterInfo parameter in method.GetParameters())
 				{
@@ -1717,43 +1723,67 @@ namespace NDoc.Core
 
 		private void WriteFieldDocumentation(
 			XmlWriter writer,
-			string memberName)
+			string memberName,
+			bool writeMissing)
 		{
 			WriteSlashDocElements(writer, memberName);
-			CheckForMissingSummaryAndRemarks(writer, memberName);
-			WriteEndDocumentation(writer);
+
+			if (writeMissing)
+			{
+				CheckForMissingSummaryAndRemarks(writer, memberName);
+			}
+
+ 			WriteEndDocumentation(writer);
 		}
 
 		private void WritePropertyDocumentation(
 			XmlWriter writer,
 			string memberName,
-			PropertyInfo property)
+			PropertyInfo property,
+			bool writeMissing)
 		{
 			WriteSlashDocElements(writer, memberName);
-			CheckForMissingSummaryAndRemarks(writer, memberName);
-			CheckForMissingParams(writer, memberName, GetIndexParameters(property));
-			CheckForMissingValue(writer, memberName);
+
+			if (writeMissing)
+			{
+				CheckForMissingSummaryAndRemarks(writer, memberName);
+				CheckForMissingParams(writer, memberName, GetIndexParameters(property));
+				CheckForMissingValue(writer, memberName);
+			}
+
 			WriteEndDocumentation(writer);
 		}
 
 		private void WriteMethodDocumentation(
 			XmlWriter writer,
 			string memberName,
-			MethodInfo method)
+			MethodInfo method,
+			bool writeMissing)
 		{
 			WriteSlashDocElements(writer, memberName);
-			CheckForMissingSummaryAndRemarks(writer, memberName);
-			CheckForMissingParams(writer, memberName, method.GetParameters());
-			CheckForMissingReturns(writer, memberName, method);
+
+			if (writeMissing)
+			{
+				CheckForMissingSummaryAndRemarks(writer, memberName);
+				CheckForMissingParams(writer, memberName, method.GetParameters());
+				CheckForMissingReturns(writer, memberName, method);
+			}
+
 			WriteEndDocumentation(writer);
 		}
 
 		private void WriteEventDocumentation(
 			XmlWriter writer,
-			string memberName)
+			string memberName,
+			bool writeMissing)
 		{
 			WriteSlashDocElements(writer, memberName);
-			CheckForMissingSummaryAndRemarks(writer, memberName);
+
+			if (writeMissing)
+			{
+				CheckForMissingSummaryAndRemarks(writer, memberName);
+			}
+
 			WriteEndDocumentation(writer);
 		}
 
