@@ -380,8 +380,7 @@ namespace NDoc.Documenter.Msdn
 					XslTransform xsltContents = new XslTransform();
 					MakeTransform(xsltContents, "htmlcontents.xslt");
 					xsltContents.Transform(htmlHelp.GetPathToContentsFile(), 
-						Path.Combine(MyConfig.OutputDirectory, "contents.html"), 
-						new XmlUrlResolver());
+						Path.Combine(MyConfig.OutputDirectory, "contents.html"));
 				}
 
 				if ((MyConfig.OutputTarget & OutputType.HtmlHelp) > 0)
@@ -1454,7 +1453,7 @@ namespace NDoc.Documenter.Msdn
 				arguments.AddExtensionObject("urn:NDocUtil", utilities);
 				arguments.AddExtensionObject("urn:NDocExternalHtml", htmlProvider);
 
-				transform.Transform(xmlDocumentation, arguments, streamWriter, new XmlUrlResolver());
+				transform.Transform(xmlDocumentation, arguments, streamWriter);
 			}
 			finally
 			{

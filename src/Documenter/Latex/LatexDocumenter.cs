@@ -326,7 +326,7 @@ Path.GetFullPath(Path.Combine(moduleDir, @"..\..\..\Documenter\Latex"));
 							
 			OnDocBuildingStep(20, "Building TeX file...");
 
-			transform.Transform(document, args, writer, new XmlUrlResolver());
+			transform.Transform(document, args, writer);
 
 			writer.Close();
 		}
