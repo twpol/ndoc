@@ -83,6 +83,14 @@
 				DeploymentContent="TRUE">
 			</File>
 			<File
+				RelativePath=".\Content\extensibility-sections.htm"
+				DeploymentContent="TRUE">
+			</File>
+			<File
+				RelativePath=".\Content\extensibility.htm"
+				DeploymentContent="TRUE">
+			</File>
+			<File
 				RelativePath=".\Content\gettinginvolved.htm"
 				DeploymentContent="TRUE">
 			</File>
