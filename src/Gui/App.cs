@@ -31,7 +31,9 @@ namespace NDoc.Gui
 	/// </summary>
 	public sealed class App
 	{
-		private void App() {}
+		private App() 
+		{
+		}
 
 		/// <summary>
 		/// Application entry point
@@ -42,7 +44,7 @@ namespace NDoc.Gui
 		{
 			string projectFilename = (args.Length == 1) ? args[0] : null;
 
-			Application.Run( new MainForm( projectFilename ) );
+			Application.Run(new MainForm(projectFilename));
 		}
 
 		/// <summary>
@@ -63,8 +65,8 @@ namespace NDoc.Gui
 		{
 			get
 			{
-				Uri uri = new Uri( Assembly.GetExecutingAssembly().CodeBase, true );
-				return Path.GetDirectoryName( uri.AbsolutePath );
+				Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase, true);
+				return Path.GetDirectoryName(uri.AbsolutePath);
 			}
 		}
 
@@ -76,9 +78,9 @@ namespace NDoc.Gui
 			get
 			{
 				// first try to locate license file in directory in which NDocGui is located
-				string path = Path.Combine( RuntimeLocation, "gpl.rtf" );
-				if ( File.Exists( path ) == false ) 
-					path = GetSourceTreePath( @"setup\gpl.rtf" );
+				string path = Path.Combine(RuntimeLocation, "gpl.rtf");
+				if (File.Exists(path) == false) 
+					path = GetSourceTreePath(@"setup\gpl.rtf");
 
 				return path;
 			}
@@ -91,11 +93,11 @@ namespace NDoc.Gui
 		/// </summary>
 		/// <param name="fileName">The file to build a path for</param>
 		/// <returns>Relative path to the file in the source tree</returns>
-		public static string GetSourceTreePath( string fileName )
+		public static string GetSourceTreePath(string fileName)
 		{
 			return Path.Combine(
 				RuntimeLocation, 
-				string.Format( CultureInfo.InvariantCulture, "..{0}..{0}..{0}{1}", Path.DirectorySeparatorChar, fileName ) );
+				string.Format(CultureInfo.InvariantCulture, "..{0}..{0}..{0}{1}", Path.DirectorySeparatorChar, fileName));
 		}
 
 		/// <summary>
@@ -107,9 +109,9 @@ namespace NDoc.Gui
 			{
 				// first try to locate help file in directory in which NDocGui is
 				// located
-				string path = Path.Combine( RuntimeLocation, "NDocUsersGuide.chm" );
-				if ( File.Exists( path ) == false ) 
-					path = GetSourceTreePath( @"UsersGuide\NDocUsersGuide.chm" );
+				string path = Path.Combine(RuntimeLocation, "NDocUsersGuide.chm");
+				if (File.Exists(path) == false) 
+					path = GetSourceTreePath(@"UsersGuide\NDocUsersGuide.chm");
 
 				return path;
 			}
@@ -120,39 +122,39 @@ namespace NDoc.Gui
 		/// </summary>
 		/// <param name="strBld">A StringBuilder to hold the exception details</param>
 		/// <param name="ex">The Exception</param>
-		public static void DumpException( StringBuilder strBld, Exception ex )
+		public static void DumpException(StringBuilder strBld, Exception ex)
 		{
-			if ( ex != null )
+			if (ex != null)
 			{
-				strBld.Append( "\r\n\r\n" );
+				strBld.Append("\r\n\r\n");
 				Exception tmpEx = ex;
-				while ( tmpEx != null )
+				while (tmpEx != null)
 				{
-					strBld.AppendFormat( "Exception: {0}\r\n", tmpEx.GetType() );
-					strBld.Append( tmpEx.Message );
-					strBld.Append( "\r\n\r\n" );
+					strBld.AppendFormat("Exception: {0}\r\n", tmpEx.GetType());
+					strBld.Append(tmpEx.Message);
+					strBld.Append("\r\n\r\n");
 					tmpEx = tmpEx.InnerException;
 				}
-				strBld.Append( "\r\n" );
+				strBld.Append("\r\n");
 			}
 
 			ReflectionTypeLoadException rtle = ex as ReflectionTypeLoadException;
-			if ( rtle != null )
+			if (rtle != null)
 			{
 				Hashtable fileLoadExceptions = new Hashtable();
-				foreach( Exception loaderEx in rtle.LoaderExceptions )
+				foreach (Exception loaderEx in rtle.LoaderExceptions)
 				{
 					System.IO.FileLoadException fileLoadEx = loaderEx as System.IO.FileLoadException;
-					if ( fileLoadEx != null )
+					if (fileLoadEx != null)
 					{
-						if ( fileLoadExceptions.ContainsKey( fileLoadEx.FileName ) == false )
+						if (fileLoadExceptions.ContainsKey(fileLoadEx.FileName) == false)
 						{
-							fileLoadExceptions.Add( fileLoadEx.FileName, null ) ;
-							strBld.AppendFormat( "Unable to load: {0}\r\n", fileLoadEx.FileName );
+							fileLoadExceptions.Add(fileLoadEx.FileName, null);
+							strBld.AppendFormat("Unable to load: {0}\r\n", fileLoadEx.FileName);
 						}
 					}
-					strBld.Append( loaderEx.Message + "\r\n" );
-					strBld.Append( loaderEx.StackTrace + Environment.NewLine );
+					strBld.Append(loaderEx.Message + "\r\n");
+					strBld.Append(loaderEx.StackTrace + Environment.NewLine);
 				}
 			}
 		}
@@ -165,22 +167,22 @@ namespace NDoc.Gui
 		{
 			System.Text.StringBuilder strBld = new System.Text.StringBuilder();
 
-			App.DumpException( strBld, ex );
+			App.DumpException(strBld, ex);
 
-			if ( ex != null ) 
+			if (ex != null) 
 			{
-				strBld.Append( "\r\n" );
+				strBld.Append("\r\n");
 				Exception tmpEx = ex;
-				while ( tmpEx != null )
+				while (tmpEx != null)
 				{
-					strBld.AppendFormat( "Exception: {0}\r\n", tmpEx.GetType() );
-					strBld.Append( tmpEx.StackTrace.Replace( "\r\n", "\n" ).Replace( "\r", "\n" ).Replace( "\n", "\r\n" ) );
-					strBld.Append( "\r\n\r\n" );
+					strBld.AppendFormat("Exception: {0}\r\n", tmpEx.GetType());
+					strBld.Append(tmpEx.StackTrace.Replace("\r\n", "\n").Replace("\r", "\n").Replace("\n", "\r\n"));
+					strBld.Append("\r\n\r\n");
 					tmpEx = tmpEx.InnerException;
 				}
 			}
 
-			Trace.WriteLine( strBld );
+			Trace.WriteLine(strBld);
 		}
 	}
 }
