@@ -29,6 +29,10 @@ namespace NDoc.Documenter.LinearHtml
 	public class LinearHtmlDocumenterConfig : BaseDocumenterConfig
 	{
 		/// <summary>Initializes a new instance of the MsdnHelpConfig class.</summary>
+		/// <remarks>
+		/// <para>The LinearHTML Documenter creates a single HTML file that includes
+		/// all of the types and members in your project.</para>
+		/// </remarks>
 		public LinearHtmlDocumenterConfig() : base("LinearHtml")
 		{
 			// fix for bug 884121 - OutputDirectory on Linux
@@ -49,6 +53,10 @@ namespace NDoc.Documenter.LinearHtml
 		bool _IncludeTypeMemberDetails;
 
 		/// <summary>Gets or sets the IncludeTypeMemberDetails property.</summary>
+		/// <remarks>Whether or not to put type member (methods, fields, properties, ...) details into the 
+		/// document.  For fields and properties this means whether or not to include 
+		/// remarks in the table.  For methods this means whether or not to break out 
+		/// method details (such as parameters) into separate sub-sections.</remarks>
 		[Category("LinearHtml Style Settings")]
 		[Description("Whether or not to put type member (methods, fields, properties, ...) details into the "
 			+ "document.  For fields and properties this means whether or not to include "
@@ -69,6 +77,7 @@ namespace NDoc.Documenter.LinearHtml
 		string _OutputDirectory;
 
 		/// <summary>Gets or sets the OutputDirectory property.</summary>
+		/// <remarks>The directory in which .html file will be generated.</remarks>
 		[Category("Documentation Main Settings")]
 		[Description("The directory in which .html file will be generated.")]
 #if !MONO //System.Windows.Forms.Design.FolderNameEditor is not implemented in mono 0.28
@@ -94,6 +103,8 @@ namespace NDoc.Documenter.LinearHtml
 		private bool _MethodParametersInTable;
 
 		/// <summary>Gets or sets the MethodParametersInTable property.</summary>
+		/// <remarks>Whether or not to put method parameter lists 
+		/// into the same table with the method name.</remarks>
 		[Category("LinearHtml Style Settings")]
 		[Description("Whether or not to put method parameter lists into the "
 			+ "same table with the method name.")]
@@ -112,6 +123,8 @@ namespace NDoc.Documenter.LinearHtml
 		private string _TypeIncludeRegexp;
 
 		/// <summary>Gets or sets the TypeIncludeRegexp property.</summary>
+		/// <remarks>A C# regular expression to include types.  If this is specified,
+		///  only types which match will be included in the output.</remarks>
 		[Category("Documentation Main Settings")]
 		[Description("A C# regular expression to include types.  If this is specified,"
 			+ " only types which match will be included in the output.")]
@@ -129,6 +142,7 @@ namespace NDoc.Documenter.LinearHtml
 		private string _NamespaceExcludeRegexp;
 
 		/// <summary>Gets or sets the NamespaceExcludeRegexp property.</summary>
+		/// <remarks>A C# regular expression to exclude namespaces.</remarks>
 		[Category("Documentation Main Settings")]
 		[Description("A C# regular expression to exclude namespaces.")]
 		public string NamespaceExcludeRegexp
@@ -145,6 +159,7 @@ namespace NDoc.Documenter.LinearHtml
 		private string _Title;
 
 		/// <summary>Gets or sets the Title property.</summary>
+		/// <remarks>This is the title displayed at the top of every page.</remarks>
 		[Category("Documentation Main Settings")]
 		[Description("This is the title displayed at the top of every page.")]
 		public string Title
@@ -161,6 +176,9 @@ namespace NDoc.Documenter.LinearHtml
 		private bool _IncludeHierarchy;
 
 		/// <summary>Gets or sets the IncludeHierarchy property.</summary>
+		/// <remarks>To include a class hiararchy page for each namespace. 
+		/// Don't turn it on if your project has a namespace with many types, 
+		/// as NDoc will become very slow and might crash.</remarks>
 		[Category("Documentation Main Settings")]
 		[Description("To include a class hiararchy page for each namespace. Don't turn it on if your project has a namespace with many types, as NDoc will become very slow and might crash.")]
 		public bool IncludeHierarchy
@@ -177,6 +195,8 @@ namespace NDoc.Documenter.LinearHtml
 		bool _SortTOCByNamespace;
 
 		/// <summary>Gets or sets the SortTOCByNamespace property.</summary>
+		/// <remarks>Sorts the TOC by namespace name. SplitTOCs is disabled 
+		/// when this option is selected.</remarks>
 		[Category("Documentation Main Settings")]
 		[Description("Sorts the TOC by namespace name. "
 			+ "SplitTOCs is disabled when this option is selected.")]
@@ -194,6 +214,9 @@ namespace NDoc.Documenter.LinearHtml
 		string _HeaderHtml;
 
 		/// <summary>Gets or sets the HeaderHtml property.</summary>
+		/// <remarks>Raw HTML that is used as a page header instead of the default blue banner. 
+		/// "%FILE_NAME%" is dynamically replaced by the name of the file for the current html page. 
+		/// "%TOPIC_TITLE%" is dynamically replaced by the title of the current page.</remarks>
 		[Category("Documentation Main Settings")]
 		[Description("Raw HTML that is used as a page header instead of the default blue banner. " +
 			"\"%FILE_NAME%\" is dynamically replaced by the name of the file for the current html page. " +
@@ -213,6 +236,11 @@ namespace NDoc.Documenter.LinearHtml
 		string _FooterHtml;
 
 		/// <summary>Gets or sets the FooterHtml property.</summary>
+		/// <remarks>Raw HTML that is used as a page footer instead of the default footer.
+		/// "%FILE_NAME%\" is dynamically replaced by the name of the file for the current html page. 
+		/// "%ASSEMBLY_NAME%\" is dynamically replaced by the name of the assembly for the current page. 
+		/// "%ASSEMBLY_VERSION%\" is dynamically replaced by the version of the assembly for the current page. 
+		/// "%TOPIC_TITLE%\" is dynamically replaced by the title of the current page.</remarks>
 		[Category("Documentation Main Settings")]
 		[Description("Raw HTML that is used as a page footer instead of the default footer." +
 			"\"%FILE_NAME%\" is dynamically replaced by the name of the file for the current html page. " +
@@ -234,6 +262,8 @@ namespace NDoc.Documenter.LinearHtml
 		string _FilesToInclude;
 
 		/// <summary>Gets or sets the FilesToInclude property.</summary>
+		/// <remarks>Specifies external files that must be included 
+		/// in the compiled CHM file. Multiple files must be separated by a pipe ('|').</remarks>
 		[Category("Documentation Main Settings")]
 		[Description("Specifies external files that must be included in the compiled CHM file. Multiple files must be separated by a pipe ('|').")]
 		public string FilesToInclude
