@@ -4,7 +4,7 @@
 		<!-- copy the ndoc key file to the location where the compiler expects it to be -->
 		<copy file="../../ndoc.snk" todir="${current.bin.dir}/../../../../" if="${current.build.config.release}" />
 		<!-- compile the assembly -->
-		<csc target="library" output="${current.bin.dir}/${nant.project.name}.dll" debug="${current.build.debug}" unsafe="false" checked="false" define="${current.build.defines}" doc="${current.bin.dir}/${nant.project.name}.xml">
+		<csc target="library" output="${current.bin.dir}/${nant.project.name}.dll" debug="${current.build.debug}" optimize="${current.build.optimize}" unsafe="false" checked="false" define="${current.build.defines}" doc="${current.bin.dir}/${nant.project.name}.xml">
 			<sources>
 				<includes name="**/*.cs" />
 				<includes name="../../CommonAssemblyInfo.cs" />
