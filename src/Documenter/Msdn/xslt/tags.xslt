@@ -25,6 +25,7 @@
   </doc:template>
   <xsl:template match="para" mode="slashdoc" doc:group="block" doc:msdn="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrfpara.htm">
     <p>
+      <xsl:apply-templates select="@*" mode="slashdoc" />
       <xsl:apply-templates select="./node()" mode="slashdoc" />
     </p>
   </xsl:template>
@@ -34,6 +35,7 @@
   </doc:template>
   <xsl:template match="para[@lang]" mode="slashdoc" doc:group="block">
     <p>
+      <xsl:apply-templates select="@*[not(name()='lang')]" mode="slashdoc" />
       <span class="lang">
         <xsl:text>[</xsl:text>
         <xsl:call-template name="get-lang">
@@ -49,6 +51,7 @@
   </doc:template>
   <xsl:template match="code" mode="slashdoc" doc:group="block" doc:msdn="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrfcode.htm">
     <pre class="code">
+      <xsl:apply-templates select="@*" mode="slashdoc" />
       <xsl:apply-templates mode="slashdoc" />
     </pre>
   </xsl:template>
@@ -58,6 +61,7 @@
   </doc:template>
   <xsl:template match="code[@lang]" mode="slashdoc" doc:group="block">
     <pre class="code">
+      <xsl:apply-templates select="@*[not(name()='lang')]" mode="slashdoc" />
       <span class="lang">
         <xsl:text>[</xsl:text>
         <xsl:call-template name="get-lang">
@@ -74,6 +78,7 @@
   </doc:template>
   <xsl:template match="note" mode="slashdoc" doc:group="block">
     <blockquote class="dtBlock">
+      <xsl:apply-templates select="@*[not(name()='type')]" mode="slashdoc" />
       <xsl:choose>
         <xsl:when test="@type='caution'">
           <b>CAUTION</b>
@@ -196,22 +201,51 @@
 	 | MonoDoc/ECMA Tags
 	 +-->
 	<xsl:template match="block[@type='note']" mode="slashdoc">
-		<p><b>Note: </b><xsl:apply-templates mode="slashdoc"/></p>
+		<p>
+			<xsl:apply-templates select="@*[not(name()='type')]" mode="slashdoc" />
+			<b>Note: </b>
+			<xsl:apply-templates mode="slashdoc" />
+		</p>
 	</xsl:template>
+	<!-- -->
 	<xsl:template match="block[@type='behaviors']" mode="slashdoc">
-		<p><h4 class=".dtH4">Operation</h4><xsl:apply-templates select="./node()" mode="slashdoc"/></p>
+		<p>
+			<xsl:apply-templates select="@*[not(name()='type')]" mode="slashdoc" />
+			<h4 class=".dtH4">Operation</h4>
+			<xsl:apply-templates select="./node()" mode="slashdoc" />
+		</p>
 	</xsl:template>
+	<!-- -->
 	<xsl:template match="block[@type='overrides']" mode="slashdoc">
-		<p><h4 class=".dtH4">Note to Inheritors</h4><xsl:apply-templates select="./node()" mode="slashdoc"/></p>
+		<p>
+			<xsl:apply-templates select="@*[not(name()='type')]" mode="slashdoc" />
+			<h4 class=".dtH4">Note to Inheritors</h4>
+			<xsl:apply-templates select="./node()" mode="slashdoc" />
+		</p>
 	</xsl:template>
+	<!-- -->
 	<xsl:template match="block[@type='usage']" mode="slashdoc">
-		<p><h4 class=".dtH4">Usage</h4><xsl:apply-templates select="./node()" mode="slashdoc"/></p>
+		<p>
+			<xsl:apply-templates select="@*[not(name()='type')]" mode="slashdoc" />
+			<h4 class=".dtH4">Usage</h4>
+			<xsl:apply-templates select="./node()" mode="slashdoc" />
+		</p>
 	</xsl:template>
+	<!-- -->
 	<xsl:template match="block[@type='default']" mode="slashdoc">
-		<p><h4 class=".dtH4">Default</h4><xsl:apply-templates select="./node()" mode="slashdoc"/></p>
+		<p>
+			<xsl:apply-templates select="@*[not(name()='type')]" mode="slashdoc" />
+			<h4 class=".dtH4">Default</h4>
+			<xsl:apply-templates select="./node()" mode="slashdoc" />
+		</p>
 	</xsl:template>
+	<!-- -->
 	<xsl:template match="block[@type='example']" mode="slashdoc">
-		<p><b>For example: </b><xsl:apply-templates mode="slashdoc"/></p>
+		<p>
+			<xsl:apply-templates select="@*[not(name()='type')]" mode="slashdoc" />
+			<b>For example: </b>
+			<xsl:apply-templates mode="slashdoc" />
+		</p>
 	</xsl:template>
 
   <!--
