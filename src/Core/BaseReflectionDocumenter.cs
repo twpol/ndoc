@@ -51,47 +51,54 @@ namespace NDoc.Core
 		{
 		}
 
-		/// <summary>Builds an Xml file combining the reflected metadata with the /doc comments.</summary>
-		/// <returns>full pathname of XML file</returns>
-		/// <remarks>The caller is responsible for deleting the xml file after use...</remarks>
-		protected string MakeXmlFile(Project project)
+		/// <summary>
+		/// Writes reflected metadata combined with the /doc comments to the 
+		/// specified file.
+		/// </summary>
+		/// <remarks>
+		/// This is performed in a separate <see cref="AppDomain" />.
+		/// </remarks>
+		protected void MakeXmlFile(Project project, string fileName)
 		{
-			string tempfilename = Path.GetTempFileName();
-
 			//if this.rep.UseNDocXmlFile is set, 
 			//copy it to the temp file and return.
 			string xmlFile = MyConfig.UseNDocXmlFile;
 			if (xmlFile.Length > 0)
 			{
 				Trace.WriteLine("Loading pre-compiled XML information from:\n" + xmlFile);
-				File.Copy(xmlFile,tempfilename,true);
-				return tempfilename;
+				File.Copy(xmlFile, fileName, true);
+				return;
 			}
 
-			//let's try to create this in a new AppDomain
-			AppDomain appDomain=null;
-			try
+            AppDomain appDomain = null;
+			try 
 			{
-				appDomain = AppDomain.CreateDomain("NDocReflection");
+				appDomain = AppDomain.CreateDomain("NDocReflection", 
+					AppDomain.CurrentDomain.Evidence, AppDomain.CurrentDomain.SetupInformation);
 				ReflectionEngine re = (ReflectionEngine)  
 					appDomain.CreateInstanceFromAndUnwrap(Assembly.GetExecutingAssembly().EscapedCodeBase, 
-					"NDoc.Core.ReflectionEngine");
-				ReflectionEngineParameters rep = new ReflectionEngineParameters(project, MyConfig);
-				tempfilename = re.MakeXmlFile(rep);
-				return tempfilename;
-			}
-			finally
+					typeof(ReflectionEngine).FullName);
+				ReflectionEngineParameters rep = new ReflectionEngineParameters(
+					project, MyConfig);
+				re.MakeXmlFile(rep, fileName);
+			} 
+			finally 
 			{
-				if (appDomain!=null) AppDomain.Unload(appDomain);
+				if (appDomain != null) AppDomain.Unload(appDomain);
 			}
 		}
 
-		/// <summary>Builds an Xml string combining the reflected metadata with the /doc comments.</summary>
+		/// <summary>
+		/// Returns reflected metadata combined with the /doc comments.
+		/// </summary>
 		/// <remarks>This now evidently writes the string in utf-16 format (and 
 		/// says so, correctly I suppose, in the xml text) so if you write this string to a file with 
 		/// utf-8 encoding it will be unparseable because the file will claim to be utf-16
 		/// but will actually be utf-8.</remarks>
 		/// <returns>XML string</returns>
+		/// <remarks>
+		/// This is performed in a separate <see cref="AppDomain" />.
+		/// </remarks>
 		protected string MakeXml(Project project)
 		{
 			//if MyConfig.UseNDocXmlFile is set, 
@@ -100,28 +107,29 @@ namespace NDoc.Core
 			if (xmlFile.Length > 0)
 			{
 				Trace.WriteLine("Loading pre-compiled XML information from:\n" + xmlFile);
-				using (TextReader reader = new StreamReader(xmlFile,Encoding.UTF8))
+				using (TextReader reader = new StreamReader(xmlFile, Encoding.UTF8))
 				{
 					return reader.ReadToEnd();
 				}
 			}
 
-			AppDomain appDomain=null;
-			try
+			AppDomain appDomain = null;
+
+			try 
 			{
-				appDomain = AppDomain.CreateDomain("NDocReflection");
+				appDomain = AppDomain.CreateDomain("NDocReflection", 
+					AppDomain.CurrentDomain.Evidence, AppDomain.CurrentDomain.SetupInformation);
 				ReflectionEngine re = (ReflectionEngine)  
 					appDomain.CreateInstanceFromAndUnwrap(Assembly.GetExecutingAssembly().EscapedCodeBase, 
-					"NDoc.Core.ReflectionEngine");
-				ReflectionEngineParameters rep = new ReflectionEngineParameters(project, MyConfig);
-				string tempString = re.MakeXml(rep);
-				return tempString;
-			}
-			finally
+					typeof(ReflectionEngine).FullName);
+				ReflectionEngineParameters rep = new ReflectionEngineParameters(
+					project, MyConfig);
+				return re.MakeXml(rep);
+			} 
+			finally 
 			{
-				if (appDomain!=null) AppDomain.Unload(appDomain);
+				if (appDomain != null) AppDomain.Unload(appDomain);
 			}
 		}
-
 	}
 }
