@@ -1,6 +1,6 @@
 <project>
     <assemblies>
-        <assembly location="..\src\Test\bin\Debug\NDoc.Test.dll" documentation="..\src\Test\bin\Debug\NDoc.Test.xml" />
+        <assembly location="..\bin\.net-1.1\NDoc.Test.dll" documentation="..\bin\.net-1.1\NDoc.Test.xml" />
     </assemblies>
     <namespaces>
         <namespace name="NDoc.Test"></namespace>
@@ -18,7 +18,7 @@
             <property name="RegisterTitleWithNamespace" value="False" />
             <property name="ParentCollectionNamespace" value="" />
             <property name="RegisterTitleAsCollection" value="False" />
-            <property name="OutputDirectory" value=".\doc\" />
+            <property name="OutputDirectory" value=".\Test\HtmlHelp2\" />
             <property name="HtmlHelpName" value="Documentation" />
             <property name="IncludeFavorites" value="False" />
             <property name="Title" value="An NDoc Documented Class Library" />
@@ -55,11 +55,12 @@
             <property name="ShowTypeIdInAttributes" value="False" />
             <property name="DocumentedAttributes" value="" />
             <property name="GetExternalSummaries" value="True" />
-            <property name="DocumentOnlyEditorBrowsable" value="True" />
+            <property name="EditorBrowsableFilter" value="Off" />
+            <property name="UseNDocXmlFile" value="" />
         </documenter>
         <documenter name="JavaDoc">
             <property name="Title" value="NDoc" />
-            <property name="OutputDirectory" value=".\docs\Test\JavaDoc\" />
+            <property name="OutputDirectory" value=".\Test\JavaDoc\" />
             <property name="ShowMissingSummaries" value="False" />
             <property name="ShowMissingRemarks" value="False" />
             <property name="ShowMissingParams" value="False" />
@@ -82,11 +83,43 @@
             <property name="ShowTypeIdInAttributes" value="False" />
             <property name="DocumentedAttributes" value="" />
             <property name="GetExternalSummaries" value="True" />
-            <property name="DocumentOnlyEditorBrowsable" value="True" />
+            <property name="EditorBrowsableFilter" value="Off" />
+            <property name="UseNDocXmlFile" value="" />
+        </documenter>
+        <documenter name="LaTeX">
+            <property name="OutputDirectory" value=".\Test\LaTeX" />
+            <property name="TextFileFullName" value="Documentation.tex" />
+            <property name="TexFileBaseName" value="Documentation" />
+            <property name="LatexCompiler" value="latex" />
+            <property name="TexFileFullPath" value=".\Test\LaTeX\Documentation.tex" />
+            <property name="ShowMissingSummaries" value="False" />
+            <property name="ShowMissingRemarks" value="False" />
+            <property name="ShowMissingParams" value="False" />
+            <property name="ShowMissingReturns" value="False" />
+            <property name="ShowMissingValues" value="False" />
+            <property name="DocumentInternals" value="False" />
+            <property name="DocumentProtected" value="True" />
+            <property name="DocumentPrivates" value="False" />
+            <property name="DocumentProtectedInternalAsProtected" value="False" />
+            <property name="DocumentEmptyNamespaces" value="False" />
+            <property name="IncludeAssemblyVersion" value="False" />
+            <property name="CopyrightText" value="" />
+            <property name="CopyrightHref" value="" />
+            <property name="ReferencesPath" value="" />
+            <property name="SkipNamespacesWithoutSummaries" value="False" />
+            <property name="UseNamespaceDocSummaries" value="False" />
+            <property name="AutoPropertyBackerSummaries" value="False" />
+            <property name="AutoDocumentConstructors" value="True" />
+            <property name="DocumentAttributes" value="False" />
+            <property name="ShowTypeIdInAttributes" value="False" />
+            <property name="DocumentedAttributes" value="" />
+            <property name="GetExternalSummaries" value="True" />
+            <property name="EditorBrowsableFilter" value="Off" />
+            <property name="UseNDocXmlFile" value="" />
         </documenter>
         <documenter name="LinearHtml">
             <property name="IncludeTypeMemberDetails" value="False" />
-            <property name="OutputDirectory" value=".\doc\" />
+            <property name="OutputDirectory" value=".\Test\LinearHtml\" />
             <property name="MethodParametersInTable" value="False" />
             <property name="TypeIncludeRegexp" value="" />
             <property name="NamespaceExcludeRegexp" value="" />
@@ -118,16 +151,17 @@
             <property name="ShowTypeIdInAttributes" value="False" />
             <property name="DocumentedAttributes" value="" />
             <property name="GetExternalSummaries" value="True" />
-            <property name="DocumentOnlyEditorBrowsable" value="True" />
+            <property name="EditorBrowsableFilter" value="Off" />
+            <property name="UseNDocXmlFile" value="" />
         </documenter>
         <documenter name="MSDN">
-            <property name="OutputDirectory" value=".\docs\Test\MSDN\" />
+            <property name="OutputDirectory" value=".\Test\MSDN\" />
             <property name="HtmlHelpName" value="NDoc.Test" />
             <property name="IncludeFavorites" value="False" />
             <property name="Title" value="An NDoc Documented Class Library" />
             <property name="SplitTOCs" value="False" />
             <property name="DefaulTOC" value="" />
-            <property name="IncludeHierarchy" value="False" />
+            <property name="IncludeHierarchy" value="True" />
             <property name="ShowVisualBasic" value="False" />
             <property name="RootPageContainsNamespaces" value="False" />
             <property name="SortTOCByNamespace" value="True" />
@@ -147,21 +181,22 @@
             <property name="DocumentProtectedInternalAsProtected" value="False" />
             <property name="DocumentEmptyNamespaces" value="False" />
             <property name="IncludeAssemblyVersion" value="True" />
-            <property name="CopyrightText" value="" />
+            <property name="CopyrightText" value="Copyright © 2000-2003 the NDoc Team" />
             <property name="CopyrightHref" value="" />
             <property name="ReferencesPath" value="" />
             <property name="SkipNamespacesWithoutSummaries" value="False" />
             <property name="UseNamespaceDocSummaries" value="False" />
             <property name="AutoPropertyBackerSummaries" value="False" />
             <property name="AutoDocumentConstructors" value="True" />
-            <property name="DocumentAttributes" value="False" />
+            <property name="DocumentAttributes" value="True" />
             <property name="ShowTypeIdInAttributes" value="False" />
             <property name="DocumentedAttributes" value="" />
             <property name="GetExternalSummaries" value="True" />
-            <property name="DocumentOnlyEditorBrowsable" value="True" />
+            <property name="EditorBrowsableFilter" value="HideNever" />
+            <property name="UseNDocXmlFile" value="" />
         </documenter>
         <documenter name="XML">
-            <property name="OutputFile" value=".\docs\Test\Test.xml" />
+            <property name="OutputFile" value=".\Test\Test.xml" />
             <property name="ShowMissingSummaries" value="False" />
             <property name="ShowMissingRemarks" value="False" />
             <property name="ShowMissingParams" value="False" />
@@ -184,7 +219,8 @@
             <property name="ShowTypeIdInAttributes" value="False" />
             <property name="DocumentedAttributes" value="" />
             <property name="GetExternalSummaries" value="True" />
-            <property name="DocumentOnlyEditorBrowsable" value="True" />
+            <property name="EditorBrowsableFilter" value="Off" />
+            <property name="UseNDocXmlFile" value="" />
         </documenter>
     </documenters>
 </project>
