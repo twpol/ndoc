@@ -217,16 +217,6 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "RuntimePropertyGrid.cs"
-                    SubType = "Component"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "RuntimePropertyGrid.resx"
-                    DependentUpon = "RuntimePropertyGrid.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
                     RelPath = "SolutionForm.cs"
                     SubType = "Form"
                     BuildAction = "Compile"
