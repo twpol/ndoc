@@ -34,7 +34,15 @@ namespace NDoc.Documenter.Msdn
 		bool includeFavorites;
 
 		/// <summary>Initializes a new instance of the MsdnHelpConfig class.</summary>
-		public MsdnDocumenterConfig() : base("MSDN")
+		public MsdnDocumenterConfig() : this("MSDN")
+		{
+		}
+
+		/// <summary>
+		/// Constructor used by derived classes
+		/// </summary>
+		/// <param name="name">The name of the derived class config</param>
+		protected MsdnDocumenterConfig( string name ) : base( name )
 		{
 			outputDirectory = @".\doc\";
 
@@ -55,8 +63,8 @@ namespace NDoc.Documenter.Msdn
 			_HeaderHtml = string.Empty;
 			_FooterHtml = string.Empty;
 			_FilesToInclude = string.Empty;
-		}
 
+		}
 
 		/// <summary>Gets or sets the OutputDirectory property.</summary>
 		[
