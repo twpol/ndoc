@@ -197,8 +197,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 
 				// create and intialize a HtmlFactory
 				ExternalHtmlProvider htmlProvider = new ExternalHtmlProvider( MyConfig.HeaderHtml, MyConfig.FooterHtml );
-				string DocLangCode = Enum.GetName(typeof(SdkLanguage),MyConfig.SdkDocLanguage).Replace("_","-");
-				HtmlFactory factory = new HtmlFactory( tempFileName, workspace.ContentDirectory, htmlProvider, MyConfig.SdkDocVersion, DocLangCode );
+				HtmlFactory factory = new HtmlFactory( tempFileName, workspace.ContentDirectory, htmlProvider, MyConfig);
 
 				// generate all the html content - builds the toc along the way
 				using( new TOCBuilder( toc, factory ) )
@@ -299,26 +298,13 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			// load the stylesheets
 			OnDocBuildingStep( 20, "Loading StyleSheets..." );
 
-			if ( MyConfig.ExtensibilityStylesheet.Length > 0 )
-				factory.LoadStylesheets( MyConfig.ExtensibilityStylesheet, workspace.ResourceDirectory );
-
-			else
-				factory.LoadStylesheets( workspace.ResourceDirectory );
+			factory.LoadStylesheets(MyConfig.ExtensibilityStylesheet);
 
 			OnDocBuildingStep( 30, "Generating HTML..." );
 
 			if ( MyConfig.UseHelpNamespaceMappingFile.Length != 0 )
 				factory.SetNamespaceMap( MyConfig.UseHelpNamespaceMappingFile );
 
-			// add properties to the factory - these get passed to the stylesheets
-			factory.Arguments.AddParam( "ndoc-title", "", MyConfig.Title );
-			factory.Arguments.AddParam( "ndoc-document-attributes", "", MyConfig.DocumentAttributes );
-			factory.Arguments.AddParam( "ndoc-documented-attributes", "", MyConfig.DocumentedAttributes );
-			factory.Arguments.AddParam( "ndoc-net-framework-version", "", GetNETVersionString() );
-			factory.Arguments.AddParam( "ndoc-version", "", MyConfig.Version );
-			factory.Arguments.AddParam( "ndoc-includeHierarchy", "", MyConfig.IncludeHierarchy );
-			factory.Arguments.AddParam( "ndoc-omit-syntax", "", MyConfig.OmitSyntaxSection );
-			
 
 #if DEBUG
 			int start = Environment.TickCount;
@@ -328,16 +314,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 #if DEBUG
 			Trace.WriteLine( string.Format( "It took {0} seconds to make the html", ( Environment.TickCount - start ) / 1000 ) );
 #endif
-		}
-
-		private string GetNETVersionString()
-		{
-			switch ( MyConfig.SdkDocVersion )
-			{
-				case SdkVersion.SDK_v1_1:	return "1.1";
-				case SdkVersion.SDK_v1_0:	return "1.0";
-				default:						return "";
-			}
 		}
 
 		/// <summary>
@@ -366,24 +342,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 
 		private void UnPackResources( Workspace workspace )
 		{
-#if NO_RESOURCES
-			// copy all of the xslt source files into the workspace
-			DirectoryInfo xsltSource = new DirectoryInfo( Path.GetFullPath(Path.Combine(
-				System.Windows.Forms.Application.StartupPath, @"..\..\..\Documenter\NativeHtmlHelp2\xslt") ) );
-                				
-			foreach ( FileInfo f in xsltSource.GetFiles( "*.xslt" ) )
-			{
-				string fname = Path.Combine( workspace.ResourceDirectory, f.Name );
-				f.CopyTo( fname, true );
-				File.SetAttributes( fname, FileAttributes.Normal );
-			}
-#else
-			EmbeddedResources.WriteEmbeddedResources(
-				this.GetType().Module.Assembly,
-				"NDoc.Documenter.NativeHtmlHelp2.xslt",
-				workspace.ResourceDirectory );
-#endif
-
 			EmbeddedResources.WriteEmbeddedResources(
 				this.GetType().Module.Assembly,
 				"NDoc.Documenter.NativeHtmlHelp2.includes",
