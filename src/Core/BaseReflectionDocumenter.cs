@@ -29,7 +29,7 @@ using System.Xml;
 using System.Xml.XPath;
 using System.ComponentModel;
 
-namespace NDoc.Core
+namespace NDoc.Core.Reflection
 {
 	/// <summary>The base class for documenters which use the <see cref="ReflectionEngine"/> to extract 
 	/// documentation from .Net assemblies.</summary>
@@ -65,7 +65,7 @@ namespace NDoc.Core
 			string xmlFile = MyConfig.UseNDocXmlFile;
 			if (xmlFile.Length > 0)
 			{
-				Trace.WriteLine("Loading pre-compiled XML information from:\n" + xmlFile);
+				Trace.WriteLine("Loading pre-compiled XML information from: " + xmlFile);
 				File.Copy(xmlFile, fileName, true);
 				return;
 			}
@@ -109,7 +109,7 @@ namespace NDoc.Core
 			string xmlFile = MyConfig.UseNDocXmlFile;
 			if (xmlFile.Length > 0)
 			{
-				Trace.WriteLine("Loading pre-compiled XML information from:\n" + xmlFile);
+				Trace.WriteLine("Loading pre-compiled XML information from: " + xmlFile);
 				using (TextReader reader = new StreamReader(xmlFile, Encoding.UTF8))
 				{
 					return reader.ReadToEnd();
