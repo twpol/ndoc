@@ -18,33 +18,30 @@
           </OBJECT>
       <LI><OBJECT type="text/sitemap">
             <param name="Name" value="Getting Started">
+            <param name="Local" value="Content\gettingstarted.htm">
           </OBJECT>
       <UL>
          <LI><OBJECT type="text/sitemap">
-               <param name="Name" value="** New **">
-               <param name="Local" value="Content\gettingstarted.htm">
-             </OBJECT>
-      </UL>
-      <LI><OBJECT type="text/sitemap">
-            <param name="Name" value="Decorating Your Code">
-          </OBJECT>
-      <UL>
-         <LI><OBJECT type="text/sitemap">
-               <param name="Name" value="Code Comments">
-               <param name="Local" value="Content\tags.html">
+               <param name="Name" value="Setting up Your C# Project">
+               <param name="Local" value="Content\settingupyourproject.htm">
              </OBJECT>
          <LI><OBJECT type="text/sitemap">
-               <param name="Name" value="Attributes">
-             </OBJECT>
-         <LI><OBJECT type="text/sitemap">
-               <param name="Name" value="Defining Your Own Tags">
+               <param name="Name" value="Decorating Your Code">
+               <param name="Local" value="content\decorating.htm">
              </OBJECT>
          <UL>
             <LI><OBJECT type="text/sitemap">
-                  <param name="Name" value="** New **">
-                  <param name="Local" value="Content\blank.htm">
+                  <param name="Name" value="Code Comments">
+                  <param name="Local" value="Content\tags.html">
+                </OBJECT>
+            <LI><OBJECT type="text/sitemap">
+                  <param name="Name" value="Attributes">
+                  <param name="Local" value="Content\attributes.htm">
                 </OBJECT>
          </UL>
+         <LI><OBJECT type="text/sitemap">
+               <param name="Name" value="Creating an NDoc Project">
+             </OBJECT>
       </UL>
       <LI><OBJECT type="text/sitemap">
             <param name="Name" value="Project Designer">
@@ -131,6 +128,15 @@
                   <param name="Local" value="Content\latex.htm">
                 </OBJECT>
          </UL>
+      </UL>
+      <LI><OBJECT type="text/sitemap">
+            <param name="Name" value="Defining Your Own Tags">
+          </OBJECT>
+      <UL>
+         <LI><OBJECT type="text/sitemap">
+               <param name="Name" value="** New **">
+               <param name="Local" value="Content\blank.htm">
+             </OBJECT>
       </UL>
       <LI><OBJECT type="text/sitemap">
             <param name="Name" value="Programmer's Reference">
