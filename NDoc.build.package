@@ -26,7 +26,12 @@
 
 				<includes name="bin/**" />
 				<includes name="doc/**" />
-				<!--includes name="examples/*" /-->
+				
+				<includes name="examples/*" />
+				<includes name="examples/Linked/*" />
+				<excludes name="examples/Linked/Linked.chw" />
+				<excludes name="examples/Linked/Linked.log" />
+				<excludes name="examples/Linked/Linked.chm" />
 
 				<includes name="src/**/*" />
 				<excludes name="src/Addins/**" />
