@@ -128,7 +128,7 @@
 				</a>
 			</td>
 			<td width="50%">
-				<xsl:apply-templates select="documentation/summary/node()" mode="slashdoc" />
+				<xsl:apply-templates select="(documentation/summary)[1]/node()" mode="slashdoc" />
 			</td>
 		</tr>
 	</xsl:template>
@@ -146,7 +146,7 @@
 				</a>
 			</td>
 			<td width="50%">
-				<xsl:apply-templates select="documentation/summary/node()" mode="slashdoc" />
+				<xsl:apply-templates select="(documentation/summary)[1]/node()" mode="slashdoc" />
 			</td>
 		</tr>
 	</xsl:template>
@@ -164,7 +164,7 @@
 				</a>
 			</td>
 			<td width="50%">
-				<xsl:apply-templates select="documentation/summary/node()" mode="slashdoc" />
+				<xsl:apply-templates select="(documentation/summary)[1]/node()" mode="slashdoc" />
 			</td>
 		</tr>
 	</xsl:template>
@@ -182,7 +182,7 @@
 				</a>
 			</td>
 			<td width="50%">
-				<xsl:apply-templates select="documentation/summary/node()" mode="slashdoc" />
+				<xsl:apply-templates select="(documentation/summary)[1]/node()" mode="slashdoc" />
 			</td>
 		</tr>
 	</xsl:template>
@@ -200,7 +200,7 @@
 				</a>
 			</td>
 			<td width="50%">
-				<xsl:apply-templates select="documentation/summary/node()" mode="slashdoc" />
+				<xsl:apply-templates select="(documentation/summary)[1]/node()" mode="slashdoc" />
 			</td>
 		</tr>
 	</xsl:template>
