@@ -100,7 +100,6 @@
 				</xsl:call-template>
 				<div id="content">
 					<xsl:call-template name="summary-section" />
-					<br />
 					<xsl:if test="local-name()!='delegate' and local-name()!='enumeration'">
 						<xsl:variable name="members-href">
 							<xsl:call-template name="get-filename-for-type-members">
@@ -108,7 +107,6 @@
 							</xsl:call-template>
 						</xsl:variable>
 						<p class="i1">For a list of all members of this type, see <a href="{$members-href}"><xsl:value-of select="@name" /> Members</a>.</p>
-						<br />
 					</xsl:if>
 					<xsl:if test="local-name() != 'delegate' and local-name() != 'enumeration'">
 						<p class="i1">
