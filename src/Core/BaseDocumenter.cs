@@ -303,7 +303,7 @@ namespace NDoc.Core
 					else
 					{
 						string rawXml = System.Text.Encoding.UTF8.GetString( xmlMemoryStream.ToArray() );
-						writer.WriteRaw( rawXml );
+						writer.WriteRaw( rawXml.Substring(1) );
 					}
 				}
 			}
