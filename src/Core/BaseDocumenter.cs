@@ -1339,7 +1339,7 @@ namespace NDoc.Core
 		/// <param name="type">The type to derive the member name ID from.</param>
 		private string GetTypeName(Type type)
 		{
-			return type.FullName.Replace('+', '.');
+			return type.FullName.Replace('+', '.').Replace("&", null);
 		}
 
 		/// <summary>Derives the member name ID for a type. Used to match nodes in the /doc XML.</summary>

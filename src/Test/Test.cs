@@ -1274,6 +1274,16 @@ namespace NDoc.Test
 			Foo
 		}
 	}
+
+	/// <summary>This class has a method that accepts a ref to a byte array.</summary>
+	public class RefToByteArrayTest
+	{
+		/// <summary>This method that accepts a ref to a byte array.</summary>
+		/// <param name="array">A ref to a byte array.</param>
+		public void RefToByteArray(ref byte[] array)
+		{
+		}
+	}
 }
 
 namespace NDoc.Test.InternalStuff
