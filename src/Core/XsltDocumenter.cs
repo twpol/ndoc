@@ -30,7 +30,10 @@ namespace NDoc.Core
 		/// <summary>Document me.</summary>
 		public override void View()
 		{
-			Process.Start(Path.Combine(MyConfig.OutputDirectory, GetFilenameForNamespaces()));
+			Process.Start(
+				Path.Combine(
+					MyConfig.OutputDirectory, 
+					GetFilenameForNamespaces()));
 		}
 
 		/// <summary>Document me.</summary>
@@ -126,7 +129,10 @@ namespace NDoc.Core
 			return transform;
 		}
 
-		private void Transform(string transformName, string outputPath, params object[] args)
+		private void Transform(
+			string transformName, 
+			string outputPath, 
+			params object[] args)
 		{
 			if (TransformExists(transformName))
 			{
@@ -151,7 +157,9 @@ namespace NDoc.Core
 				
 				try
 				{
-					fileStream = new FileStream(Path.Combine(MyConfig.OutputDirectory, outputPath), FileMode.Create);
+					fileStream = new FileStream(
+						Path.Combine(MyConfig.OutputDirectory, outputPath), 
+						FileMode.Create);
 					memoryStream.WriteTo(fileStream);
 				}
 				finally
@@ -170,7 +178,9 @@ namespace NDoc.Core
 				"namespaces",
 				GetFilenameForNamespaces());
 
-			XmlNodeList namespaceNodeList = Document.SelectNodes("/ndoc/assembly/module/namespace");
+			XmlNodeList namespaceNodeList = 
+				Document.SelectNodes("/ndoc/assembly/module/namespace");
+			
 			XmlNode[] namespaceNodes = SortNodes(namespaceNodeList, "name");
 			
 			string previousNamespaceName = null;
@@ -211,7 +221,10 @@ namespace NDoc.Core
 		private void TransformClasses(string namespaceName)
 		{
 			XmlNodeList nodeList = Document.SelectNodes(
-				String.Format("/ndoc/assembly/module/namespace[@name='{0}']/class", namespaceName));
+				String.Format(
+					"/ndoc/assembly/module/namespace[@name='{0}']/class", 
+					namespaceName));
+
 			XmlNode[] nodes = SortNodes(nodeList, "name");
 
 			foreach (XmlNode node in nodes)
@@ -228,6 +241,11 @@ namespace NDoc.Core
 		private string GetFileNameForClassMembers(string classID)
 		{
 			return classID.Substring(2) + "Members.html";
+		}
+
+		private string GetFileNameForConstructors(string classID)
+		{
+			return classID.Substring(2) + "Constructors.html";
 		}
 
 		private void TransformClass(string classID)
@@ -258,6 +276,21 @@ namespace NDoc.Core
 		private void TransformClassConstructors(string classID)
 		{
 			//Trace.WriteLine("class-constructors: " + classID);
+
+			XmlNodeList nodeList = Document.SelectNodes(
+				String.Format(
+					"/ndoc/assembly/module/namespace/class[@id='{0}']/constructor", 
+					classID));
+
+			XmlNode[] nodes = SortNodes(nodeList, "name");
+
+			if (nodes.Length > 1)
+			{
+				Transform(
+					"constructors", 
+					GetFileNameForConstructors(classID), 
+					"class-id", classID);
+			}
 		}
 
 		private void TransformClassFields(string classID)

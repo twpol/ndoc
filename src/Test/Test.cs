@@ -9,6 +9,18 @@ namespace NDoc.Test
 	/// inventory analysis survivabilty format.</remarks>
 	public class Class
 	{
+		/// <summary>Initializes a new instance of the Class class.</summary>
+		public Class() { }
+
+		/// <summary>Initializes a new instance of the Class class.</summary>
+		public Class(int i) { }
+		
+		/// <summary>Initializes a new instance of the Class class.</summary>
+		public Class(string s) { }
+		
+		/// <summary>Initializes a new instance of the Class class.</summary>
+		protected Class(double d) { }
+
 		/// <summary>Holds an <c>int</c> value.</summary>
 		public int Field;
 
