@@ -71,6 +71,13 @@
 		<xsl:value-of select="concat($type-part, @name, 'Overloads.html')" />
 	</xsl:template>
 	<!-- -->
+	<xsl:template name="get-filename-for-inherited-method-overloads">
+		<xsl:param name="declaring-type" />
+		<xsl:param name="method-name" />
+		<xsl:variable name="type-part" select="translate($declaring-type, '.[]', '')" />
+		<xsl:value-of select="concat($type-part, $method-name, 'Overloads.html')" />
+	</xsl:template>
+	<!-- -->
 	<xsl:template name="get-filename-for-method">
 		<xsl:param name="method" select="." />
 		<xsl:choose>

@@ -309,10 +309,9 @@
 								<td width="50%">
 									<a>
 										<xsl:attribute name="href">
-											<xsl:call-template name="get-filename-for-individual-member-overloads">
-												<xsl:with-param name="member">
-													<xsl:value-of select="'method'" />
-												</xsl:with-param>
+											<xsl:call-template name="get-filename-for-inherited-method-overloads">
+												<xsl:with-param name="declaring-type" select="@declaringType" />
+												<xsl:with-param name="method-name" select="@name" />
 											</xsl:call-template>
 										</xsl:attribute>
 										<xsl:value-of select="@name" />
@@ -327,7 +326,7 @@
 								</td>
 								<td width="50%">
 									<xsl:text>Overloaded. </xsl:text>
-									<xsl:apply-templates select="documentation/summary/node()" mode="slashdoc" />
+									<xsl:apply-templates select="//class[@id=$declaring-type-id]/method[@name=$name][1]/documentation/summary/node()" mode="slashdoc" />
 								</td>
 							</xsl:when>
 							<xsl:otherwise>
