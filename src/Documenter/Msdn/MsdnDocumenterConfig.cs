@@ -419,6 +419,7 @@ namespace NDoc.Documenter.Msdn
 		[Category("HTML Help Options")]
 		[Description("The ID of the language the help file is in.")]
 		[DefaultValue(1033)]
+		[Editor(typeof(LangIdEditor), typeof(UITypeEditor))]
 		public short LangID
 		{
 			get { return _LangID; }
