@@ -34,11 +34,26 @@
 						<xsl:with-param name="level" select="1" />
 					</xsl:call-template>
 					<xsl:if test="$ns/interface">
-						<h3 class="dtH3">Interfaces</h3>
+						<h4 class="dtH4">Interfaces</h4>
 						<xsl:apply-templates select="$ns/interface">
 							<xsl:sort select="@name" />
 						</xsl:apply-templates>
 					</xsl:if>
+					
+					
+					<h4 class="dtH4">See Also</h4>
+					<p>
+						<a>
+							<xsl:attribute name="href">
+								<xsl:call-template name="get-filename-for-namespace">
+									<xsl:with-param name="name" select="$namespace" />
+								</xsl:call-template>
+							</xsl:attribute>
+							<xsl:value-of select="$namespace" /> Namespace
+						</a>
+					</p>
+					
+					
 					<xsl:call-template name="footer-row">
 						<xsl:with-param name="type-name" select="concat($ns/@name, ' Hierarchy')" />
 					</xsl:call-template>
