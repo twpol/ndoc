@@ -160,8 +160,8 @@ namespace NDoc.Documenter.Msdn
 // Define this when you want to edit the stylesheets
 // without having to shutdown the application to rebuild.
 #if NO_RESOURCES
-				string mainModuleDirectory = Path.GetDirectoryName(Assembly.GetCallingAssembly().Location);
-				resourceDirectory = Path.GetFullPath(Path.Combine(mainModuleDirectory, @"..\..\..\Documenter\Msdn\"));
+				resourceDirectory = Path.GetFullPath(Path.Combine(
+					System.Windows.Forms.Application.StartupPath, @"..\..\..\Documenter\Msdn\"));
 #else
 				resourceDirectory = Path.Combine(Path.Combine(
 					Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),

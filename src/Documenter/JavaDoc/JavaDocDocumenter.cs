@@ -55,12 +55,12 @@ namespace NDoc.Documenter.JavaDoc
 				Directory.CreateDirectory(MyConfig.OutputDirectory);
 			}
 
-			// Define this when you want to edit the stylesheets
-			// without having to shutdown the application to rebuild.
-			#if NO_RESOURCES
-				string mainModuleDirectory = Path.GetDirectoryName(Assembly.GetCallingAssembly().Location);
-				_ResourceDirectory = Path.GetFullPath(Path.Combine(mainModuleDirectory, @"..\..\..\Documenter\JavaDoc\"));
-			#else
+// Define this when you want to edit the stylesheets
+// without having to shutdown the application to rebuild.
+#if NO_RESOURCES
+			_ResourceDirectory = Path.GetFullPath(Path.Combine(
+				System.Windows.Forms.Application.StartupPath, @"..\..\..\Documenter\JavaDoc\"));
+#else
 				_ResourceDirectory = Environment.GetFolderPath(
 					Environment.SpecialFolder.ApplicationData) +
 					"\\NDoc\\JavaDoc\\";
@@ -74,7 +74,7 @@ namespace NDoc.Documenter.JavaDoc
 					this.GetType().Module.Assembly,
 					"NDoc.Documenter.JavaDoc.xslt",
 					_ResourceDirectory + "xslt\\");
-			#endif
+#endif
 
 			string outcss = Path.Combine(MyConfig.OutputDirectory, "JavaDoc.css");
 			File.Copy(Path.Combine(_ResourceDirectory, @"css\JavaDoc.css"), outcss, true);

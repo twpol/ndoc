@@ -224,7 +224,7 @@ namespace NDoc.Core
 		{
 			ArrayList documenters = new ArrayList();
 
-			string mainModuleDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+			string mainModuleDirectory = System.Windows.Forms.Application.StartupPath;
 
 			foreach (string fileName in Directory.GetFiles(mainModuleDirectory, "NDoc.Documenter.*.dll"))
 			{

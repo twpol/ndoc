@@ -252,12 +252,12 @@ namespace NDoc.Documenter.LinearHtml
 			{
 				OnDocBuildingStep(0, "Initializing...");
 
-				// Define this when you want to edit the stylesheets
-				// without having to shutdown the application to rebuild.
-				#if NO_RESOURCES
-					string mainModuleDirectory = Path.GetDirectoryName(Assembly.GetCallingAssembly().Location);
-					resourceDirectory = Path.GetFullPath(Path.Combine(mainModuleDirectory, @"..\..\..\Documenter\Msdn\"));
-				#else
+// Define this when you want to edit the stylesheets
+// without having to shutdown the application to rebuild.
+#if NO_RESOURCES
+				resourceDirectory = Path.GetFullPath(Path.Combine(
+					System.Windows.Forms.Application.StartupPath, @"..\..\..\Documenter\Msdn\"));
+#else
 
 				resourceDirectory = Path.Combine(Path.Combine(
 					Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
@@ -266,7 +266,7 @@ namespace NDoc.Documenter.LinearHtml
 				EmbeddedResources.WriteEmbeddedResources(this.GetType().Module.Assembly,
 					"NDoc.Documenter.LinearHtml.xslt",
 					Path.Combine(resourceDirectory, "xslt"));
-				#endif
+#endif
 
 				// Create the html output directory if it doesn't exist.
 				if (!Directory.Exists(MyConfig.OutputDirectory))
