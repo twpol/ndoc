@@ -179,6 +179,14 @@ ol div.tablediv, ul div.tablediv, ol div.HxLinkTable, ul div.HxLinkTable
 	{
 	margin-top: 0em; /* Forces tables to have correct right margins and top spacing */
 	}
+table.footer
+{
+	width: 95%; /* Forces tables to have correct right margin */
+	margin-bottom: .3em;
+	border-width: 0px 0px 0px 0px;
+	border-style:none;
+	font-size: 100%; /* Text in Table is same size as text outside table */
+}
 table.dtTABLE
 	{
 	width: 100%; /* Forces tables to have correct right margin */

@@ -22,7 +22,7 @@
           </OBJECT>
       <UL>
          <LI><OBJECT type="text/sitemap">
-               <param name="Name" value="Setting up Your C# Project">
+               <param name="Name" value="Setting up Your C# Projects">
                <param name="Local" value="Content\settingupyourproject.htm">
              </OBJECT>
          <LI><OBJECT type="text/sitemap">
@@ -41,6 +41,7 @@
          </UL>
          <LI><OBJECT type="text/sitemap">
                <param name="Name" value="Creating an NDoc Project">
+               <param name="Local" value="Content\createproject.htm">
              </OBJECT>
       </UL>
       <LI><OBJECT type="text/sitemap">
@@ -63,6 +64,7 @@
       </UL>
       <LI><OBJECT type="text/sitemap">
             <param name="Name" value="Documenters">
+            <param name="Local" value="Content\documenters.htm">
           </OBJECT>
       <UL>
          <LI><OBJECT type="text/sitemap">

@@ -1,25 +1,13 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 	<head>
-		<title>What's New</title>
+		<title>Code Documentation Generator for .NET</title>
 		<meta name="GENERATOR" content="Microsoft Visual Studio .NET 7.1">
 		<meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5">
 		<link href="css/ndoc.css" rel="stylesheet" name="ndocstyle">
+		<script src="script/ndoc.js"></script>
 	</head>
-	<body id="bodyID" class="dtBODY">
-		<div id="nsbanner">
-			<div id="bannerrow1">
-				<table class="bannerparthead" cellspacing="0" id="Table1">
-					<tr id="hdr">
-						<td class="runninghead">NDoc User's Guide</td>
-						<td class="product">NDoc 1.3</td>
-					</tr>
-				</table>
-			</div>
-			<div id="TitleRow">
-				<h1 class="dtH1">Code Documentation Generator for .NET</h1>
-			</div>
-		</div>
+	<body class="dtBODY" id="bodyID" onload="InitTitle()">
 		<div id="nstext">
 			<h1 class="dtH1">About NDoc</h1>
 			NDoc generates class libraries documentation from .NET assemblies and the XML 
@@ -35,8 +23,7 @@
 				fixes, or even join us as a developer!</P>
 			<h1 class="dtH1">Before You Begin</h1>
 			<p>
-				Make sure you the <a href="gettingstarted.htm">neccessary HTML Help compilers</a>
-				and any other tools that will make developing your help titles easier.
+				Make sure you have the <a href="gettingstarted.htm">neccessary HTML Help compilers</a>.
 			</p>
 			<h1 class="dtH1">What's New for This Release</h1>
 			<P>
@@ -44,31 +31,194 @@
 			</P>
 			<ul>
 				<li>
-				A complete re-implementation of the Html Help 2 documenter. The new VS.NET 
-				Documenter creates Html Help 2 topics, with fully populated XML data islands, 
-				resulting in much better integration with the Visual Studio help system.
+					A complete re-implementation of the Html Help 2 documenter. The new VS.NET 
+					Documenter creates Html Help 2 topics, with fully populated XML data islands, 
+					resulting in much better integration with the Visual Studio help system.</li>
 				<LI>
 					Support for new code commenting tags like <STRONG><A href="tags.htm#platform">platform</A></STRONG>,
 					<STRONG><A href="tags.htm#preliminary">preliminary</A></STRONG>, and <STRONG><A href="tags.htm#threadSafety">
-							threadSafety</A></STRONG>
-				.
+							threadSafety</A></STRONG>.</LI>
 				<LI>
-					Support for the <STRONG>ObsoleteAttribute</STRONG>
-				.
+					Support for the <STRONG>ObsoleteAttribute</STRONG>.</LI>
 				<LI>
-				User interface and performance enhancements.
+					User interface and performance enhancements.</LI>
 				<LI>
 					Better constitency between NDoc generated topics and MSDN topics.</LI>
 			</ul>
-			<P>
-				<hr>
-			<P></P>
-			<P>
-				NDoc development is hosted by <a target="_blank" href="http://sourceforge.net"><img src="images/sf.gif" alt="SourceForge" align="absBottom" border="0"></a>
-			</P>
-			<P><A href="http://ndoc.sourceforge.net/" target="_blank">Visit the NDoc website for 
-					the latest versions and information</A>&nbsp;
-			</P>
+			<h1 class="dth1">Feature Requests</h1>
+			<table class="dtTABLE" cellSpacing="0" style="WIDTH: 94%" ID="Table2">
+				<thead>
+					<tr vAlign="top">
+						<th width="25%">
+							ID</th>
+						<th width="75%">
+							Description</th></tr>
+				</thead>
+				<tbody>
+					<TR>
+						<TD>
+							&nbsp;511907</TD>
+						<TD><A target="_blank" href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=511907&amp;group_id=36057&amp;atid=416081">Thread 
+								Safety support</A></TD>
+					</TR>
+					<TR>
+						<TD>
+							&nbsp;576920</TD>
+						<TD><A target="_blank" href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=576920&amp;group_id=36057&amp;atid=416081">Custom 
+								Commenting Tag</A></TD>
+					</TR>
+					<TR>
+						<TD>
+							&nbsp;618569</TD>
+						<TD><A target="_blank" href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=618569&amp;group_id=36057&amp;atid=416081">Drag'n'drop 
+								support for dll files</A></TD>
+					</TR>
+					<TR>
+						<TD>
+							&nbsp;628277</TD>
+						<TD><A target="_blank" href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=628277&amp;group_id=36057&amp;atid=416081">Show 
+								HTML Help Compiler Errors</A></TD>
+					</TR>
+					<TR>
+						<TD>
+							&nbsp;645072</TD>
+						<TD><A target="_blank" href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=645072&amp;group_id=36057&amp;atid=416081">Feedback 
+								Email URL</A></TD>
+					</TR>
+					<TR>
+						<TD>
+							&nbsp;676655</TD>
+						<TD><A target="_blank" href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=676655&amp;group_id=36057&amp;atid=416081">Create 
+								links to "non-existent" references</A></TD>
+					</TR>
+					<TR>
+						<TD>
+							&nbsp;683110</TD>
+						<TD><A target="_blank" href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=683110&amp;group_id=36057&amp;atid=416081">specifying 
+								platform support ?</A></TD>
+					</TR>
+					<TR>
+						<TD>
+							&nbsp;684450</TD>
+						<TD><A target="_blank" href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=684450&amp;group_id=36057&amp;atid=416081">Specify 
+								which icons should be used</A></TD>
+					</TR>
+					<TR>
+						<TD>
+							&nbsp;696597</TD>
+						<TD><A target="_blank" href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=696597&amp;group_id=36057&amp;atid=416081">Users 
+								Guide</A></TD>
+					</TR>
+					<TR>
+						<TD>
+							&nbsp;774621</TD>
+						<TD><A target="_blank" href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=774621&amp;group_id=36057&amp;atid=416081">Clean-up 
+								output folder</A></TD>
+					</TR>
+					<TR>
+						<TD>
+							&nbsp;779201</TD>
+						<TD><A target="_blank" href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=779201&amp;group_id=36057&amp;atid=416081">HTML 
+								Help in Separate Directory</A></TD>
+					</TR>
+					<TR>
+						<TD>
+							&nbsp;785322</TD>
+						<TD><A target="_blank" href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=785322&amp;group_id=36057&amp;atid=416081">Build 
+								on right click</A></TD>
+					</TR>
+					<TR>
+						<TD>
+							&nbsp;799315</TD>
+						<TD><A target="_blank" href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=799315&amp;group_id=36057&amp;atid=416081">NDoc 
+								Attributes</A></TD>
+					</TR>
+					<TR>
+						<TD>
+							&nbsp;835771</TD>
+						<TD><A target="_blank" href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=835771&amp;group_id=36057&amp;atid=416081">Support 
+								for binary TOC</A></TD>
+					</TR>
+					<TR>
+						<TD>
+							&nbsp;856294</TD>
+						<TD><A target="_blank" href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=856294&amp;group_id=36057&amp;atid=416081">&lt;Preliminary/&gt; 
+								tag</A></TD>
+					</TR>
+				</tbody>
+			</table>
+			<H1 class="dth1">Bug Fixes</H1>
+			<table class="dtTABLE" cellSpacing="0" style="WIDTH: 94%">
+				<thead>
+					<tr vAlign="top">
+						<th width="25%">
+							ID</th>
+						<th width="75%">
+							Description</th></tr>
+				</thead>
+				<tbody>
+					<TR>
+						<TD>
+							630329</TD>
+						<TD><A target="_blank" href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=630329&amp;group_id=36057&amp;atid=416078">Invalid 
+								links to enumeration members</A></TD>
+					</TR>
+					<TR>
+						<TD>
+							632736</TD>
+						<TD><A target="_blank" href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=632736&amp;group_id=36057&amp;atid=416078">Members 
+								not sorted on overloads page.</A></TD>
+					</TR>
+					<TR>
+						<TD>
+							633471</TD>
+						<TD><A target="_blank" href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=633471&amp;group_id=36057&amp;atid=416078">&lt;returns&gt; 
+								tag for delegates is ignored</A></TD>
+					</TR>
+					<TR>
+						<TD>
+							642513</TD>
+						<TD><A target="_blank" href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=642513&amp;group_id=36057&amp;atid=416078">Readonly 
+								RootPageFile causes Exception.</A></TD>
+					</TR>
+					<TR>
+						<TD>
+							662600</TD>
+						<TD><A target="_blank" href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=662600&amp;group_id=36057&amp;atid=416078">Inherited 
+								System fields are missing doc links</A></TD>
+					</TR>
+					<TR>
+						<TD>
+							776653</TD>
+						<TD><A target="_blank" href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=776653&amp;group_id=36057&amp;atid=416078">Summary 
+								for Public Shared functions (in VB) not generated</A></TD>
+					</TR>
+					<TR>
+						<TD>
+							801317</TD>
+						<TD><A target="_blank" href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=801317&amp;group_id=36057&amp;atid=416078">The 
+								pre-build and post build events fail</A></TD>
+					</TR>
+					<TR>
+						<TD>
+							823474</TD>
+						<TD><A target="_blank" href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=823474&amp;group_id=36057&amp;atid=416078">Multiple 
+								static explicit casts not processed correctly.</A></TD>
+					</TR>
+					<TR>
+						<TD>
+							833301</TD>
+						<TD><A target="_blank" href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=833301&amp;group_id=36057&amp;atid=416078">NDoc 
+								solution won't compile if spaces in solution path</A></TD>
+					</TR>
+					<TR>
+						<TD>
+							839384</TD>
+						<TD><A target="_blank" href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=839384&amp;group_id=36057&amp;atid=416078">ndocconsole 
+								bug</A></TD>
+					</TR>
+				</tbody>
+			</table>
 		</div>
 	</body>
 </html>

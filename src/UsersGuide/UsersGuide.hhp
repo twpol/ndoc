@@ -1,28 +1,36 @@
 
+[INFOTYPES]
+
 [OPTIONS]
+Auto Index=Yes
 Binary TOC=Yes
-Binary Index=Yes
+Compatibility=1.1 or later
 Compiled File=NDocUsersGuide.chm
 Contents File=contents.HHC
-Index File=index.HHK
 Default Window=MsdnHelp
 Default Topic=Content\Default.htm
-Default Font=
+Display compile progress=No
+Error log file=_errorlog.txt
 Full-text search=Yes
-Auto Index=Yes
+Index File=index.HHK
 Language=0x409 English (United States)
 Title=NDoc User's Guide
+Binary Index=Yes
+Default Font=
 Create CHI file=No
-Compatibility=1.1 or later
-Error log file=_errorlog.txt
 
 [WINDOWS]
 MsdnHelp="NDoc 1.3 Help","contents.hhc","index.hhk","Content\Default.htm","Content\Default.htm",,,,,0x73520,220,0x60387E,[86,51,872,558],0xB0000,,,,,,0
 
 [FILES]
+Content\images\assemblynamedialog.JPG
 Content\attributes.htm
 Content\blank.htm
+Content\images\buildbutton.JPG
+Content\images\buildprogress.JPG
+Content\images\configuration.JPG
 Content\consoleapplication.htm
+Content\createproject.htm
 Content\decorating.htm
 Content\Default.htm
 Content\documenters.htm
@@ -33,16 +41,20 @@ Content\javadoc.htm
 Content\latex.htm
 Content\linear.htm
 Content\msdn.htm
+Content\css\ndoc.css
+Content\images\newfromvsnet.JPG
 Content\projectdesigner.htm
 Content\reference.htm
+Content\images\selectdocumenter.JPG
 Content\settingupyourproject.htm
+Content\images\sf.GIF
 Content\support.htm
+Content\tags.htm
+Content\images\toolbar.JPG
 Content\vsnet.htm
 Content\xml.htm
-Content\css\ndoc.css
-Content\images\assemblynamedialog.JPG
-Content\images\sf.GIF
 Content\images\xmldocnamedialog.JPG
-Content\tags.htm
+Content\script\ndoc.js
+Content\images\logo.PNG
 
 [MERGE FILES]
