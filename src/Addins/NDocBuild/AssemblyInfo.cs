@@ -47,8 +47,5 @@ using System.Runtime.CompilerServices;
 //       documentation for more information on this.
 //
 [assembly: AssemblyDelaySign(false)]
-
-// Note: A strong name key has been generated. If you wish to use it, uncomment the following line:
-//<Assembly: AssemblyKeyFile("..\\..\\NDocBuild.snk")>
-
+[assembly: AssemblyKeyFile(@"..\..\..\ndoc.snk")]
 [assembly: AssemblyKeyName("")]
