@@ -73,7 +73,7 @@ namespace NDoc.Core
 			{
 				if (reader != null) reader.Close();
 			}
-			Debug.WriteLine("Cached doc : " + Path.GetFileName(xmlFileName) + ((Environment.TickCount - start) / 1000.0).ToString() + " sec.");
+			Debug.WriteLine("Cached doc : " + Path.GetFileName(xmlFileName) + " (" + ((Environment.TickCount - start) / 1000.0).ToString() + " sec.)");
 		}
 
 		/// <summary>
