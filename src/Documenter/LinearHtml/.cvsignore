@@ -1,5 +1,4 @@
 bin
 obj
-*.suo
-*.user
-
+LinearHtml.csproj.user
+NDoc.Documenter.LinearHtml.xml
