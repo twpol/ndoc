@@ -239,7 +239,7 @@ namespace NDoc.Documenter.Msdn
 		[Category("HTML Help Options")]
 		[Description("Turning this flag on will generate a separate table-of-contents for each assembly. "
 			+ "It cannot be set if SortTOCByNamespace is set or RootPageFileName is specified.")]
-		public bool SplitTOCs
+		private bool SplitTOCs
 		{
 			get { return _SplitTOCs; }
 
@@ -382,7 +382,7 @@ namespace NDoc.Documenter.Msdn
 		[Category("HTML Help Options")]
 		[Description("Sorts the table-of-contents by namespace name. "
 			+ "SplitTOCs is disabled when this option is selected.")]
-		public bool SortTOCByNamespace
+		private bool SortTOCByNamespace
 		{
 			get { return _SortTOCByNamespace; }
 
