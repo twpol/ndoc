@@ -1101,12 +1101,15 @@ namespace NDoc.Test
 		public void Method(int i) {}
 	}
 
+#warning The link to the method with parameters should point to that correct page.
 	/// <summary>This class wants to ref the method with no parameters
 	/// in the OverloadedWithNoParameters class.
 	/// See <see cref="OverloadedWithNoParameters.Method" />
 	/// ("OverloadedWithNoParameters.Method").
 	/// See <see cref="OverloadedWithNoParameters.Method()" />
 	/// ("OverloadedWithNoParameters.Method()").
+	/// See <see cref="OverloadedWithNoParameters.Method(int)" />
+	/// ("OverloadedWithNoParameters.Method(int)").
 	/// </summary>
 	public class CRefToOverloadWithNoParameters
 	{
