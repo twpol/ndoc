@@ -21,6 +21,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Xml;
+using System.Text;
 
 namespace NDoc.Core
 {
@@ -77,8 +78,10 @@ namespace NDoc.Core
 		}
 
 		/// <summary>Adds an assembly/doc pair to the project.</summary>
-		public void AddAssemblySlashDoc(AssemblySlashDoc assemblySlashDoc)
+		/// <returns>bool - true for doc added, false or exception otherwise</returns>
+		public bool AddAssemblySlashDoc(AssemblySlashDoc assemblySlashDoc)
 		{
+			bool ret = true; // assume success, set otherwise
 			if (FindAssemblySlashDoc(assemblySlashDoc))
 			{
 				throw new AssemblyAlreadyExistsException("Assembly already exists.");
@@ -91,12 +94,13 @@ namespace NDoc.Core
 			}
 			catch (FileNotFoundException) 
 			{
-				//ignore
+				ret = false;
 			}
 			finally
 			{
 				IsDirty = true;
 			}
+			return(ret);
 		}
 
 		private bool FindAssemblySlashDoc(AssemblySlashDoc assemblySlashDoc)
@@ -270,7 +274,10 @@ namespace NDoc.Core
 
 			XmlTextReader reader = null;
 
-			bool assembliesLoadErrorFlag = false;
+//			bool assembliesLoadErrorFlag = false;
+
+			// keep track of assemblies which fail to load
+			CouldNotLoadAllAssembliesException exc = null;
 
 			try
 			{
@@ -287,14 +294,7 @@ namespace NDoc.Core
 						switch (reader.Name)
 						{
 							case "assemblies":
-								try
-								{
-									ReadAssemblySlashDocs(reader);
-								}
-								catch (CouldNotLoadAllAssembliesException)
-								{
-									assembliesLoadErrorFlag = true;
-								}
+								ReadAssemblySlashDocs(reader);
 								break;
 							case "namespaces":
 								ReadNamespaceSummaries(reader);
@@ -313,6 +313,10 @@ namespace NDoc.Core
 					}
 				}
 			}
+			catch (CouldNotLoadAllAssembliesException e)
+			{
+				throw e;
+			}
 			catch (Exception ex)
 			{
 				throw new DocumenterException("Error reading in project file " 
@@ -328,19 +332,16 @@ namespace NDoc.Core
 				}
 			}
 
-			if (assembliesLoadErrorFlag)
-			{
-				//re-throw the exception caught earlier
-				throw new CouldNotLoadAllAssembliesException(
-					"Some assemblies could not be loaded.");
-			}
-
 			IsDirty = false;
 		}
 
 		private void ReadAssemblySlashDocs(XmlReader reader)
 		{
 			int count = 0;
+
+			// keep a list of slash-docs which we fail to load
+			ArrayList failedDocs = new ArrayList();
+
 			while (!reader.EOF && !(reader.NodeType == XmlNodeType.EndElement && reader.Name == "assemblies"))
 			{
 				if (reader.NodeType == XmlNodeType.Element && reader.Name == "assembly")
@@ -349,14 +350,19 @@ namespace NDoc.Core
 					assemblySlashDoc.AssemblyFilename = reader["location"];
 					assemblySlashDoc.SlashDocFilename = reader["documentation"];
 					count++;
-					AddAssemblySlashDoc(assemblySlashDoc);
+					if (!AddAssemblySlashDoc(assemblySlashDoc))
+					{
+						failedDocs.Add(assemblySlashDoc);
+					}
 				}
 				reader.Read();
 			}
 			if (count > AssemblySlashDocCount)
 			{
-				throw new CouldNotLoadAllAssembliesException(
-					"Some assemblies could not be loaded.");
+				StringBuilder sb = new StringBuilder("One or more assemblies could not be loaded:\n");
+				foreach(AssemblySlashDoc slashDoc in failedDocs)
+					sb.Append(slashDoc.AssemblyFilename + "\n");
+				throw new CouldNotLoadAllAssembliesException(sb.ToString());
 			}
 		}
 
