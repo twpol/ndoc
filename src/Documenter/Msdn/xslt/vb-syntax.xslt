@@ -444,20 +444,24 @@
 	<xsl:template name="vb-attributes">
 		<xsl:if test="$ndoc-document-attributes">
 			<xsl:if test="attribute">
-				<xsl:for-each select="attribute">
-					<div class="attribute">
-						<xsl:call-template name="vb-attribute">
-							<xsl:with-param name="attname" select="@name" />
-						</xsl:call-template>
-					</div>
-				</xsl:for-each>
+				<div class="attribute">
+					<xsl:text>&lt;</xsl:text>
+					<xsl:for-each select="attribute">
+							<xsl:call-template name="vb-attribute">
+								<xsl:with-param name="attname" select="@name" />
+							</xsl:call-template>
+							<xsl:if test="position()!=last()">
+								<xsl:text>, </xsl:text> 
+							</xsl:if>
+					</xsl:for-each>
+					<xsl:text>&gt;</xsl:text>
+				</div>
 			</xsl:if>
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="vb-attribute">
 		<xsl:param name="attname" />
-		<xsl:text>&lt;</xsl:text>
 		<xsl:if test="@target"><xsl:value-of select="@target" /> : </xsl:if>
 		<xsl:call-template name="strip-namespace-and-attribute">
 			<xsl:with-param name="name" select="@name" />
@@ -487,7 +491,6 @@
 			</xsl:for-each>
 			<xsl:text>)</xsl:text>
 		</xsl:if>
-		<xsl:text>&gt;</xsl:text>
 	</xsl:template>
 	<!-- -->
 </xsl:transform>
