@@ -331,10 +331,9 @@ namespace NDoc.Core
 
 		private void listView1_SelectedIndexChanged(object sender, System.EventArgs e)
 		{
-			//Debug.WriteLine("listView1_SelectedIndexChanged " + listView1.SelectedItems.Count);
 			if (listView1.SelectedItems.Count == 1)
 			{
-				propertyGrid1.SelectedObject = new RefPathPropGridProxy((ReferencePath)listView1.SelectedItems[0].Tag);
+				propertyGrid1.SelectedObject = new RefPathPropGridProxy(this);
 				if (propertyGrid1.SelectedGridItem.Expandable)
 					propertyGrid1.SelectedGridItem.Expanded = true;
 			}
@@ -374,19 +373,32 @@ namespace NDoc.Core
 
 		private class RefPathPropGridProxy
 		{
-			public RefPathPropGridProxy(ReferencePath refPath)
+			public RefPathPropGridProxy(ReferencePathCollectionEditorForm editorForm)
 			{
-				ReferencePath = refPath;
+				_editorForm = editorForm;
+				ListViewItem li = editorForm.listView1.SelectedItems[0];
+				_listViewItem = li;
+				_referencePath = (ReferencePath)li.Tag;
 			}
 
+			private ReferencePathCollectionEditorForm _editorForm;
 			private ReferencePath _referencePath;
+			private ListViewItem  _listViewItem;
 
 			[Editor(typeof(ReferencePath.UIEditor), typeof(UITypeEditor))]
 			[NDoc.Core.PropertyGridUI.FoldernameEditor.FolderDialogTitle("Select Reference Path")]
 			public ReferencePath ReferencePath 
 			{
 				get { return _referencePath; }
-				set { _referencePath = value; }
+				set 
+				{
+					_referencePath = value;
+					if(!Object.ReferenceEquals(_listViewItem.Tag,_referencePath))
+					{
+						_listViewItem.Tag=_referencePath;
+						_editorForm._refPaths[_listViewItem.Index]=_referencePath;
+					}
+				}
 			} 
 		}
 	}
