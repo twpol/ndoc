@@ -168,7 +168,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 					
 						<xsl:variable name="paramname" select="@name"/>
 						\sld
-						{\tt <xsl:value-of select="@name"/>} - <xsl:value-of select="../documentation/param[@name=@paramname]"/>
+						{\tt <xsl:value-of select="@name"/>} - <xsl:value-of select="../documentation/param[@name=$paramname]"/>
 					
 					}
 					</xsl:for-each>
