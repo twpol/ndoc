@@ -324,6 +324,7 @@ namespace NDoc.Test
 	/// <seealso cref="Handler"/>
 	/// <seealso cref="Enum"/>
 	/// <seealso href="http://slashdot.org/">Slashdot</seealso>
+	/// <seealso cref="System.Object"/>
 	public class SeeAlso
 	{
 		/// <summary>This method has lots of &lt;seealso&gt; elements.</summary>
@@ -337,6 +338,24 @@ namespace NDoc.Test
 		/// <seealso cref="Handler"/>
 		/// <seealso cref="Enum"/>
 		public void AlsoSee() { }
+
+		/// <summary>&lt;seealso cref="System.Object"/></summary>
+		/// <seealso cref="System.Object"/>
+		public void SeeSystemClass()
+		{
+		}
+
+		/// <summary>&lt;seealso cref="System.String.Length"/></summary>
+		/// <seealso cref="System.String.Length"/>
+		public void SeeSystemProperty()
+		{
+		}
+
+		/// <summary>&lt;seealso cref="System.Object.ToString"/></summary>
+		/// <seealso cref="System.Object.ToString"/>
+		public void SeeSystemMethod()
+		{
+		}
 	}
 
 	/// <summary>Represents a class containing properties.</summary>

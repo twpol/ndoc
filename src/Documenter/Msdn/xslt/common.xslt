@@ -280,6 +280,16 @@
 										<xsl:value-of select="$seethis/@name" />
 									</a>
 								</xsl:when>
+								<xsl:when test="starts-with(substring-after($cref, ':'), 'System.')">
+									<a>
+										<xsl:attribute name="href">
+											<xsl:call-template name="get-filename-for-system-cref">
+												<xsl:with-param name="cref" select="@cref" />
+											</xsl:call-template>
+										</xsl:attribute>
+										<xsl:value-of select="substring-after($cref, ':')" />
+									</a>									
+								</xsl:when>
 								<xsl:otherwise>
 									<xsl:value-of select="substring(@cref, 3)" />
 								</xsl:otherwise>
@@ -816,6 +826,22 @@
 			<xsl:when test="$name='op_LessThanOrEqual'">operator &lt;=</xsl:when>
 			<xsl:when test="$name='op_GreaterThanOrEqual'">operator >=</xsl:when>
 			<xsl:otherwise>ERROR</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	<!-- -->
+	<xsl:template name="get-namespace">
+		<xsl:param name="name" />
+		<xsl:param name="namespace" />
+		<xsl:choose>
+			<xsl:when test="contains($name, '.')">
+				<xsl:call-template name="get-namespace">
+					<xsl:with-param name="name" select="substring-after($name, '.')" />
+					<xsl:with-param name="namespace" select="concat($namespace, substring-before($name, '.'), '.')" />
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="substring($namespace, 1, string-length($namespace) - 1)" />
+			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
 	<!-- -->

@@ -90,6 +90,41 @@
 		</xsl:choose>
 	</xsl:template>
 	<!-- -->
+	<xsl:template name="get-filename-for-system-cref">
+		<xsl:param name="cref" />
+		<xsl:choose>
+			<xsl:when test="starts-with($cref, 'T:')">
+				<xsl:value-of select="concat('ms-help://MS.VSCC/MS.MSDNVS/cpref/html/frlrf', translate(substring-after($cref, ':'), '.', ''), 'ClassTopic.htm')" />
+			</xsl:when>
+			<xsl:when test="starts-with($cref, 'P:')">
+				<xsl:variable name="namespace">
+					<xsl:call-template name="get-namespace">
+						<xsl:with-param name="name" select="substring-after($cref, ':')" />
+					</xsl:call-template>
+				</xsl:variable>
+				<xsl:variable name="name">
+					<xsl:call-template name="strip-namespace">
+						<xsl:with-param name="name" select="substring-after($cref, ':')" />
+					</xsl:call-template>
+				</xsl:variable>
+				<xsl:value-of select="concat('ms-help://MS.VSCC/MS.MSDNVS/cpref/html/frlrf', translate($namespace, '.', ''), 'Class', $name, 'Topic.htm')" />
+			</xsl:when>
+			<xsl:when test="starts-with($cref, 'M:')">
+				<xsl:variable name="namespace">
+					<xsl:call-template name="get-namespace">
+						<xsl:with-param name="name" select="substring-after($cref, ':')" />
+					</xsl:call-template>
+				</xsl:variable>
+				<xsl:variable name="name">
+					<xsl:call-template name="strip-namespace">
+						<xsl:with-param name="name" select="substring-after($cref, ':')" />
+					</xsl:call-template>
+				</xsl:variable>
+				<xsl:value-of select="concat('ms-help://MS.VSCC/MS.MSDNVS/cpref/html/frlrf', translate($namespace, '.', ''), 'Class', $name, 'Topic.htm')" />
+			</xsl:when>
+		</xsl:choose>
+	</xsl:template>
+	<!-- -->
 	<xsl:template name="get-filename-for-system-property">
 		<!-- Beta 2 Example:  ms-help://MS.VSCC/MS.MSDNVS/cpref/html/frlrfSystemExceptionClassInnerExceptionTopic.htm -->
 		<xsl:value-of select="concat('ms-help://MS.VSCC/MS.MSDNVS/cpref/html/frlrf', translate(@declaringType, '.[]', ''), 'Class', @name, 'Topic.htm')" />
