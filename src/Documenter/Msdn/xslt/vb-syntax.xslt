@@ -167,7 +167,17 @@
 	<!-- -->
 	<xsl:template match="parameter" mode="vb">
 		<xsl:text>&#160;&#160;&#160;</xsl:text>
-		<xsl:text>ByVal </xsl:text>
+		<xsl:choose>
+			<xsl:when test="@isParamArray = 'true'">
+				<xsl:text>ParamArray </xsl:text>
+			</xsl:when>
+			<xsl:when test="@direction = 'ref' or @direction = 'out'">
+				<xsl:text>ByRef </xsl:text>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:text>ByVal </xsl:text>
+			</xsl:otherwise>
+		</xsl:choose>
 		<xsl:value-of select="@name" />
 		<xsl:text>&#160;As&#160;</xsl:text>
 		<a>
