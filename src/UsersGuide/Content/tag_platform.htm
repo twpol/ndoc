@@ -1,26 +1,54 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
-	<head>
-		<title>platform</title>
-		<meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5">
-		<link href="css/ndoc.css" rel="stylesheet" name="ndocstyle" type="text/css">
-		<script src="script/ndoc.js"></script>
-	</head>
-	<body class="dtBODY" id="bodyID" onload="InitTitle()">
-		<div id="nstext">
-			<pre class="syntax">&lt;platform&gt;[<EM>description</EM>]&lt;/platform&gt;</pre>
-			<p>where:</p>
-			<dl>
-				<dt><I>description</I></dt>
-				<dd>
-					Either an item in a bullet or numbered list or the definition of a <I>term</I>.</dd>
-			</dl>
-			<h4 class="dtH4">Applies To</h4>
-			<p>All Types and Members.</p>
-			<h4 class="dtH4">Remarks</h4>
-			<h4 class="dtH4">Examples</h4>
-			<h4 class="dtH4">See Also</h4>
-			<p><a HREF="tags.htm"> NDoc&nbsp;Tags</a></p>
-		</div>
-	</body>
+
+<head>
+<title>platform</title>
+<meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5">
+<link href="css/ndoc.css" rel="stylesheet" name="ndocstyle" type="text/css">
+<script src="script/ndoc.js"></script>
+</head>
+
+<body class="dtBODY" id="bodyID" onload="InitTitle()">
+
+<div id="nstext">
+	<pre class="syntax">&lt;platform&gt;[<em>description</em>]&lt;/platform&gt;</pre>
+	<p>where:</p>
+	<dl>
+		<dt><i>description</i></dt>
+		<dd>Either an item in a bullet or numbered list or the definition of a
+		<i>term</i>.</dd>
+	</dl>
+	<h4 class="dtH4">Applies To</h4>
+	<p>All Types and Members.</p>
+	<h4 class="dtH4">Remarks</h4>
+	<h4 class="dtH4">Examples</h4>
+	<pre class="code"><span class="lang">[C#]</span>
+/// &lt;platform&gt;
+///   &lt;os ndocBuiltIn=&quot;all&quot; /&gt;
+///   &lt;frameworks&gt;
+///     &lt;mono&gt;true&lt;/mono&gt;
+///     &lt;compact&gt;true&lt;/compact&gt;
+///   &lt;/frameworks&gt; 
+/// &lt;/platform&gt;
+public class ThisClassSupportsAllPlatforms
+{ 
+   /// &lt;summary&gt;
+   /// This method should display the same list of platforms as the 
+   /// containing class ( if InheritPlatformSupport is true )
+   /// &lt;/summary&gt;
+   public void ThisMethodShouldHaveTheSamePlatformAsTheClass()
+   
+   /// &lt;platform&gt;
+   ///   &lt;frameworks&gt;
+   ///     &lt;compact&gt;false&lt;/compact&gt;
+   ///   &lt;/frameworks&gt;
+   /// &lt;/platform&gt;
+   public void ThisMethodDoesNotSupportTheCF(){}
+}</pre>
+	<h4 class="dtH4">See Also</h4>
+	<p><a href="tags.htm">NDoc Tags</a></p>
+</div>
+
+</body>
+
 </html>

@@ -57,14 +57,17 @@
 					<td width="50%">
 						<b>AdditionalFrameworkList</b></td>
 					<td width="50%">User defined list of additional framework implementations to be 
-						displayed for default platform support (ignored if <b>InheritPlatformSupport</b>
+						displayed for default platform support (ignored if <b>
+					<a href="#InheritPlatformSupport">InheritPlatformSupport</a> </b>
 						is false).</td>
 				</tr>
 				<tr valign="top">
 					<td width="50%">
 						<b>AdditionalOSList<font face="Times New Roman"></font></b></td>
 					<td width="50%">User defined list of additional operating systems to be displayed 
-						for default platform support (ignored if <b>InheritPlatformSupport</b> is 
+						for default platform support (ignored if <b>
+					<a href="#InheritPlatformSupport">InheritPlatformSupport</a> </b>
+					is 
 						false).</td>
 				</tr>
 				<tr valign="top">
@@ -109,24 +112,25 @@
 					<td width="50%">
 						<b>DefaultOSSupport</b></td>
 					<td width="50%">Defines the default set of operating systems supported by classes 
-						that don't have OS support specified in their comments (ignored if <b>InheritPlatformSupport</b>
+						that don't have OS support specified in their comments (ignored if <b>
+					<a href="#InheritPlatformSupport">InheritPlatformSupport</a></b>
 						is false). The valid values are:
 						<ul type="disc">
 							<li>
-								<b>NoRestriction</b>
+								<b>all</b>
 							- The default is any operating system that supports the .NET framework. 
 							(Windows 98/98SE, Windows ME, Windows NT4, Windows XP Pro and Home, Windows 
 							Server 2003)
 							<li>
-								<b>NT5Plus</b>
+								<b>nt5plus</b>
 							- The default operating system includes any NT5 derivative (Windows 2000, 
 							Windows XP Pro and Home, Windows Server 2003)
 							<li>
-								<b>Server</b>
-							- The default operating system is a server system (Windows 2000, Windows XP 
-							Pro, Windows Server 2003)
+								<b>enterprise</b>
+							- The default is an enterprise capable operating system 
+								(Windows 2000, Windows XP Pro, Windows Server 2003)
 							<li>
-								<b>None</b> - No default operating system list is defined.</li>
+								<b>none</b> - No default operating system list is defined.</li>
 						</ul>
 					</td>
 				</tr>
@@ -224,6 +228,7 @@
 				</tr>
 				<tr valign="top">
 					<td width="50%">
+						<a name="InheritPlatformSupport"/>
 						<b>InheritPlatformSupport</b></td>
 					<td width="50%">When true, types and members that don't have specific framework 
 						support specified, will display default operating system and framework support 
@@ -231,6 +236,7 @@
 				</tr>
 				<tr valign="top">
 					<td width="50%">
+						<a name="preliminary"/>
 						<b>Preliminary</b></td>
 					<td width="50%">If true, NDoc will mark every topic as being preliminary 
 						documentation. Each topic will include a notice that the documentation is 
@@ -301,13 +307,17 @@
 					<td width="50%">
 						<b>SupportCompactFrameworkByDefault</b></td>
 					<td width="50%">If true, the .NET compact framework will be included in the default 
-						set of platforms (ignored if <b>InheritPlatformSupport</b> is false).</td>
+						set of platforms (ignored if <b>
+					<a href="#InheritPlatformSupport">InheritPlatformSupport</a> </b>
+					is false).</td>
 				</tr>
 				<tr valign="top">
 					<td width="50%">
 						<b>SupportMONOFrameworkByDefault</b></td>
 					<td width="50%">If true, the MONO open source framework will be included in the 
-						default set of platforms (ignored if <b>InheritPlatformSupport</b> is false).</td>
+						default set of platforms (ignored if <b>
+					<a href="#InheritPlatformSupport">InheritPlatformSupport</a> </b>
+					is false).</td>
 				</tr>
 				<tr valign="top">
 					<td width="50%">
