@@ -659,6 +659,40 @@ namespace NDoc.Core
 			writer.WriteEndElement();
 		}
 
+		private void WriteSpecialAttributes(XmlWriter writer, Type type)
+		{
+			if ((type.Attributes & TypeAttributes.Serializable) == TypeAttributes.Serializable)
+			{
+				writer.WriteStartElement("attribute");
+				writer.WriteAttributeString("name", "System.SerializableAttribute");
+				writer.WriteEndElement(); // attribute
+			}
+			//TODO: more special attributes here?
+		}
+
+		private void WriteSpecialAttributes(XmlWriter writer, FieldInfo field)
+		{
+			if ((field.Attributes & FieldAttributes.NotSerialized) == FieldAttributes.NotSerialized)
+			{
+				writer.WriteStartElement("attribute");
+				writer.WriteAttributeString("name", "System.NonSerializedAttribute");
+				writer.WriteEndElement(); // attribute
+			}
+			//TODO: more special attributes here?
+		}
+
+		private void WriteCustomAttributes(XmlWriter writer, Type type)
+		{
+			WriteSpecialAttributes(writer, type);
+			WriteCustomAttributes(writer, type.GetCustomAttributes(true));
+		}
+
+		private void WriteCustomAttributes(XmlWriter writer, FieldInfo field)
+		{
+			WriteSpecialAttributes(writer, field);
+			WriteCustomAttributes(writer, field.GetCustomAttributes(true));
+		}
+
 		private void WriteCustomAttributes(XmlWriter writer, MemberInfo memberInfo)
 		{
 			WriteCustomAttributes(writer, memberInfo.GetCustomAttributes(true));
