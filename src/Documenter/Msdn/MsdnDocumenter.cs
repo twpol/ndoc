@@ -252,13 +252,22 @@ namespace NDoc.Documenter.Msdn
 					// add root page if requested
 					if (rootPageFileName != null)
 					{
+						if (!File.Exists(rootPageFileName))
+						{
+							throw new DocumenterException("Cannot find the documentation's root page file:\n" 
+								+ rootPageFileName);
+						}
+
 						// add the file
 						string rootPageOutputName = Path.Combine(MyConfig.OutputDirectory, "index.html");
-						if (File.Exists(rootPageOutputName))
+						if (Path.GetFullPath(rootPageFileName) != Path.GetFullPath(rootPageOutputName))
 						{
-							File.SetAttributes(rootPageOutputName, FileAttributes.Normal);
+							if (File.Exists(rootPageOutputName))
+							{
+								File.SetAttributes(rootPageOutputName, FileAttributes.Normal);
+							}
+							File.Copy(rootPageFileName, rootPageOutputName, true);
 						}
-						File.Copy(rootPageFileName, rootPageOutputName, true);
 						htmlHelp.AddFileToProject(Path.GetFileName(rootPageOutputName));
 						htmlHelp.AddFileToContents(rootPageTOCName, 
 							Path.GetFileName(rootPageOutputName));
