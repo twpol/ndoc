@@ -98,7 +98,7 @@
 						</tr>
 					</table>
 				</td>
-				<td class="logo" rowspan="2">.NET Framework<br />Beta 2</td>
+				<td class="logo" rowspan="2">.NET Framework</td>
 			</tr>
 			<tr class="nav2">
 				<td>
