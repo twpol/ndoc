@@ -78,29 +78,17 @@ namespace NDoc.Core
 		}
 
 		/// <summary>Adds an assembly/doc pair to the project.</summary>
-		/// <returns>bool - true for doc added, false or exception otherwise</returns>
-		public bool AddAssemblySlashDoc(AssemblySlashDoc assemblySlashDoc)
+		public void AddAssemblySlashDoc(AssemblySlashDoc assemblySlashDoc)
 		{
-			bool ret = true; // assume success, set otherwise
 			if (FindAssemblySlashDoc(assemblySlashDoc))
 			{
 				throw new AssemblyAlreadyExistsException("Assembly already exists.");
 			}
 
-			try
-			{
-				AddNamespacesFromAssembly(assemblySlashDoc.AssemblyFilename);
-				_AssemblySlashDocs.Add(assemblySlashDoc);
-			}
-			catch (FileNotFoundException) 
-			{
-				ret = false;
-			}
-			finally
-			{
-				IsDirty = true;
-			}
-			return(ret);
+			IsDirty = true;
+
+			AddNamespacesFromAssembly(assemblySlashDoc.AssemblyFilename);
+			_AssemblySlashDocs.Add(assemblySlashDoc);
 		}
 
 		private bool FindAssemblySlashDoc(AssemblySlashDoc assemblySlashDoc)
@@ -281,6 +269,9 @@ namespace NDoc.Core
 			// keep track of whether or not any assemblies fail to load
 			CouldNotLoadAllAssembliesException assemblyLoadException = null;
 
+			// keep track of whether or not any errors in documenter property values
+			DocumenterPropertyFormatException documenterPropertyFormatExceptions = null;
+
 			try
 			{
 				StreamReader streamReader = new StreamReader(filename);
@@ -310,7 +301,15 @@ namespace NDoc.Core
 								ReadNamespaceSummaries(reader);
 								break;
 							case "documenters":
+								// continue even if we have errors in documenter properties
+								try
+								{
 								ReadDocumenters(reader);
+								}
+								catch (DocumenterPropertyFormatException e)
+								{
+									documenterPropertyFormatExceptions = e;
+								}
 								break;
 							default:
 								reader.Read();
@@ -343,6 +342,11 @@ namespace NDoc.Core
 				throw assemblyLoadException;
 			}
 
+			if (documenterPropertyFormatExceptions != null)
+			{
+				throw documenterPropertyFormatExceptions;
+			}
+
 			IsDirty = false;
 		}
 
@@ -352,6 +356,8 @@ namespace NDoc.Core
 
 			// keep a list of slash-docs which we fail to load
 			ArrayList failedDocs = new ArrayList();
+			// keep a list of load exceptions.
+			ArrayList loadExceptions = new ArrayList();
 
 			while (!reader.EOF && !(reader.NodeType == XmlNodeType.EndElement && reader.Name == "assemblies"))
 			{
@@ -361,18 +367,28 @@ namespace NDoc.Core
 					assemblySlashDoc.AssemblyFilename = reader["location"];
 					assemblySlashDoc.SlashDocFilename = reader["documentation"];
 					count++;
-					if (!AddAssemblySlashDoc(assemblySlashDoc))
+					try
+					{
+						AddAssemblySlashDoc(assemblySlashDoc);
+					}
+					catch(FileNotFoundException e)
 					{
 						failedDocs.Add(assemblySlashDoc);
+						loadExceptions.Add(e);
 					}
 				}
 				reader.Read();
 			}
-			if (count > AssemblySlashDocCount)
+			if (failedDocs.Count>0)
 			{
-				StringBuilder sb = new StringBuilder("One or more assemblies could not be loaded:\n");
-				foreach(AssemblySlashDoc slashDoc in failedDocs)
-					sb.Append(slashDoc.AssemblyFilename + "\n");
+				StringBuilder sb = new StringBuilder();
+				for(int i=0;i<failedDocs.Count;i++)
+				{
+					FileNotFoundException LoadException=(FileNotFoundException)loadExceptions[i];
+					sb.Append( LoadException.Message  + "\n");
+					sb.Append( LoadException.FusionLog );
+					sb.Append("\n");
+				}
 				throw new CouldNotLoadAllAssembliesException(sb.ToString());
 			}
 		}
@@ -409,6 +425,8 @@ namespace NDoc.Core
 
 		private void ReadDocumenters(XmlReader reader)
 		{
+			string FailureMessages="";
+
 			while (!reader.EOF && !(reader.NodeType == XmlNodeType.EndElement && reader.Name == "documenters"))
 			{
 				if (reader.NodeType == XmlNodeType.Element && reader.Name == "documenter")
@@ -419,11 +437,22 @@ namespace NDoc.Core
 					if (documenter != null)
 					{
 						reader.Read(); // Advance to next node.
+						try
+						{
 						documenter.Config.Read(reader);
+					}
+						catch (DocumenterPropertyFormatException e)
+						{
+							FailureMessages += name + " Documenter\n" + e.Message + "\n";
+						}
 					}
 				}
 				reader.Read();
 			}
+
+			if (FailureMessages.Length > 0)
+				throw new DocumenterPropertyFormatException(FailureMessages);
+
 		}
 
 		/// <summary>Retrieves a documenter by name.</summary>
@@ -568,6 +597,29 @@ namespace NDoc.Core
 
 		/// <summary/>
 		protected CouldNotLoadAllAssembliesException(
+			System.Runtime.Serialization.SerializationInfo info,
+			System.Runtime.Serialization.StreamingContext context
+			) : base (info, context) { }
+	}
+	/// <summary>
+	/// This exception is thrown when there were invalid values in the documenter properties.
+	/// </summary>
+	[Serializable]
+	public class DocumenterPropertyFormatException : ApplicationException
+	{ 
+		/// <summary/>
+		public DocumenterPropertyFormatException() { }
+
+		/// <summary/>
+		public DocumenterPropertyFormatException(string message)
+			: base(message) { }
+
+		/// <summary/>
+		public DocumenterPropertyFormatException(string message, Exception inner)
+			: base(message, inner) { }
+
+		/// <summary/>
+		protected DocumenterPropertyFormatException(
 			System.Runtime.Serialization.SerializationInfo info,
 			System.Runtime.Serialization.StreamingContext context
 			) : base (info, context) { }
