@@ -21,4 +21,11 @@
 		direct="http://prdownloads.sourceforge.net/ndoc/ndoc-devel-20020123.zip"
 	/>
 
+	<release
+		name="ndoc-devel-20020316"
+		date="2002-03-16"
+		link="http://sourceforge.net/project/showfiles.php?group_id=36057&amp;release_id=79945"
+		direct="http://prdownloads.sourceforge.net/ndoc/ndoc-devel-20020316.zip"
+	/>
+
 </releases>
