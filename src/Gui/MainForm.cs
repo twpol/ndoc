@@ -126,7 +126,7 @@ namespace NDoc.Gui
 		private NDoc.Gui.HeaderGroupBox documenterHeaderGroupBox;
 		private System.Windows.Forms.Label labelDocumenters;
 		private System.Windows.Forms.ComboBox comboBoxDocumenters;
-		private System.Windows.Forms.PropertyGrid propertyGrid;
+		private RuntimePropertyGrid propertyGrid;
 		private NDoc.Gui.TraceWindowControl traceWindow1;
 		private System.Windows.Forms.MenuItem menuView;
 		private System.Windows.Forms.MenuItem menuViewBuildProgress;
@@ -327,7 +327,7 @@ namespace NDoc.Gui
 			this.documenterHeaderGroupBox = new NDoc.Gui.HeaderGroupBox();
 			this.labelDocumenters = new System.Windows.Forms.Label();
 			this.comboBoxDocumenters = new System.Windows.Forms.ComboBox();
-			this.propertyGrid = new System.Windows.Forms.PropertyGrid();
+			this.propertyGrid = new RuntimePropertyGrid();
 			((System.ComponentModel.ISupportInitialize)(this.statusBarTextPanel)).BeginInit();
 			this.assembliesHeaderGroupBox.SuspendLayout();
 			this.documenterHeaderGroupBox.SuspendLayout();
