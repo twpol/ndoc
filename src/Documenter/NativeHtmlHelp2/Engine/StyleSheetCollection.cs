@@ -42,6 +42,10 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			common.Load( Path.Combine( Path.Combine( resourceDirectory, "xslt" ), "tags.xslt" ) );
 			
 			XmlElement include = common.CreateElement( "xsl", "include", "http://www.w3.org/1999/XSL/Transform" );
+
+			if ( !Path.IsPathRooted( extensibilityStylesheet ) )
+				extensibilityStylesheet = Path.GetFullPath( extensibilityStylesheet );
+
 			include.SetAttribute( "href", extensibilityStylesheet );
 
 			common.DocumentElement.PrependChild( include );

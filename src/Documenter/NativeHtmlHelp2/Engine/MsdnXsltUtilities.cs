@@ -20,7 +20,7 @@ using System;
 using System.Xml;
 using System.Xml.XPath;
 using System.Diagnostics;
-using System.Collections.Specialized;
+using System.Collections;
 
 using NDoc.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping;
 
@@ -31,7 +31,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 	/// </summary>
 	public class MsdnXsltUtilities
 	{
-		private StringCollection descriptions;
+		private Hashtable descriptions;
 
 		private NamespaceMapper nsMapper;
 
@@ -41,12 +41,17 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <param name="mapper">The namespace mapper used to look up XLink help namespace for foreign types</param>	
 		public MsdnXsltUtilities( NamespaceMapper mapper )
 		{
-			descriptions = new StringCollection();	
-
+			ResetDescriptions();
 			nsMapper = mapper;
 		}
 
-
+		/// <summary>
+		/// Resets the descriptions collections
+		/// </summary>
+		public void ResetDescriptions()
+		{
+			descriptions = new Hashtable();	
+		}
 #if MONO
 		/// <summary>
 		/// Returns an HRef for a CRef.
@@ -534,7 +539,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			if ( descriptions.Contains( description ) )
 				return true;
 
-			descriptions.Add( description );
+			descriptions.Add( description, description );
 			return false;
 		}
 

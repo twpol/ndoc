@@ -59,6 +59,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// </summary>
 		public readonly XsltArgumentList Arguments;
 
+		private MsdnXsltUtilities _utilities;
 		/// <summary>
 		/// Constructs a new instance of HtmlFactory
 		/// </summary>
@@ -77,9 +78,10 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		
 			nsMapper = new NamespaceMapper( Path.Combine( Directory.GetParent( _outputDirectory ).ToString(), "NamespaceMap.xml" ) );
 			_htmlProvider = htmlProvider;
+			_utilities = new MsdnXsltUtilities( this.nsMapper );
 
 			this.Arguments = new XsltArgumentList();
-			this.Arguments.AddExtensionObject( "urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities", new MsdnXsltUtilities( this.nsMapper ) );
+			this.Arguments.AddExtensionObject( "urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities", _utilities );
 			this.Arguments.AddExtensionObject( "urn:NDocExternalHtml", _htmlProvider );
 
 			if ( sdkVersion == SdkDocVersion.SDK_v1_0 )
@@ -218,6 +220,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			int start = Environment.TickCount;
 #endif
 			_htmlProvider.SetFilename( fileName );
+			_utilities.ResetDescriptions();
 
 			using ( StreamWriter streamWriter = new StreamWriter(
 				File.Open( Path.Combine( _outputDirectory, fileName ), FileMode.CreateNew, FileAccess.Write, FileShare.None ), encoding ) )

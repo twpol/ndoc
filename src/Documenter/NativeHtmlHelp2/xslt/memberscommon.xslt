@@ -195,7 +195,7 @@
 					<xsl:with-param name="member" select="$member" />
 				</xsl:call-template>
 			</h4>
-			<div class="tablediv">
+			<div class="tablediv">				
 				<table class="dtTABLE" cellspacing="0">
 					<xsl:apply-templates select="*[local-name()=$member and @access='Public' and not(@contract='Static')]">
 						<xsl:sort select="@name" />
@@ -558,7 +558,7 @@
 			</tr>
 		</xsl:if>
 	</xsl:template>	
-<!--	<xsl:template match="field[not(@declaringType)]|property[not(@declaringType)]|event[not(@declaringType)]|method[not(@declaringType)]|operator"> -->
+	<!--<xsl:template match="field[not(@declaringType)]|property[not(@declaringType)]|event[not(@declaringType)]|method[not(@declaringType)]|operator">-->
 	<xsl:template match="field | property | event | method | operator">
 		<xsl:variable name="member" select="local-name()" />
 		<xsl:variable name="name" select="@name" />
