@@ -574,8 +574,24 @@ by a type, but you cannot define your own.</xsl:when>
 			<xsl:when test="$lang = 'JScript'">:<xsl:text>&#160;</xsl:text></xsl:when>
 		</xsl:choose>
 	</xsl:template>
+
+
+	<xsl:template match="@* | node() | text()" mode="cast-type"/>
+	<xsl:template match="operator[@name='op_Implicit']" mode="cast-type">
+		<xsl:param name="lang"/>
+		<xsl:choose>
+			<xsl:when test="$lang='C#'">implicit&#160;</xsl:when>
+		</xsl:choose>
+	</xsl:template>	
 	
-	
+	<xsl:template match="operator[@name='opExplicit']" mode="cast-type">
+		<xsl:param name="lang"/>
+		<xsl:choose>
+			<xsl:when test="$lang='C#'">explicit&#160;</xsl:when>
+		</xsl:choose>
+	</xsl:template>	
+		
+		
 	<xsl:template match="@* | node() | text()" mode="method-open"/>
 	<xsl:template match="method" mode="method-open">
 		<xsl:param name="lang"/>

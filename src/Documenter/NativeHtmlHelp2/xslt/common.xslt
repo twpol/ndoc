@@ -530,7 +530,7 @@
 				<xsl:apply-templates select="." mode="MSHelpTitle">
 					<xsl:with-param name="title" select="$title"/>
 					<xsl:with-param name="page-type" select="$page-type"/>						
-					<xsl:with-param name="overload-page" select="$overload-page"/>
+					<!--xsl:with-param name="overload-page" select="$overload-page"/-->
 				</xsl:apply-templates>
 				
 				<xsl:choose>
@@ -753,7 +753,7 @@
 			<xsl:when test="$name='op_GreaterThan'">operator ></xsl:when>
 			<xsl:when test="$name='op_LessThanOrEqual'">operator &lt;=</xsl:when>
 			<xsl:when test="$name='op_GreaterThanOrEqual'">operator >=</xsl:when>
-			<xsl:otherwise>ERROR</xsl:otherwise>
+			<xsl:otherwise>operator </xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
 	<!-- -->

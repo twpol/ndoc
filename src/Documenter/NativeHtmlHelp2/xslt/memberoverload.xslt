@@ -26,13 +26,15 @@
 			<xsl:choose>
 				<xsl:when test="local-name()='method'">Method</xsl:when>
 				<xsl:when test="local-name()='constructor'">Constructor</xsl:when>
-				<xsl:when test="local-name()='operator'">
+				<xsl:when test="local-name()='operator'">Operator</xsl:when>
+				<!--
 			    <xsl:call-template name="operator-name">
 				    <xsl:with-param name="name">
 				      <xsl:value-of select="@name" />
 				    </xsl:with-param>
 			    </xsl:call-template>
 				</xsl:when>
+				-->
 				<xsl:otherwise>Property</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
@@ -41,7 +43,7 @@
 			<xsl:call-template name="html-head">
 				<xsl:with-param name="title">
 					<xsl:choose>
-						<xsl:when test="local-name()='constructor' or local-name()='operator'">
+						<xsl:when test="local-name()='constructor'">
 							<xsl:value-of select="../@name" />
 						</xsl:when>
 						<xsl:otherwise>
@@ -125,8 +127,7 @@
 		</html>
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="constructor | method | operator | property" mode="syntax">
-	
+	<xsl:template match="constructor | method | property" mode="syntax">
 		<xsl:apply-templates select="." mode="cs-inline-syntax">
 			<xsl:with-param name="lang" select="'Visual Basic'"/>
 		</xsl:apply-templates>
@@ -144,6 +145,14 @@
 		</xsl:apply-templates>		
 	</xsl:template>
 	
-
+	<xsl:template match="operator" mode="syntax">
+		<xsl:apply-templates select="." mode="cs-inline-syntax">
+			<xsl:with-param name="lang" select="'C#'"/>
+		</xsl:apply-templates>
+		<br/>
+		<xsl:apply-templates select="." mode="cs-inline-syntax">
+			<xsl:with-param name="lang" select="'C++'"/>
+		</xsl:apply-templates>					
+	</xsl:template>
 	<!-- -->
 </xsl:stylesheet>

@@ -23,7 +23,8 @@
 		<xsl:variable name="childType">
 			<xsl:choose>
 				<xsl:when test="local-name()='method'">Method</xsl:when>
-				<xsl:when test="local-name()='operator'">
+				<xsl:when test="local-name()='operator'">Operator</xsl:when>
+				<!--
 					<xsl:call-template name="operator-name">
 						<xsl:with-param name="name">
 						<xsl:value-of select="@name" />
@@ -36,6 +37,7 @@
 						</xsl:with-param>
 					</xsl:call-template>
 				</xsl:when>
+				-->
 				<xsl:when test="@contract='Static'">Static Constructor</xsl:when>
 				<xsl:otherwise>Constructor</xsl:otherwise>
 			</xsl:choose>
@@ -47,16 +49,14 @@
 					<xsl:if test="local-name()='constructor'">
 						<xsl:value-of select="../@name" />
 					</xsl:if>
-					<xsl:if test="local-name()='method'">
+					<xsl:if test="local-name()='method' or local-name()='operator'">
 						<xsl:value-of select="@name" />
 					</xsl:if>
 					<xsl:text>&#32;</xsl:text>
 					<xsl:value-of select="$childType" />
-					<xsl:if test="local-name()!='operator'">
-					  <xsl:if test="count(parent::node()/*[@name=$memberName]) &gt; 1">
-						  <xsl:text>&#32;</xsl:text>
-						  <xsl:call-template name="get-param-list" />
-					  </xsl:if>
+					<xsl:if test="count(parent::node()/*[@name=$memberName]) &gt; 1">
+						<xsl:text>&#32;</xsl:text>
+						<xsl:call-template name="get-param-list" />
 					</xsl:if>
 				</xsl:with-param>
 				<xsl:with-param name="page-type" select="$childType"/>					

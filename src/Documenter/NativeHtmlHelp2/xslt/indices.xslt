@@ -30,7 +30,7 @@
 		<MSHelp:RLTitle Title="{$title}"/>	
 	</xsl:template>
 	
-	<xsl:template match="field | property | method | event" mode="MSHelpTitle">
+	<xsl:template match="field | property | method | event | operator" mode="MSHelpTitle">
 		<xsl:param name="title" />
 		<MSHelp:TOCTitle Title="{$title}"/>
 		<MSHelp:RLTitle Title="{concat( parent::node()/@name, '.', $title )}"/>	
@@ -49,14 +49,14 @@
 		</xsl:choose>
 		<MSHelp:RLTitle Title="{$title}"/>
 	</xsl:template>
-		
+<!--		
 	<xsl:template match="operator" mode="MSHelpTitle">
 		<xsl:param name="title" />
 		<xsl:param name="page-type"/>	
 		<MSHelp:TOCTitle Title="{$page-type}"/>	
 		<MSHelp:RLTitle Title="{$title}"/>
 	</xsl:template>
-		
+-->		
 		
 	<xsl:template match="ndoc" mode="AIndex">
 		<xsl:call-template name="add-a-index">
