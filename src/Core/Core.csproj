@@ -102,7 +102,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AssemblyResolver.cs"
+                    RelPath = "AssemblyLoader.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -233,6 +233,16 @@
                 />
                 <File
                     RelPath = "XsltResourceResolver.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ReflectionEngine\ReflectionEngine.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ReflectionEngine\ReflectionEngineParameters.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

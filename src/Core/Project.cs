@@ -37,7 +37,6 @@ namespace NDoc.Core
 		}
 
 		private bool _IsDirty;
-		private SortedList _namespaces;
 		private string _projectFile;
 
 		/// <summary>
@@ -77,12 +76,6 @@ namespace NDoc.Core
 
 		private ArrayList _AssemblySlashDocs = new ArrayList();
 
-		//		/// <summary>Gets or sets the AssemblySlashDocs property.</summary>
-		//		private ArrayList AssemblySlashDocs
-		//		{
-		//			get { return _AssemblySlashDocs; }
-		//		}
-
 		/// <summary>
 		/// A custom exception to detect if a duplicate assembly is beeing added.
 		/// </summary>
@@ -105,15 +98,6 @@ namespace NDoc.Core
 			IsDirty = true;
 
 			_AssemblySlashDocs.Add(assemblySlashDoc);
-
-			//add any new namespaces if namespace already created...
-			if (_namespaces!=null)
-			{
-				AssemblyResolver assemblyResolver = SetupAssemblyResolver();
-				AddNamespacesFromAssembly(GetFullPath(assemblySlashDoc.AssemblyFilename));
-				assemblyResolver.Deinstall();
-			}
-
 		}
 
 		private bool FindAssemblySlashDoc(AssemblySlashDoc assemblySlashDoc)
@@ -179,12 +163,25 @@ namespace NDoc.Core
 		/// A rooted path.
 		/// </returns>
 		public string GetFullPath(string path) {
-			if (!Path.IsPathRooted(path)) {
+
+			if (path!=null && path.Length>0)
+			{
+				if (!Path.IsPathRooted(path)) 
+				{
 				path = Path.GetFullPath(Path.Combine(BaseDirectory, path));
+			}
 			}
 
 			return path;
 		}
+
+		private SortedList _namespaces;
+
+		public SortedList Namespaces 
+		{
+			get { return _namespaces; }
+			set { _namespaces = value; }
+		} 
 
 		/// <summary>Sets a namespace summary.</summary>
 		public void SetNamespaceSummary(string namespaceName, string summary)
@@ -228,9 +225,6 @@ namespace NDoc.Core
 		{
 			get 
 			{
-				if (_namespaces==null)
-					GetNamespacesFromAssemblies();
-				
 				if (_namespaces!=null)
 				{
 					return _namespaces.Count;
@@ -242,30 +236,30 @@ namespace NDoc.Core
 			}
 		}
 
-		// enumerates the namespaces from an assembly 
-		// and add them to the project if new
-		private void AddNamespacesFromAssembly(string assemblyFile)
-		{
-			Assembly a = BaseDocumenter.LoadAssembly(assemblyFile);
-			if (_namespaces==null) _namespaces = new SortedList();
-
-			foreach (Type t in a.GetTypes())
-			{
-				string ns = t.Namespace;
-				{
-					if (ns == null)
-					{
-						if ((!_namespaces.ContainsKey("(global)")))
-							_namespaces.Add("(global)",null);
-					}
-					else
-					{
-						if ((!_namespaces.ContainsKey(ns)))
-							_namespaces.Add(ns, null);
-					}
-				}
-			}
-		}
+//		// enumerates the namespaces from an assembly 
+//		// and add them to the project if new
+//		private void AddNamespacesFromAssembly(AssemblyLoader assemblyLoader,string assemblyFile)
+//		{
+//			Assembly a = assemblyLoader.LoadAssembly(assemblyFile);
+//			if (_namespaces==null) _namespaces = new SortedList();
+//
+//			foreach (Type t in a.GetTypes())
+//			{
+//				string ns = t.Namespace;
+//				{
+//					if (ns == null)
+//					{
+//						if ((!_namespaces.ContainsKey("(global)")))
+//							_namespaces.Add("(global)",null);
+//					}
+//					else
+//					{
+//						if ((!_namespaces.ContainsKey(ns)))
+//							_namespaces.Add(ns, null);
+//					}
+//				}
+//			}
+//		}
 
 		private ArrayList _Documenters;
 
@@ -545,25 +539,6 @@ namespace NDoc.Core
 			}
 		}
 
-		private void GetNamespacesFromAssemblies()
-		{
-			AssemblyResolver assemblyResolver=null;
-
-			if (_AssemblySlashDocs.Count > 0)
-			{
-				assemblyResolver = SetupAssemblyResolver();
-
-				foreach (AssemblySlashDoc assemblySlashDoc in _AssemblySlashDocs)
-				{
-					AddNamespacesFromAssembly(GetFullPath(assemblySlashDoc.AssemblyFilename));
-				}
-			}
-
-			if (assemblyResolver != null)
-			{
-				assemblyResolver.Deinstall();
-			}
-		}
 
 		/// <summary>
 		/// Loads namespace summaries from an XML document.
@@ -799,54 +774,6 @@ namespace NDoc.Core
 
 		/// <summary>Raised by projects when they're dirty state changes from false to true.</summary>
 		public event ProjectModifiedEventHandler Modified;
-
-		/// <summary>
-		/// Setup AssemblyResolver for case where system doesn't resolve
-		/// an assembly automatically.
-		/// This puts in the directories in ReferencesPath, and the directories
-		/// to each assembly referenced in the project.
-		/// </summary>
-		/// <remarks>
-		/// <para>The case which forced this to be so thorough is when an assembly 
-		/// references an unmanaged (native) dll.  When the assembly is loaded,
-		/// the system must also find the unmanaged dll.  The rules for
-		/// finding the unmanaged dll are apparently just like any other application:
-		/// current working directory, the path environment variable, etc. </para>
-		/// <para>So in order to handle that case, we have to install an
-		/// AssemblyResolver that catches the resolution failure, and uses
-		/// an assembly load function that cd's to the directory which hopefully
-		/// contains the unmanaged dll (see LoadAssembly()).  So in this
-		/// case I'm assuming that the directory containing the referencing
-		/// assembly also contains the unmanaged dll.</para>
-		/// </remarks>
-		protected AssemblyResolver SetupAssemblyResolver()
-		{
-			ArrayList assemblyResolveDirs = new ArrayList();
-
-			// add references path
-			foreach(string dir in GetReferencePaths())
-			{
-				if (!assemblyResolveDirs.Contains(dir))
-					assemblyResolveDirs.Add(dir);
-			}
-
-			// put dirs containing assemblies in also
-			foreach(AssemblySlashDoc assemblySlashDoc in GetAssemblySlashDocs())
-			{
-				string dir = Path.GetDirectoryName(Path.GetFullPath(
-					assemblySlashDoc.AssemblyFilename));
-				if (!assemblyResolveDirs.Contains(dir)) assemblyResolveDirs.Add(dir);
-			}
-			AssemblyResolver assemblyResolver = new AssemblyResolver(assemblyResolveDirs);
-
-			// For performance, don't have resolver search all subdirs.  Also, it's not
-			// clear that's a reasonable behavior.
-			assemblyResolver.IncludeSubdirs = false; 
-			assemblyResolver.Install();
-
-			return(assemblyResolver);
-		}
-
 
 	}
 
