@@ -134,7 +134,9 @@ namespace NDoc.Core
 					
 					if (node.Name == "code")
 					{
-						FixupCodeTag(node);
+						// 09/17/04 GERT: comment this out, until this has been 
+						// discussed with Kevin
+						//FixupCodeTag(node);
 					}
 					else
 					{
