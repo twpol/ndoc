@@ -102,6 +102,11 @@
                     Project = "{ED78444A-4734-41F7-8688-4BA9994BEBF5}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
+                <Reference
+                    Name = "Latex"
+                    Project = "{2929DFA6-FFCF-4110-B8B5-3005A087B58A}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
             </References>
         </Build>
         <Files>

@@ -21,6 +21,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NDocBuild", "Addins\NDocBui
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NDocGen", "NDocGen\NDocGen.csproj", "{E425AB4F-B068-4508-A0E3-20CE8C577F14}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Latex", "Documenter\Latex\Latex.csproj", "{2929DFA6-FFCF-4110-B8B5-3005A087B58A}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "NDocBuildSetup", "Addins\NDocBuild\NDocBuildSetup\NDocBuildSetup.vdproj", "{F8B0C8D6-1EE4-4A79-AE7A-EB19154A523D}"
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		ConfigName.0 = Debug
@@ -69,6 +73,14 @@ Global
 		{E425AB4F-B068-4508-A0E3-20CE8C577F14}.Debug.Build.0 = Debug|.NET
 		{E425AB4F-B068-4508-A0E3-20CE8C577F14}.Release.ActiveCfg = Release|.NET
 		{E425AB4F-B068-4508-A0E3-20CE8C577F14}.Release.Build.0 = Release|.NET
+		{2929DFA6-FFCF-4110-B8B5-3005A087B58A}.Debug.ActiveCfg = Debug|.NET
+		{2929DFA6-FFCF-4110-B8B5-3005A087B58A}.Debug.Build.0 = Debug|.NET
+		{2929DFA6-FFCF-4110-B8B5-3005A087B58A}.Release.ActiveCfg = Release|.NET
+		{2929DFA6-FFCF-4110-B8B5-3005A087B58A}.Release.Build.0 = Release|.NET
+		{F8B0C8D6-1EE4-4A79-AE7A-EB19154A523D}.Debug.ActiveCfg = Debug
+		{F8B0C8D6-1EE4-4A79-AE7A-EB19154A523D}.Debug.Build.0 = Debug
+		{F8B0C8D6-1EE4-4A79-AE7A-EB19154A523D}.Release.ActiveCfg = Release
+		{F8B0C8D6-1EE4-4A79-AE7A-EB19154A523D}.Release.Build.0 = Release
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
