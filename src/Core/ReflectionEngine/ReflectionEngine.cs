@@ -773,7 +773,7 @@ namespace NDoc.Core
 							WriteEndDocumentation(writer);
 						}
 
-						WriteNamespaceTypeHierarchy(writer, namespaceName);
+						WriteNamespaceTypeHierarchy(writer, ourNamespaceName);
 						
 						int classCount = WriteClasses(writer, types, namespaceName);
 						Trace.WriteLine(string.Format("Wrote {0} classes.", classCount));
