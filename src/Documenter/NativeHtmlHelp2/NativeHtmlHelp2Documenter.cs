@@ -457,7 +457,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		{
 			try
 			{
-				Trace.WriteLine( "Compiling Html Help 2 file" );
 #if DEBUG
 				int start = Environment.TickCount;
 #endif				
