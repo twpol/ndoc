@@ -385,7 +385,7 @@ namespace NDoc.Core
 
 		/// <summary>Gets or sets the DocumentProtected property.</summary>
 		/// <remarks>If this is true, protected members will be included in the
-		/// documentation. Since protected members of non-sealed types can be
+		/// documentation. Since protected members of non-internal types can be
 		/// accessed outside of an assembly, this is true by default.</remarks>
 		[Category("Visibility")]
 		[Description("Turn this flag on to document protected code.")]
