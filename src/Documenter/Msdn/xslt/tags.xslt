@@ -5,6 +5,9 @@
 	xmlns:NUtil="urn:NDocUtil"
 	exclude-result-prefixes="doc NUtil"
 >
+	<!-- NDoc resolves this custom url to a user-supplied extensibility stylesheet -->
+	<xsl:include href="user:extensibility" />
+
   <!--
 	 | Identity Template
 	 +-->
