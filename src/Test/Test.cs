@@ -32,6 +32,9 @@ namespace NDoc.Test
 		/// <summary>Holds an <c>int</c> value.</summary>
 		public int Field;
 
+		/// <summary>Holds an read-only<c>int</c> value.</summary>
+		public readonly int ReadOnlyField = 12;
+
 		/// <summary>Holds a static <c>int</c> value.</summary>
 		public static int StaticField;
 
