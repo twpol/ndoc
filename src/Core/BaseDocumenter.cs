@@ -509,16 +509,9 @@ namespace NDoc.Core
 
 		private void WriteCustomAttributes(XmlWriter writer, object[] attributes)
 		{
-			if (attributes.Length > 0)
+			foreach (Attribute attribute in attributes)
 			{
-				writer.WriteStartElement("attributes");
-
-				foreach (Attribute attribute in attributes)
-				{
-					WriteCustomAttribute(writer, attribute);
-				}
-
-				writer.WriteEndElement(); // attributes
+				WriteCustomAttribute(writer, attribute);
 			}
 		}
 
@@ -535,6 +528,7 @@ namespace NDoc.Core
 			{
 				writer.WriteStartElement("field");
 				writer.WriteAttributeString("name", field.Name);
+				writer.WriteAttributeString("type", field.FieldType.FullName);
 				object value = field.GetValue(attribute);
 				writer.WriteAttributeString("value", value != null ? value.ToString() : "");
 				writer.WriteEndElement(); // field
@@ -544,6 +538,7 @@ namespace NDoc.Core
 			{
 				writer.WriteStartElement("property");
 				writer.WriteAttributeString("name", property.Name);
+				writer.WriteAttributeString("type", property.PropertyType.FullName);
 				object value = property.GetValue(attribute, null);
 				writer.WriteAttributeString("value", value != null ? value.ToString() : "");
 				writer.WriteEndElement(); // property
