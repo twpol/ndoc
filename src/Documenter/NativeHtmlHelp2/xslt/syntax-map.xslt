@@ -429,10 +429,7 @@
 			<I>returnValue</I>
 			<B> = </B>
 			<I><xsl:value-of select="../@name"/>Object</I><B>.Item( </B>
-				<xsl:call-template name="js-indexer-params">
-					<xsl:with-param name="lang" select="'JScript'"/>
-					<xsl:with-param name="namespace-name" select="../../@name" />
-				</xsl:call-template>
+				<xsl:call-template name="js-indexer-params"/>
 			<B> );</B>
 		</xsl:if>
 		<xsl:if test="@set='true'">
@@ -440,19 +437,13 @@
 				<xsl:text>&#10;</xsl:text>		
 			</xsl:if>
 			<I><xsl:value-of select="../@name"/>Object</I><B>.Item( </B>
-				<xsl:call-template name="js-indexer-params">
-					<xsl:with-param name="lang" select="'JScript'"/>
-					<xsl:with-param name="namespace-name" select="../../@name" />
-				</xsl:call-template>
+				<xsl:call-template name="js-indexer-params"/>
 			<B> ) = newValue;</B>
 		</xsl:if>
 		<xsl:text>&#10;</xsl:text><B>-or-</B><xsl:text>&#10;</xsl:text>
 		<xsl:if test="@get='true'">
 			<I>returnValue</I><B> = </B><I><xsl:value-of select="../@name"/>Object</I><B>( </B>
-				<xsl:call-template name="js-indexer-params">
-					<xsl:with-param name="lang" select="'JScript'"/>
-					<xsl:with-param name="namespace-name" select="../../@name" />
-					</xsl:call-template>
+				<xsl:call-template name="js-indexer-params"/>
 			<B> );</B>
 		</xsl:if>
 		<xsl:if test="@set='true'">
@@ -460,10 +451,7 @@
 				<xsl:text>&#10;</xsl:text>		
 			</xsl:if>
 			<I><xsl:value-of select="../@name"/>Object</I><B>( </B>
-				<xsl:call-template name="js-indexer-params">
-					<xsl:with-param name="lang" select="'JScript'"/>
-					<xsl:with-param name="namespace-name" select="../../@name" />
-				</xsl:call-template>
+				<xsl:call-template name="js-indexer-params"/>
 			<B> ) = newValue;</B>
 		</xsl:if>
 	</xsl:template>
