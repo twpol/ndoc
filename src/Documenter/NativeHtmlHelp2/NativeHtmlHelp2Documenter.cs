@@ -316,30 +316,6 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 #endif
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="writer"></param>
-		protected override void AddDocumenterSpecificXmlData(XmlWriter writer)
-		{
-			// add the default docset for this help title
-			AddDocSet( writer, MyConfig.HtmlHelpName );
-
-			// also add the items from the custom docset list
-			foreach ( string s in MyConfig.DocSetList.Split( new char [] { ',' } ) )
-				AddDocSet( writer, s );
-		}
-
-		private void AddDocSet(XmlWriter writer, string id )
-		{
-			if ( id.Length > 0 )
-			{
-				writer.WriteStartElement( "docSet" );
-				writer.WriteString(id.Trim());
-				writer.WriteEndElement();
-			}
-		}
-
 		private void UnPackResources( Workspace workspace )
 		{
 			EmbeddedResources.WriteEmbeddedResources(
