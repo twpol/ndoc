@@ -23,6 +23,8 @@ using System.IO;
 using System.Windows.Forms.Design;
 
 using NDoc.Core;
+using NDoc.Core.Reflection;
+using NDoc.Core.PropertyGridUI;
 
 namespace NDoc.Documenter.Msdn
 {
@@ -33,7 +35,6 @@ namespace NDoc.Documenter.Msdn
 	[DefaultProperty("OutputDirectory")]
 	public class MsdnDocumenterConfig : BaseReflectionDocumenterConfig
 	{
-		string outputDirectory;
 		string htmlHelpName;
 		bool includeFavorites;
 
@@ -46,11 +47,8 @@ namespace NDoc.Documenter.Msdn
 		/// Constructor used by derived classes
 		/// </summary>
 		/// <param name="name">The name of the derived class config</param>
-		protected MsdnDocumenterConfig( string name ) : base( name )
+		protected MsdnDocumenterConfig(string name) : base(name)
 		{
-			// fix for bug 884121 - OutputDirectory on Linux
-			outputDirectory = string.Format(".{0}doc{0}",Path.DirectorySeparatorChar );
-
 			htmlHelpName = "Documentation";
 
 			_Title = "An NDoc Documented Class Library";
@@ -69,34 +67,38 @@ namespace NDoc.Documenter.Msdn
 		}
 
 		#region Main Settings
+		string _outputDirectory = string.Format( ".{0}doc{0}", Path.DirectorySeparatorChar );
+		
 		/// <summary>Gets or sets the OutputDirectory property.</summary>
-		/// <remarks>The directory in which .html files and the .chm file will be generated.</remarks>
+		/// <remarks>The directory in which .html files and the .chm files will be generated.</remarks>
 		[Category("Documentation Main Settings")]
-		[Description("The directory in which .html files and the .chm file will be generated.")]
+		[Description("The directory in which .html files and the .chm files will be generated.")]
 		[Editor(typeof(FolderNameEditor), typeof(UITypeEditor))]
 		public string OutputDirectory
 		{
-			get { return outputDirectory; }
+			get { return _outputDirectory; }
 
 			set
 			{
 				if ( value.IndexOfAny(new char[]{'#','?', ';'}) != -1) 
 				{
 					throw new FormatException("Output Directory '" + value + 
-						"' is not valid because it contains '#','?', or ';' which" +
+						"' is not valid because it contains '#','?' or ';' which" +
 						" are reserved characters in HTML URLs."); 
 				}
 
-				outputDirectory = value;
+				_outputDirectory = value;
 
-				if (!outputDirectory.EndsWith( Path.DirectorySeparatorChar.ToString() ))
+				if (!_outputDirectory.EndsWith( Path.DirectorySeparatorChar.ToString() ))
 				{
-					outputDirectory += Path.DirectorySeparatorChar;
+					_outputDirectory += Path.DirectorySeparatorChar;
 				}
 
 				SetDirty();
 			}
 		}
+		void ResetOutputDirectory() { _outputDirectory = string.Format( ".{0}doc{0}", Path.DirectorySeparatorChar ); }
+
 
 		/// <summary>Gets or sets the HtmlHelpName property.</summary>
 		/// <remarks>The HTML Help project file and the compiled HTML Help file
@@ -115,7 +117,7 @@ namespace NDoc.Documenter.Msdn
 				}
 				else
 				{
-					htmlHelpName = value; 
+					htmlHelpName = value;
 				}
 
 				SetDirty();
@@ -134,7 +136,7 @@ namespace NDoc.Documenter.Msdn
 
 			set 
 			{ 
-				_Title = value; 
+				_Title = value;
 				SetDirty();
 			}
 		}
@@ -153,7 +155,7 @@ namespace NDoc.Documenter.Msdn
 
 			set 
 			{ 
-				_ShowVisualBasic = value; 
+				_ShowVisualBasic = value;
 				SetDirty();
 			}
 		}
@@ -165,14 +167,14 @@ namespace NDoc.Documenter.Msdn
 		[Category("Documentation Main Settings")]
 		[Description("Sets the output type to HTML Help (.chm) or Web or both.")]
 		[DefaultValue(OutputType.HtmlHelpAndWeb)]
-		[System.ComponentModel.TypeConverter(typeof(NDoc.Core.EnumDescriptionConverter))]
+		[System.ComponentModel.TypeConverter(typeof(EnumDescriptionConverter))]
 		public OutputType OutputTarget
 		{
 			get { return _OutputTarget; }
 
 			set 
 			{ 
-				_OutputTarget = value; 
+				_OutputTarget = value;
 				SetDirty();
 			}
 		}
@@ -209,7 +211,7 @@ namespace NDoc.Documenter.Msdn
 
 			set 
 			{ 
-				includeFavorites = value; 
+				includeFavorites = value;
 				SetDirty();
 			}
 		}
@@ -310,8 +312,8 @@ namespace NDoc.Documenter.Msdn
 		/// "%FILE_NAME%\" is dynamically replaced by the name of the file for the current html page. 
 		/// "%TOPIC_TITLE%\" is dynamically replaced by the title of the current page.</remarks>
 		[Category("HTML Help Options")]
-		[Description("Raw HTML that is used as a page header instead of the default blue banner. " +
-			 "\"%FILE_NAME%\" is dynamically replaced by the name of the file for the current html page. " +
+		[Description("Raw HTML that is used as a page header instead of the default blue banner. " + 
+			 "\"%FILE_NAME%\" is dynamically replaced by the name of the file for the current html page. " + 
 			 "\"%TOPIC_TITLE%\" is dynamically replaced by the title of the current page.")]
 		[DefaultValue("")]
 		[Editor(typeof(TextEditor), typeof(UITypeEditor))]
@@ -335,10 +337,10 @@ namespace NDoc.Documenter.Msdn
 		/// "%ASSEMBLY_VERSION%\" is dynamically replaced by the version of the assembly for the current page. 
 		/// "%TOPIC_TITLE%\" is dynamically replaced by the title of the current page.</remarks>
 		[Category("HTML Help Options")]
-		[Description("Raw HTML that is used as a page footer instead of the default footer." +
-			 "\"%FILE_NAME%\" is dynamically replaced by the name of the file for the current html page. " +
-			 "\"%ASSEMBLY_NAME%\" is dynamically replaced by the name of the assembly for the current page. " +
-			 "\"%ASSEMBLY_VERSION%\" is dynamically replaced by the version of the assembly for the current page. " +
+		[Description("Raw HTML that is used as a page footer instead of the default footer." + 
+			 "\"%FILE_NAME%\" is dynamically replaced by the name of the file for the current html page. " + 
+			 "\"%ASSEMBLY_NAME%\" is dynamically replaced by the name of the assembly for the current page. " + 
+			 "\"%ASSEMBLY_VERSION%\" is dynamically replaced by the version of the assembly for the current page. " + 
 			 "\"%TOPIC_TITLE%\" is dynamically replaced by the title of the current page.")]
 		[DefaultValue("")]
 		[Editor(typeof(TextEditor), typeof(UITypeEditor))]
@@ -372,45 +374,52 @@ namespace NDoc.Documenter.Msdn
 			}
 		}
 
-		string _AdditionalContentResourceDirectory = string.Empty;
+		FolderPath _AdditionalContentResourceDirectory = new FolderPath();
 
 		/// <summary>Gets or sets the AdditionalContentResourceDirectory property</summary>
 		/// <remarks>Directory that contains resources (images etc.) used by the additional content pages. 
 		/// This directory will be recursively compiled into the help file.</remarks>
 		[Category("HTML Help Options")]
 		[Description("Directory that contains resources (images etc.) used by the additional content pages. This directory will be recursively compiled into the help file.")]
-		[DefaultValue("")]
-		[Editor(typeof(FolderNameEditor), typeof(UITypeEditor))]
-		public string AdditionalContentResourceDirectory
+		[NDoc.Core.PropertyGridUI.FoldernameEditor.FolderDialogTitle("Select AdditionalContentResourceDirectory")]
+		public FolderPath AdditionalContentResourceDirectory
 		{
 			get { return _AdditionalContentResourceDirectory; }
 
 			set
 			{
-				_AdditionalContentResourceDirectory = value;
-				SetDirty();
+				if (_AdditionalContentResourceDirectory.Path != value.Path)
+				{
+					_AdditionalContentResourceDirectory = value;
+					SetDirty();
+				}
 			}
 		}	
+		void ResetAdditionalContentResourceDirectory() { _AdditionalContentResourceDirectory = new FolderPath(); }
 
-		string _ExtensibilityStylesheet = string.Empty;
 
-		/// <summary>Path to an xslt stylesheet that contains templates for documenting extensibility tags</summary>
-		/// <remarks>Path to an xslt stylesheet that contains templates for documenting extensibility tags. 
-		/// </remarks>
+		FilePath _ExtensibilityStylesheet = new FilePath();
+
+		/// <summary>Gets or sets the ExtensibilityStylesheet property</summary>
+		/// <remarks>Path to an xslt stylesheet that contains templates for documenting extensibility tags.</remarks>
 		[Category("Extensibility")]
 		[Description("Path to an xslt stylesheet that contains templates for documenting extensibility tags. Refer to the NDoc user's guide for more details on extending NDoc.")]
-		[DefaultValue("")]
-		[Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
-		public string ExtensibilityStylesheet
+		[NDoc.Core.PropertyGridUI.FilenameEditor.FileDialogFilter
+			 ("Select Extensibility Stylesheet", "Stylesheet files (*.xslt)|*.xslt|All files (*.*)|*.*")]
+		public FilePath ExtensibilityStylesheet
 		{
 			get { return _ExtensibilityStylesheet; }
 
 			set
 			{
-				_ExtensibilityStylesheet = value;
-				SetDirty();
+				if (_ExtensibilityStylesheet.Path != value.Path)
+				{
+					_ExtensibilityStylesheet = value;
+					SetDirty();
+				}
 			}
-		}
+		}	
+		void ResetExtensibilityStylesheet() { _ExtensibilityStylesheet = new FilePath(); }
 	
 		short _LangID = 1033;
 
@@ -439,28 +448,32 @@ namespace NDoc.Documenter.Msdn
 		/// <returns></returns>
 		protected override string HandleUnknownPropertyType(string name, string value)
 		{
-			string FailureMessages="";
+			string FailureMessages = "";
 			//SdkDocVersion has been split into two separate options
 			// - value "MsdnOnline" replaced by "SDK_v1_1" and setting option SdkLinksOnWeb to true
 			//note: case insensitive comparison
-			if (String.Compare(name,"LinkToSdkDocVersion",true) == 0) 
+			if (String.Compare(name, "LinkToSdkDocVersion", true) == 0) 
 			{
-				if (String.Compare(value,"MsdnOnline",true) == 0)
+				if (String.Compare(value, "MsdnOnline", true) == 0)
 				{
 					Trace.WriteLine("WARNING: " + base.Name + " Configuration - value 'MsdnOnline' of property 'LinkSdkDocVersion' is OBSOLETE. Please use new option 'SdkLinksOnWeb'\n");
+					Project.SuspendDirtyCheck=false;
 					FailureMessages += base.ReadProperty("SdkDocVersion", "SDK_v1_1");
 					FailureMessages += base.ReadProperty("SdkLinksOnWeb", "True");
+					Project.SuspendDirtyCheck=true;
 				}
 				else
 				{
 					Trace.WriteLine("WARNING: " + base.Name + " Configuration - property 'LinkToSdkDocVersion' is OBSOLETE. Please use new property 'SdkDocVersion'\n");
+					Project.SuspendDirtyCheck=false;
 					FailureMessages += base.ReadProperty("SdkDocVersion", value);
+					Project.SuspendDirtyCheck=true;
 				}
 			}
 			else
 			{
 				// if we don't know how to handle this, let the base class have a go
-				FailureMessages = base.HandleUnknownPropertyType (name, value);
+				FailureMessages = base.HandleUnknownPropertyType(name, value);
 			}
 			return FailureMessages;
 		}
@@ -474,11 +487,11 @@ namespace NDoc.Documenter.Msdn
 	{
 		/// <summary>Output only an HTML Help file (.chm).</summary>
 		[Description("HTML Help")]
-		HtmlHelp = 1,
+		HtmlHelp = 1, 
 
 		/// <summary>Output only Web pages.</summary>
 		[Description("Web")]
-		Web = 2,
+		Web = 2, 
 
 		/// <summary>Output both HTML Help and Web.</summary>
 		[Description("HTML Help and Web")]

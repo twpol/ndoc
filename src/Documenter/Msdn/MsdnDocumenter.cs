@@ -29,6 +29,7 @@ using System.Xml.Xsl;
 using System.Globalization;
 
 using NDoc.Core;
+using NDoc.Core.Reflection;
 
 namespace NDoc.Documenter.Msdn
 {
@@ -122,11 +123,13 @@ namespace NDoc.Documenter.Msdn
 				return result;
 			}
 
-			if ( MyConfig.AdditionalContentResourceDirectory.Length != 0 && !Directory.Exists( MyConfig.AdditionalContentResourceDirectory ) )
-				return string.Format( "The Additional Content Resource Directory {0} could not be found", MyConfig.AdditionalContentResourceDirectory );
+			string AdditionalContentResourceDirectory = MyConfig.AdditionalContentResourceDirectory;
+			if ( AdditionalContentResourceDirectory.Length != 0 && !Directory.Exists( AdditionalContentResourceDirectory ) )
+				return string.Format( "The Additional Content Resource Directory {0} could not be found", AdditionalContentResourceDirectory );
 
-			if ( MyConfig.ExtensibilityStylesheet.Length != 0 && !File.Exists( MyConfig.ExtensibilityStylesheet ) )
-				return string.Format( "The Extensibility Stylesheet file {0} could not be found", MyConfig.ExtensibilityStylesheet );
+			string ExtensibilityStylesheet = MyConfig.ExtensibilityStylesheet;
+			if ( ExtensibilityStylesheet.Length != 0 && !File.Exists( ExtensibilityStylesheet ) )
+				return string.Format( "The Extensibility Stylesheet file {0} could not be found", ExtensibilityStylesheet );
 
 			if (checkInputOnly) 
 			{
@@ -191,7 +194,7 @@ namespace NDoc.Documenter.Msdn
 					"NDoc.Documenter.Msdn.scripts",
 					workspace.WorkingDirectory);
 
-				if ( MyConfig.AdditionalContentResourceDirectory.Length > 0 )			
+				if ( ((string)MyConfig.AdditionalContentResourceDirectory).Length > 0 )			
 					workspace.ImportContentDirectory( MyConfig.AdditionalContentResourceDirectory );
 
 				// Write the external files (FilesToInclude) to the html output directory
@@ -203,22 +206,22 @@ namespace NDoc.Documenter.Msdn
 
 					string path = Path.GetDirectoryName(srcFilePattern);
 					string pattern = Path.GetFileName(srcFilePattern);
-
+ 
 					// Path.GetDirectoryName can return null in some cases.
 					// Treat this as an empty string.
 					if (path == null)
 						path = string.Empty;
-
+ 
 					// Make sure we have a fully-qualified path name
 					if (!Path.IsPathRooted(path))
 						path = Path.Combine(Environment.CurrentDirectory, path);
-
+ 
 					// Directory.GetFiles does not accept null or empty string
 					// for the searchPattern parameter. When no pattern was
 					// specified, assume all files (*) are wanted.
 					if ((pattern == null) || (pattern.Length == 0))
 						pattern = "*";
-
+ 
 					foreach(string srcFile in Directory.GetFiles(path, pattern))
 					{
 						string dstFile = Path.Combine(workspace.WorkingDirectory, Path.GetFileName(srcFile));
@@ -306,14 +309,7 @@ namespace NDoc.Documenter.Msdn
 
 				OnDocBuildingStep(30, "Loading XSLT files...");
 
-				string extensibilityStylesheet = MyConfig.ExtensibilityStylesheet;
-	
-				// make relative paths absolute
-				if (extensibilityStylesheet.Length>0 &&
-					!Path.IsPathRooted( extensibilityStylesheet ) )
-					extensibilityStylesheet = Path.GetFullPath( extensibilityStylesheet );
-				
-				stylesheets = StyleSheetCollection.LoadStyleSheets(extensibilityStylesheet);
+				stylesheets = StyleSheetCollection.LoadStyleSheets(MyConfig.ExtensibilityStylesheet);
 
 				OnDocBuildingStep(40, "Generating HTML pages...");
 
@@ -563,7 +559,7 @@ namespace NDoc.Documenter.Msdn
 			int start = Environment.TickCount;
 #endif
 
-				MakeHtmlForAssembliesSorted();
+			MakeHtmlForAssembliesSorted();
 
 #if DEBUG
 			Trace.WriteLine("Making Html: " + ((Environment.TickCount - start)/1000.0).ToString() + " sec.");
@@ -655,10 +651,10 @@ namespace NDoc.Documenter.Msdn
 			arguments = new XsltArgumentList();
 			arguments.AddParam("namespace", String.Empty, namespaceName);
 
-				TransformAndWriteResult(
-					"namespacehierarchy",
-					arguments,
-					fileName.Insert(fileName.Length - 5, "Hierarchy"));
+			TransformAndWriteResult(
+				"namespacehierarchy",
+				arguments,
+				fileName.Insert(fileName.Length - 5, "Hierarchy"));
 
 			MakeHtmlForTypes(namespaceName);
 		}
@@ -1447,7 +1443,7 @@ namespace NDoc.Documenter.Msdn
 			}
 
 #if DEBUG
-			Trace.WriteLine((Environment.TickCount - start).ToString() + " msec.");
+			Debug.WriteLine((Environment.TickCount - start).ToString() + " msec.");
 #endif
 			htmlHelp.AddFileToProject(filename);
 		}
