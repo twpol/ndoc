@@ -112,6 +112,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "AssemblyXmlDocCache.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AttributesEditor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -153,6 +158,11 @@
                 />
                 <File
                     RelPath = "EmbeddedResources.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ExternalXmlSummaryCache.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -208,11 +218,6 @@
                 />
                 <File
                     RelPath = "Workspace.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "XmlDocumentationCache.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

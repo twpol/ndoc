@@ -1,5 +1,6 @@
 // Documenter.cs - base XML documenter code
 // Copyright (C) 2001  Kral Ferch, Jason Diamond
+// Parts Copyright (C) 2004  Kevin Downs
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -34,8 +35,9 @@ namespace NDoc.Core
 	{
 		IDocumenterConfig		config;
 		Project					_Project;
-		XmlDocument				currentSlashDoc;
-		XmlDocumentationCache	docCache;
+
+		AssemblyXmlDocCache		assemblyDocCache;
+		ExternalXmlSummaryCache	externalSummaryCache;
 
 		private class ImplementsInfo
 		{
@@ -68,7 +70,6 @@ namespace NDoc.Core
 		protected BaseDocumenter(string name)
 		{
 			_Name = name;
-			docCache = new XmlDocumentationCache();
 		}
 
 		/// <summary>
@@ -203,7 +204,7 @@ namespace NDoc.Core
 			ArrayList assemblyResolveDirs = new ArrayList();
 
 			// add references path
-			if ((MyConfig.ReferencesPath != null) && (MyConfig.ReferencesPath != string.Empty))
+			if ((MyConfig.ReferencesPath != null) && (MyConfig.ReferencesPath.Length > 0))
 			{
 				string[] dirs = MyConfig.ReferencesPath.Split(';');
 				foreach(string dir in dirs)
@@ -252,6 +253,19 @@ namespace NDoc.Core
 			_Project = project;
 			AssemblyResolver assemblyResolver = SetupAssemblyResolver(project);
 
+
+			if (MyConfig.GetExternalSummaries)
+			{
+				externalSummaryCache = new ExternalXmlSummaryCache();
+				foreach (AssemblySlashDoc assemblySlashDoc in project.GetAssemblySlashDocs())
+				{
+					string assemblypath = Path.GetFullPath(assemblySlashDoc.AssemblyFilename);
+					string slashdocpath = Path.GetFullPath(assemblySlashDoc.SlashDocFilename);
+					Assembly assembly = LoadAssembly(assemblypath);
+					externalSummaryCache.AddXmlDoc(assembly.FullName, slashdocpath);
+				}
+			}
+
 			StringWriter swriter = new StringWriter();
 			XmlWriter writer = new XmlTextWriter(swriter);
 
@@ -269,10 +283,10 @@ namespace NDoc.Core
 				// Start the root element
 				writer.WriteStartElement("ndoc");
 
-				if (MyConfig.FeedbackEmailAddress != string.Empty)
+				if (MyConfig.FeedbackEmailAddress.Length > 0)
 					WriteFeedBackEmailAddress( writer );
 
-				if (MyConfig.CopyrightText != string.Empty)
+				if (MyConfig.CopyrightText.Length > 0)
 					WriteCopyright( writer );
 
 				if ( MyConfig.InheritPlatformSupport )
@@ -292,12 +306,16 @@ namespace NDoc.Core
 					string path = Path.GetFullPath(currentAssemblyFilename);
 					Assembly assembly = LoadAssembly(path);
 
-					currentSlashDoc = new XmlDocument();
-					currentSlashDoc.Load(assemblySlashDoc.SlashDocFilename);
+					assemblyDocCache = new AssemblyXmlDocCache(assemblySlashDoc.SlashDocFilename);
+
+					int starta = Environment.TickCount;
 
 					WriteAssembly(writer, assembly);
 
-					currentSlashDoc = null;
+					Trace.WriteLine("Completed " + assembly.FullName); 
+					Trace.WriteLine(((Environment.TickCount - starta)/1000.0).ToString() + " sec.");
+
+					assemblyDocCache.Flush();
 
 					i++;
 				}
@@ -308,9 +326,8 @@ namespace NDoc.Core
 				writer.WriteEndDocument();
 				writer.Flush();
 
-#if DEBUG
 				Trace.WriteLine("MakeXML : " + ((Environment.TickCount - start)/1000.0).ToString() + " sec.");
-#endif
+
 				return swriter.ToString();
 
 				// if you want to see NDoc's intermediate XML file, use the XML documenter.
@@ -328,16 +345,18 @@ namespace NDoc.Core
 
 				_Project = null;
 
-				writer.Close();
-				swriter.Close();
+				if (writer != null)  writer.Close();
+				if (swriter != null) swriter.Close();
 
-				if (null != assemblyResolver)
+				if (assemblyResolver != null)
 				{
 					assemblyResolver.Deinstall();
 				}
 
-				docCache.Flush();
+				if (externalSummaryCache != null) externalSummaryCache=null;
 
+				GC.Collect();
+				GC.WaitForPendingFinalizers();
 				GC.Collect();
 				Debug.WriteLine("Memory after cleanup: " + GC.GetTotalMemory(false).ToString());
 			}
@@ -408,7 +427,7 @@ namespace NDoc.Core
 			writer.WriteStartElement("copyright");
 			writer.WriteAttributeString("text", MyConfig.CopyrightText);
 
-			if (MyConfig.CopyrightHref != string.Empty)
+			if (MyConfig.CopyrightHref.Length > 0)
 			{
 				if (!MyConfig.CopyrightHref.StartsWith("http:"))
 				{
@@ -468,7 +487,7 @@ namespace NDoc.Core
 				) &&
 				IsEditorBrowsable(type) &&
 				(!MyConfig.UseNamespaceDocSummaries || (type.Name != "NamespaceDoc")) &&
-				!HasNodocTag(GetMemberName(type));
+				!assemblyDocCache.HasNodocTag(GetMemberName(type));
 		}
 
 		private bool MustDocumentMethod(MethodBase method)
@@ -506,25 +525,9 @@ namespace NDoc.Core
 				(method.IsPrivate && MyConfig.DocumentPrivates)
 				) &&
 				IsEditorBrowsable(method) &&
-				!HasNodocTag(GetMemberName(method));
+				!assemblyDocCache.HasNodocTag(GetMemberName(method));
 		}
 
-		private bool HasNodocTag(string name)
-		{
-			string xpath = String.Format(
-				"/doc/members/member[@name='{0}']/nodoc",
-				name);
-
-			XmlNode valuenode = currentSlashDoc.SelectSingleNode(xpath);
-			if (valuenode == null)
-			{
-				return false;
-			}
-			else
-			{
-				return true;
-			}
-		}
 
 		private bool IsHidden(MemberInfo member, Type type)
 		{
@@ -689,7 +692,7 @@ namespace NDoc.Core
 				(field.IsFamilyAndAssembly && MyConfig.DocumentInternals) ||
 				(field.IsPrivate && MyConfig.DocumentPrivates)) &&
 				IsEditorBrowsable(field) &&
-				!HasNodocTag(GetMemberName(field));
+				!assemblyDocCache.HasNodocTag(GetMemberName(field));
 		}
 
 		private void WriteAssembly(XmlWriter writer, Assembly assembly)
@@ -707,10 +710,6 @@ namespace NDoc.Core
 			foreach (Module module in assembly.GetModules())
 			{
 				WriteModule(writer, module);
-
-				Debug.WriteLine("Memory before module cleanup: " + GC.GetTotalMemory(false).ToString());
-				GC.Collect();
-				Debug.WriteLine("Memory after module cleanup: " + GC.GetTotalMemory(false).ToString());
 			}
 
 			writer.WriteEndElement(); // assembly
@@ -754,16 +753,10 @@ namespace NDoc.Core
 				string namespaceSummary = null;
 				if (MyConfig.UseNamespaceDocSummaries)
 				{
-					string xPathExpr;
 					if (namespaceName == null)
-						xPathExpr = "/doc/members/member[@name=\"T:NamespaceDoc\"]/summary";
+						namespaceSummary = assemblyDocCache.GetDoc("T:NamespaceDoc");
 					else
-						xPathExpr = "/doc/members/member[@name=\"T:" + namespaceName + ".NamespaceDoc\"]/summary";
-
-					XmlNode xmlNode = currentSlashDoc.SelectSingleNode(xPathExpr);
-
-					if (xmlNode != null && xmlNode.HasChildNodes)
-						namespaceSummary = xmlNode.InnerXml;
+						namespaceSummary = assemblyDocCache.GetDoc("T:" + namespaceName + ".NamespaceDoc");
 				}
 
 				if ((namespaceSummary == null) || (namespaceSummary.Length == 0))
@@ -1073,7 +1066,6 @@ namespace NDoc.Core
 				writer.WriteAttributeString("hiding", "true");
 			}
 
-
 			WriteTypeDocumentation(writer, memberName, type);
 			WriteCustomAttributes(writer, type);
 			if (type.BaseType!=null)
@@ -1331,8 +1323,18 @@ namespace NDoc.Core
 			{
 				if (IsEditorBrowsable(property))
 				{
-					MethodInfo getMethod = property.GetGetMethod(true);
-					MethodInfo setMethod = property.GetSetMethod(true);
+					MethodInfo getMethod = null;
+					MethodInfo setMethod = null;
+					if (property.CanRead)
+					{
+						try{getMethod = property.GetGetMethod(true);}
+						catch(System.Security.SecurityException){}
+					}
+					if (property.CanWrite)
+					{
+						try{setMethod = property.GetSetMethod(true);}
+						catch(System.Security.SecurityException){}
+					}
 
 					bool hasGetter = (getMethod != null) && MustDocumentMethod(getMethod);
 					bool hasSetter = (setMethod != null) && MustDocumentMethod(setMethod);
@@ -1877,17 +1879,34 @@ namespace NDoc.Core
 		private PropertyInfo DerivePropertyFromAccessorMethod(MemberInfo accessor)
 		{
 			MethodInfo accessorMethod = (MethodInfo)accessor;
+			string accessortype = accessorMethod.Name.Substring(0,3);
 			string propertyName = accessorMethod.Name.Substring(4);
-			Type returnType = accessorMethod.ReturnType;
+
 			ParameterInfo[] parameters;
 			parameters = accessorMethod.GetParameters();
-			Type[] types;
-
 			int parmCount = parameters.GetLength(0);
-			types = new Type[parmCount];
-			for(int i=0; i<parmCount;i++)
+			
+			Type   returnType = null;
+			Type[] types      = null;
+
+			if (accessortype=="get")
 			{
-				types[i]=((ParameterInfo)parameters.GetValue(i)).ParameterType;
+				returnType = accessorMethod.ReturnType;
+				types = new Type[parmCount];
+				for(int i=0; i<parmCount;i++)
+				{
+					types[i]=((ParameterInfo)parameters.GetValue(i)).ParameterType;
+				}
+			}
+			else
+			{
+				returnType = ((ParameterInfo)parameters.GetValue(0)).ParameterType;
+				parmCount--;
+				types = new Type[parmCount];
+				for(int i=0; i<parmCount;i++)
+				{
+					types[i]=((ParameterInfo)parameters.GetValue(i+1)).ParameterType;
+				}
 			}
 
 			PropertyInfo derivedProperty= accessorMethod.DeclaringType.GetProperty(propertyName,returnType,types);
@@ -2189,26 +2208,30 @@ namespace NDoc.Core
 
 			memberName = "P:" + GetFullNamespaceName(property) + "." + property.Name;
 
-			if (property.GetIndexParameters().Length > 0)
+			try
 			{
-				memberName += "(";
-
-				int i = 0;
-
-				foreach (ParameterInfo parameter in property.GetIndexParameters())
+				if (property.GetIndexParameters().Length > 0)
 				{
-					if (i > 0)
+					memberName += "(";
+
+					int i = 0;
+
+					foreach (ParameterInfo parameter in property.GetIndexParameters())
 					{
-						memberName += ",";
+						if (i > 0)
+						{
+							memberName += ",";
+						}
+
+						memberName += parameter.ParameterType.FullName;
+
+						++i;
 					}
 
-					memberName += parameter.ParameterType.FullName;
-
-					++i;
+					memberName += ")";
 				}
-
-				memberName += ")";
 			}
+			catch(System.Security.SecurityException){}
 
 			return memberName;
 		}
@@ -2268,13 +2291,11 @@ namespace NDoc.Core
 
 		private void WriteSlashDocElements(XmlWriter writer, string memberName)
 		{
-			string xPathExpr = "/doc/members/member[@name=\"" + memberName + "\"]";
-			XmlNode xmlNode = currentSlashDoc.SelectSingleNode(xPathExpr);
-
-			if (xmlNode != null && xmlNode.HasChildNodes)
+			string temp=assemblyDocCache.GetDoc(memberName);
+			if (temp!=null)	
 			{
 				WriteStartDocumentation(writer);
-				writer.WriteRaw(xmlNode.InnerXml);
+				writer.WriteRaw(temp);
 			}
 		}
 
@@ -2471,35 +2492,50 @@ namespace NDoc.Core
 		{
 			if (MyConfig.ShowMissingSummaries || MyConfig.ShowMissingRemarks)
 			{
-				string xPathExpr = "/doc/members/member[@name=\"" + memberName + "\"]";
-				XmlNode xmlNode = currentSlashDoc.SelectSingleNode(xPathExpr);
+				string xmldoc=assemblyDocCache.GetDoc(memberName);
+				bool bMissingSummary=true;
+				bool bMissingRemarks=true;
 
-				if (MyConfig.ShowMissingSummaries)
+				if (xmldoc!=null)
 				{
-					XmlNode summary;
-					if (xmlNode == null
-						|| (summary = xmlNode.SelectSingleNode("summary")) == null
-						|| summary.InnerText.Length == 0
-						|| summary.InnerText.Trim().StartsWith("Summary description for"))
+					XmlTextReader reader= new XmlTextReader(xmldoc,XmlNodeType.Element,null);
+					while (reader.Read()) 
+					{
+						if (reader.NodeType == XmlNodeType.Element) 
+						{
+							if (reader.Name=="summary") 
+							{
+								string summarydetails =reader.ReadInnerXml();
+								if (summarydetails.Length>0 && !summarydetails.Trim().StartsWith("Summary description for"))
+								{
+									bMissingSummary=false;
+								}
+							}
+							else if (reader.Name=="remarks")
+							{
+								string remarksdetails =reader.ReadInnerXml();
+								if (remarksdetails.Length>0)
+				{
+									bMissingRemarks=false;
+								}
+							}
+						}
+					}
+				}
+
+				if (MyConfig.ShowMissingSummaries && bMissingSummary)
 					{
 						WriteMissingDocumentation(writer, "summary", null,
 							"Missing <summary> documentation for " + memberName);
 					}
-				}
 
-				if (MyConfig.ShowMissingRemarks)
-				{
-					XmlNode remarks;
-					if (xmlNode == null
-						|| (remarks = xmlNode.SelectSingleNode("remarks")) == null
-						|| remarks.InnerText.Length == 0)
+				if (MyConfig.ShowMissingRemarks && bMissingRemarks)
 					{
 						WriteMissingDocumentation(writer, "remarks", null,
 							"Missing <remarks> documentation for " + memberName);
 					}
 				}
 			}
-		}
 
 		private void CheckForMissingParams(
 			XmlWriter writer,
@@ -2508,16 +2544,36 @@ namespace NDoc.Core
 		{
 			if (MyConfig.ShowMissingParams)
 			{
+				string xmldoc=assemblyDocCache.GetDoc(memberName);
 				foreach (ParameterInfo parameter in parameters)
 				{
-					string xpath = String.Format(
-						"/doc/members/member[@name='{0}']/param[@name='{1}']",
-						memberName,
-						parameter.Name);
+					bool bMissingParams=true;
 
-					XmlNode param;
-					if ((param = currentSlashDoc.SelectSingleNode(xpath)) == null
-						|| param.InnerText.Length == 0)
+					if (xmldoc!=null)
+					{
+						XmlTextReader reader= new XmlTextReader(xmldoc,XmlNodeType.Element,null);
+						while (reader.Read()) 
+						{
+							if (reader.NodeType == XmlNodeType.Element) 
+							{
+								if (reader.Name=="param") 
+								{
+									string name= reader.GetAttribute("name");
+									if (name==parameter.Name)
+									{
+										string paramsdetails = reader.ReadInnerXml();
+										if(paramsdetails.Length>0)
+										{ 
+											bMissingParams=false;
+											break; // we can stop if we locate what we are looking for
+										}
+									}
+								}
+							}
+						}
+					}
+
+					if (bMissingParams)
 					{
 						WriteMissingDocumentation(writer, "param", parameter.Name,
 							"Missing <param> documentation for " + parameter.Name);
@@ -2534,13 +2590,30 @@ namespace NDoc.Core
 			if (MyConfig.ShowMissingReturns &&
 				!"System.Void".Equals(method.ReturnType.FullName))
 			{
-				string xpath = String.Format(
-					"/doc/members/member[@name='{0}']/returns",
-					memberName);
+				string xmldoc=assemblyDocCache.GetDoc(memberName);
+				bool bMissingReturns=true;
 
-				XmlNode returns;
-				if ((returns = currentSlashDoc.SelectSingleNode(xpath)) == null
-					|| returns.InnerText.Length == 0)
+				if (xmldoc!=null)
+				{
+					XmlTextReader reader= new XmlTextReader(xmldoc,XmlNodeType.Element,null);
+					while (reader.Read()) 
+					{
+						if (reader.NodeType == XmlNodeType.Element) 
+						{
+							if (reader.Name=="returns") 
+							{
+								string returnsdetails =reader.ReadInnerXml();
+								if (returnsdetails.Length>0)
+								{ 
+									bMissingReturns=false;
+									break; // we can stop if we locate what we are looking for
+								}
+							}
+						}
+					}
+				}
+
+				if (bMissingReturns)
 				{
 					WriteMissingDocumentation(writer, "returns", null,
 						"Missing <returns> documentation for " + memberName);
@@ -2554,16 +2627,33 @@ namespace NDoc.Core
 		{
 			if (MyConfig.ShowMissingValues)
 			{
-				string xpath = String.Format(
-					"/doc/members/member[@name='{0}']/value",
-					memberName);
+				string xmldoc=assemblyDocCache.GetDoc(memberName);
+				bool bMissingValues=true;
 
-				XmlNode valuenode;
-				if ((valuenode = currentSlashDoc.SelectSingleNode(xpath)) == null
-					|| valuenode.InnerText.Length == 0)
+				if (xmldoc!=null)
 				{
-					WriteMissingDocumentation(writer, "value", null,
-						"Missing <value> documentation for " + memberName);
+					XmlTextReader reader= new XmlTextReader(xmldoc,XmlNodeType.Element,null);
+					while (reader.Read()) 
+					{
+						if (reader.NodeType == XmlNodeType.Element) 
+						{
+							if (reader.Name=="value") 
+				{
+								string valuesdetails =reader.ReadInnerXml();
+								if (valuesdetails.Length>0)
+								{
+									bMissingValues=false;
+									break; // we can stop if we locate what we are looking for
+								}
+							}
+						}
+					}
+				}
+
+				if (bMissingValues)
+				{
+					WriteMissingDocumentation(writer, "values", null,
+						"Missing <values> documentation for " + memberName);
 				}
 			}
 		}
@@ -2618,7 +2708,7 @@ namespace NDoc.Core
 		{
 			if (MyConfig.GetExternalSummaries)
 			{
-				string summary = docCache.GetSummary(memberName, declaringType).OuterXml;
+				string summary = externalSummaryCache.GetSummary(memberName, declaringType);
 				if (summary.Length > 0)
 				{
 					WriteStartDocumentation(writer);
@@ -2669,13 +2759,29 @@ namespace NDoc.Core
 			{		
 				if (constructor.GetParameters().Length == 0)
 				{
-					string xPathExpr = "/doc/members/member[@name=\"" + memberName + "\"]";
-					XmlNode xmlNode = currentSlashDoc.SelectSingleNode(xPathExpr);
+					string xmldoc=assemblyDocCache.GetDoc(memberName);
+					bool bMissingSummary=true;
 
-					XmlNode summary;
-					if (xmlNode == null
-						|| (summary = xmlNode.SelectSingleNode("summary")) == null
-						|| summary.InnerText.Length == 0)
+					if (xmldoc!=null)
+					{
+						XmlTextReader reader= new XmlTextReader(xmldoc,XmlNodeType.Element,null);
+						while (reader.Read()) 
+						{
+							if (reader.NodeType == XmlNodeType.Element) 
+							{
+								if (reader.Name=="summary") 
+								{
+									string summarydetails =reader.ReadInnerXml();
+									if (summarydetails.Length>0 && !summarydetails.Trim().StartsWith("Summary description for"))
+									{ 
+										bMissingSummary=false;
+									}
+								}
+							}
+						}
+					}
+
+					if (bMissingSummary)
 					{
 						WriteStartDocumentation(writer);
 						if (constructor.IsStatic)
@@ -2796,20 +2902,34 @@ namespace NDoc.Core
 		{
 			if (!MyConfig.AutoPropertyBackerSummaries) return false;
 
-			string xPathExpr = "/doc/members/member[@name=\"" + memberName + "\"]";
-			XmlNode xmlNode = currentSlashDoc.SelectSingleNode(xPathExpr);
-
 			// determine if field is non-public
 			// (because public fields are probably not backers for properties)
 			bool isNonPublic = true;  // stubbed out for now
 
+			//check whether or not we have a valid summary
+			bool isMissingSummary=true;
+			string xmldoc=assemblyDocCache.GetDoc(memberName);
+			if (xmldoc!=null)
+			{
+				XmlTextReader reader= new XmlTextReader(xmldoc,XmlNodeType.Element,null);
+				while (reader.Read()) 
+				{
+					if (reader.NodeType == XmlNodeType.Element) 
+					{
+						if (reader.Name=="summary") 
+						{
+							string summarydetails =reader.ReadInnerXml();
+							if (summarydetails.Length>0 && !summarydetails.Trim().StartsWith("Summary description for"))
+							{
+								isMissingSummary=false;
+							}
+						}
+					}
+				}
+			}
+
 			// only do this if there is no summary already
-			XmlNode summary;
-			if ((xmlNode == null
-				|| (summary = xmlNode.SelectSingleNode("summary")) == null
-				|| summary.InnerText.Length == 0
-				|| summary.InnerText.Trim().StartsWith("Summary description for"))
-				&& isNonPublic)
+			if (isMissingSummary && isNonPublic)
 			{
 				// find the property (if any) that this field backs
 
