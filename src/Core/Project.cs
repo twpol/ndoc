@@ -482,6 +482,7 @@ namespace NDoc.Core
 				writer.Indentation = 4;
 
 				writer.WriteStartElement("project");
+				writer.WriteAttributeString("SchemaVersion","1.3");
 
 				//do not change the order of those lines
 				WriteAssemblySlashDocs(writer);
