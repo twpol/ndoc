@@ -218,9 +218,9 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 				OnDocBuildingStep( 95, "Finishing up..." );
 
 				if ( MyConfig.RegisterTitleWithNamespace )
-					RegisterTitle( workspace );
+					RegisterTitleWithCollection( workspace );
 				else if ( MyConfig.RegisterTitleAsCollection )
-					RegisterCollection( workspace );
+					RegisterTitleAsCollection( workspace );
 
 				// create collection level files
 				if( MyConfig.GenerateCollectionFiles )
@@ -465,26 +465,28 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			index.Save( workspace.RootDirectory );
 		}
 	
-		private void RegisterCollection( Workspace workspace )
+		private void RegisterTitleAsCollection( Workspace workspace )
 		{
 			string ns = MyConfig.HtmlHelpName;
 
 			if ( ns.Length > 0 )
 			{
 				HxReg reg = new HxReg();
+
 				FileInfo f = new FileInfo( Path.Combine( workspace.RootDirectory, MyConfig.HtmlHelpName + ".Hxs" ) );
 				reg.RegisterNamespace( ns, f, MyConfig.Title );
 				reg.RegisterTitle( ns, ns, f );
 			}
 		}
 
-		private void RegisterTitle( Workspace workspace )
+		private void RegisterTitleWithCollection( Workspace workspace )
 		{
 			string ns = MyConfig.CollectionNamespace;
 
 			if ( ns.Length > 0 )
 			{
 				HxReg reg = new HxReg();
+
 				reg.RegisterTitle( ns, MyConfig.HtmlHelpName, new FileInfo( Path.Combine( workspace.RootDirectory, MyConfig.HtmlHelpName + ".Hxs" ) ) );
 			}
 		}
@@ -539,15 +541,15 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 					// well that didn't work, meaning the user doesn't have a default hxs viewer
 					// let's try and open it in dexexplore
 
-					// if the title is registers as a collection then use HtmlHelpName as the namesapce
-					if ( MyConfig.RegisterTitleAsCollection )
-					{
-						StartDexplore( MyConfig.HtmlHelpName  );
-					}
-					// otherwise if we're registered in an external namespace open that one
-					else if ( MyConfig.RegisterTitleWithNamespace )
+					// if if we're registered in an external namespace open that one
+					if ( MyConfig.RegisterTitleWithNamespace )
 					{
 						StartDexplore( MyConfig.CollectionNamespace  );
+					}
+					// otherwise the title is registered as a collection then use HtmlHelpName as the namesapce
+					else if ( MyConfig.RegisterTitleAsCollection )
+					{
+						StartDexplore( MyConfig.HtmlHelpName  );
 					}
 					else
 					{

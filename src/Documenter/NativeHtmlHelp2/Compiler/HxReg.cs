@@ -61,7 +61,40 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Compiler
 		}
 
 		/// <summary>
-		/// Registers the a help namespace
+		/// Removes a help namespace from the help registry
+		/// </summary>
+		/// <param name="helpNamespace">The help namespace to remove</param>
+		public void UnregisterNamespace( string helpNamespace )
+		{
+			StringBuilder sb = new StringBuilder();
+			sb.AppendFormat( " -n {0} ", helpNamespace );
+			
+			sb.Append( " -r " );
+
+			Execute( sb.ToString(), "." );
+			Trace.WriteLine( string.Format( "Unregistering {0} help namespace", helpNamespace ) );
+		}
+
+		/// <summary>
+		/// Removes a help title from the help registry
+		/// </summary>
+		/// <param name="helpNamespace">The help namespace that contains the title</param>
+		/// <param name="titleId">The id of the title to remove</param>
+		public void UnregisterTitle( string helpNamespace, string titleId )
+		{
+			StringBuilder sb = new StringBuilder();
+			sb.AppendFormat( " -n {0} ", helpNamespace );
+			sb.AppendFormat( " -i {0} ", titleId );
+			
+			sb.Append( " -r " );
+
+			Execute( sb.ToString(), "." );
+			Trace.WriteLine( string.Format( "Unregistering {0} help title", titleId ) );
+		}
+			
+
+		/// <summary>
+		/// Registers a help namespace
 		/// </summary>
 		/// <param name="helpNamespace">The ID of the namespace to register</param>
 		/// <param name="collectionFile">The collection (HxS or HxC) file</param>
