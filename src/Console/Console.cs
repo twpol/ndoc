@@ -21,8 +21,6 @@ using System.Collections;
 using System.Xml;
 using System.IO;
 using NDoc.Core;
-using NDoc.Documenter.Msdn;
-using NDoc.Documenter.Xml;
 
 namespace NDoc.ConsoleApplication
 {

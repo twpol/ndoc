@@ -36,7 +36,6 @@ using System.Xml.Serialization;
 using System.Diagnostics;
 
 using NDoc.Core;
-using NDoc.Documenter.Xml;
 using VS = NDoc.VisualStudio;
 
 namespace NDoc.Gui
