@@ -82,9 +82,9 @@ namespace NDoc.Gui
 		}
 
 		/// <summary>Clean up any resources being used.</summary>
-		public override void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			base.Dispose();
+			base.Dispose(disposing);
 		}
 
 		/// <summary>

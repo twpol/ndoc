@@ -206,10 +206,10 @@ namespace NDoc.Gui
 
 		/// <summary>Calls <see cref="WriteConfig"/> to write out the config 
 		/// file and calls Dispose() on base and components.</summary>
-		public override void Dispose()
+		protected override void Dispose(bool disposing)
 		{
 			WriteConfig();
-			base.Dispose();
+			base.Dispose(disposing);
 		}
 		#endregion // Constructors / Dispose
 
