@@ -110,6 +110,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "HtmlHelp2.build"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "HtmlHelp2Config.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
