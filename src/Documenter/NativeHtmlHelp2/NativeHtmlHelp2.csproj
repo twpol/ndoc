@@ -129,6 +129,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "NativeHtmlHelp2DocumenterInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "NativeHtmlHelp2Workspace.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

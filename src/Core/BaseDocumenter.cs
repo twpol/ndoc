@@ -38,7 +38,7 @@ namespace NDoc.Core
 	/// It provides default implementations of all the methods required by the <see cref="IDocumenter"/> interface. 
 	/// It also provides some basic properties which are shared by all documenters. 
 	/// </remarks>
-	abstract public class BaseDocumenter : IDocumenter, IComparable
+	abstract public class BaseDocumenter : IDocumenter
 	{
 		IDocumenterConfig		config;
 
@@ -51,43 +51,17 @@ namespace NDoc.Core
 		}
 
 		/// <summary>Initializes a new instance of the <see cref="BaseDocumenter"/> class.</summary>
-		/// <param name="name">The display name of this documenter.</param>
-		protected BaseDocumenter(string name)
+		/// <param name="config_">settings</param>
+		protected BaseDocumenter( IDocumenterConfig config_ )
 		{
-			_Name = name;
-		}
-
-		/// <summary>
-		/// Specifies the development status (alpha, beta, stable) of a documenter.
-		/// </summary>
-		/// <remarks>
-		/// As implemented in this class, this always returns <see cref="DocumenterDevelopmentStatus">Stable</see>.
-		/// <note type="inheritinfo">Documenters should override this if they are not yet stable...</note>
-		/// </remarks>
-		public virtual DocumenterDevelopmentStatus DevelopmentStatus
-		{
-			get { return(DocumenterDevelopmentStatus.Stable); }
-		}
-
-		/// <summary>Compares the currrent document to another documenter.</summary>
-		public int CompareTo(object obj)
-		{
-			return String.Compare(Name, ((IDocumenter)obj).Name);
+			Debug.Assert( config_ != null );
+			config = config_;
 		}
 
 		/// <summary>See <see cref="IDocumenter.Config">IDocumenter.Config</see>.</summary>
 		public IDocumenterConfig Config
 		{
 			get { return config; }
-			set { config = value; }
-		}
-
-		private string _Name;
-
-		/// <summary>Gets the display name of this documenter.</summary>
-		public string Name
-		{
-			get { return _Name; }
 		}
 
 		/// <summary>See <see cref="IDocumenter.MainOutputFile">IDocumenter.MainOutputFile</see>.</summary>
@@ -128,9 +102,6 @@ namespace NDoc.Core
 			if (DocBuildingProgress != null)
 				DocBuildingProgress(this, new ProgressArgs(progress, ""));
 		}
-
-		/// <summary>See <see cref="IDocumenter.Clear">IDocumenter.Clear</see>.</summary>
-		abstract public void Clear();
 
 		/// <summary>See <see cref="IDocumenter.CanBuild">IDocumenter.CanBuild</see>.</summary>
 		public virtual string CanBuild(Project project)

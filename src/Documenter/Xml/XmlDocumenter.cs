@@ -31,9 +31,8 @@ namespace NDoc.Documenter.Xml
 	public class XmlDocumenter : BaseReflectionDocumenter
 	{
 		/// <summary>Initializes a new instance of the XmlDocumenter class.</summary>
-		public XmlDocumenter() : base("XML")
+		public XmlDocumenter( XmlDocumenterConfig config ) : base( config )
 		{
-			Clear();
 		}
 
 		/// <summary>See <see cref="IDocumenter"/>.</summary>
@@ -43,12 +42,6 @@ namespace NDoc.Documenter.Xml
 			{
 				return ((XmlDocumenterConfig)Config).OutputFile;
 			} 
-		}
-
-		/// <summary>See IDocumenter.</summary>
-		public override void Clear()
-		{
-			Config = new XmlDocumenterConfig();
 		}
 
 		/// <summary>See IDocumenter.</summary>

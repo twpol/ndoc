@@ -60,8 +60,17 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		private const string ADDITIONAL_CONTENT_CATEGORY = "Html Help 2 Additional Content";
 
 		/// <summary>Initializes a new instance of the NativeHtmlHelp2Config class.</summary>
-		public NativeHtmlHelp2Config() : base("VS.NET 2003")
+		public NativeHtmlHelp2Config( NativeHtmlHelp2DocumenterInfo info ) : base( info )
 		{
+		}
+		
+		/// <summary>
+		/// Creates an instance of a documenter <see cref="IDocumenterConfig.CreateDocumenter"/>
+		/// </summary>
+		/// <returns>IDocumenter instance</returns>		
+		public override IDocumenter CreateDocumenter()
+		{
+			return new NativeHtmlHelp2Documenter( this );
 		}
 
 		#region Main Settings properties
@@ -649,7 +658,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 
 			if (String.Compare(name, "LinkToSdkDocVersion", true) == 0) 
 			{
-				Trace.WriteLine("WARNING: " + base.Name + " Configuration - property 'LinkToSdkDocVersion' is OBSOLETE. Please use new property 'SdkDocVersion'\n");
+				Trace.WriteLine("WARNING: " + base.DocumenterInfo.Name + " Configuration - property 'LinkToSdkDocVersion' is OBSOLETE. Please use new property 'SdkDocVersion'\n");
 				Project.SuspendDirtyCheck=false;
 				FailureMessages += base.ReadProperty("SdkDocVersion", value);
 				Project.SuspendDirtyCheck=true;

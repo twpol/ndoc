@@ -132,15 +132,6 @@ namespace NDoc.Documenter.LinearHtml
 			get { return (LinearHtmlDocumenterConfig) Config; }
 		}
 
-		/// <summary>
-		/// The development status (alpha, beta, stable) of this documenter.
-		/// Documenters should override this if they aren't stable.
-		/// </summary>
-		public override DocumenterDevelopmentStatus DevelopmentStatus
-		{
-			get { return(DocumenterDevelopmentStatus.Alpha); }
-		}
-
 		#endregion
 
 		#region Constructors
@@ -148,7 +139,7 @@ namespace NDoc.Documenter.LinearHtml
 		/// <summary>
 		/// Default constructor.
 		/// </summary>
-		public LinearHtmlDocumenter() : base("LinearHtml")
+		public LinearHtmlDocumenter( LinearHtmlDocumenterConfig config ) : base( config )
 		{
 			namespaceWriters = new Hashtable();
 
@@ -159,19 +150,11 @@ namespace NDoc.Documenter.LinearHtml
 			namespaceSections.Add("enumeration", "Enumerations");
 			namespaceSections.Add("structure", "Structs");
 			namespaceSections.Add("delegate", "Delegates");
-
-			Clear();
 		}
 
 		#endregion
 
 		#region Main Public API
-
-		/// <summary>See <see cref="IDocumenter"/>.</summary>
-		public override void Clear()
-		{
-			Config = new LinearHtmlDocumenterConfig();
-		}
 
 		/// <summary>See <see cref="IDocumenter"/>.</summary>
 		public override string MainOutputFile 
@@ -1807,7 +1790,9 @@ namespace NDoc.Documenter.LinearHtml
 			string fileName = args[0];
 			string outFileName = args[1];
 			Console.WriteLine("Starting for file {0}, output {1}", fileName, outFileName);
-			LinearHtmlDocumenter ld = new LinearHtmlDocumenter();
+			LinearHtmlDocumenterInfo info = new LinearHtmlDocumenterInfo();
+
+			LinearHtmlDocumenter ld = new LinearHtmlDocumenter( new LinearHtmlDocumenterConfig( info ) );
 			ld.Load(fileName);
 			ld.MakeHtml(outFileName);
 		}

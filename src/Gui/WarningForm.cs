@@ -31,10 +31,13 @@ namespace NDoc.Gui
 		/// <param name="parent">The Form's parent</param>
 		public static void ShowWarning( string title, string message, Control parent )
 		{
-			using ( WarningForm warningForm = new WarningForm( title, message ) )
+			if ( parent != null && parent.IsDisposed == false )
 			{
-				warningForm.StartPosition = FormStartPosition.CenterParent;
-				warningForm.ShowDialog( parent );
+				using ( WarningForm warningForm = new WarningForm( title, message ) )
+				{
+					warningForm.StartPosition = FormStartPosition.CenterParent;
+					warningForm.ShowDialog( parent );
+				}
 			}
 		}
 

@@ -38,25 +38,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 	{
 
 		/// <summary>Initializes a new instance of the NativeHtmlHelp2Documenter class.</summary>
-		public NativeHtmlHelp2Documenter() : base( "VS.NET 2003" )
+		public NativeHtmlHelp2Documenter( NativeHtmlHelp2Config config ) : base( config )
 		{
-			Clear();
-		}
-
-		/// <summary>
-		/// The development status (alpha, beta, stable) of this documenter.
-		/// See <see cref="BaseDocumenter"/>
-		/// </summary>
-		public override DocumenterDevelopmentStatus DevelopmentStatus
-		{
-			get { return DocumenterDevelopmentStatus.Stable; }
-		}
-
-		/// <summary>See <see cref="IDocumenter"/>.</summary>
-		public override void Clear()
-		{
-			//create a new instance of our config settings
-			Config = new NativeHtmlHelp2Config();
 		}
 
 		/// <summary>See <see cref="IDocumenter"/>.</summary>

@@ -22,6 +22,7 @@ using System.ComponentModel;
 using System.Drawing.Design;
 using System.Reflection;
 using System.Windows.Forms.Design;
+using System.Diagnostics;
 using System.Xml;
 
 namespace NDoc.Core
@@ -35,12 +36,13 @@ namespace NDoc.Core
 	/// </remarks>
 	abstract public class BaseDocumenterConfig : IDocumenterConfig
 	{
-		private string _Name;
+		private IDocumenterInfo _info;
 
 		/// <summary>Initializes a new instance of the <see cref="BaseDocumenterConfig"/> class.</summary>
-		protected BaseDocumenterConfig(string name)
+		protected BaseDocumenterConfig( IDocumenterInfo info )
 		{
-			_Name = name;
+			Debug.Assert( info != null );
+			_info = info;
 		}
 
 		private Project _Project;
@@ -52,6 +54,12 @@ namespace NDoc.Core
 		{
 			get{return _Project;}
 		}
+
+		/// <summary>
+		/// Creates an instance of a documenter <see cref="IDocumenterConfig.CreateDocumenter"/>
+		/// </summary>
+		/// <returns>IDocumenter instance</returns>		
+		public abstract IDocumenter CreateDocumenter();
 
 		/// <summary>Associates this config with a <see cref="Project"/>.</summary>
 		/// <param name="project">A <see cref="Project"/> to associate with this config.</param>
@@ -73,9 +81,9 @@ namespace NDoc.Core
 		/// Gets the display name of the documenter.
 		/// </summary>
 		[Browsable(false)]
-		public string Name
+		public IDocumenterInfo DocumenterInfo
 		{
-			get { return _Name;}
+			get { return _info;}
 		}
 
 		/// <summary>Gets an enumerable list of <see cref="PropertyInfo"/> objects representing the properties of this config.</summary>
@@ -143,7 +151,7 @@ namespace NDoc.Core
 		public void Write(XmlWriter writer)
 		{
 			writer.WriteStartElement("documenter");
-			writer.WriteAttributeString("name", _Name);
+			writer.WriteAttributeString("name", this.DocumenterInfo.Name );
 
 			PropertyInfo[] properties = GetType().GetProperties();
 

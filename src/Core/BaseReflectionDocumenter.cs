@@ -46,8 +46,8 @@ namespace NDoc.Core.Reflection
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BaseReflectionDocumenter"/> class.
 		/// </summary>
-		/// <param name="name">Documenter Name</param>
-		protected BaseReflectionDocumenter(string name):base(name)
+		/// <param name="config">Documenter setting</param>
+		protected BaseReflectionDocumenter( IDocumenterConfig config ) : base( config )
 		{
 		}
 

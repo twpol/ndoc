@@ -286,8 +286,7 @@ namespace NDoc.Core
 				//Clear the project to ensure everything is back to default state
 				Clear();
 
-				throw new DocumenterException("Error reading in project file " 
-					+ filename + ".\n" + ex.Message, ex);
+				throw new DocumenterException("Error reading in project file " 	+ filename + ".\n" + ex.Message, ex);
 			}
 			finally
 			{
@@ -310,8 +309,6 @@ namespace NDoc.Core
 //			IsDirty = false;
 		}
 
-
-
 		private void ReadDocumenters(XmlReader reader)
 		{
 			string FailureMessages = "";
@@ -321,19 +318,26 @@ namespace NDoc.Core
 				if (reader.NodeType == XmlNodeType.Element && reader.Name == "documenter")
 				{
 					string name = reader["name"];
-					IDocumenter documenter = GetDocumenter(name);
+					IDocumenterInfo info = InstalledDocumenters.GetDocumenter(name);
 
-					if (documenter != null)
+					if (info != null)
 					{
+						IDocumenterConfig config = info.CreateConfig( this );
+
 						reader.Read(); // Advance to next node.
 						try
 						{
-							documenter.Config.Read(reader);
+							config.Read(reader);
 						}
 						catch (DocumenterPropertyFormatException e)
 						{
 							FailureMessages += name + " Documenter\n" + e.Message + "\n";
 						}
+
+						if ( _configs.ContainsKey( info.Name ) == false )
+							_configs.Add( info.Name, config );
+						else
+							_configs[info.Name] = config;
 					}
 				}
 				reader.Read();
@@ -341,21 +345,54 @@ namespace NDoc.Core
 
 			if (FailureMessages.Length > 0)
 				throw new DocumenterPropertyFormatException(FailureMessages);
-
 		}
 
-		/// <summary>Retrieves a documenter by name.</summary>
-		public IDocumenter GetDocumenter(string name)
-		{
-			foreach (IDocumenter documenter in InstalledDocumenters.Documenters)
-			{
-				if (documenter.Name == name)
-				{
-					return documenter;
-				}
-			}
+		private Hashtable _configs = new Hashtable();
 
-			return null;
+		/// <summary>
+		/// Event rasied when the <see cref="ActiveConfig"/> changes
+		/// </summary>
+		public event EventHandler ActiveConfigChanged;
+
+		/// <summary>
+		/// Raises the <see cref="ActiveConfigChanged"/> event
+		/// </summary>
+		protected virtual void OnActiveConfigChanged()
+		{
+			if ( ActiveConfigChanged != null )
+				ActiveConfigChanged( this, EventArgs.Empty );
+		}
+		/// <summary>
+		/// The active documenter type
+		/// </summary>
+		public IDocumenterInfo ActiveDocumenter
+		{
+			get
+			{
+				return _currentConfig.DocumenterInfo;
+			}
+			set
+			{
+				// add a new config for this type if not already present
+				if ( _configs.ContainsKey( value.Name ) == false )
+					_configs.Add( value.Name, value.CreateConfig( this ) );
+
+				// set the active config
+				_currentConfig = _configs[value.Name] as IDocumenterConfig;
+				OnActiveConfigChanged();
+			}
+		}
+
+		private IDocumenterConfig _currentConfig;
+		/// <summary>
+		/// The curently active <see cref="IDocumenterConfig"/>
+		/// </summary>
+		public IDocumenterConfig ActiveConfig
+		{
+			get
+			{
+				return _currentConfig;
+			}
 		}
 
 		#endregion
@@ -411,9 +448,7 @@ namespace NDoc.Core
 				//OK, we have managed to create the project file in memory.
 				//Now we can try to write it to disk
 				using(Stream stream = File.Create(filename))
-				{
 					tempDataStore.WriteTo(stream);
-				}
 			}
 			catch (Exception ex)
 			{
@@ -421,31 +456,25 @@ namespace NDoc.Core
 				//restore the original filename
 				ProjectFile = oldProjectFile ;
 
-				throw new DocumenterException("Error saving project file "
-					+ ".\n" + ex.Message, ex);
+				throw new DocumenterException("Error saving project file.\n" + ex.Message, ex);
 			}
 			finally
 			{
 				if (writer != null)
-				{
 					writer.Close(); // Closes the underlying stream.
-				}
 			}
 
 			IsDirty = false;
 		}
 
-
 		private void WriteDocumenters(XmlWriter writer)
 		{
-			if (InstalledDocumenters.Documenters.Count > 0)
+			if ( _configs.Count > 0 )
 			{
-				writer.WriteStartElement("documenters");
+				writer.WriteStartElement( "documenters" );
 
-				foreach (IDocumenter documenter in InstalledDocumenters.Documenters)
-				{
-					documenter.Config.Write(writer);
-				}
+				foreach ( IDocumenterConfig documenter in _configs )
+					documenter.Write(writer);
 
 				writer.WriteEndElement();
 			}
@@ -460,11 +489,21 @@ namespace NDoc.Core
 			if (_namespaces != null) _namespaces = new Namespaces();
 			if (_referencePaths != null) _referencePaths = new ReferencePathCollection();
 
-			foreach (IDocumenter documenter in InstalledDocumenters.Documenters)
-			{
-				documenter.Clear();
-				documenter.Config.SetProject(this);
-			}
+			// cache the current active info object
+			IDocumenterInfo currentInfo = null;
+			if ( this._currentConfig != null )
+				currentInfo = _currentConfig.DocumenterInfo;
+
+			// create a new configs collection populated with new configs for each type
+			Hashtable newConfigs = new Hashtable();
+			foreach ( IDocumenterConfig config in _configs.Values )
+				newConfigs.Add( config.DocumenterInfo.Name, config.DocumenterInfo.CreateConfig( this ) );
+
+			_configs = newConfigs;
+
+			// reset the active config
+			if ( currentInfo != null )
+				_currentConfig = _configs[currentInfo.Name] as IDocumenterConfig;
 
 			IsDirty = false;
 			ProjectFile = "";

@@ -36,7 +36,7 @@ namespace NDoc.Documenter.LinearHtml
 		/// <para>The LinearHTML Documenter creates a single HTML file that includes
 		/// all of the types and members in your project.</para>
 		/// </remarks>
-		public LinearHtmlDocumenterConfig() : base("LinearHtml")
+		public LinearHtmlDocumenterConfig( LinearHtmlDocumenterInfo info ) : base( info )
 		{
 			_Title = "An NDoc Documented Class Library";
 			_HeaderHtml = string.Empty;
@@ -49,6 +49,15 @@ namespace NDoc.Documenter.LinearHtml
 			_TypeIncludeRegexp = string.Empty;
 			_MethodParametersInTable = false;
 			_IncludeTypeMemberDetails = false;
+		}
+
+		/// <summary>
+		/// Creates an instance of a documenter <see cref="IDocumenterConfig.CreateDocumenter"/>
+		/// </summary>
+		/// <returns>IDocumenter instance</returns>		
+		public override IDocumenter CreateDocumenter()
+		{
+			return new LinearHtmlDocumenter( this );
 		}
 
 		bool _IncludeTypeMemberDetails;

@@ -123,6 +123,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "JavaDocDocumenterInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "JavaDocWorkspace.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -38,13 +38,25 @@ namespace NDoc.Documenter.Latex
 	[DefaultProperty("OutputDirectory")]
 	public class LatexDocumenterConfig : BaseReflectionDocumenterConfig
 	{
-		/// <summary/>
-		public LatexDocumenterConfig() : base("LaTeX")
-		{			
+		/// <summary>
+		/// Creates a new instance of the class
+		/// </summary>
+		/// <param name="info">Info class descrbing the documenter</param>
+		public LatexDocumenterConfig( LatexDocumenterInfo info ) : base( info )
+		{
 			// fix for bug 884121 - OutputDirectory on Linux
 			OutputDirectory = string.Format(".{0}doc{0}",Path.DirectorySeparatorChar );
 			TexFileBaseName = "Documentation";
 			LatexCompiler = "latex";
+		}
+
+		/// <summary>
+		/// Creates an instance of a documenter <see cref="IDocumenterConfig.CreateDocumenter"/>
+		/// </summary>
+		/// <returns>IDocumenter instance</returns>		
+		public override IDocumenter CreateDocumenter()
+		{
+			return new LatexDocumenter( this );
 		}
 
 		/// <summary>Gets or sets the output directory.</summary>

@@ -30,7 +30,6 @@ using NDoc.Core.PropertyGridUI;
 
 namespace NDoc.Core.Reflection
 {
-
 	/// <summary>The base config class for documenters which use the <see cref="ReflectionEngine"/> to extract 
 	/// documentation from .Net assemblies.</summary>
 	/// <remarks>
@@ -46,12 +45,11 @@ namespace NDoc.Core.Reflection
 	/// </remarks>
 	abstract public class BaseReflectionDocumenterConfig : BaseDocumenterConfig
 	{
-		
 		/// <summary>
-		/// Initializes a new instance of the <see cref="BaseReflectionDocumenterConfig"/> class.
+		/// Creates a new instance of the class
 		/// </summary>
-		/// <param name="name">Documenter Name</param>
-		protected BaseReflectionDocumenterConfig(string name) : base(name)
+		/// <param name="info">Info class descrbing the documenter</param>
+		protected BaseReflectionDocumenterConfig( IDocumenterInfo info ) : base( info )
 		{
 			_ShowMissingSummaries = false;
 			_ShowMissingRemarks = false;
@@ -85,8 +83,6 @@ namespace NDoc.Core.Reflection
 			_ShowTypeIdInAttributes = false;
 			_DocumentedAttributes = string.Empty;
 		}
-
-		
 		
 		/// <summary>
 		/// Gets or sets a collection of additional paths to search for reference assemblies.
@@ -822,7 +818,7 @@ namespace NDoc.Core.Reflection
 			{
 				if (value.Length>0)
 				{
-					Trace.WriteLine("WARNING: " + base.Name + " Configuration - property 'ReferencesPath' is OBSOLETE. Please use the project level property 'ReferencePath'\n");
+					Trace.WriteLine("WARNING: " + base.DocumenterInfo.Name + " Configuration - property 'ReferencesPath' is OBSOLETE. Please use the project level property 'ReferencePath'\n");
 					Project.ReferencePaths.Add(new ReferencePath(value));
 				}
 			}
@@ -830,7 +826,7 @@ namespace NDoc.Core.Reflection
 			{
 				if (value.Length>0)
 				{
-					Trace.WriteLine("WARNING: " + base.Name + " Configuration - property 'IncludeAssemblyVersion' is OBSOLETE. Please use new property 'AssemblyVersionInfo'\n");
+					Trace.WriteLine("WARNING: " + base.DocumenterInfo.Name + " Configuration - property 'IncludeAssemblyVersion' is OBSOLETE. Please use new property 'AssemblyVersionInfo'\n");
 
 					string newValue=String.Empty;
 					if (String.Compare(value, "true", true) == 0)

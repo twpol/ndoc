@@ -40,8 +40,17 @@ namespace NDoc.Documenter.JavaDoc
 		/// <a href="http://sourceforge.net/projects/ndoc/">contact one of NDoc's Admins</a>.
 		/// </para>
 		/// </remarks>
-		public JavaDocDocumenterConfig() : base("JavaDoc")
+		public JavaDocDocumenterConfig( JavaDocDocumenterInfo info ) : base( info )
 		{
+		}
+
+		/// <summary>
+		/// Creates an instance of a documenter <see cref="IDocumenterConfig.CreateDocumenter"/>
+		/// </summary>
+		/// <returns>IDocumenter instance</returns>		
+		public override IDocumenter CreateDocumenter()
+		{
+			return new JavaDocDocumenter( this );
 		}
 
 		private string _Title;
@@ -95,7 +104,7 @@ namespace NDoc.Documenter.JavaDoc
 				SetDirty();
 			}
 		}
-		void ResetOutputDirectory() { _outputDirectory = string.Format( ".{0}doc{0}", Path.DirectorySeparatorChar ); }
 
+		//void ResetOutputDirectory() { _outputDirectory = string.Format( ".{0}doc{0}", Path.DirectorySeparatorChar ); }
 	}
 }

@@ -58,15 +58,7 @@ namespace NDoc.Documenter.Msdn2
 		bool includeFavorites;
 
 		/// <summary>Initializes a new instance of the MsdnHelpConfig class.</summary>
-		public Msdn2DocumenterConfig() : this("MSDN 2003")
-		{
-		}
-
-		/// <summary>
-		/// Constructor used by derived classes
-		/// </summary>
-		/// <param name="name">The name of the derived class config</param>
-		protected Msdn2DocumenterConfig( string name ) : base( name )
+		public Msdn2DocumenterConfig( Msdn2DocumenterInfo info ) : base( info )
 		{
 			_Title = "An NDoc Documented Class Library";
 
@@ -79,7 +71,16 @@ namespace NDoc.Documenter.Msdn2
 			_HeaderHtml = string.Empty;
 			_FooterHtml = string.Empty;
 			_FilesToInclude = string.Empty;
+		}
 
+		
+		/// <summary>
+		/// Creates an instance of a documenter <see cref="IDocumenterConfig.CreateDocumenter"/>
+		/// </summary>
+		/// <returns>IDocumenter instance</returns>		
+		public override IDocumenter CreateDocumenter()
+		{
+			return new Msdn2Documenter( this );
 		}
 
 		#region Main Settings
@@ -473,7 +474,7 @@ namespace NDoc.Documenter.Msdn2
 			{
 				if (String.Compare(value, "MsdnOnline", true) == 0)
 				{
-					Trace.WriteLine("WARNING: " + base.Name + " Configuration - value 'MsdnOnline' of property 'LinkSdkDocVersion' is OBSOLETE. Please use new option 'SdkLinksOnWeb'\n");
+					Trace.WriteLine("WARNING: " + base.DocumenterInfo.Name + " Configuration - value 'MsdnOnline' of property 'LinkSdkDocVersion' is OBSOLETE. Please use new option 'SdkLinksOnWeb'\n");
 					Project.SuspendDirtyCheck=false;
 					FailureMessages += base.ReadProperty("SdkDocVersion", "SDK_v1_1");
 					FailureMessages += base.ReadProperty("SdkLinksOnWeb", "True");
@@ -481,7 +482,7 @@ namespace NDoc.Documenter.Msdn2
 				}
 				else
 				{
-					Trace.WriteLine("WARNING: " + base.Name + " Configuration - property 'LinkToSdkDocVersion' is OBSOLETE. Please use new property 'SdkDocVersion'\n");
+					Trace.WriteLine("WARNING: " + base.DocumenterInfo.Name + " Configuration - property 'LinkToSdkDocVersion' is OBSOLETE. Please use new property 'SdkDocVersion'\n");
 					Project.SuspendDirtyCheck=false;
 					FailureMessages += base.ReadProperty("SdkDocVersion", value);
 					Project.SuspendDirtyCheck=true;

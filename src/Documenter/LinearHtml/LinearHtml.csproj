@@ -127,6 +127,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "LinearHtmlDocumenterInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "LinearHtmlWorkspace.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

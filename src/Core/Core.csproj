@@ -161,6 +161,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "BaseDocumenterInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "BaseReflectionDocumenter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -227,6 +232,11 @@
                 />
                 <File
                     RelPath = "IDocumenterConfig.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IDocumenterInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

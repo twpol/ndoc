@@ -69,7 +69,7 @@ namespace NDoc.Documenter.Msdn
 		/// Initializes a new instance of the <see cref="MsdnDocumenter" />
 		/// class.
 		/// </summary>
-		public MsdnDocumenter() : base("MSDN")
+		public MsdnDocumenter( MsdnDocumenterConfig config ) : base( config )
 		{
 			lowerCaseTypeNames = new Hashtable();
 			lowerCaseTypeNames.Add(WhichType.Class, "class");
@@ -87,14 +87,6 @@ namespace NDoc.Documenter.Msdn
 
 			fileNames = new StringDictionary();
 			elemNames = new StringDictionary();
-
-			Clear();
-		}
-
-		/// <summary>See IDocumenter.</summary>
-		public override void Clear()
-		{
-			Config = new MsdnDocumenterConfig();
 		}
 
 		/// <summary>See <see cref="IDocumenter"/>.</summary>

@@ -31,7 +31,7 @@ namespace NDoc.ConsoleApplication
 	class EntryPoint
 	{
 		private static Project project;
-		private static IDocumenter documenter;
+		private static IDocumenterConfig documenterConfig;
 
 		public static int Main(string[] args)
 		{
@@ -40,19 +40,21 @@ namespace NDoc.ConsoleApplication
 				WriteLogoBanner();
 
 				project = new Project();
-				documenter = project.GetDocumenter("MSDN");
-				if (documenter == null)
+				IDocumenterInfo info = InstalledDocumenters.GetDocumenter("MSDN");
+				if (info == null)
 				{
-					//MSDN documenter not found, pick the first one available.
+					//MSDN documenterConfig not found, pick the first one available.
 					if (InstalledDocumenters.Documenters.Count > 0)
 					{
-						documenter = (IDocumenter)InstalledDocumenters.Documenters[0];
+						info = (IDocumenterInfo)InstalledDocumenters.Documenters[0];
 					}
 					else
 					{
-						throw new ApplicationException("Could not find any documenter assemblies.");
+						throw new ApplicationException("Could not find any documenterConfig assemblies.");
 					}
 				}
+				documenterConfig = info.CreateConfig();
+
 				int maxDepth = 20; //to limit recursion depth
 				bool propertiesSet = false;
 				bool projectSet = false;
@@ -88,29 +90,31 @@ namespace NDoc.ConsoleApplication
 
 								switch (name.ToLower())
 								{
-									case "documenter":
+									case "documenterConfig":
 										if (propertiesSet)
 										{
-											throw new ApplicationException("The documenter name must be specified before any documenter specific options.");
+											throw new ApplicationException("The documenterConfig name must be specified before any documenterConfig specific options.");
 										}
 										if (projectSet)
 										{
-											throw new ApplicationException("The documenter name must be specified before the project file.");
+											throw new ApplicationException("The documenterConfig name must be specified before the project file.");
 										}
-										documenter = project.GetDocumenter(val.Replace("_"," "));
-										if (documenter == null)
+										info = InstalledDocumenters.GetDocumenter(val.Replace("_"," "));
+
+										if (info == null)
 										{
-											throw new ApplicationException("The specified documenter name is invalid.");
+											throw new ApplicationException("The specified documenterConfig name is invalid.");
 										}
+										documenterConfig = info.CreateConfig();
 										break;
 									case "project":
 										if (propertiesSet)
 										{
-											throw new ApplicationException("The project file must be specified before any documenter specific options.");
+											throw new ApplicationException("The project file must be specified before any documenterConfig specific options.");
 										}
 										project = new Project();
-										documenter = project.GetDocumenter(documenter.Name);
-										documenter.Config.SetProject(project);
+										info = InstalledDocumenters.GetDocumenter(documenterConfig.DocumenterInfo.Name);
+										documenterConfig = info.CreateConfig( project );
 										project.Read(val);
 										projectSet = true;
 										break;
@@ -136,7 +140,7 @@ namespace NDoc.ConsoleApplication
 										project.ReferencePaths.Add(new ReferencePath(val));
 										break;
 									default:
-										documenter.Config.SetValue(name, val);
+										documenterConfig.SetValue(name, val);
 										propertiesSet = true;
 										break;
 								}
@@ -176,6 +180,7 @@ namespace NDoc.ConsoleApplication
 				}
 				else
 				{
+					IDocumenter documenter = documenterConfig.CreateDocumenter();
 					documenter.DocBuildingStep += new DocBuildingEventHandler(DocBuildingStepHandler);
 					documenter.Build(project);
 					return 0;
@@ -196,18 +201,18 @@ namespace NDoc.ConsoleApplication
 			Console.WriteLine("usage: NDocConsole  assembly[,xmldoc] [assembly[,xmldoc]]...");
 			Console.WriteLine("                    [[-referencepath=dir] [-referencepath=dir]...]");
 			Console.WriteLine("                    [-namespacesummaries=filename]");
-			Console.WriteLine("                    [-documenter=documenter_name]");
+			Console.WriteLine("                    [-documenterConfig=documenter_name]");
 			Console.WriteLine("                    [[-property=value] [-property=value]...]");
 			Console.WriteLine("                    [-verbose]");
 			Console.WriteLine();
 			Console.WriteLine("or     NDocConsole  -recurse=dir[,maxDepth]");
 			Console.WriteLine("                    [[-referencepath=dir] [-referencepath=dir]...]");
 			Console.WriteLine("                    [-namespacesummaries=filename]");
-			Console.WriteLine("                    [-documenter=docname]");
+			Console.WriteLine("                    [-documenterConfig=docname]");
 			Console.WriteLine("                    [[-property=value] [-property=value]...]");
 			Console.WriteLine("                    [-verbose]");
 			Console.WriteLine();
-			Console.WriteLine("or     NDocConsole  [-documenter=documenter_name] -project=ndocfile [-verbose]");
+			Console.WriteLine("or     NDocConsole  [-documenterConfig=documenter_name] -project=ndocfile [-verbose]");
 			Console.WriteLine();
 			Console.WriteLine("or     NDocConsole  [-help] [documenter_name [property_name]]");
 			Console.WriteLine();
@@ -234,20 +239,21 @@ namespace NDoc.ConsoleApplication
 
 			if (args.Length>1)
 			{
-				IDocumenter documenter = project.GetDocumenter(args[1].Replace("_"," "));
-				if (documenter == null)
+				IDocumenterInfo info = InstalledDocumenters.GetDocumenter(args[1].Replace("_"," "));
+				if (info == null)
 				{
 					WriteHelpAvailableDocumenters();
 					return;
 				}
 
+				IDocumenterConfig documenterConfig = info.CreateConfig( project );
 				if (args.Length==2)
 				{
-					WriteHelpAvailableDocParameters(documenter);
+					WriteHelpAvailableDocParameters(documenterConfig);
 				}
 				else
 				{
-					WriteHelpDocParameter(documenter,args[2]);
+					WriteHelpDocParameter(documenterConfig,args[2]);
 				}
 			}
 
@@ -260,15 +266,15 @@ namespace NDoc.ConsoleApplication
 			for (int i = 0; i < docs.Count; i++)
 			{
 				if (i > 0) Console.Write(", ");
-				Console.Write(((IDocumenter)docs[i]).Name.Replace(" ","_"));
+				Console.Write(((IDocumenterInfo)docs[i]).Name.Replace(" ","_"));
 			}
 			Console.WriteLine();
 		}
 
-		private static void WriteHelpAvailableDocParameters(IDocumenter documenter)
+		private static void WriteHelpAvailableDocParameters(IDocumenterConfig documenterConfig)
 		{
-			Console.WriteLine("available properties with the {0} documenter:", documenter.Name);
-			foreach (PropertyInfo property in documenter.Config.GetProperties())
+			Console.WriteLine("available properties with the {0} documenterConfig:", documenterConfig.DocumenterInfo.Name);
+			foreach (PropertyInfo property in documenterConfig.GetProperties())
 			{
 				if (!property.IsDefined(typeof(NonPersistedAttribute),true))
 				{
@@ -277,11 +283,11 @@ namespace NDoc.ConsoleApplication
 			}
 		}
 
-		private static void WriteHelpDocParameter(IDocumenter documenter,string propertyName)
+		private static void WriteHelpDocParameter(IDocumenterConfig documenterConfig,string propertyName)
 		{
 			PropertyInfo foundProperty=null;
 
-			foreach (PropertyInfo property in documenter.Config.GetProperties())
+			foreach (PropertyInfo property in documenterConfig.GetProperties())
 			{
 				if (string.Compare(property.Name, propertyName, true) == 0)
 				{
@@ -292,9 +298,9 @@ namespace NDoc.ConsoleApplication
 
 			if (foundProperty==null)
 			{
-				Console.WriteLine("{0} is not a property of the {1} documenter...", propertyName, documenter.Name);
+				Console.WriteLine("{0} is not a property of the {1} documenterConfig...", propertyName, documenterConfig.DocumenterInfo.Name);
 				Console.WriteLine("");
-				WriteHelpAvailableDocParameters(documenter);
+				WriteHelpAvailableDocParameters(documenterConfig);
 			}
 			else
 			{

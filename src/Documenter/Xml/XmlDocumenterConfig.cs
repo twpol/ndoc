@@ -48,9 +48,18 @@ namespace NDoc.Documenter.Xml
 	public class XmlDocumenterConfig : BaseReflectionDocumenterConfig
 	{
 		/// <summary>Initializes a new instance of the XmlDocumenterConfig class.</summary>
-		public XmlDocumenterConfig() : base("XML")
+		public XmlDocumenterConfig( XmlDocumenterInfo info ) : base( info )
 		{
 			OutputFile = string.Format( ".{0}doc{0}doc.xml", Path.DirectorySeparatorChar );
+		}
+		
+		/// <summary>
+		/// Creates an instance of a documenter <see cref="IDocumenterConfig.CreateDocumenter"/>
+		/// </summary>
+		/// <returns>IDocumenter instance</returns>		
+		public override IDocumenter CreateDocumenter()
+		{
+			return new XmlDocumenter( this );
 		}
 
 		private string _OutputFile;

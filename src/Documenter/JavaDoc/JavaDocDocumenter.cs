@@ -33,9 +33,8 @@ namespace NDoc.Documenter.JavaDoc
 	public class JavaDocDocumenter : BaseReflectionDocumenter
 	{
 		/// <summary>Initializes a new instance of the JavaDocDocumenter class.</summary>
-		public JavaDocDocumenter() : base("JavaDoc")
+		public JavaDocDocumenter( JavaDocDocumenterConfig config ) : base( config )
 		{
-			Config = new JavaDocDocumenterConfig();
 		}
 
 		private Workspace workspace = null;
@@ -131,11 +130,6 @@ namespace NDoc.Documenter.JavaDoc
 
 				return Path.GetFullPath( MyConfig.OutputDirectory );
 			} 
-		}
-
-		/// <summary>See <see cref="IDocumenter"/>.</summary>
-		public override void Clear()
-		{
 		}
 
 		private JavaDocDocumenterConfig MyConfig

@@ -39,6 +39,22 @@ namespace NDoc.Core
 		}
 
 		/// <summary>
+		/// Find a documenter by name
+		/// </summary>
+		/// <param name="name">The name to search for</param>
+		/// <returns>An IdocumenterInfo describing the documenter</returns>
+		public static IDocumenterInfo GetDocumenter(string name)
+		{
+			foreach ( IDocumenterInfo documenter in _Documenters )
+			{
+				if ( documenter.Name == name )
+					return documenter;
+			}
+
+			return null;
+		}
+
+		/// <summary>
 		/// Appends the specified directory to the documenter probe path.
 		/// </summary>
 		/// <param name="path">The directory to add to the probe path.</param>
@@ -87,10 +103,7 @@ namespace NDoc.Core
 
 			// scan all assemblies in probe path for documenters
 			foreach (string path in _probePath) 
-			{
-				// find documenters in given path
 				FindDocumentersInPath( documenters, path );
-			}
 
 			// sort documenters
 			documenters.Sort();
@@ -128,17 +141,14 @@ namespace NDoc.Core
 					{
 						foreach (Type type in assembly.GetTypes()) 
 						{
-							if (type.IsClass && !type.IsAbstract && (type.GetInterface("NDoc.Core.IDocumenter") != null))
+							if (type.IsClass && !type.IsAbstract && (type.GetInterface("NDoc.Core.IDocumenterInfo") != null))
 							{
-								IDocumenter documenter = Activator.CreateInstance(type) as IDocumenter;
+								IDocumenterInfo documenter = Activator.CreateInstance(type) as IDocumenterInfo;
 								if (documenter != null)
-								{
 									documenters.Add(documenter);
-								}
+
 								else
-								{
 									Trace.WriteLine(String.Format("Documenter {0} in file {1} does not implement a current version of IDocumenter and so was not instantiated.", type.FullName, fileName));
-								}
 							}
 						}
 					}

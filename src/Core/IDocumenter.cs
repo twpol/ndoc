@@ -57,26 +57,6 @@ namespace NDoc.Core
 	}
 
 	/// <summary>
-	/// Specifies the development status of a documenter.
-	/// </summary>
-	public enum DocumenterDevelopmentStatus
-	{
-		/// <summary>Still in development, not really ready for anyone 
-		/// else to use except to provide feedback.</summary>
-		Alpha,
-		/// <summary>Ready for users to try out, with the understanding that
-		/// bugs are likely.</summary>
-		Beta,
-		/// <summary>Ready for use, or at least as stable as free 
-		/// software gets!</summary>
-		Stable,
-		/// <summary>
-		/// No longer actively maintained.
-		/// </summary>
-		Obsolete
-	}
-
-	/// <summary>
 	/// Used by events raised by <see cref="IDocumenter"/> to notify doc building progress.
 	/// </summary>
 	/// <param name="sender">The source of the event.</param>
@@ -86,14 +66,6 @@ namespace NDoc.Core
 	/// <summary>Represents a class capable of generating documentation from a given assembly and /doc file.</summary>
 	public interface IDocumenter
 	{
-		/// <summary>Gets the display name for the documenter.</summary>
-		string Name { get; }
-
-		/// <summary>
-		/// The development status (alpha, beta, stable) of this documenter.
-		/// </summary>
-		DocumenterDevelopmentStatus DevelopmentStatus { get; }
-
 		/// <summary>
 		/// Raised to update the overall percent complete value and the current step name.
 		/// </summary>
@@ -102,9 +74,6 @@ namespace NDoc.Core
 		/// Raised to update the current step's percent complete value.
 		/// </summary>
 		event DocBuildingEventHandler DocBuildingProgress;
-
-		/// <summary>Resets the documenter to a clean state.</summary>
-		void Clear();
 
 		/// <summary>Checks to make sure the documenter can perform a
 		/// build.</summary>
@@ -139,6 +108,6 @@ namespace NDoc.Core
 
 		/// <summary>Gets or sets the documenter's config object.</summary>
 		/// <remarks>This can be put inside a PropertyGrid for editing by the user.</remarks>
-		IDocumenterConfig Config { get; set; }
+		IDocumenterConfig Config { get; }
 	}
 }

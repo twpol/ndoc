@@ -73,18 +73,8 @@ namespace NDoc.Documenter.Latex
 		/// <remarks>
 		/// The documenter name is set to "LaTeX".
 		/// </remarks>
-		public LatexDocumenter()
-			: base("LaTeX")
+		public LatexDocumenter( LatexDocumenterConfig config ) : base( config )
 		{
-			Config = new LatexDocumenterConfig();
-		}
-
-		/// <summary>
-		/// The development status (alpha, beta, stable) of this documenter.
-		/// </summary>
-		public override DocumenterDevelopmentStatus DevelopmentStatus
-		{
-			get { return(DocumenterDevelopmentStatus.Alpha); }
 		}
 
 		/// <summary>
@@ -96,14 +86,6 @@ namespace NDoc.Documenter.Latex
 			{
 				return (LatexDocumenterConfig)Config;
 			}
-		}
-
-		/// <summary>
-		/// Clears the configuration settings.
-		/// </summary>
-		public override void Clear()
-		{
-			Config = new LatexDocumenterConfig();
 		}
 
 		/// <summary>

@@ -24,6 +24,11 @@ namespace NDoc.Core
 	/// <summary>Specifies the methods that are common to all documenter configs.</summary>
 	public interface IDocumenterConfig
 	{
+		/// <summary>
+		/// Returns information about the config
+		/// </summary>
+		IDocumenterInfo DocumenterInfo{ get; }
+
 		/// <summary>Associates the config with a project.</summary>
 		/// <remarks>Changes to the config will notify the project so that 
 		/// it can be marked as modified and saved.</remarks>
@@ -47,5 +52,11 @@ namespace NDoc.Core
 		/// <param name="writer">An XmlWriter.</param>
 		/// <remarks>This method uses reflection to serialize all of the public properties in the documenter.</remarks>
 		void Write(XmlWriter writer);
+
+		/// <summary>
+		/// Creates an instance of a documenter 
+		/// </summary>
+		/// <returns>IDocumenter instance</returns>		
+		IDocumenter CreateDocumenter();
 	}
 }

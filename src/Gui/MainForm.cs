@@ -197,14 +197,14 @@ namespace NDoc.Gui
 
 			project = new Project();
 			project.Modified += new ProjectModifiedEventHandler(OnProjectModified);
-
+			project.ActiveConfigChanged += new EventHandler(project_ActiveConfigChanged);
 			project.AssemblySlashDocs.Cleared += new EventHandler(AssemblySlashDocs_Cleared);
 			project.AssemblySlashDocs.ItemAdded += new AssemblySlashDocEventHandler(AssemblySlashDocs_ItemRemovedAdded);
 			project.AssemblySlashDocs.ItemRemoved += new AssemblySlashDocEventHandler(AssemblySlashDocs_ItemRemovedAdded);
 
 			assemblyListControl.AssemblySlashDocs = project.AssemblySlashDocs;
 
-			foreach ( IDocumenter documenter in InstalledDocumenters.Documenters )
+			foreach ( IDocumenterInfo documenter in InstalledDocumenters.Documenters )
 			{
 				// build a development status string (alpha, beta, etc)
 				string devStatus = string.Empty;
@@ -1011,7 +1011,7 @@ namespace NDoc.Gui
 
 			int index = 0;
 
-			foreach ( IDocumenter documenter in InstalledDocumenters.Documenters )
+			foreach ( IDocumenterInfo documenter in InstalledDocumenters.Documenters )
 			{
 				if ( documenter.Name == documenterName )
 				{
@@ -1049,7 +1049,7 @@ namespace NDoc.Gui
 				settings.SetSetting( "gui", "detailedAssemblyView", this.assemblyListControl.DetailsView );
 
 				if ( comboBoxDocumenters.SelectedIndex >= 0 )
-					settings.SetSetting( "gui", "documenter", ((IDocumenter)InstalledDocumenters.Documenters[comboBoxDocumenters.SelectedIndex]).Name );
+					settings.SetSetting( "gui", "documenter", ((IDocumenterInfo)InstalledDocumenters.Documenters[comboBoxDocumenters.SelectedIndex]).Name );
 
 				// Trim our MRU list down to max amount before writing the config.
 				while (recentProjectFilenames.Count > this.options.MRUSize)
@@ -1065,29 +1065,32 @@ namespace NDoc.Gui
 
 			try
 			{
-				Directory.SetCurrentDirectory( Path.GetDirectoryName(fileName) );
-
-				try
+				using ( new WaitCursor( this ) )
 				{
-					project.Read(fileName);
+					Directory.SetCurrentDirectory( Path.GetDirectoryName(fileName) );
+
+					try
+					{
+						project.Read(fileName);
+					}
+					catch (DocumenterPropertyFormatException e)
+					{
+						WarningForm.ShowWarning( "Invalid Properties in Project File.", e.Message  + "Documenter defaults will be used....", this );
+					}
+
+					projectFilename = fileName;
+					SetWindowTitle();
+
+					RefreshPropertyGrid();
+
+					UpdateMRUList();
+
+					EnableMenuItems(true);
+
+					project.IsDirty = false;
+
+					bFailed = false;
 				}
-				catch (DocumenterPropertyFormatException e)
-				{
-					WarningForm.ShowWarning( "Invalid Properties in Project File.", e.Message  + "Documenter defaults will be used....", this );
-				}
-
-				projectFilename = fileName;
-				SetWindowTitle();
-
-				RefreshPropertyGrid();
-
-				UpdateMRUList();
-
-				EnableMenuItems(true);
-
-				project.IsDirty = false;
-
-				bFailed = false;
 			}
 			catch (DocumenterException docEx)
 			{
@@ -1387,7 +1390,7 @@ namespace NDoc.Gui
 
 		private void menuDocBuildItem_Click(object sender, System.EventArgs e)
 		{
-			IDocumenter documenter = (IDocumenter)InstalledDocumenters.Documenters[comboBoxDocumenters.SelectedIndex];
+			IDocumenter documenter = project.ActiveConfig.CreateDocumenter();
 
 			//make sure the current directory is the project directory
 			if ( projectFilename != untitledProjectName )
@@ -1405,7 +1408,7 @@ namespace NDoc.Gui
 			if ( !Directory.Exists( Path.GetDirectoryName( documenter.MainOutputFile ) ) )
 				Directory.CreateDirectory( Path.GetDirectoryName( documenter.MainOutputFile ) );
 
-			string logPath = Path.Combine( Path.GetDirectoryName(documenter.MainOutputFile ),"ndoc.log" );
+			string logPath = Path.Combine( Path.GetDirectoryName(documenter.MainOutputFile ), "ndoc.log" );
 
 			using( StreamWriter logWriter = new StreamWriter( logPath, false, new System.Text.UTF8Encoding( false ) ) )
 			using( new WaitCursor( this, Cursors.AppStarting ) )
@@ -1478,14 +1481,14 @@ namespace NDoc.Gui
 
 					// Process exception
 					Trace.WriteLine( "An error occured while trying to build the documentation." );
-					Trace.WriteLine("");
-					App.BuildTraceError(ex);
+					Trace.WriteLine( "" );
+					App.BuildTraceError( ex );
 
 					// we do not want to show any dialogs if the app is shutting down
-					if ( !this.IsDisposed && innermostException is DocumenterException )
+					if ( innermostException is DocumenterException )
 						ErrorForm.ShowError( "NDoc Documenter Error", ex, this );
 
-					else if ( !this.IsDisposed )
+					else 
 						ErrorForm.ShowError( ex, this );
 				}
 				// disconnect from the trace listener
@@ -1632,8 +1635,8 @@ namespace NDoc.Gui
 		{
 			if ( comboBoxDocumenters.SelectedIndex != -1 )
 			{
-				IDocumenterConfig documenterConfig = ((IDocumenter)InstalledDocumenters.Documenters[comboBoxDocumenters.SelectedIndex]).Config;
-				propertyGrid.SelectedObject = documenterConfig;
+				IDocumenterInfo info = (IDocumenterInfo)InstalledDocumenters.Documenters[comboBoxDocumenters.SelectedIndex];
+				project.ActiveDocumenter = info;
 			}
 		}
 
@@ -1799,8 +1802,7 @@ namespace NDoc.Gui
 					}
 					catch(Exception ex)
 					{
-						if ( !this.IsDisposed )					
-							ErrorForm.ShowError( ex, this );					
+						ErrorForm.ShowError( ex, this );					
 					}
 					finally
 					{
@@ -1836,8 +1838,7 @@ namespace NDoc.Gui
 						if ( streamWriter != null ) 
 							streamWriter.Close();
 
-						if ( !this.IsDisposed )
-							ErrorForm.ShowError( ex, this );
+						ErrorForm.ShowError( ex, this );
 					}
 				}
 			}
@@ -1901,6 +1902,11 @@ namespace NDoc.Gui
 		{
 			this.detailsMenuItem5.Enabled = !this.assemblyListControl.DetailsView;
 			this.listMenuItem7.Enabled = this.assemblyListControl.DetailsView;
+		}
+
+		private void project_ActiveConfigChanged(object sender, EventArgs e)
+		{
+			propertyGrid.SelectedObject = project.ActiveConfig;
 		}
 	}
 }

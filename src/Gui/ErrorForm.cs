@@ -34,10 +34,13 @@ namespace NDoc.Gui
 		/// <param name="parent">The parent control</param>
 		public static void ShowError( string message, Exception ex, Control parent )
 		{
-			using ( ErrorForm errorForm = new ErrorForm( message, ex ) )
+			if ( parent != null && parent.IsDisposed == false )
 			{
-				errorForm.StartPosition = FormStartPosition.CenterParent;
-				errorForm.ShowDialog(parent);
+				using ( ErrorForm errorForm = new ErrorForm( message, ex ) )
+				{
+					errorForm.StartPosition = FormStartPosition.CenterParent;
+					errorForm.ShowDialog(parent);
+				}
 			}
 		}
 
