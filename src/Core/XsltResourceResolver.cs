@@ -20,7 +20,7 @@ using System.Xml;
 using System.Reflection;
 using System.IO;
 
-namespace NDoc.Documenter.Core
+namespace NDoc.Core
 {
 	/// <summary>	
 	/// This class resolves references to urls that point to resources
@@ -46,7 +46,7 @@ namespace NDoc.Documenter.Core
 			_ExtensibiltyStylesheet=String.Empty;
 			if (resourceBase.StartsWith("file://"))
 			{
-				_ResourceBase=resourceBase.Substring(4);
+				_ResourceBase=resourceBase.Substring(7);
 				_UseEmbeddedResources=false;
 			}
 			else
