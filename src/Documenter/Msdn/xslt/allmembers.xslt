@@ -221,6 +221,10 @@
 								</xsl:element>
 								<xsl:element name="param">
 									<xsl:attribute name="name">Keyword</xsl:attribute>
+									<xsl:attribute name="value"><xsl:value-of select="substring-after(@id, ':')" /> class</xsl:attribute>
+								</xsl:element>
+								<xsl:element name="param">
+									<xsl:attribute name="name">Keyword</xsl:attribute>
 									<xsl:attribute name="value"><xsl:value-of select='@name' /> class, all members</xsl:attribute>
 								</xsl:element>
 							</object>
@@ -234,9 +238,14 @@
 									<xsl:attribute name="name">Keyword</xsl:attribute>
 									<xsl:attribute name="value"><xsl:value-of select='@name' /> interface, all members</xsl:attribute>
 								</xsl:element>
+								<xsl:element name="param">
+									<xsl:attribute name="name">Keyword</xsl:attribute>
+									<xsl:attribute name="value"><xsl:value-of select="substring-after(@id, ':')" /> interface</xsl:attribute>
+								</xsl:element>
 							</object>
 						</xsl:if>
 					</xsl:if>
+					
 					<xsl:call-template name="footer-row">
 						<xsl:with-param name="type-name">
 							<xsl:value-of select="@name" /> Members
