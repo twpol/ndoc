@@ -306,6 +306,10 @@ namespace NDoc.Core
 				if (type.DeclaringType != null && 
 					!MustDocumentType(type.DeclaringType))
 					return false;
+				// There are a group of *public* interfaces in System.Runtime.InteropServices
+				// that are not documented by MS and should be considered internal to the framework...
+				if (type.IsInterface && type.Namespace=="System.Runtime.InteropServices" && type.Name.StartsWith("_"))
+					return false;
 			}
 
 			return 
