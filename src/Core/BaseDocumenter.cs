@@ -39,6 +39,28 @@ namespace NDoc.Core
 
 		XmlDocument xmlDocument;
 
+		private class ImplementsInfo
+		{
+			public Type TargetType;
+			public MemberInfo TargetMethod;
+			public Type InterfaceType;
+			public MemberInfo InterfaceMethod;
+		}
+		private class ImplementsCollection : NameObjectCollectionBase
+		{
+			public ImplementsInfo this [int index]
+			{
+				get { return (ImplementsInfo)BaseGet(index); }
+				set { BaseSet(index, value); }
+			}
+			public ImplementsInfo this [string name]
+			{
+				get { return (ImplementsInfo)BaseGet(name); }
+				set { BaseSet(name, value); }
+			}
+		}
+		ImplementsCollection implementations;
+
 		/// <summary>Initialized a new BaseDocumenter instance.</summary>
 		protected BaseDocumenter(string name)
 		{
@@ -214,9 +236,11 @@ namespace NDoc.Core
 				writer.Flush();
 
 				// write our intermediate xml to a file for debugging
-				//FileStream fs = new FileStream(@"C:\test.xml", FileMode.Create);
-				//fs.Write(memoryStream.GetBuffer(), 0, memoryStream.GetBuffer().Length);
-				//fs.Close();
+#if DEBUG
+				FileStream fs = new FileStream(@"C:\test.xml", FileMode.Create);
+				fs.Write(memoryStream.GetBuffer(), 0, (int)memoryStream.Length);
+				fs.Close();
+#endif
 
 				// xmlDocument.Load(new MemoryStream(memoryStream.GetBuffer()));
 				memoryStream.Position = 0;
@@ -640,11 +664,26 @@ namespace NDoc.Core
 			WriteCustomAttributes(writer, type);
 			WriteBaseType(writer, type.BaseType);
 
+			Debug.Assert(implementations == null);
+			implementations = new ImplementsCollection();
+
 			foreach(Type interfaceType in type.GetInterfaces())
 			{
 				if(MustDocumentType(interfaceType))
 				{
 					writer.WriteElementString("implements", interfaceType.Name);
+					InterfaceMapping interfaceMap = type.GetInterfaceMap(interfaceType);
+					int numberOfMethods = interfaceMap.InterfaceMethods.Length;
+					for (int i = 0; i < numberOfMethods; i++)
+					{
+						string implementation			= interfaceMap.TargetMethods[i].ToString();
+						ImplementsInfo implements		= new ImplementsInfo();
+						implements.InterfaceMethod		= interfaceMap.InterfaceMethods[i];
+						implements.InterfaceType		= interfaceMap.InterfaceType;
+						implements.TargetMethod			= interfaceMap.TargetMethods[i];
+						implements.TargetType			= interfaceMap.TargetType;
+						implementations[implementation]	= implements;
+					}
 				}
 			}
 
@@ -654,6 +693,8 @@ namespace NDoc.Core
 			WriteMethods(writer, type);
 			WriteOperators(writer, type);
 			WriteEvents(writer, type);
+
+			implementations = null;
 
 			writer.WriteEndElement();
 		}
@@ -973,6 +1014,8 @@ namespace NDoc.Core
 				}
 			}
 
+			Debug.Assert(implementations == null);
+
 			WriteFields(writer, type);
 			WriteProperties(writer, type);
 			WriteMethods(writer, type);
@@ -1153,6 +1196,33 @@ namespace NDoc.Core
 				writer.WriteAttributeString("multicast", "true");
 			}
 
+			if (implementations != null)
+			{
+				ImplementsInfo implements = null;
+				MethodInfo adder = eventInfo.GetAddMethod();
+				if (adder != null)
+				{
+					implements = implementations[adder.ToString()];
+				}
+				if (implements == null)
+				{
+					MethodInfo remover = eventInfo.GetRemoveMethod();
+					if (remover != null)
+					{
+						implements = implementations[remover.ToString()];
+					}
+				}
+				if (implements != null)
+				{
+					writer.WriteStartElement("implements");
+					writer.WriteAttributeString("name", eventInfo.Name);
+					writer.WriteAttributeString("interface", implements.InterfaceType.Name);
+					writer.WriteAttributeString("interfaceId", GetMemberName(implements.InterfaceType));
+					writer.WriteAttributeString("declaringType", implements.InterfaceType.FullName);
+					writer.WriteEndElement();
+				}
+			}
+
 			WriteEventDocumentation(writer, memberName, !inherited);
 			WriteCustomAttributes(writer, eventInfo);
 
@@ -1215,6 +1285,33 @@ namespace NDoc.Core
 			if (overload > 0)
 			{
 				writer.WriteAttributeString("overload", overload.ToString());
+			}
+
+			if (implementations != null)
+			{
+				ImplementsInfo implements = null;
+				MethodInfo getter = property.GetGetMethod();
+				if (getter != null)
+				{
+					implements = implementations[getter.ToString()];
+				}
+				if (implements == null)
+				{
+					MethodInfo setter = property.GetSetMethod();
+					if (setter != null)
+					{
+						implements = implementations[setter.ToString()];
+					}
+				}
+				if (implements != null)
+				{
+					writer.WriteStartElement("implements");
+					writer.WriteAttributeString("name", property.Name);
+					writer.WriteAttributeString("interface", implements.InterfaceType.Name);
+					writer.WriteAttributeString("interfaceId", GetMemberName(implements.InterfaceType));
+					writer.WriteAttributeString("declaringType", implements.InterfaceType.FullName);
+					writer.WriteEndElement();
+				}
 			}
 
 			WritePropertyDocumentation(writer, memberName, property, !inherited);
@@ -1298,11 +1395,12 @@ namespace NDoc.Core
 				string interfaceName = null;
 
 				int lastIndexOfDot = name.LastIndexOf('.');
-
 				if (lastIndexOfDot != -1)
 				{
-					name = method.Name.Substring(lastIndexOfDot + 1);
-					interfaceName = method.Name.Substring(0, lastIndexOfDot);
+					interfaceName = name.Substring(0, lastIndexOfDot);
+					lastIndexOfDot = interfaceName.LastIndexOf('.');
+					if (lastIndexOfDot != -1)
+						name = name.Substring(lastIndexOfDot + 1);
 				}
 
 				writer.WriteStartElement("method");
@@ -1328,6 +1426,20 @@ namespace NDoc.Core
 				}
 
 				writer.WriteAttributeString("returnType", GetTypeName(method.ReturnType));
+
+				if (implementations != null)
+				{
+					ImplementsInfo implements = implementations[method.ToString()];
+					if (implements != null)
+					{
+						writer.WriteStartElement("implements");
+						writer.WriteAttributeString("name", implements.InterfaceMethod.Name);
+						writer.WriteAttributeString("interface", implements.InterfaceType.Name);
+						writer.WriteAttributeString("interfaceId", GetMemberName(implements.InterfaceType));
+						writer.WriteAttributeString("declaringType", implements.InterfaceType.FullName);
+						writer.WriteEndElement();
+					}
+				}
 
 				WriteMethodDocumentation(writer, memberName, method, !inherited);
 				WriteCustomAttributes(writer, method);

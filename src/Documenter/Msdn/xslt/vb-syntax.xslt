@@ -33,7 +33,9 @@
 				<xsl:when test="$old-type='System.DateTime'">Date</xsl:when>
 				<xsl:when test="$old-type='System.Object'">Object</xsl:when>
 				<xsl:otherwise>
-					<xsl:value-of select="$old-type" />
+					<xsl:call-template name="strip-namespace">
+						<xsl:with-param name="name" select="$old-type" />
+					</xsl:call-template>
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
@@ -133,13 +135,10 @@
 				</xsl:call-template>
 			</a>
 		</xsl:if>
-		<xsl:if test="@interface">
-			<xsl:text> Implements </xsl:text>
-			<xsl:call-template name="strip-namespace">
-				<xsl:with-param name="name" select="@interface" />
-			</xsl:call-template>
-			<xsl:text>.</xsl:text>
-			<xsl:value-of select="@name" />
+		<xsl:if test="implements">
+			<xsl:text> Implements _</xsl:text>
+			<br /><xsl:text>&#160;&#160;&#160;</xsl:text>
+			<xsl:value-of select="implements/@interface" /><xsl:text>.</xsl:text><xsl:value-of select="implements/@name" />
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
@@ -256,7 +255,9 @@
 								<xsl:text>New</xsl:text>
 							</xsl:when>
 							<xsl:otherwise>
-								<xsl:value-of select="@name" />
+								<xsl:call-template name="strip-namespace">
+									<xsl:with-param name="name" select="@name" />
+								</xsl:call-template>
 							</xsl:otherwise>
 						</xsl:choose>
 						<xsl:call-template name="vb-parameters" />
@@ -363,6 +364,11 @@
 					<xsl:with-param name="runtime-type" select="@type" />
 				</xsl:call-template>
 			</a>
+			<xsl:if test="implements">
+				<xsl:text> Implements _</xsl:text>
+				<br /><xsl:text>&#160;&#160;&#160;</xsl:text>
+				<xsl:value-of select="implements/@interface" /><xsl:text>.</xsl:text><xsl:value-of select="implements/@name" />
+			</xsl:if>
 		</xsl:if>
 	</xsl:template>
 	<!-- -->

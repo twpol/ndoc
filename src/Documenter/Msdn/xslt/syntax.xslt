@@ -149,12 +149,6 @@
 							</xsl:choose>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:if test="@interface">
-								<xsl:call-template name="strip-namespace">
-									<xsl:with-param name="name" select="@interface" />
-								</xsl:call-template>
-								<xsl:text>.</xsl:text>
-							</xsl:if>
 							<xsl:value-of select="@name" />
 						</xsl:otherwise>
 					</xsl:choose>

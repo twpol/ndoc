@@ -64,6 +64,7 @@
 							</table>
 						</div>
 					</xsl:if>
+					<xsl:call-template name="implements-section" />
 					<xsl:call-template name="remarks-section" />
 					<xsl:call-template name="exceptions-section" />
 					<xsl:call-template name="example-section" />

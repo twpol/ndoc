@@ -1130,8 +1130,14 @@ namespace NDoc.Test
 		/// <summary>Explicit method test</summary>
 		int ExplicitProperty { get; }
 
+		/// <summary>Implicit method test</summary>
+		int ImplicitProperty { get; }
+
 		/// <summary>Explicit method test</summary>
 		void ExplicitMethod();
+
+		/// <summary>Implicit method test</summary>
+		void ImplicitMethod();
 	}
 
 	/// <summary>Explicit interface test (internal)</summary>
@@ -1150,8 +1156,16 @@ namespace NDoc.Test
 			get { return 0; }
 		}
 
+		/// <summary>an implicitely implemented property</summary>
+		public int ImplicitProperty { get { return -1; } }
+
 		/// <summary>an explicitly implemented method</summary>
 		void ExplicitInterface.ExplicitMethod()
+		{
+		}
+
+		/// <summary>an implicitely implemented method</summary>
+		public void ImplicitMethod()
 		{
 		}
 

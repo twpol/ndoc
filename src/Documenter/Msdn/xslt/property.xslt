@@ -48,6 +48,7 @@
 					<p></p>
 					<xsl:call-template name="parameter-section" />
 					<xsl:call-template name="value-section" />
+					<xsl:call-template name="implements-section" />
 					<xsl:call-template name="remarks-section" />
 					<xsl:call-template name="events-section" />
 					<xsl:call-template name="exceptions-section" />

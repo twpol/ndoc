@@ -456,6 +456,63 @@
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
+	<xsl:template name="implements-section">
+		<xsl:if test="implements">
+			<xsl:variable name="member" select="local-name()" />
+			<h4 class="dtH4">Implements</h4>
+			<xsl:for-each select="implements">
+				<xsl:variable name="declaring-type-id" select="@interfaceId" />
+				<xsl:variable name="name" select="@name" />
+				<xsl:variable name="declaring-interface" select="//interface[@id=$declaring-type-id]" />
+				<p>
+					<a>
+						<xsl:attribute name="href">
+							<xsl:choose>
+								<xsl:when test="$member='property'">
+									<xsl:choose>
+										<xsl:when test="starts-with(@declaringType, 'System.')" >
+											<xsl:call-template name="get-filename-for-system-property" />
+										</xsl:when>
+										<xsl:otherwise>
+											<xsl:call-template name="get-filename-for-property">
+												<xsl:with-param name="property" select="$declaring-interface/property[@name=$name]" />
+											</xsl:call-template>
+										</xsl:otherwise>
+									</xsl:choose>
+								</xsl:when>
+								<xsl:when test="$member='event'">
+									<xsl:choose>
+										<xsl:when test="starts-with(@declaringType, 'System.')" >
+											<xsl:call-template name="get-filename-for-system-event" />
+										</xsl:when>
+										<xsl:otherwise>
+											<xsl:call-template name="get-filename-for-event">
+												<xsl:with-param name="event" select="$declaring-interface/event[@name=$name]" />
+											</xsl:call-template>
+										</xsl:otherwise>
+									</xsl:choose>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:choose>
+										<xsl:when test="starts-with(@declaringType, 'System.')" >
+											<xsl:call-template name="get-filename-for-system-method" />
+										</xsl:when>
+										<xsl:otherwise>
+											<xsl:call-template name="get-filename-for-method">
+												<xsl:with-param name="method" select="$declaring-interface/method[@name=$name]" />
+											</xsl:call-template>
+										</xsl:otherwise>
+									</xsl:choose>
+								</xsl:otherwise>
+							</xsl:choose>
+						</xsl:attribute>
+						<xsl:value-of select="@interface" /><xsl:text>.</xsl:text><xsl:value-of select="@name" />
+					</a>
+				</p>
+			</xsl:for-each>
+		</xsl:if>
+	</xsl:template>
+	<!-- -->
 	<xsl:template name="remarks-section">
 		<xsl:if test="documentation/remarks">
 			<h4 class="dtH4">Remarks</h4>

@@ -96,7 +96,7 @@ namespace NDoc.Documenter.Msdn
 			get 
 			{
 				return Path.Combine(MyConfig.OutputDirectory, 
-					MyConfig.HtmlHelpName) + ".chm";
+					MyConfig.HtmlHelpName + ".chm");
 			} 
 		}
 
@@ -115,7 +115,7 @@ namespace NDoc.Documenter.Msdn
 			}
 
 			string path = Path.Combine(MyConfig.OutputDirectory, 
-				MyConfig.HtmlHelpName) + ".chm";
+				MyConfig.HtmlHelpName + ".chm");
 
 			string temp = Path.Combine(MyConfig.OutputDirectory, "~chm.tmp");
 
@@ -150,19 +150,20 @@ namespace NDoc.Documenter.Msdn
 					string mainModuleDirectory = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
 					resourceDirectory = Path.GetFullPath(Path.Combine(mainModuleDirectory, @"..\..\..\Documenter\Msdn\"));
 				#else
-					resourceDirectory = Path.Combine(
+
+					resourceDirectory = Path.Combine(Path.Combine(
 						Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-						@"\NDoc\MSDN\");
+						"NDoc"), "MSDN");
 
 					EmbeddedResources.WriteEmbeddedResources(
 						this.GetType().Module.Assembly,
 						"NDoc.Documenter.Msdn.css",
-						Path.Combine(resourceDirectory, @"css\"));
+						Path.Combine(resourceDirectory, "css"));
 
 					EmbeddedResources.WriteEmbeddedResources(
 						this.GetType().Module.Assembly,
 						"NDoc.Documenter.Msdn.xslt",
-						Path.Combine(resourceDirectory, @"xslt\"));
+						Path.Combine(resourceDirectory, "xslt"));
 				#endif
 
 				// Create the html output directory if it doesn't exist.
@@ -173,7 +174,7 @@ namespace NDoc.Documenter.Msdn
 
 				// Copy our cascading style sheet to the html output directory
 				string cssfile = Path.Combine(MyConfig.OutputDirectory, "MSDN.css");
-				File.Copy(Path.Combine(resourceDirectory, @"css\MSDN.css"), cssfile, true);
+				File.Copy(Path.Combine(Path.Combine(resourceDirectory, "css"), "MSDN.css"), cssfile, true);
 				File.SetAttributes(cssfile, FileAttributes.Normal); //ensure it's not read only
 
 				// Write the embedded icons to the html output directory
@@ -327,7 +328,7 @@ namespace NDoc.Documenter.Msdn
 		{
 			try
 			{
-				transform.Load(resourceDirectory + "xslt/" + filename);
+				transform.Load(Path.Combine(Path.Combine(resourceDirectory, "xslt"), filename));
 			}
 			catch (Exception e)
 			{

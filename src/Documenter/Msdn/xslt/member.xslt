@@ -80,6 +80,7 @@
 					<xsl:call-template name="cs-member-syntax" />
 					<xsl:call-template name="parameter-section" />
 					<xsl:call-template name="returnvalue-section" />
+					<xsl:call-template name="implements-section" />
 					<xsl:call-template name="remarks-section" />
 					<xsl:call-template name="events-section" />
 					<xsl:call-template name="exceptions-section" />

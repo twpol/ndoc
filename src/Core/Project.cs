@@ -70,6 +70,8 @@ namespace NDoc.Core
 		/// </summary>
 		public class AssemblyAlreadyExistsException : ApplicationException
 		{
+			/// <summary>Initializes a new instance of the AssemblyAlreadyExistsException 
+			/// class with a specified error message.</summary>
 			public AssemblyAlreadyExistsException(string message) : base(message)
 			{}
 		}
