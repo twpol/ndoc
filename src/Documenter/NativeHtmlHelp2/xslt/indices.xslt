@@ -40,7 +40,7 @@
 		<xsl:param name="title" />
 		<xsl:param name="page-type"/>
 		<xsl:choose>
-			<xsl:when test="$page-type='type' or $page-type='hierarchy' or $page-type='Members'">
+			<xsl:when test="$page-type='type' or $page-type='hierarchy' or $page-type='Members' or $page-type='TypeHierarchy'">
 				<MSHelp:TOCTitle Title="{$title}"/>
 			</xsl:when>
 			<xsl:otherwise>
@@ -148,6 +148,9 @@
 				</xsl:when>
 				<xsl:when test="$page-type='Fields'">
 					<xsl:value-of select="NUtil:GetOverviewHRef( string( @id ), 'Fields' )"/>				
+				</xsl:when>
+				<xsl:when test="$page-type='TypeHierarchy'">
+					<xsl:value-of select="NUtil:GetTypeHierarchyHRef( string( @id ) )"/>				
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:value-of select="NUtil:GetTypeHRef( string( @id ) )"/>

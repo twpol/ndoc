@@ -657,7 +657,18 @@
 				</xsl:apply-templates>
 				
 				<xsl:choose>
-					<xsl:when test="$page-type!='hierarchy'">
+					<xsl:when test="$page-type='hierarchy'">
+						<xsl:apply-templates select="ndoc" mode="AIndex-hierarchy"/>		
+					</xsl:when>
+					
+					<xsl:when test="$page-type='TypeHierarchy'">
+						<xsl:apply-templates select="." mode="AIndex">
+							<xsl:with-param name="page-type" select="$page-type"/>
+							<xsl:with-param name="overload-page" select="$overload-page"/>				
+						</xsl:apply-templates>
+					</xsl:when>
+
+					<xsl:otherwise>
 						<xsl:apply-templates select="." mode="KIndex">
 							<xsl:with-param name="title" select="$title"/>
 							<xsl:with-param name="page-type" select="$page-type"/>		
@@ -674,10 +685,6 @@
 							<xsl:with-param name="page-type" select="$page-type"/>
 							<xsl:with-param name="overload-page" select="$overload-page"/>				
 						</xsl:apply-templates>
-					</xsl:when>
-					
-					<xsl:otherwise>
-						<xsl:apply-templates select="ndoc" mode="AIndex-hierarchy"/>		
 					</xsl:otherwise>
 				</xsl:choose>
 				

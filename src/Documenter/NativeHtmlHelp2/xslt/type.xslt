@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	xmlns:MSHelp="http://msdn.microsoft.com/mshelp"	
-	xmlns:NUtil="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities"
-	exclude-result-prefixes="NUtil">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:MSHelp="http://msdn.microsoft.com/mshelp"
+	xmlns:NUtil="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities" exclude-result-prefixes="NUtil">
 	<!-- -->
-	<xsl:output method="xml" indent="yes" encoding="utf-8" omit-xml-declaration="yes"/>
+	<xsl:output method="xml" indent="yes" encoding="utf-8" omit-xml-declaration="yes" />
 	<!-- -->
 	<xsl:include href="common.xslt" />
 	<xsl:include href="syntax.xslt" />
@@ -34,9 +32,9 @@
 				<xsl:with-param name="count" select="$level" />
 			</xsl:call-template>
 			<xsl:call-template name="get-link-for-type">
-				<xsl:with-param name="type" select="$list[$last]/@id"/>
-				<xsl:with-param name="link-text" select="substring-after( $list[$last]/@id, ':' )"/>	
-			</xsl:call-template>	
+				<xsl:with-param name="type" select="$list[$last]/@id" />
+				<xsl:with-param name="link-text" select="substring-after( $list[$last]/@id, ':' )" />
+			</xsl:call-template>
 			<br />
 			<xsl:call-template name="draw-hierarchy">
 				<xsl:with-param name="list" select="$list[position()!=$last]" />
@@ -80,7 +78,7 @@
 		<html dir="LTR">
 			<xsl:call-template name="html-head">
 				<xsl:with-param name="title" select="concat(@name, ' ', $type)" />
-				<xsl:with-param name="page-type" select="'type'"/>
+				<xsl:with-param name="page-type" select="'type'" />
 			</xsl:call-template>
 			<body topmargin="0" id="bodyID" class="dtBODY">
 				<object id="obj_cook" classid="clsid:59CC0C20-679B-11D2-88BD-0800361A1803" style="display:none;"></object>
@@ -90,7 +88,7 @@
 				<div id="nstext" valign="bottom">
 					<xsl:call-template name="summary-section" />
 					<xsl:if test="local-name()!='delegate' and local-name()!='enumeration'">
-						<xsl:variable name="members-href" select="NUtil:GetOverviewHRef( string( @id ), 'Members' )"/>
+						<xsl:variable name="members-href" select="NUtil:GetOverviewHRef( string( @id ), 'Members' )" />
 						<xsl:if test="constructor|field|property|method|operator|event">
 							<p>For a list of all members of this type, see <a href="{$members-href}"><xsl:value-of select="@name" /> Members</a>.</p>
 						</xsl:if>
@@ -98,48 +96,93 @@
 					<xsl:if test="local-name()='enumeration' and @flags">
 						<p>This enumeration has a 
 						<xsl:call-template name="get-a-href">
-							<xsl:with-param name="cref" select="'T:System.FlagsAttribute'" />
-						</xsl:call-template>
+								<xsl:with-param name="cref" select="'T:System.FlagsAttribute'" />
+							</xsl:call-template>
 						attribute that allows a bitwise combination of its member values.</p>
 					</xsl:if>
-
 					<xsl:if test="local-name() != 'delegate' and local-name() != 'enumeration'">
 						<p>
 							<xsl:choose>
 								<xsl:when test="self::interface">
-									<xsl:if test="base">
-										<xsl:call-template name="draw-hierarchy">
-											<xsl:with-param name="list" select="descendant::base" />
-											<xsl:with-param name="level" select="0" />
-										</xsl:call-template>
-										<xsl:call-template name="indent">
-											<xsl:with-param name="count" select="count(descendant::base)" />
-										</xsl:call-template>
+									<xsl:if test="derivedBy">
 										<b>
-											<xsl:value-of select="@name" />
+											<xsl:value-of select="substring-after( @id, ':' )" />
 										</b>
+										<xsl:choose>
+											<xsl:when test="count(derivedBy) &lt; 6">
+												<xsl:for-each select="derivedBy">
+													<br />
+													<xsl:call-template name="indent">
+														<xsl:with-param name="count" select="1" />
+													</xsl:call-template>
+													<xsl:call-template name="get-link-for-type">
+														<xsl:with-param name="type" select="@id" />
+														<xsl:with-param name="link-text" select="substring-after(@id, ':' )" />
+													</xsl:call-template>
+												</xsl:for-each>
+											</xsl:when>
+											<xsl:otherwise>
+													<br />
+													<xsl:call-template name="indent">
+														<xsl:with-param name="count" select="1" />
+													</xsl:call-template>
+												<a href="{NUtil:GetTypeHierarchyHRef( string( @id ))}">
+													<xsl:text>Derived interfaces</xsl:text>
+												</a>
+											</xsl:otherwise>
+										</xsl:choose>
 									</xsl:if>
 								</xsl:when>
 								<xsl:otherwise>
 									<xsl:call-template name="get-xlink-for-foreign-type">
-										<xsl:with-param name="type" select="'T:System.Object'" />									
+										<xsl:with-param name="type" select="'T:System.Object'" />
 									</xsl:call-template>
 									<br />
 									<xsl:call-template name="draw-hierarchy">
 										<xsl:with-param name="list" select="descendant::base" />
 										<xsl:with-param name="level" select="1" />
 									</xsl:call-template>
+									<xsl:variable name="typeIndent" select="count(descendant::base)" />
 									<xsl:call-template name="indent">
-										<xsl:with-param name="count" select="count(descendant::base) + 1" />
+										<xsl:with-param name="count" select="$typeIndent+1" />
 									</xsl:call-template>
 									<b>
 										<xsl:value-of select="substring-after( @id, ':' )" />
-									</b>									
+									</b>
+									<xsl:if test="derivedBy">
+												<xsl:variable name="derivedTypeIndent" select="$typeIndent+2" />
+										<xsl:choose>
+											<xsl:when test="count(derivedBy) &lt; 6">
+												<xsl:for-each select="derivedBy">
+													<br />
+													<xsl:call-template name="indent">
+														<xsl:with-param name="count" select="$derivedTypeIndent" />
+													</xsl:call-template>
+													<xsl:call-template name="get-link-for-type">
+														<xsl:with-param name="type" select="@id" />
+														<xsl:with-param name="link-text" select="substring-after(@id, ':' )" />
+													</xsl:call-template>
+												</xsl:for-each>
+											</xsl:when>
+											<xsl:otherwise>
+												<br />
+												<xsl:call-template name="indent">
+													<xsl:with-param name="count" select="$derivedTypeIndent" />
+												</xsl:call-template>
+												<a href="{NUtil:GetTypeHierarchyHRef( string( @id ))}">
+													<xsl:text>Derived types</xsl:text>
+												</a>
+											</xsl:otherwise>
+										</xsl:choose>
+									</xsl:if>
 								</xsl:otherwise>
 							</xsl:choose>
 						</p>
 					</xsl:if>
-					<xsl:call-template name="syntax-section"/>
+					<xsl:call-template name="syntax-section" />
+					<xsl:if test="local-name() = 'interface'">
+						<xsl:call-template name="interface-implementing-types-section" />
+					</xsl:if>
 					<xsl:if test="local-name() = 'delegate'">
 						<xsl:call-template name="parameter-section" />
 						<xsl:call-template name="returnvalue-section" />
@@ -153,8 +196,7 @@
 					<xsl:if test="local-name() = 'enumeration'">
 						<xsl:call-template name="enumeration-members-section" />
 					</xsl:if>
-					<xsl:call-template name="type-requirements-section"/>
-					
+					<xsl:call-template name="type-requirements-section" />
 					<xsl:variable name="page">
 						<xsl:choose>
 							<xsl:when test="local-name() = 'enumeration'">enumeration</xsl:when>
@@ -162,11 +204,9 @@
 							<xsl:otherwise>type</xsl:otherwise>
 						</xsl:choose>
 					</xsl:variable>
-					
 					<xsl:call-template name="seealso-section">
 						<xsl:with-param name="page" select="$page" />
-					</xsl:call-template>						
-					
+					</xsl:call-template>
 					<xsl:call-template name="footer-row">
 						<xsl:with-param name="type-name" select="concat(@name, ' ', $type)" />
 					</xsl:call-template>
@@ -175,4 +215,36 @@
 		</html>
 	</xsl:template>
 	<!-- -->
+	<xsl:template name="interface-implementing-types-section">
+		<xsl:if test="implementedBy">
+			<h4 class="dtH4">Types that implement <xsl:value-of select="@name" /></h4>
+			<div class="tablediv">
+				<table class="dtTABLE" cellspacing="0">
+					<tr valign="top">
+						<th width="50%">Type</th>
+						<th width="50%">Description</th>
+					</tr>
+					<xsl:for-each select="implementedBy">
+						<xsl:variable name="typeID" select="@id" />
+						<xsl:apply-templates select="ancestor::ndoc/assembly/module/namespace/*[@id=$typeID]" mode="implementingType" />
+					</xsl:for-each>
+				</table>
+			</div>
+		</xsl:if>
+	</xsl:template>
+	<!-- -->
+	<xsl:template match="structure | class" mode="implementingType">
+		<tr valign="top">
+			<td>
+				<a href="{NUtil:GetLocalCRef( string( @id ) ) }">
+					<xsl:value-of select="@name" />
+				</a>
+			</td>
+			<td>
+				<xsl:call-template name="obsolete-inline" />
+				<xsl:apply-templates select="(documentation/summary)[1]/node()" mode="slashdoc" />
+				<xsl:if test="not((documentation/summary)[1]/node())">&#160;</xsl:if>
+			</td>
+		</tr>
+	</xsl:template>
 </xsl:stylesheet>
