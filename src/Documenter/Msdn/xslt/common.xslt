@@ -132,7 +132,7 @@
 	<!-- -->
 	<xsl:template name="type-mixed">
 		<xsl:choose>
-			<xsl:when test="local-name()='constructor' or local-name()='property' or local-name()='method' or local-name()='event'">
+			<xsl:when test="local-name()='constructor' or local-name()='property' or local-name()='method' or local-name()='event' or local-name()='operator'">
 				<xsl:choose>
 					<xsl:when test="local-name(..)='interface'">Interface</xsl:when>
 					<xsl:otherwise>Class</xsl:otherwise>
@@ -149,7 +149,7 @@
 	<!-- -->
 	<xsl:template name="type-element">
 		<xsl:choose>
-			<xsl:when test="local-name()='constructor' or local-name()='field' or local-name()='property' or local-name()='method' or local-name()='event'">
+			<xsl:when test="local-name()='constructor' or local-name()='field' or local-name()='property' or local-name()='method' or local-name()='event' or local-name()='operator'">
 				<xsl:value-of select="local-name(..)" />
 			</xsl:when>
 			<xsl:otherwise>
@@ -160,7 +160,7 @@
 	<!-- -->
 	<xsl:template name="type-name">
 		<xsl:choose>
-			<xsl:when test="local-name()='constructor' or local-name()='field' or local-name()='property' or local-name()='method' or local-name()='event'">
+			<xsl:when test="local-name()='constructor' or local-name()='field' or local-name()='property' or local-name()='method' or local-name()='event' or local-name()='operator'">
 				<xsl:value-of select="../@name" />
 			</xsl:when>
 			<xsl:otherwise>
@@ -171,7 +171,7 @@
 	<!-- -->
 	<xsl:template name="type-id">
 		<xsl:choose>
-			<xsl:when test="local-name()='constructor' or local-name()='field' or local-name()='property' or local-name()='method' or local-name()='event'">
+			<xsl:when test="local-name()='constructor' or local-name()='field' or local-name()='property' or local-name()='method' or local-name()='event' or local-name()='operator'">
 				<xsl:value-of select="../@id" />
 			</xsl:when>
 			<xsl:otherwise>
@@ -182,7 +182,7 @@
 	<!-- -->
 	<xsl:template name="namespace-name">
 		<xsl:choose>
-			<xsl:when test="local-name()='constructor' or local-name()='field' or local-name()='property' or local-name()='method' or local-name()='event'">
+			<xsl:when test="local-name()='constructor' or local-name()='field' or local-name()='property' or local-name()='method' or local-name()='event' or local-name()='operator'">
 				<xsl:value-of select="../../@name" />
 			</xsl:when>
 			<xsl:otherwise>
@@ -245,24 +245,41 @@
 			<xsl:if test="$page='member' or $page='property'">
 				<xsl:variable name="memberName" select="@name" />
 				<xsl:if test="count(parent::node()/*[@name=$memberName]) &gt; 1">
-					<xsl:text> | </xsl:text>
 					<xsl:choose>
-						<xsl:when test="local-name()!='constructor'">
-							<a>
-								<xsl:attribute name="href">
-									<xsl:call-template name="get-filename-for-current-method-overloads" />
-								</xsl:attribute>
-								<xsl:value-of select="concat($typeName, '.', @name)" />
-								<xsl:text> Overload List</xsl:text>
-							</a>
-						</xsl:when>
-						<xsl:otherwise>
+						<xsl:when test="local-name()='constructor'">
+ 				      <xsl:text> | </xsl:text>
 							<a>
 								<xsl:attribute name="href">
 									<xsl:call-template name="get-filename-for-current-constructor-overloads" />
 								</xsl:attribute>
 								<xsl:value-of select="$typeName" />
 								<xsl:text> Constructor Overload List</xsl:text>
+							</a>
+						</xsl:when>
+						<xsl:when test="local-name()='operator'">
+						  <xsl:if test="@name!='op_Implicit' and @name!='op_Explicit'">
+   				      <xsl:text> | </xsl:text>
+							  <a>
+								  <xsl:attribute name="href">
+									  <xsl:call-template name="get-filename-for-current-method-overloads" />
+								  </xsl:attribute>
+								  <xsl:value-of select="$typeName" />
+								  <xsl:text> </xsl:text>
+								  <xsl:call-template name="operator-name">
+								    <xsl:with-param name="name"><xsl:value-of select="@name" /></xsl:with-param>
+								  </xsl:call-template>
+								  <xsl:text> Overload List</xsl:text>
+							  </a>
+						  </xsl:if>
+						</xsl:when>
+						<xsl:otherwise>
+	 			      <xsl:text> | </xsl:text>
+   						<a>
+								<xsl:attribute name="href">
+									<xsl:call-template name="get-filename-for-current-method-overloads" />
+								</xsl:attribute>
+								<xsl:value-of select="concat($typeName, '.', @name)" />
+								<xsl:text> Overload List</xsl:text>
 							</a>
 						</xsl:otherwise>
 					</xsl:choose>
