@@ -1665,7 +1665,7 @@ namespace NDoc.Gui
 
 			if (form.ShowDialog(this) == System.Windows.Forms.DialogResult.OK)
 			{
-				AssemblySlashDoc  assemblySlashDoc = new AssemblySlashDoc();
+				AssemblySlashDoc assemblySlashDoc = new AssemblySlashDoc();
 				try
 				{
 					assemblySlashDoc.AssemblyFilename = form.AssemblyFilename;
@@ -1677,6 +1677,14 @@ namespace NDoc.Gui
 				catch(Project.AssemblyAlreadyExistsException)
 				{
 					//ignore this exception
+				}
+				catch(ReflectionTypeLoadException ex)
+				{
+					string msg = string.Format(
+						"Unable to load types from {0}.\nIs {1} missing a dependency?", 
+						form.AssemblyFilename, Path.GetFileName(form.AssemblyFilename));
+					ErrorForm errorForm = new ErrorForm(msg, ex);
+					errorForm.ShowDialog();
 				}
 			}
 
