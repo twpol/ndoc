@@ -452,22 +452,26 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="overloads-remarks-section">
-		<xsl:if test="documentation/overloads/remarks">
+		<xsl:variable name="memberName" select="@name" />
+		<xsl:if test="parent::node()/*[@name=$memberName]/documentation/overloads/remarks">
 			<h4 class="dtH4">Remarks</h4>
 			<p>
-				<xsl:apply-templates select="(documentation/overloads/remarks)[1]/node()" mode="slashdoc" />
+				<xsl:call-template name="output-paragraph">
+					<xsl:with-param name="nodes" select="(parent::node()/*[@name=$memberName]/documentation/overloads/remarks)[1]/node()" />
+				</xsl:call-template>
 			</p>
-			<xsl:apply-templates select="documentation/node()" mode="overloads-remarks-section"/>			
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="overloads-example-section">
-		<xsl:if test="documentation/overloads/example">
+		<xsl:variable name="memberName" select="@name" />
+		<xsl:if test="parent::node()/*[@name=$memberName]/documentation/overloads/example">
 			<h4 class="dtH4">Example</h4>
 			<p>
-				<xsl:apply-templates select="(documentation/overloads/example)[1]/node()" mode="slashdoc" />
+				<xsl:call-template name="output-paragraph">
+					<xsl:with-param name="nodes" select="(parent::node()/*[@name=$memberName]/documentation/overloads/example)[1]/node()" />
+				</xsl:call-template>
 			</p>
-			<xsl:apply-templates select="documentation/node()" mode="overloads-example-section"/>			
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
