@@ -98,6 +98,7 @@ namespace NDoc.Core
 			this.textBoxEntry.Size = new System.Drawing.Size(368, 216);
 			this.textBoxEntry.TabIndex = 2;
 			this.textBoxEntry.Text = "";
+			this.textBoxEntry.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxEntry_KeyDown);
 			this.textBoxEntry.DragOver += new System.Windows.Forms.DragEventHandler(this.textBoxEntry_DragOver);
 			this.textBoxEntry.DragDrop += new System.Windows.Forms.DragEventHandler(this.textBoxEntry_DragDrop);
 			// 
@@ -178,6 +179,15 @@ namespace NDoc.Core
 			}
 
 			this.Value = text;
+		}
+
+		private void textBoxEntry_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
+		{
+			if (e.Control && (e.KeyCode == Keys.A))
+			{
+				textBoxEntry.SelectAll();
+				e.Handled = true;
+			}
 		}
 
 		/// <summary>
