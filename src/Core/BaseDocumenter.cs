@@ -1252,7 +1252,7 @@ namespace NDoc.Core
 					writer.WriteAttributeString("overload", overload.ToString());
 				}
 
-				writer.WriteAttributeString("returnType", method.ReturnType.FullName);
+				writer.WriteAttributeString("returnType", GetTypeName(method.ReturnType));
 
 				WriteMethodDocumentation(writer, memberName, method, !inherited);
 				WriteCustomAttributes(writer, method);
