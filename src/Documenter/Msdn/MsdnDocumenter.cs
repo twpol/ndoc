@@ -249,7 +249,8 @@ namespace NDoc.Documenter.Msdn
 						xmlDocumentation.Load(fxtr);
 
 						tempFile.Seek(0,SeekOrigin.Begin);
-						xpathDocument = new XPathDocument(tempFile);
+						XmlTextReader reader = new XmlTextReader(tempFile);
+						xpathDocument = new XPathDocument(reader, XmlSpace.Preserve);
 					}
 				}
 				finally

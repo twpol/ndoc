@@ -88,7 +88,9 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 
 				tempFile.Seek(0,SeekOrigin.Begin);
 
-				xPathDocumentation = new XPathDocument(tempFile);
+				XmlTextReader reader = new XmlTextReader(tempFile);
+				xPathDocumentation = new XPathDocument(reader,XmlSpace.Preserve);
+
 			}
 			finally
 			{
