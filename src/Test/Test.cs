@@ -777,6 +777,9 @@ namespace NDoc.Test
 
 		/// <summary>Greater-than-or-equal operator.</summary>
 		public static bool operator >=(Operators x, Operators y) { return false; }
+
+		/// <summary>A multiplication method.</summary>
+		public static int Multiply(Operators x, Operators y) { return 0; }
 	}
 
 	/// <summary>This class contains various type conversions.</summary>
@@ -1332,6 +1335,12 @@ namespace NDoc.Test
 		}
 		/// <summary>This overload accepts one int parameter.</summary>
 		public void OverloadedMethod(int i)
+		{
+		}
+
+		/// <summary>This method is not overloaded and should not override
+		/// the OverloadedMethod(int i) page.</summary>
+		public void OverloadedMethod2()
 		{
 		}
 
