@@ -88,7 +88,7 @@ namespace NDoc.Core
 			}
 			else
 			{
-				throw new FileNotFoundException("Documentation not built.", 
+				throw new FileNotFoundException("Documentation not built.",
 					this.MainOutputFile);
 			}
 		}
@@ -150,8 +150,6 @@ namespace NDoc.Core
 			}
 		}
 
-
-
 		/// <summary>See <see cref="IDocumenter"/>.</summary>
 		abstract public void Build(Project project);
 
@@ -160,24 +158,21 @@ namespace NDoc.Core
 		{
 			_Project = project;
 
-// vvvvv WB020102: add assembly resolver needed to resolve assembly dependencies.
 			AssemblyResolver assemblyResolver = null;
-			string baseDirectory = ((BaseDocumenterConfig)this.Config).BaseDirectory;
-			if (string.Empty != baseDirectory) 
+
+			string baseDirectory = MyConfig.BaseDirectory;
+
+			if (string.Empty != baseDirectory)
 			{
 				assemblyResolver = new AssemblyResolver(baseDirectory);
 				assemblyResolver.Install();
 			}
-// ^^^^^ WB020102
 
-// vvvvv WB020102: performance helper: write to memory stream instead of file.
-			// Sucks that there's no XmlNodeWriter.  Instead we
+			// Sucks that there's no XmlNodeWriter. Instead we
 			// have to write out to a file then load back in.
-//			XmlWriter writer = new XmlTextWriter(@".\temp.xml", System.Text.Encoding.UTF8);
-// ----- WB020102: replaced by
+			// For performance, we'll write to a memory stream instead of a file.
 			MemoryStream memoryStream = new MemoryStream();
 			XmlWriter writer = new XmlTextWriter(memoryStream, System.Text.Encoding.UTF8);
-// ^^^^^ WB020102
 
 			string currentAssemblyFilename = "";
 
@@ -220,11 +215,7 @@ namespace NDoc.Core
 
 				writer.Close();
 
-// vvvvv WB020201: performance helper: load from memory stream instead of file.
-//				xmlDocument.Load(@".\temp.xml");
-// ----- WB020201: replaced by
 				xmlDocument.Load(new MemoryStream(memoryStream.GetBuffer()));
-// ^^^^^ WB020201
 			}
 			catch (Exception e)
 			{
@@ -236,14 +227,11 @@ namespace NDoc.Core
 			finally
 			{
 				writer.Close();
-// vvvvv WB020201: performance helper: no more temp. file; deinstall assembly resolver
-//				File.Delete(@".\temp.xml");
-// ----- WB020201: replaced by
-				if (null != assemblyResolver) 
+
+				if (null != assemblyResolver)
 				{
 					assemblyResolver.Deinstall();
 				}
-// ^^^^^ WB020201
 			}
 		}
 
@@ -666,8 +654,13 @@ namespace NDoc.Core
 				writer.WriteStartElement("property");
 				writer.WriteAttributeString("name", property.Name);
 				writer.WriteAttributeString("type", property.PropertyType.FullName);
-				object value = property.GetValue(attribute, null);
-				writer.WriteAttributeString("value", value != null ? value.ToString() : "");
+
+				if (property.CanRead)
+				{
+					object value = property.GetValue(attribute, null);
+					writer.WriteAttributeString("value", value != null ? value.ToString() : "");
+				}
+
 				writer.WriteEndElement(); // property
 			}
 
@@ -1426,7 +1419,7 @@ namespace NDoc.Core
 				{
 					memberName += ",";
 				}
-				
+
 				string parameterName = parameter.ParameterType.FullName;
 
 				parameterName = Regex.Replace(parameterName, ",", ",0:");
