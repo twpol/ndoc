@@ -155,9 +155,9 @@ namespace NDoc.Gui
 			// 
 			// assembliesListView
 			// 
-			this.assembliesListView.Anchor = (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.assembliesListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
 				| System.Windows.Forms.AnchorStyles.Left) 
-				| System.Windows.Forms.AnchorStyles.Right);
+				| System.Windows.Forms.AnchorStyles.Right)));
 			this.assembliesListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
 																								 this.assemblyColumnHeader,
 																								 this.versionColumnHeader,
@@ -165,7 +165,7 @@ namespace NDoc.Gui
 			this.assembliesListView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
 			this.assembliesListView.Location = new System.Drawing.Point(8, 16);
 			this.assembliesListView.Name = "assembliesListView";
-			this.assembliesListView.Size = new System.Drawing.Size(510, 114);
+			this.assembliesListView.Size = new System.Drawing.Size(510, 122);
 			this.assembliesListView.TabIndex = 0;
 			this.assembliesListView.View = System.Windows.Forms.View.Details;
 			// 
@@ -186,19 +186,19 @@ namespace NDoc.Gui
 			// 
 			// closeButton
 			// 
-			this.closeButton.Anchor = (System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right);
+			this.closeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.closeButton.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.closeButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.closeButton.Location = new System.Drawing.Point(458, 394);
+			this.closeButton.Location = new System.Drawing.Point(456, 416);
 			this.closeButton.Name = "closeButton";
 			this.closeButton.TabIndex = 0;
 			this.closeButton.Text = "&Close";
 			// 
 			// richTextBox
 			// 
-			this.richTextBox.Anchor = (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.richTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
 				| System.Windows.Forms.AnchorStyles.Left) 
-				| System.Windows.Forms.AnchorStyles.Right);
+				| System.Windows.Forms.AnchorStyles.Right)));
 			this.richTextBox.BackColor = System.Drawing.SystemColors.Control;
 			this.richTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.richTextBox.Location = new System.Drawing.Point(16, 8);
@@ -210,24 +210,23 @@ namespace NDoc.Gui
 			// 
 			// versionHeaderGroupBox
 			// 
-			this.versionHeaderGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-				| System.Windows.Forms.AnchorStyles.Right);
-			this.versionHeaderGroupBox.Controls.AddRange(new System.Windows.Forms.Control[] {
-																								this.assembliesListView});
+			this.versionHeaderGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+				| System.Windows.Forms.AnchorStyles.Right)));
+			this.versionHeaderGroupBox.Controls.Add(this.assembliesListView);
 			this.versionHeaderGroupBox.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.versionHeaderGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-			this.versionHeaderGroupBox.Location = new System.Drawing.Point(8, 240);
+			this.versionHeaderGroupBox.Location = new System.Drawing.Point(8, 256);
 			this.versionHeaderGroupBox.Name = "versionHeaderGroupBox";
 			this.versionHeaderGroupBox.Padding = 0;
-			this.versionHeaderGroupBox.Size = new System.Drawing.Size(526, 144);
+			this.versionHeaderGroupBox.Size = new System.Drawing.Size(526, 152);
 			this.versionHeaderGroupBox.TabIndex = 1;
 			this.versionHeaderGroupBox.TabStop = false;
 			this.versionHeaderGroupBox.Text = "Version Information";
 			// 
 			// projectHomePageLinkLabel
 			// 
-			this.projectHomePageLinkLabel.Anchor = ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-				| System.Windows.Forms.AnchorStyles.Right);
+			this.projectHomePageLinkLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+				| System.Windows.Forms.AnchorStyles.Right)));
 			this.projectHomePageLinkLabel.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
 			this.projectHomePageLinkLabel.Location = new System.Drawing.Point(16, 152);
 			this.projectHomePageLinkLabel.Name = "projectHomePageLinkLabel";
@@ -239,8 +238,8 @@ namespace NDoc.Gui
 			// 
 			// adminsLinkLabel
 			// 
-			this.adminsLinkLabel.Anchor = ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-				| System.Windows.Forms.AnchorStyles.Right);
+			this.adminsLinkLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+				| System.Windows.Forms.AnchorStyles.Right)));
 			this.adminsLinkLabel.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
 			this.adminsLinkLabel.Location = new System.Drawing.Point(16, 176);
 			this.adminsLinkLabel.Name = "adminsLinkLabel";
@@ -252,29 +251,29 @@ namespace NDoc.Gui
 			// 
 			// developersLabel
 			// 
-			this.developersLabel.Anchor = ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-				| System.Windows.Forms.AnchorStyles.Right);
+			this.developersLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+				| System.Windows.Forms.AnchorStyles.Right)));
 			this.developersLabel.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
 			this.developersLabel.Location = new System.Drawing.Point(16, 200);
 			this.developersLabel.Name = "developersLabel";
-			this.developersLabel.Size = new System.Drawing.Size(512, 32);
+			this.developersLabel.Size = new System.Drawing.Size(512, 48);
 			this.developersLabel.TabIndex = 7;
-			this.developersLabel.Text = "Contributors: Heath Stewart, Jerome Mathieu, Keith Hill, Michael Poettgen, Pascal" +
-				" Bourque, Ryan Seghers, Steve Van Esch, Thong (Tum) Nguyen";
+			this.developersLabel.Text = "Contributors: Carlos Guzmán Álvarez, Don Kackman, Heath Stewart, Laurent Domenech" +
+				", Jerome Mathieu, Keith Hill, Michael Poettgen, Pascal Bourque, Ryan Seghers, St" +
+				"eve Van Esch, Thong (Tum) Nguyen";
 			// 
 			// AboutForm
 			// 
 			this.AcceptButton = this.closeButton;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.CancelButton = this.closeButton;
-			this.ClientSize = new System.Drawing.Size(546, 432);
-			this.Controls.AddRange(new System.Windows.Forms.Control[] {
-																		  this.developersLabel,
-																		  this.adminsLinkLabel,
-																		  this.projectHomePageLinkLabel,
-																		  this.richTextBox,
-																		  this.versionHeaderGroupBox,
-																		  this.closeButton});
+			this.ClientSize = new System.Drawing.Size(546, 452);
+			this.Controls.Add(this.developersLabel);
+			this.Controls.Add(this.adminsLinkLabel);
+			this.Controls.Add(this.projectHomePageLinkLabel);
+			this.Controls.Add(this.richTextBox);
+			this.Controls.Add(this.versionHeaderGroupBox);
+			this.Controls.Add(this.closeButton);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
