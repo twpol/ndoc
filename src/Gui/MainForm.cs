@@ -112,7 +112,6 @@ namespace NDoc.Gui
 		private string processDirectory;
 		private string projectFilename;
 		private string untitledProjectName = "(Untitled)";
-		private int maxMRU = 8;
 		private Thread buildThread;
 		private System.Windows.Forms.ToolBarButton solutionToolBarButton;
 		private System.Windows.Forms.MenuItem menuFileOpenSolution;
@@ -909,7 +908,7 @@ namespace NDoc.Gui
 
 					count++;
 
-					if (count > maxMRU)
+					if (count > this.options.MRUSize)
 					{
 						break;
 					}
@@ -987,6 +986,7 @@ namespace NDoc.Gui
 
 			this.options.LoadLastProjectOnStart = settings.GetSetting( "gui", "loadLastProjectOnStart", true );
 			this.options.ShowProgressOnBuild = settings.GetSetting( "gui", "showProgressOnBuild", false );
+			this.options.MRUSize = settings.GetSetting( "gui", "mruSize", 8 );
 
 			int index = 0;
 
@@ -1029,8 +1029,8 @@ namespace NDoc.Gui
 					settings.SetSetting( "gui", "documenter", ((IDocumenter)project.Documenters[comboBoxDocumenters.SelectedIndex]).Name );
 
 				// Trim our MRU list down to max amount before writing the config.
-				while (recentProjectFilenames.Count > maxMRU)
-					recentProjectFilenames.RemoveAt(maxMRU);
+				while (recentProjectFilenames.Count > this.options.MRUSize)
+					recentProjectFilenames.RemoveAt(this.options.MRUSize);
 
 				settings.SetSettingList( "gui", "mru", "project", recentProjectFilenames );			
 			}
@@ -1555,10 +1555,11 @@ namespace NDoc.Gui
             
 			if ( starting )
 			{
+				this.traceWindow1.Clear();
+
 				if ( this.options.ShowProgressOnBuild && !this.traceWindow1.Visible )
 					this.traceWindow1.Visible = true;
 
-				this.traceWindow1.Clear();
 				if ( this.traceWindow1.Visible )
 					this.traceWindow1.Connect();
 			}
@@ -1881,7 +1882,7 @@ namespace NDoc.Gui
 
 		private void menuViewLicense_Click(object sender, System.EventArgs e)
 		{
-			Uri uri = new Uri( Assembly.GetExecutingAssembly().CodeBase );
+			Uri uri = new Uri( Assembly.GetExecutingAssembly().CodeBase, true );
 			string path = Path.Combine( Path.GetDirectoryName( uri.AbsolutePath ), "gpl.rtf" );
 			if ( !File.Exists( path ) )
 				MessageBox.Show( this, "Could not find the license file", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error );
@@ -1920,6 +1921,7 @@ namespace NDoc.Gui
 					{
 						settings.SetSetting( "gui", "loadLastProjectOnStart", this.options.LoadLastProjectOnStart );
 						settings.SetSetting( "gui", "showProgressOnBuild", this.options.ShowProgressOnBuild );
+						settings.SetSetting( "gui", "mruSize", this.options.MRUSize );
 					}
 
 					// save machine settings

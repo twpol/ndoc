@@ -68,6 +68,21 @@ namespace NDoc.Gui
 			set{ _HtmlHelpWorkshopLocation = value; }
 		}
 
+		private int _MRUSize = 8;
+
+		/// <summary>
+		/// Get/Set the MRUSize property
+		/// </summary>
+		[Browsable(true)]
+		[DefaultValue(8)]
+		[Description("The maximum number of items to display in the most recently used projects list.")]
+		[Category("User Specific Settings")]
+		public int MRUSize
+		{
+			get{ return _MRUSize; }
+			set{ _MRUSize = value; }
+		}
+
 		/// <summary>
 		/// Create a clone of this object
 		/// </summary>
