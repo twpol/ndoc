@@ -77,6 +77,20 @@
                <param name="Name" value="VS.NET">
                <param name="Local" value="Content\vsnet.htm">
              </OBJECT>
+         <UL>
+            <LI><OBJECT type="text/sitemap">
+                  <param name="Name" value="Linking to Other Titles">
+                  <param name="Local" value="Content\vsnet-linking.htm">
+                </OBJECT>
+            <LI><OBJECT type="text/sitemap">
+                  <param name="Name" value="Integrating with Visual Studio">
+                  <param name="Local" value="Content\vsnet-integrating.htm">
+                </OBJECT>
+            <LI><OBJECT type="text/sitemap">
+                  <param name="Name" value="Deploying">
+                  <param name="Local" value="Content\vsnet-deploying.htm">
+                </OBJECT>
+         </UL>
          <LI><OBJECT type="text/sitemap">
                <param name="Name" value="MSDN">
                <param name="Local" value="Content\msdn.htm">

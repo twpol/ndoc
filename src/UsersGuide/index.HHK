@@ -10,11 +10,6 @@
 </OBJECT>
 <UL>
     <LI><OBJECT type="text/sitemap">
-            <param name="Name" value="** New **">
-            <param name="Name" value="** New **">
-            <param name="Local" value="Content\blank.htm">
-         </OBJECT>
-    <LI><OBJECT type="text/sitemap">
             <param name="Name" value="Attributes">
             <param name="Name" value="Attributes">
             <param name="Local" value="Content\attributes.htm">
@@ -48,6 +43,16 @@
             <param name="Name" value="Decorating Your Code">
             <param name="Name" value="Decorating Your Code">
             <param name="Local" value="content\decorating.htm">
+         </OBJECT>
+    <LI><OBJECT type="text/sitemap">
+            <param name="Name" value="Defining Your Own Tags">
+            <param name="Name" value="Defining Your Own Tags">
+            <param name="Local" value="Content\extensibility.htm">
+         </OBJECT>
+    <LI><OBJECT type="text/sitemap">
+            <param name="Name" value="Deploying">
+            <param name="Name" value="Deploying">
+            <param name="Local" value="Content\vsnet-deploying.htm">
          </OBJECT>
     <LI><OBJECT type="text/sitemap">
             <param name="Name" value="Documenters">
@@ -95,6 +100,11 @@
             <param name="Local" value="Content\tag_include.htm">
          </OBJECT>
     <LI><OBJECT type="text/sitemap">
+            <param name="Name" value="Integrating with Visual Studio">
+            <param name="Name" value="Integrating with Visual Studio">
+            <param name="Local" value="Content\vsnet-integrating.htm">
+         </OBJECT>
+    <LI><OBJECT type="text/sitemap">
             <param name="Name" value="JavaDoc">
             <param name="Name" value="JavaDoc">
             <param name="Local" value="Content\javadoc.htm">
@@ -113,6 +123,11 @@
             <param name="Name" value="Linear">
             <param name="Name" value="Linear">
             <param name="Local" value="Content\linear.htm">
+         </OBJECT>
+    <LI><OBJECT type="text/sitemap">
+            <param name="Name" value="Linking to Other Titles">
+            <param name="Name" value="Linking to Other Titles">
+            <param name="Local" value="Content\vsnet-linking.htm">
          </OBJECT>
     <LI><OBJECT type="text/sitemap">
             <param name="Name" value="list">
@@ -188,6 +203,11 @@
             <param name="Name" value="returns">
             <param name="Name" value="returns">
             <param name="Local" value="Content\tag_returns.htm">
+         </OBJECT>
+    <LI><OBJECT type="text/sitemap">
+            <param name="Name" value="Sections">
+            <param name="Name" value="Sections">
+            <param name="Local" value="Content\extensibility-sections.htm">
          </OBJECT>
     <LI><OBJECT type="text/sitemap">
             <param name="Name" value="see">
