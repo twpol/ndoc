@@ -27,9 +27,11 @@
 						<xsl:text>System.Object</xsl:text>
 					</a>
 					<br />
-					<xsl:apply-templates select="$ns//*[(local-name()='class' and not(base)) or (local-name()='base' and not(base))]">
-						<xsl:sort select="@name" />
-					</xsl:apply-templates>
+					<xsl:variable name="roots" select="$ns//*[(local-name()='class' and not(base)) or (local-name()='base' and not(base))]" />
+					<xsl:call-template name="call-draw">
+						<xsl:with-param name="nodes" select="$roots" />
+						<xsl:with-param name="level" select="1" />
+					</xsl:call-template>
 					<br />
 					<xsl:if test="$ns/interface">
 						<h3>Interfaces</h3>
@@ -45,33 +47,63 @@
 		</html>
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="class">
-		<xsl:variable name="class-id" select="class/@id" />
-		<xsl:if test="not(..//base[@id=$class-id])">
-			<xsl:call-template name="draw-hierarchy">
-				<xsl:with-param name="current" select="." />
-				<xsl:with-param name="level" select="1" />
-			</xsl:call-template>
-		</xsl:if>
+	<xsl:template name="call-draw">
+		<xsl:param name="nodes" />
+		<xsl:param name="level" />
+		<xsl:for-each select="$nodes">
+			<xsl:sort select="@name" />
+			<xsl:if test="position() = 1">
+				<xsl:variable name="head" select="." />
+				<xsl:call-template name="draw">
+					<xsl:with-param name="head" select="$head" />
+					<xsl:with-param name="tail" select="$nodes[@name != $head/@name]" />
+					<xsl:with-param name="level" select="$level" />
+				</xsl:call-template>
+			</xsl:if>
+		</xsl:for-each>
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="base">
-		<xsl:call-template name="draw-hierarchy">
-			<xsl:with-param name="current" select="." />
-			<xsl:with-param name="level" select="1" />
+	<xsl:template name="draw">
+		<xsl:param name="head" />
+		<xsl:param name="tail" />
+		<xsl:param name="level" />
+		<xsl:call-template name="indent">
+			<xsl:with-param name="count" select="$level" />
 		</xsl:call-template>
-	</xsl:template>
-	<!-- -->
-	<xsl:template match="interface">
+		<xsl:text>-</xsl:text>
 		<a>
 			<xsl:attribute name="href">
-				<xsl:call-template name="get-filename-for-type">
-					<xsl:with-param name="id" select="@id" />
-				</xsl:call-template>
+				<xsl:choose>
+					<xsl:when test="starts-with($head/@id, 'T:System.')">
+						<xsl:call-template name="get-filename-for-system-type">
+							<xsl:with-param name="type-name" select="substring-after($head/@id, 'T:')" />
+						</xsl:call-template>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:call-template name="get-filename-for-type">
+							<xsl:with-param name="id" select="$head/@id" />
+						</xsl:call-template>
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:attribute>
-			<xsl:value-of select="@name" />
+			<xsl:call-template name="get-datatype">
+				<xsl:with-param name="datatype" select="substring-after($head/@id, 'T:')" />
+			</xsl:call-template>
 		</a>
 		<br />
+		<xsl:variable name="derivatives" select="/ndoc/assembly/module/namespace/class[base/@id = $head/@id] | /ndoc/assembly/module/namespace/class/descendant::base[base[@id = $head/@id]]" />
+		<xsl:if test="$derivatives">
+			<xsl:call-template name="call-draw">
+				<xsl:with-param name="nodes" select="$derivatives" />
+				<xsl:with-param name="level" select="$level + 1" />
+			</xsl:call-template>
+		</xsl:if>
+		<xsl:if test="$tail">
+			<xsl:call-template name="call-draw">
+				<xsl:with-param name="nodes" select="$tail" />
+				<xsl:with-param name="level" select="$level" />
+			</xsl:call-template>
+		</xsl:if>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="indent">
@@ -84,42 +116,16 @@
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
-	<xsl:template name="draw-hierarchy">
-		<xsl:param name="current" />
-		<xsl:param name="level" />
-		<xsl:if test="$current[local-name()!='namespace']">
-			<xsl:call-template name="indent">
-				<xsl:with-param name="count" select="$level" />
-			</xsl:call-template>
-			<xsl:text>-</xsl:text>
-			<a>
-				<xsl:attribute name="href">
-					<xsl:choose>
-						<xsl:when test="starts-with($current/@id, 'T:System.')">
-							<xsl:call-template name="get-filename-for-system-type">
-								<xsl:with-param name="type-name" select="substring-after($current/@id, 'T:')" />
-							</xsl:call-template>
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:call-template name="get-filename-for-type">
-								<xsl:with-param name="id" select="$current/@id" />
-							</xsl:call-template>
-						</xsl:otherwise>
-					</xsl:choose>
-				</xsl:attribute>
-				<xsl:call-template name="get-datatype">
-					<xsl:with-param name="datatype" select="substring-after($current/@id, 'T:')" />
+	<xsl:template match="interface">
+		<a>
+			<xsl:attribute name="href">
+				<xsl:call-template name="get-filename-for-type">
+					<xsl:with-param name="id" select="@id" />
 				</xsl:call-template>
-			</a>
-			<br />
-			<!-- bug in MSXML that won't allow this recursion to go any deeper.  saxon works ok with it. -->
-			<xsl:if test="$level != 7">
-				<xsl:call-template name="draw-hierarchy">
-					<xsl:with-param name="current" select="$current/.." />
-					<xsl:with-param name="level" select="$level + 1" />
-				</xsl:call-template>
-			</xsl:if>
-		</xsl:if>
+			</xsl:attribute>
+			<xsl:value-of select="@name" />
+		</a>
+		<br />
 	</xsl:template>
 	<!-- -->
 </xsl:stylesheet>
