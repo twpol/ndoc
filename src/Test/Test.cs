@@ -25,19 +25,20 @@ namespace NDoc.Test
 	/// inventory analysis survivabilty format.</remarks>
 	public class Class
 	{
-		/// <summary>Initializes a new instance of the Class class.</summary>
+		/// <overloads>Initializes a new instance of the Class class.</overloads>
+		/// <summary>Initializes a new instance of the Class class with no param.</summary>
 		public Class() { }
 
-		/// <summary>Initializes a new instance of the Class class.</summary>
+		/// <summary>Initializes a new instance of the Class class with an integer.</summary>
 		public Class(int i) { }
 
-		/// <summary>Initializes a new instance of the Class class.</summary>
+		/// <summary>Initializes a new instance of the Class class with a string.</summary>
 		public Class(string s) { }
 
-		/// <summary>Initializes a new instance of the Class class.</summary>
+		/// <summary>Initializes a new instance of the Class class with a double.</summary>
 		protected Class(double d) { }
 
-		/// <summary>Initializes a new instance of the Class class.</summary>
+		/// <summary>Initializes a new instance of the Class class with 3 integers.</summary>
 		/// <param name="i1">This is the first integer parameter.
 		/// This is the first integer parameter. This is the first integer
 		/// parameter. This is the first integer parameter.</param>
