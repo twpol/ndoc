@@ -215,6 +215,10 @@ namespace NDoc.Core
 
 				writer.Close();
 
+				//FileStream fs = new FileStream(@"C:\test.xml", FileMode.Create);
+				//fs.Write(memoryStream.GetBuffer(), 0, memoryStream.GetBuffer().Length);
+				//fs.Close();
+
 				xmlDocument.Load(new MemoryStream(memoryStream.GetBuffer()));
 			}
 			catch (Exception e)
@@ -342,13 +346,13 @@ namespace NDoc.Core
 
 				string namespaceSummary = _Project.GetNamespaceSummary(ourNamespaceName);
 
-				if (MyConfig.SkipNamespacesWithoutSummaries && 
+				if (MyConfig.SkipNamespacesWithoutSummaries &&
 					(namespaceSummary == null || namespaceSummary.Length == 0))
 				{
 					Trace.WriteLine(string.Format("Skipping namespace {0}...", namespaceName));
 				}
 				else
-				{					
+				{
 					Trace.WriteLine(string.Format("Writing namespace {0}...", namespaceName));
 
 					MemoryStream xmlMemoryStream = null;
@@ -1030,6 +1034,11 @@ namespace NDoc.Core
 			if (field.IsStatic)
 			{
 				writer.WriteAttributeString("contract", "Static");
+			}
+
+			if (field.IsLiteral)
+			{
+				writer.WriteAttributeString("literal", "true");
 			}
 
 			if (field.IsInitOnly)

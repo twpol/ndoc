@@ -1314,6 +1314,13 @@ namespace NDoc.Test
 		{
 		}
 	}
+
+	/// <summary>This class contains constant fields.</summary>
+	public class ConstFields
+	{
+		/// <summary>This is a constant string.</summary>
+		public const string ConstString = "ConstString";
+	}
 }
 
 namespace NDoc.Test.InternalStuff

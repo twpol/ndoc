@@ -202,7 +202,14 @@
 				<xsl:text>&#160;</xsl:text>
 			</xsl:if>
 			<xsl:if test="@contract='Static'">
-				<xsl:text>static&#160;</xsl:text>
+				<xsl:choose>
+					<xsl:when test="@literal='true'">
+						<xsl:text>const&#160;</xsl:text>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:text>static&#160;</xsl:text>
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:if>
 			<xsl:if test="@initOnly='true'">
 				<xsl:text>readonly&#160;</xsl:text>
