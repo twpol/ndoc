@@ -39,11 +39,15 @@
 						<b>
 							<xsl:value-of select="@name" />
 						</b>
-						<xsl:text> class are listed below. For a complete list of </xsl:text>
+						<xsl:text> </xsl:text>
+						<xsl:value-of select="local-name()" />
+						<xsl:text> are listed below. For a complete list of </xsl:text>
 						<b>
 							<xsl:value-of select="@name" />
 						</b>
-						<xsl:text> class members, see the </xsl:text>
+						<xsl:text> </xsl:text>
+						<xsl:value-of select="local-name()" />
+						<xsl:text> members, see the </xsl:text>
 						<a>
 							<xsl:attribute name="href">
 								<xsl:call-template name="get-filename-for-type-members">
