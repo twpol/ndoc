@@ -37,6 +37,7 @@ using System.Xml.Serialization;
 using System.Diagnostics;
 
 using NDoc.Core;
+using NDoc.Core.PropertyGridUI;
 using VS = NDoc.VisualStudio;
 
 namespace NDoc.Gui
@@ -141,6 +142,11 @@ namespace NDoc.Gui
 		private System.Windows.Forms.MenuItem menuViewDescriptions;
 
 		private string startingProjectFilename;
+		private System.Windows.Forms.MenuItem menuItem2;
+		private System.Windows.Forms.MenuItem menuItem4;
+		private System.Windows.Forms.MenuItem menuFileImportNamespaces;
+		private System.Windows.Forms.MenuItem menuItem6;
+		private System.Windows.Forms.MenuItem menuFileExportNamespaces;
 		private StringCollection recentProjectFilenames = new StringCollection();
 		#endregion // Fields
 
@@ -186,9 +192,6 @@ namespace NDoc.Gui
 
 		private void MainForm_Load(object sender, System.EventArgs e)
 		{
-//			// Allow developers to continue to compile their assemblies while NDoc is running.
-//			AppDomain.CurrentDomain.SetShadowCopyFiles();
-
 			Thread.CurrentThread.Name = "GUI";
 
 			project = new Project();
@@ -233,12 +236,14 @@ namespace NDoc.Gui
 							recentProjectFilenames.RemoveAt(0);
 						}
 					}
+					if ( recentProjectFilenames.Count == 0 )
+					{
+						Clear();
+					}
 				}
-				if ( recentProjectFilenames.Count == 0 )
+				else
 				{
-					//there was no project to load
-					projectFilename = untitledProjectName;
-					EnableMenuItems(false);
+					Clear();
 				}
 			}
 			else
@@ -296,6 +301,11 @@ namespace NDoc.Gui
 			this.menuFileCloseItem = new System.Windows.Forms.MenuItem();
 			this.menuSpacerItem1 = new System.Windows.Forms.MenuItem();
 			this.menuFileSaveAsItem = new System.Windows.Forms.MenuItem();
+			this.menuItem4 = new System.Windows.Forms.MenuItem();
+			this.menuItem2 = new System.Windows.Forms.MenuItem();
+			this.menuFileImportNamespaces = new System.Windows.Forms.MenuItem();
+			this.menuItem6 = new System.Windows.Forms.MenuItem();
+			this.menuFileExportNamespaces = new System.Windows.Forms.MenuItem();
 			this.menuSpacerItem2 = new System.Windows.Forms.MenuItem();
 			this.menuFileRecentProjectsItem = new System.Windows.Forms.MenuItem();
 			this.menuSpacerItem3 = new System.Windows.Forms.MenuItem();
@@ -340,7 +350,7 @@ namespace NDoc.Gui
 			this.documenterHeaderGroupBox = new NDoc.Gui.HeaderGroupBox();
 			this.labelDocumenters = new System.Windows.Forms.Label();
 			this.comboBoxDocumenters = new System.Windows.Forms.ComboBox();
-			this.propertyGrid = new NDoc.Gui.RuntimePropertyGrid();
+			this.propertyGrid = new NDoc.Core.PropertyGridUI.RuntimePropertyGrid();
 			((System.ComponentModel.ISupportInitialize)(this.statusBarTextPanel)).BeginInit();
 			this.assembliesHeaderGroupBox.SuspendLayout();
 			this.documenterHeaderGroupBox.SuspendLayout();
@@ -356,7 +366,7 @@ namespace NDoc.Gui
 			// progressBar
 			// 
 			this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.progressBar.Location = new System.Drawing.Point(334, 593);
+			this.progressBar.Location = new System.Drawing.Point(358, 593);
 			this.progressBar.Name = "progressBar";
 			this.progressBar.Size = new System.Drawing.Size(144, 15);
 			this.progressBar.TabIndex = 24;
@@ -364,7 +374,7 @@ namespace NDoc.Gui
 			// 
 			// menuFileExitItem
 			// 
-			this.menuFileExitItem.Index = 10;
+			this.menuFileExitItem.Index = 13;
 			this.menuFileExitItem.Text = "&Exit";
 			this.menuFileExitItem.Click += new System.EventHandler(this.menuFileExitItem_Click);
 			// 
@@ -404,6 +414,9 @@ namespace NDoc.Gui
 																						 this.menuSpacerItem1,
 																						 this.menuFileSaveItem,
 																						 this.menuFileSaveAsItem,
+																						 this.menuItem4,
+																						 this.menuItem2,
+																						 this.menuItem6,
 																						 this.menuSpacerItem2,
 																						 this.menuFileRecentProjectsItem,
 																						 this.menuSpacerItem3,
@@ -448,19 +461,50 @@ namespace NDoc.Gui
 			this.menuFileSaveAsItem.Text = "Save &As...";
 			this.menuFileSaveAsItem.Click += new System.EventHandler(this.menuFileSaveAsItem_Click);
 			// 
+			// menuItem4
+			// 
+			this.menuItem4.Index = 7;
+			this.menuItem4.Text = "-";
+			// 
+			// menuItem2
+			// 
+			this.menuItem2.Index = 8;
+			this.menuItem2.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+																					  this.menuFileImportNamespaces});
+			this.menuItem2.Text = "Import";
+			// 
+			// menuFileImportNamespaces
+			// 
+			this.menuFileImportNamespaces.Index = 0;
+			this.menuFileImportNamespaces.Text = "Namespace Summaries";
+			this.menuFileImportNamespaces.Click += new System.EventHandler(this.menuFileImportNamespaces_Click);
+			// 
+			// menuItem6
+			// 
+			this.menuItem6.Index = 9;
+			this.menuItem6.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+																					  this.menuFileExportNamespaces});
+			this.menuItem6.Text = "Export";
+			// 
+			// menuFileExportNamespaces
+			// 
+			this.menuFileExportNamespaces.Index = 0;
+			this.menuFileExportNamespaces.Text = "Namespace Summaries";
+			this.menuFileExportNamespaces.Click += new System.EventHandler(this.menuFileExportNamespaces_Click);
+			// 
 			// menuSpacerItem2
 			// 
-			this.menuSpacerItem2.Index = 7;
+			this.menuSpacerItem2.Index = 10;
 			this.menuSpacerItem2.Text = "-";
 			// 
 			// menuFileRecentProjectsItem
 			// 
-			this.menuFileRecentProjectsItem.Index = 8;
+			this.menuFileRecentProjectsItem.Index = 11;
 			this.menuFileRecentProjectsItem.Text = "&Recent Projects";
 			// 
 			// menuSpacerItem3
 			// 
-			this.menuSpacerItem3.Index = 9;
+			this.menuSpacerItem3.Index = 12;
 			this.menuSpacerItem3.Text = "-";
 			// 
 			// menuDocItem
@@ -594,8 +638,9 @@ namespace NDoc.Gui
 			// 
 			this.addButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.addButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.addButton.Location = new System.Drawing.Point(408, 18);
+			this.addButton.Location = new System.Drawing.Point(424, 24);
 			this.addButton.Name = "addButton";
+			this.addButton.Size = new System.Drawing.Size(88, 24);
 			this.addButton.TabIndex = 14;
 			this.addButton.Text = "Add";
 			this.addButton.Click += new System.EventHandler(this.addButton_Click);
@@ -623,7 +668,7 @@ namespace NDoc.Gui
 			this.statusBar.Panels.AddRange(new System.Windows.Forms.StatusBarPanel[] {
 																						 this.statusBarTextPanel});
 			this.statusBar.ShowPanels = true;
-			this.statusBar.Size = new System.Drawing.Size(496, 20);
+			this.statusBar.Size = new System.Drawing.Size(520, 20);
 			this.statusBar.TabIndex = 21;
 			this.statusBar.VisibleChanged += new System.EventHandler(this.statusBar_VisibleChanged);
 			// 
@@ -632,7 +677,7 @@ namespace NDoc.Gui
 			this.statusBarTextPanel.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Spring;
 			this.statusBarTextPanel.BorderStyle = System.Windows.Forms.StatusBarPanelBorderStyle.None;
 			this.statusBarTextPanel.Text = "Ready";
-			this.statusBarTextPanel.Width = 480;
+			this.statusBarTextPanel.Width = 504;
 			// 
 			// assemblyHeader
 			// 
@@ -663,8 +708,9 @@ namespace NDoc.Gui
 			this.editButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.editButton.Enabled = false;
 			this.editButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.editButton.Location = new System.Drawing.Point(408, 50);
+			this.editButton.Location = new System.Drawing.Point(424, 56);
 			this.editButton.Name = "editButton";
+			this.editButton.Size = new System.Drawing.Size(88, 24);
 			this.editButton.TabIndex = 15;
 			this.editButton.Text = "Edit";
 			this.editButton.Click += new System.EventHandler(this.editButton_Click);
@@ -673,9 +719,9 @@ namespace NDoc.Gui
 			// 
 			this.namespaceSummariesButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.namespaceSummariesButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.namespaceSummariesButton.Location = new System.Drawing.Point(408, 114);
+			this.namespaceSummariesButton.Location = new System.Drawing.Point(424, 120);
 			this.namespaceSummariesButton.Name = "namespaceSummariesButton";
-			this.namespaceSummariesButton.Size = new System.Drawing.Size(75, 32);
+			this.namespaceSummariesButton.Size = new System.Drawing.Size(88, 32);
 			this.namespaceSummariesButton.TabIndex = 17;
 			this.namespaceSummariesButton.Text = "Namespace\nSummaries";
 			this.namespaceSummariesButton.Click += new System.EventHandler(this.namespaceSummariesButton_Click);
@@ -692,7 +738,7 @@ namespace NDoc.Gui
 			this.assembliesHeaderGroupBox.Location = new System.Drawing.Point(0, 28);
 			this.assembliesHeaderGroupBox.Name = "assembliesHeaderGroupBox";
 			this.assembliesHeaderGroupBox.Padding = 0;
-			this.assembliesHeaderGroupBox.Size = new System.Drawing.Size(496, 152);
+			this.assembliesHeaderGroupBox.Size = new System.Drawing.Size(520, 164);
 			this.assembliesHeaderGroupBox.TabIndex = 22;
 			this.assembliesHeaderGroupBox.TabStop = false;
 			this.assembliesHeaderGroupBox.Text = "Select Assemblies to Document";
@@ -704,9 +750,9 @@ namespace NDoc.Gui
 				| System.Windows.Forms.AnchorStyles.Left) 
 				| System.Windows.Forms.AnchorStyles.Right)));
 			this.assembliesListView.ForeColor = System.Drawing.SystemColors.WindowText;
-			this.assembliesListView.Location = new System.Drawing.Point(16, 24);
+			this.assembliesListView.Location = new System.Drawing.Point(8, 24);
 			this.assembliesListView.Name = "assembliesListView";
-			this.assembliesListView.Size = new System.Drawing.Size(384, 120);
+			this.assembliesListView.Size = new System.Drawing.Size(408, 128);
 			this.assembliesListView.TabIndex = 13;
 			this.assembliesListView.View = System.Windows.Forms.View.List;
 			this.assembliesListView.DoubleClick += new System.EventHandler(this.assembliesListView_DoubleClick);
@@ -719,8 +765,9 @@ namespace NDoc.Gui
 			this.deleteButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.deleteButton.Enabled = false;
 			this.deleteButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.deleteButton.Location = new System.Drawing.Point(408, 82);
+			this.deleteButton.Location = new System.Drawing.Point(424, 88);
 			this.deleteButton.Name = "deleteButton";
+			this.deleteButton.Size = new System.Drawing.Size(88, 24);
 			this.deleteButton.TabIndex = 16;
 			this.deleteButton.Text = "Remove";
 			this.deleteButton.Click += new System.EventHandler(this.deleteButton_Click);
@@ -742,7 +789,7 @@ namespace NDoc.Gui
 			this.toolBar.Location = new System.Drawing.Point(0, 0);
 			this.toolBar.Name = "toolBar";
 			this.toolBar.ShowToolTips = true;
-			this.toolBar.Size = new System.Drawing.Size(496, 28);
+			this.toolBar.Size = new System.Drawing.Size(520, 28);
 			this.toolBar.TabIndex = 20;
 			this.toolBar.TextAlign = System.Windows.Forms.ToolBarTextAlign.Right;
 			this.toolBar.Wrappable = false;
@@ -759,7 +806,7 @@ namespace NDoc.Gui
 			this.traceWindow1.Dock = System.Windows.Forms.DockStyle.Bottom;
 			this.traceWindow1.Location = new System.Drawing.Point(0, 462);
 			this.traceWindow1.Name = "traceWindow1";
-			this.traceWindow1.Size = new System.Drawing.Size(496, 128);
+			this.traceWindow1.Size = new System.Drawing.Size(520, 128);
 			this.traceWindow1.TabIndex = 25;
 			this.traceWindow1.TabStop = false;
 			this.traceWindow1.TraceText = "";
@@ -770,7 +817,7 @@ namespace NDoc.Gui
 			this.splitter1.Dock = System.Windows.Forms.DockStyle.Bottom;
 			this.splitter1.Location = new System.Drawing.Point(0, 459);
 			this.splitter1.Name = "splitter1";
-			this.splitter1.Size = new System.Drawing.Size(496, 3);
+			this.splitter1.Size = new System.Drawing.Size(520, 3);
 			this.splitter1.TabIndex = 26;
 			this.splitter1.TabStop = false;
 			// 
@@ -781,10 +828,10 @@ namespace NDoc.Gui
 			this.documenterHeaderGroupBox.Controls.Add(this.comboBoxDocumenters);
 			this.documenterHeaderGroupBox.Controls.Add(this.propertyGrid);
 			this.documenterHeaderGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.documenterHeaderGroupBox.Location = new System.Drawing.Point(0, 180);
+			this.documenterHeaderGroupBox.Location = new System.Drawing.Point(0, 192);
 			this.documenterHeaderGroupBox.Name = "documenterHeaderGroupBox";
 			this.documenterHeaderGroupBox.Padding = 0;
-			this.documenterHeaderGroupBox.Size = new System.Drawing.Size(496, 279);
+			this.documenterHeaderGroupBox.Size = new System.Drawing.Size(520, 267);
 			this.documenterHeaderGroupBox.TabIndex = 27;
 			this.documenterHeaderGroupBox.TabStop = false;
 			this.documenterHeaderGroupBox.Text = "Select and Configure Documenter";
@@ -819,17 +866,18 @@ namespace NDoc.Gui
 			this.propertyGrid.LineColor = System.Drawing.SystemColors.ScrollBar;
 			this.propertyGrid.Location = new System.Drawing.Point(8, 56);
 			this.propertyGrid.Name = "propertyGrid";
-			this.propertyGrid.Size = new System.Drawing.Size(480, 216);
+			this.propertyGrid.Size = new System.Drawing.Size(504, 204);
 			this.propertyGrid.TabIndex = 0;
 			this.propertyGrid.Text = "PropertyGrid";
 			this.propertyGrid.ViewBackColor = System.Drawing.SystemColors.Window;
 			this.propertyGrid.ViewForeColor = System.Drawing.SystemColors.WindowText;
+			this.propertyGrid.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propertyGrid_PropertyValueChanged);
 			// 
 			// MainForm
 			// 
 			this.AllowDrop = true;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.ClientSize = new System.Drawing.Size(496, 610);
+			this.ClientSize = new System.Drawing.Size(520, 610);
 			this.Controls.Add(this.documenterHeaderGroupBox);
 			this.Controls.Add(this.splitter1);
 			this.Controls.Add(this.traceWindow1);
@@ -1082,12 +1130,6 @@ namespace NDoc.Gui
 				{
 					project.Read(fileName);
 				}
-				catch (CouldNotLoadAllAssembliesException e)
-				{
-					WarningForm warningForm = new WarningForm("Could not load assembly.",
-						e.Message);
-					warningForm.ShowDialog(this);
-				}
 				catch (DocumenterPropertyFormatException e)
 				{
 					WarningForm warningForm = new WarningForm("Invalid Properties in Project File.",
@@ -1102,7 +1144,7 @@ namespace NDoc.Gui
 
 				// Update the ListView
 				assembliesListView.Items.Clear();
-				foreach (AssemblySlashDoc assemblySlashDoc2 in project.GetAssemblySlashDocs())
+				foreach (AssemblySlashDoc assemblySlashDoc2 in project.AssemblySlashDocs)
 				{
 					AddRowToListView(assemblySlashDoc2);
 				}
@@ -1174,6 +1216,7 @@ namespace NDoc.Gui
 				SetWindowTitle();
 				UpdateMRUList();
 				EnableMenuItems(true);
+				propertyGrid.Refresh();
 			}
 		}
 
@@ -1182,9 +1225,9 @@ namespace NDoc.Gui
 			ListViewItem  listItem;
 			string[]  subItems = new string[1];
 
-			subItems[0] = Path.GetFileName(assemblySlashDoc.SlashDocFilename);
+			subItems[0] = Path.GetFileName(assemblySlashDoc.SlashDoc.Path);
 			listItem = new ListViewItem(
-				Path.GetFileName(assemblySlashDoc.AssemblyFilename));
+				Path.GetFileName(assemblySlashDoc.Assembly.Path));
 			assembliesListView.Items.Add(listItem);
 		}
 
@@ -1304,17 +1347,17 @@ namespace NDoc.Gui
 						string spath = sol.Directory;
 
 						AssemblySlashDoc asd = new AssemblySlashDoc();
-						asd.AssemblyFilename=Path.Combine(spath, apath);
+						asd.Assembly.Path=Path.Combine(spath, apath);
 
-						if (!File.Exists(asd.AssemblyFilename))
+						if (!File.Exists(asd.Assembly.Path))
 						{
 							warningMessages += String.Format("VS Project '{0}' has been imported, but the specified assembly does not exist.\n- You will not be able to build documentation for this project until its assembly has been successfully compiled...\n\n",p.Name);
 						}
 
 						if (xpath!=null && xpath.Length>0)
 						{
-							asd.SlashDocFilename=Path.Combine(spath, xpath);
-							if (!File.Exists(asd.SlashDocFilename))
+							asd.SlashDoc.Path=Path.Combine(spath, xpath);
+							if (!File.Exists(asd.SlashDoc.Path))
 							{
 							warningMessages += String.Format("VS Project '{0}' has been imported, but the XML documentation file specified in the project cannot be found.\n- This can occur if the project is set to do 'incremental' compiles.\n- NDoc output will be very limited until the VS project is rebuilt with XML documntation...\n",p.Name);
 						
@@ -1325,17 +1368,14 @@ namespace NDoc.Gui
 							warningMessages += String.Format("VS Project '{0}' has been imported, but the project is not set to produce XML documentation.\n- NDoc output for this assembly will be very limited...\n\n",p.Name);
 						}
 
-						project.AddAssemblySlashDoc(asd);
+						project.AssemblySlashDocs.Add(asd);
 						AddRowToListView(asd);
 					}
 
 					EnableMenuItems(true);
 					EnableAssemblyItems();
 
-					projectFilename =  Path.Combine(
-						sol.Directory,
-						sol.Name + ".ndoc");
-					//FileSave(projectFilename);
+					projectFilename =  Path.Combine(sol.Directory, sol.Name + ".ndoc");
 
 					if (warningMessages.Length>0)
 					{
@@ -1497,93 +1537,163 @@ namespace NDoc.Gui
 			}
 
 			documenter.DocBuildingStep += new DocBuildingEventHandler(OnStepUpdate);
-
-			BuildWorker buildWorker = new BuildWorker(documenter, project);
-			buildThread = new Thread(new ThreadStart(buildWorker.ThreadProc));
-			buildThread.Name = "Build";
-			buildThread.IsBackground = true;
-			buildThread.Priority = ThreadPriority.BelowNormal;
-
-			ConfigureUIForBuild(true);
-
-			try
+			if (!Directory.Exists(Path.GetDirectoryName(documenter.MainOutputFile)))
+				Directory.CreateDirectory(Path.GetDirectoryName(documenter.MainOutputFile));
+			string logPath = Path.Combine(Path.GetDirectoryName(documenter.MainOutputFile),"ndoc.log");
+			using(StreamWriter logWriter = new StreamWriter(logPath,false,new System.Text.UTF8Encoding(false)))
 			{
-				this.Cursor = Cursors.AppStarting;
+				Trace.Listeners.Add(new TextWriterTraceListener(logWriter,"ndoc"));
 
-				UpdateProgress("Building documentation...", 0);
+				BuildWorker buildWorker = new BuildWorker(documenter, project);
+				buildThread = new Thread(new ThreadStart(buildWorker.ThreadProc));
+				buildThread.Name = "Build";
+				buildThread.IsBackground = true;
+				buildThread.Priority = ThreadPriority.BelowNormal;
 
-				buildThread.Start();
+				ConfigureUIForBuild(true);
 
-				// Wait for thread to start
-				while (!buildThread.IsAlive);
-
-				// Now wait for thread to complete
-				while (!buildWorker.IsComplete && buildThread.IsAlive)
+				try
 				{
-					// Keep GUI responsive
-					Application.DoEvents();
+					this.Cursor = Cursors.AppStarting;
 
-					// Don't chew up all CPU cycles
-					Thread.Sleep(100);
+					UpdateProgress("Building documentation...", 0);
+
+					buildThread.Start();
+
+					// Wait for thread to start
+					while (!buildThread.IsAlive);
+
+					// Now wait for thread to complete
+					while (!buildWorker.IsComplete && buildThread.IsAlive)
+					{
+						// Keep GUI responsive
+						Application.DoEvents();
+
+						// Don't chew up all CPU cycles
+						Thread.Sleep(100);
+					}
+
+					// Wait a little for the thread to die
+					buildThread.Join(200);
+				}
+				finally
+				{
+					// disconnect from the documenter's events
+					documenter.DocBuildingStep -= new DocBuildingEventHandler(OnStepUpdate);
+
+					// keep us from accessing parts of the window when it is closed while a build is in progress
+					if ( !this.IsDisposed )
+					{
+						// Just in case some weird exception happens, we don't get stuck
+						// with a busy cursor.
+						this.Cursor = Cursors.Default;
+
+						ConfigureUIForBuild(false);
+						statusBarTextPanel.Text = "Ready";
+						if ( !this.traceWindow1.IsDisposed && this.traceWindow1.Visible )
+							this.traceWindow1.Disconnect();
+					}
 				}
 
-				// Wait a little for the thread to die
-				buildThread.Join(200);
-			}
-			finally
-			{
-				// disconnect from the documenter's events
-				documenter.DocBuildingStep -= new DocBuildingEventHandler(OnStepUpdate);
-
-				// keep us from accessing parts of the window when it is closed while a build is in progress
-				if ( !this.IsDisposed )
+				Exception ex = buildWorker.Exception;
+				if (ex != null)
 				{
-					// Just in case some weird exception happens, we don't get stuck
-					// with a busy cursor.
-					this.Cursor = Cursors.Default;
 
-					ConfigureUIForBuild(false);
-					statusBarTextPanel.Text = "Ready";
-					if ( !this.traceWindow1.IsDisposed && this.traceWindow1.Visible )
-						this.traceWindow1.Disconnect();
+					//check if thread has been aborted
+					Exception iex = ex;
+					Exception innermostException;
+					do
+					{
+						if (iex is ThreadAbortException)
+						{
+							// disconnect from the trace listener
+							Trace.Listeners.Remove("ndoc");
+							return;
+						}
+						innermostException = iex;
+						iex = iex.InnerException;
+					} while (iex != null);
+
+					// Process exception
+					string msg = "An error occured while trying to build the documentation.";
+
+					Trace.WriteLine(msg);
+					Trace.WriteLine("");
+					BuildTraceError(ex);
+
+					// we do not want to show any dialogs if the app is shutting down
+					if ( !this.IsDisposed && innermostException is DocumenterException )
+					{
+						ErrorForm errorForm = new ErrorForm(msg, ex /*innermostException*/);
+						errorForm.Text = "NDoc Documenter Error";
+						errorForm.ShowDialog(this);
+					}
+					else if ( !this.IsDisposed )
+					{
+						ErrorForm errorForm = new ErrorForm(msg, ex/*innermostException*/);
+						errorForm.ShowDialog(this);
+					}
+
+				}
+				// disconnect from the trace listener
+				Trace.Listeners.Remove("ndoc");
+			}
+		}
+
+		private void BuildTraceError(Exception ex)
+		{
+			System.Text.StringBuilder strBld = new System.Text.StringBuilder();
+
+			if (ex != null)
+			{
+				strBld.Append("\r\n\r\n");
+				Exception tmpEx = ex;
+				while (tmpEx != null)
+				{
+					strBld.AppendFormat("Exception: {0}\r\n", tmpEx.GetType().ToString());
+					strBld.Append(tmpEx.Message);
+					strBld.Append("\r\n\r\n");
+					tmpEx = tmpEx.InnerException;
+				}
+				strBld.Append("\r\n");
+			}
+			ReflectionTypeLoadException rtle = ex as ReflectionTypeLoadException;
+			if (rtle != null)
+			{
+				Hashtable fileLoadExceptions = new Hashtable();
+				foreach(Exception loaderEx in rtle.LoaderExceptions)
+				{
+					System.IO.FileLoadException fileLoadEx = loaderEx as System.IO.FileLoadException;
+					if (fileLoadEx !=null)
+					{
+						if (!fileLoadExceptions.ContainsKey(fileLoadEx.FileName))
+						{
+							fileLoadExceptions.Add(fileLoadEx.FileName,null);
+							strBld.Append("Unable to load: " + fileLoadEx.FileName + "\r\n");
+						}
+					}
+//					else
+//					{
+						strBld.Append(loaderEx.Message + "\r\n");
+						strBld.Append(loaderEx.StackTrace + Environment.NewLine);
+					//					}
 				}
 			}
 
-			// If no exception occurred during the build, then blow outta here
-			Exception ex = buildWorker.Exception;
-			if (ex == null)
+			if (ex != null) 
 			{
-				return;
-			}
-
-			//check if thread has been aborted
-			Exception iex = ex;
-			Exception innermostException;
-			do
-			{
-				if (iex is ThreadAbortException)
+				strBld.Append("\r\n");
+				Exception tmpEx = ex;
+				while (tmpEx != null)
 				{
-					return;
+					strBld.AppendFormat("Exception: {0}\r\n", tmpEx.GetType().ToString());
+					strBld.Append(tmpEx.StackTrace.Replace("\r\n","\n").Replace("\r","\n").Replace("\n","\r\n"));
+					strBld.Append("\r\n\r\n");
+					tmpEx = tmpEx.InnerException;
 				}
-				innermostException = iex;
-				iex = iex.InnerException;
-			} while (iex != null);
-
-			// Process exception
-			string msg = "An error occured while trying to build the documentation.";
-
-			// we do not want to show any dialogs if the app is shutting down
-			if ( !this.IsDisposed && innermostException is DocumenterException )
-			{
-				ErrorForm errorForm = new ErrorForm(msg, innermostException);
-				errorForm.Text = "NDoc Documenter Error";
-				errorForm.ShowDialog(this);
 			}
-			else if ( !this.IsDisposed )
-			{
-				ErrorForm errorForm = new ErrorForm(msg, innermostException);
-				errorForm.ShowDialog(this);
-			}
+
+			Trace.WriteLine(strBld.ToString());
 		}
 
 		private void menuCancelBuildItem_Click(object sender, System.EventArgs e)
@@ -1649,12 +1759,13 @@ namespace NDoc.Gui
 		private delegate void UpdateProgressDelegate(string text, int percent);
 		private void UpdateProgress(string text, int percent)
 		{
+			percent = Math.Max(percent, 0);
+			percent = Math.Min(percent, 100);
 			if (text != null)
 			{
 				statusBarTextPanel.Text = text;
+				Trace.WriteLine(text);
 			}
-			percent = Math.Max(percent, 0);
-			percent = Math.Min(percent, 100);
 			progressBar.Value = percent;
 			statusBar.Update();
 		}
@@ -1758,34 +1869,17 @@ namespace NDoc.Gui
 
 			if (form.ShowDialog(this) == System.Windows.Forms.DialogResult.OK)
 			{
-				AssemblySlashDoc assemblySlashDoc = new AssemblySlashDoc();
+				AssemblySlashDoc assemblySlashDoc = null;
 				try
 				{
-					assemblySlashDoc.AssemblyFilename = form.AssemblyFilename;
-					assemblySlashDoc.SlashDocFilename = form.SlashDocFilename;
-					project.AddAssemblySlashDoc(assemblySlashDoc);
+					assemblySlashDoc=form.AssySlashDoc;
+					project.AssemblySlashDocs.Add(assemblySlashDoc);
 					AddRowToListView(assemblySlashDoc);
 					EnableMenuItems(true);
 				}
 				catch(Project.AssemblyAlreadyExistsException)
 				{
 					//ignore this exception
-				}
-				catch(ReflectionTypeLoadException ex)
-				{
-					string msg = string.Format(
-						"Unable to load types from {0}.\nIs {1} missing a dependency?", 
-						form.AssemblyFilename, Path.GetFileName(form.AssemblyFilename));
-					ErrorForm errorForm = new ErrorForm(msg, ex);
-					errorForm.ShowDialog(this);
-				}
-				catch(BadImageFormatException ex)
-				{
-					string msg = string.Format(
-						"Unable to load the file {0}.\n{1} doesn't appear to be a managed assembly.", 
-						form.AssemblyFilename, Path.GetFileName(form.AssemblyFilename));
-					ErrorForm errorForm = new ErrorForm(msg, ex);
-					errorForm.ShowDialog(this);
 				}
 			}
 
@@ -1806,18 +1900,16 @@ namespace NDoc.Gui
 
 				form.Text = "Edit Assembly Filename and XML Documentation Filename";
 				form.StartPosition = FormStartPosition.CenterParent;
-				form.AssemblyFilename = project.GetAssemblySlashDoc(nIndex).AssemblyFilename;
-				form.SlashDocFilename = project.GetAssemblySlashDoc(nIndex).SlashDocFilename;
+				form.AssySlashDoc=project.AssemblySlashDocs[nIndex];
 
 				if (form.ShowDialog(this) == System.Windows.Forms.DialogResult.OK)
 				{
-					project.GetAssemblySlashDoc(nIndex).AssemblyFilename = form.AssemblyFilename;
-					project.GetAssemblySlashDoc(nIndex).SlashDocFilename = form.SlashDocFilename;
+					project.AssemblySlashDocs[nIndex]=form.AssySlashDoc;
 
 					string[] subItems = new string[1];
 
-					assembliesListView.SelectedItems[0].Text = Path.GetFileName(project.GetAssemblySlashDoc(nIndex).AssemblyFilename);
-					subItems[0] = Path.GetFileName(project.GetAssemblySlashDoc(nIndex).SlashDocFilename);
+					assembliesListView.SelectedItems[0].Text = Path.GetFileName(project.AssemblySlashDocs[nIndex].Assembly.Path);
+					subItems[0] = Path.GetFileName(project.AssemblySlashDocs[nIndex].SlashDoc.Path);
 				}
 			}
 		}
@@ -1835,7 +1927,7 @@ namespace NDoc.Gui
 		{
 			foreach(ListViewItem listViewItem in assembliesListView.SelectedItems)
 			{
-				project.RemoveAssemblySlashDoc(listViewItem.Index);
+				project.AssemblySlashDocs.RemoveAt(listViewItem.Index);
 				listViewItem.Remove();
 			}
 
@@ -1904,15 +1996,9 @@ namespace NDoc.Gui
 
 		private void SelectedDocumenterChanged()
 		{
-			if (propertyGrid.SelectedObject != null)
-			{
-				((IDocumenterConfig)propertyGrid.SelectedObject).SetProject(null);
-			}
-
 			if (comboBoxDocumenters.SelectedIndex != -1)
 			{
 				IDocumenterConfig documenterConfig = ((IDocumenter)project.Documenters[comboBoxDocumenters.SelectedIndex]).Config;
-				documenterConfig.SetProject(project);
 				propertyGrid.SelectedObject = documenterConfig;
 			}
 		}
@@ -1953,8 +2039,11 @@ namespace NDoc.Gui
 			base.OnClosing(e);
 		}
 
+
+		//This makes the property grid more responsive on update
 		private void propertyGrid_PropertyValueChanged(object s, System.Windows.Forms.PropertyValueChangedEventArgs e)
 		{
+			this.project.IsDirty=true;
 			propertyGrid.Refresh();
 		}
 
@@ -2051,7 +2140,7 @@ namespace NDoc.Gui
 				this.Cursor = Cursors.WaitCursor;
 				try
 				{
-					project.AddAssemblySlashDoc(assemblySlashDoc);
+					project.AssemblySlashDocs.Add(assemblySlashDoc);
 					AddRowToListView(assemblySlashDoc);
 					EnableMenuItems(true);
 					EnableAssemblyItems();
@@ -2064,7 +2153,7 @@ namespace NDoc.Gui
 				{
 					string msg = string.Format(
 						"Unable to load types from {0}.\nIs {1} missing a dependency?", 
-						assemblySlashDoc.AssemblyFilename, Path.GetFileName(assemblySlashDoc.AssemblyFilename));
+						assemblySlashDoc.Assembly.Path, Path.GetFileName(assemblySlashDoc.Assembly.Path));
 					ErrorForm errorForm = new ErrorForm(msg, ex);
 					errorForm.ShowDialog(this);
 				}
@@ -2160,6 +2249,68 @@ namespace NDoc.Gui
 				FileOpen( DragDropHandler.GetProjectFilePath( files ) );
 			}
 			base.OnDragDrop (drgevent);
+		}
+
+		private void menuFileImportNamespaces_Click(object sender, System.EventArgs e)
+		{
+			OpenFileDialog openFileDlg = new OpenFileDialog();
+			openFileDlg.InitialDirectory = Directory.GetCurrentDirectory();
+			openFileDlg.Filter = "NDoc Namespace Summary files (*.xml)|*.xml|NDoc Project files (*.ndoc)|*.ndoc|All files (*.*)|*.*" ;
+
+			if(openFileDlg.ShowDialog() == DialogResult.OK)
+			{
+				StreamReader streamReader=null;
+				try
+				{
+					streamReader = new StreamReader(openFileDlg.FileName);
+					XmlTextReader reader = new XmlTextReader(streamReader);
+					reader.MoveToContent();
+					project.Namespaces.Read(reader);
+					reader.Close();
+					streamReader.Close();
+				}
+				catch(Exception ex)
+				{
+					if (streamReader!=null) streamReader.Close();
+					if ( !this.IsDisposed )
+					{
+						ErrorForm errorForm = new ErrorForm(ex.Message, ex);
+						errorForm.ShowDialog(this);
+					}
+				}
+			}
+		}
+
+		private void menuFileExportNamespaces_Click(object sender, System.EventArgs e)
+		{
+			SaveFileDialog saveFileDlg = new SaveFileDialog();
+			saveFileDlg.InitialDirectory = Directory.GetCurrentDirectory();
+			saveFileDlg.Filter = "NDoc Namespace Summary files (*.xml)|*.xml|All files (*.*)|*.*" ;
+
+			if(saveFileDlg.ShowDialog() == DialogResult.OK)
+			{
+				StreamWriter streamWriter=null;
+				try
+				{
+					streamWriter = new StreamWriter(saveFileDlg.FileName,false,new System.Text.UTF8Encoding(false));
+					XmlTextWriter writer = new XmlTextWriter(streamWriter);
+					writer.Formatting=Formatting.Indented;
+					writer.Indentation=4;
+					project.Namespaces.Write(writer);
+					writer.Close();
+					streamWriter.Close();
+				}
+				catch(Exception ex)
+				{
+					if (streamWriter!=null) streamWriter.Close();
+					if ( !this.IsDisposed )
+					{
+						ErrorForm errorForm = new ErrorForm(ex.Message, ex);
+						errorForm.ShowDialog(this);
+					}
+				}
+			}
+		
 		}
 
 		private bool ShowDescriptions
