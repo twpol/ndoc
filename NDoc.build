@@ -5,7 +5,7 @@
 	<property name="project.version" value="1.2" />
 	<property name="project.build.config" value="debug" readonly="false" />
 	<property name="project.build.package" value="false" readonly="false" />
-	<property name="build.dir" value="${nant.project.basedir}/build/${nant.project.name}-${project.version}"
+	<property name="build.dir" value="${nant.project.basedir}/bin"
 		readonly="false" />
 	<!-- Include helpers -->
 	<include buildfile="NDoc.build.include" />
@@ -146,6 +146,7 @@
 
 
 
+	those targets are to help debugging ndoc on mono::
 
 	-->
 	<target name="mono" description="Builds on mono::">
@@ -157,7 +158,7 @@
 	-->
 	<target name="mono-core" description="Builds Core on mono::">
 		<call target="set-mono-1.0-runtime-configuration" force="true" />
-		<call target="check-current-bin-dir" force="true" />
+		<call target="clean-current-bin-dir" force="true" />
 		<nant buildfile="src/Core/Core.build" target="compile" inheritall="true" />
 	</target>
 	<!--
@@ -165,7 +166,7 @@
 	-->
 	<target name="mono-msdn" description="Builds the msdn documenter on mono::">
 		<call target="set-mono-1.0-runtime-configuration" force="true" />
-		<call target="check-current-bin-dir" force="true" />
+		<call target="clean-current-bin-dir" force="true" />
 		<nant buildfile="src/Documenter/Msdn/Msdn.build" target="compile" inheritall="true" />
 	</target>
 </project>

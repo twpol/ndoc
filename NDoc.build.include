@@ -250,9 +250,9 @@
 		<property name="current.build.debug" value="${build.debug}" readonly="false" />
 		<property name="current.build.defines" value="${build.defines},NET,NET_1_0" readonly="false" />
 		<property name="current.build.optimize" value="${build.optimize}" readonly="false" />
-		<property name="current.bin.dir" value="${build.dir}/bin/.net-${current.runtime.version}"
+		<property name="current.bin.dir" value="${build.dir}/.net-${current.runtime.version}"
 			readonly="false" />
-		<property name="current.sdkdoc.dir" value="${build.dir}/doc/sdk/${current.runtime.config}/${current.runtime.version}"
+		<property name="current.sdkdoc.dir" value="${nant.project.basedir}/doc/sdk/${current.runtime.config}/${current.runtime.version}"
 			readonly="false" />
 		<property name="current.sdkdoc.debug" value="${sdkdoc.debug}" readonly="false" />
 		<property name="nant.settings.currentframework" value="${current.runtime.config}-${current.runtime.version}" />
@@ -268,9 +268,9 @@
 		<property name="current.build.debug" value="${build.debug}" readonly="false" />
 		<property name="current.build.defines" value="${build.defines},NET,NET_1_1" readonly="false" />
 		<property name="current.build.optimize" value="${build.optimize}" readonly="false" />
-		<property name="current.bin.dir" value="${build.dir}/bin/.net-${current.runtime.version}"
+		<property name="current.bin.dir" value="${build.dir}/.net-${current.runtime.version}"
 			readonly="false" />
-		<property name="current.sdkdoc.dir" value="${build.dir}/doc/sdk/${current.runtime.config}/${current.runtime.version}"
+		<property name="current.sdkdoc.dir" value="${nant.project.basedir}/doc/sdk/${current.runtime.config}/${current.runtime.version}"
 			readonly="false" />
 		<property name="current.sdkdoc.debug" value="${sdkdoc.debug}" readonly="false" />
 		<property name="nant.settings.currentframework" value="${current.runtime.config}-${current.runtime.version}" />
@@ -287,9 +287,9 @@
 		<property name="current.build.debug" value="${build.debug}" readonly="false" />
 		<property name="current.build.defines" value="${build.defines},NETCF,NETCF_1_0" readonly="false" />
 		<property name="current.build.optimize" value="${build.optimize}" readonly="false" />
-		<property name="current.bin.dir" value="${build.dir}/bin/${current.runtime.config}-${current.runtime.version}"
+		<property name="current.bin.dir" value="${build.dir}/${current.runtime.config}-${current.runtime.version}"
 			readonly="false" />
-		<property name="current.sdkdoc.dir" value="${build.dir}/doc/sdk/${current.runtime.config}/${current.runtime.version}"
+		<property name="current.sdkdoc.dir" value="${nant.project.basedir}/doc/sdk/${current.runtime.config}/${current.runtime.version}"
 			readonly="false" />
 		<property name="current.sdkdoc.debug" value="${sdkdoc.debug}" readonly="false" />
 		<property name="nant.settings.currentframework" value="${current.runtime.config}-${current.runtime.version}" />
@@ -305,9 +305,9 @@
 		<property name="current.build.debug" value="${build.debug}" readonly="false" />
 		<property name="current.build.defines" value="${build.defines},MONO,MONO_1_0" readonly="false" />
 		<property name="current.build.optimize" value="${build.optimize}" readonly="false" />
-		<property name="current.bin.dir" value="${build.dir}/bin/${current.runtime.config}-${current.runtime.version}"
+		<property name="current.bin.dir" value="${build.dir}/${current.runtime.config}-${current.runtime.version}"
 			readonly="false" />
-		<property name="current.sdkdoc.dir" value="${build.dir}/doc/sdk/${current.runtime.config}/${current.runtime.version}"
+		<property name="current.sdkdoc.dir" value="${nant.project.basedir}/doc/sdk/${current.runtime.config}/${current.runtime.version}"
 			readonly="false" />
 		<property name="current.sdkdoc.debug" value="${sdkdoc.debug}" readonly="false" />
 		<property name="nant.settings.currentframework" value="${current.runtime.config}-${current.runtime.version}" />
@@ -323,9 +323,9 @@
 		<property name="current.build.debug" value="${build.debug}" readonly="false" />
 		<property name="current.build.defines" value="${build.defines},SSCLI,SSCLI_1_0" readonly="false" />
 		<property name="current.build.optimize" value="${build.optimize}" readonly="false" />
-		<property name="current.bin.dir" value="${build.dir}/bin/${current.runtime.config}-${current.runtime.version}"
+		<property name="current.bin.dir" value="${build.dir}/${current.runtime.config}-${current.runtime.version}"
 			readonly="false" />
-		<property name="current.sdkdoc.dir" value="${build.dir}/doc/sdk/${current.runtime.config}/${current.runtime.version}"
+		<property name="current.sdkdoc.dir" value="${nant.project.basedir}/doc/sdk/${current.runtime.config}/${current.runtime.version}"
 			readonly="false" />
 		<property name="current.sdkdoc.debug" value="${sdkdoc.debug}" readonly="false" />
 		<property name="nant.settings.currentframework" value="${current.runtime.config}-${current.runtime.version}" />
