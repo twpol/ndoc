@@ -51,6 +51,10 @@ namespace NDoc.Documenter.Msdn
 			_OutputTarget = OutputType.HtmlHelpAndWeb;
 
 			_RootPageContainsNamespaces = false;
+
+			_HeaderHtml = string.Empty;
+			_FooterHtml = string.Empty;
+			_FilesToInclude = string.Empty;
 		}
 
 
@@ -367,6 +371,64 @@ namespace NDoc.Documenter.Msdn
 				SetDirty();
 			}
 		}
+
+		string _HeaderHtml;
+
+		/// <summary>Gets or sets the HeaderHtml property.</summary>
+		[
+		Category("HTML Help Options"),
+		Description("Raw HTML that is used as a page header instead of the default blue banner. " +
+			"\"%TOPIC-TITLE%\" is dynamically replaced by the title of the current page.")
+		]
+		public string HeaderHtml
+		{
+			get { return _HeaderHtml; }
+
+			set
+			{
+				_HeaderHtml = value;
+				SetDirty();
+			}
+		}
+
+		string _FooterHtml;
+
+		/// <summary>Gets or sets the FooterHtml property.</summary>
+		[
+		Category("HTML Help Options"),
+		Description("Raw HTML that is used as a page footer instead of the default footer." +
+			"\"%ASSEMBLY-NAME%\" is dynamically replaced by the name of the assembly for the current page. " +
+			"\"%ASSEMBLY-VERSION%\" is dynamically replaced by the version of the assembly for the current page. " +
+			"\"%TOPIC-TITLE%\" is dynamically replaced by the title of the current page.")
+		]
+		public string FooterHtml
+		{
+			get { return _FooterHtml; }
+
+			set
+			{
+				_FooterHtml = value;
+				SetDirty();
+			}
+		}
+
+		string _FilesToInclude;
+
+		/// <summary>Gets or sets the FilesToInclude property.</summary>
+		[
+		Category("HTML Help Options"),
+		Description("Specifies external files that must be included in the compiled CHM file. Multiple files must be separated by a pipe ('|').")
+		]
+		public string FilesToInclude
+		{
+			get { return _FilesToInclude; }
+
+			set
+			{
+				_FilesToInclude = value;
+				SetDirty();
+			}
+ 		}
 
 	}
 
