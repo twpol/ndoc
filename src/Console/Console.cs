@@ -47,7 +47,16 @@ namespace NDoc.Console
 							string name = pair[0].Substring(1);
 							string value = pair[1];
 
-							documenter.Config.SetValue(name, value);
+							if (name.ToLower() == "project")
+							{
+								project = new Project();
+								project.Read(value);
+								documenter = (MsdnDocumenter)project.GetDocumenter(documenter.Name);
+							}
+							else
+							{
+								documenter.Config.SetValue(name, value);
+							}
 						}
 					}
 					else if (arg.IndexOf(',') != -1)
@@ -76,7 +85,7 @@ namespace NDoc.Console
 
 		private static void WriteUsage(IDocumenter documenter)
 		{
-			System.Console.WriteLine("usage: NDoc.Console [-property=value...] assembly,xml [assembly,xml...]");
+			System.Console.WriteLine("usage: NDoc.Console [-project=file] [-property=value...] assembly,xml [assembly,xml...]");
 			System.Console.WriteLine("  available properties:");
 
 			foreach (string property in documenter.Config.GetProperties())

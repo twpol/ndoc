@@ -281,7 +281,7 @@ namespace NDoc.Core
 			}
 		}
 
-		private IDocumenter GetDocumenter(string name)
+		public IDocumenter GetDocumenter(string name)
 		{
 			foreach (IDocumenter documenter in Documenters)
 			{
