@@ -389,7 +389,7 @@ namespace NDoc.Core
 		/// <summary>Gets or sets the CopyrightHref property.</summary>
 		[
 		Category("Documentation Main Settings"),
-		Description("An URL referenced by the copyright notice."),
+		Description("An URL referenced by the copyright notice.")
 		]
 		public string CopyrightHref
 		{
