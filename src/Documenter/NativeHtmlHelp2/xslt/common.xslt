@@ -996,13 +996,13 @@
 		
 	<xsl:template match="os">
 		<xsl:choose>
-			<xsl:when test="@ndocBuiltIn = 'no-restriction'">
+			<xsl:when test="@ndocBuiltIn = 'all'">
 				<xsl:text>Windows 98, Windows NT 4.0, Windows Millennium Edition, Windows 2000, Windows XP Home Edition, Windows XP Professional, Windows Server 2003 family</xsl:text>
 			</xsl:when>
-			<xsl:when test="@ndocBuiltIn = 'nt5+'">
+			<xsl:when test="@ndocBuiltIn = 'nt5plus'">
 				<xsl:text>Windows 2000, Windows XP Home Edition, Windows XP Professional, Windows Server 2003 family</xsl:text>
 			</xsl:when>
-			<xsl:when test="@ndocBuiltIn = 'server'">
+			<xsl:when test="@ndocBuiltIn = 'enterprise'">
 				<xsl:text>Windows 2000, Windows XP Professional, Windows Server 2003 family</xsl:text>
 			</xsl:when>			
 		</xsl:choose>	

@@ -887,7 +887,7 @@ namespace NDoc.Core
 			}
 		}
 
-		private OSSupport _DefaultOSSupport  = OSSupport.NoRestrictions;
+		private OSSupport _DefaultOSSupport  = OSSupport.all;
 
 		/// <summary>Gets or sets the DefaultOSSupport property.</summary>
 		/// <remarks>Defines the default set of operating systems 
@@ -896,25 +896,25 @@ namespace NDoc.Core
 		/// The valid values are:
 		/// <list type="bullet">
 		/// <item>
-		/// <description><b>NoRestriction</b> - The default is any operating system that supports the .NET framework.
+		/// <description><b>all</b> - The default is any operating system that supports the .NET framework.
 		/// (Windows 98/98SE, Windows ME, Windows NT4, Windows XP Pro and Home, Windows Server 2003)</description>
 		/// </item>
 		/// <item>
-		/// <description><b>NT5Plus</b> - The default operating system includes any NT5 derivative 
+		/// <description><b>nt5plus</b> - The default operating system includes any NT5 derivative 
 		/// (Windows 2000, Windows XP Pro and Home, Windows Server 2003)</description>
 		/// </item>
 		/// <item>
-		/// <description><b>Server</b> - The default operating system is a server system 
+		/// <description><b>enterprise</b> - The default operating system is a enterprise system 
 		/// (Window 2000, Windows XP Pro, Windows Server 2003)</description>
 		/// </item>
 		/// <item>
-		/// <description><b>None</b> - no default operating system list is defined.</description>
+		/// <description><b>none</b> - no default operating system list is defined.</description>
 		/// </item>
 		/// </list>
 		/// </remarks>
 		[Category("Supported Platforms")]
 		[Description("Defines the default set of operating systems supported by classes that don't have OS support specified in their comments (ignored if InheritPlatformSupport is false).")]
-		[DefaultValue(OSSupport.NoRestrictions)]
+		[DefaultValue(OSSupport.all)]
 		public OSSupport DefaultOSSupport 
 		{
 			get { return _DefaultOSSupport ; }
@@ -1024,21 +1024,21 @@ namespace NDoc.Core
 		/// <summary>
 		/// All operating systems that support .NET
 		/// </summary>
-		NoRestrictions,
+		all,
 
 		/// <summary>
 		/// A Windows OS from the NT 5 family of operating systems
 		/// </summary>
-		NT5Plus,
+		nt5plus,
 
 		/// <summary>
-		/// A server operating system
+		/// A enterprise operating system
 		/// </summary>
-		Server,
+		enterprise,
 
 		/// <summary>
 		/// Do not show a default list of operating systems
 		/// </summary>
-		None
+		none
 	}
 }

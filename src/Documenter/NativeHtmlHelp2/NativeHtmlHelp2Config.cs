@@ -639,7 +639,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 
 		/// <summary>Path to an xslt stylesheet that contains templates for documenting extensibility tags</summary>
 		[Category("Extensibility")]
-		[Description("Path to an xslt stylesheet that contains templates for documenting extensibility tags. Extensibility templates should match your custom nodes and have a mode of 'slashdoc'")]
+		[Description("Path to an xslt stylesheet that contains templates for documenting extensibility tags. Refer to the NDoc user's guide for more details on extending NDoc.")]
 		[DefaultValue("")]
 		[Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
 		public string ExtensibilityStylesheet

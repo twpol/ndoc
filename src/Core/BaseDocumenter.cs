@@ -434,20 +434,20 @@ namespace NDoc.Core
 			writer.WriteStartElement( "platform" );
 
 			//write out the supported operating systems
-			if ( MyConfig.DefaultOSSupport != OSSupport.None )
+			if ( MyConfig.DefaultOSSupport != OSSupport.none )
 			{
 				writer.WriteStartElement( "os" );
 
 				switch ( MyConfig.DefaultOSSupport )
 				{
-					case OSSupport.NoRestrictions:
-						writer.WriteAttributeString( "ndocBuiltIn", "no-restriction" );
+					case OSSupport.all:
+						writer.WriteAttributeString( "ndocBuiltIn", "all" );
 						break;
-					case OSSupport.NT5Plus:
-						writer.WriteAttributeString( "ndocBuiltIn", "nt5+" );
+					case OSSupport.nt5plus:
+						writer.WriteAttributeString( "ndocBuiltIn", "nt5plus" );
 						break;
-					case OSSupport.Server:
-						writer.WriteAttributeString( "ndocBuiltIn", "server" );
+					case OSSupport.enterprise:
+						writer.WriteAttributeString( "ndocBuiltIn", "enterprise" );
 						break;
 					default:
 						Debug.Assert( false );	//remind ourselves to update this switch if new items are added
