@@ -134,7 +134,14 @@
 		<xsl:param name="link-text"/>
 
 		<xsl:variable name="cref">
-			<xsl:value-of select="NUtil:GetLocalCRef( $type/@id )"/>
+			<xsl:choose>
+				<xsl:when test="$type/@id">
+					<xsl:value-of select="NUtil:GetLocalCRef( $type/@id )"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="NUtil:GetLocalCRef( $type )"/>
+				</xsl:otherwise>
+			</xsl:choose>
 		</xsl:variable>
 		
 		<xsl:choose>

@@ -34,7 +34,7 @@
 				<xsl:with-param name="count" select="$level" />
 			</xsl:call-template>
 			<xsl:call-template name="get-link-for-type">
-				<xsl:with-param name="type" select="$list[$last]"/>
+				<xsl:with-param name="type" select="$list[$last]/@id"/>
 				<xsl:with-param name="link-text" select="substring-after( $list[$last]/@id, ':' )"/>	
 			</xsl:call-template>	
 			<br />
