@@ -12,6 +12,11 @@
     <LI><OBJECT type="text/sitemap">
             <param name="Name" value="** New **">
             <param name="Name" value="** New **">
+            <param name="Local" value="Content\projectdesigner.htm">
+         </OBJECT>
+    <LI><OBJECT type="text/sitemap">
+            <param name="Name" value="** New **">
+            <param name="Name" value="** New **">
             <param name="Local" value="Content\documentersgenral.htm">
          </OBJECT>
     <LI><OBJECT type="text/sitemap">
@@ -22,12 +27,12 @@
     <LI><OBJECT type="text/sitemap">
             <param name="Name" value="** New **">
             <param name="Name" value="** New **">
-            <param name="Local" value="Content\reference.htm">
+            <param name="Local" value="Content\blank.htm">
          </OBJECT>
     <LI><OBJECT type="text/sitemap">
             <param name="Name" value="** New **">
             <param name="Name" value="** New **">
-            <param name="Local" value="Content\projectdesigner.htm">
+            <param name="Local" value="Content\reference.htm">
          </OBJECT>
     <LI><OBJECT type="text/sitemap">
             <param name="Name" value="** New **">
@@ -37,32 +42,22 @@
     <LI><OBJECT type="text/sitemap">
             <param name="Name" value="** New **">
             <param name="Name" value="** New **">
-            <param name="Local" value="Content\linear.htm">
-         </OBJECT>
-    <LI><OBJECT type="text/sitemap">
-            <param name="Name" value="** New **">
-            <param name="Name" value="** New **">
-            <param name="Local" value="Content\xml.htm">
-         </OBJECT>
-    <LI><OBJECT type="text/sitemap">
-            <param name="Name" value="** New **">
-            <param name="Name" value="** New **">
-            <param name="Local" value="Content\latex.htm">
-         </OBJECT>
-    <LI><OBJECT type="text/sitemap">
-            <param name="Name" value="** New **">
-            <param name="Name" value="** New **">
             <param name="Local" value="Content\msdn.htm">
          </OBJECT>
     <LI><OBJECT type="text/sitemap">
             <param name="Name" value="** New **">
             <param name="Name" value="** New **">
-            <param name="Local" value="Content\blank.htm">
+            <param name="Local" value="Content\javadoc.htm">
          </OBJECT>
     <LI><OBJECT type="text/sitemap">
             <param name="Name" value="** New **">
             <param name="Name" value="** New **">
-            <param name="Local" value="Content\javadoc.htm">
+            <param name="Local" value="Content\linear.htm">
+         </OBJECT>
+    <LI><OBJECT type="text/sitemap">
+            <param name="Name" value="** New **">
+            <param name="Name" value="** New **">
+            <param name="Local" value="Content\latex.htm">
          </OBJECT>
     <LI><OBJECT type="text/sitemap">
             <param name="Name" value="Attributes">
@@ -75,9 +70,19 @@
             <param name="Local" value="Content\tags.htm">
          </OBJECT>
     <LI><OBJECT type="text/sitemap">
+            <param name="Name" value="Creating an NDoc Project">
+            <param name="Name" value="Creating an NDoc Project">
+            <param name="Local" value="Content\createproject.htm">
+         </OBJECT>
+    <LI><OBJECT type="text/sitemap">
             <param name="Name" value="Decorating Your Code">
             <param name="Name" value="Decorating Your Code">
             <param name="Local" value="content\decorating.htm">
+         </OBJECT>
+    <LI><OBJECT type="text/sitemap">
+            <param name="Name" value="Documenters">
+            <param name="Name" value="Documenters">
+            <param name="Local" value="Content\documenters.htm">
          </OBJECT>
     <LI><OBJECT type="text/sitemap">
             <param name="Name" value="Getting Involved">
@@ -95,14 +100,24 @@
             <param name="Local" value="content\support.htm">
          </OBJECT>
     <LI><OBJECT type="text/sitemap">
-            <param name="Name" value="Setting up Your C# Project">
-            <param name="Name" value="Setting up Your C# Project">
+            <param name="Name" value="Known Issues">
+            <param name="Name" value="Known Issues">
+            <param name="Local" value="Content\knownissues.htm">
+         </OBJECT>
+    <LI><OBJECT type="text/sitemap">
+            <param name="Name" value="Setting up Your C# Projects">
+            <param name="Name" value="Setting up Your C# Projects">
             <param name="Local" value="Content\settingupyourproject.htm">
          </OBJECT>
     <LI><OBJECT type="text/sitemap">
             <param name="Name" value="What's New">
             <param name="Name" value="What's New">
             <param name="Local" value="Content\Default.htm">
+         </OBJECT>
+    <LI><OBJECT type="text/sitemap">
+            <param name="Name" value="XML">
+            <param name="Name" value="XML">
+            <param name="Local" value="Content\xml.htm">
          </OBJECT>
 </UL>
 </BODY>

@@ -1,62 +1,69 @@
 <!doctype HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
 <html>
-	<head><title>Attributes supported by NDoc</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=Windows-1252">
-		<meta content="http://schemas.microsoft.com/intellisense/ie5" name="vs_targetSchema">
-		<LINK href="css/ndoc.css" rel="stylesheet" name="ndocstyle">
-		<script src="script/ndoc.js"></script>
-	</head>
-	<body class="dtBODY" id="bodyID" onload="InitTitle()">
-		<div id="nstext">
-			<p>The MSDN and VS.NET documenters that ship with NDoc use a number of system <A href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfsystemattributeclasstopic.htm">
-					attributes</A> to augment the code comment tags when generating compiled 
-				help files. When a type or member is decorated with the attributes described 
-				below, NDoc will use this information in order to make the help file more 
-				descriptive.
-			</p>
-			<table class="dtTABLE" id="Table2" style="WIDTH: 94%" cellSpacing="0">
-				<thead>
-					<tr vAlign="top">
-						<th width="33%">
-							Attribute</th>
-						<th width="67%">
-							Description</th></tr>
-				</thead>
-				<tbody>
-					<tr vAlign="top">
-						<td>
-							<p><b><A href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfsystemobsoleteattributeclasstopic.htm">ObsoleteAttribute</A></b></p>
-						</td>
-						<td>
-							<p>Marks program elements that are no longer in use.&nbsp;NDoc will include warning 
-								text for each item that is marked as obsolete.</p>
-						</td>
-					</tr>
-					<tr vAlign="top">
-						<td>
-							<p><b><B><A href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemComponentModelEditorBrowsableAttributeClassTopic.htm">EditorBrowsableAttribute</A></B></p>
-							<P></B></P>
-						</td>
-						<td>
-							<p>This attribute prevents types of members from showing up in editor or type 
-								browsers. If the project setting <STRONG>EditorBrowsableFilter</STRONG> is set 
-								to <STRONG>true</STRONG>, then no documentation will be generated for items 
-								decorated with this attribute.</p>
-						</td>
-					</tr>
-					<tr vAlign="top">
-						<td><b>
-								<P><B><B><A href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemReflectionAssemblyVersionAttributeClassTopic.htm">AssemblyVersionAttribute</A></B></P>
-								<P>
-							</b></B></P>
-						</td>
-						<td>
-							<p>If the <STRONG>IncludeAssemblyVersion</STRONG> project setting is <STRONG>true</STRONG>, 
-								then the assembly version will be included on each topic page.</p>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-	</body>
+
+<head>
+<title>Attributes supported by NDoc</title>
+<meta http-equiv="Content-Type" content="text/html; charset=Windows-1252" />
+<meta content="http://schemas.microsoft.com/intellisense/ie5" name="vs_targetSchema" />
+<link href="css/ndoc.css" rel="stylesheet" name="ndocstyle" />
+<script src="script/ndoc.js"></script>
+</head>
+
+<body class="dtBODY" id="bodyID" onload="InitTitle()">
+
+<div id="nstext">
+	<p>The MSDN and VS.NET documenters that ship with NDoc use a number of system
+	<a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfsystemattributeclasstopic.htm">
+	attributes</a> to augment the code comment tags when generating compiled help 
+	files. When a type or member is decorated with the attributes described below, 
+	NDoc will use this information in order to make the help file more descriptive.
+	</p>
+	<table class="dtTABLE" id="Table2" style="WIDTH: 94%" cellspacing="0">
+		<thead>
+			<tr valign="top">
+				<th width="33%">Attribute</th>
+				<th width="67%">Description</th>
+			</tr>
+		</thead>
+		<tr valign="top">
+			<td>
+			<p><b>
+			<a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfsystemobsoleteattributeclasstopic.htm">
+			ObsoleteAttribute</a></b></p>
+			</td>
+			<td>
+			<p>Marks program elements that are no longer in use. NDoc will include 
+			warning text for each item that is marked as obsolete.</p>
+			</td>
+		</tr>
+		<tr valign="top">
+			<td>
+			<p><b>
+			<a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemComponentModelEditorBrowsableAttributeClassTopic.htm">
+			EditorBrowsableAttribute</a></b></p>
+			</td>
+			<td>
+			<p>This attribute prevents types of members from showing up in editor 
+			or type browsers. If the project setting <strong>EditorBrowsableFilter</strong> 
+			is set to <strong>true</strong>, then no documentation will be generated 
+			for items decorated with this attribute.</p>
+			</td>
+		</tr>
+		<tr valign="top">
+			<td>
+			<p><b>
+			<a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemReflectionAssemblyVersionAttributeClassTopic.htm">
+			AssemblyVersionAttribute</a></b></p>
+			</td>
+			<td>
+			<p>If the <strong>IncludeAssemblyVersion</strong> project setting is
+			<strong>true</strong>, then the assembly version will be included on 
+			each topic page.</p>
+			</td>
+		</tr>
+	</table>
+</div>
+
+</body>
+
 </html>

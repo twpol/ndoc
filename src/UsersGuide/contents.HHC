@@ -14,8 +14,13 @@
       <LI><OBJECT type="text/sitemap">
             <param name="Name" value="What's New">
             <param name="Local" value="Content\Default.htm">
-            <param name="ImageNumber" value="11">
           </OBJECT>
+      <UL>
+         <LI><OBJECT type="text/sitemap">
+               <param name="Name" value="Known Issues">
+               <param name="Local" value="Content\knownissues.htm">
+             </OBJECT>
+      </UL>
       <LI><OBJECT type="text/sitemap">
             <param name="Name" value="Getting Started">
             <param name="Local" value="Content\gettingstarted.htm">
@@ -96,13 +101,8 @@
          </UL>
          <LI><OBJECT type="text/sitemap">
                <param name="Name" value="XML">
+               <param name="Local" value="Content\xml.htm">
              </OBJECT>
-         <UL>
-            <LI><OBJECT type="text/sitemap">
-                  <param name="Name" value="** New **">
-                  <param name="Local" value="Content\xml.htm">
-                </OBJECT>
-         </UL>
          <LI><OBJECT type="text/sitemap">
                <param name="Name" value="JavaDoc">
              </OBJECT>
