@@ -45,6 +45,14 @@ namespace NDoc.Core
 		/// </summary>
 		public XmlDocumentationCache()
 		{
+			Flush();
+		}
+
+		/// <summary>
+		/// Flushes the XmlDocumentationCache.
+		/// </summary>
+		public void Flush()
+		{
 			docs = new Hashtable();
 			summaries = new Hashtable();
 		}
@@ -117,7 +125,10 @@ namespace NDoc.Core
 							Debug.WriteLine("Loading XML Doc for " + type.Assembly.FullName);
 							Debug.WriteLine("at " + docPath);
 							doc = new XmlDocument();
-							doc.Load(new StreamReader(docPath));
+							using (StreamReader reader = new StreamReader(docPath))
+							{
+								doc.Load(reader);
+							}
 						}
 					}
 				}
