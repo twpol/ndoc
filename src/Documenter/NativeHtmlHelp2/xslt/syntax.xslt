@@ -886,6 +886,7 @@
 		<xsl:param name="include-type-links"/>
 		<xsl:param name="open-paren"/>
 		<xsl:param name="close-paren"/>
+		<xsl:param name="dir"/>
 		
 		<xsl:value-of select="$open-paren"/>
 		<xsl:if test="parameter">
@@ -936,7 +937,7 @@
 					<xsl:text>&#160;__gc[]</xsl:text>
 				</xsl:if>
 				<!-- c++ indexer setters also include the return type in the param list -->
-				<xsl:if test="position()!= last() or ($lang='C++' and parent::node()[local-name()='property'])">
+				<xsl:if test="position() != last() or ($lang='C++' and parent::property and $dir = 'set')">
 					<xsl:text>,</xsl:text>
 				</xsl:if>
 			</xsl:for-each>

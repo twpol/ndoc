@@ -295,7 +295,7 @@
 		<xsl:call-template name="cpp-property-getter">
 			<xsl:with-param name="include-type-links" select="$include-type-links"/>
 		</xsl:call-template>
-		<xsl:if test="$include-type-links = false()">
+		<xsl:if test="$include-type-links != true()">
 			<br/>
 		</xsl:if>
 		<xsl:text>&#10;</xsl:text>
@@ -340,6 +340,7 @@
 					<xsl:with-param name="include-type-links" select="$include-type-links"/>		
 					<xsl:with-param name="lang" select="'C++'"/>
 					<xsl:with-param name="namespace-name" select="../../@name" />
+					<xsl:with-param name="dir" select="'get'"/>
 				</xsl:call-template>
 				<xsl:text>)</xsl:text>			
 			</xsl:when>
@@ -373,6 +374,7 @@
 			<xsl:with-param name="include-type-links" select="$include-type-links"/>		
 			<xsl:with-param name="lang" select="'C++'"/>
 			<xsl:with-param name="namespace-name" select="../../@name" />
+			<xsl:with-param name="dir" select="'set'"/>
 		</xsl:call-template>
 		<xsl:if test="parameter">
 			<xsl:text>&#160;&#160;&#160;</xsl:text>
@@ -385,7 +387,7 @@
 		<xsl:if test="contains(@type, '[')">
 			<xsl:text>&#160;__gc[]</xsl:text>
 		</xsl:if>
-		<xsl:if test="parameter">
+		<xsl:if test="parameter and $include-type-links = true()">
 			<xsl:text>newValue&#10;</xsl:text>
 		</xsl:if>
 		<xsl:text>);</xsl:text>
@@ -395,6 +397,7 @@
 		<xsl:param name="lang"/>
 		<xsl:param name="namespace-name" />
 		<xsl:param name="include-type-links"/>
+		<xsl:param name="dir"/>
 		
 		<xsl:call-template name="parameters-list">
 			<xsl:with-param name="lang" select="$lang"/>
@@ -402,6 +405,7 @@
 			<xsl:with-param name="include-type-links" select="$include-type-links"/>
 			<xsl:with-param name="open-paren" select="''"/>
 			<xsl:with-param name="close-paren" select="''"/>
+			<xsl:with-param name="dir" select="$dir"/>
 		</xsl:call-template>	
 	</xsl:template>
 		
