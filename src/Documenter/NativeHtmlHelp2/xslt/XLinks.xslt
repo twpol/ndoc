@@ -164,20 +164,23 @@
 	<xsl:template name="get-link-for-type">
 		<xsl:param name="type" />
 		<xsl:param name="link-text" />
-		<xsl:variable name="cref">
+		<xsl:variable name="tid">
 			<xsl:choose>
 				<xsl:when test="$type/@id">
-					<xsl:value-of select="NUtil:GetLocalCRef( $type/@id )" />
+					<xsl:value-of select="$type/@id" />
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:value-of select="NUtil:GetLocalCRef( $type )" />
+					<xsl:value-of select="$type" />
 				</xsl:otherwise>
 			</xsl:choose>
+		</xsl:variable>
+		<xsl:variable name="cref">
+					<xsl:value-of select="NUtil:GetLocalCRef( $tid )" />
 		</xsl:variable>
 		<xsl:choose>
 			<xsl:when test="$cref=''">
 				<xsl:call-template name="get-xlink-for-foreign-type">
-					<xsl:with-param name="type" select="$type" />
+					<xsl:with-param name="type" select="$tid" />
 					<xsl:with-param name="link-text" select="$link-text" />
 				</xsl:call-template>
 			</xsl:when>

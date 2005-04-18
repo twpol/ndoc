@@ -606,9 +606,12 @@ div#popUpWindow a /* Controls the style of the Links in Glossary Popups */
 	color: Red;
 	font-weight: bold;
 	}
-div.Hierarchy
+div.hier
 {
 	margin: 0.5em,0.0em,0.5em,1.0em;
 }
+    table.hier  {width:100%; border:none; font-size: 100%;padding:0px;margin:0px;border-collapse:collapse}
+    table.hier  tr {padding:0px;margin:0px;}
+    table.hier  td {vertical-align: top; padding:0px;margin:0px;}
 
 

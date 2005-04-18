@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-	xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
 	<!-- -->
 	<xsl:output method="xml" indent="yes" encoding="utf-8" omit-xml-declaration="yes" />
 	<!-- -->
@@ -34,7 +33,7 @@
 			<xsl:call-template name="html-head">
 				<xsl:with-param name="title">
 					<xsl:if test="local-name()='constructor'">
-						<xsl:value-of select="../@name" />
+						<xsl:value-of select="../@displayName" />
 					</xsl:if>
 					<xsl:if test="local-name()='method'">
 						<xsl:value-of select="@name" />
@@ -62,10 +61,10 @@
 				<xsl:call-template name="title-row">
 					<xsl:with-param name="type-name">
 						<xsl:if test="local-name()='constructor'">
-							<xsl:value-of select="../@name" />
+							<xsl:value-of select="../@displayName" />
 						</xsl:if>
 						<xsl:if test="local-name()='method'">
-							<xsl:value-of select="../@name" />
+							<xsl:value-of select="../@displayName" />
 							<xsl:text>.</xsl:text>
 							<xsl:value-of select="@name" />
 						</xsl:if>

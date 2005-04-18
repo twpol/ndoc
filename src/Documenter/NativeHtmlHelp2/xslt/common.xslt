@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-	xmlns:NUtil="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities"
-	xmlns:NHtmlProvider="urn:NDocExternalHtml" 
-	xmlns:MSHelp="http://msdn.microsoft.com/mshelp" 
-	exclude-result-prefixes="NUtil NHtmlProvider">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:NUtil="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities"
+	xmlns:NHtmlProvider="urn:NDocExternalHtml" xmlns:MSHelp="http://msdn.microsoft.com/mshelp" exclude-result-prefixes="NUtil NHtmlProvider">
 	<!-- -->
 	<xsl:include href="tags.xslt" />
 	<xsl:include href="indices.xslt" />
@@ -92,10 +89,10 @@
 	<xsl:template name="type-name">
 		<xsl:choose>
 			<xsl:when test="local-name()='constructor' or local-name()='field' or local-name()='property' or local-name()='method' or local-name()='event' or local-name()='operator'">
-				<xsl:value-of select="../@name" />
+				<xsl:value-of select="../@displayName" />
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:value-of select="@name" />
+				<xsl:value-of select="@displayName" />
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>

@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-	xmlns:NUtil="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities"
-	xmlns:MSHelp="http://msdn.microsoft.com/mshelp" 
-	exclude-result-prefixes="NUtil">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:NUtil="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities"
+	xmlns:MSHelp="http://msdn.microsoft.com/mshelp" exclude-result-prefixes="NUtil">
 	<!-- -->
 	<xsl:output method="xml" indent="yes" encoding="utf-8" omit-xml-declaration="yes" />
 	<!-- -->
@@ -37,7 +35,7 @@
 				<xsl:with-param name="title">
 					<xsl:choose>
 						<xsl:when test="local-name()='constructor'">
-							<xsl:value-of select="../@name" />
+							<xsl:value-of select="../@displayName" />
 						</xsl:when>
 						<xsl:when test="local-name()='operator'">
 							<xsl:call-template name="operator-name">

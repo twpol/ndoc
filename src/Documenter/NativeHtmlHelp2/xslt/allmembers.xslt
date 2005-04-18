@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-	xmlns:MSHelp="http://msdn.microsoft.com/mshelp"
-	xmlns:NUtil="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities" 
-	exclude-result-prefixes="NUtil">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:MSHelp="http://msdn.microsoft.com/mshelp"
+	xmlns:NUtil="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities" exclude-result-prefixes="NUtil">
 	<!-- -->
 	<xsl:output method="xml" indent="yes" encoding="utf-8" omit-xml-declaration="yes" />
 	<!-- -->
@@ -15,13 +13,13 @@
 		<xsl:param name="type" />
 		<html dir="LTR">
 			<xsl:call-template name="html-head">
-				<xsl:with-param name="title" select="concat(@name, ' Members')" />
+				<xsl:with-param name="title" select="concat(@displayName, ' Members')" />
 				<xsl:with-param name="page-type" select="'Members'" />
 			</xsl:call-template>
 			<body topmargin="0" id="bodyID" class="dtBODY">
 				<xsl:call-template name="title-row">
 					<xsl:with-param name="type-name">
-						<xsl:value-of select="@name" /> Members
+						<xsl:value-of select="@displayName" /> Members
 					</xsl:with-param>
 				</xsl:call-template>
 				<div id="nstext" valign="bottom">
@@ -31,7 +29,7 @@
 							<xsl:attribute name="href">
 								<xsl:value-of select="NUtil:GetLocalCRef( string( @id ) )" />
 							</xsl:attribute>
-							<xsl:value-of select="@name" />
+							<xsl:value-of select="@displayName" />
 							<xsl:text> overview</xsl:text>
 						</a>
 					</p>

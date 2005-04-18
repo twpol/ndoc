@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-	xmlns:MSHelp="http://msdn.microsoft.com/mshelp"
-	xmlns:NUtil="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities" 
-	exclude-result-prefixes="NUtil">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:MSHelp="http://msdn.microsoft.com/mshelp"
+	xmlns:NUtil="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities" exclude-result-prefixes="NUtil">
 	<!-- -->
 	<xsl:output method="xml" indent="yes" encoding="utf-8" omit-xml-declaration="yes" />
 	<!-- -->
@@ -54,15 +52,37 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template match="hierarchyType" mode="hierarchy">
-		<div class="Hierarchy">
-			<xsl:call-template name="get-link-for-type">
-				<xsl:with-param name="type" select="@id" />
-				<xsl:with-param name="link-text" select="substring-after(@id, ':' )" />
-			</xsl:call-template>
-			<xsl:if test="hierarchyInterfaces">
-				<xsl:text>&#160;---- </xsl:text>
-				<xsl:apply-templates select="./hierarchyInterfaces/hierarchyInterface" mode="baseInterfaces" />
-			</xsl:if>
+		<div class="hier">
+			<xsl:choose>
+				<xsl:when test="hierarchyInterfaces">
+					<table class="hier">
+						<tr>
+							<td width="1%">
+								<nobr>
+									<xsl:call-template name="get-link-for-type">
+										<xsl:with-param name="type" select="@id" />
+										<xsl:with-param name="link-text">
+                                            <xsl:value-of select="@namespace" />.<xsl:value-of select="@displayName" />
+                                        </xsl:with-param>
+									</xsl:call-template>
+									<xsl:text>&#160;----&#160;</xsl:text>
+								</nobr>
+							</td>
+							<td width="99%">
+								<xsl:apply-templates select="./hierarchyInterfaces/hierarchyInterface" mode="baseInterfaces" />
+							</td>
+						</tr>
+					</table>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:call-template name="get-link-for-type">
+						<xsl:with-param name="type" select="@id" />
+						<xsl:with-param name="link-text">
+                            <xsl:value-of select="@namespace" />.<xsl:value-of select="@displayName" />
+                        </xsl:with-param>
+					</xsl:call-template>
+				</xsl:otherwise>
+			</xsl:choose>
 			<xsl:apply-templates select="hierarchyType" mode="hierarchy" />
 		</div>
 	</xsl:template>
@@ -70,7 +90,9 @@
 	<xsl:template match="hierarchyInterface" mode="baseInterfaces">
 		<xsl:call-template name="get-link-for-type">
 			<xsl:with-param name="type" select="@id" />
-			<xsl:with-param name="link-text" select="substring-after(@id, ':' )" />
+			<xsl:with-param name="link-text">
+                <xsl:value-of select="@namespace" />.<xsl:value-of select="@displayName" />
+        </xsl:with-param>
 		</xsl:call-template>
 		<xsl:if test="position() != last()">
 			<xsl:text>, </xsl:text>

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-	xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
 	<!-- -->
 	<xsl:output method="xml" indent="yes" encoding="utf-8" omit-xml-declaration="yes" />
 	<!-- -->
@@ -23,7 +22,8 @@
 		</xsl:variable>
 		<xsl:variable name="propertyName" select="@name" />
 		<xsl:variable name="title">
-			<xsl:value-of select="@name" /><xsl:text> Property</xsl:text>
+			<xsl:value-of select="@name" />
+			<xsl:text> Property</xsl:text>
 			<xsl:if test="./parameter">
 				<xsl:text> </xsl:text>
 				<xsl:if test="count(parent::node()/*[@name=$propertyName]) &gt; 1">
@@ -40,7 +40,7 @@
 				<object id="obj_cook" classid="clsid:59CC0C20-679B-11D2-88BD-0800361A1803" style="display:none;"></object>
 				<xsl:call-template name="title-row">
 					<xsl:with-param name="type-name">
-						<xsl:value-of select="../@name" />.<xsl:value-of select="$title" />
+						<xsl:value-of select="../@displayName" />.<xsl:value-of select="$title" />
 					</xsl:with-param>
 				</xsl:call-template>
 				<div id="nstext" valign="bottom">

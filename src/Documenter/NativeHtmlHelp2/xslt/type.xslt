@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-	xmlns:MSHelp="http://msdn.microsoft.com/mshelp"
-	xmlns:NUtil="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities" 
-	exclude-result-prefixes="NUtil">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:MSHelp="http://msdn.microsoft.com/mshelp"
+	xmlns:NUtil="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities" exclude-result-prefixes="NUtil">
 	<!-- -->
 	<xsl:output method="xml" indent="yes" encoding="utf-8" omit-xml-declaration="yes" />
 	<!-- -->
@@ -35,7 +33,9 @@
 			</xsl:call-template>
 			<xsl:call-template name="get-link-for-type">
 				<xsl:with-param name="type" select="$list[$last]/@id" />
-				<xsl:with-param name="link-text" select="substring-after( $list[$last]/@id, ':' )" />
+				<xsl:with-param name="link-text">
+                    <xsl:value-of select="$list[$last]/@namespace" />.<xsl:value-of select="$list[$last]/@displayName" />
+                </xsl:with-param>
 			</xsl:call-template>
 			<br />
 			<xsl:call-template name="draw-hierarchy">
@@ -79,13 +79,13 @@
 		<xsl:param name="type" />
 		<html dir="LTR">
 			<xsl:call-template name="html-head">
-				<xsl:with-param name="title" select="concat(@name, ' ', $type)" />
+				<xsl:with-param name="title" select="concat(@displayName, ' ', $type)" />
 				<xsl:with-param name="page-type" select="'type'" />
 			</xsl:call-template>
 			<body topmargin="0" id="bodyID" class="dtBODY">
 				<object id="obj_cook" classid="clsid:59CC0C20-679B-11D2-88BD-0800361A1803" style="display:none;"></object>
 				<xsl:call-template name="title-row">
-					<xsl:with-param name="type-name" select="concat(@name, ' ', $type)" />
+					<xsl:with-param name="type-name" select="concat(@displayName, ' ', $type)" />
 				</xsl:call-template>
 				<div id="nstext" valign="bottom">
 					<xsl:call-template name="summary-section" />
@@ -98,7 +98,8 @@
 									<xsl:attribute name="href">
 										<xsl:value-of select="$members-href" />
 									</xsl:attribute>
-									<xsl:value-of select="@name" /><xsl:text> Members</xsl:text>
+									<xsl:value-of select="@displayName" />
+									<xsl:text> Members</xsl:text>
 								</a>
 								<xsl:text>.</xsl:text>
 							</p>
@@ -118,7 +119,7 @@
 								<xsl:when test="self::interface">
 									<xsl:if test="derivedBy">
 										<b>
-											<xsl:value-of select="substring-after( @id, ':' )" />
+                                            <xsl:value-of select="@namespace" />.<xsl:value-of select="@displayName" />
 										</b>
 										<xsl:choose>
 											<xsl:when test="count(derivedBy) &lt; 6">
@@ -129,7 +130,9 @@
 													</xsl:call-template>
 													<xsl:call-template name="get-link-for-type">
 														<xsl:with-param name="type" select="@id" />
-														<xsl:with-param name="link-text" select="substring-after(@id, ':' )" />
+														<xsl:with-param name="link-text">
+                                                            <xsl:value-of select="@namespace" />.<xsl:value-of select="@displayName" />
+                                                        </xsl:with-param>
 													</xsl:call-template>
 												</xsl:for-each>
 											</xsl:when>
@@ -162,7 +165,7 @@
 										<xsl:with-param name="count" select="$typeIndent+1" />
 									</xsl:call-template>
 									<b>
-										<xsl:value-of select="substring-after( @id, ':' )" />
+                                        <xsl:value-of select="@namespace" />.<xsl:value-of select="@displayName" />
 									</b>
 									<xsl:if test="derivedBy">
 										<xsl:variable name="derivedTypeIndent" select="$typeIndent+2" />
@@ -175,7 +178,9 @@
 													</xsl:call-template>
 													<xsl:call-template name="get-link-for-type">
 														<xsl:with-param name="type" select="@id" />
-														<xsl:with-param name="link-text" select="substring-after(@id, ':' )" />
+														<xsl:with-param name="link-text">
+                                                            <xsl:value-of select="@namespace" />.<xsl:value-of select="@displayName" />
+                                                        </xsl:with-param>
 													</xsl:call-template>
 												</xsl:for-each>
 											</xsl:when>
@@ -259,7 +264,7 @@
 					<xsl:attribute name="href">
 						<xsl:value-of select="NUtil:GetLocalCRef( string( @id ) )" />
 					</xsl:attribute>
-					<xsl:value-of select="@name" />
+					<xsl:value-of select="@displayName" />
 				</a>
 			</td>
 			<td>

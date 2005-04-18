@@ -446,9 +446,7 @@
 					</xsl:choose>
 					<xsl:text> (inherited from </xsl:text>
 					<b>
-						<xsl:call-template name="strip-namespace">
-							<xsl:with-param name="name" select="@declaringType" />
-						</xsl:call-template>
+                        <xsl:value-of select="../@displayName"/>
 					</b>
 					<xsl:text>)</xsl:text>
 				</td>
@@ -523,7 +521,7 @@
 								<xsl:attribute name="href">
 									<xsl:value-of select="NUtil:GetOverviewHRef( string( ../@id ), 'Constructor' )" />
 								</xsl:attribute>
-								<xsl:value-of select="../@name" />
+								<xsl:value-of select="../@displayName" />
 							</a>
 						</td>
 						<td width="50%">
@@ -536,7 +534,7 @@
 								</xsl:when>
 								<xsl:otherwise>
 									<xsl:text>Initializes a new instance of the </xsl:text>
-									<xsl:value-of select="../@name" />
+									<xsl:value-of select="../@displayName" />
 									<xsl:text> class.</xsl:text>
 								</xsl:otherwise>
 							</xsl:choose>
@@ -565,7 +563,7 @@
 								<xsl:attribute name="href">
 									<xsl:value-of select="NUtil:GetConstructorHRef( . )" />
 								</xsl:attribute>
-								<xsl:value-of select="../@name" />
+								<xsl:value-of select="../@displayName" />
 								<xsl:text> Constructor</xsl:text>
 							</a>
 						</td>
