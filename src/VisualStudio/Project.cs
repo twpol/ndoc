@@ -102,7 +102,10 @@ namespace NDoc.VisualStudio
 				{
 					projectType = "C# Local";
 				}
-
+				else if ((bool)_ProjectNavigator.Evaluate("boolean(VisualStudioProject/CSHARP/@ProjectType='Web')"))
+				{
+					projectType = "C# Web";
+				}
 				return projectType;
 			}
 		}

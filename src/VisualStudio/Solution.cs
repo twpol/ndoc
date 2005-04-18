@@ -22,10 +22,12 @@
 
 using System;
 using System.Collections;
+using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.XPath;
+using System.DirectoryServices; // to get IIS virtual directory fiel path.
 
 namespace NDoc.VisualStudio
 {
@@ -198,33 +200,62 @@ namespace NDoc.VisualStudio
 				//which might have a completely differant structure that we could not handle!
 				if (projectTypeGUID=="{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") //C# project
 				{
-					if (!path.StartsWith("http:"))
-					{
 						Project project = new Project(this, new Guid(id), name);
-						string absoluteProjectPath = Path.Combine(_directory, path);
+						string absoluteProjectPath = String.Empty; 
+						
+					if (path.StartsWith("http:"))
+					{
+						Uri projectURL = new Uri(path);
+						if (projectURL.Authority=="localhost")
+						{
+							//we will assume thet the virtual directory is on site 1 of localhost
+							DirectoryEntry root = new DirectoryEntry("IIS://localhost/w3svc/1/root");
+							string rootPath = root.Properties["Path"].Value as String;
+							//we will also assume that the user has been clever and changed to virtual directory local path...
+							absoluteProjectPath=rootPath + projectURL.AbsolutePath;
+						}
+					}
+					else
+					{
+						absoluteProjectPath = Path.Combine(_directory, path);
+					}
 
+					
+					if (absoluteProjectPath.Length>0)
+					{
 						project.Read(absoluteProjectPath);
 
-						string relativeProjectPath = Path.GetDirectoryName(path);
+						string relativeProjectPath = Path.GetDirectoryName(absoluteProjectPath);
 						project.RelativePath = relativeProjectPath;
 
 						if (project.ProjectType == "C# Local")
 						{
 							_projects.Add(project.ID, project);
 						}
+						if (project.ProjectType == "C# Web")
+						{
+							_projects.Add(project.ID, project);
+						}
 					}
+				}
+				if (projectTypeGUID=="{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") // VB.NET project
+				{
+				}
+				
+				if (projectTypeGUID=="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") // C++ project
+				{
 				}
 			}
 		}
 
 
-		/// <summary>Gets the project with the specified GUID.</summary>
-		/// <param name="id">The GUID used to identify the project in the .sln file.</param>
-		/// <returns>The project.</returns>
-		public Project GetProject(Guid id)
-		{
-			return (Project)_projects[id];
-		}
+//		/// <summary>Gets the project with the specified GUID.</summary>
+//		/// <param name="id">The GUID used to identify the project in the .sln file.</param>
+//		/// <returns>The project.</returns>
+//		public Project GetProject(Guid id)
+//		{
+//			return (Project)_projects[id];
+//		}
 
 		/// <summary>Gets the project with the specified name.</summary>
 		/// <param name="name">The project name.</param>
