@@ -3654,7 +3654,6 @@ namespace NDoc.Core.Reflection
 		private void BuildDerivedMemberXref(Type type)
 		{
 			if (type.BaseType != null && 
-				!(type.BaseType.FullName.StartsWith("System.") || type.BaseType.FullName.StartsWith("Microsoft.")) && 
 				MustDocumentType(type.BaseType)) // we don't care about undocumented types
 			{
 				derivedTypes.Add(type.BaseType, type);
@@ -3700,8 +3699,7 @@ namespace NDoc.Core.Reflection
 		{
 			foreach (Type interfaceType in type.GetInterfaces())
 			{
-				if (!(interfaceType.FullName.StartsWith("System.") || interfaceType.FullName.StartsWith("Microsoft.")) && 
-					MustDocumentType(interfaceType)) // we don't care about undocumented types
+				if (MustDocumentType(interfaceType)) // we don't care about undocumented types
 				{
 					if (type.IsInterface)
 					{
