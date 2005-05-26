@@ -32,6 +32,8 @@ namespace NDoc.ConsoleApplication
 	{
 		private static Project project;
 		private static IDocumenterConfig documenterConfig;
+		private static bool verbose;
+		private static DateTime startDateTime;
 
 		public static int Main(string[] args)
 		{
@@ -53,7 +55,8 @@ namespace NDoc.ConsoleApplication
 						throw new ApplicationException("Could not find any documenter assemblies.");
 					}
 				}
-				documenterConfig = info.CreateConfig();
+				project.ActiveDocumenter = info;
+				documenterConfig = project.ActiveConfig;
 
 				int maxDepth = 20; //to limit recursion depth
 				bool propertiesSet = false;
@@ -78,6 +81,7 @@ namespace NDoc.ConsoleApplication
 						if (string.Compare(arg, "-verbose", true) == 0)
 						{
 							Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
+							verbose = true;
 						}
 						else
 						{
@@ -93,7 +97,7 @@ namespace NDoc.ConsoleApplication
 									case "documenter":
 										if (propertiesSet)
 										{
-											throw new ApplicationException("The documenter name must be specified before any documenterConfig specific options.");
+											throw new ApplicationException("The documenter name must be specified before any documenter specific options.");
 										}
 										if (projectSet)
 										{
@@ -105,18 +109,21 @@ namespace NDoc.ConsoleApplication
 										{
 											throw new ApplicationException("The specified documenter name is invalid.");
 										}
-										documenterConfig = info.CreateConfig();
+										project.ActiveDocumenter = info;
+										documenterConfig = project.ActiveConfig;
 										break;
 									case "project":
 										if (propertiesSet)
 										{
 											throw new ApplicationException("The project file must be specified before any documenter specific options.");
 										}
-										project = new Project();
-										info = InstalledDocumenters.GetDocumenter(documenterConfig.DocumenterInfo.Name);
-										documenterConfig = info.CreateConfig( project );
+										Console.WriteLine("using project file " + val);
 										project.Read(val);
+										project.ActiveDocumenter = info;
+										documenterConfig = project.ActiveConfig;
 										projectSet = true;
+										Directory.SetCurrentDirectory(Path.GetDirectoryName(val));
+										Debug.WriteLine(Directory.GetCurrentDirectory());
 										break;
 									case "recurse":
 										string[] recPair = val.Split(',');
@@ -181,11 +188,15 @@ namespace NDoc.ConsoleApplication
 				}
 				else
 				{
+					startDateTime = DateTime.UtcNow;
 					IDocumenter documenter = documenterConfig.CreateDocumenter();
 					documenter.DocBuildingStep += new DocBuildingEventHandler(DocBuildingStepHandler);
 					documenter.Build(project);
+					TimeSpan ts = DateTime.UtcNow - startDateTime;
+					Console.WriteLine(String.Format("Total build time {0:f1} s", ts.TotalSeconds));
 					return 0;
 				}
+
 			}
 			catch( Exception except )
 			{
@@ -202,18 +213,18 @@ namespace NDoc.ConsoleApplication
 			Console.WriteLine("usage: NDocConsole  assembly[,xmldoc] [assembly[,xmldoc]]...");
 			Console.WriteLine("                    [[-referencepath=dir] [-referencepath=dir]...]");
 			Console.WriteLine("                    [-namespacesummaries=filename]");
-			Console.WriteLine("                    [-documenterConfig=documenter_name]");
+			Console.WriteLine("                    [-documenter=documenter_name]");
 			Console.WriteLine("                    [[-property=value] [-property=value]...]");
 			Console.WriteLine("                    [-verbose]");
 			Console.WriteLine();
 			Console.WriteLine("or     NDocConsole  -recurse=dir[,maxDepth]");
 			Console.WriteLine("                    [[-referencepath=dir] [-referencepath=dir]...]");
 			Console.WriteLine("                    [-namespacesummaries=filename]");
-			Console.WriteLine("                    [-documenterConfig=docname]");
+			Console.WriteLine("                    [-documenter=documenter_name]");
 			Console.WriteLine("                    [[-property=value] [-property=value]...]");
 			Console.WriteLine("                    [-verbose]");
 			Console.WriteLine();
-			Console.WriteLine("or     NDocConsole  [-documenterConfig=documenter_name] -project=ndocfile [-verbose]");
+			Console.WriteLine("or     NDocConsole  [-documenter=documenter_name] -project=ndocfile [-verbose]");
 			Console.WriteLine();
 			Console.WriteLine("or     NDocConsole  [-help] [documenter_name [property_name]]");
 			Console.WriteLine();
