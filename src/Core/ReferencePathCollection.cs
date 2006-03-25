@@ -37,9 +37,7 @@ namespace NDoc.Core
 	/// </remarks>
 	[Serializable]
 	[TypeConverter(typeof(ReferencePathCollection.ReferencePathCollectionTypeConverter))]
-#if (!MONO) // PropertyGrid is not available in MWF
 	[Editor(typeof(ReferencePathCollection.ReferencePathCollectionEditor), typeof(UITypeEditor))]
-#endif
 	public class ReferencePathCollection : CollectionBase, ICustomTypeDescriptor
 	{
 		#region collection methods
@@ -417,7 +415,6 @@ namespace NDoc.Core
 	
 		}
 
-#if (!MONO) // PropertyGrid is not available in MWF
 		/// <summary>
 		/// 
 		/// </summary>

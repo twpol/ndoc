@@ -93,11 +93,8 @@ namespace NDoc.Core
 		{
 			ArrayList documenters = new ArrayList();
 
-#if MONO //System.Windows.Forms.Application.StartupPath is not implemented in mono v0.31
-			string mainModuleDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-#else
 			string mainModuleDirectory = System.Windows.Forms.Application.StartupPath;
-#endif
+
 			// make sure module directory is probed
 			AppendProbePath( mainModuleDirectory );
 
