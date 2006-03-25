@@ -1654,14 +1654,10 @@ namespace NDoc.Test
 		public const EnumFlags ConstEnum =  EnumFlags.Foo;
 		/// <summary>This is a constant with 2 enum flags.</summary>
 		public const EnumFlags ConstEnum2 =  EnumFlags.Foo|EnumFlags.Bar;
-
-#if( !MONO ) //This causes the MONO compiler to abend! :-(
 		/// <summary>This is a constant decimal.</summary>
 		public const decimal ConstDecimal = 3.14159265358979323846m;
 		/// <summary>This is a constant decimal.</summary>
 		public const decimal ConstDecimal2 = 314159265358979323846m;
-#endif
-
 	}
 
 	/// <summary>
