@@ -17,7 +17,7 @@ namespace NDoc.Documenter.JavaDoc
 		}
 
 		/// <summary>
-		/// See <see cref="IDocumenterInfo.CreateConfig"/>
+		/// See <see cref="IDocumenterInfo.CreateConfig()"/>
 		/// </summary>
 		/// <returns>A config instance</returns>
 		public override IDocumenterConfig CreateConfig()
