@@ -501,6 +501,5 @@ namespace NDoc.Core
 				}
 			}
 		}
-#endif
 	}
 }
