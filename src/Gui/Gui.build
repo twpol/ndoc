@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <project name="NDocGui" default="compile">
-	<target name="compile" unless="${framework::get-family(framework::get-target-framework())=='mono'}">
+	<target name="compile">
 		<csc target="winexe" output="${current.bin.dir}/${nant.project.name}.exe" debug="${current.build.debug}" optimize="${current.build.optimize}" unsafe="false" win32icon="ndoc.ico" checked="false" define="${current.build.defines}">
 			<sources>
 				<include name="**/*.cs" />
@@ -8,11 +8,11 @@
 			</sources>
 			<references>
 				<include name="System.dll" />
+				<include name="System.Data.dll" />
 				<include name="System.Design.dll" />
 				<include name="System.Drawing.dll" />
 				<include name="System.Windows.Forms.dll" />
 				<include name="System.Xml.dll" />
-				<include name="System.Data.dll" />
 				<include name="${current.bin.dir}/NDoc.Core.dll" />
 				<include name="${current.bin.dir}/NDoc.VisualStudio.dll" />
 			</references>
