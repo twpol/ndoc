@@ -138,23 +138,6 @@ namespace NDoc.Documenter.JavaDoc
 		}
 
 		private Hashtable cachedTransforms = new Hashtable();
-		/// <summary>
-		/// Gets the cached transform file, based upon the specified name.  If the file does not 
-		/// exist, it is created and then cached.
-		/// </summary>
-		/// <param name="fileName"></param>
-		/// <returns></returns>
-		private XslTransform GetTransformFile(string fileName)
-		{
-			XslTransform transform = (XslTransform)cachedTransforms[fileName];
-			if(transform == null)
-			{
-				transform = new XslTransform();
-				transform.Load(Path.Combine(this.workspace.ResourceDirectory, @"xslt\" + fileName));
-				cachedTransforms.Add(fileName, transform);
-			}
-			return transform;
-		}
 
 		private void TransformAndWriteResult(
 			string transformFilename,

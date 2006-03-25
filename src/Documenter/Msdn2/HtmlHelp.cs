@@ -191,11 +191,6 @@ namespace NDoc.Documenter.Msdn2
 			}
 		}
 
-		private string GetProjectFilename()
-		{
-			return _projectName + ".hhp";
-		}
-
 		private string GetContentsFilename()
 		{
 			return (_tocFiles.Count > 0) ? (string)_tocFiles[0] : string.Empty;

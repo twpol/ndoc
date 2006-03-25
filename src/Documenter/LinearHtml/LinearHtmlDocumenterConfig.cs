@@ -115,8 +115,6 @@ namespace NDoc.Documenter.LinearHtml
 				SetDirty();
 			}
 		}
-		void ResetOutputDirectory() { _outputDirectory = string.Format( ".{0}doc{0}", Path.DirectorySeparatorChar ); }
-
 
 		private bool _MethodParametersInTable;
 

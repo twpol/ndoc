@@ -607,17 +607,6 @@ namespace NDoc.Documenter.LinearHtml
 			return(sortedList);
 		}
 
-		void GetSummaryAndRemarks(XPathNavigator nav, out string summary, out string remarks)
-		{
-			XPathNavigator summaryNav = GetDescendantNodeWithName(nav, "summary");
-			XPathNavigator remarksNav = GetDescendantNodeWithName(nav, "remarks");
-			summary = GetNodeXmlFixCode(summaryNav);
-			if (summaryNav != null)
-				Console.WriteLine("GSAR: got {0} from {1}", summary, summaryNav.Value);
-			else Console.WriteLine("GSAR: No summary");
-			remarks = GetNodeXmlFixCode(remarksNav);
-		}
-
 		/// <summary>
 		/// Fix code node such that it will be rendered correctly (using pre).
 		/// </summary>
@@ -627,27 +616,6 @@ namespace NDoc.Documenter.LinearHtml
 			foreach(XmlNode codeNode in topNode.SelectNodes("descendant::code"))
 			{
 				codeNode.InnerXml = "<pre class=\"code\">" + codeNode.InnerXml + "</pre>";
-			}
-		}
-
-		/// <summary>
-		/// Fix code node such that it will be rendered correctly (using pre).
-		/// </summary>
-		private void FixCodeNodes(XPathNavigator nav)
-		{
-			XmlNode n = null;
-			try
-			{
-				n = ((IHasXmlNode)nav).GetNode();
-			}
-			catch(Exception) 
-			{
-				return;
-			}
-
-			if (n != null) 
-			{
-				FixCodeNodes(n); // change <code> to <pre class="code">
 			}
 		}
 
