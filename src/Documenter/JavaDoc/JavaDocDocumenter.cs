@@ -137,8 +137,6 @@ namespace NDoc.Documenter.JavaDoc
 			get { return (JavaDocDocumenterConfig)Config; }
 		}
 
-		private Hashtable cachedTransforms = new Hashtable();
-
 		private void TransformAndWriteResult(
 			string transformFilename,
 			XsltArgumentList args,
