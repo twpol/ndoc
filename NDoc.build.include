@@ -231,6 +231,18 @@
 	<!--
 
 	-->
+	<target name="set-mono-2.0-framework-configuration" depends="check-build-dir, check-current-build-config, check-build-debug, check-build-defines, check-build-optimize">
+		<property name="nant.settings.currentframework" value="mono-2.0" />
+		<property name="current.build.debug" value="${build.debug}" dynamic="true" readonly="false" />
+		<property name="current.build.defines" value="${build.defines},MONO,MONO_2_0" dynamic="true" readonly="false" />
+		<property name="current.build.optimize" value="${build.optimize}" dynamic="true" readonly="false" />
+		<property name="current.bin.dir" value="${build.dir}/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
+		<property name="current.sdkdoc.dir" value="${nant.project.basedir}/doc/sdk/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
+		<property name="current.sdkdoc.debug" value="${sdkdoc.debug}" dynamic="true" readonly="false" />
+	</target>
+	<!--
+
+	-->
 	<target name="set-sscli-1.0-framework-configuration" depends="check-build-dir, check-current-build-config, check-build-debug, check-build-defines, check-build-optimize">
 		<property name="nant.settings.currentframework" value="sscli-1.0" />
 		<property name="current.build.debug" value="${build.debug}" dynamic="true" readonly="false" />
@@ -291,6 +303,14 @@
 		</if>
 		<if test="${framework::exists('mono-1.0')}">
 			<property name="nant.settings.currentframework" value="mono-1.0" />
+			<call target="display-current-runtime" />
+		</if>
+		<!-- Mono 2.0 -->
+		<if test="${not framework::exists('mono-2.0')}">
+			<echo message="Mono 2.0 runtime is not available." />
+		</if>
+		<if test="${framework::exists('mono-2.0')}">
+			<property name="nant.settings.currentframework" value="mono-2.0" />
 			<call target="display-current-runtime" />
 		</if>
 		<!-- SSCLI 1.0 -->

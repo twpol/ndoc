@@ -85,7 +85,6 @@
         <!-- 
             build .NET Framework 2.0 version if both Framework and SDK are available 
         -->
-        <!--
         <if test="${framework::exists('net-2.0')}">
             <if test="${framework::sdk-exists('net-2.0')}">
                 <call target="set-net-2.0-framework-configuration" />
@@ -108,7 +107,6 @@
                 <echo message="The .NET Framework 2.0 is not available. Build skipped." />
             </if>
         </if>
-        -->
         <!-- 
             build Mono 1.0 version if both Framework and SDK are available 
         -->
@@ -132,6 +130,31 @@
             </if>
             <if test="${not property::exists('project.build.package') or not project.build.package}">
                 <echo message="Mono 1.0 is not available. Build skipped." />
+            </if>
+        </if>
+        <!-- 
+            build Mono 2.0 version if both Framework and SDK are available 
+        -->
+        <if test="${framework::exists('mono-2.0')}">
+            <if test="${framework::sdk-exists('mono-2.0')}">
+                <call target="set-mono-2.0-framework-configuration" />
+                <call target="compile" />
+            </if>
+            <if test="${not framework::sdk-exists('mono-2.0')}">
+                <if test="${property::exists('project.build.package') and project.build.package}">
+                    <fail message="The Mono SDK 2.0 is not available." />
+                </if>
+                <if test="${not property::exists('project.build.package') or not project.build.package}">
+                    <echo message="The Mono SDK 2.0 is not available. Build skipped." />
+                </if>
+            </if>
+        </if>
+        <if test="${not framework::exists('mono-2.0')}">
+            <if test="${property::exists('project.build.package') and project.build.package}">
+                <fail message="Mono 2.0 is not available." />
+            </if>
+            <if test="${not property::exists('project.build.package') or not project.build.package}">
+                <echo message="Mono 2.0 is not available. Build skipped." />
             </if>
         </if>
     </target>
