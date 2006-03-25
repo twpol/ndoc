@@ -9,6 +9,7 @@
 			<references>
 				<include name="System.dll" />
 				<include name="System.Xml.dll" />
+				<include name="System.DirectoryServices.dll" />
 			</references>
 		</csc>
 	</target>
