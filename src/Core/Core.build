@@ -5,9 +5,6 @@
 			<sources>
 				<include name="**/*.cs" />
 				<include name="../CommonAssemblyInfo.cs" />
-
-				<exclude name="RuntimePropertyGrid.cs" if="${framework::get-target-framework() == 'mono-1.0'}" />
-				<exclude name="ReferencePathCollectionEditorForm.cs" if="${framework::get-target-framework() == 'mono-1.0'}" />				
 			</sources>
 			<references>
 				<include name="System.dll" />
