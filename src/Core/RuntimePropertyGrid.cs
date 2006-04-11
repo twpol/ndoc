@@ -72,9 +72,10 @@ namespace NDoc.Core.PropertyGridUI
 			Type type = item.GetType();
 			BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 			PropertyInfo prop = type.GetProperty("Instance", flags);
-			object instance = prop.GetValue(item,BindingFlags.GetProperty,null,null,null);
-
-			menuReset.Enabled = item.PropertyDescriptor.CanResetValue(instance);
+			if (prop != null) {
+				object instance = prop.GetValue (item, BindingFlags.GetProperty, null, null, null);
+				menuReset.Enabled = item.PropertyDescriptor.CanResetValue (instance);
+			}
 			menuDisplay.Checked = this.HelpVisible;
 		}
 
@@ -90,9 +91,17 @@ namespace NDoc.Core.PropertyGridUI
 				Type type = this.GetType().BaseType;
 				BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 				FieldInfo field = type.GetField("gridView", flags);
+				if (field == null) {
+					// we cannot rely on the stability of the internal API
+					return 0;
+				}
 				object gridView = field.GetValue(this);
 				type = gridView.GetType();
 				PropertyInfo prop = type.GetProperty("InternalLabelWidth", flags);
+				if (prop == null) {
+					// we cannot rely on the stability of the internal API
+					return 0;
+				}
 				object InternalLabelWidth = prop.GetValue(gridView,BindingFlags.GetProperty,null,null,null);
 				return (int)InternalLabelWidth;
 			}
@@ -101,12 +110,19 @@ namespace NDoc.Core.PropertyGridUI
 				Type type = this.GetType().BaseType;
 				BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 				FieldInfo field = type.GetField("gridView", flags);
+				if (field == null) {
+					// we cannot rely on the stability of the internal API
+					return;
+				}
 				object gridView = field.GetValue(this);
 				type = gridView.GetType();
 				MethodInfo method = type.GetMethod("MoveSplitterTo",flags);
+				if (method == null) {
+					// we cannot rely on the stability of the internal API
+					return;
+				}
 				method.Invoke(gridView,new Object[]{value});
 			}
 		}
-
 	}
 }
