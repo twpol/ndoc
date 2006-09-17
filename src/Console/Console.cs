@@ -32,7 +32,6 @@ namespace NDoc.ConsoleApplication
 	{
 		private static Project project;
 		private static IDocumenterConfig documenterConfig;
-		private static bool verbose;
 		private static DateTime startDateTime;
 
 		public static int Main(string[] args)
@@ -81,7 +80,6 @@ namespace NDoc.ConsoleApplication
 						if (string.Compare(arg, "-verbose", true) == 0)
 						{
 							Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
-							verbose = true;
 						}
 						else
 						{

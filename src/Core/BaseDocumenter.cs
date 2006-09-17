@@ -103,13 +103,13 @@ namespace NDoc.Core
 				DocBuildingProgress(this, new ProgressArgs(progress, ""));
 		}
 
-		/// <summary>See <see cref="IDocumenter.CanBuild">IDocumenter.CanBuild</see>.</summary>
+		/// <summary>See <see cref="IDocumenter.CanBuild(Project)">IDocumenter.CanBuild</see>.</summary>
 		public virtual string CanBuild(Project project)
 		{
 			return this.CanBuild(project, false);
 		}
 
-		/// <summary>See <see cref="IDocumenter.CanBuild">CanBuild</see>.</summary>
+        /// <summary>See <see cref="IDocumenter.CanBuild(Project, bool)">CanBuild</see>.</summary>
 		public virtual string CanBuild(Project project, bool checkInputOnly)
 		{
 			StringBuilder xfiles = new StringBuilder();
