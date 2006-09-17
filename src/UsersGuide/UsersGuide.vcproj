@@ -1,51 +1,82 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.10"
+	Version="8.00"
 	Name="UsersGuide"
 	ProjectGUID="{D250CF6D-13ED-4B69-AE7C-345D7C686B49}"
 	RootNamespace="UsersGuide"
-	Keyword="MakeFileProj">
+	Keyword="MakeFileProj"
+	>
 	<Platforms>
 		<Platform
-			Name="Win32"/>
+			Name="Win32"
+		/>
 	</Platforms>
+	<ToolFiles>
+	</ToolFiles>
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="Debug"
 			IntermediateDirectory="Debug"
-			ConfigurationType="0">
+			ConfigurationType="0"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			>
 			<Tool
 				Name="VCNMakeTool"
 				BuildCommandLine="NMAKE /F UsersGuide.mak /B CONFIG=$(ConfigurationName)"
 				ReBuildCommandLine="NMAKE /E /F UsersGuide.mak /A CONFIG=$(ConfigurationName)"
 				CleanCommandLine="del NDocUsersGuide.chm"
-				Output="NDocUsersGuide.chm"/>
+				Output="NDocUsersGuide.chm"
+				PreprocessorDefinitions=""
+				IncludeSearchPath=""
+				ForcedIncludes=""
+				AssemblySearchPath=""
+				ForcedUsingAssemblies=""
+				CompileAsManaged=""
+			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="Release"
 			IntermediateDirectory="Release"
-			ConfigurationType="0">
+			ConfigurationType="0"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			>
 			<Tool
 				Name="VCNMakeTool"
 				BuildCommandLine="NMAKE /F UsersGuide.mak /B CONFIG=$(ConfigurationName)"
 				ReBuildCommandLine="NMAKE /E /F UsersGuide.mak /A CONFIG=$(ConfigurationName)"
 				CleanCommandLine="del NDocUsersGuide.chm"
-				Output="NDocUsersGuide.chm"/>
+				Output="NDocUsersGuide.chm"
+				PreprocessorDefinitions=""
+				IncludeSearchPath=""
+				ForcedIncludes=""
+				AssemblySearchPath=""
+				ForcedUsingAssemblies=""
+				CompileAsManaged=""
+			/>
 		</Configuration>
 		<Configuration
 			Name="Deploy|Win32"
 			OutputDirectory="$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="0">
+			ConfigurationType="0"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			>
 			<Tool
 				Name="VCNMakeTool"
 				BuildCommandLine="NMAKE /F UsersGuide.mak /B CONFIG=$(ConfigurationName)"
 				ReBuildCommandLine="NMAKE /E /F UsersGuide.mak /A CONFIG=$(ConfigurationName)"
 				CleanCommandLine="del NDocUsersGuide.chm"
-				Output="NDocUsersGuide.chm"/>
+				Output="NDocUsersGuide.chm"
+				PreprocessorDefinitions=""
+				IncludeSearchPath=""
+				ForcedIncludes=""
+				AssemblySearchPath=""
+				ForcedUsingAssemblies=""
+				CompileAsManaged=""
+			/>
 		</Configuration>
 	</Configurations>
 	<References>
@@ -53,278 +84,348 @@
 	<Files>
 		<Filter
 			Name="Content"
-			Filter="">
+			>
 			<File
 				RelativePath=".\Content\attributes.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\blank.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\build_process.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\consoleapplication.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\contrib.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\createproject.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\decorating.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\Default.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\documenters.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\extensibility-sections.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\extensibility.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\gettinginvolved.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\gettingstarted.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\javadoc.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\knownissues.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\latex.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\linear.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\msdn.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\projectdesigner.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\reference.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\settingupyourproject.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\support.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\tag_c.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\tag_code.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\tag_event.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\tag_example.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\tag_exception.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\tag_exclude.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\tag_include.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\tag_list.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\tag_note.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\tag_overloads.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\tag_para.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\tag_param.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\tag_paramref.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\tag_permission.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\tag_preliminary.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\tag_remarks.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\tag_returns.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\tag_see.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\tag_seealso.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\tag_summary.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\tag_threadsafety.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\tag_value.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\tags.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\tagsusage.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\vsnet.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\whatsnew.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
 				RelativePath=".\Content\xml.htm"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<Filter
 				Name="css"
-				Filter="">
+				>
 				<File
-					RelativePath=".\Content\css\ndoc.css">
+					RelativePath=".\Content\css\ndoc.css"
+					>
 				</File>
 			</Filter>
 			<Filter
 				Name="images"
-				Filter="">
+				>
 				<File
-					RelativePath=".\Content\images\assemblynamedialog.JPG">
+					RelativePath=".\Content\images\assemblynamedialog.JPG"
+					>
 				</File>
 				<File
-					RelativePath=".\Content\images\build_event.JPG">
+					RelativePath=".\Content\images\build_event.JPG"
+					>
 				</File>
 				<File
-					RelativePath=".\Content\images\buildbutton.JPG">
+					RelativePath=".\Content\images\buildbutton.JPG"
+					>
 				</File>
 				<File
-					RelativePath=".\Content\images\buildprogress.JPG">
+					RelativePath=".\Content\images\buildprogress.JPG"
+					>
 				</File>
 				<File
-					RelativePath=".\Content\images\configuration.JPG">
+					RelativePath=".\Content\images\configuration.JPG"
+					>
 				</File>
 				<File
-					RelativePath=".\Content\images\designer.JPG">
+					RelativePath=".\Content\images\designer.JPG"
+					>
 				</File>
 				<File
-					RelativePath=".\Content\images\editnamespace.JPG">
+					RelativePath=".\Content\images\editnamespace.JPG"
+					>
 				</File>
 				<File
-					RelativePath=".\Content\images\extendexample.JPG">
+					RelativePath=".\Content\images\extendexample.JPG"
+					>
 				</File>
 				<File
-					RelativePath=".\Content\images\logo.JPG">
+					RelativePath=".\Content\images\logo.JPG"
+					>
 				</File>
 				<File
-					RelativePath=".\Content\images\newfromvsnet.JPG">
+					RelativePath=".\Content\images\newfromvsnet.JPG"
+					>
 				</File>
 				<File
-					RelativePath=".\Content\images\selectdocumenter.JPG">
+					RelativePath=".\Content\images\selectdocumenter.JPG"
+					>
 				</File>
 				<File
-					RelativePath=".\Content\images\sf.GIF">
+					RelativePath=".\Content\images\sf.GIF"
+					>
 				</File>
 				<File
-					RelativePath=".\Content\images\toolbar.JPG">
+					RelativePath=".\Content\images\toolbar.JPG"
+					>
 				</File>
 				<File
-					RelativePath=".\Content\images\xmldocnamedialog.JPG">
+					RelativePath=".\Content\images\xmldocnamedialog.JPG"
+					>
 				</File>
 			</Filter>
 			<Filter
 				Name="script"
-				Filter="">
+				>
 				<File
-					RelativePath=".\Content\script\ndoc.js">
+					RelativePath=".\Content\script\ndoc.js"
+					>
 				</File>
 				<File
-					RelativePath=".\Content\script\ndoc_tags.js">
+					RelativePath=".\Content\script\ndoc_tags.js"
+					>
 				</File>
 			</Filter>
 		</Filter>
 		<File
-			RelativePath=".\contents.HHC">
+			RelativePath=".\contents.HHC"
+			>
 		</File>
 		<File
-			RelativePath=".\index.HHK">
+			RelativePath=".\index.HHK"
+			>
 		</File>
 		<File
-			RelativePath=".\UsersGuide.hhp">
+			RelativePath=".\UsersGuide.hhp"
+			>
 		</File>
 		<File
-			RelativePath=".\UsersGuide.mak">
+			RelativePath=".\UsersGuide.mak"
+			>
 		</File>
 	</Files>
 	<Globals>
