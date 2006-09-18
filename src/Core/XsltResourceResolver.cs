@@ -84,7 +84,7 @@ namespace NDoc.Core
 		/// <param name="baseUri">The base URI used to resolve the relative URI.</param>
 		/// <param name="relativeUri">The URI to resolve. The URI can be absolute or relative. If absolute, this value effectively replaces the <paramref name="baseUri"/> value. If relative, it combines with the <paramref name="baseUri"/> to make an absolute URI.</param>
 		/// <returns>A <see cref="Uri"/> representing the absolute URI or <see langword="null"/> if the relative URI can not be resolved.</returns>
-		/// <remarks><paramref name="baseURI"/> is always <see langword="null"/> when this method is called from <see cref="System.Xml.Xsl.XslTransform.Load">XslTransform.Load</see></remarks>
+		/// <remarks><paramref name="baseURI"/> is always <see langword="null"/> when this method is called from <see cref="System.Xml.Xsl.XslTransform.Load(System.Xml.XmlReader)">XslTransform.Load</see></remarks>
 		public override Uri ResolveUri(Uri baseUri, string relativeUri)
 		{
 			Uri temp=null;

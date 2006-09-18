@@ -75,7 +75,7 @@ namespace NDoc.Core.Reflection
 			{
 				appDomain = AppDomain.CreateDomain("NDocReflection", 
 					AppDomain.CurrentDomain.Evidence, AppDomain.CurrentDomain.SetupInformation);
-				appDomain.SetShadowCopyFiles(); //only required for managed c++ assemblies
+                appDomain.SetupInformation.ShadowCopyFiles = "true"; //only required for managed c++ assemblies
                 ReflectionEngine re = (ReflectionEngine)   
                     appDomain.CreateInstanceAndUnwrap(typeof(ReflectionEngine).Assembly.FullName, 
                     typeof(ReflectionEngine).FullName, false, BindingFlags.Public | BindingFlags.Instance, 
@@ -122,7 +122,7 @@ namespace NDoc.Core.Reflection
 			{
 				appDomain = AppDomain.CreateDomain("NDocReflection", 
 					AppDomain.CurrentDomain.Evidence, AppDomain.CurrentDomain.SetupInformation);
-				appDomain.SetShadowCopyFiles(); //only required for managed c++ assemblies
+				appDomain.SetupInformation.ShadowCopyFiles = "true"; //only required for managed c++ assemblies
 				ReflectionEngine re = (ReflectionEngine)   
                     appDomain.CreateInstanceAndUnwrap(typeof(ReflectionEngine).Assembly.FullName, 
                     typeof(ReflectionEngine).FullName, false, BindingFlags.Public | BindingFlags.Instance, 
