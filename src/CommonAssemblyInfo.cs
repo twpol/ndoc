@@ -13,12 +13,12 @@ using System.Runtime.InteropServices;
 //------------------------------------------------------------------------------
 
 [assembly: ComVisibleAttribute(false)]
-[assembly: AssemblyConfigurationAttribute("release")]
+[assembly: AssemblyConfigurationAttribute("debug")]
 [assembly: AssemblyCompanyAttribute("http://ndoc.sourceforge.net")]
 [assembly: AssemblyProductAttribute("NDoc")]
 [assembly: AssemblyCopyrightAttribute("")]
 [assembly: AssemblyTrademarkAttribute("")]
 [assembly: AssemblyCultureAttribute("")]
-[assembly: AssemblyVersionAttribute("1.3.1851.0")]
-[assembly: AssemblyInformationalVersionAttribute("1.3.1")]
+[assembly: AssemblyVersionAttribute("2.0.0.0")]
+[assembly: AssemblyInformationalVersionAttribute("2.0.0")]
 
