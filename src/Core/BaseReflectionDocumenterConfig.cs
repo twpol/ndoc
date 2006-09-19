@@ -444,7 +444,29 @@ namespace NDoc.Core.Reflection
 
 		#region Documentation Main Settings 
 		
-		private AssemblyVersionInformationType _AssemblyVersionInfo;
+        private string _UseNDocXmlFile = string.Empty;
+
+        /// <summary>Gets or sets a value indicating whether to use the specified XML file as input instead of reflecting the list of assemblies specified on the project.</summary>
+        /// <remarks><para>When set, NDoc will use the specified XML file as 
+        /// input instead of reflecting the list of assemblies specified 
+        /// on the project.</para>
+        /// <para>Very useful for debugging documenters. <b><i>Leave empty for normal usage.</i></b></para>
+        /// </remarks>
+        [Category("Documentation Main Settings")]
+        [Description("When set, NDoc will use the specified XML file as input instead of reflecting the list of assemblies specified on the project.  Very useful for debugging documenters.  Leave empty for normal usage.")]
+        [Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
+        [DefaultValue("")]
+        public string UseNDocXmlFile
+        {
+            get { return _UseNDocXmlFile; }
+            set
+            {
+                _UseNDocXmlFile = value;
+                SetDirty();
+            }
+        }
+
+        private AssemblyVersionInformationType _AssemblyVersionInfo;
 
 		/// <summary>Gets or sets the AssemblyVersion property.</summary>
 		/// <remarks>Determines what type of Assembly Version information is documented. 

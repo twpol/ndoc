@@ -342,28 +342,6 @@ namespace NDoc.Core
 
 		#region Documentation Main Settings 
 
-		private string _UseNDocXmlFile = string.Empty;
-
-		/// <summary>Gets or sets a value indicating whether to use the specified XML file as input instead of reflecting the list of assemblies specified on the project.</summary>
-		/// <remarks><para>When set, NDoc will use the specified XML file as 
-		/// input instead of reflecting the list of assemblies specified 
-		/// on the project.</para>
-		/// <para>Very useful for debugging documenters. <b><i>Leave empty for normal usage.</i></b></para>
-		/// </remarks>
-		[Category("Documentation Main Settings")]
-		[Description("When set, NDoc will use the specified XML file as input instead of reflecting the list of assemblies specified on the project.  Very useful for debugging documenters.  Leave empty for normal usage.")]
-		[Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
-		[DefaultValue("")]
-		public string UseNDocXmlFile
-		{
-			get { return _UseNDocXmlFile; }
-			set
-			{
-				_UseNDocXmlFile = value;
-				SetDirty();
-			}
-		}
-
 		private bool _CleanIntermediates = false;
 
 		/// <summary>Gets or sets a value indicating whether to delete intermediate files after a successful build.</summary>
