@@ -35,7 +35,7 @@
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
     <DefineConstants>DEBUG;TRACE;NO_RESOURCES</DefineConstants>
-    <DocumentationFile>NDoc.Intellisense.xml</DocumentationFile>
+    <DocumentationFile>NDoc.Documenter.Intellisense.xml</DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
     <NoStdLib>false</NoStdLib>
