@@ -1,0 +1,28 @@
+﻿<project SchemaVersion="1.3">
+    <assemblies>
+        <assembly location=".\src\Core\bin\Debug\NDoc.Core.dll" documentation=".\src\Core\bin\Debug\NDoc.Core.xml" />
+    </assemblies>
+    <namespaces>
+        <namespace name="NDoc.Core">The <b>NDoc.Core</b> namespace contains the core functionality of NDoc as well as interfaces and base classes to build specific documenters.</namespace>
+    </namespaces>
+    <documenters>
+        <documenter name="MSDN">
+            <property name="OutputDirectory" value=".\doc\" />
+            <property name="HtmlHelpName" value="NDoc.Core" />
+            <property name="Title" value="NDoc Documentation" />
+            <property name="ShowMissingSummaries" value="True" />
+            <property name="AssemblyVersionInfo" value="AssemblyVersion" />
+            <property name="CopyrightText" value="Copyright © 2000-2003 the NDoc Team" />
+        </documenter>
+        <documenter name="MSDN 2003">
+            <property name="OutputDirectory" value=".\doc\" />
+            <property name="HtmlHelpName" value="NDoc.Core" />
+            <property name="Title" value="NDoc Documentation" />
+            <property name="OutputTarget" value="HtmlHelp" />
+            <property name="Version" value="2.0.0.0" />
+            <property name="ShowMissingSummaries" value="True" />
+            <property name="AssemblyVersionInfo" value="AssemblyVersion" />
+            <property name="CopyrightText" value="Copyright © 2000-2003 the NDoc Team" />
+        </documenter>
+    </documenters>
+</project>
