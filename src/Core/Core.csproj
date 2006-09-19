@@ -252,6 +252,7 @@
     <None Include="AssySlashDocXML.xsx">
       <DependentUpon>AssySlashDocXML.xsd</DependentUpon>
     </None>
+    <None Include="Documenter.cd" />
     <None Include="Core.build" />
     <EmbeddedResource Include="AttributesForm.resx">
       <DependentUpon>AttributesForm.cs</DependentUpon>
