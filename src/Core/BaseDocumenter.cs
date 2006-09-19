@@ -42,14 +42,6 @@ namespace NDoc.Core
 	{
 		IDocumenterConfig		config;
 
-		private BaseDocumenterConfig MyConfig
-		{
-			get
-		{
-				return (BaseDocumenterConfig)Config;
-			}
-		}
-
 		/// <summary>Initializes a new instance of the <see cref="BaseDocumenter"/> class.</summary>
 		/// <param name="config_">settings</param>
 		protected BaseDocumenter( IDocumenterConfig config_ )
