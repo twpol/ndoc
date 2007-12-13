@@ -97,11 +97,13 @@ namespace NDoc.VisualStudio
 					{
 						AddProject(line);
 					}
-					else if (line.StartsWith("\tGlobalSection(SolutionConfiguration)"))
+					else if (line.StartsWith("\tGlobalSection(SolutionConfiguration)")
+                        || line.StartsWith("\tGlobalSection(SolutionConfigurationPlatforms)"))
 					{
 						ReadSolutionConfig(reader);
 					}
-					else if (line.StartsWith("\tGlobalSection(ProjectConfiguration)"))
+					else if (line.StartsWith("\tGlobalSection(ProjectConfiguration)")
+                        || line.StartsWith("\tGlobalSection(ProjectConfigurationPlatforms)"))
 					{
 						ReadProjectConfig(reader);
 					}

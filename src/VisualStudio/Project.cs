@@ -93,16 +93,19 @@ namespace NDoc.VisualStudio
 			get
 			{
 				string projectType = "";
-
+                XmlNamespaceManager m = new XmlNamespaceManager(_ProjectNavigator.NameTable);
+                m.AddNamespace("proj", "http://schemas.microsoft.com/developer/msbuild/2003");
 				if ((bool)_ProjectNavigator.Evaluate("boolean(VisualStudioProject/@ProjectType='Visual C++')"))
 				{
 					projectType = "Visual C++";
 				}
-				else if ((bool)_ProjectNavigator.Evaluate("boolean(VisualStudioProject/CSHARP/@ProjectType='Local')"))
+				else if ((bool)_ProjectNavigator.Evaluate("boolean(VisualStudioProject/CSHARP/@ProjectType='Local')")
+                    || (bool)_ProjectNavigator.Evaluate("boolean(/proj:Project/proj:PropertyGroup/proj:ProjectType[text()='Local'])", m))
 				{
 					projectType = "C# Local";
 				}
-				else if ((bool)_ProjectNavigator.Evaluate("boolean(VisualStudioProject/CSHARP/@ProjectType='Web')"))
+				else if ((bool)_ProjectNavigator.Evaluate("boolean(VisualStudioProject/CSHARP/@ProjectType='Web')")
+                    || (bool)_ProjectNavigator.Evaluate("boolean(/proj:Project/proj:PropertyGroup/proj:ProjectType[text()='Web'])", m))
 				{
 					projectType = "C# Web";
 				}
@@ -168,13 +171,20 @@ namespace NDoc.VisualStudio
 		public ProjectConfig GetConfiguration(string configName)
 		{
 			XPathNavigator navigator = null;
-
+            XmlNamespaceManager m = new XmlNamespaceManager(_ProjectNavigator.NameTable);
+            m.AddNamespace("proj", "http://schemas.microsoft.com/developer/msbuild/2003");
+            //TODO Solution version identifier
+            //TODO Total rewritting needed
 			XPathNodeIterator nodes = 
 				_ProjectNavigator.Select(
 				String.Format(
 				"/VisualStudioProject/CSHARP/Build/Settings/Config[@Name='{0}']", 
 				configName));
-
+            if (nodes.Count == 0)
+            {
+                nodes = _ProjectNavigator.Select(String.Format(
+                    "/proj:Project/proj:PropertyGroup/@Condition/contains(text(), '{0}')", configName), m);
+            }
 			if (nodes.MoveNext())
 			{
 				navigator = nodes.Current;

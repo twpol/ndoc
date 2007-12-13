@@ -1,0 +1,14 @@
+Microsoft HTML Help Compiler 4.74.8702
+
+Compiling g:\NDoc3 Source\ndoc3\src\UsersGuide\NDocUsersGuide.chm
+
+
+Compile time: 0 minutes, 2 seconds
+55	Topics
+386	Local links
+43	Internet links
+10	Graphics
+
+
+Created g:\NDoc3 Source\ndoc3\src\UsersGuide\NDocUsersGuide.chm, 336,292 bytes
+Compression decreased file by 271,041 bytes.
