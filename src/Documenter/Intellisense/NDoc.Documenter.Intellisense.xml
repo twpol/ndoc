@@ -4,22 +4,21 @@
         <name>NDoc.Documenter.Intellisense</name>
     </assembly>
     <members>
-        <member name="T:NDoc.Documenter.Intellisense.StyleSheetCollection">
+        <member name="T:NDoc.Documenter.Intellisense.IntellisenseDocumenterInfo">
             <summary>
-            The collection of xslt stylesheets used to generate the Html
+            Information about the Documenter
             </summary>
         </member>
-        <member name="M:NDoc.Documenter.Intellisense.StyleSheetCollection.LoadStyleSheets(System.String)">
+        <member name="M:NDoc.Documenter.Intellisense.IntellisenseDocumenterInfo.#ctor">
             <summary>
-            Load the predefined set of xslt stylesheets into a dictionary
+            Creates a new instance of the class
             </summary>
-            <param name="extensibilityStylesheet"></param>
-            <returns>The populated collection</returns>
         </member>
-        <member name="P:NDoc.Documenter.Intellisense.StyleSheetCollection.Item(System.String)">
+        <member name="M:NDoc.Documenter.Intellisense.IntellisenseDocumenterInfo.CreateConfig">
             <summary>
-            Return a named stylesheet from the collection
+            See <see cref="M:NDoc.Core.IDocumenterInfo.CreateConfig(NDoc.Core.Project)"/>
             </summary>
+            <returns>A config instance</returns>
         </member>
         <member name="T:NDoc.Documenter.Intellisense.IntellisenseDocumenterConfig">
             <summary>
@@ -204,21 +203,22 @@
             </summary>
             <value></value>
         </member>
-        <member name="T:NDoc.Documenter.Intellisense.IntellisenseDocumenterInfo">
+        <member name="T:NDoc.Documenter.Intellisense.StyleSheetCollection">
             <summary>
-            Information about the Documenter
+            The collection of xslt stylesheets used to generate the Html
             </summary>
         </member>
-        <member name="M:NDoc.Documenter.Intellisense.IntellisenseDocumenterInfo.#ctor">
+        <member name="M:NDoc.Documenter.Intellisense.StyleSheetCollection.LoadStyleSheets(System.String)">
             <summary>
-            Creates a new instance of the class
+            Load the predefined set of xslt stylesheets into a dictionary
             </summary>
+            <param name="extensibilityStylesheet"></param>
+            <returns>The populated collection</returns>
         </member>
-        <member name="M:NDoc.Documenter.Intellisense.IntellisenseDocumenterInfo.CreateConfig">
+        <member name="P:NDoc.Documenter.Intellisense.StyleSheetCollection.Item(System.String)">
             <summary>
-            See <see cref="M:NDoc.Core.IDocumenterInfo.CreateConfig(NDoc.Core.Project)"/>
+            Return a named stylesheet from the collection
             </summary>
-            <returns>A config instance</returns>
         </member>
     </members>
 </doc>

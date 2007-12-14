@@ -4,33 +4,6 @@
         <name>NDoc.Documenter.JavaDoc</name>
     </assembly>
     <members>
-        <member name="T:NDoc.Documenter.JavaDoc.JavaDocWorkspace">
-            <summary>
-            Summary description for LatexWorkspace.
-            </summary>
-        </member>
-        <member name="M:NDoc.Documenter.JavaDoc.JavaDocWorkspace.#ctor(System.String)">
-            <summary>
-            Manages the location of the documentation build process
-            </summary>
-            <param name="rootDir">The location to create the workspace</param>
-        </member>
-        <member name="T:NDoc.Documenter.JavaDoc.JavaDocDocumenterInfo">
-            <summary>
-            Information about the Xml Documenter
-            </summary>
-        </member>
-        <member name="M:NDoc.Documenter.JavaDoc.JavaDocDocumenterInfo.#ctor">
-            <summary>
-            Creates a new instance of the class
-            </summary>
-        </member>
-        <member name="M:NDoc.Documenter.JavaDoc.JavaDocDocumenterInfo.CreateConfig">
-            <summary>
-            See <see cref="M:NDoc.Core.IDocumenterInfo.CreateConfig"/>
-            </summary>
-            <returns>A config instance</returns>
-        </member>
         <member name="T:NDoc.Documenter.JavaDoc.JavaDocDocumenterConfig">
             <summary>The JavaDoc documenter config class.</summary>
         </member>
@@ -84,6 +57,33 @@
         </member>
         <member name="P:NDoc.Documenter.JavaDoc.JavaDocDocumenter.MainOutputFile">
             <summary>See <see cref="T:NDoc.Core.IDocumenter"/>.</summary>
+        </member>
+        <member name="T:NDoc.Documenter.JavaDoc.JavaDocWorkspace">
+            <summary>
+            Summary description for LatexWorkspace.
+            </summary>
+        </member>
+        <member name="M:NDoc.Documenter.JavaDoc.JavaDocWorkspace.#ctor(System.String)">
+            <summary>
+            Manages the location of the documentation build process
+            </summary>
+            <param name="rootDir">The location to create the workspace</param>
+        </member>
+        <member name="T:NDoc.Documenter.JavaDoc.JavaDocDocumenterInfo">
+            <summary>
+            Information about the Xml Documenter
+            </summary>
+        </member>
+        <member name="M:NDoc.Documenter.JavaDoc.JavaDocDocumenterInfo.#ctor">
+            <summary>
+            Creates a new instance of the class
+            </summary>
+        </member>
+        <member name="M:NDoc.Documenter.JavaDoc.JavaDocDocumenterInfo.CreateConfig">
+            <summary>
+            See <see cref="M:NDoc.Core.IDocumenterInfo.CreateConfig"/>
+            </summary>
+            <returns>A config instance</returns>
         </member>
     </members>
 </doc>

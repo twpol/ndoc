@@ -4,24 +4,6 @@
         <name>NDoc.VisualStudio</name>
     </assembly>
     <members>
-        <member name="T:NDoc.VisualStudio.ProjectConfig">
-            <summary>
-            ProjectConfig settings for Visual Studio C# projects.
-            </summary>
-        </member>
-        <member name="P:NDoc.VisualStudio.ProjectConfig.Name">
-            <summary>Gets the name of the configuration.</summary>
-            <remarks>This is usually "Debug" or "Release".</remarks>
-        </member>
-        <member name="P:NDoc.VisualStudio.ProjectConfig.OutputPath">
-            <summary>Gets the location of the output files (relative to the 
-            project directory) for this project's configuration.</summary>
-        </member>
-        <member name="P:NDoc.VisualStudio.ProjectConfig.DocumentationFile">
-            <summary>Gets the name of the file (relative to the project 
-            directory) into which documentation comments will be 
-            processed.</summary>
-        </member>
         <member name="T:NDoc.VisualStudio.Solution">
             <summary>
             Represents a Visual Studio solution file.
@@ -80,6 +62,24 @@
         </member>
         <member name="P:NDoc.VisualStudio.Solution.ProjectCount">
             <summary>Gets a count of the number of projects in the solution</summary>
+        </member>
+        <member name="T:NDoc.VisualStudio.ProjectConfig">
+            <summary>
+            ProjectConfig settings for Visual Studio C# projects.
+            </summary>
+        </member>
+        <member name="P:NDoc.VisualStudio.ProjectConfig.Name">
+            <summary>Gets the name of the configuration.</summary>
+            <remarks>This is usually "Debug" or "Release".</remarks>
+        </member>
+        <member name="P:NDoc.VisualStudio.ProjectConfig.OutputPath">
+            <summary>Gets the location of the output files (relative to the 
+            project directory) for this project's configuration.</summary>
+        </member>
+        <member name="P:NDoc.VisualStudio.ProjectConfig.DocumentationFile">
+            <summary>Gets the name of the file (relative to the project 
+            directory) into which documentation comments will be 
+            processed.</summary>
         </member>
         <member name="T:NDoc.VisualStudio.Project">
             <summary>

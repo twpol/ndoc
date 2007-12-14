@@ -4,138 +4,41 @@
         <name>NDocGui</name>
     </assembly>
     <members>
-        <member name="T:NDoc.Gui.App">
+        <member name="T:NDoc.Gui.ErrorForm">
             <summary>
-            Static class with the Main method and application properties
+            Form used to display errors to the user
             </summary>
         </member>
-        <member name="M:NDoc.Gui.App.Main(System.String[])">
-            <summary>
-            Application entry point
-            </summary>
-            <param name="args">Command line arguments</param>
-        </member>
-        <member name="M:NDoc.Gui.App.GetSourceTreePath(System.String)">
-            <summary>
-            Returns a path to a file based resource that
-            is sompatible with the source tree structure, rather than the
-            deploymeed strucutre
-            </summary>
-            <param name="fileName">The file to build a path for</param>
-            <returns>Relative path to the file in the source tree</returns>
-        </member>
-        <member name="M:NDoc.Gui.App.GetInnermostException(System.Exception)">
-            <summary>
-            Given an <see cref="T:System.Exception"/> returns the deepest
-            non-null InnerException
-            </summary>
-            <param name="e">The top Exception</param>
-            <returns>The innermost Exception</returns>
-        </member>
-        <member name="M:NDoc.Gui.App.DumpException(System.Text.StringBuilder,System.Exception)">
-            <summary>
-            Streams an exception
-            </summary>
-            <param name="strBld">A StringBuilder to hold the exception details</param>
-            <param name="ex">The Exception</param>
-        </member>
-        <member name="M:NDoc.Gui.App.BuildTraceError(System.Exception)">
-            <summary>
-            Dumps the details of an exception to the Trace window
-            </summary>
-            <param name="ex">The Exception</param>
-        </member>
-        <member name="P:NDoc.Gui.App.WebSiteUri">
-            <summary>
-            The NDoc SourceForge URI
-            </summary>
-        </member>
-        <member name="P:NDoc.Gui.App.RuntimeLocation">
-            <summary>
-            The location where the application is running 
-            </summary>
-        </member>
-        <member name="P:NDoc.Gui.App.LicenseFilePath">
-            <summary>
-            The path to the license file
-            </summary>
-        </member>
-        <member name="P:NDoc.Gui.App.HelpFilePath">
-            <summary>
-            The path to the help file
-            </summary>
-        </member>
-        <member name="T:NDoc.Gui.AboutForm">
-            <summary>
-            Summary description for AboutForm.
-            </summary>
-        </member>
-        <member name="F:NDoc.Gui.AboutForm.components">
+        <member name="F:NDoc.Gui.ErrorForm.components">
             <summary>
             Required designer variable.
             </summary>
         </member>
-        <member name="M:NDoc.Gui.AboutForm.#ctor">
+        <member name="M:NDoc.Gui.ErrorForm.ShowError(System.String,System.Exception,System.Windows.Forms.Control)">
             <summary>
-            
+            Show the ErrorForm
             </summary>
+            <param name="message">A message to display</param>
+            <param name="ex">The exception to display</param>
+            <param name="parent">The parent control</param>
         </member>
-        <member name="M:NDoc.Gui.AboutForm.Dispose(System.Boolean)">
+        <member name="M:NDoc.Gui.ErrorForm.ShowError(System.Exception,System.Windows.Forms.Control)">
+            <summary>
+            Show the ErrorForm
+            </summary>
+            <param name="ex">The exception to display</param>
+            <param name="parent">The parent control</param>
+        </member>
+        <member name="M:NDoc.Gui.ErrorForm.Dispose(System.Boolean)">
             <summary>
             Clean up any resources being used.
             </summary>
         </member>
-        <member name="M:NDoc.Gui.AboutForm.InitializeComponent">
+        <member name="M:NDoc.Gui.ErrorForm.InitializeComponent">
             <summary>
             Required method for Designer support - do not modify
             the contents of this method with the code editor.
             </summary>
-        </member>
-        <member name="T:NDoc.Gui.DropFileType">
-            <summary>
-            The type of files that can be dropped
-            </summary>
-        </member>
-        <member name="F:NDoc.Gui.DropFileType.Assembly">
-            <summary>
-            One or more assemblies (dll or exe)
-            </summary>
-        </member>
-        <member name="F:NDoc.Gui.DropFileType.Project">
-            <summary>
-            An .ndoc project file
-            </summary>
-        </member>
-        <member name="F:NDoc.Gui.DropFileType.Unsupported">
-            <summary>
-            Any other file type
-            </summary>
-        </member>
-        <member name="T:NDoc.Gui.DragDropHandler">
-            <summary>
-            Handles drap and drop operations
-            </summary>
-        </member>
-        <member name="M:NDoc.Gui.DragDropHandler.CanDrop(System.String[])">
-            <summary>
-            Determines if the list of files is a list of assemblies
-            </summary>
-            <param name="files">File list</param>
-            <returns>True if all the files are dll's or exe's</returns>
-        </member>
-        <member name="M:NDoc.Gui.DragDropHandler.GetAssemblySlashDocs(System.String[])">
-            <summary>
-            Create a collection of <see cref="T:NDoc.Core.AssemblySlashDoc"/> objects
-            </summary>
-            <param name="files">An arrray of assembly files names</param>
-            <returns>Populated collection</returns>
-        </member>
-        <member name="M:NDoc.Gui.DragDropHandler.GetProjectFilePath(System.String[])">
-            <summary>
-            Gets the path to a NDoc file project from the dropped files list
-            </summary>
-            <param name="files">The files dropped</param>
-            <returns>The path stored in the first location or the files array</returns>
         </member>
         <member name="T:NDoc.Gui.AssemblyListControl">
             <summary>
@@ -211,33 +114,94 @@
             Determines if the ListView is in report or list mode
             </summary>
         </member>
-        <member name="T:NDoc.Gui.IBuildStatus">
+        <member name="T:NDoc.Gui.TextBoxWriter">
             <summary>
-            Interface for receiving status notification during a build
+            A <see cref="T:System.IO.TextWriter"/> that writes to a text box
             </summary>
         </member>
-        <member name="M:NDoc.Gui.IBuildStatus.BuildException(System.Exception)">
+        <member name="M:NDoc.Gui.TextBoxWriter.#ctor(System.Windows.Forms.TextBoxBase)">
             <summary>
-            An exception occurred during the build
+            creates a new instance of the class
             </summary>
-            <param name="e">The exception</param>
+            <param name="b">The <see cref="T:System.Windows.Forms.TextBoxBase"/> that will be written to</param>
         </member>
-        <member name="M:NDoc.Gui.IBuildStatus.BuildComplete">
+        <member name="M:NDoc.Gui.TextBoxWriter.Write(System.String)">
             <summary>
-            The build is completed
+            Write a string to the trace window
             </summary>
-            <remarks>This is called on succes, failure and cancellation</remarks>
+            <param name="message">The string to write</param>
         </member>
-        <member name="M:NDoc.Gui.IBuildStatus.BuildCancelled">
+        <member name="M:NDoc.Gui.TextBoxWriter.WriteLine(System.String)">
             <summary>
-            Called when the build is cancelled
+            Writes a string and a new line to the text box
+            </summary>
+            <param name="message">The string to write</param>
+        </member>
+        <member name="P:NDoc.Gui.TextBoxWriter.Encoding">
+            <summary>
+            Get's the encoding of the stream
             </summary>
         </member>
-        <member name="M:NDoc.Gui.IBuildStatus.ReportProgress(NDoc.Core.ProgressArgs)">
+        <member name="T:NDoc.Gui.App">
             <summary>
-            Reports build progress
+            Static class with the Main method and application properties
             </summary>
-            <param name="e">Build progress arguments</param>
+        </member>
+        <member name="M:NDoc.Gui.App.Main(System.String[])">
+            <summary>
+            Application entry point
+            </summary>
+            <param name="args">Command line arguments</param>
+        </member>
+        <member name="M:NDoc.Gui.App.GetSourceTreePath(System.String)">
+            <summary>
+            Returns a path to a file based resource that
+            is sompatible with the source tree structure, rather than the
+            deploymeed strucutre
+            </summary>
+            <param name="fileName">The file to build a path for</param>
+            <returns>Relative path to the file in the source tree</returns>
+        </member>
+        <member name="M:NDoc.Gui.App.GetInnermostException(System.Exception)">
+            <summary>
+            Given an <see cref="T:System.Exception"/> returns the deepest
+            non-null InnerException
+            </summary>
+            <param name="e">The top Exception</param>
+            <returns>The innermost Exception</returns>
+        </member>
+        <member name="M:NDoc.Gui.App.DumpException(System.Text.StringBuilder,System.Exception)">
+            <summary>
+            Streams an exception
+            </summary>
+            <param name="strBld">A StringBuilder to hold the exception details</param>
+            <param name="ex">The Exception</param>
+        </member>
+        <member name="M:NDoc.Gui.App.BuildTraceError(System.Exception)">
+            <summary>
+            Dumps the details of an exception to the Trace window
+            </summary>
+            <param name="ex">The Exception</param>
+        </member>
+        <member name="P:NDoc.Gui.App.WebSiteUri">
+            <summary>
+            The NDoc SourceForge URI
+            </summary>
+        </member>
+        <member name="P:NDoc.Gui.App.RuntimeLocation">
+            <summary>
+            The location where the application is running 
+            </summary>
+        </member>
+        <member name="P:NDoc.Gui.App.LicenseFilePath">
+            <summary>
+            The path to the license file
+            </summary>
+        </member>
+        <member name="P:NDoc.Gui.App.HelpFilePath">
+            <summary>
+            The path to the help file
+            </summary>
         </member>
         <member name="T:NDoc.Gui.OptionsForm">
             <summary>
@@ -312,100 +276,33 @@
             Get/Set the MRUSize property
             </summary>
         </member>
-        <member name="T:NDoc.Gui.ErrorForm">
+        <member name="T:NDoc.Gui.IBuildStatus">
             <summary>
-            Form used to display errors to the user
+            Interface for receiving status notification during a build
             </summary>
         </member>
-        <member name="F:NDoc.Gui.ErrorForm.components">
+        <member name="M:NDoc.Gui.IBuildStatus.BuildException(System.Exception)">
             <summary>
-            Required designer variable.
+            An exception occurred during the build
+            </summary>
+            <param name="e">The exception</param>
+        </member>
+        <member name="M:NDoc.Gui.IBuildStatus.BuildComplete">
+            <summary>
+            The build is completed
+            </summary>
+            <remarks>This is called on succes, failure and cancellation</remarks>
+        </member>
+        <member name="M:NDoc.Gui.IBuildStatus.BuildCancelled">
+            <summary>
+            Called when the build is cancelled
             </summary>
         </member>
-        <member name="M:NDoc.Gui.ErrorForm.ShowError(System.String,System.Exception,System.Windows.Forms.Control)">
+        <member name="M:NDoc.Gui.IBuildStatus.ReportProgress(NDoc.Core.ProgressArgs)">
             <summary>
-            Show the ErrorForm
+            Reports build progress
             </summary>
-            <param name="message">A message to display</param>
-            <param name="ex">The exception to display</param>
-            <param name="parent">The parent control</param>
-        </member>
-        <member name="M:NDoc.Gui.ErrorForm.ShowError(System.Exception,System.Windows.Forms.Control)">
-            <summary>
-            Show the ErrorForm
-            </summary>
-            <param name="ex">The exception to display</param>
-            <param name="parent">The parent control</param>
-        </member>
-        <member name="M:NDoc.Gui.ErrorForm.Dispose(System.Boolean)">
-            <summary>
-            Clean up any resources being used.
-            </summary>
-        </member>
-        <member name="M:NDoc.Gui.ErrorForm.InitializeComponent">
-            <summary>
-            Required method for Designer support - do not modify
-            the contents of this method with the code editor.
-            </summary>
-        </member>
-        <member name="T:NDoc.Gui.TextBoxWriter">
-            <summary>
-            A <see cref="T:System.IO.TextWriter"/> that writes to a text box
-            </summary>
-        </member>
-        <member name="M:NDoc.Gui.TextBoxWriter.#ctor(System.Windows.Forms.TextBoxBase)">
-            <summary>
-            creates a new instance of the class
-            </summary>
-            <param name="b">The <see cref="T:System.Windows.Forms.TextBoxBase"/> that will be written to</param>
-        </member>
-        <member name="M:NDoc.Gui.TextBoxWriter.Write(System.String)">
-            <summary>
-            Write a string to the trace window
-            </summary>
-            <param name="message">The string to write</param>
-        </member>
-        <member name="M:NDoc.Gui.TextBoxWriter.WriteLine(System.String)">
-            <summary>
-            Writes a string and a new line to the text box
-            </summary>
-            <param name="message">The string to write</param>
-        </member>
-        <member name="P:NDoc.Gui.TextBoxWriter.Encoding">
-            <summary>
-            Get's the encoding of the stream
-            </summary>
-        </member>
-        <member name="T:NDoc.Gui.SolutionForm">
-            <summary>
-            Summary description for SolutionForm.
-            </summary>
-        </member>
-        <member name="F:NDoc.Gui.SolutionForm.components">
-            <summary>
-            Required designer variable.
-            </summary>
-        </member>
-        <member name="M:NDoc.Gui.SolutionForm.#ctor">
-            <summary>
-            Initializes a new instance of the SolutionForm class.
-            </summary>
-        </member>
-        <member name="M:NDoc.Gui.SolutionForm.Dispose(System.Boolean)">
-            <summary>
-            Clean up any resources being used.
-            </summary>
-        </member>
-        <member name="M:NDoc.Gui.SolutionForm.InitializeComponent">
-            <summary>
-            Required method for Designer support - do not modify
-            the contents of this method with the code editor.
-            </summary>
-        </member>
-        <member name="P:NDoc.Gui.SolutionForm.ConfigList">
-            <summary>
-            Listbox of solution's configurations.
-            </summary>
+            <param name="e">Build progress arguments</param>
         </member>
         <member name="T:NDoc.Gui.WarningForm">
             <summary>
@@ -503,28 +400,36 @@
             Raised when the close button is clicked
             </summary>
         </member>
-        <member name="T:NDoc.Gui.AssemblySlashDocForm">
+        <member name="T:NDoc.Gui.SolutionForm">
             <summary>
-               This form allows the user to select an assembly and it's matching /doc file.
+            Summary description for SolutionForm.
             </summary>
         </member>
-        <member name="M:NDoc.Gui.AssemblySlashDocForm.#ctor">
-            <summary>Initializes a new instance of the AssemblySlashDocForm class.</summary>
-        </member>
-        <member name="M:NDoc.Gui.AssemblySlashDocForm.Dispose(System.Boolean)">
-            <summary>Clean up any resources being used.</summary>
-        </member>
-        <member name="M:NDoc.Gui.AssemblySlashDocForm.InitializeComponent">
+        <member name="F:NDoc.Gui.SolutionForm.components">
             <summary>
-               Required method for Designer support - do not modify
-               the contents of this method with the code editor.
+            Required designer variable.
             </summary>
         </member>
-        <member name="P:NDoc.Gui.AssemblySlashDocForm.AssySlashDoc">
+        <member name="M:NDoc.Gui.SolutionForm.#ctor">
             <summary>
-            Gets or sets the AssemblySlashDoc.
+            Initializes a new instance of the SolutionForm class.
             </summary>
-            <value></value>
+        </member>
+        <member name="M:NDoc.Gui.SolutionForm.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:NDoc.Gui.SolutionForm.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="P:NDoc.Gui.SolutionForm.ConfigList">
+            <summary>
+            Listbox of solution's configurations.
+            </summary>
         </member>
         <member name="T:NDoc.Gui.BuildWorker">
             <summary>
@@ -552,6 +457,31 @@
         <member name="P:NDoc.Gui.BuildWorker.IsBuilding">
             <summary>
             Return true if the build thread is active
+            </summary>
+        </member>
+        <member name="T:NDoc.Gui.WaitCursor">
+            <summary>
+            Manages the wait cursor
+            </summary>
+        </member>
+        <member name="M:NDoc.Gui.WaitCursor.#ctor(System.Windows.Forms.Control)">
+            <summary>
+            Constructing this class casues the cursor to be set to the wait cursor
+            and resets it at disposal
+            </summary>
+            <param name="parent">The control whose cursor to set</param>
+        </member>
+        <member name="M:NDoc.Gui.WaitCursor.#ctor(System.Windows.Forms.Control,System.Windows.Forms.Cursor)">
+            <summary>
+            Constructing this class casues the cursor to be set to the specified cursor
+            and resets it at disposal
+            </summary>
+            <param name="parent">The control whose cursor to set</param>
+            <param name="cursor">The cursor</param>
+        </member>
+        <member name="M:NDoc.Gui.WaitCursor.Dispose">
+            <summary>
+            Restores the cursor to the default
             </summary>
         </member>
         <member name="T:NDoc.Gui.MainForm">
@@ -705,29 +635,76 @@
             </summary>
             <param name="e">progress arguments</param>
         </member>
-        <member name="T:NDoc.Gui.WaitCursor">
+        <member name="T:NDoc.Gui.DropFileType">
             <summary>
-            Manages the wait cursor
+            The type of files that can be dropped
             </summary>
         </member>
-        <member name="M:NDoc.Gui.WaitCursor.#ctor(System.Windows.Forms.Control)">
+        <member name="F:NDoc.Gui.DropFileType.Assembly">
             <summary>
-            Constructing this class casues the cursor to be set to the wait cursor
-            and resets it at disposal
+            One or more assemblies (dll or exe)
             </summary>
-            <param name="parent">The control whose cursor to set</param>
         </member>
-        <member name="M:NDoc.Gui.WaitCursor.#ctor(System.Windows.Forms.Control,System.Windows.Forms.Cursor)">
+        <member name="F:NDoc.Gui.DropFileType.Project">
             <summary>
-            Constructing this class casues the cursor to be set to the specified cursor
-            and resets it at disposal
+            An .ndoc project file
             </summary>
-            <param name="parent">The control whose cursor to set</param>
-            <param name="cursor">The cursor</param>
         </member>
-        <member name="M:NDoc.Gui.WaitCursor.Dispose">
+        <member name="F:NDoc.Gui.DropFileType.Unsupported">
             <summary>
-            Restores the cursor to the default
+            Any other file type
+            </summary>
+        </member>
+        <member name="T:NDoc.Gui.DragDropHandler">
+            <summary>
+            Handles drap and drop operations
+            </summary>
+        </member>
+        <member name="M:NDoc.Gui.DragDropHandler.CanDrop(System.String[])">
+            <summary>
+            Determines if the list of files is a list of assemblies
+            </summary>
+            <param name="files">File list</param>
+            <returns>True if all the files are dll's or exe's</returns>
+        </member>
+        <member name="M:NDoc.Gui.DragDropHandler.GetAssemblySlashDocs(System.String[])">
+            <summary>
+            Create a collection of <see cref="T:NDoc.Core.AssemblySlashDoc"/> objects
+            </summary>
+            <param name="files">An arrray of assembly files names</param>
+            <returns>Populated collection</returns>
+        </member>
+        <member name="M:NDoc.Gui.DragDropHandler.GetProjectFilePath(System.String[])">
+            <summary>
+            Gets the path to a NDoc file project from the dropped files list
+            </summary>
+            <param name="files">The files dropped</param>
+            <returns>The path stored in the first location or the files array</returns>
+        </member>
+        <member name="T:NDoc.Gui.AboutForm">
+            <summary>
+            Summary description for AboutForm.
+            </summary>
+        </member>
+        <member name="F:NDoc.Gui.AboutForm.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:NDoc.Gui.AboutForm.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:NDoc.Gui.AboutForm.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:NDoc.Gui.AboutForm.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
             </summary>
         </member>
         <member name="T:NDoc.Gui.NamespaceSummariesForm">
@@ -766,6 +743,29 @@
             </summary>
             <param name="sender"></param>
             <param name="e"></param>
+        </member>
+        <member name="T:NDoc.Gui.AssemblySlashDocForm">
+            <summary>
+               This form allows the user to select an assembly and it's matching /doc file.
+            </summary>
+        </member>
+        <member name="M:NDoc.Gui.AssemblySlashDocForm.#ctor">
+            <summary>Initializes a new instance of the AssemblySlashDocForm class.</summary>
+        </member>
+        <member name="M:NDoc.Gui.AssemblySlashDocForm.Dispose(System.Boolean)">
+            <summary>Clean up any resources being used.</summary>
+        </member>
+        <member name="M:NDoc.Gui.AssemblySlashDocForm.InitializeComponent">
+            <summary>
+               Required method for Designer support - do not modify
+               the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="P:NDoc.Gui.AssemblySlashDocForm.AssySlashDoc">
+            <summary>
+            Gets or sets the AssemblySlashDoc.
+            </summary>
+            <value></value>
         </member>
     </members>
 </doc>

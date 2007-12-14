@@ -4,6 +4,141 @@
         <name>NDoc.Documenter.Msdn</name>
     </assembly>
     <members>
+        <member name="T:NDoc.Documenter.Msdn.StyleSheetCollection">
+            <summary>
+            The collection of xslt stylesheets used to generate the Html
+            </summary>
+        </member>
+        <member name="M:NDoc.Documenter.Msdn.StyleSheetCollection.LoadStyleSheets(System.String)">
+            <summary>
+            Load the predefined set of xslt stylesheets into a dictionary
+            </summary>
+            <param name="extensibilityStylesheet"></param>
+            <returns>The populated collection</returns>
+        </member>
+        <member name="P:NDoc.Documenter.Msdn.StyleSheetCollection.Item(System.String)">
+            <summary>
+            Return a named stylesheet from the collection
+            </summary>
+        </member>
+        <member name="T:NDoc.Documenter.Msdn.MsdnXsltUtilities">
+            <summary>
+            Provides an extension object for the xslt transformations.
+            </summary>
+        </member>
+        <member name="M:NDoc.Documenter.Msdn.MsdnXsltUtilities.#ctor(System.Collections.Specialized.StringDictionary,System.Collections.Specialized.StringDictionary,NDoc.Core.Reflection.SdkVersion,System.String,System.Boolean,System.Text.Encoding)">
+            <summary>
+            Initializes a new instance of class MsdnXsltUtilities
+            </summary>
+            <param name="fileNames">A StringDictionary holding id to file name mappings.</param>
+            <param name="elemNames">A StringDictionary holding id to element name mappings</param>
+            <param name="linkToSdkDocVersion">Specifies the version of the SDK documentation.</param>
+            <param name="linkToSdkDocLangauge">Specifies the version of the SDK documentation.</param>
+            <param name="SdkLinksOnWeb">Specifies if links should be to ms online documentation.</param>
+            <param name="fileEncoding">Specifies if links should be to ms online documentation.</param>
+        </member>
+        <member name="M:NDoc.Documenter.Msdn.MsdnXsltUtilities.Reset">
+            <summary>
+            Reset Overload method checking state.
+            </summary>
+        </member>
+        <member name="M:NDoc.Documenter.Msdn.MsdnXsltUtilities.GetHRef(System.String)">
+            <summary>
+            Returns an HRef for a CRef.
+            </summary>
+            <param name="cref">CRef for which the HRef will be looked up.</param>
+        </member>
+        <member name="M:NDoc.Documenter.Msdn.MsdnXsltUtilities.GetName(System.String)">
+            <summary>
+            Returns a name for a CRef.
+            </summary>
+            <param name="cref">CRef for which the name will be looked up.</param>
+        </member>
+        <member name="M:NDoc.Documenter.Msdn.MsdnXsltUtilities.HasSimilarOverloads(System.String)">
+            <summary>
+            Looks up, whether a member has similar overloads, that have already been documented.
+            </summary>
+            <param name="description">A string describing this overload.</param>
+            <returns>true, if there has been a member with the same description.</returns>
+            <remarks>
+            <para>On the members pages overloads are cumulated. Instead of adding all overloads
+            to the members page, a link is added to the members page, that points
+            to an overloads page.</para>
+            <para>If for example one overload is public, while another one is protected,
+            we want both to appear on the members page. This is to make the search
+            for suitable members easier.</para>
+            <para>This leads us to the similarity of overloads. Two overloads are considered
+            similar, if they have the same name, declaring type, access (public, protected, ...)
+            and contract (static, non static). The description contains these four attributes
+            of the member. This means, that two members are similar, when they have the same
+            description.</para>
+            <para>Asking for the first time, if a member has similar overloads, will return false.
+            After that, if asking with the same description again, it will return true, so
+            the overload does not need to be added to the members page.</para>
+            </remarks>
+        </member>
+        <member name="M:NDoc.Documenter.Msdn.MsdnXsltUtilities.Replace(System.String,System.String,System.String)">
+            <summary>
+            Exposes <see cref="M:System.String.Replace(System.String,System.String)"/> to XSLT
+            </summary>
+            <param name="str">The string to search</param>
+            <param name="oldValue">The string to search for</param>
+            <param name="newValue">The string to replace</param>
+            <returns>A new string</returns>
+        </member>
+        <member name="M:NDoc.Documenter.Msdn.MsdnXsltUtilities.GetLocalizedFrameworkURL(System.String,System.String)">
+            <summary>
+            returns a localized sdk url if one exists for the <see cref="P:System.Globalization.CultureInfo.CurrentCulture"/>.
+            </summary>
+            <param name="searchNamespace">base namespace to search for</param>
+            <param name="langCode">the localization language code</param>
+            <returns>ms-help url for sdk</returns>
+        </member>
+        <member name="M:NDoc.Documenter.Msdn.MsdnXsltUtilities.GetContentType">
+            <summary>
+            Gets HTML ContentType for the system's current ANSI code page. 
+            </summary>
+            <returns>ContentType attribute string</returns>
+        </member>
+        <member name="P:NDoc.Documenter.Msdn.MsdnXsltUtilities.SdkDocBaseUrl">
+            <summary>
+            Gets the base Url for system types links.
+            </summary>
+        </member>
+        <member name="P:NDoc.Documenter.Msdn.MsdnXsltUtilities.SdkDocExt">
+            <summary>
+            Gets the page file extension for system types links.
+            </summary>
+        </member>
+        <member name="T:NDoc.Documenter.Msdn.ExternalHtmlProvider">
+            <summary>
+            Used as an extension object to the xslt processor to allow
+            retrieving user-provided raw html.
+            </summary>
+        </member>
+        <member name="M:NDoc.Documenter.Msdn.ExternalHtmlProvider.#ctor(NDoc.Documenter.Msdn.MsdnDocumenterConfig,System.String)">
+            <summary>
+            Contructor.
+            </summary>
+            <param name="config">MsdnDocumenterConfig from which the property values can be retrieved.</param>
+            <param name="fileName">Name of the HTML file that is currently being generated by the xslt processor.</param>
+        </member>
+        <member name="M:NDoc.Documenter.Msdn.ExternalHtmlProvider.GetHeaderHtml(System.String)">
+            <summary>
+            Retrieves user-provided raw html to use as page headers.
+            </summary>
+            <param name="topicTitle">The title of the current topic.</param>
+            <returns></returns>
+        </member>
+        <member name="M:NDoc.Documenter.Msdn.ExternalHtmlProvider.GetFooterHtml(System.String,System.String,System.String)">
+            <summary>
+            Retrieves user-provided raw html to use as page footers.
+            </summary>
+            <param name="assemblyName">The name of the assembly for the current topic.</param>
+            <param name="assemblyVersion">The version of the assembly for the current topic.</param>
+            <param name="topicTitle">The title of the current topic.</param>
+            <returns></returns>
+        </member>
         <member name="T:NDoc.Documenter.Msdn.MsdnDocumenter">
             <summary>The MsdnDocumenter class.</summary>
         </member>
@@ -41,21 +176,16 @@
             they are loaded into memory, and hence lowers memory requirements significantly.
             </summary>
         </member>
-        <member name="T:NDoc.Documenter.Msdn.MsdnDocumenterInfo">
+        <member name="T:NDoc.Documenter.Msdn.MsdnWorkspace">
             <summary>
-            Information about the Xml Documenter
+            Summary description for MsdnWorkspace.
             </summary>
         </member>
-        <member name="M:NDoc.Documenter.Msdn.MsdnDocumenterInfo.#ctor">
+        <member name="M:NDoc.Documenter.Msdn.MsdnWorkspace.#ctor(System.String)">
             <summary>
-            Creates a new instance of the class
+            Contructs a new instance of the MsdnWorkspace class
             </summary>
-        </member>
-        <member name="M:NDoc.Documenter.Msdn.MsdnDocumenterInfo.CreateConfig">
-            <summary>
-            See <see cref="M:NDoc.Core.IDocumenterInfo.CreateConfig"/>
-            </summary>
-            <returns>A config instance</returns>
+            <param name="rootDir">The location to create the workspace</param>
         </member>
         <member name="T:NDoc.Documenter.Msdn.HtmlHelp">
             <summary>HTML Help file utilities.</summary>
@@ -265,6 +395,22 @@
             Tool
             </summary>
         </member>
+        <member name="T:NDoc.Documenter.Msdn.MsdnDocumenterInfo">
+            <summary>
+            Information about the Xml Documenter
+            </summary>
+        </member>
+        <member name="M:NDoc.Documenter.Msdn.MsdnDocumenterInfo.#ctor">
+            <summary>
+            Creates a new instance of the class
+            </summary>
+        </member>
+        <member name="M:NDoc.Documenter.Msdn.MsdnDocumenterInfo.CreateConfig">
+            <summary>
+            See <see cref="M:NDoc.Core.IDocumenterInfo.CreateConfig"/>
+            </summary>
+            <returns>A config instance</returns>
+        </member>
         <member name="T:NDoc.Documenter.Msdn.MsdnDocumenterConfig">
             <summary>The MsdnDocumenterConfig class.</summary>
             <remarks>
@@ -404,152 +550,6 @@
         </member>
         <member name="F:NDoc.Documenter.Msdn.TOCStyle.Hierarchical">
             <summary>Elements are nested in the table of contents</summary>
-        </member>
-        <member name="T:NDoc.Documenter.Msdn.StyleSheetCollection">
-            <summary>
-            The collection of xslt stylesheets used to generate the Html
-            </summary>
-        </member>
-        <member name="M:NDoc.Documenter.Msdn.StyleSheetCollection.LoadStyleSheets(System.String)">
-            <summary>
-            Load the predefined set of xslt stylesheets into a dictionary
-            </summary>
-            <param name="extensibilityStylesheet"></param>
-            <returns>The populated collection</returns>
-        </member>
-        <member name="P:NDoc.Documenter.Msdn.StyleSheetCollection.Item(System.String)">
-            <summary>
-            Return a named stylesheet from the collection
-            </summary>
-        </member>
-        <member name="T:NDoc.Documenter.Msdn.MsdnWorkspace">
-            <summary>
-            Summary description for MsdnWorkspace.
-            </summary>
-        </member>
-        <member name="M:NDoc.Documenter.Msdn.MsdnWorkspace.#ctor(System.String)">
-            <summary>
-            Contructs a new instance of the MsdnWorkspace class
-            </summary>
-            <param name="rootDir">The location to create the workspace</param>
-        </member>
-        <member name="T:NDoc.Documenter.Msdn.ExternalHtmlProvider">
-            <summary>
-            Used as an extension object to the xslt processor to allow
-            retrieving user-provided raw html.
-            </summary>
-        </member>
-        <member name="M:NDoc.Documenter.Msdn.ExternalHtmlProvider.#ctor(NDoc.Documenter.Msdn.MsdnDocumenterConfig,System.String)">
-            <summary>
-            Contructor.
-            </summary>
-            <param name="config">MsdnDocumenterConfig from which the property values can be retrieved.</param>
-            <param name="fileName">Name of the HTML file that is currently being generated by the xslt processor.</param>
-        </member>
-        <member name="M:NDoc.Documenter.Msdn.ExternalHtmlProvider.GetHeaderHtml(System.String)">
-            <summary>
-            Retrieves user-provided raw html to use as page headers.
-            </summary>
-            <param name="topicTitle">The title of the current topic.</param>
-            <returns></returns>
-        </member>
-        <member name="M:NDoc.Documenter.Msdn.ExternalHtmlProvider.GetFooterHtml(System.String,System.String,System.String)">
-            <summary>
-            Retrieves user-provided raw html to use as page footers.
-            </summary>
-            <param name="assemblyName">The name of the assembly for the current topic.</param>
-            <param name="assemblyVersion">The version of the assembly for the current topic.</param>
-            <param name="topicTitle">The title of the current topic.</param>
-            <returns></returns>
-        </member>
-        <member name="T:NDoc.Documenter.Msdn.MsdnXsltUtilities">
-            <summary>
-            Provides an extension object for the xslt transformations.
-            </summary>
-        </member>
-        <member name="M:NDoc.Documenter.Msdn.MsdnXsltUtilities.#ctor(System.Collections.Specialized.StringDictionary,System.Collections.Specialized.StringDictionary,NDoc.Core.Reflection.SdkVersion,System.String,System.Boolean,System.Text.Encoding)">
-            <summary>
-            Initializes a new instance of class MsdnXsltUtilities
-            </summary>
-            <param name="fileNames">A StringDictionary holding id to file name mappings.</param>
-            <param name="elemNames">A StringDictionary holding id to element name mappings</param>
-            <param name="linkToSdkDocVersion">Specifies the version of the SDK documentation.</param>
-            <param name="linkToSdkDocLangauge">Specifies the version of the SDK documentation.</param>
-            <param name="SdkLinksOnWeb">Specifies if links should be to ms online documentation.</param>
-            <param name="fileEncoding">Specifies if links should be to ms online documentation.</param>
-        </member>
-        <member name="M:NDoc.Documenter.Msdn.MsdnXsltUtilities.Reset">
-            <summary>
-            Reset Overload method checking state.
-            </summary>
-        </member>
-        <member name="M:NDoc.Documenter.Msdn.MsdnXsltUtilities.GetHRef(System.String)">
-            <summary>
-            Returns an HRef for a CRef.
-            </summary>
-            <param name="cref">CRef for which the HRef will be looked up.</param>
-        </member>
-        <member name="M:NDoc.Documenter.Msdn.MsdnXsltUtilities.GetName(System.String)">
-            <summary>
-            Returns a name for a CRef.
-            </summary>
-            <param name="cref">CRef for which the name will be looked up.</param>
-        </member>
-        <member name="M:NDoc.Documenter.Msdn.MsdnXsltUtilities.HasSimilarOverloads(System.String)">
-            <summary>
-            Looks up, whether a member has similar overloads, that have already been documented.
-            </summary>
-            <param name="description">A string describing this overload.</param>
-            <returns>true, if there has been a member with the same description.</returns>
-            <remarks>
-            <para>On the members pages overloads are cumulated. Instead of adding all overloads
-            to the members page, a link is added to the members page, that points
-            to an overloads page.</para>
-            <para>If for example one overload is public, while another one is protected,
-            we want both to appear on the members page. This is to make the search
-            for suitable members easier.</para>
-            <para>This leads us to the similarity of overloads. Two overloads are considered
-            similar, if they have the same name, declaring type, access (public, protected, ...)
-            and contract (static, non static). The description contains these four attributes
-            of the member. This means, that two members are similar, when they have the same
-            description.</para>
-            <para>Asking for the first time, if a member has similar overloads, will return false.
-            After that, if asking with the same description again, it will return true, so
-            the overload does not need to be added to the members page.</para>
-            </remarks>
-        </member>
-        <member name="M:NDoc.Documenter.Msdn.MsdnXsltUtilities.Replace(System.String,System.String,System.String)">
-            <summary>
-            Exposes <see cref="M:System.String.Replace(System.String,System.String)"/> to XSLT
-            </summary>
-            <param name="str">The string to search</param>
-            <param name="oldValue">The string to search for</param>
-            <param name="newValue">The string to replace</param>
-            <returns>A new string</returns>
-        </member>
-        <member name="M:NDoc.Documenter.Msdn.MsdnXsltUtilities.GetLocalizedFrameworkURL(System.String,System.String)">
-            <summary>
-            returns a localized sdk url if one exists for the <see cref="P:System.Globalization.CultureInfo.CurrentCulture"/>.
-            </summary>
-            <param name="searchNamespace">base namespace to search for</param>
-            <param name="langCode">the localization language code</param>
-            <returns>ms-help url for sdk</returns>
-        </member>
-        <member name="M:NDoc.Documenter.Msdn.MsdnXsltUtilities.GetContentType">
-            <summary>
-            Gets HTML ContentType for the system's current ANSI code page. 
-            </summary>
-            <returns>ContentType attribute string</returns>
-        </member>
-        <member name="P:NDoc.Documenter.Msdn.MsdnXsltUtilities.SdkDocBaseUrl">
-            <summary>
-            Gets the base Url for system types links.
-            </summary>
-        </member>
-        <member name="P:NDoc.Documenter.Msdn.MsdnXsltUtilities.SdkDocExt">
-            <summary>
-            Gets the page file extension for system types links.
-            </summary>
         </member>
     </members>
 </doc>
