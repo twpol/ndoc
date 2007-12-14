@@ -4,22 +4,6 @@
         <name>NDoc.Documenter.Xml</name>
     </assembly>
     <members>
-        <member name="T:NDoc.Documenter.Xml.XmlDocumenterInfo">
-            <summary>
-            Information about the Xml Documenter
-            </summary>
-        </member>
-        <member name="M:NDoc.Documenter.Xml.XmlDocumenterInfo.#ctor">
-            <summary>
-            Creates a new instance of the class
-            </summary>
-        </member>
-        <member name="M:NDoc.Documenter.Xml.XmlDocumenterInfo.CreateConfig">
-            <summary>
-            See <see cref="M:NDoc.Core.IDocumenterInfo.CreateConfig"/>
-            </summary>
-            <returns>A config instance</returns>
-        </member>
         <member name="T:NDoc.Documenter.Xml.XmlDocumenterConfig">
             <summary>The XmlDocumenter config class.</summary>
             <remarks>	
@@ -66,6 +50,22 @@
         </member>
         <member name="P:NDoc.Documenter.Xml.XmlDocumenter.MainOutputFile">
             <summary>See <see cref="T:NDoc.Core.IDocumenter"/>.</summary>
+        </member>
+        <member name="T:NDoc.Documenter.Xml.XmlDocumenterInfo">
+            <summary>
+            Information about the Xml Documenter
+            </summary>
+        </member>
+        <member name="M:NDoc.Documenter.Xml.XmlDocumenterInfo.#ctor">
+            <summary>
+            Creates a new instance of the class
+            </summary>
+        </member>
+        <member name="M:NDoc.Documenter.Xml.XmlDocumenterInfo.CreateConfig">
+            <summary>
+            See <see cref="M:NDoc.Core.IDocumenterInfo.CreateConfig"/>
+            </summary>
+            <returns>A config instance</returns>
         </member>
     </members>
 </doc>

@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{DBA75D67-23C9-4A78-ABC2-CF8802FDB7CA}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -257,6 +257,7 @@
     <None Include="Core.build" />
     <EmbeddedResource Include="AttributesForm.resx">
       <DependentUpon>AttributesForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="graphics\folder.bmp" />
     <EmbeddedResource Include="graphics\folderpin.bmp" />
@@ -264,15 +265,19 @@
     <EmbeddedResource Include="graphics\multifolderpin.bmp" />
     <EmbeddedResource Include="ReferencePathCollectionEditorForm.resx">
       <DependentUpon>ReferencePathCollectionEditorForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="RuntimePropertyGrid.resx">
       <DependentUpon>RuntimePropertyGrid.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="SimpleEdit.resx">
       <DependentUpon>SimpleEdit.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="TextEditorForm.resx">
       <DependentUpon>TextEditorForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <Content Include="graphics\Red Folder.ico" />
   </ItemGroup>

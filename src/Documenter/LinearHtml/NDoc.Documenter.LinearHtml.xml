@@ -4,6 +4,108 @@
         <name>NDoc.Documenter.LinearHtml</name>
     </assembly>
     <members>
+        <member name="T:NDoc.Documenter.LinearHtml.LinearHtmlDocumenterInfo">
+            <summary>
+            Information about the Xml Documenter
+            </summary>
+        </member>
+        <member name="M:NDoc.Documenter.LinearHtml.LinearHtmlDocumenterInfo.#ctor">
+            <summary>
+            Creates a new instance of the class
+            </summary>
+        </member>
+        <member name="M:NDoc.Documenter.LinearHtml.LinearHtmlDocumenterInfo.CreateConfig">
+            <summary>
+            See <see cref="M:NDoc.Core.IDocumenterInfo.CreateConfig"/>
+            </summary>
+            <returns>A config instance</returns>
+        </member>
+        <member name="T:NDoc.Documenter.LinearHtml.LinearHtmlDocumenterConfig">
+            <summary>The LinearHtmlDocumenterConfig class.</summary>
+        </member>
+        <member name="M:NDoc.Documenter.LinearHtml.LinearHtmlDocumenterConfig.#ctor(NDoc.Documenter.LinearHtml.LinearHtmlDocumenterInfo)">
+            <summary>Initializes a new instance of the MsdnHelpConfig class.</summary>
+            <remarks>
+            <para>The LinearHTML Documenter creates a single HTML file that includes
+            all of the types and members in your project.</para>
+            </remarks>
+        </member>
+        <member name="M:NDoc.Documenter.LinearHtml.LinearHtmlDocumenterConfig.CreateDocumenter">
+            <summary>
+            Creates an instance of a documenter <see cref="M:NDoc.Core.IDocumenterConfig.CreateDocumenter"/>
+            </summary>
+            <returns>IDocumenter instance</returns>		
+        </member>
+        <member name="P:NDoc.Documenter.LinearHtml.LinearHtmlDocumenterConfig.IncludeTypeMemberDetails">
+            <summary>Gets or sets the IncludeTypeMemberDetails property.</summary>
+            <remarks>Whether or not to put type member (methods, fields, properties, ...) details into the 
+            document.  For fields and properties this means whether or not to include 
+            remarks in the table.  For methods this means whether or not to break out 
+            method details (such as parameters) into separate sub-sections.</remarks>
+        </member>
+        <member name="P:NDoc.Documenter.LinearHtml.LinearHtmlDocumenterConfig.OutputDirectory">
+            <summary>Gets or sets the OutputDirectory property.</summary>
+            <remarks>The directory in which the .html file will be generated.</remarks>
+        </member>
+        <member name="P:NDoc.Documenter.LinearHtml.LinearHtmlDocumenterConfig.MethodParametersInTable">
+            <summary>Gets or sets the MethodParametersInTable property.</summary>
+            <remarks>Whether or not to put method parameter lists 
+            into the same table with the method name.</remarks>
+        </member>
+        <member name="P:NDoc.Documenter.LinearHtml.LinearHtmlDocumenterConfig.TypeIncludeRegexp">
+            <summary>Gets or sets the TypeIncludeRegexp property.</summary>
+            <remarks>A C# regular expression to include types.  If this is specified,
+             only types which match will be included in the output.</remarks>
+        </member>
+        <member name="P:NDoc.Documenter.LinearHtml.LinearHtmlDocumenterConfig.NamespaceExcludeRegexp">
+            <summary>Gets or sets the NamespaceExcludeRegexp property.</summary>
+            <remarks>A C# regular expression to exclude namespaces.</remarks>
+        </member>
+        <member name="P:NDoc.Documenter.LinearHtml.LinearHtmlDocumenterConfig.Title">
+            <summary>Gets or sets the Title property.</summary>
+            <remarks>This is the title displayed at the top of every page.</remarks>
+        </member>
+        <member name="P:NDoc.Documenter.LinearHtml.LinearHtmlDocumenterConfig.IncludeHierarchy">
+            <summary>Gets or sets the IncludeHierarchy property.</summary>
+            <remarks>To include a class hiararchy page for each namespace. 
+            Don't turn it on if your project has a namespace with many types, 
+            as NDoc will become very slow and might crash.</remarks>
+        </member>
+        <member name="P:NDoc.Documenter.LinearHtml.LinearHtmlDocumenterConfig.SortTOCByNamespace">
+            <summary>Gets or sets the SortTOCByNamespace property.</summary>
+            <remarks>Sorts the TOC by namespace name. SplitTOCs is disabled 
+            when this option is selected.</remarks>
+        </member>
+        <member name="P:NDoc.Documenter.LinearHtml.LinearHtmlDocumenterConfig.HeaderHtml">
+            <summary>Gets or sets the HeaderHtml property.</summary>
+            <remarks>Raw HTML that is used as a page header instead of the default blue banner. 
+            "%FILE_NAME%" is dynamically replaced by the name of the file for the current html page. 
+            "%TOPIC_TITLE%" is dynamically replaced by the title of the current page.</remarks>
+        </member>
+        <member name="P:NDoc.Documenter.LinearHtml.LinearHtmlDocumenterConfig.FooterHtml">
+            <summary>Gets or sets the FooterHtml property.</summary>
+            <remarks>Raw HTML that is used as a page footer instead of the default footer.
+            "%FILE_NAME%\" is dynamically replaced by the name of the file for the current html page. 
+            "%ASSEMBLY_NAME%\" is dynamically replaced by the name of the assembly for the current page. 
+            "%ASSEMBLY_VERSION%\" is dynamically replaced by the version of the assembly for the current page. 
+            "%TOPIC_TITLE%\" is dynamically replaced by the title of the current page.</remarks>
+        </member>
+        <member name="P:NDoc.Documenter.LinearHtml.LinearHtmlDocumenterConfig.FilesToInclude">
+            <summary>Gets or sets the FilesToInclude property.</summary>
+            <remarks>Specifies external files that must be included 
+            in the compiled CHM file. Multiple files must be separated by a pipe ('|').</remarks>
+        </member>
+        <member name="T:NDoc.Documenter.LinearHtml.LinearHtmlWorkspace">
+            <summary>
+            Summary description for LatexWorkspace.
+            </summary>
+        </member>
+        <member name="M:NDoc.Documenter.LinearHtml.LinearHtmlWorkspace.#ctor(System.String)">
+            <summary>
+            Manages the location of the documentation build process
+            </summary>
+            <param name="rootDir">The location to create the workspace</param>
+        </member>
         <member name="T:NDoc.Documenter.LinearHtml.LinearHtmlDocumenter">
             <summary>
             This creates a linear (serial, more printable) html file from an ndoc xml file. 
@@ -454,108 +556,6 @@
         </member>
         <member name="P:NDoc.Documenter.LinearHtml.LinearHtmlDocumenter.MainOutputFile">
             <summary>See <see cref="T:NDoc.Core.IDocumenter"/>.</summary>
-        </member>
-        <member name="T:NDoc.Documenter.LinearHtml.LinearHtmlDocumenterInfo">
-            <summary>
-            Information about the Xml Documenter
-            </summary>
-        </member>
-        <member name="M:NDoc.Documenter.LinearHtml.LinearHtmlDocumenterInfo.#ctor">
-            <summary>
-            Creates a new instance of the class
-            </summary>
-        </member>
-        <member name="M:NDoc.Documenter.LinearHtml.LinearHtmlDocumenterInfo.CreateConfig">
-            <summary>
-            See <see cref="M:NDoc.Core.IDocumenterInfo.CreateConfig"/>
-            </summary>
-            <returns>A config instance</returns>
-        </member>
-        <member name="T:NDoc.Documenter.LinearHtml.LinearHtmlDocumenterConfig">
-            <summary>The LinearHtmlDocumenterConfig class.</summary>
-        </member>
-        <member name="M:NDoc.Documenter.LinearHtml.LinearHtmlDocumenterConfig.#ctor(NDoc.Documenter.LinearHtml.LinearHtmlDocumenterInfo)">
-            <summary>Initializes a new instance of the MsdnHelpConfig class.</summary>
-            <remarks>
-            <para>The LinearHTML Documenter creates a single HTML file that includes
-            all of the types and members in your project.</para>
-            </remarks>
-        </member>
-        <member name="M:NDoc.Documenter.LinearHtml.LinearHtmlDocumenterConfig.CreateDocumenter">
-            <summary>
-            Creates an instance of a documenter <see cref="M:NDoc.Core.IDocumenterConfig.CreateDocumenter"/>
-            </summary>
-            <returns>IDocumenter instance</returns>		
-        </member>
-        <member name="P:NDoc.Documenter.LinearHtml.LinearHtmlDocumenterConfig.IncludeTypeMemberDetails">
-            <summary>Gets or sets the IncludeTypeMemberDetails property.</summary>
-            <remarks>Whether or not to put type member (methods, fields, properties, ...) details into the 
-            document.  For fields and properties this means whether or not to include 
-            remarks in the table.  For methods this means whether or not to break out 
-            method details (such as parameters) into separate sub-sections.</remarks>
-        </member>
-        <member name="P:NDoc.Documenter.LinearHtml.LinearHtmlDocumenterConfig.OutputDirectory">
-            <summary>Gets or sets the OutputDirectory property.</summary>
-            <remarks>The directory in which the .html file will be generated.</remarks>
-        </member>
-        <member name="P:NDoc.Documenter.LinearHtml.LinearHtmlDocumenterConfig.MethodParametersInTable">
-            <summary>Gets or sets the MethodParametersInTable property.</summary>
-            <remarks>Whether or not to put method parameter lists 
-            into the same table with the method name.</remarks>
-        </member>
-        <member name="P:NDoc.Documenter.LinearHtml.LinearHtmlDocumenterConfig.TypeIncludeRegexp">
-            <summary>Gets or sets the TypeIncludeRegexp property.</summary>
-            <remarks>A C# regular expression to include types.  If this is specified,
-             only types which match will be included in the output.</remarks>
-        </member>
-        <member name="P:NDoc.Documenter.LinearHtml.LinearHtmlDocumenterConfig.NamespaceExcludeRegexp">
-            <summary>Gets or sets the NamespaceExcludeRegexp property.</summary>
-            <remarks>A C# regular expression to exclude namespaces.</remarks>
-        </member>
-        <member name="P:NDoc.Documenter.LinearHtml.LinearHtmlDocumenterConfig.Title">
-            <summary>Gets or sets the Title property.</summary>
-            <remarks>This is the title displayed at the top of every page.</remarks>
-        </member>
-        <member name="P:NDoc.Documenter.LinearHtml.LinearHtmlDocumenterConfig.IncludeHierarchy">
-            <summary>Gets or sets the IncludeHierarchy property.</summary>
-            <remarks>To include a class hiararchy page for each namespace. 
-            Don't turn it on if your project has a namespace with many types, 
-            as NDoc will become very slow and might crash.</remarks>
-        </member>
-        <member name="P:NDoc.Documenter.LinearHtml.LinearHtmlDocumenterConfig.SortTOCByNamespace">
-            <summary>Gets or sets the SortTOCByNamespace property.</summary>
-            <remarks>Sorts the TOC by namespace name. SplitTOCs is disabled 
-            when this option is selected.</remarks>
-        </member>
-        <member name="P:NDoc.Documenter.LinearHtml.LinearHtmlDocumenterConfig.HeaderHtml">
-            <summary>Gets or sets the HeaderHtml property.</summary>
-            <remarks>Raw HTML that is used as a page header instead of the default blue banner. 
-            "%FILE_NAME%" is dynamically replaced by the name of the file for the current html page. 
-            "%TOPIC_TITLE%" is dynamically replaced by the title of the current page.</remarks>
-        </member>
-        <member name="P:NDoc.Documenter.LinearHtml.LinearHtmlDocumenterConfig.FooterHtml">
-            <summary>Gets or sets the FooterHtml property.</summary>
-            <remarks>Raw HTML that is used as a page footer instead of the default footer.
-            "%FILE_NAME%\" is dynamically replaced by the name of the file for the current html page. 
-            "%ASSEMBLY_NAME%\" is dynamically replaced by the name of the assembly for the current page. 
-            "%ASSEMBLY_VERSION%\" is dynamically replaced by the version of the assembly for the current page. 
-            "%TOPIC_TITLE%\" is dynamically replaced by the title of the current page.</remarks>
-        </member>
-        <member name="P:NDoc.Documenter.LinearHtml.LinearHtmlDocumenterConfig.FilesToInclude">
-            <summary>Gets or sets the FilesToInclude property.</summary>
-            <remarks>Specifies external files that must be included 
-            in the compiled CHM file. Multiple files must be separated by a pipe ('|').</remarks>
-        </member>
-        <member name="T:NDoc.Documenter.LinearHtml.LinearHtmlWorkspace">
-            <summary>
-            Summary description for LatexWorkspace.
-            </summary>
-        </member>
-        <member name="M:NDoc.Documenter.LinearHtml.LinearHtmlWorkspace.#ctor(System.String)">
-            <summary>
-            Manages the location of the documentation build process
-            </summary>
-            <param name="rootDir">The location to create the workspace</param>
         </member>
     </members>
 </doc>
