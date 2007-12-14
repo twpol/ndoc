@@ -29,6 +29,12 @@ using System.Xml.XPath;
 
 namespace NDoc.VisualStudio
 {
+    internal enum ProjectVersion
+    {
+        VS2003,
+        VS2005AndAbove
+    }
+
 	/// <summary>
 	/// Represents a Visual Studio c# project file.
 	/// </summary>
@@ -78,6 +84,7 @@ namespace NDoc.VisualStudio
 		private XPathDocument _ProjectDocument;
 		private XPathNavigator _ProjectNavigator;
         private XmlNamespaceManager _ProjectNamespaceManager;
+        private ProjectVersion _ProjectVersion;
 
 		/// <summary>Reads the project file from the specified path.</summary>
 		/// <param name="path">The path to the project file.</param>
@@ -98,6 +105,7 @@ namespace NDoc.VisualStudio
 				string projectType = "";
                 if ((bool)_ProjectNavigator.Evaluate("boolean(VisualStudioProject)"))
                 {
+                    _ProjectVersion = ProjectVersion.VS2003;
                     if ((bool)_ProjectNavigator.Evaluate("boolean(VisualStudioProject/@ProjectType='Visual C++')"))
                         projectType = "Visual C++";
                     else if ((bool)_ProjectNavigator.Evaluate("boolean(VisualStudioProject/CSHARP/@ProjectType='Local')"))
@@ -105,8 +113,9 @@ namespace NDoc.VisualStudio
                     else if ((bool)_ProjectNavigator.Evaluate("boolean(VisualStudioProject/CSHARP/@ProjectType='Web')"))
                         projectType = "C# Web";
                 }
-                else if ((bool)_ProjectNavigator.Evaluate("boolean(/ns:Project)"))
+                else if ((bool)_ProjectNavigator.Evaluate("boolean(/ns:Project)", _ProjectNamespaceManager))
                 {
+                    _ProjectVersion = ProjectVersion.VS2005AndAbove;
                     if ((bool)_ProjectNavigator.Evaluate("boolean(/ns:Project/ns:PropertyGroup/ns:ProjectType[text()='Local'])", _ProjectNamespaceManager))
                         projectType = "C# Local";
                     else if ((bool)_ProjectNavigator.Evaluate("boolean(/ns:Project/ns:PropertyGroup/ns:ProjectType[text()='Web'])", _ProjectNamespaceManager))
@@ -114,8 +123,7 @@ namespace NDoc.VisualStudio
                 }
                 else
                 {
-                    throw new ApplicationException("Unknown project file. " +
-                        "Please file a bug report and attach the project file for the project: " + Name);
+                    throw new ApplicationException("Unknown project file");
                 }
 				return projectType;
 			}
@@ -126,7 +134,12 @@ namespace NDoc.VisualStudio
 		{
 			get
 			{
-				return (string)_ProjectNavigator.Evaluate("string(/VisualStudioProject/CSHARP/Build/Settings/@AssemblyName)");
+                if (_ProjectVersion == ProjectVersion.VS2003)
+                    return (string)_ProjectNavigator.Evaluate("string(/VisualStudioProject/CSHARP/Build/Settings/@AssemblyName)");
+                else if (_ProjectVersion == ProjectVersion.VS2005AndAbove)
+                    return (string)_ProjectNavigator.Evaluate("string(/ns:Project/ns:PropertyGroup/ns:AssemblyName)", _ProjectNamespaceManager);
+                else
+                    throw new ApplicationException("Couldn't find assembly name");
 			}
 		}
 
@@ -136,7 +149,12 @@ namespace NDoc.VisualStudio
 		{
 			get
 			{
-				return (string)_ProjectNavigator.Evaluate("string(/VisualStudioProject/CSHARP/Build/Settings/@OutputType)");
+                if (_ProjectVersion == ProjectVersion.VS2003)
+                    return (string)_ProjectNavigator.Evaluate("string(/VisualStudioProject/CSHARP/Build/Settings/@OutputType)");
+                else if (_ProjectVersion == ProjectVersion.VS2005AndAbove)
+                    return (string)_ProjectNavigator.Evaluate("string(/ns:Project/ns:PropertyGroup/ns:OutputType)", _ProjectNamespaceManager);
+                else
+                    throw new ApplicationException("Could not find outputtype");
 			}
 		}
 
@@ -179,26 +197,29 @@ namespace NDoc.VisualStudio
 		public ProjectConfig GetConfiguration(string configName)
 		{
 			XPathNavigator navigator = null;
-            XmlNamespaceManager m = new XmlNamespaceManager(_ProjectNavigator.NameTable);
-            m.AddNamespace("proj", "http://schemas.microsoft.com/developer/msbuild/2003");
-            //TODO Solution version identifier
-            //TODO Total rewritting needed
-			XPathNodeIterator nodes = 
-				_ProjectNavigator.Select(
-				String.Format(
-				"/VisualStudioProject/CSHARP/Build/Settings/Config[@Name='{0}']", 
-				configName));
-            if (nodes.Count == 0)
+            XPathNodeIterator nodes = null;
+            if (_ProjectVersion == ProjectVersion.VS2003)
             {
-                nodes = _ProjectNavigator.Select(String.Format(
-                    "/proj:Project/proj:PropertyGroup/@Condition/contains(text(), '{0}')", configName), m);
+                nodes =
+                    _ProjectNavigator.Select(
+                        String.Format("/VisualStudioProject/CSHARP/Build/" + 
+                        "Settings/Config[@Name='{0}']", configName));
             }
-			if (nodes.MoveNext())
-			{
-				navigator = nodes.Current;
-			}
+            else if (_ProjectVersion == ProjectVersion.VS2005AndAbove)
+            {
+                nodes =
+                    _ProjectNavigator.Select(
+                        String.Format("/ns:Project/ns:PropertyGroup/" + 
+                        "@Condition[contains(string(), '{0}')]", configName), _ProjectNamespaceManager);
+            }
+            if (nodes == null)
+            {
+                throw new ApplicationException("Couldn't find configuration");
+            }
+            else if (nodes.MoveNext())
+                navigator = nodes.Current;
 		
-			return new ProjectConfig(navigator);
+			return new ProjectConfig(navigator, _ProjectVersion);
 		}
 
 		/// <summary>Gets the relative path (from the solution directory) to the

@@ -35,10 +35,18 @@ namespace NDoc.VisualStudio
 	public class ProjectConfig
 	{
 		private XPathNavigator _Navigator;
+        private ProjectVersion _ProjectVersion;
+        private XmlNamespaceManager _ProjectNamespaceManager;
 
-		internal ProjectConfig(XPathNavigator navigator)
+		internal ProjectConfig(XPathNavigator navigator, ProjectVersion version)
 		{
 			_Navigator = navigator.Clone();
+            _ProjectVersion = version;
+            if (_ProjectVersion == ProjectVersion.VS2005AndAbove)
+            {
+                _ProjectNamespaceManager = new XmlNamespaceManager(_Navigator.NameTable);
+                _ProjectNamespaceManager.AddNamespace("ns", "http://schemas.microsoft.com/developer/msbuild/2003");
+            }
 		}
 
 		/// <summary>Gets the name of the configuration.</summary>
@@ -57,7 +65,12 @@ namespace NDoc.VisualStudio
 		{
 			get
 			{
-				return (string)_Navigator.Evaluate("string(@OutputPath)");
+                if (_ProjectVersion == ProjectVersion.VS2003)
+                    return (string)_Navigator.Evaluate("string(@OutputPath)");
+                else if (_ProjectVersion == ProjectVersion.VS2005AndAbove)
+                    return (string)_Navigator.Evaluate("string(//ns:OutputPath)", _ProjectNamespaceManager);
+                else
+                    throw new ApplicationException("Couldn't find output path");
 			}
 		}
 
@@ -68,7 +81,12 @@ namespace NDoc.VisualStudio
 		{
 			get
 			{
-				return (string)_Navigator.Evaluate("string(@DocumentationFile)");
+                if (_ProjectVersion == ProjectVersion.VS2003)
+                    return (string)_Navigator.Evaluate("string(@DocumentationFile)");
+                else if (_ProjectVersion == ProjectVersion.VS2005AndAbove)
+                    return (string)_Navigator.Evaluate("string(//ns:DocumentationFile)", _ProjectNamespaceManager);
+                else
+                    throw new ApplicationException("Couldn't documentation file tag");
 			}
 		}
 	}
