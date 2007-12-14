@@ -77,6 +77,7 @@ namespace NDoc.VisualStudio
 
 		private XPathDocument _ProjectDocument;
 		private XPathNavigator _ProjectNavigator;
+        private XmlNamespaceManager _ProjectNamespaceManager;
 
 		/// <summary>Reads the project file from the specified path.</summary>
 		/// <param name="path">The path to the project file.</param>
@@ -84,6 +85,8 @@ namespace NDoc.VisualStudio
 		{
 			_ProjectDocument = new XPathDocument(path);
 			_ProjectNavigator = _ProjectDocument.CreateNavigator();
+            _ProjectNamespaceManager = new XmlNamespaceManager(_ProjectNavigator.NameTable);
+            _ProjectNamespaceManager.AddNamespace("ns", "http://schemas.microsoft.com/developer/msbuild/2003");
 		}
 
 		/// <summary>Gets a string that represents the type of project.</summary>
@@ -93,22 +96,27 @@ namespace NDoc.VisualStudio
 			get
 			{
 				string projectType = "";
-                XmlNamespaceManager m = new XmlNamespaceManager(_ProjectNavigator.NameTable);
-                m.AddNamespace("proj", "http://schemas.microsoft.com/developer/msbuild/2003");
-				if ((bool)_ProjectNavigator.Evaluate("boolean(VisualStudioProject/@ProjectType='Visual C++')"))
-				{
-					projectType = "Visual C++";
-				}
-				else if ((bool)_ProjectNavigator.Evaluate("boolean(VisualStudioProject/CSHARP/@ProjectType='Local')")
-                    || (bool)_ProjectNavigator.Evaluate("boolean(/proj:Project/proj:PropertyGroup/proj:ProjectType[text()='Local'])", m))
-				{
-					projectType = "C# Local";
-				}
-				else if ((bool)_ProjectNavigator.Evaluate("boolean(VisualStudioProject/CSHARP/@ProjectType='Web')")
-                    || (bool)_ProjectNavigator.Evaluate("boolean(/proj:Project/proj:PropertyGroup/proj:ProjectType[text()='Web'])", m))
-				{
-					projectType = "C# Web";
-				}
+                if ((bool)_ProjectNavigator.Evaluate("boolean(VisualStudioProject)"))
+                {
+                    if ((bool)_ProjectNavigator.Evaluate("boolean(VisualStudioProject/@ProjectType='Visual C++')"))
+                        projectType = "Visual C++";
+                    else if ((bool)_ProjectNavigator.Evaluate("boolean(VisualStudioProject/CSHARP/@ProjectType='Local')"))
+                        projectType = "C# Local";
+                    else if ((bool)_ProjectNavigator.Evaluate("boolean(VisualStudioProject/CSHARP/@ProjectType='Web')"))
+                        projectType = "C# Web";
+                }
+                else if ((bool)_ProjectNavigator.Evaluate("boolean(/ns:Project)"))
+                {
+                    if ((bool)_ProjectNavigator.Evaluate("boolean(/ns:Project/ns:PropertyGroup/ns:ProjectType[text()='Local'])", _ProjectNamespaceManager))
+                        projectType = "C# Local";
+                    else if ((bool)_ProjectNavigator.Evaluate("boolean(/ns:Project/ns:PropertyGroup/ns:ProjectType[text()='Web'])", _ProjectNamespaceManager))
+                        projectType = "C# Web";
+                }
+                else
+                {
+                    throw new ApplicationException("Unknown project file. " +
+                        "Please file a bug report and attach the project file for the project: " + Name);
+                }
 				return projectType;
 			}
 		}
