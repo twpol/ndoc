@@ -158,7 +158,7 @@ namespace NDoc.VisualStudio
 
 		private void ReadProjectConfig(TextReader reader)
 		{
-			const string pattern = @"^\t\t(?<projid>\S+)\.(?<solcfg>\S+)\.Build\.\d+ = (?<projcfg>\S+)\|.+";
+			const string pattern = @"^\t\t(?<projid>\S+)\.(?<solcfg>.+)\.Build\.\d+ = (?<projcfg>\S+)\|.+";
 			Regex regex = new Regex(pattern);
 			string line;
 

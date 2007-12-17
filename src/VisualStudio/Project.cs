@@ -113,13 +113,18 @@ namespace NDoc.VisualStudio
                     else if ((bool)_ProjectNavigator.Evaluate("boolean(VisualStudioProject/CSHARP/@ProjectType='Web')"))
                         projectType = "C# Web";
                 }
-                else if ((bool)_ProjectNavigator.Evaluate("boolean(/ns:Project)", _ProjectNamespaceManager))
+                else if ((bool)_ProjectNavigator.Evaluate("boolean(/ns:Project/ns:PropertyGroup/ns:ProjectType)", _ProjectNamespaceManager))
                 {
                     _ProjectVersion = ProjectVersion.VS2005AndAbove;
                     if ((bool)_ProjectNavigator.Evaluate("boolean(/ns:Project/ns:PropertyGroup/ns:ProjectType[text()='Local'])", _ProjectNamespaceManager))
                         projectType = "C# Local";
                     else if ((bool)_ProjectNavigator.Evaluate("boolean(/ns:Project/ns:PropertyGroup/ns:ProjectType[text()='Web'])", _ProjectNamespaceManager))
                         projectType = "C# Web";
+                }
+                else if ((bool)_ProjectNavigator.Evaluate("boolean(/ns:Project/ns:PropertyGroup)", _ProjectNamespaceManager))
+                {
+                    _ProjectVersion = ProjectVersion.VS2005AndAbove;
+                    projectType = "C# Local";
                 }
                 else
                 {
@@ -187,7 +192,12 @@ namespace NDoc.VisualStudio
 		{
 			get
 			{
-				return (string)_ProjectNavigator.Evaluate("string(/VisualStudioProject/CSHARP/Build/Settings/@RootNamespace)");
+                if (_ProjectVersion == ProjectVersion.VS2003)
+                    return (string)_ProjectNavigator.Evaluate("string(/VisualStudioProject/CSHARP/Build/Settings/@RootNamespace)");
+                else if (_ProjectVersion == ProjectVersion.VS2005AndAbove)
+                    return (string)_ProjectNavigator.Evaluate("string(/ns:Project/ns:PropertyGroup/ns:RootNamespace)", _ProjectNamespaceManager);
+                else
+                    throw new ApplicationException("Couldn't find rootnamespace tag");
 			}
 		}
 

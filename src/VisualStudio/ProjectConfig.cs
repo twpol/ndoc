@@ -55,6 +55,7 @@ namespace NDoc.VisualStudio
 		{
 			get
 			{
+                //TODO Return the right name
 				return (string)_Navigator.Evaluate("string(@Name)");
 			}
 		}
