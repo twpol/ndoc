@@ -46,7 +46,7 @@ namespace NDoc.Core
 		/// <returns></returns>
 		public static string GetMemberID(FieldInfo field)
 		{
-			return "F:" + GetFullNamespaceName(field) + "." + field.Name;
+            return "F:" + GetFullNamespaceName(field) + "." + field.Name;
 		}
 
 		/// <summary>
@@ -307,10 +307,27 @@ namespace NDoc.Core
 		/// <returns></returns>
 		public static string GetTypeName(Type type)
 		{
-			// XML Documentation file appends a "@" to reference and out types, not a "&"
-			string result = type.FullName.Replace("&", "@").Replace('+', '#');
+            string result = String.Empty;
+            if (!type.IsGenericType)
+                // XML Documentation file appends a "@" to reference and out types, not a "&"
+                result = type.FullName.Replace("&", "@").Replace('+', '#');
+            else
+            {
+                string param = GetGenericArguments(type.GetGenericArguments());
+                result = type.Name.Substring(0, type.Name.IndexOf("`")) + "<" + param + ">";
+            }
 			return result;
 		}
+
+        private static string GetGenericArguments(Type[] args)
+        {
+            string result = String.Empty;
+            foreach (Type t in args)
+            {
+                result += t.Name + ",";
+            }
+            return result.Substring(0, result.LastIndexOf(","));
+        }
 
 #endif
 
