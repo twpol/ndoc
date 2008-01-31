@@ -548,7 +548,7 @@
 		</xsl:choose>
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="br" mode="slashdoc" doc:group="inline">
+	<xsl:template match="br" mode="slashdoc">
 		<br/>
 	</xsl:template>
 </xsl:transform>
