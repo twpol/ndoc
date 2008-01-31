@@ -3275,7 +3275,8 @@ namespace NDoc.Core.Reflection
 			Type declaringType)
 		{
 #if NET_2_0
-            if (declaringType.HasGenericArguments) declaringType = declaringType.GetGenericTypeDefinition();
+            if (declaringType.GetGenericArguments().Length > 0)
+                declaringType = declaringType.GetGenericTypeDefinition();
 #endif
 			string summary = externalSummaryCache.GetSummary(memberName, declaringType);
 			if (summary.Length > 0)
