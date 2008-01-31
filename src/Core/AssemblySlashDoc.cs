@@ -29,7 +29,9 @@ namespace NDoc.Core
 	[Serializable]
 	public class AssemblySlashDoc : ICloneable
 	{
+        /// <summary>Path to assembly</summary>
 		private FilePath assembly;
+        /// <summary>Path to slashdoc</summary>
 		private FilePath slashDoc;
 
 		/// <overloads>Initializes a new instance of the <see cref="AssemblySlashDoc"/> class.</overloads>
@@ -83,7 +85,7 @@ namespace NDoc.Core
 		/// <summary>
 		/// <see cref="System.ICloneable"/>
 		/// </summary>
-		/// <returns>cloned object</returns>
+		/// <returns>Cloned object</returns>
 		public object Clone()
 		{
 			AssemblySlashDoc ret = new AssemblySlashDoc();
