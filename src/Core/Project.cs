@@ -515,7 +515,7 @@ namespace NDoc.Core
 				_currentConfig = _configs[currentInfo.Name] as IDocumenterConfig;
 
 			IsDirty = false;
-			ProjectFile = "";
+			ProjectFile = null;
 		}
 
 		private void _AssemblySlashDocs_Cleared(object sender, EventArgs e)
