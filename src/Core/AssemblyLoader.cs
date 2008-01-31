@@ -213,6 +213,11 @@ namespace NDoc.Core.Reflection
 			return assy;
 		}
 
+        /// <summary>
+        /// Creates assembly evidence
+        /// </summary>
+        /// <param name="fileName">The assembly filename</param>
+        /// <returns>The new assembly evidence</returns>
 		static Evidence CreateAssemblyEvidence(string fileName)
 		{
 			//HACK: I am unsure whether 'Hash' evidence is required - since this will be difficult to obtain, we will not supply it...
@@ -457,6 +462,11 @@ namespace NDoc.Core.Reflection
 			return null;
 		}
 
+        /// <summary>
+        /// Gets all subdirectories of a directory
+        /// </summary>
+        /// <param name="parentDir">The parent directory</param>
+        /// <returns>Array containing all subdirectories</returns>
 		private string[] GetSubDirectories(string parentDir) 
 		{
 			string[] subdirs = (string[])this.directoryLists[parentDir];
@@ -468,9 +478,6 @@ namespace NDoc.Core.Reflection
 			return subdirs;
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
 		private bool IsAssemblyNameEquivalent(string AssyFullName, string RequiredAssyName)
 		{
 			if (RequiredAssyName.Length < AssyFullName.Length)
