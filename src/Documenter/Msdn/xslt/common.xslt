@@ -36,23 +36,27 @@
 	<xsl:template match="node()|@*|text()" mode="title-row" />
 	<xsl:template match="node()|@*|text()" mode="header-section" />
 	<xsl:template match="node()|@*|text()" mode="after-remarks-section"/>
-	<!-- -->
+	<!-- C# Types -->
 	<xsl:template name="csharp-type">
 		<xsl:param name="runtime-type" />
 		<xsl:variable name="old-type">
 			<xsl:choose>
+        <!-- If it contains a [ remove it -->
 				<xsl:when test="contains($runtime-type, '[')">
 					<xsl:value-of select="substring-before($runtime-type, '[')" />
 				</xsl:when>
+        <!-- If it contains a & remove it -->
 				<xsl:when test="contains($runtime-type, '&amp;')">
 					<xsl:value-of select="substring-before($runtime-type, '&amp;')" />
 				</xsl:when>
+        <!-- Otherwise just the name -->
 				<xsl:otherwise>
 					<xsl:value-of select="$runtime-type" />
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
 		<xsl:variable name="new-type">
+      <!-- Convert known types to short form -->
 			<xsl:choose>
 				<xsl:when test="$old-type='System.Byte'">byte</xsl:when>
 				<xsl:when test="$old-type='Byte'">byte</xsl:when>
@@ -100,7 +104,7 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
-	<!-- -->
+	<!-- Type access modifier -->
 	<xsl:template name="type-access">
 		<xsl:param name="access" />
 		<xsl:param name="type" />
@@ -115,7 +119,7 @@
 			<xsl:otherwise>/* unknown */</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
-	<!-- -->
+	<!-- Method access modifier -->
 	<xsl:template name="method-access">
 		<xsl:param name="access" />
 		<xsl:choose>
@@ -127,7 +131,7 @@
 			<xsl:otherwise>/* unknown */</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
-	<!-- -->
+	<!-- Contract -->
 	<xsl:template name="contract">
 		<xsl:param name="contract" />
 		<xsl:choose>
@@ -780,13 +784,16 @@
 	<!-- -->
 	<xsl:template name="value">
 		<xsl:param name="type" />
+    <!-- Get namespace -->
 		<xsl:variable name="namespace">
 			<xsl:value-of select="concat(../../@name, '.')" />
 		</xsl:variable>
+    <!-- If type contains the namespace, remove namespace -->
 		<xsl:choose>
 			<xsl:when test="contains($type, $namespace)">
 				<xsl:value-of select="substring-after($type, $namespace)" />
 			</xsl:when>
+      <!-- Otherwise just write the type -->
 			<xsl:otherwise>
 				<xsl:call-template name="csharp-type">
 					<xsl:with-param name="runtime-type" select="$type" />
@@ -928,7 +935,7 @@
 			<xsl:text>]</xsl:text>
 		</xsl:if>
 	</xsl:template>
-	<!-- -->
+	<!-- Operator name -->
 	<xsl:template name="operator-name">
 		<xsl:param name="name" />
 		<xsl:param name="from" />
@@ -979,40 +986,39 @@
 			<xsl:when test="$name='op_BitwiseOrAssignment'">Bitwise Or Assignment Operator</xsl:when>
 			<xsl:when test="$name='op_Comma'">Comma Operator</xsl:when>
 			<xsl:when test="$name='op_DivisionAssignment'">Division Assignment Operator</xsl:when>
-			<xsl:when test="$name='op_Implicit'">
+			<!-- If the operator is an implicit conversion operator -->
+      <xsl:when test="$name='op_Implicit'">
 				<xsl:text>Implicit </xsl:text>
-				<!--<xsl:value-of select="$from" />
-				    <xsl:text> to </xsl:text>
-				    <xsl:value-of select="$to" />-->
+        <!-- Remove namespace -->
 				<xsl:call-template name="strip-namespace">
 					<xsl:with-param name="name" select="$from" />
 				</xsl:call-template>
 				<xsl:text> to </xsl:text>
+        <!-- Remove namespace -->
 				<xsl:call-template name="strip-namespace">
 					<xsl:with-param name="name" select="$to" />
 				</xsl:call-template>
-				<!--KSD-->
 				<xsl:text> Conversion</xsl:text>
 			</xsl:when>
+      <!-- If the operator is an explicit conversion operator -->
 			<xsl:when test="$name='op_Explicit'">
 				<xsl:text>Explicit </xsl:text>
-				<!--<xsl:value-of select="$from" />
-				    <xsl:text> to </xsl:text>
-				    <xsl:value-of select="$to" />-->
+        <!-- Remove namespace -->
 				<xsl:call-template name="strip-namespace">
 					<xsl:with-param name="name" select="$from" />
 				</xsl:call-template>
 				<xsl:text> to </xsl:text>
+        <!-- Remove namespace -->
 				<xsl:call-template name="strip-namespace">
 					<xsl:with-param name="name" select="$to" />
 				</xsl:call-template>
-				<!--KSD-->
 				<xsl:text> Conversion</xsl:text>
 			</xsl:when>
+      <!-- Otherwise unknown operator -->
 			<xsl:otherwise>ERROR</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
-	<!-- -->
+	<!-- C# Operator name -->
 	<xsl:template name="csharp-operator-name">
 		<xsl:param name="name" />
 		<xsl:choose>
