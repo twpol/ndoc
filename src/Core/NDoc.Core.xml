@@ -1044,6 +1044,12 @@
             See <see href="http://www.ecma-international.org/publications/standards/Ecma-334.htm">here</see> for further details.
             </remarks>
         </member>
+        <member name="F:NDoc.Core.AssemblySlashDoc.assembly">
+            <summary>Path to assembly</summary>
+        </member>
+        <member name="F:NDoc.Core.AssemblySlashDoc.slashDoc">
+            <summary>Path to slashdoc</summary>
+        </member>
         <member name="M:NDoc.Core.AssemblySlashDoc.#ctor">
             <overloads>Initializes a new instance of the <see cref="T:NDoc.Core.AssemblySlashDoc"/> class.</overloads>
             <summary>Initializes a blank instance of the <see cref="T:NDoc.Core.AssemblySlashDoc"/> class.</summary>
@@ -1058,7 +1064,7 @@
             <summary>
             <see cref="T:System.ICloneable"/>
             </summary>
-            <returns>cloned object</returns>
+            <returns>Cloned object</returns>
         </member>
         <member name="P:NDoc.Core.AssemblySlashDoc.Assembly">
             <summary>
@@ -1958,6 +1964,13 @@
             use Assembly.Load or Assembly.LoadFrom the assembly file locks.
             This method doesn't lock the assembly file.</remarks>
         </member>
+        <member name="M:NDoc.Core.Reflection.AssemblyLoader.CreateAssemblyEvidence(System.String)">
+            <summary>
+            Creates assembly evidence
+            </summary>
+            <param name="fileName">The assembly filename</param>
+            <returns>The new assembly evidence</returns>
+        </member>
         <member name="M:NDoc.Core.Reflection.AssemblyLoader.ResolveAssembly(System.Object,System.ResolveEventArgs)">
             <summary> 
             Resolves the location and loads an assembly not found by the system.
@@ -1995,10 +2008,12 @@
             <param name="includeSubDirs">true, search subdirectories.</param>
             <returns>The assembly, or null if not found.</returns>
         </member>
-        <member name="M:NDoc.Core.Reflection.AssemblyLoader.IsAssemblyNameEquivalent(System.String,System.String)">
+        <member name="M:NDoc.Core.Reflection.AssemblyLoader.GetSubDirectories(System.String)">
             <summary>
-            
+            Gets all subdirectories of a directory
             </summary>
+            <param name="parentDir">The parent directory</param>
+            <returns>Array containing all subdirectories</returns>
         </member>
         <member name="P:NDoc.Core.Reflection.AssemblyLoader.SearchedDirectories">
             <summary>
@@ -2062,6 +2077,14 @@
             
             </summary>
             <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NDoc.Core.MemberID.GetTypeName(System.Type,System.Boolean)">
+            <summary>
+            
+            </summary>
+            <param name="type"></param>
+            <param name="UsePositionalNumber"></param>
             <returns></returns>
         </member>
         <member name="T:NDoc.Core.BaseDocumenterInfo">
