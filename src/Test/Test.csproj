@@ -101,6 +101,7 @@
     <Compile Include="Extensibility.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Generics.cs" />
     <Compile Include="InternalStuff.cs">
       <SubType>Code</SubType>
     </Compile>
