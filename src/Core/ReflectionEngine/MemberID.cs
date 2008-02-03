@@ -195,7 +195,6 @@ namespace NDoc.Core
         /// <param name="type"></param>
         /// <param name="UsePositionalNumber"></param>
         /// <returns></returns>
-        //TODO Check if this is relevant, maybe just the first type name
 		public static string GetTypeName(Type type, bool UsePositionalNumber)
         {
             string result = "";
@@ -338,11 +337,15 @@ namespace NDoc.Core
             StringBuilder argList = new StringBuilder();
             int i = 0;
 
+            //Append number of generic parameters to be able to link to return type
+            argList.Append('`');
+            argList.Append(type.GetGenericArguments().Length);
+
             foreach (Type argType in type.GetGenericArguments())
             {
                 if (i == 0)
                 {
-                    argList.Append('{');
+                    argList.Append('<');
                 }
                 else
                 {
@@ -355,8 +358,9 @@ namespace NDoc.Core
                 }
                 else if (argType.ContainsGenericParameters)
                 {
-                    argList.Append('`');
-                    argList.Append(argType.GenericParameterPosition.ToString());
+                    /*argList.Append('`');
+                    argList.Append(argType.GenericParameterPosition.ToString());*/
+                    argList.Append(argType.Name);
                 }
                 else
                 {
@@ -368,7 +372,7 @@ namespace NDoc.Core
 
             if (i > 0)
             {
-                argList.Append('}');
+                argList.Append('>');
             }
 
             // XML Documentation file appends a "@" to reference and out types, not a "&"

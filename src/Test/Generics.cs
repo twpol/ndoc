@@ -50,11 +50,25 @@ namespace NDoc.Test.Generics
         public Generic_Multiple<string, string, string> test;
 
         /// <summary>
+        /// Property test with generic return value and asymmetric accessor accessibility
+        /// </summary>
+        public Generic_Single<int> Test
+        {
+            get
+            {
+                return null;
+            }
+            private set
+            {
+            }
+        }
+
+        /// <summary>
         /// Generic delegate
         /// </summary>
         /// <typeparam name="T">Type T</typeparam>
         /// <param name="item">The item parameter</param>
-        public delegate void GenericDelegate<T>(T item);
+        public delegate void GenericDelegate<T>(T item) where T : class;
 
         /// <summary>
         /// Another generic delegate with a return value
@@ -90,7 +104,7 @@ namespace NDoc.Test.Generics
         /// <typeparam name="T">Type</typeparam>
         /// <param name="test">Test parameter</param>
         /// <returns>An instance of Generic_ClassCon</returns>
-        public Generic_Single<T> GenericMeth3<T>(T test)
+        public Generic_Single<T> GenericMeth3<T>(Generic_Single<int> test)
         {
             return null;
         }

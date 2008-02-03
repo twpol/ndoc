@@ -129,7 +129,14 @@
         <xsl:when test="$old-type='System.Object'">object</xsl:when>
         <xsl:when test="$old-type='Object'">object</xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="$old-type" />
+          <xsl:choose>
+            <xsl:when test="contains($old-type, '&lt;')">
+              <xsl:value-of select="concat(substring-before(@returnType, '`'), string('&lt;'), substring-after(@returnType, '&lt;'))"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="$old-type" />
+            </xsl:otherwise>
+          </xsl:choose>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>

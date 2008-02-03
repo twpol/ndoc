@@ -506,15 +506,23 @@
     </xsl:choose>
     <xsl:text>&#160;{</xsl:text>
     <!-- If property has a get -->
-    <xsl:if test="@get='true'">
+    <xsl:if test="@get!='false'">
+      <xsl:if test="@get != 'public'">
+        <xsl:value-of select="@get"/>
+        <xsl:text>&#160;</xsl:text>
+      </xsl:if>
       <xsl:text>get;</xsl:text>
       <!-- If property has a set -->
-      <xsl:if test="@set='true'">
+      <xsl:if test="@set!='false'">
         <xsl:text>&#160;</xsl:text>
       </xsl:if>
     </xsl:if>
     <!-- If property has a set -->
-    <xsl:if test="@set='true'">
+    <xsl:if test="@set!='false'">
+      <xsl:if test="@set != 'public'">
+        <xsl:value-of select="@set"/>
+        <xsl:text>&#160;</xsl:text>
+      </xsl:if>
       <xsl:text>set;</xsl:text>
     </xsl:if>
     <xsl:text>}</xsl:text>
@@ -540,7 +548,7 @@
         </xsl:choose>
         <xsl:choose>
           <!-- If this should be written in long mode, write a link to the datatype -->
-          <xsl:when test="$version='long'">
+          <xsl:when test="$version='long' and contains(@type, '.')">
             <a>
               <xsl:attribute name="href">
                 <xsl:call-template name="get-filename-for-type-name">

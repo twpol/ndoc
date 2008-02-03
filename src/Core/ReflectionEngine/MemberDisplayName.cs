@@ -58,7 +58,6 @@ namespace NDoc.Core
 #if NET_2_0
         private static string GetTypeDisplayName(Type type)
         {
-            //if (type.HasGenericArguments) type = type.GetGenericTypeDefinition();
             if (type.ContainsGenericParameters)
             {
                 String result;
