@@ -78,6 +78,11 @@ namespace NDoc.Test
 		/// <summary>Holds a static <c>int</c> value.</summary>
 		public static int StaticField;
 
+        /// <summary>
+        /// Class Field, test of link to return type
+        /// </summary>
+        public Class ClassField;
+
 		/// <summary>Gets a value of <see cref="Property"/>.</summary>
 		/// <remarks>Gets a value of <see cref="this"/>.</remarks>
 		public int Property

@@ -130,7 +130,7 @@
         <xsl:when test="$old-type='Object'">object</xsl:when>
         <xsl:otherwise>
           <xsl:choose>
-            <xsl:when test="contains($old-type, '&lt;')">
+            <xsl:when test="contains($old-type, '`')">
               <xsl:value-of select="concat(substring-before(@returnType, '`'), string('&lt;'), substring-after(@returnType, '&lt;'))"/>
             </xsl:when>
             <xsl:otherwise>
@@ -604,7 +604,7 @@
       <xsl:value-of select="@name" />
     </a>
   </xsl:template>
-  <!-- -->
+  <!-- Remarks Section -->
   <xsl:template name="remarks-section">
     <xsl:if test="documentation/remarks">
       <h4 class="dtH4">Remarks</h4>
@@ -622,7 +622,7 @@
       <xsl:apply-templates select="documentation/node()" mode="remarks-section" />
     </xsl:if>
   </xsl:template>
-  <!-- -->
+  <!-- Value Section -->
   <xsl:template name="value-section">
     <xsl:if test="documentation/value">
       <h4 class="dtH4">Property Value</h4>
@@ -632,7 +632,7 @@
       <xsl:apply-templates select="documentation/node()" mode="value-section" />
     </xsl:if>
   </xsl:template>
-  <!-- -->
+  <!-- Events Section -->
   <xsl:template name="events-section">
     <xsl:if test="documentation/event">
       <h4 class="dtH4">Events</h4>
@@ -661,7 +661,7 @@
       <xsl:apply-templates select="documentation/node()" mode="events-section" />
     </xsl:if>
   </xsl:template>
-  <!-- -->
+  <!-- Exceptions Sectio -->
   <xsl:template name="exceptions-section">
     <xsl:if test="documentation/exception">
       <h4 class="dtH4">Exceptions</h4>
@@ -690,7 +690,7 @@
       <xsl:apply-templates select="documentation/node()" mode="exceptions-section" />
     </xsl:if>
   </xsl:template>
-  <!-- -->
+  <!-- Thread safety section -->
   <xsl:template name="thread-safety-section">
     <xsl:choose>
       <xsl:when test="documentation/threadsafety">
@@ -702,6 +702,7 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
+  <!-- Threadsafty text-->
   <xsl:template match="threadsafety">
     <H4 class="dtH4">Thread Safety</H4>
     <xsl:choose>
@@ -730,7 +731,7 @@
     <xsl:apply-templates select="node()" mode="slashdoc" />
     <xsl:apply-templates select="." mode="thread-safety-section" />
   </xsl:template>
-  <!-- -->
+  <!-- Example section -->
   <xsl:template name="example-section">
     <xsl:if test="documentation/example">
       <h4 class="dtH4">Example</h4>
@@ -740,7 +741,7 @@
       <xsl:apply-templates select="documentation/node()" mode="example-section" />
     </xsl:if>
   </xsl:template>
-  <!-- -->
+  <!-- Enumeration members section -->
   <xsl:template name="enumeration-members-section">
     <xsl:if test="field">
       <xsl:variable name="asflags">
@@ -800,7 +801,7 @@
       <xsl:apply-templates select="documentation/node()" mode="enumeration-members-section" />
     </xsl:if>
   </xsl:template>
-  <!-- -->
+  <!-- Get language -->
   <xsl:template name="get-lang">
     <xsl:param name="lang" />
     <xsl:choose>
@@ -812,7 +813,7 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-  <!-- get-a-href -->
+  <!-- Get a link from a cref -->
   <xsl:template name="get-a-href">
     <xsl:param name="cref" />
     <xsl:variable name="href" select="string(NUtil:GetHRef($cref))" />
@@ -879,7 +880,7 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-  <!-- -->
+  <!-- HTML Head -->
   <xsl:template name="html-head">
     <xsl:param name="title" />
     <head>
@@ -893,7 +894,7 @@
       <xsl:apply-templates select="/ndoc" mode="header-section" />
     </head>
   </xsl:template>
-  <!-- -->
+  <!-- Title row -->
   <xsl:template name="title-row">
     <xsl:param name="type-name" />
     <div id="nsbanner">
@@ -923,7 +924,7 @@
       <xsl:apply-templates select="documentation/node()" mode="title-row" />
     </div>
   </xsl:template>
-  <!-- -->
+  <!-- Footer row -->
   <xsl:template name="footer-row">
     <xsl:param name="type-name" />
     <xsl:variable name="assembly-name">
@@ -962,6 +963,7 @@
       </div>
     </xsl:if>
   </xsl:template>
+  <!-- Preliminary section -->
   <xsl:template name="preliminary-section">
     <p class="topicstatus">
       <xsl:choose>
@@ -978,7 +980,7 @@
     </p>
     <xsl:apply-templates select="documentation/node()" mode="preliminary-section" />
   </xsl:template>
-  <!-- -->
+  <!-- Copyright notice -->
   <xsl:template name="copyright-notice">
     <xsl:variable name="copyright-text">
       <xsl:value-of select="/ndoc/copyright/@text" />
@@ -997,7 +999,7 @@
       </a>
     </xsl:if>
   </xsl:template>
-  <!-- -->
+  <!-- Generated from assembly version -->
   <xsl:template name="generated-from-assembly-version">
     <xsl:variable name="assembly-name">
       <xsl:value-of select="ancestor-or-self::assembly/./@name" />
@@ -1127,7 +1129,7 @@
       <xsl:otherwise>ERROR</xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-  <!-- -->
+  <!-- Get namespace -->
   <xsl:template name="get-namespace">
     <xsl:param name="name" />
     <xsl:param name="namespace" />
@@ -1143,7 +1145,7 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-  <!-- -->
+  <!-- Strip namespace -->
   <xsl:template name="strip-namespace">
     <xsl:param name="name" />
     <xsl:choose>
@@ -1157,7 +1159,7 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-  <!-- -->
+  <!-- Requirements section -->
   <xsl:template name="requirements-section">
     <xsl:if test="documentation/permission">
       <h4 class="dtH4">Requirements</h4>
@@ -1183,7 +1185,7 @@
       <xsl:apply-templates select="documentation/node()" mode="requirements-section" />
     </xsl:if>
   </xsl:template>
-  <!-- -->
+  <!-- Feedback email -->
   <xsl:template match="feedbackEmail">
     <xsl:param name="page" />
     <xsl:variable name="href">

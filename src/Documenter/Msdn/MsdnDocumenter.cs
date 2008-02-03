@@ -745,7 +745,11 @@ namespace NDoc.Documenter.Msdn
 
 		private void MakeHtmlForEnumerationOrDelegate(WhichType whichType, XmlNode typeNode)
 		{
-			string typeName = typeNode.Attributes["name"].Value;
+			string typeName;
+            if (whichType == WhichType.Delegate)
+                typeName = typeNode.Attributes["displayName"].Value;
+            else
+                typeName = typeNode.Attributes["name"].Value;
 			string typeID = typeNode.Attributes["id"].Value;
 			string fileName = GetFilenameForType(typeNode);
 

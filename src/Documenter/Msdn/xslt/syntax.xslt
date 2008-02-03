@@ -359,11 +359,11 @@
           <a>
             <xsl:attribute name="href">
               <xsl:call-template name="get-filename-for-type-name">
-                <xsl:with-param name="type-name" select="@type" />
+                <xsl:with-param name="type-name" select="substring-before(@type, '&lt;')" />
               </xsl:call-template>
             </xsl:attribute>
             <xsl:call-template name="get-datatype">
-              <xsl:with-param name="datatype" select="substring-before(@type, '{')" />
+              <xsl:with-param name="datatype" select="substring-before(@type, '`')" />
             </xsl:call-template>
           </a>
           <xsl:text>&lt;</xsl:text>
@@ -427,16 +427,35 @@
     <xsl:choose>
       <!-- If we shoule write links to types -->
       <xsl:when test="$link-types">
-        <a>
-          <xsl:attribute name="href">
-            <xsl:call-template name="get-filename-for-type-name">
-              <xsl:with-param name="type-name" select="@type" />
-            </xsl:call-template>
-          </xsl:attribute>
-          <xsl:call-template name="value">
-            <xsl:with-param name="type" select="@type" />
-          </xsl:call-template>
-        </a>
+        <xsl:choose>
+          <xsl:when test="contains(@type, '&lt;')">
+            <a>
+              <xsl:attribute name="href">
+                <xsl:call-template name="get-filename-for-type-name">
+                  <xsl:with-param name="type-name" select="substring-before(@type, '&lt;')" />
+                </xsl:call-template>
+              </xsl:attribute>
+              <xsl:call-template name="value">
+                <xsl:with-param name="type" select="substring-before(@type, '`')" />
+              </xsl:call-template>
+            </a>
+            <xsl:text>&lt;</xsl:text>
+            <xsl:call-template name="generic-field"/>
+            <xsl:text>&gt;</xsl:text>
+          </xsl:when>
+          <xsl:otherwise>
+            <a>
+              <xsl:attribute name="href">
+                <xsl:call-template name="get-filename-for-type-name">
+                  <xsl:with-param name="type-name" select="@type" />
+                </xsl:call-template>
+              </xsl:attribute>
+              <xsl:call-template name="value">
+                <xsl:with-param name="type" select="@type" />
+              </xsl:call-template>
+            </a>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:when>
       <!-- Otherwise just write the type of the property -->
       <xsl:otherwise>

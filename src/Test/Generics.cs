@@ -47,7 +47,7 @@ namespace NDoc.Test.Generics
         /// <summary>
         /// Test of generic field
         /// </summary>
-        public Generic_Multiple<string, string, string> test;
+        public Generic_Multiple<string, string, string> test_field;
 
         /// <summary>
         /// Property test with generic return value and asymmetric accessor accessibility
