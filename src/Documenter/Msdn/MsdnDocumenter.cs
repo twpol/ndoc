@@ -477,8 +477,8 @@ namespace NDoc.Documenter.Msdn
 				{
 					string typeId = typeNode.Attributes["id"].Value;
 					fileNames[typeId] = GetFilenameForType(typeNode);
-					elemNames[typeId] = typeNode.Attributes["name"].Value;
-
+					elemNames[typeId] = typeNode.Attributes["displayName"].Value;
+                    //TODO The rest should also use displayName
 					XmlNodeList members = typeNode.SelectNodes("*[@id]");
 					foreach (XmlElement memberNode in members)
 					{
@@ -506,11 +506,11 @@ namespace NDoc.Documenter.Msdn
 								break;
 							case "operator":
 								fileNames[id] = GetFilenameForOperator(memberNode);
-								elemNames[id] = memberNode.Attributes["name"].Value;
+                                elemNames[id] = memberNode.Attributes["name"].Value;
 								break;
 							case "event":
 								fileNames[id] = GetFilenameForEvent(memberNode);
-								elemNames[id] = memberNode.Attributes["name"].Value;
+                                elemNames[id] = memberNode.Attributes["name"].Value;
 								break;
 						}
 					}
@@ -760,7 +760,7 @@ namespace NDoc.Documenter.Msdn
 			WhichType whichType,
 			XmlNode typeNode)
 		{
-			string typeName = typeNode.Attributes["name"].Value;
+			string typeName = typeNode.Attributes["displayName"].Value;
 			string typeID = typeNode.Attributes["id"].Value;
 			string fileName = GetFilenameForType(typeNode);
 
@@ -815,7 +815,7 @@ namespace NDoc.Documenter.Msdn
 			//string        typeID;
 			string        fileName;
 
-			typeName = typeNode.Attributes["name"].Value;
+			typeName = typeNode.Attributes["displayName"].Value;
 			//typeID = typeNode.Attributes["id"].Value;
 			constructorNodes = typeNode.SelectNodes("constructor[@contract!='Static']");
 

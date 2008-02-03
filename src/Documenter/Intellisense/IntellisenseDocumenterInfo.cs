@@ -17,7 +17,7 @@ namespace NDoc.Documenter.Intellisense
 		}
 
 		/// <summary>
-		/// See <see cref="IDocumenterInfo.CreateConfig"/>
+		/// See <see cref="IDocumenterInfo.CreateConfig()"/>
 		/// </summary>
 		/// <returns>A config instance</returns>
 		public override IDocumenterConfig CreateConfig()

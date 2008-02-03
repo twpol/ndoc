@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Globalization;
@@ -31,7 +32,7 @@ using System.ComponentModel;
 
 namespace NDoc.Core.Reflection
 {
-	/// <summary>
+    /// <summary>
 	/// Summary description for ReflectionEngine.
 	/// </summary>
 	public class ReflectionEngine : MarshalByRefObject
@@ -44,21 +45,17 @@ namespace NDoc.Core.Reflection
 		}
 
 		ReflectionEngineParameters rep;
-					
-		AssemblyLoader			assemblyLoader;
-
-		AssemblyXmlDocCache		assemblyDocCache;
+		AssemblyLoader assemblyLoader;
+		AssemblyXmlDocCache assemblyDocCache;
 		ExternalXmlSummaryCache	externalSummaryCache;
 		Hashtable notEmptyNamespaces;
 		Hashtable documentedTypes;
-
 		ImplementsCollection implementations;
 		TypeHierarchy derivedTypes;
 		TypeHierarchy interfaceImplementingTypes;
 		NamespaceHierarchyCollection namespaceHierarchies;
 		TypeHierarchy baseInterfaces;
 		AttributeUsageDisplayFilter attributeFilter;
-
 
 		/// <summary>
 		/// Gets the namespaces from assembly.
@@ -1146,6 +1143,12 @@ namespace NDoc.Core.Reflection
 			writer.WriteAttributeString("id", memberName);
 			writer.WriteAttributeString("access", GetTypeAccessValue(type));
 
+            //Generic support
+            if (type.ContainsGenericParameters)
+            {
+                writer.WriteAttributeString("genericconstraints", GetGenericConstraints(type));
+            }
+
 			if (hiding)
 			{
 				writer.WriteAttributeString("hiding", "true");
@@ -1989,6 +1992,18 @@ namespace NDoc.Core.Reflection
 
 		#region Members
 
+        private void WriteGenericFieldArguments(Type type, XmlWriter writer)
+        {
+            foreach (Type t in type.GetGenericArguments())
+            {
+                writer.WriteStartElement("genericargument");
+                writer.WriteAttributeString("name", MemberID.GetTypeName(t, false));
+                if (t.IsGenericType)
+                    WriteGenericFieldArguments(t, writer);
+                writer.WriteEndElement();
+            }
+        }
+
 		/// <summary>Writes XML documenting a field.</summary>
 		/// <param name="writer">XmlWriter to write on.</param>
 		/// <param name="field">Field to document.</param>
@@ -2018,7 +2033,8 @@ namespace NDoc.Core.Reflection
 #else
 			writer.WriteAttributeString("type", MemberID.GetTypeName(t));
 #endif
-			writer.WriteAttributeString("valueType", t.IsValueType.ToString().ToLower());
+            
+            writer.WriteAttributeString("valueType", t.IsValueType.ToString().ToLower());
 
 			bool inherited = (field.DeclaringType != field.ReflectedType);
 			if (inherited)
@@ -2056,6 +2072,11 @@ namespace NDoc.Core.Reflection
 					writer.WriteAttributeString("value", fieldValue);
 				}
 			}
+
+            if (t.IsGenericType)
+            {
+                WriteGenericFieldArguments(t, writer);
+            }
 
 			if (inherited)
 			{
@@ -2822,6 +2843,60 @@ namespace NDoc.Core.Reflection
 
 		#endregion
 
+        private string GetGenericConstraints(Type type)
+        {
+            string retval = String.Empty;
+            List<string> retList = new List<string>();
+            Type[] args = type.GetGenericTypeDefinition().GetGenericArguments();
+            foreach(Type t in args)
+            {
+                GenericParameterAttributes constraints = t.GenericParameterAttributes
+                    & GenericParameterAttributes.SpecialConstraintMask;
+                Type[] specificType = t.GetGenericParameterConstraints();
+                if(constraints != GenericParameterAttributes.None || specificType.Length > 0)
+                    retList.Add("where " + t.Name + " : ");
+                //struct constraint
+                if (t.IsValueType)
+                {
+                    retList.Add("struct");
+                }
+                //class constraint
+                if ((constraints & GenericParameterAttributes.ReferenceTypeConstraint) != 0)
+                    retList.Add("class");
+                //specific classes, interfaces or other template constraint
+                if (specificType.Length > 0)
+                {
+                    for (int i = 0; i < specificType.Length; i++)
+                    {
+                        string name;
+                        if ((name = specificType[i].Name) != "ValueType")
+                        {
+                            retList.Add(name);
+                        }
+                    }
+                }
+                //new() constraint always comes last
+                if (!t.IsValueType && (constraints & GenericParameterAttributes.DefaultConstructorConstraint) != 0)
+                    retList.Add("new()");
+            }
+            for (int i = 0; i < retList.Count; i++)
+            {
+                if (!retList[i].Contains("where"))
+                {
+                    retval += retList[i];
+                    if (retList.Count > i + 1)
+                    {
+                        if (!retList[i + 1].Contains("where"))
+                            retval += ", ";
+                        else
+                            retval += " ";
+                    }
+                }
+                else
+                    retval += retList[i];
+            }
+            return retval;
+        }
 
 		#region Enumeration Values
 

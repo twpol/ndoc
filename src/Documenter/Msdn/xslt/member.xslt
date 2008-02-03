@@ -38,11 +38,11 @@
 				<xsl:otherwise>Constructor</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
-		<xsl:variable name="memberName" select="@name" />
+		<xsl:variable name="memberName" select="@displayName" />
 		<html dir="LTR">
 			<xsl:call-template name="html-head">
 				<xsl:with-param name="title">
-					<xsl:value-of select="../@name" />
+					<xsl:value-of select="../@displayName" />
 					<xsl:if test="local-name()='method'">
 						<xsl:text>.</xsl:text>
 						<xsl:value-of select="@name" />
@@ -50,7 +50,7 @@
 					<xsl:text>&#32;</xsl:text>
 					<xsl:value-of select="$childType" />
 					<xsl:if test="local-name()!='operator'">
-					  <xsl:if test="count(parent::node()/*[@name=$memberName]) &gt; 1">
+					  <xsl:if test="count(parent::node()/*[@displayName=$memberName]) &gt; 1">
 						  <xsl:text>&#32;</xsl:text>
 						  <xsl:call-template name="get-param-list" />
 					  </xsl:if>
@@ -60,16 +60,16 @@
 			<body id="bodyID" class="dtBODY">
 				<xsl:call-template name="title-row">
 					<xsl:with-param name="type-name">
-						<xsl:value-of select="../@name" />
+						<xsl:value-of select="../@displayName" />
 						<xsl:if test="local-name()='method'">
 							<xsl:text>.</xsl:text>
-							<xsl:value-of select="@name" />
+							<xsl:value-of select="@displayName" />
 						</xsl:if>
 						<xsl:text>&#160;</xsl:text>
 						<xsl:value-of select="$childType" />
 						<xsl:text>&#160;</xsl:text>
 					  <xsl:if test="local-name()!='operator'">
-						  <xsl:if test="count(parent::node()/*[@name=$memberName]) &gt; 1">
+						  <xsl:if test="count(parent::node()/*[@displayName=$memberName]) &gt; 1">
 							  <xsl:call-template name="get-param-list" />
 						  </xsl:if>
 						</xsl:if>

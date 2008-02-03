@@ -39,7 +39,8 @@
 								<xsl:with-param name="type-name" select="$list[$last]/@type" />
 							</xsl:call-template>
 						</xsl:attribute>
-						<xsl:value-of select="substring-after($list[$last]/@id, ':' )" />
+            <!--<xsl:value-of select="substring-after($list[$last]/@id, ':' )" />-->
+            <xsl:value-of select="$list[$last]/@displayName" />
 					</a>
 				</xsl:when>
 				<xsl:otherwise>
@@ -53,11 +54,13 @@
 										<xsl:with-param name="id" select="$list[$last]/@id" />
 									</xsl:call-template>
 								</xsl:attribute>
-								<xsl:value-of select="substring-after($list[$last]/@id, ':' )" />
+								<!--<xsl:value-of select="substring-after($list[$last]/@id, ':' )" />-->
+                <xsl:value-of select="$list[$last]/@displayName" />
 							</a>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of select="substring-after($list[$last]/@id, ':' )" />
+              <!--<xsl:value-of select="substring-after($list[$last]/@id, ':' )" />-->
+              <xsl:value-of select="$list[$last]/@displayName" />
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:otherwise>
@@ -104,11 +107,11 @@
 		<xsl:param name="type" />
 		<html dir="LTR">
 			<xsl:call-template name="html-head">
-				<xsl:with-param name="title" select="concat(@name, ' ', $type)" />
+				<xsl:with-param name="title" select="concat(@displayName, ' ', $type)" />
 			</xsl:call-template>
 			<body id="bodyID" class="dtBODY">
 				<xsl:call-template name="title-row">
-					<xsl:with-param name="type-name" select="concat(@name, ' ', $type)" />
+					<xsl:with-param name="type-name" select="concat(@displayName, ' ', $type)" />
 				</xsl:call-template>
 				<div id="nstext">
 					<xsl:call-template name="summary-section" />
@@ -119,7 +122,7 @@
 							</xsl:call-template>
 						</xsl:variable>
 						<xsl:if test="constructor|field|property|method|operator|event">
-							<p>For a list of all members of this type, see <a href="{$members-href}"><xsl:value-of select="@name" /> Members</a>.</p>
+							<p>For a list of all members of this type, see <a href="{$members-href}"><xsl:value-of select="@displayName" /> Members</a>.</p>
 						</xsl:if>
 					</xsl:if>
 					<xsl:if test="local-name()='enumeration' and @flags">
@@ -192,7 +195,7 @@
 										<xsl:with-param name="count" select="$typeIndent+1" />
 									</xsl:call-template>
 									<b>
-										<xsl:value-of select="substring-after( @id, ':' )" />
+										<xsl:value-of select="@displayName" />
 									</b>
 									<xsl:if test="derivedBy">
 										<xsl:variable name="derivedTypeIndent" select="$typeIndent+2" />
@@ -209,7 +212,7 @@
 																<xsl:with-param name="id" select="@id" />
 															</xsl:call-template>
 														</xsl:attribute>
-														<xsl:value-of select="substring-after(@id, ':' )" />
+														<xsl:value-of select="@displayName" />
 													</a>
 												</xsl:for-each>
 											</xsl:when>
@@ -242,6 +245,10 @@
 						<xsl:call-template name="parameter-section" />
 						<xsl:call-template name="returnvalue-section" />
 					</xsl:if>
+          <!-- Generic parameter section -->
+          <xsl:if test="documentation/typeparam">
+            <xsl:call-template name="generictypeparam-section" />
+          </xsl:if>
 					<!-- only classes and structures get a thread safety section -->
 					<xsl:if test="local-name() = 'class' or local-name() = 'structure'">
 						<xsl:call-template name="thread-safety-section" />

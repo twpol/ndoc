@@ -43,7 +43,7 @@
 									<th width="50%">Description</th>
 								</tr>
 								<xsl:apply-templates select="assembly/module/namespace[@name=$namespace]/class">
-									<xsl:sort select="@name" />
+									<xsl:sort select="@displayName" />
 								</xsl:apply-templates>
 							</table>
 						</div>
@@ -128,7 +128,7 @@
 							<xsl:with-param name="id" select="@id" />
 						</xsl:call-template>
 					</xsl:attribute>
-					<xsl:value-of select="@name" />
+					<xsl:value-of select="@displayName" />
 				</a>
 			</td>
 			<td width="50%">

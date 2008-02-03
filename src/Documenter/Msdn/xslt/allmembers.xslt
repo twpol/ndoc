@@ -12,12 +12,12 @@
 		<xsl:param name="type" />
 		<html dir="LTR">
 			<xsl:call-template name="html-head">
-				<xsl:with-param name="title" select="concat(@name, ' Members')" />
+				<xsl:with-param name="title" select="concat(@displayName, ' Members')" />
 			</xsl:call-template>
 			<body id="bodyID" class="dtBODY">
 				<xsl:call-template name="title-row">
 					<xsl:with-param name="type-name">
-						<xsl:value-of select="@name" /> Members
+						<xsl:value-of select="@displayName" /> Members
 					</xsl:with-param>
 				</xsl:call-template>
 				<div id="nstext">
@@ -28,7 +28,7 @@
 									<xsl:with-param name="id" select="@id" />
 								</xsl:call-template>
 							</xsl:attribute>
-							<xsl:value-of select="@name" />
+							<xsl:value-of select="@displayName" />
 							<xsl:text> overview</xsl:text>
 						</a>
 					</p>
@@ -273,7 +273,7 @@
 								<xsl:attribute name="href">
 									<xsl:call-template name="get-filename-for-current-constructor-overloads" />
 								</xsl:attribute>
-								<xsl:value-of select="../@name" />
+								<xsl:value-of select="../@displayName" />
 							</a>
 						</td>
 						<td width="50%">
@@ -286,7 +286,7 @@
 								</xsl:when>
 								<xsl:otherwise>
 									<xsl:text>Initializes a new instance of the </xsl:text>
-									<xsl:value-of select="../@name" />
+									<xsl:value-of select="../@displayName" />
 									<xsl:text> class.</xsl:text>
 								</xsl:otherwise>
 							</xsl:choose>
@@ -315,7 +315,7 @@
 								<xsl:attribute name="href">
 									<xsl:call-template name="get-filename-for-current-constructor" />
 								</xsl:attribute>
-								<xsl:value-of select="../@name" />
+								<xsl:value-of select="../@displayName" />
 								<xsl:text> Constructor</xsl:text>
 							</a>
 						</td>

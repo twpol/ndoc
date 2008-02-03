@@ -216,7 +216,7 @@
         </member>
         <member name="M:NDoc.Documenter.Intellisense.IntellisenseDocumenterInfo.CreateConfig">
             <summary>
-            See <see cref="M:NDoc.Core.IDocumenterInfo.CreateConfig(NDoc.Core.Project)"/>
+            See <see cref="M:NDoc.Core.IDocumenterInfo.CreateConfig"/>
             </summary>
             <returns>A config instance</returns>
         </member>

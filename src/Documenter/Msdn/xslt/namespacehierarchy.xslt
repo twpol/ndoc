@@ -91,7 +91,7 @@
 					</xsl:attribute>
 				</xsl:otherwise>
 			</xsl:choose>
-			<xsl:value-of select="substring-after(@id, ':')" />
+			<xsl:value-of select="@displayName" />
 		</a>
 	</xsl:template>
 	<!-- -->

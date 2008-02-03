@@ -195,6 +195,7 @@ namespace NDoc.Core
         /// <param name="type"></param>
         /// <param name="UsePositionalNumber"></param>
         /// <returns></returns>
+        //TODO Check if this is relevant, maybe just the first type name
 		public static string GetTypeName(Type type, bool UsePositionalNumber)
         {
             string result = "";
