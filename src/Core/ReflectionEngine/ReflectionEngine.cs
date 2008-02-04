@@ -1143,10 +1143,9 @@ namespace NDoc.Core.Reflection
 			writer.WriteAttributeString("id", memberName);
 			writer.WriteAttributeString("access", GetTypeAccessValue(type));
 
-            string constraints;
-            if (type.IsGenericType && (constraints = GetGenericTypeConstraints(type)) != "")
+            if (type.IsGenericType)
             {
-                writer.WriteAttributeString("genericconstraints", constraints);
+                WriteGenericTypeConstraints(type, writer);
             }
 
 			if (hiding)
@@ -1296,10 +1295,9 @@ namespace NDoc.Core.Reflection
 			writer.WriteAttributeString("namespace", type.Namespace);
 			writer.WriteAttributeString("id", memberName);
 			writer.WriteAttributeString("access", GetTypeAccessValue(type));
-            string constraints;
-            if (type.IsGenericType && (constraints = GetGenericTypeConstraints(type)) != "")
+            if (type.IsGenericType)
             {
-                writer.WriteAttributeString("genericconstraints", constraints);
+                WriteGenericTypeConstraints(type, writer);
             }
 
 			const BindingFlags bindingFlags = 
@@ -1997,14 +1995,26 @@ namespace NDoc.Core.Reflection
 
 		#region Members
 
-        private void WriteGenericArguments(Type type, XmlWriter writer)
+        private void WriteGenericArgumentsAndParametersMethod(MethodInfo m, XmlWriter writer)
+        {
+            foreach (Type t in m.GetGenericArguments())
+            {
+                writer.WriteStartElement("genericargument");
+                writer.WriteAttributeString("name", MemberID.GetTypeName(t, false));
+                if (t.IsGenericType)
+                    WriteGenericArgumentsAndParameters(t, writer);
+                writer.WriteEndElement();
+            }
+        }
+
+        private void WriteGenericArgumentsAndParameters(Type type, XmlWriter writer)
         {
             foreach (Type t in type.GetGenericArguments())
             {
                 writer.WriteStartElement("genericargument");
                 writer.WriteAttributeString("name", MemberID.GetTypeName(t, false));
                 if (t.IsGenericType)
-                    WriteGenericArguments(t, writer);
+                    WriteGenericArgumentsAndParameters(t, writer);
                 writer.WriteEndElement();
             }
         }
@@ -2080,7 +2090,7 @@ namespace NDoc.Core.Reflection
 
             if (t.IsGenericType)
             {
-                WriteGenericArguments(t, writer);
+                WriteGenericArgumentsAndParameters(t, writer);
             }
 
 			if (inherited)
@@ -2433,7 +2443,7 @@ namespace NDoc.Core.Reflection
 
                 if (t.IsGenericType)
                 {
-                    WriteGenericArguments(t, writer);
+                    WriteGenericArgumentsAndParameters(t, writer);
                 }
 
 				writer.WriteEndElement();
@@ -2569,10 +2579,9 @@ namespace NDoc.Core.Reflection
 				Type t = method.ReturnType;
 				writer.WriteAttributeString("returnType", MemberID.GetTypeName(t));
 				writer.WriteAttributeString("valueType", t.IsValueType.ToString().ToLower());
-                string constraints;
-                if (method.IsGenericMethod && (constraints = GetGenericMethodConstraints(method)) != "")
+                if (method.IsGenericMethod)
                 {
-                    writer.WriteAttributeString("genericconstraints", constraints);
+                    WriteGenericMethodConstraints(method, writer);
                 }
 
 				if (inherited)
@@ -2628,6 +2637,17 @@ namespace NDoc.Core.Reflection
 						writer.WriteEndElement();
 					}
 				}
+                if (t.IsGenericType)
+                {
+                    writer.WriteStartElement("returnType");
+                    writer.WriteAttributeString("returnType", MemberID.GetTypeName(t));
+                    WriteGenericArgumentsAndParameters(t, writer);
+                    writer.WriteEndElement();
+                }
+                if (method.IsGenericMethod)
+                {
+                    WriteGenericArgumentsAndParametersMethod(method, writer);
+                }
 
 				writer.WriteEndElement();
 			}
@@ -2690,7 +2710,7 @@ namespace NDoc.Core.Reflection
 
             if (t.IsGenericType)
             {
-                WriteGenericArguments(t, writer);
+                WriteGenericArgumentsAndParameters(t, writer);
             }
 
 			writer.WriteEndElement();
@@ -2863,12 +2883,13 @@ namespace NDoc.Core.Reflection
 
 		#endregion
 
-        private string GetGenericMethodConstraints(MethodInfo m)
+        private string WriteGenericMethodConstraints(MethodInfo m, XmlWriter writer)
         {
-            return GetGenericConstraints(m.GetGenericMethodDefinition().GetGenericArguments());
+            return WriteGenericConstraints(m.GetGenericMethodDefinition().GetGenericArguments(), writer);
         }
 
-        private string GetGenericConstraints(Type[] args)
+        //TODO: This should write some tags instead
+        private string WriteGenericConstraints(Type[] args, XmlWriter writer)
         {
             string retval = String.Empty;
             List<string> retList = new List<string>();
@@ -2880,7 +2901,7 @@ namespace NDoc.Core.Reflection
                 if (constraints != GenericParameterAttributes.None || specificType.Length > 0)
                     retList.Add("where " + t.Name + " : ");
                 //struct constraint
-                if (t.IsValueType)
+                if ((constraints & GenericParameterAttributes.NotNullableValueTypeConstraint) != 0)
                 {
                     retList.Add("struct");
                 }
@@ -2900,7 +2921,8 @@ namespace NDoc.Core.Reflection
                     }
                 }
                 //new() constraint always comes last
-                if (!t.IsValueType && (constraints & GenericParameterAttributes.DefaultConstructorConstraint) != 0)
+                if ((constraints & GenericParameterAttributes.NotNullableValueTypeConstraint) == 0
+                    && (constraints & GenericParameterAttributes.DefaultConstructorConstraint) != 0)
                     retList.Add("new()");
             }
             for (int i = 0; i < retList.Count; i++)
@@ -2921,10 +2943,10 @@ namespace NDoc.Core.Reflection
             }
             return retval;
         }
-        
-        private string GetGenericTypeConstraints(Type type)
+
+        private string WriteGenericTypeConstraints(Type type, XmlWriter writer)
         {
-            return GetGenericConstraints(type.GetGenericTypeDefinition().GetGenericArguments());
+            return WriteGenericConstraints(type.GetGenericTypeDefinition().GetGenericArguments(), writer);
         }
 
 		#region Enumeration Values

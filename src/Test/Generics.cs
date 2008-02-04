@@ -45,6 +45,13 @@ namespace NDoc.Test.Generics
     public class Generic
     {
         /// <summary>
+        /// Generic delegate
+        /// </summary>
+        /// <typeparam name="T">Type T</typeparam>
+        /// <param name="item">The item parameter</param>
+        public delegate void GenericDelegate<T>(T item) where T : class;
+
+        /// <summary>
         /// Test of generic field
         /// </summary>
         public Generic_Multiple<string, string, string> test_field;
@@ -62,13 +69,6 @@ namespace NDoc.Test.Generics
             {
             }
         }
-
-        /// <summary>
-        /// Generic delegate
-        /// </summary>
-        /// <typeparam name="T">Type T</typeparam>
-        /// <param name="item">The item parameter</param>
-        public delegate void GenericDelegate<T>(T item) where T : class;
 
         /// <summary>
         /// Another generic delegate with a return value

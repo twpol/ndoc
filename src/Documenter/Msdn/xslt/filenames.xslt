@@ -313,21 +313,32 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-  <!-- -->
+  <!-- Get a filename from a type name -->
   <xsl:template name="get-filename-for-type-name">
     <xsl:param name="type-name" />
+    <!-- Variable to handle generic type-->
+    <xsl:variable name="name">
+      <xsl:choose>
+        <xsl:when test="contains($type-name, '&lt;')">
+          <xsl:value-of select="substring-before($type-name, '&lt;')"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$type-name"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
     <xsl:choose>
-      <xsl:when test="starts-with($type-name, 'System.')">
+      <xsl:when test="starts-with($name, 'System.')">
         <xsl:call-template name="get-filename-for-system-type">
-          <xsl:with-param name="type-name" select="$type-name" />
+          <xsl:with-param name="type-name" select="$name" />
         </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="concat(translate($type-name, '[,]', ''), '.html')" />
+        <xsl:value-of select="concat(translate($name, '[,]', ''), '.html')" />
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-  <!-- -->
+  <!-- Get the filename for a operator -->
   <xsl:template name="get-filename-for-operator">
     <xsl:param name="operator" select="." />
     <xsl:variable name="filename">

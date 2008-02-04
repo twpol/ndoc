@@ -38,28 +38,66 @@
   <xsl:template match="node()|@*|text()" mode="header-section" />
   <xsl:template match="node()|@*|text()" mode="after-remarks-section"/>
   <!-- Generic Field -->
+  <xsl:template name="generic-returnType">
+    <xsl:param name="node" select="returnType"/>
+    <xsl:for-each select="genericargument">
+      <xsl:choose>
+        <xsl:when test="contains(@name, '.')">
+          <a>
+            <xsl:attribute name="href">
+              <xsl:call-template name="get-filename-for-type-name">
+                <xsl:with-param name="type-name" select="@name" />
+              </xsl:call-template>
+            </xsl:attribute>
+            <xsl:call-template name="get-datatype">
+              <xsl:with-param name="datatype" select="@name" />
+            </xsl:call-template>
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="get-datatype">
+            <xsl:with-param name="datatype" select="@name" />
+          </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:if test="genericargument">
+        <xsl:text>&lt;</xsl:text>
+      </xsl:if>
+      <xsl:if test="genericargument">
+        <xsl:call-template name="generic-returnType">
+          <xsl:with-param name="node" select="current()" />
+        </xsl:call-template>
+      </xsl:if>
+      <xsl:if test="genericargument">
+        <xsl:text>&gt;</xsl:text>
+      </xsl:if>
+      <xsl:if test="position()!=last()">
+        <xsl:text>,</xsl:text>
+      </xsl:if>
+    </xsl:for-each>
+  </xsl:template>
+  <!-- Generic Field -->
   <xsl:template name="generic-field">
     <xsl:for-each select="genericargument">
-      <a>
-        <xsl:attribute name="href">
-          <xsl:call-template name="get-filename-for-type-name">
-            <xsl:with-param name="type-name" select="@name" />
+      <xsl:choose>
+        <xsl:when test="contains(@name, '.')">
+          <a>
+            <xsl:attribute name="href">
+              <xsl:call-template name="get-filename-for-type-name">
+                <xsl:with-param name="type-name" select="@name" />
+              </xsl:call-template>
+            </xsl:attribute>
+            <xsl:call-template name="get-datatype">
+              <xsl:with-param name="datatype" select="@name" />
+            </xsl:call-template>
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="get-datatype">
+            <xsl:with-param name="datatype" select="@name" />
           </xsl:call-template>
-        </xsl:attribute>
-        <xsl:variable name="name">
-          <xsl:choose>
-            <xsl:when test="contains(string(@name), '{')">
-              <xsl:value-of select="substring-before(@name, '{')"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:value-of select="@name"/>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:variable>
-        <xsl:call-template name="get-datatype">
-          <xsl:with-param name="datatype" select="$name" />
-        </xsl:call-template>
-      </a>
+        </xsl:otherwise>
+      </xsl:choose>
       <xsl:if test="genericargument">
         <xsl:text>&lt;</xsl:text>
       </xsl:if>

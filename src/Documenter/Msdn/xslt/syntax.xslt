@@ -72,6 +72,12 @@
             <xsl:with-param name="version">long</xsl:with-param>
             <xsl:with-param name="namespace-name" select="../@name" />
           </xsl:call-template>
+          <xsl:text>&#160;</xsl:text>
+          <xsl:if test="@genericconstraints">
+            <xsl:text>&#160;</xsl:text>
+            <xsl:value-of select="@genericconstraints"/>
+          </xsl:if>
+          <xsl:text>;</xsl:text>
         </xsl:if>
       </div>
     </div>
@@ -171,6 +177,11 @@
                 <xsl:with-param name="datatype" select="@returnType" />
               </xsl:call-template>
             </a>
+            <xsl:if test="returnType/genericargument">
+              <xsl:text>&lt;</xsl:text>
+              <xsl:call-template name="generic-returnType"/>
+              <xsl:text>&gt;</xsl:text>
+            </xsl:if>
             <xsl:text>&#160;</xsl:text>
           </xsl:if>
           <xsl:choose>
@@ -222,11 +233,21 @@
           </xsl:choose>
         </xsl:otherwise>
       </xsl:choose>
+      <xsl:if test="genericargument">
+        <xsl:text>&lt;</xsl:text>
+        <xsl:call-template name="generic-field" />
+        <xsl:text>&gt;</xsl:text>
+      </xsl:if>
       <!-- Write parameters -->
       <xsl:call-template name="parameters">
         <xsl:with-param name="version">long</xsl:with-param>
         <xsl:with-param name="namespace-name" select="../../@name" />
       </xsl:call-template>
+      <xsl:if test="@genericconstraints">
+        <xsl:text>&#160;</xsl:text>
+        <xsl:value-of select="@genericconstraints"/>
+      </xsl:if>
+      <xsl:text>;</xsl:text>
     </div>
   </xsl:template>
   <!-- C# Member Syntax 2 -->
@@ -578,6 +599,11 @@
                 <xsl:with-param name="datatype" select="@type" />
               </xsl:call-template>
             </a>
+            <xsl:if test="genericargument">
+              <xsl:text>&lt;</xsl:text>
+              <xsl:call-template name="generic-field" />
+              <xsl:text>&gt;</xsl:text>
+            </xsl:if>
           </xsl:when>
           <!-- Otherwise just write the datatype -->
           <xsl:otherwise>
@@ -603,17 +629,28 @@
         <br />
       </xsl:if>
     </xsl:if>
-    <xsl:text>);</xsl:text>
+    <xsl:text>)</xsl:text>
   </xsl:template>
   <!--  -->
   <xsl:template name="get-datatype">
     <xsl:param name="datatype" />
+    <!-- Variable added to hanlde generic datatypes-->
+    <xsl:variable name="type">
+      <xsl:choose>
+        <xsl:when test="contains($datatype, '`')">
+          <xsl:value-of select="substring-before($datatype, '`')"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$datatype"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
     <!-- Removes namespace -->
     <xsl:call-template name="strip-namespace">
       <xsl:with-param name="name">
         <!-- Gets the C# type (System.String is string)-->
         <xsl:call-template name="csharp-type">
-          <xsl:with-param name="runtime-type" select="$datatype" />
+          <xsl:with-param name="runtime-type" select="$type" />
         </xsl:call-template>
       </xsl:with-param>
     </xsl:call-template>

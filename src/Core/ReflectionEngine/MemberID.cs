@@ -358,8 +358,6 @@ namespace NDoc.Core
                 }
                 else if (argType.ContainsGenericParameters)
                 {
-                    /*argList.Append('`');
-                    argList.Append(argType.GenericParameterPosition.ToString());*/
                     argList.Append(argType.Name);
                 }
                 else
