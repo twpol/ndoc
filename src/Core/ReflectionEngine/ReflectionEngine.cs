@@ -1142,12 +1142,6 @@ namespace NDoc.Core.Reflection
 			writer.WriteAttributeString("namespace", type.Namespace);
 			writer.WriteAttributeString("id", memberName);
 			writer.WriteAttributeString("access", GetTypeAccessValue(type));
-
-            if (type.IsGenericType)
-            {
-                WriteGenericTypeConstraints(type, writer);
-            }
-
 			if (hiding)
 			{
 				writer.WriteAttributeString("hiding", "true");
@@ -1224,6 +1218,13 @@ namespace NDoc.Core.Reflection
 				}
 			}
 
+#if NET_2_0
+            if (type.IsGenericType)
+            {
+                WriteGenericTypeConstraints(type, writer);
+            }
+#endif
+
 			WriteConstructors(writer, type);
 			WriteStaticConstructor(writer, type);
 			WriteFields(writer, type);
@@ -1272,6 +1273,13 @@ namespace NDoc.Core.Reflection
 					writer.WriteEndElement();
 				}
 			}
+
+#if NET_2_0
+            if (type.IsGenericType)
+            {
+                WriteGenericTypeConstraints(type, writer);
+            }
+#endif
 			
 			WriteInterfaceImplementingTypes(writer, type);
 
@@ -1295,11 +1303,6 @@ namespace NDoc.Core.Reflection
 			writer.WriteAttributeString("namespace", type.Namespace);
 			writer.WriteAttributeString("id", memberName);
 			writer.WriteAttributeString("access", GetTypeAccessValue(type));
-            if (type.IsGenericType)
-            {
-                WriteGenericTypeConstraints(type, writer);
-            }
-
 			const BindingFlags bindingFlags = 
 					  BindingFlags.Instance | 
 					  BindingFlags.Static | 
@@ -1324,7 +1327,12 @@ namespace NDoc.Core.Reflection
 					}
 				}
 			}
-
+#if NET_2_0
+            if (type.IsGenericType)
+            {
+                WriteGenericTypeConstraints(type, writer);
+            }
+#endif
 			writer.WriteEndElement();
 		}
 
@@ -1991,33 +1999,8 @@ namespace NDoc.Core.Reflection
 		}
 
 		#endregion
-
-
+        
 		#region Members
-
-        private void WriteGenericArgumentsAndParametersMethod(MethodInfo m, XmlWriter writer)
-        {
-            foreach (Type t in m.GetGenericArguments())
-            {
-                writer.WriteStartElement("genericargument");
-                writer.WriteAttributeString("name", MemberID.GetTypeName(t, false));
-                if (t.IsGenericType)
-                    WriteGenericArgumentsAndParameters(t, writer);
-                writer.WriteEndElement();
-            }
-        }
-
-        private void WriteGenericArgumentsAndParameters(Type type, XmlWriter writer)
-        {
-            foreach (Type t in type.GetGenericArguments())
-            {
-                writer.WriteStartElement("genericargument");
-                writer.WriteAttributeString("name", MemberID.GetTypeName(t, false));
-                if (t.IsGenericType)
-                    WriteGenericArgumentsAndParameters(t, writer);
-                writer.WriteEndElement();
-            }
-        }
 
 		/// <summary>Writes XML documenting a field.</summary>
 		/// <param name="writer">XmlWriter to write on.</param>
@@ -2087,12 +2070,12 @@ namespace NDoc.Core.Reflection
 					writer.WriteAttributeString("value", fieldValue);
 				}
 			}
-
+#if NET_2_0
             if (t.IsGenericType)
             {
                 WriteGenericArgumentsAndParameters(t, writer);
             }
-
+#endif
 			if (inherited)
 			{
 				WriteInheritedDocumentation(writer, memberName, field.DeclaringType);
@@ -2440,12 +2423,12 @@ namespace NDoc.Core.Reflection
 						}
 					}
 				}
-
+#if NET_2_0
                 if (t.IsGenericType)
                 {
                     WriteGenericArgumentsAndParameters(t, writer);
                 }
-
+#endif
 				writer.WriteEndElement();
 			}
 		}
@@ -2579,11 +2562,6 @@ namespace NDoc.Core.Reflection
 				Type t = method.ReturnType;
 				writer.WriteAttributeString("returnType", MemberID.GetTypeName(t));
 				writer.WriteAttributeString("valueType", t.IsValueType.ToString().ToLower());
-                if (method.IsGenericMethod)
-                {
-                    WriteGenericMethodConstraints(method, writer);
-                }
-
 				if (inherited)
 				{
 					writer.WriteAttributeString("declaringType", MemberID.GetDeclaringTypeName(method));
@@ -2637,6 +2615,11 @@ namespace NDoc.Core.Reflection
 						writer.WriteEndElement();
 					}
 				}
+#if NET_2_0
+                if (method.IsGenericMethod)
+                {
+                    WriteGenericMethodConstraints(method, writer);
+                }
                 if (t.IsGenericType)
                 {
                     writer.WriteStartElement("returnType");
@@ -2648,7 +2631,7 @@ namespace NDoc.Core.Reflection
                 {
                     WriteGenericArgumentsAndParametersMethod(method, writer);
                 }
-
+#endif
 				writer.WriteEndElement();
 			}
 		}
@@ -2707,12 +2690,12 @@ namespace NDoc.Core.Reflection
 			}
 
 			WriteCustomAttributes(writer, parameter);
-
+#if NET_2_0
             if (t.IsGenericType)
             {
                 WriteGenericArgumentsAndParameters(t, writer);
             }
-
+#endif
 			writer.WriteEndElement();
 		}
 
@@ -2883,75 +2866,143 @@ namespace NDoc.Core.Reflection
 
 		#endregion
 
-        private string WriteGenericMethodConstraints(MethodInfo m, XmlWriter writer)
+#if NET_2_0
+        #region Generics
+
+        /// <summary>
+        /// Writes generic arguments and parameters for a method
+        /// </summary>
+        /// <param name="m">Generic method</param>
+        /// <param name="writer">XMLWriter to write the XML</param>
+        private void WriteGenericArgumentsAndParametersMethod(MethodInfo m, XmlWriter writer)
         {
-            return WriteGenericConstraints(m.GetGenericMethodDefinition().GetGenericArguments(), writer);
+            foreach (Type t in m.GetGenericArguments())
+            {
+                writer.WriteStartElement("genericargument");
+                writer.WriteAttributeString("name", MemberID.GetTypeName(t, false));
+                if (t.IsGenericType)
+                    WriteGenericArgumentsAndParameters(t, writer);
+                writer.WriteEndElement();
+            }
         }
 
-        //TODO: This should write some tags instead
-        private string WriteGenericConstraints(Type[] args, XmlWriter writer)
+        /// <summary>
+        /// Writes generic arguments and parameters for a type
+        /// </summary>
+        /// <param name="type">Generic type</param>
+        /// <param name="writer">XMLWriter to write the XML</param>
+        private void WriteGenericArgumentsAndParameters(Type type, XmlWriter writer)
         {
-            string retval = String.Empty;
-            List<string> retList = new List<string>();
+            foreach (Type t in type.GetGenericArguments())
+            {
+                writer.WriteStartElement("genericargument");
+                writer.WriteAttributeString("name", MemberID.GetTypeName(t, false));
+                if (t.IsGenericType)
+                    WriteGenericArgumentsAndParameters(t, writer);
+                writer.WriteEndElement();
+            }
+        }
+
+        /// <summary>
+        /// Contains information about constraints on a generic parameter template
+        /// </summary>
+        private struct Constraint
+        {
+            /// <summary>
+            /// Name of the parameter
+            /// </summary>
+            public string typeparam;
+            /// <summary>
+            /// List of constraints on the parameter
+            /// </summary>
+            public List<string> constraint;
+        }
+
+        /// <summary>
+        /// Write constraints for a generic type
+        /// </summary>
+        /// <param name="type">The generic type</param>
+        /// <param name="writer">The current XMLWriter</param>
+        private void WriteGenericTypeConstraints(Type type, XmlWriter writer)
+        {
+            WriteGenericConstraints(type.GetGenericTypeDefinition().GetGenericArguments(), writer);
+        }
+
+        /// <summary>
+        /// Write constrains for a generic method
+        /// </summary>
+        /// <param name="m">The generic method</param>
+        /// <param name="writer">The current XMLWriter</param>
+        private void WriteGenericMethodConstraints(MethodInfo m, XmlWriter writer)
+        {
+            WriteGenericConstraints(m.GetGenericMethodDefinition().GetGenericArguments(), writer);
+        }
+
+        /// <summary>
+        /// Writes generic constraints
+        /// </summary>
+        /// <param name="args">An array of generic arguments of a type or method</param>
+        /// <param name="writer">The current XMLWriter</param>
+        private void WriteGenericConstraints(Type[] args, XmlWriter writer)
+        {
+            List<Constraint> constraintList = new List<Constraint>();
             foreach (Type t in args)
             {
                 GenericParameterAttributes constraints = t.GenericParameterAttributes
                     & GenericParameterAttributes.SpecialConstraintMask;
                 Type[] specificType = t.GetGenericParameterConstraints();
+                Constraint c = new Constraint();
+                List<string> cons = new List<string>();
+                //If any constraints are present
                 if (constraints != GenericParameterAttributes.None || specificType.Length > 0)
-                    retList.Add("where " + t.Name + " : ");
+                    c.typeparam = t.Name;
                 //struct constraint
                 if ((constraints & GenericParameterAttributes.NotNullableValueTypeConstraint) != 0)
-                {
-                    retList.Add("struct");
-                }
+                    cons.Add("struct");
                 //class constraint
                 if ((constraints & GenericParameterAttributes.ReferenceTypeConstraint) != 0)
-                    retList.Add("class");
-                //specific classes, interfaces or other template constraint
+                    cons.Add("class");
+                //Specific classes, interfaces or other template constraint
                 if (specificType.Length > 0)
                 {
                     for (int i = 0; i < specificType.Length; i++)
                     {
                         string name;
+                        //If name is ValueType ignore this, as this is present when struct is a constraint
                         if ((name = specificType[i].Name) != "ValueType")
-                        {
-                            retList.Add(name);
-                        }
+                            cons.Add(name);
                     }
                 }
                 //new() constraint always comes last
                 if ((constraints & GenericParameterAttributes.NotNullableValueTypeConstraint) == 0
                     && (constraints & GenericParameterAttributes.DefaultConstructorConstraint) != 0)
-                    retList.Add("new()");
-            }
-            for (int i = 0; i < retList.Count; i++)
-            {
-                if (!retList[i].Contains("where"))
+                    cons.Add("new()");
+                if (c.typeparam != String.Empty)
                 {
-                    retval += retList[i];
-                    if (retList.Count > i + 1)
-                    {
-                        if (!retList[i + 1].Contains("where"))
-                            retval += ", ";
-                        else
-                            retval += " ";
-                    }
+                    c.constraint = cons;
+                    constraintList.Add(c);
                 }
-                else
-                    retval += retList[i];
             }
-            return retval;
+
+            foreach (Constraint c in constraintList)
+            {
+                if (c.constraint.Count > 0)
+                {
+                    writer.WriteStartElement("constraints");
+                    writer.WriteAttributeString("param", c.typeparam);
+                    foreach (string s in c.constraint)
+                        writer.WriteElementString("constraint", s);
+                    writer.WriteEndElement();
+                }
+            }
         }
 
-        private string WriteGenericTypeConstraints(Type type, XmlWriter writer)
-        {
-            return WriteGenericConstraints(type.GetGenericTypeDefinition().GetGenericArguments(), writer);
-        }
+        #endregion
+#endif
 
-		#region Enumeration Values
+        #region Enumeration Values
 
-		private string GetTypeAccessValue(Type type)
+        private string GetTypeAccessValue(Type type)
 		{
 			string result = "Unknown";
 

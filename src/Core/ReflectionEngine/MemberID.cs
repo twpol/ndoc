@@ -338,14 +338,14 @@ namespace NDoc.Core
             int i = 0;
 
             //Append number of generic parameters to be able to link to return type
-            argList.Append('`');
-            argList.Append(type.GetGenericArguments().Length);
+            /*argList.Append('`');
+            argList.Append(type.GetGenericArguments().Length);*/
 
             foreach (Type argType in type.GetGenericArguments())
             {
                 if (i == 0)
                 {
-                    argList.Append('<');
+                    argList.Append('{');
                 }
                 else
                 {
@@ -370,7 +370,7 @@ namespace NDoc.Core
 
             if (i > 0)
             {
-                argList.Append('>');
+                argList.Append('}');
             }
 
             // XML Documentation file appends a "@" to reference and out types, not a "&"
@@ -400,7 +400,7 @@ namespace NDoc.Core
 				}
 
 				Type paramType = parameter.ParameterType;
-				paramList.Append(GetTypeName(paramType));
+				paramList.Append(GetTypeName(paramType, true));
 
 				++i;
 			}
@@ -411,7 +411,7 @@ namespace NDoc.Core
 			}
 
 #if NET_2_0
-			if (method.ContainsGenericParameters)
+            if (method.ContainsGenericParameters)
                 paramList.Replace("`", "``");
 #endif
 

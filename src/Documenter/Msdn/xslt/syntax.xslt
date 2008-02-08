@@ -56,9 +56,8 @@
         <!-- Writes name -->
         <xsl:value-of select="@displayName" />
         <!-- Write generic constraints if there are any -->
-        <xsl:if test="@genericconstraints">
-          <xsl:text>&#160;</xsl:text>
-          <xsl:value-of select="@genericconstraints"/>
+        <xsl:if test="local-name() != 'delegate' and constraints">
+          <xsl:call-template name="genericconstraints" />
         </xsl:if>
         <!-- Is not a enumeration and not a delegate? -->
         <xsl:if test="local-name() != 'enumeration' and local-name() != 'delegate'">
@@ -72,17 +71,29 @@
             <xsl:with-param name="version">long</xsl:with-param>
             <xsl:with-param name="namespace-name" select="../@name" />
           </xsl:call-template>
-          <xsl:text>&#160;</xsl:text>
-          <xsl:if test="@genericconstraints">
-            <xsl:text>&#160;</xsl:text>
-            <xsl:value-of select="@genericconstraints"/>
+          <xsl:if test="constraints">
+            <xsl:call-template name="genericconstraints" />
           </xsl:if>
           <xsl:text>;</xsl:text>
         </xsl:if>
       </div>
     </div>
   </xsl:template>
-  <!-- -->
+  <!-- Generic constrains -->
+  <xsl:template name="genericconstraints">
+    <xsl:for-each select="constraints">
+      <xsl:text>&#160;where&#160;</xsl:text>
+      <xsl:value-of select="@param"/>
+      <xsl:text>&#160;:&#160;</xsl:text>
+      <xsl:for-each select="constraint">
+        <xsl:value-of select="."/>
+        <xsl:if test="position() != last()">
+          <xsl:text>,&#160;</xsl:text>
+        </xsl:if>
+      </xsl:for-each>
+    </xsl:for-each>
+  </xsl:template>
+  <!-- Derivation -->
   <xsl:template name="derivation">
     <!-- Is this a derived class? Either from a class or an interface -->
     <xsl:if test="@baseType!='' or implements[not(@inherited)]">
@@ -243,9 +254,8 @@
         <xsl:with-param name="version">long</xsl:with-param>
         <xsl:with-param name="namespace-name" select="../../@name" />
       </xsl:call-template>
-      <xsl:if test="@genericconstraints">
-        <xsl:text>&#160;</xsl:text>
-        <xsl:value-of select="@genericconstraints"/>
+      <xsl:if test="constraints">
+        <xsl:call-template name="genericconstraints" />
       </xsl:if>
       <xsl:text>;</xsl:text>
     </div>
