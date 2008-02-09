@@ -179,14 +179,29 @@
           <xsl:if test="@name != 'op_Explicit' and @name != 'op_Implicit'">
             <!-- Write link to datatype -->
             <a>
-              <xsl:attribute name="href">
-                <xsl:call-template name="get-filename-for-type-name">
-                  <xsl:with-param name="type-name" select="@returnType" />
-                </xsl:call-template>
-              </xsl:attribute>
-              <xsl:call-template name="get-datatype">
-                <xsl:with-param name="datatype" select="@returnType" />
-              </xsl:call-template>
+              <xsl:choose>
+                <xsl:when test="contains(@returnType, '{')">
+                  <xsl:attribute name="href">
+                    <xsl:call-template name="genericclasslink">
+                      <xsl:with-param name="genericarguments" select="returnType/genericargument" />
+                      <xsl:with-param name="type" select="@returnType" />
+                    </xsl:call-template>
+                  </xsl:attribute>
+                  <xsl:call-template name="get-datatype">
+                    <xsl:with-param name="datatype" select="substring-before(@returnType, '{')" />
+                  </xsl:call-template>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:attribute name="href">
+                    <xsl:call-template name="get-filename-for-type-name">
+                      <xsl:with-param name="type-name" select="@returnType" />
+                    </xsl:call-template>
+                  </xsl:attribute>
+                  <xsl:call-template name="get-datatype">
+                    <xsl:with-param name="datatype" select="@returnType" />
+                  </xsl:call-template>
+                </xsl:otherwise>
+              </xsl:choose>
             </a>
             <xsl:if test="returnType/genericargument">
               <xsl:text>&lt;</xsl:text>
@@ -204,14 +219,29 @@
                   <xsl:text>explicit operator </xsl:text>
                   <!-- Write link to datatype -->
                   <a>
-                    <xsl:attribute name="href">
-                      <xsl:call-template name="get-filename-for-type-name">
-                        <xsl:with-param name="type-name" select="@returnType" />
-                      </xsl:call-template>
-                    </xsl:attribute>
-                    <xsl:call-template name="get-datatype">
-                      <xsl:with-param name="datatype" select="@returnType" />
-                    </xsl:call-template>
+                    <xsl:choose>
+                      <xsl:when test="contains(@returnType, '{')">
+                        <xsl:attribute name="href">
+                          <xsl:call-template name="genericclasslink">
+                            <xsl:with-param name="genericarguments" select="returnType/genericargument" />
+                            <xsl:with-param name="type" select="@returnType" />
+                          </xsl:call-template>
+                        </xsl:attribute>
+                        <xsl:call-template name="get-datatype">
+                          <xsl:with-param name="datatype" select="substring-before(@returnType, '{')" />
+                        </xsl:call-template>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <xsl:attribute name="href">
+                          <xsl:call-template name="get-filename-for-type-name">
+                            <xsl:with-param name="type-name" select="@returnType" />
+                          </xsl:call-template>
+                        </xsl:attribute>
+                        <xsl:call-template name="get-datatype">
+                          <xsl:with-param name="datatype" select="@returnType" />
+                        </xsl:call-template>
+                      </xsl:otherwise>
+                    </xsl:choose>
                   </a>
                 </xsl:when>
                 <!-- If this is a implicit conversion operator -->
@@ -219,14 +249,29 @@
                   <xsl:text>implicit operator </xsl:text>
                   <!-- Write link to datatype -->
                   <a>
-                    <xsl:attribute name="href">
-                      <xsl:call-template name="get-filename-for-type-name">
-                        <xsl:with-param name="type-name" select="@returnType" />
-                      </xsl:call-template>
-                    </xsl:attribute>
-                    <xsl:call-template name="get-datatype">
-                      <xsl:with-param name="datatype" select="@returnType" />
-                    </xsl:call-template>
+                    <xsl:choose>
+                      <xsl:when test="contains(@returnType, '{')">
+                        <xsl:attribute name="href">
+                          <xsl:call-template name="genericclasslink">
+                            <xsl:with-param name="genericarguments" select="returnType/genericargument" />
+                            <xsl:with-param name="type" select="@returnType" />
+                          </xsl:call-template>
+                        </xsl:attribute>
+                        <xsl:call-template name="get-datatype">
+                          <xsl:with-param name="datatype" select="substring-before(@returnType, '{')" />
+                        </xsl:call-template>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <xsl:attribute name="href">
+                          <xsl:call-template name="get-filename-for-type-name">
+                            <xsl:with-param name="type-name" select="@returnType" />
+                          </xsl:call-template>
+                        </xsl:attribute>
+                        <xsl:call-template name="get-datatype">
+                          <xsl:with-param name="datatype" select="@returnType" />
+                        </xsl:call-template>
+                      </xsl:otherwise>
+                    </xsl:choose>
                   </a>
                 </xsl:when>
                 <!-- Otherwise write C# operator name -->
@@ -389,12 +434,13 @@
         <xsl:otherwise>
           <a>
             <xsl:attribute name="href">
-              <xsl:call-template name="get-filename-for-type-name">
-                <xsl:with-param name="type-name" select="substring-before(@type, '&lt;')" />
+              <xsl:call-template name="genericclasslink">
+                <xsl:with-param name="genericarguments" select="genericargument" />
+                <xsl:with-param name="type" select="@type" />
               </xsl:call-template>
             </xsl:attribute>
             <xsl:call-template name="get-datatype">
-              <xsl:with-param name="datatype" select="substring-before(@type, '`')" />
+              <xsl:with-param name="datatype" select="substring-before(@type, '{')" />
             </xsl:call-template>
           </a>
           <xsl:text>&lt;</xsl:text>
@@ -420,6 +466,16 @@
       </xsl:if>
       <xsl:text>;</xsl:text>
     </div>
+  </xsl:template>
+  <!-- Link to generic class -->
+  <xsl:template name="genericclasslink">
+    <xsl:param name="genericarguments" />
+    <xsl:param name="type" />
+    <xsl:call-template name="get-filename-for-type-name">
+      <xsl:with-param name="type-name">
+        <xsl:value-of select="concat(substring-before($type, '{'), '`', count($genericarguments))"/>
+      </xsl:with-param>
+    </xsl:call-template>
   </xsl:template>
   <!-- C# Property Syntax -->
   <xsl:template name="cs-property-syntax">
@@ -459,15 +515,16 @@
       <!-- If we shoule write links to types -->
       <xsl:when test="$link-types">
         <xsl:choose>
-          <xsl:when test="contains(@type, '&lt;')">
+          <xsl:when test="contains(@type, '{')">
             <a>
               <xsl:attribute name="href">
-                <xsl:call-template name="get-filename-for-type-name">
-                  <xsl:with-param name="type-name" select="substring-before(@type, '&lt;')" />
+                <xsl:call-template name="genericclasslink">
+                  <xsl:with-param name="genericarguments" select="genericargument" />
+                  <xsl:with-param name="type" select="@type" />
                 </xsl:call-template>
               </xsl:attribute>
               <xsl:call-template name="value">
-                <xsl:with-param name="type" select="substring-before(@type, '`')" />
+                <xsl:with-param name="type" select="substring-before(@type, '{')" />
               </xsl:call-template>
             </a>
             <xsl:text>&lt;</xsl:text>
@@ -601,13 +658,32 @@
           <xsl:when test="$version='long' and contains(@type, '.')">
             <a>
               <xsl:attribute name="href">
-                <xsl:call-template name="get-filename-for-type-name">
-                  <xsl:with-param name="type-name" select="@type" />
-                </xsl:call-template>
+                <xsl:choose>
+                  <xsl:when test="contains(@type, '{')">
+                    <xsl:call-template name="genericclasslink">
+                      <xsl:with-param name="genericarguments" select="genericargument" />
+                      <xsl:with-param name="type" select="@type" />
+                    </xsl:call-template>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:call-template name="get-filename-for-type-name">
+                      <xsl:with-param name="type-name" select="@type" />
+                    </xsl:call-template>
+                  </xsl:otherwise>
+                </xsl:choose>
               </xsl:attribute>
-              <xsl:call-template name="get-datatype">
-                <xsl:with-param name="datatype" select="@type" />
-              </xsl:call-template>
+              <xsl:choose>
+                <xsl:when test="contains(@type, '{')">
+                  <xsl:call-template name="get-datatype">
+                    <xsl:with-param name="datatype" select="substring-before(@type, '{')" />
+                  </xsl:call-template>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:call-template name="get-datatype">
+                    <xsl:with-param name="datatype" select="@type" />
+                  </xsl:call-template>
+                </xsl:otherwise>
+              </xsl:choose>
             </a>
             <xsl:if test="genericargument">
               <xsl:text>&lt;</xsl:text>
@@ -660,7 +736,7 @@
       <xsl:with-param name="name">
         <!-- Gets the C# type (System.String is string)-->
         <xsl:call-template name="csharp-type">
-          <xsl:with-param name="runtime-type" select="$type" />
+          <xsl:with-param name="runtime-type" select="$datatype" />
         </xsl:call-template>
       </xsl:with-param>
     </xsl:call-template>
