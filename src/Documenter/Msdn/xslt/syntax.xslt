@@ -86,7 +86,23 @@
       <xsl:value-of select="@param"/>
       <xsl:text>&#160;:&#160;</xsl:text>
       <xsl:for-each select="constraint">
-        <xsl:value-of select="."/>
+        <xsl:choose>
+          <xsl:when test="contains(., '.')">
+            <a>
+              <xsl:attribute name="href">
+                <xsl:call-template name="get-filename-for-type-name">
+                  <xsl:with-param name="type-name" select="." />
+                </xsl:call-template>
+              </xsl:attribute>
+              <xsl:call-template name="get-datatype">
+                <xsl:with-param name="datatype" select="." />
+              </xsl:call-template>
+            </a>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="."/>
+          </xsl:otherwise>
+        </xsl:choose>
         <xsl:if test="position() != last()">
           <xsl:text>,&#160;</xsl:text>
         </xsl:if>

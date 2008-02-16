@@ -2969,7 +2969,7 @@ namespace NDoc.Core.Reflection
                     {
                         string name;
                         //If name is ValueType ignore this, as this is present when struct is a constraint
-                        if ((name = specificType[i].Name) != "ValueType")
+                        if ((name = specificType[i].FullName) != "ValueType")
                             cons.Add(name);
                     }
                 }

@@ -34,8 +34,8 @@ namespace NDoc.Test.Generics
     /// <typeparam name="T">Type T</typeparam>
     /// <typeparam name="U">Type U</typeparam>
     public class Generic_ClassCon2<T, U>
-        where T : struct, U
-        where U : class, new()
+        where T : U
+        where U : Generic, new()
     {
     }
 
