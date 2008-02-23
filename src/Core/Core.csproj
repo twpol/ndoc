@@ -255,6 +255,7 @@
     </None>
     <None Include="Documenter.cd" />
     <None Include="Core.build" />
+    <None Include="ReflectionEngine\reflection.xsd" />
     <EmbeddedResource Include="AttributesForm.resx">
       <DependentUpon>AttributesForm.cs</DependentUpon>
       <SubType>Designer</SubType>
