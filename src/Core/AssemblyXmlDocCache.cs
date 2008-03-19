@@ -74,7 +74,8 @@ namespace NDoc.Core.Reflection
 			{
 				if ((reader.NodeType == XmlNodeType.Element) && (reader.Name.Equals(oMember)))
 				{
-					string ID = reader.GetAttribute("name");
+					//Handles multidimensional arrays by replacing 0: from XML doc to the reflection type
+                    string ID = reader.GetAttribute("name").Replace("0:","");
 					string doc = reader.ReadInnerXml().Trim();
 					doc = PreprocessDoc(ID, doc);
 					if (docs.ContainsKey(ID))

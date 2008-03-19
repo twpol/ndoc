@@ -28,6 +28,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Xml;
 using System.Xml.XPath;
+using System.Xml.Schema;
 using System.ComponentModel;
 
 namespace NDoc.Core.Reflection
@@ -149,8 +150,17 @@ namespace NDoc.Core.Reflection
 			}
 			finally
 			{
-				if (writer != null)  writer.Close();
-			}			
+				if (writer != null)
+                    writer.Close();
+                XmlReaderSettings settings = new XmlReaderSettings();
+                XmlSchemaSet sc = new XmlSchemaSet();
+                sc.Add("urn:ndoc-schema", "reflection.xsd");
+                settings.ValidationType = ValidationType.Schema;
+                settings.Schemas = sc;
+                settings.ValidationEventHandler += validator_ValidationEventHandler;
+                XmlReader reader = XmlReader.Create(xmlFile, settings);
+                while (reader.Read()) ;
+			}
 		}
 
 
@@ -169,7 +179,7 @@ namespace NDoc.Core.Reflection
 
 			try
 			{
-				BuildXml(writer);
+                BuildXml(writer);
 				return swriter.ToString();
 			}
 			finally
@@ -179,6 +189,11 @@ namespace NDoc.Core.Reflection
 			}
 
 		}
+
+        private void validator_ValidationEventHandler(object sender, ValidationEventArgs args)
+        {
+            throw new Exception(args.Message);
+        }
 
 		/// <summary>Builds an Xml file combining the reflected metadata with the /doc comments.</summary>
 		private void BuildXml(XmlWriter writer)
@@ -215,7 +230,8 @@ namespace NDoc.Core.Reflection
 
 					// Start the root element
 					writer.WriteStartElement("ndoc");
-					writer.WriteAttributeString("SchemaVersion", "1.4");
+					writer.WriteAttributeString("SchemaVersion", "2.0");
+                    writer.WriteAttributeString("xmlns", "urn:ndoc-schema");
 
 					if (this.rep.FeedbackEmailAddress.Length > 0)
 						WriteFeedBackEmailAddress(writer);
@@ -249,7 +265,6 @@ namespace NDoc.Core.Reflection
 					writer.Flush();
 
 					Trace.WriteLine("MakeXML : " + ((Environment.TickCount - start) / 1000.0).ToString() + " sec.");
-
 					// if you want to see NDoc's intermediate XML file, use the XML documenter.
 				}
 				finally
@@ -1160,11 +1175,6 @@ namespace NDoc.Core.Reflection
 				{
 					writer.WriteAttributeString("sealed", "true");
 				}
-
-				if (type.BaseType != null && type.BaseType.FullName != "System.Object")
-				{
-					writer.WriteAttributeString("baseType", type.BaseType.Name);
-				}
 			}
 
 			WriteTypeDocumentation(writer, memberName, type);
@@ -1190,7 +1200,7 @@ namespace NDoc.Core.Reflection
 			{
 				if (MustDocumentType(interfaceType))
 				{
-					writer.WriteStartElement("implements");
+					writer.WriteStartElement("implementsClass");
 					writer.WriteAttributeString("type", interfaceType.FullName.Replace('+', '.'));
 					writer.WriteAttributeString("displayName", MemberDisplayName.GetMemberDisplayName(interfaceType));
 					writer.WriteAttributeString("namespace", interfaceType.Namespace);
@@ -1198,6 +1208,7 @@ namespace NDoc.Core.Reflection
 					{
 						writer.WriteAttributeString("inherited", "true");
 					}
+                    WriteGenericArgumentsAndParameters(interfaceType, writer);
 					writer.WriteEndElement();
  
 					InterfaceMapping interfaceMap = type.GetInterfaceMap(interfaceType);
@@ -1315,8 +1326,13 @@ namespace NDoc.Core.Reflection
 				if (method.Name == "Invoke")
 				{
 					Type t = method.ReturnType;
-					writer.WriteAttributeString("returnType", MemberID.GetTypeName(t));
+					//writer.WriteAttributeString("returnType", MemberID.GetTypeName(t));
 					writer.WriteAttributeString("valueType", t.IsValueType.ToString().ToLower());
+
+                    //TODO: Handle Generics
+                    writer.WriteStartElement("returnType");
+                    writer.WriteAttributeString("type", MemberID.GetTypeName(t));
+                    writer.WriteEndElement();
 
 					WriteDelegateDocumentation(writer, memberName, type, method);
 					WriteCustomAttributes(writer, type);
@@ -1510,11 +1526,9 @@ namespace NDoc.Core.Reflection
 				{
 					writer.WriteStartElement("attribute");
 					writer.WriteAttributeString("name", "System.NonSerializedAttribute");
-					writer.WriteEndElement(); // attribute
+					writer.WriteEndElement();
 				}
 			}
-
-			//TODO: more special attributes here?
 		}
 
 		private void WriteCustomAttributes(XmlWriter writer, Assembly assembly) 
@@ -1982,15 +1996,22 @@ namespace NDoc.Core.Reflection
 			return IsAlsoAnEvent(property.DeclaringType, property.PropertyType.FullName);
 		}
 
+        /// <summary>
+        /// Writes the XML structure for the base type of a class
+        /// </summary>
+        /// <param name="writer">The XML writer</param>
+        /// <param name="type">The type of the basetype</param>
 		private void WriteBaseType(XmlWriter writer, Type type)
 		{
 			if (!"System.Object".Equals(type.FullName))
 			{
-				writer.WriteStartElement("base");
+				writer.WriteStartElement("baseType");
 				writer.WriteAttributeString("name", type.Name);
 				writer.WriteAttributeString("id", MemberID.GetMemberID(type));
 				writer.WriteAttributeString("displayName", MemberDisplayName.GetMemberDisplayName(type));
 				writer.WriteAttributeString("namespace", type.Namespace);
+
+                WriteGenericArgumentsAndParameters(type, writer);
 
 				WriteBaseType(writer, type.BaseType);
 
@@ -2035,10 +2056,6 @@ namespace NDoc.Core.Reflection
             writer.WriteAttributeString("valueType", t.IsValueType.ToString().ToLower());
 
 			bool inherited = (field.DeclaringType != field.ReflectedType);
-			if (inherited)
-			{
-				writer.WriteAttributeString("declaringType", MemberID.GetDeclaringTypeName(field));
-			}
 
 			if (!IsMemberSafe(field))
 				writer.WriteAttributeString("unsafe", "true");
@@ -2070,6 +2087,10 @@ namespace NDoc.Core.Reflection
 					writer.WriteAttributeString("value", fieldValue);
 				}
 			}
+            if (inherited)
+            {
+                WriteDeclaringType(MemberID.GetDeclaringTypeName(field), writer);
+            }
 #if NET_2_0
             if (t.IsGenericType)
             {
@@ -2088,6 +2109,16 @@ namespace NDoc.Core.Reflection
 
 			writer.WriteEndElement();
 		}
+
+        /// <summary>
+        /// Write the declaring type to the XML file
+        /// </summary>
+        /// <param name="type">The name of the declaring type</param>
+        /// <param name="writer">The XML writer</param>
+        private void WriteDeclaringType(string type, XmlWriter writer)
+        {
+            writer.WriteAttributeString("declaringType", type);
+        }
 
 		/// <summary>
 		/// 
@@ -2300,7 +2331,8 @@ namespace NDoc.Core.Reflection
 				{
 					//this is an explicit interface implementation. if we don't want
 					//to document them, get out of here quick...
-					if (!this.rep.DocumentExplicitInterfaceImplementations) return;
+					if (!this.rep.DocumentExplicitInterfaceImplementations)
+                        return;
 
 					interfaceName = name.Substring(0, lastIndexOfDot);
 					lastIndexOfDot = interfaceName.LastIndexOf('.');
@@ -2320,7 +2352,8 @@ namespace NDoc.Core.Reflection
 							implements = implementations[setter.ToString()];
 						}
 					}
-					if (implements == null) return;
+					if (implements == null)
+                        return;
 				}
 
 				writer.WriteStartElement("property");
@@ -2418,7 +2451,12 @@ namespace NDoc.Core.Reflection
 							writer.WriteAttributeString("id", InterfaceMethodID);
 							writer.WriteAttributeString("interface", implements.InterfaceType.Name);
 							writer.WriteAttributeString("interfaceId", MemberID.GetMemberID(implements.InterfaceType));
-							writer.WriteAttributeString("declaringType", implements.InterfaceType.FullName.Replace('+', '.'));
+                            string declaringType = String.Empty;
+                            if (implements.InterfaceType.GetGenericArguments().Length > 0)
+                                declaringType = implements.InterfaceType.GetGenericTypeDefinition().FullName.Replace('+', '.');
+                            else
+                                declaringType = implements.InterfaceType.FullName.Replace('+', '.');
+                            writer.WriteAttributeString("declaringType", declaringType);
 							writer.WriteEndElement();
 						}
 					}
@@ -2560,7 +2598,6 @@ namespace NDoc.Core.Reflection
 				writer.WriteAttributeString("access", GetMethodAccessValue(method));
 				writer.WriteAttributeString("contract", GetMethodContractValue(method));
 				Type t = method.ReturnType;
-				writer.WriteAttributeString("returnType", MemberID.GetTypeName(t));
 				writer.WriteAttributeString("valueType", t.IsValueType.ToString().ToLower());
 				if (inherited)
 				{
@@ -2584,6 +2621,14 @@ namespace NDoc.Core.Reflection
 				{
 					writer.WriteAttributeString("interface", interfaceName);
 				}
+
+                writer.WriteStartElement("returnType");
+                writer.WriteAttributeString("type", MemberID.GetTypeName(t));
+                if (t.IsGenericType)
+                {
+                    WriteGenericArgumentsAndParameters(t, writer);
+                }
+                writer.WriteEndElement();
 
 				if (inherited)
 				{
@@ -2620,13 +2665,7 @@ namespace NDoc.Core.Reflection
                 {
                     WriteGenericMethodConstraints(method, writer);
                 }
-                if (t.IsGenericType)
-                {
-                    writer.WriteStartElement("returnType");
-                    writer.WriteAttributeString("returnType", MemberID.GetTypeName(t));
-                    WriteGenericArgumentsAndParameters(t, writer);
-                    writer.WriteEndElement();
-                }
+                
                 if (method.IsGenericMethod)
                 {
                     WriteGenericArgumentsAndParametersMethod(method, writer);
@@ -2711,7 +2750,6 @@ namespace NDoc.Core.Reflection
 				writer.WriteAttributeString("access", GetMethodAccessValue(method));
 				writer.WriteAttributeString("contract", GetMethodContractValue(method));
 				Type t = method.ReturnType;
-				writer.WriteAttributeString("returnType", MemberID.GetTypeName(t));
 				writer.WriteAttributeString("valueType", t.IsValueType.ToString().ToLower());
 
 				bool inherited = method.DeclaringType != method.ReflectedType;
@@ -2728,6 +2766,14 @@ namespace NDoc.Core.Reflection
 
 				if (!IsMemberSafe(method))
 					writer.WriteAttributeString("unsafe", "true");
+
+                writer.WriteStartElement("returnType");
+                writer.WriteAttributeString("type", MemberID.GetTypeName(t));
+                if (t.IsGenericType)
+                {
+                    WriteGenericArgumentsAndParameters(t, writer);
+                }
+                writer.WriteEndElement();
 
 				if (inherited)
 				{
@@ -2783,7 +2829,6 @@ namespace NDoc.Core.Reflection
 		#endregion
 
 		#region Get MemberID of base of inherited member
-		//TODO: Refactor into get base member and then use MemberID to get ID
 
 		/// <summary>Used by GetFullNamespaceName(MemberInfo member) functions to build
 		/// up most of the /doc member name.</summary>
@@ -2988,7 +3033,7 @@ namespace NDoc.Core.Reflection
             {
                 if (c.constraint.Count > 0)
                 {
-                    writer.WriteStartElement("constraints");
+                    writer.WriteStartElement("genericconstraints");
                     writer.WriteAttributeString("param", c.typeparam);
                     foreach (string s in c.constraint)
                         writer.WriteElementString("constraint", s);
@@ -3896,6 +3941,11 @@ namespace NDoc.Core.Reflection
 
 		#region Write Hierarchies
 
+        /// <summary>
+        /// Writes the XML documenting which classes derives from the current class
+        /// </summary>
+        /// <param name="writer">XML writer</param>
+        /// <param name="type">Current class type</param>
 		private void WriteDerivedTypes(XmlWriter writer, Type type)
 		{
 			foreach (Type derived in derivedTypes.GetDerivedTypes(type))
@@ -3904,6 +3954,7 @@ namespace NDoc.Core.Reflection
 				writer.WriteAttributeString("id", MemberID.GetMemberID(derived));
 				writer.WriteAttributeString("displayName", MemberDisplayName.GetMemberDisplayName(derived));
 				writer.WriteAttributeString("namespace", derived.Namespace);
+                WriteGenericArgumentsAndParameters(derived, writer);
 				writer.WriteEndElement();
 			}
 		}

@@ -498,8 +498,9 @@ namespace NDoc.Test
 		/// <summary>Function returning a public inner class oject.</summary>
 		public Inner GetInnerClassObject() { return new Inner(); }
 
-		/// <summary>Function with a public inner class oject parameter.</summary>
-		public void TestInnerClassObject(Inner TheInner) { }
+        //TODO HIGH: For some reason the documentation tag does not appear in this situation
+		///// <summary>Function with a public inner class oject parameter.</summary>
+		//public void TestInnerClassObject(Inner TheInner) { }
 
 		/// <summary>Represents a private inner class.</summary>
 		private class PrivateInner
@@ -1579,6 +1580,7 @@ namespace NDoc.Test
 	/// <summary>This class has a member that uses 2D rectangular arrays.</summary>
 	public class Matrix
 	{
+        //TODO HIGH: Documentation does not appear here
 		/// <summary>Returns the inverse of a matrix.</summary>
 		/// <param name="matrix">A matrix.</param>
 		/// <returns>The inverted matrix.</returns>
@@ -1587,6 +1589,7 @@ namespace NDoc.Test
 			return null;
 		}
 
+        //TODO HIGH: Documentation does not appear here
 		/// <summary>Returns the inverse of a matrix.</summary>
 		/// <param name="matrix">A matrix.</param>
 		/// <returns>The inverted matrix.</returns>

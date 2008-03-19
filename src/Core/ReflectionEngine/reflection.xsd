@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.w3schools.com" xmlns="http://www.w3schools.com" elementFormDefault="qualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:ndoc-schema" xmlns="urn:ndoc-schema" elementFormDefault="qualified">
   
   <xs:element name="copyright">
     <xs:complexType>
@@ -20,7 +20,7 @@
       <xs:attribute name="id" type="xs:string" use="required"/>
       <xs:attribute name="displayName" type="xs:string" use="required"/>
       <xs:attribute name="namespace" type="xs:string" use="required"/>
-      <xs:attribute name="fullname" type="xs:string" use="required"/>
+      <xs:attribute name="fullName" type="xs:string" use="required"/>
     </xs:complexType>
   </xs:element>
 
@@ -126,9 +126,9 @@
 
   <xs:element name="documentation">
     <xs:complexType>
-      <xs:sequence>
-        <xs:any namespace="##other" processContents="skip" minOccurs="1" maxOccurs="unbounded"/>
-      </xs:sequence>
+      <xs:choice minOccurs="1" maxOccurs="unbounded">
+        <xs:any processContents="skip"/>
+      </xs:choice>
     </xs:complexType>
   </xs:element>
 
@@ -144,7 +144,7 @@
     </xs:complexType>
   </xs:element>
 
-  <xs:element name="genericconstraint">
+  <xs:element name="genericconstraints">
     <xs:complexType>
       <xs:sequence>
         <xs:element name="constraint" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
@@ -173,8 +173,6 @@
   <xs:element name="constructor">
     <xs:complexType>
       <xs:sequence>
-        <xs:element name="summary" type="xs:string" minOccurs="0" maxOccurs="1"/>
-        <xs:element name="remarks" type="xs:string" minOccurs="0" maxOccurs="1"/>
         <xs:element ref="documentation"/>
         <xs:group ref="attributeGroup" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="parameter" minOccurs="0" maxOccurs="unbounded"/>
@@ -187,20 +185,10 @@
       <xs:attribute name="unsafe" type="xs:boolean" use="optional"/>
     </xs:complexType>
   </xs:element>
-
-  <xs:element name="declaringType">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="genericargument" minOccurs="0" maxOccurs="unbounded"/>
-      </xs:sequence>
-      <xs:attribute name="type" type="xs:string" use="required"/>
-    </xs:complexType>
-  </xs:element>
   
   <xs:element name="field">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="declaringType" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="genericargument" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element name="summary" type="xs:string" minOccurs="0" maxOccurs="1"/>
         <xs:element name="remarks" type="xs:string" minOccurs="0" maxOccurs="1"/>
@@ -217,7 +205,8 @@
       <xs:attribute name="hiding" type="xs:boolean" use="optional"/>
       <xs:attribute name="initOnly" type="xs:boolean" use="optional"/>
       <xs:attribute name="literal" type="xs:boolean" use="optional"/>
-      <xs:attribute name="value" type="xs:boolean" use="optional"/>
+      <xs:attribute name="value" type="xs:string" use="optional"/>
+      <xs:attribute name="declaringType" type="xs:string" use="optional"/>
     </xs:complexType>
   </xs:element>
 
@@ -231,21 +220,17 @@
 
   <xs:element name="implements">
     <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="declaringType" minOccurs="1" maxOccurs="1"/>
-      </xs:sequence>
       <xs:attribute name="name" type="xs:string" use="required"/>
       <xs:attribute name="id" type="xs:string" use="required"/>
       <xs:attribute name="interface" type="xs:string" use="required"/>
-      <xs:attribute name="interfaceID" type="xs:string" use="required"/>
+      <xs:attribute name="interfaceId" type="xs:string" use="required"/>
+      <xs:attribute name="declaringType" type="xs:string" use="optional"/>
     </xs:complexType>
   </xs:element>
   
   <xs:element name="property">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="declaringType" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:element ref="interfaceField" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="documentation" minOccurs="1" maxOccurs="1"/>
         <xs:group ref="attributeGroup" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="parameter" minOccurs="0" maxOccurs="unbounded"/>
@@ -258,11 +243,13 @@
       <xs:attribute name="contract" type="xs:string" use="required"/>
       <xs:attribute name="type" type="xs:string" use="required"/>
       <xs:attribute name="valueType" type="xs:boolean" use="required"/>
+      <xs:attribute name="declaringType" type="xs:string" use="optional"/>
       <xs:attribute name="overload" type="xs:string" use="optional"/>
       <xs:attribute name="unsafe" type="xs:boolean" use="optional"/>
       <xs:attribute name="hiding" type="xs:boolean" use="optional"/>
       <xs:attribute name="get" type="xs:string" use="required"/>
       <xs:attribute name="set" type="xs:string" use="required"/>
+      <xs:attribute name="interface" type="xs:string" use="optional"/>
     </xs:complexType>
   </xs:element>
 
@@ -279,11 +266,11 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="returnType" minOccurs="1" maxOccurs="1"/>
-        <xs:element ref="declaringType" maxOccurs="1" minOccurs="0"/>
         <xs:element ref="documentation" minOccurs="1" maxOccurs="1"/>
         <xs:group ref="attributeGroup" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="parameter" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="implements" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="genericconstraints" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="genericargument" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
       <xs:attribute name="name" type="xs:string" use="required"/>
@@ -295,6 +282,7 @@
       <xs:attribute name="unsafe" type="xs:boolean" use="optional"/>
       <xs:attribute name="hiding" type="xs:boolean" use="optional"/>
       <xs:attribute name="interface" type="xs:string" use="optional"/>
+      <xs:attribute name="declaringType" type="xs:string" use="optional"/>
     </xs:complexType>
   </xs:element>
 
@@ -302,10 +290,9 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="returnType" minOccurs="1" maxOccurs="1"/>
-        <xs:element ref="declaringType" minOccurs="0" maxOccurs="1"/>
         <xs:element ref="documentation" minOccurs="1" maxOccurs="1"/>
         <xs:group ref="attributeGroup" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:element ref="parameter" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="parameter" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
       <xs:attribute name="name" type="xs:string" use="required"/>
       <xs:attribute name="id" type="xs:string" use="required"/>
@@ -314,6 +301,7 @@
       <xs:attribute name="valueType" type="xs:boolean" use="required"/>
       <xs:attribute name="overload" type="xs:string" use="optional"/>
       <xs:attribute name="unsafe" type="xs:boolean" use="optional"/>
+      <xs:attribute name="declaringType" type="xs:string" use="optional"/>
     </xs:complexType>
   </xs:element>
 
@@ -321,7 +309,6 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="genericargument" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:element ref="declaringType" minOccurs="0" maxOccurs="1"/>
         <xs:element ref="documentation" minOccurs="1" maxOccurs="1"/>
         <xs:group ref="attributeGroup" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="implements" minOccurs="0" maxOccurs="1"/>
@@ -334,6 +321,7 @@
       <xs:attribute name="type" type="xs:string" use="required"/>
       <xs:attribute name="interface" type="xs:string" use="optional"/>
       <xs:attribute name="multicast" type="xs:boolean" use="optional"/>
+      <xs:attribute name="declaringType" type="xs:string" use="optional"/>
     </xs:complexType>
   </xs:element>
 
@@ -342,10 +330,11 @@
       <xs:element name="summary" type="xs:string" minOccurs="0" maxOccurs="1"/>
       <xs:element name="remarks" type="xs:string" minOccurs="0" maxOccurs="1"/>
       <xs:element ref="documentation"/>
-      <xs:element ref="base" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="obsolete" minOccurs="0" maxOccurs="1"/>
+      <xs:element ref="baseType" minOccurs="0" maxOccurs="1"/>
       <xs:element ref="derivedBy" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element ref="implementsClass" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element ref="genericconstraint" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element ref="genericconstraints" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element ref="constructor" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element ref="field" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element ref="property" minOccurs="0" maxOccurs="unbounded"/>
@@ -374,11 +363,11 @@
     </xs:complexType>
   </xs:element>
 
-  <xs:element name="base">
+  <xs:element name="baseType">
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="genericargument" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:element ref="base" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="baseType" minOccurs="0" maxOccurs="1"/>
       </xs:sequence>
       <xs:attribute name="name" type="xs:string" use="required"/>
       <xs:attribute name="id" type="xs:string" use="required"/>
@@ -413,7 +402,7 @@
         <xs:element ref="documentation" minOccurs="1" maxOccurs="1"/>
         <xs:group ref="attributeGroup" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="derivedBy" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:element name="implements">
+        <xs:element name="implements" minOccurs="0" maxOccurs="unbounded">
           <xs:complexType>
             <xs:sequence>
               <xs:element ref="genericargument" minOccurs="0" maxOccurs="unbounded"/>
@@ -421,8 +410,8 @@
             <xs:attribute name="type" type="xs:string" use="required"/>
           </xs:complexType>
         </xs:element>
-        <xs:element ref="genericconstraint" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:element name="implementedBy">
+        <xs:element ref="genericconstraints" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element name="implementedBy" minOccurs="0" maxOccurs="unbounded">
           <xs:complexType>
             <xs:sequence>
               <xs:element ref="genericargument" minOccurs="0" maxOccurs="unbounded"/>
@@ -451,7 +440,7 @@
         <xs:element ref="documentation" minOccurs="1" maxOccurs="1"/>
         <xs:group ref="attributeGroup" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="parameter" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:element ref="genericconstraint" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="genericconstraints" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
       <xs:attribute name="name" type="xs:string" use="required"/>
       <xs:attribute name="displayName" type="xs:string" use="required"/>
@@ -483,12 +472,12 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="namespaceDocumentation" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:choice>
-          <xs:element ref="class" minOccurs="0" maxOccurs="unbounded"/>
-          <xs:element ref="interface" minOccurs="0" maxOccurs="unbounded"/>
-          <xs:element ref="structure" minOccurs="0" maxOccurs="unbounded"/>
-          <xs:element ref="delegate" minOccurs="0" maxOccurs="unbounded"/>
-          <xs:element ref="enumeration" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element ref="class"/>
+          <xs:element ref="interface"/>
+          <xs:element ref="structure"/>
+          <xs:element ref="delegate"/>
+          <xs:element ref="enumeration"/>
         </xs:choice>
       </xs:sequence>
       <xs:attribute name="name" type="xs:string" use="required"/>

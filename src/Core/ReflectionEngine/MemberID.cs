@@ -111,11 +111,11 @@ namespace NDoc.Core
 		{
 			string memberName;
 
-			memberName =
-				"M:" +
-				GetFullNamespaceName(method) +
-				"." +
-				method.Name.Replace('.', '#').Replace('+', '#');
+            memberName =
+                "M:" +
+                GetFullNamespaceName(method) +
+                "." +
+                method.Name.Replace('.', '#').Replace('+', '#');
 
 #if NET_2_0
             if (method.IsGenericMethod)
@@ -294,7 +294,7 @@ namespace NDoc.Core
                 }
                 else
                 {
-                    result = type.FullName.Replace("&", "").Replace('+', '#');
+                    result = type.FullName.Replace("&", "").Replace('+', '.');
                 }
             }
             return result;
@@ -381,6 +381,11 @@ namespace NDoc.Core
         }
 #endif
 
+        /// <summary>
+        /// Return a string representation of method parameters
+        /// </summary>
+        /// <param name="method">The method</param>
+        /// <returns>String representation</returns>
 		private static string GetParameterList(MethodBase method)
 		{
 			ParameterInfo[] parameters = method.GetParameters();
@@ -401,6 +406,8 @@ namespace NDoc.Core
 
 				Type paramType = parameter.ParameterType;
 				paramList.Append(GetTypeName(paramType, true));
+                if (paramType.IsByRef)
+                    paramList.Append('@');
 
 				++i;
 			}
