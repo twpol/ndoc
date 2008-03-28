@@ -172,7 +172,7 @@
 
   <xs:element name="constructor">
     <xs:complexType>
-      <xs:sequence>
+      <xs:sequence maxOccurs="1" minOccurs="0">
         <xs:element ref="documentation"/>
         <xs:group ref="attributeGroup" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="parameter" minOccurs="0" maxOccurs="unbounded"/>
@@ -188,7 +188,7 @@
   
   <xs:element name="field">
     <xs:complexType>
-      <xs:sequence>
+      <xs:sequence maxOccurs="1" minOccurs="0">
         <xs:element ref="genericargument" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element name="summary" type="xs:string" minOccurs="0" maxOccurs="1"/>
         <xs:element name="remarks" type="xs:string" minOccurs="0" maxOccurs="1"/>
@@ -264,7 +264,7 @@
 
   <xs:element name="method">
     <xs:complexType>
-      <xs:sequence>
+      <xs:sequence maxOccurs="1" minOccurs="0">
         <xs:element ref="returnType" minOccurs="1" maxOccurs="1"/>
         <xs:element ref="documentation" minOccurs="1" maxOccurs="1"/>
         <xs:group ref="attributeGroup" minOccurs="0" maxOccurs="unbounded"/>
@@ -288,7 +288,7 @@
 
   <xs:element name="operator">
     <xs:complexType>
-      <xs:sequence>
+      <xs:sequence maxOccurs="1" minOccurs="0">
         <xs:element ref="returnType" minOccurs="1" maxOccurs="1"/>
         <xs:element ref="documentation" minOccurs="1" maxOccurs="1"/>
         <xs:group ref="attributeGroup" minOccurs="0" maxOccurs="unbounded"/>
@@ -307,7 +307,7 @@
 
   <xs:element name="event">
     <xs:complexType>
-      <xs:sequence>
+      <xs:sequence maxOccurs="1" minOccurs="0">
         <xs:element ref="genericargument" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="documentation" minOccurs="1" maxOccurs="1"/>
         <xs:group ref="attributeGroup" minOccurs="0" maxOccurs="unbounded"/>
@@ -346,7 +346,7 @@
   
   <xs:element name="structure">
     <xs:complexType>
-      <xs:sequence>
+      <xs:sequence maxOccurs="1" minOccurs="0">
         <xs:group ref="classGroup" minOccurs="1" maxOccurs="1"/>
       </xs:sequence>
       <xs:attributeGroup ref="classAttributes"/>
@@ -389,7 +389,7 @@
 
   <xs:element name="class">
     <xs:complexType>
-      <xs:sequence>
+      <xs:sequence maxOccurs="1" minOccurs="0">
         <xs:group ref="classGroup" minOccurs="1" maxOccurs="1"/>
       </xs:sequence>
       <xs:attributeGroup ref="classAttributes"/>
@@ -398,7 +398,7 @@
 
   <xs:element name="interface">
     <xs:complexType>
-      <xs:sequence>
+      <xs:sequence maxOccurs="1" minOccurs="0">
         <xs:element ref="documentation" minOccurs="1" maxOccurs="1"/>
         <xs:group ref="attributeGroup" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="derivedBy" minOccurs="0" maxOccurs="unbounded"/>
@@ -435,7 +435,7 @@
 
   <xs:element name="delegate">
     <xs:complexType>
-      <xs:sequence>
+      <xs:sequence maxOccurs="1" minOccurs="0">
         <xs:element ref="returnType" minOccurs="1" maxOccurs="1"/>
         <xs:element ref="documentation" minOccurs="1" maxOccurs="1"/>
         <xs:group ref="attributeGroup" minOccurs="0" maxOccurs="unbounded"/>
@@ -453,7 +453,7 @@
 
   <xs:element name="enumeration">
     <xs:complexType>
-      <xs:sequence>
+      <xs:sequence maxOccurs="1" minOccurs="0">
         <xs:element ref="documentation" minOccurs="1" maxOccurs="1"/>
         <xs:group ref="attributeGroup" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="field" minOccurs="0" maxOccurs="unbounded"/>
@@ -470,7 +470,7 @@
 
   <xs:element name="namespace">
     <xs:complexType>
-      <xs:sequence>
+      <xs:sequence maxOccurs="1" minOccurs="0">
         <xs:element ref="namespaceDocumentation" minOccurs="0" maxOccurs="unbounded"/>
         <xs:choice minOccurs="0" maxOccurs="unbounded">
           <xs:element ref="class"/>

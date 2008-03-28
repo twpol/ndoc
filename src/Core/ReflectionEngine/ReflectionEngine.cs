@@ -231,6 +231,7 @@ namespace NDoc.Core.Reflection
 					// Start the root element
 					writer.WriteStartElement("ndoc");
 					writer.WriteAttributeString("SchemaVersion", "2.0");
+                    //TODO: This namespace prevents most documenters from reading the XML file
                     writer.WriteAttributeString("xmlns", "urn:ndoc-schema");
 
 					if (this.rep.FeedbackEmailAddress.Length > 0)
