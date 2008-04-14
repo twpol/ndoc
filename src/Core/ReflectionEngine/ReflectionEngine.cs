@@ -152,6 +152,7 @@ namespace NDoc.Core.Reflection
 			{
 				if (writer != null)
                     writer.Close();
+                //Validate XML file
                 XmlReaderSettings settings = new XmlReaderSettings();
                 XmlSchemaSet sc = new XmlSchemaSet();
                 sc.Add("urn:ndoc-schema", "reflection.xsd");
@@ -186,12 +187,21 @@ namespace NDoc.Core.Reflection
 			{
 				if (writer != null)  writer.Close();
 				if (swriter != null) swriter.Close();
+                XmlReaderSettings settings = new XmlReaderSettings();
+                XmlSchemaSet sc = new XmlSchemaSet();
+                sc.Add("urn:ndoc-schema", "reflection.xsd");
+                settings.ValidationType = ValidationType.Schema;
+                settings.Schemas = sc;
+                settings.ValidationEventHandler += validator_ValidationEventHandler;
+                XmlReader reader = XmlReader.Create(new StringReader(swriter.ToString()), settings);
+                while (reader.Read()) ;
 			}
 
 		}
 
         private void validator_ValidationEventHandler(object sender, ValidationEventArgs args)
         {
+            //TODO: Other exception
             throw new Exception(args.Message);
         }
 
@@ -231,7 +241,7 @@ namespace NDoc.Core.Reflection
 					// Start the root element
 					writer.WriteStartElement("ndoc");
 					writer.WriteAttributeString("SchemaVersion", "2.0");
-                    //TODO: This namespace prevents most documenters from reading the XML file
+                    //TODO HIGH: This namespace prevents most documenters from reading the XML file
                     writer.WriteAttributeString("xmlns", "urn:ndoc-schema");
 
 					if (this.rep.FeedbackEmailAddress.Length > 0)
@@ -1330,7 +1340,7 @@ namespace NDoc.Core.Reflection
 					//writer.WriteAttributeString("returnType", MemberID.GetTypeName(t));
 					writer.WriteAttributeString("valueType", t.IsValueType.ToString().ToLower());
 
-                    //TODO: Handle Generics
+                    //TODO HIGH: Handle Generics
                     writer.WriteStartElement("returnType");
                     writer.WriteAttributeString("type", MemberID.GetTypeName(t));
                     writer.WriteEndElement();

@@ -117,10 +117,8 @@ namespace NDoc.Core
                 "." +
                 method.Name.Replace('.', '#').Replace('+', '#');
 
-#if NET_2_0
             if (method.IsGenericMethod)
                 memberName = memberName + "``" + method.GetGenericArguments().Length;
-#endif
 
 			memberName += GetParameterList(method);
 
