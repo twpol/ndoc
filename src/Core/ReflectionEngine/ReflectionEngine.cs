@@ -152,10 +152,12 @@ namespace NDoc.Core.Reflection
 			{
 				if (writer != null)
                     writer.Close();
-                //Validate XML file
+                EmbeddedResources.WriteEmbeddedResource(
+                    this.GetType().Module.Assembly, "NDoc.Core.ReflectionEngine.reflection.xsd",
+                    Path.GetDirectoryName(xmlFile), "reflection.xsd");
                 XmlReaderSettings settings = new XmlReaderSettings();
                 XmlSchemaSet sc = new XmlSchemaSet();
-                sc.Add("urn:ndoc-schema", "reflection.xsd");
+                sc.Add("urn:ndoc-schema", Path.GetDirectoryName(xmlFile) + "/reflection.xsd");
                 settings.ValidationType = ValidationType.Schema;
                 settings.Schemas = sc;
                 settings.ValidationEventHandler += validator_ValidationEventHandler;
