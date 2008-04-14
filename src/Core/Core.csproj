@@ -255,7 +255,7 @@
     </None>
     <None Include="Documenter.cd" />
     <None Include="Core.build" />
-    <None Include="ReflectionEngine\reflection.xsd" />
+    <EmbeddedResource Include="ReflectionEngine\reflection.xsd" />
     <EmbeddedResource Include="AttributesForm.resx">
       <DependentUpon>AttributesForm.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -281,6 +281,9 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <Content Include="graphics\Red Folder.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

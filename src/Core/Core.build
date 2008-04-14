@@ -21,6 +21,7 @@
 			</resources>
 			<resources prefix="NDoc.Core" dynamicprefix="true">
 				<include name="graphics/*.bmp" />
+        <include name="ReflectionEngine/reflection.xsd" />
 			</resources>
 		</csc>
 	</target>
