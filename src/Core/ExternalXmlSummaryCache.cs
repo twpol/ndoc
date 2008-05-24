@@ -131,17 +131,7 @@ namespace NDoc.Core.Reflection
 						// If still not found, try locating the assembly in the Framework folder
 						if ((docPath == null) || (!File.Exists(docPath)))
 						{
-#if (NET_1_0)
-							FileVersionInfo version = FileVersionInfo.GetVersionInfo(assemblyPath);
-							string stringVersion = string.Format(
-								"v{0}.{1}.{2}", 
-								version.FileMajorPart, 
-								version.FileMinorPart, 
-								version.FileBuildPart);
-							string frameworkPath = this.GetDotnetFrameworkPath(stringVersion);
-#else
 							string frameworkPath = this.GetDotnetFrameworkPath(a.ImageRuntimeVersion);
-#endif
 							if (frameworkPath != null)
 							{
 								string localizedFrameworkPath = Path.Combine(frameworkPath, localizationLanguage);

@@ -14,8 +14,8 @@ using System.Runtime.InteropServices;
 
 [assembly: ComVisibleAttribute(false)]
 [assembly: AssemblyConfigurationAttribute("debug")]
-[assembly: AssemblyCompanyAttribute("http://ndoc.sourceforge.net")]
-[assembly: AssemblyProductAttribute("NDoc")]
+[assembly: AssemblyCompanyAttribute("http://ndoc3.sourceforge.net")]
+[assembly: AssemblyProductAttribute("NDoc3")]
 [assembly: AssemblyCopyrightAttribute("")]
 [assembly: AssemblyTrademarkAttribute("")]
 [assembly: AssemblyCultureAttribute("")]

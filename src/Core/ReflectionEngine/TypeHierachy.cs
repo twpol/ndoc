@@ -50,10 +50,8 @@ namespace NDoc.Core.Reflection
 				derivedTypeList = new ArrayList();
 				data.Add(baseTypeMemberID, derivedTypeList);
 			}
-#if NET_2_0
 			if (derivedType.GetGenericArguments().Length > 0)
                 derivedType = derivedType.GetGenericTypeDefinition();
-#endif
 
 			bool found = false;
 			for (int i = 0; i < derivedTypeList.Count; i++)

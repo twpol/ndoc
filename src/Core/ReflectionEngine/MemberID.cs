@@ -78,7 +78,6 @@ namespace NDoc.Core
 
 						Type type = parameter.ParameterType;
 
-#if NET_2_0
                         if (type.ContainsGenericParameters)
                         {
                             memberName += "`" + type.GenericParameterPosition.ToString();
@@ -87,9 +86,6 @@ namespace NDoc.Core
                         {
                             memberName += type.FullName;
                         }
-#else
-						memberName += type.FullName;
-#endif
 
 						++i;
 					}
@@ -147,7 +143,6 @@ namespace NDoc.Core
 
 		private static string GetTypeNamespaceName(Type type)
 		{
-#if NET_2_0
             if (type.GetGenericArguments().Length > 0)
             {
                 return type.GetGenericTypeDefinition().FullName.Replace('+', '.');
@@ -156,9 +151,6 @@ namespace NDoc.Core
             {
                 return type.FullName.Replace('+', '.');
             }
-#else
-			return type.FullName.Replace('+', '.');
-#endif
 		}
 
 		/// <summary>
@@ -176,7 +168,6 @@ namespace NDoc.Core
 			return GetTypeNamespaceName(member.ReflectedType);
 		}
 
-#if NET_2_0
         /// <summary>
         /// 
         /// </summary>
@@ -297,39 +288,7 @@ namespace NDoc.Core
             }
             return result;
         }
-#else
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="type"></param>
-		/// <returns></returns>
-		public static string GetTypeName(Type type)
-		{
-            string result = String.Empty;
-            if (!type.IsGenericType)
-                // XML Documentation file appends a "@" to reference and out types, not a "&"
-                result = type.FullName.Replace("&", "@").Replace('+', '#');
-            else
-            {
-                string param = GetGenericArguments(type.GetGenericArguments());
-                result = type.Name.Substring(0, type.Name.IndexOf("`")) + "<" + param + ">";
-            }
-			return result;
-		}
 
-        private static string GetGenericArguments(Type[] args)
-        {
-            string result = String.Empty;
-            foreach (Type t in args)
-            {
-                result += t.Name + ",";
-            }
-            return result.Substring(0, result.LastIndexOf(","));
-        }
-
-#endif
-
-#if NET_2_0
         private static string GetTypeArgumentsList(Type type)
         {
             StringBuilder argList = new StringBuilder();
@@ -377,7 +336,6 @@ namespace NDoc.Core
 
             return argList.ToString();
         }
-#endif
 
         /// <summary>
         /// Return a string representation of method parameters
@@ -415,10 +373,8 @@ namespace NDoc.Core
 				paramList.Append(')');
 			}
 
-#if NET_2_0
             if (method.ContainsGenericParameters)
                 paramList.Replace("`", "``");
-#endif
 
 			return paramList.ToString();
 		}

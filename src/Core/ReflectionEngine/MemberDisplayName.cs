@@ -55,7 +55,6 @@ namespace NDoc.Core
 		}
 
 
-#if NET_2_0
         private static string GetTypeDisplayName(Type type)
         {
             if (type.ContainsGenericParameters)
@@ -78,15 +77,7 @@ namespace NDoc.Core
                 return type.Name;
             }
         }
-#else
-		private static string GetTypeDisplayName(Type type)
-		{
-			return type.Name;
-		}
-#endif
 
-
-#if NET_2_0
         private static string GetTypeArgumentsList(Type type)
         {
             StringBuilder argList = new StringBuilder();
@@ -131,6 +122,5 @@ namespace NDoc.Core
 
             return argList.ToString();
         }
-#endif
 	}
 }

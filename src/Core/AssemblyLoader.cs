@@ -189,11 +189,7 @@ namespace NDoc.Core.Reflection
 							// LoadFile is really preferable, 
 							// but since .Net 1.0 doesn't have it,
 							// we have to use LoadFrom on that framework...
-#if (NET_1_0)
-							assy = Assembly.LoadFrom(fileName);
-#else
 							assy = Assembly.LoadFile(fileName);
-#endif
 						}
 						catch (Exception e2)
 						{

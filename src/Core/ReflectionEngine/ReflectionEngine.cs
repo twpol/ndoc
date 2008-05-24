@@ -152,17 +152,7 @@ namespace NDoc.Core.Reflection
 			{
 				if (writer != null)
                     writer.Close();
-                EmbeddedResources.WriteEmbeddedResource(
-                    this.GetType().Module.Assembly, "NDoc.Core.ReflectionEngine.reflection.xsd",
-                    Path.GetDirectoryName(xmlFile), "reflection.xsd");
-                XmlReaderSettings settings = new XmlReaderSettings();
-                XmlSchemaSet sc = new XmlSchemaSet();
-                sc.Add("urn:ndoc-schema", Path.GetDirectoryName(xmlFile) + "/reflection.xsd");
-                settings.ValidationType = ValidationType.Schema;
-                settings.Schemas = sc;
-                settings.ValidationEventHandler += validator_ValidationEventHandler;
-                XmlReader reader = XmlReader.Create(xmlFile, settings);
-                while (reader.Read()) ;
+                ValidateXML(XmlReader.Create(xmlFile, MakeXmlReaderSettings()));
 			}
 		}
 
@@ -189,25 +179,65 @@ namespace NDoc.Core.Reflection
 			{
 				if (writer != null)  writer.Close();
 				if (swriter != null) swriter.Close();
-                XmlReaderSettings settings = new XmlReaderSettings();
-                XmlSchemaSet sc = new XmlSchemaSet();
-                sc.Add("urn:ndoc-schema", "reflection.xsd");
-                settings.ValidationType = ValidationType.Schema;
-                settings.Schemas = sc;
-                settings.ValidationEventHandler += validator_ValidationEventHandler;
-                XmlReader reader = XmlReader.Create(new StringReader(swriter.ToString()), settings);
-                while (reader.Read()) ;
+                ValidateXML(XmlReader.Create(new StringReader(swriter.ToString()), MakeXmlReaderSettings()));
 			}
 
 		}
 
-        private void validator_ValidationEventHandler(object sender, ValidationEventArgs args)
+        /// <summary>
+        /// Generates the XmlReaderSettings for validating against the XML Schema.
+        /// </summary>
+        /// <returns>The XmlReaderSettings.</returns>
+        private XmlReaderSettings MakeXmlReaderSettings()
         {
-            //TODO: Other exception
-            throw new Exception(args.Message);
+            // Copies the XML Schema to the current directory
+            EmbeddedResources.WriteEmbeddedResource(
+                this.GetType().Module.Assembly, "NDoc.Core.ReflectionEngine.reflection.xsd",
+                Directory.GetCurrentDirectory(), "reflection.xsd");
+            XmlReaderSettings settings = new XmlReaderSettings();
+            XmlSchemaSet sc = new XmlSchemaSet();
+            sc.Add("urn:ndoc-schema", Directory.GetCurrentDirectory() + @"\reflection.xsd");
+            settings.ValidationType = ValidationType.Schema;
+            settings.Schemas = sc;
+            settings.ValidationEventHandler += validator_ValidationEventHandler;
+            return settings;
         }
 
-		/// <summary>Builds an Xml file combining the reflected metadata with the /doc comments.</summary>
+        /// <summary>
+        /// Validates the generated XML file against the XML schema.
+        /// </summary>
+        /// <param name="reader">An instance of a XmlReader, containing the XML to be validated.</param>
+        private void ValidateXML(XmlReader reader)
+        {
+            // Reads through the XML to validate against the schema
+            try
+            {
+                while (reader.Read()) ;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message, e);
+            }
+            finally
+            {
+                File.Delete(Directory.GetCurrentDirectory() + @"\reflection.xsd");
+            }
+        }
+
+        /// <summary>
+        /// Event handler which is run when the XML file, does not validate against the XML Schema.
+        /// </summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="args">The validation event arguments.</param>
+        private void validator_ValidationEventHandler(object sender, ValidationEventArgs args)
+        {
+            throw args.Exception;
+        }
+
+		/// <summary>
+        /// Builds an Xml file combining the reflected metadata with the /doc comments.
+		/// </summary>
+		/// <param name="writer">An instance of a XmlWriter</param>
 		private void BuildXml(XmlWriter writer)
 		{
 			int start = Environment.TickCount;
@@ -243,7 +273,7 @@ namespace NDoc.Core.Reflection
 					// Start the root element
 					writer.WriteStartElement("ndoc");
 					writer.WriteAttributeString("SchemaVersion", "2.0");
-                    //TODO HIGH: This namespace prevents most documenters from reading the XML file
+                    //TODO: This namespace prevents most documenters from reading the XML file
                     writer.WriteAttributeString("xmlns", "urn:ndoc-schema");
 
 					if (this.rep.FeedbackEmailAddress.Length > 0)
@@ -410,21 +440,12 @@ namespace NDoc.Core.Reflection
 			if (Char.IsDigit(type.Name, 0))
 				return false;
 
-#if NET_2_0
 			//If the type has a CompilerGenerated attribute then we don't want to document it 
 			//as it is an internal artifact of the compiler
 			if (type.IsDefined(typeof(System.Runtime.CompilerServices.CompilerGeneratedAttribute), false))
 			{
 				return false;
 			}
-#else
-			//HACK: exclude Net 2.0 compiler generated iterators
-			//These are nested classes with name starting with "<"
-			if (type.DeclaringType != null && type.Name.StartsWith("<"))
-			{
-				return false;
-			}
-#endif
 
 			//exclude types that are internal to the .Net framework.
 			if (type.FullName.StartsWith("System.") || type.FullName.StartsWith("Microsoft."))
@@ -484,7 +505,7 @@ namespace NDoc.Core.Reflection
 				return false;
 			}
 
-			//HACK: exclude Net 2.0 Anonymous Methods
+			//Exclude Net 2.0 Anonymous Methods
 			//These have name starting with "<"
 			if (method.Name.StartsWith("<"))
 			{
@@ -605,7 +626,7 @@ namespace NDoc.Core.Reflection
 				return false;
 			}
 
-			//HACK: exclude Net 2.0 Anonymous Method Delegates
+			//exclude Net 2.0 Anonymous Method Delegates
 			//These have name starting with "<"
 			if (field.Name.StartsWith("<"))
 			{
@@ -1242,12 +1263,12 @@ namespace NDoc.Core.Reflection
 				}
 			}
 
-#if NET_2_0
+
             if (type.IsGenericType)
             {
                 WriteGenericTypeConstraints(type, writer);
             }
-#endif
+
 
 			WriteConstructors(writer, type);
 			WriteStaticConstructor(writer, type);
@@ -1298,12 +1319,12 @@ namespace NDoc.Core.Reflection
 				}
 			}
 
-#if NET_2_0
+
             if (type.IsGenericType)
             {
                 WriteGenericTypeConstraints(type, writer);
             }
-#endif
+
 			
 			WriteInterfaceImplementingTypes(writer, type);
 
@@ -1339,10 +1360,9 @@ namespace NDoc.Core.Reflection
 				if (method.Name == "Invoke")
 				{
 					Type t = method.ReturnType;
-					//writer.WriteAttributeString("returnType", MemberID.GetTypeName(t));
 					writer.WriteAttributeString("valueType", t.IsValueType.ToString().ToLower());
 
-                    //TODO HIGH: Handle Generics
+                    //TODO: Handle Generics
                     writer.WriteStartElement("returnType");
                     writer.WriteAttributeString("type", MemberID.GetTypeName(t));
                     writer.WriteEndElement();
@@ -1356,12 +1376,12 @@ namespace NDoc.Core.Reflection
 					}
 				}
 			}
-#if NET_2_0
+
             if (type.IsGenericType)
             {
                 WriteGenericTypeConstraints(type, writer);
             }
-#endif
+
 			writer.WriteEndElement();
 		}
 
@@ -2060,11 +2080,8 @@ namespace NDoc.Core.Reflection
 			}
 
 			Type t = field.FieldType;
-#if NET_2_0
+
             writer.WriteAttributeString("type", MemberID.GetTypeName(t, false));
-#else
-			writer.WriteAttributeString("type", MemberID.GetTypeName(t));
-#endif
             
             writer.WriteAttributeString("valueType", t.IsValueType.ToString().ToLower());
 
@@ -2104,12 +2121,12 @@ namespace NDoc.Core.Reflection
             {
                 WriteDeclaringType(MemberID.GetDeclaringTypeName(field), writer);
             }
-#if NET_2_0
+
             if (t.IsGenericType)
             {
                 WriteGenericArgumentsAndParameters(t, writer);
             }
-#endif
+
 			if (inherited)
 			{
 				WriteInheritedDocumentation(writer, memberName, field.DeclaringType);
@@ -2375,11 +2392,7 @@ namespace NDoc.Core.Reflection
 				writer.WriteAttributeString("access", GetPropertyAccessValue(property));
 				writer.WriteAttributeString("contract", GetPropertyContractValue(property));
 				Type t = property.PropertyType;
-#if NET_2_0
                 writer.WriteAttributeString("type", MemberID.GetTypeName(t, false));
-#else
-				writer.WriteAttributeString("type", MemberID.GetTypeName(t));
-#endif
 				writer.WriteAttributeString("valueType", t.IsValueType.ToString().ToLower());
 
 				if (inherited)
@@ -2474,12 +2487,12 @@ namespace NDoc.Core.Reflection
 						}
 					}
 				}
-#if NET_2_0
+                
                 if (t.IsGenericType)
                 {
                     WriteGenericArgumentsAndParameters(t, writer);
                 }
-#endif
+
 				writer.WriteEndElement();
 			}
 		}
@@ -2673,7 +2686,6 @@ namespace NDoc.Core.Reflection
 						writer.WriteEndElement();
 					}
 				}
-#if NET_2_0
                 if (method.IsGenericMethod)
                 {
                     WriteGenericMethodConstraints(method, writer);
@@ -2683,7 +2695,7 @@ namespace NDoc.Core.Reflection
                 {
                     WriteGenericArgumentsAndParametersMethod(method, writer);
                 }
-#endif
+
 				writer.WriteEndElement();
 			}
 		}
@@ -2707,11 +2719,7 @@ namespace NDoc.Core.Reflection
 			writer.WriteAttributeString("name", parameter.Name);
 			
 			Type t = parameter.ParameterType;
-#if NET_2_0
 			writer.WriteAttributeString("type", MemberID.GetTypeName(t, false));
-#else
-			writer.WriteAttributeString("type", MemberID.GetTypeName(t));
-#endif
 			writer.WriteAttributeString("valueType", t.IsValueType.ToString().ToLower());
 
 			if (t.IsPointer)
@@ -2726,7 +2734,7 @@ namespace NDoc.Core.Reflection
 				}
 				else
 				{
-					//HACK: assuming this is only for VB syntax
+					//assuming this is only for VB syntax
 					writer.WriteAttributeString("defaultValue", "Nothing");
 				}
 			}
@@ -2742,12 +2750,10 @@ namespace NDoc.Core.Reflection
 			}
 
 			WriteCustomAttributes(writer, parameter);
-#if NET_2_0
             if (t.IsGenericType)
             {
                 WriteGenericArgumentsAndParameters(t, writer);
             }
-#endif
 			writer.WriteEndElement();
 		}
 
@@ -2924,7 +2930,6 @@ namespace NDoc.Core.Reflection
 
 		#endregion
 
-#if NET_2_0
         #region Generics
 
         /// <summary>
@@ -3056,7 +3061,6 @@ namespace NDoc.Core.Reflection
         }
 
         #endregion
-#endif
 
         #region Enumeration Values
 
@@ -3509,10 +3513,8 @@ namespace NDoc.Core.Reflection
 			string memberName, 
 			Type declaringType)
 		{
-#if NET_2_0
             if (declaringType.GetGenericArguments().Length > 0)
                 declaringType = declaringType.GetGenericTypeDefinition();
-#endif
 			string summary = externalSummaryCache.GetSummary(memberName, declaringType);
 			if (summary.Length > 0)
 			{
