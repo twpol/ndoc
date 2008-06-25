@@ -22,10 +22,10 @@ using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
 
-using NDoc.Core;
-using NDoc.Core.Reflection;
+using NDoc3.Core;
+using NDoc3.Core.Reflection;
 
-namespace NDoc.Documenter.Xml
+namespace NDoc3.Documenter.Xml
 {
 	/// <summary>The XmlDocumenter class.</summary>
 	public class XmlDocumenter : BaseReflectionDocumenter

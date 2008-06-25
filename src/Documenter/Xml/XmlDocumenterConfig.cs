@@ -21,19 +21,19 @@ using System.ComponentModel;
 using System.Drawing.Design;
 using System.Windows.Forms.Design;
 
-using NDoc.Core;
-using NDoc.Core.Reflection;
+using NDoc3.Core;
+using NDoc3.Core.Reflection;
 
-namespace NDoc.Documenter.Xml
+namespace NDoc3.Documenter.Xml
 {
 	/// <summary>The XmlDocumenter config class.</summary>
 	/// <remarks>	
 	/// <para>
-	/// The XML Documenter is the simplest of the NDoc Documenters. It is primarily 
+	/// The XML Documenter is the simplest of the NDoc3 Documenters. It is primarily 
 	/// a development tool.
 	/// </para>
 	/// <para>
-	/// As part of the documentation compile process, NDoc merges the type information 
+	/// As part of the documentation compile process, NDoc3 merges the type information 
 	///	in the assemblies being documented with the code comment summary XML document that the
 	///	<a href="ms-help://MS.NETFrameworkSDKv1.1/cscomp/html/vcerrDocProcessDocumentationComments.htm">
 	///	/doc compiler option</a> emits. The XML Documenter allows you to save this merged 

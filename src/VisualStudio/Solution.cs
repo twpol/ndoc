@@ -29,7 +29,7 @@ using System.Xml;
 using System.Xml.XPath;
 using System.DirectoryServices; // to get IIS virtual directory fiel path.
 
-namespace NDoc.VisualStudio
+namespace NDoc3.VisualStudio
 {
 	/// <summary>
 	/// Represents a Visual Studio solution file.

@@ -27,7 +27,7 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.XPath;
 
-namespace NDoc.VisualStudio
+namespace NDoc3.VisualStudio
 {
 	/// <summary>
 	/// ProjectConfig settings for Visual Studio C# projects.
