@@ -24,7 +24,7 @@ using System.Reflection;
 using System.Text;
 using System.Xml;
 
-using NDoc.Core;
+using NDoc3.Core;
 
 namespace NDoc.ConsoleApplication
 {

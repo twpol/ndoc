@@ -642,13 +642,13 @@ namespace NDoc.Core.Reflection
 			}
 		}
 
-		SdkVersion _SdkDocVersion = SdkVersion.SDK_v1_1;
+		SdkVersion _SdkDocVersion = SdkVersion.SDK_v2_0;
 
 		/// <summary>Gets or sets the LinkToSdkDocVersion property.</summary>
 		/// <remarks>Specifies to which version of the .NET Framework SDK documentation the links to system types will be pointing.</remarks>
 		[Category("Documentation Main Settings")]
 		[Description("Specifies to which version of the .NET Framework SDK documentation the links to system types will be pointing.")]
-		[DefaultValue(SdkVersion.SDK_v1_1)]
+		[DefaultValue(SdkVersion.SDK_v2_0)]
 		[System.ComponentModel.TypeConverter(typeof(EnumDescriptionConverter))]
 		public SdkVersion SdkDocVersion
 		{
@@ -921,13 +921,17 @@ namespace NDoc.Core.Reflection
 	/// </summary>
 	public enum SdkVersion
 	{
-		/// <summary>The SDK version 1.0.</summary>
-		[Description(".Net Version 1.0")]
-		SDK_v1_0, 
+		/// <summary>The SDK version 2.0.</summary>
+		[Description(".Net Version 2.0")]
+		SDK_v2_0, 
 
-		/// <summary>The SDK version 1.1.</summary>
-		[Description(".Net Version 1.1")]
-		SDK_v1_1, 
+		/// <summary>The SDK version 3.0.</summary>
+		[Description(".Net Version 3.0")]
+		SDK_v3_0, 
+
+        /// <summary>The SDK version 3.5.</summary>
+        [Description(".NET Version 3.5")]
+        SDK_v3_5
 	}
 
 	/// <summary>
@@ -938,8 +942,8 @@ namespace NDoc.Core.Reflection
 		/// <summary>
 		/// English
 		/// </summary>
-		[Description("English")] en, 
-		/// <summary>
+		[Description("English")] en 
+		/*/// <summary>
 		/// French
 		/// </summary>
 		[Description("French")] fr, 
@@ -962,7 +966,7 @@ namespace NDoc.Core.Reflection
 		/// <summary>
 		/// Spanish
 		/// </summary>
-		[Description("Spanish")] es 
+		[Description("Spanish")] es */
 	}
 
 	/// <summary>

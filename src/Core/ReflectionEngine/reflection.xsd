@@ -84,6 +84,11 @@
       <xs:sequence>
         <xs:element ref="attributeField" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="attributeProperty" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element name="field" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:attributeGroup ref="attributeAttributes"/>
+          </xs:complexType>
+        </xs:element>
         <xs:element name="property" minOccurs="0" maxOccurs="unbounded">
           <xs:complexType>
             <xs:attributeGroup ref="attributeAttributes"/>
@@ -101,17 +106,6 @@
       <xs:element name="obsolete" type="xs:string"/>
     </xs:choice>
   </xs:group>
-
-  <xs:element name="namespaceDocumentation">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:choice minOccurs="0" maxOccurs="1">
-          <xs:element name="summary" type="xs:string"/>
-          <xs:element name="namespacedoc" type="xs:string"/>
-        </xs:choice>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
 
   <xs:attributeGroup name="classAttributes">
     <xs:attribute name="name" type="xs:string" use="required"/>
@@ -471,7 +465,7 @@
   <xs:element name="namespace">
     <xs:complexType>
       <xs:sequence maxOccurs="1" minOccurs="0">
-        <xs:element ref="namespaceDocumentation" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="documentation" minOccurs="0" maxOccurs="unbounded"/>
         <xs:choice minOccurs="0" maxOccurs="unbounded">
           <xs:element ref="class"/>
           <xs:element ref="interface"/>

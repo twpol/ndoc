@@ -199,8 +199,8 @@
             <attributes>
                 <attribute type="ComVisibleAttribute" value="false" />
                 <attribute type="AssemblyConfigurationAttribute" value="${framework::get-target-framework()}.${platform::get-name()}; ${project.release.type}" />
-                <attribute type="AssemblyCompanyAttribute" value="http://ndoc.sourceforge.net" />
-                <attribute type="AssemblyProductAttribute" value="NDoc" />
+                <attribute type="AssemblyCompanyAttribute" value="http://ndoc3.sourceforge.net" />
+                <attribute type="AssemblyProductAttribute" value="NDoc3" />
                 <attribute type="AssemblyCopyrightAttribute" value="" />
                 <attribute type="AssemblyTrademarkAttribute" value="" />
                 <attribute type="AssemblyCultureAttribute" value="" />
@@ -213,7 +213,7 @@
 
     -->
     <target name="sdkdoc" description="Builds SDK documentation (based on .NET Framework 1.1 assembly)">
-        <echo message="Creating SDK Documentation for NDoc Core." />
+        <echo message="Creating SDK Documentation for NDoc3 Core." />
         <ndoc>
             <assemblies basedir="${build.dir}/net/1.1">
                 <include name="NDoc.Core.dll" />

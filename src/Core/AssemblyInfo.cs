@@ -7,6 +7,6 @@ using System.Reflection;
 
 #if (OFFICIAL_RELEASE)
 [assembly: AssemblyDelaySign(false)]
-[assembly: AssemblyKeyFile("NDoc.snk")]
+[assembly: AssemblyKeyFile("NDoc3.snk")]
 [assembly: AssemblyKeyName("")]
 #endif

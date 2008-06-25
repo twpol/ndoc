@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<project name="NDoc.Core" default="compile">
+<project name="NDoc3.Core" default="compile">
 	<target name="compile">
 		<csc target="library" output="${current.bin.dir}/${nant.project.name}.dll" debug="${current.build.debug}" optimize="${current.build.optimize}" unsafe="false" checked="false" define="${current.build.defines}" doc="${current.bin.dir}/${nant.project.name}.xml">
 			<sources>
@@ -19,7 +19,7 @@
 			<resources>
 				<include name="**/*.resx" />
 			</resources>
-			<resources prefix="NDoc.Core" dynamicprefix="true">
+			<resources prefix="NDoc3.Core" dynamicprefix="true">
 				<include name="graphics/*.bmp" />
         <include name="ReflectionEngine/reflection.xsd" />
 			</resources>

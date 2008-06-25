@@ -977,7 +977,7 @@ namespace NDoc.Core.Reflection
 					if (!documentedTypes.ContainsKey(typeID))
 					{
 						documentedTypes.Add(typeID, null);
-						if (MustDocumentType(type))
+						if (MustDocumentType(type) && !CheckForMissingTypeDocumentation(type))
 						{
 							bool hiding = ((type.MemberType & MemberTypes.NestedType) != 0)
 								&& IsHiding(type, type.DeclaringType);
@@ -1914,7 +1914,7 @@ namespace NDoc.Core.Reflection
 					)
 					) && 
 					MustDocumentMethod(method) && 
-					!IsHidden(method, type))
+					!IsHidden(method, type) && !CheckForMissingMethodDocumentation(method))
 				{
 					WriteMethod(
 						writer, 
@@ -3259,6 +3259,31 @@ namespace NDoc.Core.Reflection
 
 		#region Missing Documentation
 
+        /// <summary>
+        /// Checks for missing type documentation
+        /// </summary>
+        /// <param name="type">The type to check</param>
+        /// <returns>True if documentation is missing</returns>
+        private bool CheckForMissingTypeDocumentation(Type type)
+        {
+            if (assemblyDocCache.GetDoc(MemberID.GetMemberID(type)) == null)
+            {
+                Trace.WriteLine(String.Format("The type {0} isn't documented and therefore skipped", MemberID.GetMemberID(type)));
+                return true;
+            }
+            return false;
+        }
+
+        private bool CheckForMissingMethodDocumentation(MethodInfo methodInfo)
+        {
+            if (assemblyDocCache.GetDoc(MemberID.GetMemberID(methodInfo)) == null)
+            {
+                Trace.WriteLine(String.Format("The method {0} isn't documented and therefore skipped", MemberID.GetMemberID(methodInfo)));
+                return true;
+            }
+            return false;
+        }
+
 		private void CheckForMissingSummaryAndRemarks(
 			XmlWriter writer, 
 			string memberName)
@@ -3292,7 +3317,6 @@ namespace NDoc.Core.Reflection
 				{
 					WriteMissingDocumentation(writer, "summary", null, 
 						"Missing <summary> documentation for " + memberName);
-					//Debug.WriteLine("@@missing@@\t" + memberName);
 				}
 			}
 
