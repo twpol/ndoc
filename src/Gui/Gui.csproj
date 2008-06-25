@@ -9,7 +9,7 @@
     <ApplicationIcon>graphics\NDoc.ico</ApplicationIcon>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
-    <AssemblyName>NDocGui</AssemblyName>
+    <AssemblyName>NDoc3Gui</AssemblyName>
     <AssemblyOriginatorKeyFile>
     </AssemblyOriginatorKeyFile>
     <DefaultClientScript>JScript</DefaultClientScript>
