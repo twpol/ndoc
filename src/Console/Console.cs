@@ -1,4 +1,4 @@
-// Console.cs - a console application for NDoc
+// Console.cs - a console application for NDoc3
 // Copyright (C) 2001  Jason Diamond
 //
 // This program is free software; you can redistribute it and/or modify
@@ -26,7 +26,7 @@ using System.Xml;
 
 using NDoc3.Core;
 
-namespace NDoc.ConsoleApplication
+namespace NDoc3.ConsoleApplication
 {
 	class EntryPoint
 	{
@@ -208,23 +208,23 @@ namespace NDoc.ConsoleApplication
 		private static void WriteUsage()
 		{
 			Console.WriteLine();
-			Console.WriteLine("usage: NDocConsole  assembly[,xmldoc] [assembly[,xmldoc]]...");
+			Console.WriteLine("usage: NDoc3Console  assembly[,xmldoc] [assembly[,xmldoc]]...");
 			Console.WriteLine("                    [[-referencepath=dir] [-referencepath=dir]...]");
 			Console.WriteLine("                    [-namespacesummaries=filename]");
 			Console.WriteLine("                    [-documenter=documenter_name]");
 			Console.WriteLine("                    [[-property=value] [-property=value]...]");
 			Console.WriteLine("                    [-verbose]");
 			Console.WriteLine();
-			Console.WriteLine("or     NDocConsole  -recurse=dir[,maxDepth]");
+			Console.WriteLine("or     NDoc3Console  -recurse=dir[,maxDepth]");
 			Console.WriteLine("                    [[-referencepath=dir] [-referencepath=dir]...]");
 			Console.WriteLine("                    [-namespacesummaries=filename]");
 			Console.WriteLine("                    [-documenter=documenter_name]");
 			Console.WriteLine("                    [[-property=value] [-property=value]...]");
 			Console.WriteLine("                    [-verbose]");
 			Console.WriteLine();
-			Console.WriteLine("or     NDocConsole  [-documenter=documenter_name] -project=ndocfile [-verbose]");
+			Console.WriteLine("or     NDoc3Console  [-documenter=documenter_name] -project=ndocfile [-verbose]");
 			Console.WriteLine();
-			Console.WriteLine("or     NDocConsole  [-help] [documenter_name [property_name]]");
+			Console.WriteLine("or     NDoc3Console  [-help] [documenter_name [property_name]]");
 			Console.WriteLine();
 			Console.WriteLine();
 

@@ -9,7 +9,7 @@
 			<references>
 				<include name="System.dll" />
 				<include name="System.Xml.dll" />
-				<include name="${current.bin.dir}/NDoc.Core.dll" />
+				<include name="${current.bin.dir}/NDoc3.Core.dll" />
 			</references>
 		</csc>
 	</target>
