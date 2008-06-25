@@ -1,8 +1,8 @@
 using System;
 
-using NDoc.Core;
+using NDoc3.Core;
 
-namespace NDoc.Documenter.Intellisense
+namespace NDoc3.Documenter.Intellisense
 {
 	/// <summary>
 	/// Information about the Documenter

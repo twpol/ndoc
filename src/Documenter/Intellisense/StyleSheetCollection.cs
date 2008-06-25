@@ -25,9 +25,9 @@ using System.Xml.Xsl;
 using System.Diagnostics;
 using System.Reflection;
 
-using NDoc.Core;
+using NDoc3.Core;
 
-namespace NDoc.Documenter.Intellisense
+namespace NDoc3.Documenter.Intellisense
 {
 	/// <summary>
 	/// The collection of xslt stylesheets used to generate the Html
@@ -46,7 +46,7 @@ namespace NDoc.Documenter.Intellisense
 #if NO_RESOURCES
 			string resourceBase = "file://" + Path.GetFullPath(Path.Combine(System.Windows.Forms.Application.StartupPath, @"..\..\..\Documenter\Intellisense\xslt"));
 #else
-			string resourceBase = "NDoc.Documenter.Intellisense.xslt";
+			string resourceBase = "NDoc3.Documenter.Intellisense.xslt";
 #endif
 
 			XsltResourceResolver resolver = new XsltResourceResolver(resourceBase);

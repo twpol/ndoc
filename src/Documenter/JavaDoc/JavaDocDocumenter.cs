@@ -24,10 +24,10 @@ using System.Xml.XPath;
 using System.Reflection;
 using System.Collections;
 
-using NDoc.Core;
-using NDoc.Core.Reflection;
+using NDoc3.Core;
+using NDoc3.Core.Reflection;
 
-namespace NDoc.Documenter.JavaDoc
+namespace NDoc3.Documenter.JavaDoc
 {
 	/// <summary>The JavaDoc documenter.</summary>
 	public class JavaDocDocumenter : BaseReflectionDocumenter
@@ -87,12 +87,12 @@ namespace NDoc.Documenter.JavaDoc
 #else
 				EmbeddedResources.WriteEmbeddedResources(
 					this.GetType().Module.Assembly,
-					"NDoc.Documenter.JavaDoc.css",
+					"NDoc3.Documenter.JavaDoc.css",
 					Path.Combine( this.workspace.ResourceDirectory, "css" ) );
 
 				EmbeddedResources.WriteEmbeddedResources(
 					this.GetType().Module.Assembly,
-					"NDoc.Documenter.JavaDoc.xslt",
+					"NDoc3.Documenter.JavaDoc.xslt",
 					Path.Combine( this.workspace.ResourceDirectory, "xslt") );
 #endif
 

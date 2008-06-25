@@ -4,10 +4,10 @@ using System.ComponentModel;
 using System.Drawing.Design;
 using System.Windows.Forms.Design;
 
-using NDoc.Core;
-using NDoc.Core.Reflection;
+using NDoc3.Core;
+using NDoc3.Core.Reflection;
 
-namespace NDoc.Documenter.Intellisense
+namespace NDoc3.Documenter.Intellisense
 {
 	/// <summary>
 	/// Config settings for the native Intellisense Documenter

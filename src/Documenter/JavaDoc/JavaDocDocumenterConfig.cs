@@ -21,10 +21,10 @@ using System.ComponentModel;
 using System.Drawing.Design;
 using System.Windows.Forms.Design;
 
-using NDoc.Core;
-using NDoc.Core.Reflection;
+using NDoc3.Core;
+using NDoc3.Core.Reflection;
 
-namespace NDoc.Documenter.JavaDoc
+namespace NDoc3.Documenter.JavaDoc
 {
 	/// <summary>The JavaDoc documenter config class.</summary>
 	[DefaultProperty("OutputDirectory")]
@@ -37,7 +37,7 @@ namespace NDoc.Documenter.JavaDoc
 		/// technology.</para>
 		/// <para><i>Due to lack of interest this documenter is not under active development.</i>
 		/// If you are interested in updating this documenter please 
-		/// <a href="http://sourceforge.net/projects/ndoc/">contact one of NDoc's Admins</a>.
+		/// <a href="http://sourceforge.net/projects/ndoc3/">contact one of NDoc3's Admins</a>.
 		/// </para>
 		/// </remarks>
 		public JavaDocDocumenterConfig( JavaDocDocumenterInfo info ) : base( info )

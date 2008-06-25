@@ -5,10 +5,10 @@ using System.Text;
 using System.Xml.XPath;
 using System.Xml.Xsl;
 
-using NDoc.Core;
-using NDoc.Core.Reflection;
+using NDoc3.Core;
+using NDoc3.Core.Reflection;
 
-namespace NDoc.Documenter.Intellisense
+namespace NDoc3.Documenter.Intellisense
 {
 	/// <summary>
 	/// 
@@ -169,7 +169,7 @@ namespace NDoc.Documenter.Intellisense
 			}
 			catch (PathTooLongException e)
 			{
-				throw new PathTooLongException(e.Message + "\nThe file that NDoc was trying to create had the following name:\n" + Path.Combine(MyConfig.OutputDirectory, filename));
+				throw new PathTooLongException(e.Message + "\nThe file that NDoc3 was trying to create had the following name:\n" + Path.Combine(MyConfig.OutputDirectory, filename));
 			}
 
 #if DEBUG

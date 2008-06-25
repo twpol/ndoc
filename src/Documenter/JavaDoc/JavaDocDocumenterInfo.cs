@@ -1,8 +1,8 @@
 using System;
 
-using NDoc.Core;
+using NDoc3.Core;
 
-namespace NDoc.Documenter.JavaDoc
+namespace NDoc3.Documenter.JavaDoc
 {
 	/// <summary>
 	/// Information about the Xml Documenter
