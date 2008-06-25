@@ -1,6 +1,6 @@
 using System;
 
-namespace NDoc.Test.Extensibility
+namespace NDoc3.Test.Extensibility
 {
 	/// <summary>
 	/// This namespace is used to test the extensibility feature

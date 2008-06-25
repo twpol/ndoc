@@ -1,6 +1,6 @@
 using System;
 
-namespace NDoc.Test.ThreadSafety
+namespace NDoc3.Test.ThreadSafety
 {
 	/// <summary>
 	/// The classes in this namesapce test the various permuations

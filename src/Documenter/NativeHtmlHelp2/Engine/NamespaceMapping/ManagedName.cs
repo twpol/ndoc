@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Diagnostics;
 
-namespace NDoc.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping
+namespace NDoc3.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping
 {
 	/// <summary>
 	/// The ManagedName class represents a type, member or namespace name
@@ -17,7 +17,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping
 		/// <param name="ns"><see cref="System.String"/> representing the name</param>
 		public ManagedName( string ns )
 		{
-			// strip off any NDoc type prefix
+			// strip off any NDoc3 type prefix
 			int colonPos = ns.IndexOf( ':' );
 			if ( colonPos > -1 )
 				_ns = ns.Substring( colonPos + 1 );

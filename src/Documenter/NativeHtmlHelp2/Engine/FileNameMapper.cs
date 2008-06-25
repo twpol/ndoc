@@ -24,7 +24,7 @@ using System.Diagnostics;
 using System.Collections;
 using System.Collections.Specialized;
 
-namespace NDoc.Documenter.NativeHtmlHelp2.Engine
+namespace NDoc3.Documenter.NativeHtmlHelp2.Engine
 {
 	/// <summary>
 	/// The types of code elemements that topics are generated for
@@ -52,7 +52,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 	{
 		private Hashtable fileNames;
 
-		private const string FilenamePrefix = "ndoc";
+		private const string FilenamePrefix = "ndoc3";
 
 		/// <summary>
 		/// 
@@ -238,7 +238,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <summary>
 		/// Gets the filename for a specific member overload
 		/// </summary>
-		/// <param name="methodID">The NDoc generated member id</param>
+		/// <param name="methodID">The NDoc3 generated member id</param>
 		/// <param name="overload">The overload index of the member (can be empty string)</param>
 		/// <returns>The filename for the member topic</returns>
 		public static string GetFileNameForMemberOverload(string methodID, string overload)
@@ -261,7 +261,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// Given a type id (including the T: prefix)
 		/// determines the Base name for the topic file
 		/// </summary>
-		/// <param name="typeID">The ndoc generated id of a type</param>
+		/// <param name="typeID">The NDoc3 generated id of a type</param>
 		/// <returns>Topic's base name</returns>
 		private static string BaseNameFromTypeId(string typeID)
 		{
@@ -272,7 +272,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// Given a fully qualified member id (including the prefix)
 		/// determines the Base name for the topic file
 		/// </summary>
-		/// <param name="memberID">The ndoc generated id of a type member</param>
+		/// <param name="memberID">The NDoc3 generated id of a type member</param>
 		/// <returns>Topic's base name</returns>
 		private static string BaseNameFromMemberId(string memberID)
 		{
@@ -293,7 +293,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <summary>
 		/// Build Cache of filenames
 		/// </summary>
-		/// <param name="xmlDocumentation">NDoc generated XML Documentation</param>
+		/// <param name="xmlDocumentation">NDoc3 generated XML Documentation</param>
 		/// <remarks>
 		/// <para>walk through the XML documentation and determine the filename for each relevant ID.</para>
 		/// <para>Ensure these filenames are unique, then save these filenames in a hashtable for later use.</para>

@@ -18,9 +18,9 @@
 
 using System;
 
-using NDoc.Core;
+using NDoc3.Core;
 
-namespace NDoc.Documenter.NativeHtmlHelp2
+namespace NDoc3.Documenter.NativeHtmlHelp2
 {
 	/// <summary>
 	/// Manages the location of the documentation build process

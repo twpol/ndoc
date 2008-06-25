@@ -1,9 +1,9 @@
 <?xml version="1.0" ?>
-<project name="NDoc.Documenter.NativeHtmlHelp2" default="compile">
+<project name="NDoc3.Documenter.NativeHtmlHelp2" default="compile">
 	<target name="compile" depends="locate-help-compilerservices-typelib" unless="${framework::get-family(framework::get-target-framework())=='mono'}">
 		<if test="${property::exists('help.compilerservices.typelib')}">
 			<!-- generate COM interop assembly for Microsoft Help Compiler Services 1.0 -->
-			<tlbimp typelib="${help.compilerservices.typelib}" output="${current.bin.dir}/Interop.MSHelpCompiler.dll" namespace="MSHelpCompiler" asmversion="1.0.0.0" keyfile="../../../NDoc.snk" />
+			<tlbimp typelib="${help.compilerservices.typelib}" output="${current.bin.dir}/Interop.MSHelpCompiler.dll" namespace="MSHelpCompiler" asmversion="1.0.0.0" keyfile="../../../NDoc3.snk" />
 			<!-- compile the assembly -->
 			<csc target="library" output="${current.bin.dir}/${nant.project.name}.dll" debug="${current.build.debug}" optimize="${current.build.optimize}" unsafe="false" checked="false" define="${current.build.defines}" doc="${current.bin.dir}/${nant.project.name}.xml">
 				<sources>
@@ -14,9 +14,9 @@
 					<include name="System.dll" />
 					<include name="System.Xml.dll" />
 					<include name="${current.bin.dir}/Interop.MSHelpCompiler.dll" />
-					<include name="${current.bin.dir}/NDoc.Core.dll" />
+					<include name="${current.bin.dir}/NDoc3.Core.dll" />
 				</references>
-				<resources prefix="NDoc.Documenter.NativeHtmlHelp2" dynamicprefix="true">
+				<resources prefix="NDoc3.Documenter.NativeHtmlHelp2" dynamicprefix="true">
 					<include name="graphics/*.*" />
 					<include name="includes/*.*" />
 					<include name="xslt/*.*" />

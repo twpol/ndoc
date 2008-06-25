@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NDoc.Test.Generics
+namespace NDoc3.Test.Generics
 {
     /// <summary>
     /// Tests a basic generic class with three generic parameters

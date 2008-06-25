@@ -10,7 +10,7 @@
     </ApplicationIcon>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
-    <AssemblyName>NDoc.Documenter.NativeHtmlHelp2</AssemblyName>
+    <AssemblyName>NDoc3.Documenter.NativeHtmlHelp2</AssemblyName>
     <AssemblyOriginatorKeyFile>
     </AssemblyOriginatorKeyFile>
     <DefaultClientScript>JScript</DefaultClientScript>
@@ -18,7 +18,7 @@
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <DelaySign>false</DelaySign>
     <OutputType>Library</OutputType>
-    <RootNamespace>NDoc.Documenter.NativeHtmlHelp2</RootNamespace>
+    <RootNamespace>NDoc3.Documenter.NativeHtmlHelp2</RootNamespace>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <StartupObject>
     </StartupObject>
@@ -196,7 +196,8 @@
     <None Include="NativeHtmlHelp2.build" />
     <EmbeddedResource Include="Engine\NamespaceMapping\NamespaceMap.xml" />
     <EmbeddedResource Include="Engine\NamespaceMapping\NamespaceMap.xsd">
-      <SubType>Designer</SubType>
+      <SubType>
+      </SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="graphics\AnimButton1.gif" />
     <EmbeddedResource Include="graphics\AnimButton2.gif" />

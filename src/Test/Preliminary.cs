@@ -1,6 +1,6 @@
 using System;
 
-namespace NDoc.Test.Preliminary
+namespace NDoc3.Test.Preliminary
 {
 	/// <summary>
 	/// Vaiorus uses of the &lt;preliminary/&gt; tag.

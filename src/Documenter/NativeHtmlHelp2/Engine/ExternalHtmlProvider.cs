@@ -18,7 +18,7 @@
 
 using System;
 
-namespace NDoc.Documenter.NativeHtmlHelp2.Engine
+namespace NDoc3.Documenter.NativeHtmlHelp2.Engine
 {
 	/// <summary>
 	/// Used as an extension object to the xslt processor to allow

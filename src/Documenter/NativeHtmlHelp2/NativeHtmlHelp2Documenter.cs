@@ -23,15 +23,15 @@ using System.Text;
 using System.Diagnostics;
 using System.Reflection;
 
-using NDoc.Core;
-using NDoc.Core.Reflection;
+using NDoc3.Core;
+using NDoc3.Core.Reflection;
 
-using NDoc.Documenter.NativeHtmlHelp2.Compiler;
-using NDoc.Documenter.NativeHtmlHelp2.HxProject;
-using NDoc.Documenter.NativeHtmlHelp2.Engine;
-using NDoc.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping;
+using NDoc3.Documenter.NativeHtmlHelp2.Compiler;
+using NDoc3.Documenter.NativeHtmlHelp2.HxProject;
+using NDoc3.Documenter.NativeHtmlHelp2.Engine;
+using NDoc3.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping;
 
-namespace NDoc.Documenter.NativeHtmlHelp2
+namespace NDoc3.Documenter.NativeHtmlHelp2
 {
 	/// <summary>Native Html Help 2 MSDN.Net documenter</summary>
 	public class NativeHtmlHelp2Documenter : BaseReflectionDocumenter
@@ -80,7 +80,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 				{
 					StringBuilder sb = new StringBuilder();
 					sb.AppendFormat( "The namespace mapping file {0} failed to validate.\n", NamespaceMappingFilePath );
-					sb.Append( "Make sure that it conforms to the NamespaceMap.xsd schema that can be found in the NDoc installation directory.\n" );
+					sb.Append( "Make sure that it conforms to the NamespaceMap.xsd schema that can be found in the NDoc3 installation directory.\n" );
 					sb.AppendFormat( "Parse error={0}", e.Message );
 					return sb.ToString();
 				}
@@ -182,7 +182,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 				HxProject.TOCFile = toc.FileName;
 				HxProject.Save( workspace.WorkingDirectory );
 
-				// get the ndoc xml
+				// get the NDoc3 xml
 				OnDocBuildingStep( 10, "Merging XML documentation..." );
 
 				// Will hold the name of the file name containing the XML doc
@@ -336,27 +336,27 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		{
 			EmbeddedResources.WriteEmbeddedResources(
 				this.GetType().Module.Assembly,
-				"NDoc.Documenter.NativeHtmlHelp2.includes",
+				"NDoc3.Documenter.NativeHtmlHelp2.includes",
 				workspace.WorkingDirectory );
 
 			EmbeddedResources.WriteEmbeddedResources(
 				this.GetType().Module.Assembly,
-				"NDoc.Documenter.NativeHtmlHelp2.graphics",
+				"NDoc3.Documenter.NativeHtmlHelp2.graphics",
 				workspace.ContentDirectory );
 
 			EmbeddedResources.WriteEmbeddedResources(
 				this.GetType().Module.Assembly,
-				"NDoc.Documenter.NativeHtmlHelp2.HxProject.HelpTitle",
+				"NDoc3.Documenter.NativeHtmlHelp2.HxProject.HelpTitle",
 				workspace.ResourceDirectory );
 
 			EmbeddedResources.WriteEmbeddedResources(
 				this.GetType().Module.Assembly,
-				"NDoc.Documenter.NativeHtmlHelp2.HxProject.HelpCollection",
+				"NDoc3.Documenter.NativeHtmlHelp2.HxProject.HelpCollection",
 				workspace.ResourceDirectory );
 			
 			EmbeddedResources.WriteEmbeddedResources(
 				this.GetType().Module.Assembly,
-				"NDoc.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping",
+				"NDoc3.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping",
 				workspace.WorkingDirectory );
 		}
 

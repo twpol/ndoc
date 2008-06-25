@@ -22,9 +22,9 @@ using System.Xml.XPath;
 using System.Diagnostics;
 using System.Collections;
 
-using NDoc.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping;
+using NDoc3.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping;
 
-namespace NDoc.Documenter.NativeHtmlHelp2.Engine
+namespace NDoc3.Documenter.NativeHtmlHelp2.Engine
 {
 	/// <summary>
 	/// Provides an extension object for the xslt transformations.
@@ -423,8 +423,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			// if the cref is from the system or microsoft namespace generate a MS AIndex
 			if (name.RootNamespace == "System" || name.RootNamespace == "Microsoft")
 				aindex = GetSystemAIndex(cref);
-				// otherwise we're going to assume that the foreign type was documented with NDoc
-				// and generate an NDoc AIndex
+				// otherwise we're going to assume that the foreign type was documented with NDoc3
+				// and generate an NDoc3 AIndex
 			else
 				aindex = GetNDocAIndex(cref);
 

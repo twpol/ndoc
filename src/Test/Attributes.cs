@@ -1,6 +1,6 @@
 using System;
 
-namespace NDoc.Test.Attributes
+namespace NDoc3.Test.Attributes
 {
 	using System;
 	using System.Collections;

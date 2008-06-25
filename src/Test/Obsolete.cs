@@ -1,6 +1,6 @@
 using System;
 
-namespace NDoc.Test.Obsolete 
+namespace NDoc3.Test.Obsolete 
 {
 
 	/// <summary>This namespace has tests for obsolete attribute.</summary>

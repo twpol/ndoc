@@ -18,7 +18,7 @@
 
 using System;
 
-namespace NDoc.Documenter.NativeHtmlHelp2.Engine
+namespace NDoc3.Documenter.NativeHtmlHelp2.Engine
 {
 	/// <summary>
 	/// EventArgs calss used by the HtmlFactory calss when new files are being added

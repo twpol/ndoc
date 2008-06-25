@@ -1,9 +1,9 @@
 using System;
 
-using NDoc.Documenter.NativeHtmlHelp2.HxProject;
-using NDoc.Documenter.NativeHtmlHelp2.Engine;
+using NDoc3.Documenter.NativeHtmlHelp2.HxProject;
+using NDoc3.Documenter.NativeHtmlHelp2.Engine;
 
-namespace NDoc.Documenter.NativeHtmlHelp2
+namespace NDoc3.Documenter.NativeHtmlHelp2
 {
 	/// <summary>
 	/// Orchestrates building the table of contents file base on HTMLFactory events

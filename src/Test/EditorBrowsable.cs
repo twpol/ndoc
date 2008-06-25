@@ -1,6 +1,6 @@
 using System;
 
-namespace NDoc.Test.EditorBrowsableAttr
+namespace NDoc3.Test.EditorBrowsableAttr
 {
 	using System.ComponentModel;
 

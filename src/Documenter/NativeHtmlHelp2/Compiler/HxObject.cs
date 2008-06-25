@@ -22,7 +22,7 @@ using System.Diagnostics;
 
 using Microsoft.Win32;
 
-namespace NDoc.Documenter.NativeHtmlHelp2.Compiler
+namespace NDoc3.Documenter.NativeHtmlHelp2.Compiler
 {
 	/// <summary>
 	/// HxObject is the base class wrapper around the HTML Help v2 compiler

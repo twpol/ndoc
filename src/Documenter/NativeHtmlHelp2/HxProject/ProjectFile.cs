@@ -20,7 +20,7 @@ using System;
 using System.IO;
 using System.Xml;
 
-namespace NDoc.Documenter.NativeHtmlHelp2.HxProject
+namespace NDoc3.Documenter.NativeHtmlHelp2.HxProject
 {
 	/// <summary>
 	/// Represents the contents of an Html Help 2 HxC project file

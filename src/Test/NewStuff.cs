@@ -1,6 +1,6 @@
 using System;
 
-namespace NDoc.Test.NewStuff
+namespace NDoc3.Test.NewStuff
 {
 	/// <summary>
 	/// This is another example of namespace summary documentation,

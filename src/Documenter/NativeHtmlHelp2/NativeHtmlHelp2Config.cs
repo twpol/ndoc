@@ -23,11 +23,11 @@ using System.Drawing.Design;
 using System.ComponentModel;
 using System.Windows.Forms.Design;
 
-using NDoc.Core;
-using NDoc.Core.Reflection;
-using NDoc.Core.PropertyGridUI;
+using NDoc3.Core;
+using NDoc3.Core.Reflection;
+using NDoc3.Core.PropertyGridUI;
 
-namespace NDoc.Documenter.NativeHtmlHelp2
+namespace NDoc3.Documenter.NativeHtmlHelp2
 {
 
 	/// <summary>
@@ -134,7 +134,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 			}
 		}
 
-		private string _Title = "An NDoc documented library";
+		private string _Title = "An NDoc3 documented library";
 
 		/// <summary>Gets or sets the Title property.</summary>
 		/// <remarks>This is the title displayed at the top of every page.</remarks>
@@ -405,7 +405,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		[Description("If the documentation includes references to types registered in a seperate html help 2 " + 
 			 "namespace, supplying a mapping file allows XLinks to be created to topics within that namespace. " + 
 			 "Refer to the user's guide for more information about XLinks to other topics.")]
-		[NDoc.Core.PropertyGridUI.FilenameEditor.FileDialogFilter
+		[NDoc3.Core.PropertyGridUI.FilenameEditor.FileDialogFilter
 			 ("Select Namespace Mapping File", "XML files (*.xml)|*.xml|All files (*.*)|*.*")]
 		public FilePath UseHelpNamespaceMappingFile
 		{
@@ -481,7 +481,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		/// <remarks>An HTML page that will be dispayed when the root TOC node is selected.</remarks>
 		[Category(ADDITIONAL_CONTENT_CATEGORY)]
 		[Description("An HTML page that will be dispayed when the root TOC node is selected")]
-		[NDoc.Core.PropertyGridUI.FilenameEditor.FileDialogFilter
+		[NDoc3.Core.PropertyGridUI.FilenameEditor.FileDialogFilter
 			 ("Select Introduction Page", "HTML files (*.html;*.htm)|*.html;*.htm|All files (*.*)|*.*")]
 		public FilePath IntroductionPage
 		{
@@ -505,7 +505,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		/// <remarks>Displays product information in Help About.</remarks>
 		[Category(ADDITIONAL_CONTENT_CATEGORY)]
 		[Description("Displays product information in Help About.")]
-		[NDoc.Core.PropertyGridUI.FilenameEditor.FileDialogFilter
+		[NDoc3.Core.PropertyGridUI.FilenameEditor.FileDialogFilter
 			 ("Select AboutPageInfo", "HTML files (*.html;*.htm)|*.html;*.htm|All files (*.*)|*.*")]
 		public FilePath AboutPageInfo
 		{
@@ -530,7 +530,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		/// subkeywords but is not directly associated with a topic itself.</remarks>
 		[Category(ADDITIONAL_CONTENT_CATEGORY)]
 		[Description("Displays when a user chooses a keyword index term that has subkeywords but is not directly associated with a topic itself.")]
-		[NDoc.Core.PropertyGridUI.FilenameEditor.FileDialogFilter
+		[NDoc3.Core.PropertyGridUI.FilenameEditor.FileDialogFilter
 			 ("Select EmptyIndexTerm Page", "HTML files (*.html;*.htm)|*.html;*.htm|All files (*.*)|*.*")]
 		public FilePath EmptyIndexTermPage
 		{
@@ -554,7 +554,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		/// <remarks>Page that opens if a link to a topic or URL is broken.</remarks>
 		[Category(ADDITIONAL_CONTENT_CATEGORY)]
 		[Description("Opens if a link to a topic or URL is broken.")]
-		[NDoc.Core.PropertyGridUI.FilenameEditor.FileDialogFilter
+		[NDoc3.Core.PropertyGridUI.FilenameEditor.FileDialogFilter
 			 ("Select NavFail Page", "HTML files (*.html;*.htm)|*.html;*.htm|All files (*.*)|*.*")]
 		public FilePath NavFailPage
 		{
@@ -578,7 +578,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		/// <remarks>HTML file that displays the Help About image.</remarks>
 		[Category(ADDITIONAL_CONTENT_CATEGORY)]
 		[Description("HTML file that displays the Help About image.")]
-		[NDoc.Core.PropertyGridUI.FilenameEditor.FileDialogFilter
+		[NDoc3.Core.PropertyGridUI.FilenameEditor.FileDialogFilter
 			 ("Select AboutPageIcon Page", "HTML files (*.html;*.htm)|*.html;*.htm|All files (*.*)|*.*")]
 		public FilePath AboutPageIconPage
 		{
@@ -603,7 +603,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		/// This directory will be recursively compiled into the help file.</remarks>
 		[Category(ADDITIONAL_CONTENT_CATEGORY)]
 		[Description("Directory that contains resources (images etc.) used by the additional content pages. This directory will be recursively compiled into the help file.")]
-		[NDoc.Core.PropertyGridUI.FoldernameEditor.FolderDialogTitle("Select AdditionalContentResourceDirectory")]
+		[NDoc3.Core.PropertyGridUI.FoldernameEditor.FolderDialogTitle("Select AdditionalContentResourceDirectory")]
 		public FolderPath AdditionalContentResourceDirectory
 		{
 			get { return _AdditionalContentResourceDirectory; }
@@ -627,8 +627,8 @@ namespace NDoc.Documenter.NativeHtmlHelp2
 		/// <summary>Gets or sets the ExtensibilityStylesheet property</summary>
 		/// <remarks>Path to an xslt stylesheet that contains templates for documenting extensibility tags.</remarks>
 		[Category("Extensibility")]
-		[Description("Path to an xslt stylesheet that contains templates for documenting extensibility tags. Refer to the NDoc user's guide for more details on extending NDoc.")]
-		[NDoc.Core.PropertyGridUI.FilenameEditor.FileDialogFilter
+		[Description("Path to an xslt stylesheet that contains templates for documenting extensibility tags. Refer to the NDoc3 user's guide for more details on extending NDoc3.")]
+		[NDoc3.Core.PropertyGridUI.FilenameEditor.FileDialogFilter
 			 ("Select Extensibility Stylesheet", "Stylesheet files (*.xslt)|*.xslt|All files (*.*)|*.*")]
 		public FilePath ExtensibilityStylesheet
 		{

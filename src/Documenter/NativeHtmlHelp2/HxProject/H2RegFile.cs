@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using System.Collections;
 
-namespace NDoc.Documenter.NativeHtmlHelp2.HxProject
+namespace NDoc3.Documenter.NativeHtmlHelp2.HxProject
 {
 	/// <summary>
 	/// Summary description for H2RegFile.

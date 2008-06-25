@@ -21,7 +21,7 @@ using System.IO;
 using System.Text;
 using System.Diagnostics;
 
-namespace NDoc.Documenter.NativeHtmlHelp2.Compiler
+namespace NDoc3.Documenter.NativeHtmlHelp2.Compiler
 {
 	/// <summary>
 	/// Wraps the HxReg.exe help registry component

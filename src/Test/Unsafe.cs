@@ -1,9 +1,9 @@
 using System;
 
-namespace NDoc.Test.Unsafe
+namespace NDoc3.Test.Unsafe
 {
 	/// <summary>
-	/// The NDoc.Test.Unsafe namespace contains tests for types
+	/// The NDoc3.Test.Unsafe namespace contains tests for types
 	/// that expose pointer types and are marked with the "unsafe" keyword
 	/// </summary>
 	public class NamespaceDoc {}

@@ -26,11 +26,11 @@ using System.Diagnostics;
 using System.Collections;
 using System.Collections.Specialized;
 
-using NDoc.Core; //for DocumenterException
-using NDoc.Core.Reflection;
-using NDoc.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping;
+using NDoc3.Core; //for DocumenterException
+using NDoc3.Core.Reflection;
+using NDoc3.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping;
 
-namespace NDoc.Documenter.NativeHtmlHelp2.Engine
+namespace NDoc3.Documenter.NativeHtmlHelp2.Engine
 {
 	/// <summary>
 	/// Deleagate for handling file events
@@ -38,7 +38,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 	public delegate void TopicEventHandler( object sender, FileEventArgs args );
 
 	/// <summary>
-	/// The Html factory orchestrates the transformation of the NDoc Xml into the
+	/// The Html factory orchestrates the transformation of the NDoc3 Xml into the
 	/// set of Html files that will be compiled into the help project
 	/// </summary>
 	public class HtmlFactory
@@ -51,7 +51,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		private FileNameMapper  fileNameMapper;
 		private NamespaceMapper nsMapper;
 
-		private XmlDocument xmlDocumentation;			// the NDoc generates summary Xml
+		private XmlDocument xmlDocumentation;			// the NDoc3 generates summary Xml
 		private XPathDocument xPathDocumentation;	// XPath version of the xmlDocumentation node (improves performance)
 
 		//this encoding is used for all generated html...
@@ -69,7 +69,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		/// <summary>
 		/// Constructs a new instance of HtmlFactory
 		/// </summary>
-		/// <param name="tempFileName">NDoc generated temp xml file</param>
+		/// <param name="tempFileName">NDoc3 generated temp xml file</param>
 		/// <param name="outputDirectory">The directory to write the Html files to</param>
 		/// <param name="htmlProvider">Object the provides additional Html content</param>
 		/// <param name="config"></param>
@@ -138,7 +138,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			_utilities = new MsdnXsltUtilities( this.nsMapper, this.fileNameMapper );
 
 			this.Arguments = new XsltArgumentList();
-			this.Arguments.AddExtensionObject( "urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities", _utilities );
+			this.Arguments.AddExtensionObject( "urn:ndoc3-sourceforge-net:documenters.NativeHtmlHelp2.xsltUtilities", _utilities );
 			this.Arguments.AddExtensionObject( "urn:NDocExternalHtml", _htmlProvider );
 
 			// add properties passed to the stylesheets
@@ -221,7 +221,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 		}
 
 		/// <summary>
-		/// Generates HTML for the NDoc XML
+		/// Generates HTML for the NDoc3 XML
 		/// </summary>
 		public void MakeHtml()
 		{					
@@ -287,7 +287,7 @@ namespace NDoc.Documenter.NativeHtmlHelp2.Engine
 			}				      
 			catch(PathTooLongException e)
 			{
-				throw new PathTooLongException(e.Message + "\nThe file that NDoc was trying to create had the following name:\n" + Path.Combine( _outputDirectory, fileName ));
+				throw new PathTooLongException(e.Message + "\nThe file that NDoc3 was trying to create had the following name:\n" + Path.Combine( _outputDirectory, fileName ));
 			}
 
 #if DEBUG

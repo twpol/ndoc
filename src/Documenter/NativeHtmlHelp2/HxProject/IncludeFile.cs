@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Xml;
 
-namespace NDoc.Documenter.NativeHtmlHelp2.HxProject
+namespace NDoc3.Documenter.NativeHtmlHelp2.HxProject
 {
 	/// <summary>
 	/// Class representing the Hx include file

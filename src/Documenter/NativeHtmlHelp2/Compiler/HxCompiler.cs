@@ -23,7 +23,7 @@ using System.Diagnostics;
 
 using MSHelpCompiler;
 
-namespace NDoc.Documenter.NativeHtmlHelp2.Compiler
+namespace NDoc3.Documenter.NativeHtmlHelp2.Compiler
 {
 	/// <summary>
 	/// Summary description for HxCompiler.

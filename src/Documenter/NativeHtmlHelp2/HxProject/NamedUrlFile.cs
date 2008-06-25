@@ -1,7 +1,7 @@
 using System;
 using System.Xml;
 
-namespace NDoc.Documenter.NativeHtmlHelp2.HxProject
+namespace NDoc3.Documenter.NativeHtmlHelp2.HxProject
 {
 	/// <summary>
 	/// Class used for accessing the content of a named url index

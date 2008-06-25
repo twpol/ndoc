@@ -1,6 +1,6 @@
 using System;
 
-namespace NDoc.Test.Operator
+namespace NDoc3.Test.Operator
 {
 	/// <summary>
 	/// Various permutations of operators

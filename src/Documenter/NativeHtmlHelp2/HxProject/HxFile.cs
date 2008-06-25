@@ -22,7 +22,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Text;
 
-namespace NDoc.Documenter.NativeHtmlHelp2.HxProject
+namespace NDoc3.Documenter.NativeHtmlHelp2.HxProject
 {
 	/// <summary>
 	/// HxFile is the base class for vaiors Html Help 2 project files 

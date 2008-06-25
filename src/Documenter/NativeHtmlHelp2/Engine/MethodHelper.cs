@@ -19,7 +19,7 @@
 using System;
 using System.Xml;
 
-namespace NDoc.Documenter.NativeHtmlHelp2.Engine
+namespace NDoc3.Documenter.NativeHtmlHelp2.Engine
 {
 	/// <summary>
 	/// Helper functions to get information about a method

@@ -22,7 +22,7 @@ using System.Xml;
 using System.Text;
 using System.Diagnostics;
 
-namespace NDoc.Documenter.NativeHtmlHelp2.HxProject
+namespace NDoc3.Documenter.NativeHtmlHelp2.HxProject
 {
 
 	/// <summary>

@@ -1,6 +1,6 @@
 using System;
 
-namespace NDoc.Test.InternalStuff
+namespace NDoc3.Test.InternalStuff
 {
 	/// <summary>
 	/// Items marked internal

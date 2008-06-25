@@ -1,6 +1,6 @@
 using System;
 
-namespace NDoc.Test.Platforms
+namespace NDoc3.Test.Platforms
 {
 	/// <summary>
 	/// The classes in the namespace demonstrate the various

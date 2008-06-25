@@ -1,31 +1,31 @@
 using System;
 
-namespace NDoc.Test
+namespace NDoc3.Test
 {
 	/// <summary>
 	/// <p>This documentation will show up as the summary of a class
 	/// <see cref="NamespaceDoc"/>, when the UseNamespaceDocSummaries
 	/// configuration flag is set to <see langword="false"/>. When
 	/// UseNamespaceDocSummaries is set to <see langword="true"/>,
-	/// the summary will show up as the summary of the <see cref="NDoc.Test"/>
+	/// the summary will show up as the summary of the <see cref="NDoc3.Test"/>
 	/// namespace.</p>
 	/// <p>This allows you to reference other types from within the
 	/// summary documentation for the namespace, without having to use
 	/// fully qualified ids. E.g. the reference to <see cref="Class"/> is
 	/// created by using "&lt;see cref="Class"/&gt;" instead of
-	/// "&lt;see cref="T:NDoc.Test.Class"/&gt;" as you have to say using
+	/// "&lt;see cref="T:NDoc3.Test.Class"/&gt;" as you have to say using
 	/// the namespace summaries dialog.</p>
 	/// </summary>
 	public class NamespaceDoc {}
 
 #if UNICODE_NAMES
 	/// <summary>
-	/// DenGrønneKasse don't work in NDoc.
+	/// DenGrønneKasse don't work in NDoc3.
 	/// </summary>
 	public class DenGrønneKasse
 	{
 		/// <summary>
-		/// Not working in NDoc
+		/// Not working in NDoc3
 		/// </summary>
 		public void TilføjÆble()
 		{
@@ -608,8 +608,8 @@ namespace NDoc.Test
 	/// See <see cref="Handler"/>.
 	/// See <see cref="Enum"/>.
 	/// See <see cref="Enum.Bar"/>.
-	/// See <see href="http://ndoc.sf.net/" />.
-	/// See <see href="http://ndoc.sf.net/">NDOC</see>.
+	/// See <see href="http://ndoc3.sf.net/" />.
+	/// See <see href="http://ndoc3.sf.net/">NDoc3</see>.
 	/// </remarks>
 	public class See
 	{
@@ -638,7 +638,7 @@ namespace NDoc.Test
 		}
 
 		/// <summary>
-		/// This method's documentation references <see cref="NDoc.Test.See.Prop1"/> and
+		/// This method's documentation references <see cref="NDoc3.Test.See.Prop1"/> and
 		/// <see cref="Field1"/>.
 		/// </summary>
 		public void RefProp1()
@@ -647,10 +647,10 @@ namespace NDoc.Test
 	}
 
 	/// <summary>This class has lots of &lt;seealso&gt; elements.</summary>
-	/// <remarks>NDoc adds a special form of the &lt;seealso&gt; element.
+	/// <remarks>NDoc3 adds a special form of the &lt;seealso&gt; element.
 	/// Instead of a cref attribute, you can specify a href attribute some text
 	/// content just like a normal HTML &lt;a&gt; element.</remarks>
-	/// <seealso href="http://ndoc.sf.net/">the ndoc homepage</seealso>
+	/// <seealso href="http://ndoc3.sf.net/">the NDoc3 homepage</seealso>
 	/// <seealso cref="Class"/>
 	/// <seealso cref="Interface"/>
 	/// <seealso cref="Struct1"/>
