@@ -2,10 +2,10 @@
 <html>
 
 <head>
-<title>NDoc Documenter Basic Settings</title>
+<title>NDoc3 Documenter Basic Settings</title>
 <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5">
-<link href="css/ndoc.css" rel="stylesheet" name="ndocstyle" type="text/css">
-<script src="script/ndoc.js"></script>
+<link href="css/ndoc3.css" rel="stylesheet" name="ndocstyle" type="text/css">
+<script src="script/ndoc3.js"></script>
 </head>
 
 <body class="dtBODY" id="bodyID" onload="InitTitle()">
@@ -13,7 +13,7 @@
 <div id="nstext">
 	<h3 class="dtH3">Overview</h3>
 	<div id="nstext0">
-		A Documenter represents a particular method of creating, organizing, formatting and packaging your documentation. NDoc ships 
+		A Documenter represents a particular method of creating, organizing, formatting and packaging your documentation. NDoc3 ships 
 		with six Documenters:<ul>
 			<li><a href="vsnet.htm">VS.NET</a> </li>
 			<li><a href="msdn.htm">MSDN</a> </li>
@@ -22,7 +22,7 @@
 			<li><a href="linear.htm">LinearHtml</a> </li>
 			<li><a href="latex.htm">LaTeX</a></li>
 		</ul>
-		<p>NDoc uses a pluggable architecture, so it is also possible to generate your own, custom, documenters.</p>
+		<p>NDoc3 uses a pluggable architecture, so it is also possible to generate your own, custom, documenters.</p>
 		<p>Generating the documentation consists of two basic steps: </p>
 		<ol>
 			<li>Merging the /doc XML summary with reflected meta-data from the assemblies. </li>
@@ -30,7 +30,7 @@
 		</ol>
 		<p>The settings below govern how exactly the XML summary data is merged with the reflected meta-data and therefore govern 
 		what items will and will not appear in the final documentation. </p>
-		<p>These settings are shared by all of the current NDoc documenters. Particular documenters might include additional steps 
+		<p>These settings are shared by all of the current NDoc3 documenters. Particular documenters might include additional steps 
 		like compiling the transformed HTML into compiled help files. They will have additional settings that govern the details specific 
 		to the documenter&#39;s format.</p>
 	</div>
@@ -110,7 +110,7 @@
 		</tr>
 		<tr valign="top">
 			<td><a name="preliminary"><b>Preliminary</b></a></td>
-			<td>If <b>true</b>, NDoc will mark every topic as being preliminary documentation. Each topic will include a notice that 
+			<td>If <b>true</b>, NDoc3 will mark every topic as being preliminary documentation. Each topic will include a notice that 
 			the documentation is preliminary<p>The default notice is: <font color="red">[This is preliminary documentation and subject 
 			to change.]</font></p>
 			</td>
@@ -134,7 +134,7 @@
 		</tr>
 		<tr valign="top">
 			<td><a name="UseNDocXmlFile"><b>UseNDocXmlFile</b></a></td>
-			<td>When set, NDoc will use the specified XML file as input instead of reflecting the list of assemblies specified on 
+			<td>When set, NDoc3 will use the specified XML file as input instead of reflecting the list of assemblies specified on 
 			the project.<p>Very useful for debugging documenters. <i>Leave empty for normal usage.</i></p>
 			</td>
 		</tr>
@@ -222,7 +222,7 @@
 		<tr valign="top">
 			<td><b>DocumentPrivates</b></td>
 			<td>If <b>true</b>, types and members marked as private will be included in the documentation.&nbsp; This is useful when 
-			using NDoc to create documentation intended for internal use.<p>Normally, private items are not documented. </p>
+			using NDoc3 to create documentation intended for internal use.<p>Normally, private items are not documented. </p>
 			</td>
 		</tr>
 		<tr valign="top">
@@ -233,7 +233,7 @@
 		</tr>
 		<tr valign="top">
 			<td><b>DocumentProtectedInternalAsProtected</b></td>
-			<td>If <b>true</b>, NDoc will treat &quot;protected internal&quot; members as &quot;protected&quot; only.</td>
+			<td>If <b>true</b>, NDoc3 will treat &quot;protected internal&quot; members as &quot;protected&quot; only.</td>
 		</tr>
 		<tr valign="top">
 			<td><b>DocumentSealedProtected</b></td>
@@ -245,13 +245,13 @@
 			<td><b>EditorBrowsableFilter</b></td>
 			<td>Sets the level of filtering to apply on types/members marked with the <b>EditorBrowsable</b> attribute.
 			<p><font color="Red"><b>Warning: enabling this filter might result in invalid links in the documentation.</b></font></p>
-			<p><i>As of version 1.3 of NDoc, the <b><a href="tags.htm#exclude">&lt;exclude/&gt;</a></b> tag is the preferred mechanism for 
+			<p><i>As of version 1.3 of NDoc3, the <b><a href="tags.htm#exclude">&lt;exclude/&gt;</a></b> tag is the preferred mechanism for 
 			suppressing the documentation of types or members.</i></p>
 			</td>
 		</tr>
 		<tr valign="top">
 			<td><b>SkipNamespacesWithoutSummaries</b></td>
-			<td>If <b>true</b>, NDoc will not document namespaces that do not have an associated namespace summary.</td>
+			<td>If <b>true</b>, NDoc3 will not document namespaces that do not have an associated namespace summary.</td>
 		</tr>
 	</table>
 </div>

@@ -13,8 +13,8 @@ function InsertHeader()
 {
 	var html = "<div id=nsbanner><div id=bannerrow1>"
 	html += "<table class=bannerparthead cellspacing=0 id=Table1>";
-	html += "<tr id=hdr><td class=runninghead>NDoc User's Guide</td>";
-	html += "<td class=product>NDoc 1.3<br></td></tr></table></div>";
+	html += "<tr id=hdr><td class=runninghead>NDoc3 User's Guide</td>";
+	html += "<td class=product>NDoc3 2.0<br></td></tr></table></div>";
 	html += "<div id=TitleRow><h1 class=dtH1>";
 	html += document.title;
 	html += "</h1></div></div>";
@@ -28,16 +28,16 @@ function InsertFooter()
 	var lastChild = document.body.lastChild;
 	if ( lastChild == null ) return;
 
-	var subject = "?subject=NDoc User's Guide feedback about page '" + document.title + "'"
+	var subject = "?subject=NDoc3 User's Guide feedback about page '" + document.title + "'"
 	subject = subject.replace("(\s+)","%20");
 	
 	var html = "<hr/><table border=0 cellSpacing=0 class=footer>";
-	html += "<tr vAlign=top><td><p>NDoc development is hosted by <a target=_blank href=http://sourceforge.net>";
+	html += "<tr vAlign=top><td><p>NDoc3 development is hosted by <a target=_blank href=http://sourceforge.net>";
 	html += "<img src=images/sf.gif alt=SourceForge align=absMiddle border=0></a>";
-	html += "<br/><a href=\"mailto:ndoc-helpfeedback@lists.sourceforge.net";
+	html += "<br/><a href=\"mailto:ndoc3-helpfeedback@lists.sourceforge.net";
 	html += subject;
 	html += "\">Send feedback on this topic</A></p></td>";
-	html += "<td><A href=http://ndoc.sourceforge.net/ target=_blank><img alt='Visit the NDoc WIKI' align=right src=images/logo.jpg></a></td></tr></table>";	
+	html += "<td><A href=http://ndoc3.sourceforge.net/ target=_blank><img alt='Visit the NDoc3 WIKI' align=right src=images/logo.jpg></a></td></tr></table>";	
 
 	lastChild.insertAdjacentHTML( "beforeEnd", html );
 }

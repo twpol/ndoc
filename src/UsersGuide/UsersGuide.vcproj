@@ -107,11 +107,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Content\contrib.htm"
-				DeploymentContent="true"
-				>
-			</File>
-			<File
 				RelativePath=".\Content\createproject.htm"
 				DeploymentContent="true"
 				>
@@ -335,7 +330,7 @@
 				Name="css"
 				>
 				<File
-					RelativePath=".\Content\css\ndoc.css"
+					RelativePath=".\Content\css\ndoc3.css"
 					>
 				</File>
 			</Filter>
@@ -403,11 +398,11 @@
 				Name="script"
 				>
 				<File
-					RelativePath=".\Content\script\ndoc.js"
+					RelativePath=".\Content\script\ndoc3.js"
 					>
 				</File>
 				<File
-					RelativePath=".\Content\script\ndoc_tags.js"
+					RelativePath=".\Content\script\ndoc3_tags.js"
 					>
 				</File>
 			</Filter>
