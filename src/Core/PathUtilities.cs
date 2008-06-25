@@ -17,7 +17,7 @@
 using System;
 using System.IO;
 
-namespace NDoc.Core
+namespace NDoc3.Core
 {
 	/// <summary>
 	/// Utility Routines for path handling

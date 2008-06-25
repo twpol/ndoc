@@ -24,7 +24,7 @@ using System.Text;
 using System.IO;
 
 
-namespace NDoc.Core
+namespace NDoc3.Core
 {
 	/// <summary>
 	/// Event arguments class for events related to an AssemblySlashDoc

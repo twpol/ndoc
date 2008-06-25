@@ -19,7 +19,7 @@ using System;
 using System.Collections;
 using System.Xml;
 
-namespace NDoc.Core
+namespace NDoc3.Core
 {
 	/// <summary>Specifies the methods that are common to all documenter configs.</summary>
 	public interface IDocumenterConfig

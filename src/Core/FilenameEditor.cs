@@ -24,7 +24,7 @@ using System.Windows.Forms;
 using System.IO;
 
 
-namespace NDoc.Core.PropertyGridUI
+namespace NDoc3.Core.PropertyGridUI
 {
 	/// <summary>
 	/// 

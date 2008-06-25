@@ -19,7 +19,7 @@ using System.ComponentModel;
 using System.Reflection;
 using System.Windows.Forms;
 
-namespace NDoc.Core.PropertyGridUI
+namespace NDoc3.Core.PropertyGridUI
 {
 	/// <summary>
 	/// A PropertyGrid with context menu to <b>Reset</b> values and show/hide the <b>Description</b> pane.

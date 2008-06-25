@@ -22,9 +22,9 @@ using System.Windows.Forms.Design;
 using System.Drawing.Design;
 using System.IO;
 
-using NDoc.Core.PropertyGridUI;
+using NDoc3.Core.PropertyGridUI;
 
-namespace NDoc.Core
+namespace NDoc3.Core
 {
 	/// <summary>
 	/// 

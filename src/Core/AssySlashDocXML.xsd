@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<xs:schema targetNamespace="http://ndoc.sf.net/AssySlashDocXML" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-	xmlns="http://ndoc.sf.net/AssySlashDocXML" xmlns:NS="http://ndoc.sf.net/AssySlashDocXML"
+<xs:schema targetNamespace="http://ndoc3.sf.net/AssySlashDocXML" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns="http://ndoc3.sf.net/AssySlashDocXML" xmlns:NS="http://ndoc3.sf.net/AssySlashDocXML"
 	elementFormDefault="qualified" version="1.0">
 	<!-- -->
 	<xs:element name="ndoc">

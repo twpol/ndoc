@@ -25,7 +25,7 @@ using Microsoft.Win32;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 
-namespace NDoc.Core.Reflection
+namespace NDoc3.Core.Reflection
 {
 	/// <summary>
 	/// Caches XML summaries.

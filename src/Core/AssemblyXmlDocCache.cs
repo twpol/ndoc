@@ -21,7 +21,7 @@ using System.Xml;
 using System.Text;
 using System.IO;
 
-namespace NDoc.Core.Reflection
+namespace NDoc3.Core.Reflection
 {
 	/// <summary>
 	/// AssemblyXmlDocCache.

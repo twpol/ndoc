@@ -16,7 +16,7 @@ using System;
 using System.IO;
 using System.Diagnostics;
 
-namespace NDoc.Core
+namespace NDoc3.Core
 {
 	/// <summary>
 	/// Handler for content events
@@ -75,7 +75,7 @@ namespace NDoc.Core
 
 			rootDir = root;
 
-			buildDir = string.Format( "ndoc_{0}_temp", type );
+			buildDir = string.Format( "ndoc3_{0}_temp", type );
 			contentDir = contentDirName;
 			cleanableFileTypes = cleanableExtensions;
 
@@ -162,7 +162,7 @@ namespace NDoc.Core
 		{
 			get
 			{
-				return Path.Combine( WorkingDirectory, "ndoc_resources" );
+				return Path.Combine( WorkingDirectory, "ndoc3_resources" );
 			}
 		}
 

@@ -25,7 +25,7 @@ using System.Security;
 using System.Security.Permissions;
 using System.Security.Policy;
 
-namespace NDoc.Core.Reflection
+namespace NDoc3.Core.Reflection
 {
 	/// <summary>
 	/// Handles the resolution and loading of assemblies.

@@ -31,7 +31,7 @@ using System.Xml.XPath;
 using System.Xml.Schema;
 using System.ComponentModel;
 
-namespace NDoc.Core.Reflection
+namespace NDoc3.Core.Reflection
 {
     /// <summary>
 	/// Summary description for ReflectionEngine.
@@ -192,7 +192,7 @@ namespace NDoc.Core.Reflection
         {
             // Copies the XML Schema to the current directory
             EmbeddedResources.WriteEmbeddedResource(
-                this.GetType().Module.Assembly, "NDoc.Core.ReflectionEngine.reflection.xsd",
+                this.GetType().Module.Assembly, "NDoc3.Core.ReflectionEngine.reflection.xsd",
                 Directory.GetCurrentDirectory(), "reflection.xsd");
             XmlReaderSettings settings = new XmlReaderSettings();
             XmlSchemaSet sc = new XmlSchemaSet();
@@ -308,7 +308,7 @@ namespace NDoc.Core.Reflection
 					writer.Flush();
 
 					Trace.WriteLine("MakeXML : " + ((Environment.TickCount - start) / 1000.0).ToString() + " sec.");
-					// if you want to see NDoc's intermediate XML file, use the XML documenter.
+					// if you want to see NDoc3's intermediate XML file, use the XML documenter.
 				}
 				finally
 				{

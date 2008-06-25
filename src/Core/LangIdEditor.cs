@@ -22,7 +22,7 @@ using System.Drawing.Design;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 
-namespace NDoc.Core.PropertyGridUI
+namespace NDoc3.Core.PropertyGridUI
 {
 	/// <summary>
 	/// 

@@ -18,7 +18,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace NDoc.Core
+namespace NDoc3.Core
 {
 	/// <summary>Represents an exception thrown when attempting to build documentation.</summary>
 	[Serializable]

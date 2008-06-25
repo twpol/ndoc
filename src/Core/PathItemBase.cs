@@ -22,9 +22,9 @@ using System.Windows.Forms.Design;
 using System.Drawing.Design;
 using System.IO;
 
-using NDoc.Core.PropertyGridUI;
+using NDoc3.Core.PropertyGridUI;
 
-namespace NDoc.Core
+namespace NDoc3.Core
 {
 	/// <summary>
 	/// 
@@ -176,10 +176,10 @@ namespace NDoc.Core
 		/// Gets or sets an indication whether the path should be saved as fixed or relative to the project file.
 		/// </summary>
 		/// <value>
-		/// if <see langword="true"/>, NDoc will save this as a Fixed path; 
-		/// otherwise, it will be saved as a path relative to the NDoc project file.
+		/// if <see langword="true"/>, NDoc3 will save this as a Fixed path; 
+		/// otherwise, it will be saved as a path relative to the NDoc3 project file.
 		/// </value>
-		[Description("If true, NDoc will save this as a fixed path; otherwise, it will be saved as a path relative to the NDoc project file.")]
+		[Description("If true, NDoc3 will save this as a fixed path; otherwise, it will be saved as a path relative to the NDoc3 project file.")]
 		[DefaultValue(false)]
 		[PropertyOrder(20)]
 		[RefreshProperties(RefreshProperties.Repaint)] 

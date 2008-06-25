@@ -17,7 +17,7 @@ using System.ComponentModel;
 using System.Drawing.Design;
 using System.Windows.Forms;
 
-namespace NDoc.Core.PropertyGridUI
+namespace NDoc3.Core.PropertyGridUI
 {
 	/// <summary>
 	/// Provides editing facilities for large blocks of text in the <see cref="PropertyGrid"/>.

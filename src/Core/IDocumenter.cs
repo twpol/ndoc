@@ -19,7 +19,7 @@ using System;
 using System.Collections;
 using System.Xml;
 
-namespace NDoc.Core
+namespace NDoc3.Core
 {
 	/// <summary>
 	/// Custom event arguments' class used by DocBuildingEventHandler.

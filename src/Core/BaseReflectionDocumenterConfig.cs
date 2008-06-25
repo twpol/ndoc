@@ -26,9 +26,9 @@ using System.Reflection;
 using System.Windows.Forms.Design;
 using System.Xml;
 
-using NDoc.Core.PropertyGridUI;
+using NDoc3.Core.PropertyGridUI;
 
-namespace NDoc.Core.Reflection
+namespace NDoc3.Core.Reflection
 {
 	/// <summary>The base config class for documenters which use the <see cref="ReflectionEngine"/> to extract 
 	/// documentation from .Net assemblies.</summary>
@@ -347,7 +347,7 @@ namespace NDoc.Core.Reflection
 		/// <para>If this is true, types and members marked as private will
 		/// be included in the documentation.</para>
 		/// <para>Normally private items are not documented. This is useful
-		/// when use NDoc to create documentation intended for internal use.</para></remarks>
+		/// when use NDoc3 to create documentation intended for internal use.</para></remarks>
 		[Category("Visibility")]
 		[Description("Turn this flag on to document private code.")]
 		[DefaultValue(false)]
@@ -365,9 +365,9 @@ namespace NDoc.Core.Reflection
 		private bool _DocumentProtectedInternalAsProtected;
 
 		/// <summary>Gets or sets the DocumentProtectedInternalAsProtected property.</summary>
-		/// <remarks>If this is true, NDoc will treat "protected internal" members as "protected" only.</remarks>
+		/// <remarks>If this is true, NDoc3 will treat "protected internal" members as "protected" only.</remarks>
 		[Category("Visibility")]
-		[Description("If true, NDoc will treat \"protected internal\" members as \"protected\" only.")]
+		[Description("If true, NDoc3 will treat \"protected internal\" members as \"protected\" only.")]
 		[DefaultValue(false)]
 		public bool DocumentProtectedInternalAsProtected
 		{
@@ -402,7 +402,7 @@ namespace NDoc.Core.Reflection
 		private bool _SkipNamespacesWithoutSummaries;
 
 		/// <summary>Gets or sets the SkipNamespacesWithoutSummaries property.</summary>
-		/// <remarks>Setting this property to true , NDoc will not document namespaces 
+		/// <remarks>Setting this property to true , NDoc3 will not document namespaces 
 		/// that don't have an associated namespace summary.</remarks>
 		[Category("Visibility")]
 		[Description("Setting this property to true will not document namespaces that don't have an associated namespace summary.")]
@@ -424,7 +424,7 @@ namespace NDoc.Core.Reflection
 		/// <summary>Specifies the level of filtering on the EditorBrowsable attribute.</summary>
 		/// <remarks><para>Sets the level of filtering to apply on types/members marked with the <b>EditorBrowsable</b> attribute.  
 		/// <b>Warning: enabling this filter might result in invalid links in the documentation.</b></para>
-		/// <para>As of version 1.3 of NDoc, the <b>&lt;exclude/&gt;</b> tag is the preferred mechanism for
+		/// <para>As of version 1.3 of NDoc3, the <b>&lt;exclude/&gt;</b> tag is the preferred mechanism for
 		/// suppressing the documentation of types or members.</para></remarks>
 		[Category("Visibility")]
 		[Description("Sets the level of filtering to apply on types/members marked with the EditorBrowsable attribute.  Warning: enabling this filter might result in invalid links in the documentation.")]
@@ -447,13 +447,13 @@ namespace NDoc.Core.Reflection
         private string _UseNDocXmlFile = string.Empty;
 
         /// <summary>Gets or sets a value indicating whether to use the specified XML file as input instead of reflecting the list of assemblies specified on the project.</summary>
-        /// <remarks><para>When set, NDoc will use the specified XML file as 
+        /// <remarks><para>When set, NDoc3 will use the specified XML file as 
         /// input instead of reflecting the list of assemblies specified 
         /// on the project.</para>
         /// <para>Very useful for debugging documenters. <b><i>Leave empty for normal usage.</i></b></para>
         /// </remarks>
         [Category("Documentation Main Settings")]
-        [Description("When set, NDoc will use the specified XML file as input instead of reflecting the list of assemblies specified on the project.  Very useful for debugging documenters.  Leave empty for normal usage.")]
+        [Description("When set, NDoc3 will use the specified XML file as input instead of reflecting the list of assemblies specified on the project.  Very useful for debugging documenters.  Leave empty for normal usage.")]
         [Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
         [DefaultValue("")]
         public string UseNDocXmlFile
@@ -624,12 +624,12 @@ namespace NDoc.Core.Reflection
 
 		/// <summary>Get/set the Preliminary preoperty</summary>
 		/// <remarks>
-		/// <para>If true, NDoc will mark every topic as being preliminary documentation.
+		/// <para>If true, NDoc3 will mark every topic as being preliminary documentation.
 		/// Each topic will include a notice that the documentation is preliminary</para>
 		/// <para>The default notice is <font color="red">[This is preliminary documentation 
 		/// and subject to change.]</font></para></remarks>
 		[Category("Documentation Main Settings")]
-		[Description("If true, NDoc will mark every topic as being preliminary documentation.")]
+		[Description("If true, NDoc3 will mark every topic as being preliminary documentation.")]
 		[DefaultValue(false)]
 		public bool Preliminary
 		{

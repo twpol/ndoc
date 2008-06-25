@@ -17,7 +17,7 @@
 using System;
 using System.Collections;
 
-namespace NDoc.Core.Reflection
+namespace NDoc3.Core.Reflection
 {
 	/// <summary>
 	/// Summary description for ReflectionEngineParameters.

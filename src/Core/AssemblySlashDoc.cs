@@ -18,7 +18,7 @@
 using System;
 using System.ComponentModel;
 
-namespace NDoc.Core
+namespace NDoc3.Core
 {
 	/// <summary>Represents the path to an assembly and its associated documentation comment XML file.</summary>
 	/// <remarks>Documentation comment XML files are known colloquially as <i>"SlashDoc"</i> files as they produced
@@ -60,7 +60,7 @@ namespace NDoc.Core
 		/// Gets or sets the path to an assembly file.
 		/// </summary>
 		/// <value>A <see cref="FilePath"/> representing the path to an assembly.</value>
-		[NDoc.Core.PropertyGridUI.FilenameEditor.FileDialogFilter
+		[NDoc3.Core.PropertyGridUI.FilenameEditor.FileDialogFilter
 			 ("Select Assembly", 
 			 "Library and Executable files (*.dll, *.exe)|*.dll;*.exe|Library files (*.dll)|*.dll|Executable files (*.exe)|*.exe|All files (*.*)|*.*")]
 		public FilePath Assembly 
@@ -73,7 +73,7 @@ namespace NDoc.Core
 		/// Gets or sets the path to a documentation comment XML file.
 		/// </summary>
 		/// <value>A <see cref="FilePath"/> representing the path to a documentation comment XML file.</value>
-		[NDoc.Core.PropertyGridUI.FilenameEditor.FileDialogFilter
+		[NDoc3.Core.PropertyGridUI.FilenameEditor.FileDialogFilter
 			 ("Select Assembly", 
 			 "/doc Output files (*.xml)|*.xml|All files (*.*)|*.*")]
 		public FilePath SlashDoc 

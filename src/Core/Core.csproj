@@ -250,10 +250,6 @@
       <SubType>Code</SubType>
     </Compile>
     <None Include="AssySlashDocXML.xsd" />
-    <None Include="AssySlashDocXML.xsx">
-      <DependentUpon>AssySlashDocXML.xsd</DependentUpon>
-    </None>
-    <None Include="Documenter.cd" />
     <None Include="Core.build" />
     <EmbeddedResource Include="ReflectionEngine\reflection.xsd" />
     <EmbeddedResource Include="AttributesForm.resx">

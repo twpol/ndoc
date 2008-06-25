@@ -19,7 +19,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Windows.Forms;
 
-namespace NDoc.Core.PropertyGridUI
+namespace NDoc3.Core.PropertyGridUI
 {
 	/// <summary>
 	/// Used in the conjunction with the <see cref="TextEditor"/>, this form
@@ -186,7 +186,7 @@ namespace NDoc.Core.PropertyGridUI
 				}
 				catch (Exception ex)
 				{
-					MessageBox.Show("Error reading file: " + ex.Message, "NDoc",
+					MessageBox.Show("Error reading file: " + ex.Message, "NDoc3",
 						MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 				}
 				finally

@@ -1,7 +1,7 @@
 using System;
 using System.Diagnostics;
 
-namespace NDoc.Core
+namespace NDoc3.Core
 {
 	/// <summary>
 	/// Holds meta data about a specific type of documenter

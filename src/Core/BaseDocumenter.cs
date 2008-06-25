@@ -30,11 +30,11 @@ using System.Xml;
 using System.Xml.XPath;
 using System.ComponentModel;
 
-namespace NDoc.Core
+namespace NDoc3.Core
 {
 	/// <summary>Provides an abstract base class for documenters.</summary>
 	/// <remarks>
-	/// This is an <see langword="abstract"/> base class for NDoc Documenters.
+	/// This is an <see langword="abstract"/> base class for NDoc3 Documenters.
 	/// It provides default implementations of all the methods required by the <see cref="IDocumenter"/> interface. 
 	/// It also provides some basic properties which are shared by all documenters. 
 	/// </remarks>

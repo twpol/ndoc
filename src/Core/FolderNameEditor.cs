@@ -22,10 +22,10 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Windows.Forms;
 
-using NDoc.ExtendedUI;
+using NDoc3.ExtendedUI;
 
 
-namespace NDoc.Core.PropertyGridUI
+namespace NDoc3.Core.PropertyGridUI
 {
 	/// <summary>
 	/// 

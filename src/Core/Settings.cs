@@ -21,7 +21,7 @@ using System.Text;
 using System.Reflection;
 using System.Collections;
 
-namespace NDoc.Core
+namespace NDoc3.Core
 {
 	/// <summary>
 	/// This class manages read write access to application settings
@@ -84,7 +84,7 @@ namespace NDoc.Core
 			{
 				// create a path for this major.minor version of the app
 				Version version = Assembly.GetExecutingAssembly().GetName().Version;
-				return string.Format( "NDoc.{0}.{1}", version.Major, version.Minor );
+				return string.Format( "NDoc3.{0}.{1}", version.Major, version.Minor );
 			}
 		}
 

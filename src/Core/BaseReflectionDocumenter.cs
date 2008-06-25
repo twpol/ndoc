@@ -29,7 +29,7 @@ using System.Xml;
 using System.Xml.XPath;
 using System.ComponentModel;
 
-namespace NDoc.Core.Reflection
+namespace NDoc3.Core.Reflection
 {
 	/// <summary>The base class for documenters which use the <see cref="ReflectionEngine"/> to extract 
 	/// documentation from .Net assemblies.</summary>
@@ -73,7 +73,7 @@ namespace NDoc.Core.Reflection
             AppDomain appDomain = null;
 			try 
 			{
-				appDomain = AppDomain.CreateDomain("NDocReflection", 
+				appDomain = AppDomain.CreateDomain("NDoc3Reflection", 
 					AppDomain.CurrentDomain.Evidence, AppDomain.CurrentDomain.SetupInformation);
                 appDomain.SetupInformation.ShadowCopyFiles = "true"; //only required for managed c++ assemblies
                 ReflectionEngine re = (ReflectionEngine)   
@@ -120,7 +120,7 @@ namespace NDoc.Core.Reflection
 
 			try 
 			{
-				appDomain = AppDomain.CreateDomain("NDocReflection", 
+				appDomain = AppDomain.CreateDomain("NDoc3Reflection", 
 					AppDomain.CurrentDomain.Evidence, AppDomain.CurrentDomain.SetupInformation);
 				appDomain.SetupInformation.ShadowCopyFiles = "true"; //only required for managed c++ assemblies
 				ReflectionEngine re = (ReflectionEngine)   

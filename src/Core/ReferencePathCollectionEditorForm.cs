@@ -24,9 +24,9 @@ using System.Windows.Forms.Design;
 using System.Diagnostics;
 using System.Reflection;
 
-using NDoc.ExtendedUI;
+using NDoc3.ExtendedUI;
 
-namespace NDoc.Core
+namespace NDoc3.Core
 {
 	/// <summary>
 	/// Summary description for ReferencePathCollectionEditorForm.
@@ -37,7 +37,7 @@ namespace NDoc.Core
 		private System.Windows.Forms.Button btnAdd;
 		private System.Windows.Forms.Button btnRemove;
 		private System.Windows.Forms.Button btnTest;
-		private NDoc.Core.PropertyGridUI.RuntimePropertyGrid propertyGrid1;
+		private NDoc3.Core.PropertyGridUI.RuntimePropertyGrid propertyGrid1;
 		private System.Windows.Forms.Button btnCancel;
 		private System.Windows.Forms.Button btnOK;
 		private System.Windows.Forms.ImageList imageList1;
@@ -60,10 +60,10 @@ namespace NDoc.Core
 
 			ImageList.ImageCollection imlcol = this.imageList1.Images;
 
-			imlcol.Add(new Bitmap(assembly.GetManifestResourceStream("NDoc.Core.graphics.folder.bmp")));
-			imlcol.Add(new Bitmap(assembly.GetManifestResourceStream("NDoc.Core.graphics.folderpin.bmp")));
-			imlcol.Add(new Bitmap(assembly.GetManifestResourceStream("NDoc.Core.graphics.multifolder.bmp")));
-			imlcol.Add(new Bitmap(assembly.GetManifestResourceStream("NDoc.Core.graphics.multifolderpin.bmp")));
+			imlcol.Add(new Bitmap(assembly.GetManifestResourceStream("NDoc3.Core.graphics.folder.bmp")));
+			imlcol.Add(new Bitmap(assembly.GetManifestResourceStream("NDoc3.Core.graphics.folderpin.bmp")));
+			imlcol.Add(new Bitmap(assembly.GetManifestResourceStream("NDoc3.Core.graphics.multifolder.bmp")));
+			imlcol.Add(new Bitmap(assembly.GetManifestResourceStream("NDoc3.Core.graphics.multifolderpin.bmp")));
 		}
 
 		/// <summary>
@@ -108,7 +108,7 @@ namespace NDoc.Core
 		{
 			this.components = new System.ComponentModel.Container();
 			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(ReferencePathCollectionEditorForm));
-			this.propertyGrid1 = new NDoc.Core.PropertyGridUI.RuntimePropertyGrid();
+			this.propertyGrid1 = new NDoc3.Core.PropertyGridUI.RuntimePropertyGrid();
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.btnOK = new System.Windows.Forms.Button();
 			this.btnRemove = new System.Windows.Forms.Button();
@@ -386,7 +386,7 @@ namespace NDoc.Core
 			private ListViewItem  _listViewItem;
 
 			[Editor(typeof(ReferencePath.UIEditor), typeof(UITypeEditor))]
-			[NDoc.Core.PropertyGridUI.FoldernameEditor.FolderDialogTitle("Select Reference Path")]
+			[NDoc3.Core.PropertyGridUI.FoldernameEditor.FolderDialogTitle("Select Reference Path")]
 			public ReferencePath ReferencePath 
 			{
 				get { return _referencePath; }

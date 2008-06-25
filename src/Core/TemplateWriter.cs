@@ -23,7 +23,7 @@
 using System;
 using System.IO;
 
-namespace NDoc.Core
+namespace NDoc3.Core
 {
 	/// <summary>
 	/// Stream writer that parses a template file to write a new file.

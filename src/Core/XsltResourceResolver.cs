@@ -20,7 +20,7 @@ using System.Xml;
 using System.Reflection;
 using System.IO;
 
-namespace NDoc.Core
+namespace NDoc3.Core
 {
 	/// <summary>	
 	/// Resolves URLs stored as embedded resources in an assembly.

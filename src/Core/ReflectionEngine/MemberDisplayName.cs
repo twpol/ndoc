@@ -18,7 +18,7 @@ using System;
 using System.Reflection;
 using System.Text;
 
-namespace NDoc.Core
+namespace NDoc3.Core
 {
 	/// <summary>
 	/// 

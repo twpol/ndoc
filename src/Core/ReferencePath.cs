@@ -22,9 +22,9 @@ using System.Windows.Forms.Design;
 using System.Drawing.Design;
 using System.IO;
 
-using NDoc.Core.PropertyGridUI;
+using NDoc3.Core.PropertyGridUI;
 
-namespace NDoc.Core
+namespace NDoc3.Core
 {
 	/// <summary>
 	/// A path to search for referenced assemblies.
@@ -37,7 +37,7 @@ namespace NDoc.Core
 	[DefaultProperty("Path")]
 	[TypeConverter(typeof(ReferencePath.TypeConverter))]
 	[Editor(typeof(ReferencePath.UIEditor), typeof(UITypeEditor))]
-	[NDoc.Core.PropertyGridUI.FoldernameEditor.FolderDialogTitle("Select Reference Path")]
+	[NDoc3.Core.PropertyGridUI.FoldernameEditor.FolderDialogTitle("Select Reference Path")]
 	public class ReferencePath : PathItemBase
 	{
 		#region Private Fields

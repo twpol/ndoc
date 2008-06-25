@@ -25,12 +25,12 @@ using System.Windows.Forms.Design;
 using System.Diagnostics;
 using System.Xml;
 
-namespace NDoc.Core
+namespace NDoc3.Core
 {
 
 	/// <summary>Provides an abstract base class for documenter configurations.</summary>
 	/// <remarks>
-	/// This is a base class for NDoc Documenter Configs.  
+	/// This is a base class for NDoc3 Documenter Configs.  
 	/// It implements all the methods required by the <see cref="IDocumenterConfig"/> interface. 
 	/// It also provides some basic properties which are shared by all configs. 
 	/// </remarks>
@@ -68,7 +68,7 @@ namespace NDoc.Core
 			_Project = project;
 		}
 
-		/// <summary>Sets the <see cref="NDoc.Core.Project.IsDirty"/> property on the <see cref="Project"/>.</summary>
+		/// <summary>Sets the <see cref="NDoc3.Core.Project.IsDirty"/> property on the <see cref="Project"/>.</summary>
 		protected void SetDirty()
 		{
 			if (_Project != null)

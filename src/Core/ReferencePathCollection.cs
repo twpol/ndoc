@@ -26,7 +26,7 @@ using System.Xml;
 using System.Diagnostics;
 using System.Windows.Forms;
 
-namespace NDoc.Core
+namespace NDoc3.Core
 {
 	/// <summary>
 	/// Type safe collection class for <see cref="ReferencePath"/> objects. 

@@ -20,7 +20,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
 
-namespace NDoc.Core.PropertyGridUI
+namespace NDoc3.Core.PropertyGridUI
 {
 	/// <summary>
 	/// EnumConverter supporting System.ComponentModel.DescriptionAttribute

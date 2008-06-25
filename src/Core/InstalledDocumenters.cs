@@ -4,7 +4,7 @@ using System.Collections;
 using System.Diagnostics;
 using System.Reflection;
 
-namespace NDoc.Core
+namespace NDoc3.Core
 {
 	/// <summary>
 	/// Static class containing the collection of documenters 
@@ -116,7 +116,7 @@ namespace NDoc.Core
 		/// <param name="path">The directory to scan for assemblies containing documenters.</param>
 		private static void FindDocumentersInPath( ArrayList documenters, string path) 
 		{
-			foreach (string fileName in Directory.GetFiles(path, "NDoc.Documenter.*.dll")) 
+			foreach (string fileName in Directory.GetFiles(path, "NDoc3.Documenter.*.dll")) 
 			{
 				Assembly assembly = null;
 
@@ -138,7 +138,7 @@ namespace NDoc.Core
 					{
 						foreach (Type type in assembly.GetTypes()) 
 						{
-							if (type.IsClass && !type.IsAbstract && (type.GetInterface("NDoc.Core.IDocumenterInfo") != null))
+							if (type.IsClass && !type.IsAbstract && (type.GetInterface("NDoc3.Core.IDocumenterInfo") != null))
 							{
 								IDocumenterInfo documenter = Activator.CreateInstance(type) as IDocumenterInfo;
 								if (documenter != null)

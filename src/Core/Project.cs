@@ -23,9 +23,9 @@ using System.Reflection;
 using System.Xml;
 using System.Text;
 
-namespace NDoc.Core
+namespace NDoc3.Core
 {
-	/// <summary>Represents an NDoc project.</summary>
+	/// <summary>Represents an NDoc3 project.</summary>
 	public class Project
 	{
 		/// <summary>Initializes a new instance of the <see cref="Project"/> class.</summary>
@@ -212,7 +212,7 @@ namespace NDoc.Core
 
 		#region Read from Disk
 
-		/// <summary>Reads an NDoc project file from disk.</summary>
+		/// <summary>Reads an NDoc3 project file from disk.</summary>
 		public void Read(string filename)
 		{
 			Clear();
@@ -408,7 +408,7 @@ namespace NDoc.Core
 
 		#region Write to Disk
 
-		/// <summary>Writes an NDoc project to a disk file.</summary>
+		/// <summary>Writes an NDoc3 project to a disk file.</summary>
 		/// <remarks>A project is written to file in a 2 stage process;
 		/// <list type="number">
 		/// <item>The project data is serialised to an in-memory store.</item>

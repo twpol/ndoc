@@ -15,7 +15,7 @@
 using System;
 using System.Collections;
 
-namespace NDoc.Core.Reflection
+namespace NDoc3.Core.Reflection
 {
 	internal class AttributeUsageDisplayFilter
 	{

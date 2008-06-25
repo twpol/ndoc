@@ -5,7 +5,7 @@ using System;
 using System.Collections;
 using System.ComponentModel;
 
-namespace NDoc.Core.PropertyGridUI
+namespace NDoc3.Core.PropertyGridUI
 {
     /// <summary>
     /// 

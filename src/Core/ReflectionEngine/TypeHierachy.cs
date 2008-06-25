@@ -19,7 +19,7 @@ using System;
 using System.Collections;
 using System.Text;
 
-namespace NDoc.Core.Reflection
+namespace NDoc3.Core.Reflection
 {
 	/// <summary>
 	/// 

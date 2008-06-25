@@ -23,9 +23,9 @@ using System.IO;
 using System.Diagnostics;
 using System.Globalization;
 
-using NDoc.Core.Reflection;
+using NDoc3.Core.Reflection;
 
-namespace NDoc.Core
+namespace NDoc3.Core
 {
 	/// <summary>
 	/// Summary description for Namespaces.
@@ -206,7 +206,7 @@ namespace NDoc.Core
 			AppDomain appDomain = null;
 			try
 			{
-				appDomain = AppDomain.CreateDomain("NDocNamespaces");
+				appDomain = AppDomain.CreateDomain("NDoc3Namespaces");
 				ReflectionEngine re = (ReflectionEngine)   
 					appDomain.CreateInstanceAndUnwrap(typeof(ReflectionEngine).Assembly.FullName, 
 					typeof(ReflectionEngine).FullName, false, BindingFlags.Public | BindingFlags.Instance, 
