@@ -42,13 +42,13 @@ using System.Xml.XPath;
 using System.Xml.Xsl;
 using System.Reflection;
 
-using NDoc.Core;
-using NDoc.Core.Reflection;
+using NDoc3.Core;
+using NDoc3.Core.Reflection;
 
-namespace NDoc.Documenter.LinearHtml
+namespace NDoc3.Documenter.LinearHtml
 {
 	/// <summary>
-	/// This creates a linear (serial, more printable) html file from an ndoc xml file. 
+	/// This creates a linear (serial, more printable) html file from an ndoc3 xml file. 
 	/// This was designed and implemented with the intention that the html will be
 	/// inserted into a Word document, but this could be useful for other scenarios.
 	/// </summary>
@@ -80,7 +80,7 @@ namespace NDoc.Documenter.LinearHtml
 	///	the end the memory buffers written by each text writer are copied
 	///	to the output file in the appropriate order.
 	///	</para> 
-	///	<para>This has a Main for easier and faster test runs outside of NDoc.</para>
+	///	<para>This has a Main for easier and faster test runs outside of NDoc3.</para>
 	/// </remarks>
 	public class LinearHtmlDocumenter : BaseReflectionDocumenter
 	{
@@ -163,10 +163,10 @@ namespace NDoc.Documenter.LinearHtml
 		}
 
 		/// <summary>
-		/// Load the specified NDoc Xml file into this object's memory.
-		/// This is useful when this class is used outside of the context of NDoc.
+		/// Load the specified NDoc3 Xml file into this object's memory.
+		/// This is useful when this class is used outside of the context of NDoc3.
 		/// </summary>
-		/// <param name="fileName">The NDoc Xml file to load.</param>
+		/// <param name="fileName">The NDoc3 Xml file to load.</param>
 		/// <returns>bool - always true</returns>
 		public bool Load(string fileName)
 		{
@@ -182,8 +182,8 @@ namespace NDoc.Documenter.LinearHtml
 		}
 
 		/// <summary>
-		/// Load the specified NDoc Xml into this object's memory.
-		/// This is useful when this class is used outside of the context of NDoc.
+		/// Load the specified NDoc3 Xml into this object's memory.
+		/// This is useful when this class is used outside of the context of NDoc3.
 		/// </summary>
 		/// <param name="s">The stream to load.</param>
 		/// <returns>bool - always true</returns>
@@ -271,7 +271,7 @@ namespace NDoc.Documenter.LinearHtml
 
 #else
 				EmbeddedResources.WriteEmbeddedResources(this.GetType().Module.Assembly,
-					"NDoc.Documenter.LinearHtml.xslt",
+					"NDoc3.Documenter.LinearHtml.xslt",
 					Path.Combine(workspace.ResourceDirectory, "xslt"));
 #endif
 
@@ -283,7 +283,7 @@ namespace NDoc.Documenter.LinearHtml
 
 				// Write the embedded css files to the html output directory
 				EmbeddedResources.WriteEmbeddedResources(this.GetType().Module.Assembly,
-					"NDoc.Documenter.LinearHtml.css", MyConfig.OutputDirectory);
+					"NDoc3.Documenter.LinearHtml.css", MyConfig.OutputDirectory);
 
 				// Write the external files (FilesToInclude) to the html output directory
 				foreach( string srcFile in MyConfig.FilesToInclude.Split( '|' ) )
@@ -888,7 +888,7 @@ namespace NDoc.Documenter.LinearHtml
 		#region Top level, assembly, module, and namespace
 
 		/// <summary>
-		/// Build and emit the html document from the loaded NDoc Xml document.
+		/// Build and emit the html document from the loaded NDoc3 Xml document.
 		/// </summary>
 		/// <returns></returns>
 		private bool MakeHtml(string outputFileName)

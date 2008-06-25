@@ -21,11 +21,11 @@ using System.Drawing.Design;
 using System.IO;
 using System.Windows.Forms.Design;
 
-using NDoc.Core;
-using NDoc.Core.Reflection;
-using NDoc.Core.PropertyGridUI;
+using NDoc3.Core;
+using NDoc3.Core.Reflection;
+using NDoc3.Core.PropertyGridUI;
 
-namespace NDoc.Documenter.LinearHtml
+namespace NDoc3.Documenter.LinearHtml
 {
 	/// <summary>The LinearHtmlDocumenterConfig class.</summary>
 	[DefaultProperty("OutputDirectory")]
@@ -38,7 +38,7 @@ namespace NDoc.Documenter.LinearHtml
 		/// </remarks>
 		public LinearHtmlDocumenterConfig( LinearHtmlDocumenterInfo info ) : base( info )
 		{
-			_Title = "An NDoc Documented Class Library";
+			_Title = "An NDoc3 Documented Class Library";
 			_HeaderHtml = string.Empty;
 			_FooterHtml = string.Empty;
 			_FilesToInclude = string.Empty;
@@ -197,9 +197,9 @@ namespace NDoc.Documenter.LinearHtml
 		/// <summary>Gets or sets the IncludeHierarchy property.</summary>
 		/// <remarks>To include a class hiararchy page for each namespace. 
 		/// Don't turn it on if your project has a namespace with many types, 
-		/// as NDoc will become very slow and might crash.</remarks>
+		/// as NDoc3 will become very slow and might crash.</remarks>
 		[Category("Documentation Main Settings")]
-		[Description("To include a class hiararchy page for each namespace. Don't turn it on if your project has a namespace with many types, as NDoc will become very slow and might crash.")]
+		[Description("To include a class hiararchy page for each namespace. Don't turn it on if your project has a namespace with many types, as NDoc3 will become very slow and might crash.")]
 		[DefaultValue(false)]
 		public bool IncludeHierarchy
 		{

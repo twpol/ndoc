@@ -25,9 +25,9 @@ using System.Globalization;
 
 using Microsoft.Win32;
 
-using NDoc.Core;
+using NDoc3.Core;
 
-namespace NDoc.Documenter.Msdn
+namespace NDoc3.Documenter.Msdn
 {
 	/// <summary>HTML Help file utilities.</summary>
 	/// <remarks>This class is used by the MsdnHelp documenter
@@ -120,7 +120,7 @@ namespace NDoc.Documenter.Msdn
 		}
 
 		/// <summary>Gets the path to the Html Help Compiler.</summary>
-		/// <exception cref="PlatformNotSupportedException">NDoc is running on unix.</exception>
+		/// <exception cref="PlatformNotSupportedException">NDoc3 is running on unix.</exception>
 		internal string HtmlHelpCompiler
 		{
 			get
@@ -489,7 +489,7 @@ namespace NDoc.Documenter.Msdn
 
 			indexWriter.WriteStartElement("HTML");
 			indexWriter.WriteStartElement("BODY");
-			indexWriter.WriteComment(" http://ndoc.sourceforge.net/ ");
+			indexWriter.WriteComment(" http://ndoc3.sourceforge.net/ ");
 			indexWriter.WriteEndElement();
 			indexWriter.WriteEndElement();
 

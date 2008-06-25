@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<project name="NDoc.Documenter.Latex" default="compile">
+<project name="NDoc3.Documenter.Latex" default="compile">
 	<target name="compile">
 		<csc target="library" output="${current.bin.dir}/${nant.project.name}.dll" debug="${current.build.debug}" optimize="${current.build.optimize}" unsafe="false" checked="false" define="${current.build.defines}" doc="${current.bin.dir}/${nant.project.name}.xml">
 			<sources>
@@ -12,9 +12,9 @@
 				<include name="System.Drawing.dll" />
 				<include name="System.Drawing.Design.dll" />
 				<include name="System.Design.dll" />
-				<include name="${current.bin.dir}/NDoc.Core.dll" />
+				<include name="${current.bin.dir}/NDoc3.Core.dll" />
 			</references>
-			<resources prefix="NDoc.Documenter.Latex" dynamicprefix="true">
+			<resources prefix="NDoc3.Documenter.Latex" dynamicprefix="true">
 				<include name="**/*.xslt" />
 			</resources>
 		</csc>

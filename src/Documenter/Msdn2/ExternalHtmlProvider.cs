@@ -1,6 +1,6 @@
 using System;
 
-namespace NDoc.Documenter.Msdn2
+namespace NDoc3.Documenter.Msdn2
 {
 	/// <summary>
 	/// Used as an extension object to the xslt processor to allow

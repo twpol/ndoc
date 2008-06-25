@@ -32,10 +32,10 @@ using System.Reflection;
 using System.Xml;
 using System.Xml.Xsl;
 
-using NDoc.Core;
-using NDoc.Core.Reflection;
+using NDoc3.Core;
+using NDoc3.Core.Reflection;
 
-namespace NDoc.Documenter.Latex
+namespace NDoc3.Documenter.Latex
 {
 	/// <summary>
 	/// LaTeX generating documenter class.
@@ -113,7 +113,7 @@ namespace NDoc.Documenter.Latex
 		
 			EmbeddedResources.WriteEmbeddedResources(
 				this.GetType().Module.Assembly,
-				"NDoc.Documenter.Latex.xslt",
+				"NDoc3.Documenter.Latex.xslt",
 				workspace.ResourceDirectory );
 #endif
 

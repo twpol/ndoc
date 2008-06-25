@@ -3,10 +3,10 @@ using System.Diagnostics;
 using System.Collections.Specialized;
 using System.Globalization;
 
-using NDoc.Core;
-using NDoc.Core.Reflection;
+using NDoc3.Core;
+using NDoc3.Core.Reflection;
 
-namespace NDoc.Documenter.Msdn2
+namespace NDoc3.Documenter.Msdn2
 {
 	/// <summary>
 	/// Provides an extension object for the xslt transformations.

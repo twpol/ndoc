@@ -1,8 +1,8 @@
 using System;
 
-using NDoc.Core;
+using NDoc3.Core;
 
-namespace NDoc.Documenter.LinearHtml
+namespace NDoc3.Documenter.LinearHtml
 {
 	/// <summary>
 	/// Summary description for LatexWorkspace.

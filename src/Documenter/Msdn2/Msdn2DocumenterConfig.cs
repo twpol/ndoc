@@ -22,11 +22,11 @@ using System.Drawing.Design;
 using System.IO;
 using System.Windows.Forms.Design;
 
-using NDoc.Core;
-using NDoc.Core.Reflection;
-using NDoc.Core.PropertyGridUI;
+using NDoc3.Core;
+using NDoc3.Core.Reflection;
+using NDoc3.Core.PropertyGridUI;
 
-namespace NDoc.Documenter.Msdn2
+namespace NDoc3.Documenter.Msdn2
 {
 	/// <summary>
 	/// Defines the output types for this documenter.
@@ -60,7 +60,7 @@ namespace NDoc.Documenter.Msdn2
 		/// <summary>Initializes a new instance of the MsdnHelpConfig class.</summary>
 		public Msdn2DocumenterConfig( Msdn2DocumenterInfo info ) : base( info )
 		{
-			_Title = "An NDoc Documented Class Library";
+			_Title = "An NDoc3 Documented Class Library";
 
 			_BinaryTOC = true;
 
@@ -418,7 +418,7 @@ namespace NDoc.Documenter.Msdn2
 		/// This directory will be recursively compiled into the help file.</remarks>
 		[Category("HTML Help Options")]
 		[Description("Directory that contains resources (images etc.) used by the additional content pages. This directory will be recursively compiled into the help file.")]
-		[NDoc.Core.PropertyGridUI.FoldernameEditor.FolderDialogTitle("Select AdditionalContentResourceDirectory")]
+		[NDoc3.Core.PropertyGridUI.FoldernameEditor.FolderDialogTitle("Select AdditionalContentResourceDirectory")]
 		public FolderPath AdditionalContentResourceDirectory
 		{
 			get { return _AdditionalContentResourceDirectory; }
@@ -438,8 +438,8 @@ namespace NDoc.Documenter.Msdn2
 		/// <summary>Gets or sets the ExtensibilityStylesheet property</summary>
 		/// <remarks>Path to an xslt stylesheet that contains templates for documenting extensibility tags.</remarks>
 		[Category("Extensibility")]
-		[Description("Path to an xslt stylesheet that contains templates for documenting extensibility tags. Refer to the NDoc user's guide for more details on extending NDoc.")]
-		[NDoc.Core.PropertyGridUI.FilenameEditor.FileDialogFilter
+		[Description("Path to an xslt stylesheet that contains templates for documenting extensibility tags. Refer to the NDoc3 user's guide for more details on extending NDoc3.")]
+		[NDoc3.Core.PropertyGridUI.FilenameEditor.FileDialogFilter
 			 ("Select Extensibility Stylesheet", "Stylesheet files (*.xslt)|*.xslt|All files (*.*)|*.*")]
 		public FilePath ExtensibilityStylesheet
 		{

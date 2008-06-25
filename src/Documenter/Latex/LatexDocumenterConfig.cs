@@ -22,10 +22,10 @@ using System.ComponentModel;
 using System.Drawing.Design;
 using System.Windows.Forms.Design;
 
-using NDoc.Core;
-using NDoc.Core.Reflection;
+using NDoc3.Core;
+using NDoc3.Core.Reflection;
 
-namespace NDoc.Documenter.Latex
+namespace NDoc3.Documenter.Latex
 {
 	/// <summary>
 	/// Summary description for LatexDocumenterConfig.

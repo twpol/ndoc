@@ -2,10 +2,10 @@ using System;
 using System.Collections.Specialized;
 using System.Globalization;
 
-using NDoc.Core;
-using NDoc.Core.Reflection;
+using NDoc3.Core;
+using NDoc3.Core.Reflection;
 
-namespace NDoc.Documenter.Msdn
+namespace NDoc3.Documenter.Msdn
 {
 	/// <summary>
 	/// Provides an extension object for the xslt transformations.

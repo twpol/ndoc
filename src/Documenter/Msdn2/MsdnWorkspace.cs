@@ -1,8 +1,8 @@
 using System;
 
-using NDoc.Core;
+using NDoc3.Core;
 
-namespace NDoc.Documenter.Msdn2
+namespace NDoc3.Documenter.Msdn2
 {
 	/// <summary>
 	/// Summary description for MsdnWorkspace.

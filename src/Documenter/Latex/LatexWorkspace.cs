@@ -1,8 +1,8 @@
 using System;
 
-using NDoc.Core;
+using NDoc3.Core;
 
-namespace NDoc.Documenter.Latex
+namespace NDoc3.Documenter.Latex
 {
 	/// <summary>
 	/// Summary description for LatexWorkspace.

@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<project name="NDoc.Documenter.Msdn" default="compile">
+<project name="NDoc3.Documenter.Msdn" default="compile">
 	<target name="compile">
 		<csc target="library" warnaserror="true" output="${current.bin.dir}/${nant.project.name}.dll" debug="${current.build.debug}" optimize="${current.build.optimize}" unsafe="false" checked="false" define="${current.build.defines}" doc="${current.bin.dir}/${nant.project.name}.xml">
 			<warnaserror>
@@ -19,9 +19,9 @@
 				<include name="System.Design.dll" />
 				<include name="System.Drawing.dll" />
 				<include name="System.Data.dll" />
-				<include name="${current.bin.dir}/NDoc.Core.dll" />
+				<include name="${current.bin.dir}/NDoc3.Core.dll" />
 			</references>
-			<resources prefix="NDoc.Documenter.Msdn" dynamicprefix="true">
+			<resources prefix="NDoc3.Documenter.Msdn" dynamicprefix="true">
 				<include name="**/*.css" />
 				<include name="**/*.gif" />
 				<include name="**/*.js" />

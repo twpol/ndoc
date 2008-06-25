@@ -28,10 +28,10 @@ using System.Xml.XPath;
 using System.Xml.Xsl;
 using System.Globalization;
 
-using NDoc.Core;
-using NDoc.Core.Reflection;
+using NDoc3.Core;
+using NDoc3.Core.Reflection;
 
-namespace NDoc.Documenter.Msdn2
+namespace NDoc3.Documenter.Msdn2
 {
 	/// <summary>The MsdnDocumenter class.</summary>
 	public class Msdn2Documenter : BaseReflectionDocumenter
@@ -176,19 +176,19 @@ namespace NDoc.Documenter.Msdn2
 				// Write the embedded css files to the html output directory
 				EmbeddedResources.WriteEmbeddedResources(
 					this.GetType().Module.Assembly,
-					"NDoc.Documenter.Msdn2.css",
+					"NDoc3.Documenter.Msdn2.css",
 					workspace.WorkingDirectory);
 
 				// Write the embedded icons to the html output directory
 				EmbeddedResources.WriteEmbeddedResources(
 					this.GetType().Module.Assembly,
-					"NDoc.Documenter.Msdn2.images",
+					"NDoc3.Documenter.Msdn2.images",
 					workspace.WorkingDirectory);
 
 				// Write the embedded scripts to the html output directory
 				EmbeddedResources.WriteEmbeddedResources(
 					this.GetType().Module.Assembly,
-					"NDoc.Documenter.Msdn2.scripts",
+					"NDoc3.Documenter.Msdn2.scripts",
 					workspace.WorkingDirectory);
 
 				if ( ((string)MyConfig.AdditionalContentResourceDirectory).Length > 0 )			
@@ -387,13 +387,13 @@ namespace NDoc.Documenter.Msdn2
 					// Write the embedded online templates to the html output directory
 					EmbeddedResources.WriteEmbeddedResources(
 						this.GetType().Module.Assembly,
-						"NDoc.Documenter.Msdn2.onlinefiles",
+						"NDoc3.Documenter.Msdn2.onlinefiles",
 						workspace.WorkingDirectory);
 
 					using (TemplateWriter indexWriter = new TemplateWriter(
 							   Path.Combine(workspace.WorkingDirectory, "index.html"),
 							   new StreamReader(this.GetType().Module.Assembly.GetManifestResourceStream(
-							   "NDoc.Documenter.Msdn2.onlinetemplates.index.html"))))
+							   "NDoc3.Documenter.Msdn2.onlinetemplates.index.html"))))
 					{
 						indexWriter.CopyToLine("\t\t<title><%TITLE%></title>");
 						indexWriter.WriteLine("\t\t<title>" + MyConfig.HtmlHelpName + "</title>");
@@ -1497,7 +1497,7 @@ namespace NDoc.Documenter.Msdn2
 			}
 			catch(PathTooLongException e)
 			{
-				throw new PathTooLongException(e.Message + "\nThe file that NDoc was trying to create had the following name:\n" + Path.Combine(workspace.WorkingDirectory, filename));
+				throw new PathTooLongException(e.Message + "\nThe file that NDoc3 was trying to create had the following name:\n" + Path.Combine(workspace.WorkingDirectory, filename));
 			}
 
 #if DEBUG

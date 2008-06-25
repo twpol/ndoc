@@ -25,9 +25,9 @@ using System.Xml.Xsl;
 using System.Diagnostics;
 using System.Reflection;
 
-using NDoc.Core;
+using NDoc3.Core;
 
-namespace NDoc.Documenter.Msdn2
+namespace NDoc3.Documenter.Msdn2
 {
 	/// <summary>
 	/// The collection of xslt stylesheets used to generate the Html
@@ -48,7 +48,7 @@ namespace NDoc.Documenter.Msdn2
 #if NO_RESOURCES
 			string resourceBase = "file://" + Path.GetFullPath(Path.Combine(System.Windows.Forms.Application.StartupPath, @"..\..\..\Documenter\Msdn2\xslt") );
 #else
-			string resourceBase = "NDoc.Documenter.Msdn2.xslt";
+			string resourceBase = "NDoc3.Documenter.Msdn2.xslt";
 #endif
 
 			XsltResourceResolver resolver = new XsltResourceResolver(resourceBase);

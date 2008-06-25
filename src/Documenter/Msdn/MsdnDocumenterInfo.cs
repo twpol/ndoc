@@ -1,8 +1,8 @@
 using System;
 
-using NDoc.Core;
+using NDoc3.Core;
 
-namespace NDoc.Documenter.Msdn
+namespace NDoc3.Documenter.Msdn
 {
 	/// <summary>
 	/// Information about the Xml Documenter

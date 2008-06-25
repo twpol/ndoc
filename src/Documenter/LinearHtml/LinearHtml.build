@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<project name="NDoc.Documenter.LinearHtml" default="compile">
+<project name="NDoc3.Documenter.LinearHtml" default="compile">
 	<target name="compile">
 		<csc target="library" warnaserror="true" output="${current.bin.dir}/${nant.project.name}.dll" debug="${current.build.debug}" optimize="${current.build.optimize}" unsafe="false" checked="false" define="${current.build.defines}" doc="${current.bin.dir}/${nant.project.name}.xml">
 			<nowarn>
@@ -22,9 +22,9 @@
 				<include name="System.Drawing.dll" />
 				<include name="System.Drawing.Design.dll" />
 				<include name="System.Design.dll" />
-				<include name="${current.bin.dir}/NDoc.Core.dll" />
+				<include name="${current.bin.dir}/NDoc3.Core.dll" />
 			</references>
-			<resources prefix="NDoc.Documenter.LinearHtml" dynamicprefix="true">
+			<resources prefix="NDoc3.Documenter.LinearHtml" dynamicprefix="true">
 				<include name="**/*.css" />
 				<include name="**/*.xslt" />
 			</resources>
