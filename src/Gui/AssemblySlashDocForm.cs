@@ -28,9 +28,9 @@ using System.ComponentModel;
 using System.IO;
 using System.Windows.Forms;
 
-using NDoc.Core;
+using NDoc3.Core;
 
-namespace NDoc.Gui
+namespace NDoc3.Gui
 {
 
 	/// <summary>
@@ -40,7 +40,7 @@ namespace NDoc.Gui
 	{
 		private System.Windows.Forms.Button cancelButton;
 		private System.Windows.Forms.Button okButton;
-		private NDoc.Core.PropertyGridUI.RuntimePropertyGrid runtimePropertyGrid1;
+		private NDoc3.Core.PropertyGridUI.RuntimePropertyGrid runtimePropertyGrid1;
 
 		private AssemblySlashDoc assySlashDoc = new AssemblySlashDoc();
 
@@ -93,7 +93,7 @@ namespace NDoc.Gui
 		{
 			this.okButton = new System.Windows.Forms.Button();
 			this.cancelButton = new System.Windows.Forms.Button();
-			this.runtimePropertyGrid1 = new NDoc.Core.PropertyGridUI.RuntimePropertyGrid();
+			this.runtimePropertyGrid1 = new NDoc3.Core.PropertyGridUI.RuntimePropertyGrid();
 			this.SuspendLayout();
 			// 
 			// okButton

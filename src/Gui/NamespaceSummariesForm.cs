@@ -5,7 +5,7 @@
 //   Tweaked the layout, made the dialog not show up in the task bar.
 //
 // Modified by: Jason Diamond on Oct 19, 2001.
-//   Updated to work with the new NDoc.Core.Project interface.
+//   Updated to work with the new NDoc3.Core.Project interface.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-namespace NDoc.Gui
+namespace NDoc3.Gui
 {
 	using System;
 	using System.Drawing;
@@ -31,7 +31,7 @@ namespace NDoc.Gui
 	using System.Windows.Forms;
 	using System.IO;
 	using System.Reflection;
-	using NDoc.Core;
+	using NDoc3.Core;
 
 	/// <summary>
 	///    Summary description for NamespaceSummariesForm.

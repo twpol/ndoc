@@ -25,7 +25,7 @@ using System.Collections;
 using System.Diagnostics;
 using System.Threading;
 
-namespace NDoc.Gui
+namespace NDoc3.Gui
 {
 	/// <summary>
 	/// Static class with the Main method and application properties
@@ -49,13 +49,13 @@ namespace NDoc.Gui
 		}
 
 		/// <summary>
-		/// The NDoc SourceForge URI
+		/// The NDoc3 SourceForge URI
 		/// </summary>
 		public static string WebSiteUri
 		{
 			get
 			{
-				return "http://ndoc.sourceforge.net";
+				return "http://ndoc3.sourceforge.net";
 			}
 		}
 
@@ -109,9 +109,9 @@ namespace NDoc.Gui
 			get
 			{
 				// first try to locate help file in directory in which NDocGui is located
-				string path = Path.Combine( RuntimeLocation, "NDocUsersGuide.chm" );
+				string path = Path.Combine( RuntimeLocation, "NDoc3UsersGuide.chm" );
 				if ( File.Exists( path ) == false ) 
-					path = GetSourceTreePath( @"UsersGuide\NDocUsersGuide.chm" );
+					path = GetSourceTreePath( @"UsersGuide\NDoc3UsersGuide.chm" );
 
 				return path;
 			}

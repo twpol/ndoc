@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
-namespace NDoc.Gui
+namespace NDoc3.Gui
 {
 	/// <summary>
 	/// A <see cref="System.IO.TextWriter"/> that writes to a text box

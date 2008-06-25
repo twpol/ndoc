@@ -1,4 +1,4 @@
-// MainForm.cs - main GUI interface to NDoc
+// MainForm.cs - main GUI interface to NDoc3
 // Copyright (C) 2001  Kral Ferch, Keith Hill
 //
 // Modified by: Keith Hill on Sep 28, 2001.
@@ -33,23 +33,23 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.Diagnostics;
 
-using NDoc.Core;
-using NDoc.Core.PropertyGridUI;
-using VS = NDoc.VisualStudio;
+using NDoc3.Core;
+using NDoc3.Core.PropertyGridUI;
+using VS = NDoc3.VisualStudio;
 
-namespace NDoc.Gui
+namespace NDoc3.Gui
 {
 	/// <summary>The main application form.</summary>
 	/// <remarks>The main application form contains a listview that holds
 	/// assembly and /doc file pairs. You can add, edit, or delete a row
 	/// in the listview. You can document multiple assemblies at one time.
-	/// <para>NDoc provides for dynamic recognition of available
+	/// <para>NDoc3 provides for dynamic recognition of available
 	/// documenters.  It locates any available assemblies that are capable
 	/// of creating documentation by searching the directory for any
 	/// assemblies that contain a class that derives from
-	/// <see cref="IDocumenter"/> which is defined in the NDoc.Core
+	/// <see cref="IDocumenter"/> which is defined in the NDoc3.Core
 	/// namespace.</para>
-	/// <para>Currently there are 3 documenters supplied with NDoc:
+	/// <para>Currently there are 3 documenters supplied with NDoc3:
 	/// <list type="bullet">
 	/// <item><term>Msdn</term><description>Compiled HTML Help like the
 	/// .NET Framework SDK.</description></item>
@@ -59,7 +59,7 @@ namespace NDoc.Gui
 	/// full documentation.</description></item>
 	/// </list>
 	/// </para>
-	/// <para>NDoc allows you to save documentation projects. NDoc project
+	/// <para>NDoc3 allows you to save documentation projects. NDoc3 project
 	/// files have the .ndoc extension.</para>
 	/// <para>The bottom part of the main application form contains
 	/// a property grid.  You can edit the properties of the selected
@@ -119,7 +119,7 @@ namespace NDoc.Gui
 		private System.Windows.Forms.Label labelDocumenters;
 		private System.Windows.Forms.ComboBox comboBoxDocumenters;
 		private RuntimePropertyGrid propertyGrid;
-		private NDoc.Gui.TraceWindowControl traceWindow1;
+		private NDoc3.Gui.TraceWindowControl traceWindow1;
 		private System.Windows.Forms.MenuItem menuView;
 		private System.Windows.Forms.MenuItem menuViewBuildProgress;
 		private System.Windows.Forms.MenuItem menuItem1;
@@ -148,18 +148,18 @@ namespace NDoc.Gui
 		#region Constructors / Dispose
 		/// <summary>Initializes the main application form, locates
 		/// available documenters, and sets up the menus.</summary>
-		/// <remarks>NDoc project files have a .ndoc extension which
+		/// <remarks>NDoc3 project files have a .ndoc extension which
 		/// could be a registered file type in the system.  If a .ndoc
-		/// project file is double-clicked from explorer then the NDoc
+		/// project file is double-clicked from explorer then the NDoc3
 		/// application is called and passed the project file as a command line
 		/// argument.  This project filename will get passed into this
 		/// constructor.  If no project filename is passed in then the
 		/// constructor selects the most recently used project file (from
-		/// the MRU list that's stored in the NDoc configuration file) and
+		/// the MRU list that's stored in the NDoc3 configuration file) and
 		/// initializes the main application form using the information
 		/// in that project file.</remarks>
 		/// <param name="startingProjectFilename">A project filename passed
-		/// in as an argument to the NDoc application.</param>
+		/// in as an argument to the NDoc3 application.</param>
 		public MainForm(string startingProjectFilename)
 		{
 			this.SetStyle( ControlStyles.DoubleBuffer | ControlStyles.UserPaint, true );
@@ -174,13 +174,13 @@ namespace NDoc.Gui
 			Assembly assembly= Assembly.GetExecutingAssembly();
 
 			ImageList.ImageCollection imlcol = this.toolBarImageList.Images;
-			imlcol.Add(new Icon(assembly.GetManifestResourceStream("NDoc.Gui.graphics.New.ico")));
-			imlcol.Add(new Icon(assembly.GetManifestResourceStream("NDoc.Gui.graphics.OpenSolution.ico")));
-			imlcol.Add(new Icon(assembly.GetManifestResourceStream("NDoc.Gui.graphics.OpenFile.ico")));
-			imlcol.Add(new Icon(assembly.GetManifestResourceStream("NDoc.Gui.graphics.Save.ico")));
-			imlcol.Add(new Icon(assembly.GetManifestResourceStream("NDoc.Gui.graphics.Build.ico")));
-			imlcol.Add(new Icon(assembly.GetManifestResourceStream("NDoc.Gui.graphics.Cancel.ico")));
-			imlcol.Add(new Icon(assembly.GetManifestResourceStream("NDoc.Gui.graphics.View.ico")));
+			imlcol.Add(new Icon(assembly.GetManifestResourceStream("NDoc3.Gui.graphics.New.ico")));
+			imlcol.Add(new Icon(assembly.GetManifestResourceStream("NDoc3.Gui.graphics.OpenSolution.ico")));
+			imlcol.Add(new Icon(assembly.GetManifestResourceStream("NDoc3.Gui.graphics.OpenFile.ico")));
+			imlcol.Add(new Icon(assembly.GetManifestResourceStream("NDoc3.Gui.graphics.Save.ico")));
+			imlcol.Add(new Icon(assembly.GetManifestResourceStream("NDoc3.Gui.graphics.Build.ico")));
+			imlcol.Add(new Icon(assembly.GetManifestResourceStream("NDoc3.Gui.graphics.Cancel.ico")));
+			imlcol.Add(new Icon(assembly.GetManifestResourceStream("NDoc3.Gui.graphics.View.ico")));
 
 			this.startingProjectFilename = startingProjectFilename;
 		}
@@ -240,8 +240,8 @@ namespace NDoc.Gui
 				{
 					MessageBox.Show(
 						this, 
-						"The NDoc project file '" + startingProjectFilename + "' does not exist.",
-						"Error loading NDoc project file",
+						"The NDoc3 project file '" + startingProjectFilename + "' does not exist.",
+						"Error loading NDoc3 project file",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Stop
 					);
@@ -253,7 +253,7 @@ namespace NDoc.Gui
 
 			SetWindowTitle();
 		
-			this.traceWindow1.TraceText = string.Format( "[NDoc version {0}]\n", Assembly.GetExecutingAssembly().GetName().Version );
+			this.traceWindow1.TraceText = string.Format( "[NDoc3 version {0}]\n", Assembly.GetExecutingAssembly().GetName().Version );
 
 			m_buildWorker = new BuildWorker( this );
 
@@ -324,15 +324,15 @@ namespace NDoc.Gui
 			this.solutionToolBarButton = new System.Windows.Forms.ToolBarButton();
 			this.saveToolBarButton = new System.Windows.Forms.ToolBarButton();
 			this.assembliesHeaderGroupBox = new System.Windows.Forms.GroupBox();
-			this.assemblyListControl = new NDoc.Gui.AssemblyListControl();
+			this.assemblyListControl = new NDoc3.Gui.AssemblyListControl();
 			this.toolBar = new System.Windows.Forms.ToolBar();
 			this.buildToolBarButton = new System.Windows.Forms.ToolBarButton();
-			this.traceWindow1 = new NDoc.Gui.TraceWindowControl();
+			this.traceWindow1 = new NDoc3.Gui.TraceWindowControl();
 			this.splitter1 = new System.Windows.Forms.Splitter();
 			this.documenterHeaderGroupBox = new System.Windows.Forms.GroupBox();
 			this.labelDocumenters = new System.Windows.Forms.Label();
 			this.comboBoxDocumenters = new System.Windows.Forms.ComboBox();
-			this.propertyGrid = new NDoc.Core.PropertyGridUI.RuntimePropertyGrid();
+			this.propertyGrid = new NDoc3.Core.PropertyGridUI.RuntimePropertyGrid();
 			((System.ComponentModel.ISupportInitialize)(this.statusBarTextPanel)).BeginInit();
 			this.assembliesHeaderGroupBox.SuspendLayout();
 			this.documenterHeaderGroupBox.SuspendLayout();
@@ -615,7 +615,7 @@ namespace NDoc.Gui
 			// menuNDocOnline
 			// 
 			this.menuNDocOnline.Index = 4;
-			this.menuNDocOnline.Text = "NDoc Online";
+			this.menuNDocOnline.Text = "NDoc3 Online";
 			this.menuNDocOnline.Click += new System.EventHandler(this.menuNDocOnline_Click);
 			// 
 			// menuItem3
@@ -626,7 +626,7 @@ namespace NDoc.Gui
 			// menuAboutItem
 			// 
 			this.menuAboutItem.Index = 6;
-			this.menuAboutItem.Text = "&About NDoc...";
+			this.menuAboutItem.Text = "&About NDoc3...";
 			this.menuAboutItem.Click += new System.EventHandler(this.menuAboutItem_Click);
 			// 
 			// slashDocHeader
@@ -832,7 +832,7 @@ namespace NDoc.Gui
 			this.Name = "MainForm";
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-			this.Text = "NDoc";
+			this.Text = "NDoc3";
 			((System.ComponentModel.ISupportInitialize)(this.statusBarTextPanel)).EndInit();
 			this.assembliesHeaderGroupBox.ResumeLayout(false);
 			this.documenterHeaderGroupBox.ResumeLayout(false);
@@ -863,7 +863,7 @@ namespace NDoc.Gui
 					projectName = projectName.Substring( 0, projectName.LastIndexOf('.') );
 				}
 
-				this.Text = "NDoc - " + projectName + ( project.IsDirty ? "*" : "" );
+				this.Text = "NDoc3 - " + projectName + ( project.IsDirty ? "*" : "" );
 			}
 		}
 
@@ -955,7 +955,7 @@ namespace NDoc.Gui
 			return new Point( Screen.PrimaryScreen.WorkingArea.X, Screen.PrimaryScreen.WorkingArea.Y );
 		}
 
-		/// <summary>Reads in the NDoc configuration file from the
+		/// <summary>Reads in the NDoc3 configuration file from the
 		/// application directory.</summary>
 		/// <remarks>The config file stores the most recently used (MRU)
 		/// list of project files.  It also stores which documenter was
@@ -1008,7 +1008,7 @@ namespace NDoc.Gui
 			}
 		}
 
-		/// <summary>Writes out the NDoc configuration file to the
+		/// <summary>Writes out the NDoc3 configuration file to the
 		/// application directory.</summary>
 		/// <remarks>The config file stores the most recently used (MRU)
 		/// list of project files.  It also stores which documenter was
@@ -1127,7 +1127,7 @@ namespace NDoc.Gui
 					saveFileDlg.FileName = Path.GetFileName(projectFilename);
 				}
 
-				saveFileDlg.Filter = "NDoc Project files (*.ndoc)|*.ndoc|All files (*.*)|*.*" ;
+				saveFileDlg.Filter = "NDoc3 Project files (*.ndoc)|*.ndoc|All files (*.*)|*.*" ;
 
 				if( saveFileDlg.ShowDialog() == DialogResult.OK )
 				{
@@ -1166,7 +1166,7 @@ namespace NDoc.Gui
 
 		#region Event Handlers
 		/// <summary>
-		/// Resets NDoc to an empty project by calling <see cref="Clear"/>.
+		/// Resets NDoc3 to an empty project by calling <see cref="Clear"/>.
 		/// </summary>
 		/// <param name="sender">The File->New menu item (not used).</param>
 		/// <param name="e">Event arguments (not used).</param>
@@ -1207,7 +1207,7 @@ namespace NDoc.Gui
 								if (sf.ConfigList.SelectedIndex < 0)
 									return;
 
-								//clear current ndoc project settings
+								//clear current NDoc3 project settings
 								Clear();
 
 								warningMessages = LoadFromSolution( sol, (string)sf.ConfigList.SelectedItem );
@@ -1220,9 +1220,9 @@ namespace NDoc.Gui
 						}
 						else
 						{
-							warningMessages = "There are no projects in this solution that NDoc can import.\n\n";
+							warningMessages = "There are no projects in this solution that NDoc3 can import.\n\n";
 							warningMessages += "Either the solution is blank, or the projects contained within\n";
-							warningMessages += "the solution are not of a type NDoc can import.\n"; 
+							warningMessages += "the solution are not of a type NDoc3 can import.\n"; 
 						}
 
 						if ( warningMessages.Length > 0 )
@@ -1262,11 +1262,11 @@ namespace NDoc.Gui
 						assemblySlashDoc.SlashDoc.Path = Path.Combine( spath, xpath );
 
 						if ( !File.Exists( assemblySlashDoc.SlashDoc.Path ) )
-							warningMessages += String.Format("VS Project '{0}' has been imported, but the XML documentation file specified in the project cannot be found.\n- This can occur if the project is set to do 'incremental' compiles.\n- NDoc output will be very limited until the VS project is rebuilt with XML documntation...\n",p.Name);						
+							warningMessages += String.Format("VS Project '{0}' has been imported, but the XML documentation file specified in the project cannot be found.\n- This can occur if the project is set to do 'incremental' compiles.\n- NDoc3 output will be very limited until the VS project is rebuilt with XML documntation...\n",p.Name);						
 					}
 					else
 					{
-						warningMessages += String.Format("VS Project '{0}' has been imported, but the project is not set to produce XML documentation.\n- NDoc output for this assembly will be very limited...\n\n",p.Name);
+						warningMessages += String.Format("VS Project '{0}' has been imported, but the project is not set to produce XML documentation.\n- NDoc3 output for this assembly will be very limited...\n\n",p.Name);
 					}
 
 					project.AssemblySlashDocs.Add( assemblySlashDoc );
@@ -1283,7 +1283,7 @@ namespace NDoc.Gui
 				using( OpenFileDialog openFileDlg = new OpenFileDialog() )
 				{
 					openFileDlg.InitialDirectory = Directory.GetCurrentDirectory();
-					openFileDlg.Filter = "NDoc Project files (*.ndoc)|*.ndoc|All files (*.*)|*.*" ;
+					openFileDlg.Filter = "NDoc3 Project files (*.ndoc)|*.ndoc|All files (*.*)|*.*" ;
 
 					if( openFileDlg.ShowDialog() == DialogResult.OK )
 						FileOpen(openFileDlg.FileName);
@@ -1386,11 +1386,11 @@ namespace NDoc.Gui
 				if ( Directory.Exists( Path.GetDirectoryName( documenter.MainOutputFile ) ) == false )
 					Directory.CreateDirectory( Path.GetDirectoryName( documenter.MainOutputFile ) );
 
-				string logPath = Path.Combine( Path.GetDirectoryName( documenter.MainOutputFile ), "ndoc.log" );
+				string logPath = Path.Combine( Path.GetDirectoryName( documenter.MainOutputFile ), "ndoc3.log" );
 
 				ConfigureUIForBuild( true );
 
-				Trace.Listeners.Add( new TextWriterTraceListener( new StreamWriter( logPath, false, new System.Text.UTF8Encoding( false ) ),"ndoc" ) );
+				Trace.Listeners.Add( new TextWriterTraceListener( new StreamWriter( logPath, false, new System.Text.UTF8Encoding( false ) ),"NDoc3" ) );
 
 				UpdateProgress( "Building documentation...", 0 );
 
@@ -1398,7 +1398,7 @@ namespace NDoc.Gui
 			}
 			else
 			{
-				MessageBox.Show( this, message, "NDoc", MessageBoxButtons.OK, MessageBoxIcon.Stop );
+				MessageBox.Show( this, message, "NDoc3", MessageBoxButtons.OK, MessageBoxIcon.Stop );
 			}
 		}
 
@@ -1474,7 +1474,7 @@ namespace NDoc.Gui
 			catch (FileNotFoundException)
 			{
 				string msg = "The documentation has not been built yet.\nWould you like to build it now?";
-				DialogResult result = MessageBox.Show( this, msg, "NDoc", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question );
+				DialogResult result = MessageBox.Show( this, msg, "NDoc3", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question );
 
 				if ( result == DialogResult.Yes )
 					menuDocBuildItem_Click(sender, e);
@@ -1686,7 +1686,7 @@ namespace NDoc.Gui
 			using ( OpenFileDialog openFileDlg = new OpenFileDialog() )
 			{
 				openFileDlg.InitialDirectory = Directory.GetCurrentDirectory();
-				openFileDlg.Filter = "NDoc Namespace Summary files (*.xml)|*.xml|NDoc Project files (*.ndoc)|*.ndoc|All files (*.*)|*.*" ;
+				openFileDlg.Filter = "NDoc3 Namespace Summary files (*.xml)|*.xml|NDoc3 Project files (*.ndoc)|*.ndoc|All files (*.*)|*.*" ;
 
 				if( openFileDlg.ShowDialog() == DialogResult.OK )
 				{
@@ -1717,7 +1717,7 @@ namespace NDoc.Gui
 			using ( SaveFileDialog saveFileDlg = new SaveFileDialog() )
 			{
 				saveFileDlg.InitialDirectory = Directory.GetCurrentDirectory();
-				saveFileDlg.Filter = "NDoc Namespace Summary files (*.xml)|*.xml|All files (*.*)|*.*" ;
+				saveFileDlg.Filter = "NDoc3 Namespace Summary files (*.xml)|*.xml|All files (*.*)|*.*" ;
 
 				if( saveFileDlg.ShowDialog() == DialogResult.OK )
 				{
@@ -1761,7 +1761,7 @@ namespace NDoc.Gui
 			}	
 			else
 			{
-				MessageBox.Show( this, message, "NDoc", MessageBoxButtons.OK, MessageBoxIcon.Stop );
+				MessageBox.Show( this, message, "NDoc3", MessageBoxButtons.OK, MessageBoxIcon.Stop );
 			}
 		}
 
@@ -1831,7 +1831,7 @@ namespace NDoc.Gui
 				App.BuildTraceError( e );
 
 				if ( App.GetInnermostException( e ) is DocumenterException )
-					ErrorForm.ShowError( "NDoc Documenter Error", e, this );
+					ErrorForm.ShowError( "NDoc3 Documenter Error", e, this );
 
 				else 
 					ErrorForm.ShowError( e, this );	
@@ -1855,10 +1855,10 @@ namespace NDoc.Gui
 				if ( this.traceWindow1.IsDisposed == false && this.traceWindow1.Visible )
 					this.traceWindow1.Disconnect();
 
-				TraceListener listener = Trace.Listeners["ndoc"];
+				TraceListener listener = Trace.Listeners["NDoc3"];
 				listener.Close();
 				listener.Dispose();
-				Trace.Listeners.Remove("ndoc");
+				Trace.Listeners.Remove("NDoc3");
 		
 				ConfigureUIForBuild( false );
 				this.Cursor = Cursors.Default;

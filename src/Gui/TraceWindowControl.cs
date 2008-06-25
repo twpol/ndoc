@@ -8,7 +8,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 
-namespace NDoc.Gui
+namespace NDoc3.Gui
 {
 	/// <summary>
 	/// TraceWindow is a class that will connect to trace events and display trace outputs in a text box

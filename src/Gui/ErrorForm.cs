@@ -7,7 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Reflection;
 
-namespace NDoc.Gui
+namespace NDoc3.Gui
 {
 	/// <summary>
 	/// Form used to display errors to the user
@@ -194,7 +194,7 @@ namespace NDoc.Gui
 			this.ShowInTaskbar = false;
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "NDoc Error";
+			this.Text = "NDoc3 Error";
 			this.Load += new System.EventHandler(this.ErrorForm_Load);
 			this.ResumeLayout(false);
 

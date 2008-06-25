@@ -2,9 +2,9 @@ using System;
 using System.Diagnostics;
 using System.Threading;
 
-using NDoc.Core;
+using NDoc3.Core;
 
-namespace NDoc.Gui
+namespace NDoc3.Gui
 {
 	/// <summary>
 	/// Class that manages the build thread and status notification

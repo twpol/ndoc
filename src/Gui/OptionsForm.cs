@@ -4,7 +4,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 
-namespace NDoc.Gui
+namespace NDoc3.Gui
 {
 	/// <summary>
 	/// Form to view and set applicatio options
@@ -135,7 +135,7 @@ namespace NDoc.Gui
 			this.Name = "OptionsForm";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "NDoc Options";
+			this.Text = "NDoc3 Options";
 			this.ResumeLayout(false);
 
 		}

@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Drawing.Design;
 using System.Windows.Forms.Design;
 
-namespace NDoc.Gui
+namespace NDoc3.Gui
 {
 	/// <summary>
 	/// Configurable application settings
@@ -41,7 +41,7 @@ namespace NDoc.Gui
 		/// </summary>
 		[Browsable(true)]
 		[DefaultValue(true)]
-		[Description("If true, NDoc will open the last loaded project when it starts.")]
+		[Description("If true, NDoc3 will open the last loaded project when it starts.")]
 		[Category("User Specific Settings")]
 		public bool LoadLastProjectOnStart
 		{

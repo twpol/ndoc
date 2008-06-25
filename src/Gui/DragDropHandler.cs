@@ -2,9 +2,9 @@ using System;
 using System.IO;
 using System.Collections;
 
-using NDoc.Core;
+using NDoc3.Core;
 
-namespace NDoc.Gui
+namespace NDoc3.Gui
 {
 	/// <summary>
 	/// The type of files that can be dropped
@@ -85,7 +85,7 @@ namespace NDoc.Gui
 		}
 
 		/// <summary>
-		/// Gets the path to a NDoc file project from the dropped files list
+		/// Gets the path to a NDoc3 file project from the dropped files list
 		/// </summary>
 		/// <param name="files">The files dropped</param>
 		/// <returns>The path stored in the first location or the files array</returns>

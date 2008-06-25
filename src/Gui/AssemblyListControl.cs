@@ -24,9 +24,9 @@ using System.Reflection;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-using NDoc.Core;
+using NDoc3.Core;
 
-namespace NDoc.Gui
+namespace NDoc3.Gui
 {
 	/// <summary>
 	/// Control that displays the Assemblies in a project
@@ -419,7 +419,7 @@ namespace NDoc.Gui
 		/// names as keys and any existing summaries as values is passed in to
 		/// a form which allows editing of the namespace summaries.  If the ok button
 		/// is selected in the form then the Hashtable becomes the main one used by
-		/// NDoc and passed into documenters for building documentation.
+		/// NDoc3 and passed into documenters for building documentation.
 		/// </remarks>
 		/// <param name="sender">The sender (not used).</param>
 		/// <param name="e">The event arguments (not used).</param>

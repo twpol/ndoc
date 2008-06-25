@@ -4,7 +4,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 
-namespace NDoc.Gui
+namespace NDoc3.Gui
 {
 	/// <summary>
 	/// Form used to diaply warning messages to the user
@@ -151,7 +151,7 @@ namespace NDoc.Gui
 			this.MinimumSize = new System.Drawing.Size(224, 224);
 			this.Name = "WarningForm";
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
-			this.Text = "NDoc Warning";
+			this.Text = "NDoc3 Warning";
 			this.ResumeLayout(false);
 
 		}

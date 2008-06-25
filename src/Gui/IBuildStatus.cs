@@ -1,8 +1,8 @@
 using System;
 
-using NDoc.Core;
+using NDoc3.Core;
 
-namespace NDoc.Gui
+namespace NDoc3.Gui
 {
 	/// <summary>
 	/// Interface for receiving status notification during a build

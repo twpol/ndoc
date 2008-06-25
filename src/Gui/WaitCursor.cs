@@ -2,7 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Windows.Forms;
 
-namespace NDoc.Gui
+namespace NDoc3.Gui
 {
 	/// <summary>
 	/// Manages the wait cursor
