@@ -55,6 +55,7 @@ namespace NDoc3.Documenter.Msdn
 				sdkDocBaseUrl = msdnOnlineSdkBaseUrl;
 				sdkDocExt = msdnOnlineSdkPageExt;
 			}
+            /* TODO Handle none web links
 			else
 			{
 				switch (linkToSdkDocVersion)
@@ -68,7 +69,7 @@ namespace NDoc3.Documenter.Msdn
 						sdkDocExt = sdkDocPageExt;
 						break;
 				}
-			}
+			}*/
 			encodingString = "text/html; charset=" + fileEncoding.WebName; 
 		}
 

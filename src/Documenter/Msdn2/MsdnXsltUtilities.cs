@@ -57,7 +57,8 @@ namespace NDoc3.Documenter.Msdn2
 				sdkDocBaseUrl = msdnOnlineSdkBaseUrl;
 				sdkDocExt = msdnOnlineSdkPageExt;
 			}
-			else
+            //TODO Handle none web links
+			/*else
 			{
 				switch (linkToSdkDocVersion)
 				{
@@ -75,7 +76,7 @@ namespace NDoc3.Documenter.Msdn2
 						Debug.Assert( false );		// remind ourselves to update this list when new framework versions are supported
 						break;
 				}
-			}
+			}*/
 			encodingString = "text/html; charset=" + fileEncoding.WebName; 
 		}
 
