@@ -37,7 +37,7 @@
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
     <DefineConstants>DEBUG;TRACE;MONO</DefineConstants>
-    <DocumentationFile>NDoc.Test.xml</DocumentationFile>
+    <DocumentationFile>NDoc3.Test.xml</DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
     <NoStdLib>false</NoStdLib>

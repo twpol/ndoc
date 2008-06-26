@@ -36,7 +36,7 @@
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
     <DefineConstants>DEBUG;TRACE;NO_RESOURCES</DefineConstants>
-    <DocumentationFile>NDoc.Documenter.NativeHtmlHelp2.xml</DocumentationFile>
+    <DocumentationFile>NDoc3.Documenter.NativeHtmlHelp2.xml</DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
     <NoStdLib>false</NoStdLib>
