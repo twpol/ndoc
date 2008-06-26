@@ -313,13 +313,6 @@ namespace NDoc3.Gui
 			string url = e.Link.LinkData.ToString();
 			Process.Start(url);
 		}
-
-		private void adminsLinkLabel_LinkClicked(object sender, System.Windows.Forms.LinkLabelLinkClickedEventArgs e)
-		{
-			adminsLinkLabel.Links[adminsLinkLabel.Links.IndexOf(e.Link)].Visited = true;
-			string url = e.Link.LinkData.ToString();
-			Process.Start(url);
-		}
 		#endregion
 	}
 }
