@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using ShellLib;
 
-namespace NDoc.ExtendedUI
+namespace NDoc3.ExtendedUI
 {
 	public class ShellBrowseForFolderDialog
 	{
