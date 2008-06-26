@@ -930,7 +930,7 @@ namespace NDoc3.Core.Reflection
 		SDK_v3_0, 
 
         /// <summary>The SDK version 3.5.</summary>
-        [Description(".NET Version 3.5")]
+        [Description(".Net Version 3.5")]
         SDK_v3_5
 	}
 
