@@ -140,7 +140,7 @@ namespace NDoc3.Documenter.Msdn
 			}
 		}
 
-		private bool _ShowVisualBasic;
+		private bool _ShowVisualBasic = false;
 
 		/// <summary>Gets or sets the ShowVisualBasic property.</summary>
 		/// <remarks>This is a temporary property until we get a working
@@ -148,6 +148,7 @@ namespace NDoc3.Documenter.Msdn
 		[Category("Documentation Main Settings")]
 		[Description("Show Visual Basic syntax for types and members.")]
 		[DefaultValue(false)]
+        [ReadOnly(true)]
 		public bool ShowVisualBasic
 		{
 			get { return _ShowVisualBasic; }
@@ -185,7 +186,8 @@ namespace NDoc3.Documenter.Msdn
 		/// </remarks>
 		[Category("Documentation Main Settings")]
 		[Description("Turning this flag on will point all SDK links to the online MSDN library")]
-		[DefaultValue(false)]
+		[DefaultValue(true)]
+        [ReadOnly(true)]
 		public bool SdkLinksOnWeb
 		{
 			get { return _SdkLinksOnWeb; }
