@@ -228,7 +228,7 @@
       <SubType>Form</SubType>
     </Compile>
     <None Include="Gui.build" />
-    <Content Include="NDocGui.exe.manifest" />
+    <Content Include="NDoc3Gui.exe.manifest" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
