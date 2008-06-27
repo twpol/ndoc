@@ -99,7 +99,7 @@ namespace NDoc3.Test.Attributes
 	/// </summary>
 	/// <remarks>This class has the [Serializable] attribute.</remarks>
 	[Author("Jane Programmer", Version = 2), IsTested()]
-	[XmlType(Namespace="NDoc/Test/Order")]
+	[XmlType(Namespace="NDoc3/Test/Order")]
 	[Serializable]
 	public class Order
 	{
