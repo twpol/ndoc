@@ -50,6 +50,7 @@ namespace NDoc3.Documenter.Msdn
 
 		private XmlDocument xmlDocumentation;
 		private XPathDocument xpathDocument;
+        private XmlNamespaceManager xmlnsManager;
 
 		private Hashtable lowerCaseTypeNames;
 		private Hashtable mixedCaseTypeNames;
@@ -239,6 +240,8 @@ namespace NDoc3.Documenter.Msdn
 						FilteringXmlTextReader fxtr = new FilteringXmlTextReader(tempFile);
 						xmlDocumentation = new XmlDocument();
 						xmlDocumentation.Load(fxtr);
+                        xmlnsManager = new XmlNamespaceManager(xmlDocumentation.NameTable);
+                        xmlnsManager.AddNamespace("ns", "urn:ndoc-schema");
 
 						tempFile.Seek(0,SeekOrigin.Begin);
 						XmlTextReader reader = new XmlTextReader(tempFile);
@@ -253,13 +256,13 @@ namespace NDoc3.Documenter.Msdn
 					}
 				}
 
-				XmlNodeList typeNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace/*[name()!='documentation']");
+				XmlNodeList typeNodes = xmlDocumentation.SelectNodes("/ns:ndoc/ns:assembly/ns:module/ns:namespace/*[name()!='documentation']", xmlnsManager);
 				if (typeNodes.Count == 0)
 				{
 					throw new DocumenterException("There are no documentable types in this project.\n\nAny types that exist in the assemblies you are documenting have been excluded by the current visibility settings.\nFor example, you are attempting to document an internal class, but the 'DocumentInternals' visibility setting is set to False.\n\nNote: C# defaults to 'internal' if no accessibilty is specified, which is often the case for Console apps created in VS.NET...");
 				}
 
-				XmlNodeList namespaceNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace");
+                XmlNodeList namespaceNodes = xmlDocumentation.SelectNodes("/ns:ndoc/ns:assembly/ns:module/ns:namespace", xmlnsManager);
 				int[] indexes = SortNodesByAttribute(namespaceNodes, "name");
 
 				XmlNode defaultNamespace = namespaceNodes[indexes[0]];;
@@ -399,13 +402,8 @@ namespace NDoc3.Documenter.Msdn
 					using ( StreamWriter streamWriter = new StreamWriter(
 								File.Open(Path.Combine(workspace.WorkingDirectory, "contents.html"), FileMode.CreateNew, FileAccess.Write, FileShare.None ), Encoding.Default ) )
 					{
-#if(NET_1_0)
-						//Use overload that is obsolete in v1.1
-						stylesheets["htmlcontents"].Transform(xpathDocument, null, streamWriter);
-#else
 						//Use new overload so we don't get obsolete warnings - clean compile :)
 						stylesheets["htmlcontents"].Transform(xpathDocument, null, streamWriter, null);
-#endif
 					}
 #if DEBUG
 					Trace.WriteLine((Environment.TickCount - start).ToString() + " msec.");
@@ -464,7 +462,7 @@ namespace NDoc3.Documenter.Msdn
 
 		private void MakeFilenames()
 		{
-			XmlNodeList namespaces = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace");
+            XmlNodeList namespaces = xmlDocumentation.SelectNodes("/ns:ndoc/ns:assembly/ns:module/ns:namespace", xmlnsManager);
 			foreach (XmlElement namespaceNode in namespaces)
 			{
 				string namespaceName = namespaceNode.Attributes["name"].Value;
@@ -563,7 +561,7 @@ namespace NDoc3.Documenter.Msdn
 
 		private void MakeHtmlForAssembliesSorted()
 		{
-			XmlNodeList assemblyNodes = xmlDocumentation.SelectNodes("/ndoc/assembly");
+            XmlNodeList assemblyNodes = xmlDocumentation.SelectNodes("/ns:ndoc/ns:assembly", xmlnsManager);
 			bool        heirTOC = (this.MyConfig.NamespaceTOCStyle == TOCStyle.Hierarchical);
 			int         level = 0;
 			int[] indexes = SortNodesByAttribute(assemblyNodes, "name");
@@ -656,7 +654,7 @@ namespace NDoc3.Documenter.Msdn
 
 		private void GetNamespacesFromAssembly(string assemblyName, System.Collections.Specialized.NameValueCollection namespaceAssemblies)
 		{
-			XmlNodeList namespaceNodes = xmlDocumentation.SelectNodes("/ndoc/assembly[@name=\"" + assemblyName + "\"]/module/namespace");
+            XmlNodeList namespaceNodes = xmlDocumentation.SelectNodes("/ns:ndoc/ns:assembly[@name=\"" + assemblyName + "\"]/ns:module/ns:namespace", xmlnsManager);
 			foreach (XmlNode namespaceNode in namespaceNodes)
 			{
 				string namespaceName = (string)namespaceNode.Attributes["name"].Value;
@@ -695,7 +693,7 @@ namespace NDoc3.Documenter.Msdn
 			TransformAndWriteResult("namespace", arguments, fileName);
 
 			arguments = new XsltArgumentList();
-			arguments.AddParam("namespace", String.Empty, namespaceName);
+			arguments.AddParam("namespace", "ndoc", namespaceName);
 
 			TransformAndWriteResult(
 				"namespacehierarchy",
@@ -709,7 +707,7 @@ namespace NDoc3.Documenter.Msdn
 		private void MakeHtmlForTypes(string namespaceName)
 		{
 			XmlNodeList typeNodes =
-				xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace[@name=\"" + namespaceName + "\"]/*[local-name()!='documentation' and local-name()!='typeHierarchy']");
+                xmlDocumentation.SelectNodes("/ns:ndoc/ns:assembly/ns:module/ns:namespace[@name=\"" + namespaceName + "\"]/*[local-name()!='documentation' and local-name()!='typeHierarchy']", xmlnsManager);
 
 			int[] indexes = SortNodesByAttribute(typeNodes, "id");
 			int nNodes = typeNodes.Count;
@@ -770,7 +768,7 @@ namespace NDoc3.Documenter.Msdn
 
 			htmlHelp.AddFileToContents(typeName + " " + mixedCaseTypeNames[whichType], fileName);
 
-			bool hasMembers = typeNode.SelectNodes("constructor|field|property|method|operator|event").Count > 0;
+            bool hasMembers = typeNode.SelectNodes("ns:constructor|ns:field|ns:property|ns:method|ns:operator|ns:event", xmlnsManager).Count > 0;
 
 			if (hasMembers)
 			{
@@ -781,7 +779,7 @@ namespace NDoc3.Documenter.Msdn
 			arguments.AddParam("type-id", String.Empty, typeID);
 			TransformAndWriteResult("type", arguments, fileName);
 
-			if ( typeNode.SelectNodes( "derivedBy" ).Count > 5 )
+            if (typeNode.SelectNodes("ns:derivedBy", xmlnsManager).Count > 5)
 			{
 				fileName = GetFilenameForTypeHierarchy(typeNode);
 				arguments = new XsltArgumentList();
@@ -821,7 +819,7 @@ namespace NDoc3.Documenter.Msdn
 
 			typeName = typeNode.Attributes["displayName"].Value;
 			//typeID = typeNode.Attributes["id"].Value;
-			constructorNodes = typeNode.SelectNodes("constructor[@contract!='Static']");
+            constructorNodes = typeNode.SelectNodes("ns:constructor[@contract!='Static']", xmlnsManager);
 
 			// If the constructor is overloaded then make an overload page.
 			if (constructorNodes.Count > 1)
@@ -845,7 +843,7 @@ namespace NDoc3.Documenter.Msdn
 
 				if (constructorNodes.Count > 1)
 				{
-					XmlNodeList   parameterNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace/" + lowerCaseTypeNames[whichType] + "[@name=\"" + typeName + "\"]/constructor[@id=\"" + constructorID + "\"]/parameter");
+                    XmlNodeList parameterNodes = xmlDocumentation.SelectNodes("/ns:ndoc/ns:assembly/ns:module/ns:namespace/" + lowerCaseTypeNames[whichType] + "[@name=\"" + typeName + "\"]/ns:constructor[@id=\"" + constructorID + "\"]/ns:parameter", xmlnsManager);
 					htmlHelp.AddFileToContents(typeName + " Constructor " + GetParamList(parameterNodes), fileName,
 						HtmlHelpIcon.Page );
 				}
@@ -864,7 +862,7 @@ namespace NDoc3.Documenter.Msdn
 				htmlHelp.CloseBookInContents();
 			}
 
-			XmlNode staticConstructorNode = typeNode.SelectSingleNode("constructor[@contract='Static']");
+            XmlNode staticConstructorNode = typeNode.SelectSingleNode("ns:constructor[@contract='Static']", xmlnsManager);
 			if (staticConstructorNode != null)
 			{
 				constructorID = staticConstructorNode.Attributes["id"].Value;
@@ -880,7 +878,7 @@ namespace NDoc3.Documenter.Msdn
 
 		private void MakeHtmlForFields(WhichType whichType, XmlNode typeNode)
 		{
-			XmlNodeList fields = typeNode.SelectNodes("field[not(@declaringType)]");
+            XmlNodeList fields = typeNode.SelectNodes("ns:field[not(@declaringType)]", xmlnsManager);
 
 			if (fields.Count > 0)
 			{
@@ -919,7 +917,7 @@ namespace NDoc3.Documenter.Msdn
 
 		private void MakeHtmlForProperties(WhichType whichType, XmlNode typeNode)
 		{
-			XmlNodeList declaredPropertyNodes = typeNode.SelectNodes("property[not(@declaringType)]");
+            XmlNodeList declaredPropertyNodes = typeNode.SelectNodes("ns:property[not(@declaringType)]", xmlnsManager);
 
 			if (declaredPropertyNodes.Count > 0)
 			{
@@ -939,7 +937,7 @@ namespace NDoc3.Documenter.Msdn
 
 				typeName = typeNode.Attributes["name"].Value;
 				typeID = typeNode.Attributes["id"].Value;
-				propertyNodes = typeNode.SelectNodes("property[not(@declaringType)]");
+                propertyNodes = typeNode.SelectNodes("ns:property[not(@declaringType)]", xmlnsManager);
 				nNodes = propertyNodes.Count;
 
 				indexes = SortNodesByAttribute(propertyNodes, "id");
@@ -985,7 +983,7 @@ namespace NDoc3.Documenter.Msdn
 
 					if (bOverloaded)
 					{
-						XmlNodeList parameterNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace/" + lowerCaseTypeNames[whichType] + "[@name=\"" + typeName + "\"]/property[@id=\"" + propertyID + "\"]/parameter");
+                        XmlNodeList parameterNodes = xmlDocumentation.SelectNodes("/ns:ndoc/ns:assembly/ns:module/ns:namespace/" + lowerCaseTypeNames[whichType] + "[@name=\"" + typeName + "\"]/ns:property[@id=\"" + propertyID + "\"]/ns:parameter", xmlnsManager);
 						htmlHelp.AddFileToContents(propertyName + " Property " + GetParamList(parameterNodes), fileName,
 							HtmlHelpIcon.Page );
 					}
@@ -1069,7 +1067,7 @@ namespace NDoc3.Documenter.Msdn
 
 		private void MakeHtmlForMethods(WhichType whichType, XmlNode typeNode)
 		{
-			XmlNodeList declaredMethodNodes = typeNode.SelectNodes("method[not(@declaringType)]");
+            XmlNodeList declaredMethodNodes = typeNode.SelectNodes("ns:method[not(@declaringType)]", xmlnsManager);
 
 			if (declaredMethodNodes.Count > 0)
 			{
@@ -1078,7 +1076,7 @@ namespace NDoc3.Documenter.Msdn
 
 				string typeName = typeNode.Attributes["name"].Value;
 				string typeID = typeNode.Attributes["id"].Value;
-				XmlNodeList methodNodes = typeNode.SelectNodes("method");
+                XmlNodeList methodNodes = typeNode.SelectNodes("ns:method", xmlnsManager);
 				int nNodes = methodNodes.Count;
 
 				int[] indexes = SortNodesByAttribute(methodNodes, "id");
@@ -1119,7 +1117,7 @@ namespace NDoc3.Documenter.Msdn
 
 						if (bOverloaded)
 						{
-							XmlNodeList parameterNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace/" + lowerCaseTypeNames[whichType] + "[@name=\"" + typeName + "\"]/method[@id=\"" + methodID + "\"]/parameter");
+                            XmlNodeList parameterNodes = xmlDocumentation.SelectNodes("/ns:ndoc/ns:assembly/ns:module/ns:namespace/" + lowerCaseTypeNames[whichType] + "[@name=\"" + typeName + "\"]/ns:method[@id=\"" + methodID + "\"]/ns:parameter", xmlnsManager);
 							htmlHelp.AddFileToContents(methodName + " Method " + GetParamList(parameterNodes), fileName,
 								HtmlHelpIcon.Page );
 						}
@@ -1147,18 +1145,18 @@ namespace NDoc3.Documenter.Msdn
 
 		private void MakeHtmlForOperators(WhichType whichType, XmlNode typeNode)
 		{
-			XmlNodeList operators = typeNode.SelectNodes("operator");
+            XmlNodeList operators = typeNode.SelectNodes("ns:operator", xmlnsManager);
 
 			if (operators.Count > 0)
 			{
 				string typeName = (string)typeNode.Attributes["name"].Value;
 				string typeID = (string)typeNode.Attributes["id"].Value;
-				XmlNodeList opNodes = typeNode.SelectNodes("operator");
+                XmlNodeList opNodes = typeNode.SelectNodes("ns:operator", xmlnsManager);
 				string fileName = GetFilenameForOperators(whichType, typeNode);
 				bool bOverloaded = false;
 
-				bool bHasOperators =  (typeNode.SelectSingleNode("operator[@name != 'op_Explicit' and @name != 'op_Implicit']") != null);;
-				bool bHasConverters = (typeNode.SelectSingleNode("operator[@name  = 'op_Explicit' or  @name  = 'op_Implicit']") != null);
+                bool bHasOperators = (typeNode.SelectSingleNode("ns:operator[@name != 'op_Explicit' and @name != 'op_Implicit']", xmlnsManager) != null); ;
+                bool bHasConverters = (typeNode.SelectSingleNode("ns:operator[@name  = 'op_Explicit' or  @name  = 'op_Implicit']", xmlnsManager) != null);
 				string title="";
 
 				if (bHasOperators)
@@ -1219,7 +1217,7 @@ namespace NDoc3.Documenter.Msdn
 						fileName = GetFilenameForOperator(operatorNode);
 						if (bOverloaded)
 						{
-							XmlNodeList parameterNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace/" + lowerCaseTypeNames[whichType] + "[@name=\"" + typeName + "\"]/operator[@id=\"" + operatorID + "\"]/parameter");
+                            XmlNodeList parameterNodes = xmlDocumentation.SelectNodes("/ns:ndoc/ns:assembly/ns:module/ns:namespace/" + lowerCaseTypeNames[whichType] + "[@name=\"" + typeName + "\"]/ns:operator[@id=\"" + operatorID + "\"]/ns:parameter", xmlnsManager);
 							htmlHelp.AddFileToContents(GetOperatorName(operatorNode) + GetParamList(parameterNodes), fileName, 
 								HtmlHelpIcon.Page);
 						}
@@ -1317,14 +1315,14 @@ namespace NDoc3.Documenter.Msdn
 				case "op_Comma": return "Comma Operator";
 				case "op_DivisionAssignment": return "Division Assignment Operator";
 				case "op_Explicit":
-					XmlNode parameterNode = operatorNode.SelectSingleNode("parameter");
+                    XmlNode parameterNode = operatorNode.SelectSingleNode("ns:parameter", xmlnsManager);
 					string from = parameterNode.Attributes["type"].Value;
-					string to = operatorNode.Attributes["returnType"].Value;
+                    string to = operatorNode.SelectSingleNode("ns:returnType", xmlnsManager).Attributes["type"].Value;
 					return "Explicit " + StripNamespace(from) + " to " + StripNamespace(to) + " Conversion";
 				case "op_Implicit":
-					XmlNode parameterNode2 = operatorNode.SelectSingleNode("parameter");
+                    XmlNode parameterNode2 = operatorNode.SelectSingleNode("ns:parameter", xmlnsManager);
 					string from2 = parameterNode2.Attributes["type"].Value;
-					string to2 = operatorNode.Attributes["returnType"].Value;
+					string to2 = operatorNode.SelectSingleNode("ns:returnType", xmlnsManager).Attributes["type"].Value;
 					return "Implicit " + StripNamespace(from2) + " to " + StripNamespace(to2) + " Conversion";
 				default:
 					return "ERROR";
@@ -1347,11 +1345,11 @@ namespace NDoc3.Documenter.Msdn
 
 		private void MakeHtmlForEvents(WhichType whichType, XmlNode typeNode)
 		{
-			XmlNodeList declaredEventNodes = typeNode.SelectNodes("event[not(@declaringType)]");
+            XmlNodeList declaredEventNodes = typeNode.SelectNodes("ns:event[not(@declaringType)]", xmlnsManager);
 
 			if (declaredEventNodes.Count > 0)
 			{
-				XmlNodeList events = typeNode.SelectNodes("event");
+                XmlNodeList events = typeNode.SelectNodes("ns:event", xmlnsManager);
 
 				if (events.Count > 0)
 				{
@@ -1472,13 +1470,8 @@ namespace NDoc3.Documenter.Msdn
 
 					XslTransform transform = stylesheets[transformName];
 
-#if (NET_1_0)
-				//Use overload that is now obsolete
-				transform.Transform(xpathDocument, arguments, streamWriter);
-#else           
 					//Use new overload so we don't get obsolete warnings - clean compile :)
 					transform.Transform(xpathDocument, arguments, streamWriter, null);
-#endif
 				}
 			}
 			catch(PathTooLongException e)
