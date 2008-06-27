@@ -119,5 +119,15 @@ namespace NDoc3.Test.Generics
         {
             return null;
         }
+
+        /// <summary>
+        /// Generic return type
+        /// </summary>
+        /// <typeparam name="T">Type T</typeparam>
+        /// <returns>Generic type</returns>
+        public Generic_ClassCon<Generic_Single<T>> GenericMethTwo<T>()
+        {
+            return null;
+        }
     }
 }
