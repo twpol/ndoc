@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<project name="NDoc-helpers" xmlnds="http://tempuri.org/nant-vs.xsd">
+<project name="NDoc3-helpers" xmlnds="http://tempuri.org/nant-vs.xsd">
 	<target name="check-build-dir">
 		<if test="${not property::exists('build.dir')}">
 			<fail message="The build directory has not been specified." />
@@ -125,7 +125,7 @@
 	<!-- Targets for setting up the environment -->
 	<target name="set-build-configuration" depends="check-current-build-config">
 		<if test="${not target::exists('set-'+current.build.config+'-build-configuration')}">
-			<fail message="The ${current.build.config} build configuration is not supported by NDoc." />
+			<fail message="The ${current.build.config} build configuration is not supported by NDoc3." />
 		</if>
 		<call target="set-${current.build.config}-build-configuration" />
 	</target>
@@ -164,7 +164,7 @@
 	-->
 		<target name="set-framework-configuration">
 			<if test="${not(target::exists('set-'+framework::get-target-framework()+'-framework-configuration'))}">
-				<fail message="The '${framework::get-target-framework()}' framework is not supported by this version of NDoc." />
+				<fail message="The '${framework::get-target-framework()}' framework is not supported by this version of NDoc3." />
 			</if>
 			<call target="set-${framework::get-target-framework()}-framework-configuration" />
 		</target>

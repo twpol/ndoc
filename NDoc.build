@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
-<project name="ndoc" default="compile" xmlnds="http://tempuri.org/nant-vs.xsd">
+<project name="ndoc3" default="compile" xmlnds="http://tempuri.org/nant-vs.xsd">
     <!-- Global project settings -->
-    <property name="project.name" value="ndoc" />
+    <property name="project.name" value="ndoc3" />
     <property name="project.version" value="2.0" />
     <property name="project.patchversion" value="0" /> <!-- 0 for initial release -->
     <property name="project.release.type" value="dev" /> <!-- dev / alpha / beta# / rc# / release -->
@@ -10,8 +10,8 @@
     <property name="build.number" value="${math::abs(math::floor(timespan::get-total-days(datetime::now() - datetime::parse('01/01/2000'))))}" />
     <property name="build.dir" value="${nant.project.basedir}/bin" readonly="false" />
     <!-- Include helpers -->
-    <include buildfile="NDoc.build.include" />
-    <include buildfile="NDoc.build.package" />
+    <include buildfile="ndoc3.build.include" />
+    <include buildfile="ndoc3.build.package" />
     <!-- Targets that should always be executed -->
     <call target="set-build-configuration" />
     <call target="set-framework-configuration" />
@@ -164,8 +164,8 @@
     <target name="compile" description="Builds the current build configuration for the current target framework." depends="create-common-assemblyinfo">
         <!-- ensure the bin dir has been created, and clean it up if needed -->
         <call target="clean-current-bin-dir" />
-        <!-- copy the ndoc signing key file to the bin dir -->
-        <copy file="${nant.project.basedir}/NDoc.snk" todir="${current.bin.dir}" />
+        <!-- copy the ndoc3 signing key file to the bin dir -->
+        <copy file="${nant.project.basedir}/ndoc3.snk" todir="${current.bin.dir}" />
         <!-- build all projects -->
         <nant buildfile="src/ExtendedUI/ExtendedUI.build" target="compile" inheritall="true" />
         <nant buildfile="src/Core/Core.build" target="compile" inheritall="true" />
@@ -180,8 +180,8 @@
         <nant buildfile="src/Documenter/NativeHtmlHelp2/NativeHtmlHelp2.build" target="compile" inheritall="true" />
         <nant buildfile="src/Documenter/Xml/Xml.build" target="compile" inheritall="true" />
         <nant buildfile="src/Test/Test.build" target="compile" inheritall="true"  />
-        <!-- remove the ndoc signing key file -->
-        <delete file="${current.bin.dir}/NDoc.snk" />
+        <!-- remove the ndoc3 signing key file -->
+        <delete file="${current.bin.dir}/ndoc3.snk" />
     </target>
     <!--
 
@@ -214,24 +214,24 @@
     -->
     <target name="sdkdoc" description="Builds SDK documentation (based on .NET Framework 1.1 assembly)">
         <echo message="Creating SDK Documentation for NDoc3 Core." />
-        <ndoc>
+        <ndoc3>
             <assemblies basedir="${build.dir}/net/1.1">
-                <include name="NDoc.Core.dll" />
+                <include name="NDoc3.Core.dll" />
             </assemblies>
             <documenters>
                 <documenter name="MSDN">
                     <property name="OutputDirectory" value="doc/sdk" />
-                    <property name="HtmlHelpName" value="NDoc-SDK" />
-                    <property name="Title" value="NDoc ${project.version} SDK" />
+                    <property name="HtmlHelpName" value="NDoc3-SDK" />
+                    <property name="Title" value="NDoc3 ${project.version} SDK" />
                     <property name="ShowVisualBasic" value="True" />
                     <property name="SdkLinksOnWeb" value="True" />
                     <property name="IncludeAssemblyVersion" value="True" />
-                    <property name="FeedbackEmailAddress" value="ndoc-helpfeedback@lists.sourceforge.net" />
+                    <property name="FeedbackEmailAddress" value="ndoc3-helpfeedback@lists.sourceforge.net" />
                     <property name="UseNamespaceDocSummaries" value="True" />
                     <property name="Preliminary" value="${if(project.release.type == 'release','False','True')}" />
                     <property name="DocumentAttributes" value="True" />
                 </documenter>
             </documenters>
-        </ndoc>
+        </ndoc3>
     </target>
 </project>
