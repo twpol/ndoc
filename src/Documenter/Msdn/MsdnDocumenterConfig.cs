@@ -148,7 +148,7 @@ namespace NDoc3.Documenter.Msdn
 		[Category("Documentation Main Settings")]
 		[Description("Show Visual Basic syntax for types and members.")]
 		[DefaultValue(false)]
-        [ReadOnly(true)]
+        [ReadOnly(true)] //TODO Added to ensure no VB syntax
 		public bool ShowVisualBasic
 		{
 			get { return _ShowVisualBasic; }
@@ -179,7 +179,7 @@ namespace NDoc3.Documenter.Msdn
 			}
 		}
 
-		bool _SdkLinksOnWeb = false;
+		bool _SdkLinksOnWeb = true;
 
 		/// <summary>Gets or sets the SdkLinksOnWeb property.</summary>
 		/// <remarks>
@@ -187,7 +187,7 @@ namespace NDoc3.Documenter.Msdn
 		[Category("Documentation Main Settings")]
 		[Description("Turning this flag on will point all SDK links to the online MSDN library")]
 		[DefaultValue(true)]
-        [ReadOnly(true)]
+        [ReadOnly(true)] //TODO Added to ensure links on web
 		public bool SdkLinksOnWeb
 		{
 			get { return _SdkLinksOnWeb; }

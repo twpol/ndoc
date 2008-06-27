@@ -415,13 +415,8 @@ namespace NDoc3.Documenter.Msdn2
 					using ( StreamWriter streamWriter = new StreamWriter(
 								File.Open(Path.Combine(workspace.WorkingDirectory, "contents.html"), FileMode.CreateNew, FileAccess.Write, FileShare.None ), Encoding.Default ) )
 					{
-#if(NET_1_0)
-						//Use overload that is obsolete in v1.1
-						stylesheets["htmlcontents"].Transform(xpathDocument, null, streamWriter);
-#else
 						//Use new overload so we don't get obsolete warnings - clean compile :)
 						stylesheets["htmlcontents"].Transform(xpathDocument, null, streamWriter, null);
-#endif
 					}
 #if DEBUG
 					Trace.WriteLine((Environment.TickCount - start).ToString() + " msec.");
@@ -1486,13 +1481,8 @@ namespace NDoc3.Documenter.Msdn2
 
 					XslTransform transform = stylesheets[transformName];
 
-#if (NET_1_0)
-				//Use overload that is now obsolete
-				transform.Transform(xpathDocument, arguments, streamWriter);
-#else           
 					//Use new overload so we don't get obsolete warnings - clean compile :)
 					transform.Transform(xpathDocument, arguments, streamWriter, null);
-#endif
 				}
 			}
 			catch(PathTooLongException e)
