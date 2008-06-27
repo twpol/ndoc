@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:NUtil="urn:NDocUtil"
-	exclude-result-prefixes="NUtil" >
+	exclude-result-prefixes="NUtil" xmlns:ndoc="urn:ndoc-schema">
 	<!-- -->
 	<xsl:template match="/">
-		<xsl:apply-templates select="ndoc/assembly/module/namespace/*[@id=$id]" />
+		<xsl:apply-templates select="ndoc:ndoc/ndoc:assembly/ndoc:module/ndoc:namespace/ndoc:*[@id=$id]" />
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="class">
+	<xsl:template match="ndoc:class">
 		<xsl:call-template name="type-members">
 			<xsl:with-param name="type">Class</xsl:with-param>
 		</xsl:call-template>
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="interface">
+	<xsl:template match="ndoc:interface">
 		<xsl:call-template name="type-members">
 			<xsl:with-param name="type">Interface</xsl:with-param>
 		</xsl:call-template>
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="structure">
+	<xsl:template match="ndoc:structure">
 		<xsl:call-template name="type-members">
 			<xsl:with-param name="type">Structure</xsl:with-param>
 		</xsl:call-template>
@@ -353,12 +353,12 @@
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="property[@declaringType]">
+	<xsl:template match="ndoc:property[@declaringType]">
 		<xsl:variable name="name" select="@name" />
 		<xsl:variable name="declaring-type-id" select="concat('T:', @declaringType)" />
 		<xsl:text>&#10;</xsl:text>
 		<tr VALIGN="top">
-			<xsl:variable name="declaring-class" select="//class[@id=$declaring-type-id]" />
+			<xsl:variable name="declaring-class" select="//ndoc:class[@id=$declaring-type-id]" />
 			<xsl:choose>
 				<xsl:when test="$declaring-class">
 					<td width="50%">
@@ -370,7 +370,7 @@
 						<a>
 							<xsl:attribute name="href">
 								<xsl:call-template name="get-filename-for-property">
-									<xsl:with-param name="property" select="$declaring-class/property[@name=$name]" />
+									<xsl:with-param name="property" select="$declaring-class/ndoc:property[@name=$name]" />
 								</xsl:call-template>
 							</xsl:attribute>
 							<xsl:value-of select="@name" />
@@ -386,7 +386,7 @@
 					<td width="50%">
 						<xsl:call-template name="obsolete-inline"/>
 						<xsl:call-template name="summary-with-no-paragraph">
-							<xsl:with-param name="member" select="$declaring-class/property[@name=$name]" />
+							<xsl:with-param name="member" select="$declaring-class/ndoc:property[@name=$name]" />
 						</xsl:call-template>
 					</td>
 				</xsl:when>
@@ -413,7 +413,7 @@
 		</tr>
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="property[@declaringType and starts-with(@declaringType, 'System.')]">
+	<xsl:template match="ndoc:property[@declaringType and starts-with(@declaringType, 'System.')]">
 		<xsl:text>&#10;</xsl:text>
 		<tr VALIGN="top">
 			<td width="50%">
@@ -443,12 +443,12 @@
 		</tr>
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="field[@declaringType]">
+	<xsl:template match="ndoc:field[@declaringType]">
 		<xsl:variable name="name" select="@name" />
 		<xsl:variable name="declaring-type-id" select="concat('T:', @declaringType)" />
 		<xsl:text>&#10;</xsl:text>
 		<tr VALIGN="top">
-			<xsl:variable name="declaring-class" select="//class[@id=$declaring-type-id]" />
+			<xsl:variable name="declaring-class" select="//ndoc:class[@id=$declaring-type-id]" />
 			<xsl:choose>
 				<xsl:when test="$declaring-class">
 					<td width="50%">
@@ -460,7 +460,7 @@
 						<a>
 							<xsl:attribute name="href">
 								<xsl:call-template name="get-filename-for-field">
-									<xsl:with-param name="field" select="$declaring-class/field[@name=$name]" />
+									<xsl:with-param name="field" select="$declaring-class/ndoc:field[@name=$name]" />
 								</xsl:call-template>
 							</xsl:attribute>
 							<xsl:value-of select="@name" />
@@ -476,7 +476,7 @@
 					<td width="50%">
 						<xsl:call-template name="obsolete-inline"/>
 						<xsl:call-template name="summary-with-no-paragraph">
-							<xsl:with-param name="member" select="$declaring-class/field[@name=$name]" />
+							<xsl:with-param name="member" select="$declaring-class/ndoc:field[@name=$name]" />
 						</xsl:call-template>
 					</td>
 				</xsl:when>
@@ -503,7 +503,7 @@
 		</tr>
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="field[@declaringType and starts-with(@declaringType, 'System.')]">
+	<xsl:template match="ndoc:field[@declaringType and starts-with(@declaringType, 'System.')]">
 		<xsl:text>&#10;</xsl:text>
 		<tr VALIGN="top">
 			<td width="50%">
@@ -533,7 +533,7 @@
 		</tr>
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="method[@declaringType]">
+	<xsl:template match="ndoc:method[@declaringType]">
 		<xsl:variable name="name" select="@name" />
 		<xsl:variable name="contract" select="@contract" />
 		<xsl:variable name="access" select="@access" />
@@ -542,7 +542,7 @@
 		<xsl:if test="not(NUtil:HasSimilarOverloads(concat($name,':',$declaringType,':',$access,':',($contract='Static'))))">
 			<xsl:text>&#10;</xsl:text>
 			<tr VALIGN="top">
-				<xsl:variable name="declaring-class" select="//class[@id=$declaring-type-id]" />
+				<xsl:variable name="declaring-class" select="//ndoc:class[@id=$declaring-type-id]" />
 				<xsl:choose>
 					<xsl:when test="$declaring-class">
 						<xsl:choose>
@@ -573,7 +573,7 @@
 								<td width="50%">
 									<xsl:text>Overloaded. </xsl:text>
 									<xsl:call-template name="overloads-summary-with-no-paragraph">
-										<xsl:with-param name="overloads" select="$declaring-class/method[@name=$name]" />
+										<xsl:with-param name="overloads" select="$declaring-class/ndoc:method[@name=$name]" />
 									</xsl:call-template>
 								</td>
 							</xsl:when>
@@ -587,7 +587,7 @@
 									<a>
 										<xsl:attribute name="href">
 											<xsl:call-template name="get-filename-for-method">
-												<xsl:with-param name="method" select="$declaring-class/method[@name=$name]" />
+												<xsl:with-param name="method" select="$declaring-class/ndoc:method[@name=$name]" />
 											</xsl:call-template>
 										</xsl:attribute>
 										<xsl:value-of select="@name" />
@@ -608,7 +608,7 @@
 										<xsl:call-template name="obsolete-inline"/>
 									</xsl:if>
 									<xsl:call-template name="summary-with-no-paragraph">
-										<xsl:with-param name="member" select="$declaring-class/method[@name=$name]" />
+										<xsl:with-param name="member" select="$declaring-class/ndoc:method[@name=$name]" />
 									</xsl:call-template>
 								</td>
 							</xsl:otherwise>
@@ -643,7 +643,7 @@
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="method[@declaringType and starts-with(@declaringType, 'System.')]">
+	<xsl:template match="ndoc:method[@declaringType and starts-with(@declaringType, 'System.')]">
 		<xsl:variable name="name" select="@name" />
 		<xsl:variable name="contract" select="@contract" />
 		<xsl:variable name="access" select="@access" />
@@ -684,12 +684,12 @@
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="event[@declaringType]">
+	<xsl:template match="ndoc:event[@declaringType]">
 		<xsl:variable name="name" select="@name" />
 		<xsl:variable name="declaring-type-id" select="concat('T:', @declaringType)" />
 		<xsl:text>&#10;</xsl:text>
 		<tr VALIGN="top">
-			<xsl:variable name="declaring-class" select="//class[@id=$declaring-type-id]" />
+			<xsl:variable name="declaring-class" select="//ndoc:class[@id=$declaring-type-id]" />
 			<xsl:choose>
 				<xsl:when test="$declaring-class">
 					<td width="50%">
@@ -701,7 +701,7 @@
 						<a>
 							<xsl:attribute name="href">
 								<xsl:call-template name="get-filename-for-event">
-									<xsl:with-param name="event" select="$declaring-class/event[@name=$name]" />
+									<xsl:with-param name="event" select="$declaring-class/ndoc:event[@name=$name]" />
 								</xsl:call-template>
 							</xsl:attribute>
 							<xsl:value-of select="@name" />
@@ -717,7 +717,7 @@
 					<td width="50%">
 						<xsl:call-template name="obsolete-inline"/>
 						<xsl:call-template name="summary-with-no-paragraph">
-							<xsl:with-param name="member" select="$declaring-class/event[@name=$name]" />
+							<xsl:with-param name="member" select="$declaring-class/ndoc:event[@name=$name]" />
 						</xsl:call-template>
 					</td>
 				</xsl:when>
@@ -744,7 +744,7 @@
 		</tr>
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="event[@declaringType and starts-with(@declaringType, 'System.')]">
+	<xsl:template match="ndoc:event[@declaringType and starts-with(@declaringType, 'System.')]">
 		<xsl:text>&#10;</xsl:text>
 		<tr VALIGN="top">
 			<td width="50%">
@@ -774,7 +774,7 @@
 		</tr>
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="field[not(@declaringType)]|property[not(@declaringType)]|event[not(@declaringType)]|method[not(@declaringType)]|operator">
+	<xsl:template match="ndoc:field[not(@declaringType)]|ndoc:property[not(@declaringType)]|ndoc:event[not(@declaringType)]|ndoc:method[not(@declaringType)]|ndoc:operator">
 		<xsl:variable name="member" select="local-name()" />
 		<xsl:variable name="name" select="@name" />
 		<xsl:variable name="contract" select="@contract" />
@@ -802,8 +802,8 @@
 									<xsl:when test="local-name()='operator'">
 										<xsl:call-template name="operator-name">
 											<xsl:with-param name="name" select="@name" />
-											<xsl:with-param name="from" select="parameter/@type"/>
-											<xsl:with-param name="to" select="@returnType" />
+											<xsl:with-param name="from" select="ndoc:parameter/@type"/>
+											<xsl:with-param name="to" select="ndoc:returnType/@type" />
 										</xsl:call-template>
 									</xsl:when>
 									<xsl:otherwise>
@@ -836,8 +836,8 @@
 									<xsl:when test="local-name()='operator'">
 										<xsl:call-template name="operator-name">
 											<xsl:with-param name="name" select="@name" />
-											<xsl:with-param name="from" select="parameter/@type"/>
-											<xsl:with-param name="to" select="@returnType" />
+											<xsl:with-param name="from" select="ndoc:parameter/@type"/>
+											<xsl:with-param name="to" select="ndoc:returnType/@type" />
 										</xsl:call-template>
 									</xsl:when>
 									<xsl:otherwise>

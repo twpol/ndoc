@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ndoc="urn:ndoc-schema">
 	<!-- -->
 	<xsl:output method="xml" indent="yes"  encoding="utf-8" omit-xml-declaration="yes"/>
 	<!-- -->
@@ -8,10 +8,10 @@
 	<xsl:param name='member-id' />
 	<!-- -->
 	<xsl:template match="/">
-		<xsl:apply-templates select="ndoc/assembly/module/namespace/*/*[@id=$member-id][1]" />
+		<xsl:apply-templates select="ndoc:ndoc/ndoc:assembly/ndoc:module/ndoc:namespace/ndoc:*/ndoc:*[@id=$member-id][1]" />
 	</xsl:template>
-	<!-- -->
-	<xsl:template match="method | constructor | property | operator">
+	<!-- Method, constructor, property or opretor overload -->
+	<xsl:template match="ndoc:method | ndoc:constructor | ndoc:property | ndoc:operator">
 		<xsl:variable name="type">
 			<xsl:choose>
 				<xsl:when test="local-name(..)='interface'">Interface</xsl:when>
@@ -169,7 +169,7 @@
 		</html>
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="constructor | method | operator" mode="syntax">
+	<xsl:template match="ndoc:constructor | ndoc:method | ndoc:operator" mode="syntax">
 		<xsl:call-template name="member-syntax2" />
 	</xsl:template>
 	<!-- -->

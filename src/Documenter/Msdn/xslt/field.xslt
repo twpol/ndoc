@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ndoc="urn:ndoc-schema">
 	<!-- -->
 	<xsl:output method="xml" indent="yes"  encoding="utf-8" omit-xml-declaration="yes"/>
 	<!-- -->
@@ -8,10 +8,10 @@
 	<xsl:param name='field-id' />
 	<!-- -->
 	<xsl:template match="/">
-		<xsl:apply-templates select="ndoc/assembly/module/namespace/*/field[@id=$field-id]" />
+		<xsl:apply-templates select="ndoc:ndoc/ndoc:assembly/ndoc:module/ndoc:namespace/ndoc:*/ndoc:field[@id=$field-id]" />
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="field">
+	<xsl:template match="ndoc:field">
 		<html dir="LTR">
 			<xsl:call-template name="html-head">
 				<xsl:with-param name="title" select="concat(../@name, '.', @name, ' Field')" />
@@ -28,7 +28,7 @@
 					<xsl:call-template name="cs-field-or-event-syntax" />
 					<p></p>
 					<xsl:call-template name="remarks-section" />
-					<xsl:apply-templates select="documentation/node()" mode="after-remarks-section" />
+					<xsl:apply-templates select="ndoc:documentation/node()" mode="after-remarks-section" />
 					<xsl:call-template name="example-section" />
 					<xsl:call-template name="requirements-section" />
 					<xsl:call-template name="seealso-section">

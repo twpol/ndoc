@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ndoc="urn:ndoc-schema">
 	<!-- -->
 	<xsl:output method="xml" indent="yes"  encoding="utf-8" omit-xml-declaration="yes"/>
 	<!-- -->
@@ -8,10 +8,10 @@
 	<xsl:param name='property-id' />
 	<!-- -->
 	<xsl:template match="/">
-		<xsl:apply-templates select="ndoc/assembly/module/namespace/*/property[@id=$property-id]" />
+		<xsl:apply-templates select="ndoc:ndoc/ndoc:assembly/ndoc:module/ndoc:namespace/ndoc:*/ndoc:property[@id=$property-id]" />
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="property">
+	<xsl:template match="ndoc:property">
 		<xsl:variable name="type">
 			<xsl:choose>
 				<xsl:when test="local-name(..)='interface'">Interface</xsl:when>
@@ -59,7 +59,7 @@
 					<xsl:call-template name="value-section" />
 					<xsl:call-template name="implements-section" />
 					<xsl:call-template name="remarks-section" />
-					<xsl:apply-templates select="documentation/node()" mode="after-remarks-section" />
+					<xsl:apply-templates select="ndoc:documentation/node()" mode="after-remarks-section" />
 					<xsl:call-template name="events-section" />
 					<xsl:call-template name="exceptions-section" />
 					<xsl:call-template name="example-section" />

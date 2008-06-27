@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ndoc="urn:ndoc-schema">
 	<!-- -->
 	<xsl:output method="xml" indent="yes" encoding="utf-8" omit-xml-declaration="yes" />
 	<!-- -->
@@ -8,7 +8,7 @@
 	<xsl:param name='type-id' />
 	<!-- -->
 	<xsl:template match="/">
-		<xsl:apply-templates select="ndoc/assembly/module/namespace/*[@id=$type-id]" />
+		<xsl:apply-templates select="ndoc:ndoc/ndoc:assembly/ndoc:module/ndoc:namespace/ndoc:*[@id=$type-id]" />
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="indent">
@@ -45,7 +45,7 @@
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:variable name="base-class-id" select="string($list[$last]/@id)" />
-					<xsl:variable name="base-class" select="//class[@id=$base-class-id]" />
+					<xsl:variable name="base-class" select="//ndoc:class[@id=$base-class-id]" />
 					<xsl:choose>
 						<xsl:when test="$base-class">
 							<a>
@@ -73,31 +73,31 @@
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="class">
+	<xsl:template match="ndoc:class">
 		<xsl:call-template name="type">
 			<xsl:with-param name="type">Class</xsl:with-param>
 		</xsl:call-template>
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="interface">
+	<xsl:template match="ndoc:interface">
 		<xsl:call-template name="type">
 			<xsl:with-param name="type">Interface</xsl:with-param>
 		</xsl:call-template>
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="structure">
+	<xsl:template match="ndoc:structure">
 		<xsl:call-template name="type">
 			<xsl:with-param name="type">Structure</xsl:with-param>
 		</xsl:call-template>
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="delegate">
+	<xsl:template match="ndoc:delegate">
 		<xsl:call-template name="type">
 			<xsl:with-param name="type">Delegate</xsl:with-param>
 		</xsl:call-template>
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="enumeration">
+	<xsl:template match="ndoc:enumeration">
 		<xsl:call-template name="type">
 			<xsl:with-param name="type">Enumeration</xsl:with-param>
 		</xsl:call-template>
@@ -121,7 +121,7 @@
 								<xsl:with-param name="id" select="@id" />
 							</xsl:call-template>
 						</xsl:variable>
-						<xsl:if test="constructor|field|property|method|operator|event">
+						<xsl:if test="ndoc:constructor|ndoc:field|ndoc:property|ndoc:method|ndoc:operator|ndoc:event">
 							<p>For a list of all members of this type, see <a href="{$members-href}"><xsl:value-of select="@displayName" /> Members</a>.</p>
 						</xsl:if>
 					</xsl:if>
@@ -139,14 +139,14 @@
 					<xsl:if test="local-name() != 'delegate' and local-name() != 'enumeration'">
 						<p>
 							<xsl:choose>
-								<xsl:when test="self::interface">
-									<xsl:if test="derivedBy">
+								<xsl:when test="self::ndoc:interface">
+									<xsl:if test="ndoc:derivedBy">
 										<b>
 											<xsl:value-of select="substring-after( @id, ':' )" />
 										</b>
 										<xsl:choose>
-											<xsl:when test="count(derivedBy) &lt; 6">
-												<xsl:for-each select="derivedBy">
+											<xsl:when test="count(ndoc:derivedBy) &lt; 6">
+												<xsl:for-each select="ndoc:derivedBy">
 													<br />
 													<xsl:call-template name="indent">
 														<xsl:with-param name="count" select="1" />
@@ -187,10 +187,10 @@
 									<a href="{$href}">System.Object</a>
 									<br />
 									<xsl:call-template name="draw-hierarchy">
-										<xsl:with-param name="list" select="descendant::base" />
+										<xsl:with-param name="list" select="descendant::ndoc:base" />
 										<xsl:with-param name="level" select="1" />
 									</xsl:call-template>
-									<xsl:variable name="typeIndent" select="count(descendant::base)" />
+									<xsl:variable name="typeIndent" select="count(descendant::ndoc:base)" />
 									<xsl:call-template name="indent">
 										<xsl:with-param name="count" select="$typeIndent+1" />
 									</xsl:call-template>
@@ -200,8 +200,8 @@
 									<xsl:if test="derivedBy">
 										<xsl:variable name="derivedTypeIndent" select="$typeIndent+2" />
 										<xsl:choose>
-											<xsl:when test="count(derivedBy) &lt; 6">
-												<xsl:for-each select="derivedBy">
+											<xsl:when test="count(ndoc:derivedBy) &lt; 6">
+												<xsl:for-each select="ndoc:derivedBy">
 													<br />
 													<xsl:call-template name="indent">
 														<xsl:with-param name="count" select="$derivedTypeIndent" />
@@ -246,7 +246,7 @@
 						<xsl:call-template name="returnvalue-section" />
 					</xsl:if>
           <!-- Generic parameter section -->
-          <xsl:if test="documentation/typeparam">
+          <xsl:if test="ndoc:documentation/ndoc:typeparam">
             <xsl:call-template name="generictypeparam-section" />
           </xsl:if>
 					<!-- only classes and structures get a thread safety section -->
@@ -254,9 +254,10 @@
 						<xsl:call-template name="thread-safety-section" />
 					</xsl:if>
 					<xsl:call-template name="remarks-section" />
-					<xsl:apply-templates select="documentation/node()" mode="after-remarks-section" />
+					<xsl:apply-templates select="ndoc:documentation/node()" mode="after-remarks-section" />
 					<xsl:call-template name="example-section" />
 					<xsl:if test="local-name() = 'enumeration'">
+            <xsl:text>test</xsl:text>
 						<xsl:call-template name="enumeration-members-section" />
 					</xsl:if>
 					<h4 class="dtH4">Requirements</h4>
@@ -275,11 +276,11 @@
 						<b>Assembly: </b>
 						<xsl:value-of select="../../../@name" /> (in <xsl:value-of select="../../@name" />)
 					</p>
-					<xsl:if test="documentation/permission">
+					<xsl:if test="ndoc:documentation/ndoc:permission">
 						<p>
 							<b>.NET Framework Security: </b>
 							<ul class="permissions">
-								<xsl:for-each select="documentation/permission">
+								<xsl:for-each select="ndoc:documentation/ndoc:permission">
 									<li>
 										<a>
 											<xsl:attribute name="href">
@@ -323,7 +324,7 @@
 											<xsl:value-of select="concat(substring-after(@id, ':'), ' enumeration')" />
 										</xsl:attribute>
 									</xsl:element>
-									<xsl:for-each select="field">
+									<xsl:for-each select="ndoc:field">
 										<xsl:element name="param">
 											<xsl:attribute name="name">Keyword</xsl:attribute>
 											<xsl:attribute name="value">
@@ -372,7 +373,7 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="interface-implementing-types-section">
-		<xsl:if test="implementedBy">
+		<xsl:if test="ndoc:implementedBy">
 			<h4 class="dtH4">Types that implement <xsl:value-of select="@name" /></h4>
 			<div class="tablediv">
 				<table class="dtTABLE" cellspacing="0">
@@ -380,16 +381,16 @@
 						<th width="50%">Type</th>
 						<th width="50%">Description</th>
 					</tr>
-					<xsl:for-each select="implementedBy">
+					<xsl:for-each select="ndoc:implementedBy">
 						<xsl:variable name="typeID" select="@id" />
-						<xsl:apply-templates select="ancestor::ndoc/assembly/module/namespace/*[@id=$typeID]" mode="implementingType" />
+						<xsl:apply-templates select="ancestor::ndoc:ndoc/ndoc:assembly/ndoc:module/ndoc:namespace/*[@id=$typeID]" mode="implementingType" />
 					</xsl:for-each>
 				</table>
 			</div>
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="structure | class" mode="implementingType">
+	<xsl:template match="ndoc:structure | ndoc:class" mode="implementingType">
 		<tr valign="top">
 			<td width="50%">
 				<a>
@@ -403,8 +404,8 @@
 			</td>
 			<td width="50%">
 				<xsl:call-template name="obsolete-inline" />
-				<xsl:apply-templates select="(documentation/summary)[1]/node()" mode="slashdoc" />
-				<xsl:if test="not((documentation/summary)[1]/node())">&#160;</xsl:if>
+				<xsl:apply-templates select="(ndoc:documentation/ndoc:summary)[1]/node()" mode="slashdoc" />
+				<xsl:if test="not((ndoc:documentation/ndoc:summary)[1]/node())">&#160;</xsl:if>
 			</td>
 		</tr>
 	</xsl:template>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ndoc="urn:ndoc-schema">
 	<!-- -->
 	<xsl:output method="xml" indent="yes" encoding="utf-8" omit-xml-declaration="yes" />
 	<!-- -->
@@ -9,7 +9,7 @@
 	<xsl:param name='type-id' />
 	<!-- -->
 	<xsl:template match="/">
-		<xsl:apply-templates select="ndoc/assembly/module/namespace/*[@id=$type-id]" />
+		<xsl:apply-templates select="ndoc:ndoc/ndoc:assembly/ndoc:module/ndoc:namespace/ndoc:*[@id=$type-id]" />
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="indent">
@@ -47,7 +47,7 @@
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:variable name="base-class-id" select="string($list[$last]/@id)" />
-					<xsl:variable name="base-class" select="//class[@id=$base-class-id]" />
+					<xsl:variable name="base-class" select="//ndoc:class[@id=$base-class-id]" />
 					<xsl:choose>
 						<xsl:when test="$base-class">
 							<a>
@@ -77,19 +77,19 @@
 		</xsl:if>
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="class">
+	<xsl:template match="ndoc:class">
 		<xsl:call-template name="type">
 			<xsl:with-param name="type">Class</xsl:with-param>
 		</xsl:call-template>
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="interface">
+	<xsl:template match="ndoc:interface">
 		<xsl:call-template name="type">
 			<xsl:with-param name="type">Interface</xsl:with-param>
 		</xsl:call-template>
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="structure">
+	<xsl:template match="ndoc:structure">
 		<xsl:call-template name="type">
 			<xsl:with-param name="type">Structure</xsl:with-param>
 		</xsl:call-template>
@@ -108,12 +108,12 @@
 				<div id="nstext" valign="bottom">
 					<p>
 						<xsl:choose>
-							<xsl:when test="self::interface">
-								<xsl:if test="derivedBy">
+							<xsl:when test="self::ndoc:interface">
+								<xsl:if test="ndoc:derivedBy">
 									<b>
 										<xsl:value-of select="substring-after( @id, ':' )" />
 									</b>
-									<xsl:for-each select="derivedBy">
+									<xsl:for-each select="ndoc:derivedBy">
 										<br />
 										<xsl:call-template name="indent">
 											<xsl:with-param name="count" select="1" />
@@ -140,19 +140,19 @@
 								<a href="{$href}">System.Object</a>
 								<br />
 								<xsl:call-template name="draw-hierarchy">
-									<xsl:with-param name="list" select="descendant::base" />
+									<xsl:with-param name="list" select="descendant::ndoc:base" />
 									<xsl:with-param name="level" select="1" />
 								</xsl:call-template>
-								<xsl:variable name="typeIndent" select="count(descendant::base)" />
+								<xsl:variable name="typeIndent" select="count(descendant::ndoc:base)" />
 								<xsl:call-template name="indent">
 									<xsl:with-param name="count" select="$typeIndent+1" />
 								</xsl:call-template>
 								<b>
 									<xsl:value-of select="@name" />
 								</b>
-								<xsl:if test="derivedBy">
+								<xsl:if test="ndoc:derivedBy">
 									<xsl:variable name="derivedTypeIndent" select="$typeIndent+2" />
-									<xsl:for-each select="derivedBy">
+									<xsl:for-each select="ndoc:derivedBy">
 										<br />
 										<xsl:call-template name="indent">
 											<xsl:with-param name="count" select="$derivedTypeIndent" />

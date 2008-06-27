@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ndoc="urn:ndoc-schema">
 	<!-- -->
 	<xsl:output method="xml" indent="yes" encoding="utf-8" omit-xml-declaration="yes" />
 	<!-- -->
@@ -8,7 +8,7 @@
 	<xsl:param name='namespace' />
 	<!-- -->
 	<xsl:template match="/">
-		<xsl:variable name="ns" select="ndoc/namespaceHierarchies/namespaceHierarchy[@name=$namespace][1]" />
+		<xsl:variable name="ns" select="ndoc:ndoc/ndoc:namespaceHierarchies/ndoc:namespaceHierarchy[@name=$namespace][1]" />
 		<html dir="LTR">
 			<xsl:call-template name="html-head">
 				<xsl:with-param name="title" select="concat($ns/@name, 'Hierarchy')" />
@@ -39,8 +39,8 @@
 		</html>
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="namespaceHierarchy">
-		<xsl:for-each select="hierarchyType">
+	<xsl:template match="ndoc:namespaceHierarchy">
+		<xsl:for-each select="ndoc:hierarchyType">
 			<div>
 				<xsl:call-template name="get-type-link">
 					<xsl:with-param name="id" select="@id" />
@@ -50,20 +50,20 @@
 		</xsl:for-each>
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="hierarchyType" mode="hierarchy">
+	<xsl:template match="ndoc:hierarchyType" mode="hierarchy">
 		<div class="Hierarchy">
 			<xsl:call-template name="get-type-link">
 				<xsl:with-param name="id" select="@id" />
 			</xsl:call-template>
-			<xsl:if test="hierarchyInterfaces">
+			<xsl:if test="ndoc:hierarchyInterfaces">
 				<xsl:text>&#160;---- </xsl:text>
-				<xsl:apply-templates select="./hierarchyInterfaces/hierarchyInterface" mode="baseInterfaces" />
+				<xsl:apply-templates select="./ndoc:hierarchyInterfaces/ndoc:hierarchyInterface" mode="baseInterfaces" />
 			</xsl:if>
-			<xsl:apply-templates select="hierarchyType" mode="hierarchy" />
+			<xsl:apply-templates select="ndoc:hierarchyType" mode="hierarchy" />
 		</div>
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="hierarchyInterface" mode="baseInterfaces">
+	<xsl:template match="ndoc:hierarchyInterface" mode="baseInterfaces">
 		<xsl:call-template name="get-type-link">
 			<xsl:with-param name="id" select="@id" />
 		</xsl:call-template>

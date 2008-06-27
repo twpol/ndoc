@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsl:transform version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-	xmlns:NUtil="urn:NDocUtil"
+	xmlns:NUtil="urn:NDocUtil" xmlns:ndoc="urn:ndoc-schema"
 	exclude-result-prefixes="NUtil" >
 	<!-- -->
 	<xsl:param name="ndoc-vb-syntax" />
@@ -76,7 +76,7 @@
 					<xsl:when test="local-name() = 'delegate'">
 						<xsl:text>Delegate&#160;</xsl:text>
 						<xsl:choose>
-							<xsl:when test="@returnType = 'System.Void'">Sub</xsl:when>
+							<xsl:when test="ndoc:returnType/@type = 'System.Void'">Sub</xsl:when>
 							<xsl:otherwise>Function</xsl:otherwise>
 						</xsl:choose>
 					</xsl:when>
@@ -86,25 +86,25 @@
 				<xsl:value-of select="@name" />
 				<xsl:choose>
 					<xsl:when test="local-name() != 'delegate'">
-						<xsl:if test="@baseType">
+						<xsl:if test="ndoc:baseType">
 							<div>
 								<xsl:text>&#160;&#160;&#160;&#160;Inherits&#160;</xsl:text>
 								<a>
 									<xsl:attribute name="href">
 										<xsl:call-template name="get-filename-for-type-name">
-											<xsl:with-param name="type-name" select="./base/@type" />
+											<xsl:with-param name="type-name" select="./ndoc:baseType/@name" />
 										</xsl:call-template>
 									</xsl:attribute>
 									<xsl:call-template name="vb-type">
-										<xsl:with-param name="runtime-type" select="./base/@type" />
+										<xsl:with-param name="runtime-type" select="./ndoc:baseType/@name" />
 									</xsl:call-template>
 								</a>
 							</div>
 						</xsl:if>
-						<xsl:if test="implements[not(@inherited)]">
+						<xsl:if test="ndoc:implements[not(@inherited)]">
 							<div>
 								<xsl:text>&#160;&#160;&#160;&#160;Implements&#160;</xsl:text>
-								<xsl:for-each select="implements[not(@inherited)]">
+								<xsl:for-each select="ndoc:implements[not(@inherited)]">
 									<a>
 										<xsl:attribute name="href">
 											<xsl:call-template name="get-filename-for-type-name">
@@ -132,35 +132,35 @@
 	<!-- -->
 	<xsl:template name="vb-parameters">
 		<xsl:choose>
-			<xsl:when test="parameter">
+			<xsl:when test="ndoc:parameter">
 				<xsl:text>( _</xsl:text>
 				<br />
-				<xsl:apply-templates select="parameter" mode="vb" />
+				<xsl:apply-templates select="ndoc:parameter" mode="vb" />
 				<xsl:text>)</xsl:text>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:text>()</xsl:text>
 			</xsl:otherwise>
 		</xsl:choose>
-		<xsl:if test="@returnType != 'System.Void'">
+		<xsl:if test="ndoc:returnType/@type != 'System.Void'">
 			<xsl:text>&#160;As&#160;</xsl:text>
 			<a>
 				<xsl:attribute name="href">
 					<xsl:call-template name="get-filename-for-type-name">
-						<xsl:with-param name="type-name" select="@returnType" />
+						<xsl:with-param name="type-name" select="ndoc:returnType/@type" />
 					</xsl:call-template>
 				</xsl:attribute>
 				<xsl:call-template name="vb-type">
-					<xsl:with-param name="runtime-type" select="@returnType" />
+					<xsl:with-param name="runtime-type" select="ndoc:returnType/@type" />
 				</xsl:call-template>
 			</a>
 		</xsl:if>
-			<xsl:if test="implements">
+			<xsl:if test="ndoc:implements">
 			<xsl:variable name="member" select="local-name(..)"/>
 				<xsl:text>&#160;_</xsl:text>
 				<div>
 					<xsl:text>&#160;&#160;&#160;&#160;Implements&#160;</xsl:text>
-					<xsl:for-each select="implements[not(@inherited)]">
+					<xsl:for-each select="ndoc:implements[not(@inherited)]">
 						<xsl:call-template name="implements-member">
 							<xsl:with-param name="member" select="$member" />
 						</xsl:call-template>
@@ -199,7 +199,7 @@
 		</xsl:choose>
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="parameter" mode="vb">
+	<xsl:template match="ndoc:parameter" mode="vb">
 		<xsl:text>&#160;&#160;&#160;</xsl:text>
 		<xsl:if test="@optional = 'true'">
 			<xsl:text>Optional </xsl:text>
@@ -250,7 +250,7 @@
 				<xsl:call-template name="vb-attributes" />
 				<xsl:choose>
 					<xsl:when test="local-name() != 'operator'">
-						<xsl:if test="not(parent::interface or @interface)">
+						<xsl:if test="not(parent::ndoc:interface or @interface)">
 							<xsl:choose>
 								<xsl:when test="@contract='Abstract'">
 									<xsl:text>MustOverride&#160;</xsl:text>
@@ -277,7 +277,7 @@
 							</xsl:if>
 						</xsl:if>
 						<xsl:choose>
-							<xsl:when test="@returnType!='System.Void'">
+							<xsl:when test="ndoc:returnType/@type!='System.Void'">
 								<xsl:text>Function</xsl:text>
 							</xsl:when>
 							<xsl:otherwise>
@@ -303,7 +303,7 @@
 						<xsl:text>.</xsl:text>
 						<xsl:value-of select="@name" />
 						<xsl:text>(</xsl:text>
-						<xsl:for-each select="parameter">
+						<xsl:for-each select="ndoc:parameter">
 							<xsl:value-of select="@name" />
 							<xsl:if test="position() &lt; last()">
 								<xsl:text>,&#160;</xsl:text>
@@ -322,7 +322,7 @@
 				<span class="lang">[Visual&#160;Basic]</span>
 				<br />
 				<xsl:call-template name="vb-attributes" />
-				<xsl:if test="not(parent::interface)">
+				<xsl:if test="not(parent::ndoc:interface)">
 					<xsl:call-template name="vb-method-access">
 						<xsl:with-param name="access" select="@access" />
 					</xsl:call-template>
@@ -373,7 +373,7 @@
 	<xsl:template name="vb-property-syntax">
 		<xsl:if test="$ndoc-vb-syntax">
 			<xsl:call-template name="vb-attributes" />
-			<xsl:if test="not(parent::interface)">
+			<xsl:if test="not(parent::ndoc:interface)">
 				<xsl:choose>
 					<xsl:when test="@contract='Abstract'">
 						<xsl:text>MustOverride&#160;</xsl:text>
@@ -421,12 +421,12 @@
 					<xsl:with-param name="runtime-type" select="@type" />
 				</xsl:call-template>
 			</a>
-			<xsl:if test="implements">
+			<xsl:if test="ndoc:implements">
 				<xsl:variable name="member" select="local-name()" />
 				<xsl:text>&#160;_</xsl:text>
 				<div>
 					<xsl:text>&#160;&#160;&#160;&#160;Implements&#160;</xsl:text>
-					<xsl:for-each select="implements[not(@inherited)]">
+					<xsl:for-each select="ndoc:implements[not(@inherited)]">
 						<xsl:call-template name="implements-member">
 							<xsl:with-param name="member" select="$member" />
 						</xsl:call-template>
@@ -442,10 +442,10 @@
 	<!-- ATTRIBUTES -->
 	<xsl:template name="vb-attributes">
 		<xsl:if test="$ndoc-document-attributes">
-			<xsl:if test="attribute">
+			<xsl:if test="ndoc:attribute">
 				<div class="attribute">
 					<xsl:text>&lt;</xsl:text>
-					<xsl:for-each select="attribute">
+					<xsl:for-each select="ndoc:attribute">
 							<xsl:call-template name="vb-attribute">
 								<xsl:with-param name="attname" select="@name" />
 							</xsl:call-template>
@@ -465,9 +465,9 @@
 		<xsl:call-template name="strip-namespace-and-attribute">
 			<xsl:with-param name="name" select="@name" />
 		</xsl:call-template>
-		<xsl:if test="count(property | field) > 0">
+		<xsl:if test="count(ndoc:property | ndoc:field) > 0">
 			<xsl:text>(</xsl:text>
-			<xsl:for-each select="property | field">
+			<xsl:for-each select="ndoc:property | ndoc:field">
 				<xsl:value-of select="@name" />
 				<xsl:text>:=</xsl:text>
 				<xsl:choose>

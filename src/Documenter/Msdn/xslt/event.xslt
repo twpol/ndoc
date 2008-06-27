@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ndoc="urn:ndoc-schema">
 	<!-- -->
 	<xsl:output method="xml" indent="yes"  encoding="utf-8" omit-xml-declaration="yes"/>
 	<!-- -->
@@ -8,12 +8,12 @@
 	<xsl:param name='event-id' />
 	<!-- -->
 	<xsl:template match="/">
-		<xsl:apply-templates select="ndoc/assembly/module/namespace/*/event[@id=$event-id]" />
+		<xsl:apply-templates select="ndoc:ndoc/ndoc:assembly/ndoc:module/ndoc:namespace/ndoc:*/ndoc:event[@id=$event-id]" />
 	</xsl:template>
 	
 	<!-- -->
 	
-	<xsl:template match="event">
+	<xsl:template match="ndoc:event">
 		<html dir="LTR">
 			<xsl:call-template name="html-head">
 				<xsl:with-param name="title" select="concat(../@name, '.', @name, ' Event')" />
@@ -30,9 +30,9 @@
 					<xsl:call-template name="cs-field-or-event-syntax" />
 					<p></p>
 					<xsl:variable name="type" select="@type" />
-					<xsl:variable name="eventargs-id" select="concat('T:', //delegate[@id=concat('T:', $type)]/parameter[contains(@type, 'EventArgs')][1]/@type)" />
-					<xsl:variable name="thisevent" select="//class[@id=$eventargs-id]" />
-					<xsl:variable name="properties" select="$thisevent/property[@access='Public' and not(@static)]" />
+					<xsl:variable name="eventargs-id" select="concat('T:', //ndoc:delegate[@id=concat('T:', $type)]/ndoc:parameter[contains(@type, 'EventArgs')][1]/@type)" />
+					<xsl:variable name="thisevent" select="//ndoc:class[@id=$eventargs-id]" />
+					<xsl:variable name="properties" select="$thisevent/ndoc:property[@access='Public' and not(@static)]" />
 					<xsl:variable name="properties-count" select="count($properties)" />
 					<xsl:if test="$properties-count > 0">
 						<h4 class="dtH4">Event Data</h4>
@@ -74,7 +74,7 @@
 					</xsl:if>
 					<xsl:call-template name="implements-section" />
 					<xsl:call-template name="remarks-section" />
-					<xsl:apply-templates select="documentation/node()" mode="after-remarks-section" />
+					<xsl:apply-templates select="ndoc:documentation/node()" mode="after-remarks-section" />
 					<xsl:call-template name="exceptions-section" />
 					<xsl:call-template name="example-section" />
 					<xsl:call-template name="requirements-section" />
@@ -109,12 +109,12 @@
 	
 	<!-- -->
 	
-	<xsl:template match="property">
+	<xsl:template match="ndoc:property">
 		<xsl:variable name="name" select="@name" />
-		<xsl:if test="not(preceding-sibling::property[@name=$name])">
+		<xsl:if test="not(preceding-sibling::ndoc:property[@name=$name])">
 			<tr VALIGN="top">
 				<xsl:choose>
-					<xsl:when test="following-sibling::property[@name=$name]">
+					<xsl:when test="following-sibling::ndoc:property[@name=$name]">
 						<td width="50%">
 							<a>
 								<xsl:attribute name="href">
@@ -133,13 +133,13 @@
 							<xsl:choose>
 								<xsl:when test="@declaringType">
 									<xsl:variable name="declaring-type-id" select="concat('T:', @declaringType)" />
-									<xsl:variable name="declaring-class" select="//class[@id=$declaring-type-id]" />
+									<xsl:variable name="declaring-class" select="//ndoc:class[@id=$declaring-type-id]" />
 									<xsl:choose>
 										<xsl:when test="$declaring-class">
 											<a>
 												<xsl:attribute name="href">
 													<xsl:call-template name="get-filename-for-property" >
-														<xsl:with-param name="property" select="$declaring-class/property[@name=$name]" />
+														<xsl:with-param name="property" select="$declaring-class/ndoc:property[@name=$name]" />
 													</xsl:call-template>
 												</xsl:attribute>
 												<xsl:value-of select="@name" />

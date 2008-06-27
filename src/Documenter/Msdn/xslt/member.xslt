@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ndoc="urn:ndoc-schema">
 	<!-- -->
 	<xsl:output method="xml" indent="yes"  encoding="utf-8" omit-xml-declaration="yes"/>
 	<!-- -->
@@ -8,10 +8,10 @@
 	<xsl:param name='member-id' />
 	<!-- -->
 	<xsl:template match="/">
-		<xsl:apply-templates select="ndoc/assembly/module/namespace/*/*[@id=$member-id][1]" />
+		<xsl:apply-templates select="ndoc:ndoc/ndoc:assembly/ndoc:module/ndoc:namespace/ndoc:*/ndoc:*[@id=$member-id][1]" />
 	</xsl:template>
-	<!-- -->
-	<xsl:template match="method | constructor | operator">
+	<!-- Method, contructor or opreator overload -->
+	<xsl:template match="ndoc:method | ndoc:constructor | ndoc:operator">
 		<xsl:variable name="type">
 			<xsl:choose>
 				<xsl:when test="local-name(..)='interface'">Interface</xsl:when>
@@ -27,10 +27,10 @@
 				      <xsl:value-of select="@name" />
 				    </xsl:with-param>
 				    <xsl:with-param name="from">
-				      <xsl:value-of select="parameter/@type" />
+				      <xsl:value-of select="ndoc:parameter/@type" />
 				    </xsl:with-param>
 				    <xsl:with-param name="to">
-				      <xsl:value-of select="@returnType" />
+				      <xsl:value-of select="returnType" />
 				    </xsl:with-param>
 			    </xsl:call-template>
 				</xsl:when>
@@ -83,7 +83,7 @@
 					<xsl:call-template name="returnvalue-section" />
 					<xsl:call-template name="implements-section" />
 					<xsl:call-template name="remarks-section" />
-					<xsl:apply-templates select="documentation/node()" mode="after-remarks-section" />
+					<xsl:apply-templates select="ndoc:documentation/node()" mode="after-remarks-section" />
 					<xsl:call-template name="events-section" />
 					<xsl:call-template name="exceptions-section" />
 					<xsl:call-template name="example-section" />

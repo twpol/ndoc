@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ndoc="urn:ndoc-schema">
 	<!-- -->
 	<xsl:output method="xml" indent="yes"  encoding="utf-8" omit-xml-declaration="yes" standalone="no"/>
 	<!-- -->
@@ -88,11 +88,11 @@
 						<xsl:with-param name="member" select="'event'" />
 					</xsl:call-template>
 					<!-- private static members -->
-					<xsl:if test="constructor[@access='Private' and @contract='Static']">
+					<xsl:if test="ndoc:constructor[@access='Private' and @contract='Static']">
 						<h4 class="dtH4">Private Static Constructor</h4>
 						<div class="tablediv">
 							<table class="dtTABLE" cellspacing="0">
-								<xsl:apply-templates select="constructor[@access='Private' and @contract='Static']" />
+								<xsl:apply-templates select="ndoc:constructor[@access='Private' and @contract='Static']" />
 							</table>
 						</div>
 					</xsl:if>
@@ -109,11 +109,11 @@
 						<xsl:with-param name="member" select="'event'" />
 					</xsl:call-template>
 					<!-- public instance members -->
-					<xsl:if test="constructor[@access='Public' and @contract='Normal']">
+					<xsl:if test="ndoc:constructor[@access='Public' and @contract='Normal']">
 						<h4 class="dtH4">Public Instance Constructors</h4>
 						<div class="tablediv">
 							<table class="dtTABLE" cellspacing="0">
-								<xsl:apply-templates select="constructor[@access='Public' and @contract='Normal']" />
+								<xsl:apply-templates select="ndoc:constructor[@access='Public' and @contract='Normal']" />
 							</table>
 						</div>
 					</xsl:if>
@@ -130,11 +130,11 @@
 						<xsl:with-param name="member" select="'event'" />
 					</xsl:call-template>
 					<!-- protected instance members -->
-					<xsl:if test="constructor[@access='Family' and @contract='Normal']">
+					<xsl:if test="ndoc:constructor[@access='Family' and @contract='Normal']">
 						<h4 class="dtH4">Protected Instance Constructors</h4>
 						<div class="tablediv">
 							<table class="dtTABLE" cellspacing="0">
-								<xsl:apply-templates select="constructor[@access='Family' and @contract='Normal']" />
+								<xsl:apply-templates select="ndoc:constructor[@access='Family' and @contract='Normal']" />
 							</table>
 						</div>
 					</xsl:if>
@@ -151,11 +151,11 @@
 						<xsl:with-param name="member" select="'event'" />
 					</xsl:call-template>
 					<!-- protected internal instance members -->
-					<xsl:if test="constructor[@access='FamilyOrAssembly' and @contract='Normal']">
+					<xsl:if test="ndoc:constructor[@access='FamilyOrAssembly' and @contract='Normal']">
 						<h4 class="dtH4">Protected Internal Instance Constructors</h4>
 						<div class="tablediv">
 							<table class="dtTABLE" cellspacing="0">
-								<xsl:apply-templates select="constructor[@access='FamilyOrAssembly' and @contract='Normal']" />
+								<xsl:apply-templates select="ndoc:constructor[@access='FamilyOrAssembly' and @contract='Normal']" />
 							</table>
 						</div>
 					</xsl:if>
@@ -172,11 +172,11 @@
 						<xsl:with-param name="member" select="'event'" />
 					</xsl:call-template>
 					<!-- internal instance members -->
-					<xsl:if test="constructor[@access='Assembly' and @contract='Normal']">
+					<xsl:if test="ndoc:constructor[@access='Assembly' and @contract='Normal']">
 						<h4 class="dtH4">Internal Instance Constructors</h4>
 						<div class="tablediv">
 							<table class="dtTABLE" cellspacing="0">
-								<xsl:apply-templates select="constructor[@access='Assembly' and @contract='Normal']" />
+								<xsl:apply-templates select="ndoc:constructor[@access='Assembly' and @contract='Normal']" />
 							</table>
 						</div>
 					</xsl:if>
@@ -193,11 +193,11 @@
 						<xsl:with-param name="member" select="'event'" />
 					</xsl:call-template>
 					<!-- private instance members -->
-					<xsl:if test="constructor[@access='Private' and @contract='Normal']">
+					<xsl:if test="ndoc:constructor[@access='Private' and @contract='Normal']">
 						<h4 class="dtH4">Private Instance Constructors</h4>
 						<div class="tablediv">
 							<table class="dtTABLE" cellspacing="0">
-								<xsl:apply-templates select="constructor[@access='Private' and @contract='Normal']" />
+								<xsl:apply-templates select="ndoc:constructor[@access='Private' and @contract='Normal']" />
 							</table>
 						</div>
 					</xsl:if>
@@ -247,13 +247,13 @@
 		</html>
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="constructor">
+	<xsl:template match="ndoc:constructor">
 		<xsl:variable name="access" select="@access" />
-		<xsl:if test="not(preceding-sibling::constructor[@access=$access])">
+		<xsl:if test="not(preceding-sibling::ndoc:constructor[@access=$access])">
 			<xsl:variable name="contract" select="@contract" />
 			<tr VALIGN="top">
 				<xsl:choose>
-					<xsl:when test="(count(../constructor[@contract!='Static']) &gt; 1) and ($contract!='Static')">
+					<xsl:when test="(count(../ndoc:constructor[@contract!='Static']) &gt; 1) and ($contract!='Static')">
 						<td width="50%">
 						  <xsl:choose>
 							<xsl:when test="@access='Public'">
@@ -279,9 +279,9 @@
 						<td width="50%">
 							<xsl:text>Overloaded. </xsl:text>
 							<xsl:choose>
-								<xsl:when test="../constructor/documentation/overloads">
+								<xsl:when test="../ndoc:constructor/ndoc:documentation/ndoc:overloads">
 									<xsl:call-template name="overloads-summary-with-no-paragraph">
-										<xsl:with-param name="overloads" select="../constructor" />
+										<xsl:with-param name="overloads" select="../ndoc:constructor" />
 									</xsl:call-template>
 								</xsl:when>
 								<xsl:otherwise>
@@ -320,7 +320,7 @@
 							</a>
 						</td>
 						<td width="50%">
-							<xsl:apply-templates select="documentation/summary/node()" mode="slashdoc" />
+							<xsl:apply-templates select="ndoc:documentation/ndoc:summary/node()" mode="slashdoc" />
 						</td>
 					</xsl:otherwise>
 				</xsl:choose>

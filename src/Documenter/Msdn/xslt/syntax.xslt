@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ndoc="urn:ndoc-schema">
   <!-- Document attributes? -->
   <xsl:param name="ndoc-document-attributes" />
   <!-- Which attributes shoulde be documented -->
@@ -49,7 +49,7 @@
         <xsl:if test="local-name()='delegate'">
           <!-- Writes datatype -->
           <xsl:call-template name="get-datatype">
-            <xsl:with-param name="datatype" select="@returnType" />
+            <xsl:with-param name="datatype" select="ndoc:returnType/@type" />
           </xsl:call-template>
           <xsl:text>&#160;</xsl:text>
         </xsl:if>
@@ -81,11 +81,11 @@
   </xsl:template>
   <!-- Generic constrains -->
   <xsl:template name="genericconstraints">
-    <xsl:for-each select="constraints">
+    <xsl:for-each select="ndoc:constraints">
       <xsl:text>&#160;where&#160;</xsl:text>
       <xsl:value-of select="@param"/>
       <xsl:text>&#160;:&#160;</xsl:text>
-      <xsl:for-each select="constraint">
+      <xsl:for-each select="ndoc:constraint">
         <xsl:choose>
           <xsl:when test="contains(., '.')">
             <a>
@@ -112,28 +112,30 @@
   <!-- Derivation -->
   <xsl:template name="derivation">
     <!-- Is this a derived class? Either from a class or an interface -->
-    <xsl:if test="@baseType!='' or implements[not(@inherited)]">
+    <xsl:if test="ndoc:baseType or implements[not(@inherited)]">
       <b>
         <xsl:text> : </xsl:text>
-        <xsl:if test="@baseType!=''">
+        <xsl:if test="ndoc:baseType">
           <a>
             <!-- Write link to baseclass -->
             <xsl:attribute name="href">
               <xsl:call-template name="get-filename-for-type-name">
-                <xsl:with-param name="type-name" select="./base/@type" />
+                <!-- Get fullname -->
+                <xsl:with-param name="type-name" select="concat(ndoc:baseType/@namespace, '.', ndoc:baseType/@name)" />
               </xsl:call-template>
             </xsl:attribute>
             <xsl:call-template name="get-datatype">
-              <xsl:with-param name="datatype" select="@baseType" />
+              <!-- Get fullname -->
+              <xsl:with-param name="datatype" select="concat(ndoc:baseType/@namespace, '.', ndoc:baseType/@name)" />
             </xsl:call-template>
           </a>
           <!-- If we also implements an interface -->
-          <xsl:if test="implements[not(@inherited)]">
+          <xsl:if test="ndoc:implements[not(@inherited)]">
             <xsl:text>, </xsl:text>
           </xsl:if>
         </xsl:if>
         <!-- Iterate through all implemented interfaces -->
-        <xsl:for-each select="implements[not(@inherited)]">
+        <xsl:for-each select="ndoc:implements[not(@inherited)]">
           <a>
             <!-- Write link to interface -->
             <xsl:attribute name="href">
@@ -167,7 +169,7 @@
       <xsl:if test="@hiding">
         <xsl:text>new&#160;</xsl:text>
       </xsl:if>
-      <xsl:if test="not(parent::interface or @interface)">
+      <xsl:if test="not(parent::ndoc:interface or @interface)">
         <!-- If the member is not a constructor or is not static -->
         <xsl:if test="(local-name()!='constructor') or (@contract!='Static')">
           <!-- Write metod accessmodifier -->
@@ -196,30 +198,30 @@
             <!-- Write link to datatype -->
             <a>
               <xsl:choose>
-                <xsl:when test="contains(@returnType, '{')">
+                <xsl:when test="contains(ndoc:returnType/@type, '{')">
                   <xsl:attribute name="href">
                     <xsl:call-template name="genericclasslink">
-                      <xsl:with-param name="genericarguments" select="returnType/genericargument" />
-                      <xsl:with-param name="type" select="@returnType" />
+                      <xsl:with-param name="genericarguments" select="ndoc:returnType/ndoc:genericargument" />
+                      <xsl:with-param name="type" select="ndoc:returnType/@type" />
                     </xsl:call-template>
                   </xsl:attribute>
                   <xsl:call-template name="get-datatype">
-                    <xsl:with-param name="datatype" select="substring-before(@returnType, '{')" />
+                    <xsl:with-param name="datatype" select="substring-before(ndoc:returnType/@type, '{')" />
                   </xsl:call-template>
                 </xsl:when>
                 <xsl:otherwise>
                   <xsl:attribute name="href">
                     <xsl:call-template name="get-filename-for-type-name">
-                      <xsl:with-param name="type-name" select="@returnType" />
+                      <xsl:with-param name="type-name" select="ndoc:returnType/@type" />
                     </xsl:call-template>
                   </xsl:attribute>
                   <xsl:call-template name="get-datatype">
-                    <xsl:with-param name="datatype" select="@returnType" />
+                    <xsl:with-param name="datatype" select="ndoc:returnType/@type" />
                   </xsl:call-template>
                 </xsl:otherwise>
               </xsl:choose>
             </a>
-            <xsl:if test="returnType/genericargument">
+            <xsl:if test="ndoc:returnType/ndoc:genericargument">
               <xsl:text>&lt;</xsl:text>
               <xsl:call-template name="generic-returnType"/>
               <xsl:text>&gt;</xsl:text>
@@ -236,25 +238,25 @@
                   <!-- Write link to datatype -->
                   <a>
                     <xsl:choose>
-                      <xsl:when test="contains(@returnType, '{')">
+                      <xsl:when test="contains(ndoc:returnType/@type, '{')">
                         <xsl:attribute name="href">
                           <xsl:call-template name="genericclasslink">
-                            <xsl:with-param name="genericarguments" select="returnType/genericargument" />
-                            <xsl:with-param name="type" select="@returnType" />
+                            <xsl:with-param name="genericarguments" select="ndoc:returnType/ndoc:genericargument" />
+                            <xsl:with-param name="type" select="ndoc:returnType/@type" />
                           </xsl:call-template>
                         </xsl:attribute>
                         <xsl:call-template name="get-datatype">
-                          <xsl:with-param name="datatype" select="substring-before(@returnType, '{')" />
+                          <xsl:with-param name="datatype" select="substring-before(ndoc:returnType/@type, '{')" />
                         </xsl:call-template>
                       </xsl:when>
                       <xsl:otherwise>
                         <xsl:attribute name="href">
                           <xsl:call-template name="get-filename-for-type-name">
-                            <xsl:with-param name="type-name" select="@returnType" />
+                            <xsl:with-param name="type-name" select="ndoc:returnType/@type" />
                           </xsl:call-template>
                         </xsl:attribute>
                         <xsl:call-template name="get-datatype">
-                          <xsl:with-param name="datatype" select="@returnType" />
+                          <xsl:with-param name="datatype" select="ndoc:returnType/@type" />
                         </xsl:call-template>
                       </xsl:otherwise>
                     </xsl:choose>
@@ -266,25 +268,25 @@
                   <!-- Write link to datatype -->
                   <a>
                     <xsl:choose>
-                      <xsl:when test="contains(@returnType, '{')">
+                      <xsl:when test="contains(ndoc:returnType/@type, '{')">
                         <xsl:attribute name="href">
                           <xsl:call-template name="genericclasslink">
-                            <xsl:with-param name="genericarguments" select="returnType/genericargument" />
-                            <xsl:with-param name="type" select="@returnType" />
+                            <xsl:with-param name="genericarguments" select="ndoc:returnType/ndoc:genericargument" />
+                            <xsl:with-param name="type" select="ndoc:returnType/@type" />
                           </xsl:call-template>
                         </xsl:attribute>
                         <xsl:call-template name="get-datatype">
-                          <xsl:with-param name="datatype" select="substring-before(@returnType, '{')" />
+                          <xsl:with-param name="datatype" select="substring-before(ndoc:returnType/@type, '{')" />
                         </xsl:call-template>
                       </xsl:when>
                       <xsl:otherwise>
                         <xsl:attribute name="href">
                           <xsl:call-template name="get-filename-for-type-name">
-                            <xsl:with-param name="type-name" select="@returnType" />
+                            <xsl:with-param name="type-name" select="ndoc:returnType/@type" />
                           </xsl:call-template>
                         </xsl:attribute>
                         <xsl:call-template name="get-datatype">
-                          <xsl:with-param name="datatype" select="@returnType" />
+                          <xsl:with-param name="datatype" select="ndoc:returnType/@type" />
                         </xsl:call-template>
                       </xsl:otherwise>
                     </xsl:choose>
@@ -305,7 +307,7 @@
           </xsl:choose>
         </xsl:otherwise>
       </xsl:choose>
-      <xsl:if test="genericargument">
+      <xsl:if test="ndoc:genericargument">
         <xsl:text>&lt;</xsl:text>
         <xsl:call-template name="generic-field" />
         <xsl:text>&gt;</xsl:text>
@@ -315,7 +317,7 @@
         <xsl:with-param name="version">long</xsl:with-param>
         <xsl:with-param name="namespace-name" select="../../@name" />
       </xsl:call-template>
-      <xsl:if test="constraints">
+      <xsl:if test="ndoc:constraints">
         <xsl:call-template name="genericconstraints" />
       </xsl:if>
       <xsl:text>;</xsl:text>
@@ -355,26 +357,25 @@
       <xsl:when test="local-name()='operator'">
         <!-- Write datatype -->
         <xsl:call-template name="get-datatype">
-          <xsl:with-param name="datatype" select="@returnType" />
+          <xsl:with-param name="datatype" select="ndoc:returnType/@type" />
         </xsl:call-template>
-        <xsl:text>&#160;</xsl:text>
         <!-- Write operator name-->
         <xsl:call-template name="operator-name">
           <xsl:with-param name="name">
             <xsl:value-of select="@name" />
           </xsl:with-param>
           <xsl:with-param name="from">
-            <xsl:value-of select="parameter/@type" />
+            <xsl:value-of select="ndoc:parameter/@type" />
           </xsl:with-param>
           <xsl:with-param name="to">
-            <xsl:value-of select="@returnType" />
+            <xsl:value-of select="ndoc:returnType/@type" />
           </xsl:with-param>
         </xsl:call-template>
       </xsl:when>
       <!-- Otherwise write datatype and name of the member -->
       <xsl:otherwise>
         <xsl:call-template name="get-datatype">
-          <xsl:with-param name="datatype" select="@returnType" />
+          <xsl:with-param name="datatype" select="ndoc:returnType/@type" />
         </xsl:call-template>
         <xsl:text>&#160;</xsl:text>
         <xsl:value-of select="@name" />
@@ -403,7 +404,7 @@
         <xsl:text>new&#160;</xsl:text>
       </xsl:if>
       <!-- If class does not implement an interface -->
-      <xsl:if test="not(parent::interface)">
+      <xsl:if test="not(parent::ndoc:interface)">
         <!-- Write method accessmodifier -->
         <xsl:call-template name="method-access">
           <xsl:with-param name="access" select="@access" />
@@ -434,7 +435,7 @@
       <!-- Write link to datatype -->
       <xsl:choose>
         <!-- If this is not a generic type-->
-        <xsl:when test="not(genericargument) or local-name() = 'event'">
+        <xsl:when test="not(ndoc:genericargument) or local-name() = 'event'">
           <a>
             <xsl:attribute name="href">
               <xsl:call-template name="get-filename-for-type-name">
@@ -451,7 +452,7 @@
           <a>
             <xsl:attribute name="href">
               <xsl:call-template name="genericclasslink">
-                <xsl:with-param name="genericarguments" select="genericargument" />
+                <xsl:with-param name="genericarguments" select="ndoc:genericargument" />
                 <xsl:with-param name="type" select="@type" />
               </xsl:call-template>
             </xsl:attribute>
@@ -517,7 +518,7 @@
       <xsl:text>static&#160;</xsl:text>
     </xsl:if>
     <!-- If the class does not implement an interface -->
-    <xsl:if test="not(parent::interface)">
+    <xsl:if test="not(parent::ndoc:interface)">
       <!-- If contract is not normal, static or final -->
       <xsl:if test="@contract!='Normal' and @contract!='Static' and @contract!='Final'">
         <!-- Write contract -->
@@ -535,7 +536,7 @@
             <a>
               <xsl:attribute name="href">
                 <xsl:call-template name="genericclasslink">
-                  <xsl:with-param name="genericarguments" select="genericargument" />
+                  <xsl:with-param name="genericarguments" select="ndoc:genericargument" />
                   <xsl:with-param name="type" select="@type" />
                 </xsl:call-template>
               </xsl:attribute>
@@ -571,13 +572,13 @@
     <xsl:text>&#160;</xsl:text>
     <xsl:choose>
       <!-- If the property has parameters -->
-      <xsl:when test="parameter">
+      <xsl:when test="ndoc:parameter">
         <xsl:text>this[</xsl:text>
         <xsl:if test="$indent">
           <br />
         </xsl:if>
         <!-- Write all parameters -->
-        <xsl:for-each select="parameter">
+        <xsl:for-each select="ndoc:parameter">
           <xsl:if test="$indent">
             <xsl:text>&#160;&#160;&#160;</xsl:text>
           </xsl:if>
@@ -656,8 +657,8 @@
     <xsl:param name="namespace-name" />
     <!-- Write parameters -->
     <xsl:text>(</xsl:text>
-    <xsl:if test="parameter">
-      <xsl:for-each select="parameter">
+    <xsl:if test="ndoc:parameter">
+      <xsl:for-each select="ndoc:parameter">
         <!-- If this should be written in long mode -->
         <xsl:if test="$version='long'">
           <br />
@@ -677,7 +678,7 @@
                 <xsl:choose>
                   <xsl:when test="contains(@type, '{')">
                     <xsl:call-template name="genericclasslink">
-                      <xsl:with-param name="genericarguments" select="genericargument" />
+                      <xsl:with-param name="genericarguments" select="ndoc:genericargument" />
                       <xsl:with-param name="type" select="@type" />
                     </xsl:call-template>
                   </xsl:when>
@@ -701,7 +702,7 @@
                 </xsl:otherwise>
               </xsl:choose>
             </a>
-            <xsl:if test="genericargument">
+            <xsl:if test="ndoc:genericargument">
               <xsl:text>&lt;</xsl:text>
               <xsl:call-template name="generic-field" />
               <xsl:text>&gt;</xsl:text>
@@ -752,7 +753,7 @@
       <xsl:with-param name="name">
         <!-- Gets the C# type (System.String is string)-->
         <xsl:call-template name="csharp-type">
-          <xsl:with-param name="runtime-type" select="$datatype" />
+          <xsl:with-param name="runtime-type" select="$type" />
         </xsl:call-template>
       </xsl:with-param>
     </xsl:call-template>
@@ -761,7 +762,7 @@
   <!-- member.xslt is using this for title and h1.  should try and use parameters template above. -->
   <xsl:template name="get-param-list">
     <xsl:text>(</xsl:text>
-    <xsl:for-each select="parameter">
+    <xsl:for-each select="ndoc:parameter">
       <xsl:call-template name="strip-namespace">
         <xsl:with-param name="name" select="@type" />
       </xsl:call-template>
@@ -777,8 +778,8 @@
     <!-- Should attributes be documented? -->
     <xsl:if test="$ndoc-document-attributes">
       <!-- Check if this is an attribute, and if so iterate over all of them -->
-      <xsl:if test="attribute">
-        <xsl:for-each select="attribute">
+      <xsl:if test="ndoc:attribute">
+        <xsl:for-each select="ndoc:attribute">
           <div class="attribute">
             <!-- Attribute template called with the name of the attribute -->
             <xsl:call-template name="attribute">
@@ -802,10 +803,9 @@
     <xsl:call-template name="strip-namespace-and-attribute">
       <xsl:with-param name="name" select="@name" />
     </xsl:call-template>
-
-    <xsl:if test="count(property | field) > 0">
+    <xsl:if test="count(ndoc:property | ndoc:field) > 0">
       <xsl:text>(</xsl:text>
-      <xsl:for-each select="property | field">
+      <xsl:for-each select="ndoc:property | ndoc:field">
         <xsl:value-of select="@name" />
         <xsl:text>=</xsl:text>
         <xsl:choose>
