@@ -693,7 +693,7 @@ namespace NDoc3.Documenter.Msdn
 			TransformAndWriteResult("namespace", arguments, fileName);
 
 			arguments = new XsltArgumentList();
-			arguments.AddParam("namespace", "ndoc", namespaceName);
+			arguments.AddParam("namespace", String.Empty, namespaceName);
 
 			TransformAndWriteResult(
 				"namespacehierarchy",
