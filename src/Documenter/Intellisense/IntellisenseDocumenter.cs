@@ -157,14 +157,8 @@ namespace NDoc3.Documenter.Intellisense
 					File.Open(Path.Combine(MyConfig.OutputDirectory, filename), FileMode.Create), encoding))
 				{
 					XslTransform transform = stylesheets[transformName];
-
-#if (NET_1_0)
-					//Use overload that is now obsolete
-					transform.Transform(xpathDocument, arguments, streamWriter);
-#else 
 					//Use new overload so we don't get obsolete warnings - clean compile :)
 					transform.Transform(xpathDocument, arguments, streamWriter, null);
-#endif
 				}
 			}
 			catch (PathTooLongException e)

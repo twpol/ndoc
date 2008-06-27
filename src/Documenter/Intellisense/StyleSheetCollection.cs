@@ -89,11 +89,7 @@ namespace NDoc3.Documenter.Intellisense
 				Trace.WriteLine(name + ".xslt");
 				XslTransform transform = new XslTransform();
 				XmlReader reader = (XmlReader)resolver.GetEntity(new Uri("res:" + name + ".xslt"), null, typeof(XmlReader));
-#if (NET_1_0)
-				transform.Load(reader, resolver);
-#else
 				transform.Load(reader, resolver, Assembly.GetExecutingAssembly().Evidence);
-#endif
 				return transform;
 			}
 			catch (Exception e)
