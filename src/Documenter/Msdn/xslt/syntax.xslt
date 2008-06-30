@@ -484,16 +484,6 @@
       <xsl:text>;</xsl:text>
     </div>
   </xsl:template>
-  <!-- Link to generic class -->
-  <xsl:template name="genericclasslink">
-    <xsl:param name="genericarguments" />
-    <xsl:param name="type" />
-    <xsl:call-template name="get-filename-for-type-name">
-      <xsl:with-param name="type-name">
-        <xsl:value-of select="concat(substring-before($type, '{'), '`', count($genericarguments))"/>
-      </xsl:with-param>
-    </xsl:call-template>
-  </xsl:template>
   <!-- C# Property Syntax -->
   <xsl:template name="cs-property-syntax">
     <xsl:param name="indent" select="true()" />

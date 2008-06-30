@@ -38,20 +38,31 @@
   <xsl:template match="node()|@*|text()" mode="title-row" />
   <xsl:template match="node()|@*|text()" mode="header-section" />
   <xsl:template match="node()|@*|text()" mode="after-remarks-section"/>
+  <!-- Link to generic class -->
+  <xsl:template name="genericclasslink">
+    <xsl:param name="genericarguments" />
+    <xsl:param name="type" />
+    <xsl:call-template name="get-filename-for-type-name">
+      <xsl:with-param name="type-name">
+        <xsl:value-of select="concat(substring-before($type, '{'), '`', count($genericarguments))"/>
+      </xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
   <!-- Generic Returntype -->
   <xsl:template name="generic-returnType">
-    <xsl:param name="node" select="ndoc:returnType/@type"/>
-    <xsl:for-each select="ndoc:genericargument">
+    <xsl:param name="arguments" select="ndoc:returnType"/>
+    <xsl:for-each select="$arguments/ndoc:genericargument">
       <xsl:choose>
         <xsl:when test="contains(@name, '.')">
           <a>
             <xsl:attribute name="href">
-              <xsl:call-template name="get-filename-for-type-name">
-                <xsl:with-param name="type-name" select="@name" />
+              <xsl:call-template name="genericclasslink">
+                <xsl:with-param name="genericarguments" select="ndoc:genericargument"/>
+                <xsl:with-param name="type" select="@name"/>
               </xsl:call-template>
             </xsl:attribute>
             <xsl:call-template name="get-datatype">
-              <xsl:with-param name="datatype" select="@name" />
+              <xsl:with-param name="datatype" select="substring-before(@name, '{')" />
             </xsl:call-template>
           </a>
         </xsl:when>
@@ -63,13 +74,9 @@
       </xsl:choose>
       <xsl:if test="ndoc:genericargument">
         <xsl:text>&lt;</xsl:text>
-      </xsl:if>
-      <xsl:if test="ndoc:genericargument">
         <xsl:call-template name="generic-returnType">
-          <xsl:with-param name="node" select="current()" />
+          <xsl:with-param name="arguments" select="current()"/>
         </xsl:call-template>
-      </xsl:if>
-      <xsl:if test="ndoc:genericargument">
         <xsl:text>&gt;</xsl:text>
       </xsl:if>
       <xsl:if test="position()!=last()">
