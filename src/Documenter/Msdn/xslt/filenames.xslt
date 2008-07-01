@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:NUtil="urn:NDocUtil">
   <!-- -->
   <xsl:template name="get-filename-for-current-namespace-hierarchy">
     <xsl:value-of select="concat(translate($namespace, '[,]', ''), 'Hierarchy.html')" />
@@ -142,7 +142,8 @@
   <!-- -->
   <xsl:template name="get-filename-for-system-cref">
     <xsl:param name="cref" />
-    <xsl:choose>
+    <xsl:value-of select="NUtil:FormatOnlineSDKLink($type-name)"/>
+    <!--<xsl:choose>
       <xsl:when test="starts-with($cref, 'N:')">
         <xsl:call-template name="get-filename-for-system-namespace">
           <xsl:with-param name="namespace-name" select="substring-after($cref, 'N:')" />
@@ -179,7 +180,7 @@
         </xsl:variable>
         <xsl:value-of select="concat($ndoc-sdk-doc-base-url, translate($cref-type, '.*', ''), 'Class', $cref-member, 'Topic', $ndoc-sdk-doc-file-ext)" />
       </xsl:when>
-    </xsl:choose>
+    </xsl:choose>-->
   </xsl:template>
   
   <xsl:template name="get-filename-for-system-namespace">
@@ -189,7 +190,8 @@
 
   <xsl:template name="get-filename-for-system-type">
     <xsl:param name="type-name" />
-    <xsl:value-of select="concat($ndoc-sdk-doc-base-url, translate($type-name, '.[,]*', ''), 'ClassTopic', $ndoc-sdk-doc-file-ext)" />
+    <!--<xsl:value-of select="concat($ndoc-sdk-doc-base-url, translate($type-name, '.[,]*', ''), 'ClassTopic', $ndoc-sdk-doc-file-ext)" />-->
+    <xsl:value-of select="NUtil:FormatOnlineSDKLink($type-name)"/>
   </xsl:template>
 
   <xsl:template name="get-filename-for-system-property">

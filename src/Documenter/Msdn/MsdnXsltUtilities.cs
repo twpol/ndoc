@@ -17,11 +17,13 @@ namespace NDoc3.Documenter.Msdn
 		private const string helpURL = "ms-help://";
 		private const string sdkRoot = "/cpref/html/frlrf";
 		private const string sdkDocPageExt = ".htm";
-		private const string msdnOnlineSdkBaseUrl = "http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrf";
-		private const string msdnOnlineSdkPageExt = ".asp";
+		//private const string msdnOnlineSdkBaseUrl = "http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrf";
+        private const string msdnOnlineSdkBaseUrl = "http://msdn.microsoft.com/{0}/library/{1}.aspx";
+		private const string msdnOnlineSdkPageExt = ".aspx";
 		private const string systemPrefix = "System.";
 		private string sdkDocBaseUrl; 
-		private string sdkDocExt; 
+		private string sdkDocExt;
+        private string sdkDocLanguage;
 		private StringDictionary fileNames;
 		private StringDictionary elemNames;
 		private StringCollection descriptions;
@@ -48,28 +50,28 @@ namespace NDoc3.Documenter.Msdn
 
 			this.fileNames = fileNames;
 			this.elemNames = elemNames;
-			
+            this.sdkDocLanguage = linkToSdkDocLangauge;
 
-			if (SdkLinksOnWeb)
-			{
-				sdkDocBaseUrl = msdnOnlineSdkBaseUrl;
-				sdkDocExt = msdnOnlineSdkPageExt;
-			}
-            /* TODO Handle none web links
-			else
-			{
-				switch (linkToSdkDocVersion)
-				{
-					case SdkVersion.SDK_v1_0:
-						sdkDocBaseUrl = GetLocalizedFrameworkURL(sdkDoc10BaseNamespace,linkToSdkDocLangauge);
-						sdkDocExt = sdkDocPageExt;
-						break;
-					case SdkVersion.SDK_v1_1:
-						sdkDocBaseUrl = GetLocalizedFrameworkURL(sdkDoc11BaseNamespace,linkToSdkDocLangauge);
-						sdkDocExt = sdkDocPageExt;
-						break;
-				}
-			}*/
+
+            if (SdkLinksOnWeb)
+            {
+                sdkDocBaseUrl = msdnOnlineSdkBaseUrl;
+                sdkDocExt = msdnOnlineSdkPageExt;
+            }
+            /*else
+            {
+                switch (linkToSdkDocVersion)
+                {
+                    case SdkVersion.SDK_v1_0:
+                        sdkDocBaseUrl = GetLocalizedFrameworkURL(sdkDoc10BaseNamespace, linkToSdkDocLangauge);
+                        sdkDocExt = sdkDocPageExt;
+                        break;
+                    case SdkVersion.SDK_v1_1:
+                        sdkDocBaseUrl = GetLocalizedFrameworkURL(sdkDoc11BaseNamespace, linkToSdkDocLangauge);
+                        sdkDocExt = sdkDocPageExt;
+                        break;
+                }
+            }*/
 			encodingString = "text/html; charset=" + fileEncoding.WebName; 
 		}
 
@@ -88,6 +90,14 @@ namespace NDoc3.Documenter.Msdn
 		{
 			get { return sdkDocBaseUrl; }
 		}
+
+        /// <summary>
+        /// Gets the lamguage for system type links
+        /// </summary>
+        public string SdkDocLanguage
+        {
+            get { return sdkDocLanguage; }
+        }
 
 		/// <summary>
 		/// Gets the page file extension for system types links.
@@ -120,21 +130,28 @@ namespace NDoc3.Documenter.Msdn
 			}
 			else
 			{
-				switch (cref.Substring(0, 2))
+                return String.Format(sdkDocBaseUrl, sdkDocLanguage, cref.Substring(2));
+				/*switch (cref.Substring(0, 2))
 				{
 					case "N:":	// Namespace
-						return sdkDocBaseUrl + cref.Substring(2).Replace(".", "") + sdkDocExt;
+						//return sdkDocBaseUrl + cref.Substring(2).Replace(".", "") + sdkDocExt;
+                        return String.Format(sdkDocBaseUrl, sdkDocLanguage, cref.Substring(2));
 					case "T:":	// Type: class, interface, struct, enum, delegate
 						// pointer types link to the type being pointed to
-						return sdkDocBaseUrl + cref.Substring(2).Replace(".", "").Replace( "*", "" ) + "ClassTopic" + sdkDocExt;
+                        return String.Format(sdkDocBaseUrl, sdkDocLanguage, cref.Substring(2));
+						//return sdkDocBaseUrl + cref.Substring(2).Replace(".", "").Replace( "*", "" ) + "ClassTopic" + sdkDocExt;
 					case "F:":	// Field
+                        return String.Format(sdkDocBaseUrl, sdkDocLanguage, cref.Substring(2));
 					case "P:":	// Property
+                        return String.Format(sdkDocBaseUrl, sdkDocLanguage, cref.Substring(2));
 					case "M:":	// Method
+                        return String.Format(sdkDocBaseUrl, sdkDocLanguage, cref.Substring(2));
 					case "E:":	// Event
-						return GetFilenameForSystemMember(cref);
+                        //return GetFilenameForSystemMember(cref);
+                        return String.Format(sdkDocBaseUrl, sdkDocLanguage, cref.Substring(2));
 					default:
 						return string.Empty;
-				}
+				}*/
 			}
 		}
 
@@ -182,7 +199,8 @@ namespace NDoc3.Documenter.Msdn
 			index = crefName.LastIndexOf(".");
 			string crefType = crefName.Substring(0, index);
 			string crefMember = crefName.Substring(index + 1);
-			return sdkDocBaseUrl + crefType.Replace(".", "") + "Class" + crefMember + "Topic" + sdkDocExt;
+            return String.Format(sdkDocBaseUrl, sdkDocLanguage, id);
+			//return sdkDocBaseUrl + crefType.Replace(".", "") + "Class" + crefMember + "Topic" + sdkDocExt;
 		}
 
 		/// <summary>
@@ -224,7 +242,17 @@ namespace NDoc3.Documenter.Msdn
 		public string Replace( string str, string oldValue, string newValue )
 		{
 			return str.Replace( oldValue, newValue );
-		}	
+		}
+
+        /// <summary>
+        /// Exposes easy formatting of SDK links to XSLT
+        /// </summary>
+        /// <param name="typename">Name of the type to refer to</param>
+        /// <returns>URL to the type</returns>
+        public string FormatOnlineSDKLink(string typename)
+        {
+            return String.Format(sdkDocBaseUrl, sdkDocLanguage, typename);
+        }
 
 		/// <summary>
 		/// returns a localized sdk url if one exists for the <see cref="CultureInfo.CurrentCulture"/>.

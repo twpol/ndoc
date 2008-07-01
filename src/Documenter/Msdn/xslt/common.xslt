@@ -12,6 +12,7 @@
   <xsl:param name="ndoc-omit-object-tags" select="false" />
   <xsl:param name="ndoc-sdk-doc-base-url" />
   <xsl:param name="ndoc-sdk-doc-file-ext" />
+  <xsl:param name="ndoc-sdk-doc-language" />
   <!--
 	 | no-op extensibility templates
 	 +-->

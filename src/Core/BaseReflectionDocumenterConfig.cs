@@ -660,14 +660,15 @@ namespace NDoc3.Core.Reflection
 			}
 		}
 
-		SdkLanguage _SdkDocLanguage = SdkLanguage.en;
+		SdkLanguage _SdkDocLanguage = SdkLanguage.en_us;
 
 		/// <summary>Gets or sets the SdkDocLanguage property.</summary>
 		/// <remarks>Specifies to which Language of the .NET Framework SDK documentation the links to system types will be pointing.</remarks>
 		[Category("Documentation Main Settings")]
 		[Description("Specifies to which Language version of the .NET Framework SDK documentation the links to system types will be pointing.")]
-		[DefaultValue(SdkLanguage.en)]
+		[DefaultValue(SdkLanguage.en_us)]
 		[System.ComponentModel.TypeConverter(typeof(EnumDescriptionConverter))]
+        [ReadOnly(true)]
 		public SdkLanguage SdkDocLanguage
 		{
 			get { return _SdkDocLanguage; }
@@ -921,6 +922,10 @@ namespace NDoc3.Core.Reflection
 	/// </summary>
 	public enum SdkVersion
 	{
+        /// <summary>The SDK version 1.1.</summary>
+        [Description(".Net Version 1.1")]
+        SDK_v1_1, 
+
 		/// <summary>The SDK version 2.0.</summary>
 		[Description(".Net Version 2.0")]
 		SDK_v2_0, 
@@ -940,21 +945,21 @@ namespace NDoc3.Core.Reflection
 	public enum SdkLanguage
 	{
 		/// <summary>
-		/// English
+		/// English (en-us)
 		/// </summary>
-		[Description("English")] en 
-		/*/// <summary>
-		/// French
-		/// </summary>
-		[Description("French")] fr, 
+		[Description("English")] en_us, 
 		/// <summary>
-		/// German
+		/// French (fr-fr)
 		/// </summary>
-		[Description("German")] de, 
+		[Description("French")] fr_fr, 
 		/// <summary>
-		/// Italian
+		/// German (de-de)
 		/// </summary>
-		[Description("Italian")] it, 
+		[Description("German")] de_de, 
+		/// <summary>
+		/// Italian (it-it)
+		/// </summary>
+		[Description("Italian")] it_it, 
 		/// <summary>
 		/// Japanese
 		/// </summary>
@@ -964,9 +969,9 @@ namespace NDoc3.Core.Reflection
 		/// </summary>
 		[Description("Korean")] ko, 
 		/// <summary>
-		/// Spanish
+		/// Spanish (es-es)
 		/// </summary>
-		[Description("Spanish")] es */
+		[Description("Spanish")] es_es
 	}
 
 	/// <summary>

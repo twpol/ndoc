@@ -1461,6 +1461,7 @@ namespace NDoc3.Documenter.Msdn
 
 					arguments.AddParam("ndoc-sdk-doc-base-url", String.Empty, utilities.SdkDocBaseUrl);
 					arguments.AddParam("ndoc-sdk-doc-file-ext", String.Empty, utilities.SdkDocExt);
+                    arguments.AddParam("ndoc-sdk-doc-language", String.Empty, utilities.SdkDocLanguage);
 
 					arguments.AddExtensionObject("urn:NDocUtil", utilities);
 					arguments.AddExtensionObject("urn:NDocExternalHtml", htmlProvider);
