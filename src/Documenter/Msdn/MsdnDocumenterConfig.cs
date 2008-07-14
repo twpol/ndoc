@@ -155,7 +155,9 @@ namespace NDoc3.Documenter.Msdn
 
 			set 
 			{ 
-				_ShowVisualBasic = value;
+                //TODO Ensure no visual basic
+				//_ShowVisualBasic = value;
+                _ShowVisualBasic = false;
 				SetDirty();
 			}
 		}
@@ -194,7 +196,9 @@ namespace NDoc3.Documenter.Msdn
 
 			set
 			{
-				_SdkLinksOnWeb = value;
+                //TODO Ensure only links on web
+				//_SdkLinksOnWeb = value;
+                _SdkLinksOnWeb = true;
 				SetDirty();
 			}
 		}

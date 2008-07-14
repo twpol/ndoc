@@ -660,6 +660,29 @@ namespace NDoc3.Core.Reflection
 			}
 		}
 
+        /// <summary>
+        /// Converts the chosen SDK version to the string used by MSDN
+        /// </summary>
+        public string SdkDocVersionString
+        {
+            get
+            {
+                switch (_SdkDocVersion)
+                {
+                    case SdkVersion.SDK_v1_1:
+                        return "VS.71";
+                    case SdkVersion.SDK_v2_0:
+                        return "VS.80";
+                    case SdkVersion.SDK_v3_0:
+                        return "VS.85";
+                    case SdkVersion.SDK_v3_5:
+                        return "VS.90";
+                    default:
+                        return "";
+                }
+            }
+        }
+
 		SdkLanguage _SdkDocLanguage = SdkLanguage.en_us;
 
 		/// <summary>Gets or sets the SdkDocLanguage property.</summary>
@@ -668,7 +691,6 @@ namespace NDoc3.Core.Reflection
 		[Description("Specifies to which Language version of the .NET Framework SDK documentation the links to system types will be pointing.")]
 		[DefaultValue(SdkLanguage.en_us)]
 		[System.ComponentModel.TypeConverter(typeof(EnumDescriptionConverter))]
-        [ReadOnly(true)]
 		public SdkLanguage SdkDocLanguage
 		{
 			get { return _SdkDocLanguage; }
@@ -959,19 +981,31 @@ namespace NDoc3.Core.Reflection
 		/// <summary>
 		/// Italian (it-it)
 		/// </summary>
-		[Description("Italian")] it_it, 
+		[Description("Italian")] it_it,
+        /// <summary>
+		/// Spanish (es-es)
+		/// </summary>
+		[Description("Spanish")] es_es,
+        /// <summary>
+		/// Portugese Brazil (pt-br)
+		/// </summary>
+		[Description("Portugese (Brazil)")] pt_br,
 		/// <summary>
 		/// Japanese
 		/// </summary>
-		[Description("Japanese")] ja, 
+		[Description("Japanese")] ja_jp, 
 		/// <summary>
 		/// Korean
 		/// </summary>
-		[Description("Korean")] ko, 
-		/// <summary>
-		/// Spanish (es-es)
-		/// </summary>
-		[Description("Spanish")] es_es
+		[Description("Korean")] ko_kr,
+        /// <summary>
+        /// Chinese Traditional (zh-tw)
+        /// </summary>
+        [Description("Chinese Traditional")] zh_tw,
+        /// <summary>
+        /// Chinese Simplified (zh-cn)
+        /// </summary>
+        [Description("Chinese Simplified")] zh_cn
 	}
 
 	/// <summary>

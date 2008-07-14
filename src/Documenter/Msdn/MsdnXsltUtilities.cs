@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Specialized;
 using System.Globalization;
+using System.Windows.Forms;
 
 using NDoc3.Core;
 using NDoc3.Core.Reflection;
@@ -18,10 +19,11 @@ namespace NDoc3.Documenter.Msdn
 		private const string sdkRoot = "/cpref/html/frlrf";
 		private const string sdkDocPageExt = ".htm";
 		//private const string msdnOnlineSdkBaseUrl = "http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrf";
-        private const string msdnOnlineSdkBaseUrl = "http://msdn.microsoft.com/{0}/library/{1}.aspx";
+        private const string msdnOnlineSdkBaseUrl = "http://msdn.microsoft.com/{0}/library/{1}({2}).aspx";
 		private const string msdnOnlineSdkPageExt = ".aspx";
 		private const string systemPrefix = "System.";
 		private string sdkDocBaseUrl; 
+        private string sdkVersion;
 		private string sdkDocExt;
         private string sdkDocLanguage;
 		private StringDictionary fileNames;
@@ -41,7 +43,7 @@ namespace NDoc3.Documenter.Msdn
 		public MsdnXsltUtilities(
 			StringDictionary fileNames, 
 			StringDictionary elemNames, 
-			SdkVersion  linkToSdkDocVersion,
+			string linkToSdkDocVersion,
 			string linkToSdkDocLangauge,
 			bool SdkLinksOnWeb,
 			System.Text.Encoding fileEncoding)
@@ -51,7 +53,7 @@ namespace NDoc3.Documenter.Msdn
 			this.fileNames = fileNames;
 			this.elemNames = elemNames;
             this.sdkDocLanguage = linkToSdkDocLangauge;
-
+            this.sdkVersion = linkToSdkDocVersion;
 
             if (SdkLinksOnWeb)
             {
@@ -130,7 +132,7 @@ namespace NDoc3.Documenter.Msdn
 			}
 			else
 			{
-                return String.Format(sdkDocBaseUrl, sdkDocLanguage, cref.Substring(2));
+                return String.Format(sdkDocBaseUrl, sdkDocLanguage, cref.Substring(2), sdkVersion);
 				/*switch (cref.Substring(0, 2))
 				{
 					case "N:":	// Namespace
@@ -251,7 +253,7 @@ namespace NDoc3.Documenter.Msdn
         /// <returns>URL to the type</returns>
         public string FormatOnlineSDKLink(string typename)
         {
-            return String.Format(sdkDocBaseUrl, sdkDocLanguage, typename);
+            return String.Format(sdkDocBaseUrl, sdkDocLanguage, typename, sdkVersion);
         }
 
 		/// <summary>
