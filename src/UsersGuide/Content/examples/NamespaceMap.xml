@@ -11,7 +11,7 @@
 	
 	For example, given the following map file:
 	
-	<namespaceMap xmlns="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.schemas.namespaceMap">
+	<namespaceMap xmlns="urn:ndoc3-sourceforge-net:documenters.NativeHtmlHelp2.schemas.namespaceMap">
 		<helpNamespace ns="ms-help://companyX.sharedhelpcollection">
 			<managedNamespace ns="CompanyX"/>
 		</helpNamespace>
@@ -24,7 +24,7 @@
 	The managed type CompanyX.Product2.Class1 would map to ms-help://companyX.producthelpcollection,
 	while CompanyX.Core.Class1 would map to ms-help://companyX.sharedhelpcollection
 -->
-<namespaceMap xmlns="urn:ndoc-sourceforge-net:documenters.NativeHtmlHelp2.schemas.namespaceMap">
+<namespaceMap xmlns="urn:ndoc3-sourceforge-net:documenters.NativeHtmlHelp2.schemas.namespaceMap">
 	<!-- 
 		In addition to your custom mapping file, the NativeHtmlHelp2 documenter uses this 
 		file as a default map in order to include links to the Microsoft .NET SDK. 

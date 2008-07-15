@@ -249,7 +249,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>if $(ConfigurationName)==Release copy "$(SolutionDir)ndoc.snk" "$(ProjectDir)obj\$(ConfigurationName)"</PreBuildEvent>
+    <PreBuildEvent>if $(ConfigurationName)==Release copy "$(SolutionDir)ndoc3.snk" "$(ProjectDir)obj\$(ConfigurationName)"</PreBuildEvent>
     <PostBuildEvent>copy "$(ProjectDir)$(TargetFileName).manifest" "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
 </Project>
