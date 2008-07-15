@@ -40,25 +40,25 @@
         "Entry"
         {
         "MsmKey" = "8:_65E1B10D5B1D84E000891F808DCEE378"
-        "OwnerKey" = "8:_7AC6B0850E844805AD9D99C4C0B4F34F"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_65E1B10D5B1D84E000891F808DCEE378"
-        "OwnerKey" = "8:_23BA50F539274810822CD474C3C1F568"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_65E1B10D5B1D84E000891F808DCEE378"
         "OwnerKey" = "8:_19C698AE8E2B41C2B35AEA5BC67D12D3"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_65E1B10D5B1D84E000891F808DCEE378"
+        "OwnerKey" = "8:_7AC6B0850E844805AD9D99C4C0B4F34F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_65E1B10D5B1D84E000891F808DCEE378"
         "OwnerKey" = "8:_57D7188EBBBF43818E2C48D2165681DA"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_65E1B10D5B1D84E000891F808DCEE378"
+        "OwnerKey" = "8:_23BA50F539274810822CD474C3C1F568"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -76,13 +76,7 @@
         "Entry"
         {
         "MsmKey" = "8:_A7C139A8FAECD99D217EC89B65B4B45E"
-        "OwnerKey" = "8:_23BA50F539274810822CD474C3C1F568"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_A7C139A8FAECD99D217EC89B65B4B45E"
-        "OwnerKey" = "8:_19C698AE8E2B41C2B35AEA5BC67D12D3"
+        "OwnerKey" = "8:_7AC6B0850E844805AD9D99C4C0B4F34F"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -94,7 +88,13 @@
         "Entry"
         {
         "MsmKey" = "8:_A7C139A8FAECD99D217EC89B65B4B45E"
-        "OwnerKey" = "8:_7AC6B0850E844805AD9D99C4C0B4F34F"
+        "OwnerKey" = "8:_23BA50F539274810822CD474C3C1F568"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A7C139A8FAECD99D217EC89B65B4B45E"
+        "OwnerKey" = "8:_19C698AE8E2B41C2B35AEA5BC67D12D3"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -112,13 +112,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_A7C139A8FAECD99D217EC89B65B4B45E"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_23BA50F539274810822CD474C3C1F568"
+        "OwnerKey" = "8:_7AC6B0850E844805AD9D99C4C0B4F34F"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -130,7 +124,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_19C698AE8E2B41C2B35AEA5BC67D12D3"
+        "OwnerKey" = "8:_AFAC8794161B028D71A3754D1990F19D"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -142,19 +136,25 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_7AC6B0850E844805AD9D99C4C0B4F34F"
+        "OwnerKey" = "8:_23BA50F539274810822CD474C3C1F568"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_AFAC8794161B028D71A3754D1990F19D"
+        "OwnerKey" = "8:_19C698AE8E2B41C2B35AEA5BC67D12D3"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_65E1B10D5B1D84E000891F808DCEE378"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_A7C139A8FAECD99D217EC89B65B4B45E"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -175,6 +175,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
         "Release"
         {
@@ -387,7 +395,7 @@
             }
             "{3C67513D-01DD-4637-8A68-80971EB9504F}:_812190ACD25448DAB8980D9B8FDFEEB6"
             {
-            "DefaultLocation" = "8:[ProgramFilesFolder][Manufacturer]\\[ProductName]"
+            "DefaultLocation" = "8:[ProgramFilesFolder][ProductName]"
             "Name" = "8:#1925"
             "AlwaysCreate" = "11:FALSE"
             "Condition" = "8:"
@@ -445,7 +453,7 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:Setup"
+        "ProductName" = "8:NDoc3"
         "ProductCode" = "8:{F6FC0076-8FA3-41F6-BD37-BC74130850BE}"
         "PackageCode" = "8:{2D6E2940-A9A8-47FF-8B04-0CE50B39E904}"
         "UpgradeCode" = "8:{3425DD4A-B4D8-461A-B516-3DA82EFA5B84}"
