@@ -338,7 +338,11 @@
 				Name="images"
 				>
 				<File
-					RelativePath=".\Content\images\assemblynamedialog.JPG"
+					RelativePath=".\Content\images\assemblynamedialog2005.JPG"
+					>
+				</File>
+				<File
+					RelativePath=".\Content\images\assemblynamedialog2008.jpg"
 					>
 				</File>
 				<File
@@ -390,7 +394,11 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Content\images\xmldocnamedialog.JPG"
+					RelativePath=".\Content\images\xmldocdialog2008.jpg"
+					>
+				</File>
+				<File
+					RelativePath=".\Content\images\xmldocnamedialog2005.JPG"
 					>
 				</File>
 			</Filter>

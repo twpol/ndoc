@@ -17,9 +17,11 @@
 	do this by setting the &quot;XML Documentation File&quot; property in the project setting 
 	dialog. </p>
 	<p>While not absolutely necessary, it is best to name the XML documentation file 
-	with the same base name as the name of your assembly:</p>
-	<p>&nbsp;</p>
-	<img src="images/assemblynamedialog.jpg" alt="Finding the assembly name">
+        with the same base name as the name of your assembly</p>
+	<p>This is done differently in Visual Studio 2005 and Visual Studio 2008, therefore 
+        both methods will be described</p>
+    <h2>Visual Studio 2005</h2>
+	<img src="images/assemblynamedialog2005.jpg" alt="Finding the assembly name"/>
 	<p><strong class="fineprint">Finding the assembly name</strong></p>
 	<p>&nbsp;</p>
 	<p>Set the XML Documentation File property to the assembly name, but with the 
@@ -28,14 +30,25 @@
 	</p>
 	<p>&nbsp;</p>
 	<p>
-	<img src="images/xmldocnamedialog.jpg" alt="Setting the documentation file name">
+	<img src="images/xmldocnamedialog2005.jpg" alt="Setting the documentation file name"/>
 	</p>
 	<p><strong class="fineprint">Setting the XML Documentation Property</strong></p>
 	<p>&nbsp;</p>
 	<p>Now, each time VS.NET compiles your assembly, it will aggregate all of the 
 	code comments that you include in the source files, in the XML Documentation 
 	File.</p>
-	<p>If you do not use Visual Studio.NET, make sure to compile your C# projects 
+    <h2>Visual Studio 2008</h2>
+    <p><img src="images/assemblynamedialog2008.jpg" alt="Finding the assembly name"/></p>
+    <p><b>Finding the assembly name</b></p>
+    <p>&nbsp;</p>
+    <p>Set the XML Documentation File property to the assembly name, but with the 
+	.xml extension. do not forget to select the &quot;All Configurations&quot; option before 
+	you set this property. That way you can document both release and debug builds.
+	</p>
+    <p>&nbsp;</p>
+    <p><img src="images/xmldocdialog2008.jpg" alt="Setting the documentation file name"/></p>
+    <h2>Non-Visual Studio</h2>
+    <p>If you do not use Visual Studio.NET, make sure to compile your C# projects 
 	using the
 	<a href="ms-help://MS.NETFrameworkSDKv1.1/cscomp/html/vcerrDocProcessDocumentationComments.htm">
 	/doc compiler option</a>.</p>

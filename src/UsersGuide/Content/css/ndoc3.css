@@ -388,11 +388,6 @@ a:hover
 	color: #3366ff;
 	}
 
-img
-	{
-	border: none; 
-	}
-
 /* Not in dtue.css. Used by NDoc's "ShowMissing..." options. */
 .missing
 	{

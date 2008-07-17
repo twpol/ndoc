@@ -196,8 +196,7 @@
     <None Include="NativeHtmlHelp2.build" />
     <EmbeddedResource Include="Engine\NamespaceMapping\NamespaceMap.xml" />
     <EmbeddedResource Include="Engine\NamespaceMapping\NamespaceMap.xsd">
-      <SubType>
-      </SubType>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="graphics\AnimButton1.gif" />
     <EmbeddedResource Include="graphics\AnimButton2.gif" />
