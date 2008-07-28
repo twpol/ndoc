@@ -13,7 +13,7 @@ provide feedback, submit bug reports and fixes, or even join us as a
 developer!
 
 
-Status
+Status 
 ------
 
 NDoc's MSDN and HtmlHelp2 documenters are stable, but there is still quite 
