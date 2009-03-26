@@ -22,7 +22,7 @@ namespace NDoc3.Core.PropertyGridUI
 	/// <summary>
 	/// Class which implements a custom UITypeEditor for attributes.
 	/// </summary>
-	public class AttributesEditor : System.Drawing.Design.UITypeEditor 
+	public class AttributesEditor : UITypeEditor 
 	{
 		/// <summary>
 		/// Handler called when editing a value.

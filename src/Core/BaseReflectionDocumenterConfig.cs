@@ -17,15 +17,11 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
 using System;
-using System.Collections;
 using System.ComponentModel;
-using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Drawing.Design;
 using System.Reflection;
 using System.Windows.Forms.Design;
-using System.Xml;
-
 using NDoc3.Core.PropertyGridUI;
 
 namespace NDoc3.Core.Reflection
@@ -102,7 +98,7 @@ namespace NDoc3.Core.Reflection
 				SetDirty();
 			}
 		}
-		bool ShouldSerializeReferencePaths() { return (Project._referencePaths.Count > 0); }
+
 		void ResetReferencePaths() { Project._referencePaths = new ReferencePathCollection(); }
 
 		#region Show Missing Documentation Options
@@ -474,7 +470,7 @@ namespace NDoc3.Core.Reflection
 		[Category("Documentation Main Settings")]
 		[Description("Determines what type of Assembly Version information is documented.")]
 		[DefaultValue(AssemblyVersionInformationType.None)]
-		[System.ComponentModel.TypeConverter(typeof(EnumDescriptionConverter))]
+		[TypeConverter(typeof(EnumDescriptionConverter))]
 		public AssemblyVersionInformationType AssemblyVersionInfo
 		{
 			get { return _AssemblyVersionInfo; }
@@ -620,7 +616,7 @@ namespace NDoc3.Core.Reflection
 			}
 		}
 
-		private bool _Preliminary = false;
+		private bool _Preliminary;
 
 		/// <summary>Get/set the Preliminary preoperty</summary>
 		/// <remarks>
@@ -649,7 +645,7 @@ namespace NDoc3.Core.Reflection
 		[Category("Documentation Main Settings")]
 		[Description("Specifies to which version of the .NET Framework SDK documentation the links to system types will be pointing.")]
 		[DefaultValue(SdkVersion.SDK_v2_0)]
-		[System.ComponentModel.TypeConverter(typeof(EnumDescriptionConverter))]
+		[TypeConverter(typeof(EnumDescriptionConverter))]
 		public SdkVersion SdkDocVersion
 		{
 			get { return _SdkDocVersion; }
@@ -690,7 +686,7 @@ namespace NDoc3.Core.Reflection
 		[Category("Documentation Main Settings")]
 		[Description("Specifies to which Language version of the .NET Framework SDK documentation the links to system types will be pointing.")]
 		[DefaultValue(SdkLanguage.en_us)]
-		[System.ComponentModel.TypeConverter(typeof(EnumDescriptionConverter))]
+		[TypeConverter(typeof(EnumDescriptionConverter))]
 		public SdkLanguage SdkDocLanguage
 		{
 			get { return _SdkDocLanguage; }
@@ -826,7 +822,7 @@ namespace NDoc3.Core.Reflection
 			}
 		}
 
-		private bool _InstanceMembersDefaultToSafe = false;
+		private bool _InstanceMembersDefaultToSafe;
 
 		/// <summary>Gets or sets the InstanceMembersDefaultToSafe property.</summary>
 		/// <remarks>When true, types that do not have an explicit &lt;threadsafety&gt;
@@ -861,7 +857,7 @@ namespace NDoc3.Core.Reflection
 			{
 				if (value.Length > 0)
 				{
-					Trace.WriteLine("WARNING: " + base.DocumenterInfo.Name + " Configuration - property 'ReferencesPath' is OBSOLETE. Please use the project level property 'ReferencePath'\n");
+					Trace.WriteLine("WARNING: " + DocumenterInfo.Name + " Configuration - property 'ReferencesPath' is OBSOLETE. Please use the project level property 'ReferencePath'\n");
 					Project.ReferencePaths.Add(new ReferencePath(value));
 				}
 			}
@@ -869,19 +865,11 @@ namespace NDoc3.Core.Reflection
 			{
 				if (value.Length > 0)
 				{
-					Trace.WriteLine("WARNING: " + base.DocumenterInfo.Name + " Configuration - property 'IncludeAssemblyVersion' is OBSOLETE. Please use new property 'AssemblyVersionInfo'\n");
+					Trace.WriteLine("WARNING: " + DocumenterInfo.Name + " Configuration - property 'IncludeAssemblyVersion' is OBSOLETE. Please use new property 'AssemblyVersionInfo'\n");
 
-					string newValue = String.Empty;
-					if (String.Compare(value, "true", true) == 0)
-					{
-						newValue = "AssemblyVersion";
-					}
-					else
-					{
-						newValue = "None";
-					}
+					string newValue = String.Compare(value, "true", true) == 0 ? "AssemblyVersion" : "None";
 
-					FailureMessages += base.ReadProperty("AssemblyVersionInfo", newValue);
+					FailureMessages += ReadProperty("AssemblyVersionInfo", newValue);
 				}
 			}
 			else
@@ -907,19 +895,10 @@ namespace NDoc3.Core.Reflection
 			// pointless and caused awkward edge conditions when a static member had the 
 			// same name as an instance member....
 			if (property.Name == "DocumentInheritedMembers")
-			{
-				bool newValue = true;
-				if (String.Compare(value, "none", true)==0)
-				{
-					newValue = true;
-				}
-				FailureMessages += base.ReadProperty("DocumentInheritedMembers", newValue.ToString());
-			}
+				FailureMessages += ReadProperty("DocumentInheritedMembers", true.ToString());
 			else
-			{
 				// if we don't know how to handle this, let the base class have a go
 				FailureMessages = base.HandleUnknownPropertyValue(property, value);
-			}
 			return FailureMessages;
 		}
 	}
@@ -944,6 +923,10 @@ namespace NDoc3.Core.Reflection
 	/// </summary>
 	public enum SdkVersion
 	{
+        /// <summary>The SDK version 1.0.</summary>
+        [Description(".Net Version 1.0")]
+        SDK_v1_0,
+
         /// <summary>The SDK version 1.1.</summary>
         [Description(".Net Version 1.1")]
         SDK_v1_1, 

@@ -16,7 +16,6 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 using System;
-using System.ComponentModel;
 
 namespace NDoc3.Core
 {
@@ -38,8 +37,8 @@ namespace NDoc3.Core
 		/// <summary>Initializes a blank instance of the <see cref="AssemblySlashDoc"/> class.</summary>
 		public AssemblySlashDoc()
 		{
-			this.assembly = new FilePath();
-			this.slashDoc = new FilePath();
+			assembly = new FilePath();
+			slashDoc = new FilePath();
 		}
 
 		/// <summary>Initializes a new instance of the <see cref="AssemblySlashDoc"/> class
@@ -48,19 +47,16 @@ namespace NDoc3.Core
 		/// <param name="slashDocFilename">A documentation comment XML filename.</param>
 		public AssemblySlashDoc(string assemblyFilename, string slashDocFilename)
 		{
-			this.assembly = new FilePath(assemblyFilename);
-			
-			if(slashDocFilename.Length>0)
-				this.slashDoc = new FilePath(slashDocFilename);
-			else
-				this.slashDoc = new FilePath();
+			assembly = new FilePath(assemblyFilename);
+
+			slashDoc = slashDocFilename.Length>0 ? new FilePath(slashDocFilename) : new FilePath();
 		}
 
 		/// <summary>
 		/// Gets or sets the path to an assembly file.
 		/// </summary>
 		/// <value>A <see cref="FilePath"/> representing the path to an assembly.</value>
-		[NDoc3.Core.PropertyGridUI.FilenameEditor.FileDialogFilter
+		[PropertyGridUI.FilenameEditor.FileDialogFilter
 			 ("Select Assembly", 
 			 "Library and Executable files (*.dll, *.exe)|*.dll;*.exe|Library files (*.dll)|*.dll|Executable files (*.exe)|*.exe|All files (*.*)|*.*")]
 		public FilePath Assembly 
@@ -73,7 +69,7 @@ namespace NDoc3.Core
 		/// Gets or sets the path to a documentation comment XML file.
 		/// </summary>
 		/// <value>A <see cref="FilePath"/> representing the path to a documentation comment XML file.</value>
-		[NDoc3.Core.PropertyGridUI.FilenameEditor.FileDialogFilter
+		[PropertyGridUI.FilenameEditor.FileDialogFilter
 			 ("Select Assembly", 
 			 "/doc Output files (*.xml)|*.xml|All files (*.*)|*.*")]
 		public FilePath SlashDoc 
@@ -89,8 +85,8 @@ namespace NDoc3.Core
 		public object Clone()
 		{
 			AssemblySlashDoc ret = new AssemblySlashDoc();
-			ret.assembly = new FilePath( this.assembly );
-			ret.slashDoc = new FilePath( this.slashDoc );
+			ret.assembly = new FilePath( assembly );
+			ret.slashDoc = new FilePath( slashDoc );
 
 			return ret;
 		}

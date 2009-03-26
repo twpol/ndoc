@@ -553,8 +553,8 @@ namespace NDoc3.Test
 		public static int StaticMethod() { return -1; }
 	}
 
-	/// <summary>This is the second struct.</summary>
-	public struct Struct2
+	/// <summary>This is the second struct. Which implements an interface.</summary>
+	public struct Struct2 : Interface1
 	{
 	}
 

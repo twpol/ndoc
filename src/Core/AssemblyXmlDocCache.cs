@@ -18,7 +18,6 @@ using System;
 using System.Collections;
 using System.Diagnostics;
 using System.Xml;
-using System.Text;
 using System.IO;
 
 namespace NDoc3.Core.Reflection
@@ -109,12 +108,16 @@ namespace NDoc3.Core.Reflection
 			XmlDocument xmldoc = new XmlDocument();
 			xmldoc.PreserveWhitespace=true;
 			xmldoc.Load(reader);
- 
-			//
-			CleanupNodes(id, xmldoc.DocumentElement.ChildNodes);
-			//
-			ProcessSeeLinks(id, xmldoc.DocumentElement.ChildNodes);
-			return xmldoc.DocumentElement.InnerXml;
+
+
+			if (xmldoc.DocumentElement != null)
+			{
+				CleanupNodes(id, xmldoc.DocumentElement.ChildNodes);
+			
+				ProcessSeeLinks(id, xmldoc.DocumentElement.ChildNodes);
+				return xmldoc.DocumentElement.InnerXml;
+			}
+			throw new Exception("DocumentElement are null");
 		}
 
 		/// <summary>
@@ -150,7 +153,7 @@ namespace NDoc3.Core.Reflection
 				}
 				if (node.NodeType == XmlNodeType.Text)
 				{
-					node.Value = ((string)node.Value).Replace("\t", "    ").Replace("\n", " ").Replace("\r", " ").Replace("        ", " ").Replace("    ", " ").Replace("   ", " ").Replace("  ", " ");
+					node.Value = node.Value.Replace("\t", "    ").Replace("\n", " ").Replace("\r", " ").Replace("        ", " ").Replace("    ", " ").Replace("   ", " ").Replace("  ", " ");
 				}
 			}
 		}
@@ -161,14 +164,14 @@ namespace NDoc3.Core.Reflection
 		/// <param name="node">a code tag node</param>
 		private void FixupCodeTag(XmlNode node)
 		{
-			string codeText = (string)node.InnerXml;
-			if (codeText.TrimStart(new Char[] {' '}).StartsWith("\r\n"))
+			string codeText = node.InnerXml;
+			if (codeText.TrimStart(new[] {' '}).StartsWith("\r\n"))
 			{
-				codeText = codeText.TrimStart(new Char[] {' '}).Substring(2);
+				codeText = codeText.TrimStart(new[] {' '}).Substring(2);
 			}
 			codeText = codeText.Replace("\r\n", "\n");
 			codeText = codeText.Replace("\t", "    ");
-			string[] codeLines = codeText.Split(new Char[] {'\r', '\n'});
+			string[] codeLines = codeText.Split(new[] {'\r', '\n'});
 			if (codeLines.Length > 0)
 			{
 				int numberOfCharsToRemove = int.MaxValue;
@@ -198,7 +201,7 @@ namespace NDoc3.Core.Reflection
 					}
 				}
 
-				string newtext = String.Join(System.Environment.NewLine, codeLines);
+				string newtext = String.Join(Environment.NewLine, codeLines);
 
 				XmlAttribute escaped = node.Attributes["escaped"];
 				if (escaped!=null && escaped.Value=="true")

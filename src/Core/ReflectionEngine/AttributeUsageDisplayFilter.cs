@@ -12,21 +12,20 @@
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-using System;
 using System.Collections;
 
 namespace NDoc3.Core.Reflection
 {
 	internal class AttributeUsageDisplayFilter
 	{
-		private ArrayList AttributeFilters = new ArrayList();
+		private readonly ArrayList AttributeFilters = new ArrayList();
 
 		public AttributeUsageDisplayFilter(string documentedAttributesConfig)
 		{
-			string[] filters = documentedAttributesConfig.Split(new char[] {'|'});
+			string[] filters = documentedAttributesConfig.Split(new[] {'|'});
 			foreach (string filter in filters)
 			{
-				string[] filterParts = filter.Split(new char[] {','});
+				string[] filterParts = filter.Split(new[] {','});
 				if (filterParts.Length > 0)
 				{
 					if (filterParts[0].Length > 0)

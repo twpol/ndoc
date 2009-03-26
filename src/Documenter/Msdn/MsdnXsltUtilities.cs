@@ -202,7 +202,6 @@ namespace NDoc3.Documenter.Msdn
 			string crefType = crefName.Substring(0, index);
 			string crefMember = crefName.Substring(index + 1);
             return String.Format(sdkDocBaseUrl, sdkDocLanguage, id);
-			//return sdkDocBaseUrl + crefType.Replace(".", "") + "Class" + crefMember + "Topic" + sdkDocExt;
 		}
 
 		/// <summary>
@@ -253,6 +252,8 @@ namespace NDoc3.Documenter.Msdn
         /// <returns>URL to the type</returns>
         public string FormatOnlineSDKLink(string typename)
         {
+        	//Remove array brackets and unsafe pointers from the link
+			typename = typename.Replace("[", "").Replace("]", "").Replace("*", "");
             return String.Format(sdkDocBaseUrl, sdkDocLanguage, typename, sdkVersion);
         }
 

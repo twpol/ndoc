@@ -16,19 +16,9 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-using System;
-using System.Collections;
-using System.Collections.Specialized;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using System.Text;
-using System.Xml;
-using System.Xml.XPath;
-using System.ComponentModel;
 
 namespace NDoc3.Core
 {
@@ -40,7 +30,7 @@ namespace NDoc3.Core
 	/// </remarks>
 	abstract public class BaseDocumenter : IDocumenter
 	{
-		IDocumenterConfig		config;
+		readonly IDocumenterConfig config;
 
 		/// <summary>Initializes a new instance of the <see cref="BaseDocumenter"/> class.</summary>
 		/// <param name="config_">settings</param>
@@ -62,14 +52,14 @@ namespace NDoc3.Core
 		/// <summary>See <see cref="IDocumenter.View">IDocumenter.View</see>.</summary>
 		public virtual void View()
 		{
-			if (File.Exists(this.MainOutputFile))
+			if (File.Exists(MainOutputFile))
 			{
-				Process.Start(this.MainOutputFile);
+				Process.Start(MainOutputFile);
 			}
 			else
 			{
 				throw new FileNotFoundException("Documentation not built.",
-					this.MainOutputFile);
+					MainOutputFile);
 			}
 		}
 
@@ -98,7 +88,7 @@ namespace NDoc3.Core
 		/// <summary>See <see cref="IDocumenter.CanBuild(Project)">IDocumenter.CanBuild</see>.</summary>
 		public virtual string CanBuild(Project project)
 		{
-			return this.CanBuild(project, false);
+			return CanBuild(project, false);
 		}
 
         /// <summary>See <see cref="IDocumenter.CanBuild(Project, bool)">CanBuild</see>.</summary>
@@ -122,12 +112,9 @@ namespace NDoc3.Core
 
 			if (xfiles.Length > 0)
 			{
-				return "One of more source files not found:\n" + xfiles.ToString();
+				return "One of more source files not found:\n" + xfiles;
 			}
-			else
-			{
-				return null;
-			}
+        	return null;
 		}
 
 		/// <summary>See <see cref="IDocumenter.Build">IDocumenter.Build</see>.</summary>

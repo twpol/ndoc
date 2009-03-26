@@ -148,16 +148,13 @@ namespace NDoc3.Documenter.Msdn
 		[Category("Documentation Main Settings")]
 		[Description("Show Visual Basic syntax for types and members.")]
 		[DefaultValue(false)]
-        [ReadOnly(true)] //TODO Added to ensure no VB syntax
 		public bool ShowVisualBasic
 		{
 			get { return _ShowVisualBasic; }
 
 			set 
 			{ 
-                //TODO Ensure no visual basic
-				//_ShowVisualBasic = value;
-                _ShowVisualBasic = false;
+				_ShowVisualBasic = value;
 				SetDirty();
 			}
 		}

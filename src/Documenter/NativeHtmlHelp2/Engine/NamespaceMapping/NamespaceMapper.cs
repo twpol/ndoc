@@ -6,7 +6,7 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Collections;
 
-namespace NDoc.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping
+namespace NDoc3.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping
 {
 	/// <summary>
 	/// NamespaceMapper allows managed namespaces to be asscoitated with html help namespaces

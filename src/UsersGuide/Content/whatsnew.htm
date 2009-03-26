@@ -2,20 +2,29 @@
 <html>
 
 <head>
-<title>What&#39;s new in NDoc 2.0 ?</title>
+<title>What&#39;s new in NDoc3 1.0 ?</title>
 <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5">
-<link rel="stylesheet" type="text/css" href="css/ndoc3.css">
-<script src="script/ndoc3.js"></script>
+<link rel="stylesheet" type="text/css" href="css/NDoc.css">
+<script src="script/NDoc.js"></script>
 </head>
 
 <body class="dtBODY" id="bodyID" onload="InitTitle()">
 
 <div id="nstext">
-	<h2 class="dtH2">What&#39;s new in NDoc3 2.0 ?</h2>
-	<p>NDoc3 2.0 incorporates a very large number of new and enhanced features as 
+	<h2 class="dtH2">What&#39;s new in NDoc3 1.0 ?</h2>
+	<p>NDoc3 1.0 incorporates new features related to better .NET 2.0, 3.0 and 3.5 support.</p>
+	<h3 class="dtH3">Highlights</h3>
+	<ul>
+		<li>Support for generics</li>
+		<li>Support for generic constraints</li>
+		<li>Support for asymmetric property accessors</li>
+	</ul>
+	<p>NDoc3 are build upon the NDoc project which has been dead for some time. Below are listed the most recent changes for the NDoc project.</p>
+	<h2 class="dtH2">What&#39;s new in NDoc 2.0 ?</h2>
+	<p>NDoc 2.0 incorporates a very large number of new and enhanced features as 
 	well as bug fixes.</p>
 	<h3 class="dtH3">Highlights</h3>
-	<p>NDoc3 2.0 includes many new features: </p>
+	<p>NDoc 2.0 includes many new features: </p>
 	<ul>
 		<li>A complete re-implementation of the Html Help 2 documenter, now known as the "<a href="vsnet.htm">VS.NET 2003</a>" documenter.</li>
 		<li>Support for new code commenting tags like
@@ -30,7 +39,7 @@
 		<li>User interface enhancements. </li>
 		<li>Major performance enhancements in both reflection and document production.
 		</li>
-		<li>Better consistency between NDoc3 generated topics and MSDN topics.</li>
+		<li>Better consistency between NDoc generated topics and MSDN topics.</li>
 	</ul>
 	<h3 class="dtH3">"VS.NET 2003" Documenter</h3>
 	<p>The new "VS.NET 2003" Documenter creates HTML Help 2 documentation, with fully populated XML data 
@@ -43,7 +52,7 @@
 	<ul>
 		<li>The XML Merge process has been speeded-up considerably, and is now 
 		only a small percentage of the total processing time regardless of the size 
-		of an NDoc3 project. </li>
+		of an NDoc project. </li>
 		<li>Page production time has decreased by 20-50%.</li>
 		<li>Memory usage has been significantly reduced.</li>
 		<li>Namespace Hierarchies are produced without performance or stability 
@@ -58,14 +67,14 @@
 	<li>Assembly resolution has been improved, it is now far less likely that an assembly will fail to be found.</li>
 	</ul>
 	<h3 class="dtH3">Internationalization</h3>
-	<p>NDoc3 can now process assemblies and comments with non-english characters.</p>
+	<p>NDoc can now process assemblies and comments with non-english characters.</p>
 	<p>Full Unicode (RTF-8) support is available in all documenters except MSDN HtmlHelp. There are some known problems with 
-	support for mixed character-sets in the HTML Help compiler, however these are out of our control...<p>Note that while we support other character-sets, NDoc3 generated text such as section headings cannot be localized in this release.
-	<h3 class="dtH3">Concurrent NDoc3 runs</h3>
-	<p>Multiple instances of NDoc3 can now be run concurrently. Previous problems with file locking have been resolved.</p>
+	support for mixed character-sets in the HTML Help compiler, however these are out of our control...<p>Note that while we support other character-sets, NDoc generated text such as section headings cannot be localized in this release.
+	<h3 class="dtH3">Concurrent NDoc runs</h3>
+	<p>Multiple instances of NDoc can now be run concurrently. Previous problems with file locking have been resolved.</p>
 	<h3 class="dtH3">User Interface</h3>
 	<ul>
-	<li>Drag and Drop.  Assemblies may be added to a project by drag and drop from explorer to the assemblies list in the NDoc3 GUI.</li>
+	<li>Drag and Drop.  Assemblies may be added to a project by drag and drop from explorer to the assemblies list in the NDoc GUI.</li>
 	<li>Error Handling.  Error Handling has been considerably improved.</li>
 	<li>Help Compiler Messages. Help compiler messages are now written to the log, and error messages are shown if an error occurs during compilation.</li>
 	<li>Property Grid. The property grid has been enhanced in several respects.</li>
@@ -84,7 +93,7 @@
 		</thead>
 		<tr>
 			<td><a href="tag_exclude.htm">&lt;exclude/&gt;</a></td>
-			<td>Directs NDoc3 to exclude the tagged type or member from the documentation.<br />
+			<td>Directs NDoc to exclude the tagged type or member from the documentation.<br />
 			The tag overrides all visibility options. </td>
 		</tr>
 		<tr>
@@ -152,7 +161,7 @@
 		</tr>
 		<tr>
 			<td>Preliminary</td>
-			<td>If true, NDoc3 will mark every topic as being preliminary documentation.
+			<td>If true, NDoc will mark every topic as being preliminary documentation.
 			<br />
 			The default notice is <font color="red">[This is preliminary documentation 
 			and subject to change.]</font> </td>
@@ -173,7 +182,7 @@
 		</tr>
 		<tr>
 			<td>DocumentInheritedAttributes</td>
-			<td>If true, NDoc3 will document, in the syntax portion of topics, the 
+			<td>If true, NDoc will document, in the syntax portion of topics, the 
 			attributes inherited from base types/members.</td>
 		</tr>
 		<tr>
@@ -202,7 +211,7 @@
 		</tr>
 		<tr>
 			<td>SkipNamespacesWithoutSummaries</td>
-			<td>If true, NDoc3 will not document namespaces (nor any types within 
+			<td>If true, NDoc will not document namespaces (nor any types within 
 			them) if an associated namespace summary does not exist.</td>
 		</tr>
 	</table>
@@ -311,7 +320,7 @@
 			<td>LinkToSdkDocVersion</td>
 			<td>This setting has been superseded by SdkDocVersion and SdkDocLanguage, 
 			which are common to all documenters. <br />
-			NDoc3 will still read this setting, but the GUI will convert to the new 
+			NDoc will still read this setting, but the GUI will convert to the new 
 			settings on save of a project.</td>
 		</tr>
 	</table>

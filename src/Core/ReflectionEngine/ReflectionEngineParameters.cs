@@ -65,66 +65,59 @@ namespace NDoc3.Core.Reflection
 
 			ReferencePaths.AddRange(project.ReferencePaths);
 
-			if (project.Namespaces==null)
-			{
-				NamespaceSummaries  = new SortedList();
-			}
-			else
-			{
-				NamespaceSummaries = project.Namespaces;
-			}
+			NamespaceSummaries = project.Namespaces ?? new SortedList();
 		}
 
 		private void CopyConfig(BaseReflectionDocumenterConfig config)
 		{
 			#region Documentation Control
-			this.AssemblyVersionInfo=config.AssemblyVersionInfo;
-			this.UseNamespaceDocSummaries=config.UseNamespaceDocSummaries;
-			this.AutoPropertyBackerSummaries=config.AutoPropertyBackerSummaries;
-			this.AutoDocumentConstructors=config.AutoDocumentConstructors;
-			this.SdkDocLanguage=config.SdkDocLanguage;
+			AssemblyVersionInfo=config.AssemblyVersionInfo;
+			UseNamespaceDocSummaries=config.UseNamespaceDocSummaries;
+			AutoPropertyBackerSummaries=config.AutoPropertyBackerSummaries;
+			AutoDocumentConstructors=config.AutoDocumentConstructors;
+			SdkDocLanguage=config.SdkDocLanguage;
 			#endregion
 
 			#region missing 
-			this.ShowMissingSummaries=config.ShowMissingSummaries;
-			this.ShowMissingRemarks=config.ShowMissingRemarks;
-			this.ShowMissingParams=config.ShowMissingParams;
-			this.ShowMissingReturns=config.ShowMissingReturns;
-			this.ShowMissingValues=config.ShowMissingValues;
+			ShowMissingSummaries=config.ShowMissingSummaries;
+			ShowMissingRemarks=config.ShowMissingRemarks;
+			ShowMissingParams=config.ShowMissingParams;
+			ShowMissingReturns=config.ShowMissingReturns;
+			ShowMissingValues=config.ShowMissingValues;
 			#endregion
 
 			#region visibility
-			this.DocumentInheritedMembers=config.DocumentInheritedMembers;
-			this.DocumentInheritedFrameworkMembers=config.DocumentInheritedFrameworkMembers;
-			this.DocumentExplicitInterfaceImplementations=config.DocumentExplicitInterfaceImplementations;
-			this.DocumentInternals=config.DocumentInternals;
-			this.DocumentProtected=config.DocumentProtected;
-			this.DocumentSealedProtected=config.DocumentSealedProtected;
-			this.DocumentPrivates=config.DocumentPrivates;
-			this.DocumentProtectedInternalAsProtected=config.DocumentProtectedInternalAsProtected;
-			this.DocumentEmptyNamespaces=config.DocumentEmptyNamespaces;
-			this.SkipNamespacesWithoutSummaries=config.SkipNamespacesWithoutSummaries;
-			this.EditorBrowsableFilter=config.EditorBrowsableFilter;
+			DocumentInheritedMembers=config.DocumentInheritedMembers;
+			DocumentInheritedFrameworkMembers=config.DocumentInheritedFrameworkMembers;
+			DocumentExplicitInterfaceImplementations=config.DocumentExplicitInterfaceImplementations;
+			DocumentInternals=config.DocumentInternals;
+			DocumentProtected=config.DocumentProtected;
+			DocumentSealedProtected=config.DocumentSealedProtected;
+			DocumentPrivates=config.DocumentPrivates;
+			DocumentProtectedInternalAsProtected=config.DocumentProtectedInternalAsProtected;
+			DocumentEmptyNamespaces=config.DocumentEmptyNamespaces;
+			SkipNamespacesWithoutSummaries=config.SkipNamespacesWithoutSummaries;
+			EditorBrowsableFilter=config.EditorBrowsableFilter;
 			#endregion
 
 			#region Attributes
-			this.DocumentAttributes=config.DocumentAttributes;
-			this.DocumentInheritedAttributes=config.DocumentInheritedAttributes;
-			this.ShowTypeIdInAttributes=config.ShowTypeIdInAttributes;
-			this.DocumentedAttributes=config.DocumentedAttributes;
+			DocumentAttributes=config.DocumentAttributes;
+			DocumentInheritedAttributes=config.DocumentInheritedAttributes;
+			ShowTypeIdInAttributes=config.ShowTypeIdInAttributes;
+			DocumentedAttributes=config.DocumentedAttributes;
 			#endregion
 
 			#region additional info
-			this.CopyrightText=config.CopyrightText;
-			this.CopyrightHref=config.CopyrightHref;
-			this.FeedbackEmailAddress=config.FeedbackEmailAddress;
-			this.Preliminary=config.Preliminary;
+			CopyrightText=config.CopyrightText;
+			CopyrightHref=config.CopyrightHref;
+			FeedbackEmailAddress=config.FeedbackEmailAddress;
+			Preliminary=config.Preliminary;
 			#endregion
 
 			#region threadsafety
-			this.IncludeDefaultThreadSafety=config.IncludeDefaultThreadSafety;
-			this.StaticMembersDefaultToSafe=config.StaticMembersDefaultToSafe;
-			this.InstanceMembersDefaultToSafe=config.InstanceMembersDefaultToSafe;
+			IncludeDefaultThreadSafety=config.IncludeDefaultThreadSafety;
+			StaticMembersDefaultToSafe=config.StaticMembersDefaultToSafe;
+			InstanceMembersDefaultToSafe=config.InstanceMembersDefaultToSafe;
 			#endregion
 
 		}

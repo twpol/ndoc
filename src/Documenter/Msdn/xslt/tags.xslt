@@ -114,7 +114,7 @@
 	</xsl:template>
 	<xsl:template match="ndoc:list[@type='bullet']" mode="slashdoc" doc:group="block" doc:msdn="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrflist.htm">
 		<ul type="disc">
-			<xsl:apply-templates select="item" mode="slashdoc" />
+			<xsl:apply-templates select="ndoc:item" mode="slashdoc" />
 		</ul>
 	</xsl:template>
 	<xsl:template match="ndoc:list[@type='bullet']/ndoc:item" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrflist.htm">
@@ -137,7 +137,7 @@
 	</xsl:template>
 	<xsl:template match="ndoc:list[@type='number']" mode="slashdoc" doc:group="block" doc:msdn="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrflist.htm">
 		<ol>
-			<xsl:apply-templates select="item" mode="slashdoc" />
+			<xsl:apply-templates select="ndoc:item" mode="slashdoc" />
 		</ol>
 	</xsl:template>
 	<xsl:template match="ndoc:list[@type='number']/ndoc:item" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrflist.htm">
@@ -166,7 +166,7 @@
 			</table>
 		</div>
 	</xsl:template>
-	<xsl:template match="list[@type='table']/ndoc:listheader" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrflist.htm">
+	<xsl:template match="ndoc:list[@type='table']/ndoc:listheader" mode="slashdoc" doc:msdn="ms-help://MS.NETFrameworkSDKv1.1/csref/html/vclrflist.htm">
 		<tr valign="top">
 			<xsl:apply-templates mode="slashdoc" />
 		</tr>

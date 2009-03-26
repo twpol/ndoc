@@ -17,7 +17,6 @@
 
 using System;
 using System.Collections;
-using System.Text;
 
 namespace NDoc3.Core.Reflection
 {
@@ -34,7 +33,7 @@ namespace NDoc3.Core.Reflection
 			data = new Hashtable(7);
 		}
 
-		private Hashtable data;
+		private readonly Hashtable data;
 
 		/// <summary>
 		/// 

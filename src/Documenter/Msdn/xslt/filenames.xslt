@@ -143,44 +143,6 @@
   <xsl:template name="get-filename-for-system-cref">
     <xsl:param name="cref" />
     <xsl:value-of select="NUtil:FormatOnlineSDKLink($type-name)"/>
-    <!--<xsl:choose>
-      <xsl:when test="starts-with($cref, 'N:')">
-        <xsl:call-template name="get-filename-for-system-namespace">
-          <xsl:with-param name="namespace-name" select="substring-after($cref, 'N:')" />
-        </xsl:call-template>
-      </xsl:when>
-      <xsl:when test="starts-with($cref, 'T:')">
-        <xsl:call-template name="get-filename-for-system-type">
-          <xsl:with-param name="type-name" select="translate(substring-after($cref, ':'), '.', '')" />
-        </xsl:call-template>
-      </xsl:when>
-      <xsl:when test="starts-with($cref, 'F:') or starts-with($cref, 'P:') or starts-with($cref, 'M:') or starts-with($cref, 'E:')">
-        <xsl:variable name="cref-name">
-          <xsl:choose>
-            <xsl:when test="contains($cref, '.#c')">
-              <xsl:value-of select="concat(substring-after(substring-before($cref, '.#c'), 'M:'), '.ctor')" />
-            </xsl:when>
-            <xsl:when test="contains($cref, '(')">
-              <xsl:value-of select="substring-after(substring-before($cref, '('), ':')" />
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:value-of select="substring-after($cref, ':')" />
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:variable>
-        <xsl:variable name="cref-type">
-          <xsl:call-template name="get-namespace">
-            <xsl:with-param name="name" select="$cref-name" />
-          </xsl:call-template>
-        </xsl:variable>
-        <xsl:variable name="cref-member">
-          <xsl:call-template name="strip-namespace">
-            <xsl:with-param name="name" select="$cref-name" />
-          </xsl:call-template>
-        </xsl:variable>
-        <xsl:value-of select="concat($ndoc-sdk-doc-base-url, translate($cref-type, '.*', ''), 'Class', $cref-member, 'Topic', $ndoc-sdk-doc-file-ext)" />
-      </xsl:when>
-    </xsl:choose>-->
   </xsl:template>
   
   <xsl:template name="get-filename-for-system-namespace">
@@ -190,7 +152,6 @@
 
   <xsl:template name="get-filename-for-system-type">
     <xsl:param name="type-name" />
-    <!--<xsl:value-of select="concat($ndoc-sdk-doc-base-url, translate($type-name, '.[,]*', ''), 'ClassTopic', $ndoc-sdk-doc-file-ext)" />-->
     <xsl:value-of select="NUtil:FormatOnlineSDKLink($type-name)"/>
   </xsl:template>
 

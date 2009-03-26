@@ -196,14 +196,10 @@ namespace NDoc3.Gui
 			if (ex != null) 
 			{
 				strBld.Append("\r\n");
-				Exception tmpEx = ex;
-				while (tmpEx != null)
-				{
-					strBld.AppendFormat("Exception: {0}\r\n", tmpEx.GetType());
-					strBld.Append(tmpEx.StackTrace.Replace("\r\n", "\n").Replace("\r", "\n").Replace("\n", "\r\n"));
-					strBld.Append("\r\n\r\n");
-					tmpEx = tmpEx.InnerException;
-				}
+				strBld.AppendFormat("Exception: {0}\r\n", ex.GetType());
+				strBld.Append(ex.StackTrace.Replace("\r\n", "\n").Replace("\r", "\n").Replace("\n", "\r\n"));
+				strBld.Append("\r\n\r\n");
+				ex = ex.InnerException;
 			}
 
 			Trace.WriteLine(strBld);

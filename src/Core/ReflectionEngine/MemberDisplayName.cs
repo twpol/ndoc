@@ -15,7 +15,6 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 using System;
-using System.Reflection;
 using System.Text;
 
 namespace NDoc3.Core
@@ -23,12 +22,8 @@ namespace NDoc3.Core
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class MemberDisplayName
+	public static class MemberDisplayName
 	{
-		private MemberDisplayName()
-		{
-		}
-
 		/// <summary>
 		/// 
 		/// </summary>
@@ -36,7 +31,7 @@ namespace NDoc3.Core
 		/// <returns></returns>
 		public static string GetMemberDisplayName(Type type)
 		{
-			string result = string.Empty;
+			string result;
 			if (type.DeclaringType != null) //IsNested?
 			{
 				result = GetTypeDisplayName(type);
@@ -57,28 +52,17 @@ namespace NDoc3.Core
 
         private static string GetTypeDisplayName(Type type)
         {
-            if (type.ContainsGenericParameters)
+        	if (type.ContainsGenericParameters)
             {
-                String result;
-                int i = type.Name.IndexOf('`');
-                if (i > -1)
-                {
-                    result = type.Name.Substring(0, type.Name.IndexOf('`'));
-                }
-                else
-                {
-                    result = type.Name;
-                }
+            	int i = type.Name.IndexOf('`');
+                string result = i > -1 ? type.Name.Substring(0, type.Name.IndexOf('`')) : type.Name;
                 result += GetTypeArgumentsList(type);
                 return result;
             }
-            else
-            {
-                return type.Name;
-            }
+        	return type.Name;
         }
 
-        private static string GetTypeArgumentsList(Type type)
+		private static string GetTypeArgumentsList(Type type)
         {
             StringBuilder argList = new StringBuilder();
 
@@ -105,7 +89,14 @@ namespace NDoc3.Core
                 }
                 if (argType.FullName == null)
                 {
-                    argList.Append(argType.Name);
+                    if (type.IsGenericType && !type.IsGenericTypeDefinition)
+                    {
+                        Type[] types = type.GetGenericArguments();
+                        foreach (Type t in types)
+                            argList.Append(GetTypeDisplayName(t));
+                    }
+                    else
+                        argList.Append(argType.Name);
                 }
                 else
                 {

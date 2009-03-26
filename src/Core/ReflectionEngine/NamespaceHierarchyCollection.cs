@@ -24,7 +24,7 @@ namespace NDoc3.Core.Reflection
 	/// </summary>
 	internal class NamespaceHierarchyCollection
 	{
-		private Hashtable namespaces;
+		private readonly Hashtable namespaces;
         
 		/// <summary>
 		/// 

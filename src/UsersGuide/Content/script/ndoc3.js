@@ -14,7 +14,7 @@ function InsertHeader()
 	var html = "<div id=nsbanner><div id=bannerrow1>"
 	html += "<table class=bannerparthead cellspacing=0 id=Table1>";
 	html += "<tr id=hdr><td class=runninghead>NDoc3 User's Guide</td>";
-	html += "<td class=product>NDoc3 2.0<br></td></tr></table></div>";
+	html += "<td class=product>NDoc3 1.0<br></td></tr></table></div>";
 	html += "<div id=TitleRow><h1 class=dtH1>";
 	html += document.title;
 	html += "</h1></div></div>";

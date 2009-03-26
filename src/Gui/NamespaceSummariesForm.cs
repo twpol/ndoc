@@ -243,7 +243,7 @@ namespace NDoc3.Gui
 				}
 				catch(Exception docEx)
 				{
-					ErrorForm.ShowError( "Unable to complete namspace scan...", docEx, this );
+					ErrorForm.ShowError( "Unable to complete namespace scan...", docEx, this );
 				}
 				finally
 				{

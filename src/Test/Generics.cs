@@ -1,7 +1,53 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace NDoc3.Test.Generics
 {
+    /// <summary>
+    /// Very generic simple item
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public class SimpleItem<T>
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        public SimpleItem()
+        {
+        }
+    }
+
+    /// <summary>
+    /// Generic list of generic items
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public class SimpleItemList<T> : List<SimpleItem<T>>
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        public SimpleItemList()
+        {
+        }
+    }
+
+    /// <summary>
+    /// Generic interface wiht a single generic parameter
+    /// </summary>
+    /// <typeparam name="T">T Type</typeparam>
+    public interface GenericInterface<T>
+    {
+    }
+
+    /// <summary>
+    /// Generic interface with a single generic parameter which
+    /// implements another generic interface
+    /// </summary>
+    /// <typeparam name="T">T type</typeparam>
+    public interface GenericInterfaceInherited<T> : GenericInterface<T>
+    {
+    }
+
     /// <summary>
     /// Tests a basic generic class with three generic parameters
     /// </summary>

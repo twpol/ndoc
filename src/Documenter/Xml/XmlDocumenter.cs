@@ -58,7 +58,15 @@ namespace NDoc3.Documenter.Xml
 				// Determine temp file name
 				tempFileName = Path.GetTempFileName();
 				// Let the Documenter base class do it's thing.
-				MakeXmlFile(project, tempFileName);
+				try
+				{
+					MakeXmlFile(project, tempFileName);
+				}
+				catch (ReflectionEngine.ValidationException ex)
+				{
+					Trace.WriteLine("Validation failed: " + ex.Message);
+					Trace.WriteLine("Output XML anyway.");
+				}
 
 				OnDocBuildingStep(50, "Saving XML documentation...");
 

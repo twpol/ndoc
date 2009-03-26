@@ -1316,12 +1316,12 @@ namespace NDoc3.Documenter.Msdn
 				case "op_DivisionAssignment": return "Division Assignment Operator";
 				case "op_Explicit":
                     XmlNode parameterNode = operatorNode.SelectSingleNode("ns:parameter", xmlnsManager);
-					string from = parameterNode.Attributes["type"].Value;
+					string from = parameterNode.Attributes["typeId"].Value;
                     string to = operatorNode.SelectSingleNode("ns:returnType", xmlnsManager).Attributes["type"].Value;
 					return "Explicit " + StripNamespace(from) + " to " + StripNamespace(to) + " Conversion";
 				case "op_Implicit":
                     XmlNode parameterNode2 = operatorNode.SelectSingleNode("ns:parameter", xmlnsManager);
-					string from2 = parameterNode2.Attributes["type"].Value;
+					string from2 = parameterNode2.Attributes["typeId"].Value;
 					string to2 = operatorNode.SelectSingleNode("ns:returnType", xmlnsManager).Attributes["type"].Value;
 					return "Implicit " + StripNamespace(from2) + " to " + StripNamespace(to2) + " Conversion";
 				default:

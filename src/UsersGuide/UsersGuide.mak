@@ -15,16 +15,16 @@ HHC= "$(PROGRAMFILES)\HTML Help Workshop\hhc.exe"
 # ignore non-zero exit codes
 .IGNORE :
 
-NDocUsersGuide.chm: UsersGuide.hhp 
+NDoc3UsersGuide.chm: UsersGuide.hhp 
 # make the CHM	
 	$(HHC) UsersGuide.hhp
 # copy user guide to doc/help directory where setup generation will pick it up
 !IF !EXIST (..\..\doc\help)
 	mkdir ..\..\doc\help
 !ENDIF
-	copy NDocUsersGuide.chm ..\..\doc\help /y
+	copy NDoc3UsersGuide.chm ..\..\doc\help /y
 # copy user guide to gui bin directory
-	copy NDocUsersGuide.chm ..\Gui\bin\$(CONFIG) /y	
+	copy NDoc3UsersGuide.chm ..\Gui\bin\$(CONFIG) /y	
 	
 # turn error codes back on	
 !CMDSWITCHES -I

@@ -95,6 +95,7 @@
       <Name>Core</Name>
       <Project>{DBA75D67-23C9-4A78-ABC2-CF8802FDB7CA}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+      <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

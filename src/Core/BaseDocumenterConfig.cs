@@ -19,9 +19,7 @@
 using System;
 using System.Collections;
 using System.ComponentModel;
-using System.Drawing.Design;
 using System.Reflection;
-using System.Windows.Forms.Design;
 using System.Diagnostics;
 using System.Xml;
 
@@ -36,7 +34,7 @@ namespace NDoc3.Core
 	/// </remarks>
 	abstract public class BaseDocumenterConfig : IDocumenterConfig
 	{
-		private IDocumenterInfo _info;
+		private readonly IDocumenterInfo _info;
 
 		/// <summary>Initializes a new instance of the <see cref="BaseDocumenterConfig"/> class.</summary>
 		protected BaseDocumenterConfig( IDocumenterInfo info )
@@ -128,7 +126,7 @@ namespace NDoc3.Core
 					string result = ReadProperty(property.Name, value);
 					if (result.Length>0)
 					{
-						System.Diagnostics.Trace.WriteLine(result);
+						Trace.WriteLine(result);
 					}
 				}
 			}
@@ -151,7 +149,7 @@ namespace NDoc3.Core
 		public void Write(XmlWriter writer)
 		{
 			writer.WriteStartElement("documenter");
-			writer.WriteAttributeString("name", this.DocumenterInfo.Name );
+			writer.WriteAttributeString("name", DocumenterInfo.Name );
 
 			PropertyInfo[] properties = GetType().GetProperties();
 
@@ -277,13 +275,13 @@ namespace NDoc3.Core
 						ValueParsedOK = true;
 					}
 				}
-				catch(System.ArgumentException)
+				catch(ArgumentException)
 				{
 					Project.SuspendDirtyCheck=false;
 					FailureMessages += HandleUnknownPropertyValue(property, value);
 					Project.SuspendDirtyCheck=true;
 				}
-				catch(System.FormatException)
+				catch(FormatException)
 				{
 					Project.SuspendDirtyCheck=false;
 					FailureMessages += HandleUnknownPropertyValue(property, value);
@@ -336,13 +334,13 @@ namespace NDoc3.Core
 		protected virtual string HandleUnknownPropertyValue(PropertyInfo property, string value)
 		{
 			// we cannot handle this, so return an error message
-			return String.Format("     Property '{0}' has an invalid value for type {1} ('{2}') \n", property.Name, property.PropertyType.ToString() ,value);
+			return String.Format("     Property '{0}' has an invalid value for type {1} ('{2}') \n", property.Name, property.PropertyType ,value);
 		}
 
 
 		#region Documentation Main Settings 
 
-		private bool _CleanIntermediates = false;
+		private bool _CleanIntermediates;
 
 		/// <summary>Gets or sets a value indicating whether to delete intermediate files after a successful build.</summary>
 		/// <remarks>

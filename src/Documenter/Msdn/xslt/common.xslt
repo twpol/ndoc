@@ -300,10 +300,14 @@
   <xsl:template name="type-name">
     <xsl:choose>
       <xsl:when test="local-name()='constructor' or local-name()='field' or local-name()='property' or local-name()='method' or local-name()='event' or local-name()='operator'">
-        <xsl:value-of select="../@displayName" />
+        <xsl:call-template name="get-displayname-csharp">
+          <xsl:with-param name="node" select=".." />
+        </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="@displayName" />
+        <xsl:call-template name="get-displayname-csharp">
+          <xsl:with-param name="node" select="." />
+        </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -526,16 +530,20 @@
       <xsl:call-template name="preliminary-section" />
     </xsl:if>
     <xsl:call-template name="obsolete-section" />
-    <xsl:call-template name="output-paragraph">
-      <xsl:with-param name="nodes" select="(ndoc:documentation/ndoc:summary)[1]/node()" />
-    </xsl:call-template>
+    <xsl:for-each select="ndoc:documentation/ndoc:summary">
+      <xsl:call-template name="output-paragraph">
+        <xsl:with-param name="nodes" select="node()" />
+      </xsl:call-template>
+    </xsl:for-each>
     <xsl:apply-templates select="ndoc:documentation/node()" mode="summary-section" />
   </xsl:template>
   <!-- -->
   <xsl:template name="summary-with-no-paragraph">
     <xsl:param name="member" select="." />
-    <xsl:apply-templates select="($member/ndoc:documentation/ndoc:summary)[1]/node()" mode="no-para" />
-    <xsl:if test="not(($member/ndoc:documentation/ndoc:summary)[1]/node())">&#160;</xsl:if>
+    <xsl:for-each select="$member/ndoc:documentation/ndoc:summary">
+      <xsl:apply-templates select="node()" mode="no-para" />
+      <xsl:if test="not(node())">&#160;</xsl:if>
+    </xsl:for-each>
   </xsl:template>
   <!-- -->
   <xsl:template name="overloads-summary-section">
@@ -629,7 +637,7 @@
   </xsl:template>
   <!-- Implements section -->
   <xsl:template name="implements-section">
-    <xsl:if test="implements">
+    <xsl:if test="ndoc:implements">
       <h4 class="dtH4">Implements</h4>
       <xsl:for-each select="ndoc:implements">
         <p>
@@ -1196,6 +1204,11 @@
   <xsl:template name="strip-namespace">
     <xsl:param name="name" />
     <xsl:choose>
+      <xsl:when test="contains($name, '`')">
+        <xsl:call-template name="strip-namespace">
+          <xsl:with-param name="name" select="substring-before($name, '`')" />
+        </xsl:call-template>
+      </xsl:when>
       <xsl:when test="contains($name, '.')">
         <xsl:call-template name="strip-namespace">
           <xsl:with-param name="name" select="substring-after($name, '.')" />

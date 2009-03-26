@@ -8,8 +8,8 @@ namespace NDoc3.Core
 	/// </summary>
 	public abstract class BaseDocumenterInfo : IDocumenterInfo, IComparable
 	{
-		private DocumenterDevelopmentStatus _developmentStatus = DocumenterDevelopmentStatus.Stable;
-		private string _name;
+		private readonly DocumenterDevelopmentStatus _developmentStatus = DocumenterDevelopmentStatus.Stable;
+		private readonly string _name;
 
 		/// <summary>
 		/// Creates a new instance of the class

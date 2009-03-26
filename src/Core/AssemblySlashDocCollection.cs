@@ -15,13 +15,8 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 using System;
-using System.Runtime.InteropServices;
 using System.Xml;
-using System.Diagnostics;
-using System.Windows.Forms;
 using System.Collections;
-using System.Text;
-using System.IO;
 
 
 namespace NDoc3.Core
@@ -54,13 +49,6 @@ namespace NDoc3.Core
 	public class AssemblySlashDocCollection : CollectionBase
 	{
 		#region collection methods
-		
-		/// <summary>
-		/// Creates an instance of the class
-		/// </summary>
-		public AssemblySlashDocCollection()
-		{
-		}
 
 		/// <summary>
 		/// Adds the specified <see cref="AssemblySlashDoc"/> object to the collection.
@@ -78,7 +66,7 @@ namespace NDoc3.Core
 				throw new ArgumentNullException("assySlashDoc");
 
 			if ( !Contains( assySlashDoc.Assembly.Path ) )
-				this.List.Add(assySlashDoc);
+				List.Add(assySlashDoc);
 		}
 
 		/// <summary>
@@ -127,7 +115,7 @@ namespace NDoc3.Core
 			if (assySlashDoc == null)
 				throw new ArgumentNullException("assySlashDoc");
 
-			this.List.Remove(assySlashDoc);
+			List.Remove(assySlashDoc);
 		}
 
 		/// <summary>
@@ -158,14 +146,14 @@ namespace NDoc3.Core
 		{
 			get
 			{
-				return this.List[index] as AssemblySlashDoc;
+				return List[index] as AssemblySlashDoc;
 			}
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("set value");
+					throw new ArgumentNullException("Set value");
 
-				this.List[index] = value;
+				List[index] = value;
 			}
 		}
 
@@ -178,7 +166,7 @@ namespace NDoc3.Core
 		/// otherwise <see langword="false"/>.</returns>
 		public bool Contains(AssemblySlashDoc assySlashDoc)
 		{
-			return base.InnerList.Contains(assySlashDoc);
+			return InnerList.Contains(assySlashDoc);
 		}
 
 		/// <summary>
@@ -195,14 +183,19 @@ namespace NDoc3.Core
 				throw new ArgumentNullException("path");
 
 			bool result = false;
-			foreach (object obj in base.InnerList)
+			foreach (object obj in InnerList)
 			{
 				AssemblySlashDoc asd = obj as AssemblySlashDoc;
-				if (String.Compare(asd.Assembly.Path, path, true) == 0)
+				if (asd != null)
 				{
-					result = true;
-					break;
+					if (String.Compare(asd.Assembly.Path, path, true) == 0)
+					{
+						result = true;
+						break;
+					}
 				}
+				else
+					throw new Exception("AssemblySlashDoc object are null");
 			}
 			return result;
 		}
@@ -240,9 +233,7 @@ namespace NDoc3.Core
 					{
 						throw new DocumenterException("\"location\" attribute of" + " <assembly> element cannot be empty in project file.");
 					}
-					string documentation = reader.GetAttribute("documentation");
-					if ( documentation==null ) 
-						documentation=String.Empty;
+					string documentation = reader.GetAttribute("documentation") ?? String.Empty;
 					AssemblySlashDoc assemblySlashDoc = new AssemblySlashDoc(location, documentation);
 					Add(assemblySlashDoc);
 				}
@@ -270,7 +261,7 @@ namespace NDoc3.Core
 			{
 				writer.WriteStartElement("assemblies");
 
-				foreach (AssemblySlashDoc asd in this.InnerList)
+				foreach (AssemblySlashDoc asd in InnerList)
 				{
 					writer.WriteStartElement("assembly");
 					writer.WriteAttributeString("location", asd.Assembly.ToString());

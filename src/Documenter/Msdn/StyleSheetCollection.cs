@@ -46,7 +46,7 @@ namespace NDoc3.Documenter.Msdn
 // Define this when you want to edit the stylesheets
 // without having to shutdown the application to rebuild.
 #if NO_RESOURCES
-			string resourceBase = "file://" + Path.GetFullPath(Path.Combine(System.Windows.Forms.Application.StartupPath, @"..\..\..\Documenter\Msdn\xslt") );
+			string resourceBase = "file://" + Path.GetFullPath(Path.Combine(System.Windows.Forms.Application.StartupPath, String.Format("..{0}..{0}..{0}Documenter{0}Msdn{0}xslt", Path.DirectorySeparatorChar)) );
 #else
 			string resourceBase = "NDoc3.Documenter.Msdn.xslt";
 #endif

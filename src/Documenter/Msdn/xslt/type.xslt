@@ -257,7 +257,6 @@
 					<xsl:apply-templates select="ndoc:documentation/node()" mode="after-remarks-section" />
 					<xsl:call-template name="example-section" />
 					<xsl:if test="local-name() = 'enumeration'">
-            <xsl:text>test</xsl:text>
 						<xsl:call-template name="enumeration-members-section" />
 					</xsl:if>
 					<h4 class="dtH4">Requirements</h4>

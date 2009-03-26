@@ -18,111 +18,87 @@ using System;
 using System.Reflection;
 using System.Text;
 
-namespace NDoc3.Core
-{
+namespace NDoc3.Core {
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class MemberID
-	{
-		private MemberID()
-		{
-		}
-
+	public static class MemberID {
 		/// <summary>
-		/// 
+		/// Get the member ID of a type
 		/// </summary>
-		/// <param name="type"></param>
-		/// <returns></returns>
-		public static string GetMemberID(Type type)
-		{
+		/// <param name="type">The type</param>
+		/// <returns>The member ID</returns>
+		public static string GetMemberID(Type type) {
 			return "T:" + GetTypeNamespaceName(type);
 		}
 
 		/// <summary>
-		/// 
+		/// Get the member ID of a field
 		/// </summary>
-		/// <param name="field"></param>
-		/// <returns></returns>
-		public static string GetMemberID(FieldInfo field)
-		{
-            return "F:" + GetFullNamespaceName(field) + "." + field.Name;
+		/// <param name="field">The field</param>
+		/// <returns>The member ID</returns>
+		public static string GetMemberID(FieldInfo field) {
+			return "F:" + GetFullNamespaceName(field) + "." + field.Name;
 		}
 
 		/// <summary>
-		/// 
+		/// Get the member ID of a property
 		/// </summary>
-		/// <param name="property"></param>
-		/// <returns></returns>
-		public static string GetMemberID(PropertyInfo property)
-		{
-			string memberName;
-
-			memberName = "P:" + GetFullNamespaceName(property) +
+		/// <param name="property">The property</param>
+		/// <returns>The member ID</returns>
+		public static string GetMemberID(PropertyInfo property) {
+			string memberName = "P:" + GetFullNamespaceName(property) +
 				"." + property.Name.Replace('.', '#').Replace('+', '#');
 
-			try
-			{
-				if (property.GetIndexParameters().Length > 0)
-				{
+			try {
+				if (property.GetIndexParameters().Length > 0) {
 					memberName += "(";
 
 					int i = 0;
 
-					foreach (ParameterInfo parameter in property.GetIndexParameters())
-					{
-						if (i > 0)
-						{
+					foreach (ParameterInfo parameter in property.GetIndexParameters()) {
+						if (i > 0) {
 							memberName += ",";
 						}
 
 						Type type = parameter.ParameterType;
 
-                        if (type.ContainsGenericParameters)
-                        {
-                            memberName += "`" + type.GenericParameterPosition.ToString();
-                        }
-                        else
-                        {
-                            memberName += type.FullName;
-                        }
+						if (type.ContainsGenericParameters) {
+							memberName += "`" + type.GenericParameterPosition;
+						} else {
+							memberName += type.FullName;
+						}
 
 						++i;
 					}
 
 					memberName += ")";
 				}
-			}
-			catch (System.Security.SecurityException) { }
+			} catch (System.Security.SecurityException) { }
 
 			return memberName;
 		}
 
 		/// <summary>
-		/// 
+		/// Get the member ID of a method
 		/// </summary>
-		/// <param name="method"></param>
-		/// <returns></returns>
-		public static string GetMemberID(MethodBase method)
-		{
-			string memberName;
+		/// <param name="method">The method</param>
+		/// <returns>The memeber ID</returns>
+		public static string GetMemberID(MethodBase method) {
+			string memberName =
+					 "M:" +
+					 GetFullNamespaceName(method) +
+					 "." +
+					 method.Name.Replace('.', '#').Replace('+', '#');
 
-            memberName =
-                "M:" +
-                GetFullNamespaceName(method) +
-                "." +
-                method.Name.Replace('.', '#').Replace('+', '#');
-
-            if (method.IsGenericMethod)
-                memberName = memberName + "``" + method.GetGenericArguments().Length;
+			if (method.IsGenericMethod)
+				memberName = memberName + "``" + method.GetGenericArguments().Length;
 
 			memberName += GetParameterList(method);
 
-			if (method is MethodInfo)
-			{
+			if (method is MethodInfo) {
 				MethodInfo mi = (MethodInfo)method;
-				if (mi.Name == "op_Implicit" || mi.Name == "op_Explicit")
-				{
+				if (mi.Name == "op_Implicit" || mi.Name == "op_Explicit") {
 					memberName += "~" + mi.ReturnType;
 				}
 			}
@@ -131,250 +107,210 @@ namespace NDoc3.Core
 		}
 
 		/// <summary>
-		/// 
+		/// Get the member ID of an event
 		/// </summary>
-		/// <param name="eventInfo"></param>
-		/// <returns></returns>
-		public static string GetMemberID(EventInfo eventInfo)
-		{
+		/// <param name="eventInfo">The event</param>
+		/// <returns>The member ID</returns>
+		public static string GetMemberID(EventInfo eventInfo) {
 			return "E:" + GetFullNamespaceName(eventInfo) +
 				"." + eventInfo.Name.Replace('.', '#').Replace('+', '#');
 		}
 
-		private static string GetTypeNamespaceName(Type type)
-		{
-            if (type.GetGenericArguments().Length > 0)
-            {
-                return type.GetGenericTypeDefinition().FullName.Replace('+', '.');
-            }
-            else
-            {
-                return type.FullName.Replace('+', '.');
-            }
+		/// <summary>
+		/// Get the types namespace name (full name)
+		/// </summary>
+		/// <param name="type">The type</param>
+		/// <returns>The namespace name (full name)</returns>
+		private static string GetTypeNamespaceName(Type type) {
+			if (type.GetGenericArguments().Length > 0 && type.GetGenericTypeDefinition() != typeof(Nullable<>))
+				return type.GetGenericTypeDefinition().FullName.Replace('+', '.');
+			if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
+				return type.GetGenericArguments()[0].FullName.Replace('+', '.');
+			if (type.IsGenericParameter)
+				return type.Name;
+			return type.FullName.Replace('+', '.');
 		}
 
 		/// <summary>
-		/// 
+		/// Returns the declaring type name of a member
 		/// </summary>
-		/// <param name="member"></param>
-		/// <returns></returns>
-		public static string GetDeclaringTypeName(MemberInfo member)
-		{
+		/// <param name="member">The member</param>
+		/// <returns>The declaring type name</returns>
+		public static string GetDeclaringTypeName(MemberInfo member) {
 			return GetTypeNamespaceName(member.DeclaringType);
 		}
 
-		private static string GetFullNamespaceName(MemberInfo member)
-		{
+		/// <summary>
+		/// Returns the full namespace name of a member
+		/// </summary>
+		/// <param name="member">The member</param>
+		/// <returns>The full namespace name</returns>
+		private static string GetFullNamespaceName(MemberInfo member) {
 			return GetTypeNamespaceName(member.ReflectedType);
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
-		public static string GetTypeName(Type type)
-        {
-            return GetTypeName(type, true);
-        }
+		/// <summary>
+		/// Get the type name of a type
+		/// </summary>
+		/// <param name="type">The type</param>
+		/// <returns>The type name</returns>
+		public static string GetTypeName(Type type) {
+			return GetTypeName(type, false);
+		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="type"></param>
-        /// <param name="UsePositionalNumber"></param>
-        /// <returns></returns>
-		public static string GetTypeName(Type type, bool UsePositionalNumber)
-        {
-            string result = "";
-            if (type.GetGenericArguments().Length > 0)
-            {
-                // HACK: bug in reflection - namespace sometimes returns null
-                string typeNamespace = null;
-                try
-                {
-                    typeNamespace = type.Namespace + ".";
-                }
-                catch (System.NullReferenceException) { }
+		/// <summary>
+		/// Returns the type name
+		/// </summary>
+		/// <param name="type">The type</param>
+		/// <param name="UsePositionalNumber"></param>
+		/// <returns>The type name</returns>
+		public static string GetTypeName(Type type, bool UsePositionalNumber) {
+			//TODO Nullable type
+			string result = "";
+			if (type.GetGenericArguments().Length > 0) {
+				// HACK: bug in reflection - namespace sometimes returns null
+				string typeNamespace = null;
+				try {
+					typeNamespace = type.Namespace + ".";
+				} catch (NullReferenceException) { }
 
-                if (typeNamespace == null)
-                {
-                    int lastDot = type.FullName.LastIndexOf(".");
-                    if (lastDot > -1)
-                        typeNamespace = type.FullName.Substring(0, lastDot + 1);
-                    else
-                        typeNamespace = string.Empty;
-                }
-                //************ end of hack *************************
+				if (typeNamespace == null) {
+					int lastDot = type.FullName.LastIndexOf(".");
+					typeNamespace = lastDot > -1 ? type.FullName.Substring(0, lastDot + 1) : string.Empty;
+				}
+				//************ end of hack *************************
 
-                string typeName = String.Empty;
-                string typeBounds = String.Empty;
-                int lastSquareBracket = type.Name.LastIndexOf("[");
-                if (lastSquareBracket > -1)
-                {
-                    typeName = type.Name.Substring(0, lastSquareBracket);
-                    typeBounds = type.Name.Substring(lastSquareBracket);
-                    typeBounds = typeBounds.Replace(",", ",0:").Replace("[,", "[0:,");
-                }
-                else
-                {
-                    typeName = type.Name;
-                }
+				string typeName;
+				string typeBounds = String.Empty;
+				int lastSquareBracket = type.Name.LastIndexOf("[");
+				if (lastSquareBracket > -1) {
+					typeName = type.Name.Substring(0, lastSquareBracket);
+					typeBounds = type.Name.Substring(lastSquareBracket);
+					typeBounds = typeBounds.Replace(",", ",0:").Replace("[,", "[0:,");
+				} else if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>)) {
+					Type[] types = type.GetGenericArguments();
+					typeName = types[0].Name;
+					type = types[0];
+				} else {
+					typeName = type.Name;
+				}
 
-                int genParmCountPos = typeName.IndexOf("`");
-                if (genParmCountPos > -1)
-                    typeName = typeName.Substring(0, genParmCountPos);
+				int genParmCountPos = typeName.IndexOf("`");
+				if (genParmCountPos > -1)
+					typeName = typeName.Substring(0, genParmCountPos);
 
-                result = String.Concat(typeNamespace, typeName, GetTypeArgumentsList(type), typeBounds);
-            }
-            else
-            {
-                if (type.ContainsGenericParameters)
-                {
-                    if (type.HasElementType)
-                    {
-                        Type eleType = type.GetElementType();
-                        System.Diagnostics.Debug.Write(eleType.GenericParameterPosition.ToString());
-                        if (UsePositionalNumber)
-                        {
-                            result = "`" + eleType.GenericParameterPosition.ToString();
-                        }
-                        else
-                        {
-                            result = eleType.Name;
-                        }
+				result = String.Concat(typeNamespace, typeName, GetTypeArgumentsList(type), typeBounds);
+			} else {
+				if (type.ContainsGenericParameters) {
+					if (type.HasElementType) {
+						Type eleType = type.GetElementType();
+						if (UsePositionalNumber) {
+							result = "`" + eleType.GenericParameterPosition;
+						} else {
+							result = eleType.Name;
+						}
 
-                        if (type.IsArray)
-                        {
-                            int rank = type.GetArrayRank();
-                            result += "[";
-                            if (rank > 1)
-                            {
-                                int i = 0;
-                                while (i < rank)
-                                {
-                                    if (i > 0) result += ",";
-                                    result += "0:";
-                                    i++;
-                                }
-                            }
-                            result += "]";
-                        }
-                        else if (type.IsByRef)
-                        {
-                            result += "@";
-                        }
-                        else if (type.IsPointer)
-                        {
-                            result += "*";
-                        }
-                    }
-                    else
-                    {
-                        if (UsePositionalNumber)
-                        {
-                            result = "`" + type.GenericParameterPosition.ToString();
-                        }
-                        else
-                        {
-                            result = type.Name;
-                        }
-                    }
-                }
-                else
-                {
-                    result = type.FullName.Replace("&", "").Replace('+', '.');
-                }
-            }
-            return result;
-        }
+						if (type.IsArray) {
+							int rank = type.GetArrayRank();
+							result += "[";
+							if (rank > 1) {
+								int i = 0;
+								while (i < rank) {
+									if (i > 0) result += ",";
+									result += "0:";
+									i++;
+								}
+							}
+							result += "]";
+						} else if (type.IsByRef) {
+							result += "@";
+						} else if (type.IsPointer) {
+							result += "*";
+						}
+					} else {
+						if (UsePositionalNumber) {
+							result = "`" + type.GenericParameterPosition;
+						} else {
+							result = type.Name;
+						}
+					}
+				} else {
+					result = type.FullName.Replace("&", "").Replace('+', '.');
+				}
+			}
+			return result;
+		}
 
-        private static string GetTypeArgumentsList(Type type)
-        {
-            StringBuilder argList = new StringBuilder();
-            int i = 0;
+		/// <summary>
+		/// Get the generic argument list of a type
+		/// </summary>
+		/// <param name="type">The type</param>
+		/// <returns>The generic argument list</returns>
+		private static string GetTypeArgumentsList(Type type) {
+			StringBuilder argList = new StringBuilder();
+			int i = 0;
 
-            //Append number of generic parameters to be able to link to return type
-            /*argList.Append('`');
-            argList.Append(type.GetGenericArguments().Length);*/
+			foreach (Type argType in type.GetGenericArguments()) {
+				if (i == 0) {
+					argList.Append('{');
+				} else {
+					argList.Append(',');
+				}
 
-            foreach (Type argType in type.GetGenericArguments())
-            {
-                if (i == 0)
-                {
-                    argList.Append('{');
-                }
-                else
-                {
-                    argList.Append(',');
-                }
+				if (argType.GetGenericArguments().Length > 0 | argType.HasElementType) {
+					argList.Append(GetTypeName(argType));
+				} else if (argType.ContainsGenericParameters) {
+					argList.Append(argType.Name);
+				} else {
+					argList.Append(argType.FullName);
+				}
 
-                if (argType.GetGenericArguments().Length > 0 | argType.HasElementType)
-                {
-                    argList.Append(GetTypeName(argType));
-                }
-                else if (argType.ContainsGenericParameters)
-                {
-                    argList.Append(argType.Name);
-                }
-                else
-                {
-                    argList.Append(argType.FullName);
-                }
+				++i;
+			}
 
-                ++i;
-            }
+			if (i > 0) {
+				argList.Append('}');
+			}
 
-            if (i > 0)
-            {
-                argList.Append('}');
-            }
+			// XML Documentation file appends a "@" to reference and out types, not a "&"
+			argList.Replace('&', '@');
+			argList.Replace('+', '.');
 
-            // XML Documentation file appends a "@" to reference and out types, not a "&"
-            argList.Replace('&', '@');
-            argList.Replace('+', '.');
+			return argList.ToString();
+		}
 
-            return argList.ToString();
-        }
-
-        /// <summary>
-        /// Return a string representation of method parameters
-        /// </summary>
-        /// <param name="method">The method</param>
-        /// <returns>String representation</returns>
-		private static string GetParameterList(MethodBase method)
-		{
+		/// <summary>
+		/// Return a string representation of method parameters
+		/// </summary>
+		/// <param name="method">The method</param>
+		/// <returns>String representation of the method parameters</returns>
+		private static string GetParameterList(MethodBase method) {
 			ParameterInfo[] parameters = method.GetParameters();
 			StringBuilder paramList = new StringBuilder();
 
 			int i = 0;
 
-			foreach (ParameterInfo parameter in parameters)
-			{
-				if (i == 0)
-				{
+			foreach (ParameterInfo parameter in parameters) {
+				if (i == 0) {
 					paramList.Append('(');
-				}
-				else
-				{
+				} else {
 					paramList.Append(',');
 				}
 
 				Type paramType = parameter.ParameterType;
-				paramList.Append(GetTypeName(paramType, true));
-                if (paramType.IsByRef)
-                    paramList.Append('@');
+				paramList.Append(GetTypeName(paramType, false));
+				if (paramType.IsByRef)
+					paramList.Append('@');
 
 				++i;
 			}
 
-			if (i > 0)
-			{
+			if (i > 0) {
 				paramList.Append(')');
 			}
 
-            if (method.ContainsGenericParameters)
-                paramList.Replace("`", "``");
+			if (method.ContainsGenericParameters)
+				paramList.Replace("`", "``");
 
 			return paramList.ToString();
 		}

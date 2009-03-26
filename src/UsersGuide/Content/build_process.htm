@@ -10,8 +10,7 @@
 	<body class="dtBODY" id="bodyID" onload="InitTitle()">
 		<div id="nstext">
 			<h3 class="dtH3">Using NAnt</h3>
-			<p>paragraph
-			</p>
+			<p>No tutorial available yet. You can contribute a tutorial by sending a <a href="mailto:ndoc3-helpfeedback@lists.sourceforge.net?subject=NDoc3 NAnt Tutorial Contrib">mail</a>.</p>
 			<h3 class="dtH3">Using VS.NET Build Events</h3>
 			<p>Build events can be used to invoke NDoc3 when build a VS.NET solution. Because 
 				NDoc3 builds can be time consuming it is recommended that they only be included 
@@ -34,7 +33,7 @@
 			<BLOCKQUOTE dir="ltr" style="MARGIN-RIGHT: 0px">
 				<pre>IF NOT %1 == Release GOTO end
 
-"%ProgramFiles%\NDoc3 2.0\bin\net\2.0\NDoc3Console.exe" -recurse="%2bin\%1"
+"%ProgramFiles%\NDoc3\bin\NDoc3Console.exe" -recurse="%2bin\%1"
 
 :end</pre>
 			</BLOCKQUOTE>
