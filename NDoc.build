@@ -10,8 +10,8 @@
     <property name="build.number" value="${math::abs(math::floor(timespan::get-total-days(datetime::now() - datetime::parse('01/01/2000'))))}" />
     <property name="build.dir" value="${nant.project.basedir}/bin" readonly="false" />
     <!-- Include helpers -->
-    <include buildfile="ndoc3.build.include" />
-    <include buildfile="ndoc3.build.package" />
+    <include buildfile="ndoc.build.include" />
+    <include buildfile="ndoc.build.package" />
     <!-- Targets that should always be executed -->
     <call target="set-build-configuration" />
     <call target="set-framework-configuration" />
@@ -32,8 +32,8 @@
     -->
     <target name="compile-build" description="Compile current build configuration for all supports target frameworks">
         <echo message="Compiling the ${current.build.config} build configuration for all supported target frameworks." />
-        <!-- 
-            build .NET Framework 1.0 version if both the Framework and SDK are available 
+        <!--
+            build .NET Framework 1.0 version if both the Framework and SDK are available
         -->
         <if test="${framework::exists('net-1.0')}">
             <if test="${framework::sdk-exists('net-1.0')}">
@@ -57,8 +57,8 @@
                 <echo message="The .NET Framework 1.0 is not available. Build skipped." />
             </if>
         </if>
-        <!-- 
-            build .NET Framework 1.1 version if both Framework and SDK are available 
+        <!--
+            build .NET Framework 1.1 version if both Framework and SDK are available
         -->
         <if test="${framework::exists('net-1.1')}">
             <if test="${framework::sdk-exists('net-1.1')}">
@@ -82,8 +82,8 @@
                 <echo message="The .NET Framework 1.1 is not available. Build skipped." />
             </if>
         </if>
-        <!-- 
-            build .NET Framework 2.0 version if both Framework and SDK are available 
+        <!--
+            build .NET Framework 2.0 version if both Framework and SDK are available
         -->
         <if test="${framework::exists('net-2.0')}">
             <if test="${framework::sdk-exists('net-2.0')}">
@@ -107,8 +107,33 @@
                 <echo message="The .NET Framework 2.0 is not available. Build skipped." />
             </if>
         </if>
-        <!-- 
-            build Mono 1.0 version if both Framework and SDK are available 
+        <!--
+            build .NET Framework 3.5 version if both Framework and SDK are available
+        -->
+        <if test="${framework::exists('net-3.5')}">
+            <if test="${framework::sdk-exists('net-3.5')}">
+                <call target="set-net-3.5-framework-configuration" />
+                <call target="compile" />
+            </if>
+            <if test="${not framework::sdk-exists('net-3.5')}">
+                <if test="${property::exists('project.build.package') and project.build.package}">
+                    <fail message="The .NET Framework SDK 3.5 is not available." />
+                </if>
+                <if test="${not property::exists('project.build.package') or not project.build.package}">
+                    <echo message="The .NET Framework SDK 3.5 is not available. Build skipped." />
+                </if>
+            </if>
+        </if>
+        <if test="${not framework::exists('net-3.5')}">
+            <if test="${property::exists('project.build.package') and project.build.package}">
+                <fail message="The .NET Framework 3.5 is not available." />
+            </if>
+            <if test="${not property::exists('project.build.package') or not project.build.package}">
+                <echo message="The .NET Framework 3.5 is not available. Build skipped." />
+            </if>
+        </if>
+        <!--
+            build Mono 1.0 version if both Framework and SDK are available
         -->
         <if test="${framework::exists('mono-1.0')}">
             <if test="${framework::sdk-exists('mono-1.0')}">
@@ -132,8 +157,8 @@
                 <echo message="Mono 1.0 is not available. Build skipped." />
             </if>
         </if>
-        <!-- 
-            build Mono 2.0 version if both Framework and SDK are available 
+        <!--
+            build Mono 2.0 version if both Framework and SDK are available
         -->
         <if test="${framework::exists('mono-2.0')}">
             <if test="${framework::sdk-exists('mono-2.0')}">

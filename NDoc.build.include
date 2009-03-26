@@ -57,7 +57,7 @@
 		</if>
 	</target>
 	<!--
-	
+
 	-->
 	<target name="check-current-bin-dir">
 		<if test="${not property::exists('current.bin.dir')}">
@@ -66,7 +66,7 @@
 		<mkdir dir="${current.bin.dir}" />
 	</target>
 	<!--
-	
+
 	-->
 	<target name="check-current-build-debug">
 		<if test="${not property::exists('current.build.debug')}">
@@ -74,7 +74,7 @@
 		</if>
 	</target>
 	<!--
-	
+
 	-->
 	<target name="check-current-build-defines">
 		<if test="${not property::exists('current.build.defines')}">
@@ -82,7 +82,7 @@
 		</if>
 	</target>
 	<!--
-	
+
 	-->
 	<target name="check-current-build-optimize">
 		<if test="${not property::exists('current.build.optimize')}">
@@ -90,7 +90,7 @@
 		</if>
 	</target>
 	<!--
-	
+
 	-->
 	<target name="check-current-sdkdoc-dir">
 		<if test="${not property::exists('current.sdkdoc.dir')}">
@@ -99,7 +99,7 @@
 		<mkdir dir="${sdkdoc.dir}" />
 	</target>
 	<!--
-	
+
 	-->
 	<target name="check-current-sdkdoc-debug">
 		<if test="${not property::exists('current.sdkdoc.debug')}">
@@ -107,7 +107,7 @@
 		</if>
 	</target>
 	<!--
-	
+
 	-->
 	<target name="check-current-build-config">
 		<if test="${not property::exists('current.build.config')}">
@@ -120,7 +120,7 @@
 		</if>
 	</target>
 	<!--
-	
+
 	-->
 	<!-- Targets for setting up the environment -->
 	<target name="set-build-configuration" depends="check-current-build-config">
@@ -130,37 +130,43 @@
 		<call target="set-${current.build.config}-build-configuration" />
 	</target>
 	<!--
-	
+
 	-->
 	<target name="set-debug-build-configuration">
 		<property name="build.debug" value="true" readonly="false" />
 		<property name="build.defines" value="DEBUG,TRACE" readonly="false" />
 		<property name="build.optimize" value="false" readonly="false" />
+		<!-- do not treat obsolete warnings as error on .NET 2.0 -->
+		<!-- do not treat usage of AssemblyKeyFile attribute as error on .NET 2.0 -->
+		<property name="build.nowarn" value="0618,1699"/>
 		<property name="sdkdoc.debug" value="false" readonly="false" />
 		<property name="current.build.config" value="debug" readonly="false" />
 		<call target="set-build-configuration-flags" />
 	</target>
 	<!--
-	
+
 	-->
 	<target name="set-release-build-configuration">
 		<property name="build.debug" value="false" readonly="false" />
 		<property name="build.defines" value="TRACE,OFFICIAL_RELEASE" readonly="false" />
 		<property name="build.optimize" value="true" readonly="false" />
+		<!-- do not treat obsolete warnings as error on .NET 2.0 -->
+		<!-- do not treat usage of AssemblyKeyFile attribute as error on .NET 2.0 -->
+		<property name="build.nowarn" value="0618,1699"/>
 		<property name="sdkdoc.debug" value="false" readonly="false" />
 		<property name="current.build.config" value="release" readonly="false" />
 		<call target="set-build-configuration-flags" />
 	</target>
 	<!--
-	
+
 	-->
 	<target name="set-build-configuration-flags" depends="check-current-build-config">
 		<property name="current.build.config.debug" value="false" readonly="false" />
 		<property name="current.build.config.release" value="false" readonly="false" />
 		<property name="current.build.config.${current.build.config}" value="true" readonly="false" />
 	</target>
-	<!-- 
-	
+	<!--
+
 	-->
 		<target name="set-framework-configuration">
 			<if test="${not(target::exists('set-'+framework::get-target-framework()+'-framework-configuration'))}">
@@ -176,6 +182,7 @@
 		<property name="current.build.debug" value="${build.debug}" dynamic="true" readonly="false" />
 		<property name="current.build.defines" value="${build.defines},NET,NET_1_0" dynamic="true" readonly="false" />
 		<property name="current.build.optimize" value="${build.optimize}" dynamic="true" readonly="false" />
+		<property name="current.build.nowarn" value="${build.nowarn}" dynamic="true" readonly="false" />
 		<property name="current.bin.dir" value="${build.dir}/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
 		<property name="current.sdkdoc.dir" value="${nant.project.basedir}/doc/sdk/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
 		<property name="current.sdkdoc.debug" value="${sdkdoc.debug}" dynamic="true" readonly="false" />
@@ -188,6 +195,7 @@
 		<property name="current.build.debug" value="${build.debug}" dynamic="true" readonly="false" />
 		<property name="current.build.defines" value="${build.defines},NET,NET_1_1" dynamic="true" readonly="false" />
 		<property name="current.build.optimize" value="${build.optimize}" dynamic="true" readonly="false" />
+		<property name="current.build.nowarn" value="${build.nowarn}" dynamic="true" readonly="false" />
 		<property name="current.bin.dir" value="${build.dir}/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
 		<property name="current.sdkdoc.dir" value="${nant.project.basedir}/doc/sdk/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
 		<property name="current.sdkdoc.debug" value="${sdkdoc.debug}" dynamic="true" readonly="false" />
@@ -200,6 +208,18 @@
 		<property name="current.build.debug" value="${build.debug}" dynamic="true" readonly="false" />
 		<property name="current.build.defines" value="${build.defines},NET,NET_2_0" dynamic="true" readonly="false" />
 		<property name="current.build.optimize" value="${build.optimize}" dynamic="true" readonly="false" />
+		<property name="current.build.nowarn" value="${build.nowarn}" dynamic="true" readonly="false" />
+		<property name="current.bin.dir" value="${build.dir}/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
+		<property name="current.sdkdoc.dir" value="${nant.project.basedir}/doc/sdk/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
+		<property name="current.sdkdoc.debug" value="${sdkdoc.debug}" dynamic="true" readonly="false" />
+	</target>
+
+	<target name="set-net-3.5-framework-configuration" depends="check-build-dir, check-current-build-config, check-build-debug, check-build-defines, check-build-optimize">
+		<property name="nant.settings.currentframework" value="net-3.5" />
+		<property name="current.build.debug" value="${build.debug}" dynamic="true" readonly="false" />
+		<property name="current.build.defines" value="${build.defines},NET,NET_3_5" dynamic="true" readonly="false" />
+		<property name="current.build.optimize" value="${build.optimize}" dynamic="true" readonly="false" />
+		<property name="current.build.nowarn" value="${build.nowarn}" dynamic="true" readonly="false" />
 		<property name="current.bin.dir" value="${build.dir}/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
 		<property name="current.sdkdoc.dir" value="${nant.project.basedir}/doc/sdk/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
 		<property name="current.sdkdoc.debug" value="${sdkdoc.debug}" dynamic="true" readonly="false" />
@@ -212,6 +232,7 @@
 		<property name="current.build.debug" value="${build.debug}" dynamic="true" readonly="false" />
 		<property name="current.build.defines" value="${build.defines},NETCF,NETCF_1_0" dynamic="true" readonly="false" />
 		<property name="current.build.optimize" value="${build.optimize}" dynamic="true" readonly="false" />
+		<property name="current.build.nowarn" value="${build.nowarn}" dynamic="true" readonly="false" />
 		<property name="current.bin.dir" value="${build.dir}/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
 		<property name="current.sdkdoc.dir" value="${nant.project.basedir}/doc/sdk/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
 		<property name="current.sdkdoc.debug" value="${sdkdoc.debug}" dynamic="true" readonly="false" />
@@ -224,6 +245,7 @@
 		<property name="current.build.debug" value="${build.debug}" dynamic="true" readonly="false" />
 		<property name="current.build.defines" value="${build.defines},MONO,MONO_1_0" dynamic="true" readonly="false" />
 		<property name="current.build.optimize" value="${build.optimize}" dynamic="true" readonly="false" />
+		<property name="current.build.nowarn" value="${build.nowarn}" dynamic="true" readonly="false" />
 		<property name="current.bin.dir" value="${build.dir}/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
 		<property name="current.sdkdoc.dir" value="${nant.project.basedir}/doc/sdk/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
 		<property name="current.sdkdoc.debug" value="${sdkdoc.debug}" dynamic="true" readonly="false" />
@@ -236,6 +258,7 @@
 		<property name="current.build.debug" value="${build.debug}" dynamic="true" readonly="false" />
 		<property name="current.build.defines" value="${build.defines},MONO,MONO_2_0" dynamic="true" readonly="false" />
 		<property name="current.build.optimize" value="${build.optimize}" dynamic="true" readonly="false" />
+		<property name="current.build.nowarn" value="${build.nowarn}" dynamic="true" readonly="false" />
 		<property name="current.bin.dir" value="${build.dir}/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
 		<property name="current.sdkdoc.dir" value="${nant.project.basedir}/doc/sdk/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
 		<property name="current.sdkdoc.debug" value="${sdkdoc.debug}" dynamic="true" readonly="false" />
@@ -248,6 +271,7 @@
 		<property name="current.build.debug" value="${build.debug}" dynamic="true" readonly="false" />
 		<property name="current.build.defines" value="${build.defines},SSCLI,SSCLI_1_0" dynamic="true" readonly="false" />
 		<property name="current.build.optimize" value="${build.optimize}" dynamic="true" readonly="false" />
+		<property name="current.build.nowarn" value="${build.nowarn}" dynamic="true" readonly="false" />
 		<property name="current.bin.dir" value="${build.dir}/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
 		<property name="current.sdkdoc.dir" value="${nant.project.basedir}/doc/sdk/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
 		<property name="current.sdkdoc.debug" value="${sdkdoc.debug}" dynamic="true" readonly="false" />
@@ -359,7 +383,7 @@
 				readonly="false" />
 		</if>
 	</target>
-	<!-- 
+	<!--
 	clean-up targets
 	-->
 	<target name="clean-current-bin-dir" description="Checks the current bin directory and cleans it up.">
@@ -371,7 +395,7 @@
 		</delete>
 	</target>
 	<!--
-	
+
 	-->
 	<target name="clean-build-dir" depends="check-build-dir" description="Deletes current build configuration.">
 		<delete dir="${build.dir}" />

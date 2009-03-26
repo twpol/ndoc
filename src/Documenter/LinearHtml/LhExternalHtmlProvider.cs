@@ -1,6 +1,6 @@
 using System;
 
-namespace NDoc.Documenter.LinearHtml
+namespace NDoc3.Documenter.LinearHtml
 {
 	/// <summary>
 	/// Used as an extension object to the xslt processor to allow

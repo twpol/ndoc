@@ -1,7 +1,10 @@
 <?xml version="1.0"?>
 <project name="NDoc3Gui" default="compile">
 	<target name="compile">
-		<csc target="winexe" output="${current.bin.dir}/${nant.project.name}.exe" debug="${current.build.debug}" optimize="${current.build.optimize}" unsafe="false" win32icon="NDoc3.ico" checked="false" define="${current.build.defines}">
+		<csc target="winexe" output="${current.bin.dir}/${nant.project.name}.exe" debug="${current.build.debug}" optimize="${current.build.optimize}" unsafe="false" win32icon="NDoc.ico" checked="false" define="${current.build.defines}">
+      <nowarn>
+          <warning number="${current.build.nowarn}" />
+      </nowarn>
 			<sources>
 				<include name="**/*.cs" />
 				<include name="../CommonAssemblyInfo.cs" />
