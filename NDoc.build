@@ -9,7 +9,7 @@
     <property name="project.build.config" value="debug" readonly="false" />
     <property name="project.build.package" value="false" readonly="false" />
     <property name="build.number" value="${math::abs(math::floor(timespan::get-total-days(datetime::now() - datetime::parse('01/01/2000'))))}" />
-    <property name="build.dir" value="${nant.project.basedir}/bin" readonly="false" />
+    <property name="build.dir" value="${project::get-base-directory()}/bin" readonly="false" />
     <!-- Include helpers -->
     <include buildfile="ndoc.build.include" />
     <include buildfile="ndoc.build.package" />
@@ -196,7 +196,7 @@
         <!-- ensure the bin dir has been created, and clean it up if needed -->
         <call target="clean-current-bin-dir" />
         <!-- copy the ndoc3 signing key file to the bin dir -->
-        <copy file="${nant.project.basedir}/ndoc3.snk" todir="${current.bin.dir}" />
+        <copy file="${project::get-base-directory()}/ndoc3.snk" todir="${current.bin.dir}" />
         <!-- build all projects -->
         <nant buildfile="src/ExtendedUI/ExtendedUI.build" target="compile" inheritall="true" />
         <nant buildfile="src/Core/Core.build" target="compile" inheritall="true" />
