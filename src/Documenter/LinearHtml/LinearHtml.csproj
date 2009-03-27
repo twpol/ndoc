@@ -29,7 +29,7 @@
     <OldToolsVersion>2.0</OldToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <OutputPath>..\..\..\build\VS.NET2008\Debug\</OutputPath>
+    <OutputPath>..\..\..\bin\VS.NET2008\Debug\</OutputPath>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <BaseAddress>854523904</BaseAddress>
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>

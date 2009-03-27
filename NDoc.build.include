@@ -138,7 +138,7 @@
 		<property name="build.optimize" value="false" readonly="false" />
 		<!-- do not treat obsolete warnings as error on .NET 2.0 -->
 		<!-- do not treat usage of AssemblyKeyFile attribute as error on .NET 2.0 -->
-		<property name="build.nowarn" value="0618,1699"/>
+		<property name="build.nowarn" value="0618,1699,1591"/>
 		<property name="sdkdoc.debug" value="false" readonly="false" />
 		<property name="current.build.config" value="debug" readonly="false" />
 		<call target="set-build-configuration-flags" />
@@ -184,7 +184,7 @@
 		<property name="current.build.optimize" value="${build.optimize}" dynamic="true" readonly="false" />
 		<property name="current.build.nowarn" value="${build.nowarn}" dynamic="true" readonly="false" />
 		<property name="current.bin.dir" value="${build.dir}/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
-		<property name="current.sdkdoc.dir" value="${nant.project.basedir}/doc/sdk/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
+		<property name="current.sdkdoc.dir" value="${project::get-base-directory()}/doc/sdk/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
 		<property name="current.sdkdoc.debug" value="${sdkdoc.debug}" dynamic="true" readonly="false" />
 	</target>
 	<!--

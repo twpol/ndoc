@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <project name="NDoc3.Documenter.Msdn2" default="compile">
 	<target name="compile">
-		<csc target="library" warnaserror="true" output="${current.bin.dir}/${nant.project.name}.dll" debug="${current.build.debug}" optimize="${current.build.optimize}" unsafe="false" checked="false" define="${current.build.defines}" doc="${current.bin.dir}/${nant.project.name}.xml">
+		<csc target="library" warnaserror="true" output="${current.bin.dir}/${project::get-name()}.dll" debug="${current.build.debug}" optimize="${current.build.optimize}" unsafe="false" checked="false" define="${current.build.defines}" doc="${current.bin.dir}/${project::get-name()}.xml">
       <nowarn>
           <warning number="${current.build.nowarn}" />
       </nowarn>

@@ -1,5 +1,6 @@
 <?xml version="1.0" ?>
 <project name="ndoc3" default="compile" xmlnds="http://tempuri.org/nant-vs.xsd">
+
     <!-- Global project settings -->
     <property name="project.name" value="ndoc3" />
     <property name="project.version" value="2.0" />
@@ -12,9 +13,14 @@
     <!-- Include helpers -->
     <include buildfile="ndoc.build.include" />
     <include buildfile="ndoc.build.package" />
+
+<!-- require 3.5 for building -->
+		<property name="nant.settings.currentframework" value="net-3.5" />
+
     <!-- Targets that should always be executed -->
     <call target="set-build-configuration" />
     <call target="set-framework-configuration" />
+
     <!--
 
     -->
