@@ -183,6 +183,7 @@ namespace NDoc3.Gui
 			imlcol.Add(new Icon(assembly.GetManifestResourceStream("NDoc3.Gui.graphics.View.ico")));
 
 			this.startingProjectFilename = startingProjectFilename;
+            this.SizeChanged += new EventHandler(MainForm_SizeChanged);
 		}
 
 		/// <summary>
@@ -191,6 +192,8 @@ namespace NDoc3.Gui
 		/// <param name="e">event arguments</param>
 		protected override void OnLoad(EventArgs e)
 		{
+            base.OnLoad(e); // must be first due to AutoScaling (Bug #2713991)
+
 			project = new Project();
 			project.Modified += new ProjectModifiedEventHandler(OnProjectModified);
 			project.ActiveConfigChanged += new EventHandler(project_ActiveConfigChanged);
@@ -256,8 +259,6 @@ namespace NDoc3.Gui
 			this.traceWindow1.TraceText = string.Format( "[NDoc3 version {0}]\n", Assembly.GetExecutingAssembly().GetName().Version );
 
 			m_buildWorker = new BuildWorker( this );
-
-			base.OnLoad (e);
 		}
 
 		#endregion // Constructors / Dispose
@@ -976,6 +977,8 @@ namespace NDoc3.Gui
 		            this.Location  = new Point(screen.WorkingArea.Width-100, this.Location.X);
 
 		        this.Size = (Size)settings.GetSetting("gui", "size", new Size(screen.WorkingArea.Width / 3, screen.WorkingArea.Height - 20));
+                Trace.Write(string.Format("Read window size {0}", this.Size));
+
 		        // size the window to the working area if it is larger (can happen when resolution changes)
 		        if ( this.Height > screen.WorkingArea.Height )
 		            this.Height = screen.WorkingArea.Height;
@@ -1034,7 +1037,9 @@ namespace NDoc3.Gui
 				{
 					settings.SetSetting( "gui", "maximized", false );
 					settings.SetSetting( "gui", "location", this.Location );
-					settings.SetSetting( "gui", "size", Unscale(this.Size)  );
+				    Size size = Unscale(this.Size);
+                    Trace.Write(string.Format("Writing window size {0}", size));
+				    settings.SetSetting( "gui", "size", size  );
 				}
 				settings.SetSetting( "gui", "viewTrace", this.traceWindow1.Visible );
 				settings.SetSetting( "gui", "traceWindowHeight", UnscaleHeight(this.traceWindow1.Height) );
@@ -1052,6 +1057,11 @@ namespace NDoc3.Gui
 				settings.SetSettingList( "gui", "mru", "project", recentProjectFilenames );			
 			}
 		}
+
+        void MainForm_SizeChanged(object sender, EventArgs e)
+        {
+            Trace.Write(string.Format("Window Size change to {0} by:\n{1}", this.Size, new StackTrace()));
+        }
 
         private Size Unscale(Size size)
         {
