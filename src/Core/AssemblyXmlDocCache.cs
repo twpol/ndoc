@@ -27,6 +27,8 @@ namespace NDoc3.Core.Reflection
 	/// </summary>
 	internal class AssemblyXmlDocCache
 	{
+		// TODO (EE): change to use Full Qualified IDs for lookup or use multiple caches (1 per assembly)
+
 		private Hashtable docs;
 		private Hashtable excludeTags;
 
@@ -55,11 +57,11 @@ namespace NDoc3.Core.Reflection
 		public void CacheDocFile(string fileName)
 		{
 			XmlTextReader reader = new XmlTextReader(fileName);
-			reader.WhitespaceHandling=WhitespaceHandling.All;
+			reader.WhitespaceHandling = WhitespaceHandling.All;
 			CacheDocs(reader);
 		}
-		
-		
+
+
 		/// <summary>
 		/// Cache the xmld docs into a hashtable for faster access.
 		/// </summary>
@@ -69,25 +71,18 @@ namespace NDoc3.Core.Reflection
 			object oMember = reader.NameTable.Add("member");
 			reader.MoveToContent();
 
-			while (!reader.EOF) 
-			{
-				if ((reader.NodeType == XmlNodeType.Element) && (reader.Name.Equals(oMember)))
-				{
+			while (!reader.EOF) {
+				if ((reader.NodeType == XmlNodeType.Element) && (reader.Name.Equals(oMember))) {
 					//Handles multidimensional arrays by replacing 0: from XML doc to the reflection type
-                    string ID = reader.GetAttribute("name").Replace("0:","");
+					string ID = reader.GetAttribute("name").Replace("0:", "");
 					string doc = reader.ReadInnerXml().Trim();
 					doc = PreprocessDoc(ID, doc);
-					if (docs.ContainsKey(ID))
-					{
+					if (docs.ContainsKey(ID)) {
 						Trace.WriteLine("Warning: Multiple <member> tags found with id=\"" + ID + "\"");
-					}
-					else
-					{
+					} else {
 						docs.Add(ID, doc);
 					}
-				}
-				else
-				{
+				} else {
 					reader.Read();
 				}
 			}
@@ -102,18 +97,17 @@ namespace NDoc3.Core.Reflection
 		private string PreprocessDoc(string id, string doc)
 		{
 			//create an XmlDocument containg the memeber's documentation
-			XmlTextReader reader=new XmlTextReader(new StringReader("<root>" + doc + "</root>"));
-			reader.WhitespaceHandling=WhitespaceHandling.All;
-			
+			XmlTextReader reader = new XmlTextReader(new StringReader("<root>" + doc + "</root>"));
+			reader.WhitespaceHandling = WhitespaceHandling.All;
+
 			XmlDocument xmldoc = new XmlDocument();
-			xmldoc.PreserveWhitespace=true;
+			xmldoc.PreserveWhitespace = true;
 			xmldoc.Load(reader);
 
 
-			if (xmldoc.DocumentElement != null)
-			{
+			if (xmldoc.DocumentElement != null) {
 				CleanupNodes(id, xmldoc.DocumentElement.ChildNodes);
-			
+
 				ProcessSeeLinks(id, xmldoc.DocumentElement.ChildNodes);
 				return xmldoc.DocumentElement.InnerXml;
 			}
@@ -127,32 +121,24 @@ namespace NDoc3.Core.Reflection
 		/// <param name="nodes">list of nodes</param>
 		private void CleanupNodes(string id, XmlNodeList nodes)
 		{
-			foreach (XmlNode node in nodes)
-			{
-				if (node.NodeType == XmlNodeType.Element) 
-				{
-					if (node.Name == "exclude")
-					{
+			foreach (XmlNode node in nodes) {
+				if (node.NodeType == XmlNodeType.Element) {
+					if (node.Name == "exclude") {
 						excludeTags.Add(id, null);
 					}
-					
-					if (node.Name == "code")
-					{
+
+					if (node.Name == "code") {
 						FixupCodeTag(node);
-					}
-					else
-					{
+					} else {
 						CleanupNodes(id, node.ChildNodes);
 					}
 
 					// Trim attribute values...
-					foreach(XmlNode attr in node.Attributes)
-					{
-						attr.Value=attr.Value.Trim();
+					foreach (XmlNode attr in node.Attributes) {
+						attr.Value = attr.Value.Trim();
 					}
 				}
-				if (node.NodeType == XmlNodeType.Text)
-				{
+				if (node.NodeType == XmlNodeType.Text) {
 					node.Value = node.Value.Replace("\t", "    ").Replace("\n", " ").Replace("\r", " ").Replace("        ", " ").Replace("    ", " ").Replace("   ", " ").Replace("  ", " ");
 				}
 			}
@@ -165,35 +151,28 @@ namespace NDoc3.Core.Reflection
 		private void FixupCodeTag(XmlNode node)
 		{
 			string codeText = node.InnerXml;
-			if (codeText.TrimStart(new[] {' '}).StartsWith("\r\n"))
-			{
-				codeText = codeText.TrimStart(new[] {' '}).Substring(2);
+			if (codeText.TrimStart(new[] { ' ' }).StartsWith("\r\n")) {
+				codeText = codeText.TrimStart(new[] { ' ' }).Substring(2);
 			}
 			codeText = codeText.Replace("\r\n", "\n");
 			codeText = codeText.Replace("\t", "    ");
-			string[] codeLines = codeText.Split(new[] {'\r', '\n'});
-			if (codeLines.Length > 0)
-			{
+			string[] codeLines = codeText.Split(new[] { '\r', '\n' });
+			if (codeLines.Length > 0) {
 				int numberOfCharsToRemove = int.MaxValue;
-				for (int index = 0; index < codeLines.Length; index++)
-				{
+				for (int index = 0; index < codeLines.Length; index++) {
 					string testLine = codeLines[index];
 					int leadingWhitespaceChars = 0; //number of chars at start of line
-					while (leadingWhitespaceChars < testLine.Length && testLine.Substring(leadingWhitespaceChars, 1) == " ")
-					{
+					while (leadingWhitespaceChars < testLine.Length && testLine.Substring(leadingWhitespaceChars, 1) == " ") {
 						leadingWhitespaceChars++;
 					}
-					if (numberOfCharsToRemove > leadingWhitespaceChars)
-					{
+					if (numberOfCharsToRemove > leadingWhitespaceChars) {
 						numberOfCharsToRemove = leadingWhitespaceChars;
 					}
 				}
 
-				if (numberOfCharsToRemove < int.MaxValue && numberOfCharsToRemove > 0)
-				{
+				if (numberOfCharsToRemove < int.MaxValue && numberOfCharsToRemove > 0) {
 
-					for (int index = 0; index < codeLines.Length; index++)
-					{
+					for (int index = 0; index < codeLines.Length; index++) {
 						if (numberOfCharsToRemove < codeLines[index].Length)
 							codeLines[index] = codeLines[index].Substring(numberOfCharsToRemove);
 						else
@@ -204,12 +183,9 @@ namespace NDoc3.Core.Reflection
 				string newtext = String.Join(Environment.NewLine, codeLines);
 
 				XmlAttribute escaped = node.Attributes["escaped"];
-				if (escaped!=null && escaped.Value=="true")
-				{
+				if (escaped != null && escaped.Value == "true") {
 					node.InnerText = newtext;
-				}
-				else
-				{
+				} else {
 					node.InnerXml = newtext;
 				}
 			}
@@ -225,11 +201,9 @@ namespace NDoc3.Core.Reflection
 		/// </remarks>
 		private void ProcessSeeLinks(string id, XmlNodeList nodes)
 		{
-			foreach (XmlNode node in nodes)
-			{
-				if (node.NodeType == XmlNodeType.Element) 
-				{
-					Hashtable linkTable=null;
+			foreach (XmlNode node in nodes) {
+				if (node.NodeType == XmlNodeType.Element) {
+					Hashtable linkTable = null;
 					MarkupSeeLinks(ref linkTable, id, node);
 				}
 			}
@@ -243,45 +217,35 @@ namespace NDoc3.Core.Reflection
 		/// <param name="node">an Xml Node containing a doc tag</param>
 		private void MarkupSeeLinks(ref Hashtable linkTable, string id, XmlNode node)
 		{
-			if (node.LocalName=="see")
-			{
+			if (node.LocalName == "see") {
 				//we will only do this for crefs
 				XmlAttribute cref = node.Attributes["cref"];
-				if (cref !=null)
-				{
-					if (cref.Value==id) //self referencing tag
+				if (cref != null) {
+					if (cref.Value == id) //self referencing tag
 					{
 						XmlAttribute dup = node.OwnerDocument.CreateAttribute("nolink");
-						dup.Value="true";
+						dup.Value = "true";
 						node.Attributes.Append(dup);
-					}
-					else
-					{
-						if (linkTable==null)
-						{
+					} else {
+						if (linkTable == null) {
 							//assume an resonable initial table size,
 							//so we don't have to resize often.
 							linkTable = new Hashtable(16);
 						}
-						if (linkTable.ContainsKey(cref.Value))
-						{
+						if (linkTable.ContainsKey(cref.Value)) {
 							XmlAttribute dup = node.OwnerDocument.CreateAttribute("nolink");
-							dup.Value="true";
+							dup.Value = "true";
 							node.Attributes.Append(dup);
-						}
-						else
-						{
-							linkTable.Add(cref.Value,null);
+						} else {
+							linkTable.Add(cref.Value, null);
 						}
 					}
 				}
 			}
-				
+
 			//search this tags' children
-			foreach (XmlNode childnode in node.ChildNodes)
-			{
-				if (childnode.NodeType == XmlNodeType.Element) 
-				{
+			foreach (XmlNode childnode in node.ChildNodes) {
+				if (childnode.NodeType == XmlNodeType.Element) {
 					MarkupSeeLinks(ref linkTable, id, childnode);
 				}
 			}

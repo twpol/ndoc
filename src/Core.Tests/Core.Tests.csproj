@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Reflection\NDocXmlGeneratorTests.cs" />
     <Compile Include="Reflection\ReflectionEngineTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -66,6 +67,10 @@
     <ProjectReference Include="..\ExtendedUI\ExtendedUI.csproj">
       <Project>{0E14C115-C99D-49F7-A892-3AEF74320A61}</Project>
       <Name>ExtendedUI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Test\Test.csproj">
+      <Project>{087FF069-C495-4CE7-B999-06C2B5D311B9}</Project>
+      <Name>Test</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -16,12 +16,8 @@
 
 using System;
 using System.ComponentModel;
-using System.ComponentModel.Design;
-using System.Text;
-using System.Reflection;
 using System.Collections;
 using System.Drawing.Design;
-using System.Runtime.InteropServices;
 using System.Xml;
 using System.Diagnostics;
 using System.Windows.Forms;
@@ -40,6 +36,26 @@ namespace NDoc3.Core
 	[Editor(typeof(ReferencePathCollection.ReferencePathCollectionEditor), typeof(UITypeEditor))]
 	public class ReferencePathCollection : CollectionBase, ICustomTypeDescriptor
 	{
+//		/// <summary>
+//		/// Creates an empty collection
+//		/// </summary>
+//		public ReferencePathCollection()
+//		{}
+
+		/// <summary>
+		/// Creates a collection, filled with an initial list of reference paths
+		/// </summary>
+		public ReferencePathCollection(params ReferencePath[] referencePaths)
+		{
+			if (referencePaths != null)
+			{
+				foreach(ReferencePath rp in referencePaths)
+				{
+					Add(rp);
+				}
+			}
+		}
+
 		#region collection methods
 		
 		/// <summary>

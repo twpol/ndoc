@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:ndoc-schema" xmlns="urn:ndoc-schema" elementFormDefault="qualified">
-  
+
   <xs:element name="copyright">
     <xs:complexType>
       <xs:attribute name="text" type="xs:string" use="required"/>
       <xs:attribute name="href" type="xs:string" use="optional"/>
     </xs:complexType>
   </xs:element>
-  
+
   <xs:element name="threadsafety">
     <xs:complexType>
       <xs:attribute name="static" type="xs:boolean" use="required"/>
@@ -78,7 +78,7 @@
       <xs:attributeGroup ref="attributeAttributes"/>
     </xs:complexType>
   </xs:element>
-  
+
   <xs:element name="attribute">
     <xs:complexType>
       <xs:sequence>
@@ -184,7 +184,7 @@
       <xs:attribute name="unsafe" type="xs:boolean" use="optional"/>
     </xs:complexType>
   </xs:element>
-  
+
   <xs:element name="field">
     <xs:complexType>
       <xs:sequence maxOccurs="1" minOccurs="0">
@@ -227,7 +227,7 @@
       <xs:attribute name="declaringType" type="xs:string" use="optional"/>
     </xs:complexType>
   </xs:element>
-  
+
   <xs:element name="property">
     <xs:complexType>
       <xs:sequence>
@@ -347,7 +347,7 @@
       <xs:element ref="event" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
   </xs:group>
-  
+
   <xs:element name="structure">
     <xs:complexType>
       <xs:sequence maxOccurs="1" minOccurs="0">
@@ -504,6 +504,7 @@
   <xs:element name="assembly">
     <xs:complexType>
       <xs:sequence>
+        <xs:element ref="documentation" minOccurs="0" maxOccurs="1"/>
         <xs:group ref="attributeGroup" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="module" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
@@ -511,10 +512,11 @@
       <xs:attribute name="version" type="xs:string" use="optional"/>
     </xs:complexType>
   </xs:element>
-  
+
   <xs:element name="ndoc">
     <xs:complexType>
       <xs:sequence>
+        <xs:element ref="documentation" minOccurs="0" maxOccurs="1"/>
         <xs:element name="feedbackEmail" type="xs:string" maxOccurs="1" minOccurs="0"/>
         <xs:element ref="copyright" maxOccurs="1" minOccurs="0"/>
         <xs:element ref="threadsafety" maxOccurs="1" minOccurs="0"/>
