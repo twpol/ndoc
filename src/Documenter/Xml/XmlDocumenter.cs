@@ -62,7 +62,7 @@ namespace NDoc3.Documenter.Xml
 				{
 					MakeXmlFile(project, tempFileName);
 				}
-				catch (ReflectionEngine.ValidationException ex)
+				catch (ValidationException ex)
 				{
 					Trace.WriteLine("Validation failed: " + ex.Message);
 					Trace.WriteLine("Output XML anyway.");

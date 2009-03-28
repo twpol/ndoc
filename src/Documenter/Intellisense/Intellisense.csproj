@@ -122,6 +122,7 @@
     <Compile Include="StyleSheetCollection.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="xslt\StyleSheetLocation.cs" />
     <EmbeddedResource Include="xslt\assembly.xslt" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

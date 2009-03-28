@@ -22,6 +22,11 @@ namespace NDoc3.Core.Reflection
 
 		public AttributeUsageDisplayFilter(string documentedAttributesConfig)
 		{
+            if (documentedAttributesConfig == null)
+            {
+                return;
+            }
+
 			string[] filters = documentedAttributesConfig.Split(new[] {'|'});
 			foreach (string filter in filters)
 			{

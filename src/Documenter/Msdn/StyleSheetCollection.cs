@@ -17,7 +17,6 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 using System;
-using System.Text;
 using System.IO;
 using System.Collections;
 using System.Xml;
@@ -26,6 +25,7 @@ using System.Diagnostics;
 using System.Reflection;
 
 using NDoc3.Core;
+using NDoc3.Documenter.Msdn.xslt;
 
 namespace NDoc3.Documenter.Msdn
 {
@@ -43,15 +43,10 @@ namespace NDoc3.Documenter.Msdn
 		{
 			StyleSheetCollection stylesheets = new StyleSheetCollection();
 
-// Define this when you want to edit the stylesheets
-// without having to shutdown the application to rebuild.
-#if NO_RESOURCES
 			string resourceBase = "file://" + Path.GetFullPath(Path.Combine(System.Windows.Forms.Application.StartupPath, String.Format("..{0}..{0}..{0}Documenter{0}Msdn{0}xslt", Path.DirectorySeparatorChar)) );
-#else
-			string resourceBase = "NDoc3.Documenter.Msdn.xslt";
-#endif
+//			string resourceBase = "NDoc3.Documenter.Msdn.xslt";
 
-			XsltResourceResolver resolver = new XsltResourceResolver(resourceBase);
+            XsltResourceResolver resolver = new XsltResourceResolver(resourceBase, typeof(StyleSheetLocation));
 			resolver.ExtensibilityStylesheet=extensibilityStylesheet;
 			Trace.Indent();
 

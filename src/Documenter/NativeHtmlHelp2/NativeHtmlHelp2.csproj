@@ -191,6 +191,7 @@
     <Compile Include="TOCBuilder.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="xslt\StyleSheetLocation.cs" />
     <None Include="Engine\NamespaceMapping\NamespaceMap.xsx">
       <DependentUpon>NamespaceMap.xsd</DependentUpon>
     </None>

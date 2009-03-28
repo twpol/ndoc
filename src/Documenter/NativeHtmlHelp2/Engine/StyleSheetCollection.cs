@@ -26,6 +26,7 @@ using System.Diagnostics;
 using System.Reflection;
 
 using NDoc3.Core;
+using NDoc3.Documenter.NativeHtmlHelp2.xslt;
 
 namespace NDoc3.Documenter.NativeHtmlHelp2.Engine
 {
@@ -43,13 +44,10 @@ namespace NDoc3.Documenter.NativeHtmlHelp2.Engine
 		{
 			StyleSheetCollection stylesheets = new StyleSheetCollection();
 
-#if NO_RESOURCES
 			string resourceBase = "file://" + Path.GetFullPath(Path.Combine(System.Windows.Forms.Application.StartupPath, @"..\..\..\Documenter\NativeHtmlHelp2\xslt") );
-#else
-			string resourceBase = "NDoc3.Documenter.NativeHtmlHelp2.xslt";
-#endif
+//			string resourceBase = "NDoc3.Documenter.NativeHtmlHelp2.xslt";
 
-			XsltResourceResolver resolver = new XsltResourceResolver(resourceBase);
+			XsltResourceResolver resolver = new XsltResourceResolver(resourceBase, typeof(StyleSheetLocation));
 			resolver.ExtensibilityStylesheet=extensibiltyStylesheet;
 			Trace.Indent();
 

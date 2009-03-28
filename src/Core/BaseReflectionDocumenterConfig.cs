@@ -17,6 +17,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
 using System;
+using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing.Design;
@@ -41,6 +42,97 @@ namespace NDoc3.Core.Reflection
 	/// </remarks>
 	abstract public class BaseReflectionDocumenterConfig : BaseDocumenterConfig
 	{
+        #region Copy NDocXmlGenerator Helpers
+
+        private static void CopyFromProject(NDocXmlGeneratorParameters args, Project project)
+        {
+            foreach (AssemblySlashDoc assemblySlashDoc in project.AssemblySlashDocs)
+            {
+                if (assemblySlashDoc.Assembly.Path.Length > 0)
+                {
+                    string assemblyFileName = assemblySlashDoc.Assembly.Path;
+                    args.AssemblyFileNames.Add(assemblyFileName);
+                }
+                if (assemblySlashDoc.SlashDoc.Path.Length > 0)
+                {
+                    args.XmlDocFileNames.Add(assemblySlashDoc.SlashDoc.Path);
+                }
+            }
+
+            if (project.Namespaces != null)
+            {
+                project.Namespaces.CopyTo(args.NamespaceSummaries);
+            }
+        }
+
+        private static void CopyFromConfig(NDocXmlGeneratorParameters args, BaseReflectionDocumenterConfig config)
+        {
+            CopyFromProject(args, config.Project);
+
+            #region Documentation Control
+            args.AssemblyVersionInfo = config.AssemblyVersionInfo;
+            args.UseNamespaceDocSummaries = config.UseNamespaceDocSummaries;
+            args.AutoPropertyBackerSummaries = config.AutoPropertyBackerSummaries;
+            args.AutoDocumentConstructors = config.AutoDocumentConstructors;
+            args.SdkDocLanguage = config.SdkDocLanguage;
+            #endregion
+
+            #region missing
+            args.ShowMissingSummaries = config.ShowMissingSummaries;
+            args.ShowMissingRemarks = config.ShowMissingRemarks;
+            args.ShowMissingParams = config.ShowMissingParams;
+            args.ShowMissingReturns = config.ShowMissingReturns;
+            args.ShowMissingValues = config.ShowMissingValues;
+            #endregion
+
+            #region visibility
+            args.DocumentInheritedMembers = config.DocumentInheritedMembers;
+            args.DocumentInheritedFrameworkMembers = config.DocumentInheritedFrameworkMembers;
+            args.DocumentExplicitInterfaceImplementations = config.DocumentExplicitInterfaceImplementations;
+            args.DocumentInternals = config.DocumentInternals;
+            args.DocumentProtected = config.DocumentProtected;
+            args.DocumentSealedProtected = config.DocumentSealedProtected;
+            args.DocumentPrivates = config.DocumentPrivates;
+            args.DocumentProtectedInternalAsProtected = config.DocumentProtectedInternalAsProtected;
+            args.DocumentEmptyNamespaces = config.DocumentEmptyNamespaces;
+            args.SkipNamespacesWithoutSummaries = config.SkipNamespacesWithoutSummaries;
+            args.EditorBrowsableFilter = config.EditorBrowsableFilter;
+            #endregion
+
+            #region Attributes
+            args.DocumentAttributes = config.DocumentAttributes;
+            args.DocumentInheritedAttributes = config.DocumentInheritedAttributes;
+            args.ShowTypeIdInAttributes = config.ShowTypeIdInAttributes;
+            args.DocumentedAttributes = config.DocumentedAttributes;
+            #endregion
+
+            #region additional info
+            args.CopyrightText = config.CopyrightText;
+            args.CopyrightHref = config.CopyrightHref;
+            args.FeedbackEmailAddress = config.FeedbackEmailAddress;
+            args.Preliminary = config.Preliminary;
+            #endregion
+
+            #region threadsafety
+            args.IncludeDefaultThreadSafety = config.IncludeDefaultThreadSafety;
+            args.StaticMembersDefaultToSafe = config.StaticMembersDefaultToSafe;
+            args.InstanceMembersDefaultToSafe = config.InstanceMembersDefaultToSafe;
+            #endregion
+
+        }
+
+        #endregion
+
+        ///<summary>
+        /// Creates <see cref="NDocXmlGeneratorParameters"/> based on this configuration's settings.
+        ///</summary>
+        internal NDocXmlGeneratorParameters CreateNDocXmlGeneratorParameters()
+        {
+            NDocXmlGeneratorParameters args = new NDocXmlGeneratorParameters();
+            CopyFromConfig(args, this);
+            return args;
+        }
+
 		/// <summary>
 		/// Creates a new instance of the class
 		/// </summary>

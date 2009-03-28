@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{DBA75D67-23C9-4A78-ABC2-CF8802FDB7CA}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -209,6 +209,7 @@
     <Compile Include="ReflectionEngine\AttributeUsageDisplayFilter.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ReflectionEngine\ReflectionEngine.cs" />
     <Compile Include="ReflectionEngine\MemberDisplayName.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -218,15 +219,16 @@
     <Compile Include="ReflectionEngine\NamespaceHierarchyCollection.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ReflectionEngine\ReflectionEngine.cs">
+    <Compile Include="ReflectionEngine\NDocXmlGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ReflectionEngine\ReflectionEngineParameters.cs">
+    <Compile Include="ReflectionEngine\NDocXmlGeneratorParameters.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ReflectionEngine\TypeHierachy.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ReflectionEngine\ValidationException.cs" />
     <Compile Include="RuntimePropertyGrid.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -236,6 +238,7 @@
     <Compile Include="SimpleEdit.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="SortedStringDictionary.cs" />
     <Compile Include="TemplateWriter.cs">
       <SubType>Code</SubType>
     </Compile>

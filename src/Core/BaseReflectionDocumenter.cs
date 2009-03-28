@@ -16,10 +16,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 using System;
+using System.Collections;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
-using System.Reflection;
 using System.Text;
 
 namespace NDoc3.Core.Reflection
@@ -63,25 +62,10 @@ namespace NDoc3.Core.Reflection
 				return;
 			}
 
-            AppDomain appDomain = null;
-			try 
-			{
-				appDomain = AppDomain.CreateDomain("NDoc3Reflection", 
-					AppDomain.CurrentDomain.Evidence, AppDomain.CurrentDomain.SetupInformation);
-                appDomain.SetupInformation.ShadowCopyFiles = "true"; //only required for managed c++ assemblies
-                ReflectionEngine re = (ReflectionEngine)   
-                    appDomain.CreateInstanceAndUnwrap(typeof(ReflectionEngine).Assembly.FullName, 
-                    typeof(ReflectionEngine).FullName, false, BindingFlags.Public | BindingFlags.Instance, 
-                    null, new object[0], CultureInfo.InvariantCulture, new object[0], 
-                    AppDomain.CurrentDomain.Evidence);
-				ReflectionEngineParameters rep = new ReflectionEngineParameters(
-					project, MyConfig);
-				re.MakeXmlFile(rep, fileName);
-			} 
-			finally 
-			{
-				if (appDomain != null) AppDomain.Unload(appDomain);
-			}
+            using (ReflectionEngine re = new ReflectionEngine(project.ReferencePaths))
+            {
+		        re.MakeXmlFile(this.MyConfig.CreateNDocXmlGeneratorParameters(), fileName);
+		    }
 		}
 
 		/// <summary>
@@ -109,26 +93,10 @@ namespace NDoc3.Core.Reflection
 				}
 			}
 
-			AppDomain appDomain = null;
-
-			try 
-			{
-				appDomain = AppDomain.CreateDomain("NDoc3Reflection", 
-					AppDomain.CurrentDomain.Evidence, AppDomain.CurrentDomain.SetupInformation);
-				appDomain.SetupInformation.ShadowCopyFiles = "true"; //only required for managed c++ assemblies
-				ReflectionEngine re = (ReflectionEngine)   
-                    appDomain.CreateInstanceAndUnwrap(typeof(ReflectionEngine).Assembly.FullName, 
-                    typeof(ReflectionEngine).FullName, false, BindingFlags.Public | BindingFlags.Instance, 
-                    null, new object[0], CultureInfo.InvariantCulture, new object[0], 
-                    AppDomain.CurrentDomain.Evidence);
-                ReflectionEngineParameters rep = new ReflectionEngineParameters(
-					project, MyConfig);
-				return re.MakeXml(rep);
-			} 
-			finally 
-			{
-				if (appDomain != null) AppDomain.Unload(appDomain);
-			}
-		}
-	}
+            using(ReflectionEngine re = new ReflectionEngine(project.ReferencePaths))
+            {
+                return re.MakeXml(this.MyConfig.CreateNDocXmlGeneratorParameters());
+            }
+        }
+    }
 }

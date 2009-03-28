@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 [assembly: CLSCompliantAttribute(true)]
 [assembly: AssemblyTitle("NDoc3 Documenter Core")]
@@ -10,3 +11,6 @@ using System.Reflection;
 [assembly: AssemblyKeyFile("NDoc3.snk")]
 [assembly: AssemblyKeyName("")]
 #endif
+
+// for nunit testing
+[assembly: InternalsVisibleTo("NDoc3.Core.Tests")]

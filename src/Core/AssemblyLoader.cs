@@ -32,7 +32,7 @@ namespace NDoc3.Core.Reflection
 	internal class AssemblyLoader
 	{
 		/// <summary>primary search directories.</summary>
-		private readonly ReferencePathCollection SearchDirectories;
+		private readonly ReferencePathCollection searchDirectories;
 
 		/// <summary>List of subdirectory lists already scanned.</summary>
 		private readonly Hashtable directoryLists;
@@ -67,9 +67,16 @@ namespace NDoc3.Core.Reflection
 			directoryLists = new Hashtable();
 			unresolvedAssemblies = new Hashtable();
 			searchedDirectories = new Hashtable();
-
-			SearchDirectories = referenceDirectories;
+            searchDirectories = referenceDirectories ?? new ReferencePathCollection();
 		}
+
+        /// <summary>
+        /// Add the path to the list of directories for dependency resolution
+        /// </summary>
+        public void AddSearchDirectory(ReferencePath path)
+        {
+            searchDirectories.Add(path);
+        }
 
 		/// <summary>
 		/// Directories Searched for assemblies.
@@ -95,13 +102,13 @@ namespace NDoc3.Core.Reflection
 			AppDomain.CurrentDomain.AssemblyResolve += ResolveAssembly;
 		}
 
-		/// <summary> 
-		/// Deinstalls the assembly resolver.
-		/// </summary>
-		public void Deinstall() 
-		{
-			AppDomain.CurrentDomain.AssemblyResolve -= ResolveAssembly;
-		}
+//		/// <summary> 
+//		/// Deinstalls the assembly resolver.
+//		/// </summary>
+//		public void Deinstall() 
+//		{
+//			AppDomain.CurrentDomain.AssemblyResolve -= ResolveAssembly;
+//		}
 
 		/// <summary>Loads an assembly.</summary>
 		/// <param name="fileName">The assembly filename.</param>
@@ -155,6 +162,10 @@ namespace NDoc3.Core.Reflection
 				// Now we have the assembly image, try to load it into the CLR
 				try
 				{
+                    // ensure the assembly's path is added to the search list for resolving dependencies
+                    string assyDir = System.IO.Path.GetDirectoryName(fileName);
+                    searchDirectories.Add(new ReferencePath(assyDir));
+
 					Evidence evidence = CreateAssemblyEvidence(fileName);
 					assy = Assembly.Load(memStream.ToArray(), null, evidence);
 					// If the assembly loaded OK, cache the Assembly ref using the fileName as key.
@@ -356,9 +367,9 @@ namespace NDoc3.Core.Reflection
 		private Assembly LoadAssemblyFrom(string fullName, string fileName) 
 		{
 			
-			if ((SearchDirectories == null) || (SearchDirectories.Count == 0)) return (null);
+			if ((searchDirectories == null) || (searchDirectories.Count == 0)) return (null);
 
-			foreach (ReferencePath rp in SearchDirectories)
+			foreach (ReferencePath rp in searchDirectories)
 			{
 				if (Directory.Exists(rp.Path))
 				{
