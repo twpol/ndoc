@@ -37,7 +37,7 @@ namespace NDoc3.Core.Reflection
         ///</summary>
         ///<param name="args">configuration controlling the reflection process.</param>
         ///<param name="xmlFile">the file to write the NDoc xml content to</param>
-        internal void MakeXmlFile(NDocXmlGeneratorParameters args, string xmlFile)
+        internal void MakeXmlFile(NDocXmlGeneratorParameters args, FileInfo xmlFile)
         {
             using(NDocXmlGenerator xmlGen = _remoteServer.CreateInstance(args))
             {
@@ -134,7 +134,7 @@ namespace NDoc3.Core.Reflection
             {
                 try
                 {
-                    Assembly a = s_assemblyLoader.LoadAssembly(assemblyFile);
+                    IAssemblyInfo a = s_assemblyLoader.GetAssemblyInfo(assemblyFile);
                     SortedList namespaces = new SortedList();
 
                     foreach (Type t in a.GetTypes())

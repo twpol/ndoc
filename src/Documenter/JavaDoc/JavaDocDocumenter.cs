@@ -105,7 +105,7 @@ namespace NDoc3.Documenter.JavaDoc
 				// determine temp file name
 				tempFileName = Path.GetTempFileName();
 				// Let the Documenter base class do it's thing.
-				MakeXmlFile(project, tempFileName);
+				MakeXmlFile(project, new FileInfo(tempFileName));
 
 				WriteOverviewSummary();
 				WriteNamespaceSummaries();

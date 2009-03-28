@@ -1,14 +1,10 @@
 <?xml version="1.0" ?>
-<project name="NDoc3.Core" default="compile">
+<project name="NDoc3.Core.Tests.TestAssembly2" default="compile">
 
     <property name="root.dir" value="../.." overwrite="false" />
     <include buildfile="${root.dir}/build-common/common-project.xml" />
 
-    <target name="init" depends="common.init">
-
-			<resourcefileset id="project.resources" prefix="NDoc3" dynamicprefix="true">
-				<include name="**/*.xsd" />
-			</resourcefileset>
+    <target name="init" depends="common.init-test">
 
     </target>
 

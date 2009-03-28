@@ -309,7 +309,7 @@ namespace NDoc3.Documenter.LinearHtml
 					// determine temp file name
 					tempFileName = Path.GetTempFileName();
 					// Let the Documenter base class do it's thing.
-					MakeXmlFile(project, tempFileName);
+					MakeXmlFile(project, new FileInfo(tempFileName));
 					// Load the XML into DOM
 					xmlDocumentation = new XmlDocument();
 					xmlDocumentation.Load(tempFileName);

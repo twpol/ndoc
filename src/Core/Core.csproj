@@ -157,6 +157,7 @@
     <Compile Include="Core\Reflection\BaseReflectionDocumenter.cs" />
     <Compile Include="Core\Reflection\BaseReflectionDocumenterConfig.cs" />
     <Compile Include="Core\Reflection\ExternalXmlSummaryCache.cs" />
+    <Compile Include="Core\Reflection\IAssemblyInfo.cs" />
     <Compile Include="Core\Reflection\MemberDisplayName.cs" />
     <Compile Include="Core\Reflection\MemberID.cs" />
     <Compile Include="Core\Reflection\NamespaceHierarchyCollection.cs" />

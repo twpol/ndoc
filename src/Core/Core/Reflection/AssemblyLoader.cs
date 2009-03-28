@@ -29,7 +29,7 @@ namespace NDoc3.Core.Reflection
 	/// <summary>
 	/// Handles the resolution and loading of assemblies.
 	/// </summary>
-	internal class AssemblyLoader
+	internal class AssemblyLoader : IAssemblyLoader
 	{
 		/// <summary>primary search directories.</summary>
 		private readonly ReferencePathCollection searchDirectories = new ReferencePathCollection();
@@ -122,7 +122,18 @@ namespace NDoc3.Core.Reflection
 		/// <remarks>This method loads an assembly into memory. If you
 		/// use Assembly.Load or Assembly.LoadFrom the assembly file locks.
 		/// This method doesn't lock the assembly file.</remarks>
-		public Assembly LoadAssembly(string fileName)
+		public IAssemblyInfo GetAssemblyInfo(string assemblyFileName)
+		{
+			return new ReflectionAssemblyInfo(LoadAssembly(assemblyFileName));
+		}
+
+		/// <summary>Loads an assembly.</summary>
+		/// <param name="fileName">The assembly filename.</param>
+		/// <returns>The assembly object.</returns>
+		/// <remarks>This method loads an assembly into memory. If you
+		/// use Assembly.Load or Assembly.LoadFrom the assembly file locks.
+		/// This method doesn't lock the assembly file.</remarks>
+		protected Assembly LoadAssembly(string fileName)
 		{
 			// have we already loaded this assembly?
 			Assembly assy = assemblysLoadedFileName[fileName] as Assembly;

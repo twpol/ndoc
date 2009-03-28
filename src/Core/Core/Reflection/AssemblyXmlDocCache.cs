@@ -17,8 +17,10 @@
 using System;
 using System.Collections;
 using System.Diagnostics;
+using System.Reflection;
 using System.Xml;
 using System.IO;
+using System.Xml.XPath;
 
 namespace NDoc3.Core.Reflection
 {
@@ -28,6 +30,51 @@ namespace NDoc3.Core.Reflection
 	internal class AssemblyXmlDocCache
 	{
 		// TODO (EE): change to use Full Qualified IDs for lookup or use multiple caches (1 per assembly)
+		private class XmlDocKey
+		{
+			public readonly string AssemblyName;
+			public readonly string MemberId;
+
+			public XmlDocKey(string assemblyName, string memberId)
+			{
+				AssemblyName = assemblyName;
+				MemberId = memberId;
+			}
+
+			public bool Equals(XmlDocKey other)
+			{
+				if (ReferenceEquals(null, other))
+					return false;
+				if (ReferenceEquals(this, other))
+					return true;
+				return Equals(other.AssemblyName, AssemblyName) && Equals(other.MemberId, MemberId);
+			}
+
+			public override bool Equals(object obj)
+			{
+				if (ReferenceEquals(null, obj))
+					return false;
+				if (ReferenceEquals(this, obj))
+					return true;
+				if (obj.GetType() != typeof(XmlDocKey))
+					return false;
+				return Equals((XmlDocKey)obj);
+			}
+
+			public override int GetHashCode()
+			{
+				unchecked {
+					int result = (AssemblyName != null ? AssemblyName.GetHashCode() : 0);
+					result = (result * 397) ^ (MemberId != null ? MemberId.GetHashCode() : 0);
+					return result;
+				}
+			}
+
+			public override string ToString()
+			{
+				return string.Format("[{0}]{1}", this.AssemblyName, this.MemberId);
+			}
+		}
 
 		private Hashtable docs;
 		private Hashtable excludeTags;
@@ -65,36 +112,61 @@ namespace NDoc3.Core.Reflection
 		/// <summary>
 		/// Cache the xmld docs into a hashtable for faster access.
 		/// </summary>
-		/// <param name="reader">An XMLTextReader containg the docs the cache</param>
-		private void CacheDocs(XmlTextReader reader)
+		/// <param name="reader">An XmlReader containg the docs the cache</param>
+		private void CacheDocs(XmlReader reader)
 		{
-			object oMember = reader.NameTable.Add("member");
-			reader.MoveToContent();
+			XPathDocument xpathDoc = new XPathDocument(reader);
+			XPathNavigator doc = xpathDoc.CreateNavigator();
 
-			while (!reader.EOF) {
-				if ((reader.NodeType == XmlNodeType.Element) && (reader.Name.Equals(oMember))) {
-					//Handles multidimensional arrays by replacing 0: from XML doc to the reflection type
-					string ID = reader.GetAttribute("name").Replace("0:", "");
-					string doc = reader.ReadInnerXml().Trim();
-					doc = PreprocessDoc(ID, doc);
-					if (docs.ContainsKey(ID)) {
-						Trace.WriteLine("Warning: Multiple <member> tags found with id=\"" + ID + "\"");
-					} else {
-						docs.Add(ID, doc);
-					}
+			string assemblyName = doc.SelectSingleNode("/doc/assembly/name").Value;
+
+			foreach (XPathNavigator node in doc.Select("/doc/members/member")) {
+				//Handles multidimensional arrays by replacing 0: from XML doc to the reflection type
+				string ID = node.GetAttribute("name", string.Empty).Replace("0:", "");
+				XmlDocKey key = new XmlDocKey(assemblyName, ID);
+
+				string slashdoc = node.InnerXml.Trim();
+				slashdoc = PreprocessDoc(key, slashdoc);
+
+				if (docs.ContainsKey(key)) {
+					Trace.WriteLine("Warning: Multiple <member> tags found with id=\"" + ID + "\"");
 				} else {
-					reader.Read();
+					docs.Add(key, slashdoc);
 				}
 			}
+
+			//            object oMember = reader.NameTable.Add("member");
+			//			reader.MoveToContent();
+			//
+			//			while (!reader.EOF) {
+			//				if ((reader.NodeType == XmlNodeType.Element) && (reader.Name.Equals("assembly"))) {
+			//					
+			//				}
+			//
+			//				if ((reader.NodeType == XmlNodeType.Element) && (reader.Name.Equals(oMember))) {
+			//					//Handles multidimensional arrays by replacing 0: from XML doc to the reflection type
+			//					string ID = reader.GetAttribute("name").Replace("0:", "");
+			//
+			//					string doc = reader.ReadInnerXml().Trim();
+			//					doc = PreprocessDoc(ID, doc);
+			//					if (docs.ContainsKey(ID)) {
+			//						Trace.WriteLine("Warning: Multiple <member> tags found with id=\"" + ID + "\"");
+			//					} else {
+			//						docs.Add(ID, doc);
+			//					}
+			//				} else {
+			//					reader.Read();
+			//				}
+			//			}
 		}
 
 		/// <summary>
 		/// Preprocess documentation before placing it in the cache.
 		/// </summary>
-		/// <param name="id">Member name 'id' to which the docs belong</param>
+		/// <param name="key">Member name 'id' to which the docs belong</param>
 		/// <param name="doc">A string containing the members documentation</param>
 		/// <returns>processed doc string</returns>
-		private string PreprocessDoc(string id, string doc)
+		private string PreprocessDoc(XmlDocKey key, string doc)
 		{
 			//create an XmlDocument containg the memeber's documentation
 			XmlTextReader reader = new XmlTextReader(new StringReader("<root>" + doc + "</root>"));
@@ -106,9 +178,9 @@ namespace NDoc3.Core.Reflection
 
 
 			if (xmldoc.DocumentElement != null) {
-				CleanupNodes(id, xmldoc.DocumentElement.ChildNodes);
+				CleanupNodes(key, xmldoc.DocumentElement.ChildNodes);
 
-				ProcessSeeLinks(id, xmldoc.DocumentElement.ChildNodes);
+				ProcessSeeLinks(key, xmldoc.DocumentElement.ChildNodes);
 				return xmldoc.DocumentElement.InnerXml;
 			}
 			throw new Exception("DocumentElement are null");
@@ -117,20 +189,20 @@ namespace NDoc3.Core.Reflection
 		/// <summary>
 		/// strip out redundant newlines and spaces from documentation.
 		/// </summary>
-		/// <param name="id">member</param>
+		/// <param name="key">member</param>
 		/// <param name="nodes">list of nodes</param>
-		private void CleanupNodes(string id, XmlNodeList nodes)
+		private void CleanupNodes(XmlDocKey key, XmlNodeList nodes)
 		{
 			foreach (XmlNode node in nodes) {
 				if (node.NodeType == XmlNodeType.Element) {
 					if (node.Name == "exclude") {
-						excludeTags.Add(id, null);
+						excludeTags.Add(key, null);
 					}
 
 					if (node.Name == "code") {
 						FixupCodeTag(node);
 					} else {
-						CleanupNodes(id, node.ChildNodes);
+						CleanupNodes(key, node.ChildNodes);
 					}
 
 					// Trim attribute values...
@@ -195,16 +267,16 @@ namespace NDoc3.Core.Reflection
 		/// <summary>
 		/// Add 'nolink' attributes to self referencing or duplicate see tags.
 		/// </summary>
-		/// <param name="id">current member name 'id'</param>
+		/// <param name="key">current member name 'id'</param>
 		/// <param name="nodes">list of top-level nodes</param>
 		/// <remarks>
 		/// </remarks>
-		private void ProcessSeeLinks(string id, XmlNodeList nodes)
+		private void ProcessSeeLinks(XmlDocKey key, XmlNodeList nodes)
 		{
 			foreach (XmlNode node in nodes) {
 				if (node.NodeType == XmlNodeType.Element) {
 					Hashtable linkTable = null;
-					MarkupSeeLinks(ref linkTable, id, node);
+					MarkupSeeLinks(ref linkTable, key, node);
 				}
 			}
 		}
@@ -213,15 +285,15 @@ namespace NDoc3.Core.Reflection
 		/// Search tags for duplicate or self-referencing see links.
 		/// </summary>
 		/// <param name="linkTable">A table of previous links.</param>
-		/// <param name="id">current member name 'id'</param>
+		/// <param name="key">current member name 'id'</param>
 		/// <param name="node">an Xml Node containing a doc tag</param>
-		private void MarkupSeeLinks(ref Hashtable linkTable, string id, XmlNode node)
+		private void MarkupSeeLinks(ref Hashtable linkTable, XmlDocKey key, XmlNode node)
 		{
 			if (node.LocalName == "see") {
 				//we will only do this for crefs
 				XmlAttribute cref = node.Attributes["cref"];
 				if (cref != null) {
-					if (cref.Value == id) //self referencing tag
+					if (cref.Value == key.MemberId) //self referencing tag
 					{
 						XmlAttribute dup = node.OwnerDocument.CreateAttribute("nolink");
 						dup.Value = "true";
@@ -246,7 +318,7 @@ namespace NDoc3.Core.Reflection
 			//search this tags' children
 			foreach (XmlNode childnode in node.ChildNodes) {
 				if (childnode.NodeType == XmlNodeType.Element) {
-					MarkupSeeLinks(ref linkTable, id, childnode);
+					MarkupSeeLinks(ref linkTable, key, childnode);
 				}
 			}
 		}
@@ -255,21 +327,24 @@ namespace NDoc3.Core.Reflection
 		/// <summary>
 		/// Gets Xml documentation for the given ID
 		/// </summary>
+		/// <param name="assemblyName">the name of the assembly to lookup</param>
 		/// <param name="memberId">The ID of the item for which documentation is required</param>
 		/// <returns>a string containg the Xml documentation</returns>
-		public string GetDoc(string memberId)
+		public string GetDoc(AssemblyName assemblyName, string memberId)
 		{
-			return (string)docs[memberId];
+			return (string)docs[ new XmlDocKey(assemblyName.Name, memberId)];
 		}
 
 		/// <summary>
 		/// Returns whether a member has an exclude tag
 		/// </summary>
+		/// <param name="type"></param>
 		/// <param name="memberId">ID to check</param>
 		/// <returns>true if the member has an exclude tag, otherwise false</returns>
-		public bool HasExcludeTag(string memberId)
+		public bool HasExcludeTag(Type type, string memberId)
 		{
-			return excludeTags.ContainsKey(memberId);
+			return excludeTags.ContainsKey(
+				new XmlDocKey(type.Assembly.GetName().Name, memberId));
 		}
 	}
 }

@@ -50,7 +50,7 @@ namespace NDoc3.Core.Reflection
 		/// <remarks>
 		/// This is performed in a separate <see cref="AppDomain" />.
 		/// </remarks>
-		protected void MakeXmlFile(Project project, string fileName)
+		protected void MakeXmlFile(Project project, FileInfo outputFile)
 		{
 			//if this.rep.UseNDocXmlFile is set, 
 			//copy it to the temp file and return.
@@ -58,13 +58,13 @@ namespace NDoc3.Core.Reflection
 			if (xmlFile.Length > 0)
 			{
 				Trace.WriteLine("Loading pre-compiled XML information from: " + xmlFile);
-				File.Copy(xmlFile, fileName, true);
+				File.Copy(xmlFile, outputFile.FullName, true);
 				return;
 			}
 
             using (ReflectionEngine re = new ReflectionEngine(project.ReferencePaths))
             {
-		        re.MakeXmlFile(this.MyConfig.CreateNDocXmlGeneratorParameters(), fileName);
+		        re.MakeXmlFile(this.MyConfig.CreateNDocXmlGeneratorParameters(), outputFile);
 		    }
 		}
 

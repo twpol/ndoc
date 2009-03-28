@@ -60,7 +60,7 @@ namespace NDoc3.Documenter.Xml
 				// Let the Documenter base class do it's thing.
 				try
 				{
-					MakeXmlFile(project, tempFileName);
+					MakeXmlFile(project, new FileInfo(tempFileName));
 				}
 				catch (ValidationException ex)
 				{

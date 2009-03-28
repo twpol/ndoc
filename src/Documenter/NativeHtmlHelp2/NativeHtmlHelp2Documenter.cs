@@ -195,7 +195,7 @@ namespace NDoc3.Documenter.NativeHtmlHelp2
 					// determine temp file name
 					tempFileName = Path.GetTempFileName();
 					// Let the Documenter base class do it's thing.
-					MakeXmlFile(project, tempFileName);
+					MakeXmlFile(project, new FileInfo(tempFileName));
 
 					GC.Collect();
 					GC.WaitForPendingFinalizers();

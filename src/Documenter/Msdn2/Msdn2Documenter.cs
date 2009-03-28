@@ -236,7 +236,7 @@ namespace NDoc3.Documenter.Msdn2
 					// determine temp file name
 					tempFileName = Path.GetTempFileName();
 					// Let the Documenter base class do it's thing.
-					MakeXmlFile(project, tempFileName);
+					MakeXmlFile(project, new FileInfo(tempFileName));
 
 					// Load the XML documentation into DOM and XPATH doc.
 					using (FileStream tempFile = File.Open(tempFileName, FileMode.Open, FileAccess.Read)) 
