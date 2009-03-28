@@ -110,178 +110,94 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="AssemblyLoader.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AssemblySlashDoc.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AssemblySlashDocCollection.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AssemblyXmlDocCache.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AttributesEditor.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AttributesForm.cs">
+    <Compile Include="Core\AssemblySlashDoc.cs" />
+    <Compile Include="Core\AssemblySlashDocCollection.cs" />
+    <Compile Include="Core\AttributesEditor.cs" />
+    <Compile Include="Core\AttributesForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="BaseDocumenter.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="BaseDocumenterConfig.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="BaseDocumenterInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="BaseReflectionDocumenter.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="BaseReflectionDocumenterConfig.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DocumenterException.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="EmbeddedResources.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="EnumDescriptionConverter.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ExternalXmlSummaryCache.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="FilenameEditor.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="FilePath.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="FolderNameEditor.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="FolderPath.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IDocumenter.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IDocumenterConfig.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IDocumenterInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="InstalledDocumenters.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="LangIdEditor.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Namespaces.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="PathItemBase.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="PathUtilities.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Project.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="PropertySorter.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ReferencePath.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ReferencePathCollection.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ReferencePathCollectionEditorForm.cs">
+    <Compile Include="Core\BaseDocumenter.cs" />
+    <Compile Include="Core\BaseDocumenterConfig.cs" />
+    <Compile Include="Core\BaseDocumenterInfo.cs" />
+    <Compile Include="Core\BaseReflectionDocumenter.cs" />
+    <Compile Include="Core\BaseReflectionDocumenterConfig.cs" />
+    <Compile Include="Core\DocumenterException.cs" />
+    <Compile Include="Core\EmbeddedResources.cs" />
+    <Compile Include="Core\EnumDescriptionConverter.cs" />
+    <Compile Include="Core\ExternalXmlSummaryCache.cs" />
+    <Compile Include="Core\FilenameEditor.cs" />
+    <Compile Include="Core\FilePath.cs" />
+    <Compile Include="Core\FolderNameEditor.cs" />
+    <Compile Include="Core\FolderPath.cs" />
+    <Compile Include="Core\IDocumenter.cs" />
+    <Compile Include="Core\IDocumenterConfig.cs" />
+    <Compile Include="Core\IDocumenterInfo.cs" />
+    <Compile Include="Core\InstalledDocumenters.cs" />
+    <Compile Include="Core\LangIdEditor.cs" />
+    <Compile Include="Core\Namespaces.cs" />
+    <Compile Include="Core\PathItemBase.cs" />
+    <Compile Include="Core\PathUtilities.cs" />
+    <Compile Include="Core\Project.cs" />
+    <Compile Include="Core\PropertySorter.cs" />
+    <Compile Include="Core\ReferencePath.cs" />
+    <Compile Include="Core\ReferencePathCollection.cs" />
+    <Compile Include="Core\ReferencePathCollectionEditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ReflectionEngine\AttributeUsageDisplayFilter.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ReflectionEngine\ReflectionEngine.cs" />
-    <Compile Include="ReflectionEngine\MemberDisplayName.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ReflectionEngine\MemberID.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ReflectionEngine\NamespaceHierarchyCollection.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ReflectionEngine\NDocXmlGenerator.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ReflectionEngine\NDocXmlGeneratorParameters.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ReflectionEngine\TypeHierachy.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ReflectionEngine\ValidationException.cs" />
-    <Compile Include="RuntimePropertyGrid.cs">
+    <Compile Include="Core\Reflection\AssemblyLoader.cs" />
+    <Compile Include="Core\Reflection\AssemblyXmlDocCache.cs" />
+    <Compile Include="Core\Reflection\AttributeUsageDisplayFilter.cs" />
+    <Compile Include="Core\Reflection\MemberDisplayName.cs" />
+    <Compile Include="Core\Reflection\MemberID.cs" />
+    <Compile Include="Core\Reflection\NamespaceHierarchyCollection.cs" />
+    <Compile Include="Core\Reflection\NDocXmlGenerator.cs" />
+    <Compile Include="Core\Reflection\NDocXmlGeneratorParameters.cs" />
+    <Compile Include="Core\Reflection\ReflectionEngine.cs" />
+    <Compile Include="Core\Reflection\TypeHierachy.cs" />
+    <Compile Include="Core\Reflection\ValidationException.cs" />
+    <Compile Include="Core\RuntimePropertyGrid.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Settings.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="SimpleEdit.cs">
+    <Compile Include="Core\Settings.cs" />
+    <Compile Include="Core\SimpleEdit.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SortedStringDictionary.cs" />
-    <Compile Include="TemplateWriter.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="TextEditor.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="TextEditorForm.cs">
+    <Compile Include="Core\SortedStringDictionary.cs" />
+    <Compile Include="Core\TemplateWriter.cs" />
+    <Compile Include="Core\TextEditor.cs" />
+    <Compile Include="Core\TextEditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Workspace.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="XsltResourceResolver.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <None Include="AssySlashDocXML.xsd" />
+    <Compile Include="Core\Workspace.cs" />
+    <Compile Include="Core\XsltResourceResolver.cs" />
     <None Include="Core.build" />
-    <EmbeddedResource Include="ReflectionEngine\reflection.xsd" />
-    <EmbeddedResource Include="AttributesForm.resx">
+    <None Include="core.ndoc" />
+    <EmbeddedResource Include="Core\AssySlashDocXML.xsd" />
+    <EmbeddedResource Include="Core\Reflection\reflection.xsd" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Core\AttributesForm.resx">
       <DependentUpon>AttributesForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="graphics\folder.bmp" />
-    <EmbeddedResource Include="graphics\folderpin.bmp" />
-    <EmbeddedResource Include="graphics\multifolder.bmp" />
-    <EmbeddedResource Include="graphics\multifolderpin.bmp" />
-    <EmbeddedResource Include="ReferencePathCollectionEditorForm.resx">
+    <EmbeddedResource Include="Core\ReferencePathCollectionEditorForm.resx">
       <DependentUpon>ReferencePathCollectionEditorForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="RuntimePropertyGrid.resx">
+    <EmbeddedResource Include="Core\RuntimePropertyGrid.resx">
       <DependentUpon>RuntimePropertyGrid.cs</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="SimpleEdit.resx">
+    <EmbeddedResource Include="Core\SimpleEdit.resx">
       <DependentUpon>SimpleEdit.cs</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="TextEditorForm.resx">
+    <EmbeddedResource Include="Core\TextEditorForm.resx">
       <DependentUpon>TextEditorForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
-    <Content Include="graphics\Red Folder.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Core\graphics\folder.bmp" />
+    <EmbeddedResource Include="Core\graphics\folderpin.bmp" />
+    <EmbeddedResource Include="Core\graphics\multifolder.bmp" />
+    <EmbeddedResource Include="Core\graphics\multifolderpin.bmp" />
+    <EmbeddedResource Include="Core\graphics\Red Folder.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
