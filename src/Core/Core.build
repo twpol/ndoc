@@ -1,31 +1,13 @@
 <?xml version="1.0" ?>
 <project name="NDoc3.Core" default="compile">
-	<target name="compile">
-		<csc target="library" output="${current.bin.dir}/${project::get-name()}.dll" debug="${current.build.debug}" optimize="${current.build.optimize}" unsafe="false" checked="false" define="${current.build.defines}" doc="${current.bin.dir}/${project::get-name()}.xml">
-      <nowarn>
-          <warning number="${current.build.nowarn}" />
-      </nowarn>
-			<sources>
-				<include name="**/*.cs" />
-				<include name="../CommonAssemblyInfo.cs" />
-			</sources>
-			<references>
-				<include name="System.dll" />
-				<include name="System.Xml.dll" />
-				<include name="System.Drawing.dll" />
-				<include name="System.Windows.Forms.dll" />
-				<include name="System.Drawing.Design.dll" />
-				<include name="System.Design.dll" />
-				<include name="System.Data.dll" />
-				<include name="${current.bin.dir}/NDoc3.ExtendedUI.dll" />
-			</references>
-			<resources>
-				<include name="**/*.resx" />
-			</resources>
-			<resources prefix="NDoc3.Core" dynamicprefix="true">
-				<include name="graphics/*.bmp" />
-        <include name="ReflectionEngine/reflection.xsd" />
-			</resources>
-		</csc>
-	</target>
+
+    <property name="root.dir" value="../.." overwrite="false" />
+    <include buildfile="${root.dir}/build-common/common-project.xml" />
+
+    <target name="init" depends="common.init" />
+
+    <target name="compile" description="build this library" depends="init common.compile-dll" />
+
+    <target name="test" description="Run NUnit tests" depends="init compile common.run-tests" />
+
 </project>

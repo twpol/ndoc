@@ -177,52 +177,63 @@
 	<!--
 
 	-->
-	<target name="set-net-1.0-framework-configuration" depends="check-build-dir, check-current-build-config, check-build-debug, check-build-defines, check-build-optimize">
+
+    <target name="set-common-framework-configuration" depends="check-build-dir, check-current-build-config, check-build-debug, check-build-defines, check-build-optimize">
+        <property name="current.build.debug" value="${build.debug}" dynamic="true" readonly="false" />
+        <property name="current.build.optimize" value="${build.optimize}" dynamic="true" readonly="false" />
+        <property name="current.build.nowarn" value="${build.nowarn}" dynamic="true" readonly="false" />
+        <property name="current.bin.dir" value="${build.dir}/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
+        <property name="current.sdkdoc.dir" value="${project::get-base-directory()}/doc/sdk/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
+        <property name="current.sdkdoc.debug" value="${sdkdoc.debug}" dynamic="true" readonly="false" />
+    </target>
+
+    <target name="set-net-1.0-framework-configuration" depends="check-build-dir, check-current-build-config, check-build-debug, check-build-defines, check-build-optimize">
+        <call target="set-common-framework-configuration" />
 		<property name="nant.settings.currentframework" value="net-1.0" />
-		<property name="current.build.debug" value="${build.debug}" dynamic="true" readonly="false" />
-		<property name="current.build.defines" value="${build.defines},NET,NET_1_0" dynamic="true" readonly="false" />
-		<property name="current.build.optimize" value="${build.optimize}" dynamic="true" readonly="false" />
-		<property name="current.build.nowarn" value="${build.nowarn}" dynamic="true" readonly="false" />
-		<property name="current.bin.dir" value="${build.dir}/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
-		<property name="current.sdkdoc.dir" value="${project::get-base-directory()}/doc/sdk/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
-		<property name="current.sdkdoc.debug" value="${sdkdoc.debug}" dynamic="true" readonly="false" />
 	</target>
 	<!--
 
 	-->
 	<target name="set-net-1.1-framework-configuration" depends="check-build-dir, check-current-build-config, check-build-debug, check-build-defines, check-build-optimize">
-		<property name="nant.settings.currentframework" value="net-1.1" />
-		<property name="current.build.debug" value="${build.debug}" dynamic="true" readonly="false" />
+        <call target="set-common-framework-configuration" />
+        <property name="nant.settings.currentframework" value="net-1.1" />
+        <property name="current.build.defines" value="${build.defines},NET,NET_1_1" dynamic="true" />
+        <!--<property name="current.build.debug" value="${build.debug}" dynamic="true" readonly="false" />
 		<property name="current.build.defines" value="${build.defines},NET,NET_1_1" dynamic="true" readonly="false" />
 		<property name="current.build.optimize" value="${build.optimize}" dynamic="true" readonly="false" />
 		<property name="current.build.nowarn" value="${build.nowarn}" dynamic="true" readonly="false" />
 		<property name="current.bin.dir" value="${build.dir}/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
 		<property name="current.sdkdoc.dir" value="${project::get-base-directory()}/doc/sdk/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
-		<property name="current.sdkdoc.debug" value="${sdkdoc.debug}" dynamic="true" readonly="false" />
+		<property name="current.sdkdoc.debug" value="${sdkdoc.debug}" dynamic="true" readonly="false" />-->
 	</target>
 	<!--
 
 	-->
 	<target name="set-net-2.0-framework-configuration" depends="check-build-dir, check-current-build-config, check-build-debug, check-build-defines, check-build-optimize">
-		<property name="nant.settings.currentframework" value="net-2.0" />
-		<property name="current.build.debug" value="${build.debug}" dynamic="true" readonly="false" />
+        <call target="set-common-framework-configuration" />
+        <property name="nant.settings.currentframework" value="net-2.0" />
+        <property name="current.build.defines" value="${build.defines},NET,NET_2_0" dynamic="true" />
+        <!--<property name="current.build.debug" value="${build.debug}" dynamic="true" readonly="false" />
 		<property name="current.build.defines" value="${build.defines},NET,NET_2_0" dynamic="true" readonly="false" />
 		<property name="current.build.optimize" value="${build.optimize}" dynamic="true" readonly="false" />
 		<property name="current.build.nowarn" value="${build.nowarn}" dynamic="true" readonly="false" />
-		<property name="current.bin.dir" value="${build.dir}/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
+        <property name="current.bin.dir" value="${build.dir}/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
+        <property name="current.lib.dir" value="${lib.dir}/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
 		<property name="current.sdkdoc.dir" value="${project::get-base-directory()}/doc/sdk/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
-		<property name="current.sdkdoc.debug" value="${sdkdoc.debug}" dynamic="true" readonly="false" />
+		<property name="current.sdkdoc.debug" value="${sdkdoc.debug}" dynamic="true" readonly="false" />-->
 	</target>
 
 	<target name="set-net-3.5-framework-configuration" depends="check-build-dir, check-current-build-config, check-build-debug, check-build-defines, check-build-optimize">
-		<property name="nant.settings.currentframework" value="net-3.5" />
-		<property name="current.build.debug" value="${build.debug}" dynamic="true" readonly="false" />
+        <call target="set-common-framework-configuration" />
+        <property name="nant.settings.currentframework" value="net-3.5" />
+        <property name="current.build.defines" value="${build.defines},NET,NET_3_5" dynamic="true" />
+        <!--<property name="current.build.debug" value="${build.debug}" dynamic="true" readonly="false" />
 		<property name="current.build.defines" value="${build.defines},NET,NET_3_5" dynamic="true" readonly="false" />
 		<property name="current.build.optimize" value="${build.optimize}" dynamic="true" readonly="false" />
 		<property name="current.build.nowarn" value="${build.nowarn}" dynamic="true" readonly="false" />
 		<property name="current.bin.dir" value="${build.dir}/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
 		<property name="current.sdkdoc.dir" value="${project::get-base-directory()}/doc/sdk/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
-		<property name="current.sdkdoc.debug" value="${sdkdoc.debug}" dynamic="true" readonly="false" />
+		<property name="current.sdkdoc.debug" value="${sdkdoc.debug}" dynamic="true" readonly="false" />-->
 	</target>
 	<!--
 
