@@ -34,6 +34,7 @@ namespace NDoc3.Core
                 XmlDocument doc = new XmlDocument();
                 doc.LoadXml(xml);
                 doc.Save(xmlWriter);
+            }
         }
     }
 }
