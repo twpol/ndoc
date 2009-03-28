@@ -18,7 +18,7 @@
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <DelaySign>false</DelaySign>
     <OutputType>Library</OutputType>
-    <RootNamespace>NDoc3.Core</RootNamespace>
+    <RootNamespace>NDoc3</RootNamespace>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <StartupObject>
     </StartupObject>
@@ -112,41 +112,51 @@
     </Compile>
     <Compile Include="Core\AssemblySlashDoc.cs" />
     <Compile Include="Core\AssemblySlashDocCollection.cs" />
-    <Compile Include="Core\AttributesEditor.cs" />
-    <Compile Include="Core\AttributesForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Core\BaseDocumenter.cs" />
     <Compile Include="Core\BaseDocumenterConfig.cs" />
     <Compile Include="Core\BaseDocumenterInfo.cs" />
-    <Compile Include="Core\BaseReflectionDocumenter.cs" />
-    <Compile Include="Core\BaseReflectionDocumenterConfig.cs" />
     <Compile Include="Core\DocumenterException.cs" />
     <Compile Include="Core\EmbeddedResources.cs" />
-    <Compile Include="Core\EnumDescriptionConverter.cs" />
-    <Compile Include="Core\ExternalXmlSummaryCache.cs" />
-    <Compile Include="Core\FilenameEditor.cs" />
     <Compile Include="Core\FilePath.cs" />
-    <Compile Include="Core\FolderNameEditor.cs" />
     <Compile Include="Core\FolderPath.cs" />
     <Compile Include="Core\IDocumenter.cs" />
     <Compile Include="Core\IDocumenterConfig.cs" />
     <Compile Include="Core\IDocumenterInfo.cs" />
     <Compile Include="Core\InstalledDocumenters.cs" />
-    <Compile Include="Core\LangIdEditor.cs" />
     <Compile Include="Core\Namespaces.cs" />
     <Compile Include="Core\PathItemBase.cs" />
     <Compile Include="Core\PathUtilities.cs" />
     <Compile Include="Core\Project.cs" />
-    <Compile Include="Core\PropertySorter.cs" />
-    <Compile Include="Core\ReferencePath.cs" />
-    <Compile Include="Core\ReferencePathCollection.cs" />
-    <Compile Include="Core\ReferencePathCollectionEditorForm.cs">
+    <Compile Include="Core\PropertyGridUI\AttributesEditor.cs" />
+    <Compile Include="Core\PropertyGridUI\AttributesForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Core\PropertyGridUI\EnumDescriptionConverter.cs" />
+    <Compile Include="Core\PropertyGridUI\FilenameEditor.cs" />
+    <Compile Include="Core\PropertyGridUI\FolderNameEditor.cs" />
+    <Compile Include="Core\PropertyGridUI\LangIdEditor.cs" />
+    <Compile Include="Core\PropertyGridUI\PropertySorter.cs" />
+    <Compile Include="Core\PropertyGridUI\ReferencePathCollectionEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\PropertyGridUI\RuntimePropertyGrid.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Core\PropertyGridUI\SimpleEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\PropertyGridUI\TextEditor.cs" />
+    <Compile Include="Core\PropertyGridUI\TextEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\ReferencePath.cs" />
+    <Compile Include="Core\ReferencePathCollection.cs" />
     <Compile Include="Core\Reflection\AssemblyLoader.cs" />
     <Compile Include="Core\Reflection\AssemblyXmlDocCache.cs" />
     <Compile Include="Core\Reflection\AttributeUsageDisplayFilter.cs" />
+    <Compile Include="Core\Reflection\BaseReflectionDocumenter.cs" />
+    <Compile Include="Core\Reflection\BaseReflectionDocumenterConfig.cs" />
+    <Compile Include="Core\Reflection\ExternalXmlSummaryCache.cs" />
     <Compile Include="Core\Reflection\MemberDisplayName.cs" />
     <Compile Include="Core\Reflection\MemberID.cs" />
     <Compile Include="Core\Reflection\NamespaceHierarchyCollection.cs" />
@@ -155,19 +165,9 @@
     <Compile Include="Core\Reflection\ReflectionEngine.cs" />
     <Compile Include="Core\Reflection\TypeHierachy.cs" />
     <Compile Include="Core\Reflection\ValidationException.cs" />
-    <Compile Include="Core\RuntimePropertyGrid.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Core\Settings.cs" />
-    <Compile Include="Core\SimpleEdit.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Core\SortedStringDictionary.cs" />
     <Compile Include="Core\TemplateWriter.cs" />
-    <Compile Include="Core\TextEditor.cs" />
-    <Compile Include="Core\TextEditorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Core\Workspace.cs" />
     <Compile Include="Core\XsltResourceResolver.cs" />
     <None Include="Core.build" />
@@ -176,28 +176,26 @@
     <EmbeddedResource Include="Core\Reflection\reflection.xsd" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Core\AttributesForm.resx">
-      <DependentUpon>AttributesForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Core\ReferencePathCollectionEditorForm.resx">
-      <DependentUpon>ReferencePathCollectionEditorForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Core\RuntimePropertyGrid.resx">
-      <DependentUpon>RuntimePropertyGrid.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Core\SimpleEdit.resx">
-      <DependentUpon>SimpleEdit.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Core\TextEditorForm.resx">
-      <DependentUpon>TextEditorForm.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Core\graphics\folder.bmp" />
     <EmbeddedResource Include="Core\graphics\folderpin.bmp" />
     <EmbeddedResource Include="Core\graphics\multifolder.bmp" />
     <EmbeddedResource Include="Core\graphics\multifolderpin.bmp" />
     <EmbeddedResource Include="Core\graphics\Red Folder.ico" />
+    <EmbeddedResource Include="Core\PropertyGridUI\AttributesForm.resx">
+      <DependentUpon>AttributesForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\PropertyGridUI\ReferencePathCollectionEditorForm.resx">
+      <DependentUpon>ReferencePathCollectionEditorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\PropertyGridUI\RuntimePropertyGrid.resx">
+      <DependentUpon>RuntimePropertyGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\PropertyGridUI\SimpleEdit.resx">
+      <DependentUpon>SimpleEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\PropertyGridUI\TextEditorForm.resx">
+      <DependentUpon>TextEditorForm.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

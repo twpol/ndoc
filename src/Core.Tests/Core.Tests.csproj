@@ -8,7 +8,7 @@
     <ProjectGuid>{78684BDC-E23C-4BBA-B9B6-EB271D6C9016}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NDoc3.Core</RootNamespace>
+    <RootNamespace>NDoc3</RootNamespace>
     <AssemblyName>NDoc3.Core.Tests</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
