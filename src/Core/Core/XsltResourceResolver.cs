@@ -136,7 +136,7 @@ namespace NDoc3.Core
                     Uri fileUri = new Uri(_ResourceBase + Path.DirectorySeparatorChar + absoluteUri.AbsolutePath);
                     xsltStream = base.GetEntity(fileUri, role, Type.GetType("System.IO.Stream")) as Stream;
                 }
-                catch (Exception exception)
+                catch
                 {
                 }
 

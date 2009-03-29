@@ -1,10 +1,6 @@
 using System;
 using System.Collections.Specialized;
 using System.Globalization;
-using System.Windows.Forms;
-
-using NDoc3.Core;
-using NDoc3.Core.Reflection;
 
 namespace NDoc3.Documenter.Msdn
 {
@@ -13,8 +9,6 @@ namespace NDoc3.Documenter.Msdn
 	/// </summary>
 	public class MsdnXsltUtilities
 	{
-		private const string sdkDoc10BaseNamespace = "MS.NETFrameworkSDK";
-		private const string sdkDoc11BaseNamespace = "MS.NETFrameworkSDKv1.1";
 		private const string helpURL = "ms-help://";
 		private const string sdkRoot = "/cpref/html/frlrf";
 		private const string sdkDocPageExt = ".htm";
@@ -26,23 +20,25 @@ namespace NDoc3.Documenter.Msdn
         private string sdkVersion;
 		private string sdkDocExt;
         private string sdkDocLanguage;
-		private StringDictionary fileNames;
-		private StringDictionary elemNames;
+//		private readonly StringDictionary fileNames;
+//		private readonly StringDictionary elemNames;
+		private string assemblyName;
+		private NameResolver nameResolver;
 		private StringCollection descriptions;
 		private string encodingString;
 
 		/// <summary>
 		/// Initializes a new instance of class MsdnXsltUtilities
 		/// </summary>
-		/// <param name="fileNames">A StringDictionary holding id to file name mappings.</param>
-		/// <param name="elemNames">A StringDictionary holding id to element name mappings</param>
+		/// <param name="nameResolver">TODO</param>
+		/// <param name="assemblyName">TODO</param>
 		/// <param name="linkToSdkDocVersion">Specifies the version of the SDK documentation.</param>
 		/// <param name="linkToSdkDocLangauge">Specifies the version of the SDK documentation.</param>
 		/// <param name="SdkLinksOnWeb">Specifies if links should be to ms online documentation.</param>
 		/// <param name="fileEncoding">Specifies if links should be to ms online documentation.</param>
 		public MsdnXsltUtilities(
-			StringDictionary fileNames, 
-			StringDictionary elemNames, 
+			NameResolver nameResolver,
+			string assemblyName,
 			string linkToSdkDocVersion,
 			string linkToSdkDocLangauge,
 			bool SdkLinksOnWeb,
@@ -50,8 +46,10 @@ namespace NDoc3.Documenter.Msdn
 		{
 			Reset();
 
-			this.fileNames = fileNames;
-			this.elemNames = elemNames;
+			this.nameResolver = nameResolver;
+			this.assemblyName = assemblyName;
+//			this.fileNames = nameResolver.fileNames;
+//			this.elemNames = nameResolver.elemNames;
             this.sdkDocLanguage = linkToSdkDocLangauge;
             this.sdkVersion = linkToSdkDocVersion;
 
@@ -121,9 +119,9 @@ namespace NDoc3.Documenter.Msdn
 			if ((cref.Length < 9)
 				|| (cref.Substring(2, 7) != systemPrefix))
 			{
-				string fileName = fileNames[cref];
+				string fileName = nameResolver.GetFilenameForMember(assemblyName, cref);
 				if ((fileName == null) && cref.StartsWith("F:"))
-					fileName = fileNames["E:" + cref.Substring(2)];
+					fileName = nameResolver.GetFilenameForMember(assemblyName,"E:" + cref.Substring(2));
 
 				if (fileName == null)
 					return "";
@@ -171,7 +169,7 @@ namespace NDoc3.Documenter.Msdn
 				if ((cref.Length < 9)
 					|| (cref.Substring(2, 7) != systemPrefix))
 				{
-					string name = elemNames[cref];
+					string name = nameResolver.GetDisplayNameForMember(assemblyName, cref);
 					if (name != null)
 						return name;
 				}

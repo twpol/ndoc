@@ -9,12 +9,23 @@ namespace NDoc3.Core.Reflection
 	[TestFixture]
 	public class NDocXmlGeneratorTests
 	{
-		[Test, Explicit]
+		/// <summary>
+		/// The reason for introducing ComparableFileInfo
+		/// </summary>
+		[Test, Ignore]
+		public void FileInfoComparison()
+		{
+			FileInfo fi1 = new FileInfo("C:\\Test.xml");
+			FileInfo fi2 = new FileInfo("c:\\tesT.xml");
+			Assert.AreEqual(fi1, fi2, "FileInfo type's Equals() implementation doesn't fulfill expected behavior");
+		}
+
+		[Test]
 		public void ProducesNDocXml()
 		{
 			NDocXmlGeneratorParameters args = new NDocXmlGeneratorParameters();
-			AddAssemblyToDocument(typeof(GlobalAssembly1Class), args);
-			AddAssemblyToDocument(typeof(GlobalAssembly2Class), args);
+			args.AddAssemblyToDocument(typeof(GlobalAssembly1Class));
+			args.AddAssemblyToDocument(typeof(GlobalAssembly2Class));
 			args.DocumentInternals = true;
 			args.UseNamespaceDocSummaries = true;
 
@@ -28,15 +39,12 @@ namespace NDoc3.Core.Reflection
 			nsmgr.AddNamespace("ndoc", "urn:ndoc-schema");
 
 			// copes w/ duplicate typenames in different assemblies
-			Assert.AreEqual(2, doc.SelectNodes("//ndoc:namespace[@name='NDoc3.ReflectionTests.DuplicateNamespace']/ndoc:class[@name='DuplicateClass']", nsmgr).Count);
-		}
-
-		private void AddAssemblyToDocument(Type assemblyType, NDocXmlGeneratorParameters args)
-		{
-			string testAssembly1AssemblyFileName = new Uri(assemblyType.Assembly.CodeBase).AbsolutePath;
-			string testAssembly1SlashDocFileName = testAssembly1AssemblyFileName.Substring(0, testAssembly1AssemblyFileName.Length - 4) + ".xml";
-			args.AssemblyFileNames.Add(testAssembly1AssemblyFileName);
-			args.XmlDocFileNames.Add(testAssembly1SlashDocFileName);
+			XmlNodeList duplicateClassNodes = doc.SelectNodes("//ndoc:namespace[@name='NDoc3.ReflectionTests.DuplicateNamespace']/ndoc:class[@name='DuplicateClass']", nsmgr);
+			Assert.AreEqual(2, duplicateClassNodes.Count);
+			
+			// TestAssembly2 references TestAssembly1
+			XmlNodeList testAssembly1References = doc.SelectNodes("//ndoc:assembly[@name='NDoc3.Core.Tests.TestAssembly2']/ndoc:assemblyReference[@name='NDoc3.Core.Tests.TestAssembly1']", nsmgr);
+			Assert.AreEqual(1, testAssembly1References.Count);
 		}
 
 		private class TestStringReader : StringReader

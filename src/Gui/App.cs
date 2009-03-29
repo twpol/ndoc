@@ -66,7 +66,7 @@ namespace NDoc3.Gui
 		{
 			get
 			{
-				Uri uri = new Uri( Assembly.GetExecutingAssembly().CodeBase, true );
+				Uri uri = new Uri( Assembly.GetExecutingAssembly().CodeBase );
 				return Path.GetDirectoryName( uri.AbsolutePath );
 			}
 		}

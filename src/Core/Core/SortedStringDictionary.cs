@@ -3,43 +3,18 @@ using System.Collections.Generic;
 
 namespace NDoc3.Core
 {
-    ///<summary>
+	///<summary>
     ///</summary>
     [Serializable]
-    public class SortedStringDictionary : SortedList<string,string>, IDictionary<string,string>
+    internal class SortedStringDictionary : ReferenceTypeDictionary<string,string>
     {
-        public new string this[string key]
-        {
-            get
-            {
-                string result;
-                if (TryGetValue(key, out result))
-                {
-                    return result;
-                }
-                return null;
-            }
-            set
-            {
-                base[key] = value;
-            }
-        }
-
-        string IDictionary<string,string>.this[string key]
-        {
-            get
-            {
-                string result;
-                if (TryGetValue(key, out result))
-                {
-                    return result;
-                }
-                return null;
-            }
-            set
-            {
-                base[key] = value;
-            }
-        }
+		///<summary>
+		/// Creates a new instance, using <see cref="SortedList{TKey,TVal}"/> 
+		/// for storing items.
+		///</summary>
+		public SortedStringDictionary() 
+			: base(new SortedList<string,string>())
+		{
+		}
     }
 }

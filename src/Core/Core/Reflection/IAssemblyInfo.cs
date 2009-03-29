@@ -1,11 +1,12 @@
 ﻿using System;
+using System.IO;
 using System.Reflection;
 
 namespace NDoc3.Core.Reflection
 {
 	internal interface IAssemblyLoader
 	{
-		IAssemblyInfo GetAssemblyInfo(string assemblyUri);
+		IAssemblyInfo GetAssemblyInfo(FileInfo assemblyFile);
 	}
 
 	internal interface IClrElementInfo
@@ -18,6 +19,7 @@ namespace NDoc3.Core.Reflection
 	{
 		string FullName { get; }
 		AssemblyName GetName();
+		AssemblyName[] GetReferencedAssemblies();
 
 		//TODO: those below need to be abstracted
 		IModuleInfo[] GetModules();
@@ -54,6 +56,11 @@ namespace NDoc3.Core.Reflection
 		public AssemblyName AssemblyName
 		{
 			get { return GetName(); }
+		}
+
+		public AssemblyName[] GetReferencedAssemblies()
+		{
+			return _assembly.GetReferencedAssemblies();
 		}
 
 		/// <summary>

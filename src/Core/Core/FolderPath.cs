@@ -78,6 +78,13 @@ namespace NDoc3.Core
 				}
 			}
 		}
+
+		/// <inheritDoc/>
+		public override bool Exists
+		{
+			get { return Directory.Exists(base.ToString()); }
+		}
+
 		bool ShouldSerializePath() { return false; }
 
 		/// <inheritDoc/>

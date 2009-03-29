@@ -22,8 +22,6 @@ using System.Collections;
 using System.Xml;
 using System.Xml.Xsl;
 using System.Diagnostics;
-using System.Reflection;
-
 using NDoc3.Core;
 using NDoc3.Documenter.Msdn.xslt;
 
@@ -77,12 +75,12 @@ namespace NDoc3.Documenter.Msdn
 		/// <summary>
 		/// Return a named stylesheet from the collection
 		/// </summary>
-		public XslTransform this[ string name ]
+		public XslCompiledTransform this[ string name ]
 		{
 			get
 			{
 				Debug.Assert( base.InnerHashtable.Contains( name ) );
-				return (XslTransform)base.InnerHashtable[name];
+				return (XslCompiledTransform)base.InnerHashtable[name];
 			}
 		}
 
@@ -91,14 +89,17 @@ namespace NDoc3.Documenter.Msdn
 			base.InnerHashtable.Add( name, MakeTransform( name, resolver ) );
 		}
 
-		private XslTransform MakeTransform( string name,  XsltResourceResolver resolver)
+		private XslCompiledTransform MakeTransform( string name,  XmlResolver resolver)
 		{
 			try
 			{
 				Trace.WriteLine( name + ".xslt" );
-				XslTransform transform = new XslTransform();
+				XslCompiledTransform transform = new XslCompiledTransform();
 				XmlReader reader=(XmlReader)resolver.GetEntity(new Uri("res:" + name + ".xslt"),null,typeof(XmlReader));
-				transform.Load(reader ,resolver, Assembly.GetExecutingAssembly().Evidence);
+
+//				transform.Load(reader, resolver, Assembly.GetExecutingAssembly().Evidence);
+				XsltSettings settings = new XsltSettings(false, true);
+				transform.Load(reader, settings, resolver);
 				return transform;
 			}
 			catch ( Exception e )

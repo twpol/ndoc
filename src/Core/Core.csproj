@@ -151,6 +151,7 @@
     </Compile>
     <Compile Include="Core\ReferencePath.cs" />
     <Compile Include="Core\ReferencePathCollection.cs" />
+    <Compile Include="Core\ReferenceTypeDictionary.cs" />
     <Compile Include="Core\Reflection\AssemblyLoader.cs" />
     <Compile Include="Core\Reflection\AssemblyXmlDocCache.cs" />
     <Compile Include="Core\Reflection\AttributeUsageDisplayFilter.cs" />
@@ -160,6 +161,7 @@
     <Compile Include="Core\Reflection\IAssemblyInfo.cs" />
     <Compile Include="Core\Reflection\MemberDisplayName.cs" />
     <Compile Include="Core\Reflection\MemberID.cs" />
+    <Compile Include="Core\Reflection\MethodContract.cs" />
     <Compile Include="Core\Reflection\NamespaceHierarchyCollection.cs" />
     <Compile Include="Core\Reflection\NDocXmlGenerator.cs" />
     <Compile Include="Core\Reflection\NDocXmlGeneratorParameters.cs" />

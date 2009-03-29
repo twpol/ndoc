@@ -21,6 +21,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing.Design;
+using System.IO;
 using System.Reflection;
 using System.Windows.Forms.Design;
 using NDoc3.Core.PropertyGridUI;
@@ -51,11 +52,11 @@ namespace NDoc3.Core.Reflection
                 if (assemblySlashDoc.Assembly.Path.Length > 0)
                 {
                     string assemblyFileName = assemblySlashDoc.Assembly.Path;
-                    args.AssemblyFileNames.Add(assemblyFileName);
+                    args.AddAssemblyToDocument(new FileInfo(assemblyFileName));
                 }
                 if (assemblySlashDoc.SlashDoc.Path.Length > 0)
                 {
-                    args.XmlDocFileNames.Add(assemblySlashDoc.SlashDoc.Path);
+                    args.AddAssemblySlashDoc(new FileInfo(assemblySlashDoc.SlashDoc.Path));
                 }
             }
 

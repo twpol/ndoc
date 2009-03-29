@@ -17,7 +17,7 @@ namespace NDoc3.Documenter.NativeHtmlHelp2
 		}
 
 		/// <summary>
-		/// See <see cref="IDocumenterInfo.CreateConfig"/>
+		/// See <see cref="IDocumenterInfo.CreateConfig(NDoc3.Core.Project)"/>
 		/// </summary>
 		/// <returns>A config instance</returns>
 		public override IDocumenterConfig CreateConfig()

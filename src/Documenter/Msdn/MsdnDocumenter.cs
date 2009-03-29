@@ -20,10 +20,8 @@ using System.Collections;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 using System.Text;
 using System.Xml;
-using System.Xml.Serialization;
 using System.Xml.XPath;
 using System.Xml.Xsl;
 using System.Globalization;
@@ -52,11 +50,9 @@ namespace NDoc3.Documenter.Msdn
 		private XPathDocument xpathDocument;
         private XmlNamespaceManager xmlnsManager;
 
-		private Hashtable lowerCaseTypeNames;
-		private Hashtable mixedCaseTypeNames;
-		private StringDictionary fileNames;
-		private StringDictionary elemNames;
-		private MsdnXsltUtilities utilities;
+		private readonly Hashtable lowerCaseTypeNames;
+		private readonly Hashtable mixedCaseTypeNames;
+		private readonly NameResolver _nameResolver = new NameResolver();
 
 		private StyleSheetCollection stylesheets;
 
@@ -85,9 +81,6 @@ namespace NDoc3.Documenter.Msdn
 			mixedCaseTypeNames.Add(WhichType.Structure, "Structure");
 			mixedCaseTypeNames.Add(WhichType.Enumeration, "Enumeration");
 			mixedCaseTypeNames.Add(WhichType.Delegate, "Delegate");
-
-			fileNames = new StringDictionary();
-			elemNames = new StringDictionary();
 		}
 
 		/// <summary>See <see cref="IDocumenter"/>.</summary>
@@ -300,9 +293,6 @@ namespace NDoc3.Documenter.Msdn
 
 				MakeFilenames();
 
-				string DocLangCode = Enum.GetName(typeof(SdkLanguage),MyConfig.SdkDocLanguage).Replace("_","-");
-				utilities = new MsdnXsltUtilities(fileNames, elemNames, MyConfig.SdkDocVersionString, DocLangCode, MyConfig.SdkLinksOnWeb, currentFileEncoding);
-
 				OnDocBuildingStep(30, "Loading XSLT files...");
 
 				stylesheets = StyleSheetCollection.LoadStyleSheets(MyConfig.ExtensibilityStylesheet);
@@ -402,8 +392,7 @@ namespace NDoc3.Documenter.Msdn
 					using ( StreamWriter streamWriter = new StreamWriter(
 								File.Open(Path.Combine(workspace.WorkingDirectory, "contents.html"), FileMode.CreateNew, FileAccess.Write, FileShare.None ), Encoding.Default ) )
 					{
-						//Use new overload so we don't get obsolete warnings - clean compile :)
-						stylesheets["htmlcontents"].Transform(xpathDocument, null, streamWriter, null);
+						XslTransform("htmlcontents", xpathDocument, null, streamWriter);
 					}
 #if DEBUG
 					Trace.WriteLine((Environment.TickCount - start).ToString() + " msec.");
@@ -452,6 +441,13 @@ namespace NDoc3.Documenter.Msdn
 			}
 		}
 
+		private void XslTransform(string stylesheetName, XPathDocument xpathDocument, XsltArgumentList arguments, TextWriter writer)
+		{
+			//Use new overload so we don't get obsolete warnings - clean compile :)
+			XslCompiledTransform stylesheet = stylesheets[stylesheetName];
+			stylesheet.Transform(xpathDocument, arguments, writer);
+		}
+
 		private MsdnDocumenterConfig MyConfig
 		{
 			get
@@ -462,60 +458,78 @@ namespace NDoc3.Documenter.Msdn
 
 		private void MakeFilenames()
 		{
-            XmlNodeList namespaces = xmlDocumentation.SelectNodes("/ns:ndoc/ns:assembly/ns:module/ns:namespace", xmlnsManager);
-			foreach (XmlElement namespaceNode in namespaces)
+            XmlNodeList assemblies = xmlDocumentation.SelectNodes("/ns:ndoc/ns:assembly", xmlnsManager);
+			foreach(XmlElement assemblyNode in assemblies)
 			{
-				string namespaceName = namespaceNode.Attributes["name"].Value;
-				string namespaceId = "N:" + namespaceName;
-				fileNames[namespaceId] = GetFilenameForNamespace(namespaceName);
-				elemNames[namespaceId] = namespaceName;
+				string assemblyName = GetAttributeString(assemblyNode, "name", true);
 
-				XmlNodeList types = namespaceNode.SelectNodes("*[@id]");
-				foreach (XmlElement typeNode in types)
+				XmlNodeList namespaces = assemblyNode.SelectNodes("./ns:module/ns:namespace", xmlnsManager);
+				foreach (XmlElement namespaceNode in namespaces)
 				{
-					string typeId = typeNode.Attributes["id"].Value;
-					fileNames[typeId] = GetFilenameForType(typeNode);
-					elemNames[typeId] = typeNode.Attributes["displayName"].Value;
-                    //TODO The rest should also use displayName
-					XmlNodeList members = typeNode.SelectNodes("*[@id]");
-					foreach (XmlElement memberNode in members)
+					string namespaceName = GetAttributeString(namespaceNode, "name", true);
+					_nameResolver.RegisterNamespace(assemblyName, namespaceName);
+
+					XmlNodeList types = namespaceNode.SelectNodes("*[@id]", xmlnsManager);
+					foreach (XmlElement typeNode in types)
 					{
-						string id = memberNode.Attributes["id"].Value;
-						switch (memberNode.Name)
+						string typeId = GetAttributeString(typeNode, "id", true);
+						string typeDisplayName = GetAttributeString(typeNode, "displayName", true);
+						_nameResolver.RegisterType(assemblyName, typeId, typeDisplayName);
+						//TODO The rest should also use displayName
+						// TODO (EE): clarify what above line means (shall we remove 'name' attribute then?)
+						XmlNodeList members = typeNode.SelectNodes("*[@id]");
+						foreach (XmlElement memberNode in members)
 						{
-							case "constructor":
-								fileNames[id] = GetFilenameForConstructor(memberNode);
-								elemNames[id] = elemNames[typeId];
-								break;
-							case "field":
-								if (typeNode.Name == "enumeration")
-									fileNames[id] = GetFilenameForType(typeNode);
-								else
-									fileNames[id] = GetFilenameForField(memberNode);
-								elemNames[id] = memberNode.Attributes["name"].Value;
-								break;
-							case "property":
-								fileNames[id] = GetFilenameForProperty(memberNode);
-								elemNames[id] = memberNode.Attributes["name"].Value;
-								break;
-							case "method":
-								fileNames[id] = GetFilenameForMethod(memberNode);
-								elemNames[id] = memberNode.Attributes["name"].Value;
-								break;
-							case "operator":
-								fileNames[id] = GetFilenameForOperator(memberNode);
-                                elemNames[id] = memberNode.Attributes["name"].Value;
-								break;
-							case "event":
-								fileNames[id] = GetFilenameForEvent(memberNode);
-                                elemNames[id] = memberNode.Attributes["name"].Value;
-								break;
+							string memberId = GetAttributeString(memberNode, "id", true);
+							switch (memberNode.Name)
+							{
+								case "constructor":
+									{
+										MethodContract contract = GetAttributeEnum<MethodContract>(memberNode, "contract");
+										string overload = GetAttributeString(memberNode, "overload", false);
+										_nameResolver.RegisterConstructor(assemblyName, typeId, memberId, contract, overload);
+									}
+									break;
+								case "field":
+									{
+										bool isEnum = (typeNode.Name == "enumeration");
+										string memberName = GetAttributeString(memberNode, "name", true);
+										_nameResolver.RegisterField(assemblyName, typeId, memberId, isEnum, memberName);
+									}
+									break;
+								case "property":
+									{
+										string overload = GetAttributeString(memberNode, "overload", false);
+										string memberName = GetAttributeString(memberNode, "name", true);
+										_nameResolver.RegisterProperty(assemblyName, memberId, memberName, overload);
+									}
+									break;
+								case "method":
+									{
+										string overload = GetAttributeString(memberNode, "overload", false);
+										string memberName = GetAttributeString(memberNode, "name", true);
+										_nameResolver.RegisterMethod(assemblyName, memberId, memberName, overload);
+									}
+									break;
+								case "operator":
+									{
+										string overload = GetAttributeString(memberNode, "overload", false);
+										string memberName = GetAttributeString(memberNode, "name", true);
+										_nameResolver.RegisterOperator(assemblyName, memberId, memberName, overload);
+									}
+									break;
+								case "event":
+									{
+										string memberName = GetAttributeString(memberNode, "name", true);
+										_nameResolver.RegisterEvent(assemblyName, memberId, memberName);
+									}
+									break;
+							}
 						}
 					}
 				}
 			}
 		}
-
 
 		private WhichType GetWhichType(XmlNode typeNode)
 		{
@@ -559,16 +573,22 @@ namespace NDoc3.Documenter.Msdn
 #endif
 		}
 
+		private class HtmlGenerationContext
+		{
+			// TODO (EE): set assemblyname during generating html
+#pragma warning disable 649
+			public string AssemblyName;
+#pragma warning restore 649
+		}
+
 		private void MakeHtmlForAssembliesSorted()
 		{
             XmlNodeList assemblyNodes = xmlDocumentation.SelectNodes("/ns:ndoc/ns:assembly", xmlnsManager);
 			bool        heirTOC = (this.MyConfig.NamespaceTOCStyle == TOCStyle.Hierarchical);
 			int         level = 0;
 			int[] indexes = SortNodesByAttribute(assemblyNodes, "name");
-			string[]    last = new string[0];
 
-			System.Collections.Specialized.NameValueCollection namespaceAssemblies
-				= new System.Collections.Specialized.NameValueCollection();
+			NameValueCollection namespaceAssemblies = new NameValueCollection();
 
 			int nNodes = assemblyNodes.Count;
 			for (int i = 0; i < nNodes; i++)
@@ -585,21 +605,27 @@ namespace NDoc3.Documenter.Msdn
 			Array.Sort(namespaces);
 			nNodes = namespaces.Length;
 
+			HtmlGenerationContext generatorContext = new HtmlGenerationContext();
+
+			string[] last = new string[0];
+
 			for (int i = 0; i < nNodes; i++)
 			{
 				OnDocBuildingProgress(i*100/nNodes);
-				
+
+				string currentNamespace = namespaces[i];
+
 				if (heirTOC) 
 				{
-					string[] split = namespaces[i].Split('.');
+					string[] split = currentNamespace.Split('.');
 
 					for (level = last.Length; level >= 0 &&
 						ArrayEquals(split, 0, last, 0, level) == false; level--)
 					{
 						if (level > last.Length) 
 							continue;
-						
-						MakeHtmlForTypes(string.Join(".", last, 0, level));
+
+						MakeHtmlForTypes(generatorContext, string.Join(".", last, 0, level));
 						htmlHelp.CloseBookInContents();
 					}
 	        
@@ -607,12 +633,12 @@ namespace NDoc3.Documenter.Msdn
 
 					for (; level < split.Length; level++)
 					{
-						string ns = string.Join(".", split, 0, level + 1);
+						string namespaceName = string.Join(".", split, 0, level + 1);
 						
-						if (Array.BinarySearch(namespaces, ns) < 0)
-							MakeHtmlForNamespace(split[level], ns, false);
+						if (Array.BinarySearch(namespaces, namespaceName) < 0)
+							MakeHtmlForNamespace(generatorContext, split[level], namespaceName, false);
 						else
-							MakeHtmlForNamespace(split[level], ns, true);
+							MakeHtmlForNamespace(generatorContext, split[level], namespaceName, true);
 
 						htmlHelp.OpenBookInContents();
 					}
@@ -621,9 +647,9 @@ namespace NDoc3.Documenter.Msdn
 				}
 				else
 				{
-					MakeHtmlForNamespace(namespaces[i], namespaces[i], true);
+					MakeHtmlForNamespace(generatorContext, currentNamespace, currentNamespace, true);
 					htmlHelp.OpenBookInContents();
-					MakeHtmlForTypes(namespaces[i]);
+					MakeHtmlForTypes(generatorContext, currentNamespace);
 					htmlHelp.CloseBookInContents();
 				}
 			}
@@ -633,7 +659,7 @@ namespace NDoc3.Documenter.Msdn
 			{
 				for (; level >= 1; level--)
 				{
-					MakeHtmlForTypes(string.Join(".", last, 0, level));
+					MakeHtmlForTypes(generatorContext, string.Join(".", last, 0, level));
 					htmlHelp.CloseBookInContents();
 				}
 			}
@@ -668,12 +694,13 @@ namespace NDoc3.Documenter.Msdn
 		/// <remarks>
 		/// The namespace 
 		/// </remarks>
+		/// <param name="generatorContext"></param>
 		/// <param name="namespacePart">If nested, the namespace part will be the current
 		/// namespace element being documented</param>
 		/// <param name="namespaceName">The full namespace name being documented</param>
 		/// <param name="addDocumentation">If true, the namespace will be documented, if false
 		/// the node in the TOC will not link to a page</param>
-		private void MakeHtmlForNamespace(string namespacePart, string namespaceName, 
+		private void MakeHtmlForNamespace(HtmlGenerationContext generatorContext, string namespacePart, string namespaceName, 
 			bool addDocumentation)
 		{
 			if (documentedNamespaces.Contains(namespaceName)) 
@@ -683,19 +710,19 @@ namespace NDoc3.Documenter.Msdn
 
 			if (addDocumentation)
 			{
-			string fileName = GetFilenameForNamespace(namespaceName);
+			string fileName = _nameResolver.GetFilenameForMember(generatorContext.AssemblyName, "N:"+namespaceName);
 				
 				htmlHelp.AddFileToContents(namespacePart, fileName);
 
 			XsltArgumentList arguments = new XsltArgumentList();
 			arguments.AddParam("namespace", String.Empty, namespaceName);
 
-			TransformAndWriteResult("namespace", arguments, fileName);
+			TransformAndWriteResult(generatorContext, "namespace", arguments, fileName);
 
 			arguments = new XsltArgumentList();
 			arguments.AddParam("namespace", String.Empty, namespaceName);
 
-			TransformAndWriteResult(
+			TransformAndWriteResult(generatorContext,
 				"namespacehierarchy",
 				arguments,
 				fileName.Insert(fileName.Length - 5, "Hierarchy"));
@@ -704,7 +731,7 @@ namespace NDoc3.Documenter.Msdn
 				htmlHelp.AddFileToContents(namespacePart);
 		}
 
-		private void MakeHtmlForTypes(string namespaceName)
+		private void MakeHtmlForTypes(HtmlGenerationContext generatorContext, string namespaceName)
 		{
 			XmlNodeList typeNodes =
                 xmlDocumentation.SelectNodes("/ns:ndoc/ns:assembly/ns:module/ns:namespace[@name=\"" + namespaceName + "\"]/*[local-name()!='documentation' and local-name()!='typeHierarchy']", xmlnsManager);
@@ -721,19 +748,19 @@ namespace NDoc3.Documenter.Msdn
 				switch(whichType)
 				{
 					case WhichType.Class:
-						MakeHtmlForInterfaceOrClassOrStructure(whichType, typeNode);
+						MakeHtmlForInterfaceOrClassOrStructure(generatorContext, whichType, typeNode);
 						break;
 					case WhichType.Interface:
-						MakeHtmlForInterfaceOrClassOrStructure(whichType, typeNode);
+						MakeHtmlForInterfaceOrClassOrStructure(generatorContext, whichType, typeNode);
 						break;
 					case WhichType.Structure:
-						MakeHtmlForInterfaceOrClassOrStructure(whichType, typeNode);
+						MakeHtmlForInterfaceOrClassOrStructure(generatorContext, whichType, typeNode);
 						break;
 					case WhichType.Enumeration:
-						MakeHtmlForEnumerationOrDelegate(whichType, typeNode);
+						MakeHtmlForEnumerationOrDelegate(generatorContext, whichType, typeNode);
 						break;
 					case WhichType.Delegate:
-						MakeHtmlForEnumerationOrDelegate(whichType, typeNode);
+						MakeHtmlForEnumerationOrDelegate(generatorContext, whichType, typeNode);
 						break;
 					default:
 						break;
@@ -741,7 +768,7 @@ namespace NDoc3.Documenter.Msdn
 			}
 		}
 
-		private void MakeHtmlForEnumerationOrDelegate(WhichType whichType, XmlNode typeNode)
+		private void MakeHtmlForEnumerationOrDelegate(HtmlGenerationContext generatorContext, WhichType whichType, XmlNode typeNode)
 		{
 			string typeName;
             if (whichType == WhichType.Delegate)
@@ -749,22 +776,22 @@ namespace NDoc3.Documenter.Msdn
             else
                 typeName = typeNode.Attributes["name"].Value;
 			string typeID = typeNode.Attributes["id"].Value;
-			string fileName = GetFilenameForType(typeNode);
+			string fileName = _nameResolver.GetFilenameForMember(generatorContext.AssemblyName, typeID);
 
 			htmlHelp.AddFileToContents(typeName + " " + mixedCaseTypeNames[whichType], fileName, HtmlHelpIcon.Page );
 
 			XsltArgumentList arguments = new XsltArgumentList();
 			arguments.AddParam("type-id", String.Empty, typeID);
-			TransformAndWriteResult("type", arguments, fileName);
+			TransformAndWriteResult(generatorContext, "type", arguments, fileName);
 		}
 
-		private void MakeHtmlForInterfaceOrClassOrStructure(
+		private void MakeHtmlForInterfaceOrClassOrStructure(HtmlGenerationContext generatorContext, 
 			WhichType whichType,
 			XmlNode typeNode)
 		{
 			string typeName = typeNode.Attributes["displayName"].Value;
 			string typeID = typeNode.Attributes["id"].Value;
-			string fileName = GetFilenameForType(typeNode);
+			string fileName = _nameResolver.GetFilenameForMember(generatorContext.AssemblyName, typeID);
 
 			htmlHelp.AddFileToContents(typeName + " " + mixedCaseTypeNames[whichType], fileName);
 
@@ -777,54 +804,54 @@ namespace NDoc3.Documenter.Msdn
 
 			XsltArgumentList arguments = new XsltArgumentList();
 			arguments.AddParam("type-id", String.Empty, typeID);
-			TransformAndWriteResult("type", arguments, fileName);
+			TransformAndWriteResult(generatorContext, "type", arguments, fileName);
 
             if (typeNode.SelectNodes("ns:derivedBy", xmlnsManager).Count > 5)
 			{
-				fileName = GetFilenameForTypeHierarchy(typeNode);
+				fileName = _nameResolver.GetFilenameForTypeHierarchy(generatorContext.AssemblyName, typeID);
 				arguments = new XsltArgumentList();
 				arguments.AddParam("type-id", String.Empty, typeID);
-				TransformAndWriteResult("typehierarchy", arguments, fileName);
+				TransformAndWriteResult(generatorContext, "typehierarchy", arguments, fileName);
 			}
 
 			if (hasMembers)
 			{
-				fileName = GetFilenameForTypeMembers(typeNode);
+				fileName = _nameResolver.GetFilenameForTypeMembers(generatorContext.AssemblyName, typeID);
 				htmlHelp.AddFileToContents(typeName + " Members", 
 					fileName, 
 					HtmlHelpIcon.Page);
 
 				arguments = new XsltArgumentList();
 				arguments.AddParam("id", String.Empty, typeID);
-				TransformAndWriteResult("allmembers", arguments, fileName);
+				TransformAndWriteResult(generatorContext, "allmembers", arguments, fileName);
 
-				MakeHtmlForConstructors(whichType, typeNode);
-				MakeHtmlForFields(whichType, typeNode);
-				MakeHtmlForProperties(whichType, typeNode);
-				MakeHtmlForMethods(whichType, typeNode);
-				MakeHtmlForOperators(whichType, typeNode);
-				MakeHtmlForEvents(whichType, typeNode);
+				MakeHtmlForConstructors(generatorContext, whichType, typeNode);
+				MakeHtmlForFields(generatorContext, whichType, typeNode);
+				MakeHtmlForProperties(generatorContext, whichType, typeNode);
+				MakeHtmlForMethods(generatorContext, whichType, typeNode);
+				MakeHtmlForOperators(generatorContext, whichType, typeNode);
+				MakeHtmlForEvents(generatorContext, whichType, typeNode);
 
 				htmlHelp.CloseBookInContents();
 			}
 		}
 
-		private void MakeHtmlForConstructors(WhichType whichType, XmlNode typeNode)
+		private void MakeHtmlForConstructors(HtmlGenerationContext generatorContext, WhichType whichType, XmlNode typeNode)
 		{
 			XmlNodeList   constructorNodes;
 			string        constructorID;
 			string        typeName;
-			//string        typeID;
+			string        typeID;
 			string        fileName;
 
 			typeName = typeNode.Attributes["displayName"].Value;
-			//typeID = typeNode.Attributes["id"].Value;
+			typeID = typeNode.Attributes["id"].Value;
             constructorNodes = typeNode.SelectNodes("ns:constructor[@contract!='Static']", xmlnsManager);
 
 			// If the constructor is overloaded then make an overload page.
 			if (constructorNodes.Count > 1)
 			{
-				fileName = GetFilenameForConstructors(typeNode);
+				fileName = _nameResolver.GetFilenameForConstructors(generatorContext.AssemblyName, typeID);
 				htmlHelp.AddFileToContents(typeName + " Constructor", fileName);
 
 				htmlHelp.OpenBookInContents();
@@ -833,13 +860,13 @@ namespace NDoc3.Documenter.Msdn
 
 				XsltArgumentList arguments = new XsltArgumentList();
 				arguments.AddParam("member-id", String.Empty, constructorID);
-				TransformAndWriteResult("memberoverload", arguments, fileName);
+				TransformAndWriteResult(generatorContext, "memberoverload", arguments, fileName);
 			}
 
 			foreach (XmlNode constructorNode in constructorNodes)
 			{
 				constructorID = constructorNode.Attributes["id"].Value;
-				fileName = GetFilenameForConstructor(constructorNode);
+				fileName = _nameResolver.GetFilenameForMember(generatorContext.AssemblyName, constructorID);
 
 				if (constructorNodes.Count > 1)
 				{
@@ -854,7 +881,7 @@ namespace NDoc3.Documenter.Msdn
 
 				XsltArgumentList arguments = new XsltArgumentList();
 				arguments.AddParam("member-id", String.Empty, constructorID);
-				TransformAndWriteResult("member", arguments, fileName);
+				TransformAndWriteResult(generatorContext, "member", arguments, fileName);
 			}
 
 			if (constructorNodes.Count > 1)
@@ -866,17 +893,17 @@ namespace NDoc3.Documenter.Msdn
 			if (staticConstructorNode != null)
 			{
 				constructorID = staticConstructorNode.Attributes["id"].Value;
-				fileName = GetFilenameForConstructor(staticConstructorNode);
+				fileName = _nameResolver.GetFilenameForMember(generatorContext.AssemblyName, constructorID);
 
 				htmlHelp.AddFileToContents(typeName + " Static Constructor", fileName, HtmlHelpIcon.Page);
 
 				XsltArgumentList arguments = new XsltArgumentList();
 				arguments.AddParam("member-id", String.Empty, constructorID);
-				TransformAndWriteResult("member", arguments, fileName);
+				TransformAndWriteResult(generatorContext, "member", arguments, fileName);
 			}
 		}
 
-		private void MakeHtmlForFields(WhichType whichType, XmlNode typeNode)
+		private void MakeHtmlForFields(HtmlGenerationContext generatorContext, WhichType whichType, XmlNode typeNode)
 		{
             XmlNodeList fields = typeNode.SelectNodes("ns:field[not(@declaringType)]", xmlnsManager);
 
@@ -884,14 +911,14 @@ namespace NDoc3.Documenter.Msdn
 			{
 				//string typeName = typeNode.Attributes["name"].Value;
 				string typeID = typeNode.Attributes["id"].Value;
-				string fileName = GetFilenameForFields(whichType, typeNode);
+				string fileName = _nameResolver.GetFilenameForFields(generatorContext.AssemblyName, typeID);
 
 				htmlHelp.AddFileToContents("Fields", fileName);
 
 				XsltArgumentList arguments = new XsltArgumentList();
 				arguments.AddParam("id", String.Empty, typeID);
 				arguments.AddParam("member-type", String.Empty, "field");
-				TransformAndWriteResult("individualmembers", arguments, fileName);
+				TransformAndWriteResult(generatorContext, "individualmembers", arguments, fileName);
 
 				htmlHelp.OpenBookInContents();
 
@@ -903,19 +930,19 @@ namespace NDoc3.Documenter.Msdn
 
 					string fieldName = field.Attributes["name"].Value;
 					string fieldID = field.Attributes["id"].Value;
-					fileName = GetFilenameForField(field);
+					fileName = _nameResolver.GetFilenameForMember(generatorContext.AssemblyName, fieldID);
 					htmlHelp.AddFileToContents(fieldName + " Field", fileName, HtmlHelpIcon.Page );
 
 					arguments = new XsltArgumentList();
 					arguments.AddParam("field-id", String.Empty, fieldID);
-					TransformAndWriteResult("field", arguments, fileName);
+					TransformAndWriteResult(generatorContext, "field", arguments, fileName);
 				}
 
 				htmlHelp.CloseBookInContents();
 			}
 		}
 
-		private void MakeHtmlForProperties(WhichType whichType, XmlNode typeNode)
+		private void MakeHtmlForProperties(HtmlGenerationContext generatorContext, WhichType whichType, XmlNode typeNode)
 		{
             XmlNodeList declaredPropertyNodes = typeNode.SelectNodes("ns:property[not(@declaringType)]", xmlnsManager);
 
@@ -942,13 +969,13 @@ namespace NDoc3.Documenter.Msdn
 
 				indexes = SortNodesByAttribute(propertyNodes, "id");
 
-				fileName = GetFilenameForProperties(whichType, typeNode);
+				fileName = _nameResolver.GetFilenameForProperties(generatorContext.AssemblyName, typeID);
 				htmlHelp.AddFileToContents("Properties", fileName);
 
 				XsltArgumentList arguments = new XsltArgumentList();
 				arguments.AddParam("id", String.Empty, typeID);
 				arguments.AddParam("member-type", String.Empty, "property");
-				TransformAndWriteResult("individualmembers", arguments, fileName);
+				TransformAndWriteResult(generatorContext, "individualmembers", arguments, fileName);
 
 				htmlHelp.OpenBookInContents();
 
@@ -972,14 +999,14 @@ namespace NDoc3.Documenter.Msdn
 
 						arguments = new XsltArgumentList();
 						arguments.AddParam("member-id", String.Empty, propertyID);
-						TransformAndWriteResult("memberoverload", arguments, fileName);
+						TransformAndWriteResult(generatorContext, "memberoverload", arguments, fileName);
 
 						htmlHelp.OpenBookInContents();
 
 						bOverloaded = true;
 					}
 
-					fileName = GetFilenameForProperty(propertyNode);
+					fileName = _nameResolver.GetFilenameForMember(generatorContext.AssemblyName, propertyID);
 
 					if (bOverloaded)
 					{
@@ -995,7 +1022,7 @@ namespace NDoc3.Documenter.Msdn
 
 					XsltArgumentList arguments2 = new XsltArgumentList();
 					arguments2.AddParam("property-id", String.Empty, propertyID);
-					TransformAndWriteResult("property", arguments2, fileName);
+					TransformAndWriteResult(generatorContext, "property", arguments2, fileName);
 
 					if ((previousPropertyName == propertyName) && (nextPropertyName != propertyName))
 					{
@@ -1065,7 +1092,7 @@ namespace NDoc3.Documenter.Msdn
 			return nextName != name;
 		}
 
-		private void MakeHtmlForMethods(WhichType whichType, XmlNode typeNode)
+		private void MakeHtmlForMethods(HtmlGenerationContext generatorContext, WhichType whichType, XmlNode typeNode)
 		{
             XmlNodeList declaredMethodNodes = typeNode.SelectNodes("ns:method[not(@declaringType)]", xmlnsManager);
 
@@ -1081,13 +1108,13 @@ namespace NDoc3.Documenter.Msdn
 
 				int[] indexes = SortNodesByAttribute(methodNodes, "id");
 
-				fileName = GetFilenameForMethods(whichType, typeNode);
+				fileName = _nameResolver.GetFilenameForMethods(generatorContext.AssemblyName, typeID);
 				htmlHelp.AddFileToContents("Methods", fileName);
 
 				XsltArgumentList arguments = new XsltArgumentList();
 				arguments.AddParam("id", String.Empty, typeID);
 				arguments.AddParam("member-type", String.Empty, "method");
-				TransformAndWriteResult("individualmembers", arguments, fileName);
+				TransformAndWriteResult(generatorContext, "individualmembers", arguments, fileName);
 
 				htmlHelp.OpenBookInContents();
 
@@ -1106,14 +1133,14 @@ namespace NDoc3.Documenter.Msdn
 
 						arguments = new XsltArgumentList();
 						arguments.AddParam("member-id", String.Empty, methodID);
-						TransformAndWriteResult("memberoverload", arguments, fileName);
+						TransformAndWriteResult(generatorContext, "memberoverload", arguments, fileName);
 
 						htmlHelp.OpenBookInContents();
 					}
 
 					if (methodNode.Attributes["declaringType"] == null)
 					{
-						fileName = GetFilenameForMethod(methodNode);
+						fileName = _nameResolver.GetFilenameForMember(generatorContext.AssemblyName, methodID);
 
 						if (bOverloaded)
 						{
@@ -1129,7 +1156,7 @@ namespace NDoc3.Documenter.Msdn
 
 						XsltArgumentList arguments2 = new XsltArgumentList();
 						arguments2.AddParam("member-id", String.Empty, methodID);
-						TransformAndWriteResult("member", arguments2, fileName);
+						TransformAndWriteResult(generatorContext, "member", arguments2, fileName);
 					}
 
 					if (bOverloaded && IsMethodLastOverload(methodNodes, indexes, i))
@@ -1143,7 +1170,7 @@ namespace NDoc3.Documenter.Msdn
 			}
 		}
 
-		private void MakeHtmlForOperators(WhichType whichType, XmlNode typeNode)
+		private void MakeHtmlForOperators(HtmlGenerationContext generatorContext, WhichType whichType, XmlNode typeNode)
 		{
             XmlNodeList operators = typeNode.SelectNodes("ns:operator", xmlnsManager);
 
@@ -1152,10 +1179,10 @@ namespace NDoc3.Documenter.Msdn
 				string typeName = (string)typeNode.Attributes["name"].Value;
 				string typeID = (string)typeNode.Attributes["id"].Value;
                 XmlNodeList opNodes = typeNode.SelectNodes("ns:operator", xmlnsManager);
-				string fileName = GetFilenameForOperators(whichType, typeNode);
+				string fileName = _nameResolver.GetFilenameForOperators(generatorContext.AssemblyName, typeID);
 				bool bOverloaded = false;
 
-                bool bHasOperators = (typeNode.SelectSingleNode("ns:operator[@name != 'op_Explicit' and @name != 'op_Implicit']", xmlnsManager) != null); ;
+                bool bHasOperators = (typeNode.SelectSingleNode("ns:operator[@name != 'op_Explicit' and @name != 'op_Implicit']", xmlnsManager) != null);
                 bool bHasConverters = (typeNode.SelectSingleNode("ns:operator[@name  = 'op_Explicit' or  @name  = 'op_Implicit']", xmlnsManager) != null);
 				string title="";
 
@@ -1183,7 +1210,7 @@ namespace NDoc3.Documenter.Msdn
 				XsltArgumentList arguments = new XsltArgumentList();
 				arguments.AddParam("id", String.Empty, typeID);
 				arguments.AddParam("member-type", String.Empty, "operator");
-				TransformAndWriteResult("individualmembers", arguments, fileName);
+				TransformAndWriteResult(generatorContext, "individualmembers", arguments, fileName);
 
 				htmlHelp.OpenBookInContents();
 
@@ -1208,13 +1235,13 @@ namespace NDoc3.Documenter.Msdn
 
 							arguments = new XsltArgumentList();
 							arguments.AddParam("member-id", String.Empty, operatorID);
-							TransformAndWriteResult("memberoverload", arguments, fileName);
+							TransformAndWriteResult(generatorContext, "memberoverload", arguments, fileName);
 
 							htmlHelp.OpenBookInContents();
 						}
 
 
-						fileName = GetFilenameForOperator(operatorNode);
+						fileName = _nameResolver.GetFilenameForMember(generatorContext.AssemblyName, operatorID);
 						if (bOverloaded)
 						{
                             XmlNodeList parameterNodes = xmlDocumentation.SelectNodes("/ns:ndoc/ns:assembly/ns:module/ns:namespace/" + lowerCaseTypeNames[whichType] + "[@name=\"" + typeName + "\"]/ns:operator[@id=\"" + operatorID + "\"]/ns:parameter", xmlnsManager);
@@ -1229,7 +1256,7 @@ namespace NDoc3.Documenter.Msdn
 
 						arguments = new XsltArgumentList();
 						arguments.AddParam("member-id", String.Empty, operatorID);
-						TransformAndWriteResult("member", arguments, fileName);
+						TransformAndWriteResult(generatorContext, "member", arguments, fileName);
 
 						if (bOverloaded && IsMethodLastOverload(opNodes, indexes, i))
 						{
@@ -1248,13 +1275,13 @@ namespace NDoc3.Documenter.Msdn
 					string opName = (string)operatorNode.Attributes["name"].Value;
 					if ((opName == "op_Implicit") || (opName == "op_Explicit"))
 					{
-						fileName = GetFilenameForOperator(operatorNode);
+						fileName = _nameResolver.GetFilenameForMember(generatorContext.AssemblyName, operatorID);
 						htmlHelp.AddFileToContents(GetOperatorName(operatorNode), fileName, 
 							HtmlHelpIcon.Page );
 
 						arguments = new XsltArgumentList();
 						arguments.AddParam("member-id", String.Empty, operatorID);
-						TransformAndWriteResult("member", arguments, fileName);
+						TransformAndWriteResult(generatorContext, "member", arguments, fileName);
 
 					}
 				}
@@ -1343,7 +1370,7 @@ namespace NDoc3.Documenter.Msdn
 			return result;
 		}
 
-		private void MakeHtmlForEvents(WhichType whichType, XmlNode typeNode)
+		private void MakeHtmlForEvents(HtmlGenerationContext generatorContext, WhichType whichType, XmlNode typeNode)
 		{
             XmlNodeList declaredEventNodes = typeNode.SelectNodes("ns:event[not(@declaringType)]", xmlnsManager);
 
@@ -1355,14 +1382,14 @@ namespace NDoc3.Documenter.Msdn
 				{
 					//string typeName = (string)typeNode.Attributes["name"].Value;
 					string typeID = (string)typeNode.Attributes["id"].Value;
-					string fileName = GetFilenameForEvents(whichType, typeNode);
+					string fileName = _nameResolver.GetFilenameForEvents(generatorContext.AssemblyName, typeID);
 
 					htmlHelp.AddFileToContents("Events", fileName);
 
 					XsltArgumentList arguments = new XsltArgumentList();
 					arguments.AddParam("id", String.Empty, typeID);
 					arguments.AddParam("member-type", String.Empty, "event");
-					TransformAndWriteResult("individualmembers", arguments, fileName);
+					TransformAndWriteResult(generatorContext, "individualmembers", arguments, fileName);
 
 					htmlHelp.OpenBookInContents();
 
@@ -1377,14 +1404,14 @@ namespace NDoc3.Documenter.Msdn
 							string eventName = (string)eventElement.Attributes["name"].Value;
 							string eventID = (string)eventElement.Attributes["id"].Value;
 
-							fileName = GetFilenameForEvent(eventElement);
+							fileName = _nameResolver.GetFilenameForMember(generatorContext.AssemblyName, eventID);
 							htmlHelp.AddFileToContents(eventName + " Event", 
 								fileName, 
 								HtmlHelpIcon.Page);
 
 							arguments = new XsltArgumentList();
 							arguments.AddParam("event-id", String.Empty, eventID);
-							TransformAndWriteResult("event", arguments, fileName);
+							TransformAndWriteResult(generatorContext, "event", arguments, fileName);
 						}
 					}
 
@@ -1434,7 +1461,7 @@ namespace NDoc3.Documenter.Msdn
 			return indexes;
 		}
 
-		private void TransformAndWriteResult(
+		private void TransformAndWriteResult(HtmlGenerationContext generatorContext,
 			string transformName,
 			XsltArgumentList arguments,
 			string filename)
@@ -1445,14 +1472,17 @@ namespace NDoc3.Documenter.Msdn
 #endif
 
 			ExternalHtmlProvider htmlProvider = new ExternalHtmlProvider(MyConfig, filename);
-			StreamWriter streamWriter = null;
 
 			try
 			{
+				StreamWriter streamWriter;
 				using (streamWriter =  new StreamWriter(
 					File.Open(Path.Combine(workspace.WorkingDirectory, filename), FileMode.Create),
 					currentFileEncoding))
 				{
+					string DocLangCode = Enum.GetName(typeof(SdkLanguage), MyConfig.SdkDocLanguage).Replace("_", "-");
+					MsdnXsltUtilities utilities = new MsdnXsltUtilities(_nameResolver, generatorContext.AssemblyName, MyConfig.SdkDocVersionString, DocLangCode, MyConfig.SdkLinksOnWeb, currentFileEncoding);
+
 					arguments.AddParam("ndoc-title", String.Empty, MyConfig.Title);
 					arguments.AddParam("ndoc-vb-syntax", String.Empty, MyConfig.ShowVisualBasic);
 					arguments.AddParam("ndoc-omit-object-tags", String.Empty, ((MyConfig.OutputTarget & OutputType.HtmlHelp) == 0));
@@ -1469,10 +1499,10 @@ namespace NDoc3.Documenter.Msdn
 					//reset overloads testing
 					utilities.Reset();
 
-					XslTransform transform = stylesheets[transformName];
-
+					XslCompiledTransform transform = stylesheets[transformName];
+					
 					//Use new overload so we don't get obsolete warnings - clean compile :)
-					transform.Transform(xpathDocument, arguments, streamWriter, null);
+					XslTransform(transformName, xpathDocument, arguments, streamWriter);
 				}
 			}
 			catch(PathTooLongException e)
@@ -1481,85 +1511,44 @@ namespace NDoc3.Documenter.Msdn
 			}
 
 #if DEBUG
-			Debug.WriteLine((Environment.TickCount - start).ToString() + " msec.");
+			Debug.WriteLine((Environment.TickCount - start) + " msec.");
 #endif
 			htmlHelp.AddFileToProject(filename);
 		}
 
-		private string GetFilenameForNamespace(string namespaceName)
+		private TVal GetAttributeEnum<TVal>(XmlNode node, string attributeName)
 		{
-			string fileName = namespaceName + ".html";
-			return fileName;
-		}
-
-		private string GetFilenameForType(XmlNode typeNode)
-		{
-			string typeID = (string)typeNode.Attributes["id"].Value;
-			string fileName = typeID.Substring(2) + ".html";
-			return fileName;
-		}
-
-		private string GetFilenameForTypeHierarchy(XmlNode typeNode)
-		{
-			string typeID = (string)typeNode.Attributes["id"].Value;
-			string fileName = typeID.Substring(2) + "Hierarchy.html";
-			return fileName;
-		}
-		private string GetFilenameForTypeMembers(XmlNode typeNode)
-		{
-			string typeID = (string)typeNode.Attributes["id"].Value;
-			string fileName = typeID.Substring(2) + "Members.html";
-			return fileName;
-		}
-
-		private string GetFilenameForConstructors(XmlNode typeNode)
-		{
-			string typeID = (string)typeNode.Attributes["id"].Value;
-			string fileName = typeID.Substring(2) + "Constructor.html";
-			return fileName;
-		}
-
-		private string GetFilenameForConstructor(XmlNode constructorNode)
-		{
-			string constructorID = (string)constructorNode.Attributes["id"].Value;
-			int dotHash = constructorID.IndexOf(".#"); // constructors could be #ctor or #cctor
-
-			string fileName = constructorID.Substring(2, dotHash - 2);
-			if (constructorNode.Attributes["contract"].Value == "Static")
-				fileName += "Static";
-
-			fileName += "Constructor";
-
-			if (constructorNode.Attributes["overload"] != null)
+			XmlAttribute attribute = node.Attributes[attributeName];
+			if (attribute == null)
 			{
-				fileName += (string)constructorNode.Attributes["overload"].Value;
+				throw new ArgumentException(string.Format("Required attribute {0} not found on node {1}: {2}", attributeName, node.Name, node.OuterXml));
 			}
-
-			fileName += ".html";
-
-			return fileName;
+			return (TVal) Enum.Parse(typeof(TVal), attribute.Value);
 		}
 
-		private string GetFilenameForFields(WhichType whichType, XmlNode typeNode)
+		private TVal GetAttributeEnum<TVal>(XmlNode node, string attributeName, TVal defaultValue)
 		{
-			string typeID = (string)typeNode.Attributes["id"].Value;
-			string fileName = typeID.Substring(2) + "Fields.html";
-			return fileName;
+			XmlAttribute attribute = node.Attributes[attributeName];
+			if (attribute == null)
+			{
+				return defaultValue;
+			}
+			return (TVal) Enum.Parse(typeof(TVal), attribute.Value);
 		}
 
-		private string GetFilenameForField(XmlNode fieldNode)
+		private string GetAttributeString(XmlNode node, string attributeName, bool required)
 		{
-			string fieldID = (string)fieldNode.Attributes["id"].Value;
-			string fileName = fieldID.Substring(2) + ".html";
-			fileName = fileName.Replace("#",".");
-			return fileName;
-		}
-
-		private string GetFilenameForOperators(WhichType whichType, XmlNode typeNode)
-		{
-			string typeID = typeNode.Attributes["id"].Value;
-			string fileName = typeID.Substring(2) + "Operators.html";
-			return fileName;
+			string attributeString = null;
+			XmlAttribute attribute = node.Attributes[attributeName];
+			if (attribute == null && required)
+			{
+				throw new ArgumentException(string.Format("Required attribute {0} not found on node {1}: {2}", attributeName, node.Name, node.OuterXml));
+			}
+			if (attribute != null)
+			{
+				attributeString = attribute.Value;
+			}
+			return attributeString;
 		}
 
 		private string GetFilenameForOperatorsOverloads(XmlNode typeNode, XmlNode opNode)
@@ -1567,51 +1556,6 @@ namespace NDoc3.Documenter.Msdn
 			string typeID = (string)typeNode.Attributes["id"].Value;
 			string opName = (string)opNode.Attributes["name"].Value;
 			string fileName = typeID.Substring(2) + "." + opName + "_overloads.html";
-			return fileName;
-		}
-
-		private string GetFilenameForOperator(XmlNode operatorNode)
-		{
-			string operatorID = operatorNode.Attributes["id"].Value;
-			string fileName = operatorID.Substring(2);
-
-			int leftParenIndex = fileName.IndexOf('(');
-
-			if (leftParenIndex != -1)
-			{
-				fileName = fileName.Substring(0, leftParenIndex);
-			}
-
-			if (operatorNode.Attributes["overload"] != null)
-			{
-				fileName += "_overload_" + operatorNode.Attributes["overload"].Value;
-			}
-
-			fileName += ".html";
-			fileName = fileName.Replace("#",".");
-
-			return fileName;
-		}
-
-		private string GetFilenameForEvents(WhichType whichType, XmlNode typeNode)
-		{
-			string typeID = (string)typeNode.Attributes["id"].Value;
-			string fileName = typeID.Substring(2) + "Events.html";
-			return fileName;
-		}
-
-		private string GetFilenameForEvent(XmlNode eventNode)
-		{
-			string eventID = (string)eventNode.Attributes["id"].Value;
-			string fileName = eventID.Substring(2) + ".html";
-			fileName = fileName.Replace("#",".");
-			return fileName;
-		}
-
-		private string GetFilenameForProperties(WhichType whichType, XmlNode typeNode)
-		{
-			string typeID = (string)typeNode.Attributes["id"].Value;
-			string fileName = typeID.Substring(2) + "Properties.html";
 			return fileName;
 		}
 
@@ -1624,65 +1568,11 @@ namespace NDoc3.Documenter.Msdn
 			return fileName;
 		}
 
-		private string GetFilenameForProperty(XmlNode propertyNode)
-		{
-			string propertyID = (string)propertyNode.Attributes["id"].Value;
-			string fileName = propertyID.Substring(2);
-
-			int leftParenIndex = fileName.IndexOf('(');
-
-			if (leftParenIndex != -1)
-			{
-				fileName = fileName.Substring(0, leftParenIndex);
-			}
-
-			if (propertyNode.Attributes["overload"] != null)
-			{
-				fileName += (string)propertyNode.Attributes["overload"].Value;
-			}
-
-			fileName += ".html";
-			fileName = fileName.Replace("#",".");
-
-			return fileName;
-		}
-
-		private string GetFilenameForMethods(WhichType whichType, XmlNode typeNode)
-		{
-			string typeID = (string)typeNode.Attributes["id"].Value;
-			string fileName = typeID.Substring(2) + "Methods.html";
-			return fileName;
-		}
-
 		private string GetFilenameForMethodOverloads(XmlNode typeNode, XmlNode methodNode)
 		{
 			string typeID = (string)typeNode.Attributes["id"].Value;
 			string methodName = (string)methodNode.Attributes["name"].Value;
 			string fileName = typeID.Substring(2) + "." + methodName + "_overloads.html";
-			return fileName;
-		}
-
-		private string GetFilenameForMethod(XmlNode methodNode)
-		{
-			string methodID = (string)methodNode.Attributes["id"].Value;
-			string fileName = methodID.Substring(2);
-
-			int leftParenIndex = fileName.IndexOf('(');
-
-			if (leftParenIndex != -1)
-			{
-				fileName = fileName.Substring(0, leftParenIndex);
-			}
-
-			fileName = fileName.Replace("#",".");
-
-			if (methodNode.Attributes["overload"] != null)
-			{
-				fileName += "_overload_" + (string)methodNode.Attributes["overload"].Value;
-			}
-
-			fileName += ".html";
-
 			return fileName;
 		}
 
@@ -1692,14 +1582,14 @@ namespace NDoc3.Documenter.Msdn
 		/// </summary>
 		private class FilteringXmlTextReader:XmlTextReader
 		{
-			object oNamespaceHierarchy;
-			object oDocumentation;
-			object oImplements;
-			object oAttribute;
+			readonly object oNamespaceHierarchy;
+			readonly object oDocumentation;
+			readonly object oImplements;
+			readonly object oAttribute;
 
-			public FilteringXmlTextReader(System.IO.Stream file):base(file)
+			public FilteringXmlTextReader(Stream file):base(file)
 			{
-				base.WhitespaceHandling=WhitespaceHandling.None;
+				WhitespaceHandling=WhitespaceHandling.None;
 				oNamespaceHierarchy = base.NameTable.Add("namespaceHierarchy");
 				oDocumentation = base.NameTable.Add("documentation");
 				oImplements = base.NameTable.Add("implements");

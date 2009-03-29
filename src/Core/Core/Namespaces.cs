@@ -204,11 +204,11 @@ namespace NDoc3.Core
                 {
                     if (assemblySlashDoc.Assembly.Path.Length > 0)
                     {
-                        string assemblyFullPath = assemblySlashDoc.Assembly.Path;
-                        if (File.Exists(assemblyFullPath))
+                        FileInfo assemblyFullPath = new FileInfo(assemblySlashDoc.Assembly.Path);
+                        if (assemblyFullPath.Exists)
                         {
-                            SortedList namespaces = re.GetNamespacesFromAssembly(assemblyFullPath);
-                            foreach (string ns in namespaces.GetKeyList())
+                            string[] namespaces = re.GetNamespacesFromAssembly(assemblyFullPath);
+                            foreach (string ns in namespaces)
                             {
                                 if ((!_namespaces.ContainsKey(ns)))
                                 {

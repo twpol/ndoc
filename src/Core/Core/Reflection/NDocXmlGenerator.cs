@@ -32,7 +32,6 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Xml;
 using System.Xml.Schema;
-using System.Xml.XPath;
 
 namespace NDoc3.Core.Reflection
 {
@@ -41,12 +40,15 @@ namespace NDoc3.Core.Reflection
 	/// </summary>
 	internal class NDocXmlGenerator : MarshalByRefObject, IDisposable
 	{
+		public const string NDOCXML_NAMESPACEURI = "urn:ndoc-schema";
+		public const string NDOCXML_VERSION = "2.0";
+
 		private readonly NDocXmlGeneratorParameters _rep;
 		private readonly IAssemblyLoader _assemblyLoader;
 		private readonly AssemblyXmlDocCache _assemblyDocCache;
 		private readonly ExternalXmlSummaryCache _externalSummaryCache;
 		private readonly Hashtable _notEmptyNamespaces;
-//		private readonly Dictionary<Type, object>_documentedTypes;
+		//		private readonly Dictionary<Type, object>_documentedTypes;
 		private readonly TypeHierarchy _derivedTypes;
 		private readonly TypeHierarchy _interfaceImplementingTypes;
 		private readonly NamespaceHierarchyCollection _namespaceHierarchies;
@@ -59,10 +61,9 @@ namespace NDoc3.Core.Reflection
 			_assemblyLoader = assemblyLoader ?? new AssemblyLoader();
 
 			if (_assemblyLoader is AssemblyLoader) {
-				foreach (string assemblyFileName in _rep.AssemblyFileNames) {
+				foreach (FileInfo assemblyFile in _rep.AssemblyFileNames) {
 					// ensure the assembly's path is added to the search list for resolving dependencies
-					string assyDir = Path.GetDirectoryName(assemblyFileName);
-					((AssemblyLoader)assemblyLoader).AddSearchDirectory(new ReferencePath(assyDir));
+					((AssemblyLoader)assemblyLoader).AddSearchDirectory(new ReferencePath(assemblyFile.DirectoryName));
 				}
 			}
 			string DocLangCode = Enum.GetName(typeof(SdkLanguage), _rep.SdkDocLanguage).Replace("_", "-");
@@ -77,11 +78,22 @@ namespace NDoc3.Core.Reflection
 			_interfaceImplementingTypes = new TypeHierarchy();
 			_attributeFilter = new AttributeUsageDisplayFilter(rep.DocumentedAttributes);
 
-//			_documentedTypes = new Dictionary<Type, object>();
+			//			_documentedTypes = new Dictionary<Type, object>();
+
+			PreLoadXmlDocumentation();
 		}
 
 		public void Dispose()
 		{ }
+
+		private void PreLoadXmlDocumentation()
+		{
+			//preload all xml documentation
+			foreach (FileInfo xmlDocFilename in _rep.SlashDocFileNames) {
+				_externalSummaryCache.AddXmlDoc(xmlDocFilename.FullName);
+				_assemblyDocCache.CacheDocFile(xmlDocFilename.FullName);
+			}
+		}
 
 		/// <summary>
 		/// Checks if we are using the Mono runtime
@@ -89,7 +101,7 @@ namespace NDoc3.Core.Reflection
 		/// <returns>
 		/// Wether or not we are running with Mono
 		/// </returns>
-		public static bool IsRunningMono()
+		private static bool IsRunningMono()
 		{
 			return Type.GetType("Mono.Runtime") != null;
 		}
@@ -216,7 +228,7 @@ namespace NDoc3.Core.Reflection
 			//				Directory.GetCurrentDirectory(), "reflection.xsd");
 			XmlReaderSettings settings = new XmlReaderSettings();
 			XmlSchemaSet sc = new XmlSchemaSet();
-			sc.Add("urn:ndoc-schema", new XmlTextReader(EmbeddedResources.GetEmbeddedResourceStream(MethodBase.GetCurrentMethod().DeclaringType, "reflection.xsd")));
+			sc.Add(NDOCXML_NAMESPACEURI, new XmlTextReader(EmbeddedResources.GetEmbeddedResourceStream(MethodBase.GetCurrentMethod().DeclaringType, "reflection.xsd")));
 			//			sc.Add("urn:ndoc-schema", Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "reflection.xsd");
 			settings.ValidationType = ValidationType.Schema;
 			settings.Schemas = sc;
@@ -231,8 +243,7 @@ namespace NDoc3.Core.Reflection
 		private void BuildXml(XmlWriter writer)
 		{
 			int start = Environment.TickCount;
-
-			Debug.WriteLine("Memory making xml: " + GC.GetTotalMemory(false));
+			Debug.WriteLine("Memory before making xml: " + GC.GetTotalMemory(false));
 
 			try {
 				PreReflectionProcess();
@@ -242,8 +253,8 @@ namespace NDoc3.Core.Reflection
 
 				// Start the root element
 				writer.WriteStartElement("ndoc");
-				writer.WriteAttributeString("SchemaVersion", "2.0");
-				writer.WriteAttributeString("xmlns", "urn:ndoc-schema");
+				writer.WriteAttributeString("SchemaVersion", NDOCXML_VERSION);
+				writer.WriteAttributeString("xmlns", NDOCXML_NAMESPACEURI);
 
 				if (_rep.FeedbackEmailAddress.Length > 0)
 					WriteFeedBackEmailAddress(writer);
@@ -259,9 +270,8 @@ namespace NDoc3.Core.Reflection
 
 				WriteNamespaceHierarchies(writer);
 
-				foreach (string AssemblyFileName in _rep.AssemblyFileNames) {
-					string currentAssemblyFilename = AssemblyFileName;
-					IAssemblyInfo assembly = _assemblyLoader.GetAssemblyInfo(currentAssemblyFilename);
+				foreach (FileInfo assemblyFile in _rep.AssemblyFileNames) {
+					IAssemblyInfo assembly = _assemblyLoader.GetAssemblyInfo(assemblyFile);
 
 					int starta = Environment.TickCount;
 
@@ -278,38 +288,41 @@ namespace NDoc3.Core.Reflection
 				Trace.WriteLine("MakeXML : " + ((Environment.TickCount - start) / 1000.0) + " sec.");
 				// if you want to see NDoc3's intermediate XML file, use the XML documenter.
 			}
-				// TODO (EE): reevaluate exception handling 
-			catch (Exception ex) {
-				throw;
+				//			catch (Exception ex) {
+				//				// TODO (EE): reevaluate exception handling 
+				//				throw;
+				//			}
+			catch (ReflectionTypeLoadException rtle) {
+				StringBuilder sb = new StringBuilder();
+				//				if (_assemblyLoader != null && _assemblyLoader.UnresolvedAssemblies.Count > 0) {
+				//					sb.Append("One or more required assemblies could not be located : \n");
+				//					foreach (string ass in _assemblyLoader.UnresolvedAssemblies) {
+				//						sb.AppendFormat("   {0}\n", ass);
+				//					}
+				//					sb.Append("\nThe following directories were searched, \n");
+				//					foreach (string dir in _assemblyLoader.SearchedDirectories) {
+				//						sb.AppendFormat("   {0}\n", dir);
+				//					}
+				//				} else {
+				Hashtable fileLoadExceptions = new Hashtable();
+				foreach (Exception loaderEx in rtle.LoaderExceptions) {
+					System.IO.FileLoadException fileLoadEx = loaderEx as FileLoadException;
+					if (fileLoadEx != null) {
+						if (!fileLoadExceptions.ContainsKey(fileLoadEx.FileName)) {
+							fileLoadExceptions.Add(fileLoadEx.FileName, null);
+							sb.Append("Unable to load: " + fileLoadEx.FileName + "\r\n");
+						}
+					}
+					sb.Append(loaderEx.Message + Environment.NewLine);
+					sb.Append(loaderEx.StackTrace + Environment.NewLine);
+					sb.Append("--------------------" + Environment.NewLine + Environment.NewLine);
+					//					}
+				}
+				throw new DocumenterException(sb.ToString());
+			} finally {
+				Trace.WriteLine("MakeXML : " + ((Environment.TickCount - start) / 1000.0) + " sec.");
+				Debug.WriteLine("Memory after making xml: " + GC.GetTotalMemory(false));
 			}
-			//			catch (ReflectionTypeLoadException rtle) {
-			//				StringBuilder sb = new StringBuilder();
-			//				if (_assemblyLoader != null && _assemblyLoader.UnresolvedAssemblies.Count > 0) {
-			//					sb.Append("One or more required assemblies could not be located : \n");
-			//					foreach (string ass in _assemblyLoader.UnresolvedAssemblies) {
-			//						sb.AppendFormat("   {0}\n", ass);
-			//					}
-			//					sb.Append("\nThe following directories were searched, \n");
-			//					foreach (string dir in _assemblyLoader.SearchedDirectories) {
-			//						sb.AppendFormat("   {0}\n", dir);
-			//					}
-			//				} else {
-			//					Hashtable fileLoadExceptions = new Hashtable();
-			//					foreach (Exception loaderEx in rtle.LoaderExceptions) {
-			//						System.IO.FileLoadException fileLoadEx = loaderEx as FileLoadException;
-			//						if (fileLoadEx != null) {
-			//							if (!fileLoadExceptions.ContainsKey(fileLoadEx.FileName)) {
-			//								fileLoadExceptions.Add(fileLoadEx.FileName, null);
-			//								sb.Append("Unable to load: " + fileLoadEx.FileName + "\r\n");
-			//							}
-			//						}
-			//						sb.Append(loaderEx.Message + Environment.NewLine);
-			//						sb.Append(loaderEx.StackTrace + Environment.NewLine);
-			//						sb.Append("--------------------" + Environment.NewLine + Environment.NewLine);
-			//					}
-			//				}
-			//				throw new DocumenterException(sb.ToString());
-			//			}
 		}
 
 
@@ -768,6 +781,9 @@ namespace NDoc3.Core.Reflection
 				}
 			}
 
+			WriteAssemblyDocumentation(writer, assemblyName);
+			WriteAssemblyReferences(writer, assembly);
+
 			WriteCustomAttributes(writer, assembly);
 
 			foreach (IModuleInfo module in assembly.GetModules()) {
@@ -776,6 +792,16 @@ namespace NDoc3.Core.Reflection
 
 			writer.WriteEndElement(); // assembly
 		}
+
+		private void WriteAssemblyReferences(XmlWriter writer, IAssemblyInfo assembly)
+		{
+			foreach (AssemblyName assemblyName in assembly.GetReferencedAssemblies()) {
+				writer.WriteStartElement("assemblyReference");
+				writer.WriteAttributeString("name", assemblyName.Name);
+				writer.WriteEndElement();
+			}
+		}
+
 		#endregion
 
 		#region Module
@@ -878,17 +904,17 @@ namespace NDoc3.Core.Reflection
 					!IsDelegate(type) &&
 					type.Namespace == namespaceName) {
 					string typeID = MemberID.GetMemberID(type);
-//					if (!_documentedTypes.ContainsKey(type)) {
-//						_documentedTypes.Add(type, null);
-						if (MustDocumentType(type) && !CheckForMissingTypeDocumentation(type)) {
-							bool hiding = ((type.MemberType & MemberTypes.NestedType) != 0)
-								&& IsHiding(type, type.DeclaringType);
-							WriteClass(writer, type, hiding);
-							nbWritten++;
-						}
-//					} else {
-//						Trace.WriteLine(typeID + " already documented - skipped...");
-//					}
+					//					if (!_documentedTypes.ContainsKey(type)) {
+					//						_documentedTypes.Add(type, null);
+					if (MustDocumentType(type) && !CheckForMissingTypeDocumentation(type)) {
+						bool hiding = ((type.MemberType & MemberTypes.NestedType) != 0)
+							&& IsHiding(type, type.DeclaringType);
+						WriteClass(writer, type, hiding);
+						nbWritten++;
+					}
+					//					} else {
+					//						Trace.WriteLine(typeID + " already documented - skipped...");
+					//					}
 				}
 			}
 
@@ -911,13 +937,13 @@ namespace NDoc3.Core.Reflection
 					type.Namespace == namespaceName &&
 					MustDocumentType(type)) {
 					string typeID = MemberID.GetMemberID(type);
-//					if (!_documentedTypes.ContainsKey(type)) {
-//						_documentedTypes.Add(type, null);
-						WriteInterface(writer, type);
-						nbWritten++;
-//					} else {
-//						Trace.WriteLine(typeID + " already documented - skipped...");
-//					}
+					//					if (!_documentedTypes.ContainsKey(type)) {
+					//						_documentedTypes.Add(type, null);
+					WriteInterface(writer, type);
+					nbWritten++;
+					//					} else {
+					//						Trace.WriteLine(typeID + " already documented - skipped...");
+					//					}
 				}
 			}
 
@@ -934,15 +960,15 @@ namespace NDoc3.Core.Reflection
 					type.Namespace == namespaceName &&
 					MustDocumentType(type)) {
 					string typeID = MemberID.GetMemberID(type);
-//					if (!_documentedTypes.ContainsKey(type)) {
-//						_documentedTypes.Add(type, null);
-						bool hiding = ((type.MemberType & MemberTypes.NestedType) != 0)
-							&& IsHiding(type, type.DeclaringType);
-						WriteClass(writer, type, hiding);
-						nbWritten++;
-//					} else {
-//						Trace.WriteLine(typeID + " already documented - skipped...");
-//					}
+					//					if (!_documentedTypes.ContainsKey(type)) {
+					//						_documentedTypes.Add(type, null);
+					bool hiding = ((type.MemberType & MemberTypes.NestedType) != 0)
+						&& IsHiding(type, type.DeclaringType);
+					WriteClass(writer, type, hiding);
+					nbWritten++;
+					//					} else {
+					//						Trace.WriteLine(typeID + " already documented - skipped...");
+					//					}
 				}
 			}
 
@@ -959,13 +985,13 @@ namespace NDoc3.Core.Reflection
 					type.Namespace == namespaceName &&
 					MustDocumentType(type)) {
 					string typeID = MemberID.GetMemberID(type);
-//					if (!_documentedTypes.ContainsKey(type)) {
-//						_documentedTypes.Add(type, null);
-						WriteDelegate(writer, type);
-						nbWritten++;
-//					} else {
-//						Trace.WriteLine(typeID + " already documented - skipped...");
-//					}
+					//					if (!_documentedTypes.ContainsKey(type)) {
+					//						_documentedTypes.Add(type, null);
+					WriteDelegate(writer, type);
+					nbWritten++;
+					//					} else {
+					//						Trace.WriteLine(typeID + " already documented - skipped...");
+					//					}
 				}
 			}
 
@@ -981,13 +1007,13 @@ namespace NDoc3.Core.Reflection
 					type.Namespace == namespaceName &&
 					MustDocumentType(type)) {
 					string typeID = MemberID.GetMemberID(type);
-//					if (!_documentedTypes.ContainsKey(type)) {
-//						_documentedTypes.Add(type, null);
-						WriteEnumeration(writer, type);
-						nbWritten++;
-//					} else {
-//						Trace.WriteLine(typeID + " already documented - skipped...");
-//					}
+					//					if (!_documentedTypes.ContainsKey(type)) {
+					//						_documentedTypes.Add(type, null);
+					WriteEnumeration(writer, type);
+					nbWritten++;
+					//					} else {
+					//						Trace.WriteLine(typeID + " already documented - skipped...");
+					//					}
 				}
 			}
 
@@ -2026,7 +2052,7 @@ namespace NDoc3.Core.Reflection
 			writer.WriteAttributeString("name", name);
 			writer.WriteAttributeString("id", memberName);
 			writer.WriteAttributeString("access", GetMethodAccessValue(eventInfo.GetAddMethod(true)));
-			writer.WriteAttributeString("contract", GetMethodContractValue(eventInfo.GetAddMethod(true)));
+			writer.WriteAttributeString("contract", GetEnumString(GetMethodContractValue(eventInfo.GetAddMethod(true))));
 			Type t = eventInfo.EventHandlerType;
 			writer.WriteAttributeString("typeId", MemberID.GetMemberID(t));
 			if (t != null)
@@ -2096,7 +2122,7 @@ namespace NDoc3.Core.Reflection
 			writer.WriteAttributeString("name", constructor.Name);
 			writer.WriteAttributeString("id", memberName);
 			writer.WriteAttributeString("access", GetMethodAccessValue(constructor));
-			writer.WriteAttributeString("contract", GetMethodContractValue(constructor));
+			writer.WriteAttributeString("contract", GetEnumString(GetMethodContractValue(constructor)));
 
 			if (overload > 0) {
 				writer.WriteAttributeString("overload", overload.ToString());
@@ -2292,7 +2318,7 @@ namespace NDoc3.Core.Reflection
 		private string GetPropertyContractValue(PropertyInfo property)
 		{
 			if (property != null)
-				return GetMethodContractValue(property.GetAccessors(true)[0]);
+				return GetEnumString(GetMethodContractValue(property.GetAccessors(true)[0]));
 			else
 				throw new Exception("PropertyInfo are null");
 		}
@@ -2374,7 +2400,7 @@ namespace NDoc3.Core.Reflection
 				writer.WriteAttributeString("name", name);
 				writer.WriteAttributeString("id", memberName);
 				writer.WriteAttributeString("access", GetMethodAccessValue(method));
-				writer.WriteAttributeString("contract", GetMethodContractValue(method));
+				writer.WriteAttributeString("contract", GetEnumString(GetMethodContractValue(method)));
 				Type t = method.ReturnType;
 				writer.WriteAttributeString("valueType", t.IsValueType.ToString().ToLower());
 				if (inherited) {
@@ -2508,7 +2534,7 @@ namespace NDoc3.Core.Reflection
 				writer.WriteAttributeString("name", method.Name);
 				writer.WriteAttributeString("id", memberName);
 				writer.WriteAttributeString("access", GetMethodAccessValue(method));
-				writer.WriteAttributeString("contract", GetMethodContractValue(method));
+				writer.WriteAttributeString("contract", GetEnumString(GetMethodContractValue(method)));
 				Type t = method.ReturnType;
 				writer.WriteAttributeString("valueType", t.IsValueType.ToString().ToLower());
 
@@ -2899,25 +2925,25 @@ namespace NDoc3.Core.Reflection
 			return result;
 		}
 
-		private string GetMethodContractValue(MethodBase method)
+		private MethodContract GetMethodContractValue(MethodBase method)
 		{
-			string result;
+			MethodContract result;
 			MethodAttributes methodAttributes = method.Attributes;
 
 			if ((methodAttributes & MethodAttributes.Static) > 0) {
-				result = "Static";
+				result = MethodContract.Static;
 			} else if ((methodAttributes & MethodAttributes.Abstract) > 0) {
-				result = "Abstract";
+				result = MethodContract.Abstract;
 			} else if ((methodAttributes & MethodAttributes.Final) > 0) {
-				result = "Final";
+				result = MethodContract.Final;
 			} else if ((methodAttributes & MethodAttributes.Virtual) > 0) {
 				if ((methodAttributes & MethodAttributes.NewSlot) > 0) {
-					result = "Virtual";
+					result = MethodContract.Virtual;
 				} else {
-					result = "Override";
+					result = MethodContract.Override;
 				}
 			} else {
-				result = "Normal";
+				result = MethodContract.Normal;
 			}
 
 			return result;
@@ -2990,7 +3016,7 @@ namespace NDoc3.Core.Reflection
 
 				if (bMissingSummary) {
 					WriteMissingDocumentation(writer, "summary", null,
-						"Missing <summary> documentation for " + memberName);
+						memberName == null ? "Missing <summary> documentation" : "Missing <summary> documentation for " + memberName);
 				}
 			}
 
@@ -3176,8 +3202,8 @@ namespace NDoc3.Core.Reflection
 		}
 
 		private void WriteInheritedDocumentation(
-			XmlWriter writer, 
-			AssemblyName assemblyName, 
+			XmlWriter writer,
+			AssemblyName assemblyName,
 			string memberName,
 			Type declaringType)
 		{
@@ -3189,6 +3215,13 @@ namespace NDoc3.Core.Reflection
 				writer.WriteRaw(summary);
 				WriteEndDocumentation(writer);
 			}
+		}
+
+		private void WriteAssemblyDocumentation(XmlWriter writer, AssemblyName assemblyName)
+		{
+			CheckForMissingSummaryAndRemarks(writer, assemblyName, null);
+			WriteSlashDocElements(writer, assemblyName, null);
+			WriteEndDocumentation(writer);
 		}
 
 		private void WriteTypeDocumentation(XmlWriter writer, AssemblyName assemblyName, string memberName)
@@ -3350,6 +3383,7 @@ namespace NDoc3.Core.Reflection
 		/// property, when typically that wouldn't be the case.
 		/// </remarks>
 		/// <param name="writer">The XmlWriter to write to.</param>
+		/// <param name="assemblyName">the name of the currently processed assembly</param>
 		/// <param name="memberName">The full name of the field.</param>
 		/// <param name="type">The Type which contains the field
 		/// and potentially the property.</param>
@@ -3475,23 +3509,14 @@ namespace NDoc3.Core.Reflection
 
 		private void PreReflectionProcess()
 		{
-			PreLoadXmlDocumentation();
+			//			PreLoadXmlDocumentation();
 			BuildXrefs();
-		}
-
-		private void PreLoadXmlDocumentation()
-		{
-			//preload all xml documentation
-			foreach (string xmlDocFilename in _rep.XmlDocFileNames) {
-				_externalSummaryCache.AddXmlDoc(xmlDocFilename);
-				_assemblyDocCache.CacheDocFile(xmlDocFilename);
-			}
 		}
 
 		private void BuildXrefs()
 		{
 			//build derived members and implementing types xrefs.
-			foreach (string assemblyFileName in _rep.AssemblyFileNames) {
+			foreach (FileInfo assemblyFileName in _rep.AssemblyFileNames) {
 				//attempt to load the assembly
 				IAssemblyInfo assembly = _assemblyLoader.GetAssemblyInfo(assemblyFileName);
 
@@ -3642,6 +3667,12 @@ namespace NDoc3.Core.Reflection
 		}
 
 		#endregion
+
+		private string GetEnumString<T>(T enumValue)
+			where T:struct
+		{
+			return Enum.GetName(typeof (T), enumValue);
+		}
 
 		private void TraceErrorOutput(string message)
 		{

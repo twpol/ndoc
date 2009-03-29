@@ -15,10 +15,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 using System;
-using System.Diagnostics;
-using System.Text;
 using System.ComponentModel;
-using System.Windows.Forms.Design;
 using System.Drawing.Design;
 using System.IO;
 
@@ -44,6 +41,15 @@ namespace NDoc3.Core
 		public FilePath(string path) : base(path)
 		{
 			Path = path;
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="FilePath"/> class from a given <see cref="FileInfo"/>.
+		/// </summary>
+		public FilePath(FileInfo path) : base(path.FullName)
+		{
+			Path = path.FullName;
+			base.FixedPath = true;
 		}
 
 		/// <summary>Initializes a new instance of the <see cref="FilePath"/> class from an existing <see cref="FilePath"/> instance.</summary>
@@ -74,6 +80,13 @@ namespace NDoc3.Core
 				}
 			}
 		}
+
+		/// <inheritDoc/>
+		public override bool Exists
+		{
+			get { return File.Exists( base.ToString() ); }
+		}
+
 		bool ShouldSerializePath() { return false; }
 
 		// This is a special type converter which will be associated with the FilePath class.

@@ -51,7 +51,7 @@ namespace NDoc3.Core.Reflection
 		/// <term>If the requested assembly has not been loaded, but is in this list, then the file is loaded.</term>
 		/// <term>Once all search paths have been exhausted in an exact name match, this list is checked for a 'partial' match.</term>
 		/// </list></remarks>
-		private readonly Hashtable AssemblyNameFileNameMap = new Hashtable();
+		private readonly ReferenceTypeDictionary<string, FileInfo> AssemblyNameFileNameMap = new ReferenceTypeDictionary<string, FileInfo>();
 
 		/// <summary>Loaded assembly cache keyed by Assembly FileName</summary>
 		private readonly Hashtable assemblysLoadedFileName = new Hashtable();
@@ -61,8 +61,8 @@ namespace NDoc3.Core.Reflection
 		/// </summary>
 		/// <param name="referenceDirectories">Reference directories.</param>
 		public AssemblyLoader(params ReferencePath[] referenceDirectories)
-			:this(new ReferencePathCollection())
-		{}
+			: this(new ReferencePathCollection())
+		{ }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AssemblyLoader"/> class.
@@ -70,8 +70,7 @@ namespace NDoc3.Core.Reflection
 		/// <param name="referenceDirectories">Reference directories.</param>
 		public AssemblyLoader(ReferencePathCollection referenceDirectories)
 		{
-			if (referenceDirectories != null)
-			{
+			if (referenceDirectories != null) {
 				searchDirectories.AddRange(referenceDirectories);
 			}
 		}
@@ -89,6 +88,7 @@ namespace NDoc3.Core.Reflection
 		/// </summary>
 		public ICollection SearchedDirectories
 		{
+			// TODO (EE): return typed collection
 			get { return searchedDirectories.Keys; }
 		}
 
@@ -97,6 +97,7 @@ namespace NDoc3.Core.Reflection
 		/// </summary>
 		public ICollection UnresolvedAssemblies
 		{
+			// TODO (EE): return typed collection
 			get { return unresolvedAssemblies.Keys; }
 		}
 
@@ -117,24 +118,26 @@ namespace NDoc3.Core.Reflection
 		//		}
 
 		/// <summary>Loads an assembly.</summary>
-		/// <param name="fileName">The assembly filename.</param>
+		/// <param name="assemblyFile">The assembly filename.</param>
 		/// <returns>The assembly object.</returns>
 		/// <remarks>This method loads an assembly into memory. If you
 		/// use Assembly.Load or Assembly.LoadFrom the assembly file locks.
 		/// This method doesn't lock the assembly file.</remarks>
-		public IAssemblyInfo GetAssemblyInfo(string assemblyFileName)
+		public IAssemblyInfo GetAssemblyInfo(FileInfo assemblyFile)
 		{
-			return new ReflectionAssemblyInfo(LoadAssembly(assemblyFileName));
+			return new ReflectionAssemblyInfo(LoadAssembly(assemblyFile));
 		}
 
 		/// <summary>Loads an assembly.</summary>
-		/// <param name="fileName">The assembly filename.</param>
+		/// <param name="assemblyFile">The assembly filename.</param>
 		/// <returns>The assembly object.</returns>
 		/// <remarks>This method loads an assembly into memory. If you
 		/// use Assembly.Load or Assembly.LoadFrom the assembly file locks.
 		/// This method doesn't lock the assembly file.</remarks>
-		protected Assembly LoadAssembly(string fileName)
+		protected Assembly LoadAssembly(FileInfo assemblyFile)
 		{
+			string fileName = assemblyFile.FullName;
+
 			// have we already loaded this assembly?
 			Assembly assy = assemblysLoadedFileName[fileName] as Assembly;
 
@@ -262,9 +265,9 @@ namespace NDoc3.Core.Reflection
 				"AssemblyResolver");
 
 			// we may have already located the assembly but not loaded it...
-			string fileName = (string)AssemblyNameFileNameMap[args.Name];
-			if (!string.IsNullOrEmpty(fileName)) {
-				return LoadAssembly((string)AssemblyNameFileNameMap[args.Name]);
+			FileInfo file = AssemblyNameFileNameMap[args.Name];
+			if (file != null && file.Exists) {
+				return LoadAssembly(file);
 			}
 
 			string[] assemblyInfo = args.Name.Split(new[] { ',' });
@@ -274,7 +277,7 @@ namespace NDoc3.Core.Reflection
 			// first we will try filenames derived from the assembly name.
 
 			// Project Path DLLs
-			fileName = assemblyInfo[0] + ".dll";
+			string fileName = assemblyInfo[0] + ".dll";
 			Assembly assy = LoadAssemblyFrom(fullName, fileName);
 
 			// Project Path Exes
@@ -321,8 +324,11 @@ namespace NDoc3.Core.Reflection
 
 						string[] assemblyNameParts = assemblyName.Split(new[] { ',' });
 						if (assemblyNameParts[0] == assemblyInfo[0]) {
-							assy = LoadAssembly((string)AssemblyNameFileNameMap[assemblyName]);
-							break;
+							FileInfo assemblyFile = AssemblyNameFileNameMap[assemblyName];
+							if (assemblyFile != null && assemblyFile.Exists) {
+								assy = LoadAssembly(assemblyFile);
+								break;
+							}
 						}
 					}
 				}
@@ -379,15 +385,15 @@ namespace NDoc3.Core.Reflection
 			if (!searchedDirectories.ContainsKey(path)) {
 				searchedDirectories.Add(path, null);
 			}
-			string fn = Path.Combine(path, fileName);
-			if (File.Exists(fn)) {
+			FileInfo assemblyFileInfo = new FileInfo(Path.Combine(path, fileName));
+			if (assemblyFileInfo.Exists) {
 				// file exists, check it's the right assembly
 				try {
-					AssemblyName assyName = AssemblyName.GetAssemblyName(fn);
+					AssemblyName assyName = AssemblyName.GetAssemblyName(assemblyFileInfo.FullName);
 					if (IsAssemblyNameEquivalent(assyName.FullName, fullName)) {
 						//This looks like the right assembly, try loading it
 						try {
-							Assembly assembly = LoadAssembly(fn);
+							Assembly assembly = LoadAssembly(assemblyFileInfo);
 							return (assembly);
 						} catch (Exception e) {
 							Debug.WriteLine("Assembly Load Error: " + e.Message, "AssemblyResolver");
@@ -397,12 +403,12 @@ namespace NDoc3.Core.Reflection
 						//in case we need this assembly later...
 						//only first found occurence of fully-qualifed assembly name is cached
 						if (!AssemblyNameFileNameMap.ContainsKey(assyName.FullName)) {
-							AssemblyNameFileNameMap.Add(assyName.FullName, fn);
+							AssemblyNameFileNameMap.Add(assyName.FullName, assemblyFileInfo);
 						}
 					}
 				} catch (Exception e) {
 					//oops this wasn't a valid assembly
-					Debug.WriteLine("AssemblyResolver: File " + fn + " not a valid assembly");
+					Debug.WriteLine("AssemblyResolver: File " + assemblyFileInfo + " not a valid assembly");
 					Debug.WriteLine(e.Message);
 				}
 			} else {

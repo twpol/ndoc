@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Text;
 using System.Xml;
 using NDoc3.Core.Reflection;
@@ -13,8 +14,8 @@ namespace NDoc3.Core
 		public void GenerateTestNDocXml()
 		{
 			Uri uri = new Uri(this.GetType().Assembly.CodeBase);
-			string assemblyFilename = uri.AbsolutePath;
-			string slashdocFilename = assemblyFilename.Substring(0, assemblyFilename.Length - 4) + ".xml";
+			FileInfo assemblyFilename = new FileInfo(uri.AbsolutePath);
+//			string slashdocFilename = assemblyFilename.Substring(0, assemblyFilename.Length - 4) + ".xml";
 
 			ReflectionEngine re = new ReflectionEngine(null);
 
@@ -26,8 +27,7 @@ namespace NDoc3.Core
 #endif
 			using (xmlWriter) {
 				NDocXmlGeneratorParameters args = new NDocXmlGeneratorParameters();
-				args.AssemblyFileNames.Add(assemblyFilename);
-				args.XmlDocFileNames.Add(slashdocFilename);
+				args.AddAssemblyToDocument(assemblyFilename);
 
 				string xml = re.MakeXml(args);
 				XmlDocument doc = new XmlDocument();

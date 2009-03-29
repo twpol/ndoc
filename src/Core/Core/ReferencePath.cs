@@ -154,6 +154,12 @@ namespace NDoc3.Core
 			set { _IncludeSubDirectories = value; }
 		}
 
+		/// <inheritDoc/>
+		public override bool Exists
+		{
+			get { return Directory.Exists(base.ToString()); }
+		}
+
 		#endregion
 
 		#region Equality	

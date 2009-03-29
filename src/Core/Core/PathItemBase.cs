@@ -85,7 +85,7 @@ namespace NDoc3.Core
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PathItemBase"/> class.
 		/// </summary>
-		public PathItemBase() {}
+		protected PathItemBase() {}
 		
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PathItemBase"/> class from a given path string.
@@ -97,7 +97,7 @@ namespace NDoc3.Core
 		/// If a <paramref name="path"/> is rooted, <see cref="FixedPath"/> is set to <see langword="true"/>, otherwise
 		/// is is set to <see langword="false"/>
 		/// </remarks>
-		public PathItemBase(string path)
+		protected PathItemBase(string path)
 		{
 			if (path == null)
 				throw new ArgumentNullException("Path");
@@ -113,7 +113,7 @@ namespace NDoc3.Core
 				{
 					this.FixedPath = true;
 				}
-				_Path = path;
+				_Path = NormalizePath(path);
 			}
 			else
 			{
@@ -127,7 +127,7 @@ namespace NDoc3.Core
 		/// </summary>
 		/// <param name="pathItemBase">An existing <see cref="PathItemBase"/> instance.</param>
 		/// <exception cref="ArgumentNullException"><paramref name="pathItemBase"/> is a <see langword="null"/>.</exception>
-		public PathItemBase(PathItemBase pathItemBase)
+		protected PathItemBase(PathItemBase pathItemBase)
 		{
 			if (pathItemBase == null)
 				throw new ArgumentNullException("pathItemBase");
@@ -167,8 +167,8 @@ namespace NDoc3.Core
 					value = PathUtilities.RelativeToAbsolutePath(BasePath, value);
 					this.FixedPath = false;
 				}
-				System.IO.FileInfo f = new System.IO.FileInfo(value);
-				_Path = value;
+//				System.IO.FileInfo f = new System.IO.FileInfo(value);
+				_Path = NormalizePath(value);
 			}
 		}
 
@@ -189,12 +189,29 @@ namespace NDoc3.Core
 			set { _FixedPath = value; }
 		}
 
+		/// <summary>
+		/// Tests, if the path represented by this instance is valid.
+		/// </summary>
+		public virtual bool Exists { get { throw new NotImplementedException(); } }
+
 		#endregion
 
+		/// <summary>
+		/// Normalize the path representation according to the current platform we're running on.
+		/// </summary>
+		/// <remarks>
+		/// The implementation of this method must ensure, that 2 paths pointing to the same location
+		/// are considered equal. On Windows, this e.g. means case insensitive comparison of paths.
+		/// </remarks>
+		protected virtual string NormalizePath(string path)
+		{
+			return path;
+//			return PathUtilities.NormalizePath(path);
+		}
 
 		internal void SetPathInternal(string path)
 		{
-			_Path = path;
+			_Path = NormalizePath(path);
 		}
 
 		/// <inheritDoc/>
@@ -208,19 +225,28 @@ namespace NDoc3.Core
 		/// <inheritDoc/>
 		public override bool Equals(object obj)
 		{
-			PathItemBase testObj = obj as PathItemBase;
-
-			if (obj == null) return false;
-			if (this.GetType() != obj.GetType()) return false;
-
-			if (!Object.Equals(this._Path, testObj._Path)) return false;
-			if (!_FixedPath.Equals(testObj._FixedPath)) return false;
-			return true;
+			return Equals(obj as PathItemBase) ;
 		}
+
+		/// <inheritDoc/>
+		public virtual bool Equals(PathItemBase other)
+		{
+			if (ReferenceEquals(other, null)) return false;
+			if (this.GetType() != other.GetType()) return false;
+
+			return this.ToString() == other.ToString();
+		}
+
+		/// <inheritDoc/>
+		public override int GetHashCode()
+		{
+			return ToString().GetHashCode();
+		}
+
 		/// <summary>Equality operator.</summary>
 		public static bool operator == (PathItemBase x, PathItemBase y) 
-		{ 
-			if ((object)x == null) return false;
+		{
+			if (ReferenceEquals(x, null)) return false;
 			return x.Equals(y);
 		}
 		/// <summary>Inequality operator.</summary>
@@ -229,12 +255,6 @@ namespace NDoc3.Core
 			return!(x == y);
 		}
 	
-		/// <inheritDoc/>
-		public override int GetHashCode()
-		{
-			return ToString().GetHashCode();
-		}
-
 		#endregion
 
 		#region Helpers
@@ -243,7 +263,7 @@ namespace NDoc3.Core
 			string displayPath = _Path;
 			if (FixedPath)
 			{
-				displayPath = FixPath(displayPath);
+				displayPath = FixPath(basePath, displayPath);
 			}
 			else
 			{
@@ -252,7 +272,7 @@ namespace NDoc3.Core
 			return displayPath;
 		}
 
-		private string FixPath(string path)
+		private string FixPath(string BasePath, string path)
 		{
 			if (System.IO.Path.IsPathRooted(path))
 			{

@@ -3,6 +3,6 @@
 	/// <summary>
 	/// summary of DuplicateClass in TestAssembly1
 	/// </summary>
-	internal class DuplicateClass
+	public class DuplicateClass
 	{ }
 }
