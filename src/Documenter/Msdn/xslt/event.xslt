@@ -41,6 +41,7 @@
 							<a>
 								<xsl:attribute name="href">
 									<xsl:call-template name="get-filename-for-type">
+										<xsl:with-param name="assemblyName" select="ancestor::ndoc:assembly/@name" />
 										<xsl:with-param name="id" select="$eventargs-id" />
 									</xsl:call-template>
 								</xsl:attribute>

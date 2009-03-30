@@ -1,44 +1,49 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:NUtil="urn:NDocUtil">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:NUtil="urn:NDocUtil" xmlns:ndoc="urn:ndoc-schema">
 	<!-- -->
 	<xsl:include href="global_arguments.xslt" />
 	<!-- -->
 	<xsl:template name="get-filename-for-namespace-hierarchy">
+		<xsl:param name="assemblyName" select="ancestor::ndoc:assembly/@name" />
 		<xsl:param name="namespace" />
 		<!--<xsl:value-of select="concat(translate($namespace, '[,]', ''), 'Hierarchy.html')" />-->
-		<xsl:value-of select="NUtil:GetFilenameForNamespaceHierarchy($namespace)"/>
+		<xsl:value-of select="NUtil:GetFilenameForNamespaceHierarchy($assemblyName, $namespace)"/>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="get-filename-for-namespace">
+		<xsl:param name="assemblyName" select="ancestor::ndoc:assembly/@name" />
 		<xsl:param name="namespace" />
 		<!--<xsl:value-of select="concat(translate($name, '[,]', ''), '.html')" />-->
-		<xsl:value-of select="NUtil:GetFilenameForNamespace($namespace)"/>
+		<xsl:value-of select="NUtil:GetFilenameForNamespace($assemblyName, $namespace)"/>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="get-filename-for-type">
+		<xsl:param name="assemblyName" />
 		<xsl:param name="id" />
 		<!--<xsl:value-of select="concat(translate(substring-after($id, 'T:'), '[,]', ''), '.html')" />-->
-		<xsl:value-of select="NUtil:GetFilenameForId($id)"/>
+		<xsl:value-of select="NUtil:GetFilenameForId($assemblyName, $id)"/>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="get-filename-for-type-hierarchy">
+		<xsl:param name="assemblyName" />
 		<xsl:param name="id" />
 		<!--<xsl:value-of select="concat(translate(substring-after($id, 'T:'), '[,]', ''), 'Hierarchy.html')" />-->
-		<xsl:value-of select="NUtil:GetFilenameForIdHierarchy($id)"/>
+		<xsl:value-of select="NUtil:GetFilenameForTypeHierarchy($assemblyName, $id)"/>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="get-filename-for-constructors">
-		<xsl:param name="id" />
+		<xsl:param name="constructor" select="." />
 		<!--<xsl:variable name="type-part" select="translate(substring-after(../@id, 'T:'), '[,]', '')" />
     <xsl:value-of select="concat($type-part, 'Constructor.html')" />-->
-		<xsl:value-of select="NUtil:GetFilenameForConstructors($id)"/>
+		<xsl:value-of select="NUtil:GetFilenameForConstructors($constructor/ancestor::ndoc:assembly/@name, $constructor/../@id)"/>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="get-filename-for-constructor">
+		<xsl:param name="assemblyName" />
 		<xsl:param name="id" />
 		<!--<xsl:variable name="type-part" select="translate(substring-after(../@id, 'T:'), '[,]', '')" />
     <xsl:value-of select="concat($type-part, 'Constructor.html')" />-->
-		<xsl:value-of select="NUtil:GetFilenameForId($id)"/>
+		<xsl:value-of select="NUtil:GetFilenameForId($assemblyName, $id)"/>
 	</xsl:template>
 	<!-- -->
 	<!--<xsl:template name="get-filename-for-current-constructor">
@@ -56,25 +61,25 @@
   </xsl:template>-->
 	<!-- -->
 	<xsl:template name="get-filename-for-type-members">
-		<xsl:param name="id" />
+		<xsl:param name="type" select="." />
 		<!--<xsl:value-of select="concat(translate(substring-after($id, 'T:'), '[,]', ''), 'Members.html')" />-->
-		<xsl:value-of select="NUtil:GetFilenameForTypeMembers($id)"/>
+		<xsl:value-of select="NUtil:GetFilenameForTypeMembers(ancestor::ndoc:assembly/@name, @id)"/>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="get-filename-for-current-field">
 		<!--<xsl:value-of select="concat(translate(translate(substring-after(@id, 'F:'), '[,]', ''), '#', '.'), '.html')" />-->
-		<xsl:value-of select="NUtil:GetFilenameForId(@id)"/>
+		<xsl:value-of select="NUtil:GetFilenameForId(ancestor::ndoc:assembly/@name, @id)"/>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="get-filename-for-current-event">
 		<!--<xsl:value-of select="concat(translate(translate(substring-after(@id, 'E:'), '[,]', ''), '#', '.'), '.html')" />-->
-		<xsl:value-of select="NUtil:GetFilenameForId(@id)"/>
+		<xsl:value-of select="NUtil:GetFilenameForId(ancestor::ndoc:assembly/@name, @id)"/>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="get-filename-for-current-property-overloads">
 		<!--<xsl:variable name="type-part" select="translate(translate(substring-after(../@id, 'T:'), '[,]', ''), '#', '.')" />
     <xsl:value-of select="concat($type-part, @name, '.html')" />-->
-		<xsl:value-of select="NUtil:GetFilenameForPropertyOverloads(../@id, @name)"/>
+		<xsl:value-of select="NUtil:GetFilenameForPropertyOverloads(ancestor::ndoc:assembly/@name,../@id, @name)"/>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="get-filename-for-current-property">
@@ -86,7 +91,7 @@
         <xsl:value-of select="concat(translate(translate(substring-after(@id, 'P:'), '[,]', ''), '#', '.'), @overload, '.html')" />
       </xsl:otherwise>
     </xsl:choose>-->
-		<xsl:value-of select="NUtil:GetFilenameForId(@id)"/>
+		<xsl:value-of select="NUtil:GetFilenameForId(ancestor::ndoc:assembly/@name, @id)"/>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="get-filename-for-property">
@@ -99,7 +104,7 @@
         <xsl:value-of select="concat(translate(translate(substring-after($property/@id, 'P:'), '[,]', ''), '#', '.'), $property/@overload, '.html')" />
       </xsl:otherwise>
     </xsl:choose>-->
-		<xsl:value-of select="NUtil:GetFilenameForId($property/@id)"/>
+		<xsl:value-of select="NUtil:GetFilenameForId($property/ancestor::ndoc:assembly/@name, $property/@id)"/>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="get-filename-for-event">
@@ -112,7 +117,7 @@
         <xsl:value-of select="concat(translate(translate(substring-after($event/@id, 'E:'), '[,]', ''), '#', '.'), $event/@overload, '.html')" />
       </xsl:otherwise>
     </xsl:choose>-->
-		<xsl:value-of select="NUtil:GetFilenameForId($event/@id)"/>
+		<xsl:value-of select="NUtil:GetFilenameForId($event/ancestor::ndoc:assembly/@name, $event/@id)"/>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="get-filename-for-field">
@@ -125,13 +130,13 @@
         <xsl:value-of select="concat(translate(translate(substring-after($field/@id, 'F:'), '[,]', ''), '#', '.'), $field/@overload, '.html')" />
       </xsl:otherwise>
     </xsl:choose>-->
-		<xsl:value-of select="NUtil:GetFilenameForId($field/@id)"/>
+		<xsl:value-of select="NUtil:GetFilenameForId($field/ancestor::ndoc:assembly/@name, $field/@id)"/>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="get-filename-for-current-method-overloads">
 		<!--<xsl:variable name="type-part" select="translate(translate(substring-after(../@id, 'T:'), '[,]', ''), '#', '.')" />
     <xsl:value-of select="concat($type-part, '.', @name, '_overloads.html')" />-->
-		<xsl:value-of select="NUtil:GetFilenameForMethodOverloads(../@id, @name)"/>
+		<xsl:value-of select="NUtil:GetFilenameForMethodOverloads(ancestor::ndoc:assembly/@name,../@id, @name)"/>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="get-filename-for-inherited-method-overloads">
@@ -144,7 +149,7 @@
 	<!-- -->
 	<xsl:template name="get-filename-for-method">
 		<xsl:param name="method" select="." />
-		<xsl:value-of select="NUtil:GetFilenameForId($method/@id)"/>
+		<xsl:value-of select="NUtil:GetFilenameForId($method/ancestor::ndoc:assembly/@name, $method/@id)"/>
 		<!--<xsl:choose>
       <xsl:when test="contains($method/@id, '(')">
 		<xsl:choose>
@@ -171,7 +176,7 @@
 	<!-- Get the filename for an operator -->
 	<xsl:template name="get-filename-for-operator">
 		<xsl:param name="operator" select="." />
-		<xsl:value-of select="NUtil:GetFilenameForId($operator/@id)"/>
+		<xsl:value-of select="NUtil:GetFilenameForId($operator/ancestor::ndoc:assembly/@name, $operator/@id)"/>
 		<!--<xsl:variable name="filename">
       <xsl:choose>
         <xsl:when test="contains($operator/@id, '(')">
@@ -257,6 +262,12 @@
 	<xsl:template name="get-filename-for-cref-overload">
 		<xsl:param name="cref" />
 		<xsl:param name="overload" />
+		<xsl:value-of select="NUtil:GetFilenameForCRefOverload(ancestor::ndoc:assembly/@name, $cref, $overload)"/>
+	</xsl:template>
+	
+	<xsl:template name="get-filename-for-cref-overload-UNUSED">
+		<xsl:param name="cref" />
+		<xsl:param name="overload" />
 		<!--<xsl:value-of select="NUtil:GetFilenameForCRefOverload($cref, $overload)"/>-->
 
 		<xsl:choose>
@@ -326,7 +337,7 @@
 	<!-- Get a filename from a type name -->
 	<xsl:template name="get-filename-for-type-name">
 		<xsl:param name="type-name" />
-		<xsl:value-of select="NUtil:GetFilenameForTypename($type-name)"/>
+		<xsl:value-of select="NUtil:GetFilenameForTypename(ancestor::ndoc:assembly/@name, $type-name)"/>
 
 		<!-- Variable to handle generic type-->
 		<!--

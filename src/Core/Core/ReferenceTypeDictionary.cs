@@ -13,7 +13,7 @@ namespace NDoc3.Core
 	///<typeparam name="TKey">the type of the key - no restrictions</typeparam>
 	///<typeparam name="TVal">the type of the value - must be a reference type</typeparam>
 	[Serializable]
-	internal class ReferenceTypeDictionary<TKey,TVal> 
+	public class ReferenceTypeDictionary<TKey,TVal> 
 		: IDictionary<TKey,TVal>
 		where TVal:class
 	{

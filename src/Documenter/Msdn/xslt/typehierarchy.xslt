@@ -6,10 +6,11 @@
 	<xsl:include href="common.xslt" />
 	<!-- -->
 	<!-- -->
+	<xsl:param name='assembly-name' />
 	<xsl:param name='type-id' />
 	<!-- -->
 	<xsl:template match="/">
-		<xsl:apply-templates select="ndoc:ndoc/ndoc:assembly/ndoc:module/ndoc:namespace/ndoc:*[@id=$type-id]" />
+		<xsl:apply-templates select="ndoc:ndoc/ndoc:assembly[@name=$assembly-name]/ndoc:module/ndoc:namespace/ndoc:*[@id=$type-id]" />
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="indent">
@@ -53,6 +54,7 @@
 							<a>
 								<xsl:attribute name="href">
 									<xsl:call-template name="get-filename-for-type">
+										<xsl:with-param name="assemblyName" select="$list[$last]/ancestor::ndoc:assembly/@name" />
 										<xsl:with-param name="id" select="$list[$last]/@id" />
 									</xsl:call-template>
 								</xsl:attribute>
@@ -121,6 +123,7 @@
 										<a>
 											<xsl:attribute name="href">
 												<xsl:call-template name="get-filename-for-type">
+													<xsl:with-param name="assemblyName" select="ancestor::ndoc:assembly/@name" />
 													<xsl:with-param name="id" select="@id" />
 												</xsl:call-template>
 											</xsl:attribute>
@@ -160,6 +163,7 @@
 										<a>
 											<xsl:attribute name="href">
 												<xsl:call-template name="get-filename-for-type">
+													<xsl:with-param name="assemblyName" select="ancestor::ndoc:assembly/@name" />
 													<xsl:with-param name="id" select="@id" />
 												</xsl:call-template>
 											</xsl:attribute>

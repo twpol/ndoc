@@ -41,10 +41,16 @@ namespace NDoc3.Documenter.Msdn
 		{
 			StyleSheetCollection stylesheets = new StyleSheetCollection();
 
-			string resourceBase = "file://" + Path.GetFullPath(Path.Combine(System.Windows.Forms.Application.StartupPath, String.Format("..{0}..{0}..{0}Documenter{0}Msdn{0}xslt", Path.DirectorySeparatorChar)) );
+//			string resourceBase = "file://" + Path.GetFullPath(Path.Combine(System.Windows.Forms.Application.StartupPath, String.Format("..{0}..{0}..{0}Documenter{0}Msdn{0}xslt", Path.DirectorySeparatorChar)) );
 //			string resourceBase = "NDoc3.Documenter.Msdn.xslt";
+			string path = "..{0}..{0}..{0}Documenter{0}Msdn{0}xslt";
 
-            XsltResourceResolver resolver = new XsltResourceResolver(resourceBase, typeof(StyleSheetLocation));
+			string[] resourceDirs = {
+											MakeAbsolutePath("Documenter{0}Msdn{0}xslt")
+											,MakeAbsolutePath("..{0}..{0}..{0}Documenter{0}Msdn{0}xslt")
+											,MakeAbsolutePath("..{0}..{0}..{0}src{0}Documenter{0}Msdn{0}xslt")
+			                        };
+            XsltResourceResolver resolver = new XsltResourceResolver(typeof(StyleSheetLocation), resourceDirs);
 			resolver.ExtensibilityStylesheet=extensibilityStylesheet;
 			Trace.Indent();
 
@@ -65,6 +71,11 @@ namespace NDoc3.Documenter.Msdn
 			Trace.Unindent();
 
 			return stylesheets;
+		}
+
+		private static string MakeAbsolutePath(string path)
+		{
+			return "file://" + Path.GetFullPath(Path.Combine(System.Windows.Forms.Application.StartupPath, String.Format(path, Path.DirectorySeparatorChar)) );
 		}
 
 

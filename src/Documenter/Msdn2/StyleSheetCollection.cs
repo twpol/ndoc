@@ -46,7 +46,7 @@ namespace NDoc3.Documenter.Msdn2
 			string resourceBase = "file://" + Path.GetFullPath(Path.Combine(System.Windows.Forms.Application.StartupPath, @"..\..\..\Documenter\Msdn2\xslt") );
 //			string resourceBase = "NDoc3.Documenter.Msdn2.xslt";
 
-            XsltResourceResolver resolver = new XsltResourceResolver(resourceBase, typeof(StyleSheetLocation));
+            XsltResourceResolver resolver = new XsltResourceResolver(typeof(StyleSheetLocation), resourceBase);
             resolver.ExtensibilityStylesheet = extensibilityStylesheet;
 			Trace.Indent();
 

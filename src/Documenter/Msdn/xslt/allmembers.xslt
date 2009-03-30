@@ -6,7 +6,8 @@
 	<xsl:include href="common.xslt" />
 	<xsl:include href="memberscommon.xslt" />
 	<!-- -->
-	<xsl:param name='id' />
+	<xsl:param name='assembly-name' />
+	<xsl:param name='type-id' />
 	<!-- -->
 	<xsl:template name="type-members">
 		<xsl:param name="type" />
@@ -25,6 +26,7 @@
 						<a>
 							<xsl:attribute name="href">
 								<xsl:call-template name="get-filename-for-type">
+									<xsl:with-param name="assemblyName" select="ancestor::ndoc:assembly/@name" />
 									<xsl:with-param name="id" select="@id" />
 								</xsl:call-template>
 							</xsl:attribute>
@@ -272,7 +274,7 @@
 							<a>
 								<xsl:attribute name="href">
 									<xsl:call-template name="get-filename-for-constructors">
-										<xsl:with-param name="id" select="$id" />
+										<xsl:with-param name="constructor" select="." />
 									</xsl:call-template>
 								</xsl:attribute>
 								<xsl:value-of select="../@displayName" />

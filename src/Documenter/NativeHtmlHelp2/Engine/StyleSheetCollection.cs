@@ -47,7 +47,7 @@ namespace NDoc3.Documenter.NativeHtmlHelp2.Engine
 			string resourceBase = "file://" + Path.GetFullPath(Path.Combine(System.Windows.Forms.Application.StartupPath, @"..\..\..\Documenter\NativeHtmlHelp2\xslt") );
 //			string resourceBase = "NDoc3.Documenter.NativeHtmlHelp2.xslt";
 
-			XsltResourceResolver resolver = new XsltResourceResolver(resourceBase, typeof(StyleSheetLocation));
+			XsltResourceResolver resolver = new XsltResourceResolver(typeof(StyleSheetLocation), resourceBase);
 			resolver.ExtensibilityStylesheet=extensibiltyStylesheet;
 			Trace.Indent();
 

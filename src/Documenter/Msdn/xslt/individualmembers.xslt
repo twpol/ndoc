@@ -6,7 +6,8 @@
 	<xsl:include href="common.xslt" />
 	<xsl:include href="memberscommon.xslt" />
 	<!-- -->
-	<xsl:param name='id' />
+	<xsl:param name='assembly-name' />
+	<xsl:param name='type-id' />
 	<xsl:param name='member-type' />
 	<!-- -->
 	<xsl:template name="type-members">
@@ -51,7 +52,7 @@
 						<a>
 							<xsl:attribute name="href">
 								<xsl:call-template name="get-filename-for-type-members">
-									<xsl:with-param name="id" select="@id" />
+									<xsl:with-param name="type" select="." />
 								</xsl:call-template>
 							</xsl:attribute>
 							<xsl:value-of select="@name" />

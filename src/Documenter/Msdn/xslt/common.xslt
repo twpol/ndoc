@@ -350,7 +350,8 @@
       <xsl:if test="$page!='type' and $page!='enumeration' and $page!='delegate'">
         <xsl:variable name="type-filename">
           <xsl:call-template name="get-filename-for-type">
-            <xsl:with-param name="id" select="$typeID" />
+						<xsl:with-param name="assemblyName" select="ancestor::ndoc:assembly/@name" />
+						<xsl:with-param name="id" select="$typeID" />
           </xsl:call-template>
         </xsl:variable>
         <a href="{$type-filename}">
@@ -362,7 +363,7 @@
         <a>
           <xsl:attribute name="href">
             <xsl:call-template name="get-filename-for-type-members">
-              <xsl:with-param name="id" select="$typeID" />
+              <xsl:with-param name="type" select="." />
             </xsl:call-template>
           </xsl:attribute>
           <xsl:value-of select="$typeName" />
@@ -381,14 +382,14 @@
       </a>
       <xsl:if test="$page='member' or $page='property'">
         <xsl:variable name="memberName" select="@name" />
-        <xsl:if test="count(parent::node()/*[@name=$memberName]) &gt; 1">
+        <xsl:if test="count(parent::node()/*[@name=$memberName]) > 1">
           <xsl:choose>
             <xsl:when test="local-name()='constructor'">
               <xsl:text> | </xsl:text>
               <a>
                 <xsl:attribute name="href">
 									<xsl:call-template name="get-filename-for-constructors">
-										<xsl:with-param name="id" select="$typeID" />
+										<xsl:with-param name="constructor" select="." />
 									</xsl:call-template>
 									</xsl:attribute>
                 <xsl:value-of select="$typeName" />

@@ -5,10 +5,11 @@
 	<!-- -->
 	<xsl:include href="common.xslt" />
 	<!-- -->
+	<xsl:param name='assembly-name' />
 	<xsl:param name='type-id' />
 	<!-- -->
 	<xsl:template match="/">
-		<xsl:apply-templates select="ndoc:ndoc/ndoc:assembly/ndoc:module/ndoc:namespace/ndoc:*[@id=$type-id]" />
+		<xsl:apply-templates select="ndoc:ndoc/ndoc:assembly[@name=$assembly-name]/ndoc:module/ndoc:namespace/ndoc:*[@id=$type-id]" />
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="indent">
@@ -51,6 +52,7 @@
 							<a>
 								<xsl:attribute name="href">
 									<xsl:call-template name="get-filename-for-type">
+										<xsl:with-param name="assemblyName" select="ancestor::ndoc:assembly/@name" />
 										<xsl:with-param name="id" select="$list[$last]/@id" />
 									</xsl:call-template>
 								</xsl:attribute>
@@ -118,7 +120,7 @@
 					<xsl:if test="local-name()!='delegate' and local-name()!='enumeration'">
 						<xsl:variable name="members-href">
 							<xsl:call-template name="get-filename-for-type-members">
-								<xsl:with-param name="id" select="@id" />
+								<xsl:with-param name="type" select="." />
 							</xsl:call-template>
 						</xsl:variable>
 						<xsl:if test="ndoc:constructor|ndoc:field|ndoc:property|ndoc:method|ndoc:operator|ndoc:event">
@@ -154,6 +156,7 @@
 													<a>
 														<xsl:attribute name="href">
 															<xsl:call-template name="get-filename-for-type">
+																<xsl:with-param name="assemblyName" select="ancestor::ndoc:assembly/@name" />
 																<xsl:with-param name="id" select="@id" />
 															</xsl:call-template>
 														</xsl:attribute>
@@ -168,6 +171,7 @@
 												</xsl:call-template>
 												<xsl:variable name="HierarchyFilename">
 													<xsl:call-template name="get-filename-for-type-hierarchy">
+														<xsl:with-param name="assemblyName" select="ancestor::ndoc:assembly/@name" />
 														<xsl:with-param name="id" select="@id" />
 													</xsl:call-template>
 												</xsl:variable>
@@ -209,6 +213,7 @@
 													<a>
 														<xsl:attribute name="href">
 															<xsl:call-template name="get-filename-for-type">
+																<xsl:with-param name="assemblyName" select="ancestor::ndoc:assembly/@name" />
 																<xsl:with-param name="id" select="@id" />
 															</xsl:call-template>
 														</xsl:attribute>
@@ -395,6 +400,7 @@
 				<a>
 					<xsl:attribute name="href">
 						<xsl:call-template name="get-filename-for-type">
+							<xsl:with-param name="assemblyName" select="ancestor::ndoc:assembly/@name" />
 							<xsl:with-param name="id" select="@id" />
 						</xsl:call-template>
 					</xsl:attribute>

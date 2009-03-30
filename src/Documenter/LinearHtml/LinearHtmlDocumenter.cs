@@ -268,7 +268,6 @@ namespace NDoc3.Documenter.LinearHtml
 					// set attributes to allow delete later
 					File.SetAttributes( destPath, FileAttributes.Normal );
 				}
-
 #else
 				EmbeddedResources.WriteEmbeddedResources(this.GetType().Module.Assembly,
 					"NDoc3.Documenter.LinearHtml.xslt",

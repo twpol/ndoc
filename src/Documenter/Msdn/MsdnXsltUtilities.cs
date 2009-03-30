@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Globalization;
 using NDoc3.Support;
 
@@ -100,8 +101,13 @@ namespace NDoc3.Documenter.Msdn
 		/// <param name="cref">CRef for which the HRef will be looked up.</param>
 		public string GetHRef(string cref)
 		{
+			string message = string.Format("GetHRef('{0}')", cref);
+
 			if ((cref.Length < 2) || (cref[1] != ':'))
+			{
+				Debug.WriteLine(string.Format("{0} returns ''", message));
 				return string.Empty;
+			}
 
 			if ((cref.Length < 9)
 				|| (cref.Substring(2, 7) != systemPrefix)) {
@@ -110,11 +116,19 @@ namespace NDoc3.Documenter.Msdn
 					fileName = nameResolver.GetFilenameForId(assemblyName, "E:" + cref.Substring(2));
 
 				if (fileName == null)
+				{
+					Debug.WriteLine(string.Format("{0} returns ''", message));
 					return "";
+				}
 				else
+				{
+					Debug.WriteLine(string.Format("{0} returns {1}", message, fileName));
 					return fileName;
+				}
 			} else {
-				return String.Format(sdkDocBaseUrl, sdkDocLanguage, cref.Substring(2), sdkVersion);
+				string result = String.Format(sdkDocBaseUrl, sdkDocLanguage, cref.Substring(2), sdkVersion);
+				Debug.WriteLine(string.Format("{0} returns {1}", message, result));
+				return result;
 				/*switch (cref.Substring(0, 2))
 				{
 					case "N:":	// Namespace
@@ -145,27 +159,34 @@ namespace NDoc3.Documenter.Msdn
 		/// <param name="cref">CRef for which the name will be looked up.</param>
 		public string GetName(string cref)
 		{
-			if (cref.Length < 2)
-				return cref;
+			string name = null;
+			string message = string.Format("GetName('{0}')", cref);
 
-			if (cref[1] == ':') {
+			if (cref.Length < 2)
+			{
+				name = cref;
+			}
+			else if (cref[1] == ':') {
 				if ((cref.Length < 9)
 					|| (cref.Substring(2, 7) != systemPrefix)) {
-					string name = nameResolver.GetDisplayNameForId(assemblyName, cref);
-					if (name != null)
-						return name;
+					name = nameResolver.GetDisplayNameForId(assemblyName, cref);
 				}
 
-				int index;
-				if ((index = cref.IndexOf(".#c")) >= 0)
-					cref = cref.Substring(2, index - 2);
-				else if ((index = cref.IndexOf("(")) >= 0)
-					cref = cref.Substring(2, index - 2);
-				else
-					cref = cref.Substring(2);
+				if (name == null)
+				{
+					int index;
+					if ((index = cref.IndexOf(".#c")) >= 0)
+						cref = cref.Substring(2, index - 2);
+					else if ((index = cref.IndexOf("(")) >= 0)
+						cref = cref.Substring(2, index - 2);
+					else
+						cref = cref.Substring(2);
+					name = cref.Substring(cref.LastIndexOf(".") + 1);
+				}
 			}
 
-			return cref.Substring(cref.LastIndexOf(".") + 1);
+			Debug.WriteLine(string.Format("{0} returns {1}", message, name));
+			return name;
 		}
 
 		private string GetFilenameForSystemMember(string id)
@@ -262,49 +283,88 @@ namespace NDoc3.Documenter.Msdn
 			return encodingString;
 		}
 
-		public string GetFilenameForId(string id)
+		public string GetFilenameForId(string assembly, string id)
 		{
-			return nameResolver.GetFilenameForId(assemblyName, id);
+			if (string.IsNullOrEmpty(assembly)) {
+				assembly = this.assemblyName;
+			}
+			return nameResolver.GetFilenameForId(assembly, id);
 		}
-		public string GetFilenameForIdHierarchy(string id)
+		public string GetFilenameForNamespace(string assembly, string namespaceName)
 		{
-			return nameResolver.GetFilenameForIdHierarchy(assemblyName, id);
+			if (string.IsNullOrEmpty(assembly)) {
+				assembly = this.assemblyName;
+			}
+			return nameResolver.GetFilenameForNamespace(assembly, namespaceName);
 		}
-		public string GetFilenameForNamespace(string namespaceName)
+		public string GetFilenameForNamespaceHierarchy(string assembly, string namespaceName)
 		{
-			return nameResolver.GetFilenameForNamespace(assemblyName, namespaceName);
+			if (string.IsNullOrEmpty(assembly)) {
+				assembly = this.assemblyName;
+			}
+			return nameResolver.GetFilenameForNamespaceHierarchy(assembly, namespaceName);
 		}
-		public string GetFilenameForNamespaceHierarchy(string namespaceName)
+		public string GetFilenameForTypeHierarchy(string assembly, string namespaceName)
 		{
-			return nameResolver.GetFilenameForNamespaceHierarchy(assemblyName, namespaceName);
+			if (string.IsNullOrEmpty(assembly)) {
+				assembly = this.assemblyName;
+			}
+			return nameResolver.GetFilenameForTypeHierarchy(assembly, namespaceName);
 		}
-		public string GetFilenameForConstructors(string typeId)
+		public string GetFilenameForConstructors(string assembly, string typeId)
 		{
-			return nameResolver.GetFilenameForConstructors(assemblyName, typeId);
+			if (string.IsNullOrEmpty(assembly)) {
+				assembly = this.assemblyName;
+			}
+			return nameResolver.GetFilenameForConstructorList(assembly, typeId);
 		}
-		public string GetFilenameForTypeMembers(string typeId)
+		public string GetFilenameForTypeMembers(string assembly, string typeId)
 		{
-			return nameResolver.GetFilenameForTypeMembers(assemblyName, typeId);
+			if (string.IsNullOrEmpty(assembly)) {
+				assembly = this.assemblyName;
+			}
+			return nameResolver.GetFilenameForTypeMemberList(assembly, typeId);
 		}
-		public string GetFilenameForOperatorOverloads(string typeID, string operatorName)
+
+		// TODO (EE): check, why this isn't used by any xslt template
+//		public string GetFilenameForOperatorOverloads(string assembly, string typeID, string operatorName)
+//		{
+//			if (assembly == null) {
+//				assembly = this.assemblyName;
+//			}
+//			return nameResolver.GetFilenameForOperatorOverloads(assembly, typeID, operatorName);
+//		}
+
+		public string GetFilenameForPropertyOverloads(string assembly, string typeID, string propertyName)
 		{
-			return nameResolver.GetFilenameForOperatorOverloads(assemblyName, typeID, operatorName);
+			if (string.IsNullOrEmpty(assembly)) {
+				assembly = this.assemblyName;
+			}
+			return nameResolver.GetFilenameForPropertyOverloads(assembly, typeID, propertyName);
 		}
-		public string GetFilenameForPropertyOverloads(string typeID, string propertyName)
+		public string GetFilenameForMethodOverloads(string assembly, string typeID, string methodName)
 		{
-			return nameResolver.GetFilenameForPropertyOverloads(assemblyName, typeID, propertyName);
+			if (string.IsNullOrEmpty(assembly)) {
+				assembly = this.assemblyName;
+			}
+			return nameResolver.GetFilenameForMethodOverloads(assembly, typeID, methodName);
 		}
-		public string GetFilenameForMethodOverloads(string typeID, string methodName)
+		public string GetFilenameForTypename(string assembly, string typeName)
 		{
-			return nameResolver.GetFilenameForMethodOverloads(assemblyName, typeID, methodName);
+			if (string.IsNullOrEmpty(assembly)) {
+				assembly = this.assemblyName;
+			}
+			return nameResolver.GetFilenameForTypename(assembly, typeName);
 		}
-		public string GetFilenameForTypename(string typeName)
+		public string GetFilenameForCRefOverload(string assembly, string cref, string overload)
 		{
-			return nameResolver.GetFilenameForTypename(assemblyName, typeName);
-		}
-		public string GetFilenameForCRefOverload(string cref, string overload)
-		{
-			return nameResolver.GetFilenameForCRefOverload(assemblyName, cref, overload);
+			if (string.IsNullOrEmpty(assembly)) {
+				assembly = this.assemblyName;
+			}
+			string message = string.Format("GetFilenameForCRefOverload('{0}','{1}')", cref, overload);
+			Debug.WriteLine(message);
+			string result = nameResolver.GetFilenameForCRefOverload(assembly, cref, overload);
+			return result;
 		}
 	}
 }

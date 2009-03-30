@@ -5,6 +5,7 @@
 	<!-- -->
 	<xsl:include href="common.xslt" />
 	<!-- -->
+	<xsl:param name='assembly-name' />
 	<xsl:param name='namespace' />
 	<!-- -->
 	<xsl:template match="/">
@@ -35,7 +36,7 @@
 										</xsl:with-param>
 									</xsl:call-template>
 							  </xsl:attribute>
-							  <xsl:text>Namespace hierarchy</xsl:text>
+							  <xsl:text>Namespace Hierarchy</xsl:text>
 						  </a>
 					  </p>
 					<xsl:if test="ndoc:assembly/ndoc:module/ndoc:namespace[@name=$namespace]/ndoc:class">
@@ -129,6 +130,7 @@
 				<a>
 					<xsl:attribute name="href">
 						<xsl:call-template name="get-filename-for-type">
+							<xsl:with-param name="assemblyName" select="ancestor::ndoc:assembly/@name" />
 							<xsl:with-param name="id" select="@id" />
 						</xsl:call-template>
 					</xsl:attribute>

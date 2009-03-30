@@ -21,6 +21,7 @@
       <xs:attribute name="displayName" type="xs:string" use="required"/>
       <xs:attribute name="namespace" type="xs:string" use="required"/>
       <xs:attribute name="fullName" type="xs:string" use="required"/>
+      <xs:attribute name="assembly" type="xs:string" use="required"/>
     </xs:complexType>
   </xs:element>
 
@@ -41,6 +42,7 @@
       <xs:attribute name="id" type="xs:string" use="required"/>
       <xs:attribute name="displayName" type="xs:string" use="required"/>
       <xs:attribute name="namespace" type="xs:string" use="required"/>
+      <xs:attribute name="assembly" type="xs:string" use="required"/>
     </xs:complexType>
   </xs:element>
 

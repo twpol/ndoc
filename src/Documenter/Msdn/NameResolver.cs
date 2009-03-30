@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Xml;
+using NDoc3.Core;
 using NDoc3.Core.Reflection;
 using NDoc3.Xml;
 
@@ -8,287 +11,143 @@ namespace NDoc3.Documenter.Msdn
 {
 	public class NameResolver
 	{
+		public const string EXT = ".html";
+
 		// <param name="fileNames">A StringDictionary holding id to file name mappings.</param>
-		// <param name="elemNames">A StringDictionary holding id to element name mappings</param>
+		// <param name="elemNames">A StringDictionary holding id to display name mappings</param>
 
 		private readonly StringDictionary fileNames = new StringDictionary();
 		private readonly StringDictionary elemNames = new StringDictionary();
 
+		private readonly ReferenceTypeDictionary<string, string[]> assemblyReferences = new ReferenceTypeDictionary<string, string[]>(); 
+
 		public NameResolver(XmlDocument documentation)
 		{
-			MakeFilenames(documentation);
+			BuildNameTables(documentation);
 		}
 
-		private void RegisterNamespace(string assemblyName, string namespaceName)
+		#region Used for Html file generation
+
+		public string GetFilenameForFieldList(string assemblyName, string typeID)
 		{
-			string namespaceId = "N:" + namespaceName;
-			fileNames[namespaceId] = GenerateFilenameForNamespace(assemblyName, namespaceName);
-			elemNames[namespaceId] = namespaceName;
+			return GetFilenameForIdSpecial(assemblyName, typeID, "~Fields");
 		}
 
-		private void RegisterType(string assemblyName, string typeId, string displayName)
+		public string GetFilenameForOperatorList(string assemblyName, string typeID)
 		{
-			fileNames[typeId] = GenerateFilenameForType(assemblyName, typeId);
-			elemNames[typeId] = displayName;
+			return GetFilenameForIdSpecial(assemblyName, typeID, "~Operators");
 		}
 
-		private void RegisterConstructor(string assemblyName, string typeId, string id, MethodContract contract, string overload)
+		public string GetFilenameForMethodList(string assemblyName, string typeID)
 		{
-			fileNames[id] = GenerateFilenameForConstructor(assemblyName, id, contract, overload);
-			elemNames[id] = elemNames[typeId];
+			return GetFilenameForIdSpecial(assemblyName, typeID, "~Methods");
 		}
 
-		private void RegisterOperator(string assemblyName, string memberId, string memberName, string overload)
+		public string GetFilenameForPropertyList(string assemblyName, string typeID)
 		{
-			fileNames[memberId] = GenerateFilenameForOperator(assemblyName, memberId, overload);
-			elemNames[memberId] = memberName;
+			return GetFilenameForIdSpecial(assemblyName, typeID, "~Properties");
 		}
 
-		private void RegisterMethod(string assemblyName, string memberId, string memberName, string overload)
+		public string GetFilenameForEventList(string assemblyName, string typeID)
 		{
-			fileNames[memberId] = GenerateFilenameForMethod(assemblyName, memberId, overload);
-			elemNames[memberId] = memberName;
+			return GetFilenameForIdSpecial(assemblyName, typeID, "~Events");
 		}
+		#endregion
 
-		private void RegisterProperty(string assemblyName, string memberId, string memberName, string overload)
-		{
-			fileNames[memberId] = GenerateFilenameForProperty(assemblyName, memberId, overload);
-			elemNames[memberId] = memberName;
-		}
-
-		private void RegisterField(string assemblyName, string typeId, string memberId, bool isEnum, string memberName)
-		{
-			if (isEnum)
-				fileNames[memberId] = fileNames[typeId];
-			else
-				fileNames[memberId] = GenerateFilenameForField(assemblyName, memberId);
-			elemNames[memberId] = memberName;
-		}
-
-		private void RegisterEvent(string assemblyName, string memberId, string memberName)
-		{
-			fileNames[memberId] = GenerateFilenameForEvent(assemblyName, memberId);
-			elemNames[memberId] = memberName;
-		}
-
-		private string GenerateFilenameForNamespace(string assemblyName, string namespaceName)
-		{
-			string fileName = namespaceName + ".html";
-			return fileName;
-		}
-
-		private string GenerateFilenameForType(string assemblyName, string typeID)
-		{
-			string fileName = typeID.Substring(2) + ".html";
-			return fileName;
-		}
-
-		private string GenerateFilenameForConstructor(string assemblyName, string constructorID, MethodContract contract, string overload)
-		{
-			int dotHash = constructorID.IndexOf(".#"); // constructors could be #ctor or #cctor
-			string fileName = constructorID.Substring(2, dotHash - 2);
-
-			if (contract == MethodContract.Static)
-				fileName += "Static";
-
-			fileName += "Constructor";
-
-			if (overload != null) {
-				fileName += overload;
-			}
-
-			fileName += ".html";
-
-			return fileName;
-		}
-
-		private string GenerateFilenameForEvent(string assemblyName, string eventID)
-		{
-			string fileName = eventID.Substring(2) + ".html";
-			fileName = fileName.Replace("#", ".");
-			return fileName;
-		}
-
-		private string GenerateFilenameForProperty(string assemblyName, string propertyID, string overload)
-		{
-			string fileName = propertyID.Substring(2);
-
-			int leftParenIndex = fileName.IndexOf('(');
-
-			if (leftParenIndex != -1) {
-				fileName = fileName.Substring(0, leftParenIndex);
-			}
-
-			if (overload != null) {
-				fileName += overload;
-			}
-
-			fileName += ".html";
-			fileName = fileName.Replace("#", ".");
-
-			return fileName;
-		}
-
-		private string GenerateFilenameForField(string assemblyName, string fieldID)
-		{
-			string fileName = fieldID.Substring(2) + ".html";
-			fileName = fileName.Replace("#", ".");
-			return fileName;
-		}
-
-		private string GenerateFilenameForOperator(string assemblyName, string operatorID, string overload)
-		{
-			string fileName = operatorID.Substring(2);
-
-			int leftParenIndex = fileName.IndexOf('(');
-
-			if (leftParenIndex != -1) {
-				fileName = fileName.Substring(0, leftParenIndex);
-			}
-
-			if (overload != null) {
-				fileName += "_overload_" + overload;
-			}
-
-			fileName += ".html";
-			fileName = fileName.Replace("#", ".");
-
-			return fileName;
-		}
-
-		private string GenerateFilenameForMethod(string assemblyName, string methodID, string overload)
-		{
-			string fileName = methodID.Substring(2);
-
-			int leftParenIndex = fileName.IndexOf('(');
-
-			if (leftParenIndex != -1) {
-				fileName = fileName.Substring(0, leftParenIndex);
-			}
-
-			fileName = fileName.Replace("#", ".");
-
-			if (overload != null) {
-				fileName += "_overload_" + overload;
-			}
-
-			fileName += ".html";
-
-			return fileName;
-		}
-
-		public string GetFilenameForNamespaceHierarchy(string assemblyName, string namespaceName)
-		{
-			return namespaceName + "Hierarchy.html";
-		}
-
-		public string GetFilenameForNamespace(string assemblyName, string namespaceName)
-		{
-			return namespaceName + ".html";
-		}
-
-		public string GetFilenameForId(string assemblyName, string memberId)
-		{
-			return fileNames[memberId];
-		}
-
-		public string GetFilenameForIdHierarchy(string assemblyName, string memberId)
-		{
-			string fn = fileNames[memberId];
-			if (fn == null || fn.Length < 5)
-				return fn;
-
-			fn = fn.Insert(fn.Length - ".html".Length, "Hierarchy");
-			return fn;
-		}
-
+		// exposed to XSLT
 		public string GetDisplayNameForId(string assemblyName, string memberId)
 		{
-			return elemNames[memberId];
+			string name = elemNames[assemblyName + memberId];
+			if (name == null) {
+				name = elemNames[memberId];
+			}
+			Debug.WriteLine(string.Format("GetDisplayNameForId('{0}','{1}') => {2}", assemblyName, memberId, name));
+			return name;
 		}
 
-		public string GetFilenameForFields(string assemblyName, string typeID)
+		// exposed to XSLT
+		public string GetFilenameForId(string assemblyName, string memberId)
 		{
-			string fileName = typeID.Substring(2) + "Fields.html";
-			return fileName;
+			string re = GetFilenameForIdInternal(assemblyName, memberId);
+			Debug.WriteLine(string.Format("GetFilenameForId('{0}','{1}') => {2}", assemblyName, memberId, re));
+			return re;
 		}
 
-		public string GetFilenameForOperators(string assemblyName, string typeID)
+		// exposed to XSLT
+		public string GetFilenameForNamespaceHierarchy(string assemblyName, string namespaceName)
 		{
-			string fileName = typeID.Substring(2) + "Operators.html";
-			return fileName;
+			return GetFilenameForIdSpecial(assemblyName, "N:" + namespaceName, "~Hierarchy");
 		}
 
-		public string GetFilenameForMethods(string assemblyName, string typeID)
+		// exposed to XSLT
+		public string GetFilenameForNamespace(string assemblyName, string namespaceName)
 		{
-			string fileName = typeID.Substring(2) + "Methods.html";
-			return fileName;
+			return GetFilenameForId(assemblyName, "N:" + namespaceName);
 		}
 
-		public string GetFilenameForProperties(string assemblyName, string typeID)
-		{
-			string fileName = typeID.Substring(2) + "Properties.html";
-			return fileName;
-		}
-
-		public string GetFilenameForEvents(string assemblyName, string typeID)
-		{
-			string fileName = typeID.Substring(2) + "Events.html";
-			return fileName;
-		}
-
+		// exposed to XSLT
 		public string GetFilenameForTypeHierarchy(string assemblyName, string typeID)
 		{
-			string fileName = typeID.Substring(2) + "Hierarchy.html";
-			return fileName;
+			return GetFilenameForIdSpecial(assemblyName, typeID, "~Hierarchy");
 		}
 
-		public string GetFilenameForTypeMembers(string assemblyName, string typeID)
+		// exposed to XSLT
+		public string GetFilenameForTypeMemberList(string assemblyName, string typeID)
 		{
-			string fileName = typeID.Substring(2) + "Members.html";
-			return fileName;
+			return GetFilenameForIdSpecial(assemblyName, typeID, "~Members");
 		}
 
-		public string GetFilenameForConstructors(string assemblyName, string typeID)
+		// exposed to XSLT
+		public string GetFilenameForConstructorList(string assemblyName, string typeID)
 		{
-			string fileName = typeID.Substring(2) + "Constructors.html";
-			return fileName;
+			return GetFilenameForIdSpecial(assemblyName, typeID, "~Constructors");
 		}
 
+		// exposed to XSLT
 		public string GetFilenameForOperatorOverloads(string assemblyName, string typeID, string operatorName)
 		{
-			//			string typeID = (string)typeNode.Attributes["id"].Value;
-			//			string operatorName = (string)opNode.Attributes["name"].Value;
-			string fileName = typeID.Substring(2) + "." + operatorName + "_overloads.html";
-			return fileName;
+			return GetFilenameForIdSpecial(assemblyName, typeID, "."+operatorName + "~Overloads");
 		}
 
+		// exposed to XSLT
 		public string GetFilenameForPropertyOverloads(string assemblyName, string typeID, string propertyName)
 		{
-			//			string typeID = (string)typeNode.Attributes["id"].Value;
-			//			string propertyName = (string)propertyNode.Attributes["name"].Value;
-			string fileName = typeID.Substring(2) + propertyName + "_overloads.html";
-			fileName = fileName.Replace("#", ".");
+			string fileName = GetFilenameForIdSpecial(assemblyName, typeID, "." + propertyName + "~Overloads");
 			return fileName;
 		}
 
+		// exposed to XSLT
 		public string GetFilenameForMethodOverloads(string assemblyName, string typeID, string methodName)
 		{
-			//			string typeID = (string)typeNode.Attributes["id"].Value;
-			//			string methodName = (string)methodNode.Attributes["name"].Value;
-			string fileName = typeID.Substring(2) + "." + methodName + "_overloads.html";
+			string fileName = GetFilenameForIdSpecial(assemblyName, typeID, "." + methodName + "~Overloads");
 			return fileName;
 		}
 
+		// exposed to XSLT
 		public string GetFilenameForTypename(string assemblyName, string typeName)
 		{
-			return typeName + ".html";
+			return GetFilenameForId(assemblyName, "T:"+typeName);
 		}
 
-		public string GetFilenameForCRefOverload(string assemblyName, string cref, string overload)
+		// exposed
+		public string GetFilenameForCRefOverload(string currentAssemblyName, string cref, string overload)
 		{
-			// TODO!
-			throw new NotImplementedException();
+			// lookup current assembly
+			string filename = GetFilenameForId(currentAssemblyName, cref);
+			if (filename == null)
+			{
+				// search for identifier in referenced assemblies
+				foreach(string assemblyName in this.assemblyReferences[currentAssemblyName])
+				{
+					filename = GetFilenameForId(assemblyName, cref);
+					if (filename != null)
+						break;
+				}
+			}
+			Debug.WriteLine(string.Format("GetFilenameForCRefOverload('{0}', '{1}') => {2}", currentAssemblyName, cref, filename));
+			return filename;
+			
+			#region Original XSLT Logic
 			/*
 					<!--<xsl:choose>
 						<xsl:when test="starts-with($cref, 'T:')">
@@ -354,22 +213,35 @@ namespace NDoc3.Documenter.Msdn
 						</xsl:otherwise>
 					</xsl:choose>-->
 			*/
+			#endregion
 		}
 
-		private void MakeFilenames(XmlDocument xmlDocumentation)
+		#region BuildNameTables 
+
+		private void BuildNameTables(XmlDocument xmlDocumentation)
 		{
-			XmlNamespaceManager xmlnsManager = new XmlNamespaceManager(xmlDocumentation.NameTable);
-			xmlnsManager.AddNamespace("ns", "urn:ndoc-schema");
-			XmlNodeList assemblies = xmlDocumentation.SelectNodes("/ns:ndoc/ns:assembly", xmlnsManager);
+			XmlNamespaceManager nsmgr = new XmlNamespaceManager(xmlDocumentation.NameTable);
+			nsmgr.AddNamespace("ns", "urn:ndoc-schema");
+			XmlNodeList assemblies = xmlDocumentation.SelectNodes("/ns:ndoc/ns:assembly", nsmgr);
 			foreach (XmlElement assemblyNode in assemblies) {
 				string assemblyName = GetNodeName(assemblyNode);
 
-				XmlNodeList namespaces = assemblyNode.SelectNodes("ns:module/ns:namespace", xmlnsManager);
+				// build list of assemblyReferences
+				XmlNodeList assemblyReferenceNodes = assemblyNode.SelectNodes("ns:assemblyReference", nsmgr);
+				List<string> assemblyReferenceNames = new List<string>();
+				assemblyReferenceNames.Add(assemblyName);
+				foreach(XmlNode assemblyReferenceNode in assemblyReferenceNodes)
+				{
+					assemblyReferenceNames.Add(GetNodeName(assemblyReferenceNode));
+				}
+				assemblyReferences.Add(assemblyName, assemblyReferenceNames.ToArray());
+
+				XmlNodeList namespaces = assemblyNode.SelectNodes("ns:module/ns:namespace", nsmgr);
 				foreach (XmlElement namespaceNode in namespaces) {
 					string namespaceName = GetNodeName(namespaceNode);
 					this.RegisterNamespace(assemblyName, namespaceName);
 
-					XmlNodeList types = namespaceNode.SelectNodes("*[@id]", xmlnsManager);
+					XmlNodeList types = namespaceNode.SelectNodes("*[@id]", nsmgr);
 					foreach (XmlElement typeNode in types) {
 						string typeId = GetNodeId(typeNode);
 						string typeDisplayName = GetNodeDisplayName(typeNode);
@@ -382,39 +254,39 @@ namespace NDoc3.Documenter.Msdn
 							string memberId = GetNodeId(memberNode);
 							switch (memberNode.Name) {
 								case "constructor": {
-										MethodContract contract = XmlUtils.GetAttributeEnum<MethodContract>(memberNode, "contract");
-										string overload = XmlUtils.GetAttributeString(memberNode, "overload", false);
-										this.RegisterConstructor(assemblyName, typeId, memberId, contract, overload);
-									}
+									MethodContract contract = XmlUtils.GetAttributeEnum<MethodContract>(memberNode, "contract");
+									string overload = XmlUtils.GetAttributeString(memberNode, "overload", false);
+									this.RegisterConstructor(assemblyName, typeId, memberId, contract, overload);
+								}
 									break;
 								case "field": {
-										bool isEnum = (typeNode.Name == "enumeration");
-										string memberName = GetNodeName(memberNode);
-										this.RegisterField(assemblyName, typeId, memberId, isEnum, memberName);
-									}
+									bool isEnum = (typeNode.Name == "enumeration");
+									string memberName = GetNodeName(memberNode);
+									this.RegisterField(assemblyName, typeId, memberId, isEnum, memberName);
+								}
 									break;
 								case "property": {
-										string overload = GetNodeOverload(memberNode);
-										string memberName = GetNodeName(memberNode);
-										this.RegisterProperty(assemblyName, memberId, memberName, overload);
-									}
+									string overload = GetNodeOverload(memberNode);
+									string memberName = GetNodeName(memberNode);
+									this.RegisterProperty(assemblyName, memberId, memberName, overload);
+								}
 									break;
 								case "method": {
-										string overload = GetNodeOverload(memberNode);
-										string memberName = GetNodeName(memberNode);
-										this.RegisterMethod(assemblyName, memberId, memberName, overload);
-									}
+									string overload = GetNodeOverload(memberNode);
+									string memberName = GetNodeName(memberNode);
+									this.RegisterMethod(assemblyName, memberId, memberName, overload);
+								}
 									break;
 								case "operator": {
-										string overload = GetNodeOverload(memberNode);
-										string memberName = GetNodeName(memberNode);
-										this.RegisterOperator(assemblyName, memberId, memberName, overload);
-									}
+									string overload = GetNodeOverload(memberNode);
+									string memberName = GetNodeName(memberNode);
+									this.RegisterOperator(assemblyName, memberId, memberName, overload);
+								}
 									break;
 								case "event": {
-										string memberName = GetNodeName(memberNode);
-										this.RegisterEvent(assemblyName, memberId, memberName);
-									}
+									string memberName = GetNodeName(memberNode);
+									this.RegisterEvent(assemblyName, memberId, memberName);
+								}
 									break;
 							}
 						}
@@ -422,6 +294,117 @@ namespace NDoc3.Documenter.Msdn
 				}
 			}
 		}
+
+		private void RegisterNamespace(string assemblyName, string namespaceName)
+		{
+			string namespaceId = "N:" + namespaceName;
+			Register(assemblyName, namespaceId, namespaceName, CalculateFilenameForId(assemblyName, "N:" + namespaceName, null));
+		}
+
+		private void RegisterType(string assemblyName, string typeId, string displayName)
+		{
+			Register(assemblyName, typeId, displayName, CalculateFilenameForId(assemblyName, typeId, null));
+		}
+
+		private void RegisterConstructor(string assemblyName, string typeId, string id, MethodContract contract, string overload)
+		{
+			Register(assemblyName, id, GetDisplayNameForId(assemblyName, typeId), CalculateFilenameForId(assemblyName, id, overload));
+		}
+
+		private void RegisterOperator(string assemblyName, string memberId, string memberName, string overload)
+		{
+			Register(assemblyName, memberId, memberName, CalculateFilenameForId(assemblyName, memberId, overload));
+		}
+
+		private void RegisterMethod(string assemblyName, string memberId, string memberName, string overload)
+		{
+			Register(assemblyName, memberId, memberName, CalculateFilenameForId(assemblyName, memberId, overload));
+		}
+
+		private void RegisterProperty(string assemblyName, string memberId, string memberName, string overload)
+		{
+			Register(assemblyName, memberId, memberName, CalculateFilenameForId(assemblyName, memberId, overload));
+		}
+
+		private void RegisterField(string assemblyName, string typeId, string memberId, bool isEnum, string memberName)
+		{
+			if (isEnum) {
+				Register(assemblyName, memberId, memberName, GetFilenameForId(assemblyName, typeId));
+			} else {
+				Register(assemblyName, memberId, memberName, CalculateFilenameForId(assemblyName, memberId, null));
+			}
+		}
+
+		private void RegisterEvent(string assemblyName, string memberId, string memberName)
+		{
+			Register(assemblyName, memberId, memberName, CalculateFilenameForId(assemblyName, memberId, null));
+		}
+
+
+		#endregion
+
+		#region Registration & Lookup Logic
+
+		private string GetFilenameForIdInternal(string assemblyName, string memberId)
+		{
+			string fileName = fileNames[assemblyName + memberId];
+			if (fileName == null) {
+				fileName = fileNames[memberId];
+			}
+			return fileName;
+		}
+
+		private string GetFilenameForIdSpecial(string assemblyName, string memberId, string postfix)
+		{
+			string fn = GetFilenameForId(assemblyName, memberId);
+			if (fn != null && fn.Length > EXT.Length) {
+				fn = fn.Insert(fn.Length - EXT.Length, postfix);
+			}
+			Debug.WriteLine(string.Format("GetFilenameForIdSpecial('{0}','{1}') => {2}", assemblyName, memberId, fn));
+			return fn;
+		}
+
+		private void Register(string assemblyName, string id, string displayName, string fileName)
+		{
+			Debug.WriteLine(string.Format("Registering [{0},{1}]=[{2},{3}]", assemblyName, id, displayName, fileName));
+			fileNames[assemblyName + id] = fileName;
+			elemNames[assemblyName + id] = displayName;
+		}
+
+		/// <summary>
+		/// of the form "T:XXX", "F:XXX" etc
+		/// </summary>
+		private string CalculateFilenameForId(string assemblyName, string id, string overload)
+		{
+			char idType = '\0';
+			int ix = id.IndexOf(':');
+			if (ix > -1) {
+				idType = id[0];
+			}
+			id = id.Substring(ix + 1);
+
+			// constructors could be #ctor or #cctor
+			//			int ixDotHash = id.IndexOf(".#c"); 
+			//			if (ixDotHash > -1)
+			//				id = id.Substring(0, ixDotHash);
+
+			// methods could have "("
+			int ixLBrace = id.IndexOf("(");
+			if (ixLBrace > -1)
+				id = id.Substring(0, ixLBrace);
+
+			if (overload != null) {
+				id += overload;
+			}
+
+			id = id.Replace('#', '~');
+
+			return assemblyName + "~" + id + EXT;
+		}
+
+		#endregion
+
+		#region Xml Utility Methods
 
 		private string GetNodeOverload(XmlNode memberNode)
 		{
@@ -452,5 +435,7 @@ namespace NDoc3.Documenter.Msdn
 		{
 			return XmlUtils.GetNodeDisplayName(node);
 		}
+
+		#endregion
 	}
 }

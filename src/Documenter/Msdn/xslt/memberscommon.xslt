@@ -4,7 +4,7 @@
 	exclude-result-prefixes="NUtil" xmlns:ndoc="urn:ndoc-schema">
 	<!-- -->
 	<xsl:template match="/">
-		<xsl:apply-templates select="ndoc:ndoc/ndoc:assembly/ndoc:module/ndoc:namespace/ndoc:*[@id=$id]" />
+		<xsl:apply-templates select="ndoc:ndoc/ndoc:assembly[@name=$assembly-name]/ndoc:module/ndoc:namespace/ndoc:*[@id=$type-id]" />
 	</xsl:template>
 	<!-- -->
 	<xsl:template match="ndoc:class">

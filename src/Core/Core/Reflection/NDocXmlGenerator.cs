@@ -3646,25 +3646,44 @@ namespace NDoc3.Core.Reflection
 
 		private void WriteTypeHierarchy(XmlWriter writer, TypeHierarchy derivedTypes, Type type)
 		{
+			List<string> alreadyDocumented = new List<string>();
+
+			string typeId = string.Format("{0}{1}", type.Assembly.GetName().Name, MemberID.GetMemberID(type));
+			alreadyDocumented.Add( typeId );
+
 			writer.WriteStartElement("hierarchyType");
 			writer.WriteAttributeString("id", MemberID.GetMemberID(type));
 			writer.WriteAttributeString("displayName", MemberDisplayName.GetMemberDisplayName(type));
 			writer.WriteAttributeString("namespace", type.Namespace);
+			writer.WriteAttributeString("assembly", type.Assembly.GetName().Name);
+
 			ArrayList interfaces = _baseInterfaces.GetDerivedTypes(type);
 			if (interfaces.Count > 0) {
 				writer.WriteStartElement("hierarchyInterfaces");
 				foreach (Type baseInterfaceType in interfaces) {
+
+					string interfaceTypeId = string.Format("{0}{1}", baseInterfaceType.Assembly.GetName().Name, MemberID.GetMemberID(baseInterfaceType));
+
+					if (alreadyDocumented.Contains(interfaceTypeId))
+						continue;
+					alreadyDocumented.Add(interfaceTypeId);
+
 					writer.WriteStartElement("hierarchyInterface");
 					writer.WriteAttributeString("id", MemberID.GetMemberID(baseInterfaceType));
 					writer.WriteAttributeString("displayName", MemberDisplayName.GetMemberDisplayName(baseInterfaceType));
 					writer.WriteAttributeString("namespace", baseInterfaceType.Namespace);
 					writer.WriteAttributeString("fullName", baseInterfaceType.FullName);
+					writer.WriteAttributeString("assembly", baseInterfaceType.Assembly.GetName().Name);
 					writer.WriteEndElement();
 				}
 				writer.WriteEndElement();
 			}
 			ArrayList childTypesList = derivedTypes.GetDerivedTypes(type);
 			foreach (Type childType in childTypesList) {
+				string childTypeId = string.Format("{0}{1}", childType.Assembly.GetName().Name, MemberID.GetMemberID(childType));
+				if (alreadyDocumented.Contains(childTypeId))
+					continue;
+				alreadyDocumented.Add(childTypeId);
 				WriteTypeHierarchy(writer, derivedTypes, childType);
 			}
 			writer.WriteEndElement();

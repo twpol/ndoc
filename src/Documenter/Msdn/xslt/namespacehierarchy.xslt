@@ -5,6 +5,7 @@
 	<!-- -->
 	<xsl:include href="common.xslt" />
 	<!-- -->
+	<xsl:param name='assembly-name' />
 	<xsl:param name='namespace' />
 	<!-- -->
 	<xsl:template match="/">
@@ -17,7 +18,7 @@
 				<object id="obj_cook" classid="clsid:59CC0C20-679B-11D2-88BD-0800361A1803" style="display:none;">
 <!-- needs to preserve whitespace here --></object>
 				<xsl:call-template name="title-row">
-					<xsl:with-param name="type-name" select="concat($ns/@name, ' Hierarchy new ', name())" />
+					<xsl:with-param name="type-name" select="concat($ns/@name, ' Hierarchy ', name())" />
 				</xsl:call-template>
 				<div id="nstext" valign="bottom">
 					<xsl:apply-templates select="$ns" />
@@ -44,6 +45,7 @@
 		<xsl:for-each select="ndoc:hierarchyType">
 			<div>
 				<xsl:call-template name="get-type-link">
+					<xsl:with-param name="assembly" select="@assembly" />
 					<xsl:with-param name="id" select="@id" />
 				</xsl:call-template>
 				<xsl:apply-templates mode="hierarchy" />
@@ -54,6 +56,7 @@
 	<xsl:template match="ndoc:hierarchyType" mode="hierarchy">
 		<div class="Hierarchy">
 			<xsl:call-template name="get-type-link">
+				<xsl:with-param name="assembly" select="@assembly" />
 				<xsl:with-param name="id" select="@id" />
 			</xsl:call-template>
 			<xsl:if test="ndoc:hierarchyInterfaces">
@@ -66,6 +69,7 @@
 	<!-- -->
 	<xsl:template match="ndoc:hierarchyInterface" mode="baseInterfaces">
 		<xsl:call-template name="get-type-link">
+			<xsl:with-param name="assembly" select="@assembly" />
 			<xsl:with-param name="id" select="@id" />
 		</xsl:call-template>
 		<xsl:if test="position() != last()">
@@ -74,6 +78,7 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="get-type-link">
+		<xsl:param name="assembly" />
 		<xsl:param name="id" />
 		<a>
 			<xsl:choose>
@@ -87,6 +92,7 @@
 				<xsl:otherwise>
 					<xsl:attribute name="href">
 						<xsl:call-template name="get-filename-for-type">
+							<xsl:with-param name="assemblyName" select="$assembly" />
 							<xsl:with-param name="id" select="$id" />
 						</xsl:call-template>
 					</xsl:attribute>
