@@ -172,6 +172,7 @@
     <Compile Include="Core\SortedStringDictionary.cs" />
     <Compile Include="Core\TemplateWriter.cs" />
     <Compile Include="Core\Workspace.cs" />
+    <Compile Include="Xml\XmlUtils.cs" />
     <Compile Include="Core\XsltResourceResolver.cs" />
     <None Include="Core.build" />
     <None Include="core.ndoc" />

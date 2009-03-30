@@ -8,7 +8,7 @@
 	<xsl:param name='namespace' />
 	<!-- -->
 	<xsl:template match="/">
-		<xsl:variable name="ns" select="ndoc:ndoc/ndoc:namespaceHierarchies/ndoc:namespaceHierarchy[@name=$namespace][1]" />
+		<xsl:variable name="ns" select="/ndoc:ndoc/ndoc:namespaceHierarchies/ndoc:namespaceHierarchy[@name=$namespace][1]" />
 		<html dir="LTR">
 			<xsl:call-template name="html-head">
 				<xsl:with-param name="title" select="concat($ns/@name, 'Hierarchy')" />
@@ -17,7 +17,7 @@
 				<object id="obj_cook" classid="clsid:59CC0C20-679B-11D2-88BD-0800361A1803" style="display:none;">
 <!-- needs to preserve whitespace here --></object>
 				<xsl:call-template name="title-row">
-					<xsl:with-param name="type-name" select="concat($ns/@name, ' Hierarchy')" />
+					<xsl:with-param name="type-name" select="concat($ns/@name, ' Hierarchy new ', name())" />
 				</xsl:call-template>
 				<div id="nstext" valign="bottom">
 					<xsl:apply-templates select="$ns" />

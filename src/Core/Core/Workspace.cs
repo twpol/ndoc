@@ -28,7 +28,7 @@ namespace NDoc3.Core
 	/// where help file content and project files are used to compile the 
 	/// final help collection
 	/// </summary>
-	public class Workspace
+	public class Workspace : IDisposable
 	{
 		/// <summary>
 		/// Event raised when a content directory is added
@@ -384,6 +384,12 @@ namespace NDoc3.Core
 
 			// then get rid of the working directory
 			CleanIntermediates();
+		}
+
+		public void Dispose()
+		{
+			GC.SuppressFinalize(this);
+			RemoveResourceDirectory();
 		}
 	}
 }

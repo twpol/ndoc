@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Specialized;
+using System.Xml;
 using NDoc3.Core.Reflection;
+using NDoc3.Xml;
 
 namespace NDoc3.Documenter.Msdn
 {
@@ -12,44 +14,49 @@ namespace NDoc3.Documenter.Msdn
 		private readonly StringDictionary fileNames = new StringDictionary();
 		private readonly StringDictionary elemNames = new StringDictionary();
 
-		public void RegisterNamespace(string assemblyName, string namespaceName)
+		public NameResolver(XmlDocument documentation)
+		{
+			MakeFilenames(documentation);
+		}
+
+		private void RegisterNamespace(string assemblyName, string namespaceName)
 		{
 			string namespaceId = "N:" + namespaceName;
 			fileNames[namespaceId] = GenerateFilenameForNamespace(assemblyName, namespaceName);
 			elemNames[namespaceId] = namespaceName;
 		}
 
-		public void RegisterType(string assemblyName, string typeId, string displayName)
+		private void RegisterType(string assemblyName, string typeId, string displayName)
 		{
 			fileNames[typeId] = GenerateFilenameForType(assemblyName, typeId);
 			elemNames[typeId] = displayName;
 		}
 
-		public void RegisterConstructor(string assemblyName, string typeId, string id, MethodContract contract, string overload)
+		private void RegisterConstructor(string assemblyName, string typeId, string id, MethodContract contract, string overload)
 		{
 			fileNames[id] = GenerateFilenameForConstructor(assemblyName, id, contract, overload);
 			elemNames[id] = elemNames[typeId];
 		}
 
-		public void RegisterOperator(string assemblyName, string memberId, string memberName, string overload)
+		private void RegisterOperator(string assemblyName, string memberId, string memberName, string overload)
 		{
 			fileNames[memberId] = GenerateFilenameForOperator(assemblyName, memberId, overload);
 			elemNames[memberId] = memberName;
 		}
 
-		public void RegisterMethod(string assemblyName, string memberId, string memberName, string overload)
+		private void RegisterMethod(string assemblyName, string memberId, string memberName, string overload)
 		{
 			fileNames[memberId] = GenerateFilenameForMethod(assemblyName, memberId, overload);
 			elemNames[memberId] = memberName;
 		}
 
-		public void RegisterProperty(string assemblyName, string memberId, string memberName, string overload)
+		private void RegisterProperty(string assemblyName, string memberId, string memberName, string overload)
 		{
 			fileNames[memberId] = GenerateFilenameForProperty(assemblyName, memberId, overload);
 			elemNames[memberId] = memberName;
 		}
 
-		public void RegisterField(string assemblyName, string typeId, string memberId, bool isEnum, string memberName)
+		private void RegisterField(string assemblyName, string typeId, string memberId, bool isEnum, string memberName)
 		{
 			if (isEnum)
 				fileNames[memberId] = fileNames[typeId];
@@ -58,7 +65,7 @@ namespace NDoc3.Documenter.Msdn
 			elemNames[memberId] = memberName;
 		}
 
-		public void RegisterEvent(string assemblyName, string memberId, string memberName)
+		private void RegisterEvent(string assemblyName, string memberId, string memberName)
 		{
 			fileNames[memberId] = GenerateFilenameForEvent(assemblyName, memberId);
 			elemNames[memberId] = memberName;
@@ -98,7 +105,7 @@ namespace NDoc3.Documenter.Msdn
 		private string GenerateFilenameForEvent(string assemblyName, string eventID)
 		{
 			string fileName = eventID.Substring(2) + ".html";
-			fileName = fileName.Replace("#",".");
+			fileName = fileName.Replace("#", ".");
 			return fileName;
 		}
 
@@ -188,7 +195,8 @@ namespace NDoc3.Documenter.Msdn
 		public string GetFilenameForIdHierarchy(string assemblyName, string memberId)
 		{
 			string fn = fileNames[memberId];
-			if (fn == null || fn.Length < 5) return fn;
+			if (fn == null || fn.Length < 5)
+				return fn;
 
 			fn = fn.Insert(fn.Length - ".html".Length, "Hierarchy");
 			return fn;
@@ -346,6 +354,103 @@ namespace NDoc3.Documenter.Msdn
 						</xsl:otherwise>
 					</xsl:choose>-->
 			*/
+		}
+
+		private void MakeFilenames(XmlDocument xmlDocumentation)
+		{
+			XmlNamespaceManager xmlnsManager = new XmlNamespaceManager(xmlDocumentation.NameTable);
+			xmlnsManager.AddNamespace("ns", "urn:ndoc-schema");
+			XmlNodeList assemblies = xmlDocumentation.SelectNodes("/ns:ndoc/ns:assembly", xmlnsManager);
+			foreach (XmlElement assemblyNode in assemblies) {
+				string assemblyName = GetNodeName(assemblyNode);
+
+				XmlNodeList namespaces = assemblyNode.SelectNodes("ns:module/ns:namespace", xmlnsManager);
+				foreach (XmlElement namespaceNode in namespaces) {
+					string namespaceName = GetNodeName(namespaceNode);
+					this.RegisterNamespace(assemblyName, namespaceName);
+
+					XmlNodeList types = namespaceNode.SelectNodes("*[@id]", xmlnsManager);
+					foreach (XmlElement typeNode in types) {
+						string typeId = GetNodeId(typeNode);
+						string typeDisplayName = GetNodeDisplayName(typeNode);
+						this.RegisterType(assemblyName, typeId, typeDisplayName);
+
+						//TODO The rest should also use displayName
+						// TODO (EE): clarify what above line means (shall we remove 'name' attribute then?)
+						XmlNodeList members = typeNode.SelectNodes("*[@id]");
+						foreach (XmlElement memberNode in members) {
+							string memberId = GetNodeId(memberNode);
+							switch (memberNode.Name) {
+								case "constructor": {
+										MethodContract contract = XmlUtils.GetAttributeEnum<MethodContract>(memberNode, "contract");
+										string overload = XmlUtils.GetAttributeString(memberNode, "overload", false);
+										this.RegisterConstructor(assemblyName, typeId, memberId, contract, overload);
+									}
+									break;
+								case "field": {
+										bool isEnum = (typeNode.Name == "enumeration");
+										string memberName = GetNodeName(memberNode);
+										this.RegisterField(assemblyName, typeId, memberId, isEnum, memberName);
+									}
+									break;
+								case "property": {
+										string overload = GetNodeOverload(memberNode);
+										string memberName = GetNodeName(memberNode);
+										this.RegisterProperty(assemblyName, memberId, memberName, overload);
+									}
+									break;
+								case "method": {
+										string overload = GetNodeOverload(memberNode);
+										string memberName = GetNodeName(memberNode);
+										this.RegisterMethod(assemblyName, memberId, memberName, overload);
+									}
+									break;
+								case "operator": {
+										string overload = GetNodeOverload(memberNode);
+										string memberName = GetNodeName(memberNode);
+										this.RegisterOperator(assemblyName, memberId, memberName, overload);
+									}
+									break;
+								case "event": {
+										string memberName = GetNodeName(memberNode);
+										this.RegisterEvent(assemblyName, memberId, memberName);
+									}
+									break;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		private string GetNodeOverload(XmlNode memberNode)
+		{
+			return XmlUtils.GetAttributeString(memberNode, "overload", false);
+		}
+
+		private string GetNodeId(XmlNode node)
+		{
+			return XmlUtils.GetNodeId(node);
+		}
+
+		private string GetNodeType(XmlNode node)
+		{
+			return XmlUtils.GetNodeType(node);
+		}
+
+		private string GetNodeTypeId(XmlNode node)
+		{
+			return XmlUtils.GetNodeTypeId(node);
+		}
+
+		private string GetNodeName(XmlNode node)
+		{
+			return XmlUtils.GetNodeName(node);
+		}
+
+		private string GetNodeDisplayName(XmlNode node)
+		{
+			return XmlUtils.GetNodeDisplayName(node);
 		}
 	}
 }
