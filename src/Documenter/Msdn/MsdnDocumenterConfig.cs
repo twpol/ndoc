@@ -37,6 +37,7 @@ namespace NDoc3.Documenter.Msdn
 	{
 		string htmlHelpName;
 		bool includeFavorites;
+		private bool mergeAssemblies = true;
 
 		/// <summary>Initializes a new instance of the MsdnHelpConfig class.</summary>
 		public MsdnDocumenterConfig( MsdnDocumenterInfo info ) : base( info )
@@ -201,6 +202,22 @@ namespace NDoc3.Documenter.Msdn
 		}
 
 		#endregion
+
+		/// <summary>Gets or sets the IncludeFavorites property.</summary>
+		/// <remarks>Turning this flag on will include a Favorites tab in the HTML Help file.</remarks>
+		[Category("HTML Help Options")]
+		[Description("Turning off this flag will generate a separate hierarchy level for assemblies.")]
+		[DefaultValue(true)]
+		public bool MergeAssemblies
+		{
+			get { return mergeAssemblies; }
+
+			set 
+			{ 
+				mergeAssemblies = value;
+				SetDirty();
+			}
+		}
 
 		/// <summary>Gets or sets the IncludeFavorites property.</summary>
 		/// <remarks>Turning this flag on will include a Favorites tab in the HTML Help file.</remarks>

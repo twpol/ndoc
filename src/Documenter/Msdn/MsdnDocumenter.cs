@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
@@ -47,8 +48,8 @@ namespace NDoc3.Documenter.Msdn
 			Unknown
 		};
 
-		private readonly Hashtable lowerCaseTypeNames;
-		private readonly Hashtable mixedCaseTypeNames;
+		private readonly Dictionary<WhichType, string> lowerCaseTypeNames;
+		private readonly Dictionary<WhichType, string> mixedCaseTypeNames;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MsdnDocumenter" />
@@ -57,14 +58,14 @@ namespace NDoc3.Documenter.Msdn
 		public MsdnDocumenter(MsdnDocumenterConfig config)
 			: base(config)
 		{
-			lowerCaseTypeNames = new Hashtable();
+			lowerCaseTypeNames = new Dictionary<WhichType, string>();
 			lowerCaseTypeNames.Add(WhichType.Class, "class");
 			lowerCaseTypeNames.Add(WhichType.Interface, "interface");
 			lowerCaseTypeNames.Add(WhichType.Structure, "structure");
 			lowerCaseTypeNames.Add(WhichType.Enumeration, "enumeration");
 			lowerCaseTypeNames.Add(WhichType.Delegate, "delegate");
 
-			mixedCaseTypeNames = new Hashtable();
+			mixedCaseTypeNames = new Dictionary<WhichType, string>();
 			mixedCaseTypeNames.Add(WhichType.Class, "Class");
 			mixedCaseTypeNames.Add(WhichType.Interface, "Interface");
 			mixedCaseTypeNames.Add(WhichType.Structure, "Structure");
@@ -296,7 +297,7 @@ namespace NDoc3.Documenter.Msdn
 					buildContext.htmlHelp.OpenBookInContents();
 			}
 
-			MakeHtmlForAssemblies(buildContext);
+			MakeHtmlForAssemblies(buildContext, MyConfig.MergeAssemblies);
 
 			// close root book if applicable
 			if (rootPageFileName != null) {
@@ -442,40 +443,62 @@ namespace NDoc3.Documenter.Msdn
 			return whichType;
 		}
 
-		private void MakeHtmlForAssemblies(BuildProjectContext ctx)
+		private void MakeHtmlForAssemblies(BuildProjectContext ctx, bool mergeAssemblies)
 		{
 #if DEBUG
 			int start = Environment.TickCount;
 #endif
 
-			MakeHtmlForAssembliesSorted(ctx);
+			MakeHtmlForAssembliesSorted(ctx, mergeAssemblies);
 
 #if DEBUG
 			Trace.WriteLine("Making Html: " + ((Environment.TickCount - start) / 1000.0).ToString() + " sec.");
 #endif
 		}
 
-		private void MakeHtmlForAssembliesSorted(BuildProjectContext ctx)
+		private void MakeHtmlForAssembliesSorted(BuildProjectContext ctx, bool mergeAssemblies)
 		{
+			string defaultNamespace = null; // not used ATM
+
 			XmlNodeList assemblyNodes = ctx.SelectNodes("/ndoc:ndoc/ndoc:assembly");
+
+			List<string> assemblyNames = new List<string>();
+			foreach(XmlNode node in assemblyNodes) assemblyNames.Add(GetNodeName(node));
+			assemblyNames.Sort();
+
+			if (mergeAssemblies)
+            {
+                // sort namespaces alphabetically except for defaultNamespace, which is always first
+				string[] namespaces = SortNamespaces(ctx, assemblyNames, defaultNamespace);
+				MakeHtmlForNamespaces(ctx, null, namespaces, defaultNamespace);                
+            }
+            else
+            {
+                foreach (string currentAssemblyName in assemblyNames)
+                {
+                    // TODO
+                    MakeHtmlForAssembly(ctx, currentAssemblyName);
+
+					ctx.htmlHelp.OpenBookInContents();
+                    string[] namespaces = SortNamespaces(ctx, new List<string>( new string[] { currentAssemblyName }) , defaultNamespace);
+					MakeHtmlForNamespaces(ctx, currentAssemblyName, namespaces, defaultNamespace);
+					ctx.htmlHelp.CloseBookInContents();
+                }
+            }
+        }
+
+		private void MakeHtmlForAssembly(BuildProjectContext ctx, string assemblyName)
+		{
+			//            throw new NotImplementedException();   
+			ctx.htmlHelp.AddFileToContents(assemblyName);
+		}
+
+		private void MakeHtmlForNamespaces(BuildProjectContext ctx, string currentAssembly, IList<string> namespaces, string defaultNamespace)
+		{
+			int nNodes = namespaces.Count;
+
 			bool heirTOC = (this.MyConfig.NamespaceTOCStyle == TOCStyle.Hierarchical);
 			int level = 0;
-			int[] indexes = SortNodesByAttribute(assemblyNodes, "name");
-
-			NameValueCollection namespaceAssemblies = new NameValueCollection();
-
-			int nNodes = assemblyNodes.Count;
-			for (int i = 0; i < nNodes; i++) {
-				XmlNode assemblyNode = assemblyNodes[indexes[i]];
-				if (assemblyNode.ChildNodes.Count > 0) {
-					string assemblyName = GetNodeName(assemblyNode);
-					GetNamespacesFromAssembly(ctx, assemblyName, namespaceAssemblies);
-				}
-			}
-
-			string[] namespaces = namespaceAssemblies.AllKeys;
-			Array.Sort(namespaces);
-			nNodes = namespaces.Length;
 
 			string[] last = new string[0];
 
@@ -485,7 +508,10 @@ namespace NDoc3.Documenter.Msdn
 
 				string currentNamespace = namespaces[i];
 				// determine assembly containing this namespace
-				XmlNodeList namespaceNodes = ctx.SelectNodes(string.Format("/ndoc:ndoc/ndoc:assembly/ndoc:module/ndoc:namespace[@name='{0}']", currentNamespace));
+				XmlNodeList namespaceNodes = (currentAssembly==null) 
+					? ctx.SelectNodes(string.Format("/ndoc:ndoc/ndoc:assembly/ndoc:module/ndoc:namespace[@name='{0}']", currentNamespace))
+					: ctx.SelectNodes(string.Format("/ndoc:ndoc/ndoc:assembly[@name='{0}']/ndoc:module/ndoc:namespace[@name='{1}']", currentAssembly, currentNamespace));
+
 				string assemblyName = GetNodeName(ctx.SelectSingleNode(namespaceNodes[0], "ancestor::ndoc:assembly"));
 				generatorContext = new BuildAssemblyContext(ctx, assemblyName);
 
@@ -497,7 +523,9 @@ namespace NDoc3.Documenter.Msdn
 						if (level > last.Length)
 							continue;
 
-						MakeHtmlForTypes(generatorContext, string.Join(".", last, 0, level));
+						string namespaceName = string.Join(".", last, 0, level);
+						XmlNodeList typeNodes = GetTypeNodes(ctx, currentAssembly, namespaceName);
+						MakeHtmlForTypes(generatorContext, typeNodes);
 						ctx.htmlHelp.CloseBookInContents();
 					}
 
@@ -507,7 +535,8 @@ namespace NDoc3.Documenter.Msdn
 					for (; level < split.Length; level++) {
 						string namespaceName = string.Join(".", split, 0, level + 1);
 
-						if (Array.BinarySearch(namespaces, namespaceName) < 0)
+						if (!namespaces.Contains(namespaceName))
+//						if (Array.BinarySearch(namespaces, namespaceName) < 0)
 							MakeHtmlForNamespace(generatorContext, split[level], namespaceName, false);
 						else
 							MakeHtmlForNamespace(generatorContext, split[level], namespaceName, true);
@@ -519,7 +548,8 @@ namespace NDoc3.Documenter.Msdn
 				} else {
 					MakeHtmlForNamespace(generatorContext, currentNamespace, currentNamespace, true);
 					using (ctx.htmlHelp.OpenBookInContents()) {
-						MakeHtmlForTypes(generatorContext, currentNamespace);
+						XmlNodeList typeNodes = GetTypeNodes(ctx, currentAssembly, currentNamespace);
+						MakeHtmlForTypes(generatorContext, typeNodes);
 					}
 				}
 			}
@@ -527,12 +557,28 @@ namespace NDoc3.Documenter.Msdn
 
 			if (heirTOC && last.Length > 0) {
 				for (; level >= 1; level--) {
-					MakeHtmlForTypes(generatorContext, string.Join(".", last, 0, level));
+					string ns = string.Join(".", last, 0, level);
+					XmlNodeList typeNodes = GetTypeNodes(ctx, currentAssembly, ns);
+					MakeHtmlForTypes(generatorContext, typeNodes);
 					ctx.htmlHelp.CloseBookInContents();
 				}
 			}
 
 			OnDocBuildingProgress(100);
+		}
+
+		private XmlNodeList GetTypeNodes(BuildProjectContext ctx, string assembly, string namespaceName)
+		{
+			string xpath = (assembly == null)
+			               	? string.Format(
+			               	  	"/ndoc:ndoc/ndoc:assembly/ndoc:module/ndoc:namespace[@name='{0}']/*[local-name()!='documentation' and local-name()!='typeHierarchy']",
+			               	  	namespaceName)
+			               	: string.Format(
+			               	  	"/ndoc:ndoc/ndoc:assembly[@name='{0}']/ndoc:module/ndoc:namespace[@name='{1}']/*[local-name()!='documentation' and local-name()!='typeHierarchy']",
+								assembly,
+			               	  	namespaceName);
+			XmlNodeList typeNodes = ctx.SelectNodes(xpath);
+			return typeNodes;			
 		}
 
 		private bool ArrayEquals(string[] array1, int from1, string[] array2, int from2, int count)
@@ -594,10 +640,8 @@ namespace NDoc3.Documenter.Msdn
 			}
 		}
 
-		private void MakeHtmlForTypes(BuildProjectContext projectCtx, string namespaceName)
+		private void MakeHtmlForTypes(BuildProjectContext projectCtx, XmlNodeList typeNodes)
 		{
-			XmlNodeList typeNodes = projectCtx.SelectNodes(string.Format("/ns:ndoc/ns:assembly/ns:module/ns:namespace[@name='{0}']/*[local-name()!='documentation' and local-name()!='typeHierarchy']", namespaceName));
-
 			int[] indexes = SortNodesByAttribute(typeNodes, "id");
 			int nNodes = typeNodes.Count;
 
@@ -1213,44 +1257,6 @@ namespace NDoc3.Documenter.Msdn
 			}
 		}
 
-		private string GetNodeId(XmlNode node)
-		{
-			return XmlUtils.GetNodeId(node);
-		}
-
-		private string GetNodeType(XmlNode node)
-		{
-			return XmlUtils.GetNodeType(node);
-		}
-
-		private string GetNodeTypeId(XmlNode node)
-		{
-			return XmlUtils.GetNodeTypeId(node);
-		}
-
-		private string GetNodeName(XmlNode node)
-		{
-			return XmlUtils.GetNodeName(node);
-		}
-
-		private string GetNodeDisplayName(XmlNode node)
-		{
-			return XmlUtils.GetNodeDisplayName(node);
-		}
-
-		private string StripNamespace(string name)
-		{
-			string result = name;
-
-			int lastDot = name.LastIndexOf('.');
-
-			if (lastDot != -1) {
-				result = name.Substring(lastDot + 1);
-			}
-
-			return result;
-		}
-
 		private void MakeHtmlForEvents(BuildAssemblyContext ctx, WhichType whichType, XmlNode typeNode)
 		{
 			XmlNodeList declaredEventNodes = ctx.SelectNodes(typeNode, "ndoc:event[not(@declaringType)]");
@@ -1320,6 +1326,44 @@ namespace NDoc3.Documenter.Msdn
 			return paramList;
 		}
 
+		private string GetNodeId(XmlNode node)
+		{
+			return XmlUtils.GetNodeId(node);
+		}
+
+		private string GetNodeType(XmlNode node)
+		{
+			return XmlUtils.GetNodeType(node);
+		}
+
+		private string GetNodeTypeId(XmlNode node)
+		{
+			return XmlUtils.GetNodeTypeId(node);
+		}
+
+		private string GetNodeName(XmlNode node)
+		{
+			return XmlUtils.GetNodeName(node);
+		}
+
+		private string GetNodeDisplayName(XmlNode node)
+		{
+			return XmlUtils.GetNodeDisplayName(node);
+		}
+
+		private string StripNamespace(string name)
+		{
+			string result = name;
+
+			int lastDot = name.LastIndexOf('.');
+
+			if (lastDot != -1) {
+				result = name.Substring(lastDot + 1);
+			}
+
+			return result;
+		}
+
 		private int[] SortNodesByAttribute(XmlNodeList nodes, string attributeName)
 		{
 			int length = nodes.Count;
@@ -1335,6 +1379,34 @@ namespace NDoc3.Documenter.Msdn
 			Array.Sort(names, indexes);
 
 			return indexes;
+		}
+
+		private string[] SortNamespaces(BuildProjectContext ctx, IList<string> assemblyNames, string defaultNamespace)
+		{
+			NameValueCollection namespaceAssemblies = new NameValueCollection();
+			int nNodes = assemblyNames.Count;
+			for (int i = 0; i < nNodes; i++) {
+				string assemblyName = assemblyNames[i];
+				GetNamespacesFromAssembly(ctx, assemblyName, namespaceAssemblies);
+			}
+
+			string[] namespaces = namespaceAssemblies.AllKeys;
+			if (string.IsNullOrEmpty(defaultNamespace)) {
+				Array.Sort(namespaces);
+			} else {
+				Array.Sort(namespaces, (x, y) =>
+				{
+					if (x == y) {
+						return 0;
+					} else if (x == null || x == defaultNamespace) {
+						return -1;
+					} else if (y == defaultNamespace) {
+						return 1;
+					}
+					return x.CompareTo(y);
+				});
+			}
+			return namespaces;
 		}
 
 		private void TransformAndWriteResult(BuildAssemblyContext ctx,
