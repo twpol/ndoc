@@ -2,17 +2,11 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:NUtil="urn:NDocUtil"
 	xmlns:NHtmlProvider="urn:NDocExternalHtml" xmlns:ndoc="urn:ndoc-schema"
   exclude-result-prefixes="NUtil NHtmlProvider">
-  <!-- -->
+	<!-- -->
   <xsl:include href="filenames.xslt" />
   <xsl:include href="syntax.xslt" />
   <xsl:include href="vb-syntax.xslt" />
   <xsl:include href="tags.xslt" />
-  <!-- -->
-  <xsl:param name="ndoc-title" />
-  <xsl:param name="ndoc-omit-object-tags" select="false" />
-  <xsl:param name="ndoc-sdk-doc-base-url" />
-  <xsl:param name="ndoc-sdk-doc-file-ext" />
-  <xsl:param name="ndoc-sdk-doc-language" />
   <!--
 	 | no-op extensibility templates
 	 +-->
@@ -379,7 +373,7 @@
       <a>
         <xsl:attribute name="href">
           <xsl:call-template name="get-filename-for-namespace">
-            <xsl:with-param name="name" select="$namespaceName" />
+            <xsl:with-param name="namespace" select="$namespaceName" />
           </xsl:call-template>
         </xsl:attribute>
         <xsl:value-of select="$namespaceName" />
@@ -393,8 +387,10 @@
               <xsl:text> | </xsl:text>
               <a>
                 <xsl:attribute name="href">
-                  <xsl:call-template name="get-filename-for-current-constructor-overloads" />
-                </xsl:attribute>
+									<xsl:call-template name="get-filename-for-constructors">
+										<xsl:with-param name="id" select="$typeID" />
+									</xsl:call-template>
+									</xsl:attribute>
                 <xsl:value-of select="$typeName" />
                 <xsl:text> Constructor Overload List</xsl:text>
               </a>

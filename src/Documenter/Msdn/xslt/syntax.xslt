@@ -218,9 +218,10 @@
             </xsl:when>
             <!-- Hvis det ikke er en operator write the name -->
             <xsl:otherwise>
-              <xsl:call-template name="get-displayname-csharp">
+							<xsl:value-of select="@name"/>
+              <!--<xsl:call-template name="get-displayname-csharp">
                 <xsl:with-param name="onlyWriteGenericLinks" select="true()"/>
-              </xsl:call-template>
+              </xsl:call-template>-->
             </xsl:otherwise>
           </xsl:choose>
         </xsl:otherwise>
@@ -244,7 +245,7 @@
       <xsl:text>new&#160;</xsl:text>
     </xsl:if>
     <!-- If the does not implement an interface -->
-    <xsl:if test="not(parent::interface)">
+    <xsl:if test="local-name(parent::node()) != 'interface'">
       <!-- If this is not a constructor or the contract is not static -->
       <xsl:if test="(local-name()!='constructor') or (@contract!='Static')">
         <!-- Write method accessmodifier -->
@@ -293,7 +294,7 @@
       <!-- Otherwise write datatype and name of the member -->
       <xsl:otherwise>
         <xsl:call-template name="get-datatype">
-          <xsl:with-param name="datatype" select="substring-after(ndoc:returnType/@typeId, ':')" />
+          <xsl:with-param name="datatype" select="substring-after(ndoc:returnType/@id, ':')" />
         </xsl:call-template>
         <xsl:text>&#160;</xsl:text>
         <xsl:value-of select="@name" />
@@ -554,7 +555,7 @@
     <xsl:text>(</xsl:text>
     <xsl:for-each select="ndoc:parameter">
       <xsl:call-template name="strip-namespace">
-        <xsl:with-param name="name" select="@type" />
+        <xsl:with-param name="name" select="substring-after(@typeId, ':')" />
       </xsl:call-template>
       <xsl:if test="position()!=last()">
         <xsl:text>, </xsl:text>

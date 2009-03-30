@@ -119,9 +119,9 @@ namespace NDoc3.Documenter.Msdn
 			if ((cref.Length < 9)
 				|| (cref.Substring(2, 7) != systemPrefix))
 			{
-				string fileName = nameResolver.GetFilenameForMember(assemblyName, cref);
+				string fileName = nameResolver.GetFilenameForId(assemblyName, cref);
 				if ((fileName == null) && cref.StartsWith("F:"))
-					fileName = nameResolver.GetFilenameForMember(assemblyName,"E:" + cref.Substring(2));
+					fileName = nameResolver.GetFilenameForId(assemblyName,"E:" + cref.Substring(2));
 
 				if (fileName == null)
 					return "";
@@ -169,7 +169,7 @@ namespace NDoc3.Documenter.Msdn
 				if ((cref.Length < 9)
 					|| (cref.Substring(2, 7) != systemPrefix))
 				{
-					string name = nameResolver.GetDisplayNameForMember(assemblyName, cref);
+					string name = nameResolver.GetDisplayNameForId(assemblyName, cref);
 					if (name != null)
 						return name;
 				}
@@ -283,5 +283,49 @@ namespace NDoc3.Documenter.Msdn
 			return encodingString;
 		}
 
+		public string GetFilenameForId(string id)
+		{
+			return nameResolver.GetFilenameForId(assemblyName, id);
+		}
+		public string GetFilenameForIdHierarchy(string id)
+		{
+			return nameResolver.GetFilenameForIdHierarchy(assemblyName, id);
+		}
+		public string GetFilenameForNamespace(string namespaceName)
+		{
+			return nameResolver.GetFilenameForNamespace(assemblyName, namespaceName);
+		}
+		public string GetFilenameForNamespaceHierarchy(string namespaceName)
+		{
+			return nameResolver.GetFilenameForNamespaceHierarchy(assemblyName, namespaceName);
+		}
+		public string GetFilenameForConstructors(string typeId)
+		{
+			return nameResolver.GetFilenameForConstructors(assemblyName, typeId);
+		}
+		public string GetFilenameForTypeMembers(string typeId)
+		{
+			return nameResolver.GetFilenameForTypeMembers(assemblyName, typeId);
+		}
+		public string GetFilenameForOperatorOverloads(string typeID, string operatorName)
+		{
+			return nameResolver.GetFilenameForOperatorOverloads(assemblyName, typeID, operatorName);
+		}
+		public string GetFilenameForPropertyOverloads(string typeID, string propertyName)
+		{
+			return nameResolver.GetFilenameForPropertyOverloads(assemblyName, typeID, propertyName);
+		}
+		public string GetFilenameForMethodOverloads(string typeID, string methodName)
+		{
+			return nameResolver.GetFilenameForMethodOverloads(assemblyName, typeID, methodName);
+		}
+		public string GetFilenameForTypename(string typeName)
+		{
+			return nameResolver.GetFilenameForTypename(assemblyName, typeName);
+		}
+		public string GetFilenameForCRefOverload(string cref, string overload)
+		{
+			return nameResolver.GetFilenameForCRefOverload(assemblyName, cref, overload);
+		}
 	}
 }

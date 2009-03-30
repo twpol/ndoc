@@ -14,7 +14,8 @@
 				<xsl:with-param name="title" select="concat($ns/@name, 'Hierarchy')" />
 			</xsl:call-template>
 			<body topmargin="0" id="bodyID" class="dtBODY">
-				<object id="obj_cook" classid="clsid:59CC0C20-679B-11D2-88BD-0800361A1803" style="display:none;"></object>
+				<object id="obj_cook" classid="clsid:59CC0C20-679B-11D2-88BD-0800361A1803" style="display:none;">
+<!-- needs to preserve whitespace here --></object>
 				<xsl:call-template name="title-row">
 					<xsl:with-param name="type-name" select="concat($ns/@name, ' Hierarchy')" />
 				</xsl:call-template>
@@ -25,7 +26,7 @@
 						<a>
 							<xsl:attribute name="href">
 								<xsl:call-template name="get-filename-for-namespace">
-									<xsl:with-param name="name" select="$namespace" />
+									<xsl:with-param name="namespace" select="$namespace" />
 								</xsl:call-template>
 							</xsl:attribute>
 							<xsl:value-of select="$namespace" /> Namespace

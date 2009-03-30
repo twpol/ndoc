@@ -175,7 +175,11 @@ namespace NDoc3.Core.Reflection
 		/// <remarks>The caller is responsible for deleting the xml file after use...</remarks>
 		public void MakeXmlFile(FileInfo xmlFile)
 		{
+#if DEBUG
+			MakeXmlFile(xmlFile, Formatting.Indented, 2, ' ');
+#else
 			MakeXmlFile(xmlFile, Formatting.None, 0, ' ');
+#endif
 		}
 
 		/// <summary>Builds an Xml file combining the reflected metadata with the /doc comments.</summary>

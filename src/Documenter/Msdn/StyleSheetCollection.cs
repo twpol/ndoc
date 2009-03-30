@@ -75,38 +75,66 @@ namespace NDoc3.Documenter.Msdn
 		/// <summary>
 		/// Return a named stylesheet from the collection
 		/// </summary>
-		public XslCompiledTransform this[ string name ]
+		public XslTransform this[ string name ]
 		{
 			get
 			{
 				Debug.Assert( base.InnerHashtable.Contains( name ) );
-				return (XslCompiledTransform)base.InnerHashtable[name];
+				return (XslTransform)base.InnerHashtable[name];
 			}
 		}
+//		/// <summary>
+//		/// Return a named stylesheet from the collection
+//		/// </summary>
+//		public XslCompiledTransform this[ string name ]
+//		{
+//			get
+//			{
+//				Debug.Assert( base.InnerHashtable.Contains( name ) );
+//				return (XslCompiledTransform)base.InnerHashtable[name];
+//			}
+//		}
 
 		private void AddFrom( string name, XsltResourceResolver resolver )
 		{
 			base.InnerHashtable.Add( name, MakeTransform( name, resolver ) );
 		}
 
-		private XslCompiledTransform MakeTransform( string name,  XmlResolver resolver)
+		private XslTransform MakeTransform( string name,  XmlResolver resolver)
 		{
 			try
 			{
-				Trace.WriteLine( name + ".xslt" );
-				XslCompiledTransform transform = new XslCompiledTransform();
+				Trace.WriteLine( string.Format("Compiling {0}.xslt", name) );
 				XmlReader reader=(XmlReader)resolver.GetEntity(new Uri("res:" + name + ".xslt"),null,typeof(XmlReader));
 
-//				transform.Load(reader, resolver, Assembly.GetExecutingAssembly().Evidence);
-				XsltSettings settings = new XsltSettings(false, true);
-				transform.Load(reader, settings, resolver);
+				XslTransform transform = new XslTransform();
+				transform.Load(reader, resolver);
 				return transform;
 			}
-			catch ( Exception e )
+			catch ( XsltException e )
 			{
-				throw new Exception( string.Format(	"Error compiling the {0} stylesheet", name ), e );
+				throw new Exception(string.Format("Error compiling the stylesheet '{0}': {1} at {2}:{3}", name, e.Message, e.LineNumber, e.LinePosition), e);
 			}
 		}
+
+//		private XslCompiledTransform MakeCompiledTransform( string name,  XmlResolver resolver)
+//		{
+//			try
+//			{
+//				Trace.WriteLine( string.Format("Compiling {0}.xslt", name) );
+//				XmlReader reader=(XmlReader)resolver.GetEntity(new Uri("res:" + name + ".xslt"),null,typeof(XmlReader));
+//
+////				transform.Load(reader, resolver, Assembly.GetExecutingAssembly().Evidence);
+//				XsltSettings settings = new XsltSettings(false, true);
+//				XslCompiledTransform transform = new XslCompiledTransform();
+//				transform.Load(reader, settings, resolver);
+//				return transform;
+//			}
+//			catch ( XsltException e )
+//			{
+//				throw new Exception(string.Format("Error compiling the stylesheet '{0}': {1} at {2}:{3}", name, e.Message, e.LineNumber, e.LinePosition), e);
+//			}
+//		}
 
 	}
 }

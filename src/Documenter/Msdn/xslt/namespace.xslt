@@ -29,7 +29,11 @@
 					  <p>
 						  <a>
 							  <xsl:attribute name="href">
-								  <xsl:call-template name="get-filename-for-current-namespace-hierarchy" />
+									<xsl:call-template name="get-filename-for-namespace-hierarchy">
+										<xsl:with-param name="namespace">
+											<xsl:value-of select="$namespace" />
+										</xsl:with-param>
+									</xsl:call-template>
 							  </xsl:attribute>
 							  <xsl:text>Namespace hierarchy</xsl:text>
 						  </a>

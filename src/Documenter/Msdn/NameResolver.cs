@@ -1,4 +1,5 @@
-﻿using System.Collections.Specialized;
+﻿using System;
+using System.Collections.Specialized;
 using NDoc3.Core.Reflection;
 
 namespace NDoc3.Documenter.Msdn
@@ -8,18 +9,8 @@ namespace NDoc3.Documenter.Msdn
 		// <param name="fileNames">A StringDictionary holding id to file name mappings.</param>
 		// <param name="elemNames">A StringDictionary holding id to element name mappings</param>
 
-		private StringDictionary fileNames = new StringDictionary();
-		private StringDictionary elemNames = new StringDictionary();
-
-		public string GetFilenameForMember(string assemblyName, string memberId)
-		{
-			return fileNames[memberId];
-		}
-
-		public string GetDisplayNameForMember(string assemblyName, string memberId)
-		{
-			return elemNames[memberId];
-		}
+		private readonly StringDictionary fileNames = new StringDictionary();
+		private readonly StringDictionary elemNames = new StringDictionary();
 
 		public void RegisterNamespace(string assemblyName, string namespaceName)
 		{
@@ -27,44 +18,6 @@ namespace NDoc3.Documenter.Msdn
 			fileNames[namespaceId] = GenerateFilenameForNamespace(assemblyName, namespaceName);
 			elemNames[namespaceId] = namespaceName;
 		}
-
-		//		public string GetFilenameForNamespace(string assemblyName, string namespaceName)
-		//		{
-		//			return GenerateFilenameForNamespace(assemblyName, namespaceName);
-		//		}
-		//		public string GetFilenameForType(string assemblyName, string typeId)
-		//		{
-		//			return fileNames[typeId];
-		//		}
-		//		public string GetFilenameForConstructor(string assemblyName, string constructorId)
-		//		{
-		//			return fileNames[constructorId];
-		//		}
-		//
-		//		public string GetFilenameForProperty(string assemblyName, string propertyId)
-		//		{
-		//			return fileNames[propertyId];
-		//		}
-		//
-		//		public string GetFilenameForField(string assemblyName, string fieldId)
-		//		{
-		//			return fileNames[fieldId];
-		//		}
-		//		public string GetFilenameForOperator(string assemblyName, string operatorId)
-		//		{
-		//			return fileNames[operatorId];
-		//		}
-		//
-		//		public string GetFilenameForEvent(string assemblyName, string eventId)
-		//		{
-		//			return fileNames[eventId];
-		//		}
-		//
-		//		public string GetFilenameForMethod(string assemblyName, string methodId)
-		//		{
-		//			return fileNames[methodId];
-		//		}
-		//
 
 		public void RegisterType(string assemblyName, string typeId, string displayName)
 		{
@@ -217,6 +170,35 @@ namespace NDoc3.Documenter.Msdn
 			return fileName;
 		}
 
+		public string GetFilenameForNamespaceHierarchy(string assemblyName, string namespaceName)
+		{
+			return namespaceName + "Hierarchy.html";
+		}
+
+		public string GetFilenameForNamespace(string assemblyName, string namespaceName)
+		{
+			return namespaceName + ".html";
+		}
+
+		public string GetFilenameForId(string assemblyName, string memberId)
+		{
+			return fileNames[memberId];
+		}
+
+		public string GetFilenameForIdHierarchy(string assemblyName, string memberId)
+		{
+			string fn = fileNames[memberId];
+			if (fn == null || fn.Length < 5) return fn;
+
+			fn = fn.Insert(fn.Length - ".html".Length, "Hierarchy");
+			return fn;
+		}
+
+		public string GetDisplayNameForId(string assemblyName, string memberId)
+		{
+			return elemNames[memberId];
+		}
+
 		public string GetFilenameForFields(string assemblyName, string typeID)
 		{
 			string fileName = typeID.Substring(2) + "Fields.html";
@@ -261,8 +243,109 @@ namespace NDoc3.Documenter.Msdn
 
 		public string GetFilenameForConstructors(string assemblyName, string typeID)
 		{
-			string fileName = typeID.Substring(2) + "Constructor.html";
+			string fileName = typeID.Substring(2) + "Constructors.html";
 			return fileName;
+		}
+
+		public string GetFilenameForOperatorOverloads(string assemblyName, string typeID, string operatorName)
+		{
+			//			string typeID = (string)typeNode.Attributes["id"].Value;
+			//			string operatorName = (string)opNode.Attributes["name"].Value;
+			string fileName = typeID.Substring(2) + "." + operatorName + "_overloads.html";
+			return fileName;
+		}
+
+		public string GetFilenameForPropertyOverloads(string assemblyName, string typeID, string propertyName)
+		{
+			//			string typeID = (string)typeNode.Attributes["id"].Value;
+			//			string propertyName = (string)propertyNode.Attributes["name"].Value;
+			string fileName = typeID.Substring(2) + propertyName + "_overloads.html";
+			fileName = fileName.Replace("#", ".");
+			return fileName;
+		}
+
+		public string GetFilenameForMethodOverloads(string assemblyName, string typeID, string methodName)
+		{
+			//			string typeID = (string)typeNode.Attributes["id"].Value;
+			//			string methodName = (string)methodNode.Attributes["name"].Value;
+			string fileName = typeID.Substring(2) + "." + methodName + "_overloads.html";
+			return fileName;
+		}
+
+		public string GetFilenameForTypename(string assemblyName, string typeName)
+		{
+			return typeName + ".html";
+		}
+
+		public string GetFilenameForCRefOverload(string assemblyName, string cref, string overload)
+		{
+			// TODO!
+			throw new NotImplementedException();
+			/*
+					<!--<xsl:choose>
+						<xsl:when test="starts-with($cref, 'T:')">
+							<xsl:call-template name="get-filename-for-type-name">
+								<xsl:with-param name="type-name" select="substring-after($cref, 'T:')" />
+							</xsl:call-template>
+						</xsl:when>
+						<xsl:when test="starts-with($cref, 'M:')">
+							<xsl:choose>
+								<xsl:when test="contains($cref, '.#c')">
+									<xsl:value-of select="concat(translate(substring-after(substring-before($cref, '.#c'), 'M:'), '[,]', ''), 'Constructor', $overload, '.html')" />
+								</xsl:when>
+								<xsl:when test="contains($cref, '(')">
+									<xsl:choose>
+										<xsl:when test="string-length($overload) &gt; 0">
+											<xsl:value-of select="concat(translate(substring-after(substring-before($cref, '('), 'M:'), '[,]', ''), '_overload_', $overload, '.html')" />
+										</xsl:when>
+										<xsl:otherwise>
+											<xsl:value-of select="concat(translate(substring-after(substring-before($cref, '('), 'M:'), '[,]', ''), '.html')" />
+										</xsl:otherwise>
+									</xsl:choose>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:choose>
+										<xsl:when test="string-length($overload) &gt; 0">
+											<xsl:value-of select="concat(translate(substring-after($cref, 'M:'), '[,]', ''), '_overload_', $overload, '.html')" />
+										</xsl:when>
+										<xsl:otherwise>
+											<xsl:value-of select="concat(translate(substring-after($cref, 'M:'), '[,]', ''), '.html')" />
+										</xsl:otherwise>
+									</xsl:choose>
+								</xsl:otherwise>
+							</xsl:choose>
+						</xsl:when>
+						<xsl:when test="starts-with($cref, 'E:')">
+							<xsl:value-of select="concat(translate(substring-after($cref, 'E:'), '[,]', ''), $overload, '.html')" />
+						</xsl:when>
+						<xsl:when test="starts-with($cref, 'F:')">
+							<xsl:variable name="enum" select="/ndoc/assembly/module/namespace//enumeration[field/@id = $cref]" />
+							<xsl:choose>
+								<xsl:when test="$enum">
+									<xsl:call-template name="get-filename-for-type-name">
+										<xsl:with-param name="type-name" select="substring-after($enum/@id, 'T:')" />
+									</xsl:call-template>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:value-of select="concat(translate(substring-after($cref, 'F:'), '[,]', ''), $overload, '.html')" />
+								</xsl:otherwise>
+							</xsl:choose>
+						</xsl:when>
+						<xsl:when test="starts-with($cref, 'P:')">
+							<xsl:choose>
+								<xsl:when test="contains($cref, '(')">
+									<xsl:value-of select="concat(translate(substring-after(substring-before($cref, '('), 'P:'), '[,]', ''), $overload, '.html')" />
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:value-of select="concat(translate(substring-after($cref, 'P:'), '[,]', ''), $overload, '.html')" />
+								</xsl:otherwise>
+							</xsl:choose>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="$cref" />
+						</xsl:otherwise>
+					</xsl:choose>-->
+			*/
 		}
 	}
 }

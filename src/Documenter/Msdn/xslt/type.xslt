@@ -265,7 +265,7 @@
 						<a>
 							<xsl:attribute name="href">
 								<xsl:call-template name="get-filename-for-namespace">
-									<xsl:with-param name="name" select="../@name" />
+									<xsl:with-param name="namespace" select="../@name" />
 								</xsl:call-template>
 							</xsl:attribute>
 							<xsl:value-of select="../@name" />

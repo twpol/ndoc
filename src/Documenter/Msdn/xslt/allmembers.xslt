@@ -271,7 +271,9 @@
 						  </xsl:choose>
 							<a>
 								<xsl:attribute name="href">
-									<xsl:call-template name="get-filename-for-current-constructor-overloads" />
+									<xsl:call-template name="get-filename-for-constructors">
+										<xsl:with-param name="id" select="$id" />
+									</xsl:call-template>
 								</xsl:attribute>
 								<xsl:value-of select="../@displayName" />
 							</a>
@@ -313,7 +315,9 @@
 						  </xsl:if>
 							<a>
 								<xsl:attribute name="href">
-									<xsl:call-template name="get-filename-for-current-constructor" />
+									<xsl:call-template name="get-filename-for-constructor">
+										<xsl:with-param name="id" select="@id" />
+									</xsl:call-template>
 								</xsl:attribute>
 								<xsl:value-of select="../@displayName" />
 								<xsl:text> Constructor</xsl:text>
