@@ -28,6 +28,8 @@
     </UpgradeBackupLocation>
     <OldToolsVersion>2.0</OldToolsVersion>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkSubset>
+    </TargetFrameworkSubset>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>..\..\bin\VS.NET2008\Debug\</OutputPath>
@@ -172,8 +174,10 @@
     <Compile Include="Core\SortedStringDictionary.cs" />
     <Compile Include="Core\TemplateWriter.cs" />
     <Compile Include="Core\Workspace.cs" />
+    <Compile Include="Support\ArgUtils.cs" />
     <Compile Include="Xml\XmlUtils.cs" />
     <Compile Include="Core\XsltResourceResolver.cs" />
+    <None Include="app.config" />
     <None Include="Core.build" />
     <None Include="core.ndoc" />
     <EmbeddedResource Include="Core\AssySlashDocXML.xsd" />

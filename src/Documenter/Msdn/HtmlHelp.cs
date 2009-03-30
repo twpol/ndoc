@@ -26,6 +26,7 @@ using System.Globalization;
 using Microsoft.Win32;
 
 using NDoc3.Core;
+using NDoc3.Support;
 
 namespace NDoc3.Documenter.Msdn
 {
@@ -34,8 +35,32 @@ namespace NDoc3.Documenter.Msdn
 	/// to create the files needed by the HTML Help compiler.</remarks>
 	public class HtmlHelp
 	{
-		private string _directoryName = null;
-		private string _projectName = null;
+		private class Context : IDisposable
+		{
+			public delegate void DisposeCallback();
+
+			private readonly DisposeCallback _disposeCallback;
+
+			public Context()
+			{}
+
+			public Context(DisposeCallback disposeCallback)
+			{
+				_disposeCallback = ArgUtils.AssertNotNull(disposeCallback, "disposeCallback");
+			}
+
+			public void Dispose()
+			{
+				GC.SuppressFinalize(this);
+				if (_disposeCallback != null)
+				{
+					_disposeCallback();
+				}
+			}
+		}
+
+		private readonly string _directoryName = null;
+		private readonly string _projectName = null;
 		private string _defaultTopic = null;
 
 		private string _htmlHelpCompiler = null;
@@ -44,28 +69,29 @@ namespace NDoc3.Documenter.Msdn
 		private bool _binaryTOC = false;
 		private short _langID=1033;
 
-		private bool _generateTocOnly;
+		private readonly bool _generateTocOnly;
 
 		private StreamWriter streamHtmlHelp = null;
 
-		private ArrayList _tocFiles = new ArrayList();
+		private readonly ArrayList _tocFiles = new ArrayList();
 
 		private XmlTextWriter tocWriter;
 
 		/// <summary>Initializes a new instance of the HtmlHelp class.</summary>
-		/// <param name="directoryName">The directory to write the HTML Help files to.</param>
+		/// <param name="targetDirectory">The directory to write the HTML Help files to.</param>
 		/// <param name="projectName">The name of the HTML Help project.</param>
 		/// <param name="defaultTopic">The default topic for the compiled HTML Help file.</param>
 		/// <param name="generateTocOnly">When true, HtmlHelp only outputs the HHC file and does not compile the CHM.</param>
 		public HtmlHelp(
-			string directoryName, 
+			DirectoryInfo targetDirectory, 
 			string projectName, 
 			string defaultTopic,
 			bool generateTocOnly)
 		{
-			_directoryName = directoryName;
-			_projectName = projectName;
-			_defaultTopic = defaultTopic;
+			ArgUtils.AssertNotNull(targetDirectory, "targetDirectory");
+			_directoryName = targetDirectory.FullName;
+			_projectName = ArgUtils.AssertNotNull(projectName, "projectName");
+			_defaultTopic = ArgUtils.AssertNotNull(defaultTopic, "defaultTopic");
 			_generateTocOnly = generateTocOnly;
 		}
 
@@ -243,13 +269,15 @@ namespace NDoc3.Documenter.Msdn
 		}
 
 		/// <summary>Opens an HTML Help project file for writing.</summary>
-		public void OpenProjectFile()
+		public IDisposable OpenProjectFile()
 		{
 			if (_generateTocOnly) 
-				return;
+				return new Context();
 
 			streamHtmlHelp = new StreamWriter(File.Open(GetPathToProjectFile(), FileMode.Create), System.Text.Encoding.Default);
 			streamHtmlHelp.WriteLine("[FILES]");
+
+			return new Context(CloseProjectFile);
 		}
 
 		/// <summary>Adds a file to the HTML Help project file.</summary>
@@ -329,7 +357,7 @@ namespace NDoc3.Documenter.Msdn
 		}
 
 		/// <summary>Opens a HTML Help contents file for writing.</summary>
-		public void OpenContentsFile(string tocName, bool isDefault)
+		public IDisposable OpenContentsFile(string tocName, bool isDefault)
 		{
 			// TODO: we would need a more robust way of maintaining the list
 			//       of tocs that have been opened...
@@ -369,12 +397,15 @@ namespace NDoc3.Documenter.Msdn
 
 			tocWriter.WriteComment("This document contains Table of Contents information for the HtmlHelp compiler.");
 			tocWriter.WriteStartElement("UL");
+
+			return new Context(CloseContentsFile);
 		}
 
 		/// <summary>Creates a new "book" in the HTML Help contents file.</summary>
-		public void OpenBookInContents()
+		public IDisposable OpenBookInContents()
 		{
 			tocWriter.WriteStartElement("UL");
+			return new Context(CloseBookInContents);
 		}
 
 		/// <summary>Adds a topic to the contents file.</summary>
@@ -486,16 +517,15 @@ namespace NDoc3.Documenter.Msdn
 			XmlTextWriter indexWriter = new XmlTextWriter(GetPathToIndexFile(), null);
 
 			// Don't call WriteStartDocument to avoid XML declaration.
-
-			indexWriter.WriteStartElement("HTML");
-			indexWriter.WriteStartElement("BODY");
-			indexWriter.WriteComment(" http://ndoc3.sourceforge.net/ ");
-			indexWriter.WriteEndElement();
-			indexWriter.WriteEndElement();
-
+			using (indexWriter)
+			{
+				indexWriter.WriteStartElement("HTML");
+				indexWriter.WriteStartElement("BODY");
+				indexWriter.WriteComment(" http://ndoc3.sourceforge.net/ ");
+				indexWriter.WriteEndElement();
+				indexWriter.WriteEndElement();
+			}
 			// Don't call WriteEndDocument since we didn't call WriteStartDocument.
-
-			indexWriter.Close();
 		}
 
 		/// <summary>Compiles the HTML Help project.</summary>

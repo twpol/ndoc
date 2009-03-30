@@ -33,7 +33,7 @@ namespace NDoc3.Core
         /// <param name="directory">The directory to write the resources to.</param>
         public static void WriteEmbeddedResources(
             Type resourceLocationHint,
-            string directory)
+            DirectoryInfo directory)
         {
             WriteEmbeddedResources(resourceLocationHint.Assembly, resourceLocationHint.Namespace, directory);
         }
@@ -45,11 +45,11 @@ namespace NDoc3.Core
         public static void WriteEmbeddedResources(
             Assembly assembly,
             string prefix,
-            string directory)
+            DirectoryInfo directory)
         {
-            if (!Directory.Exists(directory))
+            if (!directory.Exists)
             {
-                Directory.CreateDirectory(directory);
+                directory.Create();
             }
 
             string[] names = assembly.GetManifestResourceNames();
@@ -75,7 +75,7 @@ namespace NDoc3.Core
         public static void WriteEmbeddedResource(
             Type resourceLocationHint,
             string resourceName,
-            string directory)
+            DirectoryInfo directory)
         {
             string manifestResourceName = string.Format("{0}.{1}", resourceLocationHint.Namespace, resourceName);
             WriteEmbeddedResource(resourceLocationHint.Assembly, manifestResourceName, directory, resourceName);
@@ -89,11 +89,11 @@ namespace NDoc3.Core
         public static void WriteEmbeddedResource(
             Assembly assembly,
             string manifestResourceName,
-            string directory,
+            DirectoryInfo directory,
             string filename)
         {
             Stream input = assembly.GetManifestResourceStream(manifestResourceName);
-            Stream output = File.Open(Path.Combine(directory, filename), FileMode.Create);
+            Stream output = File.Open(Path.Combine(directory.FullName, filename), FileMode.Create);
 
             using (input)
             using (output)

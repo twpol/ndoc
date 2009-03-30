@@ -272,7 +272,7 @@ namespace NDoc3.Documenter.LinearHtml
 #else
 				EmbeddedResources.WriteEmbeddedResources(this.GetType().Module.Assembly,
 					"NDoc3.Documenter.LinearHtml.xslt",
-					Path.Combine(workspace.ResourceDirectory, "xslt"));
+					new DirectoryInfo(Path.Combine(workspace.ResourceDirectory, "xslt")));
 #endif
 
 				// Create the html output directory if it doesn't exist.
@@ -283,7 +283,7 @@ namespace NDoc3.Documenter.LinearHtml
 
 				// Write the embedded css files to the html output directory
 				EmbeddedResources.WriteEmbeddedResources(this.GetType().Module.Assembly,
-					"NDoc3.Documenter.LinearHtml.css", MyConfig.OutputDirectory);
+					"NDoc3.Documenter.LinearHtml.css", new DirectoryInfo(MyConfig.OutputDirectory));
 
 				// Write the external files (FilesToInclude) to the html output directory
 				foreach( string srcFile in MyConfig.FilesToInclude.Split( '|' ) )

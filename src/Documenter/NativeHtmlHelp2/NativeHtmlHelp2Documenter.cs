@@ -277,7 +277,7 @@ namespace NDoc3.Documenter.NativeHtmlHelp2
 				namedUrlIndex.NavFailPage = ImportContentFileToWorkspace( MyConfig.NavFailPage, workspace );
 			
 			if ( ((string) MyConfig.AdditionalContentResourceDirectory).Length > 0 )			
-				workspace.ImportContentDirectory( MyConfig.AdditionalContentResourceDirectory );
+				workspace.ImportContentDirectory( new DirectoryInfo(MyConfig.AdditionalContentResourceDirectory) );
 
 			namedUrlIndex.Save( workspace.WorkingDirectory );
 		}
@@ -337,27 +337,27 @@ namespace NDoc3.Documenter.NativeHtmlHelp2
 			EmbeddedResources.WriteEmbeddedResources(
 				this.GetType().Module.Assembly,
 				"NDoc3.Documenter.NativeHtmlHelp2.includes",
-				workspace.WorkingDirectory );
+				new DirectoryInfo(workspace.WorkingDirectory) );
 
 			EmbeddedResources.WriteEmbeddedResources(
 				this.GetType().Module.Assembly,
 				"NDoc3.Documenter.NativeHtmlHelp2.graphics",
-				workspace.ContentDirectory );
+				new DirectoryInfo(workspace.ContentDirectory) );
 
 			EmbeddedResources.WriteEmbeddedResources(
 				this.GetType().Module.Assembly,
 				"NDoc3.Documenter.NativeHtmlHelp2.HxProject.HelpTitle",
-				workspace.ResourceDirectory );
+				new DirectoryInfo(workspace.ResourceDirectory) );
 
 			EmbeddedResources.WriteEmbeddedResources(
 				this.GetType().Module.Assembly,
 				"NDoc3.Documenter.NativeHtmlHelp2.HxProject.HelpCollection",
-				workspace.ResourceDirectory );
+				new DirectoryInfo(workspace.ResourceDirectory) );
 			
 			EmbeddedResources.WriteEmbeddedResources(
 				this.GetType().Module.Assembly,
 				"NDoc3.Documenter.NativeHtmlHelp2.Engine.NamespaceMapping",
-				workspace.WorkingDirectory );
+				new DirectoryInfo(workspace.WorkingDirectory) );
 		}
 
 		private void CreateCollectionFiles( Workspace workspace )

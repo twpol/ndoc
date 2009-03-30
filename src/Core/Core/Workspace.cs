@@ -244,19 +244,17 @@ namespace NDoc3.Core
 		/// maintainng the same directory structure
 		/// </summary>
 		/// <param name="sourceDirectory">The directory to import</param>
-		public void ImportContentDirectory( string sourceDirectory )
+		public void ImportContentDirectory( DirectoryInfo sourceDirectory )
 		{
-			if ( !Directory.Exists( sourceDirectory ) )
+			if ( !sourceDirectory.Exists )
 				throw new ArgumentException( string.Format( "The source location {0} does not exist", sourceDirectory ) );
 
-			DirectoryInfo sourceDir = new DirectoryInfo( sourceDirectory );
-
 			// first import all the files in the directory directly to content
-			foreach( FileInfo file in sourceDir.GetFiles() )
+			foreach( FileInfo file in sourceDirectory.GetFiles() )
 				Workspace.ImportFile( file, this.ContentDirectory );
 
 			// then recursively import any foldes in sourceDirectory
-			foreach( DirectoryInfo dir in sourceDir.GetDirectories() )
+			foreach( DirectoryInfo dir in sourceDirectory.GetDirectories() )
 				ImportDirectory( dir, new DirectoryInfo( this.ContentDirectory ) );
 		}
 
@@ -386,7 +384,7 @@ namespace NDoc3.Core
 			CleanIntermediates();
 		}
 
-		public void Dispose()
+		public virtual void Dispose()
 		{
 			GC.SuppressFinalize(this);
 			RemoveResourceDirectory();

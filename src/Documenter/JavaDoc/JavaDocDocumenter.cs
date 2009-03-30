@@ -88,12 +88,12 @@ namespace NDoc3.Documenter.JavaDoc
 				EmbeddedResources.WriteEmbeddedResources(
 					this.GetType().Module.Assembly,
 					"NDoc3.Documenter.JavaDoc.css",
-					Path.Combine( this.workspace.ResourceDirectory, "css" ) );
+					new DirectoryInfo(Path.Combine( this.workspace.ResourceDirectory, "css" )) );
 
 				EmbeddedResources.WriteEmbeddedResources(
 					this.GetType().Module.Assembly,
 					"NDoc3.Documenter.JavaDoc.xslt",
-					Path.Combine( this.workspace.ResourceDirectory, "xslt") );
+					new DirectoryInfo(Path.Combine( this.workspace.ResourceDirectory, "xslt")) );
 #endif
 
 			string outcss = Path.Combine(MyConfig.OutputDirectory, "JavaDoc.css");

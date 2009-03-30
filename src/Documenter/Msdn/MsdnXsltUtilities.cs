@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Specialized;
 using System.Globalization;
+using NDoc3.Support;
 
 namespace NDoc3.Documenter.Msdn
 {
@@ -13,19 +14,17 @@ namespace NDoc3.Documenter.Msdn
 		private const string sdkRoot = "/cpref/html/frlrf";
 		private const string sdkDocPageExt = ".htm";
 		//private const string msdnOnlineSdkBaseUrl = "http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrf";
-        private const string msdnOnlineSdkBaseUrl = "http://msdn.microsoft.com/{0}/library/{1}({2}).aspx";
+		private const string msdnOnlineSdkBaseUrl = "http://msdn.microsoft.com/{0}/library/{1}({2}).aspx";
 		private const string msdnOnlineSdkPageExt = ".aspx";
 		private const string systemPrefix = "System.";
-		private string sdkDocBaseUrl; 
-        private string sdkVersion;
-		private string sdkDocExt;
-        private string sdkDocLanguage;
-//		private readonly StringDictionary fileNames;
-//		private readonly StringDictionary elemNames;
-		private string assemblyName;
-		private NameResolver nameResolver;
-		private StringCollection descriptions;
-		private string encodingString;
+		private readonly string sdkDocBaseUrl;
+		private readonly string sdkVersion;
+		private readonly string sdkDocExt;
+		private readonly string sdkDocLanguage;
+		private readonly string assemblyName;
+		private readonly NameResolver nameResolver;
+		private readonly StringCollection descriptions = new StringCollection();
+		private readonly string encodingString;
 
 		/// <summary>
 		/// Initializes a new instance of class MsdnXsltUtilities
@@ -44,43 +43,31 @@ namespace NDoc3.Documenter.Msdn
 			bool SdkLinksOnWeb,
 			System.Text.Encoding fileEncoding)
 		{
-			Reset();
+			this.nameResolver = ArgUtils.AssertNotNull(nameResolver, "nameResolver");
+			this.assemblyName = assemblyName; //ArgUtils.AssertNotNull(assemblyName, "assemblyName");
+			this.sdkDocLanguage = ArgUtils.AssertNotNull(linkToSdkDocLangauge, "linkToSdkDocLangauge");
+			this.sdkVersion = ArgUtils.AssertNotNull(linkToSdkDocVersion, "linkToSdkDocVersion");
+			ArgUtils.AssertNotNull(fileEncoding, "fileEncoding");
+			this.encodingString = "text/html; charset=" + fileEncoding.WebName;
 
-			this.nameResolver = nameResolver;
-			this.assemblyName = assemblyName;
-//			this.fileNames = nameResolver.fileNames;
-//			this.elemNames = nameResolver.elemNames;
-            this.sdkDocLanguage = linkToSdkDocLangauge;
-            this.sdkVersion = linkToSdkDocVersion;
-
-            if (SdkLinksOnWeb)
-            {
-                sdkDocBaseUrl = msdnOnlineSdkBaseUrl;
-                sdkDocExt = msdnOnlineSdkPageExt;
-            }
-            /*else
-            {
-                switch (linkToSdkDocVersion)
-                {
-                    case SdkVersion.SDK_v1_0:
-                        sdkDocBaseUrl = GetLocalizedFrameworkURL(sdkDoc10BaseNamespace, linkToSdkDocLangauge);
-                        sdkDocExt = sdkDocPageExt;
-                        break;
-                    case SdkVersion.SDK_v1_1:
-                        sdkDocBaseUrl = GetLocalizedFrameworkURL(sdkDoc11BaseNamespace, linkToSdkDocLangauge);
-                        sdkDocExt = sdkDocPageExt;
-                        break;
-                }
-            }*/
-			encodingString = "text/html; charset=" + fileEncoding.WebName; 
-		}
-
-		/// <summary>
-		/// Reset Overload method checking state.
-		/// </summary>
-		public void Reset()
-		{
-			descriptions = new StringCollection();
+			if (SdkLinksOnWeb) {
+				sdkDocBaseUrl = msdnOnlineSdkBaseUrl;
+				sdkDocExt = msdnOnlineSdkPageExt;
+			}
+			/*else
+			{
+				switch (linkToSdkDocVersion)
+				{
+					case SdkVersion.SDK_v1_0:
+						sdkDocBaseUrl = GetLocalizedFrameworkURL(sdkDoc10BaseNamespace, linkToSdkDocLangauge);
+						sdkDocExt = sdkDocPageExt;
+						break;
+					case SdkVersion.SDK_v1_1:
+						sdkDocBaseUrl = GetLocalizedFrameworkURL(sdkDoc11BaseNamespace, linkToSdkDocLangauge);
+						sdkDocExt = sdkDocPageExt;
+						break;
+				}
+			}*/
 		}
 
 		/// <summary>
@@ -91,13 +78,13 @@ namespace NDoc3.Documenter.Msdn
 			get { return sdkDocBaseUrl; }
 		}
 
-        /// <summary>
-        /// Gets the lamguage for system type links
-        /// </summary>
-        public string SdkDocLanguage
-        {
-            get { return sdkDocLanguage; }
-        }
+		/// <summary>
+		/// Gets the lamguage for system type links
+		/// </summary>
+		public string SdkDocLanguage
+		{
+			get { return sdkDocLanguage; }
+		}
 
 		/// <summary>
 		/// Gets the page file extension for system types links.
@@ -117,20 +104,17 @@ namespace NDoc3.Documenter.Msdn
 				return string.Empty;
 
 			if ((cref.Length < 9)
-				|| (cref.Substring(2, 7) != systemPrefix))
-			{
+				|| (cref.Substring(2, 7) != systemPrefix)) {
 				string fileName = nameResolver.GetFilenameForId(assemblyName, cref);
 				if ((fileName == null) && cref.StartsWith("F:"))
-					fileName = nameResolver.GetFilenameForId(assemblyName,"E:" + cref.Substring(2));
+					fileName = nameResolver.GetFilenameForId(assemblyName, "E:" + cref.Substring(2));
 
 				if (fileName == null)
 					return "";
 				else
 					return fileName;
-			}
-			else
-			{
-                return String.Format(sdkDocBaseUrl, sdkDocLanguage, cref.Substring(2), sdkVersion);
+			} else {
+				return String.Format(sdkDocBaseUrl, sdkDocLanguage, cref.Substring(2), sdkVersion);
 				/*switch (cref.Substring(0, 2))
 				{
 					case "N:":	// Namespace
@@ -164,11 +148,9 @@ namespace NDoc3.Documenter.Msdn
 			if (cref.Length < 2)
 				return cref;
 
-			if (cref[1] == ':')
-			{
+			if (cref[1] == ':') {
 				if ((cref.Length < 9)
-					|| (cref.Substring(2, 7) != systemPrefix))
-				{
+					|| (cref.Substring(2, 7) != systemPrefix)) {
 					string name = nameResolver.GetDisplayNameForId(assemblyName, cref);
 					if (name != null)
 						return name;
@@ -199,7 +181,7 @@ namespace NDoc3.Documenter.Msdn
 			index = crefName.LastIndexOf(".");
 			string crefType = crefName.Substring(0, index);
 			string crefMember = crefName.Substring(index + 1);
-            return String.Format(sdkDocBaseUrl, sdkDocLanguage, id);
+			return String.Format(sdkDocBaseUrl, sdkDocLanguage, id);
 		}
 
 		/// <summary>
@@ -238,22 +220,22 @@ namespace NDoc3.Documenter.Msdn
 		/// <param name="oldValue">The string to search for</param>
 		/// <param name="newValue">The string to replace</param>
 		/// <returns>A new string</returns>
-		public string Replace( string str, string oldValue, string newValue )
+		public string Replace(string str, string oldValue, string newValue)
 		{
-			return str.Replace( oldValue, newValue );
+			return str.Replace(oldValue, newValue);
 		}
 
-        /// <summary>
-        /// Exposes easy formatting of SDK links to XSLT
-        /// </summary>
-        /// <param name="typename">Name of the type to refer to</param>
-        /// <returns>URL to the type</returns>
-        public string FormatOnlineSDKLink(string typename)
-        {
-        	//Remove array brackets and unsafe pointers from the link
+		/// <summary>
+		/// Exposes easy formatting of SDK links to XSLT
+		/// </summary>
+		/// <param name="typename">Name of the type to refer to</param>
+		/// <returns>URL to the type</returns>
+		public string FormatOnlineSDKLink(string typename)
+		{
+			//Remove array brackets and unsafe pointers from the link
 			typename = typename.Replace("[", "").Replace("]", "").Replace("*", "");
-            return String.Format(sdkDocBaseUrl, sdkDocLanguage, typename, sdkVersion);
-        }
+			return String.Format(sdkDocBaseUrl, sdkDocLanguage, typename, sdkVersion);
+		}
 
 		/// <summary>
 		/// returns a localized sdk url if one exists for the <see cref="CultureInfo.CurrentCulture"/>.
@@ -263,12 +245,9 @@ namespace NDoc3.Documenter.Msdn
 		/// <returns>ms-help url for sdk</returns>
 		private string GetLocalizedFrameworkURL(string searchNamespace, string langCode)
 		{
-			if (langCode!="en")
-			{
+			if (langCode != "en") {
 				return helpURL + searchNamespace + "." + langCode.ToUpper() + sdkRoot;
-			}
-			else
-			{
+			} else {
 				//default to non-localized namespace
 				return helpURL + searchNamespace + sdkRoot;
 			}

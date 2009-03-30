@@ -114,7 +114,7 @@ namespace NDoc3.Documenter.Latex
 			EmbeddedResources.WriteEmbeddedResources(
 				this.GetType().Module.Assembly,
 				"NDoc3.Documenter.Latex.xslt",
-				workspace.ResourceDirectory );
+				new DirectoryInfo(workspace.ResourceDirectory) );
 #endif
 
 			string xmlBuffer = MakeXml(project);

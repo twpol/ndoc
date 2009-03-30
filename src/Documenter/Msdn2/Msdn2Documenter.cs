@@ -177,22 +177,22 @@ namespace NDoc3.Documenter.Msdn2
 				EmbeddedResources.WriteEmbeddedResources(
 					this.GetType().Module.Assembly,
 					"NDoc3.Documenter.Msdn2.css",
-					workspace.WorkingDirectory);
+					new DirectoryInfo(workspace.WorkingDirectory));
 
 				// Write the embedded icons to the html output directory
 				EmbeddedResources.WriteEmbeddedResources(
 					this.GetType().Module.Assembly,
 					"NDoc3.Documenter.Msdn2.images",
-					workspace.WorkingDirectory);
+					new DirectoryInfo(workspace.WorkingDirectory));
 
 				// Write the embedded scripts to the html output directory
 				EmbeddedResources.WriteEmbeddedResources(
 					this.GetType().Module.Assembly,
 					"NDoc3.Documenter.Msdn2.scripts",
-					workspace.WorkingDirectory);
+					new DirectoryInfo(workspace.WorkingDirectory));
 
 				if ( ((string)MyConfig.AdditionalContentResourceDirectory).Length > 0 )			
-					workspace.ImportContentDirectory( MyConfig.AdditionalContentResourceDirectory );
+					workspace.ImportContentDirectory( new DirectoryInfo(MyConfig.AdditionalContentResourceDirectory) );
 
 				// Write the external files (FilesToInclude) to the html output directory
 
@@ -388,7 +388,7 @@ namespace NDoc3.Documenter.Msdn2
 					EmbeddedResources.WriteEmbeddedResources(
 						this.GetType().Module.Assembly,
 						"NDoc3.Documenter.Msdn2.onlinefiles",
-						workspace.WorkingDirectory);
+						new DirectoryInfo(workspace.WorkingDirectory));
 
 					using (TemplateWriter indexWriter = new TemplateWriter(
 							   Path.Combine(workspace.WorkingDirectory, "index.html"),

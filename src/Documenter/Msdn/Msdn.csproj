@@ -108,6 +108,7 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="BuildAssemblyContext.cs" />
     <Compile Include="ExternalHtmlProvider.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -117,6 +118,7 @@
     <Compile Include="MsdnDocumenter.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="BuildProjectContext.cs" />
     <Compile Include="MsdnDocumenterConfig.cs">
       <SubType>Code</SubType>
     </Compile>

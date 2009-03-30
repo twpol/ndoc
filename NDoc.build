@@ -222,6 +222,7 @@
         <nant buildfile="test/Core.Tests.TestAssembly1/Core.Tests.TestAssembly1.build" target="compile" inheritall="true"  /> <!-- don't run tests, just serves as input to Core.Tests -->
         <nant buildfile="test/Core.Tests.TestAssembly2/Core.Tests.TestAssembly2.build" target="compile" inheritall="true"  /> <!-- don't run tests, just serves as input to Core.Tests -->
         <nant buildfile="test/Core.Tests/Core.Tests.build" target="test" inheritall="true"  />
+        <nant buildfile="test/Msdn.Tests/Msdn.Tests.build" target="test" inheritall="true"  />
 
         <!-- remove the ndoc3 signing key file -->
         <delete file="${current.bin.dir}/ndoc3.snk" />
