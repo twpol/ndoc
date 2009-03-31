@@ -63,7 +63,7 @@ namespace NDoc3.Documenter.Msdn
 				string[] assemblyReference = this.assemblyReferences[currentAssemblyName];
 				if (assemblyReference != null) {
 					foreach (string assemblyName in assemblyReference) {
-						name = GetFilenameForId(assemblyName, memberId);
+						name = elemNames[assemblyName + memberId];
 						if (name != null)
 							break;
 					}
@@ -73,7 +73,7 @@ namespace NDoc3.Documenter.Msdn
 			if (name == null) {
 				name = elemNames[memberId];
 			}
-			Debug.WriteLine(string.Format("GetDisplayNameForId('{0}','{1}') => {2}", currentAssemblyName, memberId, name));
+//			Debug.WriteLine(string.Format("GetDisplayNameForId('{0}','{1}') => {2}", currentAssemblyName, memberId, name));
 			return name;
 		}
 
@@ -82,7 +82,6 @@ namespace NDoc3.Documenter.Msdn
 		{
 			// lookup current assembly
 			string filename = GetFilenameForIdInternal(currentAssemblyName, memberId);
-			Debug.WriteLine(string.Format("GetFilenameForId('{0}','{1}') => {2}", currentAssemblyName, memberId, filename));
 			return filename;
 		}
 
@@ -366,7 +365,7 @@ namespace NDoc3.Documenter.Msdn
 				string[] assemblyReference = this.assemblyReferences[currentAssemblyName];
 				if (assemblyReference != null) {
 					foreach (string assemblyName in assemblyReference) {
-						filename = GetFilenameForId(assemblyName, memberId);
+						filename = fileNames[assemblyName + memberId];
 						if (filename != null)
 							break;
 					}
@@ -376,6 +375,8 @@ namespace NDoc3.Documenter.Msdn
 			if (filename == null) {
 				filename = fileNames[memberId];
 			}
+
+			//			Debug.WriteLine(string.Format("GetFilenameForIdInternal('{0}','{1}') => {2}", currentAssemblyName, memberId, filename));
 			return filename;
 		}
 

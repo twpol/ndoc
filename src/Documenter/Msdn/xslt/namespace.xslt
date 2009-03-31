@@ -53,7 +53,7 @@
 							</table>
 						</div>
 					</xsl:if>
-					<xsl:if test="ndoc:assembly/ndoc:module/ndoc:namespace[@name=$namespace]/interface">
+					<xsl:if test="ndoc:assembly/ndoc:module/ndoc:namespace[@name=$namespace]/ndoc:interface">
 						<h3 class="dtH3">Interfaces</h3>
 						<div class="tablediv">
 							<table class="dtTABLE" cellspacing="0">

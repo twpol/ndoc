@@ -226,7 +226,8 @@
       <xs:attribute name="id" type="xs:string" use="required"/>
       <xs:attribute name="interface" type="xs:string" use="required"/>
       <xs:attribute name="interfaceId" type="xs:string" use="required"/>
-      <xs:attribute name="declaringType" type="xs:string" use="optional"/>
+			<xs:attribute name="assembly" type="xs:string" use="required"/>
+			<xs:attribute name="declaringType" type="xs:string" use="optional"/>
     </xs:complexType>
   </xs:element>
 
@@ -380,7 +381,8 @@
       <xs:attribute name="id" type="xs:string" use="required"/>
       <xs:attribute name="displayName" type="xs:string" use="required"/>
       <xs:attribute name="namespace" type="xs:string" use="required"/>
-    </xs:complexType>
+			<xs:attribute name="assembly" type="xs:string" use="required"/>
+		</xs:complexType>
   </xs:element>
 
   <xs:element name="derivedBy">
@@ -391,6 +393,7 @@
       <xs:attribute name="id" type="xs:string" use="required"/>
       <xs:attribute name="displayName" type="xs:string" use="required"/>
       <xs:attribute name="namespace" type="xs:string" use="required"/>
+      <xs:attribute name="assembly" type="xs:string" use="required"/>
     </xs:complexType>
   </xs:element>
 
@@ -415,6 +418,7 @@
               <xs:element ref="genericargument" minOccurs="0" maxOccurs="unbounded"/>
             </xs:sequence>
             <xs:attribute name="type" type="xs:string" use="required"/>
+            <xs:attribute name="assembly" type="xs:string" use="required"/>
             <xs:attribute name="id" type="xs:string" use="required"/>
           </xs:complexType>
         </xs:element>
@@ -427,6 +431,7 @@
             <xs:attribute name="id" type="xs:string" use="required"/>
             <xs:attribute name="displayName" type="xs:string" use="required"/>
             <xs:attribute name="namespace" type="xs:string" use="required"/>
+            <xs:attribute name="assembly" type="xs:string" use="required"/>
           </xs:complexType>
         </xs:element>
         <xs:element ref="property" minOccurs="0" maxOccurs="unbounded"/>

@@ -1226,6 +1226,7 @@ namespace NDoc3.Core.Reflection
 					//else
 					//    writer.WriteAttributeString("type", interfaceType.FullName.Replace('+', '.'));
 					writer.WriteAttributeString("type", interName);
+					writer.WriteAttributeString("assembly", interfaceType.Assembly.GetName().Name);
 					writer.WriteAttributeString("id", MemberID.GetMemberID(interfaceType));
 					WriteGenericArgumentsAndParameters(interfaceType, writer);
 					writer.WriteEndElement();
@@ -1883,6 +1884,7 @@ namespace NDoc3.Core.Reflection
 				writer.WriteAttributeString("id", MemberID.GetMemberID(type));
 				writer.WriteAttributeString("displayName", MemberDisplayName.GetMemberDisplayName(type));
 				writer.WriteAttributeString("namespace", type.Namespace);
+				writer.WriteAttributeString("assembly", type.Assembly.GetName().Name);
 
 				WriteGenericArgumentsAndParameters(type, writer);
 
@@ -2106,6 +2108,7 @@ namespace NDoc3.Core.Reflection
 					writer.WriteAttributeString("interface", implements.InterfaceType.Name);
 					writer.WriteAttributeString("interfaceId", MemberID.GetMemberID(implements.InterfaceType));
 					writer.WriteAttributeString("declaringType", implements.InterfaceType.FullName.Replace('+', '.'));
+					writer.WriteAttributeString("assembly", implements.InterfaceType.Assembly.GetName().Name);
 					writer.WriteEndElement();
 				}
 			}
@@ -2254,6 +2257,7 @@ namespace NDoc3.Core.Reflection
 							writer.WriteAttributeString("name", InterfaceProperty.Name);
 							writer.WriteAttributeString("id", InterfacePropertyID);
 							writer.WriteAttributeString("interface", implements.InterfaceType.Name);
+							writer.WriteAttributeString("assembly", implements.InterfaceType.Assembly.GetName().Name);
 							writer.WriteAttributeString("interfaceId", MemberID.GetMemberID(implements.InterfaceType));
 							if (implements.InterfaceType.IsGenericType)
 								writer.WriteAttributeString("declaringType", implements.InterfaceType.GetGenericTypeDefinition().FullName.Replace('+', '.'));
@@ -2266,6 +2270,7 @@ namespace NDoc3.Core.Reflection
 							writer.WriteAttributeString("name", InterfaceMethod.Name);
 							writer.WriteAttributeString("id", InterfaceMethodID);
 							writer.WriteAttributeString("interface", implements.InterfaceType.Name);
+							writer.WriteAttributeString("assembly", implements.InterfaceType.Assembly.GetName().Name);
 							writer.WriteAttributeString("interfaceId", MemberID.GetMemberID(implements.InterfaceType));
 							string declaringType;
 							if (implements.InterfaceType.GetGenericArguments().Length > 0)
@@ -2454,6 +2459,7 @@ namespace NDoc3.Core.Reflection
 						writer.WriteAttributeString("id", MemberID.GetMemberID((MethodBase)implements.InterfaceMethod));
 						writer.WriteAttributeString("interface", MemberDisplayName.GetMemberDisplayName(implements.InterfaceType));
 						writer.WriteAttributeString("interfaceId", MemberID.GetMemberID(implements.InterfaceType));
+						writer.WriteAttributeString("assembly", implements.InterfaceType.Assembly.GetName().Name);
 						writer.WriteAttributeString("declaringType", implements.InterfaceType.FullName.Replace('+', '.'));
 						writer.WriteEndElement();
 					}
@@ -3613,6 +3619,7 @@ namespace NDoc3.Core.Reflection
 				writer.WriteAttributeString("id", MemberID.GetMemberID(derived));
 				writer.WriteAttributeString("displayName", MemberDisplayName.GetMemberDisplayName(derived));
 				writer.WriteAttributeString("namespace", derived.Namespace);
+				writer.WriteAttributeString("assembly", derived.Assembly.GetName().Name);
 				WriteGenericArgumentsAndParameters(derived, writer);
 				writer.WriteEndElement();
 			}
@@ -3625,6 +3632,7 @@ namespace NDoc3.Core.Reflection
 				writer.WriteAttributeString("id", MemberID.GetMemberID(implementingType));
 				writer.WriteAttributeString("displayName", MemberDisplayName.GetMemberDisplayName(implementingType));
 				writer.WriteAttributeString("namespace", implementingType.Namespace);
+				writer.WriteAttributeString("assembly", implementingType.Assembly.GetName().Name);
 				writer.WriteEndElement();
 			}
 		}

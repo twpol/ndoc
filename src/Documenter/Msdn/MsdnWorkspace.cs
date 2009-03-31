@@ -25,9 +25,9 @@ namespace NDoc3.Documenter.Msdn
 		{
 			if (_cleanIntermediates)
 			{
-//				CleanIntermediates();
+				CleanIntermediates();
 			}
-//			base.Dispose();
+			base.Dispose();
 		}
 	}
 }

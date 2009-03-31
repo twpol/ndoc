@@ -647,7 +647,7 @@
 					<xsl:value-of select="." />
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:value-of select="NUtil:GetName($cref)" />
+					<xsl:value-of select="NUtil:GetName(ancestor::ndoc:assembly/@name, $cref)" />
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
