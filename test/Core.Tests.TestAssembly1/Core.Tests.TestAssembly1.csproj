@@ -32,11 +32,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AssemblyDoc.cs" />
     <Compile Include="GlobalAssembly1Class.cs" />
     <Compile Include="ReflectionTests\DuplicateNamespace\NamespaceDoc.cs" />
     <Compile Include="NamespaceDoc.cs" />
     <Compile Include="ReflectionTests\TestAssembly1Class.cs" />
     <Compile Include="ReflectionTests\DuplicateNamespace\DuplicateClass.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

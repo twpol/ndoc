@@ -646,7 +646,7 @@
   </xsl:template>
   <!-- -->
   <xsl:template name="implements-member">
-    <xsl:variable name="href" select="string(NUtil:GetHRef(@id))" />
+    <xsl:variable name="href" select="string(NUtil:GetHRef(ancestor::ndoc:assembly/@name, @id))" />
     <a>
       <xsl:attribute name="href">
         <xsl:value-of select="$href" />
@@ -868,11 +868,11 @@
   <!-- Get a link from a cref -->
   <xsl:template name="get-a-href">
     <xsl:param name="cref" />
-    <xsl:variable name="href" select="string(NUtil:GetHRef($cref))" />
+    <xsl:variable name="href" select="string(NUtil:GetHRef(ancestor::ndoc:assembly/@name, $cref))" />
     <xsl:choose>
       <xsl:when test="$href=''">
         <b>
-          <xsl:value-of select="string(NUtil:GetName($cref))" />
+          <xsl:value-of select="string(NUtil:GetName(ancestor::ndoc:assembly/@name, $cref))" />
         </b>
       </xsl:when>
       <xsl:otherwise>
@@ -885,7 +885,7 @@
               <xsl:value-of select="." />
             </xsl:when>
             <xsl:otherwise>
-              <xsl:value-of select="string(NUtil:GetName($cref))" />
+              <xsl:value-of select="string(NUtil:GetName(ancestor::ndoc:assembly/@name, $cref))" />
             </xsl:otherwise>
           </xsl:choose>
         </a>
@@ -895,11 +895,11 @@
   <!-- get-a-href-with-name -->
   <xsl:template name="get-a-href-with-name">
     <xsl:param name="cref" />
-    <xsl:variable name="href" select="string(NUtil:GetHRef($cref))" />
+    <xsl:variable name="href" select="string(NUtil:GetHRef(ancestor::ndoc:assembly, $cref))" />
     <xsl:choose>
       <xsl:when test="$href=''">
         <b>
-          <xsl:value-of select="string(NUtil:GetName($cref))" />
+          <xsl:value-of select="string(NUtil:GetName(ancestor::ndoc:assembly, $cref))" />
         </b>
       </xsl:when>
       <xsl:otherwise>
@@ -907,7 +907,7 @@
           <xsl:attribute name="href">
             <xsl:value-of select="$href" />
           </xsl:attribute>
-          <xsl:value-of select="string(NUtil:GetName($cref))" />
+          <xsl:value-of select="string(NUtil:GetName(ancestor::ndoc:assembly, $cref))" />
         </a>
       </xsl:otherwise>
     </xsl:choose>

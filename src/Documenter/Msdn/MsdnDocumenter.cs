@@ -16,7 +16,6 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
@@ -163,13 +162,16 @@ namespace NDoc3.Documenter.Msdn
 						rootPageTOCName = MyConfig.RootPageTOCName;
 					}
 				} else {
+					// TODO (EE): check MergeAssemblies and adjust defaultTopic accordingly
 					XmlNodeList namespaceNodes = buildContext.SelectNodes("/ndoc:ndoc/ndoc:assembly/ndoc:module/ndoc:namespace");
 					int[] indexes = SortNodesByAttribute(namespaceNodes, "name");
 
 					XmlNode defaultNamespace = namespaceNodes[indexes[0]];
 
 					string defaultNamespaceName = GetNodeName(defaultNamespace);
-					defaultTopic = defaultNamespaceName + ".html";
+					string assemblyName = GetNodeName(buildContext.SelectSingleNode(defaultNamespace, "ancestor::ndoc:assembly"));
+					defaultTopic = buildContext._nameResolver.GetFilenameForNamespace(assemblyName, defaultNamespaceName);
+//					defaultTopic = defaultNamespaceName + ".html";
 				}
 				buildContext.htmlHelp = SetupHtmlHelpBuilder(buildContext.WorkingDirectory, defaultTopic);
 

@@ -19,7 +19,7 @@ namespace NDoc3.Documenter.Msdn
 		private readonly StringDictionary fileNames = new StringDictionary();
 		private readonly StringDictionary elemNames = new StringDictionary();
 
-		private readonly ReferenceTypeDictionary<string, string[]> assemblyReferences = new ReferenceTypeDictionary<string, string[]>(); 
+		private readonly ReferenceTypeDictionary<string, string[]> assemblyReferences = new ReferenceTypeDictionary<string, string[]>();
 
 		public NameResolver(XmlDocument documentation)
 		{
@@ -55,33 +55,50 @@ namespace NDoc3.Documenter.Msdn
 		#endregion
 
 		// exposed to XSLT
-		public string GetDisplayNameForId(string assemblyName, string memberId)
+		public string GetDisplayNameForId(string currentAssemblyName, string memberId)
 		{
-			string name = elemNames[assemblyName + memberId];
+			string name = elemNames[currentAssemblyName + memberId];
+			if (name == null) {
+				// search for identifier in referenced assemblies
+				string[] assemblyReference = this.assemblyReferences[currentAssemblyName];
+				if (assemblyReference != null) {
+					foreach (string assemblyName in assemblyReference) {
+						name = GetFilenameForId(assemblyName, memberId);
+						if (name != null)
+							break;
+					}
+				}
+			}
+
 			if (name == null) {
 				name = elemNames[memberId];
 			}
-			Debug.WriteLine(string.Format("GetDisplayNameForId('{0}','{1}') => {2}", assemblyName, memberId, name));
+			Debug.WriteLine(string.Format("GetDisplayNameForId('{0}','{1}') => {2}", currentAssemblyName, memberId, name));
 			return name;
 		}
 
 		// exposed to XSLT
-		public string GetFilenameForId(string assemblyName, string memberId)
+		public string GetFilenameForId(string currentAssemblyName, string memberId)
 		{
-			string re = GetFilenameForIdInternal(assemblyName, memberId);
-			Debug.WriteLine(string.Format("GetFilenameForId('{0}','{1}') => {2}", assemblyName, memberId, re));
-			return re;
+			// lookup current assembly
+			string filename = GetFilenameForIdInternal(currentAssemblyName, memberId);
+			Debug.WriteLine(string.Format("GetFilenameForId('{0}','{1}') => {2}", currentAssemblyName, memberId, filename));
+			return filename;
 		}
 
 		// exposed to XSLT
 		public string GetFilenameForNamespaceHierarchy(string assemblyName, string namespaceName)
 		{
+			if (string.IsNullOrEmpty(namespaceName))
+				namespaceName = "(global)";
 			return GetFilenameForIdSpecial(assemblyName, "N:" + namespaceName, "~Hierarchy");
 		}
 
 		// exposed to XSLT
 		public string GetFilenameForNamespace(string assemblyName, string namespaceName)
 		{
+			if (string.IsNullOrEmpty(namespaceName))
+				namespaceName = "(global)";
 			return GetFilenameForId(assemblyName, "N:" + namespaceName);
 		}
 
@@ -106,7 +123,7 @@ namespace NDoc3.Documenter.Msdn
 		// exposed to XSLT
 		public string GetFilenameForOperatorOverloads(string assemblyName, string typeID, string operatorName)
 		{
-			return GetFilenameForIdSpecial(assemblyName, typeID, "."+operatorName + "~Overloads");
+			return GetFilenameForIdSpecial(assemblyName, typeID, "." + operatorName + "~Overloads");
 		}
 
 		// exposed to XSLT
@@ -124,9 +141,16 @@ namespace NDoc3.Documenter.Msdn
 		}
 
 		// exposed to XSLT
-		public string GetFilenameForTypename(string assemblyName, string typeName)
+		public string GetFilenameForTypename(string currentAssemblyName, string typeName)
 		{
-			return GetFilenameForId(assemblyName, "T:"+typeName);
+			//			return GetFilenameForId(assemblyName, "T:"+typeName);
+
+			// strip leading type identifier
+			if (typeName.Length > 1 && typeName[1] != ':')
+				typeName = "T:" + typeName;
+			string filename = GetFilenameForId(currentAssemblyName, typeName);
+			Debug.WriteLine(string.Format("GetFilenameForTypename('{0}', '{1}') => {2}", currentAssemblyName, typeName, filename));
+			return filename;
 		}
 
 		// exposed
@@ -134,19 +158,9 @@ namespace NDoc3.Documenter.Msdn
 		{
 			// lookup current assembly
 			string filename = GetFilenameForId(currentAssemblyName, cref);
-			if (filename == null)
-			{
-				// search for identifier in referenced assemblies
-				foreach(string assemblyName in this.assemblyReferences[currentAssemblyName])
-				{
-					filename = GetFilenameForId(assemblyName, cref);
-					if (filename != null)
-						break;
-				}
-			}
 			Debug.WriteLine(string.Format("GetFilenameForCRefOverload('{0}', '{1}') => {2}", currentAssemblyName, cref, filename));
 			return filename;
-			
+
 			#region Original XSLT Logic
 			/*
 					<!--<xsl:choose>
@@ -216,7 +230,7 @@ namespace NDoc3.Documenter.Msdn
 			#endregion
 		}
 
-		#region BuildNameTables 
+		#region BuildNameTables
 
 		private void BuildNameTables(XmlDocument xmlDocumentation)
 		{
@@ -229,9 +243,8 @@ namespace NDoc3.Documenter.Msdn
 				// build list of assemblyReferences
 				XmlNodeList assemblyReferenceNodes = assemblyNode.SelectNodes("ns:assemblyReference", nsmgr);
 				List<string> assemblyReferenceNames = new List<string>();
-				assemblyReferenceNames.Add(assemblyName);
-				foreach(XmlNode assemblyReferenceNode in assemblyReferenceNodes)
-				{
+				//				assemblyReferenceNames.Add(assemblyName);
+				foreach (XmlNode assemblyReferenceNode in assemblyReferenceNodes) {
 					assemblyReferenceNames.Add(GetNodeName(assemblyReferenceNode));
 				}
 				assemblyReferences.Add(assemblyName, assemblyReferenceNames.ToArray());
@@ -254,39 +267,39 @@ namespace NDoc3.Documenter.Msdn
 							string memberId = GetNodeId(memberNode);
 							switch (memberNode.Name) {
 								case "constructor": {
-									MethodContract contract = XmlUtils.GetAttributeEnum<MethodContract>(memberNode, "contract");
-									string overload = XmlUtils.GetAttributeString(memberNode, "overload", false);
-									this.RegisterConstructor(assemblyName, typeId, memberId, contract, overload);
-								}
+										MethodContract contract = XmlUtils.GetAttributeEnum<MethodContract>(memberNode, "contract");
+										string overload = XmlUtils.GetAttributeString(memberNode, "overload", false);
+										this.RegisterConstructor(assemblyName, typeId, memberId, contract, overload);
+									}
 									break;
 								case "field": {
-									bool isEnum = (typeNode.Name == "enumeration");
-									string memberName = GetNodeName(memberNode);
-									this.RegisterField(assemblyName, typeId, memberId, isEnum, memberName);
-								}
+										bool isEnum = (typeNode.Name == "enumeration");
+										string memberName = GetNodeName(memberNode);
+										this.RegisterField(assemblyName, typeId, memberId, isEnum, memberName);
+									}
 									break;
 								case "property": {
-									string overload = GetNodeOverload(memberNode);
-									string memberName = GetNodeName(memberNode);
-									this.RegisterProperty(assemblyName, memberId, memberName, overload);
-								}
+										string overload = GetNodeOverload(memberNode);
+										string memberName = GetNodeName(memberNode);
+										this.RegisterProperty(assemblyName, memberId, memberName, overload);
+									}
 									break;
 								case "method": {
-									string overload = GetNodeOverload(memberNode);
-									string memberName = GetNodeName(memberNode);
-									this.RegisterMethod(assemblyName, memberId, memberName, overload);
-								}
+										string overload = GetNodeOverload(memberNode);
+										string memberName = GetNodeName(memberNode);
+										this.RegisterMethod(assemblyName, memberId, memberName, overload);
+									}
 									break;
 								case "operator": {
-									string overload = GetNodeOverload(memberNode);
-									string memberName = GetNodeName(memberNode);
-									this.RegisterOperator(assemblyName, memberId, memberName, overload);
-								}
+										string overload = GetNodeOverload(memberNode);
+										string memberName = GetNodeName(memberNode);
+										this.RegisterOperator(assemblyName, memberId, memberName, overload);
+									}
 									break;
 								case "event": {
-									string memberName = GetNodeName(memberNode);
-									this.RegisterEvent(assemblyName, memberId, memberName);
-								}
+										string memberName = GetNodeName(memberNode);
+										this.RegisterEvent(assemblyName, memberId, memberName);
+									}
 									break;
 							}
 						}
@@ -345,13 +358,25 @@ namespace NDoc3.Documenter.Msdn
 
 		#region Registration & Lookup Logic
 
-		private string GetFilenameForIdInternal(string assemblyName, string memberId)
+		private string GetFilenameForIdInternal(string currentAssemblyName, string memberId)
 		{
-			string fileName = fileNames[assemblyName + memberId];
-			if (fileName == null) {
-				fileName = fileNames[memberId];
+			string filename = fileNames[currentAssemblyName + memberId];
+			if (filename == null) {
+				// search for identifier in referenced assemblies
+				string[] assemblyReference = this.assemblyReferences[currentAssemblyName];
+				if (assemblyReference != null) {
+					foreach (string assemblyName in assemblyReference) {
+						filename = GetFilenameForId(assemblyName, memberId);
+						if (filename != null)
+							break;
+					}
+				}
 			}
-			return fileName;
+
+			if (filename == null) {
+				filename = fileNames[memberId];
+			}
+			return filename;
 		}
 
 		private string GetFilenameForIdSpecial(string assemblyName, string memberId, string postfix)

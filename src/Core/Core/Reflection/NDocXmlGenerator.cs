@@ -765,8 +765,6 @@ namespace NDoc3.Core.Reflection
 		/// </summary>
 		/// <param name="writer"></param>
 		/// <param name="assembly"></param>
-
-
 		private void WriteAssembly(XmlWriter writer, IAssemblyInfo assembly)
 		{
 			AssemblyName assemblyName = assembly.GetName();
@@ -802,6 +800,7 @@ namespace NDoc3.Core.Reflection
 			foreach (AssemblyName assemblyName in assembly.GetReferencedAssemblies()) {
 				writer.WriteStartElement("assemblyReference");
 				writer.WriteAttributeString("name", assemblyName.Name);
+
 				writer.WriteEndElement();
 			}
 		}
@@ -3223,9 +3222,18 @@ namespace NDoc3.Core.Reflection
 
 		private void WriteAssemblyDocumentation(XmlWriter writer, AssemblyName assemblyName)
 		{
-			CheckForMissingSummaryAndRemarks(writer, assemblyName, null);
-			WriteSlashDocElements(writer, assemblyName, null);
-			WriteEndDocumentation(writer);
+			if (_rep.UseNamespaceDocSummaries) {
+				string assemblySummary = _assemblyDocCache.GetDoc(assemblyName, "T:AssemblyDoc");
+				if (!string.IsNullOrEmpty(assemblySummary)) {
+					WriteStartDocumentation(writer);
+					writer.WriteRaw(assemblySummary);
+					WriteEndDocumentation(writer);
+				}
+			}
+//
+//			CheckForMissingSummaryAndRemarks(writer, assemblyName, null);
+//			WriteSlashDocElements(writer, assemblyName, null);
+//			WriteEndDocumentation(writer);
 		}
 
 		private void WriteTypeDocumentation(XmlWriter writer, AssemblyName assemblyName, string memberName)

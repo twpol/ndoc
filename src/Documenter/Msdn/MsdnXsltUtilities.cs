@@ -98,8 +98,9 @@ namespace NDoc3.Documenter.Msdn
 		/// <summary>
 		/// Returns an HRef for a CRef.
 		/// </summary>
+		/// <param name="assemblyName"></param>
 		/// <param name="cref">CRef for which the HRef will be looked up.</param>
-		public string GetHRef(string cref)
+		public string GetHRef(string assemblyName, string cref)
 		{
 			string message = string.Format("GetHRef('{0}')", cref);
 
@@ -156,8 +157,9 @@ namespace NDoc3.Documenter.Msdn
 		/// <summary>
 		/// Returns a name for a CRef.
 		/// </summary>
+		/// <param name="assemblyName"></param>
 		/// <param name="cref">CRef for which the name will be looked up.</param>
-		public string GetName(string cref)
+		public string GetName(string assemblyName, string cref)
 		{
 			string name = null;
 			string message = string.Format("GetName('{0}')", cref);
