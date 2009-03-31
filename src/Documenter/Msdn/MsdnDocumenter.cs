@@ -163,15 +163,26 @@ namespace NDoc3.Documenter.Msdn
 					}
 				} else {
 					// TODO (EE): check MergeAssemblies and adjust defaultTopic accordingly
-					XmlNodeList namespaceNodes = buildContext.SelectNodes("/ndoc:ndoc/ndoc:assembly/ndoc:module/ndoc:namespace");
-					int[] indexes = SortNodesByAttribute(namespaceNodes, "name");
+					XmlNode defaultNamespace;
+					if (MyConfig.MergeAssemblies)
+					{
+						XmlNodeList namespaceNodes = buildContext.SelectNodes("/ndoc:ndoc/ndoc:assembly/ndoc:module/ndoc:namespace");
+						int[] indexes = SortNodesByAttribute(namespaceNodes, "name");
 
-					XmlNode defaultNamespace = namespaceNodes[indexes[0]];
-
+						defaultNamespace = namespaceNodes[indexes[0]];
+					}
+					else
+					{
+						XmlNodeList assemblyNodes = buildContext.SelectNodes("/ndoc:ndoc/ndoc:assembly");
+						int[] assemblyIndexes = SortNodesByAttribute(assemblyNodes, "name");
+						XmlNode defaultAssemblyNode = assemblyNodes[assemblyIndexes[0]];
+						XmlNodeList namespaceNodes = buildContext.SelectNodes(defaultAssemblyNode, "ndoc:module/ndoc:namespace");
+						int[] indexes = SortNodesByAttribute(namespaceNodes, "name");
+						defaultNamespace = namespaceNodes[indexes[0]];
+					}
 					string defaultNamespaceName = GetNodeName(defaultNamespace);
 					string assemblyName = GetNodeName(buildContext.SelectSingleNode(defaultNamespace, "ancestor::ndoc:assembly"));
 					defaultTopic = buildContext._nameResolver.GetFilenameForNamespace(assemblyName, defaultNamespaceName);
-//					defaultTopic = defaultNamespaceName + ".html";
 				}
 				buildContext.htmlHelp = SetupHtmlHelpBuilder(buildContext.WorkingDirectory, defaultTopic);
 
@@ -478,7 +489,6 @@ namespace NDoc3.Documenter.Msdn
             {
                 foreach (string currentAssemblyName in assemblyNames)
                 {
-                    // TODO
                     MakeHtmlForAssembly(ctx, currentAssemblyName);
 
 					ctx.htmlHelp.OpenBookInContents();
@@ -491,8 +501,14 @@ namespace NDoc3.Documenter.Msdn
 
 		private void MakeHtmlForAssembly(BuildProjectContext ctx, string assemblyName)
 		{
-			//            throw new NotImplementedException();   
-			ctx.htmlHelp.AddFileToContents(assemblyName);
+			BuildAssemblyContext actx = new BuildAssemblyContext(ctx, assemblyName);
+			string fileName = ctx._nameResolver.GetFilenameForAssembly(assemblyName);
+
+			XsltArgumentList arguments = new XsltArgumentList();
+			arguments.AddParam("assembly-name", String.Empty, assemblyName);
+			TransformAndWriteResult(actx, "assembly", arguments, fileName);
+
+			ctx.htmlHelp.AddFileToContents(assemblyName + " Assembly", fileName, HtmlHelpIcon.Page);
 		}
 
 		private void MakeHtmlForNamespaces(BuildProjectContext ctx, string currentAssembly, IList<string> namespaces, string defaultNamespace)
@@ -504,9 +520,9 @@ namespace NDoc3.Documenter.Msdn
 
 			string[] last = new string[0];
 
-			BuildAssemblyContext generatorContext = null; // TODO (EE): initialize w/ assembly name
+			BuildAssemblyContext generatorContext = null;
 			for (int i = 0; i < nNodes; i++) {
-				OnDocBuildingProgress(i * 100 / nNodes);
+				OnDocBuildingProgress(i * 100 / nNodes); // TODO (EE): fix calc for !MergeAssemblies mode
 
 				string currentNamespace = namespaces[i];
 				// determine assembly containing this namespace

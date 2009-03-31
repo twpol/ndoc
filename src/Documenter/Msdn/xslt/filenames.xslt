@@ -3,6 +3,12 @@
 	<!-- -->
 	<xsl:include href="global_arguments.xslt" />
 	<!-- -->
+	<xsl:template name="get-filename-for-assembly">
+		<xsl:param name="assemblyName" select="ancestor::ndoc:assembly/@name" />
+		<!--<xsl:value-of select="concat(translate($name, '[,]', ''), '.html')" />-->
+		<xsl:value-of select="NUtil:GetFilenameForAssembly($assemblyName)"/>
+	</xsl:template>
+	<!-- -->
 	<xsl:template name="get-filename-for-namespace-hierarchy">
 		<xsl:param name="assemblyName" select="ancestor::ndoc:assembly/@name" />
 		<xsl:param name="namespace" />

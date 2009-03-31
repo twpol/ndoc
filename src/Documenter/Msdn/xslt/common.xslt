@@ -1064,8 +1064,9 @@
       <xsl:value-of select="$assembly-name" />
       <xsl:text> [</xsl:text>
       <xsl:value-of select="$assembly-version" />
-      <xsl:text>]</xsl:text>
-    </xsl:if>
+      <xsl:text>] by </xsl:text>
+			<a href="http://ndoc3.sourceforget.net">NDoc3</a>
+		</xsl:if>
   </xsl:template>
   <!-- Operator name -->
   <xsl:template name="operator-name">

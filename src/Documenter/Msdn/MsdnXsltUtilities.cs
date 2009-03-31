@@ -118,17 +118,17 @@ namespace NDoc3.Documenter.Msdn
 
 				if (fileName == null)
 				{
-					Debug.WriteLine(string.Format("{0} returns ''", message));
+//					Debug.WriteLine(string.Format("{0} returns ''", message));
 					return "";
 				}
 				else
 				{
-					Debug.WriteLine(string.Format("{0} returns {1}", message, fileName));
+//					Debug.WriteLine(string.Format("{0} returns {1}", message, fileName));
 					return fileName;
 				}
 			} else {
 				string result = String.Format(sdkDocBaseUrl, sdkDocLanguage, cref.Substring(2), sdkVersion);
-				Debug.WriteLine(string.Format("{0} returns {1}", message, result));
+//				Debug.WriteLine(string.Format("{0} returns {1}", message, result));
 				return result;
 				/*switch (cref.Substring(0, 2))
 				{
@@ -187,7 +187,7 @@ namespace NDoc3.Documenter.Msdn
 				}
 			}
 
-			Debug.WriteLine(string.Format("{0} returns {1}", message, name));
+//			Debug.WriteLine(string.Format("{0} returns {1}", message, name));
 			return name;
 		}
 
@@ -292,6 +292,13 @@ namespace NDoc3.Documenter.Msdn
 			}
 			return nameResolver.GetFilenameForId(assembly, id);
 		}
+		public string GetFilenameForAssembly(string assembly)
+		{
+			if (string.IsNullOrEmpty(assembly)) {
+				assembly = this.assemblyName;
+			}
+			return nameResolver.GetFilenameForAssembly(assembly);
+		}
 		public string GetFilenameForNamespace(string assembly, string namespaceName)
 		{
 			if (string.IsNullOrEmpty(assembly)) {
@@ -364,7 +371,7 @@ namespace NDoc3.Documenter.Msdn
 				assembly = this.assemblyName;
 			}
 			string message = string.Format("GetFilenameForCRefOverload('{0}','{1}')", cref, overload);
-			Debug.WriteLine(message);
+//			Debug.WriteLine(message);
 			string result = nameResolver.GetFilenameForCRefOverload(assembly, cref, overload);
 			return result;
 		}

@@ -85,8 +85,8 @@ namespace NDoc3.Documenter.Msdn
 		/// <summary>
 		/// Selects nodes using the default <see cref="_xmlnsManager"/>
 		/// </summary>
-		/// <param name="xpath"></param>
-		/// <returns></returns>
+		/// <param name="xpath">an xpath expression to select nodes</param>
+		/// <returns>the result of <see cref="XmlNode.SelectNodes(string,System.Xml.XmlNamespaceManager)"/></returns>
 		public XmlNodeList SelectNodes(string xpath)
 		{
 			return SelectNodes(_xmlDocumentation, xpath);
@@ -95,9 +95,9 @@ namespace NDoc3.Documenter.Msdn
 		/// <summary>
 		/// Selects nodes using the default <see cref="_xmlnsManager"/>
 		/// </summary>
-		/// <param name="contextNode">TODO</param>
-		/// <param name="xpath"></param>
-		/// <returns></returns>
+		/// <param name="contextNode">the node to evaluate <paramref name="xpath" />against</param>
+		/// <param name="xpath">an xpath expression to select nodes</param>
+		/// <returns>the result of <see cref="XmlNode.SelectNodes(string,System.Xml.XmlNamespaceManager)"/></returns>
 		public XmlNodeList SelectNodes(XmlNode contextNode, string xpath)
 		{
 			return contextNode.SelectNodes(xpath, _xmlnsManager);
@@ -106,8 +106,8 @@ namespace NDoc3.Documenter.Msdn
 		/// <summary>
 		/// Selects single node using the default <see cref="_xmlnsManager"/>
 		/// </summary>
-		/// <param name="xpath"></param>
-		/// <returns></returns>
+		/// <param name="xpath">an xpath expression to select nodes</param>
+		/// <returns>the result of <see cref="XmlNode.SelectSingleNode(string,System.Xml.XmlNamespaceManager)"/></returns>
 		public XmlNode SelectSingleNode(string xpath)
 		{
 			return SelectSingleNode(_xmlDocumentation, xpath);
@@ -116,31 +116,45 @@ namespace NDoc3.Documenter.Msdn
 		/// <summary>
 		/// Selects single node using the default <see cref="_xmlnsManager"/>
 		/// </summary>
-		/// <param name="contextNode"></param>
-		/// <param name="xpath"></param>
-		/// <returns></returns>
+		/// <param name="contextNode">the node to evaluate <paramref name="xpath" />against</param>
+		/// <param name="xpath">an xpath expression to select nodes</param>
+		/// <returns>the result of <see cref="XmlNode.SelectNodes(string,System.Xml.XmlNamespaceManager)"/></returns>
 		public XmlNode SelectSingleNode(XmlNode contextNode, string xpath)
 		{
 			return contextNode.SelectSingleNode(xpath, _xmlnsManager);
 		}
 
+		/// <summary>
+		/// Saves files mathing the specified filter from the temporary directory to the target directory
+		/// </summary>
+		/// <param name="pattern">File filter to search for</param>
 		public void SaveOutputs(string pattern)
 		{
 			this.workspace.SaveOutputs(pattern);
 		}
 
+		/// <summary>
+		/// Disposes the context, cleaning up the temporary build directory.
+		/// </summary>
 		public void Dispose()
 		{
 			GC.SuppressFinalize(this);
 			workspace.Dispose();
 		}
 
+		/// <summary>
+		/// Initializes the context, creating the temporary build directory etc.
+		/// </summary>
 		public void Initialize()
 		{
 			workspace.Clean();
 			workspace.Prepare();
 		}
 
+		/// <summary>
+		/// Copy files from an arbitrary directory to the temporary build directory
+		/// </summary>
+		/// <param name="resourceDirectory"></param>
 		public void CopyToWorkingDirectory(DirectoryInfo resourceDirectory)
 		{
 			workspace.ImportContentDirectory(resourceDirectory);

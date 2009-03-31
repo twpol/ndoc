@@ -16,6 +16,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Xml;
 using System.Reflection;
@@ -45,6 +46,14 @@ namespace NDoc3.Core
 		/// <param name="embeddedResourceBase">The type's assembly+namespace indicate the location embedded resources shall be probed from.</param>
 		public XsltResourceResolver(Type embeddedResourceBase, params string[] resourceDirs)
 		{
+			if (resourceDirs == null)
+				resourceDirs = new string[0];
+
+			Trace.WriteLine(string.Format("XSLT probing directories {0}", resourceDirs.Length));
+			foreach (string rd in resourceDirs) {
+				Trace.WriteLine(string.Format("{0}", rd));
+			}
+
 			_ExtensibiltyStylesheet = String.Empty;
 			_ResourceDirs = resourceDirs;
 			_embeddedResourceBase = embeddedResourceBase;
@@ -107,6 +116,8 @@ namespace NDoc3.Core
 			return temp;
 		}
 
+		private List<string> reportedLocations = new List<string>();
+
 		/// <summary>
 		/// Maps a URI to an object containing the actual resource.
 		/// </summary>
@@ -122,11 +133,14 @@ namespace NDoc3.Core
 				if (_ResourceDirs != null) {
 					foreach (string _ResourceBase in _ResourceDirs) {
 						Uri fileUri = new Uri(_ResourceBase + Path.DirectorySeparatorChar + absoluteUri.AbsolutePath);
-						Debug.WriteLine(string.Format("Probing {0}", fileUri.AbsoluteUri));
+						//						Debug.WriteLine(string.Format("Probing {0}", fileUri.AbsoluteUri));
 						try {
 							xsltStream = base.GetEntity(fileUri, role, Type.GetType("System.IO.Stream")) as Stream;
 							if (xsltStream != null) {
-								Debug.WriteLine(string.Format("Found at {0}", fileUri.AbsoluteUri));
+								if (!reportedLocations.Contains(fileUri.AbsoluteUri)) {
+									reportedLocations.Add(fileUri.AbsoluteUri);
+									Trace.WriteLine(string.Format("Using {0}", fileUri.AbsoluteUri));
+								}
 								break;
 							}
 						} catch { }
@@ -135,7 +149,11 @@ namespace NDoc3.Core
 
 				if (xsltStream == null) {
 					string resourceName = _embeddedResourceBase.Namespace + "." + absoluteUri.AbsolutePath;
-					Trace.Write(string.Format("Not found - using embedded {0}", resourceName));
+					string resourceDisplayName = string.Format("assembly:[{0}]{1}", _embeddedResourceBase.Assembly.GetName().Name, resourceName);
+					if (!reportedLocations.Contains(resourceDisplayName)) {
+						reportedLocations.Add(resourceDisplayName);
+						Trace.Write(string.Format("No external found - using embedded {0}", resourceDisplayName));
+					}
 					xsltStream = _embeddedResourceBase.Assembly.GetManifestResourceStream(resourceName);
 				}
 
@@ -150,10 +168,13 @@ namespace NDoc3.Core
 				//					xsltStream= base.GetEntity(fileUri, role, Type.GetType("System.IO.Stream")) as Stream;
 				//				}
 			} else {
-				Debug.WriteLine(string.Format("Probing {0}", absoluteUri));
+				Debug.WriteLine(string.Format("Probing {0}", absoluteUri.AbsoluteUri));
 				xsltStream = base.GetEntity(absoluteUri, role, Type.GetType("System.IO.Stream")) as Stream;
 				if (xsltStream != null) {
-					Debug.WriteLine(string.Format("Found at {0}", absoluteUri));
+					if (!reportedLocations.Contains(absoluteUri.AbsoluteUri)) {
+						reportedLocations.Add(absoluteUri.AbsoluteUri);
+						Trace.Write(string.Format("Using {0}", absoluteUri.AbsoluteUri));
+					}
 				}
 			}
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<project name="ndoc3" default="compile">
+<project name="ndoc3" default="test">
 
     <!-- Global project settings -->
     <property name="project.name" value="ndoc3" />
@@ -16,8 +16,8 @@
     <property name="lib.dir" value="${project::get-base-directory()}/lib" />
 
     <!-- Include helpers -->
-    <include buildfile="ndoc.build.include" />
-    <include buildfile="ndoc.build.package" />
+    <include buildfile="ndoc3.build.include" />
+    <include buildfile="ndoc3.build.package" />
 
     <!-- require 3.5 for building -->
     <property name="nant.settings.currentframework" value="net-3.5" />
@@ -256,7 +256,7 @@
     <!--
 
     -->
-    <target name="sdkdoc" description="Builds SDK documentation (based on .NET Framework 1.1 assembly)">
+    <!-- target name="sdkdoc" description="Builds SDK documentation (based on .NET Framework 1.1 assembly)">
         <echo message="Creating SDK Documentation for NDoc3 Core." />
         <ndoc3>
             <assemblies basedir="${build.dir}/net/1.1">
@@ -277,5 +277,27 @@
                 </documenter>
             </documenters>
         </ndoc3>
-    </target>
+    </target -->
+
+  <target name="sdkdoc">
+    <echo message="Creating SDK Documentation for NDoc3 Core." />
+    <exec workingdir="." program="${current.bin.dir}/NDoc3Console.exe" verbose="true">
+      <!-- arg value="-verbose" /-->
+      <!-- arg value="-documenter=MSDN" /-->
+      <arg value="-project=./NDoc3.ndoc" />
+    </exec>
+  </target>
+
+  <target name="testdoc">
+    <echo message="Creating SDK Documentation for all NDoc3 assemblies." />
+    <exec workingdir="." program="${current.bin.dir}/NDoc3Console.exe" verbose="true">
+      <!-- arg value="-verbose" /-->
+      <!-- arg value="-documenter=MSDN" /-->
+      <arg value="-project=./NDoc3-test.ndoc" />
+    </exec>
+  </target>
+
+	<target name="test" depends="compile testdoc" description="Builds, tests and runs NDoc3 on itself for smoke testing">
+	</target>
+
 </project>

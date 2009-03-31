@@ -73,7 +73,7 @@ namespace NDoc3.Documenter.Msdn
 			if (name == null) {
 				name = elemNames[memberId];
 			}
-//			Debug.WriteLine(string.Format("GetDisplayNameForId('{0}','{1}') => {2}", currentAssemblyName, memberId, name));
+			//			Debug.WriteLine(string.Format("GetDisplayNameForId('{0}','{1}') => {2}", currentAssemblyName, memberId, name));
 			return name;
 		}
 
@@ -83,6 +83,11 @@ namespace NDoc3.Documenter.Msdn
 			// lookup current assembly
 			string filename = GetFilenameForIdInternal(currentAssemblyName, memberId);
 			return filename;
+		}
+
+		public string GetFilenameForAssembly(string assemblyName)
+		{
+			return GetFilenameForId(assemblyName, null);
 		}
 
 		// exposed to XSLT
@@ -148,7 +153,7 @@ namespace NDoc3.Documenter.Msdn
 			if (typeName.Length > 1 && typeName[1] != ':')
 				typeName = "T:" + typeName;
 			string filename = GetFilenameForId(currentAssemblyName, typeName);
-			Debug.WriteLine(string.Format("GetFilenameForTypename('{0}', '{1}') => {2}", currentAssemblyName, typeName, filename));
+//			Debug.WriteLine(string.Format("GetFilenameForTypename('{0}', '{1}') => {2}", currentAssemblyName, typeName, filename));
 			return filename;
 		}
 
@@ -157,7 +162,7 @@ namespace NDoc3.Documenter.Msdn
 		{
 			// lookup current assembly
 			string filename = GetFilenameForId(currentAssemblyName, cref);
-			Debug.WriteLine(string.Format("GetFilenameForCRefOverload('{0}', '{1}') => {2}", currentAssemblyName, cref, filename));
+//			Debug.WriteLine(string.Format("GetFilenameForCRefOverload('{0}', '{1}') => {2}", currentAssemblyName, cref, filename));
 			return filename;
 
 			#region Original XSLT Logic
@@ -236,8 +241,10 @@ namespace NDoc3.Documenter.Msdn
 			XmlNamespaceManager nsmgr = new XmlNamespaceManager(xmlDocumentation.NameTable);
 			nsmgr.AddNamespace("ns", "urn:ndoc-schema");
 			XmlNodeList assemblies = xmlDocumentation.SelectNodes("/ns:ndoc/ns:assembly", nsmgr);
+			// foreach assembly
 			foreach (XmlElement assemblyNode in assemblies) {
 				string assemblyName = GetNodeName(assemblyNode);
+				RegisterAssembly(assemblyName);
 
 				// build list of assemblyReferences
 				XmlNodeList assemblyReferenceNodes = assemblyNode.SelectNodes("ns:assemblyReference", nsmgr);
@@ -248,19 +255,22 @@ namespace NDoc3.Documenter.Msdn
 				}
 				assemblyReferences.Add(assemblyName, assemblyReferenceNames.ToArray());
 
+				// foreach namespace
 				XmlNodeList namespaces = assemblyNode.SelectNodes("ns:module/ns:namespace", nsmgr);
 				foreach (XmlElement namespaceNode in namespaces) {
 					string namespaceName = GetNodeName(namespaceNode);
+					// register namespace
 					this.RegisterNamespace(assemblyName, namespaceName);
 
 					XmlNodeList types = namespaceNode.SelectNodes("*[@id]", nsmgr);
+					// foreach type
 					foreach (XmlElement typeNode in types) {
 						string typeId = GetNodeId(typeNode);
+						//TODO The rest should also use displayName ((EE): clarify what above line means - shall we remove 'name' attribute then?)
 						string typeDisplayName = GetNodeDisplayName(typeNode);
 						this.RegisterType(assemblyName, typeId, typeDisplayName);
 
-						//TODO The rest should also use displayName
-						// TODO (EE): clarify what above line means (shall we remove 'name' attribute then?)
+						// foreach member
 						XmlNodeList members = typeNode.SelectNodes("*[@id]");
 						foreach (XmlElement memberNode in members) {
 							string memberId = GetNodeId(memberNode);
@@ -305,6 +315,11 @@ namespace NDoc3.Documenter.Msdn
 					}
 				}
 			}
+		}
+
+		private void RegisterAssembly(string assemblyName)
+		{
+			Register(assemblyName, null, assemblyName, CalculateFilenameForId(assemblyName, null, null));
 		}
 
 		private void RegisterNamespace(string assemblyName, string namespaceName)
@@ -372,7 +387,7 @@ namespace NDoc3.Documenter.Msdn
 				}
 			}
 
-			if (filename == null) {
+			if (filename == null && memberId != null) {
 				filename = fileNames[memberId];
 			}
 
@@ -382,17 +397,17 @@ namespace NDoc3.Documenter.Msdn
 
 		private string GetFilenameForIdSpecial(string assemblyName, string memberId, string postfix)
 		{
-			string fn = GetFilenameForId(assemblyName, memberId);
+			string fn = GetFilenameForIdInternal(assemblyName, memberId);
 			if (fn != null && fn.Length > EXT.Length) {
 				fn = fn.Insert(fn.Length - EXT.Length, postfix);
 			}
-			Debug.WriteLine(string.Format("GetFilenameForIdSpecial('{0}','{1}') => {2}", assemblyName, memberId, fn));
+//			Debug.WriteLine(string.Format("GetFilenameForIdSpecial('{0}','{1}') => {2}", assemblyName, memberId, fn));
 			return fn;
 		}
 
 		private void Register(string assemblyName, string id, string displayName, string fileName)
 		{
-			Debug.WriteLine(string.Format("Registering [{0},{1}]=[{2},{3}]", assemblyName, id, displayName, fileName));
+//			Debug.WriteLine(string.Format("Registering [{0},{1}]=[{2},{3}]", assemblyName, id, displayName, fileName));
 			fileNames[assemblyName + id] = fileName;
 			elemNames[assemblyName + id] = displayName;
 		}
@@ -402,11 +417,16 @@ namespace NDoc3.Documenter.Msdn
 		/// </summary>
 		private string CalculateFilenameForId(string assemblyName, string id, string overload)
 		{
-			char idType = '\0';
-			int ix = id.IndexOf(':');
-			if (ix > -1) {
-				idType = id[0];
+			if (id == null)
+			{
+				return assemblyName + EXT;
 			}
+
+//			char idType = '\0';
+			int ix = id.IndexOf(':');
+//			if (ix > -1) {
+//				idType = id[0];
+//			}
 			id = id.Substring(ix + 1);
 
 			// constructors could be #ctor or #cctor

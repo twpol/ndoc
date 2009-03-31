@@ -4,9 +4,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		build-common\common-project.xml = build-common\common-project.xml
 		COPYING.txt = COPYING.txt
-		NDoc.build = NDoc.build
-		NDoc.build.include = NDoc.build.include
-		NDoc.build.package = NDoc.build.package
 		README.txt = README.txt
 	EndProjectSection
 EndProject

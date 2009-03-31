@@ -54,6 +54,7 @@ namespace NDoc3.Documenter.Msdn
 			resolver.ExtensibilityStylesheet=extensibilityStylesheet;
 			Trace.Indent();
 
+			stylesheets.AddFrom( "assembly", resolver );
 			stylesheets.AddFrom( "namespace", resolver );
 			stylesheets.AddFrom( "namespacehierarchy", resolver );
 			stylesheets.AddFrom( "type", resolver );

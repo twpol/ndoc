@@ -29,7 +29,6 @@ namespace NDoc3.Core.Reflection
 	/// </summary>
 	internal class AssemblyXmlDocCache
 	{
-		// TODO (EE): change to use Full Qualified IDs for lookup or use multiple caches (1 per assembly)
 		private class XmlDocKey
 		{
 			public readonly string AssemblyName;

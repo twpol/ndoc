@@ -190,6 +190,9 @@
   <ItemGroup>
     <EmbeddedResource Include="xslt\global_arguments.xslt" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="xslt\assembly.xslt" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>if $(ConfigurationName)==Release copy "$(SolutionDir)ndoc3.snk" "$(ProjectDir)obj\$(ConfigurationName)"</PreBuildEvent>

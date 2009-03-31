@@ -386,8 +386,9 @@
 						<th width="50%">Description</th>
 					</tr>
 					<xsl:for-each select="ndoc:implementedBy">
+						<xsl:variable name="assemblyName" select="@assembly" />
 						<xsl:variable name="typeID" select="@id" />
-						<xsl:apply-templates select="ancestor::ndoc:ndoc/ndoc:assembly/ndoc:module/ndoc:namespace/*[@id=$typeID]" mode="implementingType" />
+						<xsl:apply-templates select="ancestor::ndoc:ndoc/ndoc:assembly[@name=$assemblyName]/ndoc:module/ndoc:namespace/*[@id=$typeID]" mode="implementingType" />
 					</xsl:for-each>
 				</table>
 			</div>
