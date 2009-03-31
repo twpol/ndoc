@@ -35,7 +35,7 @@ Other predefined targets are:
         run compiled NUnit tests.
 
 All compile/run targets put the output in ${current.bin.dir}.
-common.compile* targets use source fileset with id="project.sources", 
+common.compile* targets use source fileset with id="project.sources",
 assembly fileset
 with id="project.references" and resource fileset with id="project.resources"
 to compile the project. The source and resource filesets are optional and
@@ -44,7 +44,7 @@ default to **/*.cs files and no files respectively.
     </description>
 
     <!--
-*******************************************************************************    
+*******************************************************************************
 Arguments:
 ${root.dir}: root dir
 ${current.bin.dir}: the binary directory to output the assembly + app.config to
@@ -69,19 +69,19 @@ ${current.bin.dir}: the binary directory to output the assembly + app.config to
         <patternset id="project.references.test" />
 
         <patternset id="project.references.additional" />
-        
+
         <fileset id="project.sources" failonempty="true">
             <include name="**/*.cs" />
             <include name="${root.dir}/src/CommonAssemblyInfo.cs" />
         </fileset>
-        
+
         <resourcefileset id="project.resources" />
 
         <patternset id="project.content" />
     </target>
 
     <!--
-*******************************************************************************    
+*******************************************************************************
 Arguments:
 ${root.dir}: root dir
 ${current.bin.dir}: the binary directory to output the assembly + app.config to
@@ -90,7 +90,7 @@ ${current.bin.dir}: the binary directory to output the assembly + app.config to
     </target>
 
     <!--
-*******************************************************************************    
+*******************************************************************************
 Arguments:
 ${current.bin.dir}: the binary directory to output the assembly + app.config to
 ${current.build.nowarn}: list of disabled warnings
@@ -102,21 +102,21 @@ ${current.build.defines}
 
         <property name="current.lib.dir" value="${lib.dir}\${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}" dynamic="true" />
         <!--<echo message="copying libs from ${current.lib.dir}" />-->
-        <copy todir="${current.bin.dir}" verbose="true">
+        <copy todir="${current.bin.dir}">
             <fileset>
                 <include name="${current.lib.dir}/*.dll" />
             </fileset>
         </copy>
         <property name="current.lib.dir" value="${lib.dir}\${framework::get-family(framework::get-target-framework())}" dynamic="true" />
         <!--<echo message="copying libs from ${current.lib.dir}" />-->
-        <copy todir="${current.bin.dir}" verbose="true">
+        <copy todir="${current.bin.dir}">
             <fileset>
                 <include name="${current.lib.dir}/*.dll" />
             </fileset>
         </copy>
         <property name="current.lib.dir" value="${lib.dir}" dynamic="true" />
         <!--<echo message="copying libs from ${current.lib.dir}" />-->
-        <copy todir="${current.bin.dir}" verbose="true">
+        <copy todir="${current.bin.dir}">
             <fileset>
                 <include name="${current.lib.dir}/*.dll" />
             </fileset>
@@ -143,12 +143,13 @@ ${current.build.defines}
             <resources refid="project.resources" />
         </csc>
 
-        <copy file="${project::get-base-directory()}/app.config" tofile="${current.bin.dir}/${project::get-name()}.dll.config" failonerror="false" />
-
+				<if test="${file::exists(project::get-base-directory() + '/app.config')}">
+        	<copy file="${project::get-base-directory()}/app.config" tofile="${current.bin.dir}/${project::get-name()}.dll.config" />
+				</if>
     </target>
 
     <!--
-*******************************************************************************    
+*******************************************************************************
 Runs standard unit test configuration of the current ${project::get-name()}.dll
 
 Arguments:
