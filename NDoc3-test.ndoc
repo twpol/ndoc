@@ -1,4 +1,4 @@
-﻿<project SchemaVersion="1.3">
+<project SchemaVersion="1.3">
     <assemblies>
         <assembly location=".\bin\net\3.5\NDoc3.Core.dll" documentation=".\bin\net\3.5\NDoc3.Core.xml" />
         <assembly location=".\bin\net\3.5\NDoc3.Core.Tests.dll" documentation=".\bin\net\3.5\NDoc3.Core.Tests.xml" />
@@ -18,12 +18,14 @@
     </assemblies>
     <documenters>
         <documenter name="MSDN">
-            <property name="OutputDirectory" value=".\bin\net\3.5\testdoc" />
+            <property name="OutputDirectory" value=".\bin\net\3.5\testdoc\" />
             <property name="HtmlHelpName" value="NDoc3.All" />
             <property name="Title" value="NDoc3 Test Documentation" />
+            <property name="MergeAssemblies" value="False" />
             <property name="ShowMissingSummaries" value="True" />
             <property name="AssemblyVersionInfo" value="AssemblyVersion" />
             <property name="CopyrightText" value="Copyright © 2000-2009 the NDoc3 Team" />
+            <property name="UseNamespaceDocSummaries" value="True" />
             <property name="SdkDocVersionString" value="VS.80" />
         </documenter>
     </documenters>
