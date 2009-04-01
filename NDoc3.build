@@ -1,6 +1,8 @@
 <?xml version="1.0" ?>
 <project name="ndoc3" default="test">
 
+	<echo message="${path::get-full-path('nant.exe')}" />
+
     <!-- Global project settings -->
     <property name="project.name" value="ndoc3" />
     <property name="project.version" value="2.0" />
@@ -12,6 +14,7 @@
     <property name="project.build.package" value="false" />
     <property name="build.number" value="${math::abs(math::floor(timespan::get-total-days(datetime::now() - datetime::parse('01/01/2000'))))}" />
     <property name="root.dir" value="${project::get-base-directory()}" readonly="true"/>
+    <property name="tool.dir" value="${project::get-base-directory()}/tools" readonly="true"/>
     <property name="build.dir" value="${project::get-base-directory()}/bin" />
     <property name="lib.dir" value="${project::get-base-directory()}/lib" />
 
@@ -43,56 +46,7 @@
     -->
     <target name="compile-build" description="Compile current build configuration for all supports target frameworks">
         <echo message="Compiling the ${current.build.config} build configuration for all supported target frameworks." />
-        <!--
-            build .NET Framework 1.0 version if both the Framework and SDK are available
-        -->
-        <if test="${framework::exists('net-1.0')}">
-            <if test="${framework::sdk-exists('net-1.0')}">
-                <call target="set-net-1.0-framework-configuration" />
-                <call target="compile" />
-            </if>
-            <if test="${not framework::sdk-exists('net-1.0')}">
-                <if test="${property::exists('project.build.package') and project.build.package}">
-                    <fail message="The .NET Framework SDK 1.0 is not available." />
-                </if>
-                <if test="${not property::exists('project.build.package') or not project.build.package}">
-                    <echo message="The .NET Framework SDK 1.0 is not available. Build skipped." />
-                </if>
-            </if>
-        </if>
-        <if test="${not framework::exists('net-1.0')}">
-            <if test="${property::exists('project.build.package') and project.build.package}">
-                <fail message="The .NET Framework 1.0 is not available." />
-            </if>
-            <if test="${not property::exists('project.build.package') or not project.build.package}">
-                <echo message="The .NET Framework 1.0 is not available. Build skipped." />
-            </if>
-        </if>
-        <!--
-            build .NET Framework 1.1 version if both Framework and SDK are available
-        -->
-        <if test="${framework::exists('net-1.1')}">
-            <if test="${framework::sdk-exists('net-1.1')}">
-                <call target="set-net-1.1-framework-configuration" />
-                <call target="compile" />
-            </if>
-            <if test="${not framework::sdk-exists('net-1.1')}">
-                <if test="${property::exists('project.build.package') and project.build.package}">
-                    <fail message="The .NET Framework SDK 1.1 is not available." />
-                </if>
-                <if test="${not property::exists('project.build.package') or not project.build.package}">
-                    <echo message="The .NET Framework SDK 1.1 is not available. Build skipped." />
-                </if>
-            </if>
-        </if>
-        <if test="${not framework::exists('net-1.1')}">
-            <if test="${property::exists('project.build.package') and project.build.package}">
-                <fail message="The .NET Framework 1.1 is not available." />
-            </if>
-            <if test="${not property::exists('project.build.package') or not project.build.package}">
-                <echo message="The .NET Framework 1.1 is not available. Build skipped." />
-            </if>
-        </if>
+
         <!--
             build .NET Framework 2.0 version if both Framework and SDK are available
         -->
@@ -144,31 +98,6 @@
             </if>
         </if>
         <!--
-            build Mono 1.0 version if both Framework and SDK are available
-        -->
-        <if test="${framework::exists('mono-1.0')}">
-            <if test="${framework::sdk-exists('mono-1.0')}">
-                <call target="set-mono-1.0-framework-configuration" />
-                <call target="compile" />
-            </if>
-            <if test="${not framework::sdk-exists('mono-1.0')}">
-                <if test="${property::exists('project.build.package') and project.build.package}">
-                    <fail message="The Mono SDK 1.0 is not available." />
-                </if>
-                <if test="${not property::exists('project.build.package') or not project.build.package}">
-                    <echo message="The Mono SDK 1.0 is not available. Build skipped." />
-                </if>
-            </if>
-        </if>
-        <if test="${not framework::exists('mono-1.0')}">
-            <if test="${property::exists('project.build.package') and project.build.package}">
-                <fail message="Mono 1.0 is not available." />
-            </if>
-            <if test="${not property::exists('project.build.package') or not project.build.package}">
-                <echo message="Mono 1.0 is not available. Build skipped." />
-            </if>
-        </if>
-        <!--
             build Mono 2.0 version if both Framework and SDK are available
         -->
         <if test="${framework::exists('mono-2.0')}">
@@ -194,10 +123,15 @@
             </if>
         </if>
     </target>
+
+    <target name="compile" description="compiles binaries + sdk documentation">
+			<call target="compile.binaries" />
+			<call target="compile.sdkdoc" />
+    </target>
     <!--
 
     -->
-    <target name="compile" description="Builds the current build configuration for the current target framework." depends="create-common-assemblyinfo">
+    <target name="compile.binaries" description="Builds the current build configuration for the current target framework." depends="create-common-assemblyinfo">
         <!-- ensure the bin dir has been created, and clean it up if needed -->
         <call target="clean-current-bin-dir" />
         <!-- copy the ndoc3 signing key file to the bin dir -->
@@ -206,6 +140,7 @@
         <!-- build all projects -->
         <nant buildfile="src/ExtendedUI/ExtendedUI.build" target="compile" inheritall="true" />
         <nant buildfile="src/Core/Core.build" target="compile" inheritall="true" />
+<!--
         <nant buildfile="src/Console/Console.build" target="compile" inheritall="true" />
         <nant buildfile="src/VisualStudio/VisualStudio.build" target="compile" inheritall="true" />
         <nant buildfile="src/Gui/Gui.build" target="compile" inheritall="true" />
@@ -216,14 +151,14 @@
         <nant buildfile="src/Documenter/LinearHtml/LinearHtml.build" target="compile" inheritall="true" />
         <nant buildfile="src/Documenter/NativeHtmlHelp2/NativeHtmlHelp2.build" target="compile" inheritall="true" />
         <nant buildfile="src/Documenter/Xml/Xml.build" target="compile" inheritall="true" />
-
+-->
         <!-- tests -->
-        <nant buildfile="test/Test/Test.build" target="test" inheritall="true"  />
+        <nant buildfile="test/Test/Test.build" target="compile" inheritall="true"  />
         <nant buildfile="test/Core.Tests.TestAssembly1/Core.Tests.TestAssembly1.build" target="compile" inheritall="true"  /> <!-- don't run tests, just serves as input to Core.Tests -->
         <nant buildfile="test/Core.Tests.TestAssembly2/Core.Tests.TestAssembly2.build" target="compile" inheritall="true"  /> <!-- don't run tests, just serves as input to Core.Tests -->
         <nant buildfile="test/Core.Tests/Core.Tests.build" target="test" inheritall="true"  />
         <nant buildfile="test/Msdn.Tests/Msdn.Tests.build" target="test" inheritall="true"  />
-
+        
         <!-- remove the ndoc3 signing key file -->
         <delete file="${current.bin.dir}/ndoc3.snk" />
     </target>
@@ -279,7 +214,7 @@
         </ndoc3>
     </target -->
 
-  <target name="sdkdoc">
+  <target name="compile.sdkdoc">
     <echo message="Creating SDK Documentation for NDoc3 Core." />
     <exec workingdir="." program="${current.bin.dir}/NDoc3Console.exe" verbose="true">
       <!-- arg value="-verbose" /-->
@@ -288,7 +223,7 @@
     </exec>
   </target>
 
-  <target name="testdoc">
+  <target name="test.sdkdoc">
     <echo message="Creating SDK Documentation for all NDoc3 assemblies." />
     <exec workingdir="." program="${current.bin.dir}/NDoc3Console.exe" verbose="true">
       <!-- arg value="-verbose" /-->
@@ -297,7 +232,7 @@
     </exec>
   </target>
 
-	<target name="test" depends="compile testdoc" description="Builds, tests and runs NDoc3 on itself for smoke testing">
+	<target name="test" depends="compile test.sdkdoc" description="Builds, tests and runs NDoc3 on itself for smoke testing">
 	</target>
 
 </project>

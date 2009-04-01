@@ -143,9 +143,9 @@ ${current.build.defines}
             <resources refid="project.resources" />
         </csc>
 
-				<if test="${file::exists(project::get-base-directory() + '/app.config')}">
-        	<copy file="${project::get-base-directory()}/app.config" tofile="${current.bin.dir}/${project::get-name()}.dll.config" />
-				</if>
+                <if test="${file::exists(project::get-base-directory() + '/app.config')}">
+            <copy file="${project::get-base-directory()}/app.config" tofile="${current.bin.dir}/${project::get-name()}.dll.config" />
+                </if>
     </target>
 
     <!--
@@ -157,17 +157,32 @@ ${current.bin.dir}: the binary directory to pick the assembly + app.config from
     -->
     <target name="common.run-tests" description="Run NUnit tests">
 
+            <exec program="C:\projects\partcover.tar\trunk\bin\partcover.exe"
+                  workingdir="${current.bin.dir}"
+                  verbose="true"
+                  append="true"
+				>
+				<arg value="--target" /><arg value="C:\Tools\nant\bin\NAnt.exe" />
+				<arg value="--target-work-dir" /><arg value="${current.bin.dir}" />
+				<arg value="--include" /><arg value="[NDoc3*]*" />
+                <arg value="--output" /><arg value="${current.bin.dir}/${project::get-name()}_coverage.xml" />
+				<arg value="--target-args" /><arg value="common.run-tests.execute -f:${project::get-buildfile-path()} -D:current.bin.dir=${current.bin.dir} -D:tool.dir=${tool.dir}" />
+			</exec>
+    </target>
+
+    <target name="common.run-tests.execute" description="Run NUnit tests">
+
         <nunit2 verbose="true">
             <formatter
-				type="Xml"
-				usefile="true"
-				extension=".xml"
-				outputdir="${current.bin.dir}"
-			/>
+                type="Xml"
+                usefile="true"
+                extension=".xml"
+                outputdir="${current.bin.dir}"
+            />
             <formatter type="Plain" />
             <test
-				assemblyname="${current.bin.dir}/${project::get-name()}.dll"
-				appconfig="${current.bin.dir}/${project::get-name()}.dll.config" />
+                assemblyname="${current.bin.dir}/${project::get-name()}.dll"
+                appconfig="${current.bin.dir}/${project::get-name()}.dll.config" />
         </nunit2>
 
     </target>
