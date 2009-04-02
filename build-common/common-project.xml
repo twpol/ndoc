@@ -196,6 +196,7 @@ ${current.bin.dir}: the binary directory to pick the assembly + app.config from
             <arg value="--exclude" /><arg value="[nunit*]*" />
             <arg value="--exclude" /><arg value="[NAnt*]*" />
             <arg value="--include" /><arg value="[NDoc3*]*" />
+            <arg value="--include" /><arg value="[${project::get-name()}*]*" /><!-- exclude the test-assembly itself
             <arg value="--log" /><arg value="251" />
             <arg value="--output" /><arg value="${current.bin.dir}/${project::get-name()}.dll-coverage.xml" />
             <arg value="--target-args" /><arg value="${project::get-name()}.dll /process=Single /domain=None /xml=${project::get-name()}.dll-testresults.xml" />
