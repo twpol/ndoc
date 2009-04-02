@@ -460,17 +460,17 @@
         <xsl:text>Get</xsl:text>
         <br />
         <xsl:text>&#160;&#160;&#160;End Get</xsl:text>
-        <xsl:if test="@set != 'false'">
-          <br />
-          <xsl:text>&#160;&#160;&#160;</xsl:text>
-          <xsl:call-template name="vb-method-access">
-            <xsl:with-param name="access" select="@set" />
-          </xsl:call-template>
-          <xsl:text>&#160;</xsl:text>
-          <xsl:text>Set</xsl:text>
-          <br />
-          <xsl:text>&#160;&#160;&#160;End Set</xsl:text>
-        </xsl:if>
+      </xsl:if>
+      <xsl:if test="@set != 'false'">
+        <br />
+        <xsl:text>&#160;&#160;&#160;</xsl:text>
+        <xsl:call-template name="vb-method-access">
+          <xsl:with-param name="access" select="@set" />
+        </xsl:call-template>
+        <xsl:text>&#160;</xsl:text>
+        <xsl:text>Set</xsl:text>
+        <br />
+        <xsl:text>&#160;&#160;&#160;End Set</xsl:text>
       </xsl:if>
       <br />
       <xsl:text>End Property</xsl:text>
