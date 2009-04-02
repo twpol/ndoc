@@ -461,27 +461,26 @@
     <xsl:text>&#160;{</xsl:text>
     <!-- If property has a get -->
     <xsl:if test="@get!='false'">
-      <xsl:if test="@get != 'public'">
-        <xsl:call-template name="method-access">
-          <xsl:with-param name="access" select="@get" />
-        </xsl:call-template>
-        <xsl:text>&#160;</xsl:text>
-      </xsl:if>
+      <xsl:text>&#160;</xsl:text>
+      <xsl:call-template name="method-access">
+        <xsl:with-param name="access" select="@get" />
+      </xsl:call-template>
+      <xsl:text>&#160;</xsl:text>
       <xsl:text>get;</xsl:text>
-      <!-- If property has a set -->
-      <xsl:if test="@set!='false'">
+      <!-- If property does not have a set -->
+      <xsl:if test="@set='false'">
         <xsl:text>&#160;</xsl:text>
       </xsl:if>
     </xsl:if>
     <!-- If property has a set -->
     <xsl:if test="@set!='false'">
-      <xsl:if test="@set != 'public'">
-        <xsl:call-template name="method-access">
-          <xsl:with-param name="access" select="@set" />
-        </xsl:call-template>
-        <xsl:text>&#160;</xsl:text>
-      </xsl:if>
+      <xsl:text>&#160;</xsl:text>
+      <xsl:call-template name="method-access">
+        <xsl:with-param name="access" select="@set" />
+      </xsl:call-template>
+      <xsl:text>&#160;</xsl:text>
       <xsl:text>set;</xsl:text>
+      <xsl:text>&#160;</xsl:text>
     </xsl:if>
     <xsl:text>}</xsl:text>
   </xsl:template>
