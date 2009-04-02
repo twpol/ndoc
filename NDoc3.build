@@ -140,7 +140,6 @@
         <!-- build all projects -->
         <nant buildfile="src/ExtendedUI/ExtendedUI.build" target="compile" inheritall="true" />
         <nant buildfile="src/Core/Core.build" target="compile" inheritall="true" />
-<!--
         <nant buildfile="src/Console/Console.build" target="compile" inheritall="true" />
         <nant buildfile="src/VisualStudio/VisualStudio.build" target="compile" inheritall="true" />
         <nant buildfile="src/Gui/Gui.build" target="compile" inheritall="true" />
@@ -151,14 +150,14 @@
         <nant buildfile="src/Documenter/LinearHtml/LinearHtml.build" target="compile" inheritall="true" />
         <nant buildfile="src/Documenter/NativeHtmlHelp2/NativeHtmlHelp2.build" target="compile" inheritall="true" />
         <nant buildfile="src/Documenter/Xml/Xml.build" target="compile" inheritall="true" />
--->
+
         <!-- tests -->
         <nant buildfile="test/Test/Test.build" target="compile" inheritall="true"  />
         <nant buildfile="test/Core.Tests.TestAssembly1/Core.Tests.TestAssembly1.build" target="compile" inheritall="true"  /> <!-- don't run tests, just serves as input to Core.Tests -->
         <nant buildfile="test/Core.Tests.TestAssembly2/Core.Tests.TestAssembly2.build" target="compile" inheritall="true"  /> <!-- don't run tests, just serves as input to Core.Tests -->
         <nant buildfile="test/Core.Tests/Core.Tests.build" target="test" inheritall="true"  />
         <nant buildfile="test/Msdn.Tests/Msdn.Tests.build" target="test" inheritall="true"  />
-        
+
         <!-- remove the ndoc3 signing key file -->
         <delete file="${current.bin.dir}/ndoc3.snk" />
     </target>
