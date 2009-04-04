@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<project name="ndoc3" default="compile.binaries">
+<project name="ndoc3" default="test">
 
     <!-- Global project settings -->
     <property name="project.name" value="ndoc3" />
@@ -29,21 +29,25 @@
     <call target="set-build-configuration" />
     <call target="set-framework-configuration" />
 
-    <!--
+    <target name="compile" description="compiles binaries + sdk documentation">
+			<call target="compile.binaries" />
+			<call target="compile.sdkdoc" />
+    </target>
 
-    -->
+	<target name="test" depends="compile test.sdkdoc" description="Builds, tests and runs NDoc3 on itself for smoke testing">
+	</target>
+
+    <target name="cruisecontrol" description="starts an integration build" depends="test">
+    </target>
+
     <target name="debug" description="Change the build configuration to debug mode.">
         <call target="set-debug-build-configuration" />
     </target>
-    <!--
 
-    -->
     <target name="release" description="Change the build configuration to release mode.">
         <call target="set-release-build-configuration" />
     </target>
-    <!--
 
-    -->
     <target name="compile-build" description="Compile current build configuration for all supports target frameworks">
         <echo message="Compiling the ${current.build.config} build configuration for all supported target frameworks." />
 
@@ -123,12 +127,6 @@
             </if>
         </if>
     </target>
-
-    <target name="compile" description="compiles binaries + sdk documentation">
-			<call target="compile.binaries" />
-			<call target="compile.sdkdoc" />
-    </target>
-    <!--
 
     -->
     <target name="compile.binaries" description="Builds the current build configuration for the current target framework." depends="create-common-assemblyinfo">
@@ -231,8 +229,5 @@
       <arg value="-project=./NDoc3-test.ndoc" />
     </exec>
   </target>
-
-	<target name="test" depends="compile test.sdkdoc" description="Builds, tests and runs NDoc3 on itself for smoke testing">
-	</target>
 
 </project>
