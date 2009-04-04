@@ -175,15 +175,6 @@ ${current.bin.dir}: the binary directory to pick the assembly + app.config from
 			<arg value="/nologo" />
 		</exec>
 
-		<exec program="${tool.dir}/ncoverexplorer/ncoverexplorer.console.exe" workingdir="${current.bin.dir}">
-			<arg value="/xml:&quot;${current.bin.dir}/${project.name}.dll-CoverageSummary.xml&quot;" />
-			<arg value="/report:ModuleClassFunctionSummary" />
-			<arg value="/sort:4" />
-			<arg value="/minCoverage:80" />
-			<arg value="/q" />
-			<arg path="${current.bin.dir}/${project.name}.dll-Coverage.xml" />
-		</exec>
-
 <!--
 		<loadtasks assembly="${tool.dir}/ncoverexplorer/NCoverExplorer.NAntTasks.dll" />
 
