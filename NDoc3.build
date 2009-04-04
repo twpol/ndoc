@@ -1,12 +1,12 @@
 <?xml version="1.0" ?>
-<project name="ndoc3" default="test">
-
-	<echo message="${path::get-full-path('nant.exe')}" />
+<project name="ndoc3" default="compile.binaries">
 
     <!-- Global project settings -->
     <property name="project.name" value="ndoc3" />
     <property name="project.version" value="2.0" />
-    <property name="project.patchversion" value="0" />
+    <property name="project.patchversion" value="${CCNetLabel}" overwrite="true" if="${property::exists('CCNetLabel')}"/>
+    <property name="project.patchversion" value="0" overwrite="false" />
+
     <!-- 0 for initial release -->
     <property name="project.release.type" value="dev" />
     <!-- dev / alpha / beta# / rc# / release -->
@@ -141,8 +141,6 @@
         <nant buildfile="src/ExtendedUI/ExtendedUI.build" target="compile" inheritall="true" />
         <nant buildfile="src/Core/Core.build" target="compile" inheritall="true" />
         <nant buildfile="src/Console/Console.build" target="compile" inheritall="true" />
-        <nant buildfile="src/VisualStudio/VisualStudio.build" target="compile" inheritall="true" />
-        <nant buildfile="src/Gui/Gui.build" target="compile" inheritall="true" />
         <nant buildfile="src/Documenter/Msdn/Msdn.build" target="compile" inheritall="true" />
         <nant buildfile="src/Documenter/Msdn2/Msdn2.build" target="compile" inheritall="true" />
         <nant buildfile="src/Documenter/JavaDoc/JavaDoc.build" target="compile" inheritall="true" />
@@ -150,6 +148,8 @@
         <nant buildfile="src/Documenter/LinearHtml/LinearHtml.build" target="compile" inheritall="true" />
         <nant buildfile="src/Documenter/NativeHtmlHelp2/NativeHtmlHelp2.build" target="compile" inheritall="true" />
         <nant buildfile="src/Documenter/Xml/Xml.build" target="compile" inheritall="true" />
+        <nant buildfile="src/VisualStudio/VisualStudio.build" target="compile" inheritall="true" />
+        <nant buildfile="src/Gui/Gui.build" target="compile" inheritall="true" />
 
         <!-- tests -->
         <nant buildfile="test/Test/Test.build" target="compile" inheritall="true"  />
@@ -165,6 +165,7 @@
 
     -->
     <target name="create-common-assemblyinfo">
+
         <!-- ensure src/CommonAssemblyInfo.cs is writable if it already exists -->
         <attrib file="src/CommonAssemblyInfo.cs" readonly="false" if="${file::exists('src/CommonAssemblyInfo.cs')}" />
         <!-- generate the source file holding the common assembly-level attributes -->

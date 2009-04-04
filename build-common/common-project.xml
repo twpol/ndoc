@@ -157,66 +157,68 @@ ${current.bin.dir}: the binary directory to pick the assembly + app.config from
     -->
     <target name="common.run-tests" description="Run NUnit tests">
 
-<!--
-	uncomment the tasks below when running on x64 systems to ensure tests COM interop works properly
-	see http://blogs.stonesteps.ca/showpost.asp?pid=7
--->
-<!--
-        <exec program="C:\Program Files\Microsoft SDKs\Windows\v6.1\Bin\CorFlags.exe"
-            verbose="true"
-        >
-            <arg path="${current.bin.dir}/${project::get-name()}.dll" />
-            <arg value="/32BIT+" />
-            <arg value="/Force" />
-        </exec>
+		<property name="project.name" value="${project::get-name()}" overwrite="true" />
 
-        <exec program="C:\Program Files\Microsoft SDKs\Windows\v6.1\Bin\CorFlags.exe"
-            verbose="true"
-        >
-            <arg path="${tool.dir}\nunit\nunit-console-x86.exe" />
-            <arg value="/32BIT+" />
-            <arg value="/Force" />
-        </exec>
--->
-<!-- ensure partcover driver is registered with COM -->
-<!--
-		<exec program="regsvr32" verbose="true">
-			<arg value="/s" />
-			<arg value="/c" />
-			<arg path="${tool.dir}\partcover\PartCover.CorDriver.dll" />
+		<exec program="${tool.dir}/ncover/ncover.console.exe" workingdir="${current.bin.dir}">
+			<arg value="//q" />
+			<arg value="//reg" />
+			<arg value="//w" />
+			<arg path="${current.bin.dir}" />
+			<arg value="//x" />
+			<arg path="${current.bin.dir}/${project.name}.dll-Coverage.xml" />
+			<arg value="//a" />
+			<arg value="${string::substring(project.name,0,string::last-index-of(project.name, '.Tests') )}" />
+			<arg value="//q" />
+			<arg path="${tool.dir}/nunit/nunit-console-x86.exe" />
+			<arg path="${current.bin.dir}/${project.name}.dll" />
+			<arg value="/xml:&quot;${current.bin.dir}/${project.name}.dll-testresults.xml&quot;" />
+			<arg value="/nologo" />
 		</exec>
+
+		<exec program="${tool.dir}/ncoverexplorer/ncoverexplorer.console.exe" workingdir="${current.bin.dir}">
+			<arg value="/xml:&quot;${current.bin.dir}/${project.name}.dll-CoverageSummary.xml&quot;" />
+			<arg value="/report:ModuleClassFunctionSummary" />
+			<arg value="/sort:4" />
+			<arg value="/minCoverage:80" />
+			<arg value="/q" />
+			<arg path="${current.bin.dir}/${project.name}.dll-Coverage.xml" />
+		</exec>
+
+<!--
+		<loadtasks assembly="${tool.dir}/ncoverexplorer/NCoverExplorer.NAntTasks.dll" />
+
+		<ncoverexplorer program="${tool.dir}/ncoverexplorer/ncoverexplorer.console.exe"
+			projectName="CCNet"
+			configName="${tool.dir}/ncoverexplorer/ncoverexplorer.console.config"
+			outputDir="${current.bin.dir}"
+			satisfactoryCoverage="80" reportType="4"
+			xmlReportName="${current.bin.dir}/${project.name}.dll-CoverageSummary.xml">
+			<fileset>
+				<include name="${current.bin.dir}/${project.name}.dll-Coverage.xml" />
+			</fileset>
+		</ncoverexplorer>
 -->
+    </target>
+
+    <target name="common.run-tests.partcover" description="Run NUnit tests">
+
         <exec program="${tool.dir}\partcover\partcover.exe"
               workingdir="${current.bin.dir}"
               verbose="true"
               append="true"
 				>
-            <arg value="--target" /><arg value="${tool.dir}\nunit\nunit-console-x86.exe" />
-            <arg value="--target-work-dir" /><arg value="${current.bin.dir}" />
+            <arg value="--target" /><arg path="${tool.dir}\nunit\nunit-console-x86.exe" />
+            <arg value="--target-work-dir" /><arg path="${current.bin.dir}" />
             <arg value="--exclude" /><arg value="[nunit*]*" />
             <arg value="--exclude" /><arg value="[NAnt*]*" />
             <arg value="--include" /><arg value="[NDoc3*]*" />
             <arg value="--exclude" /><arg value="[${project::get-name()}*]*" /><!-- exclude the test-assembly itself -->
             <arg value="--log" /><arg value="251" />
-            <arg value="--output" /><arg value="${current.bin.dir}/${project::get-name()}.dll-coverage.xml" />
+            <arg value="--output" /><arg path="${current.bin.dir}/${project::get-name()}.dll-coverage.xml" />
             <arg value="--target-args" /><arg value="${project::get-name()}.dll /process=Single /domain=None /xml=${project::get-name()}.dll-testresults.xml" />
 
         </exec>
 
-<!--
-        <nunit2 verbose="true">
-            <formatter
-                type="Xml"
-                usefile="true"
-                extension=".xml"
-                outputdir="${current.bin.dir}"
-            />
-            <formatter type="Plain" />
-            <test
-                assemblyname="${current.bin.dir}/${project::get-name()}.dll"
-                appconfig="${current.bin.dir}/${project::get-name()}.dll.config" />
-        </nunit2>
--->
     </target>
 
 </project>
