@@ -139,7 +139,7 @@ namespace NDoc3.Documenter.Msdn
 
 				// Will hold the name of the file name containing the XML doc
 				XmlDocument projectXml = CreateNDocXml(project);
-				buildContext.SetProjectXml(projectXml);
+				buildContext.SetProjectXml(projectXml, MyConfig.MergeAssemblies);
 
 				OnDocBuildingStep(30, "Loading XSLT files...");
 

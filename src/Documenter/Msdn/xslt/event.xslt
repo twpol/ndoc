@@ -5,10 +5,11 @@
 	<!-- -->
 	<xsl:include href="common.xslt" />
 	<!-- -->
+	<xsl:param name='assembly-name' />
 	<xsl:param name='event-id' />
 	<!-- -->
 	<xsl:template match="/">
-		<xsl:apply-templates select="ndoc:ndoc/ndoc:assembly/ndoc:module/ndoc:namespace/ndoc:*/ndoc:event[@id=$event-id]" />
+		<xsl:apply-templates select="ndoc:ndoc/ndoc:assembly[@name=$assembly-name]/ndoc:module/ndoc:namespace/ndoc:*/ndoc:event[@id=$event-id]" />
 	</xsl:template>
 	
 	<!-- -->

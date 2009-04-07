@@ -19,7 +19,7 @@ namespace NDoc3.Documenter.Msdn
 			return xpathdoc;
 		}
 
-		public void SetProjectXml(XmlDocument projectXml)
+		public void SetProjectXml(XmlDocument projectXml, bool mergeAssemblies)
 		{
 			XmlNamespaceManager nsmgr;
 			nsmgr = new XmlNamespaceManager(projectXml.NameTable);
@@ -31,7 +31,7 @@ namespace NDoc3.Documenter.Msdn
 				throw new DocumenterException("There are no documentable types in this project.\n\nAny types that exist in the assemblies you are documenting have been excluded by the current visibility settings.\nFor example, you are attempting to document an internal class, but the 'DocumentInternals' visibility setting is set to False.\n\nNote: C# defaults to 'internal' if no accessibilty is specified, which is often the case for Console apps created in VS.NET...");
 			}
 
-			_nameResolver = new NameResolver(projectXml);
+			_nameResolver = new NameResolver(projectXml, mergeAssemblies);
 			_xmlnsManager = nsmgr;
 			_xmlDocumentation = projectXml;
 		}

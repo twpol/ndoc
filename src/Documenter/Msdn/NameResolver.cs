@@ -16,14 +16,16 @@ namespace NDoc3.Documenter.Msdn
 		// <param name="fileNames">A StringDictionary holding id to file name mappings.</param>
 		// <param name="elemNames">A StringDictionary holding id to display name mappings</param>
 
+		private readonly bool mergeAssemblies;
 		private readonly StringDictionary fileNames = new StringDictionary();
 		private readonly StringDictionary elemNames = new StringDictionary();
 
 		private readonly ReferenceTypeDictionary<string, string[]> assemblyReferences = new ReferenceTypeDictionary<string, string[]>();
 
-		public NameResolver(XmlDocument documentation)
+		public NameResolver(XmlDocument documentation, bool mergeAssemblies)
 		{
-			BuildNameTables(documentation);
+			this.mergeAssemblies = mergeAssemblies;
+			BuildNameTables(documentation, mergeAssemblies);
 		}
 
 		#region Used for Html file generation
@@ -93,6 +95,8 @@ namespace NDoc3.Documenter.Msdn
 		// exposed to XSLT
 		public string GetFilenameForNamespaceHierarchy(string assemblyName, string namespaceName)
 		{
+			if (mergeAssemblies)
+				assemblyName = string.Empty;
 			if (string.IsNullOrEmpty(namespaceName))
 				namespaceName = "(global)";
 			return GetFilenameForIdSpecial(assemblyName, "N:" + namespaceName, "~Hierarchy");
@@ -101,6 +105,8 @@ namespace NDoc3.Documenter.Msdn
 		// exposed to XSLT
 		public string GetFilenameForNamespace(string assemblyName, string namespaceName)
 		{
+			if (mergeAssemblies)
+				assemblyName = string.Empty;
 			if (string.IsNullOrEmpty(namespaceName))
 				namespaceName = "(global)";
 			return GetFilenameForId(assemblyName, "N:" + namespaceName);
@@ -236,7 +242,7 @@ namespace NDoc3.Documenter.Msdn
 
 		#region BuildNameTables
 
-		private void BuildNameTables(XmlDocument xmlDocumentation)
+		private void BuildNameTables(XmlDocument xmlDocumentation, bool mergeNamespaces)
 		{
 			XmlNamespaceManager nsmgr = new XmlNamespaceManager(xmlDocumentation.NameTable);
 			nsmgr.AddNamespace("ns", "urn:ndoc-schema");
@@ -260,7 +266,7 @@ namespace NDoc3.Documenter.Msdn
 				foreach (XmlElement namespaceNode in namespaces) {
 					string namespaceName = GetNodeName(namespaceNode);
 					// register namespace
-					this.RegisterNamespace(assemblyName, namespaceName);
+					this.RegisterNamespace( (mergeNamespaces?string.Empty:assemblyName), namespaceName);
 
 					XmlNodeList types = namespaceNode.SelectNodes("*[@id]", nsmgr);
 					// foreach type
