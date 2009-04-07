@@ -97,9 +97,9 @@
 							</xsl:apply-templates>
 						</xsl:when>
 						<xsl:otherwise>
-					<xsl:apply-templates select="*[local-name()=$member and @access='Public' and @contract='Static']">
-						<xsl:sort select="@name" />
-					</xsl:apply-templates>
+							<xsl:apply-templates select="*[local-name()=$member and @access='Public' and @contract='Static']">
+								<xsl:sort select="@displayName" />
+							</xsl:apply-templates>
 						</xsl:otherwise>
 					</xsl:choose>
 				</table>
@@ -532,9 +532,11 @@
 			</td>
 		</tr>
 	</xsl:template>
+	
 	<!-- -->
 	<xsl:template match="ndoc:method[@declaringType]">
 		<xsl:variable name="name" select="@name" />
+		<xsl:variable name="displayName" select="@displayName" />
 		<xsl:variable name="contract" select="@contract" />
 		<xsl:variable name="access" select="@access" />
 		<xsl:variable name="declaringType" select="@declaringType" />
@@ -560,7 +562,7 @@
 												<xsl:with-param name="method-name" select="@name" />
 											</xsl:call-template>
 										</xsl:attribute>
-										<xsl:value-of select="@name" />
+										<xsl:value-of select="$displayName" />
 									</a>
 									<xsl:text> (inherited from </xsl:text>
 									<b>
@@ -590,7 +592,7 @@
 												<xsl:with-param name="method" select="$declaring-class/ndoc:method[@name=$name]" />
 											</xsl:call-template>
 										</xsl:attribute>
-										<xsl:value-of select="@name" />
+										<xsl:value-of select="$displayName" />
 									</a>
 									<xsl:text> (inherited from </xsl:text>
 									<b>
@@ -621,7 +623,7 @@
 								<xsl:with-param name="contract" select="$contract" />
 								<xsl:with-param name="local-name" select="local-name()" />
 							</xsl:call-template>
-							<xsl:value-of select="@name" />
+							<xsl:value-of select="$displayName" />
 							<xsl:text> (inherited from </xsl:text>
 							<b>
 								<xsl:value-of select="@declaringType" />
@@ -777,6 +779,16 @@
 	<xsl:template match="ndoc:field[not(@declaringType)]|ndoc:property[not(@declaringType)]|ndoc:event[not(@declaringType)]|ndoc:method[not(@declaringType)]|ndoc:operator">
 		<xsl:variable name="member" select="local-name()" />
 		<xsl:variable name="name" select="@name" />
+		<xsl:variable name="displayName">
+			<xsl:choose>
+				<xsl:when test="@displayName">
+					<xsl:value-of select="@displayName" />
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="@name" />
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
 		<xsl:variable name="contract" select="@contract" />
 		<xsl:variable name="access" select="@access" />
 		<xsl:if test="@name='op_Implicit' or @name='op_Explicit' or not(NUtil:HasSimilarOverloads(concat($name,'::',$access,':',($contract='Static'))))">
@@ -801,13 +813,13 @@
 								<xsl:choose>
 									<xsl:when test="local-name()='operator'">
 										<xsl:call-template name="operator-name">
-											<xsl:with-param name="name" select="@name" />
+											<xsl:with-param name="name" select="$name" />
 											<xsl:with-param name="from" select="ndoc:parameter/@type"/>
 											<xsl:with-param name="to" select="ndoc:returnType/@type" />
 										</xsl:call-template>
 									</xsl:when>
 									<xsl:otherwise>
-										<xsl:value-of select="@name" />
+										<xsl:value-of select="$displayName" />
 									</xsl:otherwise>
 								</xsl:choose>
 							</a>
@@ -841,7 +853,7 @@
 										</xsl:call-template>
 									</xsl:when>
 									<xsl:otherwise>
-										<xsl:value-of select="@name" />
+										<xsl:value-of select="$displayName" />
 									</xsl:otherwise>
 								</xsl:choose>
 							</a>

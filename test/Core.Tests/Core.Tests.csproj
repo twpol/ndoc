@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\MemberIDTests.cs" />
     <Compile Include="Core\PathUtilitiesTests.cs" />
     <Compile Include="Core\Reflection\NDocXmlGeneratorTests.cs" />
     <Compile Include="Core\Reflection\ReflectionEngineTests.cs" />

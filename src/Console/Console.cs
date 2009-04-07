@@ -519,7 +519,7 @@ namespace NDoc3.ConsoleApplication
 				}
 			}
 
-			strBld.Append(ex.StackTrace);
+			strBld.Append(ex.ToString());
 
 			return strBld.ToString().Replace("\r\n","\n").Replace("\r","\n").Replace("\n","\r\n");
 		}

@@ -120,8 +120,10 @@ namespace NDoc3.Core.Reflection
 			string assemblyName = doc.SelectSingleNode("/doc/assembly/name").Value;
 
 			foreach (XPathNavigator node in doc.Select("/doc/members/member")) {
+				string ID = node.GetAttribute("name", string.Empty); 
 				//Handles multidimensional arrays by replacing 0: from XML doc to the reflection type
-				string ID = node.GetAttribute("name", string.Empty).Replace("0:", "");
+				// TODO(EE): find out, if this still applies 
+				// ID = ID.Replace("0:", "");
 				XmlDocKey key = new XmlDocKey(assemblyName, ID);
 
 				string slashdoc = node.InnerXml.Trim();

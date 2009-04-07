@@ -15,20 +15,24 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 
-namespace NDoc3.Core {
+namespace NDoc3.Core.Reflection
+{
 	/// <summary>
 	/// 
 	/// </summary>
-	public static class MemberID {
+	public static class MemberID
+	{
 		/// <summary>
 		/// Get the member ID of a type
 		/// </summary>
 		/// <param name="type">The type</param>
 		/// <returns>The member ID</returns>
-		public static string GetMemberID(Type type) {
+		public static string GetMemberID(Type type)
+		{
 			return "T:" + GetTypeNamespaceName(type);
 		}
 
@@ -37,7 +41,8 @@ namespace NDoc3.Core {
 		/// </summary>
 		/// <param name="field">The field</param>
 		/// <returns>The member ID</returns>
-		public static string GetMemberID(FieldInfo field) {
+		public static string GetMemberID(FieldInfo field)
+		{
 			return "F:" + GetFullNamespaceName(field) + "." + field.Name;
 		}
 
@@ -46,26 +51,34 @@ namespace NDoc3.Core {
 		/// </summary>
 		/// <param name="property">The property</param>
 		/// <returns>The member ID</returns>
-		public static string GetMemberID(PropertyInfo property) {
+		public static string GetMemberID(PropertyInfo property)
+		{
 			string memberName = "P:" + GetFullNamespaceName(property) +
-				"." + property.Name.Replace('.', '#').Replace('+', '#');
+								"." + property.Name.Replace('.', '#').Replace('+', '#');
 
-			try {
-				if (property.GetIndexParameters().Length > 0) {
+			try
+			{
+				if (property.GetIndexParameters().Length > 0)
+				{
 					memberName += "(";
 
 					int i = 0;
 
-					foreach (ParameterInfo parameter in property.GetIndexParameters()) {
-						if (i > 0) {
+					foreach (ParameterInfo parameter in property.GetIndexParameters())
+					{
+						if (i > 0)
+						{
 							memberName += ",";
 						}
 
 						Type type = parameter.ParameterType;
 
-						if (type.ContainsGenericParameters) {
+						if (type.ContainsGenericParameters)
+						{
 							memberName += "`" + type.GenericParameterPosition;
-						} else {
+						}
+						else
+						{
 							memberName += type.FullName;
 						}
 
@@ -74,7 +87,8 @@ namespace NDoc3.Core {
 
 					memberName += ")";
 				}
-			} catch (System.Security.SecurityException) { }
+			}
+			catch (System.Security.SecurityException) { }
 
 			return memberName;
 		}
@@ -84,21 +98,24 @@ namespace NDoc3.Core {
 		/// </summary>
 		/// <param name="method">The method</param>
 		/// <returns>The memeber ID</returns>
-		public static string GetMemberID(MethodBase method) {
+		public static string GetMemberID(MethodBase method)
+		{
 			string memberName =
-					 "M:" +
-					 GetFullNamespaceName(method) +
-					 "." +
-					 method.Name.Replace('.', '#').Replace('+', '#');
+				"M:" +
+				GetFullNamespaceName(method) +
+				"." +
+				method.Name.Replace('.', '#').Replace('+', '#');
 
 			if (method.IsGenericMethod)
 				memberName = memberName + "``" + method.GetGenericArguments().Length;
 
 			memberName += GetParameterList(method);
 
-			if (method is MethodInfo) {
+			if (method is MethodInfo)
+			{
 				MethodInfo mi = (MethodInfo)method;
-				if (mi.Name == "op_Implicit" || mi.Name == "op_Explicit") {
+				if (mi.Name == "op_Implicit" || mi.Name == "op_Explicit")
+				{
 					memberName += "~" + mi.ReturnType;
 				}
 			}
@@ -111,9 +128,10 @@ namespace NDoc3.Core {
 		/// </summary>
 		/// <param name="eventInfo">The event</param>
 		/// <returns>The member ID</returns>
-		public static string GetMemberID(EventInfo eventInfo) {
+		public static string GetMemberID(EventInfo eventInfo)
+		{
 			return "E:" + GetFullNamespaceName(eventInfo) +
-				"." + eventInfo.Name.Replace('.', '#').Replace('+', '#');
+				   "." + eventInfo.Name.Replace('.', '#').Replace('+', '#');
 		}
 
 		/// <summary>
@@ -121,14 +139,21 @@ namespace NDoc3.Core {
 		/// </summary>
 		/// <param name="type">The type</param>
 		/// <returns>The namespace name (full name)</returns>
-		private static string GetTypeNamespaceName(Type type) {
+		private static string GetTypeNamespaceName(Type type)
+		{
 			if (type.GetGenericArguments().Length > 0 && type.GetGenericTypeDefinition() != typeof(Nullable<>))
 				return type.GetGenericTypeDefinition().FullName.Replace('+', '.');
 			if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
 				return type.GetGenericArguments()[0].FullName.Replace('+', '.');
 			if (type.IsGenericParameter)
 				return type.Name;
-			return type.FullName.Replace('+', '.');
+			// seems to happen
+			string fullName = type.FullName;
+			if (type.FullName == null)
+			{
+				fullName = type.Namespace + "." + type.Name;
+			}
+			return fullName.Replace('+', '.');
 		}
 
 		/// <summary>
@@ -136,7 +161,8 @@ namespace NDoc3.Core {
 		/// </summary>
 		/// <param name="member">The member</param>
 		/// <returns>The declaring type name</returns>
-		public static string GetDeclaringTypeName(MemberInfo member) {
+		public static string GetDeclaringTypeName(MemberInfo member)
+		{
 			return GetTypeNamespaceName(member.DeclaringType);
 		}
 
@@ -145,7 +171,8 @@ namespace NDoc3.Core {
 		/// </summary>
 		/// <param name="member">The member</param>
 		/// <returns>The full namespace name</returns>
-		private static string GetFullNamespaceName(MemberInfo member) {
+		private static string GetFullNamespaceName(MemberInfo member)
+		{
 			return GetTypeNamespaceName(member.ReflectedType);
 		}
 
@@ -154,7 +181,8 @@ namespace NDoc3.Core {
 		/// </summary>
 		/// <param name="type">The type</param>
 		/// <returns>The type name</returns>
-		public static string GetTypeName(Type type) {
+		public static string GetTypeName(Type type)
+		{
 			return GetTypeName(type, false);
 		}
 
@@ -164,17 +192,22 @@ namespace NDoc3.Core {
 		/// <param name="type">The type</param>
 		/// <param name="UsePositionalNumber"></param>
 		/// <returns>The type name</returns>
-		public static string GetTypeName(Type type, bool UsePositionalNumber) {
+		public static string GetTypeName(Type type, bool UsePositionalNumber)
+		{
 			//TODO Nullable type
 			string result = "";
-			if (type.GetGenericArguments().Length > 0) {
+			if (type.GetGenericArguments().Length > 0)
+			{
 				// HACK: bug in reflection - namespace sometimes returns null
 				string typeNamespace = null;
-				try {
+				try
+				{
 					typeNamespace = type.Namespace + ".";
-				} catch (NullReferenceException) { }
+				}
+				catch (NullReferenceException) { }
 
-				if (typeNamespace == null) {
+				if (typeNamespace == null)
+				{
 					int lastDot = type.FullName.LastIndexOf(".");
 					typeNamespace = lastDot > -1 ? type.FullName.Substring(0, lastDot + 1) : string.Empty;
 				}
@@ -183,15 +216,20 @@ namespace NDoc3.Core {
 				string typeName;
 				string typeBounds = String.Empty;
 				int lastSquareBracket = type.Name.LastIndexOf("[");
-				if (lastSquareBracket > -1) {
+				if (lastSquareBracket > -1)
+				{
 					typeName = type.Name.Substring(0, lastSquareBracket);
 					typeBounds = type.Name.Substring(lastSquareBracket);
 					typeBounds = typeBounds.Replace(",", ",0:").Replace("[,", "[0:,");
-				} else if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>)) {
+				}
+				else if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
+				{
 					Type[] types = type.GetGenericArguments();
 					typeName = types[0].Name;
 					type = types[0];
-				} else {
+				}
+				else
+				{
 					typeName = type.Name;
 				}
 
@@ -200,41 +238,63 @@ namespace NDoc3.Core {
 					typeName = typeName.Substring(0, genParmCountPos);
 
 				result = String.Concat(typeNamespace, typeName, GetTypeArgumentsList(type), typeBounds);
-			} else {
-				if (type.ContainsGenericParameters) {
-					if (type.HasElementType) {
+			}
+			else
+			{
+				if (type.ContainsGenericParameters)
+				{
+					if (type.HasElementType)
+					{
 						Type eleType = type.GetElementType();
-						if (UsePositionalNumber) {
+						if (UsePositionalNumber)
+						{
 							result = "`" + eleType.GenericParameterPosition;
-						} else {
+						}
+						else
+						{
 							result = eleType.Name;
 						}
 
-						if (type.IsArray) {
+						if (type.IsArray)
+						{
 							int rank = type.GetArrayRank();
 							result += "[";
-							if (rank > 1) {
+							if (rank > 1)
+							{
 								int i = 0;
-								while (i < rank) {
-									if (i > 0) result += ",";
+								while (i < rank)
+								{
+									if (i > 0)
+										result += ",";
 									result += "0:";
 									i++;
 								}
 							}
 							result += "]";
-						} else if (type.IsByRef) {
+						}
+						else if (type.IsByRef)
+						{
 							result += "@";
-						} else if (type.IsPointer) {
+						}
+						else if (type.IsPointer)
+						{
 							result += "*";
 						}
-					} else {
-						if (UsePositionalNumber) {
+					}
+					else
+					{
+						if (UsePositionalNumber)
+						{
 							result = "`" + type.GenericParameterPosition;
-						} else {
+						}
+						else
+						{
 							result = type.Name;
 						}
 					}
-				} else {
+				}
+				else
+				{
 					result = type.FullName.Replace("&", "").Replace('+', '.');
 				}
 			}
@@ -246,29 +306,40 @@ namespace NDoc3.Core {
 		/// </summary>
 		/// <param name="type">The type</param>
 		/// <returns>The generic argument list</returns>
-		private static string GetTypeArgumentsList(Type type) {
+		private static string GetTypeArgumentsList(Type type)
+		{
 			StringBuilder argList = new StringBuilder();
 			int i = 0;
 
-			foreach (Type argType in type.GetGenericArguments()) {
-				if (i == 0) {
+			foreach (Type argType in type.GetGenericArguments())
+			{
+				if (i == 0)
+				{
 					argList.Append('{');
-				} else {
+				}
+				else
+				{
 					argList.Append(',');
 				}
 
-				if (argType.GetGenericArguments().Length > 0 | argType.HasElementType) {
+				if (argType.GetGenericArguments().Length > 0 | argType.HasElementType)
+				{
 					argList.Append(GetTypeName(argType));
-				} else if (argType.ContainsGenericParameters) {
+				}
+				else if (argType.ContainsGenericParameters)
+				{
 					argList.Append(argType.Name);
-				} else {
+				}
+				else
+				{
 					argList.Append(argType.FullName);
 				}
 
 				++i;
 			}
 
-			if (i > 0) {
+			if (i > 0)
+			{
 				argList.Append('}');
 			}
 
@@ -284,36 +355,155 @@ namespace NDoc3.Core {
 		/// </summary>
 		/// <param name="method">The method</param>
 		/// <returns>String representation of the method parameters</returns>
-		private static string GetParameterList(MethodBase method) {
+		private static string GetParameterList(MethodBase method)
+		{
 			ParameterInfo[] parameters = method.GetParameters();
 			StringBuilder paramList = new StringBuilder();
 
 			int i = 0;
 
-			foreach (ParameterInfo parameter in parameters) {
-				if (i == 0) {
+			foreach (ParameterInfo parameter in parameters)
+			{
+				if (i == 0)
+				{
 					paramList.Append('(');
-				} else {
+				}
+				else
+				{
 					paramList.Append(',');
 				}
 
 				Type paramType = parameter.ParameterType;
-				paramList.Append(GetTypeName(paramType, false));
 				if (paramType.IsByRef)
-					paramList.Append('@');
+				{
+					paramType = paramType.GetElementType();
+				}
+				while (paramType.IsArray)
+					paramType = paramType.GetElementType();
 
+				string paramName = GetParamTypeName(method, paramType);
+				paramList.Append(paramName);
+
+				paramType = parameter.ParameterType;
+				if (paramType.IsByRef)
+				{
+					paramType = paramType.GetElementType();
+				}
+				while (paramType.IsArray)
+				{
+					paramList.Append('[');
+					if (paramType.GetArrayRank() > 1)
+					{
+						List<string> dims = new List<string>();
+						for(int c=0;c<paramType.GetArrayRank();c++)
+						{
+							dims.Add("0:");
+						}
+						paramList.Append(string.Join( ",", dims.ToArray() ));
+					}
+					paramList.Append(']');
+					paramType = paramType.GetElementType();
+				}
+
+				if (parameter.ParameterType.IsByRef)
+				{
+					paramList.Append('@');
+				}
 				++i;
 			}
 
-			if (i > 0) {
+			if (i > 0)
+			{
 				paramList.Append(')');
 			}
 
-			if (method.ContainsGenericParameters)
-				paramList.Replace("`", "``");
+			//			if (method.ContainsGenericParameters)
+			//				paramList.Replace("`", "``");
 
 			return paramList.ToString();
 		}
 
+		private static string GetParamTypeName(MethodBase method, Type paramType)
+		{
+			string paramName = null;
+			Type[] typeGenericArgs = (method.DeclaringType.IsGenericType)
+										? method.DeclaringType.GetGenericArguments()
+										: new Type[0];
+			Type[] methodGenericArgs = method.IsGenericMethod
+										? method.GetGenericArguments()
+										: new Type[0];
+
+			if (paramType.ContainsGenericParameters)
+			{
+				// class type arg?
+				for (int ix = 0; ix < typeGenericArgs.Length; ix++)
+				{
+					if (typeGenericArgs[ix] == paramType)
+					{
+						paramName = "`" + ix;
+						break;
+					}
+				}
+				if (paramName == null)
+				{
+					// method type arg?
+					for (int ixm = 0; ixm < methodGenericArgs.Length; ixm++)
+					{
+						if (methodGenericArgs[ixm] == paramType)
+						{
+							paramName = "``" + ixm;
+							break;
+						}
+					}
+				}
+				if (paramName == null)
+				{
+					// HACK: FullName sometimes seems null - wtf...
+					paramName = GetParamTypeFullName(paramType);
+					Type[] paramTypeArgs = paramType.GetGenericArguments();
+					if (paramTypeArgs.Length > 0)
+					{
+						paramName += "{";
+						for (int ixp = 0; ixp < paramTypeArgs.Length; ixp++)
+						{
+							paramName += GetParamTypeName(method, paramTypeArgs[ixp]);
+							if (ixp < paramTypeArgs.Length - 1)
+								paramName += ",";
+						}
+						paramName += "}";
+					}
+				}
+			}
+			else
+			{
+				paramName = GetTypeName(paramType, false);
+			}
+			return paramName;
+		}
+
+		private static string GetParamTypeFullName(Type paramType)
+		{
+			string paramName;
+			if (paramType.FullName == null)
+			{
+				string name = string.Empty;
+				if (paramType.IsNested)
+				{
+					name += paramType.DeclaringType.Name + ".";
+				}
+				name += paramType.Name;
+				int ix2 = name.IndexOf('`');
+				if (ix2 > -1)
+				{
+					name = name.Substring(0, ix2);
+				}
+				paramName = paramType.Namespace + "." + name;
+			}
+			else
+			{
+				paramName = paramType.FullName;
+			}
+			return paramName;
+		}
 	}
 }

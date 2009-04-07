@@ -20,11 +20,10 @@ namespace NDoc3.Core
 			ReflectionEngine re = new ReflectionEngine(null);
 
 			XmlTextWriter xmlWriter = new XmlTextWriter("test.ndoc.xml", Encoding.UTF8);
-#if DEBUG
 			xmlWriter.Indentation = 2;
 			xmlWriter.IndentChar = ' ';
 			xmlWriter.Formatting = Formatting.Indented;
-#endif
+
 			using (xmlWriter) {
 				NDocXmlGeneratorParameters args = new NDocXmlGeneratorParameters();
 				args.AddAssemblyToDocument(assemblyFilename);

@@ -1015,7 +1015,7 @@ namespace NDoc3.Documenter.Msdn
 
 				for (int i = 0; i < nNodes; i++) {
 					XmlNode methodNode = methodNodes[indexes[i]];
-					string methodName = GetNodeName(methodNode);
+					string methodName = GetNodeDisplayName(methodNode);
 					string methodID = GetNodeId(methodNode);
 
 					if (IsMethodFirstOverload(methodNodes, indexes, i)) {
@@ -1440,9 +1440,11 @@ namespace NDoc3.Documenter.Msdn
 			ExternalHtmlProvider htmlProvider = new ExternalHtmlProvider(MyConfig, filename);
 
 			try {
+
 				StreamWriter streamWriter;
+				string fullPath = Path.Combine(ctx.WorkingDirectory.FullName, filename);
 				using (streamWriter = new StreamWriter(
-					File.Open(Path.Combine(ctx.WorkingDirectory.FullName, filename), FileMode.Create),
+					File.Open(fullPath, FileMode.Create),
 					ctx.CurrentFileEncoding)) {
 					string DocLangCode = Enum.GetName(typeof(SdkLanguage), MyConfig.SdkDocLanguage).Replace("_", "-");
 					MsdnXsltUtilities utilities = new MsdnXsltUtilities(ctx._nameResolver, ctx.CurrentAssemblyName, MyConfig.SdkDocVersionString, DocLangCode, MyConfig.SdkLinksOnWeb, ctx.CurrentFileEncoding);
@@ -1467,9 +1469,14 @@ namespace NDoc3.Documenter.Msdn
 
 					XslTransform(ctx, transformName, ctx.GetXPathNavigator(), arguments, streamWriter);
 				}
-			} catch (PathTooLongException e) {
-				throw new PathTooLongException(e.Message + "\nThe file that NDoc3 was trying to create had the following name:\n" + Path.Combine(ctx.WorkingDirectory.FullName, filename));
 			}
+			catch(Exception ex)
+			{
+				throw new DocumenterException(string.Format("Failed writing to file {0}", filename), ex);
+			}
+//			catch (PathTooLongException e) {
+//				throw new PathTooLongException(e.Message + "\nThe file that NDoc3 was trying to create had the following name:\n" + Path.Combine(ctx.WorkingDirectory.FullName, filename));
+//			}
 
 #if DEBUG
 			Debug.WriteLine((Environment.TickCount - start) + " msec.");

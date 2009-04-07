@@ -296,7 +296,8 @@ namespace NDoc3.Documenter.Msdn
 								case "method": {
 										string overload = GetNodeOverload(memberNode);
 										string memberName = GetNodeName(memberNode);
-										this.RegisterMethod(assemblyName, memberId, memberName, overload);
+										string memberDisplayName = GetNodeDisplayName(memberNode);
+										this.RegisterMethod(assemblyName, memberId, memberName, memberDisplayName, overload);
 									}
 									break;
 								case "operator": {
@@ -343,9 +344,9 @@ namespace NDoc3.Documenter.Msdn
 			Register(assemblyName, memberId, memberName, CalculateFilenameForId(assemblyName, memberId, overload));
 		}
 
-		private void RegisterMethod(string assemblyName, string memberId, string memberName, string overload)
+		private void RegisterMethod(string assemblyName, string memberId, string memberName, string memberDisplayName, string overload)
 		{
-			Register(assemblyName, memberId, memberName, CalculateFilenameForId(assemblyName, memberId, overload));
+			Register(assemblyName, memberId, memberDisplayName, CalculateFilenameForId(assemblyName, memberId, overload));
 		}
 
 		private void RegisterProperty(string assemblyName, string memberId, string memberName, string overload)
@@ -444,6 +445,9 @@ namespace NDoc3.Documenter.Msdn
 			}
 
 			id = id.Replace('#', '~');
+			// generic methods have the form "methodname<Arg1, Arg2, ...>"
+			id = id.Replace('<', '{');
+			id = id.Replace('>', '}');
 
 			return assemblyName + "~" + id + EXT;
 		}

@@ -1033,10 +1033,13 @@ namespace NDoc3.Core.Reflection
 
 		#endregion
 
-		private int GetMethodOverload(MethodInfo method, Type type)
+		/// <summary>
+		/// Returns the method's index in the list of overloads
+		/// </summary>
+		private int GetMethodOverloadIndex(MethodInfo method, Type type)
 		{
-			int count = 0;
-			int overload = 0;
+			int currentIndex = 0;
+			int overloadIndex = 0;
 
 			const BindingFlags bindingFlags =
 					  BindingFlags.Instance |
@@ -1044,18 +1047,26 @@ namespace NDoc3.Core.Reflection
 					  BindingFlags.Public |
 					  BindingFlags.NonPublic;
 
+			int genericArgCount = method.IsGenericMethod ? method.GetGenericArguments().Length : 0;
+
 			MemberInfo[] methods = type.GetMember(method.Name, MemberTypes.Method, bindingFlags);
 			foreach (MethodInfo m in methods) {
-				if (!IsHidden(m, type) && MustDocumentMethod(m)) {
-					++count;
+
+				int currGenericArgCount = m.IsGenericMethod ? m.GetGenericArguments().Length : 0;
+				if (genericArgCount == currGenericArgCount
+					&& !IsHidden(m, type) 
+					&& MustDocumentMethod(m)
+					)
+				{
+					++currentIndex;
 				}
 
 				if (m == method) {
-					overload = count;
+					overloadIndex = currentIndex;
 				}
 			}
 
-			return (count > 1) ? overload : 0;
+			return (currentIndex > 1) ? overloadIndex : 0;
 		}
 
 		private int GetPropertyOverload(PropertyInfo property, PropertyInfo[] properties)
@@ -1769,7 +1780,7 @@ namespace NDoc3.Core.Reflection
 						writer,
 						method,
 						method.DeclaringType.FullName != type.FullName,
-						GetMethodOverload(method, type),
+						GetMethodOverloadIndex(method, type),
 						IsHiding(method, type), implementations);
 				}
 			}
@@ -1794,7 +1805,7 @@ namespace NDoc3.Core.Reflection
 					WriteOperator(
 						writer,
 						method,
-						GetMethodOverload(method, type));
+						GetMethodOverloadIndex(method, type));
 				}
 			}
 		}
@@ -2404,8 +2415,26 @@ namespace NDoc3.Core.Reflection
 						return;
 				}
 
+				string displayName = name;
+				if (method.IsGenericMethod)
+				{
+					Type[] genericTypeArgs = method.GetGenericArguments();
+					if (genericTypeArgs.Length > 0)
+					{
+						// language-agnostic display format uses () for generic args
+						displayName += "(" + genericTypeArgs[0].Name;
+						for(int ix=1;ix<genericTypeArgs.Length;ix++)
+						{
+							name += "," + genericTypeArgs[ix].Name;
+						}
+						displayName += ")";
+						name = name + "``" + genericTypeArgs.Length;
+					}
+				}
+
 				writer.WriteStartElement("method");
 				writer.WriteAttributeString("name", name);
+				writer.WriteAttributeString("displayName", displayName);
 				writer.WriteAttributeString("id", memberName);
 				writer.WriteAttributeString("access", GetMethodAccessValue(method));
 				writer.WriteAttributeString("contract", GetEnumString(GetMethodContractValue(method)));
@@ -2464,6 +2493,7 @@ namespace NDoc3.Core.Reflection
 						writer.WriteEndElement();
 					}
 				}
+
 				if (method.IsGenericMethod) {
 					WriteGenericMethodConstraints(method, writer);
 				}
@@ -2992,8 +3022,9 @@ namespace NDoc3.Core.Reflection
 
 		private bool CheckForMissingMethodDocumentation(MethodInfo methodInfo)
 		{
-			if (_assemblyDocCache.GetDoc(methodInfo.DeclaringType.Assembly.GetName(), MemberID.GetMemberID(methodInfo)) == null) {
-				Trace.WriteLine(String.Format("The method {0} isn't documented and therefore skipped", MemberID.GetMemberID(methodInfo)));
+			string memberId = MemberID.GetMemberID(methodInfo);
+			if (_assemblyDocCache.GetDoc(methodInfo.DeclaringType.Assembly.GetName(), memberId) == null) {
+				Trace.WriteLine(String.Format("The method {0} isn't documented and therefore skipped", memberId));
 				return true;
 			}
 			return false;

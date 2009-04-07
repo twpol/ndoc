@@ -5,12 +5,13 @@
 	<!-- -->
 	<xsl:include href="common.xslt" />
 	<!-- -->
+	<xsl:param name='assembly-name' />
 	<xsl:param name='member-id' />
 	<!-- -->
 	<xsl:template match="/">
-		<xsl:apply-templates select="ndoc:ndoc/ndoc:assembly/ndoc:module/ndoc:namespace/ndoc:*/ndoc:*[@id=$member-id][1]" />
+		<xsl:apply-templates select="ndoc:ndoc/ndoc:assembly[@name=$assembly-name]/ndoc:module/ndoc:namespace/ndoc:*/ndoc:*[@id=$member-id][1]" />
 	</xsl:template>
-	<!-- Method, constructor, property or opretor overload -->
+	<!-- Method, constructor, property or operator overload -->
 	<xsl:template match="ndoc:method | ndoc:constructor | ndoc:property | ndoc:operator">
 		<xsl:variable name="type">
 			<xsl:choose>

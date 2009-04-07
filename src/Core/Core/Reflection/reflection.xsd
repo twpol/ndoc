@@ -280,6 +280,7 @@
         <xs:element ref="genericargument" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
       <xs:attribute name="name" type="xs:string" use="required"/>
+      <xs:attribute name="displayName" type="xs:string" use="required"/>
       <xs:attribute name="id" type="xs:string" use="required"/>
       <xs:attribute name="access" type="xs:string" use="required"/>
       <xs:attribute name="contract" type="xs:string" use="required"/>

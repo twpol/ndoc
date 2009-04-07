@@ -17,7 +17,7 @@
 		<xsl:value-of select="../@displayName" />
 		<xsl:if test="local-name()='method'">
 			<xsl:text>.</xsl:text>
-			<xsl:value-of select="@name" />
+			<xsl:value-of select="@displayName" />
 		</xsl:if>
 		<xsl:if test="local-name()!='operator'">
 			<xsl:if test="count(parent::node()/*[@name=$memberName]) > 1">
