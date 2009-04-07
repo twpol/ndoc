@@ -455,6 +455,7 @@ namespace NDoc3.Documenter.Msdn
 			id = id.Replace('<', '{');
 			id = id.Replace('>', '}');
 
+			id = id.Replace('`', '$');
 			return assemblyName + "~" + id + EXT;
 		}
 

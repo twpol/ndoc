@@ -81,7 +81,7 @@ namespace NDoc3.Core
                 Type argType = genArgs[k];
                 if (i == 0)
                 {
-                    argList.Append('<');
+                    argList.Append('(');
                 }
                 else
                 {
@@ -108,7 +108,7 @@ namespace NDoc3.Core
 
             if (i > 0)
             {
-                argList.Append('>');
+                argList.Append(')');
             }
 
             return argList.ToString();

@@ -2,6 +2,19 @@
 
 namespace NDoc3.ReflectionTests
 {
+	/**
+	 * Some Javadoc Comment
+	 */
+	public interface IGenericInterface<T>
+	{}
+
+	/// <summary>
+	/// Boy..
+	/// </summary>
+	/// <typeparam name="X">The generic arg doc</typeparam>
+	public struct GenericStruct<X> : IGenericInterface<X> where X:TestAssembly1Class
+	{}
+
 	/// <summary>
 	/// TestAssembly1Class in TestAssembly1
 	/// </summary>
@@ -48,12 +61,12 @@ namespace NDoc3.ReflectionTests
 	/// </summary>
 	/// <typeparam name="S"></typeparam>
 	/// <typeparam name="T"></typeparam>
-	public class TestGenericClass<S, T>
+	public class TestGenericClass<S, T> : IGenericInterface<S>
 	{
 		/**
 		 * Some invalid comment
 		 */
-		public Predicate<int> SomePredicate;
+		public Predicate<T>[][] SomePredicate;
 
 		/// <summary>
 		/// Returns Generic Class Type

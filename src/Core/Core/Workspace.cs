@@ -81,6 +81,8 @@ namespace NDoc3.Core
 
 			if ( !Directory.Exists( RootDirectory ) )
 				Directory.CreateDirectory( RootDirectory );
+
+			CleanIntermediates();
 		}
 
 		/// <summary>

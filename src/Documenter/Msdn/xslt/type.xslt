@@ -378,7 +378,7 @@
 	<!-- -->
 	<xsl:template name="interface-implementing-types-section">
 		<xsl:if test="ndoc:implementedBy">
-			<h4 class="dtH4">Types that implement <xsl:value-of select="@name" /></h4>
+			<h4 class="dtH4">Types that implement <xsl:value-of select="@displayName" /></h4>
 			<div class="tablediv">
 				<table class="dtTABLE" cellspacing="0">
 					<tr valign="top">
@@ -405,7 +405,7 @@
 							<xsl:with-param name="id" select="@id" />
 						</xsl:call-template>
 					</xsl:attribute>
-					<xsl:value-of select="@name" />
+					<xsl:value-of select="@displayName" />
 				</a>
 			</td>
 			<td width="50%">

@@ -366,7 +366,7 @@
               <xsl:with-param name="type" select="." />
             </xsl:call-template>
           </xsl:attribute>
-          <xsl:value-of select="$typeName" />
+          <xsl:value-of select="@displayName" />
           <xsl:text> Members</xsl:text>
         </a>
         <xsl:text> | </xsl:text>

@@ -1099,7 +1099,7 @@ namespace NDoc3.Core.Reflection
 
 			string memberName = MemberID.GetMemberID(type);
 
-			string fullNameWithoutNamespace = type.FullName.Replace('+', '.');
+			string fullNameWithoutNamespace = GetTypeFullName(type).Replace('+', '.');
 
 			if (type.Namespace != null) {
 				fullNameWithoutNamespace = fullNameWithoutNamespace.Substring(type.Namespace.Length + 1);
@@ -1245,7 +1245,9 @@ namespace NDoc3.Core.Reflection
 			}
 
 
-			if (type.IsGenericType) {
+			if (type.IsGenericType)
+			{
+				WriteGenericArgumentsAndParameters(type, writer);
 				WriteGenericTypeConstraints(type, writer);
 			}
 
