@@ -4,10 +4,12 @@
     <property name="root.dir" value="../.." overwrite="false" />
     <include buildfile="${root.dir}/build-common/common-project.xml" />
 
-    <target name="init" depends="common.init-test" />
+    <target name="init" depends="common.init-test">
+    	<property name="current.build.nowarn" value="${current.build.nowarn},1591,1574,0419" overwrite="true" />
+   	</target>
 
     <target name="compile" description="build this library" depends="init common.compile-dll" />
-    
+
     <target name="test" description="Run NUnit tests" depends="init compile common.run-tests" />
 
 </project>
