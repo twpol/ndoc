@@ -1,4 +1,6 @@
-﻿namespace NDoc3.ReflectionTests
+﻿using System;
+
+namespace NDoc3.ReflectionTests
 {
 	/// <summary>
 	/// TestAssembly1Class in TestAssembly1
@@ -48,6 +50,11 @@
 	/// <typeparam name="T"></typeparam>
 	public class TestGenericClass<S, T>
 	{
+		/**
+		 * Some invalid comment
+		 */
+		public Predicate<int> SomePredicate;
+
 		/// <summary>
 		/// Returns Generic Class Type
 		/// </summary>

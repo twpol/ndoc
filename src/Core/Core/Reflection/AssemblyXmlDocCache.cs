@@ -179,10 +179,15 @@ namespace NDoc3.Core.Reflection
 
 
 			if (xmldoc.DocumentElement != null) {
-				CleanupNodes(key, xmldoc.DocumentElement.ChildNodes);
+				if (xmldoc.DocumentElement.ChildNodes.Count > 0
+					&& !(xmldoc.DocumentElement.FirstChild is XmlText))
+				{
+					CleanupNodes(key, xmldoc.DocumentElement.ChildNodes);
 
-				ProcessSeeLinks(key, xmldoc.DocumentElement.ChildNodes);
-				return xmldoc.DocumentElement.InnerXml;
+					ProcessSeeLinks(key, xmldoc.DocumentElement.ChildNodes);
+					return xmldoc.DocumentElement.InnerXml;
+				}
+				return "<summary>" + xmldoc.DocumentElement.InnerText + "</summary>";
 			}
 			throw new Exception("DocumentElement are null");
 		}

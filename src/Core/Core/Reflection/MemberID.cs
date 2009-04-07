@@ -141,6 +141,10 @@ namespace NDoc3.Core.Reflection
 		/// <returns>The namespace name (full name)</returns>
 		private static string GetTypeNamespaceName(Type type)
 		{
+			// de-ref array types
+			while(type.IsArray) 
+				type = type.GetElementType();
+
 			if (type.GetGenericArguments().Length > 0 && type.GetGenericTypeDefinition() != typeof(Nullable<>))
 				return type.GetGenericTypeDefinition().FullName.Replace('+', '.');
 			if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))

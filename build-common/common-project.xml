@@ -54,7 +54,7 @@ ${current.bin.dir}: the binary directory to output the assembly + app.config to
         <property name="assembly.is-cls-compliant" value="false" />
         <property name="assembly.version" value="1.0.0.0" />
         <property name="assembly.version.informational" value="1.0" />
-        <property name="clover.instrument" value="false" />
+        <property name="current.build.warnaserror" value="true" />
 
         <patternset id="project.references.default">
             <include name="System.dll" />
@@ -87,6 +87,7 @@ ${root.dir}: root dir
 ${current.bin.dir}: the binary directory to output the assembly + app.config to
     -->
     <target name="common.init-test" description="Initializes build properties" depends="common.init">
+        <property name="current.build.warnaserror" value="false" />
     </target>
 
     <!--
@@ -129,10 +130,11 @@ ${current.build.defines}
              optimize="${current.build.optimize}"
              unsafe="true"
              checked="false"
+             warnaserror="${current.build.warnaserror}"
              define="${current.build.defines}"
              doc="${current.bin.dir}/${project::get-name()}.xml">
             <nowarn>
-                <warning number="${current.build.nowarn}" />
+                <warning number="618,${current.build.nowarn}" />
             </nowarn>
             <sources refid="project.sources" />
             <references basedir="${current.bin.dir}">

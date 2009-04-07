@@ -195,7 +195,7 @@ namespace NDoc3.Core.Reflection
 			}
 
 			//HACK Temporary fix until Mono have been released with a fix for the XML validation
-			ValidateNDocXml(xmlFile);
+//			ValidateNDocXml(xmlFile);
 		}
 
 		/// <summary>Builds an Xml string combining the reflected metadata with the /doc comments.</summary>
@@ -2489,7 +2489,7 @@ namespace NDoc3.Core.Reflection
 						writer.WriteAttributeString("interface", MemberDisplayName.GetMemberDisplayName(implements.InterfaceType));
 						writer.WriteAttributeString("interfaceId", MemberID.GetMemberID(implements.InterfaceType));
 						writer.WriteAttributeString("assembly", implements.InterfaceType.Assembly.GetName().Name);
-						writer.WriteAttributeString("declaringType", implements.InterfaceType.FullName.Replace('+', '.'));
+						writer.WriteAttributeString("declaringType", GetTypeFullName(implements.InterfaceType).Replace('+', '.'));
 						writer.WriteEndElement();
 					}
 				}
@@ -2648,6 +2648,22 @@ namespace NDoc3.Core.Reflection
 
 		#region Get MemberID of base of inherited member
 
+		private string GetTypeFullName(Type type)
+		{
+			if (type.IsByRef)
+				type = type.GetElementType();
+
+			while(type.IsArray)
+				type = type.GetElementType();
+
+			if (type.FullName != null)
+			{
+				return type.FullName;
+			}
+
+			return type.Namespace + "." + type.Name;
+		}
+
 		/// <summary>Used by GetFullNamespaceName(MemberInfo member) functions to build
 		/// up most of the /doc member name.</summary>
 		/// <param name="type"></param>
@@ -2655,7 +2671,7 @@ namespace NDoc3.Core.Reflection
 		{
 			if (type.IsGenericType)
 				type = type.GetGenericTypeDefinition();
-			return type.FullName.Replace('+', '.');
+			return GetTypeFullName(type).Replace('+', '.');
 		}
 
 		/// <summary>Derives the member name ID for the base of an inherited field.</summary>
@@ -2663,7 +2679,7 @@ namespace NDoc3.Core.Reflection
 		/// <param name="declaringType">The declaring type.</param>
 		private string GetMemberName(FieldInfo field, Type declaringType)
 		{
-			return "F:" + declaringType.FullName.Replace("+", ".") + "." + field.Name;
+			return "F:" + GetTypeFullName(declaringType).Replace("+", ".") + "." + field.Name;
 		}
 
 		/// <summary>Derives the member name ID for an event. Used to match nodes in the /doc XML.</summary>
@@ -2671,7 +2687,7 @@ namespace NDoc3.Core.Reflection
 		/// <param name="declaringType">The declaring type.</param>
 		private string GetMemberName(EventInfo eventInfo, Type declaringType)
 		{
-			return "E:" + declaringType.FullName.Replace("+", ".") +
+			return "E:" + GetTypeFullName(declaringType).Replace("+", ".") +
 				"." + eventInfo.Name.Replace('.', '#').Replace('+', '#');
 		}
 
