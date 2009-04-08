@@ -150,8 +150,11 @@ namespace NDoc3.Core.Reflection
 		public static void ValidateNDocXml(TextReader ndocXmlSource, bool autoClose)
 		{
 			try {
-				if (!IsRunningMono()) {
-					ValidateNDocXmlInternal(XmlReader.Create(ndocXmlSource, MakeXmlReaderSettings()));
+				if (!IsRunningMono())
+				{
+					XmlTextReader reader = new XmlTextReader(ndocXmlSource);
+					reader.WhitespaceHandling = WhitespaceHandling.All;
+					ValidateNDocXmlInternal(reader);
 				}
 			} finally {
 				if (autoClose) {
@@ -167,7 +170,47 @@ namespace NDoc3.Core.Reflection
 		/// <exception cref="ValidationException">Occures if validation fails.</exception>
 		private static void ValidateNDocXmlInternal(XmlReader reader)
 		{
-			while (reader.Read()) { }
+			try
+			{
+				XmlReader validatingReader = XmlReader.Create(reader, MakeXmlReaderSettings());
+				while (validatingReader.Read()) { }
+			}
+			catch (ValidationException)
+			{
+//				if (reader is XmlTextReader)
+//				{
+//					XmlTextReader tr = (XmlTextReader) reader;
+//					string offendingText = tr.Value;
+//					throw new ValidationException("Offending text:" + offendingText, exception);
+//				}
+				throw;
+			}
+		}
+
+		/// <summary>
+		/// Generates the XmlReaderSettings for validating against the XML Schema.
+		/// </summary>
+		/// <returns>The XmlReaderSettings.</returns>
+		private static XmlReaderSettings MakeXmlReaderSettings()
+		{
+			XmlReaderSettings settings = new XmlReaderSettings();
+			settings.ValidationType = ValidationType.Schema;
+
+			XmlSchemaSet sc = new XmlSchemaSet();
+			sc.Add(NDOCXML_NAMESPACEURI, new XmlTextReader(EmbeddedResources.GetEmbeddedResourceStream(MethodBase.GetCurrentMethod().DeclaringType, "reflection.xsd")));
+			settings.Schemas = sc;
+
+			settings.ValidationEventHandler += ((sender, args) =>
+			{
+				if (args.Severity == XmlSeverityType.Error)
+				{
+					throw new ValidationException(
+						string.Format("{0} at ({1},{2})", args.Exception.Message, args.Exception.LineNumber,
+									  args.Exception.LinePosition), args.Exception);
+				}
+			});
+			settings.CheckCharacters = false;
+			return settings;
 		}
 
 		/// <summary>Builds an Xml file combining the reflected metadata with the /doc comments.</summary>
@@ -195,12 +238,12 @@ namespace NDoc3.Core.Reflection
 			}
 
 			//HACK Temporary fix until Mono have been released with a fix for the XML validation
-//			ValidateNDocXml(xmlFile);
+			ValidateNDocXml(xmlFile);
 		}
 
 		/// <summary>Builds an Xml string combining the reflected metadata with the /doc comments.</summary>
-		/// <remarks>This now evidently writes the string in utf-16 format (and 
-		/// says so, correctly I suppose, in the xml text) so if you write this string to a file with 
+		/// <remarks>This now evidently writes the string in utf-16 format (and
+		/// says so, correctly I suppose, in the xml text) so if you write this string to a file with
 		/// utf-8 encoding it will be unparseable because the file will claim to be utf-16
 		/// but will actually be utf-8.</remarks>
 		/// <returns>XML string</returns>
@@ -218,26 +261,6 @@ namespace NDoc3.Core.Reflection
 			}
 
 			return result;
-		}
-
-		/// <summary>
-		/// Generates the XmlReaderSettings for validating against the XML Schema.
-		/// </summary>
-		/// <returns>The XmlReaderSettings.</returns>
-		private static XmlReaderSettings MakeXmlReaderSettings()
-		{
-			//			// Copies the XML Schema to the current directory
-			//			EmbeddedResources.WriteEmbeddedResource(
-			//				this.GetType().Module.Assembly, "NDoc3.Core.ReflectionEngine.reflection.xsd",
-			//				Directory.GetCurrentDirectory(), "reflection.xsd");
-			XmlReaderSettings settings = new XmlReaderSettings();
-			XmlSchemaSet sc = new XmlSchemaSet();
-			sc.Add(NDOCXML_NAMESPACEURI, new XmlTextReader(EmbeddedResources.GetEmbeddedResourceStream(MethodBase.GetCurrentMethod().DeclaringType, "reflection.xsd")));
-			//			sc.Add("urn:ndoc-schema", Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "reflection.xsd");
-			settings.ValidationType = ValidationType.Schema;
-			settings.Schemas = sc;
-			settings.ValidationEventHandler += ((sender, args) => { throw new ValidationException(args.Exception.Message, args.Exception); });
-			return settings;
 		}
 
 		/// <summary>
@@ -293,7 +316,7 @@ namespace NDoc3.Core.Reflection
 				// if you want to see NDoc3's intermediate XML file, use the XML documenter.
 			}
 				//			catch (Exception ex) {
-				//				// TODO (EE): reevaluate exception handling 
+				//				// TODO (EE): reevaluate exception handling
 				//				throw;
 				//			}
 			catch (ReflectionTypeLoadException rtle) {
@@ -367,7 +390,7 @@ namespace NDoc3.Core.Reflection
 
 		#region EditorBrowsable filter
 
-		//checks if the member has been flagged with the 
+		//checks if the member has been flagged with the
 		//EditorBrowsableState.Never value
 		private bool IsEditorBrowsable(MemberInfo minfo)
 		{
@@ -410,7 +433,7 @@ namespace NDoc3.Core.Reflection
 				type = type.GetGenericTypeDefinition();
 			}
 
-			//If the type has a CompilerGenerated attribute then we don't want to document it 
+			//If the type has a CompilerGenerated attribute then we don't want to document it
 			//as it is an internal artifact of the compiler
 			if (type.IsDefined(typeof(System.Runtime.CompilerServices.CompilerGeneratedAttribute), false)) {
 				return false;
@@ -450,8 +473,8 @@ namespace NDoc3.Core.Reflection
 		private bool MustDocumentMethod(MethodBase method)
 		{
 			//Ignore MC++ destructor.
-			//The __dtor function is just a wrapper that just calls the 
-			//Finalize method; all code you write in the destructor is 
+			//The __dtor function is just a wrapper that just calls the
+			//Finalize method; all code you write in the destructor is
 			//actually written to the finalize method. So, we will filter
 			//it out of the documentation by default...
 			if (method.Name == "__dtor")
@@ -761,7 +784,7 @@ namespace NDoc3.Core.Reflection
 		///  WriteAssembly
 		///		WriteCustomAttributes
 		///		WriteModules
-		/// 
+		///
 		/// </summary>
 		/// <param name="writer"></param>
 		/// <param name="assembly"></param>
@@ -1054,7 +1077,7 @@ namespace NDoc3.Core.Reflection
 
 				int currGenericArgCount = m.IsGenericMethod ? m.GetGenericArguments().Length : 0;
 				if (genericArgCount == currGenericArgCount
-					&& !IsHidden(m, type) 
+					&& !IsHidden(m, type)
 					&& MustDocumentMethod(m)
 					)
 				{
@@ -1227,7 +1250,25 @@ namespace NDoc3.Core.Reflection
 			WriteCustomAttributes(writer, type);
 
 			WriteDerivedTypes(writer, type);
+			WriteImplementsInterfaces(writer, type);
 
+			if (type.IsGenericType)
+			{
+				WriteGenericArgumentsAndParameters(type, writer);
+				WriteGenericTypeConstraints(type, writer);
+			}
+
+			WriteInterfaceImplementingTypes(writer, type);
+
+			WriteProperties(writer, type, null);
+			WriteMethods(writer, type, null);
+			WriteEvents(writer, type, null);
+
+			writer.WriteEndElement();
+		}
+
+		private void WriteImplementsInterfaces(XmlWriter writer, Type type)
+		{
 			foreach (Type interfaceType in type.GetInterfaces()) {
 				if (MustDocumentType(interfaceType)) {
 					string interName = interfaceType.IsGenericType ? interfaceType.GetGenericTypeDefinition().FullName : interfaceType.FullName;
@@ -1243,22 +1284,6 @@ namespace NDoc3.Core.Reflection
 					writer.WriteEndElement();
 				}
 			}
-
-
-			if (type.IsGenericType)
-			{
-				WriteGenericArgumentsAndParameters(type, writer);
-				WriteGenericTypeConstraints(type, writer);
-			}
-
-
-			WriteInterfaceImplementingTypes(writer, type);
-
-			WriteProperties(writer, type, null);
-			WriteMethods(writer, type, null);
-			WriteEvents(writer, type, null);
-
-			writer.WriteEndElement();
 		}
 
 		/// <summary>Writes XML documenting a delegate.</summary>
@@ -1390,7 +1415,7 @@ namespace NDoc3.Core.Reflection
 				//			if ((type.Attributes & TypeAttributes.AnsiClass) == TypeAttributes.AnsiClass)
 				//			{
 				//				charSet = CharSet.Ansi.ToString(CultureInfo.InvariantCulture);
-				//			} 
+				//			}
 				if ((type.Attributes & TypeAttributes.UnicodeClass) == TypeAttributes.UnicodeClass) {
 					charSet = CharSet.Unicode.ToString();
 				}
@@ -1402,7 +1427,7 @@ namespace NDoc3.Core.Reflection
 				//			if ((type.Attributes & TypeAttributes.AutoLayout) == TypeAttributes.AutoLayout)
 				//			{
 				//				layoutKind = LayoutKind.Auto.ToString(CultureInfo.InvariantCulture);
-				//			} 
+				//			}
 				if ((type.Attributes & TypeAttributes.ExplicitLayout) == TypeAttributes.ExplicitLayout) {
 					layoutKind = LayoutKind.Explicit.ToString();
 				}
@@ -1993,7 +2018,7 @@ namespace NDoc3.Core.Reflection
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="parent"></param>
 		/// <param name="value"></param>
@@ -3444,7 +3469,7 @@ namespace NDoc3.Core.Reflection
 		/// looks like it backs a property, and the BaseDocumenterConfig
 		/// property is set appropriately, then this adds a
 		/// summary indicating that.</para>
-		/// <para>Note that this design will call multiple fields the 
+		/// <para>Note that this design will call multiple fields the
 		/// backer for a single property.</para>
 		/// <para/>This also will call a public field a backer for a
 		/// property, when typically that wouldn't be the case.
@@ -3515,9 +3540,9 @@ namespace NDoc3.Core.Reflection
 		/// </summary>
 		/// <param name="expectedPropertyName">The name of the property to
 		/// find.</param>
-		/// <param name="type">The type in which to search for 
+		/// <param name="type">The type in which to search for
 		/// the property.</param>
-		/// <returns>PropertyInfo - The property info, or null for 
+		/// <returns>PropertyInfo - The property info, or null for
 		/// not found.</returns>
 		private PropertyInfo FindProperty(string expectedPropertyName,
 			Type type)

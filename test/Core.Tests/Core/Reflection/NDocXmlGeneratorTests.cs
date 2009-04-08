@@ -12,7 +12,7 @@ namespace NDoc3.Core.Reflection
 		/// <summary>
 		/// The reason for introducing ComparableFileInfo
 		/// </summary>
-		[Test, Ignore]
+		[Test, Explicit]
 		public void FileInfoComparison()
 		{
 			FileInfo fi1 = new FileInfo("C:\\Test.xml");

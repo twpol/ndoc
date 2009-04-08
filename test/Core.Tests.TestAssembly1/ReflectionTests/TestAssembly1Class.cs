@@ -5,7 +5,7 @@ namespace NDoc3.ReflectionTests
 	/**
 	 * Some Javadoc Comment
 	 */
-	public interface IGenericInterface<T>
+	public interface IGenericInterface<T> where T:class
 	{}
 
 	/// <summary>
@@ -61,7 +61,7 @@ namespace NDoc3.ReflectionTests
 	/// </summary>
 	/// <typeparam name="S"></typeparam>
 	/// <typeparam name="T"></typeparam>
-	public class TestGenericClass<S, T> : IGenericInterface<S>
+	public class TestGenericClass<S, T> : IGenericInterface<S> where S:class
 	{
 		/**
 		 * Some invalid comment
@@ -75,7 +75,8 @@ namespace NDoc3.ReflectionTests
 		/// <param name="t">some arg</param>
 		/// <param name="u">some other generic arg</param>
 		/// <returns>default of T</returns>
-		public T ReturnsGenericClassType<U>(S s, TestGenericClass<U,T> t, ref U u) {
+		public T ReturnsGenericClassType<U>(S s, TestGenericClass<U,T> t, ref U u) where U:class
+		{
 			return default(T); 
 		}
 
