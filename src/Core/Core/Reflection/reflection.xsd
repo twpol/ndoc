@@ -276,8 +276,8 @@
 				<xs:group ref="attributeGroup" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element ref="parameter" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element ref="implements" minOccurs="0" maxOccurs="1"/>
-				<xs:element ref="genericconstraints" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element ref="genericargument" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="genericconstraints" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
 			<xs:attribute name="name" type="xs:string" use="required"/>
 			<xs:attribute name="displayName" type="xs:string" use="required"/>

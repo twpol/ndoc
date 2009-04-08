@@ -207,7 +207,7 @@
 			<div class="tablediv">
 				<table class="dtTABLE" cellspacing="0">
 					<xsl:apply-templates select="*[local-name()=$member and @access='Public' and not(@contract='Static')]">
-						<xsl:sort select="@name" />
+						<xsl:sort select="@displayName" />
 					</xsl:apply-templates>
 				</table>
 			</div>

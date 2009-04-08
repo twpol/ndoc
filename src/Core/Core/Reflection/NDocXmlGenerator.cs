@@ -1327,6 +1327,7 @@ namespace NDoc3.Core.Reflection
 			}
 
 			if (type.IsGenericType) {
+				WriteGenericArgumentsAndParameters(type, writer);
 				WriteGenericTypeConstraints(type, writer);
 			}
 
@@ -2522,11 +2523,8 @@ namespace NDoc3.Core.Reflection
 				}
 
 				if (method.IsGenericMethod) {
-					WriteGenericMethodConstraints(method, writer);
-				}
-
-				if (method.IsGenericMethod) {
 					WriteGenericArgumentsAndParametersMethod(method, writer);
+					WriteGenericMethodConstraints(method, writer);
 				}
 
 				writer.WriteEndElement();

@@ -133,20 +133,20 @@ namespace NDoc3.Documenter.Msdn
 		// exposed to XSLT
 		public string GetFilenameForOperatorOverloads(string assemblyName, string typeID, string operatorName)
 		{
-			return GetFilenameForIdSpecial(assemblyName, typeID, "." + operatorName + "~Overloads");
+			return GetFilenameForIdSpecial(assemblyName, typeID, "." + operatorName.Replace('`', '$') + "~Overloads");
 		}
 
 		// exposed to XSLT
 		public string GetFilenameForPropertyOverloads(string assemblyName, string typeID, string propertyName)
 		{
-			string fileName = GetFilenameForIdSpecial(assemblyName, typeID, "." + propertyName + "~Overloads");
+			string fileName = GetFilenameForIdSpecial(assemblyName, typeID, "." + propertyName.Replace('`', '$') + "~Overloads");
 			return fileName;
 		}
 
 		// exposed to XSLT
 		public string GetFilenameForMethodOverloads(string assemblyName, string typeID, string methodName)
 		{
-			string fileName = GetFilenameForIdSpecial(assemblyName, typeID, "." + methodName + "~Overloads");
+			string fileName = GetFilenameForIdSpecial(assemblyName, typeID, "." + methodName.Replace('`', '$') + "~Overloads");
 			return fileName;
 		}
 

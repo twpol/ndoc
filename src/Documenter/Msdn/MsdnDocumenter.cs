@@ -1015,14 +1015,15 @@ namespace NDoc3.Documenter.Msdn
 
 				for (int i = 0; i < nNodes; i++) {
 					XmlNode methodNode = methodNodes[indexes[i]];
-					string methodName = GetNodeDisplayName(methodNode);
+					string methodDisplayName = GetNodeDisplayName(methodNode);
+					string methodName = GetNodeName(methodNode);
 					string methodID = GetNodeId(methodNode);
 
 					if (IsMethodFirstOverload(methodNodes, indexes, i)) {
 						bOverloaded = true;
 
 						fileName = ctx._nameResolver.GetFilenameForMethodOverloads(ctx.CurrentAssemblyName, typeID, methodName);
-						ctx.htmlHelp.AddFileToContents(methodName + " Method", fileName);
+						ctx.htmlHelp.AddFileToContents(methodDisplayName + " Method", fileName);
 
 						arguments = new XsltArgumentList();
 						arguments.AddParam("member-id", String.Empty, methodID);
@@ -1037,9 +1038,9 @@ namespace NDoc3.Documenter.Msdn
 						string pageTitle;
 						if (bOverloaded) {
 							XmlNodeList parameterNodes = ctx.SelectNodes(methodNode, "ndoc:parameter");
-							pageTitle = methodName + GetParamList(parameterNodes) + " Method ";
+							pageTitle = methodDisplayName + GetParamList(parameterNodes) + " Method ";
 						} else {
-							pageTitle = methodName + " Method";
+							pageTitle = methodDisplayName + " Method";
 						}
 						ctx.htmlHelp.AddFileToContents(pageTitle, fileName,
 							HtmlHelpIcon.Page);

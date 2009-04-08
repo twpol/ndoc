@@ -43,7 +43,7 @@
 							<xsl:value-of select="../@name" />
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of select="@name" />
+							<xsl:value-of select="@displayName" />
 						</xsl:otherwise>
 					</xsl:choose>
 					<xsl:text>&#32;</xsl:text>
@@ -56,7 +56,7 @@
 						<xsl:value-of select="../@name" />
 						<xsl:if test="local-name()='method' or local-name()='property' ">
 							<xsl:text>.</xsl:text>
-							<xsl:value-of select="@name" />
+							<xsl:value-of select="@displayName" />
 						</xsl:if>
 						<xsl:text>&#160;</xsl:text>
 						<xsl:value-of select="$childType" />
@@ -172,7 +172,7 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template match="ndoc:constructor | ndoc:method | ndoc:operator" mode="syntax">
-		<xsl:call-template name="member-syntax2" />
+		<xsl:call-template name="cs-member-syntax-overload" />
 	</xsl:template>
 	<!-- -->
 	<xsl:template match="property" mode="syntax">

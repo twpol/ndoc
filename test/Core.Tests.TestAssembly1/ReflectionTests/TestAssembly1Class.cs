@@ -8,12 +8,30 @@ namespace NDoc3.ReflectionTests
 	public interface IGenericInterface<T> where T:class
 	{}
 
+	///<summary>
+	/// A generic delegate type
+	///</summary>
+	///<typeparam name="X">the delegate's type</typeparam>
+	public delegate void GenericDelegate<X>();
+
 	/// <summary>
 	/// Boy..
 	/// </summary>
 	/// <typeparam name="X">The generic arg doc</typeparam>
 	public struct GenericStruct<X> : IGenericInterface<X> where X:TestAssembly1Class
-	{}
+	{
+		///<summary>
+		/// A nested delegate type
+		///</summary>
+		///<typeparam name="X">the delegate's type</typeparam>
+		public delegate void NestedDelegate<X>();
+
+		///<summary>
+		/// A nested type
+		///</summary>
+		public class NestedType
+		{}
+	}
 
 	/// <summary>
 	/// TestAssembly1Class in TestAssembly1
@@ -54,6 +72,29 @@ namespace NDoc3.ReflectionTests
 		{
 			return ""+x;
 		}
+
+		/// <summary>
+		/// The documentation
+		/// </summary>
+		/// <typeparam name="T">some type</typeparam>
+		/// <param name="x">some arg</param>
+		/// <returns>T's default</returns>
+		public string OverloadedMethod<T>(T x)
+		{
+			return ""+x;
+		}
+
+		/// <summary>
+		/// The documentation
+		/// </summary>
+		/// <typeparam name="T">some type</typeparam>
+		/// <param name="x">some arg</param>
+		/// <param name="y"></param>
+		/// <returns>T's default</returns>
+		public string OverloadedMethod<T>(T x, Predicate<T> y)
+		{
+			return ""+x;
+		}
 	}
 
 	/// <summary>
@@ -61,7 +102,7 @@ namespace NDoc3.ReflectionTests
 	/// </summary>
 	/// <typeparam name="S"></typeparam>
 	/// <typeparam name="T"></typeparam>
-	public class TestGenericClass<S, T> : IGenericInterface<S> where S:class
+	public class TestGenericClass<S, T> : TestAssembly1Class, IGenericInterface<S> where S:class
 	{
 		/**
 		 * Some invalid comment

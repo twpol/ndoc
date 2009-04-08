@@ -700,6 +700,11 @@
 					<xsl:with-param name="runtime-type" select="$node/@name" />
 				</xsl:call-template>
 			</xsl:when>
+			<xsl:when test="$node/@typeId != ''">
+				<xsl:call-template name="vb-type">
+					<xsl:with-param name="runtime-type" select="substring-after($node/@typeId, ':')" />
+				</xsl:call-template>
+			</xsl:when>
 			<xsl:when test="$node/@id != ''">
 				<xsl:call-template name="vb-type">
 					<xsl:with-param name="runtime-type" select="substring-after($node/@id, ':')" />

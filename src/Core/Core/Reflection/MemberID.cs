@@ -141,6 +141,9 @@ namespace NDoc3.Core.Reflection
 		/// <returns>The namespace name (full name)</returns>
 		private static string GetTypeNamespaceName(Type type)
 		{
+			if (type.IsByRef)
+				type = type.GetElementType();
+
 			// de-ref array types
 			while(type.IsArray) 
 				type = type.GetElementType();

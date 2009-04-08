@@ -579,7 +579,7 @@ namespace NDoc3.Documenter.NativeHtmlHelp2.Engine
 		}
 
 		/// <summary>
-		/// Exposes <see cref="System.String.Replace"/> to XSLT
+		/// Exposes <see cref="System.String.Replace(string,string)"/> to XSLT
 		/// </summary>
 		/// <param name="str">The string to search</param>
 		/// <param name="oldValue">The string to search for</param>

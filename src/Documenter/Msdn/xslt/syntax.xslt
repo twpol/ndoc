@@ -63,27 +63,30 @@
 				<xsl:call-template name="get-displayname-csharp">
 					<xsl:with-param name="onlyWriteGenericLinks" select="true()"/>
 				</xsl:call-template>
-				<!-- Write generic constraints if there are any -->
-				<xsl:if test="local-name() != 'delegate' and ndoc:genericconstraints">
-					<xsl:call-template name="genericconstraints" />
-				</xsl:if>
 				<!-- Is not a enumeration and not a delegate? -->
 				<xsl:if test="local-name() != 'delegate'">
 					<!-- Handel derivation -->
 					<xsl:call-template name="derivation" />
 				</xsl:if>
-				<!-- If this is a delegate -->
-				<xsl:if test="local-name() = 'delegate'">
-					<!-- Write parameters -->
-					<xsl:call-template name="parameters">
-						<xsl:with-param name="version">long</xsl:with-param>
-						<xsl:with-param name="namespace-name" select="../@name" />
-					</xsl:call-template>
-					<xsl:if test="ndoc:genericconstraints">
-						<xsl:call-template name="genericconstraints" />
-					</xsl:if>
-					<xsl:text>;</xsl:text>
-				</xsl:if>
+				<xsl:choose>
+					<xsl:when test="local-name() = 'delegate'">
+						<!-- Write parameters -->
+						<xsl:call-template name="parameters">
+							<xsl:with-param name="version">long</xsl:with-param>
+							<xsl:with-param name="namespace-name" select="../@name" />
+						</xsl:call-template>
+						<xsl:if test="ndoc:genericconstraints">
+							<xsl:call-template name="genericconstraints" />
+						</xsl:if>
+						<xsl:text>;</xsl:text>
+					</xsl:when>
+					<xsl:otherwise>
+						<!-- Write generic constraints if there are any -->
+						<xsl:if test="local-name() != 'delegate' and ndoc:genericconstraints">
+							<xsl:call-template name="genericconstraints" />
+						</xsl:if>
+					</xsl:otherwise>
+				</xsl:choose>
 			</div>
 		</div>
 	</xsl:template>
@@ -238,8 +241,8 @@
 		</div>
 	</xsl:template>
 
-	<!-- C# Member Syntax 2 -->
-	<xsl:template name="member-syntax2">
+	<!-- C# Member Syntax in individual method overload list -->
+	<xsl:template name="cs-member-syntax-overload">
 		<!-- If this member hides another member -->
 		<xsl:if test="@hiding">
 			<xsl:text>new&#160;</xsl:text>
@@ -297,7 +300,7 @@
 					<xsl:with-param name="datatype" select="substring-after(ndoc:returnType/@id, ':')" />
 				</xsl:call-template>
 				<xsl:text>&#160;</xsl:text>
-				<xsl:value-of select="@name" />
+				<xsl:value-of select="@displayName" />
 			</xsl:otherwise>
 		</xsl:choose>
 		<!-- If the member is not a conversion operator, write parameters in short mode -->
@@ -504,7 +507,13 @@
 					<xsl:when test="@direction = 'out'">out&#160;</xsl:when>
 					<xsl:when test="@isParamArray = 'true'">params&#160;</xsl:when>
 				</xsl:choose>
-				<xsl:call-template name="get-displayname-csharp"/>
+				<xsl:call-template name="get-displayname-csharp">
+					<xsl:with-param name="onlyWriteGenericLinks">
+						<xsl:if test="$version='short'">
+							<xsl:value-of select="true()"/>
+						</xsl:if>
+					</xsl:with-param>
+				</xsl:call-template>
 				<!-- If this should be written in long mode, write name i italic -->
 				<xsl:if test="$version='long'">
 					<xsl:text>&#160;</xsl:text>
@@ -768,6 +777,12 @@
 			<xsl:when test="local-name($node) = 'genericargument'">
 				<xsl:call-template name="get-datatype">
 					<xsl:with-param name="datatype" select="$node/@name" />
+				</xsl:call-template>
+			</xsl:when>
+			<!-- handle parameters of generic type arguments (both, class and method generic args) -->
+			<xsl:when test="$node/@typeId != ''">
+				<xsl:call-template name="get-datatype">
+					<xsl:with-param name="datatype" select="substring-after($node/@typeId, ':')" />
 				</xsl:call-template>
 			</xsl:when>
 			<xsl:when test="$node/@id != ''">
