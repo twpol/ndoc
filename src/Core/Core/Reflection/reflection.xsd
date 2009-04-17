@@ -122,9 +122,9 @@
 	</xs:attributeGroup>
 
 	<xs:element name="documentation">
-		<xs:complexType>
+		<xs:complexType mixed ="true">
 			<xs:choice minOccurs="1" maxOccurs="unbounded">
-				<xs:any processContents="skip"/>
+				<xs:any namespace="##any" processContents="skip"/>
 			</xs:choice>
 		</xs:complexType>
 	</xs:element>

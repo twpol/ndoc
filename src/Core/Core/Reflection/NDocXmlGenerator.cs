@@ -851,13 +851,13 @@ namespace NDoc3.Core.Reflection
 			StringCollection namespaceNames = GetNamespaceNames(types);
 
 			foreach (string namespaceName in namespaceNames) {
-				string ourNamespaceName = namespaceName ?? "(global)";
+				string ourNamespaceName = string.IsNullOrEmpty(namespaceName) ? "(global)" : namespaceName;
 
 				if (_notEmptyNamespaces.ContainsKey(ourNamespaceName) || _rep.DocumentEmptyNamespaces) {
 
 					string namespaceSummary = null;
 					if (_rep.UseNamespaceDocSummaries) {
-						if (namespaceName == null)
+                        if (ourNamespaceName == "(global)")
 							namespaceSummary = _assemblyDocCache.GetDoc(module.AssemblyName, "T:NamespaceDoc");
 						else
 							namespaceSummary = _assemblyDocCache.GetDoc(module.AssemblyName, "T:" + namespaceName + ".NamespaceDoc");

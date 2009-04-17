@@ -474,7 +474,7 @@
 	<xs:element name="documentation">
 		<xs:complexType mixed="true">
 			<xs:choice minOccurs="0" maxOccurs="unbounded">
-				<xs:any namespace="##other" processContents="skip" />
+				<xs:any namespace="##any" processContents="skip" />
 			</xs:choice>
 		</xs:complexType>
 	</xs:element>

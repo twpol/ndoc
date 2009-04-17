@@ -1,5 +1,11 @@
 ﻿/// <summary>
 /// Info about TestAssembly1
 /// </summary>
-public class AssemblyDoc
+internal class AssemblyDoc
 {}
+
+/// <summary>
+/// Info about global namespace
+/// </summary>
+internal class NamespaceDoc
+{ }

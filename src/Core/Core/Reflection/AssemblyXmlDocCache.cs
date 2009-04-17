@@ -100,7 +100,7 @@ namespace NDoc3.Core.Reflection
 		/// Populates cache from the given file.
 		/// </summary>
 		/// <param name="fileName">Fully-qualified filename of xml file with which to populate the cache.</param>
-		public void CacheDocFile(string fileName)
+        public void CacheDocFile(string fileName)
 		{
 			XmlTextReader reader = new XmlTextReader(fileName);
 			reader.WhitespaceHandling = WhitespaceHandling.All;
@@ -112,7 +112,7 @@ namespace NDoc3.Core.Reflection
 		/// Cache the xmld docs into a hashtable for faster access.
 		/// </summary>
 		/// <param name="reader">An XmlReader containg the docs the cache</param>
-		private void CacheDocs(XmlReader reader)
+        private void CacheDocs(XmlReader reader)
 		{
 			XPathDocument xpathDoc = new XPathDocument(reader);
 			XPathNavigator doc = xpathDoc.CreateNavigator();
@@ -178,17 +178,20 @@ namespace NDoc3.Core.Reflection
 			xmldoc.Load(reader);
 
 			if (xmldoc.DocumentElement != null) {
-				XmlNodeList textNodes = xmldoc.DocumentElement.SelectNodes("text()");
-				if (textNodes.Count == 0)
-				{
-					CleanupNodes(key, xmldoc.DocumentElement.ChildNodes);
+                Trace.WriteLine(string.Format("TRACE: processing comment '{0}':\n{1}", key, doc));
+                XmlNodeList textNodes = xmldoc.DocumentElement.SelectNodes("comment() | text() | processing-instruction()");
 
+                bool isTextNodeOnly = xmldoc.DocumentElement.ChildNodes.Count == textNodes.Count; // xmldoc.DocumentElement.FirstChild is XmlText;
+				if (!isTextNodeOnly)
+				{
+                    CleanupNodes(key, xmldoc.DocumentElement.ChildNodes);
 					ProcessSeeLinks(key, xmldoc.DocumentElement.ChildNodes);
 					return xmldoc.DocumentElement.InnerXml;
 				}
-				return "<summary>" + xmldoc.DocumentElement.InnerXml + "</summary>";
+                Trace.WriteLine(string.Format("WARN: comment '{0}' is not well formed", key));
+				return "<summary>" + xmldoc.DocumentElement.InnerText + "</summary>";
 			}
-			throw new Exception("DocumentElement are null");
+			throw new Exception("DocumentElement is null");
 		}
 
 		/// <summary>

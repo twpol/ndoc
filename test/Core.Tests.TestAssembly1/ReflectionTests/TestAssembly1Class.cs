@@ -11,6 +11,7 @@ namespace NDoc3.ReflectionTests
 	///<summary>
 	/// A generic delegate type
 	///</summary>
+	/// Invalid Text
 	///<typeparam name="X">the delegate's type</typeparam>
 	public delegate void GenericDelegate<X>();
 
@@ -23,8 +24,8 @@ namespace NDoc3.ReflectionTests
 		///<summary>
 		/// A nested delegate type
 		///</summary>
-		///<typeparam name="X">the delegate's type</typeparam>
-		public delegate void NestedDelegate<X>();
+		///<typeparam name="Y">the delegate's type</typeparam>
+		public delegate void NestedDelegate<Y>();
 
 		///<summary>
 		/// A nested type
