@@ -60,12 +60,11 @@ namespace NDoc3.Core.Reflection
 			_rep = rep ?? new NDocXmlGeneratorParameters();
 			_assemblyLoader = assemblyLoader ?? new AssemblyLoader();
 
-			if (_assemblyLoader is AssemblyLoader) {
-				foreach (FileInfo assemblyFile in _rep.AssemblyFileNames) {
-					// ensure the assembly's path is added to the search list for resolving dependencies
-					((AssemblyLoader)assemblyLoader).AddSearchDirectory(new ReferencePath(assemblyFile.DirectoryName));
-				}
+			foreach (FileInfo assemblyFile in _rep.AssemblyFileNames) {
+				// ensure the assembly's path is added to the search list for resolving dependencies
+				assemblyLoader.AddSearchDirectory(new ReferencePath(assemblyFile.DirectoryName));
 			}
+
 			string DocLangCode = Enum.GetName(typeof(SdkLanguage), _rep.SdkDocLanguage).Replace("_", "-");
 			_externalSummaryCache = new ExternalXmlSummaryCache(DocLangCode);
 

@@ -7,6 +7,7 @@ namespace NDoc3.Core.Reflection
 	internal interface IAssemblyLoader
 	{
 		IAssemblyInfo GetAssemblyInfo(FileInfo assemblyFile);
+		void AddSearchDirectory(ReferencePath path);
 	}
 
 	internal interface IClrElementInfo

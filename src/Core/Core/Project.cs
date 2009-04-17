@@ -135,7 +135,8 @@ namespace NDoc3.Core
 		/// <summary>
 		/// A collection of directories that will be probed when attempting to load assemblies.
 		/// </summary>
-		internal ReferencePathCollection _referencePaths;
+		private ReferencePathCollection _referencePaths;
+
 		/// <summary>Gets a collection of directories that will be probed when attempting to load assemblies.</summary>
 		public ReferencePathCollection ReferencePaths
 		{

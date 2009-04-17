@@ -183,16 +183,20 @@ namespace NDoc3.Core.Reflection
 		{
 			get 
 			{ 
-				return Project._referencePaths;
+				return Project.ReferencePaths;
 			}
 			set
 			{
-				Project._referencePaths = value;
+				Project.ReferencePaths.Clear();
+				if (value != null)
+				{
+					Project.ReferencePaths.AddRange(value);
+				}
 				SetDirty();
 			}
 		}
 
-		void ResetReferencePaths() { Project._referencePaths = new ReferencePathCollection(); }
+		void ResetReferencePaths() { Project.ReferencePaths.Clear(); }
 
 		#region Show Missing Documentation Options
 
@@ -451,13 +455,13 @@ namespace NDoc3.Core.Reflection
 			}
 		}
 
-		private bool _DocumentProtectedInternalAsProtected;
+		private bool _DocumentProtectedInternalAsProtected = true;
 
 		/// <summary>Gets or sets the DocumentProtectedInternalAsProtected property.</summary>
 		/// <remarks>If this is true, NDoc3 will treat "protected internal" members as "protected" only.</remarks>
 		[Category("Visibility")]
 		[Description("If true, NDoc3 will treat \"protected internal\" members as \"protected\" only.")]
-		[DefaultValue(false)]
+		[DefaultValue(true)]
 		public bool DocumentProtectedInternalAsProtected
 		{
 			get { return _DocumentProtectedInternalAsProtected; }

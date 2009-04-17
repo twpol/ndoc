@@ -123,7 +123,7 @@ namespace NDoc3.Core.Reflection
 				string ID = node.GetAttribute("name", string.Empty); 
 				//Handles multidimensional arrays by replacing 0: from XML doc to the reflection type
 				// TODO(EE): find out, if this still applies 
-				// ID = ID.Replace("0:", "");
+//				ID = ID.Replace("0:", "");
 				XmlDocKey key = new XmlDocKey(assemblyName, ID);
 
 				string slashdoc = node.InnerXml.Trim();
@@ -177,17 +177,16 @@ namespace NDoc3.Core.Reflection
 			xmldoc.PreserveWhitespace = true;
 			xmldoc.Load(reader);
 
-
 			if (xmldoc.DocumentElement != null) {
-				if (xmldoc.DocumentElement.ChildNodes.Count > 0
-					&& !(xmldoc.DocumentElement.FirstChild is XmlText))
+				XmlNodeList textNodes = xmldoc.DocumentElement.SelectNodes("text()");
+				if (textNodes.Count == 0)
 				{
 					CleanupNodes(key, xmldoc.DocumentElement.ChildNodes);
 
 					ProcessSeeLinks(key, xmldoc.DocumentElement.ChildNodes);
 					return xmldoc.DocumentElement.InnerXml;
 				}
-				return "<summary>" + xmldoc.DocumentElement.InnerText + "</summary>";
+				return "<summary>" + xmldoc.DocumentElement.InnerXml + "</summary>";
 			}
 			throw new Exception("DocumentElement are null");
 		}
