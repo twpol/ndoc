@@ -1468,7 +1468,7 @@ namespace NDoc3.Documenter.Msdn
 
 					//Use new overload so we don't get obsolete warnings - clean compile :)
 
-					XslTransform(ctx, transformName, ctx.GetXPathNavigator(), arguments, streamWriter);
+					XslTransform(ctx, transformName, ctx.GetXPathNavigable(), arguments, streamWriter);
 				}
 			}
 			catch(Exception ex)

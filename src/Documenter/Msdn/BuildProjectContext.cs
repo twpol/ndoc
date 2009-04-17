@@ -13,10 +13,11 @@ namespace NDoc3.Documenter.Msdn
 	{
 		private XmlDocument _xmlDocumentation;
 
-		public XPathNavigator GetXPathNavigator()
+		public IXPathNavigable GetXPathNavigable()
 		{
-			XPathNavigator xpathdoc = new XPathDocument(new XmlNodeReader(_xmlDocumentation), XmlSpace.Preserve).CreateNavigator();
-			return xpathdoc;
+			return _xmlDocumentation;
+//			XPathNavigator xpathdoc = new XPathDocument(new XmlNodeReader(_xmlDocumentation), XmlSpace.Preserve).CreateNavigator();
+//			return xpathdoc;
 		}
 
 		public void SetProjectXml(XmlDocument projectXml, bool mergeAssemblies)
