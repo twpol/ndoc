@@ -191,17 +191,17 @@
 									<a href="{$href}">System.Object</a>
 									<br />
 									<xsl:call-template name="draw-hierarchy">
-										<xsl:with-param name="list" select="descendant::ndoc:base" />
+										<xsl:with-param name="list" select="descendant::ndoc:baseType" />
 										<xsl:with-param name="level" select="1" />
 									</xsl:call-template>
-									<xsl:variable name="typeIndent" select="count(descendant::ndoc:base)" />
+									<xsl:variable name="typeIndent" select="count(descendant::ndoc:baseType)" />
 									<xsl:call-template name="indent">
 										<xsl:with-param name="count" select="$typeIndent+1" />
 									</xsl:call-template>
 									<b>
 										<xsl:value-of select="@displayName" />
 									</b>
-									<xsl:if test="derivedBy">
+									<xsl:if test="ndoc:derivedBy">
 										<xsl:variable name="derivedTypeIndent" select="$typeIndent+2" />
 										<xsl:choose>
 											<xsl:when test="count(ndoc:derivedBy) &lt; 6">

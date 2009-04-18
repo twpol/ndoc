@@ -225,6 +225,8 @@ namespace NDoc3.Documenter.Msdn
 				}
 
 				OnDocBuildingStep(100, "Done.");
+			} catch(DocumenterException dex) {
+				throw;
 			} catch (Exception ex) {
 				throw new DocumenterException(ex.Message, ex);
 			} finally {
@@ -252,11 +254,12 @@ namespace NDoc3.Documenter.Msdn
 			int start = Environment.TickCount;
 #endif
 			//transform the HHC contents file into html
-			using (StreamReader contentsFile = new StreamReader(ctx.HtmlHelpContentFilePath.FullName, Encoding.Default)) {
+			using (StreamReader contentsFile = new StreamReader(ctx.HtmlHelpContentFilePath.FullName, ctx.CurrentFileEncoding)) {
 				XPathDocument xpathDocument = new XPathDocument(contentsFile);
+				string contentsFilename = Path.Combine(ctx.WorkingDirectory.FullName, "contents.html");
 				using (StreamWriter streamWriter = new StreamWriter(
-					File.Open(Path.Combine(ctx.WorkingDirectory.FullName, "contents.html"), FileMode.CreateNew, FileAccess.Write, FileShare.None), Encoding.Default)) {
-					XslTransform(ctx, "htmlcontents", xpathDocument, null, streamWriter);
+					File.Open(contentsFilename, FileMode.CreateNew, FileAccess.Write, FileShare.None), ctx.CurrentFileEncoding)) {
+					XslTransform(ctx, "htmlcontents", xpathDocument, null, streamWriter, contentsFilename);
 				}
 			}
 #if DEBUG
@@ -407,16 +410,16 @@ namespace NDoc3.Documenter.Msdn
 			}
 		}
 
-		private void XslTransform(BuildProjectContext buildContext, string stylesheetName, IXPathNavigable xpathNavigable, XsltArgumentList arguments, TextWriter writer)
+		private void XslTransform(BuildProjectContext buildContext, string stylesheetName, IXPathNavigable xpathNavigable, XsltArgumentList arguments, TextWriter writer, string targetFilename)
 		{
 			//Use new overload so we don't get obsolete warnings - clean compile :)
 			//			XslCompiledTransform stylesheet = stylesheets[stylesheetName];
 			//			stylesheet.Transform(xpathDocument, arguments, writer);
-			XslTransform stylesheet = buildContext.stylesheets[stylesheetName];
+			StyleSheet stylesheet = buildContext.stylesheets[stylesheetName];
 			try {
 				stylesheet.Transform(xpathNavigable, arguments, writer);
-			} catch (Exception ex) {
-				throw new DocumenterException(string.Format("Error transforming document using stylesheet '{0}': {1}", stylesheetName, ex.Message), ex);
+			} catch (XsltException ex) {
+				throw new DocumenterException(string.Format("XSLT error while writing file {0} using stylesheet {1}({2}:{3}) : {4}", targetFilename, stylesheetName, ex.LineNumber, ex.LinePosition, ex.Message));
 			}
 		}
 
@@ -639,20 +642,22 @@ namespace NDoc3.Documenter.Msdn
 			//			ctx.documentedNamespaces.Add(namespaceName);
 
 			if (addDocumentation) {
-				string fileName = ctx._nameResolver.GetFilenameForId(ctx.CurrentAssemblyName, "N:" + namespaceName);
+				string currentAssemblyName = (ctx.MergeAssemblies) ? string.Empty : ctx.CurrentAssemblyName;
 
-				ctx.htmlHelp.AddFileToContents(namespacePart, fileName);
+				string namespaceFilename = ctx._nameResolver.GetFilenameForNamespace(currentAssemblyName, namespaceName);
+
+				ctx.htmlHelp.AddFileToContents(namespacePart, namespaceFilename);
 
 				XsltArgumentList arguments = new XsltArgumentList();
+				arguments.AddParam("merge-assemblies", String.Empty, ctx.MergeAssemblies);
 				arguments.AddParam("namespace", String.Empty, namespaceName);
+				TransformAndWriteResult(ctx, "namespace", arguments, namespaceFilename);
 
-				TransformAndWriteResult(ctx, "namespace", arguments, fileName);
-
+				string namespaceHierarchyFilename = ctx._nameResolver.GetFilenameForNamespaceHierarchy(currentAssemblyName, namespaceName);
 				arguments = new XsltArgumentList();
+				arguments.AddParam("merge-assemblies", String.Empty, ctx.MergeAssemblies);
 				arguments.AddParam("namespace", String.Empty, namespaceName);
-
-				TransformAndWriteResult(ctx, "namespacehierarchy", arguments,
-										ctx._nameResolver.GetFilenameForNamespaceHierarchy(ctx.CurrentAssemblyName, namespaceName));
+				TransformAndWriteResult(ctx, "namespacehierarchy", arguments, namespaceHierarchyFilename);
 			} else {
 				ctx.htmlHelp.AddFileToContents(namespacePart);
 			}
@@ -1448,7 +1453,8 @@ namespace NDoc3.Documenter.Msdn
 					File.Open(fullPath, FileMode.Create),
 					ctx.CurrentFileEncoding)) {
 					string DocLangCode = Enum.GetName(typeof(SdkLanguage), MyConfig.SdkDocLanguage).Replace("_", "-");
-					MsdnXsltUtilities utilities = new MsdnXsltUtilities(ctx._nameResolver, ctx.CurrentAssemblyName, MyConfig.SdkDocVersionString, DocLangCode, MyConfig.SdkLinksOnWeb, ctx.CurrentFileEncoding);
+					
+					MsdnXsltUtilities utilities = new MsdnXsltUtilities(ctx.stylesheets[transformName], ctx._nameResolver, ctx.CurrentAssemblyName, MyConfig.SdkDocVersionString, DocLangCode, MyConfig.SdkLinksOnWeb, ctx.CurrentFileEncoding);
 
 					if (arguments.GetParam("assembly-name", string.Empty) == null) {
 						arguments.AddParam("assembly-name", String.Empty, ctx.CurrentAssemblyName);
@@ -1468,12 +1474,12 @@ namespace NDoc3.Documenter.Msdn
 
 					//Use new overload so we don't get obsolete warnings - clean compile :)
 
-					XslTransform(ctx, transformName, ctx.GetXPathNavigable(), arguments, streamWriter);
+					XslTransform(ctx, transformName, ctx.GetXPathNavigable(), arguments, streamWriter, fullPath);
 				}
 			}
-			catch(Exception ex)
+			catch(IOException ex)
 			{
-				throw new DocumenterException(string.Format("Failed writing to file {0}", filename), ex);
+				throw new DocumenterException(string.Format("IO error while creating file {0}", filename), ex);
 			}
 //			catch (PathTooLongException e) {
 //				throw new PathTooLongException(e.Message + "\nThe file that NDoc3 was trying to create had the following name:\n" + Path.Combine(ctx.WorkingDirectory.FullName, filename));

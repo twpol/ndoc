@@ -1,7 +1,11 @@
 using System;
+using System.Collections;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Globalization;
+using System.Reflection;
+using System.Xml.XPath;
+using System.Xml.Xsl;
 using NDoc3.Support;
 
 namespace NDoc3.Documenter.Msdn
@@ -11,6 +15,55 @@ namespace NDoc3.Documenter.Msdn
 	/// </summary>
 	public class MsdnXsltUtilities
 	{
+		/// <summary>
+		/// an Xslt function extension that dynamically evaluates xpath expressions
+		/// </summary>
+		private class FuncEvaluate : IXsltContextFunction
+		{
+			public object Invoke(XsltContext xsltContext, object[] args, XPathNavigator docContext)
+			{
+				XPathNavigator nav = (XPathNavigator)args[0];
+				string expr = nav.Value;
+				XPathExpression xpath = docContext.Compile(expr);
+				xpath.SetContext(xsltContext);
+				object result = docContext.Evaluate(xpath);
+				return result;
+			}
+
+			public int Minargs
+			{
+				get { return 1; }
+			}
+
+			public int Maxargs
+			{
+				get { return 1; }
+			}
+
+			public XPathResultType ReturnType
+			{
+				get { return XPathResultType.NodeSet; }
+			}
+
+			public XPathResultType[] ArgTypes
+			{
+				get { return new XPathResultType[] { XPathResultType.String }; }
+			}
+		}
+
+		static MsdnXsltUtilities()
+		{
+			// install evaluate() function 
+
+			FieldInfo fiCompiledStylesheet = typeof(XslTransform).GetField("_CompiledStylesheet", BindingFlags.Instance | BindingFlags.NonPublic);
+
+			Type TXsltCompileContext = fiCompiledStylesheet.FieldType.Assembly.GetType("System.Xml.Xsl.XsltOld.XsltCompileContext");
+			FieldInfo fiFunctionTable = TXsltCompileContext.GetField("s_FunctionTable", BindingFlags.Static | BindingFlags.NonPublic);
+			Hashtable functionTable = (Hashtable)fiFunctionTable.GetValue(null);
+
+			functionTable["evaluate"] = new FuncEvaluate();
+		}
+
 		private const string helpURL = "ms-help://";
 		private const string sdkRoot = "/cpref/html/frlrf";
 		private const string sdkDocPageExt = ".htm";

@@ -95,10 +95,6 @@ namespace NDoc3.Documenter.Msdn
 		// exposed to XSLT
 		public string GetFilenameForNamespaceHierarchy(string assemblyName, string namespaceName)
 		{
-			if (mergeAssemblies)
-				assemblyName = string.Empty;
-			if (string.IsNullOrEmpty(namespaceName))
-				namespaceName = "(global)";
 			return GetFilenameForIdSpecial(assemblyName, "N:" + namespaceName, "~Hierarchy");
 		}
 
@@ -331,8 +327,12 @@ namespace NDoc3.Documenter.Msdn
 
 		private void RegisterNamespace(string assemblyName, string namespaceName)
 		{
+			if (string.IsNullOrEmpty(namespaceName))
+			{
+				namespaceName = "(global)";
+			}
 			string namespaceId = "N:" + namespaceName;
-			Register(assemblyName, namespaceId, namespaceName, CalculateFilenameForId(assemblyName, "N:" + namespaceName, null));
+			Register(assemblyName, namespaceId, namespaceName, CalculateFilenameForId(assemblyName, namespaceId, null));
 		}
 
 		private void RegisterType(string assemblyName, string typeId, string displayName)
@@ -398,8 +398,9 @@ namespace NDoc3.Documenter.Msdn
 				filename = fileNames[memberId];
 			}
 
+//			Debug.Assert(filename != null, string.Format("Filename for assembly:memberId [{0}:{1}] not found", currentAssemblyName, memberId));
 			//			Debug.WriteLine(string.Format("GetFilenameForIdInternal('{0}','{1}') => {2}", currentAssemblyName, memberId, filename));
-			return filename;
+			return filename ?? string.Empty;
 		}
 
 		private string GetFilenameForIdSpecial(string assemblyName, string memberId, string postfix)

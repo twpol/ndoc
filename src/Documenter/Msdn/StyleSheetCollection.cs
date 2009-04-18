@@ -1,4 +1,5 @@
-// StyleSheetCollection
+#region License
+
 // Copyright (C) 2004 Kevin Downs
 // Parts Copyright (c) 2003 Don Kackman
 //
@@ -16,12 +17,14 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+#endregion
+
 using System;
+using System.Configuration;
 using System.IO;
 using System.Collections;
-using System.Xml;
-using System.Xml.Xsl;
 using System.Diagnostics;
+using System.Reflection;
 using NDoc3.Core;
 using NDoc3.Documenter.Msdn.xslt;
 
@@ -76,7 +79,9 @@ namespace NDoc3.Documenter.Msdn
 
 		private static string MakeAbsolutePath(string path)
 		{
-			return "file://" + Path.GetFullPath(Path.Combine(System.Windows.Forms.Application.StartupPath, String.Format(path, Path.DirectorySeparatorChar)) );
+			string appPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+			Debug.Assert(System.Windows.Forms.Application.StartupPath.Equals(appPath));
+			return "file://" + Path.GetFullPath(Path.Combine(appPath, String.Format(path, Path.DirectorySeparatorChar)) );
 		}
 
 
@@ -87,66 +92,18 @@ namespace NDoc3.Documenter.Msdn
 		/// <summary>
 		/// Return a named stylesheet from the collection
 		/// </summary>
-		public XslTransform this[ string name ]
+		public StyleSheet this[ string name ]
 		{
 			get
 			{
 				Debug.Assert( base.InnerHashtable.Contains( name ) );
-				return (XslTransform)base.InnerHashtable[name];
+				return (StyleSheet)base.InnerHashtable[name];
 			}
 		}
-//		/// <summary>
-//		/// Return a named stylesheet from the collection
-//		/// </summary>
-//		public XslCompiledTransform this[ string name ]
-//		{
-//			get
-//			{
-//				Debug.Assert( base.InnerHashtable.Contains( name ) );
-//				return (XslCompiledTransform)base.InnerHashtable[name];
-//			}
-//		}
 
 		private void AddFrom( string name, XsltResourceResolver resolver )
 		{
-			base.InnerHashtable.Add( name, MakeTransform( name, resolver ) );
+			base.InnerHashtable.Add( name, new StyleSheet( name, resolver ) );
 		}
-
-		private XslTransform MakeTransform( string name,  XmlResolver resolver)
-		{
-			try
-			{
-				Trace.WriteLine( string.Format("Compiling {0}.xslt", name) );
-				XmlReader reader=(XmlReader)resolver.GetEntity(new Uri("res:" + name + ".xslt"),null,typeof(XmlReader));
-
-				XslTransform transform = new XslTransform();
-				transform.Load(reader, resolver);
-				return transform;
-			}
-			catch ( XsltException e )
-			{
-				throw new Exception(string.Format("Error compiling the stylesheet '{0}': {1} at {2}:{3}", name, e.Message, e.LineNumber, e.LinePosition), e);
-			}
-		}
-
-//		private XslCompiledTransform MakeCompiledTransform( string name,  XmlResolver resolver)
-//		{
-//			try
-//			{
-//				Trace.WriteLine( string.Format("Compiling {0}.xslt", name) );
-//				XmlReader reader=(XmlReader)resolver.GetEntity(new Uri("res:" + name + ".xslt"),null,typeof(XmlReader));
-//
-////				transform.Load(reader, resolver, Assembly.GetExecutingAssembly().Evidence);
-//				XsltSettings settings = new XsltSettings(false, true);
-//				XslCompiledTransform transform = new XslCompiledTransform();
-//				transform.Load(reader, settings, resolver);
-//				return transform;
-//			}
-//			catch ( XsltException e )
-//			{
-//				throw new Exception(string.Format("Error compiling the stylesheet '{0}': {1} at {2}:{3}", name, e.Message, e.LineNumber, e.LinePosition), e);
-//			}
-//		}
-
 	}
 }

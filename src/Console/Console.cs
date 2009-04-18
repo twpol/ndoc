@@ -120,7 +120,11 @@ namespace NDoc3.ConsoleApplication
 										project.ActiveDocumenter = info;
 										documenterConfig = project.ActiveConfig;
 										projectSet = true;
-										Directory.SetCurrentDirectory(Path.GetDirectoryName(val));
+										string directoryName = Path.GetDirectoryName(val);
+										if (!string.IsNullOrEmpty(directoryName))
+										{
+											Directory.SetCurrentDirectory(directoryName);
+										}
 										Debug.WriteLine(Directory.GetCurrentDirectory());
 										break;
 									case "recurse":

@@ -11,13 +11,12 @@ namespace NDoc3.Documenter.Msdn
 {
 	internal class BuildProjectContext : IDisposable
 	{
+		private bool _mergeAssemblies;
 		private XmlDocument _xmlDocumentation;
 
 		public IXPathNavigable GetXPathNavigable()
 		{
 			return _xmlDocumentation;
-//			XPathNavigator xpathdoc = new XPathDocument(new XmlNodeReader(_xmlDocumentation), XmlSpace.Preserve).CreateNavigator();
-//			return xpathdoc;
 		}
 
 		public void SetProjectXml(XmlDocument projectXml, bool mergeAssemblies)
@@ -35,6 +34,7 @@ namespace NDoc3.Documenter.Msdn
 			_nameResolver = new NameResolver(projectXml, mergeAssemblies);
 			_xmlnsManager = nsmgr;
 			_xmlDocumentation = projectXml;
+			_mergeAssemblies = mergeAssemblies;
 		}
 
 		private XmlNamespaceManager _xmlnsManager;
@@ -51,7 +51,7 @@ namespace NDoc3.Documenter.Msdn
 			ArgUtils.AssertNotNull(ci, "ci");
 			ArgUtils.AssertNotNull(targetDirectory, "targetDirectory");
 
-			_currentFileEncoding = Encoding.GetEncoding(ci.TextInfo.ANSICodePage);
+			_currentFileEncoding = Encoding.UTF8;
 			workspace = new MsdnWorkspace(targetDirectory.FullName, cleanIntermediates);
 			_workingDirectory = new DirectoryInfo(workspace.WorkingDirectory);
 		}
@@ -66,6 +66,12 @@ namespace NDoc3.Documenter.Msdn
 			this._currentFileEncoding = other._currentFileEncoding;
 			this.htmlHelp = other.htmlHelp;
 			this._workingDirectory = other._workingDirectory;
+			this._mergeAssemblies = other._mergeAssemblies;
+		}
+
+		public bool MergeAssemblies
+		{
+			get { return _mergeAssemblies; }
 		}
 
 		public DirectoryInfo WorkingDirectory

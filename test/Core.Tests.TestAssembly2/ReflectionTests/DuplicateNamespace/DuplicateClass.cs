@@ -5,4 +5,10 @@
 	/// </summary>
 	internal class DuplicateClass
 	{}
+
+	/// <summary>
+	/// In TestAssembly2
+	/// </summary>
+	public class AnotherClass
+	{}
 }
