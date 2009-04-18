@@ -7,6 +7,7 @@
 		<html>
 			<head>
 				<title>Contents</title>
+				<META http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 				<meta name="GENERATOR" content="Microsoft Visual Studio.NET 7.0" />
 				<meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
 				<link rel="stylesheet" type="text/css" href="tree.css" />

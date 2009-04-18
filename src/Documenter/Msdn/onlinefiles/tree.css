@@ -1,4 +1,4 @@
-.treeDiv 
+.treeDiv
 {
     font-family: verdana;
     font-size: 70.5%;
@@ -8,15 +8,16 @@
     overflow: auto;
     margin: 0px 0px 0px 0px;
     padding: 0px 0px 0px 0px;
+    height: 100%;
 }
 
-.treeNode 
+.treeNode
 {
     white-space: nowrap;
     text-indent: -14px;
     margin: 5px 2px 5px 14px;
 }
-A.treeUnselected:hover, A.treeSelected:hover 
+A.treeUnselected:hover, A.treeSelected:hover
 {
     text-decoration: underline;
     background-color: #cccccc;
@@ -34,7 +35,7 @@ A.treeSelected
 	background-color: #ffffff;
     border: solid 1px #999999;
 }
-A.treeUnselected 
+A.treeUnselected
 {
 	border: solid 1px f0f0f0;
     background-color: transparent;
