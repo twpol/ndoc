@@ -401,5 +401,10 @@ table.dtTABLE td img
 	}
 div.Hierarchy
 {
-	margin: 0.5em,0.0em,0.5em,1.0em;
+	padding-top: 0.5em;
+	margin-bottom: 0.0em;
+	margin-right: 0.5em;
+	margin-top: 0.0em;
+	margin-left: 1.5em;
+/*	margin: 0.5em,0.0em,0.5em,1.0em; */
 }
