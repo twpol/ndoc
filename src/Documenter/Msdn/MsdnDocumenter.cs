@@ -225,7 +225,7 @@ namespace NDoc3.Documenter.Msdn
 				}
 
 				OnDocBuildingStep(100, "Done.");
-			} catch(DocumenterException dex) {
+			} catch(DocumenterException) {
 				throw;
 			} catch (Exception ex) {
 				throw new DocumenterException(ex.Message, ex);
@@ -1454,7 +1454,7 @@ namespace NDoc3.Documenter.Msdn
 					ctx.CurrentFileEncoding)) {
 					string DocLangCode = Enum.GetName(typeof(SdkLanguage), MyConfig.SdkDocLanguage).Replace("_", "-");
 					
-					MsdnXsltUtilities utilities = new MsdnXsltUtilities(ctx.stylesheets[transformName], ctx._nameResolver, ctx.CurrentAssemblyName, MyConfig.SdkDocVersionString, DocLangCode, MyConfig.SdkLinksOnWeb, ctx.CurrentFileEncoding);
+					MsdnXsltUtilities utilities = new MsdnXsltUtilities(ctx._nameResolver, ctx.CurrentAssemblyName, MyConfig.SdkDocVersionString, DocLangCode, MyConfig.SdkLinksOnWeb, ctx.CurrentFileEncoding);
 
 					if (arguments.GetParam("assembly-name", string.Empty) == null) {
 						arguments.AddParam("assembly-name", String.Empty, ctx.CurrentAssemblyName);
