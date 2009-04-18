@@ -152,9 +152,9 @@ namespace NDoc3.Core.Reflection
 
 			_DocumentInternals = false;
 			_DocumentProtected = true;
-			_DocumentSealedProtected = false;
+			_DocumentSealedProtected = true;
 			_DocumentPrivates = false;
-			_DocumentProtectedInternalAsProtected = false;
+			_DocumentProtectedInternalAsProtected = true;
 			_DocumentEmptyNamespaces = false;
 			_EditorBrowsableFilter = EditorBrowsableFilterLevel.Off;
 
@@ -163,11 +163,11 @@ namespace NDoc3.Core.Reflection
 			_CopyrightHref = string.Empty;
 
 			_SkipNamespacesWithoutSummaries = false;
-			_UseNamespaceDocSummaries = false;
+			_UseNamespaceDocSummaries = true;
 			_AutoPropertyBackerSummaries = false;
 			_AutoDocumentConstructors = true;
 
-			_DocumentAttributes = false;
+			_DocumentAttributes = true;
 			_DocumentInheritedAttributes = true;
 			_ShowTypeIdInAttributes = false;
 			_DocumentedAttributes = string.Empty;
@@ -414,7 +414,7 @@ namespace NDoc3.Core.Reflection
 		/// <b>DocumentProtected</b> must be turned on, too.</remarks>
 		[Category("Visibility")]
 		[Description("Turn this flag on to document protected members of sealed classes. DocumentProtected must be turned on, too.")]
-		[DefaultValue(false)]
+		[DefaultValue(true)]
 		public bool DocumentSealedProtected
 		{
 			get { return _DocumentSealedProtected; }
@@ -635,7 +635,7 @@ namespace NDoc3.Core.Reflection
 			}
 		}
 		
-		private bool _UseNamespaceDocSummaries;
+		private bool _UseNamespaceDocSummaries = true;
 
 		/// <summary>Gets or sets the UseNamespaceDocSummaries property.</summary>
 		/// <remarks>If true, the documenter will look for a class with the name 
@@ -652,7 +652,7 @@ namespace NDoc3.Core.Reflection
 			 + "show up in the resulting documentation output. You may want to use "
 			 + "#if ... #endif together with conditional compilation constants to "
 			 + "exclude the NamespaceDoc classes from release build assemblies.")]
-		[DefaultValue(false)]
+		[DefaultValue(true)]
 		public bool UseNamespaceDocSummaries
 		{
 			get { return _UseNamespaceDocSummaries; }
@@ -805,7 +805,7 @@ namespace NDoc3.Core.Reflection
 		/// in the syntax portion of topics.</remarks>
 		[Category("Show Attributes")]
 		[Description("Set this to true to output the attributes of the types/members in the syntax portion.")]
-		[DefaultValue(false)]
+		[DefaultValue(true)]
 		public bool DocumentAttributes
 		{
 			get { return _DocumentAttributes; }
