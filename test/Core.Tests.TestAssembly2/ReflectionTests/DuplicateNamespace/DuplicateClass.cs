@@ -9,6 +9,6 @@
 	/// <summary>
 	/// In TestAssembly2
 	/// </summary>
-	public class AnotherClass
+	public class AnotherClass : TestAssembly1Class
 	{}
 }

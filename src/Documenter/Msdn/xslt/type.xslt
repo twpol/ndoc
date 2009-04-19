@@ -40,8 +40,8 @@
 								<xsl:with-param name="type-name" select="$list[$last]/@type" />
 							</xsl:call-template>
 						</xsl:attribute>
-            <!--<xsl:value-of select="substring-after($list[$last]/@id, ':' )" />-->
-            <xsl:value-of select="$list[$last]/@displayName" />
+						<!--<xsl:value-of select="substring-after($list[$last]/@id, ':' )" />-->
+						<xsl:value-of select="$list[$last]/@displayName" />
 					</a>
 				</xsl:when>
 				<xsl:otherwise>
@@ -57,12 +57,12 @@
 									</xsl:call-template>
 								</xsl:attribute>
 								<!--<xsl:value-of select="substring-after($list[$last]/@id, ':' )" />-->
-                <xsl:value-of select="$list[$last]/@displayName" />
+								<xsl:value-of select="$list[$last]/@displayName" />
 							</a>
 						</xsl:when>
 						<xsl:otherwise>
-              <!--<xsl:value-of select="substring-after($list[$last]/@id, ':' )" />-->
-              <xsl:value-of select="$list[$last]/@displayName" />
+							<!--<xsl:value-of select="substring-after($list[$last]/@id, ':' )" />-->
+							<xsl:value-of select="$list[$last]/@displayName" />
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:otherwise>
@@ -124,19 +124,26 @@
 							</xsl:call-template>
 						</xsl:variable>
 						<xsl:if test="ndoc:constructor|ndoc:field|ndoc:property|ndoc:method|ndoc:operator|ndoc:event">
-							<p>For a list of all members of this type, see <a href="{$members-href}"><xsl:value-of select="@displayName" /> Members</a>.</p>
+							<p>
+								For a list of all members of this type, see <a href="{$members-href}">
+									<xsl:value-of select="@displayName" /> Members
+								</a>.
+							</p>
 						</xsl:if>
 					</xsl:if>
 					<xsl:if test="local-name()='enumeration' and @flags">
-						<p>This enumeration has a <a>
-						<xsl:attribute name="href">
+						<p>
+							This enumeration has a <a>
+								<xsl:attribute name="href">
 									<xsl:call-template name="get-filename-for-system-type">
 										<xsl:with-param name="type-name" select="'System.FlagsAttribute'" />
 										<xsl:with-param name="ignore-text" select="true()" />
 									</xsl:call-template>
 								</xsl:attribute>
-						FlagsAttribute</a>
-						attribute that allows a bitwise combination of its member values.</p>
+								FlagsAttribute
+							</a>
+							attribute that allows a bitwise combination of its member values.
+						</p>
 					</xsl:if>
 					<xsl:if test="local-name() != 'delegate' and local-name() != 'enumeration'">
 						<p>
@@ -213,7 +220,7 @@
 													<a>
 														<xsl:attribute name="href">
 															<xsl:call-template name="get-filename-for-type">
-																<xsl:with-param name="assemblyName" select="ancestor::ndoc:assembly/@name" />
+																<xsl:with-param name="assemblyName" select="@assembly" />
 																<xsl:with-param name="id" select="@id" />
 															</xsl:call-template>
 														</xsl:attribute>
@@ -250,10 +257,10 @@
 						<xsl:call-template name="parameter-section" />
 						<xsl:call-template name="returnvalue-section" />
 					</xsl:if>
-          <!-- Generic parameter section -->
-          <xsl:if test="ndoc:documentation/ndoc:typeparam">
-            <xsl:call-template name="generictypeparam-section" />
-          </xsl:if>
+					<!-- Generic parameter section -->
+					<xsl:if test="ndoc:documentation/ndoc:typeparam">
+						<xsl:call-template name="generictypeparam-section" />
+					</xsl:if>
 					<!-- only classes and structures get a thread safety section -->
 					<xsl:if test="local-name() = 'class' or local-name() = 'structure'">
 						<xsl:call-template name="thread-safety-section" />
@@ -378,7 +385,9 @@
 	<!-- -->
 	<xsl:template name="interface-implementing-types-section">
 		<xsl:if test="ndoc:implementedBy">
-			<h4 class="dtH4">Types that implement <xsl:value-of select="@displayName" /></h4>
+			<h4 class="dtH4">
+				Types that implement <xsl:value-of select="@displayName" />
+			</h4>
 			<div class="tablediv">
 				<table class="dtTABLE" cellspacing="0">
 					<tr valign="top">
