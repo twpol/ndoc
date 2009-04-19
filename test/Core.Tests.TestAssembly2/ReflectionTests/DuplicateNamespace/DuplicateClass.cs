@@ -11,4 +11,10 @@
 	/// </summary>
 	public class AnotherClass : TestAssembly1Class
 	{}
+
+	///<summary>
+	/// Interface deriving from other interface
+	///</summary>
+	public interface AnotherInterface : IGenericInterface<object>
+	{}
 }
