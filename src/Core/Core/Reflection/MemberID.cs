@@ -27,6 +27,33 @@ namespace NDoc3.Core.Reflection
 	public static class MemberID
 	{
 		/// <summary>
+		/// Gets the member ID of a type member
+		/// </summary>
+		/// <param name="member">TODO</param>
+		/// <returns>TODO</returns>
+		public static string GetDeclaringMemberID(MemberInfo member)
+		{
+			if (member is MethodInfo)
+			{
+				return GetMemberID((MethodInfo) member, true);
+			} else if (member is EventInfo)
+			{
+				return GetMemberID((EventInfo) member, true);
+			} else if (member is PropertyInfo)
+			{
+				return GetMemberID((PropertyInfo) member, true);
+			}
+			else if (member is FieldInfo)
+			{
+				return GetMemberID((FieldInfo) member, true);
+			}
+			else
+			{
+				throw new ArgumentException(string.Format("Invalid member type {0}", member.GetType().FullName));
+			}
+		}
+
+		/// <summary>
 		/// Get the member ID of a type
 		/// </summary>
 		/// <param name="type">The type</param>
@@ -40,20 +67,22 @@ namespace NDoc3.Core.Reflection
 		/// Get the member ID of a field
 		/// </summary>
 		/// <param name="field">The field</param>
+		/// <param name="useDeclaringType">TODO</param>
 		/// <returns>The member ID</returns>
-		public static string GetMemberID(FieldInfo field)
+		public static string GetMemberID(FieldInfo field, bool useDeclaringType)
 		{
-			return "F:" + GetFullNamespaceName(field) + "." + field.Name;
+			return "F:" + GetFullNamespaceName(field, useDeclaringType) + "." + field.Name;
 		}
 
 		/// <summary>
 		/// Get the member ID of a property
 		/// </summary>
 		/// <param name="property">The property</param>
+		/// <param name="useDeclaringType">TODO</param>
 		/// <returns>The member ID</returns>
-		public static string GetMemberID(PropertyInfo property)
+		public static string GetMemberID(PropertyInfo property, bool useDeclaringType)
 		{
-			string memberName = "P:" + GetFullNamespaceName(property) +
+			string memberName = "P:" + GetFullNamespaceName(property, useDeclaringType) +
 								"." + property.Name.Replace('.', '#').Replace('+', '#');
 
 			try
@@ -97,12 +126,13 @@ namespace NDoc3.Core.Reflection
 		/// Get the member ID of a method
 		/// </summary>
 		/// <param name="method">The method</param>
-		/// <returns>The memeber ID</returns>
-		public static string GetMemberID(MethodBase method)
+		/// <param name="useDeclaringType">TODO</param>
+		/// <returns>The member ID</returns>
+		public static string GetMemberID(MethodBase method, bool useDeclaringType)
 		{
 			string memberName =
 				"M:" +
-				GetFullNamespaceName(method) +
+				GetFullNamespaceName(method, useDeclaringType) +
 				"." +
 				method.Name.Replace('.', '#').Replace('+', '#');
 
@@ -127,10 +157,11 @@ namespace NDoc3.Core.Reflection
 		/// Get the member ID of an event
 		/// </summary>
 		/// <param name="eventInfo">The event</param>
+		/// <param name="useDeclaringType">TODO</param>
 		/// <returns>The member ID</returns>
-		public static string GetMemberID(EventInfo eventInfo)
+		public static string GetMemberID(EventInfo eventInfo, bool useDeclaringType)
 		{
-			return "E:" + GetFullNamespaceName(eventInfo) +
+			return "E:" + GetFullNamespaceName(eventInfo, useDeclaringType) +
 				   "." + eventInfo.Name.Replace('.', '#').Replace('+', '#');
 		}
 
@@ -141,12 +172,7 @@ namespace NDoc3.Core.Reflection
 		/// <returns>The namespace name (full name)</returns>
 		private static string GetTypeNamespaceName(Type type)
 		{
-			if (type.IsByRef)
-				type = type.GetElementType();
-
-			// de-ref array types
-			while(type.IsArray) 
-				type = type.GetElementType();
+			type = DereferenceType(type);
 
 			if (type.GetGenericArguments().Length > 0 && type.GetGenericTypeDefinition() != typeof(Nullable<>))
 				return type.GetGenericTypeDefinition().FullName.Replace('+', '.');
@@ -163,6 +189,17 @@ namespace NDoc3.Core.Reflection
 			return fullName.Replace('+', '.');
 		}
 
+		private static Type DereferenceType(Type type)
+		{
+			if (type.IsByRef)
+				type = type.GetElementType();
+
+			// de-ref array types
+			while(type.IsArray) 
+				type = type.GetElementType();
+			return type;
+		}
+
 		/// <summary>
 		/// Returns the declaring type name of a member
 		/// </summary>
@@ -170,17 +207,28 @@ namespace NDoc3.Core.Reflection
 		/// <returns>The declaring type name</returns>
 		public static string GetDeclaringTypeName(MemberInfo member)
 		{
-			return GetTypeNamespaceName(member.DeclaringType);
+			return GetTypeNamespaceName(DereferenceType(member.DeclaringType));
+		}
+
+		/// <summary>
+		/// Returns the name of the assembly declaring this member
+		/// </summary>
+		/// <param name="member">The member</param>
+		/// <returns>The declaring's assembly name</returns>
+		public static string GetDeclaringAssemblyName(MemberInfo member)
+		{
+			return DereferenceType(member.DeclaringType).Assembly.GetName().Name;
 		}
 
 		/// <summary>
 		/// Returns the full namespace name of a member
 		/// </summary>
 		/// <param name="member">The member</param>
+		/// <param name="useDeclaringType">whether to generate the name using the <see cref="MemberInfo.ReflectedType"/> or <see cref="MemberInfo.DeclaringType"/></param>
 		/// <returns>The full namespace name</returns>
-		private static string GetFullNamespaceName(MemberInfo member)
+		private static string GetFullNamespaceName(MemberInfo member, bool useDeclaringType)
 		{
-			return GetTypeNamespaceName(member.ReflectedType);
+			return GetTypeNamespaceName(DereferenceType( useDeclaringType?member.DeclaringType:member.ReflectedType ));
 		}
 
 		/// <summary>

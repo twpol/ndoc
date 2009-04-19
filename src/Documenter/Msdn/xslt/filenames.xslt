@@ -146,11 +146,12 @@
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="get-filename-for-inherited-method-overloads">
+		<xsl:param name="declaring-assembly" />
 		<xsl:param name="declaring-type" />
 		<xsl:param name="method-name" />
 		<!--<xsl:variable name="type-part" select="translate(translate($declaring-type, '[,]', ''), '#', '.')" />
     <xsl:value-of select="concat($type-part, '.', $method-name, '_overloads.html')" />-->
-		<xsl:value-of select="NUtil:GetFilenameForInheritedMethodOverloads($declaring-type, @method-name)"/>
+		<xsl:value-of select="NUtil:GetFilenameForMethodOverloads($declaring-assembly, $declaring-type, @method-name)"/>
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="get-filename-for-method">

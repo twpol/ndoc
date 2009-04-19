@@ -109,10 +109,13 @@
 								</p>
 								<blockquote class="dtBlock">
 									<a>
+										<xsl:variable name="declaring-assembly" select="@declaringAssembly" />
+										<xsl:variable name="declaring-type-id" select="concat('T:', @declaringType)" />
+										<xsl:variable name="declaring-id" select="@declaringId" />
+										<xsl:variable name="declaring-class" select="ancestor::ndoc:ndoc/ndoc:assembly[@name=$declaring-assembly]//ndoc:class[@id=$declaring-type-id]" />
 										<xsl:attribute name="href">
-											<xsl:call-template name="get-filename-for-inherited-method-overloads">
-												<xsl:with-param name="declaring-type" select="@declaringType" />
-												<xsl:with-param name="method-name" select="@name" />
+											<xsl:call-template name="get-filename-for-method">
+												<xsl:with-param name="method" select="$declaring-class/ndoc:method[@id=$declaring-id]" />
 											</xsl:call-template>
 										</xsl:attribute>
 										<xsl:apply-templates select="self::node()" mode="syntax" />

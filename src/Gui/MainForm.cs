@@ -1086,7 +1086,11 @@ namespace NDoc3.Gui
 			{
 				using ( new WaitCursor( this ) )
 				{
-					Directory.SetCurrentDirectory( Path.GetDirectoryName(fileName) );
+					string directoryName = Path.GetDirectoryName(fileName);
+					if (!string.IsNullOrEmpty(directoryName))
+					{
+						Directory.SetCurrentDirectory(directoryName);
+					}
 
 					try
 					{
@@ -1415,7 +1419,13 @@ namespace NDoc3.Gui
 
 				//make sure the current directory is the project directory
 				if ( projectFilename != UNTITLED_PROJECT_NAME )
-					Directory.SetCurrentDirectory( Path.GetDirectoryName( projectFilename ) );
+				{
+					string directoryName = Path.GetDirectoryName( projectFilename );
+					if (!string.IsNullOrEmpty(directoryName))
+					{
+						Directory.SetCurrentDirectory( directoryName );
+					}
+				}
 
 				if ( Directory.Exists( Path.GetDirectoryName( documenter.MainOutputFile ) ) == false )
 					Directory.CreateDirectory( Path.GetDirectoryName( documenter.MainOutputFile ) );
@@ -1499,7 +1509,13 @@ namespace NDoc3.Gui
 
 			//make sure the current directory is the project directory
 			if ( projectFilename != UNTITLED_PROJECT_NAME )
-				Directory.SetCurrentDirectory( Path.GetDirectoryName( projectFilename ) );
+			{
+				string directoryName = Path.GetDirectoryName( projectFilename );
+				if (!string.IsNullOrEmpty(directoryName))
+				{
+					Directory.SetCurrentDirectory( directoryName );
+				}
+			}
 
 			try
 			{

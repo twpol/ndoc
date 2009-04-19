@@ -10,6 +10,12 @@
 	/// In TestAssembly2
 	/// </summary>
 	public class AnotherClass : TestAssembly1Class
+	{
+		public static void Undocumented<X>(X x)
+		{}
+	}
+
+	public struct UndocumentedStruct
 	{}
 
 	///<summary>

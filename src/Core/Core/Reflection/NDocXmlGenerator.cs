@@ -537,10 +537,10 @@ namespace NDoc3.Core.Reflection
 			//check if the member has an exclude tag
 			if (method.DeclaringType != method.ReflectedType) // inherited
             {
-				if (_assemblyDocCache.HasExcludeTag(method.DeclaringType, GetMemberName(method, method.DeclaringType)))
+				if (_assemblyDocCache.HasExcludeTag(method.DeclaringType, MemberID.GetMemberID(method, true)))
 					return false;
 			} else {
-				if (_assemblyDocCache.HasExcludeTag(method.DeclaringType, MemberID.GetMemberID(method)))
+				if (_assemblyDocCache.HasExcludeTag(method.DeclaringType, MemberID.GetMemberID(method, false)))
 					return false;
 			}
 
@@ -569,9 +569,9 @@ namespace NDoc3.Core.Reflection
 				//check if the member has an exclude tag
 				if (property.DeclaringType != property.ReflectedType) // inherited
                 {
-					IsExcluded = _assemblyDocCache.HasExcludeTag(property.DeclaringType, GetMemberName(property, property.DeclaringType));
+					IsExcluded = _assemblyDocCache.HasExcludeTag(property.DeclaringType, MemberID.GetMemberID(property, true));
 				} else {
-					IsExcluded = _assemblyDocCache.HasExcludeTag(property.DeclaringType, MemberID.GetMemberID(property));
+					IsExcluded = _assemblyDocCache.HasExcludeTag(property.DeclaringType, MemberID.GetMemberID(property, false));
 				}
 
 				if ((hasGetter || hasSetter)
@@ -614,10 +614,10 @@ namespace NDoc3.Core.Reflection
 			//check if the member has an exclude tag
 			if (field.DeclaringType != field.ReflectedType) // inherited
             {
-				if (_assemblyDocCache.HasExcludeTag(field.DeclaringType, GetMemberName(field, field.DeclaringType)))
+				if (_assemblyDocCache.HasExcludeTag(field.DeclaringType, MemberID.GetMemberID(field, true)))
 					return false;
 			} else {
-				if (_assemblyDocCache.HasExcludeTag(field.DeclaringType, MemberID.GetMemberID(field)))
+				if (_assemblyDocCache.HasExcludeTag(field.DeclaringType, MemberID.GetMemberID(field, false)))
 					return false;
 			}
 
@@ -931,7 +931,9 @@ namespace NDoc3.Core.Reflection
 					string typeID = MemberID.GetMemberID(type);
 					//					if (!_documentedTypes.ContainsKey(type)) {
 					//						_documentedTypes.Add(type, null);
-					if (MustDocumentType(type) && !CheckForMissingTypeDocumentation(type)) {
+					if (MustDocumentType(type) 
+						// && !CheckForMissingTypeDocumentation(type)
+						) {
 						bool hiding = ((type.MemberType & MemberTypes.NestedType) != 0)
 							&& IsHiding(type, type.DeclaringType);
 						WriteClass(writer, type, hiding);
@@ -1119,7 +1121,7 @@ namespace NDoc3.Core.Reflection
 		{
 			bool isStruct = type.IsValueType;
 
-			string memberName = MemberID.GetMemberID(type);
+			string typeId = MemberID.GetMemberID(type);
 
 			string fullNameWithoutNamespace = GetTypeFullName(type).Replace('+', '.');
 
@@ -1131,7 +1133,7 @@ namespace NDoc3.Core.Reflection
 			writer.WriteAttributeString("name", fullNameWithoutNamespace);
 			writer.WriteAttributeString("displayName", MemberDisplayName.GetMemberDisplayName(type));
 			writer.WriteAttributeString("namespace", type.Namespace);
-			writer.WriteAttributeString("id", memberName);
+			writer.WriteAttributeString("id", typeId);
 			writer.WriteAttributeString("access", GetTypeAccessValue(type));
 			if (hiding) {
 				writer.WriteAttributeString("hiding", "true");
@@ -1151,7 +1153,7 @@ namespace NDoc3.Core.Reflection
 				}
 			}
 
-			WriteTypeDocumentation(writer, type.Assembly.GetName(), memberName);
+			WriteTypeDocumentation(writer, type.Assembly.GetName(), typeId);
 			WriteCustomAttributes(writer, type);
 			//Write base type if there is one and the current "class" isn't a struct
 			if (type.BaseType != null && !isStruct)
@@ -1517,7 +1519,7 @@ namespace NDoc3.Core.Reflection
 				WriteSpecialAttributes(writer, fieldInfo);
 				WriteCustomAttributes(writer, fieldInfo.GetCustomAttributes(_rep.DocumentInheritedAttributes), "");
 			} catch (Exception e) {
-				TraceErrorOutput("Error retrieving custom attributes for " + MemberID.GetMemberID(fieldInfo), e);
+				TraceErrorOutput("Error retrieving custom attributes for " + MemberID.GetMemberID(fieldInfo, false), e);
 			}
 		}
 
@@ -1526,7 +1528,7 @@ namespace NDoc3.Core.Reflection
 			try {
 				WriteCustomAttributes(writer, constructorInfo.GetCustomAttributes(_rep.DocumentInheritedAttributes), "");
 			} catch (Exception e) {
-				TraceErrorOutput("Error retrieving custom attributes for " + MemberID.GetMemberID(constructorInfo), e);
+				TraceErrorOutput("Error retrieving custom attributes for " + MemberID.GetMemberID(constructorInfo, false), e);
 			}
 		}
 
@@ -1538,7 +1540,7 @@ namespace NDoc3.Core.Reflection
 				extensionMethod = WriteCustomAttributes(writer, methodInfo.GetCustomAttributes(_rep.DocumentInheritedAttributes), "");
 				WriteCustomAttributes(writer, methodInfo.ReturnTypeCustomAttributes.GetCustomAttributes(_rep.DocumentInheritedAttributes), "return");
 			} catch (Exception e) {
-				TraceErrorOutput("Error retrieving custom attributes for " + MemberID.GetMemberID(methodInfo), e);
+				TraceErrorOutput("Error retrieving custom attributes for " + MemberID.GetMemberID(methodInfo, false), e);
 			}
 
 			return extensionMethod;
@@ -1549,7 +1551,7 @@ namespace NDoc3.Core.Reflection
 			try {
 				WriteCustomAttributes(writer, propertyInfo.GetCustomAttributes(_rep.DocumentInheritedAttributes), "");
 			} catch (Exception e) {
-				TraceErrorOutput("Error retrieving custom attributes for " + MemberID.GetMemberID(propertyInfo), e);
+				TraceErrorOutput("Error retrieving custom attributes for " + MemberID.GetMemberID(propertyInfo, false), e);
 			}
 		}
 
@@ -1567,7 +1569,7 @@ namespace NDoc3.Core.Reflection
 			try {
 				WriteCustomAttributes(writer, eventInfo.GetCustomAttributes(_rep.DocumentInheritedAttributes), "");
 			} catch (Exception e) {
-				TraceErrorOutput("Error retrieving custom attributes for " + MemberID.GetMemberID(eventInfo), e);
+				TraceErrorOutput("Error retrieving custom attributes for " + MemberID.GetMemberID(eventInfo, false), e);
 			}
 		}
 
@@ -1618,7 +1620,7 @@ namespace NDoc3.Core.Reflection
 					try {
 						fieldValue = GetDisplayValue(field.DeclaringType, field.GetValue(attribute));
 					} catch (Exception e) {
-						TraceErrorOutput("Value for attribute field " + MemberID.GetMemberID(field).Substring(2) + " cannot be determined", e);
+						TraceErrorOutput("Value for attribute field " + MemberID.GetMemberID(field, false).Substring(2) + " cannot be determined", e);
 						fieldValue = "***UNKNOWN***";
 					}
 					if (fieldValue.Length > 0) {
@@ -1643,7 +1645,7 @@ namespace NDoc3.Core.Reflection
 						try {
 							propertyValue = GetDisplayValue(property.DeclaringType, property.GetValue(attribute, null));
 						} catch (Exception e) {
-							TraceErrorOutput("Value for attribute property " + MemberID.GetMemberID(property).Substring(2) + " cannot be determined", e);
+							TraceErrorOutput("Value for attribute property " + MemberID.GetMemberID(property, false).Substring(2) + " cannot be determined", e);
 							propertyValue = "***UNKNOWN***";
 						}
 						if (propertyValue.Length > 0) {
@@ -1791,18 +1793,20 @@ namespace NDoc3.Core.Reflection
 
 				if (
 					!(
-					method.IsSpecialName &&
-					(
-					name.StartsWith("get_") ||
-					name.StartsWith("set_") ||
-					name.StartsWith("add_") ||
-					name.StartsWith("remove_") ||
-					name.StartsWith("raise_") ||
-					name.StartsWith("op_")
-					)
-					) &&
-					MustDocumentMethod(method) &&
-					!IsHidden(method, type) && !CheckForMissingMethodDocumentation(method)) {
+						method.IsSpecialName &&
+											(
+											name.StartsWith("get_") ||
+											name.StartsWith("set_") ||
+											name.StartsWith("add_") ||
+											name.StartsWith("remove_") ||
+											name.StartsWith("raise_") ||
+											name.StartsWith("op_")
+											)
+						) 
+						&& MustDocumentMethod(method) 
+						&& !IsHidden(method, type) 
+						//&& !CheckForMissingMethodDocumentation(method)
+					) {
 					WriteMethod(
 						writer,
 						method,
@@ -1855,9 +1859,9 @@ namespace NDoc3.Core.Reflection
 				//check if the event has an exclude tag
 				if (eventInfo.DeclaringType != eventInfo.ReflectedType) // inherited
                 {
-					IsExcluded = _assemblyDocCache.HasExcludeTag(eventInfo.DeclaringType, GetMemberName(eventInfo, eventInfo.DeclaringType));
+					IsExcluded = _assemblyDocCache.HasExcludeTag(eventInfo.DeclaringType, MemberID.GetMemberID(eventInfo, true));
 				} else {
-					IsExcluded = _assemblyDocCache.HasExcludeTag(eventInfo.DeclaringType, MemberID.GetMemberID(eventInfo));
+					IsExcluded = _assemblyDocCache.HasExcludeTag(eventInfo.DeclaringType, MemberID.GetMemberID(eventInfo, false));
 				}
 
 				if (!IsExcluded) {
@@ -1943,7 +1947,7 @@ namespace NDoc3.Core.Reflection
 		/// <param name="hiding">true if hiding base members</param>
 		private void WriteField(XmlWriter writer, FieldInfo field, Type type, bool hiding)
 		{
-			string memberName = MemberID.GetMemberID(field);
+			string memberName = MemberID.GetMemberID(field, false);
 
 			writer.WriteStartElement("field");
 			writer.WriteAttributeString("name", field.Name);
@@ -1991,7 +1995,7 @@ namespace NDoc3.Core.Reflection
 				}
 			}
 			if (inherited) {
-				WriteDeclaringType(MemberID.GetDeclaringTypeName(field), writer);
+				WriteDeclaringType( field, writer);
 			}
 			if (t.IsGenericType && t.GetGenericTypeDefinition() != typeof(Nullable<>)) {
 				WriteGenericArgumentsAndParameters(t, writer);
@@ -2008,13 +2012,17 @@ namespace NDoc3.Core.Reflection
 		}
 
 		/// <summary>
-		/// Write the declaring type to the XML file
+		/// Write the declaring type of a member to the XML file
 		/// </summary>
-		/// <param name="type">The name of the declaring type</param>
+		/// <param name="member">The name of the declaring type</param>
 		/// <param name="writer">The XML writer</param>
-		private void WriteDeclaringType(string type, XmlWriter writer)
+		private void WriteDeclaringType(MemberInfo member, XmlWriter writer)
 		{
-			writer.WriteAttributeString("declaringType", type);
+			writer.WriteAttributeString("declaringType", MemberID.GetDeclaringTypeName(member));
+			writer.WriteAttributeString("declaringAssembly", MemberID.GetDeclaringAssemblyName(member));
+			writer.WriteAttributeString("declaringId", MemberID.GetDeclaringMemberID(member));
+//
+//			writer.WriteAttributeString("declaringType", type);
 		}
 
 		/// <summary>
@@ -2058,7 +2066,7 @@ namespace NDoc3.Core.Reflection
 		/// <param name="implementations">Holds a mapping of interface members to concrete implementations</param>
 		private void WriteEvent(XmlWriter writer, EventInfo eventInfo, ImplementsCollection implementations)
 		{
-			string memberName = MemberID.GetMemberID(eventInfo);
+			string memberName = MemberID.GetMemberID(eventInfo, false);
 
 			string name = eventInfo.Name;
 			string interfaceName = null;
@@ -2106,7 +2114,9 @@ namespace NDoc3.Core.Reflection
 			bool inherited = eventInfo.DeclaringType != eventInfo.ReflectedType;
 
 			if (inherited) {
-				writer.WriteAttributeString("declaringType", MemberID.GetDeclaringTypeName(eventInfo));
+				WriteDeclaringType( eventInfo, writer );
+//				writer.WriteAttributeString("declaringType", MemberID.GetDeclaringTypeName(eventInfo));
+//				writer.WriteAttributeString("declaringAssembly", MemberID.GetDeclaringAssemblyName(eventInfo));
 			}
 
 			if (interfaceName != null) {
@@ -2142,7 +2152,7 @@ namespace NDoc3.Core.Reflection
 					EventInfo InterfaceEvent =
 						InterfaceMethod.DeclaringType.GetEvent(InterfaceMethod.Name.Substring(4));
 					writer.WriteAttributeString("name", InterfaceEvent.Name);
-					writer.WriteAttributeString("id", MemberID.GetMemberID(InterfaceEvent));
+					writer.WriteAttributeString("id", MemberID.GetMemberID(InterfaceEvent, false));
 					writer.WriteAttributeString("interface", implements.InterfaceType.Name);
 					writer.WriteAttributeString("interfaceId", MemberID.GetMemberID(implements.InterfaceType));
 					writer.WriteAttributeString("declaringType", implements.InterfaceType.FullName.Replace('+', '.'));
@@ -2160,7 +2170,7 @@ namespace NDoc3.Core.Reflection
 		/// <param name="overload">If &gt; 0, indicates this is the nth overloaded constructor.</param>
 		private void WriteConstructor(XmlWriter writer, ConstructorInfo constructor, int overload)
 		{
-			string memberName = MemberID.GetMemberID(constructor);
+			string memberName = MemberID.GetMemberID(constructor, false);
 
 			writer.WriteStartElement("constructor");
 			writer.WriteAttributeString("name", constructor.Name);
@@ -2195,7 +2205,7 @@ namespace NDoc3.Core.Reflection
 		private void WriteProperty(XmlWriter writer, PropertyInfo property, bool inherited, int overload, bool hiding, ImplementsCollection implementations)
 		{
 			if (property != null) {
-				string memberName = MemberID.GetMemberID(property);
+				string memberName = MemberID.GetMemberID(property, false);
 
 				string name = property.Name;
 				string interfaceName = null;
@@ -2241,7 +2251,8 @@ namespace NDoc3.Core.Reflection
 				writer.WriteAttributeString("valueType", t.IsValueType.ToString().ToLower());
 
 				if (inherited) {
-					writer.WriteAttributeString("declaringType", MemberID.GetDeclaringTypeName(property));
+					WriteDeclaringType(property, writer);
+//					writer.WriteAttributeString("declaringType", MemberID.GetDeclaringTypeName(property));
 				}
 
 				if (overload > 0) {
@@ -2290,7 +2301,7 @@ namespace NDoc3.Core.Reflection
 						MethodInfo InterfaceMethod = (MethodInfo)implements.InterfaceMethod;
 						PropertyInfo InterfaceProperty = DerivePropertyFromAccessorMethod(InterfaceMethod);
 						if (InterfaceProperty != null) {
-							string InterfacePropertyID = MemberID.GetMemberID(InterfaceProperty);
+							string InterfacePropertyID = MemberID.GetMemberID(InterfaceProperty, false);
 							writer.WriteStartElement("implements");
 							writer.WriteAttributeString("name", InterfaceProperty.Name);
 							writer.WriteAttributeString("id", InterfacePropertyID);
@@ -2303,7 +2314,7 @@ namespace NDoc3.Core.Reflection
 								writer.WriteAttributeString("declaringType", implements.InterfaceType.FullName.Replace('+', '.'));
 							writer.WriteEndElement();
 						} else if (InterfaceMethod != null) {
-							string InterfaceMethodID = MemberID.GetMemberID(InterfaceMethod);
+							string InterfaceMethodID = MemberID.GetMemberID(InterfaceMethod, false);
 							writer.WriteStartElement("implements");
 							writer.WriteAttributeString("name", InterfaceMethod.Name);
 							writer.WriteAttributeString("id", InterfaceMethodID);
@@ -2418,7 +2429,7 @@ namespace NDoc3.Core.Reflection
 		private void WriteMethod(XmlWriter writer, MethodInfo method, bool inherited, int overload, bool hiding, ImplementsCollection implementations)
 		{
 			if (method != null) {
-				string memberName = MemberID.GetMemberID(method);
+				string methodId = MemberID.GetMemberID(method, false);
 
 				string name = method.Name;
 				string interfaceName = null;
@@ -2462,13 +2473,14 @@ namespace NDoc3.Core.Reflection
 				writer.WriteStartElement("method");
 				writer.WriteAttributeString("name", name);
 				writer.WriteAttributeString("displayName", displayName);
-				writer.WriteAttributeString("id", memberName);
+				writer.WriteAttributeString("id", methodId);
 				writer.WriteAttributeString("access", GetMethodAccessValue(method));
 				writer.WriteAttributeString("contract", GetEnumString(GetMethodContractValue(method)));
 				Type t = method.ReturnType;
 				writer.WriteAttributeString("valueType", t.IsValueType.ToString().ToLower());
 				if (inherited) {
-					writer.WriteAttributeString("declaringType", MemberID.GetDeclaringTypeName(method));
+					WriteDeclaringType(method, writer);
+//					writer.WriteAttributeString("declaringType", MemberID.GetDeclaringTypeName(method));
 				}
 
 				if (overload > 0) {
@@ -2496,9 +2508,9 @@ namespace NDoc3.Core.Reflection
 				writer.WriteEndElement();
 
 				if (inherited) {
-					WriteInheritedDocumentation(writer, method.DeclaringType.Assembly.GetName(), memberName, method.DeclaringType);
+					WriteInheritedDocumentation(writer, method.DeclaringType.Assembly.GetName(), methodId, method.DeclaringType);
 				} else {
-					WriteMethodDocumentation(writer, method.DeclaringType.Assembly.GetName(), memberName, method, true);
+					WriteMethodDocumentation(writer, method.DeclaringType.Assembly.GetName(), methodId, method, true);
 				}
 
 				bool extensionMethod = WriteCustomAttributes(writer, method);
@@ -2512,7 +2524,7 @@ namespace NDoc3.Core.Reflection
 					if (implements != null) {
 						writer.WriteStartElement("implements");
 						writer.WriteAttributeString("name", implements.InterfaceMethod.Name);
-						writer.WriteAttributeString("id", MemberID.GetMemberID((MethodBase)implements.InterfaceMethod));
+						writer.WriteAttributeString("id", MemberID.GetMemberID((MethodInfo)implements.InterfaceMethod, false));
 						writer.WriteAttributeString("interface", MemberDisplayName.GetMemberDisplayName(implements.InterfaceType));
 						writer.WriteAttributeString("interfaceId", MemberID.GetMemberID(implements.InterfaceType));
 						writer.WriteAttributeString("assembly", implements.InterfaceType.Assembly.GetName().Name);
@@ -2591,7 +2603,7 @@ namespace NDoc3.Core.Reflection
 		private void WriteOperator(XmlWriter writer, MethodInfo method, int overload)
 		{
 			if (method != null) {
-				string memberName = MemberID.GetMemberID(method);
+				string memberName = MemberID.GetMemberID(method, false);
 
 				writer.WriteStartElement("operator");
 				writer.WriteAttributeString("name", method.Name);
@@ -2604,7 +2616,8 @@ namespace NDoc3.Core.Reflection
 				bool inherited = method.DeclaringType != method.ReflectedType;
 
 				if (inherited) {
-					writer.WriteAttributeString("declaringType", MemberID.GetDeclaringTypeName(method));
+					WriteDeclaringType(method, writer);
+//					writer.WriteAttributeString("declaringType", MemberID.GetDeclaringTypeName(method));
 				}
 
 				if (overload > 0) {
@@ -2698,70 +2711,70 @@ namespace NDoc3.Core.Reflection
 			return GetTypeFullName(type).Replace('+', '.');
 		}
 
-		/// <summary>Derives the member name ID for the base of an inherited field.</summary>
-		/// <param name="field">The field to derive the member name ID from.</param>
-		/// <param name="declaringType">The declaring type.</param>
-		private string GetMemberName(FieldInfo field, Type declaringType)
-		{
-			return "F:" + GetTypeFullName(declaringType).Replace("+", ".") + "." + field.Name;
-		}
-
-		/// <summary>Derives the member name ID for an event. Used to match nodes in the /doc XML.</summary>
-		/// <param name="eventInfo">The event to derive the member name ID from.</param>
-		/// <param name="declaringType">The declaring type.</param>
-		private string GetMemberName(EventInfo eventInfo, Type declaringType)
-		{
-			return "E:" + GetTypeFullName(declaringType).Replace("+", ".") +
-				"." + eventInfo.Name.Replace('.', '#').Replace('+', '#');
-		}
-
-		/// <summary>Derives the member name ID for the base of an inherited property.</summary>
-		/// <param name="property">The property to derive the member name ID from.</param>
-		/// <param name="declaringType">The declaring type.</param>
-		private string GetMemberName(PropertyInfo property, Type declaringType)
-		{
-			string memberID = MemberID.GetMemberID(property);
-
-			//extract member type (T:, P:, etc.)
-			string memberType = memberID.Substring(0, 2);
-
-			//extract member name
-			int i = memberID.IndexOf('(');
-			string memberName;
-			if (i > -1) {
-				memberName = memberID.Substring(memberID.LastIndexOf('.', i) + 1);
-			} else {
-				memberName = memberID.Substring(memberID.LastIndexOf('.') + 1);
-			}
-
-			//the member id in the declaring type
-			string key = memberType + GetTypeNamespaceName(declaringType) + "." + memberName;
-			return key;
-		}
-
-		/// <summary>Derives the member name ID for the basse of an inherited member function.</summary>
-		/// <param name="method">The method to derive the member name ID from.</param>
-		/// <param name="declaringType">The declaring type.</param>
-		private string GetMemberName(MethodBase method, Type declaringType)
-		{
-			string memberID = MemberID.GetMemberID(method);
-
-			//extract member type (T:, P:, etc.)
-			string memberType = memberID.Substring(0, 2);
-
-			//extract member name
-			int i = memberID.IndexOf('(');
-			string memberName;
-			if (i > -1) {
-				memberName = memberID.Substring(memberID.LastIndexOf('.', i) + 1);
-			} else {
-				memberName = memberID.Substring(memberID.LastIndexOf('.') + 1);
-			}
-
-			//the member id in the declaring type
-			string key = memberType + GetTypeNamespaceName(declaringType) + "." + memberName;
-			return key;
-		}
+//		/// <summary>Derives the member name ID for the base of an inherited field.</summary>
+//		/// <param name="field">The field to derive the member name ID from.</param>
+//		/// <param name="declaringType">The declaring type.</param>
+//		private string GetMemberName(FieldInfo field, Type declaringType)
+//		{
+//			return "F:" + GetTypeFullName(declaringType).Replace("+", ".") + "." + field.Name;
+//		}
+//
+//		/// <summary>Derives the member name ID for an event. Used to match nodes in the /doc XML.</summary>
+//		/// <param name="eventInfo">The event to derive the member name ID from.</param>
+//		/// <param name="declaringType">The declaring type.</param>
+//		private string GetMemberName(EventInfo eventInfo, Type declaringType)
+//		{
+//			return "E:" + GetTypeFullName(declaringType).Replace("+", ".") +
+//				"." + eventInfo.Name.Replace('.', '#').Replace('+', '#');
+//		}
+//
+//		/// <summary>Derives the member name ID for the base of an inherited property.</summary>
+//		/// <param name="property">The property to derive the member name ID from.</param>
+//		/// <param name="declaringType">The declaring type.</param>
+//		private string GetMemberName(PropertyInfo property, Type declaringType)
+//		{
+//			string memberID = MemberID.GetMemberID(property);
+//
+//			//extract member type (T:, P:, etc.)
+//			string memberType = memberID.Substring(0, 2);
+//
+//			//extract member name
+//			int i = memberID.IndexOf('(');
+//			string memberName;
+//			if (i > -1) {
+//				memberName = memberID.Substring(memberID.LastIndexOf('.', i) + 1);
+//			} else {
+//				memberName = memberID.Substring(memberID.LastIndexOf('.') + 1);
+//			}
+//
+//			//the member id in the declaring type
+//			string key = memberType + GetTypeNamespaceName(declaringType) + "." + memberName;
+//			return key;
+//		}
+//
+//		/// <summary>Derives the member name ID for the basse of an inherited member function.</summary>
+//		/// <param name="method">The method to derive the member name ID from.</param>
+//		/// <param name="declaringType">The declaring type.</param>
+//		private string GetMemberName(MethodBase method, Type declaringType)
+//		{
+//			string memberID = MemberID.GetMemberID(method);
+//
+//			//extract member type (T:, P:, etc.)
+//			string memberType = memberID.Substring(0, 2);
+//
+//			//extract member name
+//			int i = memberID.IndexOf('(');
+//			string memberName;
+//			if (i > -1) {
+//				memberName = memberID.Substring(memberID.LastIndexOf('.', i) + 1);
+//			} else {
+//				memberName = memberID.Substring(memberID.LastIndexOf('.') + 1);
+//			}
+//
+//			//the member id in the declaring type
+//			string key = memberType + GetTypeNamespaceName(declaringType) + "." + memberName;
+//			return key;
+//		}
 
 		#endregion
 
@@ -3046,38 +3059,38 @@ namespace NDoc3.Core.Reflection
 
 		#region Missing Documentation
 
-		/// <summary>
-		/// Checks for missing type documentation
-		/// </summary>
-		/// <param name="type">The type to check</param>
-		/// <returns>True if documentation is missing</returns>
-		private bool CheckForMissingTypeDocumentation(Type type)
-		{
-			if (_assemblyDocCache.GetDoc(type.Assembly.GetName(), MemberID.GetMemberID(type)) == null) {
-				Trace.WriteLine(String.Format("The type {0} isn't documented and therefore skipped", MemberID.GetMemberID(type)));
-				return true;
-			}
-			return false;
-		}
-
-		private bool CheckForMissingMethodDocumentation(MethodInfo methodInfo)
-		{
-			string memberId = MemberID.GetMemberID(methodInfo);
-			if (_assemblyDocCache.GetDoc(methodInfo.DeclaringType.Assembly.GetName(), memberId) == null) {
-				Trace.WriteLine(String.Format("The method {0} isn't documented and therefore skipped", memberId));
-				return true;
-			}
-			return false;
-		}
+//		/// <summary>
+//		/// Checks for missing type documentation
+//		/// </summary>
+//		/// <param name="type">The type to check</param>
+//		/// <returns>True if documentation is missing</returns>
+//		private bool CheckForMissingTypeDocumentation(Type type)
+//		{
+//			if (_assemblyDocCache.GetDoc(type.Assembly.GetName(), MemberID.GetMemberID(type)) == null) {
+//				Trace.WriteLine(String.Format("The type {0} isn't documented and therefore skipped", MemberID.GetMemberID(type)));
+//				return true;
+//			}
+//			return false;
+//		}
+//
+//		private bool CheckForMissingMethodDocumentation(MethodInfo methodInfo)
+//		{
+//			string memberId = MemberID.GetMemberID(methodInfo);
+//			if (_assemblyDocCache.GetDoc(methodInfo.DeclaringType.Assembly.GetName(), memberId) == null) {
+//				Trace.WriteLine(String.Format("The method {0} isn't documented and therefore skipped", memberId));
+//				return true;
+//			}
+//			return false;
+//		}
 
 		private void CheckForMissingSummaryAndRemarks(
 			XmlWriter writer,
 			AssemblyName assemblyName,
-			string memberName)
+			string memberId)
 		{
 			if (this._rep.ShowMissingSummaries) {
 				bool bMissingSummary = true;
-				string xmldoc = _assemblyDocCache.GetDoc(assemblyName, memberName);
+				string xmldoc = _assemblyDocCache.GetDoc(assemblyName, memberId);
 
 				if (xmldoc != null) {
 					XmlTextReader reader = new XmlTextReader(xmldoc, XmlNodeType.Element, null);
@@ -3096,13 +3109,13 @@ namespace NDoc3.Core.Reflection
 
 				if (bMissingSummary) {
 					WriteMissingDocumentation(writer, "summary", null,
-						memberName == null ? "Missing <summary> documentation" : "Missing <summary> documentation for " + memberName);
+						memberId == null ? "Missing <summary> documentation" : "Missing <summary> documentation for " + memberId);
 				}
 			}
 
 			if (_rep.ShowMissingRemarks) {
 				bool bMissingRemarks = true;
-				string xmldoc = _assemblyDocCache.GetDoc(assemblyName, memberName);
+				string xmldoc = _assemblyDocCache.GetDoc(assemblyName, memberId);
 
 				if (xmldoc != null) {
 					XmlTextReader reader = new XmlTextReader(xmldoc, XmlNodeType.Element, null);
@@ -3121,7 +3134,7 @@ namespace NDoc3.Core.Reflection
 
 				if (bMissingRemarks) {
 					WriteMissingDocumentation(writer, "remarks", null,
-						"Missing <remarks> documentation for " + memberName);
+						"Missing <remarks> documentation for " + memberId);
 				}
 			}
 		}

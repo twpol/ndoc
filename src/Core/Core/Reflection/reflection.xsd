@@ -209,6 +209,8 @@
 			<xs:attribute name="literal" type="xs:boolean" use="optional"/>
 			<xs:attribute name="value" type="xs:string" use="optional"/>
 			<xs:attribute name="declaringType" type="xs:string" use="optional"/>
+			<xs:attribute name="declaringAssembly" type="xs:string" use="optional"/>
+			<xs:attribute name="declaringId" type="xs:string" use="optional"/>
 		</xs:complexType>
 	</xs:element>
 
@@ -247,13 +249,15 @@
 			<xs:attribute name="typeId" type="xs:string" use="required"/>
 			<xs:attribute name="nullable" type="xs:boolean" use="optional"/>
 			<xs:attribute name="valueType" type="xs:boolean" use="required"/>
-			<xs:attribute name="declaringType" type="xs:string" use="optional"/>
 			<xs:attribute name="overload" type="xs:string" use="optional"/>
 			<xs:attribute name="unsafe" type="xs:boolean" use="optional"/>
 			<xs:attribute name="hiding" type="xs:boolean" use="optional"/>
 			<xs:attribute name="get" type="xs:string" use="required"/>
 			<xs:attribute name="set" type="xs:string" use="required"/>
 			<xs:attribute name="interface" type="xs:string" use="optional"/>
+			<xs:attribute name="declaringType" type="xs:string" use="optional"/>
+			<xs:attribute name="declaringAssembly" type="xs:string" use="optional"/>
+			<xs:attribute name="declaringId" type="xs:string" use="optional"/>
 		</xs:complexType>
 	</xs:element>
 
@@ -290,6 +294,8 @@
 			<xs:attribute name="hiding" type="xs:boolean" use="optional"/>
 			<xs:attribute name="interface" type="xs:string" use="optional"/>
 			<xs:attribute name="declaringType" type="xs:string" use="optional"/>
+			<xs:attribute name="declaringAssembly" type="xs:string" use="optional"/>
+			<xs:attribute name="declaringId" type="xs:string" use="optional"/>
 		</xs:complexType>
 	</xs:element>
 
@@ -309,6 +315,8 @@
 			<xs:attribute name="overload" type="xs:string" use="optional"/>
 			<xs:attribute name="unsafe" type="xs:boolean" use="optional"/>
 			<xs:attribute name="declaringType" type="xs:string" use="optional"/>
+			<xs:attribute name="declaringAssembly" type="xs:string" use="optional"/>
+			<xs:attribute name="declaringId" type="xs:string" use="optional"/>
 		</xs:complexType>
 	</xs:element>
 
@@ -329,6 +337,8 @@
 			<xs:attribute name="interface" type="xs:string" use="optional"/>
 			<xs:attribute name="multicast" type="xs:boolean" use="optional"/>
 			<xs:attribute name="declaringType" type="xs:string" use="optional"/>
+			<xs:attribute name="declaringAssembly" type="xs:string" use="optional"/>
+			<xs:attribute name="declaringId" type="xs:string" use="optional"/>
 		</xs:complexType>
 	</xs:element>
 

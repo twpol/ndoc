@@ -50,7 +50,7 @@ namespace NDoc3.Core
 //
 //			ParameterInfo[] pars = method.GetParameters();
 
-			Assert.AreEqual("M:NDoc3.Core.GenericClass`2.ReturnsGenericClassType``2(`0,`1,``1,``0)", MemberID.GetMemberID(method));
+			Assert.AreEqual("M:NDoc3.Core.GenericClass`2.ReturnsGenericClassType``2(`0,`1,``1,``0)", MemberID.GetMemberID(method, false));
 		}
 
 		[Test]
@@ -59,7 +59,7 @@ namespace NDoc3.Core
 			Type declaringType = typeof(GenericClass<,>);
 			MethodInfo method = declaringType.GetMethod("ReturnsGenericClassTypeWithComplexGenericArg");
 
-			Assert.AreEqual("M:NDoc3.Core.GenericClass`2.ReturnsGenericClassTypeWithComplexGenericArg``1(`0@,`1[][],NDoc3.Core.GenericClass{``0,NDoc3.Core.GenericClass{`1,`0}},``0[0:,0:]@)", MemberID.GetMemberID(method));
+			Assert.AreEqual("M:NDoc3.Core.GenericClass`2.ReturnsGenericClassTypeWithComplexGenericArg``1(`0@,`1[][],NDoc3.Core.GenericClass{``0,NDoc3.Core.GenericClass{`1,`0}},``0[0:,0:]@)", MemberID.GetMemberID(method, false));
 		}
 
 		[Test]
@@ -68,7 +68,7 @@ namespace NDoc3.Core
 			Type declaringType = typeof(NormalClass);
 			MethodInfo method = declaringType.GetMethod("TakesNestedTypeArg");
 
-			string memberId = MemberID.GetMemberID(method);
+			string memberId = MemberID.GetMemberID(method, false);
 			Assert.AreEqual("M:NDoc3.Core.NormalClass.TakesNestedTypeArg``1(NDoc3.Core.NormalClass.Function{``0},System.String,System.Object[])", memberId);
 		}
 	}
