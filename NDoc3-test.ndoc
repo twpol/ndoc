@@ -1,20 +1,31 @@
 <project SchemaVersion="1.3">
     <assemblies>
-        <assembly location="C:\projects\ndoc3\trunk\bin\VS.NET2008\Debug\NDoc3.Core.Tests.TestAssembly1.dll" documentation="C:\projects\ndoc3\trunk\bin\VS.NET2008\Debug\NDoc3.Core.Tests.TestAssembly1.xml" />
-        <assembly location="C:\projects\ndoc3\trunk\bin\VS.NET2008\Debug\NDoc3.Core.Tests.TestAssembly2.dll" documentation="C:\projects\ndoc3\trunk\bin\VS.NET2008\Debug\NDoc3.Core.Tests.TestAssembly2.xml" />
+        <assembly location=".\bin\net\3.5\NDoc3.Core.dll" documentation=".\bin\net\3.5\NDoc3.Core.xml" />
+        <assembly location=".\bin\net\3.5\NDoc3.Core.Tests.dll" documentation=".\bin\net\3.5\NDoc3.Core.Tests.xml" />
+        <assembly location=".\bin\net\3.5\NDoc3.Core.Tests.TestAssembly1.dll" documentation=".\bin\net\3.5\NDoc3.Core.Tests.TestAssembly1.xml" />
+        <assembly location=".\bin\net\3.5\NDoc3.Core.Tests.TestAssembly2.dll" documentation=".\bin\net\3.5\NDoc3.Core.Tests.TestAssembly2.xml" />
+        <assembly location=".\bin\net\3.5\NDoc3.Documenter.JavaDoc.dll" documentation=".\bin\net\3.5\NDoc3.Documenter.JavaDoc.xml" />
+        <assembly location=".\bin\net\3.5\NDoc3.Documenter.Latex.dll" documentation=".\bin\net\3.5\NDoc3.Documenter.Latex.xml" />
+        <assembly location=".\bin\net\3.5\NDoc3.Documenter.LinearHtml.dll" documentation=".\bin\net\3.5\NDoc3.Documenter.LinearHtml.xml" />
+        <assembly location=".\bin\net\3.5\NDoc3.Documenter.Msdn.dll" documentation=".\bin\net\3.5\NDoc3.Documenter.Msdn.xml" />
+        <assembly location=".\bin\net\3.5\NDoc3.Documenter.Msdn.Tests.dll" documentation=".\bin\net\3.5\NDoc3.Documenter.Msdn.Tests.xml" />
+        <assembly location=".\bin\net\3.5\NDoc3.Documenter.Msdn2.dll" documentation=".\bin\net\3.5\NDoc3.Documenter.Msdn2.xml" />
+        <assembly location=".\bin\net\3.5\NDoc3.Documenter.NativeHtmlHelp2.dll" documentation=".\bin\net\3.5\NDoc3.Documenter.NativeHtmlHelp2.xml" />
+        <assembly location=".\bin\net\3.5\NDoc3.Documenter.Xml.dll" documentation=".\bin\net\3.5\NDoc3.Documenter.Xml.xml" />
+        <assembly location=".\bin\net\3.5\NDoc3.ExtendedUI.dll" documentation=".\bin\net\3.5\NDoc3.ExtendedUI.xml" />
+        <assembly location=".\bin\net\3.5\NDoc3.Test.dll" documentation=".\bin\net\3.5\NDoc3.Test.xml" />
+        <assembly location=".\bin\net\3.5\NDoc3.VisualStudio.dll" documentation=".\bin\net\3.5\NDoc3.VisualStudio.xml" />
     </assemblies>
     <documenters>
-        <documenter name="XML">
-            <property name="OutputFile" value=".\doc\doc.xml" />
-            <property name="DocumentProtectedInternalAsProtected" value="False" />
-            <property name="UseNamespaceDocSummaries" value="False" />
-            <property name="SdkDocVersionString" value="VS.80" />
-        </documenter>
         <documenter name="MSDN">
-            <property name="OutputDirectory" value=".\bin\testdoc\" />
-            <property name="HtmlHelpName" value="Documentation" />
-            <property name="Title" value="An NDoc3 Documented Class Library" />
+            <property name="OutputDirectory" value=".\bin\net\3.5\testdoc\" />
+            <property name="HtmlHelpName" value="NDoc3.All" />
+            <property name="Title" value="NDoc3 Test Documentation" />
             <property name="MergeAssemblies" value="False" />
+            <property name="ShowMissingSummaries" value="True" />
+            <property name="AssemblyVersionInfo" value="AssemblyVersion" />
+            <property name="CopyrightText" value="Copyright © 2000-2009 the NDoc3 Team" />
+            <property name="UseNamespaceDocSummaries" value="True" />
             <property name="SdkDocVersionString" value="VS.80" />
         </documenter>
     </documenters>
