@@ -872,11 +872,11 @@
 	<!-- Get a link from a cref -->
 	<xsl:template name="get-a-href">
 		<xsl:param name="cref" />
-		<xsl:variable name="href" select="string(NUtil:GetHRef(ancestor::ndoc:assembly/@name, $cref))" />
+		<xsl:variable name="href" select="string(NUtil:GetHRef(ancestor-or-self::ndoc:assembly/@name|@name, $cref))" />
 		<xsl:choose>
 			<xsl:when test="$href=''">
 				<b>
-					<xsl:value-of select="string(NUtil:GetName(ancestor::ndoc:assembly/@name, $cref))" />
+					<xsl:value-of select="string(NUtil:GetName(ancestor-or-self::ndoc:assembly/@name|@name, $cref))" />
 				</b>
 			</xsl:when>
 			<xsl:otherwise>
@@ -889,7 +889,7 @@
 							<xsl:value-of select="." />
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of select="string(NUtil:GetName(ancestor::ndoc:assembly/@name, $cref))" />
+							<xsl:value-of select="string(NUtil:GetName(ancestor-or-self::ndoc:assembly/@name|@name, $cref))" />
 						</xsl:otherwise>
 					</xsl:choose>
 				</a>
@@ -899,11 +899,11 @@
 	<!-- get-a-href-with-name -->
 	<xsl:template name="get-a-href-with-name">
 		<xsl:param name="cref" />
-		<xsl:variable name="href" select="string(NUtil:GetHRef(ancestor::ndoc:assembly/@name, $cref))" />
+		<xsl:variable name="href" select="string(NUtil:GetHRef(ancestor-or-self::ndoc:assembly/@name, $cref))" />
 		<xsl:choose>
 			<xsl:when test="$href=''">
 				<b>
-					<xsl:value-of select="string(NUtil:GetName(ancestor::ndoc:assembly/@name, $cref))" />
+					<xsl:value-of select="string(NUtil:GetName(ancestor-or-self::ndoc:assembly/@name, $cref))" />
 				</b>
 			</xsl:when>
 			<xsl:otherwise>
@@ -911,7 +911,7 @@
 					<xsl:attribute name="href">
 						<xsl:value-of select="$href" />
 					</xsl:attribute>
-					<xsl:value-of select="string(NUtil:GetName(ancestor::ndoc:assembly/@name, $cref))" />
+					<xsl:value-of select="string(NUtil:GetName(ancestor-or-self::ndoc:assembly/@name, $cref))" />
 				</a>
 			</xsl:otherwise>
 		</xsl:choose>

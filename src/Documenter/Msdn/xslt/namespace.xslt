@@ -33,9 +33,9 @@
 		
 		<xsl:variable name="classes" select="evaluate($condition)/ndoc:class" />
 		<xsl:variable name="interfaces" select="evaluate($condition)/ndoc:interface" />
-		<xsl:variable name="structures" select="evaluate($condition)/ndoc:structures" />
-		<xsl:variable name="delegates" select="evaluate($condition)/ndoc:delegates" />
-		<xsl:variable name="enumerations" select="evaluate($condition)/ndoc:enumerations" />
+		<xsl:variable name="structures" select="evaluate($condition)/ndoc:structure" />
+		<xsl:variable name="delegates" select="evaluate($condition)/ndoc:delegate" />
+		<xsl:variable name="enumerations" select="evaluate($condition)/ndoc:enumeration" />
 		
 		<html dir="LTR">
 			<xsl:call-template name="html-head">

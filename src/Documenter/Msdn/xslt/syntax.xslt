@@ -156,7 +156,7 @@
 			<xsl:if test="not(parent::ndoc:interface or @interface)">
 				<!-- If the member is not a constructor or is not static -->
 				<xsl:if test="local-name()!='constructor'">
-					<!-- Write metod accessmodifier -->
+					<!-- Write method accessmodifier -->
 					<xsl:call-template name="method-access">
 						<xsl:with-param name="access" select="@access" />
 					</xsl:call-template>
@@ -274,8 +274,12 @@
 			<!-- If the member is a operator -->
 			<xsl:when test="local-name()='operator'">
 				<!-- Write datatype -->
-				<xsl:call-template name="get-datatype">
+				<!--<xsl:call-template name="get-datatype">
 					<xsl:with-param name="datatype" select="substring-after(ndoc:returnType/@typeId, ':')" />
+				</xsl:call-template>-->
+				<xsl:call-template name="get-displayname-csharp">
+					<xsl:with-param name="node" select="ndoc:returnType" />
+					<xsl:with-param name="onlyWriteGenericLinks" select="true()"/>
 				</xsl:call-template>
 				<!-- Write operator name-->
 				<xsl:call-template name="operator-name">
@@ -283,21 +287,33 @@
 						<xsl:value-of select="@name" />
 					</xsl:with-param>
 					<xsl:with-param name="from">
-						<xsl:call-template name="get-datatype">
+						<!--<xsl:call-template name="get-datatype">
 							<xsl:with-param name="datatype" select="substring-after(ndoc:parameter/@typeId, ':')" />
+						</xsl:call-template>-->
+						<xsl:call-template name="get-displayname-csharp">
+							<xsl:with-param name="node" select="ndoc:parameter" />
+							<xsl:with-param name="onlyWriteGenericLinks" select="true()"/>
 						</xsl:call-template>
 					</xsl:with-param>
 					<xsl:with-param name="to">
-						<xsl:call-template name="get-datatype">
+						<!--<xsl:call-template name="get-datatype">
 							<xsl:with-param name="datatype" select="substring-after(ndoc:returnType/@typeId, ':')" />
+						</xsl:call-template>-->
+						<xsl:call-template name="get-displayname-csharp">
+							<xsl:with-param name="node" select="ndoc:returnType" />
+							<xsl:with-param name="onlyWriteGenericLinks" select="true()"/>
 						</xsl:call-template>
 					</xsl:with-param>
 				</xsl:call-template>
 			</xsl:when>
 			<!-- Otherwise write datatype and name of the member -->
 			<xsl:otherwise>
-				<xsl:call-template name="get-datatype">
-					<xsl:with-param name="datatype" select="substring-after(ndoc:returnType/@id, ':')" />
+				<!--<xsl:call-template name="get-datatype">
+					<xsl:with-param name="datatype" select="substring-after(ndoc:returnType/@typeId, ':')" />
+				</xsl:call-template-->
+				<xsl:call-template name="get-displayname-csharp">
+					<xsl:with-param name="node" select="ndoc:returnType" />
+					<xsl:with-param name="onlyWriteGenericLinks" select="true()"/>
 				</xsl:call-template>
 				<xsl:text>&#160;</xsl:text>
 				<xsl:value-of select="@displayName" />
@@ -533,6 +549,30 @@
 		</xsl:if>
 		<xsl:text>)</xsl:text>
 	</xsl:template>
+
+	<xsl:template name="array" match="ndoc:array" mode="cs-syntax">
+		<xsl:text>[</xsl:text>
+		<!-- find a way to output ',' according to 'rank' attribute -->
+		<xsl:call-template name="writechar">
+			<xsl:with-param name="char" select="','"/>
+			<xsl:with-param name="count" select="number(@rank)-1" />
+		</xsl:call-template>
+		<xsl:text>]</xsl:text>
+		<xsl:apply-templates select="ndoc:array" mode="cs-syntax"/>
+	</xsl:template>
+
+	<xsl:template name="writechar">
+		<xsl:param name="char" />
+		<xsl:param name="count" />
+		<xsl:if test="$count &gt; 0">
+			<xsl:value-of select="$char" />
+			<xsl:call-template name="writechar">
+				<xsl:with-param name="char" select="$char" />
+				<xsl:with-param name="count" select="($count)-1" />
+			</xsl:call-template>
+		</xsl:if>
+	</xsl:template>
+	
 	<!--  -->
 	<xsl:template name="get-datatype">
 		<xsl:param name="datatype" />
@@ -651,16 +691,15 @@
 		<xsl:param name="node" select="."/>
 		<xsl:param name="onlyWriteGenericLinks" select="false()"/>
 		<xsl:choose>
-			<xsl:when test="$onlyWriteGenericLinks = 'true'">
+			<xsl:when test="$onlyWriteGenericLinks='true'">
 				<xsl:call-template name="write-type-link">
 					<xsl:with-param name="node" select="$node" />
-					<xsl:with-param name="writelinks" select="false()"/>
+					<xsl:with-param name="nolinks" select="true()"/>
 				</xsl:call-template>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:call-template name="write-type-link">
 					<xsl:with-param name="node" select="$node" />
-					<xsl:with-param name="writelinks" select="true()"/>
 				</xsl:call-template>
 			</xsl:otherwise>
 		</xsl:choose>
@@ -670,6 +709,11 @@
 		<xsl:for-each select="$node/ndoc:genericargument">
 			<xsl:call-template name="get-genericarguments">
 				<xsl:with-param name="node" select="."/>
+				<xsl:with-param name="nolinks">
+					<xsl:if test="$onlyWriteGenericLinks='true'">
+						<xsl:value-of select="true()"/>
+					</xsl:if>
+				</xsl:with-param>
 			</xsl:call-template>
 			<xsl:if test="position()!=last()">
 				<xsl:text>, </xsl:text>
@@ -678,12 +722,23 @@
 		<xsl:if test="$node/ndoc:genericargument">
 			<xsl:text>&gt;</xsl:text>
 		</xsl:if>
+		<!-- append array syntax -->
+		<xsl:apply-templates select="$node/ndoc:array" mode="cs-syntax" />
 	</xsl:template>
+
 	<!-- Generic parameters and arguments -->
 	<xsl:template name="get-genericarguments">
+		
 		<xsl:param name="node" select="." />
+		<xsl:param name="nolinks" select="false()"/>
+		
 		<xsl:call-template name="write-type-link">
 			<xsl:with-param name="node" select="$node" />
+			<xsl:with-param name="nolinks">
+				<xsl:if test="$nolinks='true'">
+					<xsl:value-of select="true()"/>
+				</xsl:if>
+			</xsl:with-param>
 		</xsl:call-template>
 		<xsl:if test="$node/ndoc:genericargument">
 			<xsl:text>&lt;</xsl:text>
@@ -691,6 +746,11 @@
 		<xsl:for-each select="$node/ndoc:genericargument">
 			<xsl:call-template name="get-genericarguments">
 				<xsl:with-param name="node" select="."/>
+				<xsl:with-param name="nolinks">
+					<xsl:if test="$nolinks='true'">
+						<xsl:value-of select="true()"/>
+					</xsl:if>
+				</xsl:with-param>
 			</xsl:call-template>
 			<xsl:if test="position()!=last()">
 				<xsl:text>, </xsl:text>
@@ -700,22 +760,25 @@
 			<xsl:text>&gt;</xsl:text>
 		</xsl:if>
 	</xsl:template>
+	
 	<!-- Write link to type -->
 	<xsl:template name="write-type-link">
 		<xsl:param name="node" select="."/>
-		<xsl:param name="writelinks" select="true()"/>
+		<xsl:param name="nolinks" select="false()"/>
 		<!-- Handle both types with ID attribute and those without fx. genericarguments -->
 		<xsl:choose>
-			<xsl:when test="(contains($node/@id, '.') or contains($node/@typeId, '.') or contains($node, '.') or (contains($node/@name, '.') and local-name($node) = 'genericargument')) and $writelinks = 'true'">
+			<xsl:when test="(contains($node/@id, '.') or contains($node/@typeId, '.') or contains($node, '.') or (contains($node/@name, '.') and local-name($node) = 'genericargument')) and not($nolinks='true')">
 				<a>
 					<xsl:choose>
 						<!-- Handle the speciel case of fields, events, properties and parameters
             which uses typeId instead of id attribute -->
-						<xsl:when test="local-name($node) = 'field' or local-name($node) = 'event'
-                      or local-name($node) = 'property' or local-name($node) = 'parameter'">
+						<xsl:when test="$node/@typeId">
+						<!--<xsl:when test="local-name($node) = 'field' or local-name($node) = 'event'
+                      or local-name($node) = 'property' or local-name($node) = 'parameter' or local-name($node) = 'genericargument'">-->
 							<xsl:attribute name="href">
-								<xsl:call-template name="get-filename-for-type-name">
-									<xsl:with-param name="type-name" select="substring-after($node/@typeId, ':')" />
+								<xsl:call-template name="get-filename-for-type">
+									<xsl:with-param name="id" select="$node/@typeId" />
+									<xsl:with-param name="assemblyName" select="$node/@assembly" />
 								</xsl:call-template>
 							</xsl:attribute>
 							<xsl:call-template name="get-datatype">

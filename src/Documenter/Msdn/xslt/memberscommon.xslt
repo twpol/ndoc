@@ -98,7 +98,7 @@
 						</xsl:when>
 						<xsl:otherwise>
 							<xsl:apply-templates select="*[local-name()=$member and @access='Public' and @contract='Static']">
-								<xsl:sort select="@displayName" />
+								<xsl:sort select="@name" />
 							</xsl:apply-templates>
 						</xsl:otherwise>
 					</xsl:choose>
@@ -144,7 +144,7 @@
 			<div class="tablediv">
 				<table class="dtTABLE" cellspacing="0">
 					<xsl:apply-templates select="*[local-name()=$member and @access='FamilyOrAssembly' and @contract='Static']">
-						<xsl:sort select="@name" />
+						<xsl:sort select="@dname" />
 					</xsl:apply-templates>
 				</table>
 			</div>
@@ -207,7 +207,7 @@
 			<div class="tablediv">
 				<table class="dtTABLE" cellspacing="0">
 					<xsl:apply-templates select="*[local-name()=$member and @access='Public' and not(@contract='Static')]">
-						<xsl:sort select="@displayName" />
+						<xsl:sort select="@name" />
 					</xsl:apply-templates>
 				</table>
 			</div>
@@ -798,7 +798,7 @@
 		<xsl:variable name="displayName">
 			<xsl:choose>
 				<xsl:when test="@displayName">
-					<xsl:value-of select="@displayName" />
+					<xsl:value-of select="@name" />
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:value-of select="@name" />

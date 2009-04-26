@@ -16,6 +16,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
@@ -794,7 +795,7 @@ namespace NDoc3.Documenter.Msdn
 
 				if (constructorNodes.Count > 1) {
 					XmlNodeList parameterNodes = ctx.SelectNodes(constructorNode, "ndoc:parameter");
-					ctx.htmlHelp.AddFileToContents(typeName + " Constructor " + GetParamList(parameterNodes), fileName,
+					ctx.htmlHelp.AddFileToContents(typeName + " Constructor " + GetParamList(ctx, parameterNodes), fileName,
 						HtmlHelpIcon.Page);
 				} else {
 					ctx.htmlHelp.AddFileToContents(typeName + " Constructor", fileName, HtmlHelpIcon.Page);
@@ -921,7 +922,7 @@ namespace NDoc3.Documenter.Msdn
 						pageTitle = string.Format("{0} Property", propertyName);
 					} else {
 						XmlNodeList parameterNodes = ctx.SelectNodes(propertyNode, "ns:parameter");
-						pageTitle = string.Format("{0} Property {1}", propertyName, GetParamList(parameterNodes));
+						pageTitle = string.Format("{0} Property {1}", propertyName, GetParamList(ctx, parameterNodes));
 					}
 					ctx.htmlHelp.AddFileToContents(pageTitle, fileName, HtmlHelpIcon.Page);
 
@@ -1043,7 +1044,7 @@ namespace NDoc3.Documenter.Msdn
 						string pageTitle;
 						if (bOverloaded) {
 							XmlNodeList parameterNodes = ctx.SelectNodes(methodNode, "ndoc:parameter");
-							pageTitle = methodDisplayName + GetParamList(parameterNodes) + " Method ";
+							pageTitle = methodDisplayName + GetParamList(ctx, parameterNodes) + " Method ";
 						} else {
 							pageTitle = methodDisplayName + " Method";
 						}
@@ -1131,7 +1132,7 @@ namespace NDoc3.Documenter.Msdn
 					string opPageTitle;
 					if (bOverloaded) {
 						XmlNodeList parameterNodes = ctx.SelectNodes(operatorNode, "ns:parameter");
-						opPageTitle = GetOperatorDisplayName(ctx, operatorNode) + GetParamList(parameterNodes);
+						opPageTitle = GetOperatorDisplayName(ctx, operatorNode) + GetParamList(ctx, parameterNodes);
 					} else {
 						opPageTitle = GetOperatorDisplayName(ctx, operatorNode);
 					}
@@ -1267,13 +1268,13 @@ namespace NDoc3.Documenter.Msdn
 				case "op_Explicit": {
 						XmlNode parameterNode = ctx.SelectSingleNode(operatorNode, "ndoc:parameter");
 						string from = GetNodeTypeId(parameterNode);
-						string to = GetNodeType(ctx.SelectSingleNode(operatorNode, "ndoc:returnType"));
+						string to = GetNodeTypeId(ctx.SelectSingleNode(operatorNode, "ndoc:returnType"));
 						return "Explicit " + StripNamespace(from) + " to " + StripNamespace(to) + " Conversion";
 					}
 				case "op_Implicit": {
 						XmlNode parameterNode = ctx.SelectSingleNode(operatorNode, "ndoc:parameter");
 						string from = GetNodeTypeId(parameterNode);
-						string to = GetNodeType(ctx.SelectSingleNode(operatorNode, "ndoc:returnType"));
+						string to = GetNodeTypeId(ctx.SelectSingleNode(operatorNode, "ndoc:returnType"));
 						return "Implicit " + StripNamespace(from) + " to " + StripNamespace(to) + " Conversion";
 					}
 				default:
@@ -1327,27 +1328,36 @@ namespace NDoc3.Documenter.Msdn
 			}
 		}
 
-		private string GetParamList(XmlNodeList parameterNodes)
+		private string GetParamList(BuildProjectContext ctx, XmlNodeList parameterNodes)
 		{
-			int numberOfNodes = parameterNodes.Count;
-			int nodeIndex = 1;
-			string paramList = "(";
+//			int numberOfNodes = parameterNodes.Count;
+//			int nodeIndex = 1;
+			ArrayList parameters = new ArrayList();
 
 			foreach (XmlNode parameterNode in parameterNodes) {
-				XmlAttribute typeAtt = parameterNode.Attributes["typeId"];
 
-				paramList += StripNamespace(typeAtt.Value.Substring(2));
+				string parameterTypeName = GetParameterTypeName(parameterNode, "displayName");
+				
+				parameters.Add(parameterTypeName);
 
-				if (nodeIndex < numberOfNodes) {
-					paramList += ", ";
-				}
-
-				nodeIndex++;
+//				if (nodeIndex < numberOfNodes) {
+//					paramList += ", ";
+//				}
+//
+//				nodeIndex++;
 			}
 
-			paramList += ")";
+			string[] parameterTypeNames = (string[]) parameters.ToArray(typeof (string));
+			string paramList = "(" + string.Join(",", parameterTypeNames) + ")";
 
 			return paramList;
+		}
+
+		private string GetParameterTypeName(XmlNode root, string typeAttributeName)
+		{
+			XmlAttribute typeAtt = root.Attributes[typeAttributeName];
+			return typeAtt.Value;
+//			return StripNamespace(typeAtt.Value.Substring(2));
 		}
 
 		private string GetNodeId(XmlNode node)

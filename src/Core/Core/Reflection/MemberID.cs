@@ -189,14 +189,17 @@ namespace NDoc3.Core.Reflection
 			return fullName.Replace('+', '.');
 		}
 
-		private static Type DereferenceType(Type type)
+		/// <summary>
+		/// Returns the underlying element type in case of reference or array types.
+		/// </summary>
+		public static Type DereferenceType(Type type)
 		{
-			if (type.IsByRef)
+			if (type.IsByRef || type.IsArray)
+			{
 				type = type.GetElementType();
+				return DereferenceType(type);
+			}
 
-			// de-ref array types
-			while(type.IsArray) 
-				type = type.GetElementType();
 			return type;
 		}
 
@@ -232,6 +235,16 @@ namespace NDoc3.Core.Reflection
 		}
 
 		/// <summary>
+		/// Returns the language-agnostic name of the given type
+		/// </summary>
+		/// <param name="t"></param>
+		/// <returns></returns>
+		public static string GetTypeDisplayName(Type t)
+		{
+			return GetTypeName(t);
+		}
+
+		/// <summary>
 		/// Get the type name of a type
 		/// </summary>
 		/// <param name="type">The type</param>
@@ -253,18 +266,11 @@ namespace NDoc3.Core.Reflection
 			string result = "";
 			if (type.GetGenericArguments().Length > 0)
 			{
-				// HACK: bug in reflection - namespace sometimes returns null
 				string typeNamespace = null;
-				try
+				typeNamespace = GetTypeNamespace(type);
+				if (!string.IsNullOrEmpty(typeNamespace) )
 				{
-					typeNamespace = type.Namespace + ".";
-				}
-				catch (NullReferenceException) { }
-
-				if (typeNamespace == null)
-				{
-					int lastDot = type.FullName.LastIndexOf(".");
-					typeNamespace = lastDot > -1 ? type.FullName.Substring(0, lastDot + 1) : string.Empty;
+					typeNamespace += ".";
 				}
 				//************ end of hack *************************
 
@@ -357,6 +363,30 @@ namespace NDoc3.Core.Reflection
 		}
 
 		/// <summary>
+		/// Gets the type's namespace
+		/// </summary>
+		/// <remarks>
+		/// This due to a reflection issue where type.Namespace occasionally is null.
+		/// </remarks>
+		public static string GetTypeNamespace(Type type)
+		{
+			// HACK: bug in reflection - namespace sometimes returns null
+			type = DereferenceType(type);
+
+			string typeNamespace;
+			if (type.Namespace != null)
+			{
+				typeNamespace = type.Namespace + ".";
+			}
+			else
+			{
+				int lastDot = type.FullName.LastIndexOf(".");
+				typeNamespace = lastDot > -1 ? type.FullName.Substring(0, lastDot + 1) : string.Empty;
+			}
+			return typeNamespace.TrimEnd('.');
+		}
+
+		/// <summary>
 		/// Get the generic argument list of a type
 		/// </summary>
 		/// <param name="type">The type</param>
@@ -410,7 +440,7 @@ namespace NDoc3.Core.Reflection
 		/// </summary>
 		/// <param name="method">The method</param>
 		/// <returns>String representation of the method parameters</returns>
-		private static string GetParameterList(MethodBase method)
+		public static string GetParameterList(MethodBase method)
 		{
 			ParameterInfo[] parameters = method.GetParameters();
 			StringBuilder paramList = new StringBuilder();

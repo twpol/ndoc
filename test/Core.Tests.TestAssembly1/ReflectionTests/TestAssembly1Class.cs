@@ -50,7 +50,15 @@ namespace NDoc3.ReflectionTests
 		/// <summary>
 		/// A single dim array
 		/// </summary>
-		public string[] SingleArray;
+		public string[] SingleArray { get { return null;}  }
+		/// <summary>
+		/// A single dim array
+		/// </summary>
+		public Action<int>[] AnotherArray
+		{
+			protected get { return null;} 
+			set {}
+		}
 
 		/// <summary>
 		/// The documentation

@@ -151,7 +151,10 @@
 								<xsl:when test="self::ndoc:interface">
 									<xsl:if test="ndoc:derivedBy">
 										<b>
-											<xsl:value-of select="substring-after( @id, ':' )" />
+											<xsl:if test="@namespace">
+												<xsl:value-of select="@namespace" /><xsl:text>.</xsl:text>
+											</xsl:if>
+											<xsl:value-of select="@displayName" />
 										</b>
 										<xsl:choose>
 											<xsl:when test="count(ndoc:derivedBy) &lt; 6">

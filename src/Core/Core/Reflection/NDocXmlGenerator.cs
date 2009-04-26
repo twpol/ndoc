@@ -1312,11 +1312,7 @@ namespace NDoc3.Core.Reflection
 					Type t = method.ReturnType;
 					writer.WriteAttributeString("valueType", t.IsValueType.ToString().ToLower());
 
-					writer.WriteStartElement("returnType");
-					writer.WriteAttributeString("type", MemberID.GetTypeName(t));
-					writer.WriteAttributeString("id", MemberID.GetMemberID(t));
-					WriteGenericArgumentsAndParameters(t, writer);
-					writer.WriteEndElement();
+					WriteReturnType(writer, t);
 
 					WriteDelegateDocumentation(writer, memberName, method);
 					WriteCustomAttributes(writer, type);
@@ -1332,6 +1328,13 @@ namespace NDoc3.Core.Reflection
 				WriteGenericTypeConstraints(type, writer);
 			}
 
+			writer.WriteEndElement();
+		}
+
+		private void WriteReturnType(XmlWriter writer, Type t)
+		{
+			writer.WriteStartElement("returnType");
+			WriteMethodSignatureTypeMetadata(writer, t);
 			writer.WriteEndElement();
 		}
 
@@ -1557,9 +1560,12 @@ namespace NDoc3.Core.Reflection
 
 		private void WriteCustomAttributes(XmlWriter writer, ParameterInfo parameterInfo)
 		{
-			try {
-				WriteCustomAttributes(writer, parameterInfo.GetCustomAttributes(_rep.DocumentInheritedAttributes), "");
-			} catch (Exception e) {
+			try
+			{
+				object[] customAttributes = parameterInfo.GetCustomAttributes(_rep.DocumentInheritedAttributes);
+				WriteCustomAttributes(writer, customAttributes, "");
+			}
+			catch (Exception e) {
 				TraceErrorOutput("Error retrieving custom attributes for " + parameterInfo.Member.ReflectedType.FullName + "." + parameterInfo.Member.Name + " param " + parameterInfo.Name, e);
 			}
 		}
@@ -1962,12 +1968,12 @@ namespace NDoc3.Core.Reflection
 
 			Type t = field.FieldType;
 
-			writer.WriteAttributeString("typeId", MemberID.GetMemberID(t));
+//			writer.WriteAttributeString("typeId", MemberID.GetMemberID(t));
 
-			if (t.IsGenericType && t.GetGenericTypeDefinition() == typeof(Nullable<>))
-				writer.WriteAttributeString("nullable", "true");
-
-			writer.WriteAttributeString("valueType", t.IsValueType.ToString().ToLower());
+//			if (t.IsGenericType && t.GetGenericTypeDefinition() == typeof(Nullable<>))
+//				writer.WriteAttributeString("nullable", "true");
+//
+//			writer.WriteAttributeString("valueType", t.IsValueType.ToString().ToLower());
 
 			bool inherited = (field.DeclaringType != field.ReflectedType);
 
@@ -1997,9 +2003,11 @@ namespace NDoc3.Core.Reflection
 			if (inherited) {
 				WriteDeclaringType( field, writer);
 			}
-			if (t.IsGenericType && t.GetGenericTypeDefinition() != typeof(Nullable<>)) {
-				WriteGenericArgumentsAndParameters(t, writer);
-			}
+//			if (t.IsGenericType && t.GetGenericTypeDefinition() != typeof(Nullable<>)) {
+//				WriteGenericArgumentsAndParameters(t, writer);
+//			}
+
+			WriteMethodSignatureTypeMetadata(writer, t);
 
 			if (inherited) {
 				WriteInheritedDocumentation(writer, field.DeclaringType.Assembly.GetName(), memberName, field.DeclaringType);
@@ -2245,10 +2253,10 @@ namespace NDoc3.Core.Reflection
 				writer.WriteAttributeString("access", GetPropertyAccessValue(property));
 				writer.WriteAttributeString("contract", GetPropertyContractValue(property));
 				Type t = property.PropertyType;
-				writer.WriteAttributeString("typeId", MemberID.GetMemberID(t));
-				if (t.IsGenericType && t.GetGenericTypeDefinition() == typeof(Nullable<>))
-					writer.WriteAttributeString("nullable", "true");
-				writer.WriteAttributeString("valueType", t.IsValueType.ToString().ToLower());
+//				writer.WriteAttributeString("typeId", MemberID.GetMemberID(t));
+//				if (t.IsGenericType && t.GetGenericTypeDefinition() == typeof(Nullable<>))
+//					writer.WriteAttributeString("nullable", "true");
+//				writer.WriteAttributeString("valueType", t.IsValueType.ToString().ToLower());
 
 				if (inherited) {
 					WriteDeclaringType(property, writer);
@@ -2273,18 +2281,24 @@ namespace NDoc3.Core.Reflection
 				writer.WriteAttributeString("get", getter != null ? GetMethodAccessValue(getter) : "false");
 				writer.WriteAttributeString("set", setter != null ? GetMethodAccessValue(setter) : "false");
 
-				if (inherited) {
-					WriteInheritedDocumentation(writer, property.DeclaringType.Assembly.GetName(), memberName, property.DeclaringType);
-				} else {
-					WritePropertyDocumentation(writer, property.DeclaringType.Assembly.GetName(), memberName, property, true);
-				}
+				WriteMethodSignatureTypeMetadata(writer, t);
+
 				WriteCustomAttributes(writer, property);
-				if (getter != null) {
+				if (getter != null)
+				{
 					WriteCustomAttributes(writer, getter.ReturnTypeCustomAttributes.GetCustomAttributes(true), "return");
 				}
 
-				foreach (ParameterInfo parameter in GetIndexParameters(property)) {
+				foreach (ParameterInfo parameter in GetIndexParameters(property))
+				{
 					WriteParameter(writer, parameter);
+				}
+
+				if (inherited)
+				{
+					WriteInheritedDocumentation(writer, property.DeclaringType.Assembly.GetName(), memberName, property.DeclaringType);
+				} else {
+					WritePropertyDocumentation(writer, property.DeclaringType.Assembly.GetName(), memberName, property, true);
 				}
 
 				if (implementations != null) {
@@ -2332,9 +2346,9 @@ namespace NDoc3.Core.Reflection
 					}
 				}
 
-				if (t.IsGenericType && t.GetGenericTypeDefinition() != typeof(Nullable<>)) {
-					WriteGenericArgumentsAndParameters(t, writer);
-				}
+//				if (t.IsGenericType && t.GetGenericTypeDefinition() != typeof(Nullable<>)) {
+//					WriteGenericArgumentsAndParameters(t, writer);
+//				}
 
 				writer.WriteEndElement();
 			}
@@ -2466,12 +2480,12 @@ namespace NDoc3.Core.Reflection
 							name += "," + genericTypeArgs[ix].Name;
 						}
 						displayName += ")";
-						name = name + "``" + genericTypeArgs.Length;
+//						name = name + "``" + genericTypeArgs.Length;
 					}
 				}
 
 				writer.WriteStartElement("method");
-				writer.WriteAttributeString("name", name);
+				writer.WriteAttributeString("name", displayName);
 				writer.WriteAttributeString("displayName", displayName);
 				writer.WriteAttributeString("id", methodId);
 				writer.WriteAttributeString("access", GetMethodAccessValue(method));
@@ -2480,7 +2494,6 @@ namespace NDoc3.Core.Reflection
 				writer.WriteAttributeString("valueType", t.IsValueType.ToString().ToLower());
 				if (inherited) {
 					WriteDeclaringType(method, writer);
-//					writer.WriteAttributeString("declaringType", MemberID.GetDeclaringTypeName(method));
 				}
 
 				if (overload > 0) {
@@ -2497,15 +2510,8 @@ namespace NDoc3.Core.Reflection
 				if (interfaceName != null) {
 					writer.WriteAttributeString("interface", interfaceName);
 				}
-				writer.WriteStartElement("returnType");
-				writer.WriteAttributeString("type", MemberID.GetTypeName(t));
-				writer.WriteAttributeString("id", MemberID.GetMemberID(t));
-				if (t.IsGenericType && t.GetGenericTypeDefinition() == typeof(Nullable<>))
-					writer.WriteAttributeString("nullable", "true");
-				if (t.IsGenericType && t.GetGenericTypeDefinition() != typeof(Nullable<>)) {
-					WriteGenericArgumentsAndParameters(t, writer);
-				}
-				writer.WriteEndElement();
+
+				WriteReturnType(writer, t);
 
 				if (inherited) {
 					WriteInheritedDocumentation(writer, method.DeclaringType.Assembly.GetName(), methodId, method.DeclaringType);
@@ -2563,41 +2569,82 @@ namespace NDoc3.Core.Reflection
 			writer.WriteStartElement("parameter");
 			writer.WriteAttributeString("name", parameter.Name);
 
-			Type t = parameter.ParameterType;
-			writer.WriteAttributeString("typeId", MemberID.GetMemberID(t));
-			if (t.IsGenericType && t.GetGenericTypeDefinition() == typeof(Nullable<>))
-				writer.WriteAttributeString("nullable", "true");
-			writer.WriteAttributeString("valueType", t.IsValueType.ToString().ToLower());
+			Type parameterType = parameter.ParameterType;
+			if (parameterType.IsByRef)
+			{
+				parameterType = parameterType.GetElementType();
+			}
 
 			if (extensionMethod)
 				writer.WriteAttributeString("extension", "true");
 
-			if (t.IsPointer)
+			if (parameterType.IsPointer)
 				writer.WriteAttributeString("unsafe", "true");
 
-			if (parameter.IsOptional) {
+			if (parameter.IsOptional)
+			{
 				writer.WriteAttributeString("optional", "true");
-				if (parameter.DefaultValue != null) {
+				if (parameter.DefaultValue != null)
+				{
 					writer.WriteAttributeString("defaultValue", parameter.DefaultValue.ToString());
-				} else {
+				}
+				else
+				{
 					//assuming this is only for VB syntax
 					writer.WriteAttributeString("defaultValue", "Nothing");
 				}
 			}
 
-			if (direction != "in") {
+			if (direction != "in")
+			{
 				writer.WriteAttributeString("direction", direction);
 			}
 
-			if (isParamArray) {
+			if (isParamArray)
+			{
 				writer.WriteAttributeString("isParamArray", "true");
 			}
 
+			WriteMethodSignatureTypeMetadata(writer, parameterType);
+
 			WriteCustomAttributes(writer, parameter);
-			if (t.IsGenericType && t.GetGenericTypeDefinition() != typeof(Nullable<>)) {
-				WriteGenericArgumentsAndParameters(t, writer);
-			}
+
 			writer.WriteEndElement();
+		}
+
+		private void WriteMethodSignatureTypeMetadata(XmlWriter writer, Type methodSignatureType)
+		{
+			Type elementType = MemberID.DereferenceType(methodSignatureType);
+			writer.WriteAttributeString("typeId", MemberID.GetMemberID(elementType));
+			writer.WriteAttributeString("displayName", MemberDisplayName.GetMemberDisplayName(elementType));
+			writer.WriteAttributeString("namespace", MemberID.GetTypeNamespace(elementType));
+			writer.WriteAttributeString("assembly", elementType.Assembly.GetName().Name);
+
+			bool nullable = elementType.IsGenericType && elementType.GetGenericTypeDefinition() == typeof(Nullable<>);
+			writer.WriteAttributeString("nullable", nullable.ToString().ToLower());
+
+			writer.WriteAttributeString("valueType", methodSignatureType.IsValueType.ToString().ToLower());
+
+			if (elementType.IsGenericType && elementType.GetGenericTypeDefinition() != typeof(Nullable<>))
+			{
+				WriteGenericArgumentsAndParameters(elementType, writer);
+			}
+			WriteArrayRank(writer, methodSignatureType);
+		}
+
+		private void WriteArrayRank(XmlWriter writer, Type type)
+		{
+			if (type.IsByRef)
+			{
+				type = type.GetElementType();
+			}
+			if (type.IsArray)
+			{
+				writer.WriteStartElement("array");
+				writer.WriteAttributeString("rank", type.GetArrayRank().ToString());
+				WriteArrayRank(writer, type.GetElementType());
+				writer.WriteEndElement();
+			}
 		}
 
 		private void WriteOperator(XmlWriter writer, MethodInfo method, int overload)
@@ -2627,13 +2674,14 @@ namespace NDoc3.Core.Reflection
 				if (!IsMemberSafe(method))
 					writer.WriteAttributeString("unsafe", "true");
 
-				writer.WriteStartElement("returnType");
-				writer.WriteAttributeString("type", MemberID.GetTypeName(t));
-				writer.WriteAttributeString("id", MemberID.GetMemberID(t));
-				if (t.IsGenericType) {
-					WriteGenericArgumentsAndParameters(t, writer);
-				}
-				writer.WriteEndElement();
+				WriteReturnType(writer, t);
+//				writer.WriteStartElement("returnType");
+//				writer.WriteAttributeString("type", MemberID.GetTypeName(t));
+//				writer.WriteAttributeString("id", MemberID.GetMemberID(t));
+//				if (t.IsGenericType) {
+//					WriteGenericArgumentsAndParameters(t, writer);
+//				}
+//				writer.WriteEndElement();
 
 				if (inherited) {
 					WriteInheritedDocumentation(writer, method.DeclaringType.Assembly.GetName(), memberName, method.DeclaringType);
@@ -2788,11 +2836,15 @@ namespace NDoc3.Core.Reflection
 		private void WriteGenericArgumentsAndParametersMethod(MethodInfo m, XmlWriter writer)
 		{
 			foreach (Type t in m.GetGenericArguments()) {
-				writer.WriteStartElement("genericargument");
-				writer.WriteAttributeString("name", MemberID.GetTypeName(t, false));
-				if (t.IsGenericType)
-					WriteGenericArgumentsAndParameters(t, writer);
-				writer.WriteEndElement();
+				WriteGenericArgument(writer, t);
+//				writer.WriteStartElement("genericargument");
+//				string typeId = MemberID.GetMemberID(t);
+//				writer.WriteAttributeString("name", t.Name);
+//				writer.WriteAttributeString("typeId", typeId);
+//				writer.WriteAttributeString("assembly", t.Assembly.GetName().Name);
+//				if (t.IsGenericType)
+//					WriteGenericArgumentsAndParameters(t, writer);
+//				writer.WriteEndElement();
 			}
 		}
 
@@ -2804,14 +2856,35 @@ namespace NDoc3.Core.Reflection
 		private void WriteGenericArgumentsAndParameters(Type type, XmlWriter writer)
 		{
 			foreach (Type t in type.GetGenericArguments()) {
-				writer.WriteStartElement("genericargument");
-				writer.WriteAttributeString("name", MemberID.GetTypeName(t, false));
-				if (t.IsGenericType && t.GetGenericTypeDefinition() == typeof(Nullable<>))
-					writer.WriteAttributeString("nullable", "true");
-				if (t.IsGenericType && t.GetGenericTypeDefinition() != typeof(Nullable<>))
-					WriteGenericArgumentsAndParameters(t, writer);
-				writer.WriteEndElement();
+				WriteGenericArgument(writer, t);
 			}
+		}
+
+		private void WriteGenericArgument(XmlWriter writer, Type t)
+		{
+			writer.WriteStartElement("genericargument");
+			writer.WriteAttributeString("name", t.Name);
+			// is it a concrete type? if, write additional type information
+			if (!t.IsGenericParameter)
+			{
+				writer.WriteAttributeString("displayName", MemberDisplayName.GetMemberDisplayName(t));
+				writer.WriteAttributeString("namespace", MemberID.GetTypeNamespace(t));
+				writer.WriteAttributeString("typeId", MemberID.GetMemberID(t));
+				writer.WriteAttributeString("assembly", t.Assembly.GetName().Name);
+			}
+			else
+			{
+				writer.WriteAttributeString("displayName", t.Name);
+			}
+
+			if (t.IsGenericType)
+			{
+				if (t.GetGenericTypeDefinition() == typeof(Nullable<>))
+					writer.WriteAttributeString("nullable", "true");
+				else
+					WriteGenericArgumentsAndParameters(t, writer);
+			}
+			writer.WriteEndElement();
 		}
 
 		/// <summary>

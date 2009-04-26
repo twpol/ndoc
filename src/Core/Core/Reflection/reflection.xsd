@@ -152,25 +152,6 @@
 		</xs:complexType>
 	</xs:element>
 
-	<xs:element name="parameter">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:group ref="attributeGroup" minOccurs="0" maxOccurs="unbounded"/>
-				<xs:element ref="genericargument" minOccurs="0" maxOccurs="unbounded"/>
-			</xs:sequence>
-			<xs:attribute name="name" type="xs:string" use="required"/>
-			<xs:attribute name="typeId" type="xs:string" use="required"/>
-			<xs:attribute name="nullable" type="xs:boolean" use="optional"/>
-			<xs:attribute name="valueType" type="xs:boolean" use="required"/>
-			<xs:attribute name="extension" type="xs:boolean" use="optional"/>
-			<xs:attribute name="unsafe" type="xs:boolean" use="optional"/>
-			<xs:attribute name="optional" type="xs:boolean" use="optional"/>
-			<xs:attribute name="defaultValue" type="xs:string" use="optional"/>
-			<xs:attribute name="direction" type="xs:string" use="optional"/>
-			<xs:attribute name="isParamArray" type="xs:boolean" use="optional"/>
-		</xs:complexType>
-	</xs:element>
-
 	<xs:element name="constructor">
 		<xs:complexType>
 			<xs:sequence maxOccurs="1" minOccurs="0">
@@ -191,18 +172,22 @@
 		<xs:complexType>
 			<xs:sequence maxOccurs="1" minOccurs="0">
 				<xs:element ref="genericargument" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="array" minOccurs="0" maxOccurs="1"/>
 				<xs:element name="summary" type="xs:string" minOccurs="0" maxOccurs="1"/>
 				<xs:element name="remarks" type="xs:string" minOccurs="0" maxOccurs="1"/>
 				<xs:element ref="documentation" minOccurs="0" maxOccurs="1"/>
 				<xs:group ref="attributeGroup" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
 			<xs:attribute name="name" type="xs:string" use="required"/>
+			<xs:attribute name="displayName" type="xs:string" use="required"/>
+			<xs:attribute name="namespace" type="xs:string" use="required"/>
+			<xs:attribute name="typeId" type="xs:string" use="required"/>
+			<xs:attribute name="assembly" type="xs:string" use="required"/>
+			<xs:attribute name="nullable" type="xs:boolean" use="optional"/>
+			<xs:attribute name="valueType" type="xs:boolean" use="required"/>
 			<xs:attribute name="id" type="xs:string" use="required"/>
 			<xs:attribute name="access" type="xs:string" use="required"/>
 			<xs:attribute name="contract" type="xs:string" use="optional"/>
-			<xs:attribute name="typeId" type="xs:string" use="required"/>
-			<xs:attribute name="nullable" type="xs:boolean" use="optional"/>
-			<xs:attribute name="valueType" type="xs:boolean" use="required"/>
 			<xs:attribute name="unsafe" type="xs:boolean" use="optional"/>
 			<xs:attribute name="hiding" type="xs:boolean" use="optional"/>
 			<xs:attribute name="initOnly" type="xs:boolean" use="optional"/>
@@ -236,19 +221,24 @@
 	<xs:element name="property">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element ref="documentation" minOccurs="0" maxOccurs="1"/>
+				<xs:element ref="genericargument" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="array" minOccurs="0" maxOccurs="1"/>
 				<xs:group ref="attributeGroup" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element ref="parameter" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="documentation" minOccurs="0" maxOccurs="1"/>
 				<xs:element ref="implements" minOccurs="0" maxOccurs="1"/>
-				<xs:element ref="genericargument" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
 			<xs:attribute name="name" type="xs:string" use="required"/>
+			<xs:attribute name="displayName" type="xs:string" use="required"/>
+			<xs:attribute name="typeId" type="xs:string" use="required"/>
+			<xs:attribute name="namespace" type="xs:string" use="required"/>
+			<xs:attribute name="assembly" type="xs:string" use="required"/>
+			<xs:attribute name="nullable" type="xs:boolean" use="required"/>
+			<xs:attribute name="valueType" type="xs:boolean" use="required"/>
+
 			<xs:attribute name="id" type="xs:string" use="required"/>
 			<xs:attribute name="access" type="xs:string" use="required"/>
 			<xs:attribute name="contract" type="xs:string" use="required"/>
-			<xs:attribute name="typeId" type="xs:string" use="required"/>
-			<xs:attribute name="nullable" type="xs:boolean" use="optional"/>
-			<xs:attribute name="valueType" type="xs:boolean" use="required"/>
 			<xs:attribute name="overload" type="xs:string" use="optional"/>
 			<xs:attribute name="unsafe" type="xs:boolean" use="optional"/>
 			<xs:attribute name="hiding" type="xs:boolean" use="optional"/>
@@ -261,14 +251,51 @@
 		</xs:complexType>
 	</xs:element>
 
+	<xs:element name="array">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="array" minOccurs="0" maxOccurs="1"/>
+			</xs:sequence>
+			<xs:attribute name="rank" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="parameter">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="genericargument" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="array" minOccurs="0" maxOccurs="1"/>
+				<xs:group ref="attributeGroup" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attribute name="name" type="xs:string" use="required"/>
+			<xs:attribute name="displayName" type="xs:string" use="required"/>
+			<xs:attribute name="typeId" type="xs:string" use="required"/>
+			<xs:attribute name="namespace" type="xs:string" use="required"/>
+			<xs:attribute name="assembly" type="xs:string" use="required"/>
+			<xs:attribute name="nullable" type="xs:boolean" use="required"/>
+			<xs:attribute name="valueType" type="xs:boolean" use="required"/>
+			<xs:attribute name="extension" type="xs:boolean" use="optional"/>
+			<xs:attribute name="unsafe" type="xs:boolean" use="optional"/>
+			<xs:attribute name="optional" type="xs:boolean" use="optional"/>
+			<xs:attribute name="defaultValue" type="xs:string" use="optional"/>
+			<xs:attribute name="direction" type="xs:string" use="optional"/>
+			<xs:attribute name="isParamArray" type="xs:boolean" use="optional"/>
+		</xs:complexType>
+	</xs:element>
+
 	<xs:element name="returnType">
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element ref="genericargument" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="array" minOccurs="0" maxOccurs="1"/>
+				<xs:group ref="attributeGroup" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
-			<xs:attribute name="type" type="xs:string" use="required"/>
-			<xs:attribute name="id" type="xs:string" use="required"/>
-			<xs:attribute name="nullable" type="xs:boolean" use="optional"/>
+			<xs:attribute name="displayName" type="xs:string" use="required"/>
+			<xs:attribute name="typeId" type="xs:string" use="required"/>
+			<xs:attribute name="namespace" type="xs:string" use="required"/>
+			<xs:attribute name="assembly" type="xs:string" use="required"/>
+			<xs:attribute name="nullable" type="xs:boolean" use="required"/>
+			<xs:attribute name="valueType" type="xs:boolean" use="required"/>
 		</xs:complexType>
 	</xs:element>
 
@@ -377,7 +404,10 @@
 				<xs:element ref="genericargument" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
 			<xs:attribute name="name" use="required"/>
-			<xs:attribute name="type" use="optional"/>
+			<xs:attribute name="displayName" use="required"/>
+			<xs:attribute name="namespace" use="optional"/>
+			<xs:attribute name="typeId" type="xs:string" use="optional"/>
+			<xs:attribute name="assembly" type="xs:string" use="optional"/>
 			<xs:attribute name="nullable" type="xs:boolean" use="optional"/>
 		</xs:complexType>
 	</xs:element>

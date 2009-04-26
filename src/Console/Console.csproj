@@ -27,6 +27,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>2.0</OldToolsVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>..\..\bin\VS.NET2008\Debug\</OutputPath>
@@ -77,14 +78,25 @@
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
+    <ProjectReference Include="..\..\test\Core.Tests\Core.Tests.csproj">
+      <Project>{78684BDC-E23C-4BBA-B9B6-EB271D6C9016}</Project>
+      <Name>Core.Tests</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Core\Core.csproj">
       <Name>Core</Name>
       <Project>{DBA75D67-23C9-4A78-ABC2-CF8802FDB7CA}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
       <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Documenter\Msdn\Msdn.csproj">
+      <Project>{8282F072-D966-4075-A8DA-8911E36F4980}</Project>
+      <Name>Msdn</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

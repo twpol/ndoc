@@ -93,6 +93,10 @@
 								</blockquote>
 							</xsl:when>
 							<xsl:when test="@declaringType">
+								<xsl:variable name="declaring-assembly" select="@declaringAssembly" />
+								<xsl:variable name="declaring-type-id" select="concat('T:', @declaringType)" />
+								<xsl:variable name="declaring-id" select="@declaringId" />
+								<xsl:variable name="declaring-class" select="ancestor::ndoc:ndoc/ndoc:assembly[@name=$declaring-assembly]//ndoc:class[@id=$declaring-type-id]" />
 								<p>
 									<xsl:text>Inherited from </xsl:text>
 									<a>
@@ -108,18 +112,21 @@
 									<xsl:text>.</xsl:text>
 								</p>
 								<blockquote class="dtBlock">
-									<a>
-										<xsl:variable name="declaring-assembly" select="@declaringAssembly" />
-										<xsl:variable name="declaring-type-id" select="concat('T:', @declaringType)" />
-										<xsl:variable name="declaring-id" select="@declaringId" />
-										<xsl:variable name="declaring-class" select="ancestor::ndoc:ndoc/ndoc:assembly[@name=$declaring-assembly]//ndoc:class[@id=$declaring-type-id]" />
-										<xsl:attribute name="href">
-											<xsl:call-template name="get-filename-for-method">
-												<xsl:with-param name="method" select="$declaring-class/ndoc:method[@id=$declaring-id]" />
-											</xsl:call-template>
-										</xsl:attribute>
-										<xsl:apply-templates select="self::node()" mode="syntax" />
-									</a>
+									<xsl:choose>
+										<xsl:when test="$declaring-class/ndoc:method[@id=$declaring-id]">
+											<a>
+												<xsl:attribute name="href">
+													<xsl:call-template name="get-filename-for-method">
+														<xsl:with-param name="method" select="$declaring-class/ndoc:method[@id=$declaring-id]" />
+													</xsl:call-template>
+												</xsl:attribute>
+												<xsl:apply-templates select="self::node()" mode="syntax" />
+											</a>
+										</xsl:when>
+										<xsl:otherwise>
+											<xsl:apply-templates select="self::node()" mode="syntax" />
+										</xsl:otherwise>
+									</xsl:choose>
 								</blockquote>
 							</xsl:when>
 							<xsl:otherwise>
@@ -178,7 +185,7 @@
 		<xsl:call-template name="cs-member-syntax-overload" />
 	</xsl:template>
 	<!-- -->
-	<xsl:template match="property" mode="syntax">
+	<xsl:template match="ndoc:property" mode="syntax">
 		<xsl:call-template name="cs-property-syntax">
 			<xsl:with-param name="indent" select="false()" />
 			<xsl:with-param name="display-names" select="false()" />

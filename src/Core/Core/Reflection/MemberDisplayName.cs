@@ -27,10 +27,16 @@ namespace NDoc3.Core
 		/// <summary>
 		/// 
 		/// </summary>
-		/// <param name="type"></param>
+		/// <param name="realType"></param>
 		/// <returns></returns>
-		public static string GetMemberDisplayName(Type type)
+		public static string GetMemberDisplayName(Type realType)
 		{
+			if (realType.IsByRef)
+			{
+				realType = realType.GetElementType();
+			}
+
+			Type type = DereferenceType(realType);
 			string result;
 			if (type.DeclaringType != null) //IsNested?
 			{
@@ -46,72 +52,96 @@ namespace NDoc3.Core
 			{
 				result = GetTypeDisplayName(type);
 			}
+
+			// append array indexer/byRef indicator
+			if (realType.IsArray)
+			{
+				string suffix = realType.Name.Substring(type.Name.Length);
+				result += suffix;
+			}
 			return result;
 		}
 
+		private static Type DereferenceType(Type type)
+		{
+			if (NeedsDereference(type))
+			{
+				type = type.GetElementType();
+				return DereferenceType(type);
+			}
 
-        private static string GetTypeDisplayName(Type type)
-        {
-        	if (type.ContainsGenericParameters)
-            {
-            	int i = type.Name.IndexOf('`');
-                string result = i > -1 ? type.Name.Substring(0, type.Name.IndexOf('`')) : type.Name;
-                result += GetTypeArgumentsList(type);
-                return result;
-            }
-        	return type.Name;
-        }
+			return type;
+		}
+
+		private static bool NeedsDereference(Type type)
+		{
+			return type.IsArray 
+				|| type.IsByRef 
+				;
+		}
+
+		private static string GetTypeDisplayName(Type type)
+		{
+			if (type.IsGenericType)
+			{
+				int i = type.Name.IndexOf('`');
+				string result = i > -1 ? type.Name.Substring(0, type.Name.IndexOf('`')) : type.Name;
+				result += GetTypeArgumentsList(type);
+				return result;
+			}
+			return type.Name;
+		}
 
 		private static string GetTypeArgumentsList(Type type)
-        {
-            StringBuilder argList = new StringBuilder();
+		{
+			StringBuilder argList = new StringBuilder();
 
-            int genArgLowerBound = 0;
-            if (type.IsNested)
-            {
-                Type parent = type.DeclaringType;
-                Type[] parentGenArgs = parent.GetGenericArguments();
-                genArgLowerBound = parentGenArgs.Length;
-            }
+			int genArgLowerBound = 0;
+			if (type.IsNested)
+			{
+				Type parent = type.DeclaringType;
+				Type[] parentGenArgs = parent.GetGenericArguments();
+				genArgLowerBound = parentGenArgs.Length;
+			}
 
-            Type[] genArgs = type.GetGenericArguments();
-            int i = 0;
-            for (int k = genArgLowerBound; k < genArgs.Length; k++)
-            {
-                Type argType = genArgs[k];
-                if (i == 0)
-                {
-                    argList.Append('(');
-                }
-                else
-                {
-                    argList.Append(',');
-                }
-                if (argType.FullName == null)
-                {
-                    if (type.IsGenericType && !type.IsGenericTypeDefinition)
-                    {
-                        Type[] types = type.GetGenericArguments();
-                        foreach (Type t in types)
-                            argList.Append(GetTypeDisplayName(t));
-                    }
-                    else
-                        argList.Append(argType.Name);
-                }
-                else
-                {
-                    argList.Append(GetMemberDisplayName(argType));
-                }
+			Type[] genArgs = type.GetGenericArguments();
+			int i = 0;
+			for (int k = genArgLowerBound; k < genArgs.Length; k++)
+			{
+				Type argType = genArgs[k];
+				if (i == 0)
+				{
+					argList.Append('(');
+				}
+				else
+				{
+					argList.Append(',');
+				}
+				if (argType.FullName == null)
+				{
+					if (type.IsGenericType && !type.IsGenericTypeDefinition)
+					{
+						Type[] types = type.GetGenericArguments();
+						foreach (Type t in types)
+							argList.Append(GetTypeDisplayName(t));
+					}
+					else
+						argList.Append(argType.Name);
+				}
+				else
+				{
+					argList.Append(GetMemberDisplayName(argType));
+				}
 
-                ++i;
-            }
+				++i;
+			}
 
-            if (i > 0)
-            {
-                argList.Append(')');
-            }
+			if (i > 0)
+			{
+				argList.Append(')');
+			}
 
-            return argList.ToString();
-        }
+			return argList.ToString();
+		}
 	}
 }

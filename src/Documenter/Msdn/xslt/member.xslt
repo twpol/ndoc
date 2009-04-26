@@ -56,7 +56,7 @@
 				<xsl:otherwise>Constructor</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
-		<xsl:variable name="memberName" select="@name" />
+		<xsl:variable name="memberName" select="@displayName" />
 		<html dir="LTR">
 			<xsl:call-template name="html-head">
 				<xsl:with-param name="title">
