@@ -21,6 +21,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_628D08A75FCCA9FD38C2E5A770E75593"
+        "OwnerKey" = "8:_6FB38E101B3F4343B77AF920655B9D37"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_661DB964CD414803BCDEB1C38EB72335"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -51,6 +57,42 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_AD0A0336082B5B2BBE4E9743013612D5"
+        "OwnerKey" = "8:_E61FBA49077EB18C31EF4EE6F61085DB"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_AD0A0336082B5B2BBE4E9743013612D5"
+        "OwnerKey" = "8:_D322789B907841DE9D929CC2F6997C71"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_AD0A0336082B5B2BBE4E9743013612D5"
+        "OwnerKey" = "8:_A49E5FC9A80B42789122643C47DACE82"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_AD0A0336082B5B2BBE4E9743013612D5"
+        "OwnerKey" = "8:_6FB38E101B3F4343B77AF920655B9D37"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_AD0A0336082B5B2BBE4E9743013612D5"
+        "OwnerKey" = "8:_661DB964CD414803BCDEB1C38EB72335"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_AD0A0336082B5B2BBE4E9743013612D5"
+        "OwnerKey" = "8:_13F6B90F5C8A46EC957CE01A9731DABE"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_BBCBDBF13FC44D1BB64B1098C94FC320"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -63,8 +105,68 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_E61FBA49077EB18C31EF4EE6F61085DB"
+        "OwnerKey" = "8:_13F6B90F5C8A46EC957CE01A9731DABE"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_E61FBA49077EB18C31EF4EE6F61085DB"
+        "OwnerKey" = "8:_ED96674C74D291184FF97A78A5B7D3CD"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_E61FBA49077EB18C31EF4EE6F61085DB"
+        "OwnerKey" = "8:_D322789B907841DE9D929CC2F6997C71"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_E61FBA49077EB18C31EF4EE6F61085DB"
+        "OwnerKey" = "8:_6FB38E101B3F4343B77AF920655B9D37"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_E61FBA49077EB18C31EF4EE6F61085DB"
+        "OwnerKey" = "8:_661DB964CD414803BCDEB1C38EB72335"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_ED96674C74D291184FF97A78A5B7D3CD"
+        "OwnerKey" = "8:_D322789B907841DE9D929CC2F6997C71"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_BBCBDBF13FC44D1BB64B1098C94FC320"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_ED96674C74D291184FF97A78A5B7D3CD"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_628D08A75FCCA9FD38C2E5A770E75593"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_E61FBA49077EB18C31EF4EE6F61085DB"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_AD0A0336082B5B2BBE4E9743013612D5"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -148,7 +250,7 @@
         "DisplayName" = "8:Release"
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:TRUE"
-        "OutputFilename" = "8:Release\\Setup.msi"
+        "OutputFilename" = "8:Release\\NDoc3.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -208,6 +310,130 @@
         }
         "File"
         {
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_628D08A75FCCA9FD38C2E5A770E75593"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:NDoc3.VisualStudio, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_628D08A75FCCA9FD38C2E5A770E75593"
+                    {
+                    "Name" = "8:NDoc3.VisualStudio.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:NDoc3.VisualStudio.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_B7232B1BE7CF45EA926142B19C85420A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_AD0A0336082B5B2BBE4E9743013612D5"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:NDoc3.ExtendedUI, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_AD0A0336082B5B2BBE4E9743013612D5"
+                    {
+                    "Name" = "8:NDoc3.ExtendedUI.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:NDoc3.ExtendedUI.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_B7232B1BE7CF45EA926142B19C85420A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_E61FBA49077EB18C31EF4EE6F61085DB"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:NDoc3.Core, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_E61FBA49077EB18C31EF4EE6F61085DB"
+                    {
+                    "Name" = "8:NDoc3.Core.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:NDoc3.Core.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_B7232B1BE7CF45EA926142B19C85420A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_ED96674C74D291184FF97A78A5B7D3CD"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:NDoc3.Documenter.Msdn, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_ED96674C74D291184FF97A78A5B7D3CD"
+                    {
+                    "Name" = "8:NDoc3.Documenter.Msdn.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:NDoc3.Documenter.Msdn.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_B7232B1BE7CF45EA926142B19C85420A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
         }
         "FileType"
         {
@@ -321,7 +547,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:NDoc3"
         "ProductCode" = "8:{F6FC0076-8FA3-41F6-BD37-BC74130850BE}"
-        "PackageCode" = "8:{7F3BE98D-5767-4F97-B987-B0EA427DD793}"
+        "PackageCode" = "8:{793DABF6-9910-4934-A475-E5AE0C4F11C0}"
         "UpgradeCode" = "8:{3425DD4A-B4D8-461A-B516-3DA82EFA5B84}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
@@ -442,7 +668,7 @@
         {
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_249D155EEFBB43CD95EE32E96C9E0D65"
             {
-            "Name" = "8:NDoc3 Beta 2"
+            "Name" = "8:NDoc3 Beta 3"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
@@ -456,7 +682,7 @@
             }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_BE45207BBA884DE1973453BCDDD98353"
             {
-            "Name" = "8:NDoc3 Beta 2 Documentation"
+            "Name" = "8:NDoc3 Beta 3 Documentation"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
@@ -869,7 +1095,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_13F6B90F5C8A46EC957CE01A9731DABE"
             {
-            "SourcePath" = "8:..\\src\\Documenter\\Msdn\\obj\\Debug\\NDoc3.Documenter.Msdn.dll"
+            "SourcePath" = "8:..\\src\\Documenter\\Msdn\\obj\\Release\\NDoc3.Documenter.Msdn.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_B7232B1BE7CF45EA926142B19C85420A"
@@ -897,7 +1123,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_661DB964CD414803BCDEB1C38EB72335"
             {
-            "SourcePath" = "8:..\\src\\Documenter\\Xml\\obj\\Debug\\NDoc3.Documenter.Xml.dll"
+            "SourcePath" = "8:..\\src\\Documenter\\Xml\\obj\\Release\\NDoc3.Documenter.Xml.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_B7232B1BE7CF45EA926142B19C85420A"
@@ -953,7 +1179,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_6FB38E101B3F4343B77AF920655B9D37"
             {
-            "SourcePath" = "8:..\\src\\Gui\\obj\\Debug\\NDoc3Gui.exe"
+            "SourcePath" = "8:..\\src\\Gui\\obj\\Release\\NDoc3Gui.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_B7232B1BE7CF45EA926142B19C85420A"
@@ -981,7 +1207,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_8D401E080A834DFBA090B476F8A0814B"
             {
-            "SourcePath" = "8:..\\src\\VisualStudio\\obj\\Debug\\NDoc3.VisualStudio.dll"
+            "SourcePath" = "8:..\\src\\VisualStudio\\obj\\Release\\NDoc3.VisualStudio.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_B7232B1BE7CF45EA926142B19C85420A"
@@ -1009,7 +1235,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_A49E5FC9A80B42789122643C47DACE82"
             {
-            "SourcePath" = "8:..\\src\\Core\\obj\\Debug\\NDoc3.Core.dll"
+            "SourcePath" = "8:..\\src\\Core\\obj\\Release\\NDoc3.Core.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_B7232B1BE7CF45EA926142B19C85420A"
@@ -1037,7 +1263,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_BBCBDBF13FC44D1BB64B1098C94FC320"
             {
-            "SourcePath" = "8:..\\src\\ExtendedUI\\obj\\Debug\\NDoc3.ExtendedUI.dll"
+            "SourcePath" = "8:..\\src\\ExtendedUI\\obj\\Release\\NDoc3.ExtendedUI.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_B7232B1BE7CF45EA926142B19C85420A"
@@ -1065,7 +1291,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_D322789B907841DE9D929CC2F6997C71"
             {
-            "SourcePath" = "8:..\\src\\Console\\obj\\Debug\\NDoc3Console.exe"
+            "SourcePath" = "8:..\\src\\Console\\obj\\Release\\NDoc3Console.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_B7232B1BE7CF45EA926142B19C85420A"
