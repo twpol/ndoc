@@ -194,10 +194,8 @@ namespace NDoc3.Core
 				case PlatformID.Win32S:
 				case PlatformID.Win32Windows:
 				case PlatformID.WinCE:
-				case PlatformID.Xbox:
 					path = path.ToLowerInvariant();
 					break;
-				case PlatformID.MacOSX:
 				case PlatformID.Unix:
 					// noop
 				default:
