@@ -21,9 +21,7 @@
 #endregion
 
 using System;
-using System.Collections;
 using System.IO;
-using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.XPath;
 
@@ -47,7 +45,7 @@ namespace NDoc3.VisualStudio
 			_Name = name;
 		}
 
-		private Solution _Solution;
+		private readonly Solution _Solution;
 
 		/// <summary>Gets the solution that contains this project.</summary>
 		public Solution Solution
@@ -65,7 +63,7 @@ namespace NDoc3.VisualStudio
 			set { _RelativePath = value; }
 		}
 
-		private Guid _ID;
+		private readonly Guid _ID;
 
 		/// <summary>Gets the GUID that identifies the project.</summary>
 		public Guid ID
@@ -73,7 +71,7 @@ namespace NDoc3.VisualStudio
 			get { return _ID; }
 		}
 
-		private string _Name;
+		private readonly string _Name;
 
 		/// <summary>Gets the name of the project.</summary>
 		public string Name
@@ -137,14 +135,15 @@ namespace NDoc3.VisualStudio
 		/// <summary>Gets the name of the assembly this project generates.</summary>
 		public string AssemblyName
 		{
-			get
-			{
-                if (_ProjectVersion == ProjectVersion.VS2003)
-                    return (string)_ProjectNavigator.Evaluate("string(/VisualStudioProject/CSHARP/Build/Settings/@AssemblyName)");
-                else if (_ProjectVersion == ProjectVersion.VS2005AndAbove)
-                    return (string)_ProjectNavigator.Evaluate("string(/ns:Project/ns:PropertyGroup/ns:AssemblyName)", _ProjectNamespaceManager);
-                else
-                    throw new ApplicationException("Couldn't find assembly name");
+			get {
+				switch (_ProjectVersion) {
+					case ProjectVersion.VS2003:
+						return (string)_ProjectNavigator.Evaluate("string(/VisualStudioProject/CSHARP/Build/Settings/@AssemblyName)");
+					case ProjectVersion.VS2005AndAbove:
+						return (string)_ProjectNavigator.Evaluate("string(/ns:Project/ns:PropertyGroup/ns:AssemblyName)", _ProjectNamespaceManager);
+					default:
+						throw new ApplicationException("Couldn't find assembly name");
+				}
 			}
 		}
 
@@ -152,14 +151,15 @@ namespace NDoc3.VisualStudio
 		/// <value>"Library", "Exe", or "WinExe"</value>
 		public string OutputType
 		{
-			get
-			{
-                if (_ProjectVersion == ProjectVersion.VS2003)
-                    return (string)_ProjectNavigator.Evaluate("string(/VisualStudioProject/CSHARP/Build/Settings/@OutputType)");
-                else if (_ProjectVersion == ProjectVersion.VS2005AndAbove)
-                    return (string)_ProjectNavigator.Evaluate("string(/ns:Project/ns:PropertyGroup/ns:OutputType)", _ProjectNamespaceManager);
-                else
-                    throw new ApplicationException("Could not find outputtype");
+			get {
+				switch (_ProjectVersion) {
+					case ProjectVersion.VS2003:
+						return (string)_ProjectNavigator.Evaluate("string(/VisualStudioProject/CSHARP/Build/Settings/@OutputType)");
+					case ProjectVersion.VS2005AndAbove:
+						return (string)_ProjectNavigator.Evaluate("string(/ns:Project/ns:PropertyGroup/ns:OutputType)", _ProjectNamespaceManager);
+					default:
+						throw new ApplicationException("Could not find outputtype");
+				}
 			}
 		}
 
@@ -190,14 +190,15 @@ namespace NDoc3.VisualStudio
 		/// <summary>Gets the default namespace for the project.</summary>
 		public string RootNamespace
 		{
-			get
-			{
-                if (_ProjectVersion == ProjectVersion.VS2003)
-                    return (string)_ProjectNavigator.Evaluate("string(/VisualStudioProject/CSHARP/Build/Settings/@RootNamespace)");
-                else if (_ProjectVersion == ProjectVersion.VS2005AndAbove)
-                    return (string)_ProjectNavigator.Evaluate("string(/ns:Project/ns:PropertyGroup/ns:RootNamespace)", _ProjectNamespaceManager);
-                else
-                    throw new ApplicationException("Couldn't find rootnamespace tag");
+			get {
+				switch (_ProjectVersion) {
+					case ProjectVersion.VS2003:
+						return (string)_ProjectNavigator.Evaluate("string(/VisualStudioProject/CSHARP/Build/Settings/@RootNamespace)");
+					case ProjectVersion.VS2005AndAbove:
+						return (string)_ProjectNavigator.Evaluate("string(/ns:Project/ns:PropertyGroup/ns:RootNamespace)", _ProjectNamespaceManager);
+					default:
+						throw new ApplicationException("Couldn't find rootnamespace tag");
+				}
 			}
 		}
 
@@ -207,28 +208,28 @@ namespace NDoc3.VisualStudio
 		public ProjectConfig GetConfiguration(string configName)
 		{
 			XPathNavigator navigator = null;
-            XPathNodeIterator nodes = null;
-            if (_ProjectVersion == ProjectVersion.VS2003)
-            {
-                nodes =
-                    _ProjectNavigator.Select(
-                        String.Format("/VisualStudioProject/CSHARP/Build/" + 
-                        "Settings/Config[@Name='{0}']", configName));
-            }
-            else if (_ProjectVersion == ProjectVersion.VS2005AndAbove)
-            {
-                nodes =
-                    _ProjectNavigator.Select(
-                        String.Format("/ns:Project/ns:PropertyGroup/" + 
-                        "@Condition[contains(string(), '{0}')]", configName), _ProjectNamespaceManager);
-            }
-            if (nodes == null)
-            {
-                throw new ApplicationException("Couldn't find configuration");
-            }
-            else if (nodes.MoveNext())
-                navigator = nodes.Current;
-		
+			XPathNodeIterator nodes = null;
+			if (_ProjectVersion == ProjectVersion.VS2003)
+			{
+				 nodes =
+					  _ProjectNavigator.Select(
+							String.Format("/VisualStudioProject/CSHARP/Build/" + 
+							"Settings/Config[@Name='{0}']", configName));
+			}
+			else if (_ProjectVersion == ProjectVersion.VS2005AndAbove)
+			{
+				 nodes =
+					  _ProjectNavigator.Select(
+							String.Format("/ns:Project/ns:PropertyGroup/" + 
+							"@Condition[contains(string(), '{0}')]", configName), _ProjectNamespaceManager);
+			}
+			if (nodes == null)
+			{
+				 throw new ApplicationException("Couldn't find configuration");
+			}
+			if (nodes.MoveNext())
+				navigator = nodes.Current;
+
 			return new ProjectConfig(navigator, _ProjectVersion);
 		}
 
@@ -251,7 +252,7 @@ namespace NDoc3.VisualStudio
 
 			string documentationFile = GetConfiguration(configName).DocumentationFile;
 
-			if (documentationFile != null && documentationFile.Length > 0)
+			if (!String.IsNullOrEmpty(documentationFile))
 			{
 				path = Path.Combine(RelativePath, documentationFile);
 			}

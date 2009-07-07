@@ -21,9 +21,6 @@
 #endregion
 
 using System;
-using System.Collections;
-using System.IO;
-using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.XPath;
 
@@ -34,9 +31,9 @@ namespace NDoc3.VisualStudio
 	/// </summary>
 	public class ProjectConfig
 	{
-		private XPathNavigator _Navigator;
-        private ProjectVersion _ProjectVersion;
-        private XmlNamespaceManager _ProjectNamespaceManager;
+		private readonly XPathNavigator _Navigator;
+		private readonly ProjectVersion _ProjectVersion;
+		private readonly XmlNamespaceManager _ProjectNamespaceManager;
 
 		internal ProjectConfig(XPathNavigator navigator, ProjectVersion version)
 		{
@@ -55,7 +52,7 @@ namespace NDoc3.VisualStudio
 		{
 			get
 			{
-                //TODO Return the right name
+				//TODO Return the right name
 				return (string)_Navigator.Evaluate("string(@Name)");
 			}
 		}
@@ -64,14 +61,15 @@ namespace NDoc3.VisualStudio
 		/// project directory) for this project's configuration.</summary>
 		public string OutputPath
 		{
-			get
-			{
-                if (_ProjectVersion == ProjectVersion.VS2003)
-                    return (string)_Navigator.Evaluate("string(@OutputPath)");
-                else if (_ProjectVersion == ProjectVersion.VS2005AndAbove)
-                    return (string)_Navigator.Evaluate("string(//ns:OutputPath)", _ProjectNamespaceManager);
-                else
-                    throw new ApplicationException("Couldn't find output path");
+			get {
+				switch (_ProjectVersion) {
+					case ProjectVersion.VS2003:
+						return (string)_Navigator.Evaluate("string(@OutputPath)");
+					case ProjectVersion.VS2005AndAbove:
+						return (string)_Navigator.Evaluate("string(//ns:OutputPath)", _ProjectNamespaceManager);
+					default:
+						throw new ApplicationException("Couldn't find output path");
+				}
 			}
 		}
 
@@ -80,14 +78,15 @@ namespace NDoc3.VisualStudio
 		/// processed.</summary>
 		public string DocumentationFile
 		{
-			get
-			{
-                if (_ProjectVersion == ProjectVersion.VS2003)
-                    return (string)_Navigator.Evaluate("string(@DocumentationFile)");
-                else if (_ProjectVersion == ProjectVersion.VS2005AndAbove)
-                    return (string)_Navigator.Evaluate("string(//ns:DocumentationFile)", _ProjectNamespaceManager);
-                else
-                    throw new ApplicationException("Couldn't documentation file tag");
+			get {
+				switch (_ProjectVersion) {
+					case ProjectVersion.VS2003:
+						return (string)_Navigator.Evaluate("string(@DocumentationFile)");
+					case ProjectVersion.VS2005AndAbove:
+						return (string)_Navigator.Evaluate("string(//ns:DocumentationFile)", _ProjectNamespaceManager);
+					default:
+						throw new ApplicationException("Couldn't documentation file tag");
+				}
 			}
 		}
 	}

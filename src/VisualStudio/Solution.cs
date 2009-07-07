@@ -22,11 +22,8 @@
 
 using System;
 using System.Collections;
-using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
-using System.Xml;
-using System.Xml.XPath;
 using System.DirectoryServices; // to get IIS virtual directory fiel path.
 
 namespace NDoc3.VisualStudio
@@ -77,7 +74,7 @@ namespace NDoc3.VisualStudio
 			_directory = Path.GetDirectoryName(path);
 			_name = Path.GetFileNameWithoutExtension(path);
 
-			StreamReader reader = null;
+			StreamReader reader;
 			using (reader = new StreamReader(path))
 			{
 				string line = reader.ReadLine();
@@ -111,7 +108,7 @@ namespace NDoc3.VisualStudio
 			}
 		}
 
-		private Hashtable _configurations = new Hashtable();
+		private readonly Hashtable _configurations = new Hashtable();
 
 		/// <summary>
 		/// Returns the specified project's configuration name based for 
@@ -128,8 +125,7 @@ namespace NDoc3.VisualStudio
 			Hashtable pcfg = (Hashtable)_configurations[solutionConfig];
 			if (pcfg == null) 
 				return null;
-			else
-				return (string)pcfg[projectId];
+			return (string)pcfg[projectId];
 		}
 
 		/// <summary>
@@ -180,13 +176,13 @@ namespace NDoc3.VisualStudio
 			}
 		}
 
-		private Hashtable _projects = new Hashtable();
+		private readonly Hashtable _projects = new Hashtable();
 
 		private void AddProject(string projectLine)
 		{			
 			//string pattern = @"^Project\(""(?<unknown>\S+)""\) = ""(?<name>\S+)"", ""(?<path>\S+)"", ""(?<id>\S+)""";
 			// fix for bug 887476 
-			string pattern = @"^Project\(""(?<projecttype>.*?)""\) = ""(?<name>.*?)"", ""(?<path>.*?)"", ""(?<id>.*?)""";
+			const string pattern = @"^Project\(""(?<projecttype>.*?)""\) = ""(?<name>.*?)"", ""(?<path>.*?)"", ""(?<id>.*?)""";
 			Regex regex = new Regex(pattern);
 			Match match = regex.Match(projectLine);
 		
@@ -249,15 +245,6 @@ namespace NDoc3.VisualStudio
 				}
 			}
 		}
-
-
-//		/// <summary>Gets the project with the specified GUID.</summary>
-//		/// <param name="id">The GUID used to identify the project in the .sln file.</param>
-//		/// <returns>The project.</returns>
-//		public Project GetProject(Guid id)
-//		{
-//			return (Project)_projects[id];
-//		}
 
 		/// <summary>Gets the project with the specified name.</summary>
 		/// <param name="name">The project name.</param>
