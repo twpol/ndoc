@@ -20,29 +20,25 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 
-namespace NDoc3.Core
-{
+namespace NDoc3.Core {
 	/// <summary>Provides an abstract base class for documenters.</summary>
 	/// <remarks>
 	/// This is an <see langword="abstract"/> base class for NDoc3 Documenters.
 	/// It provides default implementations of all the methods required by the <see cref="IDocumenter"/> interface. 
 	/// It also provides some basic properties which are shared by all documenters. 
 	/// </remarks>
-	abstract public class BaseDocumenter : IDocumenter
-	{
+	abstract public class BaseDocumenter : IDocumenter {
 		readonly IDocumenterConfig config;
 
 		/// <summary>Initializes a new instance of the <see cref="BaseDocumenter"/> class.</summary>
 		/// <param name="config_">settings</param>
-		protected BaseDocumenter( IDocumenterConfig config_ )
-		{
-			Debug.Assert( config_ != null );
+		protected BaseDocumenter(IDocumenterConfig config_) {
+			Debug.Assert(config_ != null);
 			config = config_;
 		}
 
 		/// <summary>See <see cref="IDocumenter.Config">IDocumenter.Config</see>.</summary>
-		public IDocumenterConfig Config
-		{
+		public IDocumenterConfig Config {
 			get { return config; }
 		}
 
@@ -50,14 +46,10 @@ namespace NDoc3.Core
 		public abstract string MainOutputFile { get; }
 
 		/// <summary>See <see cref="IDocumenter.View">IDocumenter.View</see>.</summary>
-		public virtual void View()
-		{
-			if (File.Exists(MainOutputFile))
-			{
+		public virtual void View() {
+			if (File.Exists(MainOutputFile)) {
 				Process.Start(MainOutputFile);
-			}
-			else
-			{
+			} else {
 				throw new FileNotFoundException("Documentation not built.",
 					MainOutputFile);
 			}
@@ -71,50 +63,41 @@ namespace NDoc3.Core
 		/// <summary>Raises the <see cref="DocBuildingStep"/> event.</summary>
 		/// <param name="step">The overall percent complete value.</param>
 		/// <param name="label">A description of the work currently beeing done.</param>
-		protected void OnDocBuildingStep(int step, string label)
-		{
+		protected void OnDocBuildingStep(int step, string label) {
 			if (DocBuildingStep != null)
 				DocBuildingStep(this, new ProgressArgs(step, label));
 		}
 
 		/// <summary>Raises the <see cref="DocBuildingProgress"/> event.</summary>
 		/// <param name="progress">Percentage progress value</param>
-		protected void OnDocBuildingProgress(int progress)
-		{
+		protected void OnDocBuildingProgress(int progress) {
 			if (DocBuildingProgress != null)
 				DocBuildingProgress(this, new ProgressArgs(progress, ""));
 		}
 
 		/// <summary>See <see cref="IDocumenter.CanBuild(Project)">IDocumenter.CanBuild</see>.</summary>
-		public virtual string CanBuild(Project project)
-		{
+		public virtual string CanBuild(Project project) {
 			return CanBuild(project, false);
 		}
 
-        /// <summary>See <see cref="IDocumenter.CanBuild(Project, bool)">CanBuild</see>.</summary>
-		public virtual string CanBuild(Project project, bool checkInputOnly)
-		{
+		/// <summary>See <see cref="IDocumenter.CanBuild(Project, bool)">CanBuild</see>.</summary>
+		public virtual string CanBuild(Project project, bool checkInputOnly) {
 			StringBuilder xfiles = new StringBuilder();
-			foreach (AssemblySlashDoc asd in project.AssemblySlashDocs)
-			{
-				if (!File.Exists(asd.Assembly.Path))
-				{
+			foreach (AssemblySlashDoc asd in project.AssemblySlashDocs) {
+				if (!File.Exists(asd.Assembly.Path)) {
 					xfiles.Append("\n" + asd.Assembly.Path);
 				}
-				if (asd.SlashDoc.Path.Length>0)
-				{
-					if (!File.Exists(asd.SlashDoc.Path))
-					{
+				if (asd.SlashDoc.Path.Length > 0) {
+					if (!File.Exists(asd.SlashDoc.Path)) {
 						xfiles.Append("\n" + asd.SlashDoc.Path);
 					}
 				}
 			}
 
-			if (xfiles.Length > 0)
-			{
+			if (xfiles.Length > 0) {
 				return "One of more source files not found:\n" + xfiles;
 			}
-        	return null;
+			return null;
 		}
 
 		/// <summary>See <see cref="IDocumenter.Build">IDocumenter.Build</see>.</summary>

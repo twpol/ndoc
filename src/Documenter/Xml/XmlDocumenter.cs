@@ -16,54 +16,42 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 using System;
-using System.Collections;
 using System.Diagnostics;
 using System.IO;
-using System.Xml;
-using System.Xml.Serialization;
 
 using NDoc3.Core;
 using NDoc3.Core.Reflection;
 
-namespace NDoc3.Documenter.Xml
-{
+namespace NDoc3.Documenter.Xml {
 	/// <summary>The XmlDocumenter class.</summary>
-	public class XmlDocumenter : BaseReflectionDocumenter
-	{
+	public class XmlDocumenter : BaseReflectionDocumenter {
 		/// <summary>Initializes a new instance of the XmlDocumenter class.</summary>
-		public XmlDocumenter( XmlDocumenterConfig config ) : base( config )
-		{
+		public XmlDocumenter(XmlDocumenterConfig config)
+			: base(config) {
 		}
 
 		/// <summary>See <see cref="IDocumenter"/>.</summary>
-		public override string MainOutputFile 
-		{ 
-			get 
-			{
+		public override string MainOutputFile {
+			get {
 				return ((XmlDocumenterConfig)Config).OutputFile;
-			} 
+			}
 		}
 
 		/// <summary>See IDocumenter.</summary>
-		public override void Build(Project project)
-		{
+		public override void Build(Project project) {
 			OnDocBuildingStep(0, "Building XML documentation...");
 
 			XmlDocumenterConfig config = (XmlDocumenterConfig)Config;
 
 			string tempFileName = null;
-			
-			try 
-			{
+
+			try {
 				// Determine temp file name
 				tempFileName = Path.GetTempFileName();
 				// Let the Documenter base class do it's thing.
-				try
-				{
+				try {
 					MakeXmlFile(project, new FileInfo(tempFileName));
-				}
-				catch (ValidationException ex)
-				{
+				} catch (ValidationException ex) {
 					Trace.WriteLine("Validation failed: " + ex.Message);
 					Trace.WriteLine("Output XML anyway.");
 				}
@@ -74,27 +62,21 @@ namespace NDoc3.Documenter.Xml
 
 				string directoryName = Path.GetDirectoryName(outputFileName);
 
-				if (directoryName != null && directoryName.Length > 0)
-				{
-					if (!Directory.Exists(directoryName))
-					{
+				if (!String.IsNullOrEmpty(directoryName)) {
+					if (!Directory.Exists(directoryName)) {
 						Directory.CreateDirectory(directoryName);
 					}
 				}
 
-				if (File.Exists(outputFileName)) 
-				{
+				if (File.Exists(outputFileName)) {
 					File.Delete(outputFileName);
 				}
 
 				File.Move(tempFileName, outputFileName);
 
 				OnDocBuildingStep(100, "Done.");
-			} 
-			finally 
-			{
-				if (tempFileName != null && File.Exists(tempFileName)) 
-				{
+			} finally {
+				if (tempFileName != null && File.Exists(tempFileName)) {
 					File.Delete(tempFileName);
 				}
 			}

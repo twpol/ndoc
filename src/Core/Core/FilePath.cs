@@ -21,96 +21,76 @@ using System.IO;
 
 using NDoc3.Core.PropertyGridUI;
 
-namespace NDoc3.Core
-{
+namespace NDoc3.Core {
 	/// <summary>
 	/// 
 	/// </summary>
 	[Serializable]
 	[DefaultProperty("Path")]
-	[TypeConverter(typeof(FilePath.TypeConverter))]
-	[Editor(typeof(FilePath.UIEditor), typeof(UITypeEditor))]
-	public class FilePath : PathItemBase
-	{
+	[TypeConverter(typeof(TypeConverter))]
+	[Editor(typeof(UIEditor), typeof(UITypeEditor))]
+	public class FilePath : PathItemBase {
 		/// <summary>Initializes a new instance of the <see cref="FilePath"/> class.</summary>
 		/// <overloads>Initializes a new instance of the <see cref="FilePath"/> class.</overloads>
-		public FilePath() : base() {}
+		public FilePath() { }
 
 		/// <summary>Initializes a new instance of the <see cref="FilePath"/> class from a given path string.</summary>
 		/// <param name="path">Path.</param>
-		public FilePath(string path) : base(path)
-		{
-			Path = path;
-		}
+		public FilePath(string path)
+			: base(path) { }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FilePath"/> class from a given <see cref="FileInfo"/>.
 		/// </summary>
-		public FilePath(FileInfo path) : base(path.FullName)
-		{
-			Path = path.FullName;
-			base.FixedPath = true;
+		public FilePath(FileInfo path)
+			: base(path.FullName) {
+			FixedPath = true;
 		}
 
 		/// <summary>Initializes a new instance of the <see cref="FilePath"/> class from an existing <see cref="FilePath"/> instance.</summary>
 		/// <param name="path">An existing <see cref="FilePath"/>.</param>
-		public FilePath(FilePath path)
-		{
-			if (path.Path.Length > 0)
-			{
+		public FilePath(FilePath path) {
+			if (path.Path.Length > 0) {
 				base.Path = path.Path;
-				base.FixedPath = path.FixedPath;
+				FixedPath = path.FixedPath;
 			}
 		}
 
 		/// <inheritDoc/>
 		[ReadOnly(true)]
-		public override string Path
-		{
+		public override string Path {
 			get { return base.Path; }
-			set 
-			{ 
-				if (value.Length > 0)
-				{
+			set {
+				if (value.Length > 0) {
 					base.Path = value;
-				}
-				else
-				{
-					base.SetPathInternal(String.Empty);
+				} else {
+					SetPathInternal(String.Empty);
 				}
 			}
 		}
 
 		/// <inheritDoc/>
-		public override bool Exists
-		{
-			get { return File.Exists( base.ToString() ); }
+		public override bool Exists {
+			get { return File.Exists(base.ToString()); }
 		}
-
-		bool ShouldSerializePath() { return false; }
 
 		// This is a special type converter which will be associated with the FilePath class.
 		// It converts an FilePath object to a string representation for use in a property grid.
 		/// <summary>
 		/// 
 		/// </summary>
-		new internal class TypeConverter : PropertySorter
-		{
+		new internal class TypeConverter : PropertySorter {
 			/// <inheritDoc/>
-			public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
-			{
-				if (sourceType == typeof(string)) 
-				{
+			public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType) {
+				if (sourceType == typeof(string)) {
 					return true;
 				}
 				return base.CanConvertFrom(context, sourceType);
 			}
-		
+
 			/// <inheritDoc/>
-			public override object ConvertFrom(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value)
-			{
-				if (value is string) 
-				{
+			public override object ConvertFrom(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value) {
+				if (value is string) {
 					return new FilePath((string)value);
 				}
 				return base.ConvertFrom(context, culture, value);
@@ -120,41 +100,22 @@ namespace NDoc3.Core
 		/// <summary>
 		/// 
 		/// </summary>
-		internal class UIEditor : FilenameEditor
-		{
-			/// <summary>
-			/// Creates a new <see cref="UIEditor">FilePath.UIEditor</see> instance.
-			/// </summary>
-			public UIEditor() : base() {}
-	
+		internal class UIEditor : FilenameEditor {
 			/// <inheritDoc/>
-			public override object EditValue(System.ComponentModel.ITypeDescriptorContext context, IServiceProvider provider, object value)
-			{
-				if (value is FilePath)
-				{
+			public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value) {
+				if (value is FilePath) {
 					object result = base.EditValue(context, provider, ((FilePath)value).Path);
-					if ((string)result == ((FilePath)value).Path)
-					{
+					if ((string)result == ((FilePath)value).Path) {
 						return value;
 					}
-					else
-					{
-						if (((string)result).Length > 0)
-						{
-							FilePath newValue = new FilePath((FilePath)value);
-							newValue.Path = (string)result;
-							return newValue;
-						}
-						else
-						{
-							return new FilePath();
-						}
+					if (((string)result).Length > 0) {
+						FilePath newValue = new FilePath((FilePath)value);
+						newValue.Path = (string)result;
+						return newValue;
 					}
+					return new FilePath();
 				}
-				else
-				{
-					return base.EditValue(context, provider, value);
-				}
+				return base.EditValue(context, provider, value);
 			}
 		}
 	}

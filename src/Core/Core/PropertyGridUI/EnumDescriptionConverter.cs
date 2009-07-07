@@ -16,82 +16,64 @@
 
 using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
 
-namespace NDoc3.Core.PropertyGridUI
-{
+namespace NDoc3.Core.PropertyGridUI {
 	/// <summary>
 	/// EnumConverter supporting System.ComponentModel.DescriptionAttribute
 	/// </summary>
-	public class EnumDescriptionConverter : System.ComponentModel.EnumConverter
-	{
-		private System.Type enumType;
+	public class EnumDescriptionConverter : EnumConverter {
+		private readonly Type enumType;
 
 		/// <summary>
 		/// Gets the Description of the given Enumeration value 
 		/// </summary>
 		/// <param name="value">The enumeration value</param>
 		/// <returns>The Description from the DescriptionAttribute attached to the value, otherwise the enumeration value's name</returns>
-		public static string GetEnumDescription(Enum value)
-		{
+		public static string GetEnumDescription(Enum value) {
 			FieldInfo fi = value.GetType().GetField(value.ToString());
-			DescriptionAttribute[] attributes = 
+			DescriptionAttribute[] attributes =
 				(DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
-			if (attributes.Length > 0) 
-			{
+			if (attributes.Length > 0) {
 				return attributes[0].Description;
 			}
-			else
-			{
-				return value.ToString();
-			}
+			return value.ToString();
 		}
-    
+
 		/// <summary>
 		/// Gets the Description of a named value in an Enumeration
 		/// </summary>
 		/// <param name="value">The type of the Enumeration</param>
 		/// <param name="name">The name of the Enumeration value</param>
 		/// <returns>The description, if any, else the passed name</returns>
-		public static string GetEnumDescription(System.Type value, string name)
-		{
+		public static string GetEnumDescription(Type value, string name) {
 			FieldInfo fi = value.GetField(name);
-			DescriptionAttribute[] attributes = 
+			DescriptionAttribute[] attributes =
 				(DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
-			if (attributes.Length > 0) 
-			{
+			if (attributes.Length > 0) {
 				return attributes[0].Description;
 			}
-			else
-			{
-				return name;
-			}
+			return name;
 		}
-    
+
 		/// <summary>
 		/// Gets the value of an Enum, based on it's Description Attribute or named value
 		/// </summary>
 		/// <param name="value">The Enum type</param>
 		/// <param name="description">The description or name of the element</param>
 		/// <returns>The value, or the passed in description, if it was not found</returns>
-		public static object GetEnumValue(System.Type value, string description)
-		{
+		public static object GetEnumValue(Type value, string description) {
 			FieldInfo[] fis = value.GetFields();
-			foreach (FieldInfo fi in fis) 
-			{
-				DescriptionAttribute[] attributes = 
+			foreach (FieldInfo fi in fis) {
+				DescriptionAttribute[] attributes =
 					(DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
-				if (attributes.Length > 0) 
-				{
-					if (attributes[0].Description == description)
-					{
+				if (attributes.Length > 0) {
+					if (attributes[0].Description == description) {
 						return fi.GetValue(fi.Name);
 					}
 				}
-				if (fi.Name == description)
-				{
+				if (fi.Name == description) {
 					return fi.GetValue(fi.Name);
 				}
 			}
@@ -102,8 +84,8 @@ namespace NDoc3.Core.PropertyGridUI
 		/// Constructs EnumDescriptionConverter for a given Enum
 		/// </summary>
 		/// <param name="type"></param>
-		public EnumDescriptionConverter(System.Type type) : base(type)
-		{
+		public EnumDescriptionConverter(Type type)
+			: base(type) {
 			enumType = type;
 		}
 
@@ -116,20 +98,16 @@ namespace NDoc3.Core.PropertyGridUI
 		/// <param name="value">The <see cref="Object"/> to convert.</param>
 		/// <param name="destinationType">The <see cref="Type"/> to convert the <paramref name="value"/> parameter to.</param>
 		/// <returns>An <see cref="Object"/> that represents the converted value.</returns>
-		public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
-		{
+		public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType) {
 
-			if (destinationType == typeof(string)) 
-			{
+			if (destinationType == typeof(string)) {
 				//enum value => Description
-				if (value is Enum) 
-				{
+				if (value is Enum) {
 					return GetEnumDescription((Enum)value);
 				}
 
 				//enum named value => Description
-				if (value is string) 
-				{
+				if (value is string) {
 					return GetEnumDescription(enumType, (string)value);
 				}
 			}
@@ -146,17 +124,14 @@ namespace NDoc3.Core.PropertyGridUI
 		/// <param name="culture">A <see cref="CultureInfo"/> object. If a <see langword="null"/> is passed, the current culture is assumed.</param>
 		/// <param name="value">The <see cref="Object"/> to convert.</param>
 		/// <returns>An <see cref="Object"/> that represents the converted value.</returns>
-		public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
-		{
+		public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value) {
 			//Descripton or named-value => enum
-			if (value is string) 
-			{
+			if (value is string) {
 				return GetEnumValue(enumType, (string)value);
 			}
 
 			//enum value => Description
-			if (value is Enum) 
-			{
+			if (value is Enum) {
 				return GetEnumDescription((Enum)value);
 			}
 

@@ -17,13 +17,11 @@ using System.ComponentModel;
 using System.Drawing.Design;
 using System.Windows.Forms;
 
-namespace NDoc3.Core.PropertyGridUI
-{
+namespace NDoc3.Core.PropertyGridUI {
 	/// <summary>
 	/// Class which implements a custom UITypeEditor for attributes.
 	/// </summary>
-	public class AttributesEditor : UITypeEditor 
-	{
+	public class AttributesEditor : UITypeEditor {
 		/// <summary>
 		/// Handler called when editing a value.
 		/// </summary>
@@ -31,15 +29,12 @@ namespace NDoc3.Core.PropertyGridUI
 		/// <param name="provider">Provider</param>
 		/// <param name="value">Current Value</param>
 		/// <returns>New value</returns>
-		public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value) 
-		{
+		public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value) {
 			if (context != null
 				&& context.Instance != null
-				&& provider != null) 
-			{
+				&& provider != null) {
 				AttributesForm dlg = new AttributesForm(value);
-				if(dlg.ShowDialog() == DialogResult.OK)
-				{
+				if (dlg.ShowDialog() == DialogResult.OK) {
 					return dlg.Value;
 				}
 			}
@@ -52,10 +47,8 @@ namespace NDoc3.Core.PropertyGridUI
 		/// </summary>
 		/// <param name="context">Context</param>
 		/// <returns>Edit Style</returns>
-		public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) 
-		{
-			if (context != null && context.Instance != null) 
-			{
+		public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) {
+			if (context != null && context.Instance != null) {
 				return UITypeEditorEditStyle.Modal;
 			}
 			return base.GetEditStyle(context);

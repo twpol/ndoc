@@ -24,13 +24,11 @@ using System.Security;
 using System.Security.Permissions;
 using System.Security.Policy;
 
-namespace NDoc3.Core.Reflection
-{
+namespace NDoc3.Core.Reflection {
 	/// <summary>
 	/// Handles the resolution and loading of assemblies.
 	/// </summary>
-	internal class AssemblyLoader : IAssemblyLoader
-	{
+	internal class AssemblyLoader : IAssemblyLoader {
 		/// <summary>primary search directories.</summary>
 		private readonly ReferencePathCollection searchDirectories = new ReferencePathCollection();
 
@@ -61,15 +59,13 @@ namespace NDoc3.Core.Reflection
 		/// </summary>
 		/// <param name="referenceDirectories">Reference directories.</param>
 		public AssemblyLoader(params ReferencePath[] referenceDirectories)
-			: this(new ReferencePathCollection())
-		{ }
+			: this(new ReferencePathCollection()) { }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AssemblyLoader"/> class.
 		/// </summary>
 		/// <param name="referenceDirectories">Reference directories.</param>
-		public AssemblyLoader(ReferencePathCollection referenceDirectories)
-		{
+		public AssemblyLoader(ReferencePathCollection referenceDirectories) {
 			if (referenceDirectories != null) {
 				searchDirectories.AddRange(referenceDirectories);
 			}
@@ -78,16 +74,14 @@ namespace NDoc3.Core.Reflection
 		/// <summary>
 		/// Add the path to the list of directories for dependency resolution
 		/// </summary>
-		public void AddSearchDirectory(ReferencePath path)
-		{
+		public void AddSearchDirectory(ReferencePath path) {
 			searchDirectories.Add(path);
 		}
 
 		/// <summary>
 		/// Directories Searched for assemblies.
 		/// </summary>
-		public ICollection SearchedDirectories
-		{
+		public ICollection SearchedDirectories {
 			// TODO (EE): return typed collection
 			get { return searchedDirectories.Keys; }
 		}
@@ -95,8 +89,7 @@ namespace NDoc3.Core.Reflection
 		/// <summary>
 		/// Assemblies that could not be resolved.
 		/// </summary>
-		public ICollection UnresolvedAssemblies
-		{
+		public ICollection UnresolvedAssemblies {
 			// TODO (EE): return typed collection
 			get { return unresolvedAssemblies.Keys; }
 		}
@@ -104,8 +97,7 @@ namespace NDoc3.Core.Reflection
 		/// <summary> 
 		/// Installs the assembly resolver by hooking up to the AppDomain's AssemblyResolve event.
 		/// </summary>
-		public void Install()
-		{
+		public void Install() {
 			AppDomain.CurrentDomain.AssemblyResolve += ResolveAssembly;
 		}
 
@@ -123,8 +115,7 @@ namespace NDoc3.Core.Reflection
 		/// <remarks>This method loads an assembly into memory. If you
 		/// use Assembly.Load or Assembly.LoadFrom the assembly file locks.
 		/// This method doesn't lock the assembly file.</remarks>
-		public IAssemblyInfo GetAssemblyInfo(FileInfo assemblyFile)
-		{
+		public IAssemblyInfo GetAssemblyInfo(FileInfo assemblyFile) {
 			return new ReflectionAssemblyInfo(LoadAssembly(assemblyFile));
 		}
 
@@ -134,8 +125,7 @@ namespace NDoc3.Core.Reflection
 		/// <remarks>This method loads an assembly into memory. If you
 		/// use Assembly.Load or Assembly.LoadFrom the assembly file locks.
 		/// This method doesn't lock the assembly file.</remarks>
-		protected Assembly LoadAssembly(FileInfo assemblyFile)
-		{
+		protected Assembly LoadAssembly(FileInfo assemblyFile) {
 			string fileName = assemblyFile.FullName;
 
 			// have we already loaded this assembly?
@@ -177,7 +167,7 @@ namespace NDoc3.Core.Reflection
 				// Now we have the assembly image, try to load it into the CLR
 				try {
 					// ensure the assembly's path is added to the search list for resolving dependencies
-					string assyDir = System.IO.Path.GetDirectoryName(fileName);
+					string assyDir = Path.GetDirectoryName(fileName);
 					searchDirectories.Add(new ReferencePath(assyDir));
 
 					Evidence evidence = CreateAssemblyEvidence(fileName);
@@ -217,8 +207,7 @@ namespace NDoc3.Core.Reflection
 		/// </summary>
 		/// <param name="fileName">The assembly filename</param>
 		/// <returns>The new assembly evidence</returns>
-		static Evidence CreateAssemblyEvidence(string fileName)
-		{
+		static Evidence CreateAssemblyEvidence(string fileName) {
 			//HACK: I am unsure whether 'Hash' evidence is required - since this will be difficult to obtain, we will not supply it...
 
 			Evidence newEvidence = new Evidence();
@@ -249,8 +238,7 @@ namespace NDoc3.Core.Reflection
 		/// <param name="sender">the sender of the event</param>
 		/// <param name="args">event arguments</param>
 		/// <returns>the loaded assembly, null, if not found</returns>
-		protected Assembly ResolveAssembly(object sender, ResolveEventArgs args)
-		{
+		protected Assembly ResolveAssembly(object sender, ResolveEventArgs args) {
 
 			// first, have we already loaded the required assembly?
 			Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
@@ -352,8 +340,7 @@ namespace NDoc3.Core.Reflection
 		/// </param>
 		/// <param name="fileName">The name of the assembly.</param>
 		/// <returns>The assembly, or null if not found.</returns>
-		private Assembly LoadAssemblyFrom(string fullName, string fileName)
-		{
+		private Assembly LoadAssemblyFrom(string fullName, string fileName) {
 
 			if ((searchDirectories == null) || (searchDirectories.Count == 0))
 				return (null);
@@ -380,8 +367,7 @@ namespace NDoc3.Core.Reflection
 		/// <param name="fileName">The name of the assembly.</param>
 		/// <param name="includeSubDirs">true, search subdirectories.</param>
 		/// <returns>The assembly, or null if not found.</returns>
-		private Assembly LoadAssemblyFrom(string fullName, string fileName, string path, bool includeSubDirs)
-		{
+		private Assembly LoadAssemblyFrom(string fullName, string fileName, string path, bool includeSubDirs) {
 			if (!searchedDirectories.ContainsKey(path)) {
 				searchedDirectories.Add(path, null);
 			}
@@ -433,8 +419,7 @@ namespace NDoc3.Core.Reflection
 		/// </summary>
 		/// <param name="parentDir">The parent directory</param>
 		/// <returns>Array containing all subdirectories</returns>
-		private string[] GetSubDirectories(string parentDir)
-		{
+		private string[] GetSubDirectories(string parentDir) {
 			string[] subdirs = (string[])directoryLists[parentDir];
 			if (null == subdirs) {
 				subdirs = Directory.GetDirectories(parentDir);
@@ -443,8 +428,7 @@ namespace NDoc3.Core.Reflection
 			return subdirs;
 		}
 
-		private bool IsAssemblyNameEquivalent(string AssyFullName, string RequiredAssyName)
-		{
+		private static bool IsAssemblyNameEquivalent(string AssyFullName, string RequiredAssyName) {
 			if (RequiredAssyName.Length < AssyFullName.Length)
 				return (AssyFullName.Substring(0, RequiredAssyName.Length) == RequiredAssyName);
 			return (AssyFullName == RequiredAssyName.Substring(0, AssyFullName.Length));

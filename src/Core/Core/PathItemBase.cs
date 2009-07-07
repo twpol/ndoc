@@ -15,25 +15,19 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 using System;
-using System.Diagnostics;
-using System.Text;
 using System.ComponentModel;
-using System.Windows.Forms.Design;
-using System.Drawing.Design;
 using System.IO;
 
 using NDoc3.Core.PropertyGridUI;
 
-namespace NDoc3.Core
-{
+namespace NDoc3.Core {
 	/// <summary>
 	/// 
 	/// </summary>
 	[Serializable]
 	[DefaultProperty("Path")]
-	[TypeConverter(typeof(PathItemBase.TypeConverter))]
-	public class PathItemBase 
-	{
+	[TypeConverter(typeof(TypeConverter))]
+	public class PathItemBase {
 		#region Static Members
 		private static string _basePath;
 		/// <summary>
@@ -42,21 +36,13 @@ namespace NDoc3.Core
 		/// <remarks>
 		/// If the path has not been explicitly set, it defaults to the working directory.
 		/// </remarks>
-		public static string BasePath
-		{
-			get 
-			{
-				if ((_basePath != null) && (_basePath.Length > 0))
-				{
+		public static string BasePath {
+			get {
+				if (!string.IsNullOrEmpty(_basePath))
 					return _basePath;
-				}
-				else
-				{
-					return Directory.GetCurrentDirectory();
-				}
+				return Directory.GetCurrentDirectory();
 			}
-			set 
-			{
+			set {
 				_basePath = value;
 			}
 		}
@@ -66,8 +52,7 @@ namespace NDoc3.Core
 		/// </summary>
 		/// <param name="path">The <see cref="PathItemBase"/> to convert.</param>
 		/// <returns>A string containg the fully-qualified path contained in the passed <see cref="PathItemBase"/>.</returns>
-		public static implicit operator String(PathItemBase path)
-		{
+		public static implicit operator String(PathItemBase path) {
 			return path._Path;
 		}
 
@@ -75,7 +60,7 @@ namespace NDoc3.Core
 
 		#region Private Fields
 		private string _Path = "";
-		private bool _FixedPath = false;
+		private bool _FixedPath;
 		#endregion
 
 		#region Constructors
@@ -85,8 +70,8 @@ namespace NDoc3.Core
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PathItemBase"/> class.
 		/// </summary>
-		protected PathItemBase() {}
-		
+		protected PathItemBase() { }
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PathItemBase"/> class from a given path string.
 		/// </summary>
@@ -97,26 +82,19 @@ namespace NDoc3.Core
 		/// If a <paramref name="path"/> is rooted, <see cref="FixedPath"/> is set to <see langword="true"/>, otherwise
 		/// is is set to <see langword="false"/>
 		/// </remarks>
-		protected PathItemBase(string path)
-		{
+		protected PathItemBase(string path) {
 			if (path == null)
-				throw new ArgumentNullException("Path");
+				throw new ArgumentNullException("path");
 
-			if (path.Length > 0)
-			{
-				if (!System.IO.Path.IsPathRooted(path))
-				{
+			if (path.Length > 0) {
+				if (!System.IO.Path.IsPathRooted(path)) {
 					path = PathUtilities.RelativeToAbsolutePath(BasePath, path);
-					this.FixedPath = false;
-				}
-				else
-				{
-					this.FixedPath = true;
+					FixedPath = false;
+				} else {
+					FixedPath = true;
 				}
 				_Path = NormalizePath(path);
-			}
-			else
-			{
+			} else {
 				_Path = "";
 				_FixedPath = false;
 			}
@@ -127,13 +105,12 @@ namespace NDoc3.Core
 		/// </summary>
 		/// <param name="pathItemBase">An existing <see cref="PathItemBase"/> instance.</param>
 		/// <exception cref="ArgumentNullException"><paramref name="pathItemBase"/> is a <see langword="null"/>.</exception>
-		protected PathItemBase(PathItemBase pathItemBase)
-		{
+		protected PathItemBase(PathItemBase pathItemBase) {
 			if (pathItemBase == null)
 				throw new ArgumentNullException("pathItemBase");
 
-			this._Path = pathItemBase._Path;
-			this._FixedPath = pathItemBase._FixedPath;
+			_Path = pathItemBase._Path;
+			_FixedPath = pathItemBase._FixedPath;
 		}
 
 		#endregion
@@ -151,23 +128,19 @@ namespace NDoc3.Core
 		/// </remarks>
 		[MergableProperty(false)]
 		[PropertyOrder(10)]
-		public virtual string Path
-		{
+		public virtual string Path {
 			get { return _Path; }
-			set 
-			{ 
+			set {
 				if (value == null)
-					throw new ArgumentNullException("Path");
+					throw new ArgumentNullException("value");
 
 				if (value.Length == 0)
-					throw new ArgumentOutOfRangeException("Path", "path must not be empty.");
+					throw new ArgumentOutOfRangeException("value", "path must not be empty.");
 
-				if (!System.IO.Path.IsPathRooted(value))
-				{
+				if (!System.IO.Path.IsPathRooted(value)) {
 					value = PathUtilities.RelativeToAbsolutePath(BasePath, value);
-					this.FixedPath = false;
+					FixedPath = false;
 				}
-//				System.IO.FileInfo f = new System.IO.FileInfo(value);
 				_Path = NormalizePath(value);
 			}
 		}
@@ -182,9 +155,8 @@ namespace NDoc3.Core
 		[Description("If true, NDoc3 will save this as a fixed path; otherwise, it will be saved as a path relative to the NDoc3 project file.")]
 		[DefaultValue(false)]
 		[PropertyOrder(20)]
-		[RefreshProperties(RefreshProperties.Repaint)] 
-		public bool FixedPath
-		{
+		[RefreshProperties(RefreshProperties.Repaint)]
+		public bool FixedPath {
 			get { return _FixedPath; }
 			set { _FixedPath = value; }
 		}
@@ -203,97 +175,71 @@ namespace NDoc3.Core
 		/// The implementation of this method must ensure, that 2 paths pointing to the same location
 		/// are considered equal. On Windows, this e.g. means case insensitive comparison of paths.
 		/// </remarks>
-		protected virtual string NormalizePath(string path)
-		{
+		protected virtual string NormalizePath(string path) {
 			return path;
-//			return PathUtilities.NormalizePath(path);
+			//			return PathUtilities.NormalizePath(path);
 		}
 
-		internal void SetPathInternal(string path)
-		{
+		internal void SetPathInternal(string path) {
 			_Path = NormalizePath(path);
 		}
 
 		/// <inheritDoc/>
-		public override string ToString()
-		{
+		public override string ToString() {
 			string displayPath = PersistablePath(BasePath);
 			return displayPath;
 		}
 
-		#region Equality	
+		#region Equality
 		/// <inheritDoc/>
-		public override bool Equals(object obj)
-		{
-			return Equals(obj as PathItemBase) ;
+		public override bool Equals(object obj) {
+			return Equals(obj as PathItemBase);
 		}
 
 		/// <inheritDoc/>
-		public virtual bool Equals(PathItemBase other)
-		{
+		public virtual bool Equals(PathItemBase other) {
 			if (ReferenceEquals(other, null)) return false;
-			if (this.GetType() != other.GetType()) return false;
+			if (GetType() != other.GetType()) return false;
 
-			return this.ToString() == other.ToString();
+			return ToString() == other.ToString();
 		}
 
 		/// <inheritDoc/>
-		public override int GetHashCode()
-		{
+		public override int GetHashCode() {
 			return ToString().GetHashCode();
 		}
 
 		/// <summary>Equality operator.</summary>
-		public static bool operator == (PathItemBase x, PathItemBase y) 
-		{
+		public static bool operator ==(PathItemBase x, PathItemBase y) {
 			if (ReferenceEquals(x, null)) return false;
 			return x.Equals(y);
 		}
 		/// <summary>Inequality operator.</summary>
-		public static bool operator != (PathItemBase x, PathItemBase y) 
-		{ 
-			return!(x == y);
+		public static bool operator !=(PathItemBase x, PathItemBase y) {
+			return !(x == y);
 		}
-	
+
 		#endregion
 
 		#region Helpers
-		internal string PersistablePath(string basePath)
-		{
+		internal string PersistablePath(string basePath) {
 			string displayPath = _Path;
-			if (FixedPath)
-			{
-				displayPath = FixPath(basePath, displayPath);
-			}
-			else
-			{
-				displayPath = RelativePath(displayPath);
-			}
+			displayPath = FixedPath ? FixPath(basePath, displayPath) : RelativePath(displayPath);
 			return displayPath;
 		}
 
-		private string FixPath(string BasePath, string path)
-		{
-			if (System.IO.Path.IsPathRooted(path))
-			{
+		private static string FixPath(string BasePath, string path) {
+			if (System.IO.Path.IsPathRooted(path)) {
 				return path;
 			}
-			else
-			{
-				return PathUtilities.RelativeToAbsolutePath(BasePath, path);
-			}
+			return PathUtilities.RelativeToAbsolutePath(BasePath, path);
 		}
 
-		private string RelativePath(string path)
-		{
-			if (System.IO.Path.IsPathRooted(path))
-			{
+		private static string RelativePath(string path) {
+			if (System.IO.Path.IsPathRooted(path)) {
 				return PathUtilities.AbsoluteToRelativePath(BasePath, path);
 			}
-			else
-			{
-				return path;
-			}
+			return path;
 		}
 
 		#endregion
@@ -303,33 +249,26 @@ namespace NDoc3.Core
 		/// <summary>
 		/// 
 		/// </summary>
-		internal class TypeConverter : PropertySorter
-		{
+		internal class TypeConverter : PropertySorter {
 			/// <inheritDoc/>
-			public override object ConvertTo(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, Type destType)
-			{
-				if (destType == typeof(string) && value is PathItemBase)
-				{
+			public override object ConvertTo(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, Type destType) {
+				if (destType == typeof(string) && value is PathItemBase) {
 					return value.ToString();
 				}
 				return base.ConvertTo(context, culture, value, destType);
 			}
-		
+
 			/// <inheritDoc/>
-			public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
-			{
-				if (sourceType == typeof(string)) 
-				{
+			public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType) {
+				if (sourceType == typeof(string)) {
 					return true;
 				}
 				return base.CanConvertFrom(context, sourceType);
 			}
-		
+
 			/// <inheritDoc/>
-			public override object ConvertFrom(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value)
-			{
-				if (value is string) 
-				{
+			public override object ConvertFrom(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value) {
+				if (value is string) {
 					return new PathItemBase((string)value);
 				}
 				return base.ConvertFrom(context, culture, value);

@@ -16,30 +16,24 @@
 
 using System;
 using System.ComponentModel;
-using System.ComponentModel.Design;
-using System.Diagnostics;
 using System.Drawing.Design;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 
-namespace NDoc3.Core.PropertyGridUI
-{
+namespace NDoc3.Core.PropertyGridUI {
 	/// <summary>
 	/// 
 	/// </summary>
-	public class LangIdEditor : UITypeEditor
-	{
-		private IWindowsFormsEditorService editorService = null;
+	public class LangIdEditor : UITypeEditor {
+		private IWindowsFormsEditorService editorService;
 
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="context"></param>
 		/// <returns></returns>
-		public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
-		{
-			if (context != null && context.Instance != null) 
-			{
+		public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) {
+			if (context != null && context.Instance != null) {
 				return UITypeEditorEditStyle.DropDown;
 			}
 			return base.GetEditStyle(context);
@@ -52,44 +46,35 @@ namespace NDoc3.Core.PropertyGridUI
 		/// <param name="provider"></param>
 		/// <param name="value"></param>
 		/// <returns></returns>
-		public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
-		{
+		public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value) {
 			if (context != null
 				&& context.Instance != null
-				&& provider != null) 
-				try
-				{
+				&& provider != null)
+				try {
 					// get the editor service
 					editorService = (IWindowsFormsEditorService)
 						provider.GetService(typeof(IWindowsFormsEditorService));
 
 					// create the ListBox
 					ListBox listBox = new ListBox();
-					listBox.Click += new EventHandler(List_Click);
-            
+					listBox.Click += List_Click;
+
 					// modify the list's properties including the Item list
 					FillInList(context, provider, listBox, (short)value);
 
 					// let the editor service place the list on screen and manage its events
 					editorService.DropDownControl(listBox);
-   
+
 					// return the updated value;
-					if (listBox.SelectedItem !=null)
-					{
+					if (listBox.SelectedItem != null) {
 						return ((LangListItem)listBox.SelectedItem).LangID;
-					}
-					else
-					{
+					} else {
 						return value;
 					}
-				}  
-				finally
-				{
+				} finally {
 					editorService = null;
 				}
-			else
-				return value;
-
+			return value;
 		}
 
 		/// <summary>
@@ -97,11 +82,10 @@ namespace NDoc3.Core.PropertyGridUI
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="args"></param>
-		private void List_Click(object sender, EventArgs args)
-		{
+		private void List_Click(object sender, EventArgs args) {
 			if (editorService != null)
 				editorService.CloseDropDown();
-		}  
+		}
 
 
 		/// <summary>
@@ -111,18 +95,16 @@ namespace NDoc3.Core.PropertyGridUI
 		/// <param name="provider"></param>
 		/// <param name="listBox"></param>
 		/// <param name="value"></param>
-		public void FillInList(ITypeDescriptorContext context, IServiceProvider provider, ListBox listBox, short value)
-		{
-			int SelectedIndex=-1;
-			for (int i=0; i<Languages.Length;i++)
-			{
+		public void FillInList(ITypeDescriptorContext context, IServiceProvider provider, ListBox listBox, short value) {
+			int SelectedIndex = -1;
+			for (int i = 0; i < Languages.Length; i++) {
 				listBox.Items.Add(Languages[i]);
-				if (Languages[i].LangID==value) SelectedIndex = i;
+				if (Languages[i].LangID == value) SelectedIndex = i;
 			}
-			if (SelectedIndex!=-1) listBox.SelectedIndex=SelectedIndex;
+			if (SelectedIndex != -1) listBox.SelectedIndex = SelectedIndex;
 		}
 
-		static readonly LangListItem[] Languages=
+		static readonly LangListItem[] Languages =
 			{
 				new LangListItem(1078, "Afrikaans"),
 				new LangListItem(1052, "Albanian"),
@@ -231,20 +213,17 @@ namespace NDoc3.Core.PropertyGridUI
 				new LangListItem(1066, "Vietnamese")
 			};
 
-		struct LangListItem
-		{
-			public short LangID;
-			private string Description;
+		struct LangListItem {
+			public readonly short LangID;
+			private readonly string Description;
 
-			public LangListItem(short langID, string description)
-			{
+			public LangListItem(short langID, string description) {
 				LangID = langID;
 				Description = description;
 			}
 
-			public override string ToString()
-			{
-				return LangID.ToString() + "\t" + Description;
+			public override string ToString() {
+				return LangID + "\t" + Description;
 			}
 		}
 	}

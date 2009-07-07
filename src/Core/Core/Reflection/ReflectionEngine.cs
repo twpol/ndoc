@@ -5,13 +5,11 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 
-namespace NDoc3.Core.Reflection
-{
+namespace NDoc3.Core.Reflection {
 	///<summary>
 	/// Used to reflect assemblies of a given project
 	///</summary>
-	public class ReflectionEngine : IDisposable
-	{
+	public class ReflectionEngine : IDisposable {
 		private readonly AppDomain _remoteDomain;
 		private readonly ReflectionEngineServer _remoteServer;
 
@@ -19,17 +17,22 @@ namespace NDoc3.Core.Reflection
 		/// Sets up a remote domain for reflecting assemblies.
 		/// </summary>
 		/// <param name="referencePaths">paths for resolving assembly dependencies</param>
-		public ReflectionEngine(ReferencePathCollection referencePaths)
-		{
+		public ReflectionEngine(ReferencePathCollection referencePaths) {
 			_remoteDomain = CreateRemoteDomain();
 			_remoteServer = CreateRemoteInstance(_remoteDomain, referencePaths);
 		}
 
 		///<summary>
+		/// Gets the remote server
+		///</summary>
+		public ReflectionEngineServer remoteServer {
+			get { return _remoteServer; }
+		}
+
+		///<summary>
 		/// Unloads the remote <see cref="AppDomain"/>
 		///</summary>
-		public void Dispose()
-		{
+		public void Dispose() {
 			AppDomain.Unload(_remoteDomain);
 		}
 
@@ -38,9 +41,8 @@ namespace NDoc3.Core.Reflection
 		///</summary>
 		///<param name="args">configuration controlling the reflection process.</param>
 		///<param name="xmlFile">the file to write the NDoc xml content to</param>
-		internal void MakeXmlFile(NDocXmlGeneratorParameters args, FileInfo xmlFile)
-		{
-			using (NDocXmlGenerator xmlGen = _remoteServer.CreateInstance(args)) {
+		internal static void MakeXmlFile(NDocXmlGeneratorParameters args, FileInfo xmlFile) {
+			using (NDocXmlGenerator xmlGen = ReflectionEngineServer.CreateInstance(args)) {
 				xmlGen.MakeXmlFile(xmlFile);
 			}
 		}
@@ -50,9 +52,8 @@ namespace NDoc3.Core.Reflection
 		///</summary>
 		///<param name="args">configuration controlling the reflection process.</param>
 		///<returns>A string containing the generated XML content</returns>
-		internal string MakeXml(NDocXmlGeneratorParameters args)
-		{
-			using (NDocXmlGenerator xmlGen = _remoteServer.CreateInstance(args)) {
+		internal static string MakeXml(NDocXmlGeneratorParameters args) {
+			using (NDocXmlGenerator xmlGen = ReflectionEngineServer.CreateInstance(args)) {
 				return xmlGen.MakeXml();
 			}
 		}
@@ -62,29 +63,25 @@ namespace NDoc3.Core.Reflection
 		///</summary>
 		///<param name="assemblyFile">a local file path to the assembly</param>
 		/// <returns>an array of namespaces. Is never <c>null</c></returns>
-		public string[] GetNamespacesFromAssembly(FileInfo assemblyFile)
-		{
-			return _remoteServer.GetNamespacesFromAssembly(assemblyFile);
+		public string[] GetNamespacesFromAssembly(FileInfo assemblyFile) {
+			return ReflectionEngineServer.GetNamespacesFromAssembly(assemblyFile);
 		}
 
-		private static AppDomain CreateRemoteDomain()
-		{
+		private static AppDomain CreateRemoteDomain() {
 			AppDomain remoteDomain = AppDomain.CreateDomain("NDoc3Reflection",
-												   AppDomain.CurrentDomain.Evidence,
-												   AppDomain.CurrentDomain.SetupInformation);
+													AppDomain.CurrentDomain.Evidence,
+													AppDomain.CurrentDomain.SetupInformation);
 			remoteDomain.SetupInformation.ShadowCopyFiles = "true"; //only required for managed c++ assemblies
 			return remoteDomain;
 		}
 
-		private static ReflectionEngineServer CreateRemoteInstance(AppDomain remoteDomain, ReferencePathCollection referencePaths)
-		{
+		private static ReflectionEngineServer CreateRemoteInstance(AppDomain remoteDomain, ReferencePathCollection referencePaths) {
 			ReflectionEngineServer server = CreateInstanceAndUnwrap<ReflectionEngineServer>(remoteDomain);
-			server.Initialize(referencePaths);
+			ReflectionEngineServer.Initialize(referencePaths);
 			return server;
 		}
 
-		private static T CreateInstanceAndUnwrap<T>(AppDomain appDomain)
-		{
+		private static T CreateInstanceAndUnwrap<T>(AppDomain appDomain) {
 			return (T)appDomain.CreateInstanceAndUnwrap(typeof(T).Assembly.FullName, typeof(T).FullName);
 			//                    appDomain.CreateInstanceAndUnwrap(typeof(ReflectionEngineServer).Assembly.FullName,
 			//                    typeof(ReflectionEngineServer).FullName, false,
@@ -98,29 +95,25 @@ namespace NDoc3.Core.Reflection
 		///<summary>
 		/// Used for instantiating the server part of the reflection engine
 		///</summary>
-		public class ReflectionEngineServer : MarshalByRefObject
-		{
+		public class ReflectionEngineServer : MarshalByRefObject {
 			private static AssemblyLoader s_assemblyLoader;
 
 			///<summary>
 			/// Creates a new instance and installs the global <see cref="AssemblyLoader"/>.
 			///</summary>
 			///<exception cref="NotSupportedException"></exception>
-			public ReflectionEngineServer()
-			{
+			public ReflectionEngineServer() {
 				if (s_assemblyLoader != null) {
-					throw new NotSupportedException("Only 1 instance of " + this.GetType() + " is allowed per AppDomain");
+					throw new NotSupportedException("Only 1 instance of " + GetType() + " is allowed per AppDomain");
 				}
 			}
 
-			internal void Initialize(ReferencePathCollection referencePaths)
-			{
+			internal static void Initialize(ReferencePathCollection referencePaths) {
 				s_assemblyLoader = new AssemblyLoader(referencePaths);
 				s_assemblyLoader.Install();
 			}
 
-			internal NDocXmlGenerator CreateInstance(NDocXmlGeneratorParameters args)
-			{
+			internal static NDocXmlGenerator CreateInstance(NDocXmlGeneratorParameters args) {
 				return new NDocXmlGenerator(s_assemblyLoader, args);
 			}
 
@@ -129,8 +122,7 @@ namespace NDoc3.Core.Reflection
 			/// </summary>
 			/// <param name="assemblyFile">Assembly file name.</param>
 			/// <returns></returns>
-			internal string[] GetNamespacesFromAssembly(FileInfo assemblyFile)
-			{
+			internal static string[] GetNamespacesFromAssembly(FileInfo assemblyFile) {
 				try {
 					IAssemblyInfo a = s_assemblyLoader.GetAssemblyInfo(assemblyFile);
 					List<string> namespaces = new List<string>();

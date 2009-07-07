@@ -19,20 +19,17 @@ using System.Xml;
 using System.Collections;
 
 
-namespace NDoc3.Core
-{
+namespace NDoc3.Core {
 	/// <summary>
 	/// Event arguments class for events related to an AssemblySlashDoc
 	/// </summary>
-	public class AssemblySlashDocEventArgs : EventArgs
-	{
+	public class AssemblySlashDocEventArgs : EventArgs {
 		/// <summary>
 		/// The AssemblySlashDoc
 		/// </summary>
 		public readonly AssemblySlashDoc AssemblySlashDoc;
 
-		internal AssemblySlashDocEventArgs( AssemblySlashDoc assemblySlashDoc )
-		{
+		internal AssemblySlashDocEventArgs(AssemblySlashDoc assemblySlashDoc) {
 			AssemblySlashDoc = assemblySlashDoc;
 		}
 	}
@@ -40,14 +37,13 @@ namespace NDoc3.Core
 	/// <summary>
 	/// Event handler delegate for AssemblySlashDoc related events
 	/// </summary>
-	public delegate void AssemblySlashDocEventHandler( object sender, AssemblySlashDocEventArgs args );
+	public delegate void AssemblySlashDocEventHandler(object sender, AssemblySlashDocEventArgs args);
 
 	/// <summary>
 	/// Represents a collection of assemblies and their associated documentation comment XML files. 
 	/// </summary>
 	[Serializable]
-	public class AssemblySlashDocCollection : CollectionBase
-	{
+	public class AssemblySlashDocCollection : CollectionBase {
 		#region collection methods
 
 		/// <summary>
@@ -60,12 +56,11 @@ namespace NDoc3.Core
 		/// in <paramref name="assySlashDoc"/> matches one already existing in the collection, the
 		/// operation is silently ignored.
 		/// </remarks>
-		public void Add(AssemblySlashDoc assySlashDoc)
-		{
+		public void Add(AssemblySlashDoc assySlashDoc) {
 			if (assySlashDoc == null)
 				throw new ArgumentNullException("assySlashDoc");
 
-			if ( !Contains( assySlashDoc.Assembly.Path ) )
+			if (!Contains(assySlashDoc.Assembly.Path))
 				List.Add(assySlashDoc);
 		}
 
@@ -77,14 +72,13 @@ namespace NDoc3.Core
 		/// <summary>
 		/// Raises the <see cref="Cleared"/> event
 		/// </summary>
-		protected override void OnClear()
-		{
-			if ( Cleared != null )
-				Cleared( this, EventArgs.Empty );
+		protected override void OnClear() {
+			if (Cleared != null)
+				Cleared(this, EventArgs.Empty);
 
-			base.OnClear ();
+			base.OnClear();
 		}
-		
+
 
 		/// <summary>
 		/// Event rasied when an item is added to the collection
@@ -94,12 +88,11 @@ namespace NDoc3.Core
 		/// <summary>
 		/// Raises the <see cref="ItemAdded"/> event
 		/// </summary>
-		protected override void OnInsertComplete(int index, object value)
-		{
-			if ( ItemAdded != null )
-				ItemAdded( this, new AssemblySlashDocEventArgs( value as AssemblySlashDoc ) );
+		protected override void OnInsertComplete(int index, object value) {
+			if (ItemAdded != null)
+				ItemAdded(this, new AssemblySlashDocEventArgs(value as AssemblySlashDoc));
 
-			base.OnInsertComplete (index, value);
+			base.OnInsertComplete(index, value);
 		}
 
 		/// <summary>
@@ -110,8 +103,7 @@ namespace NDoc3.Core
 		/// <remarks>
 		/// Elements that follow the removed element move up to occupy the vacated spot and the indexes of the elements that are moved are also updated.
 		/// </remarks>
-		public void Remove(AssemblySlashDoc assySlashDoc)
-		{
+		public void Remove(AssemblySlashDoc assySlashDoc) {
 			if (assySlashDoc == null)
 				throw new ArgumentNullException("assySlashDoc");
 
@@ -126,14 +118,13 @@ namespace NDoc3.Core
 		/// <summary>
 		/// Raises the <see cref="ItemRemoved"/> event
 		/// </summary>
-		protected override void OnRemoveComplete(int index, object value)
-		{
-			if ( ItemRemoved != null )
-				ItemRemoved( this, new AssemblySlashDocEventArgs( value as AssemblySlashDoc ) );
+		protected override void OnRemoveComplete(int index, object value) {
+			if (ItemRemoved != null)
+				ItemRemoved(this, new AssemblySlashDocEventArgs(value as AssemblySlashDoc));
 
-			base.OnRemoveComplete (index, value);
+			base.OnRemoveComplete(index, value);
 		}
-		
+
 		/// <summary>
 		/// Gets or sets the <see cref="AssemblySlashDoc"/> at the specified index.
 		/// </summary>
@@ -142,16 +133,13 @@ namespace NDoc3.Core
 		/// <exception cref="ArgumentOutOfRangeException"><paramref name="index"/> is not a valid index 
 		/// in the collection.</exception>
 		/// <exception cref="ArgumentNullException">set <i>value</i> is a <see langword="null"/>.</exception>
-		public AssemblySlashDoc this[int index] 
-		{
-			get
-			{
+		public AssemblySlashDoc this[int index] {
+			get {
 				return List[index] as AssemblySlashDoc;
 			}
-			set
-			{
+			set {
 				if (value == null)
-					throw new ArgumentNullException("Set value");
+					throw new ArgumentNullException("index");
 
 				List[index] = value;
 			}
@@ -164,8 +152,7 @@ namespace NDoc3.Core
 		/// <param name="assySlashDoc">The <see cref="AssemblySlashDoc"/> to locate in the collection.</param>
 		/// <returns><see langword="true"/> if the collection contains the specified <see cref="AssemblySlashDoc"/>, 
 		/// otherwise <see langword="false"/>.</returns>
-		public bool Contains(AssemblySlashDoc assySlashDoc)
-		{
+		public bool Contains(AssemblySlashDoc assySlashDoc) {
 			return InnerList.Contains(assySlashDoc);
 		}
 
@@ -177,24 +164,19 @@ namespace NDoc3.Core
 		/// otherwise <see langword="false"/>.</returns>
 		/// <exception cref="ArgumentNullException"><paramref name="path"/> is a <see langword="null"/>.</exception>
 		/// <remarks>Path comparison is case-insensitive.</remarks>
-		public bool Contains(string path)
-		{
+		public bool Contains(string path) {
 			if (path == null)
 				throw new ArgumentNullException("path");
 
 			bool result = false;
-			foreach (object obj in InnerList)
-			{
+			foreach (object obj in InnerList) {
 				AssemblySlashDoc asd = obj as AssemblySlashDoc;
-				if (asd != null)
-				{
-					if (String.Compare(asd.Assembly.Path, path, true) == 0)
-					{
+				if (asd != null) {
+					if (String.Compare(asd.Assembly.Path, path, true) == 0) {
 						result = true;
 						break;
 					}
-				}
-				else
+				} else
 					throw new Exception("AssemblySlashDoc object are null");
 			}
 			return result;
@@ -218,19 +200,14 @@ namespace NDoc3.Core
 		/// <para>If the <i>location</i> attribute is missing or an empty string an exception will be thrown.</para>
 		/// <para>If the <i>documentation</i> attribute is missing or an empty string it will be silently ignored.</para>
 		/// </remarks>
-		public void ReadXml(XmlReader reader)
-		{
-			while (!reader.EOF && !(reader.NodeType == XmlNodeType.EndElement && reader.Name == "assemblies"))
-			{
-				if (reader.NodeType == XmlNodeType.Element && reader.Name == "assembly")
-				{
-					if (reader.GetAttribute("location") == null) 
-					{
+		public void ReadXml(XmlReader reader) {
+			while (!reader.EOF && !(reader.NodeType == XmlNodeType.EndElement && reader.Name == "assemblies")) {
+				if (reader.NodeType == XmlNodeType.Element && reader.Name == "assembly") {
+					if (reader.GetAttribute("location") == null) {
 						throw new DocumenterException("\"location\" attribute is" + " required for <assembly> element in project file.");
 					}
 					string location = reader.GetAttribute("location").Trim();
-					if (location.Length == 0) 
-					{
+					if (location.Length == 0) {
 						throw new DocumenterException("\"location\" attribute of" + " <assembly> element cannot be empty in project file.");
 					}
 					string documentation = reader.GetAttribute("documentation") ?? String.Empty;
@@ -255,14 +232,11 @@ namespace NDoc3.Core
 		/// </assemblies>
 		/// </code>
 		/// </remarks>
-		public void WriteXml(XmlWriter writer)
-		{
-			if (Count > 0)
-			{
+		public void WriteXml(XmlWriter writer) {
+			if (Count > 0) {
 				writer.WriteStartElement("assemblies");
 
-				foreach (AssemblySlashDoc asd in InnerList)
-				{
+				foreach (AssemblySlashDoc asd in InnerList) {
 					writer.WriteStartElement("assembly");
 					writer.WriteAttributeString("location", asd.Assembly.ToString());
 					writer.WriteAttributeString("documentation", asd.SlashDoc.ToString());

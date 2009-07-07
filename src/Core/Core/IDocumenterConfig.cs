@@ -15,19 +15,16 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-using System;
 using System.Collections;
 using System.Xml;
 
-namespace NDoc3.Core
-{
+namespace NDoc3.Core {
 	/// <summary>Specifies the methods that are common to all documenter configs.</summary>
-	public interface IDocumenterConfig
-	{
+	public interface IDocumenterConfig {
 		/// <summary>
 		/// Returns information about the config
 		/// </summary>
-		IDocumenterInfo DocumenterInfo{ get; }
+		IDocumenterInfo DocumenterInfo { get; }
 
 		/// <summary>Associates the config with a project.</summary>
 		/// <remarks>Changes to the config will notify the project so that 

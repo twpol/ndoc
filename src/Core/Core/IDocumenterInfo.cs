@@ -1,14 +1,8 @@
-using System;
-using System.Collections;
-using System.Xml;
-
-namespace NDoc3.Core
-{
+namespace NDoc3.Core {
 	/// <summary>
 	/// Specifies the development status of a documenter.
 	/// </summary>
-	public enum DocumenterDevelopmentStatus
-	{
+	public enum DocumenterDevelopmentStatus {
 		/// <summary>Still in development, not really ready for anyone 
 		/// else to use except to provide feedback.</summary>
 		Alpha,
@@ -27,15 +21,14 @@ namespace NDoc3.Core
 	/// <summary>
 	/// Descriptive information about a documenter
 	/// </summary>
-	public interface IDocumenterInfo
-	{
+	public interface IDocumenterInfo {
 		/// <summary>
 		/// Creates an instance of an <see cref="IDocumenterConfig"/>
 		/// for the particular type of documenter and associates it with a project
 		/// </summary>
 		/// <param name="project">A project</param>
 		/// <returns>An <see cref="IDocumenterConfig"/> for the documenter type</returns>
-		IDocumenterConfig CreateConfig( Project project );
+		IDocumenterConfig CreateConfig(Project project);
 
 		/// <summary>
 		/// Creates an instance of an <see cref="IDocumenterConfig"/>
@@ -47,8 +40,8 @@ namespace NDoc3.Core
 		/// <summary>
 		/// The name of the documenter
 		/// </summary>
-		string Name{ get; }
-		
+		string Name { get; }
+
 		/// <summary>
 		/// The development status (alpha, beta, stable) of this documenter.
 		/// </summary>

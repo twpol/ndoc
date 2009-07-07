@@ -18,17 +18,15 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace NDoc3.Core
-{
+namespace NDoc3.Core {
 	/// <summary>Represents an exception thrown when attempting to build documentation.</summary>
 	[Serializable]
-	public class DocumenterException : ApplicationException
-	{
+	public class DocumenterException : ApplicationException {
 
 		/// <summary>Initializes a new instance of the <see cref="DocumenterException"/> class with the specified message.</summary>
 		/// <param name="message">The message to display when the exception is thrown.</param>
-		public DocumenterException(string message) : base(message)
-		{
+		public DocumenterException(string message)
+			: base(message) {
 		}
 
 		/// <summary>Initializes a new instance of the <see cref="DocumenterException"/> class 
@@ -37,14 +35,14 @@ namespace NDoc3.Core
 		/// <param name="message">The error message that explains the reason for the exception.</param>
 		/// <param name="inner">An instance of Exception that is the cause of the current Exception. 
 		/// If inner is non-null, then the current Exception is raised in a catch block handling the inner exception.</param>
-		public DocumenterException(string message, Exception inner) : base(message, inner)
-		{
+		public DocumenterException(string message, Exception inner)
+			: base(message, inner) {
 		}
 
 		/// <remarks>
 		/// required to serialize across appdomain boundry
 		/// </remarks>
-		private DocumenterException (SerializationInfo info , StreamingContext context ):base(info,context){}
+		private DocumenterException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 
 	}
 }

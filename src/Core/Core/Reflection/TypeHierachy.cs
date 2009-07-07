@@ -18,18 +18,15 @@
 using System;
 using System.Collections;
 
-namespace NDoc3.Core.Reflection
-{
+namespace NDoc3.Core.Reflection {
 	/// <summary>
 	/// 
 	/// </summary>
-	internal class TypeHierarchy
-	{
+	internal class TypeHierarchy {
 		/// <summary>
 		/// 
 		/// </summary>
-		public TypeHierarchy()
-		{
+		public TypeHierarchy() {
 			data = new Hashtable(7);
 		}
 
@@ -40,23 +37,19 @@ namespace NDoc3.Core.Reflection
 		/// </summary>
 		/// <param name="baseType">Base type.</param>
 		/// <param name="derivedType">Derived type.</param>
-		public void Add(Type baseType, Type derivedType)
-		{
+		public void Add(Type baseType, Type derivedType) {
 			string baseTypeMemberID = MemberID.GetMemberID(baseType);
 			ArrayList derivedTypeList = data[baseTypeMemberID] as ArrayList;
-			if (derivedTypeList == null)
-			{
+			if (derivedTypeList == null) {
 				derivedTypeList = new ArrayList();
 				data.Add(baseTypeMemberID, derivedTypeList);
 			}
 			if (derivedType.GetGenericArguments().Length > 0)
-                derivedType = derivedType.GetGenericTypeDefinition();
+				derivedType = derivedType.GetGenericTypeDefinition();
 
 			bool found = false;
-			for (int i = 0; i < derivedTypeList.Count; i++)
-			{
-				if (((Type)derivedTypeList[i]).AssemblyQualifiedName == derivedType.AssemblyQualifiedName)
-				{
+			for (int i = 0; i < derivedTypeList.Count; i++) {
+				if (((Type)derivedTypeList[i]).AssemblyQualifiedName == derivedType.AssemblyQualifiedName) {
 					found = true;
 					break;
 				}
@@ -70,25 +63,19 @@ namespace NDoc3.Core.Reflection
 		/// </summary>
 		/// <param name="baseType">Base type.</param>
 		/// <returns></returns>
-		public ArrayList GetDerivedTypes(Type baseType)
-		{
+		public ArrayList GetDerivedTypes(Type baseType) {
 			string baseTypeMemberID = MemberID.GetMemberID(baseType);
 			ArrayList derivedTypeList = data[baseTypeMemberID] as ArrayList;
-			if (derivedTypeList == null)
-			{
+			if (derivedTypeList == null) {
 				derivedTypeList = new ArrayList();
-			}
-			else
-			{
+			} else {
 				derivedTypeList.Sort(new TypeSorter());
 			}
 			return derivedTypeList;
 		}
 
-		private class TypeSorter : IComparer
-		{
-			public int Compare(object x, object y)
-			{
+		private class TypeSorter : IComparer {
+			public int Compare(object x, object y) {
 				return String.Compare(MemberID.GetMemberID((Type)x), MemberID.GetMemberID((Type)y));
 			}
 		}

@@ -15,89 +15,71 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 using System;
-using System.Diagnostics;
-using System.Text;
 using System.ComponentModel;
-using System.Windows.Forms.Design;
 using System.Drawing.Design;
 using System.IO;
 
 using NDoc3.Core.PropertyGridUI;
 
-namespace NDoc3.Core
-{
+namespace NDoc3.Core {
 	/// <summary>
 	/// 
 	/// </summary>
 	[Serializable]
 	[DefaultProperty("Path")]
-	[TypeConverter(typeof(FolderPath.TypeConverter))]
-	[Editor(typeof(FolderPath.UIEditor), typeof(UITypeEditor))]
-	public class FolderPath : PathItemBase
-	{
+	[TypeConverter(typeof(TypeConverter))]
+	[Editor(typeof(UIEditor), typeof(UITypeEditor))]
+	public class FolderPath : PathItemBase {
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FolderPath"/> class.
 		/// </summary>
-		public FolderPath() : base() {}
+		public FolderPath() { }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FolderPath"/> class from a given path string.
 		/// </summary>
 		/// <param name="path">Path.</param>
-		public FolderPath(string path) : base(path)
-		{
+		public FolderPath(string path)
+			: base(path) {
 		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FolderPath"/> class from an existing <see cref="FilePath"/> instance.
 		/// </summary>
 		/// <param name="path">An existing <see cref="FolderPath"/>.</param>
-		public FolderPath(FolderPath path)
-		{
-			if (path.Path.Length > 0)
-			{
+		public FolderPath(FolderPath path) {
+			if (path.Path.Length > 0) {
 				base.Path = path.Path;
-				base.FixedPath = path.FixedPath;
+				FixedPath = path.FixedPath;
 			}
 		}
 
 		/// <inheritDoc/>
 		[ReadOnly(true)]
-		public override string Path
-		{
+		public override string Path {
 			get { return base.Path; }
-			set 
-			{ 
-				if (value.Length > 0)
-				{
+			set {
+				if (value.Length > 0) {
 					base.Path = value;
-				}
-				else
-				{
-					base.SetPathInternal(String.Empty);
+				} else {
+					SetPathInternal(String.Empty);
 				}
 			}
 		}
 
 		/// <inheritDoc/>
-		public override bool Exists
-		{
+		public override bool Exists {
 			get { return Directory.Exists(base.ToString()); }
 		}
 
-		bool ShouldSerializePath() { return false; }
-
 		/// <inheritDoc/>
-		public override string ToString()
-		{
+		public override string ToString() {
 			string path = base.ToString();
-			if (path.Length > 0)
-			{
-				if (!path.EndsWith(new String(System.IO.Path.DirectorySeparatorChar, 1)) && 
-					!path.EndsWith(new String(System.IO.Path.AltDirectorySeparatorChar, 1)) && 
+			if (path.Length > 0) {
+				if (!path.EndsWith(new String(System.IO.Path.DirectorySeparatorChar, 1)) &&
+					!path.EndsWith(new String(System.IO.Path.AltDirectorySeparatorChar, 1)) &&
 					!path.EndsWith(new String(System.IO.Path.VolumeSeparatorChar, 1))
-					)
-				{
+					) {
 					path = path + new String(System.IO.Path.DirectorySeparatorChar, 1);
 				}
 			}
@@ -109,23 +91,18 @@ namespace NDoc3.Core
 		/// <summary>
 		/// 
 		/// </summary>
-		new internal class TypeConverter : PropertySorter
-		{
+		new internal class TypeConverter : PropertySorter {
 			/// <inheritDoc/>
-			public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
-			{
-				if (sourceType == typeof(string)) 
-				{
+			public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType) {
+				if (sourceType == typeof(string)) {
 					return true;
 				}
 				return base.CanConvertFrom(context, sourceType);
 			}
-		
+
 			/// <inheritDoc/>
-			public override object ConvertFrom(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value)
-			{
-				if (value is string) 
-				{
+			public override object ConvertFrom(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value) {
+				if (value is string) {
 					return new FolderPath((string)value);
 				}
 				return base.ConvertFrom(context, culture, value);
@@ -135,41 +112,22 @@ namespace NDoc3.Core
 		/// <summary>
 		/// 
 		/// </summary>
-		internal class UIEditor : FoldernameEditor
-		{
-			/// <summary>
-			/// Creates a new <see cref="UIEditor">FolderPath.UIEditor</see> instance.
-			/// </summary>
-			public UIEditor() : base() {}
-	
+		internal class UIEditor : FoldernameEditor {
 			/// <inheritDoc/>
-			public override object EditValue(System.ComponentModel.ITypeDescriptorContext context, IServiceProvider provider, object value)
-			{
-				if (value is FolderPath)
-				{
+			public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value) {
+				if (value is FolderPath) {
 					object result = base.EditValue(context, provider, ((FolderPath)value).Path);
-					if ((string)result == ((FolderPath)value).Path)
-					{
+					if ((string)result == ((FolderPath)value).Path) {
 						return value;
 					}
-					else
-					{
-						if (((string)result).Length > 0)
-						{
-							FolderPath newValue = new FolderPath((FolderPath)value);
-							newValue.Path = (string)result;
-							return newValue;
-						}
-						else
-						{
-							return new FolderPath();
-						}
+					if (((string)result).Length > 0) {
+						FolderPath newValue = new FolderPath((FolderPath)value);
+						newValue.Path = (string)result;
+						return newValue;
 					}
+					return new FolderPath();
 				}
-				else
-				{
-					return base.EditValue(context, provider, value);
-				}
+				return base.EditValue(context, provider, value);
 			}
 		}
 	}

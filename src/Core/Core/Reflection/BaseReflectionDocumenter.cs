@@ -16,21 +16,16 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 using System;
-using System.Collections;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
 
-namespace NDoc3.Core.Reflection
-{
+namespace NDoc3.Core.Reflection {
 	/// <summary>The base class for documenters which use the <see cref="ReflectionEngine"/> to extract 
 	/// documentation from .Net assemblies.</summary>
-	abstract public class BaseReflectionDocumenter : BaseDocumenter
-	{
-		private BaseReflectionDocumenterConfig MyConfig
-		{
-			get
-		{
+	abstract public class BaseReflectionDocumenter : BaseDocumenter {
+		private BaseReflectionDocumenterConfig MyConfig {
+			get {
 				return (BaseReflectionDocumenterConfig)Config;
 			}
 		}
@@ -39,8 +34,8 @@ namespace NDoc3.Core.Reflection
 		/// Initializes a new instance of the <see cref="BaseReflectionDocumenter"/> class.
 		/// </summary>
 		/// <param name="config">Documenter setting</param>
-		protected BaseReflectionDocumenter( IDocumenterConfig config ) : base( config )
-		{
+		protected BaseReflectionDocumenter(IDocumenterConfig config)
+			: base(config) {
 		}
 
 		/// <summary>
@@ -50,22 +45,19 @@ namespace NDoc3.Core.Reflection
 		/// <remarks>
 		/// This is performed in a separate <see cref="AppDomain" />.
 		/// </remarks>
-		protected void MakeXmlFile(Project project, FileInfo outputFile)
-		{
+		protected void MakeXmlFile(Project project, FileInfo outputFile) {
 			//if this.rep.UseNDocXmlFile is set, 
 			//copy it to the temp file and return.
 			string xmlFile = MyConfig.UseNDocXmlFile;
-			if (xmlFile.Length > 0)
-			{
+			if (xmlFile.Length > 0) {
 				Trace.WriteLine("Loading pre-compiled XML information from: " + xmlFile);
 				File.Copy(xmlFile, outputFile.FullName, true);
 				return;
 			}
 
-            using (ReflectionEngine re = new ReflectionEngine(project.ReferencePaths))
-            {
-		        re.MakeXmlFile(this.MyConfig.CreateNDocXmlGeneratorParameters(), outputFile);
-		    }
+			using (ReflectionEngine re = new ReflectionEngine(project.ReferencePaths)) {
+				ReflectionEngine.MakeXmlFile(MyConfig.CreateNDocXmlGeneratorParameters(), outputFile);
+			}
 		}
 
 		/// <summary>
@@ -79,24 +71,20 @@ namespace NDoc3.Core.Reflection
 		/// <remarks>
 		/// This is performed in a separate <see cref="AppDomain" />.
 		/// </remarks>
-		protected string MakeXml(Project project)
-		{
+		protected string MakeXml(Project project) {
 			//if MyConfig.UseNDocXmlFile is set, 
 			//load the XmlBuffer from the file and return.
 			string xmlFile = MyConfig.UseNDocXmlFile;
-			if (xmlFile.Length > 0)
-			{
+			if (xmlFile.Length > 0) {
 				Trace.WriteLine("Loading pre-compiled XML information from: " + xmlFile);
-				using (TextReader reader = new StreamReader(xmlFile, Encoding.UTF8))
-				{
+				using (TextReader reader = new StreamReader(xmlFile, Encoding.UTF8)) {
 					return reader.ReadToEnd();
 				}
 			}
 
-            using(ReflectionEngine re = new ReflectionEngine(project.ReferencePaths))
-            {
-                return re.MakeXml(this.MyConfig.CreateNDocXmlGeneratorParameters());
-            }
-        }
-    }
+			using (ReflectionEngine re = new ReflectionEngine(project.ReferencePaths)) {
+				return ReflectionEngine.MakeXml(MyConfig.CreateNDocXmlGeneratorParameters());
+			}
+		}
+	}
 }

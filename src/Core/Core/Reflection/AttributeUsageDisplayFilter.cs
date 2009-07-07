@@ -14,34 +14,25 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 using System.Collections;
 
-namespace NDoc3.Core.Reflection
-{
-	internal class AttributeUsageDisplayFilter
-	{
+namespace NDoc3.Core.Reflection {
+	internal class AttributeUsageDisplayFilter {
 		private readonly ArrayList AttributeFilters = new ArrayList();
 
-		public AttributeUsageDisplayFilter(string documentedAttributesConfig)
-		{
-            if (documentedAttributesConfig == null)
-            {
-                return;
-            }
+		public AttributeUsageDisplayFilter(string documentedAttributesConfig) {
+			if (documentedAttributesConfig == null) {
+				return;
+			}
 
-			string[] filters = documentedAttributesConfig.Split(new[] {'|'});
-			foreach (string filter in filters)
-			{
-				string[] filterParts = filter.Split(new[] {','});
-				if (filterParts.Length > 0)
-				{
-					if (filterParts[0].Length > 0)
-					{
+			string[] filters = documentedAttributesConfig.Split(new[] { '|' });
+			foreach (string filter in filters) {
+				string[] filterParts = filter.Split(new[] { ',' });
+				if (filterParts.Length > 0) {
+					if (filterParts[0].Length > 0) {
 						DisplayFilter displayFilter = new DisplayFilter();
 						displayFilter.attributeName = filterParts[0];
-						if (filterParts.Length > 1)
-						{
+						if (filterParts.Length > 1) {
 							string[] memberNames = new string[filterParts.Length - 1];
-							for (int i = 1; i < filterParts.Length; i++)
-							{
+							for (int i = 1; i < filterParts.Length; i++) {
 								memberNames[i - 1] = filterParts[i];
 							}
 							displayFilter.memberNames = memberNames;
@@ -52,27 +43,21 @@ namespace NDoc3.Core.Reflection
 			}
 		}
 
-		public bool Show(string attributeFullName)
-		{
+		public bool Show(string attributeFullName) {
 			if (AttributeFilters.Count == 0) return true;
-			foreach (DisplayFilter filter in AttributeFilters)
-			{
+			foreach (DisplayFilter filter in AttributeFilters) {
 				if (attributeFullName.IndexOf(filter.attributeName) > -1) return true;
 			}
 			return false;
 		}
 
-		public bool Show(string attributeFullName, string memberName)
-		{
+		public bool Show(string attributeFullName, string memberName) {
 			if (AttributeFilters.Count == 0) return true;
-			foreach (DisplayFilter filter in AttributeFilters)
-			{
-				if (attributeFullName.IndexOf(filter.attributeName) > -1)
-				{
+			foreach (DisplayFilter filter in AttributeFilters) {
+				if (attributeFullName.IndexOf(filter.attributeName) > -1) {
 					if (filter.memberNames == null) return true;
-					foreach (string memberNameFilter in filter.memberNames)
-					{
-						if (memberName.IndexOf(memberNameFilter) > -1)  return true;
+					foreach (string memberNameFilter in filter.memberNames) {
+						if (memberName.IndexOf(memberNameFilter) > -1) return true;
 					}
 					return false;
 				}
@@ -80,8 +65,7 @@ namespace NDoc3.Core.Reflection
 			return false;
 		}
 
-		private struct DisplayFilter
-		{
+		private struct DisplayFilter {
 			public string attributeName;
 			public string[] memberNames;
 		}

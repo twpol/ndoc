@@ -17,20 +17,11 @@ using System.ComponentModel;
 using System.Drawing.Design;
 using System.Windows.Forms;
 
-namespace NDoc3.Core.PropertyGridUI
-{
+namespace NDoc3.Core.PropertyGridUI {
 	/// <summary>
 	/// Provides editing facilities for large blocks of text in the <see cref="PropertyGrid"/>.
 	/// </summary>
-	public class TextEditor : UITypeEditor
-	{
-		/// <summary>
-		/// Creates a new instance of the <see cref="TextEditor"/> class.
-		/// </summary>
-		public TextEditor()
-		{
-		}
-
+	public class TextEditor : UITypeEditor {
 		/// <summary>
 		/// Edits the specified object's value using the editor style indicated by <see cref="GetEditStyle"/>.
 		/// </summary>
@@ -39,10 +30,8 @@ namespace NDoc3.Core.PropertyGridUI
 		/// <param name="value">The object to edit.</param>
 		/// <returns>The new value of the object.</returns>
 		public override object EditValue(ITypeDescriptorContext context,
-			IServiceProvider provider, object value)
-		{
-			if (context != null && context.Instance != null)
-			{
+			IServiceProvider provider, object value) {
+			if (context != null && context.Instance != null) {
 				TextEditorForm form = new TextEditorForm();
 				form.Value = (string)value;
 				DialogResult result = form.ShowDialog();
@@ -59,8 +48,7 @@ namespace NDoc3.Core.PropertyGridUI
 		/// </summary>
 		/// <param name="context">An <see cref="ITypeDescriptorContext"/> that can be used to gain additional context information.</param>
 		/// <returns>A <see cref="UITypeEditorEditStyle"/> value that indicates the style of editor used by <see cref="EditValue"/>.</returns>
-		public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
-		{
+		public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) {
 			if (context != null && context.Instance != null)
 				return UITypeEditorEditStyle.Modal;
 

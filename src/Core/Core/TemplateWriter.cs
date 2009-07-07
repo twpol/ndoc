@@ -17,20 +17,18 @@
  *      be misrepresented as being the original software.
  * 
  *   3. This notice may not be removed or altered from any source distribution.
- */ 
+ */
 #endregion
 
 using System;
 using System.IO;
 
-namespace NDoc3.Core
-{
+namespace NDoc3.Core {
 	/// <summary>
 	/// Stream writer that parses a template file to write a new file.
 	/// </summary>
-	public class TemplateWriter : StreamWriter
-	{
-		private TextReader template;
+	public class TemplateWriter : StreamWriter {
+		private readonly TextReader template;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TemplateWriter"/> class for the specified 
@@ -39,8 +37,8 @@ namespace NDoc3.Core
 		/// </summary>
 		/// <param name="outPath">The complete file path to write to.</param>
 		/// <param name="template">The template's stream reader.</param>
-		public TemplateWriter(string outPath, TextReader template) : base(outPath)
-		{
+		public TemplateWriter(string outPath, TextReader template)
+			: base(outPath) {
 			this.template = template;
 		}
 
@@ -51,8 +49,8 @@ namespace NDoc3.Core
 		/// </summary>
 		/// <param name="stream">The stream to write to.</param>
 		/// <param name="template">The template's stream reader.</param>
-		public TemplateWriter(Stream stream, TextReader template) : base(stream)
-		{
+		public TemplateWriter(Stream stream, TextReader template)
+			: base(stream) {
 			this.template = template;
 		}
 
@@ -67,12 +65,10 @@ namespace NDoc3.Core
 		/// Must match exactly.</param>
 		/// <returns><b>true</b> if the line was found, <b>false</b> if the 
 		/// end of the template stream was reached.</returns>
-		public bool CopyToLine(string toLine)
-		{
+		public bool CopyToLine(string toLine) {
 			String line;
-			while (((line=template.ReadLine()) != null) && (line != toLine)) 
-			{
-				this.WriteLine(line);
+			while (((line = template.ReadLine()) != null) && (line != toLine)) {
+				WriteLine(line);
 			}
 			return (line != null);
 		}
@@ -81,12 +77,10 @@ namespace NDoc3.Core
 		/// Copies the text lines form the template to the output stream 
 		/// until the end of the template stream.
 		/// </summary>
-		public void CopyToEnd()
-		{
+		public void CopyToEnd() {
 			String line;
-			while ((line=template.ReadLine()) != null) 
-			{
-				this.WriteLine(line);
+			while ((line = template.ReadLine()) != null) {
+				WriteLine(line);
 			}
 		}
 
@@ -94,8 +88,7 @@ namespace NDoc3.Core
 		/// <summary>
 		/// Closes the current StreamWriter and StreamReader.
 		/// </summary>
-		public override void Close()
-		{
+		public override void Close() {
 			template.Close();
 			base.Close();
 		}
@@ -107,10 +100,8 @@ namespace NDoc3.Core
 		/// <param name="disposing"><b>true</b> to release both managed 
 		/// and unmanaged resources; <b>false</b> to release only 
 		/// unmanaged resources.</param>
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing) 
-			{
+		protected override void Dispose(bool disposing) {
+			if (disposing) {
 				template.Close();
 			}
 			base.Dispose(disposing);

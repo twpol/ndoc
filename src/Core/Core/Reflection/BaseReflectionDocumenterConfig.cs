@@ -17,7 +17,6 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
 using System;
-using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing.Design;
@@ -26,8 +25,7 @@ using System.Reflection;
 using System.Windows.Forms.Design;
 using NDoc3.Core.PropertyGridUI;
 
-namespace NDoc3.Core.Reflection
-{
+namespace NDoc3.Core.Reflection {
 	/// <summary>The base config class for documenters which use the <see cref="ReflectionEngine"/> to extract 
 	/// documentation from .Net assemblies.</summary>
 	/// <remarks>
@@ -41,105 +39,97 @@ namespace NDoc3.Core.Reflection
 	/// appear in the final documentation.
 	/// </para>
 	/// </remarks>
-	abstract public class BaseReflectionDocumenterConfig : BaseDocumenterConfig
-	{
-        #region Copy NDocXmlGenerator Helpers
+	abstract public class BaseReflectionDocumenterConfig : BaseDocumenterConfig {
+		#region Copy NDocXmlGenerator Helpers
 
-        private static void CopyFromProject(NDocXmlGeneratorParameters args, Project project)
-        {
-            foreach (AssemblySlashDoc assemblySlashDoc in project.AssemblySlashDocs)
-            {
-                if (assemblySlashDoc.Assembly.Path.Length > 0)
-                {
-                    string assemblyFileName = assemblySlashDoc.Assembly.Path;
-                    args.AddAssemblyToDocument(new FileInfo(assemblyFileName));
-                }
-                if (assemblySlashDoc.SlashDoc.Path.Length > 0)
-                {
-                    args.AddAssemblySlashDoc(new FileInfo(assemblySlashDoc.SlashDoc.Path));
-                }
-            }
+		private static void CopyFromProject(NDocXmlGeneratorParameters args, Project project) {
+			foreach (AssemblySlashDoc assemblySlashDoc in project.AssemblySlashDocs) {
+				if (assemblySlashDoc.Assembly.Path.Length > 0) {
+					string assemblyFileName = assemblySlashDoc.Assembly.Path;
+					args.AddAssemblyToDocument(new FileInfo(assemblyFileName));
+				}
+				if (assemblySlashDoc.SlashDoc.Path.Length > 0) {
+					args.AddAssemblySlashDoc(new FileInfo(assemblySlashDoc.SlashDoc.Path));
+				}
+			}
 
-            if (project.Namespaces != null)
-            {
-                project.Namespaces.CopyTo(args.NamespaceSummaries);
-            }
-        }
+			if (project.Namespaces != null) {
+				project.Namespaces.CopyTo(args.NamespaceSummaries);
+			}
+		}
 
-        private static void CopyFromConfig(NDocXmlGeneratorParameters args, BaseReflectionDocumenterConfig config)
-        {
-            CopyFromProject(args, config.Project);
+		private static void CopyFromConfig(NDocXmlGeneratorParameters args, BaseReflectionDocumenterConfig config) {
+			CopyFromProject(args, config.Project);
 
-            #region Documentation Control
-            args.AssemblyVersionInfo = config.AssemblyVersionInfo;
-            args.UseNamespaceDocSummaries = config.UseNamespaceDocSummaries;
-            args.AutoPropertyBackerSummaries = config.AutoPropertyBackerSummaries;
-            args.AutoDocumentConstructors = config.AutoDocumentConstructors;
-            args.SdkDocLanguage = config.SdkDocLanguage;
-            #endregion
+			#region Documentation Control
+			args.AssemblyVersionInfo = config.AssemblyVersionInfo;
+			args.UseNamespaceDocSummaries = config.UseNamespaceDocSummaries;
+			args.AutoPropertyBackerSummaries = config.AutoPropertyBackerSummaries;
+			args.AutoDocumentConstructors = config.AutoDocumentConstructors;
+			args.SdkDocLanguage = config.SdkDocLanguage;
+			#endregion
 
-            #region missing
-            args.ShowMissingSummaries = config.ShowMissingSummaries;
-            args.ShowMissingRemarks = config.ShowMissingRemarks;
-            args.ShowMissingParams = config.ShowMissingParams;
-            args.ShowMissingReturns = config.ShowMissingReturns;
-            args.ShowMissingValues = config.ShowMissingValues;
-            #endregion
+			#region missing
+			args.ShowMissingSummaries = config.ShowMissingSummaries;
+			args.ShowMissingRemarks = config.ShowMissingRemarks;
+			args.ShowMissingParams = config.ShowMissingParams;
+			args.ShowMissingReturns = config.ShowMissingReturns;
+			args.ShowMissingValues = config.ShowMissingValues;
+			#endregion
 
-            #region visibility
-            args.DocumentInheritedMembers = config.DocumentInheritedMembers;
-            args.DocumentInheritedFrameworkMembers = config.DocumentInheritedFrameworkMembers;
-            args.DocumentExplicitInterfaceImplementations = config.DocumentExplicitInterfaceImplementations;
-            args.DocumentInternals = config.DocumentInternals;
-            args.DocumentProtected = config.DocumentProtected;
-            args.DocumentSealedProtected = config.DocumentSealedProtected;
-            args.DocumentPrivates = config.DocumentPrivates;
-            args.DocumentProtectedInternalAsProtected = config.DocumentProtectedInternalAsProtected;
-            args.DocumentEmptyNamespaces = config.DocumentEmptyNamespaces;
-            args.SkipNamespacesWithoutSummaries = config.SkipNamespacesWithoutSummaries;
-            args.EditorBrowsableFilter = config.EditorBrowsableFilter;
-            #endregion
+			#region visibility
+			args.DocumentInheritedMembers = config.DocumentInheritedMembers;
+			args.DocumentInheritedFrameworkMembers = config.DocumentInheritedFrameworkMembers;
+			args.DocumentExplicitInterfaceImplementations = config.DocumentExplicitInterfaceImplementations;
+			args.DocumentInternals = config.DocumentInternals;
+			args.DocumentProtected = config.DocumentProtected;
+			args.DocumentSealedProtected = config.DocumentSealedProtected;
+			args.DocumentPrivates = config.DocumentPrivates;
+			args.DocumentProtectedInternalAsProtected = config.DocumentProtectedInternalAsProtected;
+			args.DocumentEmptyNamespaces = config.DocumentEmptyNamespaces;
+			args.SkipNamespacesWithoutSummaries = config.SkipNamespacesWithoutSummaries;
+			args.EditorBrowsableFilter = config.EditorBrowsableFilter;
+			#endregion
 
-            #region Attributes
-            args.DocumentAttributes = config.DocumentAttributes;
-            args.DocumentInheritedAttributes = config.DocumentInheritedAttributes;
-            args.ShowTypeIdInAttributes = config.ShowTypeIdInAttributes;
-            args.DocumentedAttributes = config.DocumentedAttributes;
-            #endregion
+			#region Attributes
+			args.DocumentAttributes = config.DocumentAttributes;
+			args.DocumentInheritedAttributes = config.DocumentInheritedAttributes;
+			args.ShowTypeIdInAttributes = config.ShowTypeIdInAttributes;
+			args.DocumentedAttributes = config.DocumentedAttributes;
+			#endregion
 
-            #region additional info
-            args.CopyrightText = config.CopyrightText;
-            args.CopyrightHref = config.CopyrightHref;
-            args.FeedbackEmailAddress = config.FeedbackEmailAddress;
-            args.Preliminary = config.Preliminary;
-            #endregion
+			#region additional info
+			args.CopyrightText = config.CopyrightText;
+			args.CopyrightHref = config.CopyrightHref;
+			args.FeedbackEmailAddress = config.FeedbackEmailAddress;
+			args.Preliminary = config.Preliminary;
+			#endregion
 
-            #region threadsafety
-            args.IncludeDefaultThreadSafety = config.IncludeDefaultThreadSafety;
-            args.StaticMembersDefaultToSafe = config.StaticMembersDefaultToSafe;
-            args.InstanceMembersDefaultToSafe = config.InstanceMembersDefaultToSafe;
-            #endregion
+			#region threadsafety
+			args.IncludeDefaultThreadSafety = config.IncludeDefaultThreadSafety;
+			args.StaticMembersDefaultToSafe = config.StaticMembersDefaultToSafe;
+			args.InstanceMembersDefaultToSafe = config.InstanceMembersDefaultToSafe;
+			#endregion
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        ///<summary>
-        /// Creates <see cref="NDocXmlGeneratorParameters"/> based on this configuration's settings.
-        ///</summary>
-        internal NDocXmlGeneratorParameters CreateNDocXmlGeneratorParameters()
-        {
-            NDocXmlGeneratorParameters args = new NDocXmlGeneratorParameters();
-            CopyFromConfig(args, this);
-            return args;
-        }
+		///<summary>
+		/// Creates <see cref="NDocXmlGeneratorParameters"/> based on this configuration's settings.
+		///</summary>
+		internal NDocXmlGeneratorParameters CreateNDocXmlGeneratorParameters() {
+			NDocXmlGeneratorParameters args = new NDocXmlGeneratorParameters();
+			CopyFromConfig(args, this);
+			return args;
+		}
 
 		/// <summary>
 		/// Creates a new instance of the class
 		/// </summary>
 		/// <param name="info">Info class descrbing the documenter</param>
-		protected BaseReflectionDocumenterConfig( IDocumenterInfo info ) : base( info )
-		{
+		protected BaseReflectionDocumenterConfig(IDocumenterInfo info)
+			: base(info) {
 			_ShowMissingSummaries = false;
 			_ShowMissingRemarks = false;
 			_ShowMissingParams = false;
@@ -172,24 +162,20 @@ namespace NDoc3.Core.Reflection
 			_ShowTypeIdInAttributes = false;
 			_DocumentedAttributes = string.Empty;
 		}
-		
+
 		/// <summary>
 		/// Gets or sets a collection of additional paths to search for reference assemblies.
 		/// </summary>
 		[NonPersisted]
 		[Category("(Global)")]
 		[Description("A collection of additional paths to search for reference assemblies.\nNote: This is a PROJECT level property that is shared by all documenters...")]
-		public ReferencePathCollection ReferencePaths
-		{
-			get 
-			{ 
+		public ReferencePathCollection ReferencePaths {
+			get {
 				return Project.ReferencePaths;
 			}
-			set
-			{
+			set {
 				Project.ReferencePaths.Clear();
-				if (value != null)
-				{
+				if (value != null) {
 					Project.ReferencePaths.AddRange(value);
 				}
 				SetDirty();
@@ -209,12 +195,10 @@ namespace NDoc3.Core.Reflection
 		[Category("Show Missing Documentation")]
 		[Description("Turning this flag on will show you where you are missing summaries.")]
 		[DefaultValue(false)]
-		public bool ShowMissingSummaries
-		{
+		public bool ShowMissingSummaries {
 			get { return _ShowMissingSummaries; }
 
-			set
-			{
+			set {
 				_ShowMissingSummaries = value;
 				SetDirty();
 			}
@@ -229,12 +213,10 @@ namespace NDoc3.Core.Reflection
 		[Category("Show Missing Documentation")]
 		[Description("Turning this flag on will show you where you are missing Remarks.")]
 		[DefaultValue(false)]
-		public bool ShowMissingRemarks
-		{
+		public bool ShowMissingRemarks {
 			get { return _ShowMissingRemarks; }
 
-			set
-			{
+			set {
 				_ShowMissingRemarks = value;
 				SetDirty();
 			}
@@ -249,12 +231,10 @@ namespace NDoc3.Core.Reflection
 		[Category("Show Missing Documentation")]
 		[Description("Turning this flag on will show you where you are missing Params.")]
 		[DefaultValue(false)]
-		public bool ShowMissingParams
-		{
+		public bool ShowMissingParams {
 			get { return _ShowMissingParams; }
 
-			set
-			{
+			set {
 				_ShowMissingParams = value;
 				SetDirty();
 			}
@@ -269,12 +249,10 @@ namespace NDoc3.Core.Reflection
 		[Category("Show Missing Documentation")]
 		[Description("Turning this flag on will show you where you are missing Returns.")]
 		[DefaultValue(false)]
-		public bool ShowMissingReturns
-		{
+		public bool ShowMissingReturns {
 			get { return _ShowMissingReturns; }
 
-			set
-			{
+			set {
 				_ShowMissingReturns = value;
 				SetDirty();
 			}
@@ -289,12 +267,10 @@ namespace NDoc3.Core.Reflection
 		[Category("Show Missing Documentation")]
 		[Description("Turning this flag on will show you where you are missing Values.")]
 		[DefaultValue(false)]
-		public bool ShowMissingValues
-		{
+		public bool ShowMissingValues {
 			get { return _ShowMissingValues; }
 
-			set
-			{
+			set {
 				_ShowMissingValues = value;
 				SetDirty();
 			}
@@ -303,7 +279,7 @@ namespace NDoc3.Core.Reflection
 		#endregion
 
 		#region Visibility Options
-		
+
 		private bool _DocumentInheritedMembers;
 
 		/// <summary>Gets or sets the DocumentInheritedMembers property.</summary>
@@ -312,12 +288,10 @@ namespace NDoc3.Core.Reflection
 		[Category("Visibility")]
 		[Description("Turn this flag on to document inherited members.")]
 		[DefaultValue(true)]
-		public bool DocumentInheritedMembers
-		{
+		public bool DocumentInheritedMembers {
 			get { return _DocumentInheritedMembers; }
 
-			set
-			{
+			set {
 				_DocumentInheritedMembers = value;
 				SetDirty();
 			}
@@ -331,12 +305,10 @@ namespace NDoc3.Core.Reflection
 		[Category("Visibility")]
 		[Description("Turn this flag on to document members inherited from framework classes.\nNote: DocumentInheritedMembers must be true if any inherited mebers are to be documented.")]
 		[DefaultValue(true)]
-		public bool DocumentInheritedFrameworkMembers
-		{
+		public bool DocumentInheritedFrameworkMembers {
 			get { return _DocumentInheritedFrameworkMembers; }
 
-			set
-			{
+			set {
 				_DocumentInheritedFrameworkMembers = value;
 				SetDirty();
 			}
@@ -350,12 +322,10 @@ namespace NDoc3.Core.Reflection
 		[Category("Visibility")]
 		[Description("Turn this flag on to document explicit interface implementations.")]
 		[DefaultValue(false)]
-		public bool DocumentExplicitInterfaceImplementations
-		{
+		public bool DocumentExplicitInterfaceImplementations {
 			get { return _DocumentExplicitInterfaceImplementations; }
 
-			set
-			{
+			set {
 				_DocumentExplicitInterfaceImplementations = value;
 				SetDirty();
 			}
@@ -369,12 +339,10 @@ namespace NDoc3.Core.Reflection
 		[Category("Visibility")]
 		[Description("Turn this flag on to document internal code.")]
 		[DefaultValue(false)]
-		public bool DocumentInternals
-		{
+		public bool DocumentInternals {
 			get { return _DocumentInternals; }
 
-			set
-			{
+			set {
 				_DocumentInternals = value;
 				SetDirty();
 			}
@@ -389,18 +357,15 @@ namespace NDoc3.Core.Reflection
 		[Category("Visibility")]
 		[Description("Turn this flag on to document protected code.")]
 		[DefaultValue(true)]
-		public bool DocumentProtected
-		{
+		public bool DocumentProtected {
 			get { return _DocumentProtected; }
 
-			set
-			{
+			set {
 				_DocumentProtected = value;
 
 				// If DocumentProtected is turned off, then we automatically turn off
 				// DocumentSealedProtected, too.
-				if (!value)
-				{
+				if (!value) {
 					_DocumentSealedProtected = false;
 				}
 				SetDirty();
@@ -415,18 +380,15 @@ namespace NDoc3.Core.Reflection
 		[Category("Visibility")]
 		[Description("Turn this flag on to document protected members of sealed classes. DocumentProtected must be turned on, too.")]
 		[DefaultValue(true)]
-		public bool DocumentSealedProtected
-		{
+		public bool DocumentSealedProtected {
 			get { return _DocumentSealedProtected; }
 
-			set
-			{
+			set {
 				_DocumentSealedProtected = value;
 
 				// If DocumentSealedProtected is turned on, then we automatically turn on
 				// DocumentProtected, too.
-				if (value)
-				{
+				if (value) {
 					_DocumentProtected = true;
 				}
 				SetDirty();
@@ -444,12 +406,10 @@ namespace NDoc3.Core.Reflection
 		[Category("Visibility")]
 		[Description("Turn this flag on to document private code.")]
 		[DefaultValue(false)]
-		public bool DocumentPrivates
-		{
+		public bool DocumentPrivates {
 			get { return _DocumentPrivates; }
 
-			set
-			{
+			set {
 				_DocumentPrivates = value;
 				SetDirty();
 			}
@@ -462,12 +422,10 @@ namespace NDoc3.Core.Reflection
 		[Category("Visibility")]
 		[Description("If true, NDoc3 will treat \"protected internal\" members as \"protected\" only.")]
 		[DefaultValue(true)]
-		public bool DocumentProtectedInternalAsProtected
-		{
+		public bool DocumentProtectedInternalAsProtected {
 			get { return _DocumentProtectedInternalAsProtected; }
 
-			set
-			{
+			set {
 				_DocumentProtectedInternalAsProtected = value;
 				SetDirty();
 			}
@@ -481,12 +439,10 @@ namespace NDoc3.Core.Reflection
 		[Category("Visibility")]
 		[Description("Turn this flag on to document empty namespaces.")]
 		[DefaultValue(false)]
-		public bool DocumentEmptyNamespaces
-		{
+		public bool DocumentEmptyNamespaces {
 			get { return _DocumentEmptyNamespaces; }
 
-			set
-			{
+			set {
 				_DocumentEmptyNamespaces = value;
 				SetDirty();
 			}
@@ -500,18 +456,16 @@ namespace NDoc3.Core.Reflection
 		[Category("Visibility")]
 		[Description("Setting this property to true will not document namespaces that don't have an associated namespace summary.")]
 		[DefaultValue(false)]
-		public bool SkipNamespacesWithoutSummaries
-		{
+		public bool SkipNamespacesWithoutSummaries {
 			get { return _SkipNamespacesWithoutSummaries; }
 
-			set
-			{
+			set {
 				_SkipNamespacesWithoutSummaries = value;
 				SetDirty();
 			}
 		}
 
-		
+
 		private EditorBrowsableFilterLevel _EditorBrowsableFilter;
 
 		/// <summary>Specifies the level of filtering on the EditorBrowsable attribute.</summary>
@@ -522,12 +476,10 @@ namespace NDoc3.Core.Reflection
 		[Category("Visibility")]
 		[Description("Sets the level of filtering to apply on types/members marked with the EditorBrowsable attribute.  Warning: enabling this filter might result in invalid links in the documentation.")]
 		[DefaultValue(EditorBrowsableFilterLevel.Off)]
-		public EditorBrowsableFilterLevel EditorBrowsableFilter
-		{
+		public EditorBrowsableFilterLevel EditorBrowsableFilter {
 			get { return _EditorBrowsableFilter; }
 
-			set
-			{
+			set {
 				_EditorBrowsableFilter = value;
 				SetDirty();
 			}
@@ -535,31 +487,29 @@ namespace NDoc3.Core.Reflection
 
 		#endregion
 
-		#region Documentation Main Settings 
-		
-        private string _UseNDocXmlFile = string.Empty;
+		#region Documentation Main Settings
 
-        /// <summary>Gets or sets a value indicating whether to use the specified XML file as input instead of reflecting the list of assemblies specified on the project.</summary>
-        /// <remarks><para>When set, NDoc3 will use the specified XML file as 
-        /// input instead of reflecting the list of assemblies specified 
-        /// on the project.</para>
-        /// <para>Very useful for debugging documenters. <b><i>Leave empty for normal usage.</i></b></para>
-        /// </remarks>
-        [Category("Documentation Main Settings")]
-        [Description("When set, NDoc3 will use the specified XML file as input instead of reflecting the list of assemblies specified on the project.  Very useful for debugging documenters.  Leave empty for normal usage.")]
-        [Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
-        [DefaultValue("")]
-        public string UseNDocXmlFile
-        {
-            get { return _UseNDocXmlFile; }
-            set
-            {
-                _UseNDocXmlFile = value;
-                SetDirty();
-            }
-        }
+		private string _UseNDocXmlFile = string.Empty;
 
-        private AssemblyVersionInformationType _AssemblyVersionInfo;
+		/// <summary>Gets or sets a value indicating whether to use the specified XML file as input instead of reflecting the list of assemblies specified on the project.</summary>
+		/// <remarks><para>When set, NDoc3 will use the specified XML file as 
+		/// input instead of reflecting the list of assemblies specified 
+		/// on the project.</para>
+		/// <para>Very useful for debugging documenters. <b><i>Leave empty for normal usage.</i></b></para>
+		/// </remarks>
+		[Category("Documentation Main Settings")]
+		[Description("When set, NDoc3 will use the specified XML file as input instead of reflecting the list of assemblies specified on the project.  Very useful for debugging documenters.  Leave empty for normal usage.")]
+		[Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
+		[DefaultValue("")]
+		public string UseNDocXmlFile {
+			get { return _UseNDocXmlFile; }
+			set {
+				_UseNDocXmlFile = value;
+				SetDirty();
+			}
+		}
+
+		private AssemblyVersionInformationType _AssemblyVersionInfo;
 
 		/// <summary>Gets or sets the AssemblyVersion property.</summary>
 		/// <remarks>Determines what type of Assembly Version information is documented. 
@@ -568,12 +518,10 @@ namespace NDoc3.Core.Reflection
 		[Description("Determines what type of Assembly Version information is documented.")]
 		[DefaultValue(AssemblyVersionInformationType.None)]
 		[TypeConverter(typeof(EnumDescriptionConverter))]
-		public AssemblyVersionInformationType AssemblyVersionInfo
-		{
+		public AssemblyVersionInformationType AssemblyVersionInfo {
 			get { return _AssemblyVersionInfo; }
 
-			set
-			{
+			set {
 				_AssemblyVersionInfo = value;
 				SetDirty();
 			}
@@ -587,12 +535,10 @@ namespace NDoc3.Core.Reflection
 		[Description("A copyright notice text that will be included in the generated docs.")]
 		[Editor(typeof(TextEditor), typeof(UITypeEditor))]
 		[DefaultValue("")]
-		public string CopyrightText
-		{
+		public string CopyrightText {
 			get { return _CopyrightText; }
 
-			set
-			{
+			set {
 				_CopyrightText = value;
 				SetDirty();
 			}
@@ -606,12 +552,10 @@ namespace NDoc3.Core.Reflection
 		[Category("Documentation Main Settings")]
 		[Description("An URL referenced by the copyright notice.")]
 		[DefaultValue("")]
-		public string CopyrightHref
-		{
+		public string CopyrightHref {
 			get { return _CopyrightHref; }
 
-			set
-			{
+			set {
 				_CopyrightHref = value;
 				SetDirty();
 			}
@@ -625,16 +569,14 @@ namespace NDoc3.Core.Reflection
 		[Category("Documentation Main Settings")]
 		[Description("If an email address is supplied, a mailto link will be placed at the bottom of each page using this address.")]
 		[DefaultValue("")]
-		public string FeedbackEmailAddress
-		{
+		public string FeedbackEmailAddress {
 			get { return _FeedbackEmailAddress; }
-			set
-			{
+			set {
 				_FeedbackEmailAddress = value;
 				SetDirty();
 			}
 		}
-		
+
 		private bool _UseNamespaceDocSummaries = true;
 
 		/// <summary>Gets or sets the UseNamespaceDocSummaries property.</summary>
@@ -653,12 +595,10 @@ namespace NDoc3.Core.Reflection
 			 + "#if ... #endif together with conditional compilation constants to "
 			 + "exclude the NamespaceDoc classes from release build assemblies.")]
 		[DefaultValue(true)]
-		public bool UseNamespaceDocSummaries
-		{
+		public bool UseNamespaceDocSummaries {
 			get { return _UseNamespaceDocSummaries; }
 
-			set
-			{
+			set {
 				_UseNamespaceDocSummaries = value;
 				SetDirty();
 			}
@@ -681,12 +621,10 @@ namespace NDoc3.Core.Reflection
 			 + "Currently the naming conventions supported are such that "
 			 + "fields '_Length' and 'length' will be inferred to back property 'Length'.")]
 		[DefaultValue(false)]
-		public bool AutoPropertyBackerSummaries
-		{
+		public bool AutoPropertyBackerSummaries {
 			get { return _AutoPropertyBackerSummaries; }
 
-			set
-			{
+			set {
 				_AutoPropertyBackerSummaries = value;
 				SetDirty();
 			}
@@ -702,12 +640,10 @@ namespace NDoc3.Core.Reflection
 		[Category("Documentation Main Settings")]
 		[Description("Turning this flag on will enable automatic summary documentation for default constructors.")]
 		[DefaultValue(true)]
-		public bool AutoDocumentConstructors
-		{
+		public bool AutoDocumentConstructors {
 			get { return _AutoDocumentConstructors; }
 
-			set
-			{
+			set {
 				_AutoDocumentConstructors = value;
 				SetDirty();
 			}
@@ -724,12 +660,10 @@ namespace NDoc3.Core.Reflection
 		[Category("Documentation Main Settings")]
 		[Description("If true, NDoc3 will mark every topic as being preliminary documentation.")]
 		[DefaultValue(false)]
-		public bool Preliminary
-		{
+		public bool Preliminary {
 			get { return _Preliminary; }
 
-			set
-			{
+			set {
 				_Preliminary = value;
 				SetDirty();
 			}
@@ -743,38 +677,33 @@ namespace NDoc3.Core.Reflection
 		[Description("Specifies to which version of the .NET Framework SDK documentation the links to system types will be pointing.")]
 		[DefaultValue(SdkVersion.SDK_v2_0)]
 		[TypeConverter(typeof(EnumDescriptionConverter))]
-		public SdkVersion SdkDocVersion
-		{
+		public SdkVersion SdkDocVersion {
 			get { return _SdkDocVersion; }
-			set
-			{
+			set {
 				_SdkDocVersion = value;
 				SetDirty();
 			}
 		}
 
-        /// <summary>
-        /// Converts the chosen SDK version to the string used by MSDN
-        /// </summary>
-        public string SdkDocVersionString
-        {
-            get
-            {
-                switch (_SdkDocVersion)
-                {
-                    case SdkVersion.SDK_v1_1:
-                        return "VS.71";
-                    case SdkVersion.SDK_v2_0:
-                        return "VS.80";
-                    case SdkVersion.SDK_v3_0:
-                        return "VS.85";
-                    case SdkVersion.SDK_v3_5:
-                        return "VS.90";
-                    default:
-                        return "";
-                }
-            }
-        }
+		/// <summary>
+		/// Converts the chosen SDK version to the string used by MSDN
+		/// </summary>
+		public string SdkDocVersionString {
+			get {
+				switch (_SdkDocVersion) {
+					case SdkVersion.SDK_v1_1:
+						return "VS.71";
+					case SdkVersion.SDK_v2_0:
+						return "VS.80";
+					case SdkVersion.SDK_v3_0:
+						return "VS.85";
+					case SdkVersion.SDK_v3_5:
+						return "VS.90";
+					default:
+						return "";
+				}
+			}
+		}
 
 		SdkLanguage _SdkDocLanguage = SdkLanguage.en_us;
 
@@ -784,18 +713,16 @@ namespace NDoc3.Core.Reflection
 		[Description("Specifies to which Language version of the .NET Framework SDK documentation the links to system types will be pointing.")]
 		[DefaultValue(SdkLanguage.en_us)]
 		[TypeConverter(typeof(EnumDescriptionConverter))]
-		public SdkLanguage SdkDocLanguage
-		{
+		public SdkLanguage SdkDocLanguage {
 			get { return _SdkDocLanguage; }
-			set
-			{
+			set {
 				_SdkDocLanguage = value;
 				SetDirty();
 			}
 		}
 
 		#endregion
-		
+
 		#region Show Attributes Options
 
 		private bool _DocumentAttributes;
@@ -806,12 +733,10 @@ namespace NDoc3.Core.Reflection
 		[Category("Show Attributes")]
 		[Description("Set this to true to output the attributes of the types/members in the syntax portion.")]
 		[DefaultValue(true)]
-		public bool DocumentAttributes
-		{
+		public bool DocumentAttributes {
 			get { return _DocumentAttributes; }
 
-			set 
-			{ 
+			set {
 				_DocumentAttributes = value;
 				SetDirty();
 			}
@@ -825,12 +750,10 @@ namespace NDoc3.Core.Reflection
 		[Category("Show Attributes")]
 		[Description("Set this to true to output the attributes of the base types/members in the syntax portion.\nNote: This attribute has no effect unless DocumentAttributes is set to true.")]
 		[DefaultValue(true)]
-		public bool DocumentInheritedAttributes
-		{
+		public bool DocumentInheritedAttributes {
 			get { return _DocumentInheritedAttributes; }
 
-			set 
-			{ 
+			set {
 				_DocumentInheritedAttributes = value;
 				SetDirty();
 			}
@@ -843,12 +766,10 @@ namespace NDoc3.Core.Reflection
 		[Category("Show Attributes")]
 		[Description("Set this to true to output the TypeId property in the attributes.")]
 		[DefaultValue(false)]
-		public bool ShowTypeIdInAttributes
-		{
+		public bool ShowTypeIdInAttributes {
 			get { return _ShowTypeIdInAttributes; }
 
-			set 
-			{ 
+			set {
 				_ShowTypeIdInAttributes = value;
 				SetDirty();
 			}
@@ -865,12 +786,10 @@ namespace NDoc3.Core.Reflection
 		[Description("When DocumentAttributes is set to true, this specifies which attributes/property are visible.  Empty to show all.  Format: '<attribute-name-starts-with>,<property-to-show>,<property-to-show>|<attribute-name-starts-with>,<property-to-show>,<property-to-show>|(etc...)'.")]
 		[Editor(typeof(AttributesEditor), typeof(UITypeEditor))]
 		[DefaultValue("")]
-		public string DocumentedAttributes
-		{
+		public string DocumentedAttributes {
 			get { return _DocumentedAttributes; }
 
-			set
-			{
+			set {
 				_DocumentedAttributes = value;
 				SetDirty();
 			}
@@ -890,11 +809,9 @@ namespace NDoc3.Core.Reflection
 		[Category("Thread Safety")]
 		[Description("When true, typs that do not have an explicit <threadsafety> tag will include thread safety documentation corresponding to StaticMembersDefaultToSafe and InstanceMembersDefaultToSafe.")]
 		[DefaultValue(true)]
-		public bool IncludeDefaultThreadSafety 
-		{
+		public bool IncludeDefaultThreadSafety {
 			get { return _IncludeDefaultThreadSafety; }
-			set
-			{
+			set {
 				_IncludeDefaultThreadSafety = value;
 				SetDirty();
 			}
@@ -909,11 +826,9 @@ namespace NDoc3.Core.Reflection
 		[Category("Thread Safety")]
 		[Description("When true, types that do not have an explicit <threadsafety> tag will default to being safe for accessing static members across threads. (ignored if IncludeDefaultThreadSafety is false)")]
 		[DefaultValue(true)]
-		public bool StaticMembersDefaultToSafe 
-		{
+		public bool StaticMembersDefaultToSafe {
 			get { return _StaticMembersDefaultToSafe; }
-			set
-			{
+			set {
 				_StaticMembersDefaultToSafe = value;
 				SetDirty();
 			}
@@ -928,63 +843,52 @@ namespace NDoc3.Core.Reflection
 		[Category("Thread Safety")]
 		[Description("When true, types that do not have an explicit <threadsafety> tag will default to being safe for accessing instance members across threads. (ignored if IncludeDefaultThreadSafety is false)")]
 		[DefaultValue(false)]
-		public bool InstanceMembersDefaultToSafe 
-		{
+		public bool InstanceMembersDefaultToSafe {
 			get { return _InstanceMembersDefaultToSafe; }
-			set
-			{
+			set {
 				_InstanceMembersDefaultToSafe = value;
 				SetDirty();
 			}
 		}
 		#endregion
 
-	
+
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="name"></param>
 		/// <param name="value"></param>
 		/// <returns></returns>
-		protected override string HandleUnknownPropertyType(string name, string value)
-		{
+		protected override string HandleUnknownPropertyType(string name, string value) {
 			string FailureMessages = String.Empty;
 
-			if (String.Compare(name, "ReferencesPath", true) == 0) 
-			{
-				if (value.Length > 0)
-				{
+			if (String.Compare(name, "ReferencesPath", true) == 0) {
+				if (value.Length > 0) {
 					Trace.WriteLine("WARNING: " + DocumenterInfo.Name + " Configuration - property 'ReferencesPath' is OBSOLETE. Please use the project level property 'ReferencePath'\n");
 					Project.ReferencePaths.Add(new ReferencePath(value));
 				}
-			}
-			else if (String.Compare(name, "IncludeAssemblyVersion", true) == 0) 
-			{
-				if (value.Length > 0)
-				{
+			} else if (String.Compare(name, "IncludeAssemblyVersion", true) == 0) {
+				if (value.Length > 0) {
 					Trace.WriteLine("WARNING: " + DocumenterInfo.Name + " Configuration - property 'IncludeAssemblyVersion' is OBSOLETE. Please use new property 'AssemblyVersionInfo'\n");
 
 					string newValue = String.Compare(value, "true", true) == 0 ? "AssemblyVersion" : "None";
 
 					FailureMessages += ReadProperty("AssemblyVersionInfo", newValue);
 				}
-			}
-			else
-			{
+			} else {
 				// if we don't know how to handle this, let the base class have a go
 				FailureMessages = base.HandleUnknownPropertyType(name, value);
 			}
 			return FailureMessages;
 		}
-	
+
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="property"></param>
 		/// <param name="value"></param>
 		/// <returns></returns>
-		protected override string HandleUnknownPropertyValue(PropertyInfo property, string value)
-		{
+		protected override string HandleUnknownPropertyValue(PropertyInfo property, string value) {
 			string FailureMessages = String.Empty;
 
 			// DocumentInheritedMembers has changed from an enumerated value to a simple boolean,
@@ -1003,13 +907,12 @@ namespace NDoc3.Core.Reflection
 	/// <summary>
 	/// Defines the levels of filtering on the EditorBrowsable attribute.
 	/// </summary>
-	public enum EditorBrowsableFilterLevel
-	{
+	public enum EditorBrowsableFilterLevel {
 		/// <summary>No filtering.</summary>
-		Off, 
+		Off,
 
 		/// <summary>Hide members flagged with EditorBrowsableState.Never.</summary>
-		HideNever, 
+		HideNever,
 
 		/// <summary>Hide members flagged with EditorBrowsableState.Never or EditorBrowsableState.Advanced.</summary>
 		HideAdvanced
@@ -1018,92 +921,101 @@ namespace NDoc3.Core.Reflection
 	/// <summary>
 	/// Defines a version of the .NET Framework documentation.
 	/// </summary>
-	public enum SdkVersion
-	{
-        /// <summary>The SDK version 1.0.</summary>
-        [Description(".Net Version 1.0")]
-        SDK_v1_0,
+	public enum SdkVersion {
+		/// <summary>The SDK version 1.0.</summary>
+		[Description(".Net Version 1.0")]
+		SDK_v1_0,
 
-        /// <summary>The SDK version 1.1.</summary>
-        [Description(".Net Version 1.1")]
-        SDK_v1_1, 
+		/// <summary>The SDK version 1.1.</summary>
+		[Description(".Net Version 1.1")]
+		SDK_v1_1,
 
 		/// <summary>The SDK version 2.0.</summary>
 		[Description(".Net Version 2.0")]
-		SDK_v2_0, 
+		SDK_v2_0,
 
 		/// <summary>The SDK version 3.0.</summary>
 		[Description(".Net Version 3.0")]
-		SDK_v3_0, 
+		SDK_v3_0,
 
-        /// <summary>The SDK version 3.5.</summary>
-        [Description(".Net Version 3.5")]
-        SDK_v3_5
+		/// <summary>The SDK version 3.5.</summary>
+		[Description(".Net Version 3.5")]
+		SDK_v3_5
 	}
 
 	/// <summary>
 	/// Defines a language version of the .NET Framework documentation.
 	/// </summary>
-	public enum SdkLanguage
-	{
+	public enum SdkLanguage {
 		/// <summary>
 		/// English (en-us)
 		/// </summary>
-		[Description("English")] en_us, 
+		[Description("English")]
+		en_us,
 		/// <summary>
 		/// French (fr-fr)
 		/// </summary>
-		[Description("French")] fr_fr, 
+		[Description("French")]
+		fr_fr,
 		/// <summary>
 		/// German (de-de)
 		/// </summary>
-		[Description("German")] de_de, 
+		[Description("German")]
+		de_de,
 		/// <summary>
 		/// Italian (it-it)
 		/// </summary>
-		[Description("Italian")] it_it,
-        /// <summary>
+		[Description("Italian")]
+		it_it,
+		/// <summary>
 		/// Spanish (es-es)
 		/// </summary>
-		[Description("Spanish")] es_es,
-        /// <summary>
+		[Description("Spanish")]
+		es_es,
+		/// <summary>
 		/// Portugese Brazil (pt-br)
 		/// </summary>
-		[Description("Portugese (Brazil)")] pt_br,
+		[Description("Portugese (Brazil)")]
+		pt_br,
 		/// <summary>
 		/// Japanese
 		/// </summary>
-		[Description("Japanese")] ja_jp, 
+		[Description("Japanese")]
+		ja_jp,
 		/// <summary>
 		/// Korean
 		/// </summary>
-		[Description("Korean")] ko_kr,
-        /// <summary>
-        /// Chinese Traditional (zh-tw)
-        /// </summary>
-        [Description("Chinese Traditional")] zh_tw,
-        /// <summary>
-        /// Chinese Simplified (zh-cn)
-        /// </summary>
-        [Description("Chinese Simplified")] zh_cn
+		[Description("Korean")]
+		ko_kr,
+		/// <summary>
+		/// Chinese Traditional (zh-tw)
+		/// </summary>
+		[Description("Chinese Traditional")]
+		zh_tw,
+		/// <summary>
+		/// Chinese Simplified (zh-cn)
+		/// </summary>
+		[Description("Chinese Simplified")]
+		zh_cn
 	}
 
 	/// <summary>
 	/// Defines the type of version information to document.
 	/// </summary>
-	public enum AssemblyVersionInformationType
-	{
+	public enum AssemblyVersionInformationType {
 		/// <summary>
 		/// None
 		/// </summary>
-		[Description("None")] None, 
+		[Description("None")]
+		None,
 		/// <summary>
 		/// AssemblyVersion Attrribute.
 		/// <para>
 		/// This is the standard /.Net version information specified in the AssemblyVersionAttribute.
 		/// </para>
 		/// </summary>
-		[Description("Assembly Version")] AssemblyVersion, 
+		[Description("Assembly Version")]
+		AssemblyVersion,
 		/// <summary>
 		/// AssemblyFileVersion Attribute
 		/// <para>
@@ -1112,6 +1024,7 @@ namespace NDoc3.Core.Reflection
 		/// <para>This type of version information is useful if an Assembly is to installed in the GAC, and the developer need to avoid side-by-side versioning issues, but wishes to provide build version information...
 		/// </para>
 		/// </summary>
-		[Description("File Version.")] AssemblyFileVersion
+		[Description("File Version.")]
+		AssemblyFileVersion
 	}
 }

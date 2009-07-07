@@ -19,11 +19,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Xml;
-using System.Reflection;
 using System.IO;
 
-namespace NDoc3.Core
-{
+namespace NDoc3.Core {
 	/// <summary>	
 	/// Resolves URLs stored as embedded resources in an assembly.
 	/// </summary> 
@@ -31,8 +29,7 @@ namespace NDoc3.Core
 	/// disk directory rather than extracting them from the assembly. 
 	/// This is especially useful  as it allows the stylesheets to be changed 
 	/// and re-run without recompiling the assembly.</remarks>
-	public class XsltResourceResolver : XmlUrlResolver
-	{
+	public class XsltResourceResolver : XmlUrlResolver {
 		private string _ExtensibiltyStylesheet;
 		private readonly string[] _ResourceDirs;
 		//		private Assembly _Assembly;
@@ -44,8 +41,7 @@ namespace NDoc3.Core
 		/// </summary>
 		/// <param name="resourceDirs">Either, the namespace of the embedded resources, or a file URI to a disk directory where the recources may be found.</param>
 		/// <param name="embeddedResourceBase">The type's assembly+namespace indicate the location embedded resources shall be probed from.</param>
-		public XsltResourceResolver(Type embeddedResourceBase, params string[] resourceDirs)
-		{
+		public XsltResourceResolver(Type embeddedResourceBase, params string[] resourceDirs) {
 			if (resourceDirs == null)
 				resourceDirs = new string[0];
 
@@ -75,16 +71,13 @@ namespace NDoc3.Core
 		/// User-defined Extensibility Stylesheet
 		/// </summary>
 		/// <value>fully-qualified filename of exstensibility stylesheet</value>
-		public string ExtensibilityStylesheet
-		{
-			get
-			{
+		public string ExtensibilityStylesheet {
+			get {
 				if (_ExtensibiltyStylesheet.Length == 0) { return String.Empty; }
 				if (Path.IsPathRooted(_ExtensibiltyStylesheet)) {
 					return _ExtensibiltyStylesheet;
-				} else {
-					return Path.GetFullPath(_ExtensibiltyStylesheet);
 				}
+				return Path.GetFullPath(_ExtensibiltyStylesheet);
 			}
 			set { _ExtensibiltyStylesheet = value; }
 		}
@@ -95,28 +88,19 @@ namespace NDoc3.Core
 		/// <param name="baseUri">The base URI used to resolve the relative URI.</param>
 		/// <param name="relativeUri">The URI to resolve. The URI can be absolute or relative. If absolute, this value effectively replaces the <paramref name="baseUri"/> value. If relative, it combines with the <paramref name="baseUri"/> to make an absolute URI.</param>
 		/// <returns>A <see cref="Uri"/> representing the absolute URI or <see langword="null"/> if the relative URI can not be resolved.</returns>
-		/// <remarks><paramref name="baseURI"/> is always <see langword="null"/> when this method is called from <see cref="System.Xml.Xsl.XslTransform.Load(System.Xml.XmlReader)">XslTransform.Load</see></remarks>
-		public override Uri ResolveUri(Uri baseUri, string relativeUri)
-		{
-			Uri temp = null;
+		/// <remarks><paramref name="baseUri"/> is always <see langword="null"/> when this method is called from <see cref="System.Xml.Xsl.XslTransform.Load(System.Xml.XmlReader)">XslTransform.Load</see></remarks>
+		public override Uri ResolveUri(Uri baseUri, string relativeUri) {
+			Uri temp;
 			if (relativeUri.StartsWith("res:")) {
 				temp = new Uri(relativeUri);
 			} else if (relativeUri.StartsWith("user:")) {
-				if (ExtensibilityStylesheet.Length == 0) {
-					temp = new Uri("res:blank.xslt");
-				} else {
-					temp = base.ResolveUri(baseUri, ExtensibilityStylesheet);
-				}
-			} else if (relativeUri.StartsWith("file:")) {
-				temp = base.ResolveUri(baseUri, relativeUri);
-			} else {
-				temp = new Uri("res:" + relativeUri);
-			}
+				temp = ExtensibilityStylesheet.Length == 0 ? new Uri("res:blank.xslt") : base.ResolveUri(baseUri, ExtensibilityStylesheet);
+			} else temp = relativeUri.StartsWith("file:") ? base.ResolveUri(baseUri, relativeUri) : new Uri("res:" + relativeUri);
 
 			return temp;
 		}
 
-		private List<string> reportedLocations = new List<string>();
+		private readonly List<string> reportedLocations = new List<string>();
 
 		/// <summary>
 		/// Maps a URI to an object containing the actual resource.
@@ -125,8 +109,7 @@ namespace NDoc3.Core
 		/// <param name="role">unused.</param>
 		/// <param name="ofObjectToReturn">The type of object to return. The current implementation only returns <b>System.IO.Stream</b> or <b>System.Xml.XmlReader</b> objects.</param>
 		/// <returns></returns>
-		public override object GetEntity(Uri absoluteUri, string role, Type ofObjectToReturn)
-		{
+		public override object GetEntity(Uri absoluteUri, string role, Type ofObjectToReturn) {
 			Stream xsltStream = null;
 			if (absoluteUri.Scheme == "res") {
 

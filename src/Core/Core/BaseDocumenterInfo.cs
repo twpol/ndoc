@@ -1,13 +1,11 @@
 using System;
 using System.Diagnostics;
 
-namespace NDoc3.Core
-{
+namespace NDoc3.Core {
 	/// <summary>
 	/// Holds meta data about a specific type of documenter
 	/// </summary>
-	public abstract class BaseDocumenterInfo : IDocumenterInfo, IComparable
-	{
+	public abstract class BaseDocumenterInfo : IDocumenterInfo, IComparable {
 		private readonly DocumenterDevelopmentStatus _developmentStatus = DocumenterDevelopmentStatus.Stable;
 		private readonly string _name;
 
@@ -15,8 +13,8 @@ namespace NDoc3.Core
 		/// Creates a new instance of the class
 		/// </summary>
 		/// <param name="name">The documenter's name</param>
-		protected BaseDocumenterInfo( string name ) : this( name, DocumenterDevelopmentStatus.Stable )
-		{
+		protected BaseDocumenterInfo(string name)
+			: this(name, DocumenterDevelopmentStatus.Stable) {
 		}
 
 		/// <summary>
@@ -24,8 +22,7 @@ namespace NDoc3.Core
 		/// </summary>
 		/// <param name="name">The name of the documenter</param>
 		/// <param name="status">The development status of the documenter</param>
-		protected BaseDocumenterInfo( string name, DocumenterDevelopmentStatus status )
-		{
+		protected BaseDocumenterInfo(string name, DocumenterDevelopmentStatus status) {
 			_name = name;
 			_developmentStatus = status;
 		}
@@ -35,10 +32,9 @@ namespace NDoc3.Core
 		/// </summary>
 		/// <param name="project">A project to associate the config with</param>
 		/// <returns>A config object</returns>
-		public IDocumenterConfig CreateConfig( Project project )
-		{
+		public IDocumenterConfig CreateConfig(Project project) {
 			IDocumenterConfig config = CreateConfig();
-			config.SetProject( project );
+			config.SetProject(project);
 
 			return config;
 		}
@@ -52,10 +48,8 @@ namespace NDoc3.Core
 		/// <summary>
 		/// The documenter's name
 		/// </summary>
-		public string Name
-		{
-			get
-			{
+		public string Name {
+			get {
 				return _name;
 			}
 		}
@@ -67,18 +61,15 @@ namespace NDoc3.Core
 		/// As implemented in this class, this always returns <see cref="DocumenterDevelopmentStatus">Stable</see>.
 		/// <note type="inheritinfo">Documenters should override this if they are not yet stable...</note>
 		/// </remarks>
-		public DocumenterDevelopmentStatus DevelopmentStatus
-		{
-			get
-			{
+		public DocumenterDevelopmentStatus DevelopmentStatus {
+			get {
 				return _developmentStatus;
 			}
 		}
 
 		/// <summary>Compares the currrent document to another documenter.</summary>
-		public int CompareTo(object obj)
-		{
-			Debug.Assert( obj is IDocumenterInfo );
+		public int CompareTo(object obj) {
+			Debug.Assert(obj is IDocumenterInfo);
 			return String.Compare(Name, ((IDocumenterInfo)obj).Name);
 		}
 
@@ -86,15 +77,13 @@ namespace NDoc3.Core
 		/// Override
 		/// </summary>
 		/// <returns>Formatted name of the documenter</returns>
-		public override string ToString()
-		{
+		public override string ToString() {
 			// build a development status string (alpha, beta, etc)
 			string devStatus = string.Empty;
-			if ( DevelopmentStatus != DocumenterDevelopmentStatus.Stable )
-			{
+			if (DevelopmentStatus != DocumenterDevelopmentStatus.Stable) {
 				devStatus = DevelopmentStatus.ToString();
 				// want it uncapitalized
-				devStatus = string.Format( " ({0}{1})", Char.ToLower( devStatus[0] ), devStatus.Substring(1) );
+				devStatus = string.Format(" ({0}{1})", Char.ToLower(devStatus[0]), devStatus.Substring(1));
 			}
 
 			return Name + devStatus;

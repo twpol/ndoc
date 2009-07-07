@@ -28,7 +28,7 @@ namespace NDoc3.Core
 				NDocXmlGeneratorParameters args = new NDocXmlGeneratorParameters();
 				args.AddAssemblyToDocument(assemblyFilename);
 
-				string xml = re.MakeXml(args);
+				string xml = ReflectionEngine.MakeXml(args);
 				XmlDocument doc = new XmlDocument();
 				doc.LoadXml(xml);
 				doc.Save(xmlWriter);

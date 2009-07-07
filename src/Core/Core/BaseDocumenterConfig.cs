@@ -23,8 +23,7 @@ using System.Reflection;
 using System.Diagnostics;
 using System.Xml;
 
-namespace NDoc3.Core
-{
+namespace NDoc3.Core {
 
 	/// <summary>Provides an abstract base class for documenter configurations.</summary>
 	/// <remarks>
@@ -32,14 +31,12 @@ namespace NDoc3.Core
 	/// It implements all the methods required by the <see cref="IDocumenterConfig"/> interface. 
 	/// It also provides some basic properties which are shared by all configs. 
 	/// </remarks>
-	abstract public class BaseDocumenterConfig : IDocumenterConfig
-	{
+	abstract public class BaseDocumenterConfig : IDocumenterConfig {
 		private readonly IDocumenterInfo _info;
 
 		/// <summary>Initializes a new instance of the <see cref="BaseDocumenterConfig"/> class.</summary>
-		protected BaseDocumenterConfig( IDocumenterInfo info )
-		{
-			Debug.Assert( info != null );
+		protected BaseDocumenterConfig(IDocumenterInfo info) {
+			Debug.Assert(info != null);
 			_info = info;
 		}
 
@@ -48,9 +45,8 @@ namespace NDoc3.Core
 		/// Gets the <see cref="Project"/> that this config is associated with, if any
 		/// </summary>
 		/// <value>The <see cref="Project"/> that this config is associated with, or a <see langword="null"/> if it is not associated with a project.</value>
-		protected Project Project
-		{
-			get{return _Project;}
+		protected Project Project {
+			get { return _Project; }
 		}
 
 		/// <summary>
@@ -61,16 +57,13 @@ namespace NDoc3.Core
 
 		/// <summary>Associates this config with a <see cref="Project"/>.</summary>
 		/// <param name="project">A <see cref="Project"/> to associate with this config.</param>
-		public void SetProject(Project project)
-		{
+		public void SetProject(Project project) {
 			_Project = project;
 		}
 
 		/// <summary>Sets the <see cref="NDoc3.Core.Project.IsDirty"/> property on the <see cref="Project"/>.</summary>
-		protected void SetDirty()
-		{
-			if (_Project != null)
-			{
+		protected void SetDirty() {
+			if (_Project != null) {
 				_Project.IsDirty = true;
 			}
 		}
@@ -79,29 +72,22 @@ namespace NDoc3.Core
 		/// Gets the display name of the documenter.
 		/// </summary>
 		[Browsable(false)]
-		public IDocumenterInfo DocumenterInfo
-		{
-			get { return _info;}
+		public IDocumenterInfo DocumenterInfo {
+			get { return _info; }
 		}
 
 		/// <summary>Gets an enumerable list of <see cref="PropertyInfo"/> objects representing the properties of this config.</summary>
 		/// <remarks>properties are represented by <see cref="PropertyInfo"/> objects.</remarks>
-		public IEnumerable GetProperties()
-		{
+		public IEnumerable GetProperties() {
 			ArrayList properties = new ArrayList();
 
-			foreach (PropertyInfo property in GetType().GetProperties())
-			{
-				object[] attr = property.GetCustomAttributes(typeof(BrowsableAttribute),true);
-				if (attr.Length>0)
-				{
-					if( ((BrowsableAttribute)attr[0]).Browsable )
-					{
+			foreach (PropertyInfo property in GetType().GetProperties()) {
+				object[] attr = property.GetCustomAttributes(typeof(BrowsableAttribute), true);
+				if (attr.Length > 0) {
+					if (((BrowsableAttribute)attr[0]).Browsable) {
 						properties.Add(property);
 					}
-				}
-				else
-				{
+				} else {
 					properties.Add(property);
 				}
 			}
@@ -115,17 +101,13 @@ namespace NDoc3.Core
 		/// <param name="name">The name of the property to set.</param>
 		/// <param name="value">A string representation of the desired property value.</param>
 		/// <remarks>Property name matching is case-insensitive.</remarks>
-		public void SetValue(string name, string value)
-		{
+		public void SetValue(string name, string value) {
 			name = name.ToLower();
 
-			foreach (PropertyInfo property in GetType().GetProperties())
-			{
-				if (name == property.Name.ToLower())
-				{
+			foreach (PropertyInfo property in GetType().GetProperties()) {
+				if (name == property.Name.ToLower()) {
 					string result = ReadProperty(property.Name, value);
-					if (result.Length>0)
-					{
+					if (result.Length > 0) {
 						Trace.WriteLine(result);
 					}
 				}
@@ -146,60 +128,48 @@ namespace NDoc3.Core
 		/// </list>
 		/// </para>
 		/// </remarks>
-		public void Write(XmlWriter writer)
-		{
+		public void Write(XmlWriter writer) {
 			writer.WriteStartElement("documenter");
-			writer.WriteAttributeString("name", DocumenterInfo.Name );
+			writer.WriteAttributeString("name", DocumenterInfo.Name);
 
 			PropertyInfo[] properties = GetType().GetProperties();
 
-			foreach (PropertyInfo property in properties)
-			{
-				if (!property.IsDefined(typeof(NonPersistedAttribute),true))
-				{
+			foreach (PropertyInfo property in properties) {
+				if (!property.IsDefined(typeof(NonPersistedAttribute), true)) {
 					object value = property.GetValue(this, null);
 
-					if (value != null)
-					{
+					if (value != null) {
 						bool writeProperty = true;
 						string value2 = Convert.ToString(value);
 
-						if (value2 != null)
-						{
+						if (value2 != null) {
 							//see if the property has a default value
-							object[] defaultValues=property.GetCustomAttributes(typeof(DefaultValueAttribute),true);
-							if (defaultValues.Length > 0)
-							{
-								if(Convert.ToString(((DefaultValueAttribute)defaultValues[0]).Value)==value2)
-									writeProperty=false;
+							object[] defaultValues = property.GetCustomAttributes(typeof(DefaultValueAttribute), true);
+							if (defaultValues.Length > 0) {
+								if (Convert.ToString(((DefaultValueAttribute)defaultValues[0]).Value) == value2)
+									writeProperty = false;
+							} else {
+								if (value2 == "")
+									writeProperty = false;
 							}
-							else
-							{
-								if(value2=="")
-									writeProperty=false;
-							}
-						}
-						else
-						{
-							writeProperty=false;
+						} else {
+							writeProperty = false;
 						}
 
 						//being lazy and assuming only one BrowsableAttribute...
-						BrowsableAttribute[] browsableAttributes=(BrowsableAttribute[])property.GetCustomAttributes(typeof(BrowsableAttribute),true);
-						if (browsableAttributes.Length>0 && !browsableAttributes[0].Browsable)
-						{
-							writeProperty=false;
+						BrowsableAttribute[] browsableAttributes = (BrowsableAttribute[])property.GetCustomAttributes(typeof(BrowsableAttribute), true);
+						if (browsableAttributes.Length > 0 && !browsableAttributes[0].Browsable) {
+							writeProperty = false;
 						}
 
-						if (writeProperty)
-						{
+						if (writeProperty) {
 							writer.WriteStartElement("property");
 							writer.WriteAttributeString("name", property.Name);
 							writer.WriteAttributeString("value", value2);
 							writer.WriteEndElement();
 						}
 					}
-				}			
+				}
 			}
 
 			writer.WriteEndElement();
@@ -208,24 +178,21 @@ namespace NDoc3.Core
 		/// <summary>Loads config details from the specified <see cref="XmlReader"/>.</summary>
 		/// <param name="reader">An <see cref="XmlReader"/> positioned on a &lt;documenter&gt; element.</param>
 		/// <remarks>Each property found in the XML is loaded into current config using <see cref="ReadProperty"/>.</remarks>
-		public void Read(XmlReader reader)
-		{
+		public void Read(XmlReader reader) {
 			// we don't want to set the project IsDirty flag during the read...
-			_Project.SuspendDirtyCheck=true;
+			_Project.SuspendDirtyCheck = true;
 
-			string FailureMessages="";
+			string FailureMessages = "";
 
-			while(!reader.EOF && !(reader.NodeType == XmlNodeType.EndElement && reader.Name == "documenter"))
-			{
-				if (reader.NodeType == XmlNodeType.Element && reader.Name == "property")
-				{
+			while (!reader.EOF && !(reader.NodeType == XmlNodeType.EndElement && reader.Name == "documenter")) {
+				if (reader.NodeType == XmlNodeType.Element && reader.Name == "property") {
 					FailureMessages += ReadProperty(reader["name"], reader["value"]);
 				}
 				reader.Read(); // Advance.
 			}
 
 			// Restore the project IsDirty checking.
-			_Project.SuspendDirtyCheck=false;
+			_Project.SuspendDirtyCheck = false;
 			if (FailureMessages.Length > 0)
 				throw new DocumenterPropertyFormatException(FailureMessages);
 		}
@@ -236,61 +203,48 @@ namespace NDoc3.Core
 		/// <param name="name">A property name.</param>
 		/// <param name="value">A string respesentation of the desired property value.</param>
 		/// <returns>A string containing any messages generated while attempting to set the property.</returns>
-		protected string ReadProperty(string name, string value)
-		{
+		protected string ReadProperty(string name, string value) {
 			// if value is an empty string, do not bother with anything else
-			if (value==null) return String.Empty;
-			if (value.Length==0) return String.Empty;
+			if (value == null) return String.Empty;
+			if (value.Length == 0) return String.Empty;
 
-			string FailureMessages=String.Empty;
+			string FailureMessages = String.Empty;
 			PropertyInfo property = GetType().GetProperty(name);
 
-			if (property == null)
-			{
+			if (property == null) {
 				FailureMessages += HandleUnknownPropertyType(name, value);
-			}
-			else
-			{
+			} else {
 				bool ValueParsedOK = false;
 				object value2 = null;
-						
+
 				// if the string in the project file is not a valid member
 				// of the enum, or cannot be parsed into the property type
 				// for some reason,we don't want to throw an exception and
 				// ditch all the settings stored later in the file!
 				// save the exception details, and  we will throw a 
 				// single exception at the end..
-				try
-				{
-					if (property.PropertyType.IsEnum)
-					{
+				try {
+					if (property.PropertyType.IsEnum) {
 						//parse is now case-insensitive...
 						value2 = Enum.Parse(property.PropertyType, value, true);
 						ValueParsedOK = true;
-					}
-					else
-					{
+					} else {
 						TypeConverter tc = TypeDescriptor.GetConverter(property.PropertyType);
 						value2 = tc.ConvertFromString(value);
 						ValueParsedOK = true;
 					}
-				}
-				catch(ArgumentException)
-				{
-					Project.SuspendDirtyCheck=false;
+				} catch (ArgumentException) {
+					Project.SuspendDirtyCheck = false;
 					FailureMessages += HandleUnknownPropertyValue(property, value);
-					Project.SuspendDirtyCheck=true;
-				}
-				catch(FormatException)
-				{
-					Project.SuspendDirtyCheck=false;
+					Project.SuspendDirtyCheck = true;
+				} catch (FormatException) {
+					Project.SuspendDirtyCheck = false;
 					FailureMessages += HandleUnknownPropertyValue(property, value);
-					Project.SuspendDirtyCheck=true;
+					Project.SuspendDirtyCheck = true;
 				}
 				// any other exception will be thrown immediately
 
-				if (property.CanWrite && ValueParsedOK)
-				{
+				if (property.CanWrite && ValueParsedOK) {
 					property.SetValue(this, value2, null);
 				}
 			}
@@ -311,8 +265,7 @@ namespace NDoc3.Core
 		/// <see cref="ReadProperty"/> to process to translated name/value.</para>
 		/// </note>
 		/// </remarks>
-		protected virtual string HandleUnknownPropertyType(string name, string value)
-		{
+		protected virtual string HandleUnknownPropertyType(string name, string value) {
 			// As a default, we will ignore unknown property types
 			return "";
 		}
@@ -331,14 +284,13 @@ namespace NDoc3.Core
 		/// process to translated name/value.</para>
 		/// </note>
 		/// </remarks>
-		protected virtual string HandleUnknownPropertyValue(PropertyInfo property, string value)
-		{
+		protected virtual string HandleUnknownPropertyValue(PropertyInfo property, string value) {
 			// we cannot handle this, so return an error message
-			return String.Format("     Property '{0}' has an invalid value for type {1} ('{2}') \n", property.Name, property.PropertyType ,value);
+			return String.Format("     Property '{0}' has an invalid value for type {1} ('{2}') \n", property.Name, property.PropertyType, value);
 		}
 
 
-		#region Documentation Main Settings 
+		#region Documentation Main Settings
 
 		private bool _CleanIntermediates;
 
@@ -353,26 +305,23 @@ namespace NDoc3.Core
 		[Category("Documentation Main Settings")]
 		[Description("When true, intermediate files will be deleted after a successful build.")]
 		[DefaultValue(false)]
-		public bool CleanIntermediates
-		{
+		public bool CleanIntermediates {
 			get { return _CleanIntermediates; }
-			set
-			{
+			set {
 				_CleanIntermediates = value;
 				SetDirty();
 			}
 		}
-		
+
 
 		#endregion
-		
+
 	}
 
 	/// <summary>
 	/// 
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Property)]
-	public class NonPersistedAttribute : Attribute
-	{
+	public class NonPersistedAttribute : Attribute {
 	}
 }

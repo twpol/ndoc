@@ -17,8 +17,7 @@
 
 using System;
 
-namespace NDoc3.Core
-{
+namespace NDoc3.Core {
 	/// <summary>Represents the path to an assembly and its associated documentation comment XML file.</summary>
 	/// <remarks>Documentation comment XML files are known colloquially as <i>"SlashDoc"</i> files as they produced
 	/// by the Microsoft C# compiler when the /doc command-line option is specified. The format of these files is detailed in
@@ -26,17 +25,15 @@ namespace NDoc3.Core
 	/// See <see href="http://www.ecma-international.org/publications/standards/Ecma-334.htm">here</see> for further details.
 	/// </remarks>
 	[Serializable]
-	public class AssemblySlashDoc : ICloneable
-	{
-        /// <summary>Path to assembly</summary>
+	public class AssemblySlashDoc : ICloneable {
+		/// <summary>Path to assembly</summary>
 		private FilePath assembly;
-        /// <summary>Path to slashdoc</summary>
+		/// <summary>Path to slashdoc</summary>
 		private FilePath slashDoc;
 
 		/// <overloads>Initializes a new instance of the <see cref="AssemblySlashDoc"/> class.</overloads>
 		/// <summary>Initializes a blank instance of the <see cref="AssemblySlashDoc"/> class.</summary>
-		public AssemblySlashDoc()
-		{
+		public AssemblySlashDoc() {
 			assembly = new FilePath();
 			slashDoc = new FilePath();
 		}
@@ -45,11 +42,10 @@ namespace NDoc3.Core
 		/// with the specified Assembly and SlashDoc paths.</summary>
 		/// <param name="assemblyFilename">An assembly filename.</param>
 		/// <param name="slashDocFilename">A documentation comment XML filename.</param>
-		public AssemblySlashDoc(string assemblyFilename, string slashDocFilename)
-		{
+		public AssemblySlashDoc(string assemblyFilename, string slashDocFilename) {
 			assembly = new FilePath(assemblyFilename);
 
-			slashDoc = slashDocFilename.Length>0 ? new FilePath(slashDocFilename) : new FilePath();
+			slashDoc = slashDocFilename.Length > 0 ? new FilePath(slashDocFilename) : new FilePath();
 		}
 
 		/// <summary>
@@ -57,36 +53,33 @@ namespace NDoc3.Core
 		/// </summary>
 		/// <value>A <see cref="FilePath"/> representing the path to an assembly.</value>
 		[PropertyGridUI.FilenameEditor.FileDialogFilter
-			 ("Select Assembly", 
+			 ("Select Assembly",
 			 "Library and Executable files (*.dll, *.exe)|*.dll;*.exe|Library files (*.dll)|*.dll|Executable files (*.exe)|*.exe|All files (*.*)|*.*")]
-		public FilePath Assembly 
-		{
+		public FilePath Assembly {
 			get { return assembly; }
 			set { assembly = value; }
-		} 
+		}
 
 		/// <summary>
 		/// Gets or sets the path to a documentation comment XML file.
 		/// </summary>
 		/// <value>A <see cref="FilePath"/> representing the path to a documentation comment XML file.</value>
 		[PropertyGridUI.FilenameEditor.FileDialogFilter
-			 ("Select Assembly", 
+			 ("Select Assembly",
 			 "/doc Output files (*.xml)|*.xml|All files (*.*)|*.*")]
-		public FilePath SlashDoc 
-		{
+		public FilePath SlashDoc {
 			get { return slashDoc; }
 			set { slashDoc = value; }
-		} 
+		}
 
 		/// <summary>
 		/// <see cref="System.ICloneable"/>
 		/// </summary>
 		/// <returns>Cloned object</returns>
-		public object Clone()
-		{
+		public object Clone() {
 			AssemblySlashDoc ret = new AssemblySlashDoc();
-			ret.assembly = new FilePath( assembly );
-			ret.slashDoc = new FilePath( slashDoc );
+			ret.assembly = new FilePath(assembly);
+			ret.slashDoc = new FilePath(slashDoc);
 
 			return ret;
 		}

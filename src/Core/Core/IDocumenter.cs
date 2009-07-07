@@ -16,25 +16,20 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 using System;
-using System.Collections;
-using System.Xml;
 
-namespace NDoc3.Core
-{
+namespace NDoc3.Core {
 	/// <summary>
 	/// Custom event arguments' class used by DocBuildingEventHandler.
 	/// </summary>
-	public class ProgressArgs : EventArgs
-	{
-		private int progress;
-		private string status;
+	public class ProgressArgs : EventArgs {
+		private readonly int progress;
+		private readonly string status;
 		/// <summary>
 		/// ProgressArgs default constructor.
 		/// </summary>
 		/// <param name="progress">Percentage value for a progress bar.</param>
 		/// <param name="status">The label describing the current work beeing done.</param>
-		public ProgressArgs(int progress, string status)
-		{
+		public ProgressArgs(int progress, string status) {
 			this.progress = progress;
 			this.status = status;
 		}
@@ -42,17 +37,15 @@ namespace NDoc3.Core
 		/// Gets the percentage value.
 		/// </summary>
 		/// <value>A number between 0 and 100 corresponding to the percentage of work completed.</value>
-		public int Progress
-		{
-			get {return progress;}
+		public int Progress {
+			get { return progress; }
 		}
 		/// <summary>
 		/// Gets the current work label.
 		/// </summary>
 		/// <value>A short description of the current work beeing done.</value>
-		public string Status
-		{
-			get {return status;}
+		public string Status {
+			get { return status; }
 		}
 	}
 
@@ -64,8 +57,7 @@ namespace NDoc3.Core
 	public delegate void DocBuildingEventHandler(object sender, ProgressArgs e);
 
 	/// <summary>Represents a class capable of generating documentation from a given assembly and /doc file.</summary>
-	public interface IDocumenter
-	{
+	public interface IDocumenter {
 		/// <summary>
 		/// Raised to update the overall percent complete value and the current step name.
 		/// </summary>

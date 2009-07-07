@@ -1,12 +1,10 @@
 using System.Reflection;
 
-namespace NDoc3.Core.Reflection
-{
+namespace NDoc3.Core.Reflection {
 	///<summary>
 	/// Defines possible values for a method's contract.
 	///</summary>
-	public enum MethodContract
-	{
+	public enum MethodContract {
 		/// <summary>
 		/// Method is an instance member.
 		/// </summary>

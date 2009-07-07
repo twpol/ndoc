@@ -17,22 +17,18 @@
 using System;
 using System.Text;
 
-namespace NDoc3.Core
-{
+namespace NDoc3.Core {
 	/// <summary>
 	/// 
 	/// </summary>
-	public static class MemberDisplayName
-	{
+	public static class MemberDisplayName {
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="realType"></param>
 		/// <returns></returns>
-		public static string GetMemberDisplayName(Type realType)
-		{
-			if (realType.IsByRef)
-			{
+		public static string GetMemberDisplayName(Type realType) {
+			if (realType.IsByRef) {
 				realType = realType.GetElementType();
 			}
 
@@ -42,30 +38,24 @@ namespace NDoc3.Core
 			{
 				result = GetTypeDisplayName(type);
 				Type declaringType = type.DeclaringType;
-				while (declaringType != null)
-				{
+				while (declaringType != null) {
 					result = GetTypeDisplayName(declaringType) + "." + result;
 					declaringType = declaringType.DeclaringType;
 				}
-			}
-			else
-			{
+			} else {
 				result = GetTypeDisplayName(type);
 			}
 
 			// append array indexer/byRef indicator
-			if (realType.IsArray)
-			{
+			if (realType.IsArray) {
 				string suffix = realType.Name.Substring(type.Name.Length);
 				result += suffix;
 			}
 			return result;
 		}
 
-		private static Type DereferenceType(Type type)
-		{
-			if (NeedsDereference(type))
-			{
+		private static Type DereferenceType(Type type) {
+			if (NeedsDereference(type)) {
 				type = type.GetElementType();
 				return DereferenceType(type);
 			}
@@ -73,17 +63,14 @@ namespace NDoc3.Core
 			return type;
 		}
 
-		private static bool NeedsDereference(Type type)
-		{
-			return type.IsArray 
-				|| type.IsByRef 
+		private static bool NeedsDereference(Type type) {
+			return type.IsArray
+				|| type.IsByRef
 				;
 		}
 
-		private static string GetTypeDisplayName(Type type)
-		{
-			if (type.IsGenericType)
-			{
+		private static string GetTypeDisplayName(Type type) {
+			if (type.IsGenericType) {
 				int i = type.Name.IndexOf('`');
 				string result = i > -1 ? type.Name.Substring(0, type.Name.IndexOf('`')) : type.Name;
 				result += GetTypeArgumentsList(type);
@@ -92,13 +79,11 @@ namespace NDoc3.Core
 			return type.Name;
 		}
 
-		private static string GetTypeArgumentsList(Type type)
-		{
+		private static string GetTypeArgumentsList(Type type) {
 			StringBuilder argList = new StringBuilder();
 
 			int genArgLowerBound = 0;
-			if (type.IsNested)
-			{
+			if (type.IsNested) {
 				Type parent = type.DeclaringType;
 				Type[] parentGenArgs = parent.GetGenericArguments();
 				genArgLowerBound = parentGenArgs.Length;
@@ -106,38 +91,28 @@ namespace NDoc3.Core
 
 			Type[] genArgs = type.GetGenericArguments();
 			int i = 0;
-			for (int k = genArgLowerBound; k < genArgs.Length; k++)
-			{
+			for (int k = genArgLowerBound; k < genArgs.Length; k++) {
 				Type argType = genArgs[k];
-				if (i == 0)
-				{
+				if (i == 0) {
 					argList.Append('(');
-				}
-				else
-				{
+				} else {
 					argList.Append(',');
 				}
-				if (argType.FullName == null)
-				{
-					if (type.IsGenericType && !type.IsGenericTypeDefinition)
-					{
+				if (argType.FullName == null) {
+					if (type.IsGenericType && !type.IsGenericTypeDefinition) {
 						Type[] types = type.GetGenericArguments();
 						foreach (Type t in types)
 							argList.Append(GetTypeDisplayName(t));
-					}
-					else
+					} else
 						argList.Append(argType.Name);
-				}
-				else
-				{
+				} else {
 					argList.Append(GetMemberDisplayName(argType));
 				}
 
 				++i;
 			}
 
-			if (i > 0)
-			{
+			if (i > 0) {
 				argList.Append(')');
 			}
 

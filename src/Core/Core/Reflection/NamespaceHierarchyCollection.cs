@@ -17,34 +17,29 @@
 using System;
 using System.Collections;
 
-namespace NDoc3.Core.Reflection
-{
+namespace NDoc3.Core.Reflection {
 	/// <summary>
 	/// 
 	/// </summary>
-	internal class NamespaceHierarchyCollection
-	{
+	internal class NamespaceHierarchyCollection {
 		private readonly Hashtable namespaces;
-        
+
 		/// <summary>
 		/// 
 		/// </summary>
-		public NamespaceHierarchyCollection()
-		{
+		public NamespaceHierarchyCollection() {
 			namespaces = new Hashtable(15);
 		}
-        
+
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="namespaceName"></param>
 		/// <param name="baseType"></param>
 		/// <param name="derivedType"></param>
-		public void Add(string namespaceName, Type baseType, Type derivedType)
-		{
+		public void Add(string namespaceName, Type baseType, Type derivedType) {
 			TypeHierarchy derivedTypesCollection = namespaces[namespaceName] as TypeHierarchy;
-			if (derivedTypesCollection == null)
-			{
+			if (derivedTypesCollection == null) {
 				derivedTypesCollection = new TypeHierarchy();
 				namespaces.Add(namespaceName, derivedTypesCollection);
 			}
@@ -56,8 +51,7 @@ namespace NDoc3.Core.Reflection
 		/// </summary>
 		/// <param name="namespaceName"></param>
 		/// <returns></returns>
-		public TypeHierarchy GetDerivedTypesCollection(string namespaceName)
-		{
+		public TypeHierarchy GetDerivedTypesCollection(string namespaceName) {
 			TypeHierarchy derivedTypesCollection = namespaces[namespaceName] as TypeHierarchy;
 			return derivedTypesCollection;
 		}
@@ -66,10 +60,8 @@ namespace NDoc3.Core.Reflection
 		/// 
 		/// </summary>
 		/// <value></value>
-		public ICollection DefinedNamespaces
-		{
-			get
-			{
+		public ICollection DefinedNamespaces {
+			get {
 				return namespaces.Keys;
 			}
 		}

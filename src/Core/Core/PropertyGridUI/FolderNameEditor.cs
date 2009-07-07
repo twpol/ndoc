@@ -15,36 +15,28 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 using System;
-using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Drawing.Design;
 using System.ComponentModel;
-using System.ComponentModel.Design;
 using System.Windows.Forms;
 
 using NDoc3.ExtendedUI;
 
 
-namespace NDoc3.Core.PropertyGridUI
-{
+namespace NDoc3.Core.PropertyGridUI {
 	/// <summary>
 	/// 
 	/// </summary>
-	public class FoldernameEditor : System.Drawing.Design.UITypeEditor
-	{
+	public class FoldernameEditor : UITypeEditor {
 
 		private string _InitialFolder = String.Empty;
-		private string _StatusText = String.Empty;
 
 		/// <summary>
 		/// Gets the edit style.
 		/// </summary>
 		/// <param name="context">Context.</param>
 		/// <returns></returns>
-		public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) 
-		{
-			if (context != null && context.Instance != null) 
-			{
+		public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) {
+			if (context != null && context.Instance != null) {
 				return UITypeEditorEditStyle.Modal;
 			}
 			return UITypeEditorEditStyle.None;
@@ -57,39 +49,33 @@ namespace NDoc3.Core.PropertyGridUI
 		/// <param name="provider">Provider.</param>
 		/// <param name="value">Value.</param>
 		/// <returns></returns>
-		[RefreshProperties(RefreshProperties.All)] 
-		public override object EditValue(ITypeDescriptorContext context, System.IServiceProvider provider, object value) 
-		{
-			if (context == null || provider == null || context.Instance == null) 
-			{
-				return base.EditValue(provider, value);
+		[RefreshProperties(RefreshProperties.All)]
+		public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value) {
+			if (context == null || provider == null || context.Instance == null) {
+				return EditValue(provider, value);
 			}
 
 			ShellBrowseForFolderDialog folderDialog = new ShellBrowseForFolderDialog();
-			try
-			{
-				folderDialog.hwndOwner = System.Windows.Forms.Form.ActiveForm.Handle;
-			}
-			catch{}
+			try {
+				if (Form.ActiveForm != null)
+					folderDialog.hwndOwner = Form.ActiveForm.Handle;
+			} catch { }
 
-			_InitialFolder=(string)value;
+			_InitialFolder = (string)value;
 
 			FolderDialogTitleAttribute titleAtt = (FolderDialogTitleAttribute)context.PropertyDescriptor.Attributes[typeof(FolderDialogTitleAttribute)];
-			if (titleAtt != null) 
-			{
+			if (titleAtt != null) {
 				folderDialog.Title = titleAtt.Title;
 			}
 
-			folderDialog.OnInitialized += new ShellBrowseForFolderDialog.InitializedHandler(this.InitializedEvent);
-			if (folderDialog.ShowDialog() == DialogResult.OK) 
-			{
+			folderDialog.OnInitialized += InitializedEvent;
+			if (folderDialog.ShowDialog() == DialogResult.OK) {
 				value = folderDialog.FullName;
 			}
 			return value;
 		}
 
-		private void InitializedEvent(ShellBrowseForFolderDialog sender, ShellBrowseForFolderDialog.InitializedEventArgs args)
-		{
+		private void InitializedEvent(ShellBrowseForFolderDialog sender, ShellBrowseForFolderDialog.InitializedEventArgs args) {
 			sender.SetSelection(args.hwnd, _InitialFolder);
 		}
 
@@ -98,15 +84,13 @@ namespace NDoc3.Core.PropertyGridUI
 		/// 
 		/// </summary>
 		[AttributeUsage(AttributeTargets.Class | AttributeTargets.Property)]
-			public class FolderDialogTitleAttribute : Attribute
-		{
-			private string _title;
+		public class FolderDialogTitleAttribute : Attribute {
+			private readonly string _title;
 			/// <summary>
 			/// Gets the title.
 			/// </summary>
 			/// <value></value>
-			public string Title
-			{
+			public string Title {
 				get { return _title; }
 			}
 
@@ -115,17 +99,16 @@ namespace NDoc3.Core.PropertyGridUI
 			/// </summary>
 			/// <param name="title">Folder dialog title</param>
 			/// <remarks></remarks>
-			public FolderDialogTitleAttribute(string title) : base() 
-			{
-				this._title = title;
+			public FolderDialogTitleAttribute(string title) {
+				_title = title;
 			}
 		}
-		
+
 		/// <summary>
 		/// Indicates that only existing folders can be specified
 		/// </summary>
 		[AttributeUsage(AttributeTargets.Class | AttributeTargets.Property)]
-			public class ExistingFolderOnlyAttribute : Attribute {}
+		public class ExistingFolderOnlyAttribute : Attribute { }
 		#endregion
 	}
 }

@@ -15,7 +15,6 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-using System;
 using System.IO;
 using System.ComponentModel;
 using System.Drawing.Design;
@@ -24,8 +23,7 @@ using System.Windows.Forms.Design;
 using NDoc3.Core;
 using NDoc3.Core.Reflection;
 
-namespace NDoc3.Documenter.Xml
-{
+namespace NDoc3.Documenter.Xml {
 	/// <summary>The XmlDocumenter config class.</summary>
 	/// <remarks>	
 	/// <para>
@@ -45,21 +43,19 @@ namespace NDoc3.Documenter.Xml
 	///	</para>
 	///	</remarks>
 	[DefaultProperty("OutputFile")]
-	public class XmlDocumenterConfig : BaseReflectionDocumenterConfig
-	{
+	public class XmlDocumenterConfig : BaseReflectionDocumenterConfig {
 		/// <summary>Initializes a new instance of the XmlDocumenterConfig class.</summary>
-		public XmlDocumenterConfig( XmlDocumenterInfo info ) : base( info )
-		{
-			OutputFile = string.Format( ".{0}doc{0}doc.xml", Path.DirectorySeparatorChar );
+		public XmlDocumenterConfig(XmlDocumenterInfo info)
+			: base(info) {
+			OutputFile = string.Format(".{0}doc{0}doc.xml", Path.DirectorySeparatorChar);
 		}
-		
+
 		/// <summary>
 		/// Creates an instance of a documenter <see cref="IDocumenterConfig.CreateDocumenter"/>
 		/// </summary>
 		/// <returns>IDocumenter instance</returns>		
-		public override IDocumenter CreateDocumenter()
-		{
-			return new XmlDocumenter( this );
+		public override IDocumenter CreateDocumenter() {
+			return new XmlDocumenter(this);
 		}
 
 		private string _OutputFile;
@@ -71,13 +67,11 @@ namespace NDoc3.Documenter.Xml
 		[Category("Documentation Main Settings")]
 		[Description("The path to the XML file to create which will be the combined /doc output and reflection information.")]
 		[Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
-		public string OutputFile
-		{
+		public string OutputFile {
 			get { return _OutputFile; }
 
-			set 
-			{ 
-				_OutputFile = value; 
+			set {
+				_OutputFile = value;
 				SetDirty();
 			}
 		}

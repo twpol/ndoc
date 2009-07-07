@@ -18,15 +18,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace NDoc3.Core
-{
+namespace NDoc3.Core {
 	/// <summary>
 	/// Utility Routines for path handling
 	/// </summary>
-	public sealed class PathUtilities
-	{
+	public static class PathUtilities {
 		// no public constructor - only static methods...
-		private PathUtilities() { }
 
 
 		/// <summary>
@@ -38,9 +35,8 @@ namespace NDoc3.Core
 		/// <returns>
 		/// A rooted path.
 		/// </returns>
-		public static string GetFullPath(string basePath, string path)
-		{
-			if (path != null && path.Length > 0) {
+		public static string GetFullPath(string basePath, string path) {
+			if (!string.IsNullOrEmpty(path)) {
 				if (!Path.IsPathRooted(path)) {
 					path = Path.GetFullPath(Path.Combine(basePath, path));
 				}
@@ -57,11 +53,10 @@ namespace NDoc3.Core
 		/// <returns>
 		/// A relative path.
 		/// </returns>
-		public static string GetRelativePath(string basePath, string path)
-		{
-			if (path != null && path.Length > 0) {
+		public static string GetRelativePath(string basePath, string path) {
+			if (!string.IsNullOrEmpty(path)) {
 				if (Path.IsPathRooted(path)) {
-					path = PathUtilities.AbsoluteToRelativePath(basePath, path);
+					path = AbsoluteToRelativePath(basePath, path);
 				}
 			}
 
@@ -74,8 +69,7 @@ namespace NDoc3.Core
 		/// <param name="basePath">The base directory path</param>
 		/// <param name="absolutePath">An absolute path</param>
 		/// <returns>A path to the given absolute path, relative to the base path</returns>
-		public static string AbsoluteToRelativePath(string basePath, string absolutePath)
-		{
+		public static string AbsoluteToRelativePath(string basePath, string absolutePath) {
 			char[] separators = {
 									Path.DirectorySeparatorChar, 
 									Path.AltDirectorySeparatorChar, 
@@ -126,8 +120,7 @@ namespace NDoc3.Core
 		/// <param name="basePath">The base directory path</param>
 		/// <param name="relativePath">A path to the base directory path</param>
 		/// <returns>An absolute path</returns>
-		public static string RelativeToAbsolutePath(string basePath, string relativePath)
-		{
+		public static string RelativeToAbsolutePath(string basePath, string relativePath) {
 			//if the relativePath isn't... 
 			if (Path.IsPathRooted(relativePath)) {
 				return relativePath;
@@ -169,8 +162,7 @@ namespace NDoc3.Core
 		/// <remarks>
 		/// Handles only local paths (e.g. no UNC paths!)
 		/// </remarks>
-		public static string NormalizePath(string path)
-		{
+		public static string NormalizePath(string path) {
 			return NormalizePath(path, Path.DirectorySeparatorChar);
 		}
 
@@ -180,11 +172,10 @@ namespace NDoc3.Core
 		/// <remarks>
 		/// Handles only local paths (e.g. no UNC paths!)
 		/// </remarks>
-		public static string NormalizePath(string path, char directorySeparatorChar)
-		{
+		public static string NormalizePath(string path, char directorySeparatorChar) {
 			path = path
-				.Replace("\\", ""+directorySeparatorChar)
-				.Replace("/", ""+directorySeparatorChar);
+				.Replace("\\", "" + directorySeparatorChar)
+				.Replace("/", "" + directorySeparatorChar);
 
 			// reduce path (remove "..")
 			path = ReducePath(path, directorySeparatorChar);
@@ -196,7 +187,6 @@ namespace NDoc3.Core
 				case PlatformID.WinCE:
 					path = path.ToLowerInvariant();
 					break;
-				case PlatformID.Unix:
 					// noop
 				default:
 					throw new ArgumentException(string.Format("unknow Platform identifier{0}", Environment.OSVersion.Platform));
@@ -211,77 +201,61 @@ namespace NDoc3.Core
 		/// <remarks>
 		/// Handles only local paths (e.g. no UNC paths!)
 		/// </remarks>
-		public static string ReducePath(string path, char directorySeparatorChar)
-		{
+		public static string ReducePath(string path, char directorySeparatorChar) {
 			// handle corner cases
-			if (string.IsNullOrEmpty(path) 
-				|| path == "\\" || path == "\\.")
-			{
+			if (string.IsNullOrEmpty(path)
+				|| path == "\\" || path == "\\.") {
 				return path;
 			}
-			if (path == "\\\\" || path == "\\\\.")
-			{
+			if (path == "\\\\" || path == "\\\\.") {
 				return path.Replace("\\\\", "\\");
 			}
 
 			string absoluteRoot = "" + directorySeparatorChar + directorySeparatorChar;
 
 			int ixAbsoluteRoot = path.LastIndexOf(absoluteRoot);
-			if (ixAbsoluteRoot > -1)
-			{
+			if (ixAbsoluteRoot > -1) {
 				// from "sfsfdsf\\some" to rooted "\some"
 				path = path.Substring(ixAbsoluteRoot + 1);
 			}
 
 			bool isAbsolute = path[0] == directorySeparatorChar;
 			bool endsWithSeparator = path[path.Length - 1] == directorySeparatorChar;
-			bool endsWithDirIdentity = path.Length > 1 
-										&& path[path.Length - 2] == directorySeparatorChar 
+			bool endsWithDirIdentity = path.Length > 1
+										&& path[path.Length - 2] == directorySeparatorChar
 										&& path[path.Length - 1] == '.';
 
-			string[] parts = path.Split( new char[] {directorySeparatorChar}, StringSplitOptions.RemoveEmptyEntries);
+			string[] parts = path.Split(new[] { directorySeparatorChar }, StringSplitOptions.RemoveEmptyEntries);
 			List<string> directoryHierarchy = new List<string>();
 			int currentDirectoryIndex = 0;
 			for (int i = 0; i < parts.Length; i++) {
-				if (parts[i] == "..")
-				{
-					if (directoryHierarchy.Count > 0)
-					{
+				if (parts[i] == "..") {
+					if (directoryHierarchy.Count > 0) {
 						directoryHierarchy.RemoveAt(directoryHierarchy.Count - 1);
 					}
 					currentDirectoryIndex--;
-				}
-				else if (parts[i] == ".")
-				{
+				} else if (parts[i] == ".") {
 					// do nothing
-				} else if (parts[i] == absoluteRoot)
-				{
+				} else if (parts[i] == absoluteRoot) {
 					currentDirectoryIndex = 0;
 					directoryHierarchy.Clear();
-				}
-				else
-				{
-					if (currentDirectoryIndex >= 0)
-					{
+				} else {
+					if (currentDirectoryIndex >= 0) {
 						directoryHierarchy.Add(parts[i]);
 					}
 					currentDirectoryIndex++;
 				}
 			}
-			if (currentDirectoryIndex < 0)
-			{
+			if (currentDirectoryIndex < 0) {
 				throw new ArgumentException(string.Format("too many directory upwalks in {0}", path));
 			}
 			path = string.Join("" + directorySeparatorChar, directoryHierarchy.ToArray());
 			if (isAbsolute) {
 				path = directorySeparatorChar + path;
 			}
-			if (endsWithSeparator)
-			{
+			if (endsWithSeparator) {
 				path = path + directorySeparatorChar;
-			}
-			else if (endsWithDirIdentity)
-			{
+			} else if (endsWithDirIdentity) {
 				path = path + directorySeparatorChar + ".";
 			}
 			return path;

@@ -18,27 +18,22 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace NDoc3.Core.Reflection
-{
+namespace NDoc3.Core.Reflection {
 	/// <summary>
 	/// Summary description for NDocXmlGeneratorParameters.
 	/// </summary>
 	[Serializable]
-	internal class NDocXmlGeneratorParameters
-	{
+	internal class NDocXmlGeneratorParameters {
 		// wrapper to use as keys in the set
 		[Serializable]
-		private class ComparableFileInfo
-		{
+		private class ComparableFileInfo {
 			private readonly string _filePath;
 
-			public ComparableFileInfo(FileInfo file)
-			{
+			public ComparableFileInfo(FileInfo file) {
 				_filePath = PathUtilities.NormalizePath(file.FullName);
 			}
 
-			public bool Equals(ComparableFileInfo other)
-			{
+			public bool Equals(ComparableFileInfo other) {
 				if (ReferenceEquals(null, other))
 					return false;
 				if (ReferenceEquals(this, other))
@@ -46,8 +41,7 @@ namespace NDoc3.Core.Reflection
 				return Equals(other._filePath, _filePath);
 			}
 
-			public override bool Equals(object obj)
-			{
+			public override bool Equals(object obj) {
 				if (ReferenceEquals(null, obj))
 					return false;
 				if (ReferenceEquals(this, obj))
@@ -59,7 +53,6 @@ namespace NDoc3.Core.Reflection
 
 			public override int GetHashCode() { return (_filePath != null ? _filePath.GetHashCode() : 0); }
 			public override string ToString() { return _filePath; }
-			public bool Exists { get { return File.Exists(_filePath); } }
 			public FileInfo FileInfo { get { return new FileInfo(_filePath); } }
 		}
 
@@ -68,10 +61,8 @@ namespace NDoc3.Core.Reflection
 		// use a dictionary to easily avoid duplicates
 		private readonly IDictionary<ComparableFileInfo, object> _assemblyFileNames = new Dictionary<ComparableFileInfo, object>();
 
-		public ICollection<FileInfo> AssemblyFileNames
-		{
-			get
-			{
+		public ICollection<FileInfo> AssemblyFileNames {
+			get {
 				return ConvertAll(_assemblyFileNames.Keys, cfi => cfi.FileInfo);
 			}
 		}
@@ -79,38 +70,33 @@ namespace NDoc3.Core.Reflection
 		// use a dictionary to easily avoid duplicates
 		private readonly Dictionary<ComparableFileInfo, object> _slashDocFileNames = new Dictionary<ComparableFileInfo, object>();
 
-		public ICollection<FileInfo> SlashDocFileNames
-		{
-			get
-			{
-				return ConvertAll(_slashDocFileNames.Keys, cfi=>cfi.FileInfo);
+		public ICollection<FileInfo> SlashDocFileNames {
+			get {
+				return ConvertAll(_slashDocFileNames.Keys, cfi => cfi.FileInfo);
 			}
 		}
 
-		private static ICollection<TReturn> ConvertAll<TReturn,TInput>(ICollection<TInput> input, Converter<TInput, TReturn> converter)
-		{
+		private static ICollection<TReturn> ConvertAll<TReturn, TInput>(ICollection<TInput> input, Converter<TInput, TReturn> converter) {
 			List<TReturn> result = new List<TReturn>();
-			foreach(TInput element in input)
-			{
-				result.Add( converter(element) );
+			foreach (TInput element in input) {
+				result.Add(converter(element));
 			}
 			return result;
 		}
 
-//		/// <summary>
-//		/// 
-//		/// </summary>
-//		public ReferencePathCollection ReferencePaths;
+		//		/// <summary>
+		//		/// 
+		//		/// </summary>
+		//		public ReferencePathCollection ReferencePaths;
 		/// <summary>
 		/// 
 		/// </summary>
-        public readonly IDictionary<string,string> NamespaceSummaries = new SortedStringDictionary();
+		public readonly IDictionary<string, string> NamespaceSummaries = new SortedStringDictionary();
 
 		/// <summary>
 		/// Adds the type's assembly to the list of assemblies to document.
 		/// </summary>
-		public void AddAssemblyToDocument(Type assemblyType)
-		{
+		public void AddAssemblyToDocument(Type assemblyType) {
 			string testAssembly1AssemblyFileName = new Uri(assemblyType.Assembly.CodeBase).AbsolutePath;
 			AddAssemblyToDocument(new FileInfo(testAssembly1AssemblyFileName));
 		}
@@ -119,10 +105,9 @@ namespace NDoc3.Core.Reflection
 		/// Adds the assembly to the list of assemblies to document.
 		/// Adds the assembly's slashdoc file as well using the convention myassembly.dll + myassembly.xml
 		/// </summary>
-		public void AddAssemblyToDocument(FileInfo assemblyFile)
-		{
+		public void AddAssemblyToDocument(FileInfo assemblyFile) {
 			string ext = assemblyFile.Extension;
-//			if (assemblyFile.Exists)
+			//			if (assemblyFile.Exists)
 			{
 				_assemblyFileNames[new ComparableFileInfo(assemblyFile)] = assemblyFile;
 			}
@@ -130,9 +115,8 @@ namespace NDoc3.Core.Reflection
 			AddAssemblySlashDoc(slashDocFile);
 		}
 
-		public void AddAssemblySlashDoc(FileInfo slashDocPath)
-		{
-//			if (slashDocPath.Exists)
+		public void AddAssemblySlashDoc(FileInfo slashDocPath) {
+			//			if (slashDocPath.Exists)
 			{
 				_slashDocFileNames[new ComparableFileInfo(slashDocPath)] = slashDocPath;
 			}
@@ -143,108 +127,108 @@ namespace NDoc3.Core.Reflection
 		/// <summary>
 		/// 
 		/// </summary>
-		public AssemblyVersionInformationType AssemblyVersionInfo ;
+		public AssemblyVersionInformationType AssemblyVersionInfo;
 		/// <summary>
 		/// 
 		/// </summary>
-		public bool UseNamespaceDocSummaries ;
+		public bool UseNamespaceDocSummaries;
 		/// <summary>
 		/// 
 		/// </summary>
-		public bool AutoPropertyBackerSummaries ;
+		public bool AutoPropertyBackerSummaries;
 		/// <summary>
 		/// 
 		/// </summary>
-		public bool AutoDocumentConstructors ;
+		public bool AutoDocumentConstructors;
 		/// <summary>
 		/// 
 		/// </summary>
 		public SdkLanguage SdkDocLanguage;
 		#endregion
-		
+
 		#region missing
 		/// <summary>
 		/// 
 		/// </summary>
-		public bool ShowMissingSummaries ;
+		public bool ShowMissingSummaries;
 		/// <summary>
 		/// 
 		/// </summary>
-		public bool ShowMissingRemarks ;
+		public bool ShowMissingRemarks;
 		/// <summary>
 		/// 
 		/// </summary>
-		public bool ShowMissingParams ;
+		public bool ShowMissingParams;
 		/// <summary>
 		/// 
 		/// </summary>
-		public bool ShowMissingReturns ;
+		public bool ShowMissingReturns;
 		/// <summary>
 		/// 
 		/// </summary>
-		public bool ShowMissingValues ;
+		public bool ShowMissingValues;
 		#endregion
 
 		#region visibility
 		/// <summary>
 		/// 
 		/// </summary>
-		public bool DocumentInheritedMembers ;
+		public bool DocumentInheritedMembers;
 		/// <summary>
 		/// 
 		/// </summary>
-		public bool DocumentInheritedFrameworkMembers ;
+		public bool DocumentInheritedFrameworkMembers;
 		/// <summary>
 		/// 
 		/// </summary>
-		public bool DocumentExplicitInterfaceImplementations ;
+		public bool DocumentExplicitInterfaceImplementations;
 		/// <summary>
 		/// 
 		/// </summary>
-		public bool DocumentInternals ;
+		public bool DocumentInternals;
 		/// <summary>
 		/// 
 		/// </summary>
-		public bool DocumentProtected ;
+		public bool DocumentProtected;
 		/// <summary>
 		/// 
 		/// </summary>
-		public bool DocumentSealedProtected ;
+		public bool DocumentSealedProtected;
 		/// <summary>
 		/// 
 		/// </summary>
-		public bool DocumentPrivates ;
+		public bool DocumentPrivates;
 		/// <summary>
 		/// 
 		/// </summary>
-		public bool DocumentProtectedInternalAsProtected ;
+		public bool DocumentProtectedInternalAsProtected;
 		/// <summary>
 		/// 
 		/// </summary>
-		public bool DocumentEmptyNamespaces ;
+		public bool DocumentEmptyNamespaces;
 		/// <summary>
 		/// 
 		/// </summary>
-		public bool SkipNamespacesWithoutSummaries ;
+		public bool SkipNamespacesWithoutSummaries;
 		/// <summary>
 		/// 
 		/// </summary>
-		public EditorBrowsableFilterLevel EditorBrowsableFilter ;
+		public EditorBrowsableFilterLevel EditorBrowsableFilter;
 		#endregion
 
 		#region Attributes
 		/// <summary>
 		/// 
 		/// </summary>
-		public bool DocumentAttributes ;
+		public bool DocumentAttributes;
 		/// <summary>
 		/// 
 		/// </summary>
-		public bool DocumentInheritedAttributes ;
+		public bool DocumentInheritedAttributes;
 		/// <summary>
 		/// 
 		/// </summary>
-		public bool ShowTypeIdInAttributes ;
+		public bool ShowTypeIdInAttributes;
 		/// <summary>
 		/// 
 		/// </summary>
@@ -258,34 +242,34 @@ namespace NDoc3.Core.Reflection
 		/// <summary>
 		/// 
 		/// </summary>
-        public string CopyrightText = string.Empty;
+		public string CopyrightText = string.Empty;
 		/// <summary>
 		/// 
 		/// </summary>
-        public string CopyrightHref = string.Empty;
+		public string CopyrightHref = string.Empty;
 		/// <summary>
 		/// 
 		/// </summary>
-        public string FeedbackEmailAddress = string.Empty;
+		public string FeedbackEmailAddress = string.Empty;
 		/// <summary>
 		/// 
 		/// </summary>
-		public bool Preliminary ;
+		public bool Preliminary;
 		#endregion
 
 		#region threadsafety
 		/// <summary>
 		/// 
 		/// </summary>
-		public bool IncludeDefaultThreadSafety ;
+		public bool IncludeDefaultThreadSafety;
 		/// <summary>
 		/// 
 		/// </summary>
-		public bool StaticMembersDefaultToSafe ;
+		public bool StaticMembersDefaultToSafe;
 		/// <summary>
 		/// 
 		/// </summary>
-		public bool InstanceMembersDefaultToSafe ;
+		public bool InstanceMembersDefaultToSafe;
 
 		#endregion
 	}
