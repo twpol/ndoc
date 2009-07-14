@@ -28,50 +28,43 @@ using Microsoft.Win32;
 using NDoc3.Core;
 using NDoc3.Support;
 
-namespace NDoc3.Documenter.Msdn
-{
+namespace NDoc3.Documenter.Msdn {
 	/// <summary>HTML Help file utilities.</summary>
 	/// <remarks>This class is used by the MsdnHelp documenter
 	/// to create the files needed by the HTML Help compiler.</remarks>
-	public class HtmlHelp
-	{
-		private class Context : IDisposable
-		{
+	public class HtmlHelp {
+		private class Context : IDisposable {
 			public delegate void DisposeCallback();
 
 			private readonly DisposeCallback _disposeCallback;
 
-			public Context()
-			{}
+			public Context() { }
 
-			public Context(DisposeCallback disposeCallback)
-			{
+			public Context(DisposeCallback disposeCallback) {
 				_disposeCallback = ArgUtils.AssertNotNull(disposeCallback, "disposeCallback");
 			}
 
-			public void Dispose()
-			{
+			public void Dispose() {
 				GC.SuppressFinalize(this);
-				if (_disposeCallback != null)
-				{
+				if (_disposeCallback != null) {
 					_disposeCallback();
 				}
 			}
 		}
 
-		private readonly string _directoryName = null;
-		private readonly string _projectName = null;
-		private string _defaultTopic = null;
+		private readonly string _directoryName;
+		private readonly string _projectName;
+		private string _defaultTopic;
 
-		private string _htmlHelpCompiler = null;
+		private string _htmlHelpCompiler;
 
-		private bool _includeFavorites = false;
-		private bool _binaryTOC = false;
-		private short _langID=1033;
+		private bool _includeFavorites;
+		private bool _binaryTOC;
+		private short _langID = 1033;
 
 		private readonly bool _generateTocOnly;
 
-		private StreamWriter streamHtmlHelp = null;
+		private StreamWriter streamHtmlHelp;
 
 		private readonly ArrayList _tocFiles = new ArrayList();
 
@@ -83,11 +76,10 @@ namespace NDoc3.Documenter.Msdn
 		/// <param name="defaultTopic">The default topic for the compiled HTML Help file.</param>
 		/// <param name="generateTocOnly">When true, HtmlHelp only outputs the HHC file and does not compile the CHM.</param>
 		public HtmlHelp(
-			DirectoryInfo targetDirectory, 
-			string projectName, 
+			DirectoryInfo targetDirectory,
+			string projectName,
 			string defaultTopic,
-			bool generateTocOnly)
-		{
+			bool generateTocOnly) {
 			ArgUtils.AssertNotNull(targetDirectory, "targetDirectory");
 			_directoryName = targetDirectory.FullName;
 			_projectName = ArgUtils.AssertNotNull(projectName, "projectName");
@@ -96,14 +88,12 @@ namespace NDoc3.Documenter.Msdn
 		}
 
 		/// <summary>Gets the directory name containing the HTML Help files.</summary>
-		public string DirectoryName
-		{
+		public string DirectoryName {
 			get { return _directoryName; }
 		}
 
 		/// <summary>Gets the HTML Help project name.</summary>
-		public string ProjectName
-		{
+		public string ProjectName {
 			get { return _projectName; }
 		}
 
@@ -112,8 +102,7 @@ namespace NDoc3.Documenter.Msdn
 		/// Setting this to <see langword="true" /> will include the "favorites" 
 		/// tab in the compiled HTML Help file.
 		/// </remarks>
-		public bool IncludeFavorites
-		{
+		public bool IncludeFavorites {
 			get { return _includeFavorites; }
 			set { _includeFavorites = value; }
 		}
@@ -123,8 +112,7 @@ namespace NDoc3.Documenter.Msdn
 		/// Setting this to <see langword="true" /> will force the compiler 
 		/// to create a binary TOC in the chm file.
 		/// </remarks>
-		public bool BinaryTOC
-		{
+		public bool BinaryTOC {
 			get { return _binaryTOC; }
 			set { _binaryTOC = value; }
 		}
@@ -132,33 +120,27 @@ namespace NDoc3.Documenter.Msdn
 		/// <summary>
 		/// 
 		/// </summary>
-		public short LangID
-		{
+		public short LangID {
 			get { return _langID; }
 			set { _langID = value; }
 		}
 
 		/// <summary>Gets or sets the DefaultTopic property.</summary>
-		public string DefaultTopic
-		{
+		public string DefaultTopic {
 			get { return _defaultTopic; }
 			set { _defaultTopic = value; }
 		}
 
 		/// <summary>Gets the path to the Html Help Compiler.</summary>
 		/// <exception cref="PlatformNotSupportedException">NDoc3 is running on unix.</exception>
-		internal string HtmlHelpCompiler
-		{
-			get
-			{
-				if ((int) Environment.OSVersion.Platform == 128) 
-				{
+		internal string HtmlHelpCompiler {
+			get {
+				if ((int)Environment.OSVersion.Platform == 128) {
 					throw new PlatformNotSupportedException(
 						"The HTML Help Compiler is not supported on unix.");
 				}
 
-				if (_htmlHelpCompiler != null && File.Exists(_htmlHelpCompiler))
-				{
+				if (_htmlHelpCompiler != null && File.Exists(_htmlHelpCompiler)) {
 					return _htmlHelpCompiler;
 				}
 
@@ -167,49 +149,41 @@ namespace NDoc3.Documenter.Msdn
 					Environment.GetFolderPath(
 						Environment.SpecialFolder.ProgramFiles),
 					@"HTML Help Workshop\hhc.exe");
-				if (File.Exists(_htmlHelpCompiler))
-				{
+				if (File.Exists(_htmlHelpCompiler)) {
 					return _htmlHelpCompiler;
 				}
 
 				//not in default dir, try to locate it from the registry
 				RegistryKey key = Registry.ClassesRoot.OpenSubKey("hhc.file");
-				if (key != null)
-				{
+				if (key != null) {
 					key = key.OpenSubKey("DefaultIcon");
-					if (key != null)
-					{
+					if (key != null) {
 						object val = key.GetValue(null);
-						if (val != null)
-						{
+						if (val != null) {
 							string hhw = (string)val;
-							if (hhw.Length > 0)
-							{
-								hhw = hhw.Split(new Char[] {','})[0];
+							if (hhw.Length > 0) {
+								hhw = hhw.Split(new[] { ',' })[0];
 								hhw = Path.GetDirectoryName(hhw);
 								_htmlHelpCompiler = Path.Combine(hhw, "hhc.exe");
 							}
 						}
 					}
 				}
-				if (File.Exists(_htmlHelpCompiler))
-				{
+				if (File.Exists(_htmlHelpCompiler)) {
 					return _htmlHelpCompiler;
 				}
 
 				// we still can't find the compiler, see if a location is stored in the machine settings file
-				Settings settings = new Settings( Settings.MachineSettingsFile );
-				string path = settings.GetSetting( "compilers", "htmlHelpWorkshopLocation", "" );
+				Settings settings = new Settings(Settings.MachineSettingsFile);
+				string path = settings.GetSetting("compilers", "htmlHelpWorkshopLocation", "");
 
-				if ( path.Length > 0 )
-				{
+				if (path.Length > 0) {
 					_htmlHelpCompiler = Path.Combine(path, "hhc.exe");
-					if (File.Exists(_htmlHelpCompiler))
-					{
+					if (File.Exists(_htmlHelpCompiler)) {
 						return _htmlHelpCompiler;
 					}
 				}
-	
+
 				//still not finding the compiler, give up
 				throw new DocumenterException(
 					"Unable to find the HTML Help Compiler. Please verify that"
@@ -217,61 +191,51 @@ namespace NDoc3.Documenter.Msdn
 			}
 		}
 
-		private string GetContentsFilename()
-		{
+		private string GetContentsFilename() {
 			return (_tocFiles.Count > 0) ? (string)_tocFiles[0] : string.Empty;
 		}
 
-		private string GetIndexFilename()
-		{
+		private string GetIndexFilename() {
 			return _projectName + ".hhk";
 		}
 
-		private string GetLogFilename()
-		{
+		private string GetLogFilename() {
 			return _projectName + ".log";
 		}
 
-		private string GetCompiledHtmlFilename()
-		{
+		private string GetCompiledHtmlFilename() {
 			return _projectName + ".chm";
 		}
 
 		/// <summary>Gets the path the the HHP file.</summary>
-		public string GetPathToProjectFile()
-		{
+		public string GetPathToProjectFile() {
 			return Path.Combine(_directoryName, _projectName) + ".hhp";
 		}
 
 		/// <summary>Gets the path the the HHC file.</summary>
-		public string GetPathToContentsFile()
-		{
+		public string GetPathToContentsFile() {
 			return Path.Combine(_directoryName, GetContentsFilename());
 		}
 
 		/// <summary>Gets the path the the HHK file.</summary>
-		public string GetPathToIndexFile()
-		{
+		public string GetPathToIndexFile() {
 			return Path.Combine(_directoryName, _projectName) + ".hhk";
 		}
 
 		/// <summary>Gets the path the the LOG file.</summary>
-		public string GetPathToLogFile()
-		{
+		public string GetPathToLogFile() {
 			return Path.Combine(_directoryName, _projectName) + ".log";
 		}
 
 		/// <summary>Gets the path the the CHM file.</summary>
 		/// <returns>The path to the CHM file.</returns>
-		public string GetPathToCompiledHtmlFile()
-		{
+		public string GetPathToCompiledHtmlFile() {
 			return Path.Combine(_directoryName, _projectName) + ".chm";
 		}
 
 		/// <summary>Opens an HTML Help project file for writing.</summary>
-		public IDisposable OpenProjectFile()
-		{
-			if (_generateTocOnly) 
+		public IDisposable OpenProjectFile() {
+			if (_generateTocOnly)
 				return new Context();
 
 			streamHtmlHelp = new StreamWriter(File.Open(GetPathToProjectFile(), FileMode.Create), System.Text.Encoding.Default);
@@ -282,37 +246,23 @@ namespace NDoc3.Documenter.Msdn
 
 		/// <summary>Adds a file to the HTML Help project file.</summary>
 		/// <param name="filename">The filename to add.</param>
-		public void AddFileToProject(string filename)
-		{
-			if (_generateTocOnly) 
+		public void AddFileToProject(string filename) {
+			if (_generateTocOnly)
 				return;
 
 			streamHtmlHelp.WriteLine(filename);
 		}
 
 		/// <summary>Closes the HTML Help project file.</summary>
-		public void CloseProjectFile()
-		{
-			if (_generateTocOnly) 
+		public void CloseProjectFile() {
+			if (_generateTocOnly)
 				return;
 
-			string options;
+			string options = _includeFavorites ? "0x63520,220" : "0x62520,220";
 
-			if (_includeFavorites)
-			{
-				options = "0x63520,220";
-			}
-			else
-			{
-				options = "0x62520,220";						  
-			}
-
-			if (_defaultTopic.Length > 0)
-			{
+			if (_defaultTopic.Length > 0) {
 				options += ",0x387e,[86,51,872,558],,,,,,,0";
-			}
-			else
-			{
+			} else {
 				options += ",0x383e,[86,51,872,558],,,,,,,0";
 			}
 
@@ -335,8 +285,7 @@ namespace NDoc3.Documenter.Msdn
 			string LangIDString = "Language=0x" + _langID.ToString("x") + " " + ci.DisplayName;
 			streamHtmlHelp.WriteLine(LangIDString);
 
-			foreach( string tocFile in _tocFiles )
-			{
+			foreach (string tocFile in _tocFiles) {
 				streamHtmlHelp.WriteLine("Contents file=" + tocFile);
 			}
 
@@ -357,34 +306,28 @@ namespace NDoc3.Documenter.Msdn
 		}
 
 		/// <summary>Opens a HTML Help contents file for writing.</summary>
-		public IDisposable OpenContentsFile(string tocName, bool isDefault)
-		{
+		public IDisposable OpenContentsFile(string tocName, bool isDefault) {
 			// TODO: we would need a more robust way of maintaining the list
 			//       of tocs that have been opened...
 
-			if (tocName == string.Empty)
-			{
+			if (tocName == string.Empty) {
 				tocName = _projectName;
 			}
 
-			if (!tocName.EndsWith(".hhc"))
-			{
+			if (!tocName.EndsWith(".hhc")) {
 				tocName += ".hhc";
 			}
 
-			if (isDefault)
-			{
+			if (isDefault) {
 				_tocFiles.Insert(0, tocName);
-			}
-			else
-			{
-				_tocFiles.Add( tocName );
+			} else {
+				_tocFiles.Add(tocName);
 			}
 
 			// Create the table of contents writer. This can't use
 			// indenting because the HTML Help Compiler doesn't like
 			// newlines between the <LI> and <Object> tags.
-			tocWriter = new XmlTextWriter(Path.Combine(_directoryName, tocName), System.Text.Encoding.Default );
+			tocWriter = new XmlTextWriter(Path.Combine(_directoryName, tocName), System.Text.Encoding.Default);
 
 			// these formatting options cannot be used, because they make the 
 			// Html Help Compiler hang.
@@ -402,8 +345,7 @@ namespace NDoc3.Documenter.Msdn
 		}
 
 		/// <summary>Creates a new "book" in the HTML Help contents file.</summary>
-		public IDisposable OpenBookInContents()
-		{
+		public IDisposable OpenBookInContents() {
 			tocWriter.WriteStartElement("UL");
 			return new Context(CloseBookInContents);
 		}
@@ -412,8 +354,7 @@ namespace NDoc3.Documenter.Msdn
 		/// <param name="headingName">The name as it should appear in the contents.</param>
 		/// <remarks>Adds a topic node with no URL associated with the node into the
 		/// table of contents.</remarks>
-		public void AddFileToContents(string headingName)
-		{
+		public void AddFileToContents(string headingName) {
 			tocWriter.WriteStartElement("LI");
 			tocWriter.WriteStartElement("OBJECT");
 			tocWriter.WriteAttributeString("type", "text/sitemap");
@@ -430,8 +371,7 @@ namespace NDoc3.Documenter.Msdn
 		/// <remarks>Adds a topic node with no URL associated with the node into the
 		/// table of contents.</remarks>
 		/// <param name="icon">The image for this entry.</param>
-		public void AddFileToContents(string headingName, HtmlHelpIcon icon)
-		{
+		public void AddFileToContents(string headingName, HtmlHelpIcon icon) {
 			tocWriter.WriteStartElement("LI");
 			tocWriter.WriteStartElement("OBJECT");
 			tocWriter.WriteAttributeString("type", "text/sitemap");
@@ -450,8 +390,7 @@ namespace NDoc3.Documenter.Msdn
 		/// <summary>Adds a file to the contents file.</summary>
 		/// <param name="headingName">The name as it should appear in the contents.</param>
 		/// <param name="htmlFilename">The filename for this entry.</param>
-		public void AddFileToContents(string headingName, string htmlFilename)
-		{
+		public void AddFileToContents(string headingName, string htmlFilename) {
 			tocWriter.WriteStartElement("LI");
 			tocWriter.WriteStartElement("OBJECT");
 			tocWriter.WriteAttributeString("type", "text/sitemap");
@@ -471,8 +410,7 @@ namespace NDoc3.Documenter.Msdn
 		/// <param name="headingName">The name as it should appear in the contents.</param>
 		/// <param name="htmlFilename">The filename for this entry.</param>
 		/// <param name="icon">The image for this entry.</param>
-		public void AddFileToContents(string headingName, string htmlFilename, HtmlHelpIcon icon)
-		{
+		public void AddFileToContents(string headingName, string htmlFilename, HtmlHelpIcon icon) {
 			tocWriter.WriteStartElement("LI");
 			tocWriter.WriteStartElement("OBJECT");
 			tocWriter.WriteAttributeString("type", "text/sitemap");
@@ -493,23 +431,20 @@ namespace NDoc3.Documenter.Msdn
 		}
 
 		/// <summary>Closes the last opened "book" in the contents file.</summary>
-		public void CloseBookInContents()
-		{
+		public void CloseBookInContents() {
 			tocWriter.WriteEndElement();
 		}
 
 		/// <summary>Closes the contents file.</summary>
-		public void CloseContentsFile()
-		{
+		public void CloseContentsFile() {
 			tocWriter.WriteEndElement();
 			tocWriter.Close();
 		}
 
 		/// <summary>Writes an empty index file.</summary>
 		/// <remarks>The HTML Help Compiler will complain if this file doesn't exist.</remarks>
-		public void WriteEmptyIndexFile()
-		{
-			if (_generateTocOnly) 
+		public void WriteEmptyIndexFile() {
+			if (_generateTocOnly)
 				return;
 
 			// Create an empty index file to avoid compilation errors.
@@ -517,8 +452,7 @@ namespace NDoc3.Documenter.Msdn
 			XmlTextWriter indexWriter = new XmlTextWriter(GetPathToIndexFile(), null);
 
 			// Don't call WriteStartDocument to avoid XML declaration.
-			using (indexWriter)
-			{
+			using (indexWriter) {
 				indexWriter.WriteStartElement("HTML");
 				indexWriter.WriteStartElement("BODY");
 				indexWriter.WriteComment(" http://ndoc3.sourceforge.net/ ");
@@ -529,26 +463,20 @@ namespace NDoc3.Documenter.Msdn
 		}
 
 		/// <summary>Compiles the HTML Help project.</summary>
-		public void CompileProject()
-		{
-			if (_generateTocOnly) 
+		public void CompileProject() {
+			if (_generateTocOnly)
 				return;
 
 			Process helpCompileProcess = new Process();
 
-			try
-			{
-				try
-				{
+			try {
+				try {
 					string path = GetPathToCompiledHtmlFile();
 
-					if (File.Exists(path))
-					{
+					if (File.Exists(path)) {
 						File.Delete(path);
 					}
-				}
-				catch (Exception e)
-				{
+				} catch (Exception e) {
 					throw new DocumenterException("The compiled HTML Help file is probably open.", e);
 				}
 
@@ -566,22 +494,19 @@ namespace NDoc3.Documenter.Msdn
 				helpCompileProcess.StartInfo = processStartInfo;
 
 				// Start the help compile and bail if it takes longer than 10 minutes.
-				Trace.WriteLine( "Compiling Html Help file" );
+				Trace.WriteLine("Compiling Html Help file");
 
-				string stdOut = "";
+				string stdOut;
 
-				try
-				{
+				try {
 					helpCompileProcess.Start();
 
 					// Read the standard output of the spawned process.
 					stdOut = helpCompileProcess.StandardOutput.ReadToEnd();
 					// compiler std out includes a bunch of unneccessary line feeds + new lines
 					// remplace all the line feed and keep the new lines
-					stdOut = stdOut.Replace( "\r", "" );
- 				}
-				catch (Exception e)
-				{
+					stdOut = stdOut.Replace("\r", "");
+				} catch (Exception e) {
 					string msg = String.Format("The HTML Help compiler '{0}' was not found.", HtmlHelpCompiler);
 					throw new DocumenterException(msg, e);
 				}
@@ -593,24 +518,18 @@ namespace NDoc3.Documenter.Msdn
 				//				}
 
 				// Errors return 0 (success or warnings returns 1)
-				if (helpCompileProcess.ExitCode == 0)
-				{
+				if (helpCompileProcess.ExitCode == 0) {
 					string ErrMsg = "The Help compiler reported errors";
-						if (!File.Exists(GetPathToCompiledHtmlFile()))
-						{
-							ErrMsg += " - The CHM file was not been created.";
-						}
+					if (!File.Exists(GetPathToCompiledHtmlFile())) {
+						ErrMsg += " - The CHM file was not been created.";
+					}
 					throw new DocumenterException(ErrMsg + "\n\n" + stdOut);
-				}
-				else
-				{
+				} else {
 					Trace.WriteLine(stdOut);
 				}
 
-				Trace.WriteLine( "Html Help compile complete" );
-			}
-			finally
-			{
+				Trace.WriteLine("Html Help compile complete");
+			} finally {
 				helpCompileProcess.Close();
 			}
 		}
@@ -619,79 +538,78 @@ namespace NDoc3.Documenter.Msdn
 	/// <summary>
 	/// HtmlHelp v1 TOC icons
 	/// </summary>
-	public enum HtmlHelpIcon
-	{
+	public enum HtmlHelpIcon {
 		/// <summary>
 		/// Contents Book
 		/// </summary>
-		Book=1,
+		Book = 1,
 		/// <summary>
 		/// Contents Folder
 		/// </summary>
-		Folder=5,
+		Folder = 5,
 		/// <summary>
 		/// Page with Question Mark
 		/// </summary>
-		Question=9,
+		Question = 9,
 		/// <summary>
 		/// Standard Blank Page
 		/// </summary>
-		Page=11,
+		Page = 11,
 		/// <summary>
 		/// World
 		/// </summary>
-		World=13,
+		World = 13,
 		/// <summary>
 		/// World w IE icon
 		/// </summary>
-		WorldInternetExplorer=15, 
+		WorldInternetExplorer = 15,
 		/// <summary>
 		/// Information
 		/// </summary>
-		Information=17,
+		Information = 17,
 		/// <summary>
 		/// Shortcut
 		/// </summary>
-		Shortcut=19,
+		Shortcut = 19,
 		/// <summary>
 		/// BookPage
 		/// </summary>
-		BookPage=21,
+		BookPage = 21,
 		/// <summary>
 		/// Envelope
 		/// </summary>
-		Envelope=23,
+		Envelope = 23,
 		/// <summary>
 		/// Person
 		/// </summary>
-		Person=27,
+		Person = 27,
 		/// <summary>
 		/// Sound
 		/// </summary>
-		Sound=29,
+		Sound = 29,
 		/// <summary>
 		/// Disc
 		/// </summary>
-		Disc=31,
+		Disc = 31,
 		/// <summary>
 		/// Video
 		/// </summary>
-		Video=33,
+		Video = 33,
 		/// <summary>
 		/// Steps
 		/// </summary>
-		Steps=35,
+		Steps = 35,
 		/// <summary>
 		/// LightBulb
 		/// </summary>
-		LightBulb=37,
+		LightBulb = 37,
 		/// <summary>
 		/// Pencil
 		/// </summary>
-		Pencil=39,
+		Pencil = 39,
 		/// <summary>
 		/// Tool
 		/// </summary>
-		Tool=41
+		Tool = 41
 	}
 }

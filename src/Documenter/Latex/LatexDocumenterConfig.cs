@@ -16,7 +16,6 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-using System;
 using System.IO;
 using System.ComponentModel;
 using System.Drawing.Design;
@@ -25,8 +24,7 @@ using System.Windows.Forms.Design;
 using NDoc3.Core;
 using NDoc3.Core.Reflection;
 
-namespace NDoc3.Documenter.Latex
-{
+namespace NDoc3.Documenter.Latex {
 	/// <summary>
 	/// Summary description for LatexDocumenterConfig.
 	/// </summary>
@@ -36,16 +34,15 @@ namespace NDoc3.Documenter.Latex
 	/// You can download a free one from <a href="http://www.miktex.org">www.MiKTeX.org</a>.</para>
 	/// </remarks>
 	[DefaultProperty("OutputDirectory")]
-	public class LatexDocumenterConfig : BaseReflectionDocumenterConfig
-	{
+	public class LatexDocumenterConfig : BaseReflectionDocumenterConfig {
 		/// <summary>
 		/// Creates a new instance of the class
 		/// </summary>
 		/// <param name="info">Info class descrbing the documenter</param>
-		public LatexDocumenterConfig( LatexDocumenterInfo info ) : base( info )
-		{
+		public LatexDocumenterConfig(LatexDocumenterInfo info)
+			: base(info) {
 			// fix for bug 884121 - OutputDirectory on Linux
-			OutputDirectory = string.Format(".{0}doc{0}",Path.DirectorySeparatorChar );
+			OutputDirectory = string.Format(".{0}doc{0}", Path.DirectorySeparatorChar);
 			TexFileBaseName = "Documentation";
 			LatexCompiler = "latex";
 		}
@@ -54,9 +51,8 @@ namespace NDoc3.Documenter.Latex
 		/// Creates an instance of a documenter <see cref="IDocumenterConfig.CreateDocumenter"/>
 		/// </summary>
 		/// <returns>IDocumenter instance</returns>		
-		public override IDocumenter CreateDocumenter()
-		{
-			return new LatexDocumenter( this );
+		public override IDocumenter CreateDocumenter() {
+			return new LatexDocumenter(this);
 		}
 
 		/// <summary>Gets or sets the output directory.</summary>
@@ -65,15 +61,12 @@ namespace NDoc3.Documenter.Latex
 		[Category("LaTeX")]
 		[Description("The directory to output the files to.")]
 		[Editor(typeof(FolderNameEditor), typeof(UITypeEditor))]
-		public string OutputDirectory
-		{
-			get
-			{
+		public string OutputDirectory {
+			get {
 				return m_OutputDirectory;
 			}
 
-			set
-			{
+			set {
 				m_OutputDirectory = value;
 			}
 		}
@@ -82,27 +75,22 @@ namespace NDoc3.Documenter.Latex
 		/// <summary>Gets the full name of the LaTeX document.</summary>
 		[Category("LaTeX")]
 		[Description("Full name of the LaTeX document.")]
-		public string TextFileFullName
-		{
-			get
-			{
+		public string TextFileFullName {
+			get {
 				return TexFileBaseName + ".tex";
 			}
 		}
-		
+
 		/// <summary>Gets or sets the name of the LaTeX document excluding the file extension.</summary>
 		/// <remarks>Name of the LaTeX document, excluding the file extension.</remarks>
 		[Category("LaTeX")]
 		[Description("Name of the LaTeX document, excluding the file extension.")]
-		public string TexFileBaseName
-		{
-			get
-			{
+		public string TexFileBaseName {
+			get {
 				return m_TexFileBaseName;
 			}
 
-			set
-			{
+			set {
 				m_TexFileBaseName = value;
 			}
 		}
@@ -113,15 +101,12 @@ namespace NDoc3.Documenter.Latex
 		[Category("LaTeX")]
 		[Description("Path to the LaTeX executable (Set to empty if you do not have LaTeX installed).")]
 		[Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
-		public string LatexCompiler
-		{
-			get
-			{
+		public string LatexCompiler {
+			get {
 				return m_LatexCompiler;
 			}
 
-			set
-			{
+			set {
 				m_LatexCompiler = value;
 			}
 		}
@@ -130,13 +115,11 @@ namespace NDoc3.Documenter.Latex
 		/// <summary>Gets the path of the output file.</summary>
 		[Category("LaTeX")]
 		[Description("Full path to the output TeX file.")]
-		public string TexFileFullPath
-		{
-			get
-			{
+		public string TexFileFullPath {
+			get {
 				return Path.Combine(OutputDirectory, TextFileFullName);
 			}
 		}
 	}
-} 
+}
 

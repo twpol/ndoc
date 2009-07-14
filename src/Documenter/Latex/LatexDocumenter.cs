@@ -28,20 +28,17 @@ using System;
 using System.Text;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 using System.Xml;
 using System.Xml.Xsl;
 
 using NDoc3.Core;
 using NDoc3.Core.Reflection;
 
-namespace NDoc3.Documenter.Latex
-{
+namespace NDoc3.Documenter.Latex {
 	/// <summary>
 	/// LaTeX generating documenter class.
 	/// </summary>
-	public class LatexDocumenter: BaseReflectionDocumenter
-	{
+	public class LatexDocumenter : BaseReflectionDocumenter {
 		//private string m_ResourceDirectory;
 
 		private static readonly char[] c_LatexEscapeChars =
@@ -73,17 +70,15 @@ namespace NDoc3.Documenter.Latex
 		/// <remarks>
 		/// The documenter name is set to "LaTeX".
 		/// </remarks>
-		public LatexDocumenter( LatexDocumenterConfig config ) : base( config )
-		{
+		public LatexDocumenter(LatexDocumenterConfig config)
+			: base(config) {
 		}
 
 		/// <summary>
 		/// Gets the Configuration object for this documenter.
 		/// </summary>
-		private LatexDocumenterConfig LatexConfig
-		{
-			get
-			{
+		private LatexDocumenterConfig LatexConfig {
+			get {
 				return (LatexDocumenterConfig)Config;
 			}
 		}
@@ -92,9 +87,8 @@ namespace NDoc3.Documenter.Latex
 		/// <see cref="BaseDocumenter.Build"/>
 		/// </summary>
 		/// <param name="project"></param>
-		public override void Build(Project project)
-		{		
-			Workspace workspace = new LatexWorkspace( WorkingPath );
+		public override void Build(Project project) {
+			Workspace workspace = new LatexWorkspace(WorkingPath);
 			workspace.Clean();
 			workspace.Prepare();
 
@@ -110,54 +104,48 @@ namespace NDoc3.Documenter.Latex
 				File.SetAttributes( fname, FileAttributes.Normal );
 			}
 #else
-		
+
 			EmbeddedResources.WriteEmbeddedResources(
-				this.GetType().Module.Assembly,
+				GetType().Module.Assembly,
 				"NDoc3.Documenter.Latex.xslt",
-				new DirectoryInfo(workspace.ResourceDirectory) );
+				new DirectoryInfo(workspace.ResourceDirectory));
 #endif
 
 			string xmlBuffer = MakeXml(project);
 
 			// Create the output directory if it doesn't exist...
 
-			if (!Directory.Exists(LatexConfig.OutputDirectory))
-			{
+			if (!Directory.Exists(LatexConfig.OutputDirectory)) {
 				Directory.CreateDirectory(LatexConfig.OutputDirectory);
-			}
-			else
-			{
+			} else {
 				// Delete temp files in the output directory.
-				
+
 				OnDocBuildingStep(5, "Deleting temp files from last time...");
 
-				foreach (string s in c_TempFileExtensions)
-				{
+				foreach (string s in c_TempFileExtensions) {
 					File.Delete(LatexConfig.TexFileBaseName + s);
-				}				
+				}
 			}
-						
+
 			OnDocBuildingStep(10, "Scanning document text...");
 
 			XmlDocument doc = new XmlDocument();
 			doc.LoadXml(xmlBuffer);
 			MakeTextTeXCompatible(doc);
-			
+
 			WriteTeXDocument(workspace, doc);
 			CompileTexDocument();
 			workspace.RemoveResourceDirectory();
 		}
 
-		
-		private string WorkingPath
-		{ 
-			get
-			{ 
-				if ( Path.IsPathRooted( LatexConfig.OutputDirectory ) )
-					return LatexConfig.OutputDirectory; 
 
-				return Path.GetFullPath( LatexConfig.OutputDirectory );
-			} 
+		private string WorkingPath {
+			get {
+				if (Path.IsPathRooted(LatexConfig.OutputDirectory))
+					return LatexConfig.OutputDirectory;
+
+				return Path.GetFullPath(LatexConfig.OutputDirectory);
+			}
 		}
 
 		/// <summary>
@@ -165,35 +153,26 @@ namespace NDoc3.Documenter.Latex
 		/// into LaTeX compatable text.
 		/// </summary>
 		/// <param name="node"></param>
-		private void MakeTextTeXCompatible(XmlNode node)
-		{
-			if (node == null)
-			{
+		private static void MakeTextTeXCompatible(XmlNode node) {
+			if (node == null) {
 				return;
 			}
 
-			if (node.NodeType == XmlNodeType.Text)
-			{	
-				StringBuilder builder = new 
+			if (node.NodeType == XmlNodeType.Text) {
+				StringBuilder builder = new
 					StringBuilder(node.Value.Length + (node.Value.Length / 2));
 
-				for (int i = 0; i < node.Value.Length; i++)
-				{
-					char c;
-					
-					c = node.Value[i];
-					
-					if 
-						(Array.IndexOf(LatexDocumenter.c_LatexEscapeChars, c) >= 0)
-					{
+				for (int i = 0; i < node.Value.Length; i++) {
+					char c = node.Value[i];
+
+					if
+						(Array.IndexOf(c_LatexEscapeChars, c) >= 0) {
 						// Replace char with LaTeX escape sequence.
 
 						builder.Append('\\').Append(c);
-					}
-					else
-					{
+					} else {
 						builder.Append(c);
-					}				
+					}
 				}
 
 				node.Value = builder.ToString();
@@ -201,20 +180,16 @@ namespace NDoc3.Documenter.Latex
 
 			// Recursively change all the text in the node's children
 
-			if (node.HasChildNodes)
-			{
-				foreach (XmlNode n in node.ChildNodes)
-				{
+			if (node.HasChildNodes) {
+				foreach (XmlNode n in node.ChildNodes) {
 					MakeTextTeXCompatible(n);
 				}
 			}
 
 			// Change all the text in the attributes as well...
 
-			if (node.Attributes != null)
-			{
-				foreach (XmlAttribute n in node.Attributes)
-				{
+			if (node.Attributes != null) {
+				foreach (XmlAttribute n in node.Attributes) {
 					MakeTextTeXCompatible(n);
 				}
 			}
@@ -227,36 +202,24 @@ namespace NDoc3.Documenter.Latex
 		/// If a PDF or DVI file with the same name as the TeX file exists 
 		/// the path to that file is returned.
 		/// </remarks>
-		public override string MainOutputFile
-		{
-			get
-			{
-				int i;
-				String s, retval;
+		public override string MainOutputFile {
+			get {
+				string retval = "";
 
-				retval = "";
-
-				i = 0;
-
-				foreach (string ext in c_KnownLatexOuputExtensions)
-				{
-					s = Path.Combine(
-						LatexConfig.OutputDirectory, 
-						LatexConfig.TexFileBaseName 
+				foreach (string ext in c_KnownLatexOuputExtensions) {
+					String s = Path.Combine(
+						LatexConfig.OutputDirectory,
+						LatexConfig.TexFileBaseName
 						+ ext);
 
-					if (File.Exists(s))
-					{
+					if (File.Exists(s)) {
 						retval = s;
 
 						break;
 					}
-
-					i++;
 				}
 
-				if (retval == "")
-				{
+				if (retval == "") {
 					retval = LatexConfig.TexFileFullPath;
 				}
 
@@ -267,31 +230,26 @@ namespace NDoc3.Documenter.Latex
 		/// <summary>
 		/// Calls the LaTeX processor to compile the TeX file into a DVI or PDF.
 		/// </summary>
-		private void CompileTexDocument()
-		{
+		private void CompileTexDocument() {
 			Process process;
-			ProcessStartInfo startInfo;
 
-			if (LatexConfig.LatexCompiler == "")
-			{				
+			if (LatexConfig.LatexCompiler == "") {
 				return;
-			}			
-			
-			startInfo = new ProcessStartInfo(LatexConfig.LatexCompiler, 
-				LatexConfig.TextFileFullName);
+			}
+
+			ProcessStartInfo startInfo = new ProcessStartInfo(LatexConfig.LatexCompiler,
+																			  LatexConfig.TextFileFullName);
 
 			startInfo.WorkingDirectory = LatexConfig.OutputDirectory;
-			
+
 			// Run LaTeX twice to resolve references.
 
-			for (int i = 0; i < 2; i++)
-			{
+			for (int i = 0; i < 2; i++) {
 				process = Process.Start(startInfo);
 
 				OnDocBuildingStep(40 + (i * 30), "Compiling TeX file via " + LatexConfig.LatexCompiler + "...");
 
-				if (process == null)
-				{
+				if (process == null) {
 					throw new DocumenterException("Unable to start the LaTeX compiler: ("
 						+ LatexConfig.LatexCompiler + ")");
 				}
@@ -303,22 +261,17 @@ namespace NDoc3.Documenter.Latex
 		/// <summary>
 		/// Uses XSLT to transform the current document into LaTeX source.
 		/// </summary>
-		private void WriteTeXDocument( Workspace workspace, XmlDocument document)
-		{			
-			XmlWriter writer;
-			XsltArgumentList args;
-			XslTransform transform;
-
+		private void WriteTeXDocument(Workspace workspace, XmlDocument document) {
 			OnDocBuildingStep(0, "Loading XSLT files...");
 
-			transform = new XslTransform();			
+			XslTransform transform = new XslTransform();
 			transform.Load(Path.Combine(workspace.ResourceDirectory, "document.xslt"));
 
-			args = new XsltArgumentList();
-			
-			writer = new XmlTextWriter(LatexConfig.TexFileFullPath, 
-				new UTF8Encoding( false ) );
-							
+			XsltArgumentList args = new XsltArgumentList();
+
+			XmlWriter writer = new XmlTextWriter(LatexConfig.TexFileFullPath,
+															 new UTF8Encoding(false));
+
 			OnDocBuildingStep(20, "Building TeX file...");
 
 			//Use new overload so we don't get obsolete warnings - clean compile :)
@@ -327,5 +280,5 @@ namespace NDoc3.Documenter.Latex
 			writer.Close();
 		}
 	}
-} 
+}
 

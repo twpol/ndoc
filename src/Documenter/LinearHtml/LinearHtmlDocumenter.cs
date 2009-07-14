@@ -37,16 +37,11 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
-using System.Xml.Serialization;
 using System.Xml.XPath;
-using System.Xml.Xsl;
-using System.Reflection;
-
 using NDoc3.Core;
 using NDoc3.Core.Reflection;
 
-namespace NDoc3.Documenter.LinearHtml
-{
+namespace NDoc3.Documenter.LinearHtml {
 	/// <summary>
 	/// This creates a linear (serial, more printable) html file from an ndoc3 xml file. 
 	/// This was designed and implemented with the intention that the html will be
@@ -82,8 +77,7 @@ namespace NDoc3.Documenter.LinearHtml
 	///	</para> 
 	///	<para>This has a Main for easier and faster test runs outside of NDoc3.</para>
 	/// </remarks>
-	public class LinearHtmlDocumenter : BaseReflectionDocumenter
-	{
+	public class LinearHtmlDocumenter : BaseReflectionDocumenter {
 		#region Fields
 
 		/// <summary>The main navigator which keeps track of where we
@@ -96,40 +90,33 @@ namespace NDoc3.Documenter.LinearHtml
 		/// <summary>A hashtable from namespace name to Hashtables which
 		/// go from section name (Classes, Interfaces, etc) to XmlTextWriters
 		/// for that section.</summary>
-		Hashtable namespaceWriters; // namespace name -> Hashtables (of writers for each section)
+		readonly Hashtable namespaceWriters; // namespace name -> Hashtables (of writers for each section)
 
 		/// <summary>Hashtable from xml node name to section name. For example
 		/// class to Classes.</summary>
-		Hashtable namespaceSections; // xml node name -> section name
+		readonly Hashtable namespaceSections; // xml node name -> section name
 
 		/// <summary>
 		/// The namespace sections in the order they will be emitted.
 		/// </summary>
-		string[] orderedNamespaceSections = { "interface",
+		readonly string[] orderedNamespaceSections = { "interface",
 				"enumeration", "delegate", "structure", "class" };
 
 		/// <summary>
 		/// A list of Type (class, interface) member types, to specify
 		/// the order in which they should be rendered.
 		/// </summary>
-		string[] orderedMemberTypes = { "constructor", "field", "property", "method" };
+		readonly string[] orderedMemberTypes = { "constructor", "field", "property", "method" };
 
-		private Workspace workspace = null;
-
-		// the Xslt is nowhere near good yet
-		bool useXslt = false;
-
-		/// <summary>This transform can be used for each type. This is incomplete.</summary>
-		XslTransform typeTransform;
+		private Workspace workspace;
 
 		#endregion
 
 		#region Properties
 
 		/// <summary>Cast to my type.</summary>
-		private LinearHtmlDocumenterConfig MyConfig
-		{
-			get { return (LinearHtmlDocumenterConfig) Config; }
+		private LinearHtmlDocumenterConfig MyConfig {
+			get { return (LinearHtmlDocumenterConfig)Config; }
 		}
 
 		#endregion
@@ -139,8 +126,8 @@ namespace NDoc3.Documenter.LinearHtml
 		/// <summary>
 		/// Default constructor.
 		/// </summary>
-		public LinearHtmlDocumenter( LinearHtmlDocumenterConfig config ) : base( config )
-		{
+		public LinearHtmlDocumenter(LinearHtmlDocumenterConfig config)
+			: base(config) {
 			namespaceWriters = new Hashtable();
 
 			namespaceSections = new Hashtable();
@@ -157,9 +144,8 @@ namespace NDoc3.Documenter.LinearHtml
 		#region Main Public API
 
 		/// <summary>See <see cref="IDocumenter"/>.</summary>
-		public override string MainOutputFile 
-		{ 
-			get { return Path.Combine(this.WorkingPath, "linear.html"); } 
+		public override string MainOutputFile {
+			get { return Path.Combine(WorkingPath, "linear.html"); }
 		}
 
 		/// <summary>
@@ -168,17 +154,16 @@ namespace NDoc3.Documenter.LinearHtml
 		/// </summary>
 		/// <param name="fileName">The NDoc3 Xml file to load.</param>
 		/// <returns>bool - always true</returns>
-		public bool Load(string fileName)
-		{
-			#if USE_XML_DOCUMENT
-				XmlDocument doc = new XmlDocument();
-				doc.Load(fileName);
-			#else
+		public bool Load(string fileName) {
+#if USE_XML_DOCUMENT
+			XmlDocument doc = new XmlDocument();
+			doc.Load(fileName);
+#else
 				XPathDocument doc = new XPathDocument(fileName);
-			#endif
+#endif
 
 			xPathNavigator = doc.CreateNavigator();
-			return(true);
+			return (true);
 		}
 
 		/// <summary>
@@ -187,86 +172,75 @@ namespace NDoc3.Documenter.LinearHtml
 		/// </summary>
 		/// <param name="s">The stream to load.</param>
 		/// <returns>bool - always true</returns>
-		public bool Load(Stream s)
-		{
-			#if USE_XML_DOCUMENT
-				XmlDocument doc = new XmlDocument();
-				doc.Load(s);
-			#else
+		public bool Load(Stream s) {
+#if USE_XML_DOCUMENT
+			XmlDocument doc = new XmlDocument();
+			doc.Load(s);
+#else
 				XPathDocument doc = new XPathDocument(s);
-			#endif
+#endif
 
 			xPathNavigator = doc.CreateNavigator();
-			return(true);
+			return (true);
 		}
 
 		/// <summary>See <see cref="IDocumenter"/>.</summary>
-		public override string CanBuild(Project project, bool checkInputOnly)
-		{
-			string result = base.CanBuild(project, checkInputOnly); 
+		public override string CanBuild(Project project, bool checkInputOnly) {
+			string result = base.CanBuild(project, checkInputOnly);
 			if (result != null) { return result; }
 			if (checkInputOnly) { return null; }
 
 			// test if output file is open
-			string path = this.MainOutputFile;
+			string path = MainOutputFile;
 			string temp = Path.Combine(MyConfig.OutputDirectory, "~lhtml.tmp");
 
-			try
-			{
-				if (File.Exists(path))
-				{
+			try {
+				if (File.Exists(path)) {
 					//if we can move the file, then it is not open...
 					File.Move(path, temp);
 					File.Move(temp, path);
 				}
-			}
-			catch (Exception)
-			{
+			} catch (Exception) {
 				result = "The output file is probably open.\nPlease close it and try again.";
 			}
 
 			return result;
 		}
 
-		private string WorkingPath
-		{ 
-			get
-			{ 
-				if ( Path.IsPathRooted( MyConfig.OutputDirectory ) )
-					return MyConfig.OutputDirectory; 
+		private string WorkingPath {
+			get {
+				if (Path.IsPathRooted(MyConfig.OutputDirectory))
+					return MyConfig.OutputDirectory;
 
-				return Path.GetFullPath( MyConfig.OutputDirectory );
-			} 
+				return Path.GetFullPath(MyConfig.OutputDirectory);
+			}
 		}
 
 		/// <summary>See <see cref="IDocumenter"/>.</summary>
-		public override void Build(Project project)
-		{
-			try
-			{
+		public override void Build(Project project) {
+			try {
 				OnDocBuildingStep(0, "Initializing...");
 
-				this.workspace = new LinearHtmlWorkspace( this.WorkingPath );
+				workspace = new LinearHtmlWorkspace(WorkingPath);
 				workspace.Clean();
 				workspace.Prepare();
 
-				workspace.AddResourceDirectory( "xslt" );
+				workspace.AddResourceDirectory("xslt");
 
-// Define this when you want to edit the stylesheets
-// without having to shutdown the application to rebuild.
+				// Define this when you want to edit the stylesheets
+				// without having to shutdown the application to rebuild.
 #if NO_RESOURCES
 				// copy all of the xslt source files into the workspace
-				DirectoryInfo xsltSource = new DirectoryInfo( Path.GetFullPath(Path.Combine(
-					System.Windows.Forms.Application.StartupPath, @"..\..\..\Documenter\LinearHtml\xslt") ) );
+				DirectoryInfo xsltSource = new DirectoryInfo(Path.GetFullPath(Path.Combine(
+					System.Windows.Forms.Application.StartupPath, @"..\..\..\Documenter\LinearHtml\xslt")));
 
-				foreach ( FileInfo f in xsltSource.GetFiles( "*.xslt" ) )
-				{
-					string destPath = Path.Combine( Path.Combine( workspace.ResourceDirectory, "xslt" ), f.Name );
+				foreach (FileInfo f in xsltSource.GetFiles("*.xslt")) {
+					string destPath = Path.Combine(Path.Combine(workspace.ResourceDirectory, "xslt"), f.Name);
 					// change to allow overwrite if clean-up failed last time
-					if (File.Exists(destPath)) File.SetAttributes( destPath, FileAttributes.Normal );
-					f.CopyTo( destPath, true );
+					if (File.Exists(destPath)) File.SetAttributes(destPath, FileAttributes.Normal);
+					f.CopyTo(destPath, true);
 					// set attributes to allow delete later
-					File.SetAttributes( destPath, FileAttributes.Normal );
+					File.SetAttributes(destPath, FileAttributes.Normal);
 				}
 #else
 				EmbeddedResources.WriteEmbeddedResources(this.GetType().Module.Assembly,
@@ -275,19 +249,17 @@ namespace NDoc3.Documenter.LinearHtml
 #endif
 
 				// Create the html output directory if it doesn't exist.
-				if (!Directory.Exists(MyConfig.OutputDirectory))
-				{
+				if (!Directory.Exists(MyConfig.OutputDirectory)) {
 					Directory.CreateDirectory(MyConfig.OutputDirectory);
 				}
 
 				// Write the embedded css files to the html output directory
-				EmbeddedResources.WriteEmbeddedResources(this.GetType().Module.Assembly,
+				EmbeddedResources.WriteEmbeddedResources(GetType().Module.Assembly,
 					"NDoc3.Documenter.LinearHtml.css", new DirectoryInfo(MyConfig.OutputDirectory));
 
 				// Write the external files (FilesToInclude) to the html output directory
-				foreach( string srcFile in MyConfig.FilesToInclude.Split( '|' ) )
-				{
-					if ((srcFile == null) || (srcFile.Length == 0))
+				foreach (string srcFile in MyConfig.FilesToInclude.Split('|')) {
+					if (string.IsNullOrEmpty(srcFile))
 						continue;
 
 					string dstFile = Path.Combine(MyConfig.OutputDirectory, Path.GetFileName(srcFile));
@@ -301,10 +273,9 @@ namespace NDoc3.Documenter.LinearHtml
 				string tempFileName = null;
 
 				// Will hold the DOM representation of the XML doc
-				XmlDocument xmlDocumentation = null;
+				XmlDocument xmlDocumentation;
 
-				try 
-				{
+				try {
 					// determine temp file name
 					tempFileName = Path.GetTempFileName();
 					// Let the Documenter base class do it's thing.
@@ -312,11 +283,8 @@ namespace NDoc3.Documenter.LinearHtml
 					// Load the XML into DOM
 					xmlDocumentation = new XmlDocument();
 					xmlDocumentation.Load(tempFileName);
-				} 
-				finally 
-				{
-					if (tempFileName != null && File.Exists(tempFileName)) 
-					{
+				} finally {
+					if (tempFileName != null && File.Exists(tempFileName)) {
 						File.Delete(tempFileName);
 					}
 				}
@@ -333,20 +301,17 @@ namespace NDoc3.Documenter.LinearHtml
 
 				// check for documentable types
 				XmlNodeList typeNodes = xmlDocumentation.SelectNodes("/ndoc/assembly/module/namespace/*[name()!='documentation']");
-
-				if (typeNodes.Count == 0)
-				{
+				if(typeNodes == null) throw new Exception("No type nodes available");
+				if (typeNodes.Count == 0) {
 					throw new DocumenterException("There are no documentable types in this project.\n\nAny types that exist in the assemblies you are documenting have been excluded by the current visibility settings.\nFor example, you are attempting to document an internal class, but the 'DocumentInternals' visibility setting is set to False.\n\nNote: C# defaults to 'internal' if no accessibilty is specified, which is often the case for Console apps created in VS.NET...");
 				}
 
 				// create and write the html
 				OnDocBuildingStep(50, "Generating HTML page...");
-				MakeHtml(this.MainOutputFile);
+				MakeHtml(MainOutputFile);
 				OnDocBuildingStep(100, "Done.");
 				workspace.Clean();
-			}
-			catch(Exception ex)
-			{
+			} catch (Exception ex) {
 				throw new DocumenterException(ex.Message, ex);
 			}
 		}
@@ -359,8 +324,7 @@ namespace NDoc3.Documenter.LinearHtml
 		/// Setup any text writers.
 		/// </summary>
 		/// <returns></returns>
-		private bool StartWriters()
-		{
+		private void StartWriters() {
 			// namespace list
 			namespaceListWriter = new XmlTextWriter(new MemoryStream(), Encoding.UTF8);
 
@@ -368,54 +332,42 @@ namespace NDoc3.Documenter.LinearHtml
 			namespaceListWriter.WriteElementString("p", "The namespaces specified in this document are:");
 
 			// table
-			if (MyConfig.UseNamespaceDocSummaries)
-			{
+			if (MyConfig.UseNamespaceDocSummaries) {
 				string[] columnNames = { "Namespace", "Assembly", "Summary" };
 				StartTable(namespaceListWriter, "NamespaceListTable", 600, columnNames);
-			}
-			else
-			{
+			} else {
 				string[] columnNames = { "Namespace", "Assembly" };
 				StartTable(namespaceListWriter, "NamespaceListTable", 600, columnNames);
 			}
-
-			return(true);
 		}
 
 		/// <summary>
 		/// Do whatever is neccesary to any writers before emitting html.
 		/// </summary>
 		/// <returns></returns>
-		private bool EndWriters()
-		{
+		private void EndWriters() {
 			namespaceListWriter.WriteEndElement(); // table
 			namespaceListWriter.Flush();
-
-			return(true);
 		}
 
 		/// <summary>
 		/// Close all writers.  They need to be re-created for the next build.
 		/// </summary>
 		/// <returns></returns>
-		private bool DeleteWriters()
-		{
+		private void DeleteWriters() {
 			if (namespaceListWriter != null) namespaceListWriter.Close();
 			namespaceListWriter = null;
 
 			ArrayList nsSectionList = new ArrayList(orderedNamespaceSections);
 			nsSectionList.Insert(0, "typeList"); // use this for the type list too
 
-			foreach(string namespaceName in namespaceWriters.Keys)
-			{
+			foreach (string namespaceName in namespaceWriters.Keys) {
 				Hashtable nsSectionWriters = (Hashtable)namespaceWriters[namespaceName];
 
-				foreach(string sectionKey in nsSectionList)
-				{
+				foreach (string sectionKey in nsSectionList) {
 					string sectionName = (string)namespaceSections[sectionKey];
 					XmlTextWriter xtw = (XmlTextWriter)nsSectionWriters[sectionName];
-					if (xtw != null) 
-					{
+					if (xtw != null) {
 						xtw.Close();
 						nsSectionWriters.Remove(sectionName);
 					}
@@ -425,8 +377,6 @@ namespace NDoc3.Documenter.LinearHtml
 			}
 
 			namespaceWriters.Clear();
-
-			return(true);
 		}
 
 		/// <summary>
@@ -435,15 +385,13 @@ namespace NDoc3.Documenter.LinearHtml
 		/// </summary>
 		/// <param name="namespaceName">C# namespace name, not xml namespace.</param>
 		/// <param name="sectionName">The section name, such as Classes.</param>
-		void StartNamespaceSectionWriter(string namespaceName, string sectionName)
-		{
-			if (!namespaceWriters.ContainsKey(namespaceName)) 
+		void StartNamespaceSectionWriter(string namespaceName, string sectionName) {
+			if (!namespaceWriters.ContainsKey(namespaceName))
 				namespaceWriters.Add(namespaceName, new Hashtable());
 
 			Hashtable nsSectionWriters = (Hashtable)namespaceWriters[namespaceName];
-			if (!nsSectionWriters.ContainsKey(sectionName))
-			{
-				Trace.WriteLine(String.Format("Added section writer: ns {0} section {1}", 
+			if (!nsSectionWriters.ContainsKey(sectionName)) {
+				Trace.WriteLine(String.Format("Added section writer: ns {0} section {1}",
 					namespaceName, sectionName));
 				nsSectionWriters.Add(sectionName, new XmlTextWriter(new MemoryStream(),
 					Encoding.UTF8));
@@ -452,17 +400,14 @@ namespace NDoc3.Documenter.LinearHtml
 				//xtw.Formatting = Formatting.Indented;
 				xtw.Indentation = 4;
 
-				if (sectionName.Equals("Type List"))
-				{
+				if (sectionName.Equals("Type List")) {
 					// make this a potential link target (for the namespace)
 					xtw.WriteStartElement("h2");
 					xtw.WriteAttributeString("id", GetNamespaceHtmlId(namespaceName));
 					xtw.WriteString(String.Format("{0} {1}", namespaceName, sectionName));
 					//xtw.WriteString(sectionName);
 					xtw.WriteEndElement();
-				}
-				else
-				{
+				} else {
 					xtw.WriteElementString("h2", String.Format("{0} {1}", namespaceName, sectionName));
 					//xtw.WriteElementString("h2", sectionName);
 				}
@@ -479,17 +424,16 @@ namespace NDoc3.Documenter.LinearHtml
 		/// </summary>
 		/// <param name="s"></param>
 		/// <returns></returns>
-		public static string ToSimpleType(string s)
-		{
-			if ((s == null) || (s == string.Empty)) return(string.Empty);
+		public static string ToSimpleType(string s) {
+			if (string.IsNullOrEmpty(s)) return (string.Empty);
 
 			Type type = Type.GetType(s);
-			if (type == null) return(TypeBaseName(s));
+			if (type == null) return (TypeBaseName(s));
 
 			TypeCode code = Type.GetTypeCode(type);
-			if (code.Equals(TypeCode.Object)) return(TypeBaseName(s));
+			if (code.Equals(TypeCode.Object)) return (TypeBaseName(s));
 
-			return(code.ToString());
+			return (code.ToString());
 		}
 
 		/// <summary>
@@ -498,12 +442,11 @@ namespace NDoc3.Documenter.LinearHtml
 		/// </summary>
 		/// <param name="typeAccess"></param>
 		/// <returns></returns>
-		public static string ToAccessDeclaration(string typeAccess)
-		{
-			if ((typeAccess == null) || (typeAccess == string.Empty)) return(string.Empty);
+		public static string ToAccessDeclaration(string typeAccess) {
+			if (string.IsNullOrEmpty(typeAccess)) return (string.Empty);
 			string lcTypeAccess = Char.ToLower(typeAccess[0]) + typeAccess.Substring(1);
-			if (lcTypeAccess.Equals("family")) return("protected");
-			else return(lcTypeAccess);
+			if (lcTypeAccess.Equals("family")) return ("protected");
+			return (lcTypeAccess);
 		}
 
 		/// <summary>
@@ -512,12 +455,11 @@ namespace NDoc3.Documenter.LinearHtml
 		/// </summary>
 		/// <param name="typeName"></param>
 		/// <returns></returns>
-		public static string TypeBaseName(string typeName)
-		{
-			if ((typeName == null) || (typeName == string.Empty)) return(string.Empty);
+		public static string TypeBaseName(string typeName) {
+			if (string.IsNullOrEmpty(typeName)) return (string.Empty);
 			if (typeName.IndexOf(".") >= 0)
-				return(typeName.Substring(typeName.LastIndexOf(".") + 1));
-			else return(typeName);
+				return (typeName.Substring(typeName.LastIndexOf(".") + 1));
+			return (typeName);
 		}
 
 		#endregion
@@ -535,21 +477,18 @@ namespace NDoc3.Documenter.LinearHtml
 		/// <param name="localName">The localname to select.</param>
 		/// <param name="nav">The XPathNavigator.</param>
 		/// <returns>A new ArrayList of XPathNavigators.</returns>
-		ArrayList GetChildren(XPathNavigator nav, string localName)
-		{
+		static ArrayList GetChildren(XPathNavigator nav, string localName) {
 			ArrayList list = new ArrayList();
 
 			XPathNavigator children = nav.Clone();
 			children.MoveToFirstChild();
-			do
-			{
-				if (children.LocalName.Equals(localName))
-				{
+			do {
+				if (children.LocalName.Equals(localName)) {
 					list.Add(children.Clone());
 				}
-			} while(children.MoveToNext());
+			} while (children.MoveToNext());
 
-			return(list);
+			return (list);
 		}
 
 		/// <summary>
@@ -560,17 +499,15 @@ namespace NDoc3.Documenter.LinearHtml
 		/// <param name="localName">The localname to select.</param>
 		/// <param name="nav">The XPathNavigator.</param>
 		/// <returns>A new ArrayList of XPathNavigators.</returns>
-		ArrayList GetDescendants(XPathNavigator nav, string localName)
-		{
+		static ArrayList GetDescendants(XPathNavigator nav, string localName) {
 			ArrayList list = new ArrayList();
 
 			XPathNodeIterator iter = nav.SelectDescendants(localName, "", false);
-			while(iter.MoveNext())
-			{
+			while (iter.MoveNext()) {
 				list.Add(iter.Current.Clone());
 			}
 
-			return(list);
+			return (list);
 		}
 
 		/// <summary>
@@ -588,32 +525,30 @@ namespace NDoc3.Documenter.LinearHtml
 		/// <param name="localName">The localName of child nodes to select.</param>
 		/// <returns>The SortedList of child node attribute values to 
 		/// XPathNavigators.</returns>
-		SortedList GetSortedChildren(XPathNavigator nav, string localName, string attrName)
-		{
+		static SortedList GetSortedChildren(XPathNavigator nav, string localName, string attrName) {
 			SortedList sortedList = new SortedList();
 
 			XPathNavigator children = nav.Clone();
 			children.MoveToFirstChild();
-			do
-			{
-				if (children.LocalName.Equals(localName))
-				{
+			do {
+				if (children.LocalName.Equals(localName)) {
 					string attrVal = children.GetAttribute(attrName, string.Empty);
 					sortedList.Add(attrVal, children.Clone());
 				}
-			} while(children.MoveToNext());
+			} while (children.MoveToNext());
 
-			return(sortedList);
+			return (sortedList);
 		}
 
 		/// <summary>
 		/// Fix code node such that it will be rendered correctly (using pre).
 		/// </summary>
 		/// <param name="topNode"></param>
-		private void FixCodeNodes(XmlNode topNode)
-		{
-			foreach(XmlNode codeNode in topNode.SelectNodes("descendant::code"))
-			{
+		private static void FixCodeNodes(XmlNode topNode) {
+			if(topNode == null) throw new ArgumentNullException("topNode");
+			XmlNodeList nodes = topNode.SelectNodes("descendant::code");
+			if(nodes == null) throw new Exception("topNode does not contain any code section");
+			foreach (XmlNode codeNode in nodes) {
 				codeNode.InnerXml = "<pre class=\"code\">" + codeNode.InnerXml + "</pre>";
 			}
 		}
@@ -624,51 +559,46 @@ namespace NDoc3.Documenter.LinearHtml
 		/// </summary>
 		/// <param name="nav"></param>
 		/// <returns></returns>
-		private string GetNodeXmlFixCode(XPathNavigator nav)
-		{
-			if (nav == null) return(string.Empty);
+		private static string GetNodeXmlFixCode(XPathNavigator nav) {
+			if (nav == null) return (string.Empty);
 
 			// want the XmlNode if possible (depends on whether nav came from
 			// XmlDocument or XPathDocument).
 			// Can't seem to get raw xml from the navigator in the XPathDocument case.
 			// Don't know another way to test the cast, and it must be slow on exception
-			string s = string.Empty;
-			try
-			{
+			string s;
+			try {
 				XmlNode n = ((IHasXmlNode)nav).GetNode();
 				FixCodeNodes(n); // change <code> to <pre class="code">
 				s = n.InnerXml;
-			}
-			catch(Exception) 
-			{
+			} catch (Exception) {
 				s = nav.Value;
 			}
-			return(s);
+			return (s);
 		}
 
-		private void WriteNodeFixCode(XmlTextWriter xtw, XPathNavigator nav,
-			string elemType)
-		{
+		private static void WriteNodeFixCode(XmlTextWriter xtw, XPathNavigator nav,
+			string elemType) {
 			xtw.WriteStartElement(elemType);
 			xtw.WriteRaw(GetNodeXmlFixCode(nav));
 			xtw.WriteEndElement();
 		}
 
-	/* doesn't work because can't modify node via XPathNavigator
-				/// <summary>
-				/// Fix code nodes such that it will be rendered correctly (using pre).
-				/// </summary>
-				/// <param name="topNode"></param>
-				private void FixCodeNodes(XPathNavigator nav)
-				{
-					XPathNodeIterator iter = nav.SelectDescendants("code", string.Empty, true);
-					while(iter.MoveNext())
+		/* doesn't work because can't modify node via XPathNavigator
+					/// <summary>
+					/// Fix code nodes such that it will be rendered correctly (using pre).
+					/// </summary>
+					/// <param name="topNode"></param>
+					private void FixCodeNodes(XPathNavigator nav)
 					{
-						XPathNavigator n = iter.Current;
-						n.Value = "<pre class=\"code\">" + n.Value + "</pre>";
+						XPathNodeIterator iter = nav.SelectDescendants("code", string.Empty, true);
+						while(iter.MoveNext())
+						{
+							XPathNavigator n = iter.Current;
+							n.Value = "<pre class=\"code\">" + n.Value + "</pre>";
+						}
 					}
-				}
-		*/
+			*/
 
 		/// <summary>
 		/// Return a new XPathNavigator pointing to the first descendant node
@@ -678,13 +608,12 @@ namespace NDoc3.Documenter.LinearHtml
 		/// <param name="startNavigator">Initial node to start search from.</param>
 		/// <returns>An XPathNavigator pointing to the specified descendant, or null
 		/// for not found.</returns>
-		XPathNavigator GetDescendantNodeWithName(XPathNavigator startNavigator, string nodeName)
-		{
+		static XPathNavigator GetDescendantNodeWithName(XPathNavigator startNavigator, string nodeName) {
 			XPathNodeIterator xni = startNavigator.SelectDescendants(nodeName, "", false);
 			xni.MoveNext();
 			if (xni.Current.ComparePosition(startNavigator) == XmlNodeOrder.Same)
-				return(null);
-			else return(xni.Current);
+				return (null);
+			return (xni.Current);
 		}
 
 		/// <summary>
@@ -695,34 +624,13 @@ namespace NDoc3.Documenter.LinearHtml
 		/// <param name="startNavigator">Initial node to start search from.</param>
 		/// <returns>An XPathNavigator pointing to the specified child, or null
 		/// for not found.</returns>
-		XPathNavigator GetChildNodeWithName(XPathNavigator startNavigator, string nodeName)
-		{
+		static XPathNavigator GetChildNodeWithName(XPathNavigator startNavigator, string nodeName) {
 			XPathNavigator children = startNavigator.Clone();
 			children.MoveToFirstChild();
-			do
-			{
-				if (children.LocalName.Equals(nodeName)) return(children);
-			} while(children.MoveToNext());
-			return(null);
-		}
-
-		/// <summary>
-		/// For debugging, display the node local names starting from
-		/// a particular node.
-		/// </summary>
-		/// <param name="nav">The start point.</param>
-		/// <param name="prefix">An indentation prefix for the display.</param>
-		void DumpNavTree(XPathNavigator nav, string prefix)
-		{
-			XPathNavigator n = nav.Clone();
-			Console.WriteLine("{0} {1}", prefix, n.LocalName);
-
-			// display children of specified node, recursively
-			n.MoveToFirstChild();
-			do
-			{
-				if (n.HasChildren) DumpNavTree(n, prefix + "    ");
-			} while(n.MoveToNext());
+			do {
+				if (children.LocalName.Equals(nodeName)) return (children);
+			} while (children.MoveToNext());
+			return (null);
 		}
 
 		#endregion
@@ -734,9 +642,8 @@ namespace NDoc3.Documenter.LinearHtml
 		/// </summary>
 		/// <param name="namespaceName"></param>
 		/// <returns></returns>
-		private string GetNamespaceHtmlId(string namespaceName)
-		{
-			return(namespaceName + "_nsId");
+		private static string GetNamespaceHtmlId(string namespaceName) {
+			return (namespaceName + "_nsId");
 		}
 
 		/// <summary>
@@ -744,9 +651,8 @@ namespace NDoc3.Documenter.LinearHtml
 		/// </summary>
 		/// <param name="typeName"></param>
 		/// <returns></returns>
-		private string GetTypeHtmlId(string typeName)
-		{
-			return(typeName + "_typeId");
+		private static string GetTypeHtmlId(string typeName) {
+			return (typeName + "_typeId");
 		}
 
 		/// <summary>
@@ -755,10 +661,9 @@ namespace NDoc3.Documenter.LinearHtml
 		/// </summary>
 		/// <param name="namespaceName">The string to wrap.</param>
 		/// <returns>The wrapped string.</returns>
-		private string NamespaceLinkReferenceWrap(string namespaceName)
-		{
+		private static string NamespaceLinkReferenceWrap(string namespaceName) {
 			// what tag should I use?  I just want the class
-			return("<A href=\"#" + GetNamespaceHtmlId(namespaceName) 
+			return ("<A href=\"#" + GetNamespaceHtmlId(namespaceName)
 				+ "\">" + namespaceName + "</A>");
 		}
 
@@ -768,10 +673,9 @@ namespace NDoc3.Documenter.LinearHtml
 		/// </summary>
 		/// <param name="typeName">The string to wrap.</param>
 		/// <returns>The wrapped string.</returns>
-		private string TypeLinkReferenceWrap(string typeName)
-		{
+		private static string TypeLinkReferenceWrap(string typeName) {
 			// what tag should I use?  I just want the class
-			return("<A href=\"#" + GetTypeHtmlId(typeName) 
+			return ("<A href=\"#" + GetTypeHtmlId(typeName)
 				+ "\">" + typeName + "</A>");
 		}
 
@@ -781,10 +685,9 @@ namespace NDoc3.Documenter.LinearHtml
 		/// </summary>
 		/// <param name="s">The string to wrap.</param>
 		/// <returns>The wrapped string.</returns>
-		private string TypeRefWrap(string s)
-		{
+		private static string TypeRefWrap(string s) {
 			// what tag should I use?  I just want the class
-			return("<span class=\"typeRef\">" + s + "</span>");
+			return ("<span class=\"typeRef\">" + s + "</span>");
 		}
 
 		/// <summary>
@@ -793,10 +696,9 @@ namespace NDoc3.Documenter.LinearHtml
 		/// </summary>
 		/// <param name="s">The string to wrap.</param>
 		/// <returns>The wrapped string.</returns>
-		private string KeyWrap(string s)
-		{
+		private static string KeyWrap(string s) {
 			// what tag should I use?  I just want the class
-			return("<span class=\"keyWord\">" + s + "</span>");
+			return ("<span class=\"keyWord\">" + s + "</span>");
 		}
 
 		/// <summary>
@@ -808,9 +710,8 @@ namespace NDoc3.Documenter.LinearHtml
 		/// <param name="columnNames">An array of column names to use
 		/// in the header row. This also sets the number of columns.</param>
 		/// <returns>bool - true</returns>
-		private bool StartTable(XmlTextWriter xtw, string id, int width, 
-			string[] columnNames)
-		{
+		private static void StartTable(XmlTextWriter xtw, string id, int width,
+			string[] columnNames) {
 			xtw.WriteStartElement("TABLE");
 			xtw.WriteAttributeString("class", "dtTable");
 			xtw.WriteAttributeString("id", id);
@@ -819,15 +720,13 @@ namespace NDoc3.Documenter.LinearHtml
 			xtw.WriteAttributeString("width", String.Format("{0}", width));
 			xtw.WriteAttributeString("border", "1");
 			xtw.WriteStartElement("TR");
-			foreach(string colName in columnNames)
-			{
+			foreach (string colName in columnNames) {
 				xtw.WriteStartElement("TH");
 				xtw.WriteAttributeString("style", "background:#FFFFCA");
 				xtw.WriteString(colName);
 				xtw.WriteEndElement();
 			}
 			xtw.WriteEndElement(); // TR
-			return(true);
 		}
 
 		/// <summary>
@@ -836,13 +735,10 @@ namespace NDoc3.Documenter.LinearHtml
 		/// </summary>
 		/// <param name="xtw"></param>
 		/// <param name="args">The strings to write.</param>
-		private void AddTableEntry(XmlTextWriter xtw, params object[] args)
-		{
-			if ((args != null) && (args.Length > 0))
-			{
+		private static void AddTableEntry(XmlTextWriter xtw, params object[] args) {
+			if ((args != null) && (args.Length > 0)) {
 				xtw.WriteStartElement("TR");
-				foreach(string s in args)
-				{
+				foreach (string s in args) {
 					xtw.WriteElementString("TD", s);
 				}
 				xtw.WriteEndElement(); // TR
@@ -855,13 +751,10 @@ namespace NDoc3.Documenter.LinearHtml
 		/// </summary>
 		/// <param name="xtw"></param>
 		/// <param name="args">The strings to write.</param>
-		private void AddTableEntryRaw(XmlTextWriter xtw, params object[] args)
-		{
-			if ((args != null) && (args.Length > 0))
-			{
+		private static void AddTableEntryRaw(XmlTextWriter xtw, params object[] args) {
+			if ((args != null) && (args.Length > 0)) {
 				xtw.WriteStartElement("TR");
-				foreach(string s in args)
-				{
+				foreach (string s in args) {
 					xtw.WriteStartElement("TD");
 					xtw.WriteRaw(s);
 					xtw.WriteEndElement();
@@ -875,8 +768,7 @@ namespace NDoc3.Documenter.LinearHtml
 		/// something else I have to write in tables in the future.
 		/// </summary>
 		/// <param name="xtw"></param>
-		private void EndTable(XmlTextWriter xtw)
-		{
+		private static void EndTable(XmlTextWriter xtw) {
 			xtw.WriteEndElement(); // TABLE
 		}
 
@@ -890,30 +782,23 @@ namespace NDoc3.Documenter.LinearHtml
 		/// Build and emit the html document from the loaded NDoc3 Xml document.
 		/// </summary>
 		/// <returns></returns>
-		private bool MakeHtml(string outputFileName)
-		{
+		private void MakeHtml(string outputFileName) {
 			StartWriters();
 			XPathNavigator assyNav = GetDescendantNodeWithName(xPathNavigator, "assembly");
 
 			// for each assembly...
-			do 
-			{
-				if (assyNav.Name == "assembly")
-				{
+			do {
+				if (assyNav.Name == "assembly") {
 					MakeHtmlForAssembly(assyNav);
-				}
-				else
-				{
-					Trace.WriteLine(String.Format("Skipping non-assembly node name {0}", 
+				} else {
+					Trace.WriteLine(String.Format("Skipping non-assembly node name {0}",
 						assyNav.Name));
 				}
-			} while(assyNav.MoveToNext());
+			} while (assyNav.MoveToNext());
 
 			EndWriters(); // prep for emit
 			EmitHtml(outputFileName);
 			DeleteWriters(); // close them so re-build doesn't accumulate html
-
-			return(true);
 		}
 
 		/// <summary>
@@ -922,19 +807,17 @@ namespace NDoc3.Documenter.LinearHtml
 		/// </summary>
 		/// <param name="nav">The XPathNavigator pointing to a node of type
 		/// appropriate for this method.</param>
-		void MakeHtmlForAssembly(XPathNavigator nav)
-		{
+		void MakeHtmlForAssembly(XPathNavigator nav) {
 			string assemblyName = nav.GetAttribute("name", "");
 			string assemblyVersion = nav.GetAttribute("version", "");
 			Console.WriteLine("Assembly: {0}, {1}", assemblyName, assemblyVersion);
 			nav.MoveToFirstChild();
 
 			// foreach module...
-			do 
-			{
+			do {
 				Trace.WriteLine(String.Format("Making HTML for assembly {0}", assemblyName));
 				MakeHtmlForModule(nav, assemblyName, assemblyVersion);
-			} while(nav.MoveToNext());
+			} while (nav.MoveToNext());
 
 			nav.MoveToParent();
 		}
@@ -945,19 +828,17 @@ namespace NDoc3.Documenter.LinearHtml
 		/// </summary>
 		/// <param name="nav">The <see cref="XPathNavigator" /> pointing to a 
 		/// node of a type that's appropriate for this method.</param>
-        /// <param name="assemblyName">The name of the assembly containing the module.</param>
-        /// <param name="assemblyVersion">The version of the assembly containing the module.</param>
-        void MakeHtmlForModule(XPathNavigator nav, string assemblyName, string assemblyVersion)
-		{
+		/// <param name="assemblyName">The name of the assembly containing the module.</param>
+		/// <param name="assemblyVersion">The version of the assembly containing the module.</param>
+		void MakeHtmlForModule(XPathNavigator nav, string assemblyName, string assemblyVersion) {
 			//string moduleName = nav.GetAttribute("name", "");
 			Console.WriteLine("Module: {0}", nav.GetAttribute("name", ""));
 			nav.MoveToFirstChild();
 
 			// foreach namespace
-			do 
-			{
+			do {
 				MakeHtmlForNamespace(nav, assemblyName, assemblyVersion);
-			} while(nav.MoveToNext());
+			} while (nav.MoveToNext());
 
 			nav.MoveToParent();
 		}
@@ -970,18 +851,14 @@ namespace NDoc3.Documenter.LinearHtml
 		/// node of a type that's appropriate for this method.</param>
 		/// <param name="assemblyName">The name of the assembly containing this namespace.</param>
 		/// <param name="assemblyVersion">The version of the assembly containing this namespace.</param>
-		void MakeHtmlForNamespace(XPathNavigator nav, string assemblyName, string assemblyVersion)
-		{
+		void MakeHtmlForNamespace(XPathNavigator nav, string assemblyName, string assemblyVersion) {
 			string namespaceName = nav.GetAttribute("name", "");
 
 			// skip this namespace based on regex
-			if ((MyConfig.NamespaceExcludeRegexp != null) 
-				&& (MyConfig.NamespaceExcludeRegexp.Length > 0))
-			{
+			if (!string.IsNullOrEmpty(MyConfig.NamespaceExcludeRegexp)) {
 				Regex nsReject = new Regex(MyConfig.NamespaceExcludeRegexp);
 
-				if (nsReject.IsMatch(namespaceName))
-				{
+				if (nsReject.IsMatch(namespaceName)) {
 					Console.WriteLine("Rejecting namespace {0} by regexp", namespaceName);
 					return;
 				}
@@ -993,8 +870,7 @@ namespace NDoc3.Documenter.LinearHtml
 			// this goes in list of namespaces
 			//
 			string assemblyString = assemblyName;
-			if ((assemblyVersion != null) && (assemblyVersion.Length > 0))
-			{
+			if (!string.IsNullOrEmpty(assemblyVersion)) {
 				Version v = new Version(assemblyVersion);
 				string vString = String.Format("{0}.{1}.{2}.*", v.Major, v.Minor, v.Build);
 				assemblyString = assemblyName + " Version " + vString;
@@ -1003,21 +879,17 @@ namespace NDoc3.Documenter.LinearHtml
 			// get summary
 			XPathNavigator documentationNav = GetChildNodeWithName(nav, "documentation");
 			XPathNavigator summaryNav = null;
-			if (documentationNav != null)
-			{
+			if (documentationNav != null) {
 				summaryNav = GetChildNodeWithName(documentationNav, "summary");
 			}
 			string namespaceSummary = string.Empty;
 			if (summaryNav != null) namespaceSummary = summaryNav.Value;
 
-			if (MyConfig.UseNamespaceDocSummaries)
-			{
-				AddTableEntryRaw(namespaceListWriter, NamespaceLinkReferenceWrap(namespaceName), 
+			if (MyConfig.UseNamespaceDocSummaries) {
+				AddTableEntryRaw(namespaceListWriter, NamespaceLinkReferenceWrap(namespaceName),
 					assemblyString, namespaceSummary);
-			}
-			else
-			{
-				AddTableEntryRaw(namespaceListWriter, NamespaceLinkReferenceWrap(namespaceName), 
+			} else {
+				AddTableEntryRaw(namespaceListWriter, NamespaceLinkReferenceWrap(namespaceName),
 					assemblyString);
 			}
 
@@ -1032,10 +904,9 @@ namespace NDoc3.Documenter.LinearHtml
 			nav.MoveToFirstChild(); // move into namespace children
 
 			// foreach Type (class, delegate, interface)...
-			do 
-			{
+			do {
 				if (TypeMatchesIncludeRegexp(nav)) MakeHtmlForType(nav, namespaceName);
-			} while(nav.MoveToNext());
+			} while (nav.MoveToNext());
 
 			nav.MoveToParent();
 		}
@@ -1045,8 +916,7 @@ namespace NDoc3.Documenter.LinearHtml
 		/// </summary>
 		/// <param name="nav"></param>
 		/// <param name="namespaceName"></param>
-		void MakeHtmlTypeList(XPathNavigator nav, string namespaceName)
-		{
+		void MakeHtmlTypeList(XPathNavigator nav, string namespaceName) {
 			// get a writer for this namespace's type list
 			StartNamespaceSectionWriter(namespaceName, "Type List");
 			Hashtable nsSectionWriters = (Hashtable)namespaceWriters[namespaceName];
@@ -1055,30 +925,26 @@ namespace NDoc3.Documenter.LinearHtml
 			string[] colNames = { "Type", "Summary" };
 
 			// foreach namespace section ( "Classes", "Interfaces", etc)
-			foreach(string sectionName in orderedNamespaceSections)
-			{
+			foreach (string sectionName in orderedNamespaceSections) {
 				// alphabetize
 				SortedList sortedList = GetSortedChildren(nav, sectionName, "name");
 
-				if (sortedList.Count > 0)
-				{
+				if (sortedList.Count > 0) {
 					xtw.WriteElementString("h3", (string)namespaceSections[sectionName]);
-					this.StartTable(xtw, namespaceName + "_TypeList_" + sectionName, 600, colNames);
-					foreach(DictionaryEntry entry in sortedList)
-					{
+					StartTable(xtw, namespaceName + "_TypeList_" + sectionName, 600, colNames);
+					foreach (DictionaryEntry entry in sortedList) {
 						string typeName = (string)entry.Key;
 						XPathNavigator n = (XPathNavigator)entry.Value;
 
-						if (TypeMatchesIncludeRegexp(n))
-						{
+						if (TypeMatchesIncludeRegexp(n)) {
 							//string typeName = n.GetAttribute("name", string.Empty);
 							XPathNavigator summaryNav = GetDescendantNodeWithName(n, "summary");
 							string summary = string.Empty;
 							if (summaryNav != null) summary = summaryNav.Value;
-							AddTableEntryRaw(xtw, this.TypeLinkReferenceWrap(typeName), summary);
+							AddTableEntryRaw(xtw, TypeLinkReferenceWrap(typeName), summary);
 						}
-					} 
-					this.EndTable(xtw);
+					}
+					EndTable(xtw);
 				}
 			}
 		}
@@ -1090,27 +956,20 @@ namespace NDoc3.Documenter.LinearHtml
 		/// <param name="nav">The XPathNavigator pointing to the type node.</param>
 		/// <returns>bool - true for should be included, false for should be
 		/// excluded.</returns>
-		bool TypeMatchesIncludeRegexp(XPathNavigator nav)
-		{
+		bool TypeMatchesIncludeRegexp(XPathNavigator nav) {
 			// skip this namespace based on regex
-			if ((MyConfig.TypeIncludeRegexp != null) 
-				&& (MyConfig.TypeIncludeRegexp.Length > 0))
-			{
+			if (!string.IsNullOrEmpty(MyConfig.TypeIncludeRegexp)) {
 				string nodeName = nav.GetAttribute("name", "");
 				Regex typeIncludeRegex = new Regex(MyConfig.TypeIncludeRegexp);
 
-				if (typeIncludeRegex.IsMatch(nodeName))
-				{
+				if (typeIncludeRegex.IsMatch(nodeName)) {
 					Console.WriteLine("Including node {0} by regexp", nodeName);
-					return(true);
+					return (true);
 				}
-				else
-				{
-					Console.WriteLine("Excluding node {0} by regexp", nodeName);
-					return(false);
-				}
+				Console.WriteLine("Excluding node {0} by regexp", nodeName);
+				return (false);
 			}
-			else return(true);
+			return (true);
 		}
 
 		#endregion
@@ -1122,69 +981,26 @@ namespace NDoc3.Documenter.LinearHtml
 		/// </summary>
 		/// <param name="nav">The XPathNavigator pointing to the type node.</param>
 		/// <param name="namespaceName">The namespace containing this type.</param>
-		void MakeHtmlForType(XPathNavigator nav, string namespaceName)
-		{
+		void MakeHtmlForType(XPathNavigator nav, string namespaceName) {
 			string nodeName = nav.GetAttribute("name", "");
 			string nodeType = nav.LocalName;
 			Trace.WriteLine(String.Format("MakeHtmlForType: Visiting Type Node: {0}: {1}", nodeType, nodeName));
 
-			if (namespaceSections.ContainsKey(nodeType))
-			{
+			if (namespaceSections.ContainsKey(nodeType)) {
 				// write to appropriate writer
 				string sectionName = (string)namespaceSections[nodeType];
 				StartNamespaceSectionWriter(namespaceName, sectionName);
-					
+
 				// now write members
 				Hashtable nsSectionWriters = (Hashtable)namespaceWriters[namespaceName];
 				XmlTextWriter xtw = (XmlTextWriter)nsSectionWriters[sectionName];
-
-				if (useXslt)
-				{
-					MakeHtmlForTypeUsingXslt(nav, xtw, namespaceName);
-				}
-				else
-				{
-					MakeHtmlForTypeUsingCs(nav, xtw, namespaceName);
-				}
-			}
-			else 
-			{
+				
+				MakeHtmlForTypeUsingCs(nav, xtw);
+			} else {
 				if (!nodeType.Equals("summary"))
-					Console.WriteLine("Warn: MakeHtmlForType: Unknown section for node name {0}", 
+					Console.WriteLine("Warn: MakeHtmlForType: Unknown section for node name {0}",
 						nav.LocalName);
 			}
-		}
-
-		/// <summary>
-		/// Use Xslt transform to document this type.
-		/// </summary>
-		/// <param name="nav"></param>
-		/// <param name="xtw"></param>
-		/// <param name="namespaceName"></param>
-		void MakeHtmlForTypeUsingXslt(XPathNavigator nav, XmlTextWriter xtw, string namespaceName)
-		{
-			//string nodeName = nav.GetAttribute("name", "");
-			//string nodeType = nav.LocalName;
-			string typeId = nav.GetAttribute("id", "");
-
-			// create transform if it hasn't already been created
-			if (typeTransform == null)
-			{
-				string fileName = "linearHtml.xslt";
-				//string transformPath = Path.Combine(Path.Combine(resourceDirectory, "xslt"), filename);
-				string transformPath = Path.Combine(@"C:\VSProjects\Util\ndoc\src\Documenter\LinearHtml\xslt", 
-					fileName);
-
-				typeTransform = new XslTransform();
-				typeTransform.Load(transformPath);
-			}
-
-			// execute the transform
-			XsltArgumentList arguments = new XsltArgumentList();
-			arguments.AddParam("namespace", String.Empty, namespaceName);
-			arguments.AddParam("type-id", String.Empty, typeId);
-			arguments.AddParam("includeHierarchy", String.Empty, MyConfig.IncludeHierarchy);
-			typeTransform.Transform(nav, arguments, xtw);
 		}
 
 		/// <summary>
@@ -1192,9 +1008,7 @@ namespace NDoc3.Documenter.LinearHtml
 		/// </summary>
 		/// <param name="nav"></param>
 		/// <param name="xtw"></param>
-		/// <param name="namespaceName"></param>
-		void MakeHtmlForTypeUsingCs(XPathNavigator nav, XmlTextWriter xtw, string namespaceName)
-		{
+		void MakeHtmlForTypeUsingCs(XPathNavigator nav, XmlTextWriter xtw) {
 			string nodeName = nav.GetAttribute("name", "");
 			string nodeType = nav.LocalName;
 			string capsItemType = char.ToUpper(nodeType[0]) + nodeType.Substring(1);
@@ -1214,20 +1028,18 @@ namespace NDoc3.Documenter.LinearHtml
 			nav.MoveToFirstChild();
 			Hashtable navTable;
 
-			do 
-			{
+			do {
 				// each member of type
 				string memberType = nav.LocalName;
 				string memberId = nav.GetAttribute("id", "");
 
-				if (!memberTypeHt.ContainsKey(memberType)) 
-				{
+				if (!memberTypeHt.ContainsKey(memberType)) {
 					//Console.WriteLine("Add member type {0}", memberType);
 					memberTypeHt.Add(memberType, new Hashtable());
 				}
 				navTable = (Hashtable)memberTypeHt[memberType];
 				if (!navTable.ContainsKey(memberId)) navTable.Add(memberId, nav.Clone());
-			} while(nav.MoveToNext());
+			} while (nav.MoveToNext());
 
 			nav.MoveToParent();
 
@@ -1243,8 +1055,7 @@ namespace NDoc3.Documenter.LinearHtml
 			// documentation/summary
 			//
 			XPathNavigator remarksNav = null;
-			if (memberTypeHt.ContainsKey("documentation"))
-			{
+			if (memberTypeHt.ContainsKey("documentation")) {
 				navTable = (Hashtable)memberTypeHt["documentation"];
 				XPathNavigator nav2 = (XPathNavigator)navTable[String.Empty];
 				XPathNavigator summaryNav = GetDescendantNodeWithName(nav2, "summary");
@@ -1254,17 +1065,11 @@ namespace NDoc3.Documenter.LinearHtml
 			}
 
 			// attributes
-			if (memberTypeHt.ContainsKey("attribute"))
-			{
+			if (memberTypeHt.ContainsKey("attribute")) {
 				navTable = (Hashtable)memberTypeHt["attribute"];
 				StringBuilder sb = new StringBuilder("This type has the following attributes: ");
 
-				bool first = true;
-				foreach(string memberId in navTable.Keys)
-				{
-					if (!first) { sb.Append(", "); first = false; }
-					//XPathNavigator nav2 = (XPathNavigator)navTable[memberId];
-					//this.DumpNavTree(nav2, "    ");
+				foreach (string memberId in navTable.Keys) {
 					string tmps = ((XPathNavigator)navTable[memberId]).GetAttribute("name", "");
 					sb.Append(tmps);
 				}
@@ -1274,8 +1079,7 @@ namespace NDoc3.Documenter.LinearHtml
 			//
 			// documentation/remarks
 			//
-			if (remarksNav != null)
-			{
+			if (remarksNav != null) {
 				xtw.WriteElementString("h4", "Remarks");
 				WriteNodeFixCode(xtw, remarksNav, "p");
 			}
@@ -1283,13 +1087,11 @@ namespace NDoc3.Documenter.LinearHtml
 			//
 			// the members (properties, methods, fields, etc) in the type
 			//
-			if (nodeType == "enumeration")
-			{
+			if (nodeType == "enumeration") {
 				// enumerations
-				string memberType = "field"; // members are all fields in enumerations
+				const string memberType = "field";
 
-				if (memberTypeHt.ContainsKey(memberType))
-				{
+				if (memberTypeHt.ContainsKey(memberType)) {
 					xtw.WriteElementString("h4", String.Format("{0} Members", "Enumeration"));
 					string[] columnNames = { "Field", "Summary" };
 					StartTable(xtw, memberType + "_TableId_" + nodeName, 600, columnNames);
@@ -1302,8 +1104,7 @@ namespace NDoc3.Documenter.LinearHtml
 					// sort by member id (approximately the member name?)
 					SortedList sortedMemberIds = new SortedList(navTable);
 
-					foreach(string memberId in sortedMemberIds.Keys)
-					{
+					foreach (string memberId in sortedMemberIds.Keys) {
 						XPathNavigator nav2 = (XPathNavigator)navTable[memberId];
 						string memberName = nav2.GetAttribute("name", "");
 
@@ -1311,48 +1112,39 @@ namespace NDoc3.Documenter.LinearHtml
 						string summaryString = string.Empty;
 						XPathNavigator summaryNav = GetDescendantNodeWithName(nav2, "summary");
 						if (summaryNav != null) summaryString = summaryNav.Value;
-						
-						this.AddTableEntry(xtw, memberName, summaryString);
+
+						AddTableEntry(xtw, memberName, summaryString);
 					}
 
 					EndTable(xtw);
-				}
-				else
-				{
+				} else {
 					// hmm, an enumeration with no fields?
 					Console.WriteLine("Error: LinearHtml: MakeHtmlForTypeUsingCs: No fields in enumeration {0}?",
 						nodeName);
 				}
-			}
-			else
-			{
+			} else {
 				// struct, class, etc.
 
 				//
 				// member types which use name/access/summary table
 				//
-				foreach(string memberType in orderedMemberTypes) // memberType in constructor, field, property...
+				foreach (string memberType in orderedMemberTypes) // memberType in constructor, field, property...
 				{
-					if (memberTypeHt.ContainsKey(memberType))
-					{
+					if (memberTypeHt.ContainsKey(memberType)) {
 						string capsMemberType = char.ToUpper(memberType[0]) + memberType.Substring(1);
 						xtw.WriteElementString("h4", String.Format("{0} Members", capsMemberType));
 						navTable = (Hashtable)memberTypeHt[memberType]; // memberId -> navigator
 						// sort by member id (approximately the member name?)
 						SortedList sortedMemberIds = new SortedList(navTable);
 
-						if (MyConfig.IncludeTypeMemberDetails && 
-							(memberType.Equals("method") || memberType.Equals("constructor")))
-						{
+						if (MyConfig.IncludeTypeMemberDetails &&
+							(memberType.Equals("method") || memberType.Equals("constructor"))) {
 							// method, with details
-							foreach(string memberId in sortedMemberIds.Keys)
-							{
+							foreach (string memberId in sortedMemberIds.Keys) {
 								XPathNavigator nav2 = (XPathNavigator)navTable[memberId];
-								MakeHtmlDetailsForMethod(nodeName, memberType, nav2, xtw);
+								MakeHtmlDetailsForMethod(nodeName, nav2, xtw);
 							}
-						}
-						else
-						{
+						} else {
 							// not a method, or no details
 							string[] columnNames = { "Name", "Access", "Summary" };
 							StartTable(xtw, memberType + "_TableId_" + nodeName, 600, columnNames);
@@ -1360,8 +1152,7 @@ namespace NDoc3.Documenter.LinearHtml
 							//
 							// create a table entry for each member of this Type
 							//
-							foreach(string memberId in sortedMemberIds.Keys)
-							{
+							foreach (string memberId in sortedMemberIds.Keys) {
 								XPathNavigator nav2 = (XPathNavigator)navTable[memberId];
 								MakeHtmlForTypeMember(nodeName, memberType, nav2, xtw);
 							}
@@ -1386,9 +1177,8 @@ namespace NDoc3.Documenter.LinearHtml
 		/// method, etc)</param>
 		/// <param name="nav">Pointing to the member's node.</param>
 		/// <param name="xtw"></param>
-		void MakeHtmlForTypeMember(string parentTypeName, string memberType, 
-			XPathNavigator nav, XmlTextWriter xtw)
-		{
+		void MakeHtmlForTypeMember(string parentTypeName, string memberType,
+			XPathNavigator nav, XmlTextWriter xtw) {
 			bool includeMethodSignature = MyConfig.MethodParametersInTable;
 			string memberAccess = nav.GetAttribute("access", "");
 			string memberName = nav.GetAttribute("name", "");
@@ -1411,8 +1201,7 @@ namespace NDoc3.Documenter.LinearHtml
 			//
 			string nameString = memberName;
 			string args = "";
-			switch(memberType)
-			{
+			switch (memberType) {
 				case "field":
 					nameString = KeyWrap(memberName) + TypeRefWrap(" : " + typeBaseName);
 					break;
@@ -1435,16 +1224,14 @@ namespace NDoc3.Documenter.LinearHtml
 			//
 			// write the member if it isn't from a System class
 			//
-			if (declaringType.IndexOf("System") != 0)
-			{
+			if (declaringType.IndexOf("System") != 0) {
 				xtw.WriteStartElement("TR");
 				xtw.WriteStartElement("TD");
 				xtw.WriteRaw(nameString);
 				xtw.WriteEndElement();
 				xtw.WriteElementString("TD", ToAccessDeclaration(memberAccess));
 
-				if (declaringType.Length > 0)
-				{
+				if (declaringType.Length > 0) {
 					//xtw.WriteElementString("TD", "<em>(from " + declaringType + ")</em> " + summaryNav.Value);
 
 					// declared by an ancestor
@@ -1456,9 +1243,7 @@ namespace NDoc3.Documenter.LinearHtml
 					xtw.WriteString(summaryString);
 					if (!remarksString.Equals(string.Empty)) xtw.WriteRaw(remarksString);
 					xtw.WriteEndElement(); // TD
-				}
-				else
-				{
+				} else {
 					xtw.WriteStartElement("TD");
 					xtw.WriteString(summaryString);
 					if (!remarksString.Equals(string.Empty)) xtw.WriteRaw(remarksString);
@@ -1473,12 +1258,9 @@ namespace NDoc3.Documenter.LinearHtml
 		/// Write html for a single method.
 		/// </summary>
 		/// <param name="parentTypeName"></param>
-		/// <param name="memberType"></param>
 		/// <param name="nav"></param>
 		/// <param name="xtw"></param>
-		void MakeHtmlDetailsForMethod(string parentTypeName, string memberType, 
-			  XPathNavigator nav, XmlTextWriter xtw)
-		{
+		static void MakeHtmlDetailsForMethod(string parentTypeName, XPathNavigator nav, XmlTextWriter xtw) {
 			// get summary and remarks strings
 			XPathNavigator summaryNav = GetDescendantNodeWithName(nav, "summary");
 			XPathNavigator remarksNav = GetDescendantNodeWithName(nav, "remarks");
@@ -1497,18 +1279,15 @@ namespace NDoc3.Documenter.LinearHtml
 		/// </summary>
 		/// <param name="nav"><see cref="XPathNavigator" /> to the method's node.</param>
 		/// <param name="xtw">The <see cref="XmlTextWriter" /> to write the parameter list to.</param>
-		private void MakeHtmlForMethodParameterDetails(XPathNavigator nav, XmlTextWriter xtw)
-		{
+		private static void MakeHtmlForMethodParameterDetails(XPathNavigator nav, XmlTextWriter xtw) {
 			// add params
 			ArrayList parameterList = GetChildren(nav, "parameter");
 			ArrayList paramList = GetDescendants(nav, "param");
 
-			if (parameterList.Count > 0)
-			{
+			if (parameterList.Count > 0) {
 				xtw.WriteStartElement("p");
 				xtw.WriteElementString("lh", "Parameters:");
-				foreach(XPathNavigator n3 in parameterList)
-				{
+				foreach (XPathNavigator n3 in parameterList) {
 					string name = n3.GetAttribute("name", "");
 					string type = n3.GetAttribute("type", "");
 					string simpleType = ToSimpleType(type);
@@ -1520,17 +1299,15 @@ namespace NDoc3.Documenter.LinearHtml
 
 					// get description, which is the value of another node!
 					string desc = string.Empty;
-					foreach(XPathNavigator descNav in paramList)
-					{
+					foreach (XPathNavigator descNav in paramList) {
 						string tmpName = descNav.GetAttribute("name", "");
-						if (tmpName == name)
-						{
+						if (tmpName == name) {
 							desc = descNav.Value;
 							break;
 						}
 					}
 
-					xtw.WriteRaw(String.Format("<li class=\"indent1\">{0} : {1}</li>", sb.ToString(), desc));
+					xtw.WriteRaw(String.Format("<li class=\"indent1\">{0} : {1}</li>", sb, desc));
 				}
 				xtw.WriteEndElement();
 			}
@@ -1544,27 +1321,23 @@ namespace NDoc3.Documenter.LinearHtml
 		/// <param name="parentTypeName">The name of the Type which contains this
 		/// method.</param>
 		/// <returns>The declaration string.</returns>
-		string MakeMethodDeclaration(XPathNavigator nav, string parentTypeName)
-		{
+		static string MakeMethodDeclaration(XPathNavigator nav, string parentTypeName) {
 			string memberAccess = nav.GetAttribute("access", "");
 			string memberName = nav.GetAttribute("name", "");
 			string returnType = ToSimpleType(nav.GetAttribute("returnType", ""));
 
 			string args = MakeMethodParametersString(nav);
 			string nameString;
-			if (memberName.Equals(".ctor"))
-			{
-				nameString = KeyWrap(ToAccessDeclaration(memberAccess) + " " 
+			if (memberName.Equals(".ctor")) {
+				nameString = KeyWrap(ToAccessDeclaration(memberAccess) + " "
 					+ parentTypeName + "(" + args + ")");
-			}
-			else
-			{
-				nameString = KeyWrap(ToAccessDeclaration(memberAccess) + " " 
-					+ TypeRefWrap(returnType) + " " 
+			} else {
+				nameString = KeyWrap(ToAccessDeclaration(memberAccess) + " "
+					+ TypeRefWrap(returnType) + " "
 					+ memberName + "(" + args + ")");
 			}
 
-			return(nameString);
+			return (nameString);
 		}
 
 		/// <summary>
@@ -1573,17 +1346,14 @@ namespace NDoc3.Documenter.LinearHtml
 		/// </summary>
 		/// <param name="nav">Navigator to the Method's node.</param>
 		/// <returns>The param list string.</returns>
-		string MakeMethodParametersString(XPathNavigator nav)
-		{
+		static string MakeMethodParametersString(XPathNavigator nav) {
 			StringBuilder sb = new StringBuilder();
 
 			// add params
 			ArrayList paramList = GetChildren(nav, "parameter");
-			if (paramList.Count > 0)
-			{
+			if (paramList.Count > 0) {
 				bool first = true;
-				foreach(XPathNavigator n3 in paramList)
-				{
+				foreach (XPathNavigator n3 in paramList) {
 					if (!first) sb.Append(", ");
 					first = false;
 					string name = n3.GetAttribute("name", "");
@@ -1595,7 +1365,7 @@ namespace NDoc3.Documenter.LinearHtml
 				}
 			}
 
-			return(TypeRefWrap(sb.ToString()));
+			return (TypeRefWrap(sb.ToString()));
 		}
 
 		/// <summary>
@@ -1604,8 +1374,7 @@ namespace NDoc3.Documenter.LinearHtml
 		/// </summary>
 		/// <param name="nav">Navigator to the Type's node.</param>
 		/// <returns>The declaration string.</returns>
-		string MakeHtmlTypeDeclaration(XPathNavigator nav)
-		{
+		static string MakeHtmlTypeDeclaration(XPathNavigator nav) {
 			string nodeName = nav.GetAttribute("name", "");
 			string nodeType = nav.LocalName;
 			string typeAccess = nav.GetAttribute("access", "");
@@ -1621,22 +1390,20 @@ namespace NDoc3.Documenter.LinearHtml
 
 			// add interfaces to declaration string
 			ArrayList implKids = GetChildren(nav, "implements");
-			if (implKids.Count > 0)
-			{
+			if (implKids.Count > 0) {
 				// add appropriate separator
 				if (baseType.Length == 0) declarationString += " : ";
 				else declarationString += ", ";
 
 				bool first = true;
-				foreach(XPathNavigator n3 in implKids)
-				{
+				foreach (XPathNavigator n3 in implKids) {
 					if (!first) declarationString += ", ";
 					first = false;
 					declarationString += n3.GetAttribute("type", "");
 				}
 			}
 
-			return(declarationString);
+			return (declarationString);
 		}
 
 		#endregion
@@ -1651,8 +1418,7 @@ namespace NDoc3.Documenter.LinearHtml
 		/// </summary>
 		/// <param name="fileName">The name of the file to write to.</param>
 		/// <returns></returns>
-		private bool EmitHtml(string fileName)
-		{
+		private void EmitHtml(string fileName) {
 			StreamWriter sw = File.CreateText(fileName);
 			Stream fs = sw.BaseStream;
 
@@ -1688,8 +1454,8 @@ namespace NDoc3.Documenter.LinearHtml
 			fs.Flush();
 
 			// namespace section header
-//			topWriter.WriteElementString("h1", "Namespace Specifications");
-//			topWriter.Flush();
+			//			topWriter.WriteElementString("h1", "Namespace Specifications");
+			//			topWriter.Flush();
 
 			//
 			// namespaces
@@ -1700,19 +1466,15 @@ namespace NDoc3.Documenter.LinearHtml
 			ArrayList nsSectionList = new ArrayList(orderedNamespaceSections);
 			nsSectionList.Insert(0, "typeList"); // use this for the type list too
 
-			foreach(string namespaceName in namespaceWriters.Keys)
-			{
+			foreach (string namespaceName in namespaceWriters.Keys) {
 				topWriter.WriteElementString("h1", "Namespace : " + namespaceName);
 				topWriter.Flush();
 				Hashtable nsSectionWriters = (Hashtable)namespaceWriters[namespaceName];
 
-				foreach(string sectionKey in nsSectionList)
-				{
+				foreach (string sectionKey in nsSectionList) {
 					string sectionName = (string)namespaceSections[sectionKey];
 
-					xtw = null;
-					if (nsSectionWriters.ContainsKey(sectionName))
-					{
+					if (nsSectionWriters.ContainsKey(sectionName)) {
 						// so something was written to this section
 						xtw = (XmlTextWriter)nsSectionWriters[sectionName];
 						xtw.Flush();
@@ -1721,10 +1483,6 @@ namespace NDoc3.Documenter.LinearHtml
 						ms = (MemoryStream)xtw.BaseStream;
 						ms.Position = 0;
 						fs.Write(ms.GetBuffer(), 0, (int)ms.Length);
-					}
-					else
-					{
-						// nothing in this section
 					}
 				}
 			}
@@ -1735,7 +1493,6 @@ namespace NDoc3.Documenter.LinearHtml
 			topWriter.Flush();
 
 			fs.Close();
-			return(true);
 		}
 
 		#endregion
@@ -1746,10 +1503,8 @@ namespace NDoc3.Documenter.LinearHtml
 		/// The main entry point for the application.
 		/// </summary>
 		[STAThread]
-		public static void Main(string[] args)
-		{
-			if (args.Length < 2)
-			{
+		public static void Main(string[] args) {
+			if (args.Length < 2) {
 				Console.WriteLine("Usage: <input file> <output file>");
 				return;
 			}
@@ -1759,7 +1514,7 @@ namespace NDoc3.Documenter.LinearHtml
 			Console.WriteLine("Starting for file {0}, output {1}", fileName, outFileName);
 			LinearHtmlDocumenterInfo info = new LinearHtmlDocumenterInfo();
 
-			LinearHtmlDocumenter ld = new LinearHtmlDocumenter( new LinearHtmlDocumenterConfig( info ) );
+			LinearHtmlDocumenter ld = new LinearHtmlDocumenter(new LinearHtmlDocumenterConfig(info));
 			ld.Load(fileName);
 			ld.MakeHtml(outFileName);
 		}

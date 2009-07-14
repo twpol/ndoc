@@ -24,12 +24,10 @@ using System.Windows.Forms.Design;
 using NDoc3.Core;
 using NDoc3.Core.Reflection;
 
-namespace NDoc3.Documenter.JavaDoc
-{
+namespace NDoc3.Documenter.JavaDoc {
 	/// <summary>The JavaDoc documenter config class.</summary>
 	[DefaultProperty("OutputDirectory")]
-	public class JavaDocDocumenterConfig : BaseReflectionDocumenterConfig
-	{
+	public class JavaDocDocumenterConfig : BaseReflectionDocumenterConfig {
 		/// <summary>Initializes a new instance of the JavaDocDocumenterConfig class.</summary>
 		/// <remarks>
 		/// <para>The JavaDoc documenter is used to make a set of HTML documentation
@@ -40,17 +38,16 @@ namespace NDoc3.Documenter.JavaDoc
 		/// <a href="http://sourceforge.net/projects/ndoc3/">contact one of NDoc3's Admins</a>.
 		/// </para>
 		/// </remarks>
-		public JavaDocDocumenterConfig( JavaDocDocumenterInfo info ) : base( info )
-		{
+		public JavaDocDocumenterConfig(JavaDocDocumenterInfo info)
+			: base(info) {
 		}
 
 		/// <summary>
 		/// Creates an instance of a documenter <see cref="IDocumenterConfig.CreateDocumenter"/>
 		/// </summary>
 		/// <returns>IDocumenter instance</returns>		
-		public override IDocumenter CreateDocumenter()
-		{
-			return new JavaDocDocumenter( this );
+		public override IDocumenter CreateDocumenter() {
+			return new JavaDocDocumenter(this);
 		}
 
 		private string _Title;
@@ -59,45 +56,38 @@ namespace NDoc3.Documenter.JavaDoc
 		/// <remarks>The name of the JavaDoc project.</remarks>
 		[Category("Documentation Main Settings")]
 		[Description("The name of the JavaDoc project.")]
-		public string Title
-		{
-			get
-			{
+		public string Title {
+			get {
 				return _Title;
 			}
 
-			set
-			{
+			set {
 				_Title = value;
 				SetDirty();
 			}
 		}
 
-		string _outputDirectory = string.Format( ".{0}doc{0}", Path.DirectorySeparatorChar );
-		
+		string _outputDirectory = string.Format(".{0}doc{0}", Path.DirectorySeparatorChar);
+
 		/// <summary>Gets or sets the OutputDirectory property.</summary>
 		/// <remarks>The folder where the root of the HTML set will be located.
 		/// This can be absolute or relative from the .ndoc project file.</remarks>
 		[Category("Documentation Main Settings")]
 		[Description("The folder where the root of the HTML set will be located.\nThis can be absolute or relative from the .ndoc project file.")]
 		[Editor(typeof(FolderNameEditor), typeof(UITypeEditor))]
-		public string OutputDirectory
-		{
+		public string OutputDirectory {
 			get { return _outputDirectory; }
 
-			set
-			{
-				if ( value.IndexOfAny(new char[]{'#','?', ';'}) != -1) 
-				{
-					throw new FormatException("Output Directory '" + value + 
+			set {
+				if (value.IndexOfAny(new[] { '#', '?', ';' }) != -1) {
+					throw new FormatException("Output Directory '" + value +
 						"' is not valid because it contains '#','?' or ';' which" +
-						" are reserved characters in HTML URLs."); 
+						" are reserved characters in HTML URLs.");
 				}
 
 				_outputDirectory = value;
 
-				if (!_outputDirectory.EndsWith( Path.DirectorySeparatorChar.ToString() ))
-				{
+				if (!_outputDirectory.EndsWith(Path.DirectorySeparatorChar.ToString())) {
 					_outputDirectory += Path.DirectorySeparatorChar;
 				}
 

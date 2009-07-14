@@ -2,18 +2,16 @@ using System;
 
 using NDoc3.Core;
 
-namespace NDoc3.Gui
-{
+namespace NDoc3.Gui {
 	/// <summary>
 	/// Interface for receiving status notification during a build
 	/// </summary>
-	public interface IBuildStatus
-	{
+	public interface IBuildStatus {
 		/// <summary>
 		/// An exception occurred during the build
 		/// </summary>
 		/// <param name="e">The exception</param>
-		void BuildException( Exception e );
+		void BuildException(Exception e);
 
 		/// <summary>
 		/// The build is completed
@@ -30,7 +28,6 @@ namespace NDoc3.Gui
 		/// Reports build progress
 		/// </summary>
 		/// <param name="e">Build progress arguments</param>
-		void ReportProgress( ProgressArgs e );
+		void ReportProgress(ProgressArgs e);
 	}
 }
-		

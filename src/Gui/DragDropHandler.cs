@@ -1,16 +1,13 @@
-using System;
 using System.IO;
 using System.Collections;
 
 using NDoc3.Core;
 
-namespace NDoc3.Gui
-{
+namespace NDoc3.Gui {
 	/// <summary>
 	/// The type of files that can be dropped
 	/// </summary>
-	public enum DropFileType
-	{
+	public enum DropFileType {
 		/// <summary>
 		/// One or more assemblies (dll or exe)
 		/// </summary>
@@ -28,31 +25,23 @@ namespace NDoc3.Gui
 	/// <summary>
 	/// Handles drap and drop operations
 	/// </summary>
-	public sealed class DragDropHandler
-	{
-		private DragDropHandler()
-		{
-		}
-
+	public static class DragDropHandler {
 		/// <summary>
 		/// Determines if the list of files is a list of assemblies
 		/// </summary>
 		/// <param name="files">File list</param>
 		/// <returns>True if all the files are dll's or exe's</returns>
-		public static DropFileType CanDrop( string[] files )
-		{
-			if ( files.Length > 0 )
-			{
+		public static DropFileType CanDrop(string[] files) {
+			if (files.Length > 0) {
 				// the first item is an ndoc file so return the project type
-				if ( Path.GetExtension( files[0] ).ToLower() == ".ndoc" )
+				if (Path.GetExtension(files[0]).ToLower() == ".ndoc")
 					return DropFileType.Project;
-				
+
 				// otherwise we're going to look for assembly extensions
-				foreach (string s in files)
-				{
-					string ext = Path.GetExtension( s ).ToLower();
+				foreach (string s in files) {
+					string ext = Path.GetExtension(s).ToLower();
 					// this file isn't an assembly so it is unsupported
-					if ( ext != ".dll" && ext != ".exe" )
+					if (ext != ".dll" && ext != ".exe")
 						return DropFileType.Unsupported;
 				}
 				return DropFileType.Assembly;
@@ -66,21 +55,18 @@ namespace NDoc3.Gui
 		/// </summary>
 		/// <param name="files">An arrray of assembly files names</param>
 		/// <returns>Populated collection</returns>
-		public static ICollection GetAssemblySlashDocs( string[] files )
-		{
+		public static ICollection GetAssemblySlashDocs(string[] files) {
 			ArrayList assemblySlashDocs = new ArrayList();
 
-			foreach (string s in files)
-			{
-				string ext = Path.GetExtension( s ).ToLower();
-				if ( ext == ".dll" || ext == ".exe" )
-				{
-					string slashDocFile = FindDocFile( s );
-					if ( slashDocFile.Length > 0 )
-						assemblySlashDocs.Add( new AssemblySlashDoc( s, slashDocFile ) );
+			foreach (string s in files) {
+				string ext = Path.GetExtension(s).ToLower();
+				if (ext == ".dll" || ext == ".exe") {
+					string slashDocFile = FindDocFile(s);
+					if (slashDocFile.Length > 0)
+						assemblySlashDocs.Add(new AssemblySlashDoc(s, slashDocFile));
 				}
 			}
-					
+
 			return assemblySlashDocs;
 		}
 
@@ -89,19 +75,17 @@ namespace NDoc3.Gui
 		/// </summary>
 		/// <param name="files">The files dropped</param>
 		/// <returns>The path stored in the first location or the files array</returns>
-		public static string GetProjectFilePath( string[] files )
-		{
+		public static string GetProjectFilePath(string[] files) {
 			string path = string.Empty;
-			if ( files.Length > 0 )
+			if (files.Length > 0)
 				path = files[0];
 			return path;
 		}
 
-		private static string FindDocFile( string assemblyFile )
-		{
-			string slashDocFilename = assemblyFile.Substring( 0, assemblyFile.Length - 4 ) + ".xml";
+		private static string FindDocFile(string assemblyFile) {
+			string slashDocFilename = assemblyFile.Substring(0, assemblyFile.Length - 4) + ".xml";
 
-			if ( File.Exists( slashDocFilename ) )
+			if (File.Exists(slashDocFilename))
 				return slashDocFilename;
 
 			return "";

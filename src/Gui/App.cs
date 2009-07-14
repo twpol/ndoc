@@ -30,12 +30,8 @@ namespace NDoc3.Gui
 	/// <summary>
 	/// Static class with the Main method and application properties
 	/// </summary>
-	public sealed class App
+	public static class App
 	{
-		private App() 
-		{
-		}
-
 		/// <summary>
 		/// Application entry point
 		/// </summary>
@@ -168,7 +164,7 @@ namespace NDoc3.Gui
 				Hashtable fileLoadExceptions = new Hashtable();
 				foreach (Exception loaderEx in rtle.LoaderExceptions)
 				{
-					System.IO.FileLoadException fileLoadEx = loaderEx as System.IO.FileLoadException;
+					FileLoadException fileLoadEx = loaderEx as FileLoadException;
 					if (fileLoadEx != null)
 					{
 						if (fileLoadExceptions.ContainsKey(fileLoadEx.FileName) == false)
@@ -189,9 +185,9 @@ namespace NDoc3.Gui
 		/// <param name="ex">The Exception</param>
 		public static void BuildTraceError(Exception ex)
 		{
-			System.Text.StringBuilder strBld = new System.Text.StringBuilder();
+			StringBuilder strBld = new StringBuilder();
 
-			App.DumpException(strBld, ex);
+			DumpException(strBld, ex);
 
 			if (ex != null) 
 			{
@@ -199,7 +195,6 @@ namespace NDoc3.Gui
 				strBld.AppendFormat("Exception: {0}\r\n", ex.GetType());
 				strBld.Append(ex.StackTrace.Replace("\r\n", "\n").Replace("\r", "\n").Replace("\n", "\r\n"));
 				strBld.Append("\r\n\r\n");
-				ex = ex.InnerException;
 			}
 
 			Trace.WriteLine(strBld);

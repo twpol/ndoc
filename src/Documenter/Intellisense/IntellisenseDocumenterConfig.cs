@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.ComponentModel;
 using System.Drawing.Design;
@@ -7,54 +6,48 @@ using System.Windows.Forms.Design;
 using NDoc3.Core;
 using NDoc3.Core.Reflection;
 
-namespace NDoc3.Documenter.Intellisense
-{
+namespace NDoc3.Documenter.Intellisense {
 	/// <summary>
 	/// Config settings for the native Intellisense Documenter
 	/// </summary>
 	[DefaultProperty("OutputDirectory")]
-	public class IntellisenseDocumenterConfig : BaseReflectionDocumenterConfig
-	{
+	public class IntellisenseDocumenterConfig : BaseReflectionDocumenterConfig {
 		/// <summary>
 		/// Creates a new <see cref="IntellisenseDocumenterConfig"/> instance.
 		/// </summary>
-		public IntellisenseDocumenterConfig( IntellisenseDocumenterInfo info ) : base( info )
-		{
+		public IntellisenseDocumenterConfig(IntellisenseDocumenterInfo info)
+			: base(info) {
 			base.AutoDocumentConstructors = true;
 			base.DocumentAttributes = false;
 			base.DocumentInheritedMembers = false;
 			base.DocumentInheritedFrameworkMembers = false;
 			base.UseNamespaceDocSummaries = false;
 		}
-		
+
 		/// <summary>
 		/// Creates an instance of a documenter <see cref="IDocumenterConfig.CreateDocumenter"/>
 		/// </summary>
 		/// <returns>IDocumenter instance</returns>		
-		public override IDocumenter CreateDocumenter()
-		{
-			return new IntellisenseDocumenter( this );
+		public override IDocumenter CreateDocumenter() {
+			return new IntellisenseDocumenter(this);
 		}
 
 
 		string _outputDirectory = string.Format(".{0}intellisense{0}", Path.DirectorySeparatorChar);
-		
+
 		/// <summary>Gets or sets the OutputDirectory property.</summary>
 		/// <remarks>The folder where the root of the HTML set will be located.
 		/// This can be absolute or relative from the .ndoc project file.</remarks>
 		[Category("Documentation Main Settings")]
 		[Description("The directory in which the XML files will be generated.\nThis can be absolute or relative from the .ndoc project file.")]
 		[Editor(typeof(FolderNameEditor), typeof(UITypeEditor))]
-		public string OutputDirectory
-		{
+		public string OutputDirectory {
 			get { return _outputDirectory; }
 
-			set
-			{
+			set {
 				_outputDirectory = value;
 
-				if (!_outputDirectory.EndsWith(Path.DirectorySeparatorChar.ToString()))
-				{
+				if (!_outputDirectory.EndsWith(Path.DirectorySeparatorChar.ToString())) {
 					_outputDirectory += Path.DirectorySeparatorChar;
 				}
 
@@ -70,24 +63,23 @@ namespace NDoc3.Documenter.Intellisense
 		[Category("Visibility")]
 		[Description("If true, classes named 'NamespaceDoc' will be excluded from the xml.\nDefault is false.")]
 		[DefaultValue(false)]
-		public bool ExcludeNameSpaceDocClasses
-		{
+		public bool ExcludeNameSpaceDocClasses {
 			get { return base.UseNamespaceDocSummaries; }
 			set { base.UseNamespaceDocSummaries = value; }
 		}
-		
+
 		// HIDE BaseReflectionDocumenter that we do not need
 		#region non - browsable properties
 		/// <summary>
 		/// 
 		/// </summary>
 		[Browsable(false)]
-		public new bool UseNamespaceDocSummaries { get { return base.UseNamespaceDocSummaries; }  }
+		public new bool UseNamespaceDocSummaries { get { return base.UseNamespaceDocSummaries; } }
 		/// <summary>
 		/// 
 		/// </summary>
 		[Browsable(false)]
-		public new AssemblyVersionInformationType AssemblyVersionInfo { get { return base.AssemblyVersionInfo; }  }
+		public new AssemblyVersionInformationType AssemblyVersionInfo { get { return base.AssemblyVersionInfo; } }
 		/// <summary>
 		/// 
 		/// </summary>

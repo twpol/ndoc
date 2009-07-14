@@ -20,7 +20,6 @@
 #endregion
 
 using System;
-using System.Configuration;
 using System.IO;
 using System.Collections;
 using System.Diagnostics;
@@ -28,48 +27,41 @@ using System.Reflection;
 using NDoc3.Core;
 using NDoc3.Documenter.Msdn.xslt;
 
-namespace NDoc3.Documenter.Msdn
-{
+namespace NDoc3.Documenter.Msdn {
 	/// <summary>
 	/// The collection of xslt stylesheets used to generate the Html
 	/// </summary>
-	internal class StyleSheetCollection : DictionaryBase
-	{
+	internal class StyleSheetCollection : DictionaryBase {
 		/// <summary>
 		/// Load the predefined set of xslt stylesheets into a dictionary
 		/// </summary>
 		/// <param name="extensibilityStylesheet"></param>
 		/// <returns>The populated collection</returns>
-		public static StyleSheetCollection LoadStyleSheets( string extensibilityStylesheet )
-		{
+		public static StyleSheetCollection LoadStyleSheets(string extensibilityStylesheet) {
 			StyleSheetCollection stylesheets = new StyleSheetCollection();
-
-//			string resourceBase = "file://" + Path.GetFullPath(Path.Combine(System.Windows.Forms.Application.StartupPath, String.Format("..{0}..{0}..{0}Documenter{0}Msdn{0}xslt", Path.DirectorySeparatorChar)) );
-//			string resourceBase = "NDoc3.Documenter.Msdn.xslt";
-//			string path = "..{0}..{0}..{0}Documenter{0}Msdn{0}xslt";
 
 			string[] resourceDirs = {
 											MakeAbsolutePath("Documenter{0}Msdn{0}xslt")
 											,MakeAbsolutePath("..{0}..{0}..{0}Documenter{0}Msdn{0}xslt")
 											,MakeAbsolutePath("..{0}..{0}..{0}src{0}Documenter{0}Msdn{0}xslt")
 			                        };
-            XsltResourceResolver resolver = new XsltResourceResolver(typeof(StyleSheetLocation), resourceDirs);
-			resolver.ExtensibilityStylesheet=extensibilityStylesheet;
+			XsltResourceResolver resolver = new XsltResourceResolver(typeof(StyleSheetLocation), resourceDirs);
+			resolver.ExtensibilityStylesheet = extensibilityStylesheet;
 			Trace.Indent();
 
-			stylesheets.AddFrom( "assembly", resolver );
-			stylesheets.AddFrom( "namespace", resolver );
-			stylesheets.AddFrom( "namespacehierarchy", resolver );
-			stylesheets.AddFrom( "type", resolver );
-			stylesheets.AddFrom( "typehierarchy", resolver );
-			stylesheets.AddFrom( "allmembers", resolver );
-			stylesheets.AddFrom( "individualmembers", resolver );
-			stylesheets.AddFrom( "event", resolver );
-			stylesheets.AddFrom( "member", resolver );
-			stylesheets.AddFrom( "memberoverload", resolver );
-			stylesheets.AddFrom( "property", resolver );
-			stylesheets.AddFrom( "field", resolver );
-			stylesheets.AddFrom( "htmlcontents", resolver );
+			stylesheets.AddFrom("assembly", resolver);
+			stylesheets.AddFrom("namespace", resolver);
+			stylesheets.AddFrom("namespacehierarchy", resolver);
+			stylesheets.AddFrom("type", resolver);
+			stylesheets.AddFrom("typehierarchy", resolver);
+			stylesheets.AddFrom("allmembers", resolver);
+			stylesheets.AddFrom("individualmembers", resolver);
+			stylesheets.AddFrom("event", resolver);
+			stylesheets.AddFrom("member", resolver);
+			stylesheets.AddFrom("memberoverload", resolver);
+			stylesheets.AddFrom("property", resolver);
+			stylesheets.AddFrom("field", resolver);
+			stylesheets.AddFrom("htmlcontents", resolver);
 
 
 			Trace.Unindent();
@@ -77,33 +69,28 @@ namespace NDoc3.Documenter.Msdn
 			return stylesheets;
 		}
 
-		private static string MakeAbsolutePath(string path)
-		{
+		private static string MakeAbsolutePath(string path) {
 			string appPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
 			Debug.Assert(System.Windows.Forms.Application.StartupPath.Equals(appPath));
-			return "file://" + Path.GetFullPath(Path.Combine(appPath, String.Format(path, Path.DirectorySeparatorChar)) );
+			return "file://" + Path.GetFullPath(Path.Combine(appPath, String.Format(path, Path.DirectorySeparatorChar)));
 		}
 
 
-		private StyleSheetCollection( )
-		{
+		private StyleSheetCollection() {
 		}
 
 		/// <summary>
 		/// Return a named stylesheet from the collection
 		/// </summary>
-		public StyleSheet this[ string name ]
-		{
-			get
-			{
-				Debug.Assert( base.InnerHashtable.Contains( name ) );
-				return (StyleSheet)base.InnerHashtable[name];
+		public StyleSheet this[string name] {
+			get {
+				Debug.Assert(InnerHashtable.Contains(name));
+				return (StyleSheet)InnerHashtable[name];
 			}
 		}
 
-		private void AddFrom( string name, XsltResourceResolver resolver )
-		{
-			base.InnerHashtable.Add( name, new StyleSheet( name, resolver ) );
+		private void AddFrom(string name, XsltResourceResolver resolver) {
+			InnerHashtable.Add(name, new StyleSheet(name, resolver));
 		}
 	}
 }

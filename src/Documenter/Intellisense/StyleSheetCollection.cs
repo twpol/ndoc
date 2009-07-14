@@ -27,24 +27,21 @@ using System.Reflection;
 using NDoc3.Core;
 using NDoc3.Documenter.Intellisense.xslt;
 
-namespace NDoc3.Documenter.Intellisense
-{
+namespace NDoc3.Documenter.Intellisense {
 	/// <summary>
 	/// The collection of xslt stylesheets used to generate the Html
 	/// </summary>
-	internal class StyleSheetCollection : DictionaryBase
-	{
+	internal class StyleSheetCollection : DictionaryBase {
 		/// <summary>
 		/// Load the predefined set of xslt stylesheets into a dictionary
 		/// </summary>
 		/// <param name="extensibilityStylesheet"></param>
 		/// <returns>The populated collection</returns>
-		public static StyleSheetCollection LoadStyleSheets(string extensibilityStylesheet)
-		{
+		public static StyleSheetCollection LoadStyleSheets(string extensibilityStylesheet) {
 			StyleSheetCollection stylesheets = new StyleSheetCollection();
 
 			string resourceBase = "file://" + Path.GetFullPath(Path.Combine(System.Windows.Forms.Application.StartupPath, @"..\..\..\Documenter\Intellisense\xslt"));
-//			string resourceBase = "NDoc3.Documenter.Intellisense.xslt";
+			//			string resourceBase = "NDoc3.Documenter.Intellisense.xslt";
 
 			XsltResourceResolver resolver = new XsltResourceResolver(typeof(StyleSheetLocation), resourceBase);
 			resolver.ExtensibilityStylesheet = extensibilityStylesheet;
@@ -58,39 +55,31 @@ namespace NDoc3.Documenter.Intellisense
 		}
 
 
-		private StyleSheetCollection()
-		{
+		private StyleSheetCollection() {
 		}
 
 		/// <summary>
 		/// Return a named stylesheet from the collection
 		/// </summary>
-		public XslTransform this[string name]
-		{
-			get
-			{
-				Debug.Assert(base.InnerHashtable.Contains(name));
-				return (XslTransform)base.InnerHashtable[name];
+		public XslTransform this[string name] {
+			get {
+				Debug.Assert(InnerHashtable.Contains(name));
+				return (XslTransform)InnerHashtable[name];
 			}
 		}
 
-		private void AddFrom(string name, XsltResourceResolver resolver)
-		{
-			base.InnerHashtable.Add(name, MakeTransform(name, resolver));
+		private void AddFrom(string name, XsltResourceResolver resolver) {
+			InnerHashtable.Add(name, MakeTransform(name, resolver));
 		}
 
-		private static XslTransform MakeTransform(string name, XsltResourceResolver resolver)
-		{
-			try
-			{
+		private static XslTransform MakeTransform(string name, XsltResourceResolver resolver) {
+			try {
 				Trace.WriteLine(name + ".xslt");
 				XslTransform transform = new XslTransform();
 				XmlReader reader = (XmlReader)resolver.GetEntity(new Uri("res:" + name + ".xslt"), null, typeof(XmlReader));
 				transform.Load(reader, resolver, Assembly.GetExecutingAssembly().Evidence);
 				return transform;
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				throw new Exception(string.Format("Error compiling the {0} stylesheet", name), e);
 			}
 		}

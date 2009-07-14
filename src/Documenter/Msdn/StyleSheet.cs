@@ -25,73 +25,42 @@ using System.Xml;
 using System.Xml.XPath;
 using System.Xml.Xsl;
 
-namespace NDoc3.Documenter.Msdn
-{
-	internal class StyleSheet
-	{
+namespace NDoc3.Documenter.Msdn {
+	internal class StyleSheet {
 		private readonly string _name;
 		private readonly XslTransform _transform;
 		private readonly NameTable _nameTable;
 
-		public StyleSheet(string name, XmlResolver xmlResolver)
-		{
+		public StyleSheet(string name, XmlResolver xmlResolver) {
 			_name = name;
-			_nameTable= new NameTable();
+			_nameTable = new NameTable();
 			_transform = MakeTransform(name, xmlResolver);
 		}
 
-		public string Name
-		{
+		public string Name {
 			get { return _name; }
 		}
 
-		public NameTable NameTable
-		{
+		public NameTable NameTable {
 			get { return _nameTable; }
 		}
 
-		public void Transform(IXPathNavigable xpathNavigable, XsltArgumentList arguments, TextWriter writer)
-		{
+		public void Transform(IXPathNavigable xpathNavigable, XsltArgumentList arguments, TextWriter writer) {
 			_transform.Transform(xpathNavigable, arguments, writer);
 		}
 
-		private XslTransform MakeTransform( string name,  XmlResolver resolver)
-		{
-			try
-			{
-				Trace.WriteLine( string.Format("Compiling {0}.xslt", name) );
+		private static XslTransform MakeTransform(string name, XmlResolver resolver) {
+			try {
+				Trace.WriteLine(string.Format("Compiling {0}.xslt", name));
 
-				XmlReader xmlDoc=(XmlReader)resolver.GetEntity(new Uri("res:" + name + ".xslt"),null,typeof(XmlReader));
+				XmlReader xmlDoc = (XmlReader)resolver.GetEntity(new Uri("res:" + name + ".xslt"), null, typeof(XmlReader));
 
 				XslTransform transform = new XslTransform();
 				transform.Load(xmlDoc, resolver);
 				return transform;
-			}
-			catch ( XsltException e )
-			{
+			} catch (XsltException e) {
 				throw new Exception(string.Format("Error compiling the stylesheet '{0}': {1} at {2}:{3}", name, e.Message, e.LineNumber, e.LinePosition), e);
 			}
 		}
-
-		// CompiledTransform causes lots of troubles!
-
-//		private XslCompiledTransform MakeCompiledTransform( string name,  XmlResolver resolver)
-//		{
-//			try
-//			{
-//				Trace.WriteLine( string.Format("Compiling {0}.xslt", name) );
-//				XmlReader reader=(XmlReader)resolver.GetEntity(new Uri("res:" + name + ".xslt"),null,typeof(XmlReader));
-//
-////				transform.Load(reader, resolver, Assembly.GetExecutingAssembly().Evidence);
-//				XsltSettings settings = new XsltSettings(false, true);
-//				XslCompiledTransform transform = new XslCompiledTransform(false);
-//				transform.Load(reader, settings, resolver);
-//				return transform;
-//			}
-//			catch ( XsltException e )
-//			{
-//				throw new Exception(string.Format("Error compiling the stylesheet '{0}': {1} at {2}:{3}", name, e.Message, e.LineNumber, e.LinePosition), e);
-//			}
-//		}
 	}
 }

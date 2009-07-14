@@ -283,8 +283,7 @@ namespace NDoc3.ExtendedUI
 			m_DisplayName = "";
 
 			// Get shell's memory allocator, it is needed to free some memory later
-			IMalloc pMalloc;
-			pMalloc = ShellFunctions.GetMalloc();
+			IMalloc pMalloc = ShellFunctions.GetMalloc();
 		
 			IntPtr pidlRoot;
 			
@@ -307,14 +306,13 @@ namespace NDoc3.ExtendedUI
 			bi.lpszTitle = Title;
 			bi.ulFlags = (uint)DetailsFlags;
 			bi.lParam = 0;
-			bi.lpfn = new ShellApi.BrowseCallbackProc(this.myBrowseCallbackProc);
+			bi.lpfn = myBrowseCallbackProc;
 			
 			// Show dialog
-			IntPtr pidlSelected;
-			pidlSelected = ShellLib.ShellApi.SHBrowseForFolder(ref bi);
+			IntPtr pidlSelected = ShellApi.SHBrowseForFolder(ref bi);
 
 			// Save the display name
-			m_DisplayName = bi.pszDisplayName.ToString();
+			m_DisplayName = bi.pszDisplayName;
 
 			IShellFolder isf = ShellFunctions.GetDesktopFolder();
 
@@ -322,7 +320,7 @@ namespace NDoc3.ExtendedUI
 			isf.GetDisplayNameOf(pidlSelected, (uint)ShellApi.SHGNO.SHGDN_NORMAL | (uint)ShellApi.SHGNO.SHGDN_FORPARSING, out ptrDisplayName);
 			
 			String sDisplay;
-			ShellLib.ShellApi.StrRetToBSTR(ref ptrDisplayName, pidlRoot, out sDisplay);
+			ShellApi.StrRetToBSTR(ref ptrDisplayName, pidlRoot, out sDisplay);
 			m_FullName = sDisplay;
 
 			if (pidlSelected != IntPtr.Zero)
@@ -397,14 +395,9 @@ namespace NDoc3.ExtendedUI
 			ShellApi.STRRET ptrDisplayName;
 			isf.GetDisplayNameOf(pidlItem, (uint)ShellApi.SHGNO.SHGDN_NORMAL | (uint)ShellApi.SHGNO.SHGDN_FORPARSING, out ptrDisplayName);
 			String sDisplay;
-			ShellLib.ShellApi.StrRetToBSTR(ref ptrDisplayName, this.pidlRoot, out sDisplay);
+			ShellApi.StrRetToBSTR(ref ptrDisplayName, this.pidlRoot, out sDisplay);
 
-//			uint attrib = 0xFFFFFFFF ; //(uint)ShellFolderGetAttributesOfFlags.SFGAO_FILESYSTEM;
-//			IntPtr[] apidl = new IntPtr[1];
-//			apidl[0] = pidlItem;
-//			isf.GetAttributesOf(1, apidl, ref attrib);
-            bool result = !sDisplay.StartsWith("::");
-			//System.Diagnostics.Debug.WriteLine(attrib.ToString("x8") + "  ==>" + sDisplay);
+         bool result = !sDisplay.StartsWith("::");
 			return result;
 		}
 

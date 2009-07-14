@@ -1,5 +1,3 @@
-using System;
-
 using NDoc3.Core;
 
 namespace NDoc3.Documenter.Latex

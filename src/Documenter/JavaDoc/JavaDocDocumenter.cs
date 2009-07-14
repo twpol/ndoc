@@ -21,67 +21,58 @@ using System.IO;
 using System.Xml;
 using System.Xml.Xsl;
 using System.Xml.XPath;
-using System.Reflection;
-using System.Collections;
 
 using NDoc3.Core;
 using NDoc3.Core.Reflection;
 
-namespace NDoc3.Documenter.JavaDoc
-{
+namespace NDoc3.Documenter.JavaDoc {
 	/// <summary>The JavaDoc documenter.</summary>
-	public class JavaDocDocumenter : BaseReflectionDocumenter
-	{
+	public class JavaDocDocumenter : BaseReflectionDocumenter {
 		/// <summary>Initializes a new instance of the JavaDocDocumenter class.</summary>
-		public JavaDocDocumenter( JavaDocDocumenterConfig config ) : base( config )
-		{
+		public JavaDocDocumenter(JavaDocDocumenterConfig config)
+			: base(config) {
 		}
 
-		private Workspace workspace = null;
+		private Workspace workspace;
 
 		/// <summary>See <see cref="IDocumenter"/>.</summary>
-		public override string MainOutputFile 
-		{ 
-			get 
-			{
-				return Path.Combine(this.WorkingPath, 
+		public override string MainOutputFile {
+			get {
+				return Path.Combine(WorkingPath,
 					"overview-summary.html");
-			} 
+			}
 		}
 
 		string tempFileName;
 		/// <summary>See <see cref="IDocumenter"/>.</summary>
-		public override void Build(Project project)
-		{
-			this.workspace = new JavaDocWorkspace( this.WorkingPath );
+		public override void Build(Project project) {
+			workspace = new JavaDocWorkspace(WorkingPath);
 			workspace.Clean();
 			workspace.Prepare();
 
-			workspace.AddResourceDirectory( "xslt" );
-			workspace.AddResourceDirectory( "css" );
+			workspace.AddResourceDirectory("xslt");
+			workspace.AddResourceDirectory("css");
 
-// Define this when you want to edit the stylesheets
-// without having to shutdown the application to rebuild.
+			// Define this when you want to edit the stylesheets
+			// without having to shutdown the application to rebuild.
 #if NO_RESOURCES
 			// copy all of the xslt source files into the workspace
-			DirectoryInfo xsltSource = new DirectoryInfo( Path.GetFullPath(Path.Combine(
-				System.Windows.Forms.Application.StartupPath, @"..\..\..\Documenter\JavaDoc\xslt") ) );
-                				
-			foreach ( FileInfo f in xsltSource.GetFiles( "*.xslt" ) )
-			{
-				string fname = Path.Combine( Path.Combine( workspace.ResourceDirectory, "xslt" ), f.Name );
-				f.CopyTo( fname, true );
-				File.SetAttributes( fname, FileAttributes.Normal );
+			DirectoryInfo xsltSource = new DirectoryInfo(Path.GetFullPath(Path.Combine(
+				System.Windows.Forms.Application.StartupPath, @"..\..\..\Documenter\JavaDoc\xslt")));
+
+			foreach (FileInfo f in xsltSource.GetFiles("*.xslt")) {
+				string fname = Path.Combine(Path.Combine(workspace.ResourceDirectory, "xslt"), f.Name);
+				f.CopyTo(fname, true);
+				File.SetAttributes(fname, FileAttributes.Normal);
 			}
 
-			DirectoryInfo cssSource = new DirectoryInfo( Path.GetFullPath(Path.Combine(
-				System.Windows.Forms.Application.StartupPath, @"..\..\..\Documenter\JavaDoc\css") ) );
-                				
-			foreach ( FileInfo f in cssSource.GetFiles( "*.css" ) )
-			{
-				string cssname = Path.Combine( Path.Combine( workspace.ResourceDirectory, "css" ), f.Name );
-				f.CopyTo( cssname, true );
-				File.SetAttributes( cssname, FileAttributes.Normal );
+			DirectoryInfo cssSource = new DirectoryInfo(Path.GetFullPath(Path.Combine(
+				System.Windows.Forms.Application.StartupPath, @"..\..\..\Documenter\JavaDoc\css")));
+
+			foreach (FileInfo f in cssSource.GetFiles("*.css")) {
+				string cssname = Path.Combine(Path.Combine(workspace.ResourceDirectory, "css"), f.Name);
+				f.CopyTo(cssname, true);
+				File.SetAttributes(cssname, FileAttributes.Normal);
 			}
 
 #else
@@ -100,8 +91,7 @@ namespace NDoc3.Documenter.JavaDoc
 			File.Copy(Path.Combine(workspace.ResourceDirectory, @"css\JavaDoc.css"), outcss, true);
 			File.SetAttributes(outcss, FileAttributes.Archive);
 
-			try
-			{
+			try {
 				// determine temp file name
 				tempFileName = Path.GetTempFileName();
 				// Let the Documenter base class do it's thing.
@@ -109,11 +99,8 @@ namespace NDoc3.Documenter.JavaDoc
 
 				WriteOverviewSummary();
 				WriteNamespaceSummaries();
-			}
-			finally
-			{
-				if (tempFileName != null && File.Exists(tempFileName)) 
-				{
+			} finally {
+				if (tempFileName != null && File.Exists(tempFileName)) {
 					File.Delete(tempFileName);
 				}
 				workspace.RemoveResourceDirectory();
@@ -121,19 +108,16 @@ namespace NDoc3.Documenter.JavaDoc
 
 		}
 
-		private string WorkingPath
-		{ 
-			get
-			{ 
-				if ( Path.IsPathRooted( MyConfig.OutputDirectory ) )
-					return MyConfig.OutputDirectory; 
+		private string WorkingPath {
+			get {
+				if (Path.IsPathRooted(MyConfig.OutputDirectory))
+					return MyConfig.OutputDirectory;
 
-				return Path.GetFullPath( MyConfig.OutputDirectory );
-			} 
+				return Path.GetFullPath(MyConfig.OutputDirectory);
+			}
 		}
 
-		private JavaDocDocumenterConfig MyConfig
-		{
+		private JavaDocDocumenterConfig MyConfig {
 			get { return (JavaDocDocumenterConfig)Config; }
 		}
 
@@ -141,44 +125,38 @@ namespace NDoc3.Documenter.JavaDoc
 			string transformFilename,
 			XsltArgumentList args,
 			string resultDirectory,
-			string resultFilename)
-		{
+			string resultFilename) {
 #if DEBUG
 			int start = Environment.TickCount;
 #endif
 			XslTransform transform = new XslTransform();
-			transform.Load(Path.Combine(this.workspace.ResourceDirectory, @"xslt\" + transformFilename));
+			transform.Load(Path.Combine(workspace.ResourceDirectory, @"xslt\" + transformFilename));
 
-			if (args == null)
-			{
+			if (args == null) {
 				args = new XsltArgumentList();
 			}
 
 			string pathToRoot = "";
 
-			if (resultDirectory != null)
-			{
+			if (resultDirectory != null) {
 				string[] directories = resultDirectory.Split('\\');
 				int count = directories.Length;
 
-				while (count-- > 0)
-				{
+				while (count-- > 0) {
 					pathToRoot += "../";
 				}
 			}
 
 			args.AddParam("global-path-to-root", String.Empty, pathToRoot);
 
-			if (resultDirectory != null)
-			{
+			if (resultDirectory != null) {
 				resultFilename = Path.Combine(resultDirectory, resultFilename);
 			}
 
 			string resultPath = Path.Combine(MyConfig.OutputDirectory, resultFilename);
 			string resultPathDirectory = Path.GetDirectoryName(resultPath);
 
-			if (!Directory.Exists(resultPathDirectory))
-			{
+			if (!Directory.Exists(resultPathDirectory)) {
 				Directory.CreateDirectory(resultPathDirectory);
 			}
 
@@ -191,11 +169,11 @@ namespace NDoc3.Documenter.JavaDoc
 			writer.Close();
 
 #if DEBUG
-			Trace.WriteLine("Making " + transformFilename + " Html: " + ((Environment.TickCount - start)).ToString() + " ms.");
+			Trace.WriteLine("Making " + transformFilename + " Html: " + ((Environment.TickCount - start)) + " ms.");
 #endif
 		}
 
-		private XPathDocument cachedXPathDocument = null;
+		private XPathDocument cachedXPathDocument;
 
 		/// <summary>
 		/// Gets the XPathDocument, but caches it and returns the cached value.
@@ -207,29 +185,22 @@ namespace NDoc3.Documenter.JavaDoc
 		/// of the application.
 		/// </remarks>
 		/// <returns></returns>
-		protected XPathDocument GetCachedXPathDocument()
-		{
-			if(cachedXPathDocument == null)
-			{
-				Stream tempFile=null;
-				try
-				{
-					tempFile=File.Open(tempFileName,FileMode.Open,FileAccess.Read);
+		protected XPathDocument GetCachedXPathDocument() {
+			if (cachedXPathDocument == null) {
+				Stream tempFile = null;
+				try {
+					tempFile = File.Open(tempFileName, FileMode.Open, FileAccess.Read);
 					cachedXPathDocument = new XPathDocument(tempFile);
-				}
-				finally
-				{
-					if (tempFile!=null) tempFile.Close();
+				} finally {
+					if (tempFile != null) tempFile.Close();
 				}
 			}
 			return cachedXPathDocument;
 		}
 
-		private void WriteOverviewSummary()
-		{
+		private void WriteOverviewSummary() {
 			XsltArgumentList args = new XsltArgumentList();
-			string title = MyConfig.Title;
-			if (title == null) title = string.Empty;
+			string title = MyConfig.Title ?? string.Empty;
 			args.AddParam("global-title", String.Empty, title);
 
 			TransformAndWriteResult(
@@ -239,36 +210,29 @@ namespace NDoc3.Documenter.JavaDoc
 				"overview-summary.html");
 		}
 
-		private void WriteNamespaceSummaries()
-		{
+		private void WriteNamespaceSummaries() {
 			XmlDocument doc = new XmlDocument();
-			Stream tempFile=null;
-			try
-			{
-				tempFile=File.Open(tempFileName,FileMode.Open,FileAccess.Read);
+			Stream tempFile = null;
+			try {
+				tempFile = File.Open(tempFileName, FileMode.Open, FileAccess.Read);
 				doc.Load(tempFile);
-			}
-			finally
-			{
-				if (tempFile!=null) tempFile.Close();
+			} finally {
+				if (tempFile != null) tempFile.Close();
 			}
 
 			XmlNodeList namespaceNodes = doc.SelectNodes("/ndoc/assembly/module/namespace");
-
-			foreach (XmlElement namespaceElement in namespaceNodes)
-			{
-				if (namespaceElement.ChildNodes.Count > 0)
-				{
+			if(namespaceNodes == null) throw new Exception("No namespaces nodes available");
+			foreach (XmlElement namespaceElement in namespaceNodes) {
+				if (namespaceElement.ChildNodes.Count > 0) {
 					string name = namespaceElement.GetAttribute("name");
-					
+
 					WriteNamespaceSummary(name);
 					WriteTypes(namespaceElement);
 				}
 			}
 		}
 
-		private void WriteNamespaceSummary(string name)
-		{
+		private void WriteNamespaceSummary(string name) {
 			XsltArgumentList args = new XsltArgumentList();
 			args.AddParam("global-namespace-name", String.Empty, name);
 
@@ -279,18 +243,15 @@ namespace NDoc3.Documenter.JavaDoc
 				"namespace-summary.html");
 		}
 
-		private void WriteTypes(XmlElement namespaceElement)
-		{
+		private void WriteTypes(XmlElement namespaceElement) {
 			XmlNodeList typeNodes = namespaceElement.SelectNodes("interface|class|structure");
-
-			foreach (XmlElement typeElement in typeNodes)
-			{
+			if(typeNodes == null) throw new Exception("No type nodes availble");
+			foreach (XmlElement typeElement in typeNodes) {
 				WriteType(namespaceElement, typeElement);
 			}
 		}
 
-		private void WriteType(XmlElement namespaceElement, XmlElement typeElement)
-		{
+		private void WriteType(XmlElement namespaceElement, XmlElement typeElement) {
 			string id = typeElement.GetAttribute("id");
 
 			XsltArgumentList args = new XsltArgumentList();

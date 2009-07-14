@@ -25,19 +25,17 @@ using NDoc3.Core;
 using NDoc3.Core.Reflection;
 using NDoc3.Core.PropertyGridUI;
 
-namespace NDoc3.Documenter.LinearHtml
-{
+namespace NDoc3.Documenter.LinearHtml {
 	/// <summary>The LinearHtmlDocumenterConfig class.</summary>
 	[DefaultProperty("OutputDirectory")]
-	public class LinearHtmlDocumenterConfig : BaseReflectionDocumenterConfig
-	{
+	public class LinearHtmlDocumenterConfig : BaseReflectionDocumenterConfig {
 		/// <summary>Initializes a new instance of the MsdnHelpConfig class.</summary>
 		/// <remarks>
 		/// <para>The LinearHTML Documenter creates a single HTML file that includes
 		/// all of the types and members in your project.</para>
 		/// </remarks>
-		public LinearHtmlDocumenterConfig( LinearHtmlDocumenterInfo info ) : base( info )
-		{
+		public LinearHtmlDocumenterConfig(LinearHtmlDocumenterInfo info)
+			: base(info) {
 			_Title = "An NDoc3 Documented Class Library";
 			_HeaderHtml = string.Empty;
 			_FooterHtml = string.Empty;
@@ -55,9 +53,8 @@ namespace NDoc3.Documenter.LinearHtml
 		/// Creates an instance of a documenter <see cref="IDocumenterConfig.CreateDocumenter"/>
 		/// </summary>
 		/// <returns>IDocumenter instance</returns>		
-		public override IDocumenter CreateDocumenter()
-		{
-			return new LinearHtmlDocumenter( this );
+		public override IDocumenter CreateDocumenter() {
+			return new LinearHtmlDocumenter(this);
 		}
 
 		bool _IncludeTypeMemberDetails;
@@ -73,42 +70,36 @@ namespace NDoc3.Documenter.LinearHtml
 			+ "remarks in the table.  For methods this means whether or not to break out "
 			+ "method details (such as parameters) into separate sub-sections.")]
 		[DefaultValue(false)]
-		public bool IncludeTypeMemberDetails
-		{
+		public bool IncludeTypeMemberDetails {
 			get { return _IncludeTypeMemberDetails; }
 
-			set
-			{
+			set {
 				_IncludeTypeMemberDetails = value;
 				SetDirty();
 			}
 		}
 
 
-		string _outputDirectory = string.Format( ".{0}doc{0}", Path.DirectorySeparatorChar );
-		
+		string _outputDirectory = string.Format(".{0}doc{0}", Path.DirectorySeparatorChar);
+
 		/// <summary>Gets or sets the OutputDirectory property.</summary>
 		/// <remarks>The directory in which the .html file will be generated.</remarks>
 		[Category("Documentation Main Settings")]
 		[Description("The directory in which the .html file will be generated.")]
 		[Editor(typeof(FolderNameEditor), typeof(UITypeEditor))]
-		public string OutputDirectory
-		{
+		public string OutputDirectory {
 			get { return _outputDirectory; }
 
-			set
-			{
-				if ( value.IndexOfAny(new char[]{'#','?', ';'}) != -1) 
-				{
-					throw new FormatException("Output Directory '" + value + 
+			set {
+				if (value.IndexOfAny(new[] { '#', '?', ';' }) != -1) {
+					throw new FormatException("Output Directory '" + value +
 						"' is not valid because it contains '#','?' or ';' which" +
-						" are reserved characters in HTML URLs."); 
+						" are reserved characters in HTML URLs.");
 				}
 
 				_outputDirectory = value;
 
-				if (!_outputDirectory.EndsWith( Path.DirectorySeparatorChar.ToString() ))
-				{
+				if (!_outputDirectory.EndsWith(Path.DirectorySeparatorChar.ToString())) {
 					_outputDirectory += Path.DirectorySeparatorChar;
 				}
 
@@ -125,12 +116,10 @@ namespace NDoc3.Documenter.LinearHtml
 		[Description("Whether or not to put method parameter lists into the "
 			+ "same table with the method name.")]
 		[DefaultValue(false)]
-		public bool MethodParametersInTable
-		{
+		public bool MethodParametersInTable {
 			get { return _MethodParametersInTable; }
 
-			set
-			{
+			set {
 				_MethodParametersInTable = value;
 				SetDirty();
 			}
@@ -146,12 +135,10 @@ namespace NDoc3.Documenter.LinearHtml
 		[Description("A C# regular expression to include types.  If this is specified,"
 			+ " only types which match will be included in the output.")]
 		[DefaultValue("")]
-		public string TypeIncludeRegexp
-		{
+		public string TypeIncludeRegexp {
 			get { return _TypeIncludeRegexp; }
 
-			set
-			{
+			set {
 				_TypeIncludeRegexp = value;
 				SetDirty();
 			}
@@ -164,12 +151,10 @@ namespace NDoc3.Documenter.LinearHtml
 		[Category("Documentation Main Settings")]
 		[Description("A C# regular expression to exclude namespaces.")]
 		[DefaultValue("")]
-		public string NamespaceExcludeRegexp
-		{
+		public string NamespaceExcludeRegexp {
 			get { return _NamespaceExcludeRegexp; }
 
-			set
-			{
+			set {
 				_NamespaceExcludeRegexp = value;
 				SetDirty();
 			}
@@ -181,13 +166,11 @@ namespace NDoc3.Documenter.LinearHtml
 		/// <remarks>This is the title displayed at the top of every page.</remarks>
 		[Category("Documentation Main Settings")]
 		[Description("This is the title displayed at the top of every page.")]
-		public string Title
-		{
+		public string Title {
 			get { return _Title; }
 
-			set 
-			{ 
-				_Title = value; 
+			set {
+				_Title = value;
 				SetDirty();
 			}
 		}
@@ -201,13 +184,11 @@ namespace NDoc3.Documenter.LinearHtml
 		[Category("Documentation Main Settings")]
 		[Description("To include a class hiararchy page for each namespace. Don't turn it on if your project has a namespace with many types, as NDoc3 will become very slow and might crash.")]
 		[DefaultValue(false)]
-		public bool IncludeHierarchy
-		{
+		public bool IncludeHierarchy {
 			get { return _IncludeHierarchy; }
 
-			set 
-			{ 
-				_IncludeHierarchy = value; 
+			set {
+				_IncludeHierarchy = value;
 				SetDirty();
 			}
 		}
@@ -221,12 +202,10 @@ namespace NDoc3.Documenter.LinearHtml
 		[Description("Sorts the TOC by namespace name. "
 			+ "SplitTOCs is disabled when this option is selected.")]
 		[DefaultValue(true)]
-		public bool SortTOCByNamespace
-		{
+		public bool SortTOCByNamespace {
 			get { return _SortTOCByNamespace; }
 
-			set
-			{
+			set {
 				_SortTOCByNamespace = value;
 				SetDirty();
 			}
@@ -244,12 +223,10 @@ namespace NDoc3.Documenter.LinearHtml
 			"\"%TOPIC_TITLE%\" is dynamically replaced by the title of the current page.")]
 		[Editor(typeof(TextEditor), typeof(UITypeEditor))]
 		[DefaultValue("")]
-		public string HeaderHtml
-		{
+		public string HeaderHtml {
 			get { return _HeaderHtml; }
 
-			set
-			{
+			set {
 				_HeaderHtml = value;
 				SetDirty();
 			}
@@ -271,12 +248,10 @@ namespace NDoc3.Documenter.LinearHtml
 			"\"%TOPIC_TITLE%\" is dynamically replaced by the title of the current page.")]
 		[Editor(typeof(TextEditor), typeof(UITypeEditor))]
 		[DefaultValue("")]
-		public string FooterHtml
-		{
+		public string FooterHtml {
 			get { return _FooterHtml; }
 
-			set
-			{
+			set {
 				_FooterHtml = value;
 				SetDirty();
 			}
@@ -290,16 +265,14 @@ namespace NDoc3.Documenter.LinearHtml
 		[Category("Documentation Main Settings")]
 		[Description("Specifies external files that must be included in the compiled CHM file. Multiple files must be separated by a pipe ('|').")]
 		[DefaultValue("")]
-		public string FilesToInclude
-		{
+		public string FilesToInclude {
 			get { return _FilesToInclude; }
 
-			set
-			{
+			set {
 				_FilesToInclude = value;
 				SetDirty();
 			}
- 		}
+		}
 
 	}
 }

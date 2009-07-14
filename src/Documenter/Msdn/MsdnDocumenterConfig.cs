@@ -26,22 +26,20 @@ using NDoc3.Core;
 using NDoc3.Core.Reflection;
 using NDoc3.Core.PropertyGridUI;
 
-namespace NDoc3.Documenter.Msdn
-{
+namespace NDoc3.Documenter.Msdn {
 	/// <summary>The MsdnDocumenterConfig class.</summary>
 	/// <remarks>
 	/// <para>The MSDN documenter creates a compiled HTML help version 1 help file (CHM).</para>
 	/// </remarks>
 	[DefaultProperty("OutputDirectory")]
-	public class MsdnDocumenterConfig : BaseReflectionDocumenterConfig
-	{
+	public class MsdnDocumenterConfig : BaseReflectionDocumenterConfig {
 		string htmlHelpName;
 		bool includeFavorites;
 		private bool mergeAssemblies = true;
 
 		/// <summary>Initializes a new instance of the MsdnHelpConfig class.</summary>
-		public MsdnDocumenterConfig( MsdnDocumenterInfo info ) : base( info )
-		{
+		public MsdnDocumenterConfig(MsdnDocumenterInfo info)
+			: base(info) {
 			htmlHelpName = "Documentation";
 
 			_Title = "An NDoc3 Documented Class Library";
@@ -55,44 +53,39 @@ namespace NDoc3.Documenter.Msdn
 
 			_HeaderHtml = string.Empty;
 			_FooterHtml = string.Empty;
-			_FilesToInclude = string.Empty;		
+			_FilesToInclude = string.Empty;
 		}
 
-		
+
 		/// <summary>
 		/// Creates an instance of a documenter <see cref="IDocumenterConfig.CreateDocumenter"/>
 		/// </summary>
 		/// <returns>IDocumenter instance</returns>		
-		public override IDocumenter CreateDocumenter()
-		{
-			return new MsdnDocumenter( this );
+		public override IDocumenter CreateDocumenter() {
+			return new MsdnDocumenter(this);
 		}
 
 		#region Main Settings
-		string _outputDirectory = string.Format( ".{0}doc{0}", Path.DirectorySeparatorChar );
-		
+		string _outputDirectory = string.Format(".{0}doc{0}", Path.DirectorySeparatorChar);
+
 		/// <summary>Gets or sets the OutputDirectory property.</summary>
 		/// <remarks>The directory in which .html files and the .chm files will be generated.</remarks>
 		[Category("Documentation Main Settings")]
 		[Description("The directory in which .html files and the .chm files will be generated.")]
 		[Editor(typeof(FolderNameEditor), typeof(UITypeEditor))]
-		public string OutputDirectory
-		{
+		public string OutputDirectory {
 			get { return _outputDirectory; }
 
-			set
-			{
-				if ( value.IndexOfAny(new char[]{'#','?', ';'}) != -1) 
-				{
-					throw new FormatException("Output Directory '" + value + 
+			set {
+				if (value.IndexOfAny(new[] { '#', '?', ';' }) != -1) {
+					throw new FormatException("Output Directory '" + value +
 						"' is not valid because it contains '#','?' or ';' which" +
-						" are reserved characters in HTML URLs."); 
+						" are reserved characters in HTML URLs.");
 				}
 
 				_outputDirectory = value;
 
-				if (!_outputDirectory.EndsWith( Path.DirectorySeparatorChar.ToString() ))
-				{
+				if (!_outputDirectory.EndsWith(Path.DirectorySeparatorChar.ToString())) {
 					_outputDirectory += Path.DirectorySeparatorChar;
 				}
 
@@ -105,18 +98,13 @@ namespace NDoc3.Documenter.Msdn
 		/// use this property plus the appropriate extension as names.</remarks>
 		[Category("Documentation Main Settings")]
 		[Description("The name of the HTML Help project and the Compiled HTML Help file.")]
-		public string HtmlHelpName
-		{
+		public string HtmlHelpName {
 			get { return htmlHelpName; }
 
-			set 
-			{ 
-				if (Path.GetExtension(value).ToLower() == ".chm") 
-				{
+			set {
+				if (Path.GetExtension(value).ToLower() == ".chm") {
 					HtmlHelpName = Path.GetFileNameWithoutExtension(value);
-				}
-				else
-				{
+				} else {
 					htmlHelpName = value;
 				}
 
@@ -130,18 +118,16 @@ namespace NDoc3.Documenter.Msdn
 		/// <remarks>This is the title displayed at the top of every page.</remarks>
 		[Category("Documentation Main Settings")]
 		[Description("This is the title displayed at the top of every page.")]
-		public string Title
-		{
+		public string Title {
 			get { return _Title; }
 
-			set 
-			{ 
+			set {
 				_Title = value;
 				SetDirty();
 			}
 		}
 
-		private bool _ShowVisualBasic = false;
+		private bool _ShowVisualBasic;
 
 		/// <summary>Gets or sets the ShowVisualBasic property.</summary>
 		/// <remarks>This is a temporary property until we get a working
@@ -149,12 +135,10 @@ namespace NDoc3.Documenter.Msdn
 		[Category("Documentation Main Settings")]
 		[Description("Show Visual Basic syntax for types and members.")]
 		[DefaultValue(false)]
-		public bool ShowVisualBasic
-		{
+		public bool ShowVisualBasic {
 			get { return _ShowVisualBasic; }
 
-			set 
-			{ 
+			set {
 				_ShowVisualBasic = value;
 				SetDirty();
 			}
@@ -167,13 +151,11 @@ namespace NDoc3.Documenter.Msdn
 		[Category("Documentation Main Settings")]
 		[Description("Sets the output type to HTML Help (.chm) or Web or both.")]
 		[DefaultValue(OutputType.HtmlHelpAndWeb)]
-		[System.ComponentModel.TypeConverter(typeof(EnumDescriptionConverter))]
-		public OutputType OutputTarget
-		{
+		[TypeConverter(typeof(EnumDescriptionConverter))]
+		public OutputType OutputTarget {
 			get { return _OutputTarget; }
 
-			set 
-			{ 
+			set {
 				_OutputTarget = value;
 				SetDirty();
 			}
@@ -187,16 +169,14 @@ namespace NDoc3.Documenter.Msdn
 		[Category("Documentation Main Settings")]
 		[Description("Turning this flag on will point all SDK links to the online MSDN library")]
 		[DefaultValue(true)]
-        [ReadOnly(true)] //TODO Added to ensure links on web
-		public bool SdkLinksOnWeb
-		{
+		[ReadOnly(true)] //TODO Added to ensure links on web
+		public bool SdkLinksOnWeb {
 			get { return _SdkLinksOnWeb; }
 
-			set
-			{
-                //TODO Ensure only links on web
+			set {
+				//TODO Ensure only links on web
 				//_SdkLinksOnWeb = value;
-                _SdkLinksOnWeb = true;
+				_SdkLinksOnWeb = true;
 				SetDirty();
 			}
 		}
@@ -208,12 +188,10 @@ namespace NDoc3.Documenter.Msdn
 		[Category("HTML Help Options")]
 		[Description("Turning off this flag will generate a separate hierarchy level for assemblies.")]
 		[DefaultValue(true)]
-		public bool MergeAssemblies
-		{
+		public bool MergeAssemblies {
 			get { return mergeAssemblies; }
 
-			set 
-			{ 
+			set {
 				mergeAssemblies = value;
 				SetDirty();
 			}
@@ -224,12 +202,10 @@ namespace NDoc3.Documenter.Msdn
 		[Category("HTML Help Options")]
 		[Description("Turning this flag on will include a Favorites tab in the HTML Help file.")]
 		[DefaultValue(false)]
-		public bool IncludeFavorites
-		{
+		public bool IncludeFavorites {
 			get { return includeFavorites; }
 
-			set 
-			{ 
+			set {
 				includeFavorites = value;
 				SetDirty();
 			}
@@ -248,12 +224,10 @@ namespace NDoc3.Documenter.Msdn
 			 + " If this is not specified and RootPageFileName is, then"
 			 + " the TOC entry will be 'Overview'.")]
 		[DefaultValue("")]
-		public string RootPageTOCName
-		{
+		public string RootPageTOCName {
 			get { return _RootPageTOCName; }
 
-			set
-			{
+			set {
 				_RootPageTOCName = value;
 				SetDirty();
 			}
@@ -268,12 +242,10 @@ namespace NDoc3.Documenter.Msdn
 			 + "SplitTOCs is disabled when this property is set.")]
 		[DefaultValue("")]
 		[Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
-		public string RootPageFileName
-		{
+		public string RootPageFileName {
 			get { return _RootPageFileName; }
 
-			set
-			{
+			set {
 				_RootPageFileName = value;
 				SetDirty();
 			}
@@ -292,12 +264,10 @@ namespace NDoc3.Documenter.Msdn
 			 + " If false, the Root Page will be made a peer of"
 			 + " the namespaces in the table-of-contents.")]
 		[DefaultValue(false)]
-		public bool RootPageContainsNamespaces
-		{
+		public bool RootPageContainsNamespaces {
 			get { return _RootPageContainsNamespaces; }
 
-			set
-			{
+			set {
 				_RootPageContainsNamespaces = value;
 				SetDirty();
 			}
@@ -313,12 +283,10 @@ namespace NDoc3.Documenter.Msdn
 		[Description("Create a binary table-of-contents file. \r"
 			 + "This can significantly reduce the amount of time required to load a very large help document.")]
 		[DefaultValue(true)]
-		public bool BinaryTOC
-		{
+		public bool BinaryTOC {
 			get { return _BinaryTOC; }
 
-			set
-			{
+			set {
 				_BinaryTOC = value;
 				SetDirty();
 			}
@@ -331,17 +299,15 @@ namespace NDoc3.Documenter.Msdn
 		/// "%FILE_NAME%\" is dynamically replaced by the name of the file for the current html page. 
 		/// "%TOPIC_TITLE%\" is dynamically replaced by the title of the current page.</remarks>
 		[Category("HTML Help Options")]
-		[Description("Raw HTML that is used as a page header instead of the default blue banner. " + 
-			 "\"%FILE_NAME%\" is dynamically replaced by the name of the file for the current html page. " + 
+		[Description("Raw HTML that is used as a page header instead of the default blue banner. " +
+			 "\"%FILE_NAME%\" is dynamically replaced by the name of the file for the current html page. " +
 			 "\"%TOPIC_TITLE%\" is dynamically replaced by the title of the current page.")]
 		[DefaultValue("")]
 		[Editor(typeof(TextEditor), typeof(UITypeEditor))]
-		public string HeaderHtml
-		{
+		public string HeaderHtml {
 			get { return _HeaderHtml; }
 
-			set
-			{
+			set {
 				_HeaderHtml = value;
 				SetDirty();
 			}
@@ -356,19 +322,17 @@ namespace NDoc3.Documenter.Msdn
 		/// "%ASSEMBLY_VERSION%\" is dynamically replaced by the version of the assembly for the current page. 
 		/// "%TOPIC_TITLE%\" is dynamically replaced by the title of the current page.</remarks>
 		[Category("HTML Help Options")]
-		[Description("Raw HTML that is used as a page footer instead of the default footer." + 
-			 "\"%FILE_NAME%\" is dynamically replaced by the name of the file for the current html page. " + 
-			 "\"%ASSEMBLY_NAME%\" is dynamically replaced by the name of the assembly for the current page. " + 
-			 "\"%ASSEMBLY_VERSION%\" is dynamically replaced by the version of the assembly for the current page. " + 
+		[Description("Raw HTML that is used as a page footer instead of the default footer." +
+			 "\"%FILE_NAME%\" is dynamically replaced by the name of the file for the current html page. " +
+			 "\"%ASSEMBLY_NAME%\" is dynamically replaced by the name of the assembly for the current page. " +
+			 "\"%ASSEMBLY_VERSION%\" is dynamically replaced by the version of the assembly for the current page. " +
 			 "\"%TOPIC_TITLE%\" is dynamically replaced by the title of the current page.")]
 		[DefaultValue("")]
 		[Editor(typeof(TextEditor), typeof(UITypeEditor))]
-		public string FooterHtml
-		{
+		public string FooterHtml {
 			get { return _FooterHtml; }
 
-			set
-			{
+			set {
 				_FooterHtml = value;
 				SetDirty();
 			}
@@ -383,12 +347,10 @@ namespace NDoc3.Documenter.Msdn
 		[Description("Choose whether the table of contents should list namespaces " +
 			"as individual topics or have the namespaces nested.")]
 		[DefaultValue(TOCStyle.Flat)]
-		public TOCStyle NamespaceTOCStyle
-		{
+		public TOCStyle NamespaceTOCStyle {
 			get { return _NamespaceTOCStyle; }
-			
-			set
-			{
+
+			set {
 				if (value == _NamespaceTOCStyle) return;
 
 				_NamespaceTOCStyle = value;
@@ -404,12 +366,10 @@ namespace NDoc3.Documenter.Msdn
 		[Category("HTML Help Options")]
 		[Description("Specifies external files that must be included in the compiled CHM file. Multiple files must be separated by a pipe ('|').")]
 		[DefaultValue("")]
-		public string FilesToInclude
-		{
+		public string FilesToInclude {
 			get { return _FilesToInclude; }
 
-			set
-			{
+			set {
 				_FilesToInclude = value;
 				SetDirty();
 			}
@@ -422,15 +382,12 @@ namespace NDoc3.Documenter.Msdn
 		/// This directory will be recursively compiled into the help file.</remarks>
 		[Category("HTML Help Options")]
 		[Description("Directory that contains resources (images etc.) used by the additional content pages. This directory will be recursively compiled into the help file.")]
-		[NDoc3.Core.PropertyGridUI.FoldernameEditor.FolderDialogTitle("Select AdditionalContentResourceDirectory")]
-		public FolderPath AdditionalContentResourceDirectory
-		{
+		[FoldernameEditor.FolderDialogTitle("Select AdditionalContentResourceDirectory")]
+		public FolderPath AdditionalContentResourceDirectory {
 			get { return _AdditionalContentResourceDirectory; }
 
-			set
-			{
-				if (_AdditionalContentResourceDirectory.Path != value.Path)
-				{
+			set {
+				if (_AdditionalContentResourceDirectory.Path != value.Path) {
 					_AdditionalContentResourceDirectory = value;
 					SetDirty();
 				}
@@ -443,22 +400,19 @@ namespace NDoc3.Documenter.Msdn
 		/// <remarks>Path to an xslt stylesheet that contains templates for documenting extensibility tags.</remarks>
 		[Category("Extensibility")]
 		[Description("Path to an xslt stylesheet that contains templates for documenting extensibility tags. Refer to the NDoc3 user's guide for more details on extending NDoc3.")]
-		[NDoc3.Core.PropertyGridUI.FilenameEditor.FileDialogFilter
+		[FilenameEditor.FileDialogFilter
 			 ("Select Extensibility Stylesheet", "Stylesheet files (*.xslt)|*.xslt|All files (*.*)|*.*")]
-		public FilePath ExtensibilityStylesheet
-		{
+		public FilePath ExtensibilityStylesheet {
 			get { return _ExtensibilityStylesheet; }
 
-			set
-			{
-				if (_ExtensibilityStylesheet.Path != value.Path)
-				{
+			set {
+				if (_ExtensibilityStylesheet.Path != value.Path) {
 					_ExtensibilityStylesheet = value;
 					SetDirty();
 				}
 			}
 		}
-	
+
 		short _LangID = 1033;
 
 		/// <summary>Gets or sets the LangID property</summary>
@@ -467,16 +421,14 @@ namespace NDoc3.Documenter.Msdn
 		[Description("The ID of the language the help file is in.")]
 		[DefaultValue((short)1033)]
 		[Editor(typeof(LangIdEditor), typeof(UITypeEditor))]
-		public short LangID
-		{
+		public short LangID {
 			get { return _LangID; }
 
-			set
-			{
+			set {
 				_LangID = value;
 				SetDirty();
 			}
-		}	
+		}
 
 		/// <summary>
 		/// 
@@ -484,32 +436,25 @@ namespace NDoc3.Documenter.Msdn
 		/// <param name="name"></param>
 		/// <param name="value"></param>
 		/// <returns></returns>
-		protected override string HandleUnknownPropertyType(string name, string value)
-		{
+		protected override string HandleUnknownPropertyType(string name, string value) {
 			string FailureMessages = "";
 			//SdkDocVersion has been split into two separate options
 			// - value "MsdnOnline" replaced by "SDK_v1_1" and setting option SdkLinksOnWeb to true
 			//note: case insensitive comparison
-			if (String.Compare(name, "LinkToSdkDocVersion", true) == 0) 
-			{
-				if (String.Compare(value, "MsdnOnline", true) == 0)
-				{
-					Trace.WriteLine("WARNING: " + base.DocumenterInfo.Name + " Configuration - value 'MsdnOnline' of property 'LinkSdkDocVersion' is OBSOLETE. Please use new option 'SdkLinksOnWeb'\n");
-					Project.SuspendDirtyCheck=false;
-					FailureMessages += base.ReadProperty("SdkDocVersion", "SDK_v1_1");
-					FailureMessages += base.ReadProperty("SdkLinksOnWeb", "True");
-					Project.SuspendDirtyCheck=true;
+			if (String.Compare(name, "LinkToSdkDocVersion", true) == 0) {
+				if (String.Compare(value, "MsdnOnline", true) == 0) {
+					Trace.WriteLine("WARNING: " + DocumenterInfo.Name + " Configuration - value 'MsdnOnline' of property 'LinkSdkDocVersion' is OBSOLETE. Please use new option 'SdkLinksOnWeb'\n");
+					Project.SuspendDirtyCheck = false;
+					FailureMessages += ReadProperty("SdkDocVersion", "SDK_v1_1");
+					FailureMessages += ReadProperty("SdkLinksOnWeb", "True");
+					Project.SuspendDirtyCheck = true;
+				} else {
+					Trace.WriteLine("WARNING: " + DocumenterInfo.Name + " Configuration - property 'LinkToSdkDocVersion' is OBSOLETE. Please use new property 'SdkDocVersion'\n");
+					Project.SuspendDirtyCheck = false;
+					FailureMessages += ReadProperty("SdkDocVersion", value);
+					Project.SuspendDirtyCheck = true;
 				}
-				else
-				{
-					Trace.WriteLine("WARNING: " + base.DocumenterInfo.Name + " Configuration - property 'LinkToSdkDocVersion' is OBSOLETE. Please use new property 'SdkDocVersion'\n");
-					Project.SuspendDirtyCheck=false;
-					FailureMessages += base.ReadProperty("SdkDocVersion", value);
-					Project.SuspendDirtyCheck=true;
-				}
-			}
-			else
-			{
+			} else {
 				// if we don't know how to handle this, let the base class have a go
 				FailureMessages = base.HandleUnknownPropertyType(name, value);
 			}
@@ -521,27 +466,25 @@ namespace NDoc3.Documenter.Msdn
 	/// Defines the output types for this documenter.
 	/// </summary>
 	[Flags]
-	public enum OutputType
-	{
+	public enum OutputType {
 		/// <summary>Output only an HTML Help file (.chm).</summary>
 		[Description("HTML Help")]
-		HtmlHelp = 1, 
+		HtmlHelp = 1,
 
 		/// <summary>Output only Web pages.</summary>
 		[Description("Web")]
-		Web = 2, 
+		Web = 2,
 
 		/// <summary>Output both HTML Help and Web.</summary>
 		[Description("HTML Help and Web")]
 		HtmlHelpAndWeb = HtmlHelp | Web
 	}
 
-	
+
 	/// <summary>
 	/// Style for elements that are added to the table of contents
 	/// </summary>
-	public enum TOCStyle
-	{
+	public enum TOCStyle {
 		/// <summary>Elements are shown in the contents in list format</summary>
 		[Description("Flat")]
 		Flat,

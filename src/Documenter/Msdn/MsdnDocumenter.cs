@@ -21,7 +21,6 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
-using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 using System.Xml.Xsl;
@@ -153,13 +152,13 @@ namespace NDoc3.Documenter.Msdn
 				string rootPageFileName = null;
 				string rootPageTOCName = null;
 
-				if ((MyConfig.RootPageFileName != null) && (MyConfig.RootPageFileName != string.Empty)) {
+				if (!String.IsNullOrEmpty(MyConfig.RootPageFileName)) {
 					rootPageFileName = MyConfig.RootPageFileName;
 					defaultTopic = "default.html";
 
 					rootPageTOCName = "Overview";
 					// what to call the top page in the table of contents?
-					if ((MyConfig.RootPageTOCName != null) && (MyConfig.RootPageTOCName != string.Empty)) {
+					if (!String.IsNullOrEmpty(MyConfig.RootPageTOCName)) {
 						rootPageTOCName = MyConfig.RootPageTOCName;
 					}
 				} else {
@@ -283,7 +282,7 @@ namespace NDoc3.Documenter.Msdn
 
 		private void GenerateHtmlContentFiles(BuildProjectContext buildContext, string rootPageFileName, string rootPageTOCName)
 		{
-			if (MyConfig.CopyrightHref != null && MyConfig.CopyrightHref != String.Empty) {
+			if (!String.IsNullOrEmpty(MyConfig.CopyrightHref)) {
 				if (!MyConfig.CopyrightHref.StartsWith("http:")) {
 					string copyrightFile = Path.Combine(buildContext.WorkingDirectory.FullName, Path.GetFileName(MyConfig.CopyrightHref));
 					File.Copy(MyConfig.CopyrightHref, copyrightFile, true);
@@ -334,18 +333,10 @@ namespace NDoc3.Documenter.Msdn
 
 				// Load the XML documentation into DOM and XPATH doc.
 				using (FileStream tempFile = File.Open(tempFileName, FileMode.Open, FileAccess.Read)) {
-					//					FilteringXmlTextReader fxtr = new FilteringXmlTextReader(tempFile);
 
-					//					XmlTextReader reader = new XmlTextReader(tempFile);
-					//					XPathDocument doc = new XPathDocument(reader, XmlSpace.Preserve);
-
-					XmlDocument xml;
-					xml = new XmlDocument();
+					XmlDocument xml = new XmlDocument();
 					xml.Load(tempFile);
 					return xml;
-					//					tempFile.Seek(0, SeekOrigin.Begin);
-					//						XmlTextReader reader = new XmlTextReader(tempFile);
-					//						xpathDocument = new XPathDocument(reader, XmlSpace.Preserve);
 				}
 			} finally {
 				if (tempFileName != null && File.Exists(tempFileName)) {
@@ -360,20 +351,20 @@ namespace NDoc3.Documenter.Msdn
 		private void WriteHtmlContentResources(BuildProjectContext buildContext)
 		{
 			EmbeddedResources.WriteEmbeddedResources(
-				this.GetType().Module.Assembly,
-				this.GetType().Namespace + ".css", // TODO
+				GetType().Module.Assembly,
+				GetType().Namespace + ".css",
 				buildContext.WorkingDirectory);
 
 			// Write the embedded icons to the html output directory
 			EmbeddedResources.WriteEmbeddedResources(
-				this.GetType().Module.Assembly,
-				this.GetType().Namespace + ".images",
+				GetType().Module.Assembly,
+				GetType().Namespace + ".images",
 				buildContext.WorkingDirectory);
 
 			// Write the embedded scripts to the html output directory
 			EmbeddedResources.WriteEmbeddedResources(
-				this.GetType().Module.Assembly,
-				this.GetType().Namespace + ".scripts",
+				GetType().Module.Assembly,
+				GetType().Namespace + ".scripts",
 				buildContext.WorkingDirectory);
 
 			if (((string)MyConfig.AdditionalContentResourceDirectory).Length > 0)
@@ -382,7 +373,7 @@ namespace NDoc3.Documenter.Msdn
 			// Write the external files (FilesToInclude) to the html output directory
 
 			foreach (string srcFilePattern in MyConfig.FilesToInclude.Split('|')) {
-				if ((srcFilePattern == null) || (srcFilePattern.Length == 0))
+				if (string.IsNullOrEmpty(srcFilePattern))
 					continue;
 
 				string path = Path.GetDirectoryName(srcFilePattern);
@@ -400,7 +391,7 @@ namespace NDoc3.Documenter.Msdn
 				// Directory.GetFiles does not accept null or empty string
 				// for the searchPattern parameter. When no pattern was
 				// specified, assume all files (*) are wanted.
-				if ((pattern == null) || (pattern.Length == 0))
+				if (string.IsNullOrEmpty(pattern))
 					pattern = "*";
 
 				foreach (string srcFile in Directory.GetFiles(path, pattern)) {
@@ -411,7 +402,7 @@ namespace NDoc3.Documenter.Msdn
 			}
 		}
 
-		private void XslTransform(BuildProjectContext buildContext, string stylesheetName, IXPathNavigable xpathNavigable, XsltArgumentList arguments, TextWriter writer, string targetFilename)
+		private static void XslTransform(BuildProjectContext buildContext, string stylesheetName, IXPathNavigable xpathNavigable, XsltArgumentList arguments, TextWriter writer, string targetFilename)
 		{
 			//Use new overload so we don't get obsolete warnings - clean compile :)
 			//			XslCompiledTransform stylesheet = stylesheets[stylesheetName];
@@ -432,7 +423,7 @@ namespace NDoc3.Documenter.Msdn
 			}
 		}
 
-		private WhichType GetWhichType(XmlNode typeNode)
+		private static WhichType GetWhichType(XmlNode typeNode)
 		{
 			WhichType whichType;
 
@@ -469,13 +460,13 @@ namespace NDoc3.Documenter.Msdn
 			MakeHtmlForAssembliesSorted(ctx, mergeAssemblies);
 
 #if DEBUG
-			Trace.WriteLine("Making Html: " + ((Environment.TickCount - start) / 1000.0).ToString() + " sec.");
+			Trace.WriteLine("Making Html: " + ((Environment.TickCount - start) / 1000.0) + " sec.");
 #endif
 		}
 
 		private void MakeHtmlForAssembliesSorted(BuildProjectContext ctx, bool mergeAssemblies)
 		{
-			string defaultNamespace = null; // not used ATM
+			const string defaultNamespace = null;
 
 			XmlNodeList assemblyNodes = ctx.SelectNodes("/ndoc:ndoc/ndoc:assembly");
 
@@ -487,7 +478,7 @@ namespace NDoc3.Documenter.Msdn
             {
                 // sort namespaces alphabetically except for defaultNamespace, which is always first
 				string[] namespaces = SortNamespaces(ctx, assemblyNames, defaultNamespace);
-				MakeHtmlForNamespaces(ctx, null, namespaces, defaultNamespace);                
+				MakeHtmlForNamespaces(ctx, null, namespaces);                
             }
             else
             {
@@ -496,8 +487,8 @@ namespace NDoc3.Documenter.Msdn
                     MakeHtmlForAssembly(ctx, currentAssemblyName);
 
 					ctx.htmlHelp.OpenBookInContents();
-                    string[] namespaces = SortNamespaces(ctx, new List<string>( new string[] { currentAssemblyName }) , defaultNamespace);
-					MakeHtmlForNamespaces(ctx, currentAssemblyName, namespaces, defaultNamespace);
+                    string[] namespaces = SortNamespaces(ctx, new List<string>( new[] { currentAssemblyName }) , defaultNamespace);
+					MakeHtmlForNamespaces(ctx, currentAssemblyName, namespaces);
 					ctx.htmlHelp.CloseBookInContents();
                 }
             }
@@ -515,11 +506,11 @@ namespace NDoc3.Documenter.Msdn
 			ctx.htmlHelp.AddFileToContents(assemblyName + " Assembly", fileName, HtmlHelpIcon.Page);
 		}
 
-		private void MakeHtmlForNamespaces(BuildProjectContext ctx, string currentAssembly, IList<string> namespaces, string defaultNamespace)
+		private void MakeHtmlForNamespaces(BuildProjectContext ctx, string currentAssembly, IList<string> namespaces)
 		{
 			int nNodes = namespaces.Count;
 
-			bool heirTOC = (this.MyConfig.NamespaceTOCStyle == TOCStyle.Hierarchical);
+			bool heirTOC = (MyConfig.NamespaceTOCStyle == TOCStyle.Hierarchical);
 			int level = 0;
 
 			string[] last = new string[0];
@@ -589,7 +580,7 @@ namespace NDoc3.Documenter.Msdn
 			OnDocBuildingProgress(100);
 		}
 
-		private XmlNodeList GetTypeNodes(BuildProjectContext ctx, string assembly, string namespaceName)
+		private static XmlNodeList GetTypeNodes(BuildProjectContext ctx, string assembly, string namespaceName)
 		{
 			string xpath = (assembly == null)
 			               	? string.Format(
@@ -603,7 +594,7 @@ namespace NDoc3.Documenter.Msdn
 			return typeNodes;			
 		}
 
-		private bool ArrayEquals(string[] array1, int from1, string[] array2, int from2, int count)
+		private static bool ArrayEquals(string[] array1, int from1, string[] array2, int from2, int count)
 		{
 			for (int i = 0; i < count; i++) {
 				if (array1[from1 + i] != array2[from2 + i])
@@ -613,7 +604,7 @@ namespace NDoc3.Documenter.Msdn
 			return true;
 		}
 
-		private void GetNamespacesFromAssembly(BuildProjectContext buildContext, string assemblyName, NameValueCollection namespaceAssemblies)
+		private static void GetNamespacesFromAssembly(BuildProjectContext buildContext, string assemblyName, NameValueCollection namespaceAssemblies)
 		{
 			XmlNodeList namespaceNodes = buildContext.SelectNodes(string.Format("/ndoc:ndoc/ndoc:assembly[@name='{0}']/ndoc:module/ndoc:namespace", assemblyName));
 			foreach (XmlNode namespaceNode in namespaceNodes) {
@@ -700,11 +691,7 @@ namespace NDoc3.Documenter.Msdn
 
 		private void MakeHtmlForEnumerationOrDelegate(BuildAssemblyContext ctx, WhichType whichType, XmlNode typeNode)
 		{
-			string typeName;
-			if (whichType == WhichType.Delegate)
-				typeName = GetNodeDisplayName(typeNode);
-			else
-				typeName = GetNodeName(typeNode);
+			string typeName = whichType == WhichType.Delegate ? GetNodeDisplayName(typeNode) : GetNodeName(typeNode);
 			string typeID = GetNodeId(typeNode);
 			string fileName = ctx._nameResolver.GetFilenameForId(ctx.CurrentAssemblyName, typeID);
 
@@ -752,29 +739,26 @@ namespace NDoc3.Documenter.Msdn
 				arguments.AddParam("type-id", String.Empty, typeID);
 				TransformAndWriteResult(ctx, "allmembers", arguments, fileName);
 
-				MakeHtmlForConstructors(ctx, whichType, typeNode);
-				MakeHtmlForFields(ctx, whichType, typeNode);
-				MakeHtmlForProperties(ctx, whichType, typeNode);
-				MakeHtmlForMethods(ctx, whichType, typeNode);
-				MakeHtmlForOperators(ctx, whichType, typeNode);
-				MakeHtmlForEvents(ctx, whichType, typeNode);
+				MakeHtmlForConstructors(ctx, typeNode);
+				MakeHtmlForFields(ctx, typeNode);
+				MakeHtmlForProperties(ctx, typeNode);
+				MakeHtmlForMethods(ctx, typeNode);
+				MakeHtmlForOperators(ctx, typeNode);
+				MakeHtmlForEvents(ctx, typeNode);
 
 				ctx.htmlHelp.CloseBookInContents();
 			}
 		}
 
-		private void MakeHtmlForConstructors(BuildAssemblyContext ctx, WhichType whichType, XmlNode typeNode)
+		private void MakeHtmlForConstructors(BuildAssemblyContext ctx, XmlNode typeNode)
 		{
-			XmlNodeList constructorNodes;
 			string constructorID;
-			string typeName;
-			string typeID;
 			string fileName;
 
-			typeName = GetNodeDisplayName(typeNode);
-			typeID = GetNodeId(typeNode);
+			string typeName = GetNodeDisplayName(typeNode);
+			string typeID = GetNodeId(typeNode);
 
-			constructorNodes = ctx.SelectNodes(typeNode, "ndoc:constructor[@contract!='Static']");
+			XmlNodeList constructorNodes = ctx.SelectNodes(typeNode, "ndoc:constructor[@contract!='Static']");
 			// If the constructor is overloaded then make an overload page.
 			if (constructorNodes.Count > 1) {
 				fileName = ctx._nameResolver.GetFilenameForConstructorList(ctx.CurrentAssemblyName, typeID);
@@ -795,7 +779,7 @@ namespace NDoc3.Documenter.Msdn
 
 				if (constructorNodes.Count > 1) {
 					XmlNodeList parameterNodes = ctx.SelectNodes(constructorNode, "ndoc:parameter");
-					ctx.htmlHelp.AddFileToContents(typeName + " Constructor " + GetParamList(ctx, parameterNodes), fileName,
+					ctx.htmlHelp.AddFileToContents(typeName + " Constructor " + GetParamList(parameterNodes), fileName,
 						HtmlHelpIcon.Page);
 				} else {
 					ctx.htmlHelp.AddFileToContents(typeName + " Constructor", fileName, HtmlHelpIcon.Page);
@@ -823,7 +807,7 @@ namespace NDoc3.Documenter.Msdn
 			}
 		}
 
-		private void MakeHtmlForFields(BuildAssemblyContext ctx, WhichType whichType, XmlNode typeNode)
+		private void MakeHtmlForFields(BuildAssemblyContext ctx, XmlNode typeNode)
 		{
 			XmlNodeList fields = ctx.SelectNodes(typeNode, "ndoc:field[not(@declaringType)]");
 
@@ -860,27 +844,22 @@ namespace NDoc3.Documenter.Msdn
 			}
 		}
 
-		private void MakeHtmlForProperties(BuildAssemblyContext ctx, WhichType whichType, XmlNode typeNode)
+		private void MakeHtmlForProperties(BuildAssemblyContext ctx, XmlNode typeNode)
 		{
 			XmlNodeList declaredPropertyNodes = ctx.SelectNodes(typeNode, "ndoc:property[not(@declaringType)]");
 
 			if (declaredPropertyNodes.Count > 0) {
-				XmlNodeList propertyNodes;
 				XmlNode propertyNode;
 				bool bOverloaded = false;
-				string typeID;
-				string fileName;
-				int nNodes;
-				int[] indexes;
 				int i;
 
-				typeID = GetNodeId(typeNode);
-				propertyNodes = ctx.SelectNodes(typeNode, "ndoc:property[not(@declaringType)]");
-				nNodes = propertyNodes.Count;
+				string typeID = GetNodeId(typeNode);
+				XmlNodeList propertyNodes = ctx.SelectNodes(typeNode, "ndoc:property[not(@declaringType)]");
+				int nNodes = propertyNodes.Count;
 
-				indexes = SortNodesByAttribute(propertyNodes, "id");
+				int[] indexes = SortNodesByAttribute(propertyNodes, "id");
 
-				fileName = ctx._nameResolver.GetFilenameForPropertyList(ctx.CurrentAssemblyName, typeID);
+				string fileName = ctx._nameResolver.GetFilenameForPropertyList(ctx.CurrentAssemblyName, typeID);
 				ctx.htmlHelp.AddFileToContents("Properties", fileName);
 
 				XsltArgumentList arguments = new XsltArgumentList();
@@ -893,8 +872,8 @@ namespace NDoc3.Documenter.Msdn
 				for (i = 0; i < nNodes; i++) {
 					propertyNode = propertyNodes[indexes[i]];
 
-					string propertyName = (string)propertyNode.Attributes["name"].Value;
-					string propertyID = (string)propertyNode.Attributes["id"].Value;
+					string propertyName = propertyNode.Attributes["name"].Value;
+					string propertyID = propertyNode.Attributes["id"].Value;
 
 					// If the method is overloaded then make an overload page.
 					string previousPropertyName = ((i - 1 < 0) || (propertyNodes[indexes[i - 1]].Attributes.Count == 0))
@@ -922,7 +901,7 @@ namespace NDoc3.Documenter.Msdn
 						pageTitle = string.Format("{0} Property", propertyName);
 					} else {
 						XmlNodeList parameterNodes = ctx.SelectNodes(propertyNode, "ns:parameter");
-						pageTitle = string.Format("{0} Property {1}", propertyName, GetParamList(ctx, parameterNodes));
+						pageTitle = string.Format("{0} Property {1}", propertyName, GetParamList(parameterNodes));
 					}
 					ctx.htmlHelp.AddFileToContents(pageTitle, fileName, HtmlHelpIcon.Page);
 
@@ -940,7 +919,7 @@ namespace NDoc3.Documenter.Msdn
 			}
 		}
 
-		private string GetPreviousMethodName(XmlNodeList methodNodes, int[] indexes, int index)
+		private static string GetPreviousMethodName(XmlNodeList methodNodes, int[] indexes, int index)
 		{
 			while (--index >= 0) {
 				if (methodNodes[indexes[index]].Attributes["declaringType"] == null)
@@ -949,7 +928,7 @@ namespace NDoc3.Documenter.Msdn
 			return null;
 		}
 
-		private string GetNextMethodName(XmlNodeList methodNodes, int[] indexes, int index)
+		private static string GetNextMethodName(XmlNodeList methodNodes, int[] indexes, int index)
 		{
 			while (++index < methodNodes.Count) {
 				if (methodNodes[indexes[index]].Attributes["declaringType"] == null)
@@ -960,7 +939,7 @@ namespace NDoc3.Documenter.Msdn
 
 		// returns true, if method is neither overload of a method in the same class,
 		// nor overload of a method in the base class.
-		private bool IsMethodAlone(XmlNodeList methodNodes, int[] indexes, int index)
+		private static bool IsMethodAlone(XmlNodeList methodNodes, int[] indexes, int index)
 		{
 			string name = methodNodes[indexes[index]].Attributes["name"].Value;
 			int lastIndex = methodNodes.Count - 1;
@@ -973,7 +952,7 @@ namespace NDoc3.Documenter.Msdn
 			return (previousNameDifferent && nextNameDifferent);
 		}
 
-		private bool IsMethodFirstOverload(XmlNodeList methodNodes, int[] indexes, int index)
+		private static bool IsMethodFirstOverload(XmlNodeList methodNodes, int[] indexes, int index)
 		{
 			if ((methodNodes[indexes[index]].Attributes["declaringType"] != null)
 				|| IsMethodAlone(methodNodes, indexes, index))
@@ -984,7 +963,7 @@ namespace NDoc3.Documenter.Msdn
 			return previousName != name;
 		}
 
-		private bool IsMethodLastOverload(XmlNodeList methodNodes, int[] indexes, int index)
+		private static bool IsMethodLastOverload(XmlNodeList methodNodes, int[] indexes, int index)
 		{
 			if ((methodNodes[indexes[index]].Attributes["declaringType"] != null)
 				|| IsMethodAlone(methodNodes, indexes, index))
@@ -995,13 +974,12 @@ namespace NDoc3.Documenter.Msdn
 			return nextName != name;
 		}
 
-		private void MakeHtmlForMethods(BuildAssemblyContext ctx, WhichType whichType, XmlNode typeNode)
+		private void MakeHtmlForMethods(BuildAssemblyContext ctx, XmlNode typeNode)
 		{
 			XmlNodeList declaredMethodNodes = ctx.SelectNodes(typeNode, "ndoc:method[not(@declaringType)]");
 
 			if (declaredMethodNodes.Count > 0) {
 				bool bOverloaded = false;
-				string fileName;
 
 				string typeID = GetNodeId(typeNode);
 				XmlNodeList methodNodes = ctx.SelectNodes(typeNode, "ndoc:method");
@@ -1009,7 +987,7 @@ namespace NDoc3.Documenter.Msdn
 
 				int[] indexes = SortNodesByAttribute(methodNodes, "id");
 
-				fileName = ctx._nameResolver.GetFilenameForMethodList(ctx.CurrentAssemblyName, typeID);
+				string fileName = ctx._nameResolver.GetFilenameForMethodList(ctx.CurrentAssemblyName, typeID);
 				ctx.htmlHelp.AddFileToContents("Methods", fileName);
 
 				XsltArgumentList arguments = new XsltArgumentList();
@@ -1044,7 +1022,7 @@ namespace NDoc3.Documenter.Msdn
 						string pageTitle;
 						if (bOverloaded) {
 							XmlNodeList parameterNodes = ctx.SelectNodes(methodNode, "ndoc:parameter");
-							pageTitle = methodDisplayName + GetParamList(ctx, parameterNodes) + " Method ";
+							pageTitle = methodDisplayName + GetParamList(parameterNodes) + " Method ";
 						} else {
 							pageTitle = methodDisplayName + " Method";
 						}
@@ -1066,7 +1044,7 @@ namespace NDoc3.Documenter.Msdn
 			}
 		}
 
-		private void MakeHtmlForOperators(BuildAssemblyContext ctx, WhichType whichType, XmlNode typeNode)
+		private void MakeHtmlForOperators(BuildAssemblyContext ctx, XmlNode typeNode)
 		{
 			XmlNodeList opNodes = ctx.SelectNodes(typeNode, "ndoc:operator");
 
@@ -1084,11 +1062,7 @@ namespace NDoc3.Documenter.Msdn
 			string pageTitle = "";
 
 			if (bHasOperators) {
-				if (bHasConverters) {
-					pageTitle = "Operators and Type Conversions";
-				} else {
-					pageTitle = "Operators";
-				}
+				pageTitle = bHasConverters ? "Operators and Type Conversions" : "Operators";
 			} else {
 				if (bHasConverters) {
 					pageTitle = "Type Conversions";
@@ -1132,7 +1106,7 @@ namespace NDoc3.Documenter.Msdn
 					string opPageTitle;
 					if (bOverloaded) {
 						XmlNodeList parameterNodes = ctx.SelectNodes(operatorNode, "ns:parameter");
-						opPageTitle = GetOperatorDisplayName(ctx, operatorNode) + GetParamList(ctx, parameterNodes);
+						opPageTitle = GetOperatorDisplayName(ctx, operatorNode) + GetParamList(parameterNodes);
 					} else {
 						opPageTitle = GetOperatorDisplayName(ctx, operatorNode);
 					}
@@ -1170,7 +1144,7 @@ namespace NDoc3.Documenter.Msdn
 			ctx.htmlHelp.CloseBookInContents();
 		}
 
-		private string GetOperatorDisplayName(BuildProjectContext ctx, XmlNode operatorNode)
+		private static string GetOperatorDisplayName(BuildProjectContext ctx, XmlNode operatorNode)
 		{
 			string name = GetNodeName(operatorNode);
 
@@ -1282,7 +1256,7 @@ namespace NDoc3.Documenter.Msdn
 			}
 		}
 
-		private void MakeHtmlForEvents(BuildAssemblyContext ctx, WhichType whichType, XmlNode typeNode)
+		private void MakeHtmlForEvents(BuildAssemblyContext ctx, XmlNode typeNode)
 		{
 			XmlNodeList declaredEventNodes = ctx.SelectNodes(typeNode, "ndoc:event[not(@declaringType)]");
 
@@ -1328,10 +1302,8 @@ namespace NDoc3.Documenter.Msdn
 			}
 		}
 
-		private string GetParamList(BuildProjectContext ctx, XmlNodeList parameterNodes)
+		private static string GetParamList(XmlNodeList parameterNodes)
 		{
-//			int numberOfNodes = parameterNodes.Count;
-//			int nodeIndex = 1;
 			ArrayList parameters = new ArrayList();
 
 			foreach (XmlNode parameterNode in parameterNodes) {
@@ -1339,12 +1311,6 @@ namespace NDoc3.Documenter.Msdn
 				string parameterTypeName = GetParameterTypeName(parameterNode, "displayName");
 				
 				parameters.Add(parameterTypeName);
-
-//				if (nodeIndex < numberOfNodes) {
-//					paramList += ", ";
-//				}
-//
-//				nodeIndex++;
 			}
 
 			string[] parameterTypeNames = (string[]) parameters.ToArray(typeof (string));
@@ -1353,39 +1319,33 @@ namespace NDoc3.Documenter.Msdn
 			return paramList;
 		}
 
-		private string GetParameterTypeName(XmlNode root, string typeAttributeName)
+		private static string GetParameterTypeName(XmlNode root, string typeAttributeName)
 		{
 			XmlAttribute typeAtt = root.Attributes[typeAttributeName];
 			return typeAtt.Value;
-//			return StripNamespace(typeAtt.Value.Substring(2));
 		}
 
-		private string GetNodeId(XmlNode node)
+		private static string GetNodeId(XmlNode node)
 		{
 			return XmlUtils.GetNodeId(node);
 		}
 
-		private string GetNodeType(XmlNode node)
-		{
-			return XmlUtils.GetNodeType(node);
-		}
-
-		private string GetNodeTypeId(XmlNode node)
+		private static string GetNodeTypeId(XmlNode node)
 		{
 			return XmlUtils.GetNodeTypeId(node);
 		}
 
-		private string GetNodeName(XmlNode node)
+		private static string GetNodeName(XmlNode node)
 		{
 			return XmlUtils.GetNodeName(node);
 		}
 
-		private string GetNodeDisplayName(XmlNode node)
+		private static string GetNodeDisplayName(XmlNode node)
 		{
 			return XmlUtils.GetNodeDisplayName(node);
 		}
 
-		private string StripNamespace(string name)
+		private static string StripNamespace(string name)
 		{
 			string result = name;
 
@@ -1398,7 +1358,7 @@ namespace NDoc3.Documenter.Msdn
 			return result;
 		}
 
-		private int[] SortNodesByAttribute(XmlNodeList nodes, string attributeName)
+		private static int[] SortNodesByAttribute(XmlNodeList nodes, string attributeName)
 		{
 			int length = nodes.Count;
 			string[] names = new string[length];
@@ -1406,7 +1366,7 @@ namespace NDoc3.Documenter.Msdn
 			int i = 0;
 
 			foreach (XmlNode node in nodes) {
-				names[i] = (string)node.Attributes[attributeName].Value;
+				names[i] = node.Attributes[attributeName].Value;
 				indexes[i] = i++;
 			}
 
@@ -1415,7 +1375,7 @@ namespace NDoc3.Documenter.Msdn
 			return indexes;
 		}
 
-		private string[] SortNamespaces(BuildProjectContext ctx, IList<string> assemblyNames, string defaultNamespace)
+		private static string[] SortNamespaces(BuildProjectContext ctx, IList<string> assemblyNames, string defaultNamespace)
 		{
 			NameValueCollection namespaceAssemblies = new NameValueCollection();
 			int nNodes = assemblyNames.Count;

@@ -23,7 +23,7 @@ namespace ShellLib
 			IntPtr ptrRet;
 			ShellApi.SHGetDesktopFolder(out ptrRet);
 
-			System.Type shellFolderType = System.Type.GetType("ShellLib.IShellFolder");
+			Type shellFolderType = Type.GetType("ShellLib.IShellFolder");
 			Object obj = Marshal.GetTypedObjectForIUnknown(ptrRet,shellFolderType);
 			IShellFolder ishellFolder = (IShellFolder)obj;
 
@@ -32,31 +32,31 @@ namespace ShellLib
 
 		public static Type GetShellFolderType()
 		{
-			System.Type shellFolderType = System.Type.GetType("ShellLib.IShellFolder");
+			Type shellFolderType = Type.GetType("ShellLib.IShellFolder");
 			return shellFolderType;
 		}
 
 		public static Type GetMallocType()
 		{
-			System.Type mallocType = System.Type.GetType("ShellLib.IMalloc");
+			Type mallocType = Type.GetType("ShellLib.IMalloc");
 			return mallocType;
 		}
 
 		public static Type GetFolderFilterType()
 		{
-			System.Type folderFilterType = System.Type.GetType("ShellLib.IFolderFilter");
+			Type folderFilterType = Type.GetType("ShellLib.IFolderFilter");
 			return folderFilterType;
 		}
 
 		public static Type GetFolderFilterSiteType()
 		{
-			System.Type folderFilterSiteType = System.Type.GetType("ShellLib.IFolderFilterSite");
+			Type folderFilterSiteType = Type.GetType("ShellLib.IFolderFilterSite");
 			return folderFilterSiteType;
 		}
 
 		public static IShellFolder GetShellFolder(IntPtr ptrShellFolder)
 		{
-			System.Type shellFolderType = GetShellFolderType();
+			Type shellFolderType = GetShellFolderType();
 			Object obj = Marshal.GetTypedObjectForIUnknown(ptrShellFolder,shellFolderType);
 			IShellFolder RetVal = (IShellFolder)obj;
 			return RetVal;
