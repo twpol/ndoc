@@ -17,7 +17,7 @@
  *      be misrepresented as being the original software.
  * 
  *   3. This notice may not be removed or altered from any source distribution.
- */ 
+ */
 #endregion
 
 using System;
@@ -25,21 +25,17 @@ using System.IO;
 using System.Xml;
 using System.Xml.XPath;
 
-namespace NDoc3.VisualStudio
-{
-    internal enum ProjectVersion
-    {
-        VS2003,
-        VS2005AndAbove
-    }
+namespace NDoc3.VisualStudio {
+	internal enum ProjectVersion {
+		VS2003,
+		VS2005AndAbove
+	}
 
 	/// <summary>
 	/// Represents a Visual Studio c# project file.
 	/// </summary>
-	public class Project
-	{
-		internal Project(Solution solution, Guid id, string name)
-		{
+	public class Project {
+		internal Project(Solution solution, Guid id, string name) {
 			_Solution = solution;
 			_ID = id;
 			_Name = name;
@@ -48,8 +44,7 @@ namespace NDoc3.VisualStudio
 		private readonly Solution _Solution;
 
 		/// <summary>Gets the solution that contains this project.</summary>
-		public Solution Solution
-		{
+		public Solution Solution {
 			get { return _Solution; }
 		}
 
@@ -57,8 +52,7 @@ namespace NDoc3.VisualStudio
 
 		/// <summary>Gets or sets the relative path (from the solution 
 		/// directory) to the project directory.</summary>
-		public string RelativePath
-		{
+		public string RelativePath {
 			get { return _RelativePath; }
 			set { _RelativePath = value; }
 		}
@@ -66,75 +60,62 @@ namespace NDoc3.VisualStudio
 		private readonly Guid _ID;
 
 		/// <summary>Gets the GUID that identifies the project.</summary>
-		public Guid ID
-		{
+		public Guid ID {
 			get { return _ID; }
 		}
 
 		private readonly string _Name;
 
 		/// <summary>Gets the name of the project.</summary>
-		public string Name
-		{
+		public string Name {
 			get { return _Name; }
 		}
 
 		private XPathDocument _ProjectDocument;
 		private XPathNavigator _ProjectNavigator;
-        private XmlNamespaceManager _ProjectNamespaceManager;
-        private ProjectVersion _ProjectVersion;
+		private XmlNamespaceManager _ProjectNamespaceManager;
+		private ProjectVersion _ProjectVersion;
 
 		/// <summary>Reads the project file from the specified path.</summary>
 		/// <param name="path">The path to the project file.</param>
-		public void Read(string path)
-		{
+		public void Read(string path) {
 			_ProjectDocument = new XPathDocument(path);
 			_ProjectNavigator = _ProjectDocument.CreateNavigator();
-            _ProjectNamespaceManager = new XmlNamespaceManager(_ProjectNavigator.NameTable);
-            _ProjectNamespaceManager.AddNamespace("ns", "http://schemas.microsoft.com/developer/msbuild/2003");
+			_ProjectNamespaceManager = new XmlNamespaceManager(_ProjectNavigator.NameTable);
+			_ProjectNamespaceManager.AddNamespace("ns", "http://schemas.microsoft.com/developer/msbuild/2003");
 		}
 
 		/// <summary>Gets a string that represents the type of project.</summary>
 		/// <value>"Visual C++" or "C# Local"</value>
-		public string ProjectType
-		{
-			get
-			{
+		public string ProjectType {
+			get {
 				string projectType = "";
-                if ((bool)_ProjectNavigator.Evaluate("boolean(VisualStudioProject)"))
-                {
-                    _ProjectVersion = ProjectVersion.VS2003;
-                    if ((bool)_ProjectNavigator.Evaluate("boolean(VisualStudioProject/@ProjectType='Visual C++')"))
-                        projectType = "Visual C++";
-                    else if ((bool)_ProjectNavigator.Evaluate("boolean(VisualStudioProject/CSHARP/@ProjectType='Local')"))
-                        projectType = "C# Local";
-                    else if ((bool)_ProjectNavigator.Evaluate("boolean(VisualStudioProject/CSHARP/@ProjectType='Web')"))
-                        projectType = "C# Web";
-                }
-                else if ((bool)_ProjectNavigator.Evaluate("boolean(/ns:Project/ns:PropertyGroup/ns:ProjectType)", _ProjectNamespaceManager))
-                {
-                    _ProjectVersion = ProjectVersion.VS2005AndAbove;
-                    if ((bool)_ProjectNavigator.Evaluate("boolean(/ns:Project/ns:PropertyGroup/ns:ProjectType[text()='Local'])", _ProjectNamespaceManager))
-                        projectType = "C# Local";
-                    else if ((bool)_ProjectNavigator.Evaluate("boolean(/ns:Project/ns:PropertyGroup/ns:ProjectType[text()='Web'])", _ProjectNamespaceManager))
-                        projectType = "C# Web";
-                }
-                else if ((bool)_ProjectNavigator.Evaluate("boolean(/ns:Project/ns:PropertyGroup)", _ProjectNamespaceManager))
-                {
-                    _ProjectVersion = ProjectVersion.VS2005AndAbove;
-                    projectType = "C# Local";
-                }
-                else
-                {
-                    throw new ApplicationException("Unknown project file");
-                }
+				if ((bool)_ProjectNavigator.Evaluate("boolean(VisualStudioProject)")) {
+					_ProjectVersion = ProjectVersion.VS2003;
+					if ((bool)_ProjectNavigator.Evaluate("boolean(VisualStudioProject/@ProjectType='Visual C++')"))
+						projectType = "Visual C++";
+					else if ((bool)_ProjectNavigator.Evaluate("boolean(VisualStudioProject/CSHARP/@ProjectType='Local')"))
+						projectType = "C# Local";
+					else if ((bool)_ProjectNavigator.Evaluate("boolean(VisualStudioProject/CSHARP/@ProjectType='Web')"))
+						projectType = "C# Web";
+				} else if ((bool)_ProjectNavigator.Evaluate("boolean(/ns:Project/ns:PropertyGroup/ns:ProjectType)", _ProjectNamespaceManager)) {
+					_ProjectVersion = ProjectVersion.VS2005AndAbove;
+					if ((bool)_ProjectNavigator.Evaluate("boolean(/ns:Project/ns:PropertyGroup/ns:ProjectType[text()='Local'])", _ProjectNamespaceManager))
+						projectType = "C# Local";
+					else if ((bool)_ProjectNavigator.Evaluate("boolean(/ns:Project/ns:PropertyGroup/ns:ProjectType[text()='Web'])", _ProjectNamespaceManager))
+						projectType = "C# Web";
+				} else if ((bool)_ProjectNavigator.Evaluate("boolean(/ns:Project/ns:PropertyGroup)", _ProjectNamespaceManager)) {
+					_ProjectVersion = ProjectVersion.VS2005AndAbove;
+					projectType = "C# Local";
+				} else {
+					throw new ApplicationException("Unknown project file");
+				}
 				return projectType;
 			}
 		}
 
 		/// <summary>Gets the name of the assembly this project generates.</summary>
-		public string AssemblyName
-		{
+		public string AssemblyName {
 			get {
 				switch (_ProjectVersion) {
 					case ProjectVersion.VS2003:
@@ -149,8 +130,7 @@ namespace NDoc3.VisualStudio
 
 		/// <summary>Gets the output type of the project.</summary>
 		/// <value>"Library", "Exe", or "WinExe"</value>
-		public string OutputType
-		{
+		public string OutputType {
 			get {
 				switch (_ProjectVersion) {
 					case ProjectVersion.VS2003:
@@ -164,14 +144,11 @@ namespace NDoc3.VisualStudio
 		}
 
 		/// <summary>Gets the filename of the generated assembly.</summary>
-		public string OutputFile
-		{
-			get
-			{
+		public string OutputFile {
+			get {
 				string extension = "";
 
-				switch (OutputType)
-				{
+				switch (OutputType) {
 					case "Library":
 						extension = ".dll";
 						break;
@@ -188,8 +165,7 @@ namespace NDoc3.VisualStudio
 		}
 
 		/// <summary>Gets the default namespace for the project.</summary>
-		public string RootNamespace
-		{
+		public string RootNamespace {
 			get {
 				switch (_ProjectVersion) {
 					case ProjectVersion.VS2003:
@@ -205,27 +181,22 @@ namespace NDoc3.VisualStudio
 		/// <summary>Gets the configuration with the specified name.</summary>
 		/// <param name="configName">A valid configuration name, usually "Debug" or "Release".</param>
 		/// <returns>A ProjectConfig object.</returns>
-		public ProjectConfig GetConfiguration(string configName)
-		{
+		public ProjectConfig GetConfiguration(string configName) {
 			XPathNavigator navigator = null;
 			XPathNodeIterator nodes = null;
-			if (_ProjectVersion == ProjectVersion.VS2003)
-			{
-				 nodes =
-					  _ProjectNavigator.Select(
-							String.Format("/VisualStudioProject/CSHARP/Build/" + 
-							"Settings/Config[@Name='{0}']", configName));
+			if (_ProjectVersion == ProjectVersion.VS2003) {
+				nodes =
+					 _ProjectNavigator.Select(
+						  String.Format("/VisualStudioProject/CSHARP/Build/" +
+						  "Settings/Config[@Name='{0}']", configName));
+			} else if (_ProjectVersion == ProjectVersion.VS2005AndAbove) {
+				nodes =
+					 _ProjectNavigator.Select(
+						  String.Format("/ns:Project/ns:PropertyGroup/" +
+						  "@Condition[contains(string(), '{0}')]", configName), _ProjectNamespaceManager);
 			}
-			else if (_ProjectVersion == ProjectVersion.VS2005AndAbove)
-			{
-				 nodes =
-					  _ProjectNavigator.Select(
-							String.Format("/ns:Project/ns:PropertyGroup/" + 
-							"@Condition[contains(string(), '{0}')]", configName), _ProjectNamespaceManager);
-			}
-			if (nodes == null)
-			{
-				 throw new ApplicationException("Couldn't find configuration");
+			if (nodes == null) {
+				throw new ApplicationException("Couldn't find configuration");
 			}
 			if (nodes.MoveNext())
 				navigator = nodes.Current;
@@ -236,24 +207,21 @@ namespace NDoc3.VisualStudio
 		/// <summary>Gets the relative path (from the solution directory) to the
 		/// assembly this project generates.</summary>
 		/// <param name="configName">A valid configuration name, usually "Debug" or "Release".</param>
-		public string GetRelativeOutputPathForConfiguration(string configName)
-		{
+		public string GetRelativeOutputPathForConfiguration(string configName) {
 			return Path.Combine(
-				Path.Combine(RelativePath, GetConfiguration(configName).OutputPath), 
+				Path.Combine(RelativePath, GetConfiguration(configName).OutputPath),
 				OutputFile);
 		}
 
 		/// <summary>Gets the relative path (from the solution directory) to the
 		/// XML documentation this project generates.</summary>
 		/// <param name="configName">A valid configuration name, usually "Debug" or "Release".</param>
-		public string GetRelativePathToDocumentationFile(string configName)
-		{
+		public string GetRelativePathToDocumentationFile(string configName) {
 			string path = null;
 
 			string documentationFile = GetConfiguration(configName).DocumentationFile;
 
-			if (!String.IsNullOrEmpty(documentationFile))
-			{
+			if (!String.IsNullOrEmpty(documentationFile)) {
 				path = Path.Combine(RelativePath, documentationFile);
 			}
 

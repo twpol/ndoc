@@ -1,63 +1,45 @@
 using System;
-using System.Diagnostics;
 using System.Collections.Specialized;
-using System.Globalization;
 
-using NDoc3.Core;
-using NDoc3.Core.Reflection;
-
-namespace NDoc3.Documenter.Msdn2
-{
+namespace NDoc3.Documenter.Msdn2 {
 	/// <summary>
 	/// Provides an extension object for the xslt transformations.
 	/// </summary>
-	public class MsdnXsltUtilities
-	{
-		private const string sdkDoc10BaseNamespace = "MS.NETFrameworkSDK";
-		private const string sdkDoc11BaseNamespace = "MS.NETFrameworkSDKv1.1";
-		private const string helpURL = "ms-help://";
-		private const string sdkRoot = "/cpref/html/frlrf";
-		private const string sdkDocPageExt = ".htm";
+	public class MsdnXsltUtilities {
 		private const string msdnOnlineSdkBaseUrl = "http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrf";
 		private const string msdnOnlineSdkPageExt = ".asp";
 		private const string systemPrefix = "System.";
-		private string frameworkVersion="";
-		private string sdkDocBaseUrl; 
-		private string sdkDocExt; 
-		private StringDictionary fileNames;
-		private StringDictionary elemNames;
+		private const string frameworkVersion = "";
+		private readonly string sdkDocBaseUrl;
+		private readonly string sdkDocExt;
+		private readonly StringDictionary fileNames;
+		private readonly StringDictionary elemNames;
 		private StringCollection descriptions;
-		private string encodingString;
+		private readonly string encodingString;
 
 		/// <summary>
 		/// Initializes a new instance of class MsdnXsltUtilities
 		/// </summary>
 		/// <param name="fileNames">A StringDictionary holding id to file name mappings.</param>
 		/// <param name="elemNames">A StringDictionary holding id to element name mappings</param>
-		/// <param name="linkToSdkDocVersion">Specifies the version of the SDK documentation.</param>
-		/// <param name="linkToSdkDocLangauge">Specifies the version of the SDK documentation.</param>
 		/// <param name="SdkLinksOnWeb">Specifies if links should be to ms online documentation.</param>
 		/// <param name="fileEncoding">Specifies if links should be to ms online documentation.</param>
 		public MsdnXsltUtilities(
-			StringDictionary fileNames, 
-			StringDictionary elemNames, 
-			SdkVersion  linkToSdkDocVersion,
-			string linkToSdkDocLangauge,
+			StringDictionary fileNames,
+			StringDictionary elemNames,
 			bool SdkLinksOnWeb,
-			System.Text.Encoding fileEncoding)
-		{
+			System.Text.Encoding fileEncoding) {
 			Reset();
 
 			this.fileNames = fileNames;
 			this.elemNames = elemNames;
-			
 
-			if (SdkLinksOnWeb)
-			{
+
+			if (SdkLinksOnWeb) {
 				sdkDocBaseUrl = msdnOnlineSdkBaseUrl;
 				sdkDocExt = msdnOnlineSdkPageExt;
 			}
-            //TODO Handle none web links
+			//TODO Handle none web links
 			/*else
 			{
 				switch (linkToSdkDocVersion)
@@ -77,79 +59,68 @@ namespace NDoc3.Documenter.Msdn2
 						break;
 				}
 			}*/
-			encodingString = "text/html; charset=" + fileEncoding.WebName; 
+			encodingString = "text/html; charset=" + fileEncoding.WebName;
 		}
 
 		/// <summary>
 		/// Reset Overload method checking state.
 		/// </summary>
-		public void Reset()
-		{
+		public void Reset() {
 			descriptions = new StringCollection();
 		}
 
 		/// <summary>
 		/// Gets the base Url for system types links.
 		/// </summary>
-		public string SdkDocBaseUrl
-		{
+		public string SdkDocBaseUrl {
 			get { return sdkDocBaseUrl; }
 		}
 
 		/// <summary>
 		/// Gets the page file extension for system types links.
 		/// </summary>
-		public string SdkDocExt
-		{
+		public string SdkDocExt {
 			get { return sdkDocExt; }
 		}
 
 		/// <summary>
 		/// Gets the friendly version number for the framework.
 		/// </summary>
-		public string FrameworkVersion
-		{
-			get {return frameworkVersion;}
+		public string FrameworkVersion {
+			get { return frameworkVersion; }
 		}
 
 		/// <summary>
 		/// Returns an HRef for a CRef.
 		/// </summary>
 		/// <param name="cref">CRef for which the HRef will be looked up.</param>
-		public string GetHRef(string cref)
-		{
+		public string GetHRef(string cref) {
 			if ((cref.Length < 2) || (cref[1] != ':'))
 				return string.Empty;
 
 			if ((cref.Length < 9)
-				|| (cref.Substring(2, 7) != systemPrefix))
-			{
+				|| (cref.Substring(2, 7) != systemPrefix)) {
 				string fileName = fileNames[cref];
 				if ((fileName == null) && cref.StartsWith("F:"))
 					fileName = fileNames["E:" + cref.Substring(2)];
 
 				if (fileName == null)
 					return "";
-				else
-					return fileName;
+				return fileName;
 			}
-			else
-			{
-				switch (cref.Substring(0, 2))
-				{
-					case "N:":	// Namespace
-						return sdkDocBaseUrl + cref.Substring(2).Replace(".", "") + sdkDocExt;
-					case "T:":	// Type: class, interface, struct, enum, delegate
-						// pointer types link to the type being pointed to
-						return sdkDocBaseUrl + cref.Substring(2).Replace(".", "").Replace( "*", "" ) + "ClassTopic" + sdkDocExt;
-					case "F:":	// Field
-					case "P:":	// Property
-					case "M:":	// Method
-					case "E:":	// Event
-						return GetFilenameForSystemMember(cref);
-					default:
-						return string.Empty;
-				}
+			switch (cref.Substring(0, 2)) {
+				case "N:":	// Namespace
+					return sdkDocBaseUrl + cref.Substring(2).Replace(".", "") + sdkDocExt;
+				case "T:":	// Type: class, interface, struct, enum, delegate
+					// pointer types link to the type being pointed to
+					return sdkDocBaseUrl + cref.Substring(2).Replace(".", "").Replace("*", "") + "ClassTopic" + sdkDocExt;
+				case "F:":	// Field
+				case "P:":	// Property
+				case "M:":	// Method
+				case "E:":	// Event
+					return GetFilenameForSystemMember(cref);
+				default:
+					return string.Empty;
 			}
 		}
 
@@ -157,16 +128,13 @@ namespace NDoc3.Documenter.Msdn2
 		/// Returns a name for a CRef.
 		/// </summary>
 		/// <param name="cref">CRef for which the name will be looked up.</param>
-		public string GetName(string cref)
-		{
+		public string GetName(string cref) {
 			if (cref.Length < 2)
 				return cref;
 
-			if (cref[1] == ':')
-			{
+			if (cref[1] == ':') {
 				if ((cref.Length < 9)
-					|| (cref.Substring(2, 7) != systemPrefix))
-				{
+					|| (cref.Substring(2, 7) != systemPrefix)) {
 					string name = elemNames[cref];
 					if (name != null)
 						return name;
@@ -175,25 +143,18 @@ namespace NDoc3.Documenter.Msdn2
 				int index;
 				if ((index = cref.IndexOf(".#c")) >= 0)
 					cref = cref.Substring(2, index - 2);
-				else if ((index = cref.IndexOf("(")) >= 0)
-					cref = cref.Substring(2, index - 2);
-				else
-					cref = cref.Substring(2);
+				else cref = (index = cref.IndexOf("(")) >= 0 ? cref.Substring(2, index - 2) : cref.Substring(2);
 			}
 
 			return cref.Substring(cref.LastIndexOf(".") + 1);
 		}
 
-		private string GetFilenameForSystemMember(string id)
-		{
+		private string GetFilenameForSystemMember(string id) {
 			string crefName;
 			int index;
 			if ((index = id.IndexOf(".#c")) >= 0)
 				crefName = id.Substring(2, index - 2) + ".ctor";
-			else if ((index = id.IndexOf("(")) >= 0)
-				crefName = id.Substring(2, index - 2);
-			else
-				crefName = id.Substring(2);
+			else crefName = (index = id.IndexOf("(")) >= 0 ? id.Substring(2, index - 2) : id.Substring(2);
 			index = crefName.LastIndexOf(".");
 			string crefType = crefName.Substring(0, index);
 			string crefMember = crefName.Substring(index + 1);
@@ -221,8 +182,7 @@ namespace NDoc3.Documenter.Msdn2
 		/// After that, if asking with the same description again, it will return true, so
 		/// the overload does not need to be added to the members page.</para>
 		/// </remarks>
-		public bool HasSimilarOverloads(string description)
-		{
+		public bool HasSimilarOverloads(string description) {
 			if (descriptions.Contains(description))
 				return true;
 			descriptions.Add(description);
@@ -236,36 +196,15 @@ namespace NDoc3.Documenter.Msdn2
 		/// <param name="oldValue">The string to search for</param>
 		/// <param name="newValue">The string to replace</param>
 		/// <returns>A new string</returns>
-		public string Replace( string str, string oldValue, string newValue )
-		{
-			return str.Replace( oldValue, newValue );
-		}	
-
-		/// <summary>
-		/// returns a localized sdk url if one exists for the <see cref="CultureInfo.CurrentCulture"/>.
-		/// </summary>
-		/// <param name="searchNamespace">base namespace to search for</param>
-		/// <param name="langCode">the localization language code</param>
-		/// <returns>ms-help url for sdk</returns>
-		private string GetLocalizedFrameworkURL(string searchNamespace, string langCode)
-		{
-			if (langCode!="en")
-			{
-				return helpURL + searchNamespace + "." + langCode.ToUpper() + sdkRoot;
-			}
-			else
-			{
-				//default to non-localized namespace
-				return helpURL + searchNamespace + sdkRoot;
-			}
+		public string Replace(string str, string oldValue, string newValue) {
+			return str.Replace(oldValue, newValue);
 		}
 
 		/// <summary>
 		/// Gets HTML ContentType for the system's current ANSI code page. 
 		/// </summary>
 		/// <returns>ContentType attribute string</returns>
-		public string GetContentType()
-		{
+		public string GetContentType() {
 			return encodingString;
 		}
 

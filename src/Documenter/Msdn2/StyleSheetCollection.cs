@@ -27,41 +27,38 @@ using System.Reflection;
 using NDoc3.Core;
 using NDoc3.Documenter.Msdn2.xslt;
 
-namespace NDoc3.Documenter.Msdn2
-{
+namespace NDoc3.Documenter.Msdn2 {
 	/// <summary>
 	/// The collection of xslt stylesheets used to generate the Html
 	/// </summary>
-	internal class StyleSheetCollection : DictionaryBase
-	{
+	internal class StyleSheetCollection : DictionaryBase {
 		/// <summary>
 		/// Load the predefined set of xslt stylesheets into a dictionary
 		/// </summary>
 		/// <param name="extensibilityStylesheet"></param>
 		/// <returns>The populated collection</returns>
-		public static StyleSheetCollection LoadStyleSheets( string extensibilityStylesheet )
-		{
+		public static StyleSheetCollection LoadStyleSheets(string extensibilityStylesheet) {
 			StyleSheetCollection stylesheets = new StyleSheetCollection();
 
-			string resourceBase = "file://" + Path.GetFullPath(Path.Combine(System.Windows.Forms.Application.StartupPath, @"..\..\..\Documenter\Msdn2\xslt") );
-//			string resourceBase = "NDoc3.Documenter.Msdn2.xslt";
+			string resourceBase = "file://" + Path.GetFullPath(Path.Combine(System.Windows.Forms.Application.StartupPath, @"..\..\..\Documenter\Msdn2\xslt"));
+			//			string resourceBase = "NDoc3.Documenter.Msdn2.xslt";
 
-            XsltResourceResolver resolver = new XsltResourceResolver(typeof(StyleSheetLocation), resourceBase);
-            resolver.ExtensibilityStylesheet = extensibilityStylesheet;
+			XsltResourceResolver resolver = new XsltResourceResolver(typeof(StyleSheetLocation), resourceBase);
+			resolver.ExtensibilityStylesheet = extensibilityStylesheet;
 			Trace.Indent();
 
-			stylesheets.AddFrom( "namespace", resolver );
-			stylesheets.AddFrom( "namespacehierarchy", resolver );
-			stylesheets.AddFrom( "type", resolver );
-			stylesheets.AddFrom( "typehierarchy", resolver );
-			stylesheets.AddFrom( "allmembers", resolver );
-			stylesheets.AddFrom( "individualmembers", resolver );
-			stylesheets.AddFrom( "event", resolver );
-			stylesheets.AddFrom( "member", resolver );
-			stylesheets.AddFrom( "memberoverload", resolver );
-			stylesheets.AddFrom( "property", resolver );
-			stylesheets.AddFrom( "field", resolver );
-			stylesheets.AddFrom( "htmlcontents", resolver );
+			stylesheets.AddFrom("namespace", resolver);
+			stylesheets.AddFrom("namespacehierarchy", resolver);
+			stylesheets.AddFrom("type", resolver);
+			stylesheets.AddFrom("typehierarchy", resolver);
+			stylesheets.AddFrom("allmembers", resolver);
+			stylesheets.AddFrom("individualmembers", resolver);
+			stylesheets.AddFrom("event", resolver);
+			stylesheets.AddFrom("member", resolver);
+			stylesheets.AddFrom("memberoverload", resolver);
+			stylesheets.AddFrom("property", resolver);
+			stylesheets.AddFrom("field", resolver);
+			stylesheets.AddFrom("htmlcontents", resolver);
 
 
 			Trace.Unindent();
@@ -70,40 +67,32 @@ namespace NDoc3.Documenter.Msdn2
 		}
 
 
-		private StyleSheetCollection( )
-		{
+		private StyleSheetCollection() {
 		}
 
 		/// <summary>
 		/// Return a named stylesheet from the collection
 		/// </summary>
-		public XslTransform this[ string name ]
-		{
-			get
-			{
-				Debug.Assert( base.InnerHashtable.Contains( name ) );
-				return (XslTransform)base.InnerHashtable[name];
+		public XslTransform this[string name] {
+			get {
+				Debug.Assert(InnerHashtable.Contains(name));
+				return (XslTransform)InnerHashtable[name];
 			}
 		}
 
-		private void AddFrom( string name, XsltResourceResolver resolver )
-		{
-			base.InnerHashtable.Add( name, MakeTransform( name, resolver ) );
+		private void AddFrom(string name, XsltResourceResolver resolver) {
+			InnerHashtable.Add(name, MakeTransform(name, resolver));
 		}
 
-		private XslTransform MakeTransform( string name,  XsltResourceResolver resolver)
-		{
-			try
-			{
-				Trace.WriteLine( name + ".xslt" );
+		private XslTransform MakeTransform(string name, XsltResourceResolver resolver) {
+			try {
+				Trace.WriteLine(name + ".xslt");
 				XslTransform transform = new XslTransform();
-				XmlReader reader=(XmlReader)resolver.GetEntity(new Uri("res:" + name + ".xslt"),null,typeof(XmlReader));
-				transform.Load(reader ,resolver, Assembly.GetExecutingAssembly().Evidence);
+				XmlReader reader = (XmlReader)resolver.GetEntity(new Uri("res:" + name + ".xslt"), null, typeof(XmlReader));
+				transform.Load(reader, resolver, Assembly.GetExecutingAssembly().Evidence);
 				return transform;
-			}
-			catch ( Exception e )
-			{
-				throw new Exception( string.Format(	"Error compiling the {0} stylesheet", name ), e );
+			} catch (Exception e) {
+				throw new Exception(string.Format("Error compiling the {0} stylesheet", name), e);
 			}
 		}
 

@@ -17,41 +17,35 @@
  *      be misrepresented as being the original software.
  * 
  *   3. This notice may not be removed or altered from any source distribution.
- */ 
+ */
 #endregion
 
 using System;
 using System.Xml;
 using System.Xml.XPath;
 
-namespace NDoc3.VisualStudio
-{
+namespace NDoc3.VisualStudio {
 	/// <summary>
 	/// ProjectConfig settings for Visual Studio C# projects.
 	/// </summary>
-	public class ProjectConfig
-	{
+	public class ProjectConfig {
 		private readonly XPathNavigator _Navigator;
 		private readonly ProjectVersion _ProjectVersion;
 		private readonly XmlNamespaceManager _ProjectNamespaceManager;
 
-		internal ProjectConfig(XPathNavigator navigator, ProjectVersion version)
-		{
+		internal ProjectConfig(XPathNavigator navigator, ProjectVersion version) {
 			_Navigator = navigator.Clone();
-            _ProjectVersion = version;
-            if (_ProjectVersion == ProjectVersion.VS2005AndAbove)
-            {
-                _ProjectNamespaceManager = new XmlNamespaceManager(_Navigator.NameTable);
-                _ProjectNamespaceManager.AddNamespace("ns", "http://schemas.microsoft.com/developer/msbuild/2003");
-            }
+			_ProjectVersion = version;
+			if (_ProjectVersion == ProjectVersion.VS2005AndAbove) {
+				_ProjectNamespaceManager = new XmlNamespaceManager(_Navigator.NameTable);
+				_ProjectNamespaceManager.AddNamespace("ns", "http://schemas.microsoft.com/developer/msbuild/2003");
+			}
 		}
 
 		/// <summary>Gets the name of the configuration.</summary>
 		/// <remarks>This is usually "Debug" or "Release".</remarks>
-		public string Name
-		{
-			get
-			{
+		public string Name {
+			get {
 				//TODO Return the right name
 				return (string)_Navigator.Evaluate("string(@Name)");
 			}
@@ -59,8 +53,7 @@ namespace NDoc3.VisualStudio
 
 		/// <summary>Gets the location of the output files (relative to the 
 		/// project directory) for this project's configuration.</summary>
-		public string OutputPath
-		{
+		public string OutputPath {
 			get {
 				switch (_ProjectVersion) {
 					case ProjectVersion.VS2003:
@@ -76,8 +69,7 @@ namespace NDoc3.VisualStudio
 		/// <summary>Gets the name of the file (relative to the project 
 		/// directory) into which documentation comments will be 
 		/// processed.</summary>
-		public string DocumentationFile
-		{
+		public string DocumentationFile {
 			get {
 				switch (_ProjectVersion) {
 					case ProjectVersion.VS2003:
