@@ -316,7 +316,7 @@ namespace NDoc3.Core.Reflection
 			}
 			catch (ReflectionTypeLoadException rtle) {
 				StringBuilder sb = new StringBuilder();
-				Dictionary<string, object> fileLoadExceptions = new Hashtable();
+				Dictionary<string, object> fileLoadExceptions = new Dictionary<string, object>();
 				foreach (Exception loaderEx in rtle.LoaderExceptions) {
 					System.IO.FileLoadException fileLoadEx = loaderEx as FileLoadException;
 					if (fileLoadEx != null) {
