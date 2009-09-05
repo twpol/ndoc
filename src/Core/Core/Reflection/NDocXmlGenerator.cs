@@ -314,23 +314,9 @@ namespace NDoc3.Core.Reflection
 				Trace.WriteLine("MakeXML : " + ((Environment.TickCount - start) / 1000.0) + " sec.");
 				// if you want to see NDoc3's intermediate XML file, use the XML documenter.
 			}
-				//			catch (Exception ex) {
-				//				// TODO (EE): reevaluate exception handling
-				//				throw;
-				//			}
 			catch (ReflectionTypeLoadException rtle) {
 				StringBuilder sb = new StringBuilder();
-				//				if (_assemblyLoader != null && _assemblyLoader.UnresolvedAssemblies.Count > 0) {
-				//					sb.Append("One or more required assemblies could not be located : \n");
-				//					foreach (string ass in _assemblyLoader.UnresolvedAssemblies) {
-				//						sb.AppendFormat("   {0}\n", ass);
-				//					}
-				//					sb.Append("\nThe following directories were searched, \n");
-				//					foreach (string dir in _assemblyLoader.SearchedDirectories) {
-				//						sb.AppendFormat("   {0}\n", dir);
-				//					}
-				//				} else {
-				Hashtable fileLoadExceptions = new Hashtable();
+				Dictionary<string, object> fileLoadExceptions = new Hashtable();
 				foreach (Exception loaderEx in rtle.LoaderExceptions) {
 					System.IO.FileLoadException fileLoadEx = loaderEx as FileLoadException;
 					if (fileLoadEx != null) {
@@ -3908,10 +3894,10 @@ namespace NDoc3.Core.Reflection
 		}
 		private class ImplementsCollection
 		{
-			private readonly Hashtable data;
+			private readonly Dictionary<string, ImplementsInfo> data;
 			public ImplementsCollection()
 			{
-				data = new Hashtable(15); // give it an initial capacity...
+				data = new Dictionary<string, ImplementsInfo>(15); // give it an initial capacity...
 			}
 			public ImplementsInfo this[string name]
 			{
