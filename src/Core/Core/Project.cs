@@ -469,7 +469,7 @@ namespace NDoc3.Core {
 	/// This exception is thrown when one or more assemblies can not be loaded.
 	/// </summary>
 	[Serializable]
-	public class CouldNotLoadAllAssembliesException : ApplicationException {
+	public class CouldNotLoadAllAssembliesException : Exception {
 		/// <summary/>
 		public CouldNotLoadAllAssembliesException() { }
 
@@ -493,7 +493,7 @@ namespace NDoc3.Core {
 	/// This exception is thrown when there were invalid values in the documenter properties.
 	/// </summary>
 	[Serializable]
-	public class DocumenterPropertyFormatException : ApplicationException {
+	public class DocumenterPropertyFormatException : Exception {
 		/// <summary/>
 		public DocumenterPropertyFormatException() { }
 

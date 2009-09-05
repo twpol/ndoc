@@ -5,7 +5,7 @@ namespace NDoc3.Core.Reflection {
 	/// Exception class used if validation of xml fails.
 	/// </summary>
 	[Serializable]
-	public class ValidationException : ApplicationException {
+	public class ValidationException : Exception {
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ValidationException"/> class.
 		/// </summary>

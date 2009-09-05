@@ -21,7 +21,7 @@ using System.Runtime.Serialization;
 namespace NDoc3.Core {
 	/// <summary>Represents an exception thrown when attempting to build documentation.</summary>
 	[Serializable]
-	public class DocumenterException : ApplicationException {
+	public class DocumenterException : Exception {
 
 		/// <summary>Initializes a new instance of the <see cref="DocumenterException"/> class with the specified message.</summary>
 		/// <param name="message">The message to display when the exception is thrown.</param>

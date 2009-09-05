@@ -1196,7 +1196,7 @@ namespace NDoc3.Test
 	/// <summary>
 	/// This is an exception.
 	/// </summary>
-	public class MyException : ApplicationException
+	public class MyException : Exception
 	{
 		/// <summary>
 		/// This is a constructor for the exception.
