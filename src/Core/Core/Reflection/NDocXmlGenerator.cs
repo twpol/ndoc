@@ -3805,6 +3805,7 @@ namespace NDoc3.Core.Reflection
 
 		private void WriteTypeHierarchy(XmlWriter writer, TypeHierarchy derivedTypes, Type type)
 		{
+			// TODO: When we change to .NET 3.5 this should be changed to a HashSet to increase performance
 			List<string> alreadyDocumented = new List<string>();
 
 			string typeId = string.Format("{0}{1}", type.Assembly.GetName().Name, MemberID.GetMemberID(type));
