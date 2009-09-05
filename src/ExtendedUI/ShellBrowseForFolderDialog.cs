@@ -10,7 +10,7 @@ namespace NDoc3.ExtendedUI
 		// The SendMessage function sends the specified message to a window or windows. It calls the window procedure for 
 		// the specified window and does not return until the window procedure has processed the message. 
 		[DllImport("User32.dll")]
-		public static extern Int32 SendMessage(
+		internal static extern Int32 SendMessage(
 			IntPtr hWnd, // handle to destination window
 			UInt32 Msg, // message
 			UInt32 wParam, // first message parameter
@@ -18,7 +18,7 @@ namespace NDoc3.ExtendedUI
 );
 
 		[DllImport("User32.dll")]
-		public static extern Int32 SendMessage(
+		internal static extern Int32 SendMessage(
 			IntPtr hWnd, // handle to destination window
 			UInt32 Msg, // message
 			UInt32 wParam, // first message parameter

@@ -57,12 +57,12 @@ namespace ShellLib
 
         // Retrieves a pointer to the Shell's IMalloc interface.
         [DllImport("shell32.dll")]
-        public static extern Int32 SHGetMalloc(
+		internal static extern Int32 SHGetMalloc(
             out IntPtr hObject);    // Address of a pointer that receives the Shell's IMalloc interface pointer. 
 
         // Retrieves the path of a folder as an PIDL.
         [DllImport("shell32.dll")]
-        public static extern Int32 SHGetFolderLocation(
+		internal static extern Int32 SHGetFolderLocation(
             IntPtr hwndOwner,       // Handle to the owner window.
             Int32 nFolder,          // A CSIDL value that identifies the folder to be located.
             IntPtr hToken,          // Token that can be used to represent a particular user.
@@ -73,7 +73,7 @@ namespace ShellLib
 
         // Converts an item identifier list to a file system path. 
         [DllImport("shell32.dll")]
-        public static extern Int32 SHGetPathFromIDList(
+        internal static extern Int32 SHGetPathFromIDList(
             IntPtr pidl,            // Address of an item identifier list that specifies a file or directory location 
                                     // relative to the root of the namespace (the desktop). 
             StringBuilder pszPath); // Address of a buffer to receive the file system path.
@@ -81,7 +81,7 @@ namespace ShellLib
         
         // Takes the CSIDL of a folder and returns the pathname.
         [DllImport("shell32.dll")]
-        public static extern Int32 SHGetFolderPath(
+        internal static extern Int32 SHGetFolderPath(
             IntPtr hwndOwner,       // Handle to an owner window.
             Int32 nFolder,          // A CSIDL value that identifies the folder whose path is to be retrieved.
             IntPtr hToken,          // An access token that can be used to represent a particular user.
@@ -93,7 +93,7 @@ namespace ShellLib
         // of the object. This function is the preferred method to convert a string to a pointer to an item 
         // identifier list (PIDL). 
         [DllImport("shell32.dll")]
-        public static extern Int32 SHParseDisplayName(
+        internal static extern Int32 SHParseDisplayName(
             [MarshalAs(UnmanagedType.LPWStr)]
             String pszName,         // Pointer to a zero-terminated wide string that contains the display name 
                                     // to parse. 
@@ -108,14 +108,14 @@ namespace ShellLib
 
         // Retrieves the IShellFolder interface for the desktop folder, which is the root of the Shell's namespace. 
         [DllImport("shell32.dll")]
-        public static extern Int32 SHGetDesktopFolder(
+        internal static extern Int32 SHGetDesktopFolder(
             out IntPtr ppshf);      // Address that receives an IShellFolder interface pointer for the 
                                     // desktop folder.
 
         // This function takes the fully-qualified pointer to an item identifier list (PIDL) of a namespace object, 
         // and returns a specified interface pointer on the parent object.
         [DllImport("shell32.dll")]
-        public static extern Int32 SHBindToParent(
+        internal static extern Int32 SHBindToParent(
             IntPtr pidl,            // The item's PIDL. 
             [MarshalAs(UnmanagedType.LPStruct)]
             Guid riid,              // The REFIID of one of the interfaces exposed by the item's parent object. 
@@ -128,7 +128,7 @@ namespace ShellLib
         // Accepts a STRRET structure returned by IShellFolder::GetDisplayNameOf that contains or points to a 
         // string, and then returns that string as a BSTR.
         [DllImport("shlwapi.dll")]
-        public static extern Int32 StrRetToBSTR(
+        internal static extern Int32 StrRetToBSTR(
             ref STRRET pstr,        // Pointer to a STRRET structure.
             IntPtr pidl,            // Pointer to an ITEMIDLIST uniquely identifying a file object or subfolder relative
                                     // to the parent folder.
@@ -138,7 +138,7 @@ namespace ShellLib
         // Takes a STRRET structure returned by IShellFolder::GetDisplayNameOf, converts it to a string, and 
         // places the result in a buffer. 
         [DllImport("shlwapi.dll")]
-        public static extern Int32 StrRetToBuf(
+        internal static extern Int32 StrRetToBuf(
             ref STRRET pstr,        // Pointer to the STRRET structure. When the function returns, this pointer will no
                                     // longer be valid.
             IntPtr pidl,            // Pointer to the item's ITEMIDLIST structure.
@@ -151,7 +151,7 @@ namespace ShellLib
 
         // Displays a dialog box that enables the user to select a Shell folder. 
         [DllImport("shell32.dll")]
-        public static extern IntPtr SHBrowseForFolder(
+        internal static extern IntPtr SHBrowseForFolder(
             ref BROWSEINFO lbpi);   // Pointer to a BROWSEINFO structure that contains information used to display 
                                     // the dialog box. 
 
