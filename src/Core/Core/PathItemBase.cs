@@ -83,16 +83,19 @@ namespace NDoc3.Core {
 		/// is is set to <see langword="false"/>
 		/// </remarks>
 		protected PathItemBase(string path) {
+			// Check if the path is specified
 			if (path == null)
 				throw new ArgumentNullException("path");
 
 			if (path.Length > 0) {
+				// Check if the path specified are relative or aboslute
 				if (!System.IO.Path.IsPathRooted(path)) {
 					path = PathUtilities.RelativeToAbsolutePath(BasePath, path);
 					FixedPath = false;
 				} else {
 					FixedPath = true;
 				}
+				// Normalize the path according to the current operating system
 				_Path = NormalizePath(path);
 			} else {
 				_Path = "";

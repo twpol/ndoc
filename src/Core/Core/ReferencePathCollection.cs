@@ -125,9 +125,11 @@ namespace NDoc3.Core {
 		/// <exception cref="ArgumentNullException"><paramref name="path"/> is a <see langword="null"/>.</exception>
 		/// <remarks>Path comparison is case-insensitive.</remarks>
 		public bool Contains(string path) {
+			// Check if the path are specified
 			if (path == null)
 				throw new ArgumentNullException("path");
 
+			// Go through the list and look of the reference with the specified path
 			bool result = false;
 			foreach (object obj in InnerList) {
 				ReferencePath refPath = obj as ReferencePath;

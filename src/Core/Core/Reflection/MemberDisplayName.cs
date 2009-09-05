@@ -79,10 +79,16 @@ namespace NDoc3.Core {
 			return type.Name;
 		}
 
+		/// <summary>
+		/// Get the generic arguments of a type
+		/// </summary>
+		/// <param name="type">The type to get generic arguments from</param>
+		/// <returns></returns>
 		private static string GetTypeArgumentsList(Type type) {
 			StringBuilder argList = new StringBuilder();
 
 			int genArgLowerBound = 0;
+			// Check if the parent has any generic arguments which we should discard
 			if (type.IsNested) {
 				Type parent = type.DeclaringType;
 				Type[] parentGenArgs = parent.GetGenericArguments();
@@ -91,8 +97,10 @@ namespace NDoc3.Core {
 
 			Type[] genArgs = type.GetGenericArguments();
 			int i = 0;
+			// Add the generic arguments to the argument list
 			for (int k = genArgLowerBound; k < genArgs.Length; k++) {
 				Type argType = genArgs[k];
+				// If this is the first argument
 				if (i == 0) {
 					argList.Append('(');
 				} else {
@@ -112,6 +120,7 @@ namespace NDoc3.Core {
 				++i;
 			}
 
+			// If there were any arguments
 			if (i > 0) {
 				argList.Append(')');
 			}

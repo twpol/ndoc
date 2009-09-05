@@ -387,11 +387,15 @@ namespace NDoc3.ConsoleApplication {
 		}
 
 		private static void RecurseDir(string dirName, int maxDepth) {
+			// If the max depth are zero, we don't recurse any directories
 			if (0 == maxDepth) return;
+			// File extensions to look for
 			string[] extensions = { "*.dll", "*.exe" };
+			// For each extension recurse through the directories
 			foreach (string extension in extensions) {
 				foreach (string file in Directory.GetFiles(dirName, extension)) {
 					string docFile = Path.ChangeExtension(file, ".xml");
+					// If a XML doc file exists for the found assembly add it to the assembly doc files collection
 					if (File.Exists(docFile)) {
 						project.AssemblySlashDocs.Add(new AssemblySlashDoc(file, docFile));
 					} else {
@@ -402,6 +406,7 @@ namespace NDoc3.ConsoleApplication {
 					}
 				}
 			}
+			// Recurse through sub directories in the current directory
 			foreach (string subDir in Directory.GetDirectories(dirName)) {
 				RecurseDir(subDir, maxDepth - 1);
 			}

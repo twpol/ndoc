@@ -165,9 +165,11 @@ namespace NDoc3.Core {
 		/// <exception cref="ArgumentNullException"><paramref name="path"/> is a <see langword="null"/>.</exception>
 		/// <remarks>Path comparison is case-insensitive.</remarks>
 		public bool Contains(string path) {
+			// Check if the path are specified
 			if (path == null)
 				throw new ArgumentNullException("path");
 
+			// Go through the list and look of the assembly with the specified path
 			bool result = false;
 			foreach (object obj in InnerList) {
 				AssemblySlashDoc asd = obj as AssemblySlashDoc;
@@ -201,8 +203,11 @@ namespace NDoc3.Core {
 		/// <para>If the <i>documentation</i> attribute is missing or an empty string it will be silently ignored.</para>
 		/// </remarks>
 		public void ReadXml(XmlReader reader) {
+			// Read the assemblies section of the XML file
 			while (!reader.EOF && !(reader.NodeType == XmlNodeType.EndElement && reader.Name == "assemblies")) {
+				// Read an assembly section
 				if (reader.NodeType == XmlNodeType.Element && reader.Name == "assembly") {
+					// Check if the location attribute are present or an empty string
 					if (reader.GetAttribute("location") == null) {
 						throw new DocumenterException("\"location\" attribute is" + " required for <assembly> element in project file.");
 					}
@@ -210,7 +215,9 @@ namespace NDoc3.Core {
 					if (location.Length == 0) {
 						throw new DocumenterException("\"location\" attribute of" + " <assembly> element cannot be empty in project file.");
 					}
+					// Read the assembly documentation
 					string documentation = reader.GetAttribute("documentation") ?? String.Empty;
+					// Add the assembly to the collection
 					AssemblySlashDoc assemblySlashDoc = new AssemblySlashDoc(location, documentation);
 					Add(assemblySlashDoc);
 				}
@@ -233,9 +240,11 @@ namespace NDoc3.Core {
 		/// </code>
 		/// </remarks>
 		public void WriteXml(XmlWriter writer) {
+			// If there are any assemblies in the collection write them into the XML file
 			if (Count > 0) {
 				writer.WriteStartElement("assemblies");
 
+				// Write the location and documentation of the assembly
 				foreach (AssemblySlashDoc asd in InnerList) {
 					writer.WriteStartElement("assembly");
 					writer.WriteAttributeString("location", asd.Assembly.ToString());
