@@ -322,6 +322,6 @@ namespace NDoc3.Core {
 	/// 
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Property)]
-	public class NonPersistedAttribute : Attribute {
+	public sealed class NonPersistedAttribute : Attribute {
 	}
 }

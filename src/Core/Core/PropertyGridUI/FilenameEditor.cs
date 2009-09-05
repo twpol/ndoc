@@ -89,7 +89,7 @@ namespace NDoc3.Core.PropertyGridUI {
 		/// 
 		/// </summary>
 		[AttributeUsage(AttributeTargets.Property)]
-		public class FileDialogFilterAttribute : Attribute {
+		public sealed class FileDialogFilterAttribute : Attribute {
 			private readonly string _title;
 			/// <summary>
 			/// Gets the title.
@@ -136,7 +136,7 @@ namespace NDoc3.Core.PropertyGridUI {
 		/// Indicates that SaveFileDialog must be shown
 		/// </summary>
 		[AttributeUsage(AttributeTargets.Property)]
-		public class SaveFileAttribute : Attribute { }
+		public sealed class SaveFileAttribute : Attribute { }
 		#endregion
 
 	}

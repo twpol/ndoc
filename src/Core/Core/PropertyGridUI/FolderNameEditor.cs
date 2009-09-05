@@ -84,7 +84,7 @@ namespace NDoc3.Core.PropertyGridUI {
 		/// 
 		/// </summary>
 		[AttributeUsage(AttributeTargets.Class | AttributeTargets.Property)]
-		public class FolderDialogTitleAttribute : Attribute {
+		public sealed class FolderDialogTitleAttribute : Attribute {
 			private readonly string _title;
 			/// <summary>
 			/// Gets the title.
@@ -108,7 +108,7 @@ namespace NDoc3.Core.PropertyGridUI {
 		/// Indicates that only existing folders can be specified
 		/// </summary>
 		[AttributeUsage(AttributeTargets.Class | AttributeTargets.Property)]
-		public class ExistingFolderOnlyAttribute : Attribute { }
+		public sealed class ExistingFolderOnlyAttribute : Attribute { }
 		#endregion
 	}
 }

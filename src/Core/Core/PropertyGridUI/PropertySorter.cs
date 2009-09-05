@@ -125,7 +125,7 @@ namespace NDoc3.Core.PropertyGridUI {
 	/// 
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Property)]
-	public class PropertyOrderAttribute : Attribute {
+	public sealed class PropertyOrderAttribute : Attribute {
 		//
 		// Simple attribute to allow specification of the order of a property in a propertgrid. 
 		//
