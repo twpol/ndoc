@@ -3902,7 +3902,11 @@ namespace NDoc3.Core.Reflection
 			}
 			public ImplementsInfo this[string name]
 			{
-				get { return (ImplementsInfo)data[name]; }
+				get {
+					ImplementsInfo info;
+					data.TryGetValue(name, out info);
+					return info;
+				}
 				set { data[name] = value; }
 			}
 		}
