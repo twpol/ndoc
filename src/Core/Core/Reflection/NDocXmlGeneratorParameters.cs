@@ -107,19 +107,14 @@ namespace NDoc3.Core.Reflection {
 		/// </summary>
 		public void AddAssemblyToDocument(FileInfo assemblyFile) {
 			string ext = assemblyFile.Extension;
-			//			if (assemblyFile.Exists)
-			{
-				_assemblyFileNames[new ComparableFileInfo(assemblyFile)] = assemblyFile;
-			}
+			_assemblyFileNames[new ComparableFileInfo(assemblyFile)] = assemblyFile;
 			FileInfo slashDocFile = new FileInfo(assemblyFile.FullName.Substring(0, assemblyFile.FullName.Length - ext.Length) + ".xml");
-			AddAssemblySlashDoc(slashDocFile);
+			if(File.Exists(slashDocFile.FullName))
+				AddAssemblySlashDoc(slashDocFile);
 		}
 
 		public void AddAssemblySlashDoc(FileInfo slashDocPath) {
-			//			if (slashDocPath.Exists)
-			{
 				_slashDocFileNames[new ComparableFileInfo(slashDocPath)] = slashDocPath;
-			}
 		}
 		#endregion
 
