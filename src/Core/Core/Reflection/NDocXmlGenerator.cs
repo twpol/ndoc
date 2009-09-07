@@ -2327,7 +2327,7 @@ namespace NDoc3.Core.Reflection
 			if (property == null)
 				throw new Exception("PropertyInfo are null");
 			MethodInfo[] mi = property.GetAccessors(true);
-			if(mi == null || mi[0] != null)
+			if(mi == null || mi[0] == null)
 				throw new Exception("Property methods are null or are invalid");
 			return GetEnumString(GetMethodContractValue(mi[0]));
 		}
