@@ -34,19 +34,25 @@
 			<call target="compile.sdkdoc" />
     </target>
 
-	<target name="test" depends="compile test.sdkdoc" description="Builds, tests and runs NDoc3 on itself for smoke testing">
+    <target name="simian" description="finds duplicate code">
+    	<exec program="${tool.dir}\simian\simian.exe">
+    		<arg value="-includes=${project::get-base-directory()}/src/**/*.cs"/>
+    		<arg value="-formatter=xml:${current.bin.dir}\simian.xml"/>
+    	</exec>
+    </target>
 
-<!-- build coverage summary -->
-		<exec program="${tool.dir}/ncoverexplorer/ncoverexplorer.console.exe" workingdir="${current.bin.dir}">
-			<arg value="/xml:&quot;${current.bin.dir}/CoverageSummary.xml&quot;" />
-			<arg value="/report:ModuleClassFunctionSummary" />
-			<arg value="/sort:4" />
-			<arg value="/minCoverage:80" />
-			<arg value="/q" />
-			<arg path="${current.bin.dir}/*-Coverage.xml" />
-		</exec>
+  	<target name="test" depends="simian compile test.sdkdoc" description="Builds, tests and runs NDoc3 on itself for smoke testing">
+  <!-- build coverage summary -->
+  		<exec program="${tool.dir}/ncoverexplorer/ncoverexplorer.console.exe" workingdir="${current.bin.dir}">
+  			<arg value="/xml:&quot;${current.bin.dir}/CoverageSummary.xml&quot;" />
+  			<arg value="/report:ModuleClassFunctionSummary" />
+  			<arg value="/sort:4" />
+  			<arg value="/minCoverage:80" />
+  			<arg value="/q" />
+  			<arg path="${current.bin.dir}/*-Coverage.xml" />
+  		</exec>
 
-	</target>
+  	</target>
 
     <target name="cruisecontrol" description="starts an integration build" depends="test">
     </target>
