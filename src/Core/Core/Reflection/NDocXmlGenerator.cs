@@ -2974,30 +2974,6 @@ namespace NDoc3.Core.Reflection
 
 		#region Missing Documentation
 
-//		/// <summary>
-//		/// Checks for missing type documentation
-//		/// </summary>
-//		/// <param name="type">The type to check</param>
-//		/// <returns>True if documentation is missing</returns>
-//		private bool CheckForMissingTypeDocumentation(Type type)
-//		{
-//			if (_assemblyDocCache.GetDoc(type.Assembly.GetName(), MemberID.GetMemberID(type)) == null) {
-//				Trace.WriteLine(String.Format("The type {0} isn't documented and therefore skipped", MemberID.GetMemberID(type)));
-//				return true;
-//			}
-//			return false;
-//		}
-//
-//		private bool CheckForMissingMethodDocumentation(MethodInfo methodInfo)
-//		{
-//			string memberId = MemberID.GetMemberID(methodInfo);
-//			if (_assemblyDocCache.GetDoc(methodInfo.DeclaringType.Assembly.GetName(), memberId) == null) {
-//				Trace.WriteLine(String.Format("The method {0} isn't documented and therefore skipped", memberId));
-//				return true;
-//			}
-//			return false;
-//		}
-
 		private void CheckForMissingSummaryAndRemarks(
 			XmlWriter writer,
 			AssemblyName assemblyName,
@@ -3721,14 +3697,6 @@ namespace NDoc3.Core.Reflection
 				Trace.WriteLine(ex.StackTrace);
 			}
 		}
-
-		//		private AssemblyLoader SetupAssemblyLoader() {
-		//			AssemblyLoader _assemblyLoader = new AssemblyLoader(_rep.ReferencePaths);
-		//
-		//			_assemblyLoader.Install();
-		//
-		//			return (_assemblyLoader);
-		//		}
 
 
 		#region ImplementsInfo
