@@ -26,7 +26,6 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Net;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -40,15 +39,14 @@ namespace NDoc3.Core.Reflection
 	/// </summary>
 	internal class NDocXmlGenerator : MarshalByRefObject, IDisposable
 	{
-		public const string NDOCXML_NAMESPACEURI = "urn:ndoc-schema";
-		public const string NDOCXML_VERSION = "2.0";
+		private const string NDOCXML_NAMESPACEURI = "urn:ndoc-schema";
+		private const string NDOCXML_VERSION = "2.0";
 
 		private readonly NDocXmlGeneratorParameters _rep;
 		private readonly IAssemblyLoader _assemblyLoader;
 		private readonly AssemblyXmlDocCache _assemblyDocCache;
 		private readonly ExternalXmlSummaryCache _externalSummaryCache;
 		private readonly Hashtable _notEmptyNamespaces;
-		//		private readonly Dictionary<Type, object>_documentedTypes;
 		private readonly TypeHierarchy _derivedTypes;
 		private readonly TypeHierarchy _interfaceImplementingTypes;
 		private readonly NamespaceHierarchyCollection _namespaceHierarchies;
@@ -112,24 +110,8 @@ namespace NDoc3.Core.Reflection
 		/// <summary>
 		/// Validates the given ndoc xml against the schema.
 		/// </summary>
-		public static void ValidateNDocXml(Uri ndocXmlSource)
-		{
-			if (!IsRunningMono()) {
-				WebRequest req = WebRequest.Create(ndocXmlSource);
-				using (WebResponse resp = req.GetResponse()) {
-					StreamReader reader = new StreamReader(resp.GetResponseStream());
-					using (reader) {
-						ValidateNDocXml(reader, true);
-					}
-				}
-			}
-		}
-
-		/// <summary>
-		/// Validates the given ndoc xml against the schema.
-		/// </summary>
 		/// <remarks>This method automatically closes the reader instance passed into it.</remarks>
-		public static void ValidateNDocXml(FileInfo ndocXmlSource)
+		private static void ValidateNDocXml(FileInfo ndocXmlSource)
 		{
 			if (!IsRunningMono()) {
 				ValidateNDocXml(new StreamReader(ndocXmlSource.OpenRead(), true), true);
@@ -150,7 +132,7 @@ namespace NDoc3.Core.Reflection
 		/// <summary>
 		/// Validates the given ndoc xml against the schema.
 		/// </summary>
-		public static void ValidateNDocXml(TextReader ndocXmlSource, bool autoClose)
+		private static void ValidateNDocXml(TextReader ndocXmlSource, bool autoClose)
 		{
 			try {
 				if (!IsRunningMono())
@@ -545,7 +527,7 @@ namespace NDoc3.Core.Reflection
 				bool IsExcluded;
 				//check if the member has an exclude tag
 				if (property.DeclaringType != property.ReflectedType) // inherited
-                {
+            {
 					IsExcluded = _assemblyDocCache.HasExcludeTag(property.DeclaringType, MemberID.GetMemberID(property, true));
 				} else {
 					IsExcluded = _assemblyDocCache.HasExcludeTag(property.DeclaringType, MemberID.GetMemberID(property, false));
@@ -1970,8 +1952,6 @@ namespace NDoc3.Core.Reflection
 			writer.WriteAttributeString("declaringType", MemberID.GetDeclaringTypeName(member));
 			writer.WriteAttributeString("declaringAssembly", MemberID.GetDeclaringAssemblyName(member));
 			writer.WriteAttributeString("declaringId", MemberID.GetDeclaringMemberID(member));
-//
-//			writer.WriteAttributeString("declaringType", type);
 		}
 
 		/// <summary>
@@ -1980,7 +1960,7 @@ namespace NDoc3.Core.Reflection
 		/// <param name="parent"></param>
 		/// <param name="value"></param>
 		/// <returns></returns>
-		protected static string GetDisplayValue(Type parent, object value)
+		private static string GetDisplayValue(Type parent, object value)
 		{
 			if (value == null)
 				return "null";
