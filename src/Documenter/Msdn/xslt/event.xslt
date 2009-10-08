@@ -17,12 +17,12 @@
 	<xsl:template match="ndoc:event">
 		<html dir="LTR">
 			<xsl:call-template name="html-head">
-				<xsl:with-param name="title" select="concat(../@name, '.', @name, ' Event')" />
+				<xsl:with-param name="title" select="concat(../@displayName, '.', @name, ' Event')" />
 			</xsl:call-template>
 			<body id="bodyID" class="dtBODY">
 				<xsl:call-template name="title-row">
 					<xsl:with-param name="type-name">
-						<xsl:value-of select="../@name" />.<xsl:value-of select="@name" /> Event
+						<xsl:value-of select="../@displayName" />.<xsl:value-of select="@name" /> Event
 					</xsl:with-param>
 				</xsl:call-template>
 				<div id="nstext">
