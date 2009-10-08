@@ -3,6 +3,30 @@ using System.Collections.Generic;
 
 namespace NDoc3.Test.Generics
 {
+	/// <summary>
+	/// Test case for #2871847
+	/// </summary>
+	/// <typeparam name="T">Type parameter</typeparam>
+	public interface Producer_i<T> {
+		event Action<T> OnItem1Produced;
+	}
+
+	/// <summary>
+	/// Test case for #2871847. This failed in r300.
+	/// </summary>
+	/// <typeparam name="T">Type parameter</typeparam>
+	public class ThreadedConsumer_c<T> : Producer_i<T> {
+		public event Action<T> OnItem1Produced;
+	}
+
+	/// <summary>
+	/// Test case for #2871847. It works in r300.
+	/// </summary>
+	/// <typeparam name="T">Type parameter</typeparam>
+	public class ThreadedConsumer_c2<T> : Producer_i<int> {
+		public event Action<int> OnItem1Produced;
+	}
+
     /// <summary>
     /// Very generic simple item
     /// </summary>

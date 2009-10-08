@@ -655,7 +655,11 @@
 			<xsl:attribute name="href">
 				<xsl:value-of select="$href" />
 			</xsl:attribute>
-			<xsl:value-of select="@interface" />
+			<xsl:if test="ndoc:declaringType">
+				<xsl:call-template name="get-displayname-csharp">
+					<xsl:with-param name="node" select="ndoc:declaringType" />
+				</xsl:call-template>
+			</xsl:if>
 			<xsl:text>.</xsl:text>
 			<xsl:value-of select="@name" />
 		</a>

@@ -1199,10 +1199,6 @@ namespace NDoc3.Core.Reflection
 				if (MustDocumentType(interfaceType)) {
 					string interName = interfaceType.IsGenericType ? interfaceType.GetGenericTypeDefinition().FullName : interfaceType.FullName;
 					writer.WriteStartElement("implements");
-					//if(interfaceType.IsGenericType)
-					//    writer.WriteAttributeString("type", interfaceType.GetGenericTypeDefinition().FullName.Replace('+', '.'));
-					//else
-					//    writer.WriteAttributeString("type", interfaceType.FullName.Replace('+', '.'));
 					writer.WriteAttributeString("type", interName);
 					writer.WriteAttributeString("assembly", interfaceType.Assembly.GetName().Name);
 					writer.WriteAttributeString("id", MemberID.GetMemberID(interfaceType));
@@ -2044,8 +2040,6 @@ namespace NDoc3.Core.Reflection
 
 			if (inherited) {
 				WriteDeclaringType( eventInfo, writer );
-//				writer.WriteAttributeString("declaringType", MemberID.GetDeclaringTypeName(eventInfo));
-//				writer.WriteAttributeString("declaringAssembly", MemberID.GetDeclaringAssemblyName(eventInfo));
 			}
 
 			if (interfaceName != null) {
@@ -2054,6 +2048,10 @@ namespace NDoc3.Core.Reflection
 
 			if (eventInfo.IsMulticast) {
 				writer.WriteAttributeString("multicast", "true");
+			}
+
+			if (eventInfo.EventHandlerType.IsGenericType) {
+				WriteGenericArgumentsAndParameters(eventInfo.EventHandlerType, writer);
 			}
 
 			if (inherited) {
@@ -2084,12 +2082,21 @@ namespace NDoc3.Core.Reflection
 					writer.WriteAttributeString("id", MemberID.GetMemberID(InterfaceEvent, false));
 					writer.WriteAttributeString("interface", implements.InterfaceType.Name);
 					writer.WriteAttributeString("interfaceId", MemberID.GetMemberID(implements.InterfaceType));
-					writer.WriteAttributeString("declaringType", implements.InterfaceType.FullName.Replace('+', '.'));
 					writer.WriteAttributeString("assembly", implements.InterfaceType.Assembly.GetName().Name);
+					WriteImplementsDeclaringType(implements.InterfaceType, writer);
 					writer.WriteEndElement();
 				}
 			}
 
+			writer.WriteEndElement();
+		}
+
+		private void WriteImplementsDeclaringType(Type t, XmlWriter writer) {
+			//string name = t.IsGenericType ? t.GetGenericTypeDefinition().FullName : t.FullName;
+			string name = MemberID.GetMemberID(t.DeclaringType == null ? t : t.DeclaringType);
+			writer.WriteStartElement("declaringType");
+			writer.WriteAttributeString("name", name);
+			WriteGenericArgumentsAndParameters(t, writer);
 			writer.WriteEndElement();
 		}
 
@@ -2174,14 +2181,9 @@ namespace NDoc3.Core.Reflection
 				writer.WriteAttributeString("access", GetPropertyAccessValue(property));
 				writer.WriteAttributeString("contract", GetPropertyContractValue(property));
 				Type t = property.PropertyType;
-//				writer.WriteAttributeString("typeId", MemberID.GetMemberID(t));
-//				if (t.IsGenericType && t.GetGenericTypeDefinition() == typeof(Nullable<>))
-//					writer.WriteAttributeString("nullable", "true");
-//				writer.WriteAttributeString("valueType", t.IsValueType.ToString().ToLower());
 
 				if (inherited) {
 					WriteDeclaringType(property, writer);
-//					writer.WriteAttributeString("declaringType", MemberID.GetDeclaringTypeName(property));
 				}
 
 				if (overload > 0) {
@@ -2243,10 +2245,7 @@ namespace NDoc3.Core.Reflection
 							writer.WriteAttributeString("interface", implements.InterfaceType.Name);
 							writer.WriteAttributeString("assembly", implements.InterfaceType.Assembly.GetName().Name);
 							writer.WriteAttributeString("interfaceId", MemberID.GetMemberID(implements.InterfaceType));
-							if (implements.InterfaceType.IsGenericType)
-								writer.WriteAttributeString("declaringType", implements.InterfaceType.GetGenericTypeDefinition().FullName.Replace('+', '.'));
-							else
-								writer.WriteAttributeString("declaringType", implements.InterfaceType.FullName.Replace('+', '.'));
+							WriteImplementsDeclaringType(implements.InterfaceType, writer);
 							writer.WriteEndElement();
 						} else if (InterfaceMethod != null) {
 							string InterfaceMethodID = MemberID.GetMemberID(InterfaceMethod, false);
@@ -2256,12 +2255,7 @@ namespace NDoc3.Core.Reflection
 							writer.WriteAttributeString("interface", implements.InterfaceType.Name);
 							writer.WriteAttributeString("assembly", implements.InterfaceType.Assembly.GetName().Name);
 							writer.WriteAttributeString("interfaceId", MemberID.GetMemberID(implements.InterfaceType));
-							string declaringType;
-							if (implements.InterfaceType.GetGenericArguments().Length > 0)
-								declaringType = implements.InterfaceType.GetGenericTypeDefinition().FullName.Replace('+', '.');
-							else
-								declaringType = implements.InterfaceType.FullName.Replace('+', '.');
-							writer.WriteAttributeString("declaringType", declaringType);
+							WriteImplementsDeclaringType(implements.InterfaceType, writer);
 							writer.WriteEndElement();
 						}
 					}
@@ -2455,7 +2449,7 @@ namespace NDoc3.Core.Reflection
 						writer.WriteAttributeString("interface", MemberDisplayName.GetMemberDisplayName(implements.InterfaceType));
 						writer.WriteAttributeString("interfaceId", MemberID.GetMemberID(implements.InterfaceType));
 						writer.WriteAttributeString("assembly", implements.InterfaceType.Assembly.GetName().Name);
-						writer.WriteAttributeString("declaringType", GetTypeFullName(implements.InterfaceType).Replace('+', '.'));
+						WriteImplementsDeclaringType(implements.InterfaceType, writer);
 						writer.WriteEndElement();
 					}
 				}

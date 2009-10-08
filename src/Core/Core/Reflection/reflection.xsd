@@ -209,12 +209,21 @@
 
 	<xs:element name="implements">
 		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="declaringType" minOccurs="0" maxOccurs="1">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="genericargument" minOccurs="0" maxOccurs="unbounded"/>
+						</xs:sequence>
+						<xs:attribute name="name" type="xs:string" use="required"/>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
 			<xs:attribute name="name" type="xs:string" use="required"/>
 			<xs:attribute name="id" type="xs:string" use="required"/>
 			<xs:attribute name="interface" type="xs:string" use="required"/>
 			<xs:attribute name="interfaceId" type="xs:string" use="required"/>
 			<xs:attribute name="assembly" type="xs:string" use="required"/>
-			<xs:attribute name="declaringType" type="xs:string" use="optional"/>
 		</xs:complexType>
 	</xs:element>
 
