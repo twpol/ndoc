@@ -4,6 +4,20 @@ using System.Collections.Generic;
 namespace NDoc3.Test.Generics
 {
 	/// <summary>
+	/// Test class for a method which takes a generic array by ref
+	/// </summary>
+	public class GenericArrayByRef {
+		/// <summary>
+		/// Test case for #2872943. Works in r301.
+		/// </summary>
+		/// <typeparam name="T">The type parameter</typeparam>
+		/// <param name="param">Parameters</param>
+		public void ArrayByRef<T>(out T[] param) {
+			param = null;
+		}
+	}
+
+	/// <summary>
 	/// Test case for #2871847
 	/// </summary>
 	/// <typeparam name="T">Type parameter</typeparam>
@@ -12,7 +26,7 @@ namespace NDoc3.Test.Generics
 	}
 
 	/// <summary>
-	/// Test case for #2871847. This failed in r300.
+	/// Test case for #2871847. This failed in r300. Fixed in r301.
 	/// </summary>
 	/// <typeparam name="T">Type parameter</typeparam>
 	public class ThreadedConsumer_c<T> : Producer_i<T> {
