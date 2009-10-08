@@ -2393,13 +2393,12 @@ namespace NDoc3.Core.Reflection
 					if (genericTypeArgs.Length > 0)
 					{
 						// language-agnostic display format uses () for generic args
-						displayName += "(" + genericTypeArgs[0].Name;
+						displayName += "<" + genericTypeArgs[0].Name;
 						for(int ix=1;ix<genericTypeArgs.Length;ix++)
 						{
 							name += "," + genericTypeArgs[ix].Name;
 						}
-						displayName += ")";
-//						name = name + "``" + genericTypeArgs.Length;
+						displayName += ">";
 					}
 				}
 
