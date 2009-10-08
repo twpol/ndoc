@@ -2091,9 +2091,13 @@ namespace NDoc3.Core.Reflection
 			writer.WriteEndElement();
 		}
 
+		/// <summary>
+		/// Writes the declaring type sections of the implements section
+		/// </summary>
+		/// <param name="t">The type to write the declaring type of</param>
+		/// <param name="writer">The XML writer</param>
 		private void WriteImplementsDeclaringType(Type t, XmlWriter writer) {
-			//string name = t.IsGenericType ? t.GetGenericTypeDefinition().FullName : t.FullName;
-			string name = MemberID.GetMemberID(t.DeclaringType == null ? t : t.DeclaringType);
+			string name = MemberID.GetMemberID(t.DeclaringType ?? t);
 			writer.WriteStartElement("declaringType");
 			writer.WriteAttributeString("name", name);
 			WriteGenericArgumentsAndParameters(t, writer);
