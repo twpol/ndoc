@@ -3,6 +3,27 @@ using System.Collections.Generic;
 
 namespace NDoc3.Test.Generics
 {
+    /// <summary>
+    /// Class which test overloaded generic methods
+    /// </summary>
+    public class OverloadedGenericMethods {
+        /// <summary>
+        /// Overloaded method.
+        /// </summary>
+        /// <typeparam name="T">Type parameter</typeparam>
+        /// <param name="a">Type</param>
+        /// <param name="i">Integer value</param>
+        public void OverloadedMethod<T>(T a, int i) { }
+        
+        /// <summary>
+        /// Overloaded method. Fails in r306.
+        /// </summary>
+        /// <typeparam name="T">Type parameter</typeparam>
+        /// <param name="a">The type</param>
+        /// <param name="d">Double value</param>
+        public void OverloadedMethod<T>(T a, double d) { }
+    }
+
 	/// <summary>
 	/// Test class for a method which takes a generic array by ref
 	/// </summary>

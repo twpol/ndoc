@@ -205,7 +205,7 @@ namespace NDoc3.Documenter.Msdn {
 		///<param name="methodName"></param>
 		///<returns></returns>
 		public string GetFilenameForMethodOverloads(string assemblyName, string typeID, string methodName) {
-			string fileName = GetFilenameForIdSpecial(assemblyName, typeID, "." + methodName.Replace('`', '$') + "~Overloads");
+			string fileName = GetFilenameForIdSpecial(assemblyName, typeID, "." + methodName.Replace('`', '$').Replace("<", "(").Replace(">", ")") + "~Overloads");
 			return fileName;
 		}
 
