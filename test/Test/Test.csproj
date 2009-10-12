@@ -103,6 +103,7 @@
     <Compile Include="InternalStuff.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Namespace.cs" />
     <Compile Include="NewStuff.cs">
       <SubType>Code</SubType>
     </Compile>
