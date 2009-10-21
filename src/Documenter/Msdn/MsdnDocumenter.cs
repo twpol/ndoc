@@ -49,6 +49,7 @@ namespace NDoc3.Documenter.Msdn
 
 		private readonly Dictionary<WhichType, string> lowerCaseTypeNames;
 		private readonly Dictionary<WhichType, string> mixedCaseTypeNames;
+		private List<string> filesToInclude = new List<string>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MsdnDocumenter" />
@@ -314,6 +315,9 @@ namespace NDoc3.Documenter.Msdn
 			}
 
 			MakeHtmlForAssemblies(buildContext, MyConfig.MergeAssemblies);
+			foreach (string filename in filesToInclude) {
+				buildContext.htmlHelp.AddFileToProject(filename);
+			}
 
 			// close root book if applicable
 			if (rootPageFileName != null) {
@@ -398,6 +402,7 @@ namespace NDoc3.Documenter.Msdn
 					string dstFile = Path.Combine(buildContext.WorkingDirectory.FullName, Path.GetFileName(srcFile));
 					File.Copy(srcFile, dstFile, true);
 					File.SetAttributes(dstFile, FileAttributes.Archive);
+					filesToInclude.Add(dstFile);
 				}
 			}
 		}
