@@ -22,6 +22,7 @@
 
 using System;
 using System.Xml;
+using System.Xml.Linq;
 using System.Xml.XPath;
 
 namespace NDoc3.VisualStudio {
@@ -30,24 +31,31 @@ namespace NDoc3.VisualStudio {
 	/// </summary>
 	public class ProjectConfig {
 		private readonly XPathNavigator _Navigator;
-		private readonly ProjectVersion _ProjectVersion;
-		private readonly XmlNamespaceManager _ProjectNamespaceManager;
+		private readonly ProjectVersion _projectVersion;
+		private readonly XNamespace _namespace;
+		private readonly XElement _configuration;
 
-		internal ProjectConfig(XPathNavigator navigator, ProjectVersion version) {
-			_Navigator = navigator.Clone();
-			_ProjectVersion = version;
-			if (_ProjectVersion == ProjectVersion.VS2005AndAbove) {
-				_ProjectNamespaceManager = new XmlNamespaceManager(_Navigator.NameTable);
-				_ProjectNamespaceManager.AddNamespace("ns", "http://schemas.microsoft.com/developer/msbuild/2003");
-			}
+		internal ProjectConfig(XElement configuration, ProjectVersion version) {
+			_configuration = configuration;
+			_projectVersion = version;
+			if (_projectVersion == ProjectVersion.VS2005AndAbove)
+				_namespace = "http://schemas.microsoft.com/developer/msbuild/2003";
 		}
 
 		/// <summary>Gets the name of the configuration.</summary>
 		/// <remarks>This is usually "Debug" or "Release".</remarks>
 		public string Name {
 			get {
-				//TODO Return the right name
-				return (string)_Navigator.Evaluate("string(@Name)");
+				switch (_projectVersion) {
+					case ProjectVersion.VS2003:
+						return _configuration.Attribute("Name").Value;
+					case ProjectVersion.VS2005AndAbove:
+						return
+							_configuration.Attribute("Condition").Value.Split(new[] {'\''}, StringSplitOptions.RemoveEmptyEntries)[0].Trim(
+								new[] {'\'', ' '});
+					default:
+						throw new ApplicationException("Could not get project configuration name, because of unknown project version");
+				}
 			}
 		}
 
@@ -55,13 +63,13 @@ namespace NDoc3.VisualStudio {
 		/// project directory) for this project's configuration.</summary>
 		public string OutputPath {
 			get {
-				switch (_ProjectVersion) {
+				switch (_projectVersion) {
 					case ProjectVersion.VS2003:
-						return (string)_Navigator.Evaluate("string(@OutputPath)");
+						return _configuration.Attribute("OutputPath").Value;
 					case ProjectVersion.VS2005AndAbove:
-						return (string)_Navigator.Evaluate("string(//ns:OutputPath)", _ProjectNamespaceManager);
+						return _configuration.Element(_namespace + "OutputPath").Value;
 					default:
-						throw new ApplicationException("Couldn't find output path");
+						throw new ApplicationException("Couldn't find output path, because of unknown project version");
 				}
 			}
 		}
@@ -71,13 +79,15 @@ namespace NDoc3.VisualStudio {
 		/// processed.</summary>
 		public string DocumentationFile {
 			get {
-				switch (_ProjectVersion) {
+				switch (_projectVersion) {
 					case ProjectVersion.VS2003:
-						return (string)_Navigator.Evaluate("string(@DocumentationFile)");
+						if (_configuration.Attribute("DocumentationFile") == null) return null;
+						return _configuration.Attribute("DocumentationFile").Value;
 					case ProjectVersion.VS2005AndAbove:
-						return (string)_Navigator.Evaluate("string(//ns:DocumentationFile)", _ProjectNamespaceManager);
+						if (_configuration.Element(_namespace + "DocumentationFile") == null) return null;
+						return _configuration.Element(_namespace + "DocumentationFile").Value;
 					default:
-						throw new ApplicationException("Couldn't documentation file tag");
+						throw new ApplicationException("Couldn't find documentation file tag, because of unknown project version");
 				}
 			}
 		}

@@ -71,16 +71,21 @@ namespace NDoc3.VisualStudio {
 			StreamReader reader;
 			using (reader = new StreamReader(path)) {
 				string line = reader.ReadLine();
+				
+				// Read blank lines
 				while (line != null && line.Length == 0) {
 					line = reader.ReadLine();
 				}
 
+				// Check if the first non-blank line indicates that this is  a Microsoft Visual Studio Solution file
 				if (line == null || !line.StartsWith("Microsoft Visual Studio Solution File")) {
 					throw new ApplicationException("This is not a Microsoft Visual Studio Solution file.");
 				}
 
+				// Read the file to find projects, project configurations and solution configurations
 				while ((line = reader.ReadLine()) != null) {
 					if (line.StartsWith("Project")) {
+						// Add the project
 						AddProject(line);
 					} else if (line.StartsWith("\tGlobalSection(SolutionConfiguration)")
 								|| line.StartsWith("\tGlobalSection(SolutionConfigurationPlatforms)")) {
@@ -156,13 +161,16 @@ namespace NDoc3.VisualStudio {
 
 		private readonly Hashtable _projects = new Hashtable();
 
+		/// <summary>
+		/// Adds a project to process
+		/// </summary>
+		/// <param name="projectLine">The line representing the project definition</param>
 		private void AddProject(string projectLine) {
-			//string pattern = @"^Project\(""(?<unknown>\S+)""\) = ""(?<name>\S+)"", ""(?<path>\S+)"", ""(?<id>\S+)""";
-			// fix for bug 887476 
 			const string pattern = @"^Project\(""(?<projecttype>.*?)""\) = ""(?<name>.*?)"", ""(?<path>.*?)"", ""(?<id>.*?)""";
 			Regex regex = new Regex(pattern);
 			Match match = regex.Match(projectLine);
 
+			// Check if the line are in a valid form
 			if (match.Success) {
 				string projectTypeGUID = match.Groups["projecttype"].Value;
 				string name = match.Groups["name"].Value;
@@ -197,10 +205,7 @@ namespace NDoc3.VisualStudio {
 						string relativeProjectPath = Path.GetDirectoryName(absoluteProjectPath);
 						project.RelativePath = relativeProjectPath;
 
-						if (project.ProjectType == "C# Local") {
-							_projects.Add(project.ID, project);
-						}
-						if (project.ProjectType == "C# Web") {
+						if (project.ProjectType == "C# Local" || project.ProjectType == "C# Web") {
 							_projects.Add(project.ID, project);
 						}
 					}
