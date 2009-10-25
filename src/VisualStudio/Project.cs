@@ -29,9 +29,23 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 
 namespace NDoc3.VisualStudio {
+	/// <summary>
+	/// Project version enumeration.
+	/// </summary>
 	internal enum ProjectVersion {
 		VS2003,
 		VS2005AndAbove
+	}
+
+	/// <summary>
+	/// The project type.
+	/// </summary>
+	public enum ProjectType {
+		Unknown,
+		Local_CSHARP,
+		Web_CSHARP,
+		VBNET,
+		CPP
 	}
 
 	/// <summary>
@@ -88,25 +102,25 @@ namespace NDoc3.VisualStudio {
 
 		/// <summary>Gets a string that represents the type of project.</summary>
 		/// <value>"Visual C++" or "C# Local"</value>
-		public string ProjectType {
+		public ProjectType ProjectType {
 			get {
-            string projectType = "";
+				ProjectType projectType = NDoc3.VisualStudio.ProjectType.Unknown;
 				
 				// Check if it is a Visual Studio 2003 project file
 				XElement vsProject = _projectDocument.Element("VisualStudioProject");
 				if(vsProject != null) {
 					_projectVersion = ProjectVersion.VS2003;
 					if (vsProject.Attribute("ProjectType") != null && vsProject.Attribute("ProjectType").Value == "Visual C++")
-						projectType = "Visual C++";
+						projectType = NDoc3.VisualStudio.ProjectType.CPP;
 					XElement csharp = vsProject.Element("CSHARP");
 					if (csharp != null && csharp.Attribute("ProjectType") != null) {
 						if (csharp.Attribute("ProjectType").Value == "Local")
-							projectType = "C# Local";
+							projectType = NDoc3.VisualStudio.ProjectType.Local_CSHARP;
 						else if (csharp.Attribute("ProjectType").Value == "Web")
-							projectType = "C# Web";
+							projectType = NDoc3.VisualStudio.ProjectType.Web_CSHARP;
 					}
 				}
-				if (projectType != "") return projectType;
+				if (projectType != NDoc3.VisualStudio.ProjectType.Unknown) return projectType;
 				
 				// Check if it is a Visual Studio 2005 or above project file
 				bool propertyGroupExists = _projectDocument.Descendants(_namespace + "PropertyGroup").Any();
@@ -117,14 +131,14 @@ namespace NDoc3.VisualStudio {
 						_projectDocument.Element(_namespace + "Project").Element(_namespace + "PropertyGroup").Element(_namespace +
 						                                                                                               "ProjectType").
 							Value;
-					if (type == "Local") projectType = "C# Local";
-					if (type == "Web") projectType = "C# Web";
+					if (type == NDoc3.VisualStudio.ProjectType.Local_CSHARP) projectType = NDoc3.VisualStudio.ProjectType.Local_CSHARP;
+					if (type == NDoc3.VisualStudio.ProjectType.Web_CSHARP) projectType = NDoc3.VisualStudio.ProjectType.Web_CSHARP;
 				} else {
 					_projectVersion = ProjectVersion.VS2005AndAbove;
-					projectType = "C# Local";
+					projectType = NDoc3.VisualStudio.ProjectType.Local_CSHARP;
 				}
 
-				if(projectType == "")
+				if(projectType == NDoc3.VisualStudio.ProjectType.Unknown)
 					throw new ApplicationException("Unknown project file");
 
 				return projectType;

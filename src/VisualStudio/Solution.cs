@@ -183,41 +183,71 @@ namespace NDoc3.VisualStudio {
 				if (projectTypeGUID == "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") //C# project
 				{
 					Project project = new Project(this, new Guid(id), name);
-					string absoluteProjectPath = String.Empty;
+					string absoluteProjectPath = GetAbsoluteProjectPath(path);
 
-					if (path.StartsWith("http:")) {
-						Uri projectURL = new Uri(path);
-						if (projectURL.Authority == "localhost") {
-							//we will assume thet the virtual directory is on site 1 of localhost
-							DirectoryEntry root = new DirectoryEntry("IIS://localhost/w3svc/1/root");
-							string rootPath = root.Properties["Path"].Value as String;
-							//we will also assume that the user has been clever and changed to virtual directory local path...
-							absoluteProjectPath = rootPath + projectURL.AbsolutePath;
-						}
-					} else {
-						absoluteProjectPath = Path.Combine(_directory, path);
-					}
-
-
-					if (absoluteProjectPath.Length > 0) {
+					if (!String.IsNullOrEmpty(absoluteProjectPath)) {
 						project.Read(absoluteProjectPath);
+						project.RelativePath = Path.GetDirectoryName(absoluteProjectPath);
 
-						string relativeProjectPath = Path.GetDirectoryName(absoluteProjectPath);
-						project.RelativePath = relativeProjectPath;
-
-						if (project.ProjectType == "C# Local" || project.ProjectType == "C# Web") {
+						// If this is a known project type add it to the project list
+						if (project.ProjectType == ProjectType.Local_CSHARP || project.ProjectType == ProjectType.Web_CSHARP) {
 							_projects.Add(project.ID, project);
 						}
 					}
 				}
-				if (projectTypeGUID == "{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") // VB.NET project
+				else if (projectTypeGUID == "{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") // VB.NET project
 				{
-				}
+					Project project = new Project(this, new Guid(id), name);
+					string absolutePath = GetAbsoluteProjectPath(path);
 
-				if (projectTypeGUID == "{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") // C++ project
+					if (!String.IsNullOrEmpty(absoluteProjectPath)) {
+						project.Read(absoluteProjectPath);
+						project.RelativePath = Path.GetDirectoryName(absoluteProjectPath);
+
+						// If this is a known project type add it to the project list
+						if (project.ProjectType == ProjectType.VBNET) {
+							_projects.Add(project.ID, project);
+						}
+					}
+				}
+				else if (projectTypeGUID == "{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") // C++ project
 				{
+					Project project = new Project(this, new Guid(id), name);
+					string absolutePath = GetAbsoluteProjectPath(path);
+
+					if (!String.IsNullOrEmpty(absoluteProjectPath)) {
+						project.Read(absoluteProjectPath);
+						project.RelativePath = Path.GetDirectoryName(absoluteProjectPath);
+
+						// If this is a known project type add it to the project list
+						if (project.ProjectType == ProjectType.CPP) {
+							_projects.Add(project.ID, project);
+						}
+					}
 				}
 			}
+		}
+
+		/// <summary>
+		/// Gets the abosulte path of a project specified by the supplied path.
+		/// </summary>
+		/// <param name="path">Th project path.</param>
+		/// <returns>The aboslute path.</returns>
+		private string GetAbsoluteProjectPath(string path) {
+			string absoluteProjectPath = String.Empty;
+			if (path.StartsWith("http:")) {
+				Uri projectURL = new Uri(path);
+				if (projectURL.Authority == "localhost") {
+					//we will assume thet the virtual directory is on site 1 of localhost
+					DirectoryEntry root = new DirectoryEntry("IIS://localhost/w3svc/1/root");
+					string rootPath = root.Properties["Path"].Value as String;
+					//we will also assume that the user has been clever and changed to virtual directory local path...
+					absoluteProjectPath = rootPath + projectURL.AbsolutePath;
+				}
+			} else {
+				absoluteProjectPath = Path.Combine(_directory, path);
+			}
+			return absoluteProjectPath;
 		}
 
 		/// <summary>Gets the project with the specified name.</summary>
