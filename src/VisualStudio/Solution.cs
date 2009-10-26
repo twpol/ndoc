@@ -200,9 +200,9 @@ namespace NDoc3.VisualStudio {
 					Project project = new Project(this, new Guid(id), name);
 					string absolutePath = GetAbsoluteProjectPath(path);
 
-					if (!String.IsNullOrEmpty(absoluteProjectPath)) {
-						project.Read(absoluteProjectPath);
-						project.RelativePath = Path.GetDirectoryName(absoluteProjectPath);
+					if (!String.IsNullOrEmpty(absolutePath)) {
+						project.Read(absolutePath);
+						project.RelativePath = Path.GetDirectoryName(absolutePath);
 
 						// If this is a known project type add it to the project list
 						if (project.ProjectType == ProjectType.VBNET) {
@@ -215,9 +215,9 @@ namespace NDoc3.VisualStudio {
 					Project project = new Project(this, new Guid(id), name);
 					string absolutePath = GetAbsoluteProjectPath(path);
 
-					if (!String.IsNullOrEmpty(absoluteProjectPath)) {
-						project.Read(absoluteProjectPath);
-						project.RelativePath = Path.GetDirectoryName(absoluteProjectPath);
+					if (!String.IsNullOrEmpty(absolutePath)) {
+						project.Read(absolutePath);
+						project.RelativePath = Path.GetDirectoryName(absolutePath);
 
 						// If this is a known project type add it to the project list
 						if (project.ProjectType == ProjectType.CPP) {

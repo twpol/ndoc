@@ -131,8 +131,8 @@ namespace NDoc3.VisualStudio {
 						_projectDocument.Element(_namespace + "Project").Element(_namespace + "PropertyGroup").Element(_namespace +
 						                                                                                               "ProjectType").
 							Value;
-					if (type == NDoc3.VisualStudio.ProjectType.Local_CSHARP) projectType = NDoc3.VisualStudio.ProjectType.Local_CSHARP;
-					if (type == NDoc3.VisualStudio.ProjectType.Web_CSHARP) projectType = NDoc3.VisualStudio.ProjectType.Web_CSHARP;
+					if (type == "Local") projectType = NDoc3.VisualStudio.ProjectType.Local_CSHARP;
+					if (type == "Web") projectType = NDoc3.VisualStudio.ProjectType.Web_CSHARP;
 				} else {
 					_projectVersion = ProjectVersion.VS2005AndAbove;
 					projectType = NDoc3.VisualStudio.ProjectType.Local_CSHARP;
