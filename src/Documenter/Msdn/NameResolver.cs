@@ -455,8 +455,6 @@ namespace NDoc3.Documenter.Msdn {
 				filename = fileNames[memberId];
 			}
 
-			//			Debug.Assert(filename != null, string.Format("Filename for assembly:memberId [{0}:{1}] not found", currentAssemblyName, memberId));
-			//			Debug.WriteLine(string.Format("GetFilenameForIdInternal('{0}','{1}') => {2}", currentAssemblyName, memberId, filename));
 			return filename ?? string.Empty;
 		}
 
@@ -465,12 +463,10 @@ namespace NDoc3.Documenter.Msdn {
 			if (fn != null && fn.Length > EXT.Length) {
 				fn = fn.Insert(fn.Length - EXT.Length, postfix);
 			}
-			//			Debug.WriteLine(string.Format("GetFilenameForIdSpecial('{0}','{1}') => {2}", assemblyName, memberId, fn));
 			return fn;
 		}
 
 		private void Register(string assemblyName, string id, string displayName, string fileName) {
-			//			Debug.WriteLine(string.Format("Registering [{0},{1}]=[{2},{3}]", assemblyName, id, displayName, fileName));
 			fileNames[assemblyName + id] = fileName;
 			elemNames[assemblyName + id] = displayName;
 		}
@@ -483,17 +479,8 @@ namespace NDoc3.Documenter.Msdn {
 				return assemblyName + EXT;
 			}
 
-			//			char idType = '\0';
 			int ix = id.IndexOf(':');
-			//			if (ix > -1) {
-			//				idType = id[0];
-			//			}
 			id = id.Substring(ix + 1);
-
-			// constructors could be #ctor or #cctor
-			//			int ixDotHash = id.IndexOf(".#c"); 
-			//			if (ixDotHash > -1)
-			//				id = id.Substring(0, ixDotHash);
 
 			// methods could have "("
 			int ixLBrace = id.IndexOf("(");

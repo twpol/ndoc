@@ -143,8 +143,13 @@ namespace NDoc3.Documenter.Msdn {
 				}
 				return fileName;
 			}
-			string result = String.Format(sdkDocBaseUrl, sdkDocLanguage, cref.Substring(2), sdkVersion);
-			return result;
+			if (cref.Contains("`")) {
+				MSDNResolver.MSDNResolver resolver = new MSDNResolver.MSDNResolver();
+				string contentId = resolver.ResolveLink(cref, sdkDocLanguage, sdkVersion);
+				return String.Format(sdkDocBaseUrl, sdkDocLanguage, contentId, "");
+			}
+			
+			return String.Format(sdkDocBaseUrl, sdkDocLanguage, cref.Substring(2), sdkVersion);
 		}
 
 		/// <summary>
@@ -172,7 +177,6 @@ namespace NDoc3.Documenter.Msdn {
 				}
 			}
 
-			//			Debug.WriteLine(string.Format("{0} returns {1}", message, name));
 			return name;
 		}
 
