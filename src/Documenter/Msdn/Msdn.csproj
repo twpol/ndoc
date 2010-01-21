@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{8282F072-D966-4075-A8DA-8911E36F4980}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -95,10 +95,6 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
-    <ProjectReference Include="..\..\..\MSDNResolver\MSDNResolver.csproj">
-      <Project>{266952FB-66BF-4EB2-91A2-35634A536DD6}</Project>
-      <Name>MSDNResolver</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Core\Core.csproj">
       <Name>Core</Name>
       <Project>{DBA75D67-23C9-4A78-ABC2-CF8802FDB7CA}</Project>
