@@ -17,6 +17,7 @@
     <property name="tool.dir" value="${project::get-base-directory()}/tools" readonly="true"/>
     <property name="build.dir" value="${project::get-base-directory()}/bin" />
     <property name="lib.dir" value="${project::get-base-directory()}/lib" />
+	<property name="bin.dir" value="${project::get-base-directory()}/bin/VS.NET2008/Debug" />
 
     <!-- Include helpers -->
     <include buildfile="ndoc3.build.include" />
@@ -34,14 +35,7 @@
 			<call target="compile.sdkdoc" />
     </target>
 
-    <target name="simian" description="finds duplicate code">
-    	<exec program="${tool.dir}\simian\simian.exe">
-    		<arg value="-includes=${project::get-base-directory()}/src/**/*.cs"/>
-    		<arg value="-formatter=xml:${current.bin.dir}\simian.xml"/>
-    	</exec>
-    </target>
-
-  	<target name="test" depends="simian compile test.sdkdoc" description="Builds, tests and runs NDoc3 on itself for smoke testing">
+  	<target name="test" depends="compile test.sdkdoc" description="Builds, tests and runs NDoc3 on itself for smoke testing">
   <!-- build coverage summary -->
   		<exec program="${tool.dir}/ncoverexplorer/ncoverexplorer.console.exe" workingdir="${current.bin.dir}">
   			<arg value="/xml:&quot;${current.bin.dir}/CoverageSummary.xml&quot;" />
@@ -125,34 +119,9 @@
     <!--
 
     -->
-    <!-- target name="sdkdoc" description="Builds SDK documentation (based on .NET Framework 1.1 assembly)">
-        <echo message="Creating SDK Documentation for NDoc3 Core." />
-        <ndoc3>
-            <assemblies basedir="${build.dir}/net/1.1">
-                <include name="NDoc3.Core.dll" />
-            </assemblies>
-            <documenters>
-                <documenter name="MSDN">
-                    <property name="OutputDirectory" value="doc/sdk" />
-                    <property name="HtmlHelpName" value="NDoc3-SDK" />
-                    <property name="Title" value="NDoc3 ${project.version} SDK" />
-                    <property name="ShowVisualBasic" value="True" />
-                    <property name="SdkLinksOnWeb" value="True" />
-                    <property name="IncludeAssemblyVersion" value="True" />
-                    <property name="FeedbackEmailAddress" value="ndoc3-helpfeedback@lists.sourceforge.net" />
-                    <property name="UseNamespaceDocSummaries" value="True" />
-                    <property name="Preliminary" value="${if(project.release.type == 'release','False','True')}" />
-                    <property name="DocumentAttributes" value="True" />
-                </documenter>
-            </documenters>
-        </ndoc3>
-    </target -->
-
   <target name="compile.sdkdoc">
     <echo message="Creating SDK Documentation for NDoc3 Core." />
     <exec workingdir="." program="${current.bin.dir}/NDoc3Console.exe" verbose="true">
-      <!-- arg value="-verbose" /-->
-      <!-- arg value="-documenter=MSDN" /-->
       <arg value="-project=./NDoc3.ndoc" />
     </exec>
   </target>
@@ -160,8 +129,6 @@
   <target name="test.sdkdoc">
     <echo message="Creating SDK Documentation for all NDoc3 assemblies." />
     <exec workingdir="." program="${current.bin.dir}/NDoc3Console.exe" verbose="true">
-      <!-- arg value="-verbose" /-->
-      <!-- arg value="-documenter=MSDN" /-->
       <arg value="-project=./NDoc3-test.ndoc" />
     </exec>
   </target>

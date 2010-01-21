@@ -47,7 +47,7 @@ namespace NDoc3.Core
 			Type[] genericTypeArgs = genericType.GetGenericArguments();
 
 			string displayName2 = MemberDisplayName.GetMemberDisplayName(genericTypeDefinition);
-			Assert.AreEqual("GenericClass(S,T)", displayName2);
+			Assert.AreEqual("GenericClass<S,T>", displayName2);
 
 			// Note: Nested partial types are not allowed - we don't need to care about them
 //			Type t = typeof(System.Action<System.Action<,>>);
@@ -58,32 +58,32 @@ namespace NDoc3.Core
 			t = typeof(System.Action<System.Action<WaitCallback>>);
 			displayName = MemberDisplayName.GetMemberDisplayName(t);
 			Assert.AreEqual("Action`1", t.Name);
-			Assert.AreEqual("Action(Action(WaitCallback))", displayName);
+			Assert.AreEqual("Action<Action<WaitCallback>>", displayName);
 
 			t = typeof(System.Action<System.Action<WaitCallback>>).MakeByRefType();
 			displayName = MemberDisplayName.GetMemberDisplayName(t);
 			Assert.AreEqual("Action`1&", t.Name);
-			Assert.AreEqual("Action(Action(WaitCallback))", displayName);
+			Assert.AreEqual("Action<Action<WaitCallback>>", displayName);
 
 			t = typeof(System.Action<System.Action<WaitCallback>>[]).MakeByRefType();
 			displayName = MemberDisplayName.GetMemberDisplayName(t);
 			Assert.AreEqual("Action`1[]&", t.Name);
-			Assert.AreEqual("Action(Action(WaitCallback))[]", displayName);
+			Assert.AreEqual("Action<Action<WaitCallback>>[]", displayName);
 
 			t = typeof(System.Action<System.Action<WaitCallback>>[]);
 			displayName = MemberDisplayName.GetMemberDisplayName(t);
 			Assert.AreEqual("Action`1[]", t.Name);
-			Assert.AreEqual("Action(Action(WaitCallback))[]", displayName);
+			Assert.AreEqual("Action<Action<WaitCallback>>[]", displayName);
 
 			t = typeof(System.Action<System.Action<WaitCallback>>[,]);
 			displayName = MemberDisplayName.GetMemberDisplayName(t);
 			Assert.AreEqual("Action`1[,]", t.Name);
-			Assert.AreEqual("Action(Action(WaitCallback))[,]", displayName);
+			Assert.AreEqual("Action<Action<WaitCallback>>[,]", displayName);
 
 			t = typeof(System.Action<System.Action<WaitCallback>>[][]);
 			displayName = MemberDisplayName.GetMemberDisplayName(t);
 			Assert.AreEqual("Action`1[][]", t.Name);
-			Assert.AreEqual("Action(Action(WaitCallback))[][]", displayName);
+			Assert.AreEqual("Action<Action<WaitCallback>>[][]", displayName);
 		}
 
 		[Test]

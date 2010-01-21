@@ -1,6 +1,6 @@
 ﻿<project SchemaVersion="1.3">
     <assemblies>
-        <assembly location=".\bin\net\3.5\NDoc3.Core.dll" documentation=".\bin\net\3.5\NDoc3.Core.xml" />
+        <assembly location=".\bin\net\2.0\NDoc3.Core.dll" documentation=".\bin\net\2.0\NDoc3.Core.xml" />
     </assemblies>
     <namespaces>
         <namespace name="NDoc3.Core">The <b>NDoc3.Core</b> namespace contains the core functionality of NDoc3 as well as interfaces and base classes to build specific documenters.</namespace>
