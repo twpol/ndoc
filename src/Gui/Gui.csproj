@@ -229,7 +229,6 @@
     <Compile Include="WarningForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <None Include="App.config" />
     <None Include="Gui.build" />
     <Content Include="NDoc3Gui.exe.manifest" />
   </ItemGroup>
