@@ -121,6 +121,13 @@ namespace NDoc3.Core
 			string memberId = MemberID.GetMemberID(method, false);
 			Assert.AreEqual("M:NDoc3.Core.NormalClass.TakesNestedTypeArg``1(NDoc3.Core.NormalClass.Function{``0},System.String,System.Object[])", memberId);
 		}
+
+		[Test]
+		public void NullableParameterTest() {
+			MethodInfo mi = typeof(NormalClass).GetMethod("NullableParam");
+			string memberId = MemberID.GetMemberID(mi, false);
+			Assert.AreEqual("M:NDoc3.Core.NormalClass.NullableParam(System.Nullable{System.Int32})", memberId);
+		}
 	}
 
 	/// <summary>
@@ -194,6 +201,12 @@ namespace NDoc3.Core
 		{
         	return function();
 		}
+
+		/// <summary>
+		/// Nullable parameter test.
+		/// </summary>
+		/// <param name="nullable">Nullable parameter</param>
+		public void NullableParam(int? nullable) { }
 	}
 
 	/// <summary>

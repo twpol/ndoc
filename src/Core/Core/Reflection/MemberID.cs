@@ -230,7 +230,12 @@ namespace NDoc3.Core.Reflection {
 		/// <returns>The type name</returns>
 		public static string GetTypeName(Type type, bool UsePositionalNumber) {
 			//TODO Nullable type
-			string result;
+			string result = "";
+			bool nullable = false;
+			if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>)) {
+				nullable = true;
+				result += "System.Nullable{";
+			}
 			if (type.GetGenericArguments().Length > 0) {
 				string typeNamespace = GetTypeNamespace(type);
 				if (!string.IsNullOrEmpty(typeNamespace)) {
@@ -257,15 +262,15 @@ namespace NDoc3.Core.Reflection {
 				if (genParmCountPos > -1)
 					typeName = typeName.Substring(0, genParmCountPos);
 
-				result = String.Concat(typeNamespace, typeName, GetTypeArgumentsList(type), typeBounds);
+				result += String.Concat(typeNamespace, typeName, GetTypeArgumentsList(type), typeBounds);
 			} else {
 				if (type.ContainsGenericParameters) {
 					if (type.HasElementType) {
 						Type eleType = type.GetElementType();
 						if (UsePositionalNumber) {
-							result = "`" + eleType.GenericParameterPosition;
+							result += "`" + eleType.GenericParameterPosition;
 						} else {
-							result = eleType.Name;
+							result += eleType.Name;
 						}
 
 						if (type.IsArray) {
@@ -288,15 +293,16 @@ namespace NDoc3.Core.Reflection {
 						}
 					} else {
 						if (UsePositionalNumber) {
-							result = "`" + type.GenericParameterPosition;
+							result += "`" + type.GenericParameterPosition;
 						} else {
-							result = type.Name;
+							result += type.Name;
 						}
 					}
 				} else {
-					result = type.FullName.Replace("&", "").Replace('+', '.');
+					result += type.FullName.Replace("&", "").Replace('+', '.');
 				}
 			}
+			if (nullable) result += "}";
 			return result;
 		}
 
