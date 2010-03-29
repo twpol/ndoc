@@ -152,8 +152,10 @@ namespace NDoc3.Core.Reflection {
 
 			if (type.GetGenericArguments().Length > 0 && type.GetGenericTypeDefinition() != typeof(Nullable<>))
 				return type.GetGenericTypeDefinition().FullName.Replace('+', '.');
-			if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
-				return type.GetGenericArguments()[0].FullName.Replace('+', '.');
+			if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>)) {
+				Type t = type.GetGenericArguments()[0];
+				return String.IsNullOrEmpty(t.FullName) ? t.Name : t.FullName.Replace('+', ' ');
+			}
 			if (type.IsGenericParameter)
 				return type.Name;
 			// seems to happen
