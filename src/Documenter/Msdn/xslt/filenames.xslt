@@ -204,7 +204,7 @@
 
 	<xsl:template name="get-filename-for-system-namespace">
 		<xsl:param name="namespace-name" />
-		<xsl:value-of select="concat($ndoc-sdk-doc-base-url, translate($namespace-name, '.', ''), $ndoc-sdk-doc-file-ext)" />
+		<xsl:value-of select="NUtil:FormatOnlineSDKLink($namespace-name)" />
 	</xsl:template>
 
 	<xsl:template name="get-filename-for-system-type">
@@ -213,19 +213,19 @@
 	</xsl:template>
 
 	<xsl:template name="get-filename-for-system-property">
-		<xsl:value-of select="concat($ndoc-sdk-doc-base-url, translate(@declaringType, '.[,]', ''), 'Class', translate(@name, '.[,]', ''), 'Topic', $ndoc-sdk-doc-file-ext)" />
+		<xsl:value-of select="NUtil:FormatOnlineSDKLink(concat(@declaringType, '.' , @name))" />
 	</xsl:template>
 
 	<xsl:template name="get-filename-for-system-field">
-		<xsl:value-of select="concat($ndoc-sdk-doc-base-url, translate(@declaringType, '.[,]', ''), 'Class', translate(@name, '.[,]', ''), 'Topic', $ndoc-sdk-doc-file-ext)" />
+		<xsl:value-of select="NUtil:FormatOnlineSDKLink(concat(@declaringType, '.' , @name))" />
 	</xsl:template>
 
 	<xsl:template name="get-filename-for-system-method">
-		<xsl:value-of select="concat($ndoc-sdk-doc-base-url, translate(@declaringType, '.[,]', ''), 'Class', translate(@name, '.[,]', ''), 'Topic', $ndoc-sdk-doc-file-ext)" />
+		<xsl:value-of select="NUtil:FormatOnlineSDKLink(concat(@declaringType, '.' , @name))" />
 	</xsl:template>
 
 	<xsl:template name="get-filename-for-system-event">
-		<xsl:value-of select="concat($ndoc-sdk-doc-base-url, translate(@declaringType, '.[,]', ''), 'Class', translate(@name, '.[,]', ''), 'Topic', $ndoc-sdk-doc-file-ext)" />
+		<xsl:value-of select="NUtil:FormatOnlineSDKLink(concat(@declaringType, '.' , @name))" />
 	</xsl:template>
 	<!-- -->
 	<xsl:template name="get-filename-for-individual-member">
