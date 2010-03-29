@@ -444,5 +444,15 @@ namespace NDoc3.Test.NewStuff {
 		/// Nullable Int32 generic argument
 		/// </summary>
 		public Generic_Single<int?> nullableGenericArgument;
+
+		/// <summary>
+		/// Converts a value to a nullable type. Test for bug #2964377.
+		/// </summary>
+		/// <typeparam name="T">Type to convert to nullable.</typeparam>
+		/// <param name="value">Value to convert.</param>
+		/// <returns>Converted value.</returns>
+		public static T? ConvertoToNullable<T>(IConvertible value) where T : struct {
+			return null;
+		}
 	}
 }
