@@ -853,7 +853,7 @@ namespace NDoc3.Core.Reflection
 							WriteEndDocumentation(writer);
 						} else if (_rep.ShowMissingSummaries) {
 							WriteStartDocumentation(writer);
-							WriteMissingDocumentation(writer, "summary", null, "Missing <summary> Documentation for " + namespaceName);
+							WriteMissingDocumentation(writer, "summary", null, "Missing <summary> documentation for " + namespaceName);
 							WriteEndDocumentation(writer);
 						}
 
@@ -2997,7 +2997,7 @@ namespace NDoc3.Core.Reflection
 
 				if (bMissingSummary) {
 					WriteMissingDocumentation(writer, "summary", null,
-						memberId == null ? "Missing <summary> documentation" : "Missing <summary> documentation for " + memberId);
+						memberId == null ? "Missing <summary> documentation" : "Missing <summary> documentation for " + memberId.Substring(2));
 				}
 			}
 
