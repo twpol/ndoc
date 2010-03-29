@@ -1806,13 +1806,6 @@ namespace NDoc3.Core.Reflection {
 
 			Type t = field.FieldType;
 
-			//			writer.WriteAttributeString("typeId", MemberID.GetMemberID(t));
-
-			//			if (t.IsGenericType && t.GetGenericTypeDefinition() == typeof(Nullable<>))
-			//				writer.WriteAttributeString("nullable", "true");
-			//
-			//			writer.WriteAttributeString("valueType", t.IsValueType.ToString().ToLower());
-
 			bool inherited = (field.DeclaringType != field.ReflectedType);
 
 			if (!IsMemberSafe(field))
@@ -1841,14 +1834,13 @@ namespace NDoc3.Core.Reflection {
 			if (inherited) {
 				WriteDeclaringType(field, writer);
 			}
-			//			if (t.IsGenericType && t.GetGenericTypeDefinition() != typeof(Nullable<>)) {
-			//				WriteGenericArgumentsAndParameters(t, writer);
-			//			}
 
 			WriteMethodSignatureTypeMetadata(writer, t);
 
 			if (inherited) {
 				WriteInheritedDocumentation(writer, memberName, field.DeclaringType);
+			} else if (CheckForInheritDoc(field.DeclaringType.Assembly.GetName(), memberName) && field.DeclaringType.BaseType != null) {
+				WriteInheritedDocumentation(writer, memberName, field.DeclaringType.BaseType);
 			} else {
 				WriteFieldDocumentation(writer, type.Assembly.GetName(), memberName, type);
 			}
@@ -1972,6 +1964,8 @@ namespace NDoc3.Core.Reflection {
 
 			if (inherited) {
 				WriteInheritedDocumentation(writer, memberName, eventInfo.DeclaringType);
+			} else if (CheckForInheritDoc(eventInfo.DeclaringType.Assembly.GetName(), memberName) && eventInfo.DeclaringType.BaseType != null) {
+					WriteInheritedDocumentation(writer, memberName, eventInfo.DeclaringType.BaseType);
 			} else {
 				WriteEventDocumentation(writer, eventInfo.DeclaringType.Assembly.GetName(), memberName, true);
 			}
@@ -2135,6 +2129,8 @@ namespace NDoc3.Core.Reflection {
 
 				if (inherited) {
 					WriteInheritedDocumentation(writer, memberName, property.DeclaringType);
+				} else if (CheckForInheritDoc(property.DeclaringType.Assembly.GetName(), memberName) && property.DeclaringType.BaseType != null) {
+					WriteInheritedDocumentation(writer, memberName, property.DeclaringType.BaseType);
 				} else {
 					WritePropertyDocumentation(writer, property.DeclaringType.Assembly.GetName(), memberName, property, true);
 				}
@@ -2473,7 +2469,6 @@ namespace NDoc3.Core.Reflection {
 
 				if (inherited) {
 					WriteDeclaringType(method, writer);
-					//					writer.WriteAttributeString("declaringType", MemberID.GetDeclaringTypeName(method));
 				}
 
 				if (overload > 0) {
@@ -2484,16 +2479,11 @@ namespace NDoc3.Core.Reflection {
 					writer.WriteAttributeString("unsafe", "true");
 
 				WriteReturnType(writer, t);
-				//				writer.WriteStartElement("returnType");
-				//				writer.WriteAttributeString("type", MemberID.GetTypeName(t));
-				//				writer.WriteAttributeString("id", MemberID.GetMemberID(t));
-				//				if (t.IsGenericType) {
-				//					WriteGenericArgumentsAndParameters(t, writer);
-				//				}
-				//				writer.WriteEndElement();
 
 				if (inherited) {
 					WriteInheritedDocumentation(writer, memberName, method.DeclaringType);
+				} else if (CheckForInheritDoc(method.DeclaringType.Assembly.GetName(), memberName) && method.DeclaringType.BaseType != null) {
+					WriteInheritedDocumentation(writer, memberName, method.DeclaringType.BaseType);
 				} else {
 					WriteMethodDocumentation(writer, method.DeclaringType.Assembly.GetName(), memberName, method, true);
 				}
