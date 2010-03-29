@@ -669,7 +669,7 @@ namespace NDoc3.Core.Reflection {
 			}
 		}
 
-		SdkVersion _SdkDocVersion = SdkVersion.SDK_v2_0;
+		SdkVersion _SdkDocVersion = SdkVersion.SDK_v3_5;
 
 		/// <summary>Gets or sets the LinkToSdkDocVersion property.</summary>
 		/// <remarks>Specifies to which version of the .NET Framework SDK documentation the links to system types will be pointing.</remarks>
