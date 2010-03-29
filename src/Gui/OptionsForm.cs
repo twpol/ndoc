@@ -88,6 +88,7 @@ namespace NDoc3.Gui
 			this.Ok.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.Ok.Location = new System.Drawing.Point(182, 310);
 			this.Ok.Name = "Ok";
+			this.Ok.Size = new System.Drawing.Size(75, 23);
 			this.Ok.TabIndex = 0;
 			this.Ok.Text = "Ok";
 			this.Ok.Click += new System.EventHandler(this.Ok_Click);
@@ -99,27 +100,23 @@ namespace NDoc3.Gui
 			this.Cancel.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.Cancel.Location = new System.Drawing.Point(262, 310);
 			this.Cancel.Name = "Cancel";
+			this.Cancel.Size = new System.Drawing.Size(75, 23);
 			this.Cancel.TabIndex = 1;
 			this.Cancel.Text = "Cancel";
 			this.Cancel.Click += new System.EventHandler(this.Cancel_Click);
 			// 
 			// propertyGrid
 			// 
-			this.propertyGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-				| System.Windows.Forms.AnchorStyles.Left) 
-				| System.Windows.Forms.AnchorStyles.Right)));
-			this.propertyGrid.CommandsVisibleIfAvailable = true;
-			this.propertyGrid.LargeButtons = false;
+			this.propertyGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+							| System.Windows.Forms.AnchorStyles.Left)
+							| System.Windows.Forms.AnchorStyles.Right)));
 			this.propertyGrid.LineColor = System.Drawing.SystemColors.ScrollBar;
 			this.propertyGrid.Location = new System.Drawing.Point(8, 16);
 			this.propertyGrid.Name = "propertyGrid";
 			this.propertyGrid.PropertySort = System.Windows.Forms.PropertySort.Categorized;
 			this.propertyGrid.Size = new System.Drawing.Size(328, 280);
 			this.propertyGrid.TabIndex = 2;
-			this.propertyGrid.Text = "PropertyGrid";
 			this.propertyGrid.ToolbarVisible = false;
-			this.propertyGrid.ViewBackColor = System.Drawing.SystemColors.Window;
-			this.propertyGrid.ViewForeColor = System.Drawing.SystemColors.WindowText;
 			this.propertyGrid.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propertyGrid_PropertyValueChanged);
 			// 
 			// OptionsForm
@@ -131,7 +128,7 @@ namespace NDoc3.Gui
 			this.Controls.Add(this.propertyGrid);
 			this.Controls.Add(this.Cancel);
 			this.Controls.Add(this.Ok);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
 			this.Name = "OptionsForm";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
