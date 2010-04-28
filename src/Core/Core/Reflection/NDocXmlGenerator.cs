@@ -292,10 +292,10 @@ namespace NDoc3.Core.Reflection {
 			}
 		}
 
-
-		#region Global Xml Elements
-
-		// writes out the default thead safety settings for the project
+		/// <summary>
+		/// Writes out the default thead safety settings for the project
+		/// </summary>
+		/// <param name="writer"></param>
 		private void WriteDefaultThreadSafety(XmlWriter writer) {
 			writer.WriteStartElement("threadsafety");
 			writer.WriteAttributeString("static", XmlConvert.ToString(_rep.StaticMembersDefaultToSafe));
@@ -307,7 +307,10 @@ namespace NDoc3.Core.Reflection {
 			writer.WriteElementString("feedbackEmail", _rep.FeedbackEmailAddress);
 		}
 
-		// writes the copyright node to the documentation
+		/// <summary>
+		/// Writes the copyright node to the documentation 
+		/// </summary>
+		/// <param name="writer"></param>
 		private void WriteCopyright(XmlWriter writer) {
 			writer.WriteStartElement("copyright");
 			writer.WriteAttributeString("text", _rep.CopyrightText);
@@ -323,12 +326,11 @@ namespace NDoc3.Core.Reflection {
 			writer.WriteEndElement();
 		}
 
-		#endregion
-
-		#region EditorBrowsable filter
-
-		//checks if the member has been flagged with the
-		//EditorBrowsableState.Never value
+		/// <summary>
+		/// Checks if the member has been flagged with the EditorBrowsableState.Never value
+		/// </summary>
+		/// <param name="minfo"></param>
+		/// <returns></returns>
 		private bool IsEditorBrowsable(MemberInfo minfo) {
 			if (_rep.EditorBrowsableFilter == EditorBrowsableFilterLevel.Off) {
 				return true;
@@ -349,10 +351,6 @@ namespace NDoc3.Core.Reflection {
 			}
 			throw new Exception("Unknown exception occured");
 		}
-
-		#endregion
-
-		#region MustDocument * filters
 
 		private bool MustDocumentType(Type type) {
 			Type declaringType = type.DeclaringType;
@@ -515,7 +513,6 @@ namespace NDoc3.Core.Reflection {
 			return false;
 		}
 
-
 		private bool MustDocumentField(FieldInfo field) {
 			if (!
 				(
@@ -556,10 +553,6 @@ namespace NDoc3.Core.Reflection {
 
 			return IsEditorBrowsable(field);
 		}
-
-		#endregion
-
-		#region IsHidden\IsHiding
 
 		private static bool IsHidden(MemberInfo member, Type type) {
 			if (member.DeclaringType == member.ReflectedType)
@@ -705,10 +698,6 @@ namespace NDoc3.Core.Reflection {
 			return true;
 		}
 
-		#endregion
-
-		#region Assembly
-
 		/// <summary>
 		///  WriteAssembly
 		///		WriteCustomAttributes
@@ -755,9 +744,6 @@ namespace NDoc3.Core.Reflection {
 			}
 		}
 
-		#endregion
-
-		#region Module
 		/// <summary>Writes documentation about a module out as XML.</summary>
 		/// <param name="writer">XmlWriter to write on.</param>
 		/// <param name="module">Module to document.</param>
@@ -768,9 +754,7 @@ namespace NDoc3.Core.Reflection {
 			WriteNamespaces(writer, module);
 			writer.WriteEndElement();
 		}
-		#endregion
 
-		#region Namespace
 		private void WriteNamespaces(XmlWriter writer, IModuleInfo module) {
 			Type[] types = module.GetTypes();
 
@@ -843,9 +827,7 @@ namespace NDoc3.Core.Reflection {
 				}
 			}
 		}
-		#endregion
 
-		#region TypeCollections
 		private int WriteClasses(XmlWriter writer, Type[] types, string namespaceName) {
 			int nbWritten = 0;
 
@@ -943,8 +925,6 @@ namespace NDoc3.Core.Reflection {
 				type.BaseType.FullName == "System.MulticastDelegate";
 		}
 
-		#endregion
-
 		/// <summary>
 		/// Returns the method's index in the list of overloads
 		/// </summary>
@@ -996,8 +976,6 @@ namespace NDoc3.Core.Reflection {
 			return (count > 1) ? overload : 0;
 		}
 
-
-		#region Types
 		/// <summary>Writes XML documenting a class.</summary>
 		/// <param name="writer">XmlWriter to write on.</param>
 		/// <param name="type">Class to document.</param>
@@ -1270,9 +1248,6 @@ namespace NDoc3.Core.Reflection {
 			writer.WriteEndElement();
 		}
 
-		#endregion
-
-		#region Attributes
 		private void WriteStructLayoutAttribute(XmlWriter writer, Type type) {
 			string charSet = null;
 			string layoutKind = null;
@@ -1518,10 +1493,6 @@ namespace NDoc3.Core.Reflection {
 
 			writer.WriteEndElement(); // attribute
 		}
-
-		#endregion
-
-		#region MemberCollections
 
 		private void WriteConstructors(XmlWriter writer, Type type) {
 			int overload = 0;
@@ -1780,10 +1751,6 @@ namespace NDoc3.Core.Reflection {
 				writer.WriteEndElement();
 			}
 		}
-
-		#endregion
-
-		#region Members
 
 		/// <summary>Writes XML documenting a field.</summary>
 		/// <param name="writer">XmlWriter to write on.</param>
@@ -2498,10 +2465,6 @@ namespace NDoc3.Core.Reflection {
 			}
 		}
 
-
-		#endregion
-
-		#region IsMemberSafe
 		private static bool IsMemberSafe(FieldInfo field) {
 			return !field.FieldType.IsPointer;
 		}
@@ -2524,9 +2487,6 @@ namespace NDoc3.Core.Reflection {
 
 			return IsMemberSafe((MethodBase)method);
 		}
-		#endregion
-
-		#region Get MemberID of base of inherited member
 
 		private static string GetTypeFullName(Type type) {
 			if (type.IsByRef)
@@ -2541,10 +2501,6 @@ namespace NDoc3.Core.Reflection {
 
 			return type.Namespace + "." + type.Name;
 		}
-
-		#endregion
-
-		#region Generics
 
 		/// <summary>
 		/// Writes generic arguments and parameters for a method
@@ -2687,10 +2643,6 @@ namespace NDoc3.Core.Reflection {
 			}
 		}
 
-		#endregion
-
-		#region Enumeration Values
-
 		private string GetTypeAccessValue(Type type) {
 			string result = "Unknown";
 
@@ -2812,8 +2764,6 @@ namespace NDoc3.Core.Reflection {
 			return result;
 		}
 
-		#endregion
-
 		private static StringCollection GetNamespaceNames(Type[] types) {
 			StringCollection namespaceNames = new StringCollection();
 
@@ -2825,9 +2775,6 @@ namespace NDoc3.Core.Reflection {
 
 			return namespaceNames;
 		}
-
-
-		#region Missing Documentation
 
 		private void CheckForMissingSummaryAndRemarks(
 			XmlWriter writer,
@@ -3002,11 +2949,6 @@ namespace NDoc3.Core.Reflection {
 
 			writer.WriteEndElement();
 		}
-
-		#endregion
-
-
-		#region Write Documentation
 
 		private bool didWriteStartDocumentation;
 
@@ -3199,11 +3141,6 @@ namespace NDoc3.Core.Reflection {
 			WriteEndDocumentation(writer);
 		}
 
-		#endregion
-
-
-		#region Property Backers
-
 		/// <summary>
 		/// This checks whether a field is a property backer, meaning
 		/// it stores the information for the property.
@@ -3338,11 +3275,6 @@ namespace NDoc3.Core.Reflection {
 			writer.WriteEndElement();
 		}
 
-		#endregion
-
-
-		#region PreReflectionProcess
-
 		private void PreReflectionProcess() {
 			//			PreLoadXmlDocumentation();
 			BuildXrefs();
@@ -3414,11 +3346,6 @@ namespace NDoc3.Core.Reflection {
 				}
 			}
 		}
-
-		#endregion
-
-
-		#region Write Hierarchies
 
 		/// <summary>
 		/// Writes the XML documenting which classes derives from the current class
@@ -3514,8 +3441,6 @@ namespace NDoc3.Core.Reflection {
 			writer.WriteEndElement();
 		}
 
-		#endregion
-
 		private static string GetEnumString<T>(T enumValue)
 			where T : struct {
 			return Enum.GetName(typeof(T), enumValue);
@@ -3533,13 +3458,11 @@ namespace NDoc3.Core.Reflection {
 			}
 		}
 
-
-		#region ImplementsInfo
-
 		private class ImplementsInfo {
 			public Type InterfaceType;
 			public MemberInfo InterfaceMethod;
 		}
+
 		private class ImplementsCollection {
 			private readonly Dictionary<string, ImplementsInfo> data;
 			public ImplementsCollection() {
@@ -3554,9 +3477,5 @@ namespace NDoc3.Core.Reflection {
 				set { data[name] = value; }
 			}
 		}
-
-		#endregion
-
-
 	}
 }
