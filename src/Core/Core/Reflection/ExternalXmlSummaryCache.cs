@@ -70,6 +70,7 @@ namespace NDoc3.Core.Reflection {
 		/// Gets the xml documentation for the assembly of the specified type.
 		/// </summary>
 		public void GetXmlFor(Type type) {
+			if (type.Assembly.FullName == null) throw new InvalidOperationException("type.Assembly.FullName are null");
 			string searchedDoc = (string)cachedDocs[type.Assembly.FullName];
 
 			if (searchedDoc == null) {
@@ -114,6 +115,10 @@ namespace NDoc3.Core.Reflection {
 								string localizedFrameworkPath = Path.Combine(frameworkPath, localizationLanguage);
 								if (Directory.Exists(localizedFrameworkPath)) {
 									docPath = Path.Combine(localizedFrameworkPath, a.GetName().Name + ".xml");
+								} else {
+									localizedFrameworkPath = Path.Combine(frameworkPath, localizationLanguage.Substring(0, 2));
+									if (Directory.Exists(localizedFrameworkPath))
+										docPath = Path.Combine(localizedFrameworkPath, a.GetName().Name + ".xml");
 								}
 								if ((docPath == null) || (!File.Exists(docPath))) {
 									docPath = Path.Combine(frameworkPath, a.GetName().Name + ".xml");
@@ -189,7 +194,7 @@ namespace NDoc3.Core.Reflection {
 		/// <param name="id">Member name 'id' to which the docs belong</param>
 		/// <param name="doc">A string containing the members documentation</param>
 		/// <returns>processed doc string</returns>
-		private string PreprocessDoc(string id, string doc) {
+		private static string PreprocessDoc(string id, string doc) {
 			//create an XmlDocument containg the memeber's documentation
 			XmlTextReader reader = new XmlTextReader(new StringReader("<root>" + doc + "</root>"));
 			reader.WhitespaceHandling = WhitespaceHandling.All;
@@ -198,9 +203,10 @@ namespace NDoc3.Core.Reflection {
 			xmldoc.PreserveWhitespace = true;
 			xmldoc.Load(reader);
 
-			//
+			if (xmldoc.DocumentElement == null) throw new InvalidOperationException("xmldoc.DocumentElement are null");
+			
 			CleanupNodes(xmldoc.DocumentElement.ChildNodes);
-			//
+			
 			ProcessSeeLinks(id, xmldoc.DocumentElement.ChildNodes);
 			return xmldoc.DocumentElement.InnerXml;
 		}
