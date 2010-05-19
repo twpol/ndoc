@@ -40,6 +40,12 @@ namespace NDoc3.Test
 	/// inventory analysis survivabilty format.</remarks>
 	public class Class
 	{
+		/// <summary>
+		/// Test for bug #3003325.
+		/// Constant string.
+		/// </summary>
+		public const string STR = "\tHello\n\"World\\\033";
+
 		/// <overloads>Initializes a new instance of the Class class.</overloads>
 		/// <summary>Initializes a new instance of the <see cref="Class"/> class with no param.</summary>
 		public Class() { }

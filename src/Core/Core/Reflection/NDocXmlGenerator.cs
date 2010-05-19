@@ -31,6 +31,8 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Xml;
 using System.Xml.Schema;
+using System.CodeDom;
+using Microsoft.CSharp;
 
 namespace NDoc3.Core.Reflection {
 	/// <summary>
@@ -1838,7 +1840,10 @@ namespace NDoc3.Core.Reflection {
 				return "null";
 
 			if (value is string) {
-				return (value.ToString());
+				CodePrimitiveExpression expr = new CodePrimitiveExpression(value);
+				StringWriter sw = new StringWriter();
+				new CSharpCodeProvider().GenerateCodeFromExpression(expr, sw, null);
+				return sw.ToString();
 			}
 
 			if (value is Enum) {
