@@ -2614,9 +2614,9 @@ namespace NDoc3.Core.Reflection {
 					cons.Add("class");
 				//Specific classes, interfaces or other template constraint
 				for (int i = 0; i < specificType.Length; i++) {
-					string name;
+					string name = specificType[i].FullName;
 					//If name is ValueType ignore this, as this is present when struct is a constraint
-					if ((name = specificType[i].FullName) != "ValueType") {
+					if (specificType[i] != typeof(ValueType)) {
 						// FullName of a type can be null, if there is a constraint on a type of other generic parameter
 						if (name != null) {
 							cons.Add(name);
