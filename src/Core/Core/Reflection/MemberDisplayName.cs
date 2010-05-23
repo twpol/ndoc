@@ -102,7 +102,7 @@ namespace NDoc3.Core {
 				Type argType = genArgs[k];
 				// If this is the first argument
 				if (i == 0) {
-					argList.Append('<');
+					argList.Append('{');
 				} else {
 					argList.Append(',');
 				}
@@ -122,7 +122,7 @@ namespace NDoc3.Core {
 
 			// If there were any arguments
 			if (i > 0) {
-				argList.Append('>');
+				argList.Append('}');
 			}
 
 			return argList.ToString();
