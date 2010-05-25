@@ -37,6 +37,7 @@
 	<xsl:template match="node()|@*|text()" mode="title-row" />
 	<xsl:template match="node()|@*|text()" mode="header-section" />
 	<xsl:template match="node()|@*|text()" mode="after-remarks-section"/>
+	
 	<!-- Link to generic class -->
 	<xsl:template name="genericclasslink">
 		<xsl:param name="genericarguments" />
@@ -47,6 +48,7 @@
 			</xsl:with-param>
 		</xsl:call-template>
 	</xsl:template>
+	
 	<!-- Generic Returntype -->
 	<xsl:template name="generic-returnType">
 		<xsl:param name="arguments" select="ndoc:returnType"/>
@@ -83,6 +85,7 @@
 			</xsl:if>
 		</xsl:for-each>
 	</xsl:template>
+	
 	<!-- Generic Field -->
 	<xsl:template name="generic-field">
 		<xsl:for-each select="ndoc:genericargument">
@@ -107,11 +110,7 @@
 			</xsl:choose>
 			<xsl:if test="ndoc:genericargument">
 				<xsl:text>&lt;</xsl:text>
-			</xsl:if>
-			<xsl:if test="ndoc:genericargument">
 				<xsl:call-template name="generic-field"/>
-			</xsl:if>
-			<xsl:if test="ndoc:genericargument">
 				<xsl:text>&gt;</xsl:text>
 			</xsl:if>
 			<xsl:if test="position()!=last()">
@@ -119,6 +118,7 @@
 			</xsl:if>
 		</xsl:for-each>
 	</xsl:template>
+	
 	<!-- C# Types -->
 	<xsl:template name="csharp-type">
 		<xsl:param name="runtime-type" />
@@ -194,6 +194,7 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
+	
 	<!-- Type access modifier -->
 	<xsl:template name="type-access">
 		<xsl:param name="access" />
@@ -209,6 +210,7 @@
 			<xsl:otherwise>/* unknown */</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
+	
 	<!-- Method access modifier -->
 	<xsl:template name="method-access">
 		<xsl:param name="access" />
@@ -221,6 +223,7 @@
 			<xsl:otherwise>/* unknown */</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
+	
 	<!-- Contract -->
 	<xsl:template name="contract">
 		<xsl:param name="contract" />
@@ -234,6 +237,7 @@
 			<xsl:otherwise>/* unknown */</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
+	
 	<!-- Generic template parameter -->
 	<xsl:template name="generictypeparam-topic">
 		<dl>
@@ -250,6 +254,7 @@
 			</xsl:for-each>
 		</dl>
 	</xsl:template>
+	
 	<!-- Parameter -->
 	<xsl:template name="parameter-topic">
 		<dl>
@@ -266,6 +271,7 @@
 			</xsl:for-each>
 		</dl>
 	</xsl:template>
+	
 	<!-- -->
 	<xsl:template name="type-mixed">
 		<xsl:choose>
@@ -283,6 +289,7 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
+	
 	<!-- -->
 	<xsl:template name="type-element">
 		<xsl:choose>
@@ -294,6 +301,7 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
+	
 	<!-- -->
 	<xsl:template name="type-name">
 		<xsl:choose>
@@ -309,6 +317,7 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
+	
 	<!-- -->
 	<xsl:template name="type-id">
 		<xsl:choose>
@@ -320,6 +329,7 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
+	
 	<!-- -->
 	<xsl:template name="namespace-name">
 		<xsl:choose>
@@ -331,6 +341,7 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
+	
 	<!-- -->
 	<xsl:template name="seealso-section">
 		<xsl:param name="page" />
@@ -461,6 +472,7 @@
 			<xsl:apply-templates select="ndoc:documentation/node()" mode="seealso-section" />
 		</p>
 	</xsl:template>
+	
 	<!-- -->
 	<xsl:template name="output-paragraph">
 		<xsl:param name="nodes" />
@@ -475,10 +487,12 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
+	
 	<!-- -->
 	<xsl:template match="ndoc:para | ndoc:p" mode="no-para">
 		<xsl:apply-templates mode="slashdoc" />
 	</xsl:template>
+	
 	<!-- -->
 	<xsl:template match="ndoc:note" mode="no-para">
 		<blockquote class="dtBlock">
@@ -487,10 +501,12 @@
 			<xsl:apply-templates mode="slashdoc" />
 		</blockquote>
 	</xsl:template>
+	
 	<!-- -->
 	<xsl:template match="node()" mode="no-para">
 		<xsl:apply-templates select="." mode="slashdoc" />
 	</xsl:template>
+	
 	<!-- -->
 	<xsl:template name="obsolete-section">
 		<xsl:if test="./ndoc:obsolete">
@@ -517,6 +533,7 @@
 			<HR />
 		</xsl:if>
 	</xsl:template>
+	
 	<!-- -->
 	<xsl:template name="obsolete-inline">
 		<xsl:if test="./ndoc:obsolete">
@@ -525,6 +542,7 @@
 			</FONT>
 		</xsl:if>
 	</xsl:template>
+	
 	<!-- -->
 	<xsl:template name="summary-section">
 		<xsl:if test="ancestor-or-self::node()/ndoc:documentation/ndoc:preliminary | /ndoc:ndoc/ndoc:preliminary">
@@ -538,6 +556,7 @@
 		</xsl:for-each>
 		<xsl:apply-templates select="ndoc:documentation/node()" mode="summary-section" />
 	</xsl:template>
+	
 	<!-- -->
 	<xsl:template name="summary-with-no-paragraph">
 		<xsl:param name="member" select="." />
@@ -546,6 +565,7 @@
 			<xsl:if test="not(node())">&#160;</xsl:if>
 		</xsl:for-each>
 	</xsl:template>
+	
 	<!-- -->
 	<xsl:template name="overloads-summary-section">
 		<xsl:variable name="memberName" select="@name" />
@@ -566,6 +586,7 @@
 		</xsl:choose>
 		<xsl:apply-templates select="ndoc:documentation/node()" mode="overloads-summary-section" />
 	</xsl:template>
+	
 	<!-- -->
 	<xsl:template name="overloads-summary-with-no-paragraph">
 		<xsl:param name="overloads" select="." />
@@ -586,6 +607,7 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
+	
 	<!-- -->
 	<xsl:template name="overloads-remarks-section">
 		<xsl:variable name="memberName" select="@name" />
@@ -598,6 +620,7 @@
 			</p>
 		</xsl:if>
 	</xsl:template>
+	
 	<!-- Overloads example section -->
 	<xsl:template name="overloads-example-section">
 		<xsl:variable name="memberName" select="@name" />
@@ -610,6 +633,7 @@
 			</p>
 		</xsl:if>
 	</xsl:template>
+	
 	<!-- Parameter section -->
 	<xsl:template name="parameter-section">
 		<xsl:if test="ndoc:documentation/ndoc:param">
@@ -618,6 +642,7 @@
 			<xsl:apply-templates select="ndoc:documentation/node()" mode="parameter-section" />
 		</xsl:if>
 	</xsl:template>
+	
 	<!-- Generic template parameter section -->
 	<xsl:template name="generictypeparam-section">
 		<xsl:if test="ndoc:documentation/ndoc:typeparam">
@@ -626,6 +651,7 @@
 			<xsl:apply-templates select="ndoc:documentation/node()" mode="generictypeparam-section"/>
 		</xsl:if>
 	</xsl:template>
+	
 	<!-- Returnvalue section -->
 	<xsl:template name="returnvalue-section">
 		<xsl:if test="ndoc:documentation/ndoc:returns">
@@ -636,6 +662,7 @@
 			<xsl:apply-templates select="ndoc:documentation/node()" mode="returnvalue-section" />
 		</xsl:if>
 	</xsl:template>
+	
 	<!-- Implements section -->
 	<xsl:template name="implements-section">
 		<xsl:if test="ndoc:implements">
@@ -648,6 +675,7 @@
 			<xsl:apply-templates select="ndoc:documentation/node()" mode="implements-section" />
 		</xsl:if>
 	</xsl:template>
+	
 	<!-- -->
 	<xsl:template name="implements-member">
 		<xsl:variable name="href" select="string(NUtil:GetHRef(ancestor::ndoc:assembly/@name, @id))" />
@@ -664,6 +692,7 @@
 			<xsl:value-of select="@name" />
 		</a>
 	</xsl:template>
+	
 	<!-- Remarks Section -->
 	<xsl:template name="remarks-section">
 		<xsl:if test="ndoc:documentation/ndoc:remarks">
@@ -682,6 +711,7 @@
 			<xsl:apply-templates select="ndoc:documentation/node()" mode="remarks-section" />
 		</xsl:if>
 	</xsl:template>
+	
 	<!-- Value Section -->
 	<xsl:template name="value-section">
 		<xsl:if test="ndoc:documentation/ndoc:value">
@@ -692,6 +722,7 @@
 			<xsl:apply-templates select="ndoc:documentation/node()" mode="value-section" />
 		</xsl:if>
 	</xsl:template>
+	
 	<!-- Events Section -->
 	<xsl:template name="events-section">
 		<xsl:if test="ndoc:documentation/ndoc:event">
@@ -721,6 +752,7 @@
 			<xsl:apply-templates select="ndoc:documentation/node()" mode="events-section" />
 		</xsl:if>
 	</xsl:template>
+	
 	<!-- Exceptions Sectio -->
 	<xsl:template name="exceptions-section">
 		<xsl:if test="ndoc:documentation/ndoc:exception">
@@ -750,6 +782,7 @@
 			<xsl:apply-templates select="ndoc:documentation/node()" mode="exceptions-section" />
 		</xsl:if>
 	</xsl:template>
+	
 	<!-- Thread safety section -->
 	<xsl:template name="thread-safety-section">
 		<xsl:choose>
@@ -762,6 +795,7 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
+	
 	<!-- Threadsafty text-->
 	<xsl:template match="ndoc:threadsafety">
 		<H4 class="dtH4">Thread Safety</H4>
@@ -791,6 +825,7 @@
 		<xsl:apply-templates select="node()" mode="slashdoc" />
 		<xsl:apply-templates select="." mode="thread-safety-section" />
 	</xsl:template>
+	
 	<!-- Example section -->
 	<xsl:template name="example-section">
 		<xsl:if test="ndoc:documentation/ndoc:example">
@@ -801,6 +836,7 @@
 			<xsl:apply-templates select="ndoc:documentation/node()" mode="example-section" />
 		</xsl:if>
 	</xsl:template>
+	
 	<!-- Enumeration members section -->
 	<xsl:template name="enumeration-members-section">
 		<xsl:if test="ndoc:field">
@@ -861,6 +897,7 @@
 			<xsl:apply-templates select="ndoc:documentation/node()" mode="enumeration-members-section" />
 		</xsl:if>
 	</xsl:template>
+	
 	<!-- Get language -->
 	<xsl:template name="get-lang">
 		<xsl:param name="lang" />
@@ -900,6 +937,7 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
+	
 	<!-- get-a-href-with-name -->
 	<xsl:template name="get-a-href-with-name">
 		<xsl:param name="cref" />
@@ -920,6 +958,7 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
+	
 	<!-- -->
 	<xsl:template name="value">
 		<xsl:param name="type" />
@@ -955,6 +994,7 @@
 			<xsl:apply-templates select="/ndoc:ndoc" mode="header-section" />
 		</head>
 	</xsl:template>
+	
 	<!-- Title row -->
 	<xsl:template name="title-row">
 		<xsl:param name="type-name" />
@@ -985,6 +1025,7 @@
 			<xsl:apply-templates select="ndoc:documentation/node()" mode="title-row" />
 		</div>
 	</xsl:template>
+	
 	<!-- Footer row -->
 	<xsl:template name="footer-row">
 		<xsl:param name="type-name" />
@@ -1024,6 +1065,7 @@
 			</div>
 		</xsl:if>
 	</xsl:template>
+	
 	<!-- Preliminary section -->
 	<xsl:template name="preliminary-section">
 		<p class="topicstatus">
@@ -1041,6 +1083,7 @@
 		</p>
 		<xsl:apply-templates select="ndoc:documentation/node()" mode="preliminary-section" />
 	</xsl:template>
+	
 	<!-- Copyright notice -->
 	<xsl:template name="copyright-notice">
 		<xsl:variable name="copyright-text">
@@ -1060,6 +1103,7 @@
 			</a>
 		</xsl:if>
 	</xsl:template>
+	
 	<!-- Generated from assembly version -->
 	<xsl:template name="generated-from-assembly-version">
 		<xsl:variable name="assembly-name">
@@ -1077,6 +1121,7 @@
 			<a href="http://ndoc3.sourceforget.net">NDoc3</a>
 		</xsl:if>
 	</xsl:template>
+	
 	<!-- Operator name -->
 	<xsl:template name="operator-name">
 		<xsl:param name="name" />
@@ -1160,6 +1205,7 @@
 			<xsl:otherwise>ERROR</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
+	
 	<!-- C# Operator name -->
 	<xsl:template name="csharp-operator-name">
 		<xsl:param name="name" />
@@ -1191,6 +1237,7 @@
 			<xsl:otherwise>ERROR</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
+	
 	<!-- Get namespace -->
 	<xsl:template name="get-namespace">
 		<xsl:param name="name" />
@@ -1207,6 +1254,7 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
+	
 	<!-- Strip namespace -->
 	<xsl:template name="strip-namespace">
 		<xsl:param name="name" />
@@ -1226,6 +1274,7 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
+	
 	<!-- Requirements section -->
 	<xsl:template name="requirements-section">
 		<xsl:if test="ndoc:documentation/ndoc:permission">
@@ -1252,6 +1301,7 @@
 			<xsl:apply-templates select="ndoc:documentation/node()" mode="requirements-section" />
 		</xsl:if>
 	</xsl:template>
+	
 	<!-- Feedback email -->
 	<xsl:template match="ndoc:feedbackEmail">
 		<xsl:param name="page" />
