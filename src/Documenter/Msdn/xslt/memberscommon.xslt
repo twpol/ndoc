@@ -569,11 +569,6 @@
 											<xsl:call-template name="get-filename-for-method">
 												<xsl:with-param name="method" select="$declaring-class/ndoc:method[@id=$declaring-id]" />
 											</xsl:call-template>
-											<!--<xsl:call-template name="get-filename-for-inherited-method-overloads">
-												<xsl:with-param name="declaring-assembly" select="@declaring-assembly" />
-												<xsl:with-param name="declaring-type" select="@declaring-type" />
-												<xsl:with-param name="method-name" select="@id" />
-											</xsl:call-template>-->
 										</xsl:attribute>
 										<xsl:value-of select="$displayName" />
 									</a>
