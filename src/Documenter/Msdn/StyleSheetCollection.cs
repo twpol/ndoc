@@ -75,7 +75,6 @@ namespace NDoc3.Documenter.Msdn {
 			return "file://" + Path.GetFullPath(Path.Combine(appPath, String.Format(path, Path.DirectorySeparatorChar)));
 		}
 
-
 		private StyleSheetCollection() {
 		}
 

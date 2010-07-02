@@ -409,9 +409,6 @@ namespace NDoc3.Documenter.Msdn
 
 		private static void XslTransform(BuildProjectContext buildContext, string stylesheetName, IXPathNavigable xpathNavigable, XsltArgumentList arguments, TextWriter writer, string targetFilename)
 		{
-			//Use new overload so we don't get obsolete warnings - clean compile :)
-			//			XslCompiledTransform stylesheet = stylesheets[stylesheetName];
-			//			stylesheet.Transform(xpathDocument, arguments, writer);
 			StyleSheet stylesheet = buildContext.stylesheets[stylesheetName];
 			try {
 				stylesheet.Transform(xpathNavigable, arguments, writer);
