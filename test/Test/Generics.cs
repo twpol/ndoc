@@ -83,7 +83,7 @@ namespace NDoc3.Test.Generics
     public class SimpleItemList<T> : List<SimpleItem<T>>
     {
         /// <summary>
-        /// 
+        /// Initializes an instance of <see cref="SimpleItemList{T}"/>
         /// </summary>
         public SimpleItemList()
         {

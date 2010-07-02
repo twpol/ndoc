@@ -85,7 +85,6 @@ namespace NDoc3.Core.Reflection {
 			excludeTags = new Hashtable();
 		}
 
-
 		/// <summary>
 		/// Populates cache from the given file.
 		/// </summary>
@@ -95,7 +94,6 @@ namespace NDoc3.Core.Reflection {
 			reader.WhitespaceHandling = WhitespaceHandling.All;
 			CacheDocs(reader);
 		}
-
 
 		/// <summary>
 		/// Cache the xmld docs into a hashtable for faster access.
@@ -123,30 +121,6 @@ namespace NDoc3.Core.Reflection {
 					docs.Add(key, slashdoc);
 				}
 			}
-
-			//            object oMember = reader.NameTable.Add("member");
-			//			reader.MoveToContent();
-			//
-			//			while (!reader.EOF) {
-			//				if ((reader.NodeType == XmlNodeType.Element) && (reader.Name.Equals("assembly"))) {
-			//					
-			//				}
-			//
-			//				if ((reader.NodeType == XmlNodeType.Element) && (reader.Name.Equals(oMember))) {
-			//					//Handles multidimensional arrays by replacing 0: from XML doc to the reflection type
-			//					string ID = reader.GetAttribute("name").Replace("0:", "");
-			//
-			//					string doc = reader.ReadInnerXml().Trim();
-			//					doc = PreprocessDoc(ID, doc);
-			//					if (docs.ContainsKey(ID)) {
-			//						Trace.WriteLine("Warning: Multiple <member> tags found with id=\"" + ID + "\"");
-			//					} else {
-			//						docs.Add(ID, doc);
-			//					}
-			//				} else {
-			//					reader.Read();
-			//				}
-			//			}
 		}
 
 		/// <summary>
@@ -312,7 +286,6 @@ namespace NDoc3.Core.Reflection {
 				}
 			}
 		}
-
 
 		/// <summary>
 		/// Gets Xml documentation for the given ID
