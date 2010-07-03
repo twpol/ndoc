@@ -1832,6 +1832,16 @@ namespace NDoc3.Test
 	public class EcmaBlocks
 	{
 	}
+
+	/// <summary>
+	/// Test class for inheritdoc.
+	/// </summary>
+	public class Inheritdoc : System.Collections.ArrayList {
+		/// <inheritdoc />
+		public override int Add(object value) {
+			return base.Add(value);
+		}
+	}
 }
 
 ///// <summary>
