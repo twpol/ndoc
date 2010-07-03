@@ -2,9 +2,9 @@
 <xsl:stylesheet version="1.0" 
 				xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
 				xmlns:ndoc="urn:ndoc-schema"
-				xmlns:NDocUtil="urn:NDocUtil"
+				xmlns:NUtil="urn:NDocUtil"
 				xmlns:msxsl="urn:schemas-microsoft-com:xslt"
-				exclude-result-prefixes="xsl ndoc NDocUtil msxsl"
+				exclude-result-prefixes="xsl ndoc NUtil msxsl"
 >
 	<!-- -->
 	<xsl:output method="xml" indent="yes"  encoding="utf-8" omit-xml-declaration="yes"/>
@@ -144,7 +144,7 @@
 							<xsl:with-param name="id" select="@id" />
 						</xsl:call-template>
 					</xsl:attribute>
-					<xsl:value-of select="@displayName" />
+					<xsl:value-of select="NUtil:ToGeneralGenericFormat(@displayName)" />
 				</a>
 			</td>
 			<td width="50%">

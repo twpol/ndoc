@@ -381,7 +381,7 @@
 							<xsl:with-param name="type" select="." />
 						</xsl:call-template>
 					</xsl:attribute>
-					<xsl:value-of select="@displayName" />
+					<xsl:value-of select="NUtil:ToGeneralGenericFormat(@displayName)" />
 					<xsl:text> Members</xsl:text>
 				</a>
 				<xsl:text> | </xsl:text>

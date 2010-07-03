@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ndoc="urn:ndoc-schema">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ndoc="urn:ndoc-schema"
+                xmlns:NUtil="urn:NDocUtil"
+	              exclude-result-prefixes="NUtil">
 	<!-- -->
 	<xsl:output method="xml" indent="yes"  encoding="utf-8" omit-xml-declaration="yes" standalone="no"/>
 	<!-- -->
@@ -13,12 +15,12 @@
 		<xsl:param name="type" />
 		<html dir="LTR">
 			<xsl:call-template name="html-head">
-				<xsl:with-param name="title" select="concat(@displayName, ' Members')" />
+				<xsl:with-param name="title" select="concat(NUtil:ToGeneralGenericFormat(@displayName), ' Members')" />
 			</xsl:call-template>
 			<body id="bodyID" class="dtBODY">
 				<xsl:call-template name="title-row">
 					<xsl:with-param name="type-name">
-						<xsl:value-of select="@displayName" /> Members
+						<xsl:value-of select="NUtil:ToGeneralGenericFormat(@displayName)" /> Members
 					</xsl:with-param>
 				</xsl:call-template>
 				<div id="nstext">
@@ -30,7 +32,7 @@
 									<xsl:with-param name="id" select="@id" />
 								</xsl:call-template>
 							</xsl:attribute>
-							<xsl:value-of select="@displayName" />
+							<xsl:value-of select="NUtil:ToGeneralGenericFormat(@displayName)" />
 							<xsl:text> overview</xsl:text>
 						</a>
 					</p>
@@ -226,7 +228,7 @@
 						<object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e" viewastext="true" style="display: none;">
 							<xsl:element name="param">
 								<xsl:attribute name="name">Keyword</xsl:attribute>
-								<xsl:attribute name="value"><xsl:value-of select="concat(@displayName, ' ', local-name())" /></xsl:attribute>
+								<xsl:attribute name="value"><xsl:value-of select="concat(NUtil:ToGeneralGenericFormat(@displayName), ' ', local-name())" /></xsl:attribute>
 							</xsl:element>
 							<xsl:element name="param">
 								<xsl:attribute name="name">Keyword</xsl:attribute>
@@ -234,14 +236,14 @@
 							</xsl:element>
 							<xsl:element name="param">
 								<xsl:attribute name="name">Keyword</xsl:attribute>
-								<xsl:attribute name="value"><xsl:value-of select="concat(@displayName, ' ', local-name(), ', all members')" /></xsl:attribute>
+								<xsl:attribute name="value"><xsl:value-of select="concat(NUtil:ToGeneralGenericFormat(@displayName), ' ', local-name(), ', all members')" /></xsl:attribute>
 							</xsl:element>
 						</object>
 					</xsl:if>
 										
 					<xsl:call-template name="footer-row">
 						<xsl:with-param name="type-name">
-							<xsl:value-of select="@displayName" /> Members
+							<xsl:value-of select="NUtil:ToGeneralGenericFormat(@displayName)" /> Members
 						</xsl:with-param>
 					</xsl:call-template>
 				</div>
@@ -277,7 +279,7 @@
 										<xsl:with-param name="constructor" select="." />
 									</xsl:call-template>
 								</xsl:attribute>
-								<xsl:value-of select="../@displayName" />
+								<xsl:value-of select="NUtil:ToGeneralGenericFormat(../@displayName)" />
 							</a>
 						</td>
 						<td width="50%">
@@ -290,7 +292,7 @@
 								</xsl:when>
 								<xsl:otherwise>
 									<xsl:text>Initializes a new instance of the </xsl:text>
-									<xsl:value-of select="../@displayName" />
+									<xsl:value-of select="NUtil:ToGeneralGenericFormat(../@displayName)" />
 									<xsl:text> class.</xsl:text>
 								</xsl:otherwise>
 							</xsl:choose>
@@ -321,7 +323,7 @@
 										<xsl:with-param name="id" select="@id" />
 									</xsl:call-template>
 								</xsl:attribute>
-								<xsl:value-of select="../@displayName" />
+								<xsl:value-of select="NUtil:ToGeneralGenericFormat(../@displayName)" />
 								<xsl:text> Constructor</xsl:text>
 							</a>
 						</td>

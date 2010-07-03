@@ -52,9 +52,10 @@ namespace NDoc3.Xml
 		///</summary>
 		///<param name="typeNode">The node</param>
 		///<returns>The node display name</returns>
+		///<remarks>Replace {} with (), to support multiple language, just like MSDN does.</remarks>
 		public static string GetNodeDisplayName(XmlNode typeNode)
 		{
-			return GetAttributeString(typeNode, "displayName", true);
+			return GetAttributeString(typeNode, "displayName", true).Replace('{', '(').Replace('}', ')');
 		}
 
 		///<summary>

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ndoc="urn:ndoc-schema">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ndoc="urn:ndoc-schema"
+                xmlns:NUtil="urn:NDocUtil"
+	              exclude-result-prefixes="NUtil">
 	<!-- -->
 	<xsl:output method="xml" indent="yes"  encoding="utf-8" omit-xml-declaration="yes"/>
 	<!-- -->
@@ -43,7 +45,7 @@
 							<xsl:value-of select="../@name" />
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of select="@displayName" />
+							<xsl:value-of select="NUtil:ToGeneralGenericFormat(@displayName)" />
 						</xsl:otherwise>
 					</xsl:choose>
 					<xsl:text>&#32;</xsl:text>
@@ -56,7 +58,7 @@
 						<xsl:value-of select="../@name" />
 						<xsl:if test="local-name()='method' or local-name()='property' ">
 							<xsl:text>.</xsl:text>
-							<xsl:value-of select="@displayName" />
+							<xsl:value-of select="NUtil:ToGeneralGenericFormat(@displayName)" />
 						</xsl:if>
 						<xsl:text>&#160;</xsl:text>
 						<xsl:value-of select="$childType" />

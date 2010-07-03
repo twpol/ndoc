@@ -215,6 +215,10 @@ namespace NDoc3.Documenter.Msdn {
 			return str.Replace(oldValue, newValue);
 		}
 
+		public string ToGeneralGenericFormat(string str) {
+			return str.Replace('{', '(').Replace('}', ')');
+		}
+
 		/// <summary>
 		/// Exposes easy formatting of SDK links to XSLT
 		/// </summary>

@@ -543,7 +543,7 @@
 	<xsl:template match="ndoc:method[@declaringType]">
 		<xsl:variable name="id" select="@id" />
 		<xsl:variable name="name" select="@name" />
-		<xsl:variable name="displayName" select="@displayName" />
+		<xsl:variable name="displayName" select="NUtil:ToGeneralGenericFormat(@displayName)" />
 		<xsl:variable name="contract" select="@contract" />
 		<xsl:variable name="access" select="@access" />
 		<xsl:variable name="declaring-assembly" select="@declaringAssembly" />
@@ -792,7 +792,7 @@
 		<xsl:variable name="name" select="@name" />
 		<xsl:variable name="displayName">
 			<xsl:choose>
-				<xsl:when test="@displayName">
+				<xsl:when test="NUtil:ToGeneralGenericFormat(@displayName)">
 					<xsl:value-of select="@name" />
 				</xsl:when>
 				<xsl:otherwise>

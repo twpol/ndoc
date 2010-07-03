@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ndoc="urn:ndoc-schema">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ndoc="urn:ndoc-schema"
+                xmlns:NUtil="urn:NDocUtil"
+	              exclude-result-prefixes="NUtil">
 	<!-- -->
 	<xsl:output method="xml" indent="yes"  encoding="utf-8" omit-xml-declaration="yes"/>
 	<!-- -->
@@ -17,12 +19,12 @@
 	<xsl:template match="ndoc:event">
 		<html dir="LTR">
 			<xsl:call-template name="html-head">
-				<xsl:with-param name="title" select="concat(../@displayName, '.', @name, ' Event')" />
+				<xsl:with-param name="title" select="concat(NUtil:ToGeneralGenericFormat(../@displayName), '.', @name, ' Event')" />
 			</xsl:call-template>
 			<body id="bodyID" class="dtBODY">
 				<xsl:call-template name="title-row">
 					<xsl:with-param name="type-name">
-						<xsl:value-of select="../@displayName" />.<xsl:value-of select="@name" /> Event
+						<xsl:value-of select="NUtil:ToGeneralGenericFormat(../@displayName)" />.<xsl:value-of select="@name" /> Event
 					</xsl:with-param>
 				</xsl:call-template>
 				<div id="nstext">

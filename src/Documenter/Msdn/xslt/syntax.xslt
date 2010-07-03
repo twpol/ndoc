@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ndoc="urn:ndoc-schema">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ndoc="urn:ndoc-schema"
+                xmlns:NUtil="urn:NDocUtil"
+	              exclude-result-prefixes="NUtil">
 	<!-- Document attributes? -->
 	<xsl:param name="ndoc-document-attributes" />
 	<!-- Which attributes should be documented -->

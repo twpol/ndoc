@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ndoc="urn:ndoc-schema">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ndoc="urn:ndoc-schema"
+                xmlns:NUtil="urn:NDocUtil"
+	              exclude-result-prefixes="NUtil">
 	<!-- -->
 	<xsl:include href="common.xslt" />
 	<!-- -->
@@ -13,10 +15,10 @@
 	<xsl:template name="FormatMemberDisplay">
 		<xsl:param name="memberName" />
 		<xsl:param name="memberType" />
-		<xsl:value-of select="../@displayName" />
+		<xsl:value-of select="NUtil:ToGeneralGenericFormat(../@displayName)" />
 		<xsl:if test="local-name()='method'">
 			<xsl:text>.</xsl:text>
-			<xsl:value-of select="@displayName" />
+			<xsl:value-of select="NUtil:ToGeneralGenericFormat(@displayName)" />
 		</xsl:if>
 		<xsl:if test="local-name()!='operator'">
 			<xsl:if test="count(parent::node()/*[@name=$memberName]) > 1">
@@ -56,7 +58,7 @@
 				<xsl:otherwise>Constructor</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
-		<xsl:variable name="memberName" select="@displayName" />
+		<xsl:variable name="memberName" select="NUtil:ToGeneralGenericFormat(@displayName)" />
 		<html dir="LTR">
 			<xsl:call-template name="html-head">
 				<xsl:with-param name="title">

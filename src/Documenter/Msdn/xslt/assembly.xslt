@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ndoc="urn:ndoc-schema" exclude-result-prefixes="ndoc xsl">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ndoc="urn:ndoc-schema"
+                xmlns:NUtil="urn:NDocUtil"
+	              exclude-result-prefixes="NUtil ndoc xsl">
 	<!-- -->
 	<xsl:include href="common.xslt" />
 	<!-- -->
@@ -228,7 +230,7 @@
 							<xsl:with-param name="id" select="@id" />
 						</xsl:call-template>
 					</xsl:attribute>
-					<xsl:value-of select="@displayName" />
+					<xsl:value-of select="NUtil:ToGeneralGenericFormat(@displayName)" />
 				</a>
 			</td>
 			<td width="50%">
