@@ -154,6 +154,10 @@
                <param name="Name" value="include">
                <param name="Local" value="Content\tag_include.htm">
              </OBJECT>
+		 <LI><OBJECT type="text/sitemap">
+               <param name="Name" value="inheritdoc">
+               <param name="Local" value="Content\tag_inheritdoc.htm">
+             </OBJECT>
          <LI><OBJECT type="text/sitemap">
                <param name="Name" value="list">
                <param name="Local" value="Content\tag_list.htm">

@@ -37,7 +37,7 @@ function InsertFooter()
 	html += "<br/><a href=\"mailto:ndoc3-helpfeedback@lists.sourceforge.net";
 	html += subject;
 	html += "\">Send feedback on this topic</A></p></td>";
-	html += "<td><A href=http://ndoc3.sourceforge.net/ target=_blank><img alt='Visit the NDoc3 WIKI' align=right src=images/logo.jpg></a></td></tr></table>";	
+	html += "<td><A href=http://ndoc3.sourceforge.net/ target=_blank><img alt='Visit the NDoc3 forge' align=right src=images/logo.jpg></a></td></tr></table>";	
 
 	lastChild.insertAdjacentHTML( "beforeEnd", html );
 }
