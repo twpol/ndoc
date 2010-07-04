@@ -110,6 +110,9 @@
     <Reference Include="System.Drawing.Design">
       <Name>System.Drawing.Design</Name>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web.Services" />
     <Reference Include="System.Windows.Forms">
       <Name>System.Windows.Forms</Name>
     </Reference>
@@ -189,6 +192,12 @@
     <Compile Include="Core\SortedStringDictionary.cs" />
     <Compile Include="Core\TemplateWriter.cs" />
     <Compile Include="Core\Workspace.cs" />
+    <Compile Include="MsdnContentService\ContentServiceHelper.cs" />
+    <Compile Include="Service References\MsdnContentService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Support\ArgUtils.cs" />
     <Compile Include="Xml\XmlUtils.cs" />
     <Compile Include="Core\XsltResourceResolver.cs" />
@@ -197,6 +206,55 @@
     <None Include="core.ndoc" />
     <EmbeddedResource Include="Core\AssySlashDocXML.xsd" />
     <EmbeddedResource Include="Core\Reflection\reflection.xsd" />
+    <None Include="Service References\MsdnContentService\atoms.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MsdnContentService\atoms1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MsdnContentService\atoms2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MsdnContentService\atoms3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MsdnContentService\atoms4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MsdnContentService\atoms5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MsdnContentService\atoms6.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MsdnContentService\atoms7.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MsdnContentService\atoms8.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MsdnContentService\ContentService.wsdl" />
+    <None Include="Service References\MsdnContentService\default.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MsdnContentService\default1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MsdnContentService\default2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MsdnContentService\default3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MsdnContentService\NDoc3.MsdnContentService.getContentResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\MsdnContentService\NDoc3.MsdnContentService.getNavigationPathsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\MsdnContentService\urn_msdn_com_public_content_syndication_2006_09_common.xsd">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Core\graphics\folder.bmp" />
@@ -236,6 +294,24 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\MsdnContentService\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\MsdnContentService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\MsdnContentService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\MsdnContentService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
