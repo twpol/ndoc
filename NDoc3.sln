@@ -48,6 +48,8 @@ Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "test\Test\Test.csproj", "{087FF069-C495-4CE7-B999-06C2B5D311B9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Test", "test\Core.Test\Core.Test.csproj", "{4EF57A94-F7DB-4D63-94F1-149907DA33DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -300,6 +302,21 @@ Global
 		{087FF069-C495-4CE7-B999-06C2B5D311B9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{087FF069-C495-4CE7-B999-06C2B5D311B9}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{087FF069-C495-4CE7-B999-06C2B5D311B9}.Release|Win32.ActiveCfg = Release|Any CPU
+		{4EF57A94-F7DB-4D63-94F1-149907DA33DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EF57A94-F7DB-4D63-94F1-149907DA33DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EF57A94-F7DB-4D63-94F1-149907DA33DC}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{4EF57A94-F7DB-4D63-94F1-149907DA33DC}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{4EF57A94-F7DB-4D63-94F1-149907DA33DC}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{4EF57A94-F7DB-4D63-94F1-149907DA33DC}.Deploy|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EF57A94-F7DB-4D63-94F1-149907DA33DC}.Deploy|Any CPU.Build.0 = Debug|Any CPU
+		{4EF57A94-F7DB-4D63-94F1-149907DA33DC}.Deploy|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{4EF57A94-F7DB-4D63-94F1-149907DA33DC}.Deploy|Mixed Platforms.Build.0 = Debug|Any CPU
+		{4EF57A94-F7DB-4D63-94F1-149907DA33DC}.Deploy|Win32.ActiveCfg = Debug|Any CPU
+		{4EF57A94-F7DB-4D63-94F1-149907DA33DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EF57A94-F7DB-4D63-94F1-149907DA33DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EF57A94-F7DB-4D63-94F1-149907DA33DC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{4EF57A94-F7DB-4D63-94F1-149907DA33DC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{4EF57A94-F7DB-4D63-94F1-149907DA33DC}.Release|Win32.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
