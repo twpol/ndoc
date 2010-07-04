@@ -121,6 +121,7 @@
     <Compile Include="Console.cs">
       <SubType>Code</SubType>
     </Compile>
+    <None Include="app.config" />
     <None Include="Console.build" />
   </ItemGroup>
   <ItemGroup>

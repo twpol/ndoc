@@ -201,7 +201,6 @@
     <Compile Include="Support\ArgUtils.cs" />
     <Compile Include="Xml\XmlUtils.cs" />
     <Compile Include="Core\XsltResourceResolver.cs" />
-    <None Include="app.config" />
     <None Include="Core.build" />
     <None Include="core.ndoc" />
     <EmbeddedResource Include="Core\AssySlashDocXML.xsd" />
