@@ -72,7 +72,7 @@ namespace NDoc3.Documenter.Msdn {
 		/// <remarks>The directory in which .html files and the .chm files will be generated.</remarks>
 		[Category("Documentation Main Settings")]
 		[Description("The directory in which .html files and the .chm files will be generated.")]
-		[Editor(typeof(FolderNameEditor), typeof(UITypeEditor))]
+		[Editor(typeof(FoldernameEditor), typeof(UITypeEditor))]
 		public string OutputDirectory {
 			get { return _outputDirectory; }
 
@@ -241,7 +241,7 @@ namespace NDoc3.Documenter.Msdn {
 		[Description("The name of an html file to be included as the root home page. "
 			 + "SplitTOCs is disabled when this property is set.")]
 		[DefaultValue("")]
-		[Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
+		[Editor(typeof(FilenameEditor), typeof(UITypeEditor))]
 		public string RootPageFileName {
 			get { return _RootPageFileName; }
 

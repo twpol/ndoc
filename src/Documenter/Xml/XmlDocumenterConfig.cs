@@ -18,10 +18,10 @@
 using System.IO;
 using System.ComponentModel;
 using System.Drawing.Design;
-using System.Windows.Forms.Design;
 
 using NDoc3.Core;
 using NDoc3.Core.Reflection;
+using NDoc3.Core.PropertyGridUI;
 
 namespace NDoc3.Documenter.Xml {
 	/// <summary>The XmlDocumenter config class.</summary>
@@ -66,7 +66,7 @@ namespace NDoc3.Documenter.Xml {
 		/// absolute or relative from the .ndoc project file.</remarks>
 		[Category("Documentation Main Settings")]
 		[Description("The path to the XML file to create which will be the combined /doc output and reflection information.")]
-		[Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
+		[Editor(typeof(FilenameEditor), typeof(UITypeEditor))]
 		public string OutputFile {
 			get { return _OutputFile; }
 

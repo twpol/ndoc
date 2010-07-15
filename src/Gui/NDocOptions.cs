@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel;
 using System.Drawing.Design;
 using System.Windows.Forms.Design;
+using NDoc3.Core.PropertyGridUI;
 
 namespace NDoc3.Gui {
 	/// <summary>
@@ -48,7 +49,7 @@ namespace NDoc3.Gui {
 		[DefaultValue("")]
 		[Description("The path to the html help workshop, where the HHC.EXE compiler is located. Only set this value if the MSDN documenter cannot find the html help compiler.")]
 		[Category("Machine Specific Settings")]
-		[Editor(typeof(FolderNameEditor), typeof(UITypeEditor))]
+		[Editor(typeof(FoldernameEditor), typeof(UITypeEditor))]
 		public string HtmlHelpWorkshopLocation {
 			get { return _HtmlHelpWorkshopLocation; }
 			set { _HtmlHelpWorkshopLocation = value; }

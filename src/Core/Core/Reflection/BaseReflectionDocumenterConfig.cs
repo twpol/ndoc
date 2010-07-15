@@ -499,7 +499,7 @@ namespace NDoc3.Core.Reflection {
 		/// </remarks>
 		[Category("Documentation Main Settings")]
 		[Description("When set, NDoc3 will use the specified XML file as input instead of reflecting the list of assemblies specified on the project.  Very useful for debugging documenters.  Leave empty for normal usage.")]
-		[Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
+		[Editor(typeof(FilenameEditor), typeof(UITypeEditor))]
 		[DefaultValue("")]
 		public string UseNDocXmlFile {
 			get { return _UseNDocXmlFile; }
