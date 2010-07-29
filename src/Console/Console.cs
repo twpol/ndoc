@@ -25,9 +25,14 @@ using System.Text;
 using System.Xml;
 
 using NDoc3.Core;
+using System.Diagnostics.CodeAnalysis;
+using System.Resources;
 
 namespace NDoc3.ConsoleApplication {
 	class EntryPoint {
+		private static ResourceManager resourceManager = new ResourceManager("NDoc3.ConsoleApplication.Console", Assembly.GetExecutingAssembly());
+		private static CultureInfo currentCulture = CultureInfo.CurrentUICulture;
+
 		private static Project project;
 		private static IDocumenterConfig documenterConfig;
 		private static DateTime startDateTime;
@@ -43,7 +48,7 @@ namespace NDoc3.ConsoleApplication {
 					if (InstalledDocumenters.Documenters.Count > 0) {
 						info = (IDocumenterInfo)InstalledDocumenters.Documenters[0];
 					} else {
-						throw new ApplicationException("Could not find any documenter assemblies.");
+						throw new InvalidOperationException(resourceManager.GetString("NoDocumenterAssemblies", currentCulture));
 					}
 				}
 				project.ActiveDocumenter = info;
@@ -58,43 +63,43 @@ namespace NDoc3.ConsoleApplication {
 					return 1;
 				}
 
-				if (args[0].ToLower().StartsWith("-help")) {
+				if (args[0].StartsWith("-help", StringComparison.OrdinalIgnoreCase)) {
 					WriteHelp(args);
 					return 1;
 				}
 
 				foreach (string arg in args) {
-					if (arg.StartsWith("-")) {
-						if (string.Compare(arg, "-verbose", true) == 0) {
+					if (arg.StartsWith("-", StringComparison.OrdinalIgnoreCase)) {
+						if (string.Compare(arg, "-verbose", StringComparison.OrdinalIgnoreCase) == 0) {
 							Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
 						} else {
-							string[] pair = arg.Split('=');
+							string[] pair = { arg.Substring(0, arg.IndexOf('=')), arg.Substring(arg.IndexOf('=') + 1) };
 
 							if (pair.Length == 2) {
 								string name = pair[0].Substring(1);
 								string val = pair[1];
 
-								switch (name.ToLower()) {
-									case "documenter":
+								switch (name.ToUpperInvariant()) {
+									case "DOCUMENTER":
 										if (propertiesSet) {
-											throw new ApplicationException("The documenter name must be specified before any documenter specific options.");
+											throw new ArgumentException("documenter", resourceManager.GetString("DocumenterBeforeOptions", currentCulture));
 										}
 										if (projectSet) {
-											throw new ApplicationException("The documenter name must be specified before the project file.");
+											throw new ArgumentException("documenter", resourceManager.GetString("DocumenterBeforeProjectFile", currentCulture));
 										}
 										info = InstalledDocumenters.GetDocumenter(val.Replace("_", " "));
 
 										if (info == null) {
-											throw new ApplicationException("The specified documenter name is invalid.");
+											throw new ArgumentException("documenter", resourceManager.GetString("InvalidDocumenter", currentCulture));
 										}
 										project.ActiveDocumenter = info;
 										documenterConfig = project.ActiveConfig;
 										break;
-									case "project":
+									case "PROJECT":
 										if (propertiesSet) {
-											throw new ApplicationException("The project file must be specified before any documenter specific options.");
+											throw new ArgumentException("project", resourceManager.GetString("ProjectFileBeforeOptions", currentCulture));
 										}
-										Console.WriteLine("using project file " + val);
+										Console.WriteLine(resourceManager.GetString("UsingProjectFile", currentCulture) + val);
 										project.Read(val);
 										project.ActiveDocumenter = info;
 										documenterConfig = project.ActiveConfig;
@@ -105,23 +110,21 @@ namespace NDoc3.ConsoleApplication {
 										}
 										Debug.WriteLine(Directory.GetCurrentDirectory());
 										break;
-									case "recurse":
+									case "RECURSE":
 										string[] recPair = val.Split(',');
 										if (2 == recPair.Length) {
-											maxDepth = Convert.ToInt32(recPair[1]);
+											maxDepth = Convert.ToInt32(recPair[1], CultureInfo.CurrentCulture);
 										}
 										RecurseDir(recPair[0], maxDepth);
 										break;
-									case "namespacesummaries":
+									case "NAMESPACESUMMARIES":
 										using (StreamReader streamReader = new StreamReader(val)) {
 											XmlTextReader reader = new XmlTextReader(streamReader);
 											reader.MoveToContent();
 											project.Namespaces.Read(reader);
-											reader.Close();
-											streamReader.Close();
 										}
 										break;
-									case "referencepath":
+									case "REFERENCEPATH":
 										project.ReferencePaths.Add(new ReferencePath(val));
 										break;
 									default:
@@ -151,7 +154,7 @@ namespace NDoc3.ConsoleApplication {
 				}
 
 				if (project.AssemblySlashDocs.Count == 0) {
-					Console.WriteLine("[Error] Build cannot proceed; No assemblies were specified, or none could be found.");
+					Console.WriteLine(resourceManager.GetString("NoAssembliesSpecified", currentCulture));
 					//WriteUsage();
 					return 1;
 				}
@@ -160,7 +163,7 @@ namespace NDoc3.ConsoleApplication {
 				documenter.DocBuildingStep += DocBuildingStepHandler;
 				documenter.Build(project);
 				TimeSpan ts = DateTime.UtcNow - startDateTime;
-				Console.WriteLine(String.Format("Total build time {0:f1} s", ts.TotalSeconds));
+				Console.WriteLine(String.Format(CultureInfo.CurrentCulture, resourceManager.GetString("TotalBuildTime", currentCulture), ts.TotalSeconds));
 				return 0;
 			} catch (Exception except) {
 				string errorText = BuildExceptionText(except);
@@ -172,34 +175,20 @@ namespace NDoc3.ConsoleApplication {
 
 		private static void WriteUsage() {
 			Console.WriteLine();
-			Console.WriteLine("usage: NDoc3Console  assembly[,xmldoc] [assembly[,xmldoc]]...");
-			Console.WriteLine("                    [[-referencepath=dir] [-referencepath=dir]...]");
-			Console.WriteLine("                    [-namespacesummaries=filename]");
-			Console.WriteLine("                    [-documenter=documenter_name]");
-			Console.WriteLine("                    [[-property=value] [-property=value]...]");
-			Console.WriteLine("                    [-verbose]");
+			Console.WriteLine(resourceManager.GetString("NDoc3Usage1", currentCulture));
 			Console.WriteLine();
-			Console.WriteLine("or     NDoc3Console  -recurse=dir[,maxDepth]");
-			Console.WriteLine("                    [[-referencepath=dir] [-referencepath=dir]...]");
-			Console.WriteLine("                    [-namespacesummaries=filename]");
-			Console.WriteLine("                    [-documenter=documenter_name]");
-			Console.WriteLine("                    [[-property=value] [-property=value]...]");
-			Console.WriteLine("                    [-verbose]");
+			Console.WriteLine(resourceManager.GetString("NDoc3Usage2", currentCulture));
 			Console.WriteLine();
-			Console.WriteLine("or     NDoc3Console  [-documenter=documenter_name] -project=ndocfile [-verbose]");
+			Console.WriteLine(resourceManager.GetString("NDoc3Usage3", currentCulture));
 			Console.WriteLine();
-			Console.WriteLine("or     NDoc3Console  [-help] [documenter_name [property_name]]");
+			Console.WriteLine(resourceManager.GetString("NDoc3Usage4", currentCulture));
 			Console.WriteLine();
 			Console.WriteLine();
 
 			WriteHelpAvailableDocumenters();
 
 			Console.WriteLine();
-			Console.WriteLine(@"namespace summaries file syntax:");
-			Console.WriteLine(@"    <namespaces>");
-			Console.WriteLine(@"        <namespace name=""My.NameSpace"">My summary.</namespace>");
-			Console.WriteLine(@"        ...");
-			Console.WriteLine(@"    </namespaces>");
+			Console.WriteLine(resourceManager.GetString("NamespaceSummarySyntax", currentCulture));
 
 		}
 
@@ -226,38 +215,39 @@ namespace NDoc3.ConsoleApplication {
 
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.Write(System.String)")]
 		private static void WriteHelpAvailableDocumenters() {
-			Console.Write("available documenters: ");
+			Console.WriteLine(resourceManager.GetString("AvailableDocumenters", currentCulture));
 			ArrayList docs = InstalledDocumenters.Documenters;
 			for (int i = 0; i < docs.Count; i++) {
-				if (i > 0) Console.Write(", ");
-				Console.Write(((IDocumenterInfo)docs[i]).Name.Replace(" ", "_"));
+				Console.WriteLine(((IDocumenterInfo)docs[i]).Name.Replace(" ", "_"));
 			}
 			Console.WriteLine();
 		}
 
 		private static void WriteHelpAvailableDocParameters(IDocumenterConfig documenterConfig) {
-			Console.WriteLine("available properties with the {0} documenterConfig:", documenterConfig.DocumenterInfo.Name);
+			Console.WriteLine(resourceManager.GetString("AvailableProperties", currentCulture), documenterConfig.DocumenterInfo.Name);
 			foreach (PropertyInfo property in documenterConfig.GetProperties()) {
 				if (!property.IsDefined(typeof(NonPersistedAttribute), true)) {
-					Console.WriteLine("    " + property.Name);
+					Console.WriteLine("\t" + property.Name);
 				}
 			}
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "documenterConfig")]
 		private static void WriteHelpDocParameter(IDocumenterConfig documenterConfig, string propertyName) {
 			PropertyInfo foundProperty = null;
 
 			foreach (PropertyInfo property in documenterConfig.GetProperties()) {
-				if (string.Compare(property.Name, propertyName, true) == 0) {
+				if (String.Compare(property.Name, propertyName, StringComparison.OrdinalIgnoreCase) == 0) {
 					foundProperty = property;
 					break;
 				}
 			}
 
 			if (foundProperty == null) {
-				Console.WriteLine("{0} is not a property of the {1} documenterConfig...", propertyName, documenterConfig.DocumenterInfo.Name);
-				Console.WriteLine("");
+				Console.WriteLine(resourceManager.GetString("NotPropertyOfConfig"), propertyName, documenterConfig.DocumenterInfo.Name);
+				Console.WriteLine();
 				WriteHelpAvailableDocParameters(documenterConfig);
 			} else {
 				WriteHelpPropertyDetails(foundProperty);
@@ -266,28 +256,28 @@ namespace NDoc3.ConsoleApplication {
 
 		private static void WriteHelpPropertyDetails(PropertyInfo property) {
 			Console.WriteLine(property.Name);
-			Console.WriteLine("");
+			Console.WriteLine();
 
 			object[] descAttr = property.GetCustomAttributes(typeof(System.ComponentModel.DescriptionAttribute), true);
 			if (descAttr.Length > 0) {
-				Console.WriteLine("  Description:");
-				Console.WriteLine("    " + ((System.ComponentModel.DescriptionAttribute)descAttr[0]).Description);
+				Console.WriteLine(resourceManager.GetString("Description", currentCulture));
+				Console.WriteLine(((System.ComponentModel.DescriptionAttribute)descAttr[0]).Description);
 				Console.WriteLine();
 			}
 
 			if (property.PropertyType.IsSubclassOf(typeof(Enum))) {
-				Console.WriteLine("  Possible Values:");
+				Console.WriteLine(resourceManager.GetString("PossibleValues", currentCulture));
 				string[] enumValues = Enum.GetNames(property.PropertyType);
 				foreach (string enumValue in enumValues) {
-					Console.WriteLine("    " + enumValue);
+					Console.WriteLine(enumValue);
 				}
 				Console.WriteLine();
 			}
 
 			object[] defaultAttr = property.GetCustomAttributes(typeof(System.ComponentModel.DefaultValueAttribute), true);
 			if (defaultAttr.Length > 0) {
-				Console.WriteLine("  Default Value:");
-				Console.WriteLine("    " + ((System.ComponentModel.DefaultValueAttribute)defaultAttr[0]).Value);
+				Console.WriteLine(resourceManager.GetString("DefaultValue", currentCulture));
+				Console.WriteLine(((System.ComponentModel.DefaultValueAttribute)defaultAttr[0]).Value);
 				Console.WriteLine();
 			}
 		}
@@ -317,7 +307,7 @@ namespace NDoc3.ConsoleApplication {
 				informationalVersion = informationalVersionAttribute.InformationalVersion;
 			} else {
 				if (assembly.Location == null)
-					throw new Exception("Fatal error occured while getting assembly version number");
+					throw new InvalidOperationException(resourceManager.GetString("FatalErrorAssemblyVersion", currentCulture));
 				FileVersionInfo info = FileVersionInfo.GetVersionInfo(assembly.Location);
 				informationalVersion = info.FileMajorPart + "." + info.FileMinorPart;
 			}
@@ -379,7 +369,7 @@ namespace NDoc3.ConsoleApplication {
 			// timing
 			if (lastStepDateTime.Ticks > 0) {
 				TimeSpan ts = DateTime.UtcNow - lastStepDateTime;
-				Console.WriteLine(String.Format("	Last step took {0:f1} s", ts.TotalSeconds));
+				Console.WriteLine(String.Format(CultureInfo.CurrentUICulture, resourceManager.GetString("LastStepTook", currentCulture), ts.TotalSeconds));
 			}
 			lastStepDateTime = DateTime.UtcNow;
 
@@ -399,7 +389,7 @@ namespace NDoc3.ConsoleApplication {
 					if (File.Exists(docFile)) {
 						project.AssemblySlashDocs.Add(new AssemblySlashDoc(file, docFile));
 					} else {
-						Console.WriteLine("[Warning] No XML doc file found for '" + file + "'");
+						Console.WriteLine(resourceManager.GetString("NoXMLDocFound", currentCulture), file);
 						AssemblySlashDoc assemblySlashDoc = new AssemblySlashDoc();
 						assemblySlashDoc.Assembly.Path = file;
 						project.AssemblySlashDocs.Add(assemblySlashDoc);
