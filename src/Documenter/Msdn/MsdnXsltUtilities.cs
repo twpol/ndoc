@@ -56,7 +56,6 @@ namespace NDoc3.Documenter.Msdn {
 
 		private const string helpURL = "ms-help://";
 		private const string sdkRoot = "/cpref/html/frlrf";
-		//private const string msdnOnlineSdkBaseUrl = "http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrf";
 		private const string msdnOnlineSdkBaseUrl = "http://msdn.microsoft.com/{0}/library/{1}({2}).aspx";
 		private const string msdnOnlineSdkPageExt = ".aspx";
 		private const string systemPrefix = "System.";
@@ -86,7 +85,7 @@ namespace NDoc3.Documenter.Msdn {
 			bool SdkLinksOnWeb,
 			System.Text.Encoding fileEncoding) {
 			this.nameResolver = ArgUtils.AssertNotNull(nameResolver, "nameResolver");
-			this.assemblyName = assemblyName; //ArgUtils.AssertNotNull(assemblyName, "assemblyName");
+			this.assemblyName = assemblyName;
 			sdkDocLanguage = ArgUtils.AssertNotNull(linkToSdkDocLangauge, "linkToSdkDocLangauge");
 			sdkVersion = ArgUtils.AssertNotNull(linkToSdkDocVersion, "linkToSdkDocVersion");
 			ArgUtils.AssertNotNull(fileEncoding, "fileEncoding");
@@ -286,15 +285,6 @@ namespace NDoc3.Documenter.Msdn {
 			}
 			return nameResolver.GetFilenameForTypeMemberList(assembly, typeId);
 		}
-
-		// TODO (EE): check, why this isn't used by any xslt template
-		//		public string GetFilenameForOperatorOverloads(string assembly, string typeID, string operatorName)
-		//		{
-		//			if (assembly == null) {
-		//				assembly = this.assemblyName;
-		//			}
-		//			return nameResolver.GetFilenameForOperatorOverloads(assembly, typeID, operatorName);
-		//		}
 
 		public string GetFilenameForPropertyOverloads(string assembly, string typeID, string propertyName) {
 			if (string.IsNullOrEmpty(assembly)) {
