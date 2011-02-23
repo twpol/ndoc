@@ -1,0 +1,259 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Deploy|Win32">
+      <Configuration>Deploy</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectName>UsersGuide</ProjectName>
+    <ProjectGuid>{D250CF6D-13ED-4B69-AE7C-345D7C686B49}</ProjectGuid>
+    <RootNamespace>UsersGuide</RootNamespace>
+    <Keyword>MakeFileProj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Deploy|Win32'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Deploy|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Debug\</IntDir>
+    <NMakeBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NMAKE /F UsersGuide.mak /B CONFIG=$(Configuration)</NMakeBuildCommandLine>
+    <NMakeReBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NMAKE /E /F UsersGuide.mak /A CONFIG=$(Configuration)</NMakeReBuildCommandLine>
+    <NMakeCleanCommandLine Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">del NDoc3UsersGuide.chm</NMakeCleanCommandLine>
+    <NMakeOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NDoc3UsersGuide.chm</NMakeOutput>
+    <NMakePreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+    <NMakeIncludeSearchPath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
+    <NMakeForcedIncludes Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(NMakeForcedIncludes)</NMakeForcedIncludes>
+    <NMakeAssemblySearchPath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(NMakeAssemblySearchPath)</NMakeAssemblySearchPath>
+    <NMakeForcedUsingAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(NMakeForcedUsingAssemblies)</NMakeForcedUsingAssemblies>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Release\</IntDir>
+    <NMakeBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NMAKE /F UsersGuide.mak /B CONFIG=$(Configuration)</NMakeBuildCommandLine>
+    <NMakeReBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NMAKE /E /F UsersGuide.mak /A CONFIG=$(Configuration)</NMakeReBuildCommandLine>
+    <NMakeCleanCommandLine Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">del NDoc3UsersGuide.chm</NMakeCleanCommandLine>
+    <NMakeOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NDoc3UsersGuide.chm</NMakeOutput>
+    <NMakePreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+    <NMakeIncludeSearchPath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
+    <NMakeForcedIncludes Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(NMakeForcedIncludes)</NMakeForcedIncludes>
+    <NMakeAssemblySearchPath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(NMakeAssemblySearchPath)</NMakeAssemblySearchPath>
+    <NMakeForcedUsingAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(NMakeForcedUsingAssemblies)</NMakeForcedUsingAssemblies>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Deploy|Win32'">$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Deploy|Win32'">$(Configuration)\</IntDir>
+    <NMakeBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='Deploy|Win32'">NMAKE /F UsersGuide.mak /B CONFIG=$(Configuration)</NMakeBuildCommandLine>
+    <NMakeReBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='Deploy|Win32'">NMAKE /E /F UsersGuide.mak /A CONFIG=$(Configuration)</NMakeReBuildCommandLine>
+    <NMakeCleanCommandLine Condition="'$(Configuration)|$(Platform)'=='Deploy|Win32'">del NDocUsersGuide.chm</NMakeCleanCommandLine>
+    <NMakeOutput Condition="'$(Configuration)|$(Platform)'=='Deploy|Win32'">NDocUsersGuide.chm</NMakeOutput>
+    <NMakePreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Deploy|Win32'">$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+    <NMakeIncludeSearchPath Condition="'$(Configuration)|$(Platform)'=='Deploy|Win32'">$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
+    <NMakeForcedIncludes Condition="'$(Configuration)|$(Platform)'=='Deploy|Win32'">$(NMakeForcedIncludes)</NMakeForcedIncludes>
+    <NMakeAssemblySearchPath Condition="'$(Configuration)|$(Platform)'=='Deploy|Win32'">$(NMakeAssemblySearchPath)</NMakeAssemblySearchPath>
+    <NMakeForcedUsingAssemblies Condition="'$(Configuration)|$(Platform)'=='Deploy|Win32'">$(NMakeForcedUsingAssemblies)</NMakeForcedUsingAssemblies>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="Content\attributes.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\blank.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\build_process.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\consoleapplication.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\createproject.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\decorating.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\Default.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\documenters.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\extensibility-sections.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\extensibility.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\gettinginvolved.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\gettingstarted.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\javadoc.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\knownissues.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\latex.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\linear.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\msdn.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\projectdesigner.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\reference.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\settingupyourproject.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\support.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\tag_c.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\tag_code.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\tag_event.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\tag_example.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\tag_exception.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\tag_exclude.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\tag_include.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\tag_list.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\tag_note.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\tag_overloads.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\tag_para.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\tag_param.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\tag_paramref.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\tag_permission.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\tag_preliminary.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\tag_remarks.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\tag_returns.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\tag_see.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\tag_seealso.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\tag_summary.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\tag_threadsafety.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\tag_value.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\tags.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\tagsusage.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\vsnet.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\whatsnew.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\xml.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Content\css\ndoc3.css" />
+    <None Include="Content\images\assemblynamedialog2005.JPG" />
+    <None Include="Content\images\assemblynamedialog2008.jpg" />
+    <None Include="Content\images\build_event.JPG" />
+    <None Include="Content\images\buildbutton.JPG" />
+    <None Include="Content\images\buildprogress.JPG" />
+    <None Include="Content\images\configuration.JPG" />
+    <None Include="Content\images\designer.JPG" />
+    <None Include="Content\images\editnamespace.JPG" />
+    <None Include="Content\images\extendexample.JPG" />
+    <None Include="Content\images\logo.JPG" />
+    <None Include="Content\images\newfromvsnet.JPG" />
+    <None Include="Content\images\selectdocumenter.JPG" />
+    <None Include="Content\images\sf.GIF" />
+    <None Include="Content\images\toolbar.JPG" />
+    <None Include="Content\images\xmldocdialog2008.jpg" />
+    <None Include="Content\images\xmldocnamedialog2005.JPG" />
+    <None Include="Content\script\ndoc3.js" />
+    <None Include="Content\script\ndoc3_tags.js" />
+    <None Include="contents.HHC" />
+    <None Include="index.HHK" />
+    <None Include="UsersGuide.hhp" />
+    <None Include="UsersGuide.mak" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

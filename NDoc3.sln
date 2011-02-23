@@ -30,8 +30,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisualStudio", "src\VisualS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NativeHtmlHelp2", "src\Documenter\NativeHtmlHelp2\NativeHtmlHelp2.csproj", "{5B088ED3-EEED-4DD4-AE4C-A7E9323B634C}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UsersGuide", "src\UsersGuide\UsersGuide.vcxproj", "{D250CF6D-13ED-4B69-AE7C-345D7C686B49}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtendedUI", "src\ExtendedUI\ExtendedUI.csproj", "{0E14C115-C99D-49F7-A892-3AEF74320A61}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Msdn2", "src\Documenter\Msdn2\Msdn2.csproj", "{E483DCDD-A621-4DD6-92A3-5D9F4F9A7FC9}"
@@ -42,11 +40,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "test\Test\Test.cspr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Test", "test\Core.Test\Core.Test.csproj", "{4EF57A94-F7DB-4D63-94F1-149907DA33DC}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UsersGuide", "src\UsersGuide\UsersGuide_2010.vcxproj", "{D250CF6D-13ED-4B69-AE7C-345D7C686B49}"
+EndProject
 Global
-	GlobalSection(SubversionScc) = preSolution
-		Svn-Managed = True
-		Manager = AnkhSVN - Subversion Support for Visual Studio
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -174,19 +170,6 @@ Global
 		{5B088ED3-EEED-4DD4-AE4C-A7E9323B634C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5B088ED3-EEED-4DD4-AE4C-A7E9323B634C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{5B088ED3-EEED-4DD4-AE4C-A7E9323B634C}.Release|Win32.ActiveCfg = Release|Any CPU
-		{D250CF6D-13ED-4B69-AE7C-345D7C686B49}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{D250CF6D-13ED-4B69-AE7C-345D7C686B49}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{D250CF6D-13ED-4B69-AE7C-345D7C686B49}.Debug|Win32.ActiveCfg = Debug|Win32
-		{D250CF6D-13ED-4B69-AE7C-345D7C686B49}.Deploy|Any CPU.ActiveCfg = Deploy|Win32
-		{D250CF6D-13ED-4B69-AE7C-345D7C686B49}.Deploy|Mixed Platforms.ActiveCfg = Deploy|Win32
-		{D250CF6D-13ED-4B69-AE7C-345D7C686B49}.Deploy|Mixed Platforms.Build.0 = Deploy|Win32
-		{D250CF6D-13ED-4B69-AE7C-345D7C686B49}.Deploy|Win32.ActiveCfg = Deploy|Win32
-		{D250CF6D-13ED-4B69-AE7C-345D7C686B49}.Deploy|Win32.Build.0 = Deploy|Win32
-		{D250CF6D-13ED-4B69-AE7C-345D7C686B49}.Release|Any CPU.ActiveCfg = Release|Win32
-		{D250CF6D-13ED-4B69-AE7C-345D7C686B49}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{D250CF6D-13ED-4B69-AE7C-345D7C686B49}.Release|Mixed Platforms.Build.0 = Release|Win32
-		{D250CF6D-13ED-4B69-AE7C-345D7C686B49}.Release|Win32.ActiveCfg = Release|Win32
-		{D250CF6D-13ED-4B69-AE7C-345D7C686B49}.Release|Win32.Build.0 = Release|Win32
 		{0E14C115-C99D-49F7-A892-3AEF74320A61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0E14C115-C99D-49F7-A892-3AEF74320A61}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E14C115-C99D-49F7-A892-3AEF74320A61}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -261,8 +244,27 @@ Global
 		{4EF57A94-F7DB-4D63-94F1-149907DA33DC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{4EF57A94-F7DB-4D63-94F1-149907DA33DC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{4EF57A94-F7DB-4D63-94F1-149907DA33DC}.Release|Win32.ActiveCfg = Release|Any CPU
+		{D250CF6D-13ED-4B69-AE7C-345D7C686B49}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{D250CF6D-13ED-4B69-AE7C-345D7C686B49}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{D250CF6D-13ED-4B69-AE7C-345D7C686B49}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{D250CF6D-13ED-4B69-AE7C-345D7C686B49}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D250CF6D-13ED-4B69-AE7C-345D7C686B49}.Debug|Win32.Build.0 = Debug|Win32
+		{D250CF6D-13ED-4B69-AE7C-345D7C686B49}.Deploy|Any CPU.ActiveCfg = Deploy|Win32
+		{D250CF6D-13ED-4B69-AE7C-345D7C686B49}.Deploy|Mixed Platforms.ActiveCfg = Deploy|Win32
+		{D250CF6D-13ED-4B69-AE7C-345D7C686B49}.Deploy|Mixed Platforms.Build.0 = Deploy|Win32
+		{D250CF6D-13ED-4B69-AE7C-345D7C686B49}.Deploy|Win32.ActiveCfg = Deploy|Win32
+		{D250CF6D-13ED-4B69-AE7C-345D7C686B49}.Deploy|Win32.Build.0 = Deploy|Win32
+		{D250CF6D-13ED-4B69-AE7C-345D7C686B49}.Release|Any CPU.ActiveCfg = Release|Win32
+		{D250CF6D-13ED-4B69-AE7C-345D7C686B49}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{D250CF6D-13ED-4B69-AE7C-345D7C686B49}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{D250CF6D-13ED-4B69-AE7C-345D7C686B49}.Release|Win32.ActiveCfg = Release|Win32
+		{D250CF6D-13ED-4B69-AE7C-345D7C686B49}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
 	EndGlobalSection
 EndGlobal
